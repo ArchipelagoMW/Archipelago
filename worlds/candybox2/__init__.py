@@ -9,8 +9,8 @@ from .locations import location_descriptions, locations
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items
 from .options import CandyBox2Options
 from .regions import create_regions, connect_entrances
-from .rooms import entrance_friendly_names
-from .rules import set_rules
+from .rooms import entrance_friendly_names, CandyBox2Room
+from .rules import set_rules, can_reach_room
 
 EXPECTED_CLIENT_VERSION = "20250409-1+"
 
@@ -125,7 +125,7 @@ class CandyBox2World(World):
         set_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
-        return state.has("Progressive World Map", self.player, 7) and \
+        return can_reach_room(state, CandyBox2Room.TOWER, self.player) and \
             state.has("P Stone", self.player) and \
             state.has("L Stone", self.player) and \
             state.has("A Stone", self.player) and \
