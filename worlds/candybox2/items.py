@@ -91,7 +91,7 @@ item_descriptions = {
     CandyBox2ItemName.HP_BAR: ""
 }
 
-items: dict[str, CandyBox2ItemData] = {
+items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.CANDY: CandyBox2ItemData(candy_box_2_base_id + 0, lambda _: 0),
     CandyBox2ItemName.LOLLIPOP: CandyBox2ItemData(candy_box_2_base_id + 1, lambda _: 8, ItemClassification.progression),
     CandyBox2ItemName.CHOCOLATE_BAR: CandyBox2ItemData(candy_box_2_base_id + 2, lambda _: 3, ItemClassification.progression),

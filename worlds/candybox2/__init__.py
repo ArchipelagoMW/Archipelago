@@ -32,8 +32,8 @@ class CandyBox2World(World):
     game = "Candy Box 2"
     web = CandyBox2WebWorld()
     base_id = 1
-    location_name_to_id = locations
-    item_name_to_id = {name: data.code for name, data in items.items() if data.code is not None}
+    location_name_to_id = {name.value: location for name, location in locations.items()}
+    item_name_to_id = {name.value: data.code for name, data in items.items() if data.code is not None}
     options_dataclass = CandyBox2Options
     options: CandyBox2Options
     topology_present = True
