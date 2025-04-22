@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.candybox2.items import candy_box_2_base_id, items
 from worlds.generic.Rules import add_rule
+from .locations import CandyBox2LocationName
 from .rooms import CandyBox2Room, entrance_friendly_names
 
 if TYPE_CHECKING:
@@ -75,112 +76,112 @@ def can_beat_sharks(world: "CandyBox2World", state: CollectionState, player: int
 
 def set_rules(world: "CandyBox2World", player: int):
 
-    add_rule(world.get_location("Disappointed Emote Chocolate Bar"), lambda state: can_farm_candies(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR), lambda state: can_farm_candies(state, player))
 
-    add_rule(world.get_location("Village Forge Buy Polished Silver Sword"),
+    add_rule(world.get_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD),
              lambda state: can_farm_candies(state, player))
-    add_rule(world.get_location("Village Forge Buy Lightweight Body Armour"),
+    add_rule(world.get_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR),
              lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3))
 
     # TODO: Forge locations should depend on previous forge location where applicable
-    add_rule(world.get_location("Village Forge Buy Scythe"),
+    add_rule(world.get_location(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE),
             lambda state: can_farm_candies(state, player) and state.has("Progressive World Map", player, 3)
             and can_reach_room(state, CandyBox2Room.DRAGON, player))
 
     # Cellar rules
-    add_rule(world.get_location("Cellar Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.CELLAR_QUEST_CLEARED), lambda state: weapon_is_at_least(world, state, player,
                                                                                           "Wooden Sword"))
 
     # Desert rules
-    add_rule(world.get_location("Desert Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.DESERT_QUEST_CLEARED), lambda state: weapon_is_at_least(world, state, player,
                                                                                           "Iron Axe"))
 
-    add_rule(world.get_location("Desert Bird Feather Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.DESERT_BIRD_FEATHER_ACQUIRED),
             lambda state: weapon_is_at_least(world, state, player,"Iron Axe")
             and has_projectiles(world, state, player))
 
     # Wishing Well rules
-    add_rule(world.get_location("Enchant Red Enchanted Gloves"), lambda state: state.has("Leather Gloves", player) and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Pink Enchanted Gloves"), lambda state: state.has("Leather Gloves", player) and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Summoning Tribal Spear"), lambda state: has_weapon(world, state, player, "Tribal Spear") and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Enchanted Monkey Wizard Staff"), lambda state: has_weapon(world, state, player, "Monkey Wizard Staff") and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Enchanted Knight Body Armour"), lambda state: state.has("Knight Body Armour", player) and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Octopus King Crown with Jaspers"), lambda state: state.has("Octopus King Crown", player) and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Octopus King Crown with Obsidian"), lambda state: state.has("Octopus King Crown", player) and has_all_chocolates(state, player))
-    add_rule(world.get_location("Enchant Giant Spoon of Doom"), lambda state: has_weapon(world, state, player, "Giant Spoon") and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_RED_ENCHANTED_GLOVES), lambda state: state.has("Leather Gloves", player) and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_PINK_ENCHANTED_GLOVES), lambda state: state.has("Leather Gloves", player) and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_SUMMONING_TRIBAL_SPEAR), lambda state: has_weapon(world, state, player, "Tribal Spear") and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_ENCHANTED_MONKEY_WIZARD_STAFF), lambda state: has_weapon(world, state, player, "Monkey Wizard Staff") and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_ENCHANTED_KNIGHT_BODY_ARMOUR), lambda state: state.has("Knight Body Armour", player) and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_JASPERS), lambda state: state.has("Octopus King Crown", player) and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_OBSIDIAN), lambda state: state.has("Octopus King Crown", player) and has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.ENCHANT_GIANT_SPOON_OF_DOOM), lambda state: has_weapon(world, state, player, "Giant Spoon") and has_all_chocolates(state, player))
 
     # Bridge rules
-    add_rule(world.get_location("Troll Defeated"),
+    add_rule(world.get_location(CandyBox2LocationName.TROLL_DEFEATED),
              lambda state: weapon_is_at_least(world, state, player,"Polished Silver Sword"))
-    add_rule(world.get_location("The Troll's Bludgeon Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED),
              lambda state: weapon_is_at_least(world, state, player, "Polished Silver Sword"))
 
     # Cave rules
-    add_rule(world.get_location("Octopus King Defeated"), lambda state: state.has("Sorceress' Cauldron", player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.OCTOPUS_KING_DEFEATED), lambda state: state.has("Sorceress' Cauldron", player) and weapon_is_at_least(
         world, state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
-    add_rule(world.get_location("Monkey Wizard Defeated"), lambda state: state.has("Boots of Introspection", player) and state.has("Beginners' Grimoire", player) and state.has("Octopus King Crown with Jaspers", player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED), lambda state: state.has("Boots of Introspection", player) and state.has("Beginners' Grimoire", player) and state.has("Octopus King Crown with Jaspers", player) and weapon_is_at_least(
         world, state, player, "Troll's Bludgeon") and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # The Hole rules
-    add_rule(world.get_location("The Hole Heart Pendant Acquired"), lambda state: can_jump(state, player))
-    add_rule(world.get_location("The Hole Black Magic Grimoire Acquired"), lambda state: can_escape_hole(state, player) and state.has("Sponge", player))
-    add_rule(world.get_location("The Hole Desert Fortress Key Acquired"), lambda state: can_escape_hole(state, player) and state.has("Sponge", player) and can_jump(state, player))
-    add_rule(world.get_location("The Hole Tribal Warrior Defeated"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED), lambda state: can_jump(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED), lambda state: can_escape_hole(state, player) and state.has("Sponge", player))
+    add_rule(world.get_location(CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED), lambda state: can_escape_hole(state, player) and state.has("Sponge", player) and can_jump(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
         world, state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # TODO: possibly fly over?
-    add_rule(world.get_location("The Hole Four Chocolate Bars in The Hole Acquired"), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED), lambda state: can_escape_hole(state, player) and weapon_is_at_least(
         world, state, player, "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # The Forest rules
-    add_rule(world.get_location("Forest Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.FOREST_QUEST_CLEARED), lambda state: weapon_is_at_least(world, state, player,
                                                                                           "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # Castle Entrance rules
-    add_rule(world.get_location("Castle Entrance Quest Cleared"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED), lambda state: weapon_is_at_least(world, state, player,
                                                                                                    "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
-    add_rule(world.get_location("Knight Body Armour Acquired"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED), lambda state: weapon_is_at_least(world, state, player,
                                                                                                  "Enchanted Monkey Wizard Staff") and state.has("Octopus King Crown with Jaspers", player) and armor_is_at_least(state, player, "Lightweight Body Armour"))
 
     # Castle rules
-    add_rule(world.get_location("The Giant Nougat Monster Defeated"), lambda state: state.has("Purple Fin", player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED), lambda state: state.has("Purple Fin", player) and weapon_is_at_least(
         world, state, player, "Summoning Tribal Spear") and state.has("Boots of Introspection", player) and state.has("Octopus King Crown with Obsidian", player))
 
     # Egg Room
-    add_rule(world.get_location("Egg Room Quest cleared"), lambda state: can_fly(state, player) or has_weapon(world, state, player, "Nothing (Weapon)"))
+    add_rule(world.get_location(CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED), lambda state: can_fly(state, player) or has_weapon(world, state, player, "Nothing (Weapon)"))
 
     # The Desert Fortress
-    add_rule(world.get_location("Xinopherydon Defeated"), lambda state: can_fly(state, player) and (has_weapon(world, state, player, "Enchanted Monkey Wizard Staff") or state.has("Octopus King Crown with Jaspers", player)))
-    add_rule(world.get_location("Xinopherydon Quest Unicorn Horn Acquired"), lambda state: can_fly(state, player))
-    add_rule(world.get_location("Teapot Defeated"), lambda state: weapon_is_at_least(world, state, player,
+    add_rule(world.get_location(CandyBox2LocationName.XINOPHERYDON_DEFEATED), lambda state: can_fly(state, player) and (has_weapon(world, state, player, "Enchanted Monkey Wizard Staff") or state.has("Octopus King Crown with Jaspers", player)))
+    add_rule(world.get_location(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED), lambda state: can_fly(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.TEAPOT_DEFEATED), lambda state: weapon_is_at_least(world, state, player,
                                                                                      "Scythe") and state.has("Octopus King Crown with Obsidian", player) and state.has("Sorceress' Cauldron", player) and state.has("Xinopherydon Claw", player))
-    add_rule(world.get_location("Rocket Boots Acquired"), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and state.has("Beginners' Grimoire", player) and (state.has("Octopus King Crown with Obsidian", player) or has_weapon(world, state, player, "Summoning Tribal Spear"))))
+    add_rule(world.get_location(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED), lambda state: can_fly(state, player) or (state.has("Boots of Introspection", player) and can_jump(state, player) and state.has("Beginners' Grimoire", player) and (state.has("Octopus King Crown with Obsidian", player) or has_weapon(world, state, player, "Summoning Tribal Spear"))))
 
     # Hell rules
-    add_rule(world.get_location("Devil Defeated"), lambda state: state.has("Black Magic Grimoire", player) and state.has("Unicorn Horn", player) and state.has("Boots of Introspection", player) and armor_is_at_least(state, player, "Enchanted Knight Body Armour") and state.has("Pink Enchanted Gloves", player) and has_weapon(world, state, player, "Enchanted Monkey Wizard Staff"))
+    add_rule(world.get_location(CandyBox2LocationName.DEVIL_DEFEATED), lambda state: state.has("Black Magic Grimoire", player) and state.has("Unicorn Horn", player) and state.has("Boots of Introspection", player) and armor_is_at_least(state, player, "Enchanted Knight Body Armour") and state.has("Pink Enchanted Gloves", player) and has_weapon(world, state, player, "Enchanted Monkey Wizard Staff"))
 
     # Developer rules
-    add_rule(world.get_location("The Developer Defeated"), lambda state: can_farm_candies(state, player) and state.has("Purple Fin", player) and state.has("Beginners' Grimoire", player))
+    add_rule(world.get_location(CandyBox2LocationName.THE_DEVELOPER_DEFEATED), lambda state: can_farm_candies(state, player) and state.has("Purple Fin", player) and state.has("Beginners' Grimoire", player))
 
     # The Sea rules
 
-    add_rule(world.get_location("The Sponge Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_SPONGE_ACQUIRED),
              lambda state: sea_entrance(world, state, player))
 
-    add_rule(world.get_location("The Shell Powder Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_SHELL_POWDER_ACQUIRED),
              lambda state: sea_entrance(world, state, player))
 
-    add_rule(world.get_location("The Red Fin Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_RED_FIN_ACQUIRED),
              lambda state: can_beat_sharks(world, state, player)
                            and state.has("Octopus King Crown with Jaspers", player))
 
-    add_rule(world.get_location("The Green Fin Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED),
              lambda state: can_beat_sharks(world, state, player)
                            and state.has("Advanced Grimoire", player)
                            and state.has("Pink Enchanted Gloves", player)
                            and state.has("Octopus King Crown with Jaspers", player))
 
-    add_rule(world.get_location("The Purple Fin Acquired"),
+    add_rule(world.get_location(CandyBox2LocationName.THE_PURPLE_FIN_ACQUIRED),
              lambda state: can_beat_sharks(world, state, player)
                            and state.has("Heart Pendant", player)
                            and state.has("Heart Plug", player)
@@ -190,27 +191,27 @@ def set_rules(world: "CandyBox2World", player: int):
                            and state.has("Unicorn Horn", player))
 
     # Cyclops Puzzle
-    add_rule(world.get_location("Solve Cyclops Puzzle"), lambda state: can_reach_room(state, CandyBox2Room.DRAGON, player))
+    add_rule(world.get_location(CandyBox2LocationName.SOLVE_CYCLOPS_PUZZLE), lambda state: can_reach_room(state, CandyBox2Room.DRAGON, player))
 
     # X Potion
-    add_rule(world.get_location("Yourself Defeated"), lambda state: state.has("Octopus King Crown", player))
+    add_rule(world.get_location(CandyBox2LocationName.YOURSELF_DEFEATED), lambda state: state.has("Octopus King Crown", player))
 
     # Cooking
-    add_rule(world.get_location("Bake Pain au Chocolat 1"), lambda state: chocolate_count(state, player) >= 9)
-    add_rule(world.get_location("Bake Pain au Chocolat 2"), lambda state: chocolate_count(state, player) >= 10)
-    add_rule(world.get_location("Bake Pain au Chocolat 3"), lambda state: chocolate_count(state, player) >= 11)
-    add_rule(world.get_location("Bake Pain au Chocolat 4"), lambda state: chocolate_count(state, player) >= 12)
-    add_rule(world.get_location("Bake Pain au Chocolat 5"), lambda state: has_all_chocolates(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_1), lambda state: chocolate_count(state, player) >= 9)
+    add_rule(world.get_location(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_2), lambda state: chocolate_count(state, player) >= 10)
+    add_rule(world.get_location(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_3), lambda state: chocolate_count(state, player) >= 11)
+    add_rule(world.get_location(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4), lambda state: chocolate_count(state, player) >= 12)
+    add_rule(world.get_location(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5), lambda state: has_all_chocolates(state, player))
 
     # Sorceress items
-    add_rule(world.get_location("Sorceress' Hut Beginner's Grimoire"), lambda state: can_grow_lollipops(state, player))
-    add_rule(world.get_location("Sorceress' Hut Advanced Grimoire"), lambda state: can_grow_lollipops(state, player))
-    add_rule(world.get_location("Sorceress' Hut Hat"), lambda state: can_farm_lollipops(state, player))
-    add_rule(world.get_location("Sorceress' Hut Cauldron"), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE), lambda state: can_grow_lollipops(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.SORCERESS_HUT_HAT), lambda state: can_farm_lollipops(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.SORCERESS_HUT_CAULDRON), lambda state: can_grow_lollipops(state, player))
 
     # Merchant items
-    add_rule(world.get_location("Village Shop Chocolate Bar"), lambda state: can_farm_candies(state, player))
-    add_rule(world.get_location("Village Shop Candy Merchant's Hat"), lambda state: can_farm_candies(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR), lambda state: can_farm_candies(state, player))
+    add_rule(world.get_location(CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT), lambda state: can_farm_candies(state, player))
 
 def has_weapon(world: "CandyBox2World", state: CollectionState, player: int, weapon: str):
     if state.has(weapon, player):
