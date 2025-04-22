@@ -2,6 +2,7 @@ from enum import IntEnum
 from typing import Callable, Optional, TYPE_CHECKING
 
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
+from Utils import visualize_regions
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .locations import candy_box_locations, CandyBox2Location, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
@@ -201,12 +202,14 @@ def connect_entrances(world: "CandyBox2World"):
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
         })
+        return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_only":
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
             CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
         })
+        return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
         world.entrance_randomisation = randomize_entrances(world, True, {
@@ -215,8 +218,14 @@ def connect_entrances(world: "CandyBox2World"):
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
+        return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "everything":
+        # Place the lollipop farm first to avoid condition where ER places everything but the lollipop farm and X potion
+        lollipop_farm = next(entrance for region in world.multiworld.get_regions(world.player) for entrance in region.entrances if entrance.name == CandyBox2Room.LOLLIPOP_FARM)
+        lollipop_farm_entrance = world.random.choice([ex for region in world.multiworld.get_regions(world.player) for ex in region.exits if not ex.connected_region])
+        entrance_randomisation_entry_lollipop_farm = manual_connect_entrances(lollipop_farm_entrance, lollipop_farm)
+
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
@@ -225,8 +234,13 @@ def connect_entrances(world: "CandyBox2World"):
             # The lollipop farm can never go behind the X quest because the X quest requires lollipops
             CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
+        return [entrance_randomisation_entry_lollipop_farm, *world.entrance_randomisation.pairings]
 
-    return world.entrance_randomisation.pairings
+def manual_connect_entrances(entrance_from: Entrance, entrance_to: Entrance):
+    entrance_to_parent_region = entrance_to.connected_region
+    entrance_to_parent_region.entrances.remove(entrance_to)
+    entrance_from.connect(entrance_to_parent_region)
+    return entrance_from.name, entrance_to.name
 
 def entrances_to_add_to_pool(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
