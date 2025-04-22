@@ -81,14 +81,11 @@ class EntranceShuffle(Choice, LADXROption):
     """
     Randomizes where overworld entrances lead.
 
-
     **Simple:** Single-entrance caves/houses that have items are shuffled
     amongst each other.
 
     If *Dungeon Shuffle* is enabled, then dungeons will be shuffled with all the
-
     non-connector entrances in the pool. Note, some entrances can lead into water, use
-
     the warp-to-home from the save&quit menu to escape this.
     """
 
