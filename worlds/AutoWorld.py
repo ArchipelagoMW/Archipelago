@@ -457,10 +457,10 @@ class World(metaclass=AutoWorldRegister):
 
     def fill_hook(
             self,
-                prog_item_pool: list["Item"],
-                useful_item_pool: list["Item"],
-                filler_item_pool: list["Item"],
-                fill_locations: list["Location"],
+            progitempool: list["Item"],
+            usefulitempool: list["Item"],
+            filleritempool: list["Item"],
+            fill_locations: list["Location"],
     ) -> None:
         """
         Special method that gets called as part of distribute_items_restrictive (main fill).
@@ -475,9 +475,9 @@ class World(metaclass=AutoWorldRegister):
     def stage_fill_hook(
             cls,
             multiworld: "MultiWorld",
-            prog_item_pool: list["Item"],
-            useful_item_pool: list["Item"],
-            filler_item_pool: list["Item"],
+            progitempool: list["Item"],
+            usefulitempool: list["Item"],
+            filleritempool: list["Item"],
             fill_locations: list["Location"],
     ) -> None:
         """
