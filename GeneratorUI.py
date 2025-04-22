@@ -59,7 +59,7 @@ async def show_in_file_explorer(path: str) -> None:
         # I have not tested this part yet
         return await run("open", "-R", path)
     elif is_windows:
-        return await run("explorer", "/select", path)
+        return await run("explorer", f"/select,{path}")
 
     raise Exception("Could not show file in explorer")
 
