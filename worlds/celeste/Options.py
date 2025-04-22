@@ -169,7 +169,7 @@ class TrapExpirationAction(Choice):
     option_return_to_menu = 0
     option_deaths = 1
     option_new_screens = 2
-    default = 2
+    default = 1
 
 class TrapExpirationAmount(Range):
     """
