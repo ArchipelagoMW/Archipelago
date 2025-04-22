@@ -63,3 +63,18 @@ class CrystalProjectLogic:
             clamshellsRequired = self.options.clamshellsQuantity
 
         return state.has("Item - Clamshell", self.player, clamshellsRequired)
+
+    def has_rental_quintar(self, state: CollectionState) -> bool:
+        return state.has_any({"Item - Progressive Quintar Flute"}, self.player)
+
+    def has_horizontal_movement(self, state: CollectionState) -> bool:
+        return state.has("Item - Progressive Quintar Flute", self.player, 2) or state.has("Item - Owl Drum", self.player)
+
+    def has_vertical_movement(self, state: CollectionState) -> bool:
+        return state.has("Item - Ibek Bell", self.player)
+
+    def has_glide(self, state: CollectionState) -> bool: 
+        return state.has("Item - Owl Drum", self.player)
+
+    def has_swimming(self, state: CollectionState) -> bool:
+        return state.has_any({"Item - Progressive Salmon Violin"}, self.player)
