@@ -1,7 +1,8 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Region, Location
+from .Options import CrystalProjectOptions
 from .Locations import LocationData
-from .rules import get_job_count
+from .rules import CrystalProjectLogic
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
@@ -11,9 +12,10 @@ class CrystalProjectLocation(Location):
     def __init__(self, player: int, name: str = " ", address: int = None, parent=None):
         super().__init__(player, name, address, parent)
 
-def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> None:
+def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
     multiworld = world.multiworld
     player = world.player
+    logic = CrystalProjectLogic(player, options)
 
     locations_per_region = get_locations_per_region(locations)
 
@@ -75,7 +77,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit", "Beaurior Volcano"],
         {"Beaurior Volcano": lambda state: state.has_any({"Item - Ibek Bell"}, world.player)})
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
-        {"Skumparadise": lambda state: get_job_count(player, state) >= 3})
+        {"Skumparadise": lambda state: logic.has_jobs(state, 3)})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
@@ -86,8 +88,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData]) -> N
         {"Quintar Sanctum": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
-        {#"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
-        "Greenshire Reprise": lambda state: get_job_count(player, state) >= 6 })
+        {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
+        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) })
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2), 
         "Okimoto N.S.": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})

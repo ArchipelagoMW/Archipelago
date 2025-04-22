@@ -1,6 +1,7 @@
 from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
-from .rules import get_job_count
+from .Options import CrystalProjectOptions
+from .rules import CrystalProjectLogic
 
 class LocationData(NamedTuple):
     region: str
@@ -13,7 +14,8 @@ npc_index_offset = 10000
 crystal_index_offset = 100000
 #ability_index_offset = 1000000 Abilities Todo
 
-def get_locations(player: Optional[int]) -> List[LocationData]:
+def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+    logic = CrystalProjectLogic(player, options)
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -197,7 +199,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         
         #NPCs
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
-        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset, logic.has_enough_clamshells),
         #343, 81, 0
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond Ore below the bay", 2896 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)),
         #Todo NPCs Job Masters: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
@@ -379,7 +381,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
         #Todo NPCs CheckOrNot: Crystal Checker guy gives you Quintar Pass for having enough crystals; doesn't if you already have the Quintar Pass
-        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: get_job_count(player, state) >= 7),
+        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver Dust beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset),
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
@@ -598,7 +600,7 @@ def get_locations(player: Optional[int]) -> List[LocationData]:
 
         #NPCs
         #Todo NPCs CheckOrNot: Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
-        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: get_job_count(player, state) >= 15),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
