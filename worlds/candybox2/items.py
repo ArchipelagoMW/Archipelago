@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from enum import StrEnum
 from typing import NamedTuple, Iterable, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
@@ -19,78 +20,145 @@ class CandyBox2ItemData(NamedTuple):
     classification: ItemClassification = ItemClassification.filler
     description: str | None = None
 
+
+class CandyBox2ItemName(StrEnum):
+    CANDY = "Candy"
+    LOLLIPOP = "Lollipop"
+    CHOCOLATE_BAR = "Chocolate Bar"
+    HP_BAR = "HP Bar"
+    TIME_RING = "Time Ring"
+    CANDY_MERCHANTS_HAT = "Candy Merchant's Hat"
+    LEATHER_GLOVES = "Leather Gloves"
+    LEATHER_BOOTS = "Leather Boots"
+    PROGRESSIVE_WORLD_MAP = "Progressive World Map"
+    TROLLS_BLUDGEON = "Troll's Bludgeon"
+    DESERT_BIRD_FEATHER = "Desert bird feather"
+    BEGINNERS_GRIMOIRE = "Beginners' Grimoire"
+    ADVANCED_GRIMOIRE = "Advanced Grimoire"
+    SORCERESS_CAULDRON = "Sorceress' Cauldron"
+    SORCERESS_HAT = "Sorceress' Hat"
+    OCTOPUS_KING_CROWN = "Octopus King Crown"
+    MONKEY_WIZARD_STAFF = "Monkey Wizard Staff"
+    HEART_PLUG = "Heart Plug"
+    POGO_STICK = "Pogo Stick"
+    P_STONE = "P Stone"
+    L_STONE = "L Stone"
+    A_STONE = "A Stone"
+    Y_STONE = "Y Stone"
+    WOODEN_SWORD = "Wooden Sword"
+    IRON_AXE = "Iron Axe"
+    POLISHED_SILVER_SWORD = "Polished Silver Sword"
+    LIGHTWEIGHT_BODY_ARMOUR = "Lightweight Body Armour"
+    SCYTHE = "Scythe"
+    RED_ENCHANTED_GLOVES = "Red Enchanted Gloves"
+    PINK_ENCHANTED_GLOVES = "Pink Enchanted Gloves"
+    SUMMONING_TRIBAL_SPEAR = "Summoning Tribal Spear"
+    ENCHANTED_MONKEY_WIZARD_STAFF = "Enchanted Monkey Wizard Staff"
+    ENCHANTED_KNIGHT_BODY_ARMOUR = "Enchanted Knight Body Armour"
+    OCTOPUS_KING_CROWN_WITH_JASPERS = "Octopus King Crown with Jaspers"
+    OCTOPUS_KING_CROWN_WITH_OBSIDIAN = "Octopus King Crown with Obsidian"
+    GIANT_SPOON_OF_DOOM = "Giant Spoon of Doom"
+    TRIBAL_SPEAR = "Tribal Spear"
+    GIANT_SPOON = "Giant Spoon"
+    DESERT_FORTRESS_KEY = "Desert Fortress Key"
+    KNIGHT_BODY_ARMOUR = "Knight Body Armour"
+    XINOPHERYDON_CLAW = "Xinopherydon Claw"
+    UNICORN_HORN = "Unicorn Horn"
+    ROCKET_BOOTS = "Rocket Boots"
+    HEART_PENDANT = "Heart Pendant"
+    BLACK_MAGIC_GRIMOIRE = "Black Magic Grimoire"
+    FOUR_CHOCOLATE_BARS = "4 Chocolate Bars"
+    PITCHFORK = "Pitchfork"
+    TWENTY_CANDIES = "20 Candies"
+    ONE_HUNDRED_CANDIES = "100 Candies"
+    FIVE_HUNDRED_CANDIES = "500 Candies"
+    THREE_LOLLIPOPS = "3 Lollipops"
+    THREE_CHOCOLATE_BARS = "3 Chocolate Bars"
+    THIRD_HOUSE_KEY = "Third House Key"
+    SPONGE = "Sponge"
+    SHELL_POWDER = "Shell Powder"
+    RED_FIN = "Red Fin"
+    GREEN_FIN = "Green Fin"
+    PURPLE_FIN = "Purple Fin"
+    LOCKED_CANDY_BOX = "Locked Candy Box"
+    BOOTS_OF_INTROSPECTION = "Boots of Introspection"
+    PAIN_AU_CHOCOLAT = "Pain au Chocolat"
+    NOTHING_WEAPON = "Nothing (Weapon)"
+    PROGRESSIVE_WEAPON = "Progressive Weapon"
+
+
 item_descriptions = {
-    "HP Bar": ""
+    CandyBox2ItemName.HP_BAR: ""
 }
 
 items: dict[str, CandyBox2ItemData] = {
-    "Candy": CandyBox2ItemData(candy_box_2_base_id + 0, lambda _: 0),
-    "Lollipop": CandyBox2ItemData(candy_box_2_base_id + 1, lambda _: 8, ItemClassification.progression),
-    "Chocolate Bar": CandyBox2ItemData(candy_box_2_base_id + 2, lambda _: 3, ItemClassification.progression),
-    "HP Bar": CandyBox2ItemData(candy_box_2_base_id + 3, lambda world: hp_bar_count(world), ItemClassification.useful),
-    "Time Ring": CandyBox2ItemData(candy_box_2_base_id + 4, lambda _: 1, ItemClassification.useful),
-    "Candy Merchant's Hat": CandyBox2ItemData(candy_box_2_base_id + 5, lambda _: 1, ItemClassification.useful),
-    "Leather Gloves": CandyBox2ItemData(candy_box_2_base_id + 6, lambda _: 1, ItemClassification.progression),
-    "Leather Boots": CandyBox2ItemData(candy_box_2_base_id + 7, lambda _: 1, ItemClassification.progression),
-    "Progressive World Map": CandyBox2ItemData(candy_box_2_base_id + 8, lambda _: 7, ItemClassification.progression),
-    "Troll's Bludgeon": CandyBox2ItemData(candy_box_2_base_id + 9, lambda world: weapon_item_count(world, 9), ItemClassification.progression),
-    "Desert bird feather": CandyBox2ItemData(candy_box_2_base_id + 10, lambda _: 1, ItemClassification.progression),
-    "Beginners' Grimoire": CandyBox2ItemData(candy_box_2_base_id + 11, lambda _: 1, ItemClassification.progression),
-    "Advanced Grimoire": CandyBox2ItemData(candy_box_2_base_id + 12, lambda _: 1, ItemClassification.progression),
-    "Sorceress' Cauldron": CandyBox2ItemData(candy_box_2_base_id + 13, lambda _: 1, ItemClassification.progression),
-    "Sorceress' Hat": CandyBox2ItemData(candy_box_2_base_id + 14, lambda _: 1, ItemClassification.useful),
-    "Octopus King Crown": CandyBox2ItemData(candy_box_2_base_id + 15, lambda _: 1, ItemClassification.progression),
-    "Monkey Wizard Staff": CandyBox2ItemData(candy_box_2_base_id + 16, lambda world: weapon_item_count(world, 16), ItemClassification.progression),
-    "Heart Plug": CandyBox2ItemData(candy_box_2_base_id + 17, lambda _: 1, ItemClassification.progression),
-    "Pogo Stick": CandyBox2ItemData(candy_box_2_base_id + 18, lambda _: 1, ItemClassification.progression),
-    "P Stone": CandyBox2ItemData(candy_box_2_base_id + 19, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    "L Stone": CandyBox2ItemData(candy_box_2_base_id + 20, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    "A Stone": CandyBox2ItemData(candy_box_2_base_id + 21, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    "Y Stone": CandyBox2ItemData(candy_box_2_base_id + 22, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    "Wooden Sword": CandyBox2ItemData(candy_box_2_base_id + 23, lambda world: weapon_item_count(world, 23), ItemClassification.progression),
-    "Iron Axe": CandyBox2ItemData(candy_box_2_base_id + 24, lambda world: weapon_item_count(world, 24), ItemClassification.progression),
-    "Polished Silver Sword": CandyBox2ItemData(candy_box_2_base_id + 25, lambda world: weapon_item_count(world, 25), ItemClassification.progression),
-    "Lightweight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 26, lambda _: 1, ItemClassification.progression),
-    "Scythe": CandyBox2ItemData(candy_box_2_base_id + 27, lambda world: weapon_item_count(world, 27), ItemClassification.progression),
-    "Red Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 28, lambda _: 1, ItemClassification.progression),
-    "Pink Enchanted Gloves": CandyBox2ItemData(candy_box_2_base_id + 29, lambda _: 1, ItemClassification.progression),
-    "Summoning Tribal Spear": CandyBox2ItemData(candy_box_2_base_id + 30, lambda world: weapon_item_count(world, 30), ItemClassification.progression),
-    "Enchanted Monkey Wizard Staff": CandyBox2ItemData(candy_box_2_base_id + 31, lambda world: weapon_item_count(world, 31), ItemClassification.progression),
-    "Enchanted Knight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 32, lambda _: 1, ItemClassification.progression),
-    "Octopus King Crown with Jaspers": CandyBox2ItemData(candy_box_2_base_id + 33, lambda _: 1, ItemClassification.progression),
-    "Octopus King Crown with Obsidian": CandyBox2ItemData(candy_box_2_base_id + 34, lambda _: 1, ItemClassification.progression),
-    "Giant Spoon of Doom": CandyBox2ItemData(candy_box_2_base_id + 35, lambda world: weapon_item_count(world, 35), ItemClassification.progression),
-    "Tribal Spear": CandyBox2ItemData(candy_box_2_base_id + 36, lambda world: weapon_item_count(world, 36), ItemClassification.progression),
-    "Giant Spoon": CandyBox2ItemData(candy_box_2_base_id + 37, lambda world: weapon_item_count(world, 37), ItemClassification.progression),
-    "Desert Fortress Key": CandyBox2ItemData(candy_box_2_base_id + 38, lambda _: 1, ItemClassification.progression),
-    "Knight Body Armour": CandyBox2ItemData(candy_box_2_base_id + 39, lambda _: 1, ItemClassification.progression),
-    "Xinopherydon Claw": CandyBox2ItemData(candy_box_2_base_id + 40, lambda _: 1, ItemClassification.progression),
-    "Unicorn Horn": CandyBox2ItemData(candy_box_2_base_id + 41, lambda _: 1, ItemClassification.progression),
-    "Rocket Boots": CandyBox2ItemData(candy_box_2_base_id + 42, lambda _: 1, ItemClassification.progression),
-    "Heart Pendant": CandyBox2ItemData(candy_box_2_base_id + 43, lambda _: 1, ItemClassification.progression),
-    "Black Magic Grimoire": CandyBox2ItemData(candy_box_2_base_id + 44, lambda _: 1, ItemClassification.progression),
-    "4 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 45, lambda _: 1, ItemClassification.progression),
-    "Pitchfork": CandyBox2ItemData(candy_box_2_base_id + 46, lambda _: 1, ItemClassification.progression),
-    "20 Candies": CandyBox2ItemData(candy_box_2_base_id + 47, lambda _: 1),
-    "100 Candies": CandyBox2ItemData(candy_box_2_base_id + 48, lambda _: 1),
-    "500 Candies": CandyBox2ItemData(candy_box_2_base_id + 49, lambda _: 1),
-    "3 Lollipops": CandyBox2ItemData(candy_box_2_base_id + 50, lambda _: 1, ItemClassification.progression),
-    "3 Chocolate Bars": CandyBox2ItemData(candy_box_2_base_id + 51, lambda _: 2, ItemClassification.progression),
-    "Third House Key": CandyBox2ItemData(candy_box_2_base_id + 52, lambda _: 1, ItemClassification.progression),
-    "Sponge": CandyBox2ItemData(candy_box_2_base_id + 53, lambda _: 1, ItemClassification.progression),
-    "Shell Powder": CandyBox2ItemData(candy_box_2_base_id + 54, lambda _: 1, ItemClassification.progression),
-    "Red Fin": CandyBox2ItemData(candy_box_2_base_id + 55, lambda _: 1, ItemClassification.useful),
-    "Green Fin": CandyBox2ItemData(candy_box_2_base_id + 56, lambda _: 1, ItemClassification.progression),
-    "Purple Fin": CandyBox2ItemData(candy_box_2_base_id + 57, lambda _: 1, ItemClassification.progression),
-    "Locked Candy Box": CandyBox2ItemData(candy_box_2_base_id + 58, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    "Boots of Introspection": CandyBox2ItemData(candy_box_2_base_id + 59, lambda _: 1, ItemClassification.progression),
-    "Pain au Chocolat": CandyBox2ItemData(candy_box_2_base_id + 60, lambda _: 5, ItemClassification.useful),
-    "Nothing (Weapon)": CandyBox2ItemData(candy_box_2_base_id + 61, lambda world: weapon_item_count(world, 61), ItemClassification.progression),
-    "Progressive Weapon": CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression),
+    CandyBox2ItemName.CANDY: CandyBox2ItemData(candy_box_2_base_id + 0, lambda _: 0),
+    CandyBox2ItemName.LOLLIPOP: CandyBox2ItemData(candy_box_2_base_id + 1, lambda _: 8, ItemClassification.progression),
+    CandyBox2ItemName.CHOCOLATE_BAR: CandyBox2ItemData(candy_box_2_base_id + 2, lambda _: 3, ItemClassification.progression),
+    CandyBox2ItemName.HP_BAR: CandyBox2ItemData(candy_box_2_base_id + 3, lambda world: hp_bar_count(world), ItemClassification.useful),
+    CandyBox2ItemName.TIME_RING: CandyBox2ItemData(candy_box_2_base_id + 4, lambda _: 1, ItemClassification.useful),
+    CandyBox2ItemName.CANDY_MERCHANTS_HAT: CandyBox2ItemData(candy_box_2_base_id + 5, lambda _: 1, ItemClassification.useful),
+    CandyBox2ItemName.LEATHER_GLOVES: CandyBox2ItemData(candy_box_2_base_id + 6, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.LEATHER_BOOTS: CandyBox2ItemData(candy_box_2_base_id + 7, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.PROGRESSIVE_WORLD_MAP: CandyBox2ItemData(candy_box_2_base_id + 8, lambda _: 7, ItemClassification.progression),
+    CandyBox2ItemName.TROLLS_BLUDGEON: CandyBox2ItemData(candy_box_2_base_id + 9, lambda world: weapon_item_count(world, 9), ItemClassification.progression),
+    CandyBox2ItemName.DESERT_BIRD_FEATHER: CandyBox2ItemData(candy_box_2_base_id + 10, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.BEGINNERS_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 11, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.ADVANCED_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 12, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SORCERESS_CAULDRON: CandyBox2ItemData(candy_box_2_base_id + 13, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SORCERESS_HAT: CandyBox2ItemData(candy_box_2_base_id + 14, lambda _: 1, ItemClassification.useful),
+    CandyBox2ItemName.OCTOPUS_KING_CROWN: CandyBox2ItemData(candy_box_2_base_id + 15, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.MONKEY_WIZARD_STAFF: CandyBox2ItemData(candy_box_2_base_id + 16, lambda world: weapon_item_count(world, 16), ItemClassification.progression),
+    CandyBox2ItemName.HEART_PLUG: CandyBox2ItemData(candy_box_2_base_id + 17, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.POGO_STICK: CandyBox2ItemData(candy_box_2_base_id + 18, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.P_STONE: CandyBox2ItemData(candy_box_2_base_id + 19, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.L_STONE: CandyBox2ItemData(candy_box_2_base_id + 20, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.A_STONE: CandyBox2ItemData(candy_box_2_base_id + 21, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.Y_STONE: CandyBox2ItemData(candy_box_2_base_id + 22, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.WOODEN_SWORD: CandyBox2ItemData(candy_box_2_base_id + 23, lambda world: weapon_item_count(world, 23), ItemClassification.progression),
+    CandyBox2ItemName.IRON_AXE: CandyBox2ItemData(candy_box_2_base_id + 24, lambda world: weapon_item_count(world, 24), ItemClassification.progression),
+    CandyBox2ItemName.POLISHED_SILVER_SWORD: CandyBox2ItemData(candy_box_2_base_id + 25, lambda world: weapon_item_count(world, 25), ItemClassification.progression),
+    CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR: CandyBox2ItemData(candy_box_2_base_id + 26, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SCYTHE: CandyBox2ItemData(candy_box_2_base_id + 27, lambda world: weapon_item_count(world, 27), ItemClassification.progression),
+    CandyBox2ItemName.RED_ENCHANTED_GLOVES: CandyBox2ItemData(candy_box_2_base_id + 28, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.PINK_ENCHANTED_GLOVES: CandyBox2ItemData(candy_box_2_base_id + 29, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR: CandyBox2ItemData(candy_box_2_base_id + 30, lambda world: weapon_item_count(world, 30), ItemClassification.progression),
+    CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF: CandyBox2ItemData(candy_box_2_base_id + 31, lambda world: weapon_item_count(world, 31), ItemClassification.progression),
+    CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR: CandyBox2ItemData(candy_box_2_base_id + 32, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS: CandyBox2ItemData(candy_box_2_base_id + 33, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN: CandyBox2ItemData(candy_box_2_base_id + 34, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.GIANT_SPOON_OF_DOOM: CandyBox2ItemData(candy_box_2_base_id + 35, lambda world: weapon_item_count(world, 35), ItemClassification.progression),
+    CandyBox2ItemName.TRIBAL_SPEAR: CandyBox2ItemData(candy_box_2_base_id + 36, lambda world: weapon_item_count(world, 36), ItemClassification.progression),
+    CandyBox2ItemName.GIANT_SPOON: CandyBox2ItemData(candy_box_2_base_id + 37, lambda world: weapon_item_count(world, 37), ItemClassification.progression),
+    CandyBox2ItemName.DESERT_FORTRESS_KEY: CandyBox2ItemData(candy_box_2_base_id + 38, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.KNIGHT_BODY_ARMOUR: CandyBox2ItemData(candy_box_2_base_id + 39, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.XINOPHERYDON_CLAW: CandyBox2ItemData(candy_box_2_base_id + 40, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.UNICORN_HORN: CandyBox2ItemData(candy_box_2_base_id + 41, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.ROCKET_BOOTS: CandyBox2ItemData(candy_box_2_base_id + 42, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.HEART_PENDANT: CandyBox2ItemData(candy_box_2_base_id + 43, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 44, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.FOUR_CHOCOLATE_BARS: CandyBox2ItemData(candy_box_2_base_id + 45, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.PITCHFORK: CandyBox2ItemData(candy_box_2_base_id + 46, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.TWENTY_CANDIES: CandyBox2ItemData(candy_box_2_base_id + 47, lambda _: 1),
+    CandyBox2ItemName.ONE_HUNDRED_CANDIES: CandyBox2ItemData(candy_box_2_base_id + 48, lambda _: 1),
+    CandyBox2ItemName.FIVE_HUNDRED_CANDIES: CandyBox2ItemData(candy_box_2_base_id + 49, lambda _: 1),
+    CandyBox2ItemName.THREE_LOLLIPOPS: CandyBox2ItemData(candy_box_2_base_id + 50, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.THREE_CHOCOLATE_BARS: CandyBox2ItemData(candy_box_2_base_id + 51, lambda _: 2, ItemClassification.progression),
+    CandyBox2ItemName.THIRD_HOUSE_KEY: CandyBox2ItemData(candy_box_2_base_id + 52, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SPONGE: CandyBox2ItemData(candy_box_2_base_id + 53, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.SHELL_POWDER: CandyBox2ItemData(candy_box_2_base_id + 54, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.RED_FIN: CandyBox2ItemData(candy_box_2_base_id + 55, lambda _: 1, ItemClassification.useful),
+    CandyBox2ItemName.GREEN_FIN: CandyBox2ItemData(candy_box_2_base_id + 56, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.PURPLE_FIN: CandyBox2ItemData(candy_box_2_base_id + 57, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.LOCKED_CANDY_BOX: CandyBox2ItemData(candy_box_2_base_id + 58, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.BOOTS_OF_INTROSPECTION: CandyBox2ItemData(candy_box_2_base_id + 59, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.PAIN_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 60, lambda _: 5, ItemClassification.useful),
+    CandyBox2ItemName.NOTHING_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 61, lambda world: weapon_item_count(world, 61), ItemClassification.progression),
+    CandyBox2ItemName.PROGRESSIVE_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression),
 }
 
 filler_items: list[str] = [
-    "Candy"
+    CandyBox2ItemName.CANDY
 ]
 
 def weapon_item_count(world: "CandyBox2World", weapon: int):
