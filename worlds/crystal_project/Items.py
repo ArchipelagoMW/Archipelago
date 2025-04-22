@@ -139,7 +139,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression),
     "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression),
     "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression),
-    "Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.progression, 12),
+    "Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 12),
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression),
     "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression),
     "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression),
