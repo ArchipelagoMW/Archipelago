@@ -155,7 +155,7 @@ class LuigisMansionRandomizer:
         update_item_info_table(self.jmp_item_info_table, self.output_data)
         update_item_appear_table(self.jmp_item_appear_table, self.output_data)
         update_treasure_table(self.jmp_treasure_table, self.jmp_character_info_table, self.output_data)
-        update_treasure_table(self.jmp_treasure_table, self.jmp_teiden_character_info_table, self.output_data, True)
+        update_treasure_table(self.jmp_treasure_table, self.jmp_teiden_character_info_table, self.output_data)
         update_furniture_info(self.jmp_furniture_info_table, self.jmp_item_appear_table, self.output_data)
         update_event_info(self.jmp_event_info_table, bool_boo_checks, self.output_data)
         update_observer_info(self.jmp_observer_info_table)
