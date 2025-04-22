@@ -3,7 +3,7 @@ from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
-from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -451,9 +451,10 @@ class TunicWorld(World):
     def pre_fill(self) -> None:
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-            reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
+            sphere_one_locs = self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player)
+            reserved_locations: Set[Location] = set(self.random.sample(sphere_one_locs, 2))
             viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
-                                if loc.name not in reserved_locations
+                                if loc not in reserved_locations
                                 and loc.name not in self.options.priority_locations.value]
 
             if len(viable_locations) < self.amount_to_local_fill:
