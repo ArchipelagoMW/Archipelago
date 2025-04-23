@@ -49,10 +49,10 @@ def has_projectiles(world: "CandyBox2World", state: CollectionState, player: int
     return state.has(CandyBox2ItemName.RED_ENCHANTED_GLOVES, player) or state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) or has_weapon(world, state, player, CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF)
 
 def can_jump(state: CollectionState, player: int):
-    return (state.has(CandyBox2ItemName.ROCKET_BOOTS, player) or state.has(CandyBox2ItemName.DESERT_BIRD_FEATHER, player)) and state.has(CandyBox2ItemName.POGO_STICK, player)
+    return ((state.has(CandyBox2ItemName.ROCKET_BOOTS, player) or state.has(CandyBox2ItemName.DESERT_BIRD_FEATHER, player)) and state.has(CandyBox2ItemName.POGO_STICK, player)) or state.has(CandyBox2ItemName.PROGRESSIVE_JUMP, player, 2)
 
 def can_fly(state: CollectionState, player: int):
-    return state.has(CandyBox2ItemName.ROCKET_BOOTS, player) and state.has(CandyBox2ItemName.POGO_STICK, player)
+    return (state.has(CandyBox2ItemName.ROCKET_BOOTS, player) and state.has(CandyBox2ItemName.POGO_STICK, player)) or state.has(CandyBox2ItemName.PROGRESSIVE_JUMP, player, 3)
 
 def can_escape_hole(state: CollectionState, player: int):
     return can_fly(state, player) or state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player)

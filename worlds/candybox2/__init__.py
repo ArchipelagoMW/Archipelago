@@ -38,9 +38,11 @@ class CandyBox2World(World):
     options: CandyBox2Options
     topology_present = True
 
-    entrance_randomisation: ERPlacementState = None
     should_randomize_hp_bar: bool
     starting_weapon: int
+    progressive_jump: bool
+
+    entrance_randomisation: ERPlacementState = None
     original_entrances: list[tuple[str, str]]
     calculated_entrances: list[tuple[str, str]]
 
@@ -48,6 +50,7 @@ class CandyBox2World(World):
         super(CandyBox2World, self).__init__(multiworld, player)
         self.should_randomize_hp_bar = False
         self.starting_weapon = 0
+        self.progressive_jump = False
         self.original_entrances: list[tuple[str, str]] = []
         self.calculated_entrances: list[tuple[str, str]] = []
 
@@ -67,6 +70,7 @@ class CandyBox2World(World):
     def generate_early(self) -> None:
         self.should_randomize_hp_bar = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["hpBarRandomized"] if self.is_ut_regen() else self.options.randomise_hp_bar.value
         self.starting_weapon = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["weapon"] if self.is_ut_regen() else self.options.starting_weapon.value
+        self.progressive_jump = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["progressiveJump"] if self.is_ut_regen() else self.options.progressive_jump.value
 
     def create_regions(self) -> None:
         return create_regions(self)
@@ -114,7 +118,8 @@ class CandyBox2World(World):
             },
             "defaults": {
                 "weapon": self.options.starting_weapon.value,
-                "hpBarRandomized": self.options.randomise_hp_bar.value
+                "hpBarRandomized": self.options.randomise_hp_bar.value,
+                "progressiveJump": self.options.progressive_jump.value,
             }
         }
 

@@ -85,6 +85,7 @@ class CandyBox2ItemName(StrEnum):
     PAIN_AU_CHOCOLAT = "Pain au Chocolat"
     NOTHING_WEAPON = "Nothing (Weapon)"
     PROGRESSIVE_WEAPON = "Progressive Weapon"
+    PROGRESSIVE_JUMP = "Progressive Jump"
 
 
 item_descriptions = {
@@ -102,7 +103,7 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.LEATHER_BOOTS: CandyBox2ItemData(candy_box_2_base_id + 7, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.PROGRESSIVE_WORLD_MAP: CandyBox2ItemData(candy_box_2_base_id + 8, lambda _: 7, ItemClassification.progression),
     CandyBox2ItemName.TROLLS_BLUDGEON: CandyBox2ItemData(candy_box_2_base_id + 9, lambda world: weapon_item_count(world, 9), ItemClassification.progression),
-    CandyBox2ItemName.DESERT_BIRD_FEATHER: CandyBox2ItemData(candy_box_2_base_id + 10, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.DESERT_BIRD_FEATHER: CandyBox2ItemData(candy_box_2_base_id + 10, lambda world: jump_item_count(world), ItemClassification.progression),
     CandyBox2ItemName.BEGINNERS_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 11, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.ADVANCED_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 12, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.SORCERESS_CAULDRON: CandyBox2ItemData(candy_box_2_base_id + 13, lambda _: 1, ItemClassification.progression),
@@ -110,7 +111,7 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.OCTOPUS_KING_CROWN: CandyBox2ItemData(candy_box_2_base_id + 15, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.MONKEY_WIZARD_STAFF: CandyBox2ItemData(candy_box_2_base_id + 16, lambda world: weapon_item_count(world, 16), ItemClassification.progression),
     CandyBox2ItemName.HEART_PLUG: CandyBox2ItemData(candy_box_2_base_id + 17, lambda _: 1, ItemClassification.progression),
-    CandyBox2ItemName.POGO_STICK: CandyBox2ItemData(candy_box_2_base_id + 18, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.POGO_STICK: CandyBox2ItemData(candy_box_2_base_id + 18, lambda world: jump_item_count(world), ItemClassification.progression),
     CandyBox2ItemName.P_STONE: CandyBox2ItemData(candy_box_2_base_id + 19, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.L_STONE: CandyBox2ItemData(candy_box_2_base_id + 20, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.A_STONE: CandyBox2ItemData(candy_box_2_base_id + 21, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
@@ -134,7 +135,7 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.KNIGHT_BODY_ARMOUR: CandyBox2ItemData(candy_box_2_base_id + 39, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.XINOPHERYDON_CLAW: CandyBox2ItemData(candy_box_2_base_id + 40, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.UNICORN_HORN: CandyBox2ItemData(candy_box_2_base_id + 41, lambda _: 1, ItemClassification.progression),
-    CandyBox2ItemName.ROCKET_BOOTS: CandyBox2ItemData(candy_box_2_base_id + 42, lambda _: 1, ItemClassification.progression),
+    CandyBox2ItemName.ROCKET_BOOTS: CandyBox2ItemData(candy_box_2_base_id + 42, lambda world: jump_item_count(world), ItemClassification.progression),
     CandyBox2ItemName.HEART_PENDANT: CandyBox2ItemData(candy_box_2_base_id + 43, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 44, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.FOUR_CHOCOLATE_BARS: CandyBox2ItemData(candy_box_2_base_id + 45, lambda _: 1, ItemClassification.progression),
@@ -155,6 +156,7 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.PAIN_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 60, lambda _: 5, ItemClassification.useful),
     CandyBox2ItemName.NOTHING_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 61, lambda world: weapon_item_count(world, 61), ItemClassification.progression),
     CandyBox2ItemName.PROGRESSIVE_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression),
+    CandyBox2ItemName.PROGRESSIVE_JUMP: CandyBox2ItemData(candy_box_2_base_id + 63, lambda world: progressive_jump_count(world), ItemClassification.progression),
 }
 
 filler_items: list[str] = [
@@ -177,6 +179,19 @@ def progressive_weapon_count(world: "CandyBox2World"):
         return 11
 
     # Progressive Weapons are disabled
+    return 0
+
+def jump_item_count(world: "CandyBox2World"):
+    if world.progressive_jump:
+        return 0
+
+    return 1
+
+def progressive_jump_count(world: "CandyBox2World"):
+    if world.progressive_jump:
+        return 3
+
+    # Progressive Jump is disabled
     return 0
 
 def hp_bar_count(world: "CandyBox2World"):

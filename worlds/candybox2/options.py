@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle
+from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle, DefaultOnToggle
 
 
 class QuestRandomisation(Choice):
@@ -86,10 +86,10 @@ class StartingWeapon(Choice):
     option_scythe = 27
     option_giant_spoon_of_doom = 35
 
-class RandomiseHpBar(Toggle):
+class RandomiseHpBar(DefaultOnToggle):
     """Whether the HP Bar must be an item found elsewhere"""
     display_name = "Randomise HP Bar"
-    default = True
+
 
 class EnergyLink(Toggle):
     """Allow sending energy to other worlds. Candy and lollipops can be converted to energy. 25% of the energy is lost in the transfer."""
@@ -101,6 +101,11 @@ class Gifting(Toggle):
     display_name = "Gifting"
     default = 1
 
+class ProgressiveJump(DefaultOnToggle):
+    """Obtain the Pogo Stick, the Desert Bird Feather and the Rocket Boots in that order"""
+    display_name = "Progressive Jump"
+
+
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
     progression_balancing = True
@@ -108,6 +113,7 @@ class CandyBox2Options(PerGameCommonOptions):
     quest_randomisation: QuestRandomisation
     death_link: DeathLink
     starting_weapon: StartingWeapon
+    progressive_jump: ProgressiveJump
     candy_production_multiplier: CandyProductionMultiplier
     lollipop_production_multiplier: LollipopProductionMultiplier
     candy_merchant_hat_price: CandyMerchantHatPrice
