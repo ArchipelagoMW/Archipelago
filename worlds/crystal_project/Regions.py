@@ -64,6 +64,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, "Tall, Tall Heights"),
         create_region(world, player, locations_per_region, "Northern Cave"),
         create_region(world, player, locations_per_region, "Lands End"),
+        create_region(world, player, locations_per_region, "Slip Glide Ride"),
+        create_region(world, player, locations_per_region, "Northern Stretch"),
         
     ]
 
@@ -75,51 +77,54 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region("Yamagawa M.A.", player).add_exits(["Lake Delende"])
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit", "Beaurior Volcano"],
-        {"Beaurior Volcano": lambda state: state.has_any({"Item - Ibek Bell"}, world.player)})
+        {"Beaurior Volcano": logic.has_vertical_movement})
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
         {"Skumparadise": lambda state: logic.has_jobs(state, 3)})
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
-        {"Capital Jail": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
+        {"Capital Jail": logic.has_rental_quintar})
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
-        {"Quintar Sanctum": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player)})
+        {"Quintar Sanctum": logic.has_rental_quintar})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
         "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) })
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
-        {"Shoudu Waterfront": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2), 
-        "Okimoto N.S.": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
+        {"Shoudu Waterfront": logic.has_horizontal_movement, 
+        "Okimoto N.S.": logic.has_horizontal_movement})
     multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province"],
-        {"Shoudu Province": lambda state: state.has("Item - Ibek Bell", world.player)})
+        {"Shoudu Province": logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass", "Tall, Tall Heights"], 
-        {"Salmon Pass": lambda state: state.has_any({"Item - Progressive Quintar Flute"}, world.player),
-        "Tall, Tall Heights": lambda state: state.has("Item - Ibek Bell", world.player),})
+        {"Salmon Pass": logic.has_rental_quintar,
+        "Tall, Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Salmon Pass", player).add_exits(["Salmon River"], 
-        {"Salmon River": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2)})
+        {"Salmon River": logic.has_horizontal_movement})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Salmon Bay"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
-        "Salmon Bay": lambda state: state.has("Item - Progressive Quintar Flute", world.player, 2) and state.has("Item - Ibek Bell", player)})
+        "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "The Open Sea"],
         {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
-        "The Open Sea": lambda state: state.has("Item - Progressive Salmon Violin", world.player)})
+        "The Open Sea": logic.has_swimming})
     multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine", "The Undercity", "Quintar Reserve"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
-        "Ganymede Shrine": lambda state: state.has("Item - Ibek Bell", world.player),
-        "The Undercity": lambda state: state.has("Item - Ibek Bell", world.player) and state.has("Item - Progressive Quintar Flute", world.player, 2),
-        "Quintar Reserve": lambda state: state.has("Item - Ibek Bell", world.player) and state.has("Item - Item - Elevator Part", world.player, 10)})
+        "Ganymede Shrine": logic.has_vertical_movement,
+        "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
+        "Quintar Reserve": logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10)})
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Beaurior Volcano"],
-        {"Beaurior Volcano": lambda state: state.has("Item - Ibek Bell", world.player)})
+        {"Beaurior Volcano": logic.has_vertical_movement})
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine"])
     multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm"],
-        {"Lands End": lambda state: state.has("Item - Owl Drum", world.player)})
-    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Northern Cave", "Lands End"],
-        {"Eastern Chasm": lambda state: state.has("Item - Ibek Bell", world.player)})
+        {"Lands End": logic.has_glide})
+    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Northern Cave", "Lands End", "Northern Stretch"],
+        {"Eastern Chasm": logic.has_vertical_movement,
+        "Northern Stretch": logic.has_glide})
+    multiworld.get_region("Northern Cave", player).add_exits(["Slip Glide Ride"],
+        {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement})
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}

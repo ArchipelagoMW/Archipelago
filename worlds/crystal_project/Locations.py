@@ -378,6 +378,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Money chest west of and above sneaky Potion chest", 338 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle Tincture Pouch chest with a short and tall box friend", 471 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop Spore Blocker chest west of Quintar Sanctum", 365 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement),
+        #Technically the 1st Overpass Scrap chest
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Climb the mountain east of Quintar Sanctum for Overpass Scrap chest", 3532 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement),
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
@@ -687,12 +689,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Overpass
         #Treasure chests
+        #1st Overpass Scrap chest on main map has been categorized under Rolling Quintar Fields
         #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
         #2nd Overpass Scrap chest from the bottom on main map has been categorized under Salmon Bay
         #5th Overpass Scrap chest from the top on main map has been categorized under quintar reserve
+        #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall, Tall Heights
+        #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
 
         #NPCs
+        #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall, Tall Heights
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Aegis ID 3610 (501, 194, -210); gives you Aegis Seal in exchange for job mastery
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Beastmaster ID 3608 (312, 236, -344); gives you Beastmaster Seal in exchange for job mastery
@@ -707,6 +713,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
         #The Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
+        #Underpass (Ice Pass) Scrap chest has been categorized under Tall, Tall Heights
+        #Underpass (Ice Pass) Potion chest has been categorized under Tall, Tall Heights
 
         #Abilities Todo: descriptivize and implement
         #614, 91, -213
@@ -746,10 +754,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the resovoir above the water", 3508 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest above the accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest above samurai lounge", 3511 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in samurai lounge", 3512 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the assassin lounge", 3513 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest across from assassin lounge", 3514 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest above Samurai Lounge", 3511 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest among the crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest its in a room and there is a bed", 3515 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest in the granary", 3520 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest below the flower house", 3521 + treasure_index_offset, logic.has_vertical_movement),
@@ -757,7 +765,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether chest balance above the undercity", 2717 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest jump through a window", 1507 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest across the resovoir", 2978 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest above samurai lounge", 1541 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest above Samurai Lounge", 1541 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest", 2723 + treasure_index_offset), #(736, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest", 2723 + treasure_index_offset), #(734, 133, -260)
         LocationData("Shoudu Province", "Shoudu Province Chest - Gravedigger chest", 2665 + treasure_index_offset), #(749, 134, -263)
@@ -792,15 +800,15 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + npc_index_offset), #(752, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + npc_index_offset), #(756, 133, -261)
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ore", 2832 + npc_index_offset), #(753, 130, -264)
-        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot back resovoir wall", 2827 + npc_index_offset, logic.has_vertical_movement and logic.has_swimming),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot back reservoir wall", 2827 + npc_index_offset, logic.has_vertical_movement and logic.has_swimming),
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot farmland on way to shrine", 2821 + npc_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ore near sky fishing", 2834 + npc_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Dust in the 2 Sky Arena Win room", 2829 + npc_index_offset, logic.has_vertical_movement),
 
-        #crystals
+        #Crystals
         LocationData("Shoudu Province", "Shoudu Province Crystal - Samurai Crystal 3 Sky Arena wins", 1206 + crystal_index_offset, logic.has_vertical_movement),
 
-        #The undercity
+        #The Undercity
         #Items
         LocationData("The Undercity", "The Undercity Chest - Potion Pouch chest hiding in the rafters", 2989 + treasure_index_offset),
         LocationData("The Undercity", "The Undercity Chest - Ether chest up the rafters against a pillar", 2990 + treasure_index_offset),
@@ -827,17 +835,18 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Undercity", "The Undercity Crystal - Assassin Crystal", 1204 + crystal_index_offset),
 
         #Ganymede Shrine
-        #Items
+        #Treasure chests
         LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: lambda state: state.has("Item - Ganymede Stone", player)),
 
         #Beaurior Volcano
-        #Treasure Chests
+        #Treasure chests
         LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Fenix Syrup chest", 3770 + treasure_index_offset),
 	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Temporal Blade chest", 1168 + treasure_index_offset),
 	    LocationData("Beaurior Volcano", "Beaurior Volcano Chest - Tome of Light chest", 2750 + treasure_index_offset),
 
         #Beaurior Rock
         #Treasure chests
+        #Todo prefer the floor #'s to match the in-game map
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Ground Floor Ether chest", 1796 + treasure_index_offset),
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Ground Floor Guard Crown chest", 481 + treasure_index_offset),
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Bottom Floor Halberd chest", 724 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
@@ -860,7 +869,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Bottom Floor Gold Ingot", 2822 + npc_index_offset, lambda state: state.has("Item - Small Key", player) and logic.has_horizontal_movement),
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Floor 4 Gold Dust", 2823 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Floor 4 Gold Ore", 2824 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement),
-	    LocationData("Beaurior Rock", "Beaurior Rock NPC - Summit Gold Ore", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement),
+	    #Technically Beaurior Volcano but it's at the top so Rock it is
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - Summit Gold Ore", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement),
 
         #Crystals
 	    LocationData("Beaurior Rock", "Beaurior Rock Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Boss Key", player)),
@@ -878,14 +888,18 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #LocationData("Lake Delende", "Lake Delende Ability - Ioske from SEarth_Summon", 1111 + ability_index_offset),
 
         #Quintar Reserve
-        #Items
+        #Treasure chests
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Overpass Scrap chest on the climb up from the elevator", 3536 + treasure_index_offset),
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Quintar Grass chest in race start hut", 1591 + treasure_index_offset),
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring chest in Mausoleum", 1320 + treasure_index_offset, lambda state: state.has("Item - Owl Drum", player)),
 
         #NPCs
+        #Todo NPCs CheckOrNot: 3 Quintar Eggs here
+        #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar) (789, 191, -338)
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the quintar nest", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
+        #Todo descriptivize and check requirements for shedding #3 (696, 191, -337)
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 3", 2257 + npc_index_offset),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 4 north side of the map", 2259 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 5 long jog along the east mountian", 2260 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 6 overlooking the east ocean", 2261 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
@@ -900,7 +914,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Dust jump across the treetops", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement and logic.has_horizontal_movement and state.has("Item - Dione Stone", player)),
 
         #Dione shrine
-        #items
+        #Treasure chests
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on top of shrine", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)),
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest in lobby", 2791 + treasure_index_offset),
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on second floor", 2792 + treasure_index_offset),
@@ -930,13 +944,37 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tall stones and blue flowers Potion Pouch chest", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement),
         #Technically Northern Cave
         LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Break the ice Radiance chest", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Parkour off the diamondsmith Judo Gi chest beneath the dead tree", 2810 + treasure_index_offset, logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Money chest east of the souvenir shop", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Athenaeum Chips Challenge (or be a bird) Insignia Helm chest", 2785 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Potion Pouch chest east of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Z-Potion chest on the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        #Technically 1st Overpass Scrap on Overpass (Cloudy Wind) submap
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Overpass Scrap chest past the spiky tunnel to Salmon River", 3538 + treasure_index_offset),
+        #Technically Underpass Scrap on Underpass (Ice Pass) submap
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Underpass Scrap chest in the spiky tunnel to Salmon River", 3672 + treasure_index_offset),
+        #Technically Potion chest on Underpass (Ice Pass) submap
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Potion chest in the spiky tunnel to Salmon River", 1601 + treasure_index_offset),
 
         #NPCs
+        #Todo NPCs Job Masters: Tall, Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
+        #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
+        #LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Z8_FisherInHut", 1549 + npc_index_offset),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot above the Boomer Society", 1600 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Hop along spike mountain to Gold Dust", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Melted snow Gold Ingot past the Potion Pouch chest", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)),
         LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ingot by the breakable ice wall", 2814 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Come back with the bird for Gold Ingot", 2845 + npc_index_offset, logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Treacherous landing Gold Ore above the spikes", 1584 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Ore tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Dust past the Athenaeum Chips Challenge", 1602 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        #Technically 1st Gold Dust on Overpass (Cloudy Wind) submap
+        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold Dust past the spiky tunnel to Salmon River", 2710 + npc_index_offset),
+
+        #Abilities Todo: descriptivize and implement
+        #498, 218, -412
+        #LocationData("Tall, Tall Heights", "Tall, Tall Heights Ability - Pamoa from SIce_Summon", 1136 + ability_index_offset),
 
         #Northern Cave
         #Treasure chests
@@ -965,7 +1003,25 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Lands End", "Lands End NPC - Pillar Gold Ore by River Cats Ego", 2850 + npc_index_offset),
         LocationData("Lands End", "Lands End NPC - Gold Dust in spikes and storm", 2851 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)),
         LocationData("Lands End", "Lands End NPC - Gold Ingot behind the shrine", 2852 + npc_index_offset),
-        LocationData("Lands End", "Lands End NPC - Owl Drum", 1176 + npc_index_offset),
+        LocationData("Lands End", "Lands End NPC - Owl Drum", 1176 + npc_index_offset), #Todo make the owl drum sparkle despawn after you pick up this check; it stays rn if you don't have the owl drum item
+
+        #Slip Glide Ride
+        #Treasure chests
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Back out to 1st room to Money chest", 2554 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 1)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Climb up and fall down Plate of Lion chest", 1172 + treasure_index_offset),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Sparks and tar Red Door Key chest", 1298 + treasure_index_offset),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Red Door Key chest to the left through 2nd red lock", 1698 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 2)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Red Door Key chest through 1st red lock", 1716 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 1)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Past the mean Ibek jump Sages Walker chest", 1282 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 1)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Nickelodeon slime time :) Seekers Garb chest", 1269 + treasure_index_offset),
+
+        #Crystals
+        LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 3)),
+
+        #Northern Stretch
+        #Treasure chests
+        LocationData("Northern Stretch", "Northern Stretch Chest - Northern Stretch map chest at the base of Summoners Lookout", 3655 + treasure_index_offset),
+
 
         #Jidamba Eaclaneya
         #NPCs
