@@ -1,7 +1,7 @@
 import settings
 import typing
 import os
-from .options import TrackmaniaOptions
+from .options import TrackmaniaOptions, create_option_groups
 from .items import trackmania_items, trackmania_item_groups, create_itempool, create_item
 from .locations import build_locations
 from .regions import create_regions
@@ -27,7 +27,7 @@ components.append(Component("Trackmania Client", "TrackmaniaClient", func=launch
 
 class Webmania(WebWorld):
     theme = "ice"
-    # option_groups = create_option_groups()
+    option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide for setting up Trackmania to be played in Archipelago.",
@@ -68,6 +68,7 @@ class TrackmaniaWorld(World):
                            "MedalRequirement": self.options.medal_requirement.value,
                            "MapTags": encode(self.options.map_tags.value),
                            "MapTagsInclusive": self.options.map_tags_inclusive.value,
-                           "MapETags": encode(self.options.map_etags.value),}
+                           "MapETags": encode(self.options.map_etags.value),
+                           "Difficulties": encode(self.options.difficulties.value),}
 
         return slot_data

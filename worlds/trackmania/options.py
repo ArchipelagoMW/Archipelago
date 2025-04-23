@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Dict, Any
-from Options import Toggle, Range, Choice, OptionSet, PerGameCommonOptions, OptionGroup, StartInventory, ProgressionBalancing
-from .data import get_all_map_tags, get_excluded_map_tags
+from Options import Toggle, Range, Choice, OptionSet, PerGameCommonOptions, OptionGroup, StartInventory, ProgressionBalancing, Accessibility
+from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
 
@@ -71,14 +71,23 @@ class MapTagsInclusive(Toggle):
     display_name = "Are TMX Tags Inclusive"
 
 class MapETags(OptionSet):
-    """Tags that maps from Trackmania Exchance are *not* allowed to have."""
+    """Tags that maps from Trackmania Exchange are *not* allowed to have."""
     display_name = "Excluded TMX Tags"
     valid_keys = get_all_map_tags()
     default = get_excluded_map_tags()
 
+class MapDifficulties(OptionSet):
+    """Difficulty Ratings that maps from Trackmania Exchange are allowed to have."""
+    display_name = "Allowed TMX Difficulties"
+    valid_keys = get_all_map_difficulties()
+    default = get_default_map_difficulties()
+
 
 @dataclass
 class TrackmaniaOptions(PerGameCommonOptions):
+    progression_balancing: ProgressionBalancing
+    accessibility: Accessibility
+
     target_time: TargetTime
     series_number : SeriesNumber
     series_map_number: SeriesMapNumber
@@ -87,3 +96,18 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_tags: MapTags
     map_tags_inclusive: MapTagsInclusive
     map_etags: MapETags
+    difficulties: MapDifficulties
+
+option_groups: Dict[str, List[Any]] = {
+    "Generation":[ProgressionBalancing, Accessibility],
+    "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
+    "Campaign Configuration":[SeriesNumber, SeriesMapNumber, MedalRequirement],
+    "Map Tags":[MapTagsInclusive, MapTags, MapETags]
+}
+
+def create_option_groups() -> List[OptionGroup]:
+    option_group_list: List[OptionGroup] = []
+    for name, options in option_groups.items():
+        option_group_list.append(OptionGroup(name=name, options=options))
+
+    return option_group_list
