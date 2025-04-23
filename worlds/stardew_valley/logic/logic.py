@@ -44,6 +44,7 @@ from .skill_logic import SkillLogicMixin
 from .source_logic import SourceLogicMixin
 from .special_items_logic import SpecialItemsLogicMixin
 from .special_order_logic import SpecialOrderLogicMixin
+from .tailoring_logic import TailoringLogicMixin
 from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
@@ -102,7 +103,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, TailoringLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent

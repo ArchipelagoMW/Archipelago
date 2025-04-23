@@ -28,7 +28,7 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
     elif options.bundle_randomization == BundleRandomization.option_shuffled:
         return get_shuffled_bundles(random, logic, content, options)
     elif options.bundle_randomization == BundleRandomization.option_meme:
-        return get_remixed_bundles_anywhere(random, content, options)
+        return get_meme_bundles(random, content, options)
 
     raise NotImplementedError
 
