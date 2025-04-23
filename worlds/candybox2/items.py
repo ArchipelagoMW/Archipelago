@@ -88,10 +88,6 @@ class CandyBox2ItemName(StrEnum):
     PROGRESSIVE_JUMP = "Progressive Jump"
 
 
-item_descriptions = {
-    CandyBox2ItemName.HP_BAR: ""
-}
-
 items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.CANDY: CandyBox2ItemData(candy_box_2_base_id + 0, lambda _: 0),
     CandyBox2ItemName.LOLLIPOP: CandyBox2ItemData(candy_box_2_base_id + 1, lambda _: 8, ItemClassification.progression),

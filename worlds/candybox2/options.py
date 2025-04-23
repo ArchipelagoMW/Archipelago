@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle, DefaultOnToggle
+from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle, DefaultOnToggle, OptionGroup
 
 
 class QuestRandomisation(Choice):
@@ -95,16 +95,34 @@ class EnergyLink(Toggle):
     """Allow sending energy to other worlds. Candy and lollipops can be converted to energy. 25% of the energy is lost in the transfer."""
     display_name = "Energy Link"
 
-class Gifting(Toggle):
+class Gifting(DefaultOnToggle):
     """Do you want to enable gifting items to and from other Archipelago slots?
     Items can only be sent to games that also support gifting"""
     display_name = "Gifting"
-    default = 1
 
 class ProgressiveJump(DefaultOnToggle):
     """Obtain the Pogo Stick, the Desert Bird Feather and the Rocket Boots in that order"""
     display_name = "Progressive Jump"
 
+candy_box_2_options_groups = [
+    OptionGroup("Inventory Customisation", [
+        StartingWeapon,
+        ProgressiveJump,
+    ]),
+    OptionGroup("Production Multipliers", [
+        CandyProductionMultiplier,
+        LollipopProductionMultiplier,
+    ]),
+    OptionGroup("Item Pricing", [
+        CandyMerchantHatPrice,
+        SorceressHatPrice,
+    ]),
+    OptionGroup("Inter-game Features", [
+        DeathLink,
+        EnergyLink,
+        Gifting
+    ])
+]
 
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):

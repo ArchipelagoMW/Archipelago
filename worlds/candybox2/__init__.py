@@ -7,7 +7,7 @@ from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations, CandyBox2LocationName
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
-from .options import CandyBox2Options
+from .options import CandyBox2Options, candy_box_2_options_groups
 from .regions import create_regions, connect_entrances
 from .rooms import entrance_friendly_names, CandyBox2Room
 from .rules import set_rules, can_reach_room
@@ -20,11 +20,13 @@ class CandyBox2WebWorld(WebWorld):
         "A guide to setting up Candy Box 2 for Archipelago.",
         "English",
         "guide_en.md",
-        "setup/en",
+        "guide/en",
         ["Victor Tran"]
     )]
 
     location_descriptions = location_descriptions
+    option_groups = candy_box_2_options_groups
+    bug_report_page = "https://github.com/vicr123/candy-box-2/issues"
 
 class CandyBox2World(World):
     """Text-based web game with fun ASCII art"""

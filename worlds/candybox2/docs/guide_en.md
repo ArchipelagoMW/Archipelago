@@ -9,7 +9,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a YAML file?
 
-You can customize your options by visiting the [Candy Box 2 Player Options Page](../player-options)
+You can customize your options by visiting the [Candy Box 2 Player Options Page](/games/Candy%20Box%202/player-options)
 
 ## Joining a MultiWorld Game
 
