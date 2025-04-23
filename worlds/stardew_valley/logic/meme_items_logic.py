@@ -47,10 +47,10 @@ class MemeItemsLogic(BaseLogic):
         return self.logic.true_
 
     def has_any_hat(self):
-        return self.logic.has_any(all_hat_names)
+        return self.logic.has_any(*all_hat_names)
 
     def has_any_ring(self):
-        return self.logic.has_any(all_ring_names)
+        return self.logic.received_any(*all_ring_names)
 
     def has_any_boots(self):
         return self.logic.received(APWeapon.footwear)

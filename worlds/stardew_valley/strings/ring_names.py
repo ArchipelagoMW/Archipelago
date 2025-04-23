@@ -7,4 +7,4 @@ def ring(name: str) -> str:
 
 
 class Ring:
-    burglar = ring("Burglar")
+    burglar = ring("Burglar's Ring")

@@ -382,7 +382,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
         for catalogue in items_by_catalogue:
             for item in items_by_catalogue[catalogue]:
-                self.registry.item_rules[item] = self.logic.has(catalogue)
+                self.registry.item_rules[item] = self.has(catalogue)
 
         for boots in tier_by_boots:
             self.registry.item_rules[boots] = self.combat.has_specific_boots(boots)

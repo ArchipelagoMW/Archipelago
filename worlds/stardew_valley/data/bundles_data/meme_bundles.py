@@ -203,6 +203,7 @@ communist_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist
 # Reverse Bundle
 # Communist Bundle
 # Bundle Bundle
+# Scavenger Bundle
 
 pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle, big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
