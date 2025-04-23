@@ -2,6 +2,7 @@ from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.boot_names import Boots
+from ...strings.catalogue_names import CatalogueItem
 from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor
 from ...strings.crop_names import Vegetable, Fruit
 from ...strings.currency_names import Currency
@@ -515,12 +516,12 @@ tea_set = BundleItem(Gift.tea_set)
 golden_pumpkin = BundleItem(Gift.golden_pumpkin)
 mermaid_pendant = BundleItem(Gift.mermaid_pendant)
 
-crystal_ball = BundleItem(Furniture.crystal_ball)
-amethyst_crystal_ball = BundleItem(Furniture.amethyst_crystal_ball)
-aquamarine_crystal_ball = BundleItem(Furniture.aquamarine_crystal_ball)
-emerald_crystal_ball = BundleItem(Furniture.emerald_crystal_ball)
-ruby_crystal_ball = BundleItem(Furniture.ruby_crystal_ball)
-topaz_crystal_ball = BundleItem(Furniture.topaz_crystal_ball)
+crystal_ball = BundleItem(CatalogueItem.crystal_ball)
+amethyst_crystal_ball = BundleItem(CatalogueItem.amethyst_crystal_ball)
+aquamarine_crystal_ball = BundleItem(CatalogueItem.aquamarine_crystal_ball)
+emerald_crystal_ball = BundleItem(CatalogueItem.emerald_crystal_ball)
+ruby_crystal_ball = BundleItem(CatalogueItem.ruby_crystal_ball)
+topaz_crystal_ball = BundleItem(CatalogueItem.topaz_crystal_ball)
 flute_block = BundleItem(Furniture.flute_block)
 
 wood_floor = BundleItem(Floor.wood)

@@ -1,9 +1,10 @@
 import unittest
 
 from .bases import SVTestBase
-from .. import BundleRandomization
+from .. import BundleRandomization, location_table
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
-from ..options import BundlePlando
+from ..locations import LocationTags
+from ..options import BundlePlando, BundlePrice
 from ..strings.bundle_names import BundleName
 from ..strings.crop_names import Fruit
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality
@@ -87,3 +88,19 @@ class TestRemixedAnywhereBundles(SVTestBase):
         for bundle_name in self.fish_bundle_names:
             with self.subTest(f"{bundle_name}"):
                 self.assertIn(bundle_name, location_names)
+
+
+class TestMemeBundlesAreResolvable(SVTestBase):
+    options = {
+        BundleRandomization.internal_name: BundleRandomization.option_meme,
+        BundlePrice.internal_name: BundlePrice.option_maximum,
+    }
+
+    def test_can_complete_all_bundles_with_all_state(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.collect_everything()
+        for location_name in location_names:
+            if location_name not in location_table or LocationTags.MEME_BUNDLE not in location_table[location_name].tags:
+                continue
+            with self.subTest(f"{location_name}"):
+                self.assert_can_reach_location(location_name)

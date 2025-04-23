@@ -121,12 +121,6 @@ class Lighting:
 
 
 class Furniture:
-    topaz_crystal_ball = "Topaz Crystal Ball"
-    ruby_crystal_ball = "Ruby Crystal Ball"
-    emerald_crystal_ball = "Emerald Crystal Ball"
-    aquamarine_crystal_ball = "Aquamarine Crystal Ball"
-    amethyst_crystal_ball = "Amethyst Crystal Ball"
-    crystal_ball = "Crystal Ball"
     tub_o_flowers = "Tub o' Flowers"
     wicked_statue = "Wicked Statue"
     flute_block = "Flute Block"

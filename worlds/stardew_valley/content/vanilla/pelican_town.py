@@ -8,6 +8,7 @@ from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, Priz
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
+from ...strings.catalogue_names import Catalogue
 from ...strings.crop_names import Fruit
 from ...strings.fish_names import WaterItem
 from ...strings.food_names import Beverage, Meal
@@ -340,6 +341,9 @@ pelican_town = ContentPack(
         # Hat.space_helmet,
         # Hat.infinity_crown,
         # Hat.sports_cap,
+
+        # Catalogues
+        Catalogue.wizard: (ShopSource(money_price=150000, shop_region=Region.sewer),),
     },
     fishes=(
         fish_data.albacore,
