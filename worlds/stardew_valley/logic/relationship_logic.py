@@ -1,5 +1,4 @@
 import math
-import typing
 from typing import Union
 
 from Utils import cache_self1
@@ -14,11 +13,6 @@ from ..strings.gift_names import Gift
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
-
-if typing.TYPE_CHECKING:
-    pass
-else:
-    ModLogicMixin = object
 
 possible_kids = ("Cute Baby", "Ugly Baby")
 
