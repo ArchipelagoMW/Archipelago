@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Option, DefaultOnToggle, Choice, PerGameCommonOptions
+from Options import Option, DefaultOnToggle, Choice, PerGameCommonOptions, Toggle
 
 
 class ExpandedPool(DefaultOnToggle):
@@ -33,8 +33,68 @@ class StartingPosition(Choice):
     option_dangerous = 2
     option_very_dangerous = 3
 
+class WeaponLogic(Choice):
+    """What level of offensive power is logically required for later dungeons.
+    Easy means the Sword will be required for level 1 and later, the White Sword for levels 4 and later,
+    and the Magical Sword for levels 6, 8, and 9.
+    Moderate means the Swrod for level 1 and later and the White Sword or Magical Rod for levels 4 and later.
+    Hard means no safety logic is added. You may be required to defeat enemies with weak or unusual weaponry, such as
+    Wizzrobes with the basic Sword or Darknuts with the Magical Rod."""
+    display_name = "Weapon Logic"
+    option_easy = 0
+    option_moderate = 1
+    option_hard = 2
+
+class DefenseLogic(Choice):
+    """What level of defensive power is logically required for later dungeons.
+    Easy means you're guaranteed to have one Heart Container per previous dungeon level plus three additional,
+    and the Blue Ring is guaranteed to be available before levels 5 and later.
+    Moderate means you're guaranteed to have one extra heart per previous dungeon level,
+    taking into account available Rings.
+    Hard means no safety logic is added, so all hearts and rings could be in any location."""
+    display_name = "Defense Logic"
+    option_easy = 0
+    option_moderate = 1
+    option_hard = 2
+
+class EntranceShuffle(Choice):
+    """Shuffle entrances around.
+    Dungeons means only dungeon entrances will be shuffled with each other.
+    Major means that dungeon entrances and major item locations (sword caves, take any caves, letter cave)
+    will be shuffled with each other
+    Open means that only dungeon entrances and open caves will be shuffled with each other.
+    Major Open is a combination combines and shuffles both Major and Open locations.
+    All means all entrances will be shuffled amongst each other. Starting Sword Cave will be in an open location
+    and have a weapon.
+    Warp Caves will be included as major locations if the Randomize Warp Caves setting is turned on
+    """
+    display_name = "Entrance Shuffle"
+    option_off = 0
+    option_dungeons = 1
+    option_major = 2
+    option_open = 3
+    option_major_open = 4
+    option_all = 5
+    default = 0
+
+class RandomizeWarpCaves(Toggle):
+    """Include the Take Any Road caves in entrance randomization"""
+    display_name = "Randomize Warp Caves"
+
+
+
 @dataclass
 class TlozOptions(PerGameCommonOptions):
     ExpandedPool: ExpandedPool
     TriforceLocations: TriforceLocations
     StartingPosition: StartingPosition
+    WeaponLogic: WeaponLogic
+    DefenseLogic: DefenseLogic
+    EntranceShuffle: EntranceShuffle
+    RandomizeWarpCaves: RandomizeWarpCaves
+
+
+def is_sword_cave_shuffled(option_value) -> bool:
+    # A couple of things care if Starting Sword Cave is in the shuffle. This centralizes the check for that.
+    check_list = [EntranceShuffle.option_open, EntranceShuffle.option_major_open, EntranceShuffle.option_all]
+    return option_value in check_list
