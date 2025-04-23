@@ -112,7 +112,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": logic.has_vertical_movement,
         "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
-        "Quintar Reserve": logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10)})
+        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10)})
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Beaurior Volcano"],
         {"Beaurior Volcano": logic.has_vertical_movement})
