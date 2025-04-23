@@ -324,8 +324,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin skulking in shop alley", 565 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
-        #Todo Multichecks: 5 checks on the Penguin Keeper
+        # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 2", 531 + 50000 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 3", 531 + 50001 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + 50002 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 5", 531 + 50003 + npc_index_offset),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that"s the logic we"re using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling the Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
