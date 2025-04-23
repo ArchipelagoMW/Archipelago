@@ -22,7 +22,6 @@ class HatLogic(BaseLogic):
             Hat.joja_cap: self.can_get_unlikely_hat_at_outfit_services,
             Hat.dark_ballcap: self.can_get_unlikely_hat_at_outfit_services,
             Hat.dark_cowboy_hat: self.logic.region.can_reach(Region.skull_cavern_100),
-            Hat.infinity_crown: self.logic.combat.has_galaxy_weapon & self.logic.region.can_reach(Region.volcano_floor_10) & self.logic.has("Galaxy Soul"),
             Hat.garbage_hat: self.logic.region.can_reach(Region.town) & self.logic.time.has_lived_months(12),
             Hat.mystery_hat: self.logic.region.can_reach(Region.blacksmith) & self.logic.grind.can_grind_mystery_boxes(100),
             Hat.golden_helmet: self.logic.region.can_reach(Region.blacksmith) & self.logic.has(Geode.golden_coconut),

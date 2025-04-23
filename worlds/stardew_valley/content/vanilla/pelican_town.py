@@ -3,7 +3,8 @@ from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
+    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -296,12 +297,14 @@ pelican_town = ContentPack(
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
 
-        # Hats
+        # Hats from the Hat Mouse
         Hat.good_ol_cap: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(15000),)),),
         Hat.lucky_bow: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(50000),)),),
         Hat.cool_cap: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(250000),)),),
         Hat.bowler: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(1000000),)),),
         Hat.sombrero: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(10000000),)),),
+        Hat.blue_ribbon: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(GrangeDisplayRequirement(),)),),
+        Hat.infinity_crown: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(ForgeInfinityWeaponRequirement(),)),),
         # Hat.blue_bonnet,
         # Hat.cowboy_hat,
         # Hat.butterfly_bow,
@@ -335,11 +338,9 @@ pelican_town = ContentPack(
         # Hat.paper_hat,
         # Hat.pageboy_cap,
         # Hat.jester_hat,
-        # Hat.blue_ribbon,
         # Hat.governors_hat,
         # Hat.white_bow,
         # Hat.space_helmet,
-        # Hat.infinity_crown,
         # Hat.sports_cap,
 
         # Catalogues

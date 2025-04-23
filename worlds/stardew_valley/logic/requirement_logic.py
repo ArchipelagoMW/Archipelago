@@ -4,7 +4,9 @@ from typing import Iterable
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
-    RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement
+    RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement, GrangeDisplayRequirement, \
+    ForgeInfinityWeaponRequirement
+from ..strings.region_names import Region
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -71,3 +73,11 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: TotalEarningsRequirement):
         return self.logic.money.can_have_earned_total(requirement.amount)
+
+    @meet_requirement.register
+    def _(self, requirement: GrangeDisplayRequirement):
+        return self.logic.festival.can_succeed_grange_display()
+
+    @meet_requirement.register
+    def _(self, requirement: ForgeInfinityWeaponRequirement):
+        return self.logic.combat.has_galaxy_weapon & self.logic.region.can_reach(Region.volcano_floor_10) & self.logic.has("Galaxy Soul")

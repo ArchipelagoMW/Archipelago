@@ -65,3 +65,13 @@ class WalnutRequirement(Requirement):
 @dataclass(frozen=True)
 class TotalEarningsRequirement(Requirement):
     amount: int
+
+
+@dataclass(frozen=True)
+class GrangeDisplayRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
+class ForgeInfinityWeaponRequirement(Requirement):
+    pass
