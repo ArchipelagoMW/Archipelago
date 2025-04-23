@@ -60,7 +60,10 @@ class MoneyLogic(BaseLogic):
     @cache_self1
     def can_shop_from(self, source: ShopSource) -> StardewRule:
         season_rule = self.logic.season.has_any(source.seasons)
-        money_rule = self.logic.money.can_spend(source.money_price) if source.money_price is not None else true_
+        if source.currency == Currency.money:
+            money_rule = self.logic.money.can_spend(source.price) if source.price is not None else true_
+        else:
+            money_rule = self.logic.money.can_trade_at(source.shop_region, source.currency, source.price) if source.price is not None else true_
 
         item_rules = []
         if source.items_price is not None:

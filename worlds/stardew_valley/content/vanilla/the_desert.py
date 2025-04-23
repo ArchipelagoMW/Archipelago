@@ -31,10 +31,10 @@ the_desert = ContentPack(
         Vegetable.beet: (HarvestCropSource(seed=Seed.beet, seasons=(Season.fall,)),),
     },
     shop_sources={
-        Seed.cactus: (ShopSource(money_price=150, shop_region=Region.oasis),),
-        Seed.rhubarb: (ShopSource(money_price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
-        Seed.starfruit: (ShopSource(money_price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
-        Seed.beet: (ShopSource(money_price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
+        Seed.cactus: (ShopSource(price=150, shop_region=Region.oasis),),
+        Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
+        Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
+        Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
     },
     fishes=(
         fish_data.sandfish,
