@@ -62,6 +62,7 @@ from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
+from ..strings.boot_names import tier_by_boots
 from ..strings.building_names import Building
 from ..strings.catalogue_names import items_by_catalogue
 from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting, WildSeeds
@@ -382,6 +383,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         for catalogue in items_by_catalogue:
             for item in items_by_catalogue[catalogue]:
                 self.registry.item_rules[item] = self.logic.has(catalogue)
+
+        for boots in tier_by_boots:
+            self.registry.item_rules[boots] = self.combat.has_specific_boots(boots)
 
     def setup_events(self, register_event: Callable[[str, str, StardewRule], None]) -> None:
         for logic_event in all_logic_events:

@@ -97,9 +97,8 @@ class TestMemeBundlesAreResolvable(SVTestBase):
     }
 
     def test_can_complete_all_bundles_with_all_state(self):
-        location_names = {location.name for location in self.multiworld.get_locations()}
         self.collect_everything()
-        for location_name in location_names:
+        for location_name in self.get_real_location_names():
             if location_name not in location_table or LocationTags.MEME_BUNDLE not in location_table[location_name].tags:
                 continue
             with self.subTest(f"{location_name}"):
