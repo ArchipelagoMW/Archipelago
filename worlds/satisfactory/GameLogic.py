@@ -581,7 +581,7 @@ class GameLogic:
 
     buildings: dict[str, Building] = {
         "Constructor": Building("Constructor", ("Reinforced Iron Plate", "Cable"), PowerInfrastructureLevel.Basic),
-        "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Rotor", "Cable"), PowerInfrastructureLevel.Basic),
+        "Assembler": Building("Assembler", ("Reinforced Iron Plate", "Iron Rod", "Cable"), PowerInfrastructureLevel.Basic), # Simplified , used ("Reinforced Iron Plate", "Rotor", "Cable")
         "Manufacturer": Building("Manufacturer", ("Motor", "Heavy Modular Frame", "Cable", "Plastic"), PowerInfrastructureLevel.Advanced),
         "Packager": Building("Packager", ("Steel Beam", "Rubber", "Plastic"), PowerInfrastructureLevel.Basic),
         "Refinery": Building("Refinery", ("Motor", "Encased Industrial Beam", "Steel Pipe", "Copper Sheet"), PowerInfrastructureLevel.Automated),
@@ -598,7 +598,7 @@ class GameLogic:
         "Oil Extractor": Building("Oil Extractor", ("Motor", "Encased Industrial Beam", "Cable")),
         "Water Extractor": Building("Water Extractor", ("Copper Sheet", "Reinforced Iron Plate", "Rotor")),
         "Smelter": Building("Smelter", ("Iron Rod", "Wire"), PowerInfrastructureLevel.Basic),
-        "Foundry": Building("Foundry", ("Modular Frame", "Rotor", "Concrete"), PowerInfrastructureLevel.Basic),
+        "Foundry": Building("Foundry", ("Reinforced Iron Plate", "Iron Rod", "Concrete"), PowerInfrastructureLevel.Basic), # Simplified , used ("Modular Frame", "Rotor", "Concrete")
         "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Wire", "Rubber", "Encased Industrial Beam", "Motor", "Steel Beam", "Plastic"), PowerInfrastructureLevel.Advanced),
         "Equipment Workshop": Building("Equipment Workshop", ("Iron Plate", "Iron Rod"), implicitly_unlocked=True),
         "AWESOME Sink": Building("AWESOME Sink", ("Reinforced Iron Plate", "Cable", "Concrete"), can_produce=False),
