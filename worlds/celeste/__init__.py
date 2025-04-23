@@ -5,9 +5,10 @@ from BaseClasses import ItemClassification, Location, MultiWorld, Region, Tutori
 from Utils import visualize_regions
 from worlds.AutoWorld import WebWorld, World
 
-from .Items import CelesteItem, generate_item_table, generate_item_data_table, generate_item_groups, level_item_lists, level_cassette_items, cassette_item_data_table, trap_item_data_table
+from .Items import CelesteItem, generate_item_table, generate_item_data_table, generate_item_groups, level_item_lists, level_cassette_items,\
+                                cassette_item_data_table, crystal_heart_item_data_table, trap_item_data_table
 from .Locations import CelesteLocation, location_data_table, generate_location_groups, checkpoint_location_data_table, location_id_offsets
-from .Names import ItemName, LocationName
+from .Names import ItemName
 from .Options import CelesteOptions, celeste_option_groups, resolve_options
 from .Levels import Level, LocationType, load_logic_data, goal_area_option_to_name, goal_area_option_to_display_name, goal_area_to_location_name
 
@@ -128,6 +129,7 @@ class CelesteWorld(World):
         item_pool: list[CelesteItem] = []
 
         location_count: int = len(self.get_locations())
+        goal_area_location_count: int = sum(goal_area_option_to_display_name[self.options.goal_area] in loc.name for loc in self.get_locations())
 
         # Goal Items
         goal_item_loc: Location = self.multiworld.get_location(goal_area_to_location_name[self.goal_area], self.player)
@@ -180,12 +182,8 @@ class CelesteWorld(World):
         # Interactables
         item_pool += [self.create_item(item_name) for item_name in sorted(self.active_items)]
 
-        # Cassettes
-        if self.options.require_cassettes:
-            item_pool += [self.create_item(level_cassette_items[level_name]) for level_name in sorted(self.active_levels)]
-
         # Strawberries
-        real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
+        real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - goal_area_location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
 
         menu_region = self.multiworld.get_region("Menu", self.player)
@@ -221,6 +219,26 @@ class CelesteWorld(World):
         trap_weights += ([ItemName.zoom_trap] * self.options.zoom_trap_weight.value)
 
         total_filler_count: int = (location_count - len(item_pool))
+
+        # Cassettes
+        if self.options.require_cassettes:
+            shuffled_active_levels = sorted(self.active_levels)
+            self.random.shuffle(shuffled_active_levels)
+            for level_name in shuffled_active_levels:
+                if level_name not in self.multiworld.precollected_items[self.player]:
+                    if total_filler_count > 0:
+                        item_pool.append(self.create_item(level_cassette_items[level_name]))
+                        total_filler_count -= 1
+                    else:
+                        self.multiworld.push_precollected(self.create_item(level_cassette_items[level_name]))
+
+        # Crystal Hearts
+        for name in crystal_heart_item_data_table.keys():
+            if total_filler_count > 0:
+                if name not in self.multiworld.precollected_items[self.player]:
+                    item_pool.append(self.create_item(name))
+                    total_filler_count -= 1
+
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(total_filler_count * (self.options.trap_fill_percentage.value / 100.0))
         total_filler_count -= trap_count
 
@@ -284,6 +302,7 @@ class CelesteWorld(World):
             "music_shuffle": self.options.music_shuffle.value,
             "music_map": self.generate_music_data(),
             "require_cassettes": self.options.require_cassettes.value,
+            "chosen_poem": self.random.randint(0, 119),
         }
 
     def output_active_traps(self) -> dict[int, int]:

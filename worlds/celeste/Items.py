@@ -198,6 +198,25 @@ cassette_item_data_table: dict[str, CelesteItemData] = {
     ItemName.farewell_cassette: CelesteItemData(celeste_base_id + 0x1000 + 0x1A, ItemClassification.filler),
 }
 
+crystal_heart_item_data_table: dict[str, CelesteItemData] = {
+    ItemName.crystal_heart_1:  CelesteItemData(celeste_base_id + 0x3000 + 0x00, ItemClassification.filler),
+    ItemName.crystal_heart_2:  CelesteItemData(celeste_base_id + 0x3000 + 0x01, ItemClassification.filler),
+    ItemName.crystal_heart_3:  CelesteItemData(celeste_base_id + 0x3000 + 0x02, ItemClassification.filler),
+    ItemName.crystal_heart_4:  CelesteItemData(celeste_base_id + 0x3000 + 0x03, ItemClassification.filler),
+    ItemName.crystal_heart_5:  CelesteItemData(celeste_base_id + 0x3000 + 0x04, ItemClassification.filler),
+    ItemName.crystal_heart_6:  CelesteItemData(celeste_base_id + 0x3000 + 0x05, ItemClassification.filler),
+    ItemName.crystal_heart_7:  CelesteItemData(celeste_base_id + 0x3000 + 0x06, ItemClassification.filler),
+    ItemName.crystal_heart_8:  CelesteItemData(celeste_base_id + 0x3000 + 0x07, ItemClassification.filler),
+    ItemName.crystal_heart_9:  CelesteItemData(celeste_base_id + 0x3000 + 0x08, ItemClassification.filler),
+    ItemName.crystal_heart_10: CelesteItemData(celeste_base_id + 0x3000 + 0x09, ItemClassification.filler),
+    ItemName.crystal_heart_11: CelesteItemData(celeste_base_id + 0x3000 + 0x0A, ItemClassification.filler),
+    ItemName.crystal_heart_12: CelesteItemData(celeste_base_id + 0x3000 + 0x0B, ItemClassification.filler),
+    ItemName.crystal_heart_13: CelesteItemData(celeste_base_id + 0x3000 + 0x0C, ItemClassification.filler),
+    ItemName.crystal_heart_14: CelesteItemData(celeste_base_id + 0x3000 + 0x0D, ItemClassification.filler),
+    ItemName.crystal_heart_15: CelesteItemData(celeste_base_id + 0x3000 + 0x0E, ItemClassification.filler),
+    ItemName.crystal_heart_16: CelesteItemData(celeste_base_id + 0x3000 + 0x0F, ItemClassification.filler),
+}
+
 def add_checkpoint_to_table(id: int, name: str):
     checkpoint_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
@@ -215,6 +234,7 @@ def generate_item_data_table() -> dict[int, CelesteItemData]:
             **key_item_data_table,
             **gem_item_data_table,
             **cassette_item_data_table,
+            **crystal_heart_item_data_table,
             **interactable_item_data_table}
 
 
@@ -224,13 +244,14 @@ def generate_item_table() -> dict[str, int]:
 
 def generate_item_groups() -> dict[str, list[str]]:
     item_groups: dict[str, list[str]] = {
-        "Collectables":  list(collectable_item_data_table.keys()),
-        "Traps":         list(trap_item_data_table.keys()),
-        "Checkpoints":   list(checkpoint_item_data_table.keys()),
-        "Keys":          list(key_item_data_table.keys()),
-        "Gems":          list(gem_item_data_table.keys()),
-        "Cassettes":     list(cassette_item_data_table.keys()),
-        "Interactables": list(interactable_item_data_table.keys()),
+        "Collectables":   list(collectable_item_data_table.keys()),
+        "Traps":          list(trap_item_data_table.keys()),
+        "Checkpoints":    list(checkpoint_item_data_table.keys()),
+        "Keys":           list(key_item_data_table.keys()),
+        "Gems":           list(gem_item_data_table.keys()),
+        "Cassettes":      list(cassette_item_data_table.keys()),
+        "Crystal Hearts": list(crystal_heart_item_data_table.keys()),
+        "Interactables":  list(interactable_item_data_table.keys()),
     }
 
     return item_groups

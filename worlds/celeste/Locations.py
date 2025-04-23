@@ -5,7 +5,6 @@ from worlds.generic.Rules import set_rule
 
 from .Levels import Level, LocationType
 from .Names import ItemName
-from .Names import LocationName
 
 
 celeste_base_id: int = 0xCA10000
