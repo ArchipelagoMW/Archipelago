@@ -1,4 +1,3 @@
-from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..stardew_rule import StardewRule
 from ..strings.artisan_good_names import ArtisanGood
@@ -15,7 +14,6 @@ class TailoringLogicMixin(BaseLogicMixin):
 
 class TailoringLogic(BaseLogic):
 
-    @cache_self1
-    def can_tailor(self, item: str) -> StardewRule:
+    def can_tailor(self, *items: str) -> StardewRule:
         sewing_machine_rule = self.logic.region.can_reach(Region.haley_house) | self.logic.has(Machine.sewing_machine)
-        return sewing_machine_rule & self.logic.relationship.can_meet(NPC.emily) & self.logic.has(ArtisanGood.cloth) & self.logic.has(item)
+        return sewing_machine_rule & self.logic.relationship.can_meet(NPC.emily) & self.logic.has(ArtisanGood.cloth) & self.logic.has_any(*items)

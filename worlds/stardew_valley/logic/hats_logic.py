@@ -2,6 +2,7 @@ from functools import cached_property
 
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..stardew_rule import StardewRule
+from ..strings.fish_names import Fish
 from ..strings.forageable_names import Mushroom
 from ..strings.geode_names import Geode
 from ..strings.hat_names import Hat
@@ -30,6 +31,7 @@ class HatLogic(BaseLogic):
             Hat.living_hat: self.logic.grind.can_grind_weeds(100000),
             Hat.deluxe_pirate_hat: self.logic.region.can_reach_all((Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10)),
             Hat.spotted_headscarf: self.logic.tailoring.can_tailor(Mushroom.red),
+            Hat.fishing_hat: self.logic.tailoring.can_tailor(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish, Fish.midnight_squid, Fish.void_salmon, Fish.slimejack),
         })
 
     @cached_property
