@@ -3,6 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
+from ...data.recipe_source import ShopTradeSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
     GrangeDisplayRequirement, ForgeInfinityWeaponRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
@@ -11,6 +12,7 @@ from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
 from ...strings.crop_names import Fruit
+from ...strings.currency_names import Currency
 from ...strings.fish_names import WaterItem
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
@@ -296,6 +298,9 @@ pelican_town = ContentPack(
         Book.woodcutters_weekly: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(money_price=5000, shop_region=LogicRegion.bookseller_1),),
+
+        # Other Hats
+        Hat.top_hat: (ShopTradeSource(region=Region.casino, currency=Currency.qi_coin, price=8000),),
 
         # Hats from the Hat Mouse
         Hat.good_ol_cap: (ShopSource(money_price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(15000),)),),
