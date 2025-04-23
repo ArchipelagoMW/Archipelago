@@ -267,6 +267,9 @@ class CelesteWorld(World):
     # TODO: More Options
     def fill_slot_data(self):
         return {
+            "apworld_version": 900,
+            "min_mod_version": 900,
+
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "trap_link": self.options.trap_link.value,
