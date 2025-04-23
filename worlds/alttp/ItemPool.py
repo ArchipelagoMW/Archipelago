@@ -497,7 +497,7 @@ def generate_itempool(world):
             adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
             for i in range(4):
                 try:
-                    next(adv_heart_pieces).classification = ItemClassification.progression
+                    next(adv_heart_pieces).classification |= ItemClassification.progression
                 except StopIteration:
                     break  # logically health tanking is an option, so rules should still resolve to something beatable
 
