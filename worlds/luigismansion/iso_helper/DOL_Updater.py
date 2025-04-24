@@ -1,3 +1,4 @@
+import random
 import struct
 from pkgutil import get_data
 
@@ -11,9 +12,13 @@ CUSTOM_CODE_OFFSET_START = 0x39FA20
 
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
-def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int, slot_name: str, random_spawn: str,
-    king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool, boo_rand_on: bool) -> (GCM, DOL):
-    # Find the main 
+def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk_speed: int, slot_name: str,
+    random_spawn: str, king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool,
+    boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
+
+    random.seed(seed)
+
+    # Find the main DOL file and read it.
     dol_data = gcm.read_file_data("sys/main.dol")
     dol.read(dol_data)
 
@@ -43,16 +48,13 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
     # Turn on custom code handler for boo display counter only if Boo Rando is on.
     if boo_rand_on:
         dol.data.seek(0x04DB50)
-        boo_custom_code_one = "93C1FFF0"
-        dol.data.write(bytes.fromhex(boo_custom_code_one))
+        dol.data.write(bytes.fromhex("93C1FFF0"))
 
         dol.data.seek(0x04DBB0)
-        boo_custom_code_two = "4848CDE5"
-        dol.data.write(bytes.fromhex(boo_custom_code_two))
+        dol.data.write(bytes.fromhex("4848D0C1"))
 
         dol.data.seek(0x04DC10)
-        boo_custom_code_three = "4848CD85"
-        dol.data.write(bytes.fromhex(boo_custom_code_three))
+        dol.data.write(bytes.fromhex("4848D061"))
 
     # Turn off pickup animations
     if pickup_anim_enabled == 1:
@@ -60,12 +62,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
         gem_val = [0x05]
 
         # Write additional code to enable Custom Pickup animations when animations are turned off.
-        dol.data.seek(0xAD625)
-        dol.data.write(bytes.fromhex("42D0F5"))
-
-        #TODO review this for king boo stuff
-        #dol.data.seek(0x3A0108)
-        #dol.data.write(bytes.fromhex("01"))
+        dol.data.seek(0xAD624)
+        dol.data.write(bytes.fromhex("4842D769"))
     else:
         pickup_val = [0x02]
         gem_val = [0x06]
@@ -124,6 +122,18 @@ def update_dol_offsets(gcm: GCM, dol: DOL, start_inv: list[str], walk_speed: int
         dol.data.write(struct.pack(">f", spawn_info["pos_y"]))
         dol.data.seek(0x3A014C)
         dol.data.write(struct.pack(">f", spawn_info["pos_z"]))
+
+    if dool_model_rando_on:
+        door_model_offsets: list[int] = [0x2FFFBE, 0x2FFFDA, 0x2FFFF6, 0x300012, 0x30004A, 0x300066, 0x300082,
+            0x30009E, 0x3000BA, 0x3000D6, 0x300146, 0x300162, 0x30017E, 0x30019A, 0x3001B6, 0x3001D2, 0x3001EE,
+            0x30020A, 0x300242, 0x30025E, 0x30027A, 0x3002B2, 0x3002CE, 0x3002EA, 0x300306, 0x30035A, 0x3003AE,
+            0x3003CA, 0x3003E6, 0x300402, 0x30043A, 0x300456, 0x300472, 0x30048E, 0x3004C6, 0x3004E2, 0x3004FE,
+            0x30051A, 0x30056E, 0x30058A, 0x3005A6, 0x3005DE, 0x3005FA, 0x300616, 0x300632, 0x30064E, 0x300686,
+            0x3006A2, 0x3006BE, 0x3006DA, 0x3006F0, 0x300712, 0x30072E, 0x30074A]
+        for map_two_doors in door_model_offsets:
+            dol.data.seek(map_two_doors)
+            door_model_id = random.randint(1,14)
+            dol.data.write(door_model_id.to_bytes())
 
     # Save all changes to the DOL itself.
     dol.save_changes()
