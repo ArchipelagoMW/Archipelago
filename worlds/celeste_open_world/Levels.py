@@ -107,8 +107,6 @@ class RegionConnection:
     destination: PreRegion
     possible_access: list[list[str]]
 
-    # TODO: Assign the actual regions here after the structure is built
-
     def __init__(self, source_name: str, destination_name: str, possible_access: list[list[str]] = []):
         self.source_name = source_name
         self.destination_name = destination_name
