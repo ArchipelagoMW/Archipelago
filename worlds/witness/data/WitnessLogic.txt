@@ -1196,6 +1196,7 @@ Audio Log - 0x3C135 (Blue Tunnel Audio Log) - True
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Stars & Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Stars & Shapers
+Audio Log - 0x338D7 (Staircase Audio Log) - True
 158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Negative Shapers & Full Dots
 158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Full Dots
 158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Full Dots
