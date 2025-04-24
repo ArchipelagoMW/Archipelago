@@ -8,7 +8,7 @@ import requests
 # The CSVs are updated at this repository to be shared between generator and client.
 data_repository_address = "https://raw.githubusercontent.com/digiholic/osrs-archipelago-logic/"
 # The Github tag of the CSVs this was generated with
-data_csv_tag = "v2.0.3"
+data_csv_tag = "v2.0.4"
 # If true, generate using file names in the repository
 debug = False
 
@@ -39,9 +39,13 @@ if __name__ == "__main__":
                     locations_reader = csv.reader(loc_file.read().splitlines())
                     parse_loc_file(loc_py_file, locations_reader)
             else:
+                print("Loading: " + data_repository_address + "/" + data_csv_tag + "/locations.csv")
                 with requests.get(data_repository_address + "/" + data_csv_tag + "/locations.csv") as req:
-                    locations_reader = csv.reader(req.text.splitlines())
-                    parse_loc_file(loc_py_file, locations_reader)
+                    if req.status_code == 200:
+                        locations_reader = csv.reader(req.text.splitlines())
+                        parse_loc_file(loc_py_file, locations_reader)
+                    else:
+                        print(str(req.status_code) + ": " + req.reason)
             loc_py_file.write("]\n")
 
 
@@ -86,9 +90,13 @@ if __name__ == "__main__":
                     regions_reader = csv.reader(region_file.read().splitlines())
                     parse_region_file(reg_py_file, regions_reader)
             else:
+                print("Loading: "+ data_repository_address + "/" + data_csv_tag + "/regions.csv")
                 with requests.get(data_repository_address + "/" + data_csv_tag + "/regions.csv") as req:
-                    regions_reader = csv.reader(req.text.splitlines())
-                    parse_region_file(reg_py_file, regions_reader)
+                    if req.status_code == 200:
+                        regions_reader = csv.reader(req.text.splitlines())
+                        parse_region_file(reg_py_file, regions_reader)
+                    else:
+                        print(str(req.status_code) + ": " + req.reason)
             reg_py_file.write("]\n")
 
 
@@ -122,9 +130,13 @@ if __name__ == "__main__":
                     regions_reader = csv.reader(region_file.read().splitlines())
                     parse_resources_file(res_py_file, regions_reader)
             else:
+                print("Loading: " + data_repository_address + "/" + data_csv_tag + "/resources.csv")
                 with requests.get(data_repository_address + "/" + data_csv_tag + "/resources.csv") as req:
-                    resource_reader = csv.reader(req.text.splitlines())
-                    parse_resources_file(res_py_file, resource_reader)
+                    if req.status_code == 200:
+                        resource_reader = csv.reader(req.text.splitlines())
+                        parse_resources_file(res_py_file, resource_reader)
+                    else:
+                        print(str(req.status_code) + ": " + req.reason)
             res_py_file.write("]\n")
 
 
@@ -154,9 +166,13 @@ if __name__ == "__main__":
                     regions_reader = csv.reader(region_file.read().splitlines())
                     parse_item_file(item_py_file, regions_reader)
             else:
+                print("Loading: " + data_repository_address + "/" + data_csv_tag + "/items.csv")
                 with requests.get(data_repository_address + "/" + data_csv_tag + "/items.csv") as req:
-                    item_reader = csv.reader(req.text.splitlines())
-                    parse_item_file(item_py_file, item_reader)
+                    if req.status_code == 200:
+                        item_reader = csv.reader(req.text.splitlines())
+                        parse_item_file(item_py_file, item_reader)
+                    else:
+                        print(str(req.status_code) + ": " + req.reason)
             item_py_file.write("]\n")
 
 

@@ -136,7 +136,7 @@ location_rows = [
 	LocationRow('Get Prompted to Buy Membership', 'general', [], [], [], 0),
 	LocationRow('Pet the Stray Dog in Varrock', 'general', ['Central Varrock', 'West Varrock', 'South of Varrock', ], [], [], 0),
 	LocationRow('Get Sent to Jail in Shantay Pass', 'general', ['Al Kharid', 'Port Sarim', ], [], [], 0),
-	LocationRow('Have the Apothecary Make a Strength Potion', 'general', ['Central Varrock', 'Deadly Red Spider', 'Limpwurt Root', ], [], [], 0),
+	LocationRow('Have the Apothecary Make a Strength Potion', 'general', ['Central Varrock', 'Red Spider Eggs', 'Limpwurt Root', ], [], [], 0),
 	LocationRow('Put a Whole Banana into a Bottle of Karamjan Rum', 'general', ['Karamja', ], [], [], 0),
 	LocationRow('Attempt to Shear "The Thing"', 'general', ['Lumbridge Farms West', ], [], [], 0),
 	LocationRow('Eat a Kebab', 'general', ['Al Kharid', ], [], [], 0),

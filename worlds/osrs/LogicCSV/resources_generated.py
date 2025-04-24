@@ -57,4 +57,5 @@ resource_rows = [
 	ResourceRow('Limpwurt Root'),
 	ResourceRow('Bar'),
 	ResourceRow('Haystack'),
+	ResourceRow('Red Spider Eggs'),
 ]
