@@ -48,7 +48,7 @@ class LockGoalArea(DefaultOnToggle):
 
 class GoalAreaCheckpointsanity(Toggle):
     """
-    Determines whether the Checkpoints in your Goal Area will be shuffled into the item pool or not
+    Determines whether the Checkpoints in your Goal Area will be shuffled into the item pool (if Checkpointsanity is active)
     """
     display_name = "Goal Area Checkpointsanity"
 
@@ -58,8 +58,8 @@ class TotalStrawberries(Range):
     """
     display_name = "Total Strawberries"
     range_start = 0
-    range_end = 200
-    default = 20
+    range_end = 202
+    default = 50
 
 class StrawberriesRequiredPercentage(Range):
     """
@@ -387,6 +387,7 @@ celeste_option_groups = [
         Gemsanity,
         Carsanity,
         Roomsanity,
+        IncludeGoldens,
         IncludeCore,
         IncludeFarewell,
         IncludeBSides,

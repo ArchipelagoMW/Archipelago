@@ -160,7 +160,6 @@ def create_regions_and_locations(world):
                     else:
                         menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
                 else:
-                    # TODO: Account for Lock Goal Area here
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
                     world.active_checkpoint_names.append(checkpoint_location_name)
                     checkpoint_rule = lambda state, checkpoint_location_name=checkpoint_location_name: state.has(checkpoint_location_name, world.player)

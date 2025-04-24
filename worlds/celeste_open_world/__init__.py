@@ -13,12 +13,12 @@ from .Options import CelesteOptions, celeste_option_groups, resolve_options
 from .Levels import Level, LocationType, load_logic_data, goal_area_option_to_name, goal_area_option_to_display_name, goal_area_to_location_name
 
 
-class CelesteWebWorld(WebWorld):
+class CelesteOpenWebWorld(WebWorld):
     theme = "ice"
 
     setup_en = Tutorial(
         tutorial_name="Start Guide",
-        description="A guide to playing Celeste in Archipelago.",
+        description="A guide to playing Celeste (Open World) in Archipelago.",
         language="English",
         file_name="guide_en.md",
         link="guide/en",
@@ -30,12 +30,14 @@ class CelesteWebWorld(WebWorld):
     option_groups = celeste_option_groups
 
 
-class CelesteWorld(World):
-    """TBD"""
+class CelesteOpenWorld(World):
+    """
+    Celeste (Open World) is a randomizer for the original Celeste. In this acclaimed platformer created by ExOK Games, you control Madeline as she attempts to climb the titular mountain, meeting friends and obstacles along the way.  Progression is found in unlocking the ability to interact with various objects in the areas, such as springs, traffic blocks, feathers, and many more. Please be safe on the climb.
+    """
 
     # Class Data
-    game = "Celeste"
-    web = CelesteWebWorld()
+    game = "Celeste (Open World)"
+    web = CelesteOpenWebWorld()
     options_dataclass = CelesteOptions
     options: CelesteOptions
 
@@ -56,22 +58,6 @@ class CelesteWorld(World):
     active_levels: set[str]
     active_items: set[str]
 
-
-    @classmethod
-    def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
-        with open("./worlds/celeste/data/IDs.txt", "w") as f:
-            print("Items:", file=f)
-            for name in sorted(CelesteWorld.item_name_to_id, key=CelesteWorld.item_name_to_id.get):
-                id = CelesteWorld.item_name_to_id[name]
-                print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
-            print("\nLocations:", file=f)
-            for name in sorted(CelesteWorld.location_name_to_id, key=CelesteWorld.location_name_to_id.get):
-                id = CelesteWorld.location_name_to_id[name]
-                print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
-            print("\nLocations 2:", file=f)
-            for name in sorted(CelesteWorld.location_name_to_id, key=CelesteWorld.location_name_to_id.get):
-                id = CelesteWorld.location_name_to_id[name]
-                print(f"{{ \"{name}\", 0x{id:X} }},", file=f)
 
     def generate_early(self) -> None:
         if not self.player_name.isascii():
@@ -260,11 +246,7 @@ class CelesteWorld(World):
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.victory, self.player)
 
-    #def generate_output(self, output_directory: str):
-    #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
-    #                  regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[self.player])
 
-    # TODO: More Options
     def fill_slot_data(self):
         return {
             "apworld_version": 900,
@@ -343,3 +325,25 @@ class CelesteWorld(World):
             musiclist_s = musiclist_o.copy()
 
             return dict(zip(musiclist_o, musiclist_s))
+
+
+    # Useful Debugging tools, kept around for later.
+    #@classmethod
+    #def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
+    #    with open("./worlds/celeste/data/IDs.txt", "w") as f:
+    #        print("Items:", file=f)
+    #        for name in sorted(CelesteOpenWorld.item_name_to_id, key=CelesteOpenWorld.item_name_to_id.get):
+    #            id = CelesteOpenWorld.item_name_to_id[name]
+    #            print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
+    #        print("\nLocations:", file=f)
+    #        for name in sorted(CelesteOpenWorld.location_name_to_id, key=CelesteOpenWorld.location_name_to_id.get):
+    #            id = CelesteOpenWorld.location_name_to_id[name]
+    #            print(f"{{ 0x{id:X}, \"{name}\" }},", file=f)
+    #        print("\nLocations 2:", file=f)
+    #        for name in sorted(CelesteOpenWorld.location_name_to_id, key=CelesteOpenWorld.location_name_to_id.get):
+    #            id = CelesteOpenWorld.location_name_to_id[name]
+    #            print(f"{{ \"{name}\", 0x{id:X} }},", file=f)
+    #
+    #def generate_output(self, output_directory: str):
+    #    visualize_regions(self.multiworld.get_region("Menu", self.player), f"Player{self.player}.puml", show_entrance_names=False,
+    #                  regions_to_highlight=self.multiworld.get_all_state(self.player).reachable_regions[self.player])
