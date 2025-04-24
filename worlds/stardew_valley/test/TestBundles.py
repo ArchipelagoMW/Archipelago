@@ -92,7 +92,7 @@ class TestRemixedAnywhereBundles(SVTestBase):
                 self.assertIn(bundle_name, location_names)
 
 
-class TestMemeBundlesAreResolvable(SVTestBase):
+class TestMemeBundles(SVTestBase):
     options = {
         BundleRandomization.internal_name: BundleRandomization.option_meme,
         BundlePrice.internal_name: BundlePrice.option_maximum,
