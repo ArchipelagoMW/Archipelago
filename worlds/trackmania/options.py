@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from typing import List, Dict, Any
-from Options import Toggle, Range, Choice, OptionSet, PerGameCommonOptions, OptionGroup, StartInventory, ProgressionBalancing, Accessibility
+from Options import Toggle, Range, OptionSet, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility
 from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
 
 class TargetTime(Range):
     """Determines what time you must drive on a map for it to be considered completed. 
-    You can enter any number from 0 - 300.
+    You can enter any number from 0 to 300.
     
     0   = Bronze Medal
     100 = Silver Medal
@@ -18,7 +18,7 @@ class TargetTime(Range):
     For example, a value of 250 will make your target time halfway between the gold and author medals. 
     A value of 120 will make your target time 20% of the way from the silver medal to the gold medal.
 
-    The the quickest medal equal to or below your target time is made your progression medal.
+    The quickest medal equal to or below your target time is made your progression medal.
     """
     display_name = "Target Time Difficulty"
     range_start = 0
@@ -50,9 +50,9 @@ class MedalRequirement(Range):
     default = 6
 
 class SkipPercentage(Range):
-    """The number of map skips in the item pool, calculated as a percetage of the total number of maps.
+    """The number of map skips in the item pool, calculated as a percentage of the total number of maps.
     
-    If a map is broken or impossible or you get stuck, use the /reroll command in the client to replace 
+    If a map is broken, impossible, or you get stuck, use the /reroll command in the client to replace
     the currently loaded map with a new one.
     """
     display_name = "Map Skip Item Percentage"

@@ -1,7 +1,7 @@
 import random
 from BaseClasses import Item, ItemClassification
 from .data import base_id, base_filler_id, filler_item_names
-from typing import List, Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import TrackmaniaWorld
@@ -18,7 +18,8 @@ trackmania_items: dict[str,int] = {
 }
 
 trackmania_item_groups = {
-        "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"}
+    "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"},
+    "Filler Items": set(filler_item_names)
 }
 
 #Item classification for most of our items is dependent on the target_time setting, so it cannot be hardcoded.
@@ -48,16 +49,18 @@ def get_progression_medal(world: "TrackmaniaWorld") -> str:
             return "Gold Medal"
         case x if 300 <= x:
             return "Author Medal"
+        case _:
+            return ""
 
 
-def create_itempool(world: "TrackmaniaWorld") -> List[Item]:
-    itempool: List[Item] = []
+def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
+    itempool: list[Item] = []
     #create medals for each map
     total_map_count : int = world.options.series_number * world.options.series_map_number
-    itempool += create_medals(world, "Bronze Medal", 0, total_map_count)
-    itempool += create_medals(world, "Silver Medal", 100, total_map_count)
-    itempool += create_medals(world, "Gold Medal", 200, total_map_count)
     itempool += create_medals(world, "Author Medal", 300, total_map_count)
+    itempool += create_medals(world, "Gold Medal", 200, total_map_count)
+    itempool += create_medals(world, "Silver Medal", 100, total_map_count)
+    itempool += create_medals(world, "Bronze Medal", 0, total_map_count)
 
     #each map has one additional check for reaching the target time we can fill with skips and filler
     skip_count = round(float(total_map_count) * (world.options.skip_percentage / 100.0))
@@ -65,41 +68,43 @@ def create_itempool(world: "TrackmaniaWorld") -> List[Item]:
 
     filler_count = total_map_count - skip_count
     for x in range(filler_count):
-        filler_name = filler_item_names[random.randint(0, len(filler_item_names)-1)]
+        filler_name = get_filler_item_name()
         itempool += create_items(world,filler_name, 1)
 
     return itempool
 
-def create_medals(world: "TrackmaniaWorld", medal: str, minimumTargetTime:int, mapCount: int) -> List[Item]:
-    if (world.options.target_time >= minimumTargetTime):
-        return create_items(world, medal, mapCount)
+def create_medals(world: "TrackmaniaWorld", medal: str, minimum_target_time:int, map_count: int) -> list[Item]:
+    if world.options.target_time >= minimum_target_time:
+        return create_items(world, medal, map_count)
     else:
         return []
 
 def create_item(world: "TrackmaniaWorld", name: str) -> Item:
-    id = world.item_name_to_id[name]
-    return TrackmaniaItem(name, determine_item_classification(world,name), id, world.player)
+    item_id = world.item_name_to_id[name]
+    return TrackmaniaItem(name, determine_item_classification(world,name), item_id, world.player)
 
-def create_items(world: "TrackmaniaWorld", name: str, count: int) -> List[Item]:
+def create_items(world: "TrackmaniaWorld", name: str, count: int) -> list[Item]:
 
-    id = world.item_name_to_id[name]
-    itemlist: List[Item] = []
+    item_id = world.item_name_to_id[name]
+    itemlist: list[Item] = []
 
     for i in range(count):
-        itemlist += [TrackmaniaItem(name, determine_item_classification(world,name), id, world.player)]
+        itemlist += [TrackmaniaItem(name, determine_item_classification(world,name), item_id, world.player)]
 
     return itemlist
+
+def get_filler_item_name() -> str:
+    return filler_item_names[random.randint(0, len(filler_item_names)-1)]
 
 def build_items() -> dict[str,int]:
     # hardcoded items
     items: dict[str, int] = trackmania_items
 
-    fillerId = base_filler_id
-    # since we dont have preferences yet, we have to return every possible location, not just the ones we need ;-;
-    # its fine but my inner perfectionist is not
+    # filler items
+    filler_id:int = base_filler_id
     for x in range(len(filler_item_names)):
-        items[filler_item_names[x]] = fillerId
-        fillerId += 1
+        items[filler_item_names[x]] = filler_id
+        filler_id += 1
 
     return items
 

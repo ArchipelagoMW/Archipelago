@@ -4,7 +4,7 @@ import websockets
 import functools
 from copy import deepcopy
 from typing import List, Any, Iterable
-from NetUtils import decode, encode, JSONtoTextParser, JSONMessagePart, NetworkItem, NetworkPlayer
+from NetUtils import decode, encode, JSONtoTextParser, NetworkItem, NetworkPlayer
 from MultiServer import Endpoint
 from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, logger, get_base_parser
 
@@ -176,7 +176,6 @@ async def proxy(websocket, path: str = "/", ctx: TrackmaniaContext = None):
 
                 for msg in decode(data):
                     if msg["cmd"] == "Connect":
-                        logger.info("Attempting Connection!")
                         # Proxy is connecting, make sure it is valid
                         if msg["game"] != "Trackmania":
                             logger.info("Aborting proxy connection: game is not Trackmania")
@@ -195,7 +194,6 @@ async def proxy(websocket, path: str = "/", ctx: TrackmaniaContext = None):
 
     except Exception as e:
         if not isinstance(e, websockets.WebSocketException):
-            logger.info(";-;")
             logger.exception(e)
     finally:
         await ctx.disconnect_proxy()
