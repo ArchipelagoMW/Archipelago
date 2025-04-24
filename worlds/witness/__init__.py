@@ -416,7 +416,7 @@ class WitnessWorld(World):
         return True
 
     def remove(self, state: CollectionState, item: WitnessItem) -> bool:
-        if not super().collect(state, item):
+        if not super().remove(state, item):
             return False
 
         if item.eggs:
