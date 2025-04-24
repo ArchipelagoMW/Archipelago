@@ -66,6 +66,11 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, "Lands End"),
         create_region(world, player, locations_per_region, "Slip Glide Ride"),
         create_region(world, player, locations_per_region, "Northern Stretch"),
+        create_region(world, player, locations_per_region, "The Chalice of Tar"),
+        create_region(world, player, locations_per_region, "Flyers Crag"),
+        create_region(world, player, locations_per_region, "Flyers Lookout"),
+        create_region(world, player, locations_per_region, "Jidamba Tangle"),
+        create_region(world, player, locations_per_region, "Jidamba Eaclaneya"),
         
     ]
 
@@ -86,6 +91,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         {"Capital Jail": logic.has_rental_quintar})
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
+    multiworld.get_region("Capital Pipeline", player).add_exits(["Jidamba Tangle"],
+        {"Jidamba Tangle": logic.has_vertical_movement})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
         {"Quintar Sanctum": logic.has_rental_quintar})
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
@@ -95,6 +102,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": logic.has_horizontal_movement, 
         "Okimoto N.S.": logic.has_horizontal_movement})
+    multiworld.get_region("Okimoto N.S.", player).add_exits(["Flyers Crag"],
+        {"Flyers Crag": logic.has_glide}) #Todo check this exit is correct
+    multiworld.get_region("The Open Sea", player).add_exits(["Jidamba Tangle"],
+        {"Jidamba Tangle": logic.has_swimming})
     multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province"],
         {"Shoudu Province": logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass", "Tall, Tall Heights"], 
@@ -108,23 +119,35 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "The Open Sea"],
         {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
         "The Open Sea": logic.has_swimming})
-    multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine", "The Undercity", "Quintar Reserve"],
+    multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine", "The Undercity", "Quintar Reserve", "Flyers Crag"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": logic.has_vertical_movement,
         "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
-        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10)})
+        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10),
+        "Flyers Crag": logic.has_glide}) #Todo check this exit is correct
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Beaurior Volcano"],
         {"Beaurior Volcano": logic.has_vertical_movement})
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine"])
-    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm"],
-        {"Lands End": logic.has_glide})
-    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Northern Cave", "Lands End", "Northern Stretch"],
+    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Lands End", "Flyers Lookout"],
+        {"Lands End": logic.has_glide,
+        "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player),
+        "Flyers Lookout": logic.has_glide}) #todo check this exit is correct
+    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Eastern Chasm", "Northern Cave", "Lands End", "Northern Stretch", "The Chalice of Tar"],
         {"Eastern Chasm": logic.has_vertical_movement,
-        "Northern Stretch": logic.has_glide})
+        "Northern Stretch": logic.has_glide,
+        "The Chalice of Tar": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Northern Cave", player).add_exits(["Slip Glide Ride"],
         {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement})
+    multiworld.get_region("Lands End", player).add_exits(["Jidamba Tangle"],
+        {"Jidamba Tangle": logic.has_glide}) #Todo check
+    multiworld.get_region("Flyers Crag", player).add_exits(["Jidamba Tangle"],
+        {"Jidamba Tangle": logic.has_glide}) #Todo check
+    multiworld.get_region("Flyers Lookout", player).add_exits(["Jidamba Tangle"],
+        {"Jidamba Tangle": logic.has_glide}) #Todo check
+    multiworld.get_region("Jidamba Tangle", player).add_exits(["Jidamba Eaclaneya"],
+        {"Jidamba Eaclaneya": lambda state: state.has("Item - Foliage Key", world.player) and state.has("Item - Cave Key", world.player) and state.has("Item - Canopy Key", world.player)})
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
@@ -167,4 +190,5 @@ def connect_menu_region(world: "CrystalProjectWorld") -> None:
         "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player),
         "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player),
         "Tall, Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
+        "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player),
         })

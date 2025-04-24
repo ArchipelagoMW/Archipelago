@@ -558,7 +558,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset),
 
         #NPCs
-        #Todo Missable NPCs: figure out Courtyard Key Reid (see Capital Sequoia)
+        #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
 
         #Crystals
         #Technically in River Cat"s Ego map
@@ -697,8 +697,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #1st Overpass Scrap chest on main map has been categorized under Rolling Quintar Fields
         #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
-        #2nd Overpass Scrap chest from the bottom on main map has been categorized under Salmon Bay
-        #5th Overpass Scrap chest from the top on main map has been categorized under quintar reserve
+        #4th Overpass Scrap chest on main map has been categorized under Dione Shrine
+        #5th Overpass Scrap chest on main map has been categorized under Quintar Reserve
+        #8th Overpass Scrap chest on main map has been categorized under Salmon Bay
+        #Gold Ingot and Life Jewel chest have been categorized under Dione Shrine
         #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall, Tall Heights
         #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
 
@@ -748,8 +750,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         #Todo descriptivize & check requirements on these
         LocationData("Shoudu Province", "Shoudu Province Chest - Money chest in the 2 Sky Arena Win Room", 2794 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2812 + treasure_index_offset), #(737, 133, -264)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest", 2813 + treasure_index_offset), #(734, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Bone Mail chest in the 2 Sky Arena Win Room", 2751 + treasure_index_offset, logic.has_vertical_movement),     
         LocationData("Shoudu Province", "Shoudu Province Chest - Cutlass chest in the 2 Sky Arena Win room", 2747 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Elevator Part chest below the fast boi spark", 3504 + treasure_index_offset, logic.has_vertical_movement),
@@ -771,12 +771,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest jump through a window", 1507 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Ether Pouch chest across the resovoir", 2978 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming),
         LocationData("Shoudu Province", "Shoudu Province Chest - Fleuret chest above Samurai Lounge", 1541 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest", 2723 + treasure_index_offset), #(736, 133, -262)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest", 2723 + treasure_index_offset), #(734, 133, -260)
-        LocationData("Shoudu Province", "Shoudu Province Chest - Gravedigger chest", 2665 + treasure_index_offset), #(749, 134, -263)
         LocationData("Shoudu Province", "Shoudu Province Chest - Knicked Knackers chest crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Looters Pin chest go in the back door cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest", 2805 + treasure_index_offset), #(748, 134, -262)
         LocationData("Shoudu Province", "Shoudu Province Chest - Muggers Glove chest sneak behind the boxes near assassin lounge", 2760 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Muramasa chest", 2928 + treasure_index_offset), #(754, 134, -264)
         LocationData("Shoudu Province", "Shoudu Province Chest - Plague Mask chest in the Weaponsmith", 1505 + treasure_index_offset),
@@ -796,11 +792,19 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - The Immovable chest under the dry kid pit", 1365 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Tonic Pouch in the 2 Sky Arena Win room", 2796 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Soul Kris chest in 2 Sky Arena Win room", 2748 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest 1 in 5 Sky Arena Win room", 2812 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Axe chest in 5 Sky Arena Win room", 2723 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Money chest 2 in 5 Sky Arena Win room", 2813 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gaia Vest chest in 5 Sky Arena Win room", 2753 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Gravedigger chest in 8 Sky Arena Win room", 2665 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest in 8 Sky Arena Win room", 2805 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Wizards Wall chest in 8 Sky Arena Win room", 2800 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Fall through broken grate below Sky Arena building for Potion chest", 2951 + treasure_index_offset, logic.has_vertical_movement),
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
-        #Todo sky arena npc
+        #Todo NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 6 prizes in exchange for winning fights
         #Todo descriptivize and check requirements on these
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + npc_index_offset), #(752, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + npc_index_offset), #(756, 133, -261)
@@ -809,9 +813,17 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot farmland on way to shrine", 2821 + npc_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ore near sky fishing", 2834 + npc_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province NPC - Gold Dust in the 2 Sky Arena Win room", 2829 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ore in the 5 Sky Arena Win room", 2720 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot in the 5 Sky Arena Win room", 2722 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Dust in the 5 Sky Arena Win room", 2721 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ingot in the 8 Sky Arena Win room", 2830 + npc_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province NPC - Gold Ore in the 8 Sky Arena Win room", 2831 + npc_index_offset, logic.has_vertical_movement),
 
         #Crystals
         LocationData("Shoudu Province", "Shoudu Province Crystal - Samurai Crystal 3 Sky Arena wins", 1206 + crystal_index_offset, logic.has_vertical_movement),
+
+        #Abilities Todo: descriptivize and implement (720, 138, -278)
+        #LocationData("Shoudu Province", "Shoudu Province Ability - Tira from SShadow_Summon", 1132 + ability_index_offset),
 
         #The Undercity
         #Items
@@ -903,8 +915,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar) (789, 191, -338)
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the quintar nest", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
-        #Todo descriptivize and check requirements for shedding #3 (696, 191, -337)
-        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 3", 2257 + npc_index_offset),
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 3 sneaky Quintar nest north of Mausoleum", 2257 + npc_index_offset),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 4 north side of the map", 2259 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 5 long jog along the east mountian", 2260 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 6 overlooking the east ocean", 2261 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
@@ -918,15 +929,21 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Ore climb the center mountain", 2839 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Gold Dust jump across the treetops", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement and logic.has_horizontal_movement and state.has("Item - Dione Stone", player)),
 
-        #Dione shrine
+        #Dione Shrine
         #Treasure chests
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on top of shrine", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)),
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest in lobby", 2791 + treasure_index_offset),
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on second floor", 2792 + treasure_index_offset),
         LocationData("Dione Shrine", "Dione Shrine Chest - Dione Shard chest on second floor balcony", 1146 + treasure_index_offset),
+        #Technically 4th Overpass Scrap on main map
+        LocationData("Dione Shrine", "Dione Shrine Chest - Glide SW from top of shrine to Overpass Scrap chest", 3535 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)),
+        #Technically on Overpass main map
+        LocationData("Dione Shrine", "Dione Shrine Chest - Glide SW from top of shrine to Life Jewel chest", 2749 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)),
 
         #NPCs
         LocationData("Dione Shrine", "Dione Shrine NPC - Shedding 9 on top of the shrine", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)),
+        #Technically Gold Ingot on Overpass main map
+        LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold Ingot", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)),
 
         #Quintar Mausoleum
         #Treasure chests Todo descriptivize
@@ -1027,10 +1044,90 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Northern Stretch", "Northern Stretch Chest - Northern Stretch map chest at the base of Summoners Lookout", 3655 + treasure_index_offset),
 
+        #The Chalice of Tar
+        #Treasure chests
+        LocationData("The Chalice of Tar", "The Chalice of Tar Chest - The Chalice of Tar Map chest at the tippy-top", 3544 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("The Chalice of Tar", "The Chalice of Tar Chest - Dont let your feathers touch the tar Vermillion Book chest", 2587 + treasure_index_offset),
+        LocationData("The Chalice of Tar", "The Chalice of Tar Chest - Windsong chest after the tar tunnel", 2806 + treasure_index_offset),
+
+        #NPCs
+        #Todo NPCs Job Masters: The Chalice of Tar has Master Mimic ID 3606 (526, 234, -438); gives you Mimic Seal in exchange for job mastery
+        LocationData("The Chalice of Tar", "The Chalice of Tar NPC - Gold Ore sparkling above the Overpass on the way up", 2841 + npc_index_offset),
+
+        #Crystals
+        LocationData("The Chalice of Tar", "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic Crystal", 3701 + crystal_index_offset),
+
+        #Flyers Crag
+        #Todo descriptivize and check requirements (region entry rules include owl)
+        #Treasure chests
+        LocationData("Flyers Crag", "Flyers Crag Chest - Flyers Crag Map chest", 3656 + treasure_index_offset), #(658, 216, -170)
+        
+        #NPCs
+        LocationData("Flyers Crag", "Flyers Crag NPC - Gold Dust", 2820 + npc_index_offset), #(695, 137, -159)
+        LocationData("Flyers Crag", "Flyers Crag NPC - Gold Ingot", 2819 + npc_index_offset), #(686, 132, -162)
+
+        #Flyers Lookout
+        #Treasure chests
+        #There are no checks here unless an Overpass Scrap shows up
+
+        #Jidamba Tangle
+        #Todo descriptivize and check requirements (there's a teleport stone here so... probably going to have to write bird on everything)
+        #Treasure chests
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Demon Plate chest inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ether chest up a tree N of Foliage Key", 3024 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ether chest along a river through the foliage", 3026 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ether chest atop overgrown building E of Eaclaneya", 3028 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Flame Guard chest tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Flamespike chest tucked against western side of Eaclaneya", 2802 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Foliage Key chest smack in the center of the tall grass", 1632 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Partizan chest NW of Foliage Key", 2807 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Potion chest tucked below Partizan chest", 3025 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Rune Bow chest atop Eaclaneya", 2808 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Fly down from Weaver Outpost to Siege Bow chest pedestal", 2803 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Island Tower Shield chest in the river through the foliage", 3011 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Z-Potion chest north of foliage river", 3027 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Cave Key chest accompanied by orange flowers", 1435 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Hop from underground root to sneaky passage for damp Ravens Cloak chest", 2798 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ravens Hood chest hiding in underground sneaky passage by NE cave exit", 2797 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Canopy Key chest smack in the center of, you guessed it, the canopy", 1631 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Demon Helm chest up in the canopy south of shrine", 1171 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Jidamba Tangle Map chest in Eaclaneya entrance hall", 2919 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        #NPCs
+        #Todo NPCs Missable: Z54_ChloeFishing ID 2775 gives you the Super Rod (828, 119, 99)
+        #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Splish splash Diamond Dust", 2871 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond Dust hot girl summer on the beach", 2873 + npc_index_offset),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Damp Diamond Ingot lurking beneath diamondsmith", 2869 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond Ingot at southern mouth of cave", 2874 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Fly from Summoners weeping tree to hot tub Diamond Ingot", 2876 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Splash Mountain Diamond Ore (pool at S end of canopy)", 2870 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond Ore atop broken ruins along the beach", 2872 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond Ore atop broken ruins by the Summoner tree", 2875 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Splash Mountain Gold Ore (pool at NE end of canopy)", 2900 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond Ingot in the boughs above the shrine", 2898 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Canopy Gold Ingot above big lake", 2899 + npc_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        #Abilities Todo: descriptivize and implement (672, 124, 106)
+        #LocationData("Jidamba Tangle", "Jidamba Tangle Ability - Juses from SLife_Summon", 1134 + ability_index_offset),
 
         #Jidamba Eaclaneya
+        #Treasure chests
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Celestial Crown chest", 2799 + treasure_index_offset), #(739, 70, 152)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flame Sword chest", 2755 + treasure_index_offset), #(694, 66, 150)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Jidamba Eaclaneya Map chest", 2920 + treasure_index_offset), #(727, 66, 99)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Ether Pouch chest", 2282 + treasure_index_offset), #(731, 35, 80)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Staff of Balance chest", 2289 + treasure_index_offset), #(793, 36, 71)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Stardust Wand chest", 2301 + treasure_index_offset), #(659, 37, 46)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flameseeker chest", 2308 + treasure_index_offset), #(844, 27, 98)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Viridian Book chest", 2317 + treasure_index_offset), #(671, 27, 92)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Salmon Violin", 2288 + treasure_index_offset), #(713, 22, 18)
+
         #NPCs
         #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
+
+        #Crystals
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + treasure_index_offset), #(739, 37, 68)
 
     ]
 
