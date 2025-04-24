@@ -270,7 +270,8 @@ class TestAlternateProgressiveDots(WitnessTestBase):
             # Progressive Dots chain now has 4 members
             "Progressive Dots": 4,
 
-            # Dots items don't exist because Progressive Dots is on. This now includes Colored Dots and Sound Dots as well
+            # Dots items don't exist because Progressive Dots is on.
+            # For this test, this includes Colored Dots and Sound Dots as well
             "Dots": 0,
             "Sparse Dots": 0,
             "Colored Dots": 0,

@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Dict, List, Set
 from BaseClasses import Item, ItemClassification, MultiWorld
 
 from .data import static_items as static_witness_items
-from .data import static_logic as static_witness_logic
 from .data.item_definition_classes import (
     DoorItemDefinition,
     ItemCategory,
@@ -281,7 +280,8 @@ class WitnessPlayerItems:
         """
         return {
             cast_not_none(static_witness_items.ITEM_DATA[progressive_item].ap_code): [
-                cast_not_none(static_witness_items.ITEM_DATA[base_item].ap_code) for base_item in corresponding_base_items
+                cast_not_none(static_witness_items.ITEM_DATA[base_item].ap_code)
+                for base_item in corresponding_base_items
             ]
             for progressive_item, corresponding_base_items in self.all_progressive_item_lists.items()
         }
