@@ -54,6 +54,29 @@ class StartWithMaps(DefaultOnToggle):
     """
     display_name = "Begin with Area Maps"
 
+class IncludedRegions(Choice):
+    """
+    Choose which regions will have locations worth checking in them.
+    
+    Any treasures, npcs, and crystals outside of this region will not give you checks when you interact with them.
+
+    This can be used to make your game shorter/easier or longer/harder.
+    
+    Beginner: Only regions up through the end of the cave of trials will have checks.
+    
+    Advanced: Description!
+
+    Expert: Description!
+
+    All: Every region is included
+    """
+    display_name = "Regions to include in game"
+    option_beginner = 0
+    option_advanced = 1
+    option_expert = 2
+    option_all = 3
+    default = 0
+
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -63,3 +86,4 @@ class CrystalProjectOptions(PerGameCommonOptions):
     randomizeJobs: RandomizeJobs
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
+    includedRegions: IncludedRegions

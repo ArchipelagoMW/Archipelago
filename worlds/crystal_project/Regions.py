@@ -1,10 +1,8 @@
 from typing import List, Dict, TYPE_CHECKING
-from BaseClasses import Region, Location
+from BaseClasses import Region, Location, MultiWorld
 from .Options import CrystalProjectOptions
 from .Locations import LocationData
 from .rules import CrystalProjectLogic
-if TYPE_CHECKING:
-    from . import CrystalProjectWorld
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
@@ -12,69 +10,108 @@ class CrystalProjectLocation(Location):
     def __init__(self, player: int, name: str = " ", address: int = None, parent=None):
         super().__init__(player, name, address, parent)
 
-def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
+def init_areas(world: MultiWorld, locations: List[LocationData], options: CrystalProjectOptions) -> None:
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
 
     locations_per_region = get_locations_per_region(locations)
 
-    regions = [
-        create_region(world, player, locations_per_region, "Menu"),
-        create_region(world, player, locations_per_region, "Spawning Meadows"),
-        create_region(world, player, locations_per_region, "Delende"),
-        create_region(world, player, locations_per_region, "Soiled Den"),
-        create_region(world, player, locations_per_region, "Pale Grotto"),
-        create_region(world, player, locations_per_region, "Seaside Cliffs"),
-        create_region(world, player, locations_per_region, "Draft Shaft Conduit"),
-        create_region(world, player, locations_per_region, "Mercury Shrine"),
-        create_region(world, player, locations_per_region, "Yamagawa M.A."),
-        create_region(world, player, locations_per_region, "Proving Meadows"),
-        create_region(world, player, locations_per_region, "Skumparadise"),
-        create_region(world, player, locations_per_region, "Capital Sequoia"),
-        create_region(world, player, locations_per_region, "Jojo Sewers"),
-        create_region(world, player, locations_per_region, "Boomer Society"),
-        create_region(world, player, locations_per_region, "Rolling Quintar Fields"),
-        create_region(world, player, locations_per_region, "Quintar Nest"),
-        create_region(world, player, locations_per_region, "Quintar Sanctum"),
-        create_region(world, player, locations_per_region, "Capital Jail"),
-        create_region(world, player, locations_per_region, "Capital Pipeline"),
-        create_region(world, player, locations_per_region, "Cobblestone Crag"),
-        create_region(world, player, locations_per_region, "Okimoto N.S."),
-        create_region(world, player, locations_per_region, "Greenshire Reprise"),
-        create_region(world, player, locations_per_region, "Salmon Pass"),
-        create_region(world, player, locations_per_region, "Salmon River"),
-        create_region(world, player, locations_per_region, "Poko Poko Desert"),
-        create_region(world, player, locations_per_region, "Sara Sara Bazaar"),
-        create_region(world, player, locations_per_region, "Sara Sara Beach"),
-        create_region(world, player, locations_per_region, "Ancient Reservoir"),
-        create_region(world, player, locations_per_region, "Salmon Bay"),
-        create_region(world, player, locations_per_region, "The Open Sea"),
-        create_region(world, player, locations_per_region, "Shoudu Waterfront"),
-        create_region(world, player, locations_per_region, "Shoudu Province"),
-        create_region(world, player, locations_per_region, "The Undercity"),
-        create_region(world, player, locations_per_region, "Ganymede Shrine"),
-        create_region(world, player, locations_per_region, "Beaurior Volcano"),
-        create_region(world, player, locations_per_region, "Beaurior Rock"),
-        create_region(world, player, locations_per_region, "Lake Delende"),
-        create_region(world, player, locations_per_region, "Quintar Reserve"),
-        create_region(world, player, locations_per_region, "Dione Shrine"),
-        #create_region(world, player, locations_per_region, "Quintar Mausoleum"),
-        create_region(world, player, locations_per_region, "Eastern Chasm"),
-        create_region(world, player, locations_per_region, "Tall, Tall Heights"),
-        create_region(world, player, locations_per_region, "Northern Cave"),
-        create_region(world, player, locations_per_region, "Lands End"),
-        create_region(world, player, locations_per_region, "Slip Glide Ride"),
-        create_region(world, player, locations_per_region, "Northern Stretch"),
-        create_region(world, player, locations_per_region, "The Chalice of Tar"),
-        create_region(world, player, locations_per_region, "Flyers Crag"),
-        create_region(world, player, locations_per_region, "Flyers Lookout"),
-        create_region(world, player, locations_per_region, "Jidamba Tangle"),
-        create_region(world, player, locations_per_region, "Jidamba Eaclaneya"),
-        
+    if (options.includedRegions == options.includedRegions.option_beginner or
+        options.includedRegions == options.includedRegions.option_advanced or
+        options.includedRegions == options.includedRegions.option_expert or
+        options.includedRegions == options.includedRegions.option_all):
+        excluded = False
+    else:
+        excluded = True
+
+    beginner_regions = [
+        create_region(world, player, locations_per_region, "Menu", excluded),
+        create_region(world, player, locations_per_region, "Spawning Meadows", excluded),
+        create_region(world, player, locations_per_region, "Delende", excluded),
+        create_region(world, player, locations_per_region, "Soiled Den", excluded),
+        create_region(world, player, locations_per_region, "Pale Grotto", excluded),
+        create_region(world, player, locations_per_region, "Seaside Cliffs", excluded),
+        create_region(world, player, locations_per_region, "Draft Shaft Conduit", excluded),
+        create_region(world, player, locations_per_region, "Mercury Shrine", excluded),
+        create_region(world, player, locations_per_region, "Yamagawa M.A.", excluded),
+        create_region(world, player, locations_per_region, "Proving Meadows", excluded),
+        create_region(world, player, locations_per_region, "Skumparadise", excluded),
     ]
 
-    multiworld.regions += regions
+    if (options.includedRegions == options.includedRegions.option_advanced or
+        options.includedRegions == options.includedRegions.option_expert or
+        options.includedRegions == options.includedRegions.option_all):
+        excluded = False
+    else:
+        excluded = True
+
+    advanced_regions = [
+        create_region(world, player, locations_per_region, "Capital Sequoia", excluded),
+        create_region(world, player, locations_per_region, "Jojo Sewers", excluded),
+        create_region(world, player, locations_per_region, "Boomer Society", excluded),
+        create_region(world, player, locations_per_region, "Rolling Quintar Fields", excluded),
+        create_region(world, player, locations_per_region, "Quintar Nest", excluded),
+        create_region(world, player, locations_per_region, "Quintar Sanctum", excluded),
+        create_region(world, player, locations_per_region, "Capital Jail", excluded),
+        create_region(world, player, locations_per_region, "Capital Pipeline", excluded),
+        create_region(world, player, locations_per_region, "Cobblestone Crag", excluded),
+        create_region(world, player, locations_per_region, "Okimoto N.S.", excluded),
+        create_region(world, player, locations_per_region, "Greenshire Reprise", excluded),
+        create_region(world, player, locations_per_region, "Salmon Pass", excluded),
+        create_region(world, player, locations_per_region, "Salmon River", excluded),
+        create_region(world, player, locations_per_region, "Poko Poko Desert", excluded),
+        create_region(world, player, locations_per_region, "Sara Sara Bazaar", excluded),
+        create_region(world, player, locations_per_region, "Sara Sara Beach", excluded),
+        create_region(world, player, locations_per_region, "Ancient Reservoir", excluded),
+        create_region(world, player, locations_per_region, "Salmon Bay", excluded),
+    ]
+
+    if (options.includedRegions == options.includedRegions.option_expert or
+        options.includedRegions == options.includedRegions.option_all):
+        excluded = False
+    else:
+        excluded = True
+
+    expert_regions = [
+        create_region(world, player, locations_per_region, "The Open Sea", excluded),
+        create_region(world, player, locations_per_region, "Shoudu Waterfront", excluded),
+        create_region(world, player, locations_per_region, "Shoudu Province", excluded),
+        create_region(world, player, locations_per_region, "The Undercity", excluded),
+        create_region(world, player, locations_per_region, "Ganymede Shrine", excluded),
+        create_region(world, player, locations_per_region, "Beaurior Volcano", excluded),
+        create_region(world, player, locations_per_region, "Beaurior Rock", excluded),
+        create_region(world, player, locations_per_region, "Lake Delende", excluded),
+        create_region(world, player, locations_per_region, "Quintar Reserve", excluded),
+        create_region(world, player, locations_per_region, "Dione Shrine", excluded),
+        #create_region(world, player, locations_per_region, "Quintar Mausoleum", excluded),
+        create_region(world, player, locations_per_region, "Eastern Chasm", excluded),
+        create_region(world, player, locations_per_region, "Tall, Tall Heights", excluded),
+        create_region(world, player, locations_per_region, "Northern Cave", excluded),
+        create_region(world, player, locations_per_region, "Lands End", excluded),
+        create_region(world, player, locations_per_region, "Slip Glide Ride", excluded),
+        create_region(world, player, locations_per_region, "Northern Stretch", excluded),
+        create_region(world, player, locations_per_region, "The Chalice of Tar", excluded),
+        create_region(world, player, locations_per_region, "Flyers Crag", excluded),
+        create_region(world, player, locations_per_region, "Flyers Lookout", excluded),
+        create_region(world, player, locations_per_region, "Jidamba Tangle", excluded),
+        create_region(world, player, locations_per_region, "Jidamba Eaclaneya", excluded),
+    ]
+
+    if (options.includedRegions == options.includedRegions.option_all):
+        excluded = False
+    else:
+        excluded = True
+     
+    end_game_regions = [
+
+    ]
+
+    multiworld.regions += beginner_regions
+    multiworld.regions += advanced_regions
+    multiworld.regions += expert_regions
+    multiworld.regions += end_game_regions
+
     connect_menu_region(world)
 
     multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"])
@@ -157,13 +194,16 @@ def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[Lo
 
     return per_region
 
-def create_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str) -> Region:
+def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
     region = Region(name, player, world.multiworld)
 
-    if name in locations_per_region:
-        for location_data in locations_per_region[name]:
-            location = create_location(player, location_data, region)
-            region.locations.append(location)
+    #if the region isn't part of the multiworld, we still make the region so that all the exits still work,
+        #but we also don't fill it with locations
+    if not excluded: 
+        if name in locations_per_region:
+            for location_data in locations_per_region[name]:
+                location = create_location(player, location_data, region)
+                region.locations.append(location)
 
     return region
 
@@ -176,7 +216,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 
     return location
 
-def connect_menu_region(world: "CrystalProjectWorld") -> None:
+def connect_menu_region(world: MultiWorld) -> None:
     starting_region_list = {
         0: "Spawning Meadows"
     }
