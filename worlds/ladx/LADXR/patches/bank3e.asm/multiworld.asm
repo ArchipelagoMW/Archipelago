@@ -28,6 +28,7 @@ MainLoop:
 
     ld   a, [wLinkSpawnDelay]
     and  a
+    ld   hl, wMWCommand ; load command early to do it once
     jr   z, .allowSpawn
     dec  a
     ld   [wLinkSpawnDelay], a
@@ -43,16 +44,17 @@ MainLoop:
     ld   a, [wDropBombSpawnCount]
     and  a
     call nz, LinkSpawnBomb
+
     ; deathlink
-    ld   a, [wMWCommand]
-    bit  3, a
+    bit  3, [hl] ; wMWCommand
     jr   z, .noSpawn
+    res  3, [hl]
     ld   a, [wMWDeathLinkRecv]
     jr   nz, .noSpawn ; if deathlink recv flag is still up, dont do it
     ld   a, [wHasMedicine]
     ; set health and health loss to a
     ; instant kill if no medicine
-    ; kill with damage if medicine (to trigger)
+    ; kill with damage if medicine (to trigger medicine)
     ld   [$DB5A], a ; wHealth
     ld   [$DB94], a ; wSubtractHealthBuffer
     ; set health gain to zero
@@ -64,9 +66,9 @@ MainLoop:
 
 .noSpawn:
     ; Have a location to collect?
-    ld   a, [wMWCommand]
-    bit  2, a
+    bit  2, [hl] ; wMWCommand
     jr   z, .noCollect
+    res  2, [hl]
     ; get current location value onto b
     ld   a, [wMultipurposeC] ; collect location hi
     ld   h, a
@@ -77,22 +79,24 @@ MainLoop:
     ld   a, [wMultipurposeE] ; location mask
     or   b ; apply mask
     cp   b ; was location already set?
-    jr   z, .finishCommands ; if so, do nothing else
+    ret  z ; if so, do nothing else
     ld   [hl], a
+    ld   hl, wMWCommand
 
 .noCollect
     ; Have an item to give?
-    ld   a, [wMWCommand]
-    bit  0, a
-    jr   z, .finishCommands
-    bit  1, a ; should skip recvindex check
-    jr   nz, .skipRecvIndexCheck
+    bit  0, [hl] ; wMWCommand
+    ret  z
+    res  0, [hl]
+    bit  1, [hl] ; do recvindex check only if bit set
+    jr   z, .skipRecvIndexCheck
+    res  1, [hl]
     ld   a, [wMWRecvIndexHi]
     cp   [wMWMultipurposeC]
-    jr   nz, .finishCommands ; failed check on hi
+    ret  nz ; failed check on hi
     ld   a, [wMWRecvIndexLo]
     cp   [wMWMultipurposeD]
-    jr   nz, .finishCommands ; failed check on lo
+    ret  nz ; failed check on lo
 
 .skipRecvIndexCheck
     ; Give an item to the player
@@ -116,11 +120,6 @@ MainLoop:
     ld  a, [wLinkGiveItemFrom]
     call MessageAddPlayerName
     ld   a, $C9
-
-.finishCommands
-    ; clear MW command
-    xor  a
-    ld   [wMWCommand], a
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
 
