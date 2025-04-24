@@ -390,12 +390,7 @@ class WitnessWorld(World):
         else:
             item_data = static_witness_items.ITEM_DATA[item_name]
 
-        item = WitnessItem(
-            item_name,
-            item_data.classification,
-            item_data.ap_code,
-            player=self.player,
-        )
+        item = WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
 
         item.is_alias_for = static_witness_items.ALL_ITEM_ALIASES.get(item_name, None)
         if hasattr(self, "player_items") and self.player_items:
