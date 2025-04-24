@@ -42,7 +42,9 @@ def mystery_argparse():
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
-    parser.add_argument('--log_level', default='info', help='Sets log level')
+    parser.add_argument('--log_level', default=defaults.loglevel, help='Sets log level')
+    parser.add_argument('--log_time', help="Add timestamps to STDOUT",
+                        default=defaults.logtime, action='store_true')
     parser.add_argument("--csv_output", action="store_true",
                         help="Output rolled player options to csv (made for async multiworld).")
     parser.add_argument("--plando", default=defaults.plando_options,
@@ -52,12 +54,22 @@ def mystery_argparse():
     parser.add_argument("--skip_output", action="store_true",
                         help="Skips generation assertion and output stages and skips multidata and spoiler output. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--spoiler_only", action="store_true",
+                        help="Skips generation assertion and multidata, outputting only a spoiler log. "
+                             "Intended for debugging and testing purposes.")
     args = parser.parse_args()
+
+    if args.skip_output and args.spoiler_only:
+        parser.error("Cannot mix --skip_output and --spoiler_only")
+    elif args.spoiler == 0 and args.spoiler_only:
+        parser.error("Cannot use --spoiler_only when --spoiler=0. Use --skip_output or set --spoiler to a different value")
+
     if not os.path.isabs(args.weights_file_path):
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
     args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+
     return args
 
 
@@ -75,7 +87,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
 
     seed = get_seed(args.seed)
 
-    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level)
+    Utils.init_logging(f"Generate_{seed}", loglevel=args.log_level, add_timestamp=args.log_time)
     random.seed(seed)
     seed_name = get_seed_name(random)
 
@@ -106,6 +118,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
             raise Exception("Cannot mix --sameoptions with --meta")
     else:
         meta_weights = None
+
+
     player_id = 1
     player_files = {}
     for file in os.scandir(args.player_files_path):
@@ -162,6 +176,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.outputpath = args.outputpath
     erargs.skip_prog_balancing = args.skip_prog_balancing
     erargs.skip_output = args.skip_output
+    erargs.spoiler_only = args.spoiler_only
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
@@ -277,22 +292,30 @@ def get_choice(option, root, value=None) -> Any:
     raise RuntimeError(f"All options specified in \"{option}\" are weighted as zero.")
 
 
-class SafeDict(dict):
-    def __missing__(self, key):
-        return '{' + key + '}'
+class SafeFormatter(string.Formatter):
+    def get_value(self, key, args, kwargs):
+        if isinstance(key, int):
+            if key < len(args):
+                return args[key]
+            else:
+                return "{" + str(key) + "}"
+        else:
+            return kwargs.get(key, "{" + key + "}")
 
 
 def handle_name(name: str, player: int, name_counter: Counter):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
-    new_name = string.Formatter().vformat(new_name, (), SafeDict(number=number,
-                                                                 NUMBER=(number if number > 1 else ''),
-                                                                 player=player,
-                                                                 PLAYER=(player if player > 1 else '')))
+
+    new_name = SafeFormatter().vformat(new_name, (), {"number": number,
+                                                      "NUMBER": (number if number > 1 else ''),
+                                                      "player": player,
+                                                      "PLAYER": (player if player > 1 else '')})
     # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
     # Could cause issues for some clients that cannot handle the additional whitespace.
     new_name = new_name.strip()[:16].strip()
+
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
@@ -438,7 +461,7 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if "linked_options" in weights:
         weights = roll_linked_options(weights)
 
-    valid_keys = set()
+    valid_keys = {"triggers"}
     if "triggers" in weights:
         weights = roll_triggers(weights, weights["triggers"], valid_keys)
 
@@ -497,14 +520,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     for option_key, option in world_type.options_dataclass.type_hints.items():
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
-    for option_key in game_weights:
-        if option_key in {"triggers", *valid_keys}:
-            continue
-        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers.")
+
+    # TODO remove plando_items after moving it to the options system
+    valid_keys.add("plando_items")
     if PlandoOptions.items in plando_options:
         ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
+        # TODO there are still more LTTP options not on the options system
+        valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
         roll_alttp_settings(ret, game_weights)
+
+    # log a warning for options within a game section that aren't determined as valid
+    for option_key in game_weights:
+        if option_key in valid_keys:
+            continue
+        logging.warning(f"{option_key} is not a valid option name for {ret.game} and is not present in triggers "
+                        f"for player {ret.name}.")
 
     return ret
 

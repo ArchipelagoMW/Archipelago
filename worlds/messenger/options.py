@@ -3,7 +3,8 @@ from dataclasses import dataclass
 from schema import And, Optional, Or, Schema
 
 from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle, Visibility
+    PlandoConnections, Range, StartInventoryPool, Toggle
+from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
@@ -15,32 +16,32 @@ class MessengerAccessibility(ItemsAccessibility):
 
 class PortalPlando(PlandoConnections):
     """
-    Plando connections to be used with portal shuffle. Direction is ignored.
-    List of valid connections can be found here: https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/messenger/portals.py#L12.
-    The entering Portal should *not* have "Portal" appended.
-    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
-    Example:
-    - entrance: Riviere Turquoise
-      exit: Wingsuit
-    - entrance: Sunken Shrine
-      exit: Sunny Day
-    - entrance: Searing Crags
-      exit: Glacial Peak Portal
+    Plando connections to be used with portal shuffle.
+    Documentation on using this can be found in The Messenger plando guide.
     """
+    display_name = "Portal Plando Connections"
     portals = [f"{portal} Portal" for portal in PORTALS]
     shop_points = [point for points in SHOP_POINTS.values() for point in points]
     checkpoints = [point for points in CHECKPOINTS.values() for point in points]
-    portal_entrances = PORTALS
-    portal_exits = portals + shop_points + checkpoints
-    entrances = portal_entrances
-    exits = portal_exits
+
+    entrances = frozenset(PORTALS)
+    exits = frozenset(portals + shop_points + checkpoints)
 
 
-# for back compatibility. To later be replaced with transition plando
-class HiddenPortalPlando(PortalPlando):
-    visibility = Visibility.none
-    entrances = PortalPlando.entrances
-    exits = PortalPlando.exits
+class TransitionPlando(PlandoConnections):
+    """
+    Plando connections to be used with transition shuffle.
+    Documentation on using this can be found in The Messenger plando guide.
+    """
+    display_name = "Transition Plando Connections"
+    entrances = frozenset(RANDOMIZED_CONNECTIONS.keys())
+    exits = frozenset(RANDOMIZED_CONNECTIONS.values())
+
+    @classmethod
+    def can_connect(cls, entrance: str, exit: str) -> bool:
+        if entrance != "Glacial Peak - Left" and entrance.lower() in cls.exits:
+            return exit.lower() in cls.entrances
+        return exit.lower() not in cls.entrances
 
 
 class Logic(Choice):
@@ -130,7 +131,9 @@ class MusicBox(DefaultOnToggle):
 
 
 class NotesNeeded(Range):
-    """How many notes are needed to access the Music Box."""
+    """
+    How many notes need to be found in order to access the Music Box. 6 are always needed to enter, so this places the others in your start inventory.
+    """
     display_name = "Notes Needed"
     range_start = 1
     range_end = 6
@@ -226,7 +229,7 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
-    # shuffle_transitions: ShuffleTransitions
+    shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
@@ -236,4 +239,4 @@ class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
     portal_plando: PortalPlando
-    plando_connections: HiddenPortalPlando
+    plando_connections: TransitionPlando
