@@ -47,7 +47,7 @@ class MedalRequirement(Range):
     display_name = "Series Medal Requirement"
     range_start = 1
     range_end = 20
-    default = 6
+    default = 8
 
 class SkipPercentage(Range):
     """The number of map skips in the item pool, calculated as a percentage of the total number of maps.
@@ -59,6 +59,13 @@ class SkipPercentage(Range):
     range_start = 0
     range_end = 100
     default = 10
+
+class ProgressiveTargetTimeChance(Range):
+    """Percentage chance that the item received for beating the target time is guaranteed to be a progression item"""
+    display_name = "Target Time Progression Item Chance"
+    range_start = 0
+    range_end = 100
+    default = 40
 
 class MapTags(OptionSet):
     """Tags that maps from Trackmania Exchange are allowed to have. If none of these tags are checked, 
@@ -93,6 +100,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
     series_map_number: SeriesMapNumber
     medal_requirement: MedalRequirement
     skip_percentage: SkipPercentage
+    target_progression_chance : ProgressiveTargetTimeChance
     map_tags: MapTags
     map_tags_inclusive: MapTagsInclusive
     map_etags: MapETags
@@ -101,7 +109,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
-    "Campaign Configuration":[SeriesNumber, SeriesMapNumber, MedalRequirement],
+    "Campaign Configuration":[SeriesNumber, SeriesMapNumber, MedalRequirement, ProgressiveTargetTimeChance],
     "Map Tags":[MapTagsInclusive, MapTags, MapETags]
 }
 
