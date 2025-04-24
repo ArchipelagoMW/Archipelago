@@ -9,8 +9,8 @@ if TYPE_CHECKING:
 class TrackmaniaLocation(Location):  # or from Locations import MyGameLocation
     game = "Trackmania"  # name of the game/world this location is in
 
-def build_locations() -> Dict[str, int]:
-    trackmania_locations : Dict[str, int] = {}
+def build_locations() -> dict[str, int]:
+    trackmania_locations : dict[str, int] = {}
     idOffset = 0
     #since we dont have preferences yet, we have to return every possible location, not just the ones we need ;-;
     #its fine but my inner perfectionist is not

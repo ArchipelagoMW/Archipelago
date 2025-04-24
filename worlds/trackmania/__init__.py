@@ -2,7 +2,7 @@ import settings
 import typing
 import os
 from .options import TrackmaniaOptions, create_option_groups
-from .items import trackmania_items, trackmania_item_groups, create_itempool, create_item
+from .items import build_items, trackmania_item_groups, create_itempool, create_item
 from .locations import build_locations
 from .regions import create_regions
 from worlds.AutoWorld import World, WebWorld
@@ -46,7 +46,7 @@ class TrackmaniaWorld(World):
     options: TrackmaniaOptions  # typing hints for option results
     web = Webmania()
 
-    item_name_to_id = trackmania_items
+    item_name_to_id = build_items()
     location_name_to_id = build_locations()
 
     item_name_groups = trackmania_item_groups
