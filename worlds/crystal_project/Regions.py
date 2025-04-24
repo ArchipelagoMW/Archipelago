@@ -114,16 +114,28 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
 
     connect_menu_region(world)
 
-    multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"])
-    multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"])
-    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Lake Delende"])
-    multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"])
+    multiworld.get_region("Spawning Meadows", player).add_exits(["Delende"]) #forwards
+    multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine"]) #forwards
+    #todo mercury shrine has no listed connections atm including a backwards
+    multiworld.get_region("Delende", player).add_exits(["Spawning Meadows"]) #backwards
+    #TODO should soiled den have a forwards, if so what?
+    multiworld.get_region("Soiled Den", player).add_exits(["Delende"]) #backwards
+    multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"]) #forwards
+    multiworld.get_region("Pale Grotto", player).add_exits(["Delende"]) #backwards
+    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Lake Delende"]) #forwards
+    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Delende"]) #backwards
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Draft Shaft Conduit", "Beaurior Volcano"],
-        {"Beaurior Volcano": logic.has_vertical_movement})
+        {"Beaurior Volcano": logic.has_vertical_movement}) #forwards
+    multiworld.get_region("Seaside Cliffs", player).add_exits(["Delende"]) #backwards
+    #no forwards for draft shaft conduit till we do fish stuff!
+    multiworld.get_region("Draft Shaft Conduit", player).add_exits(["Seaside Cliffs"]) #backwards
     multiworld.get_region("Proving Meadows", player).add_exits(["Skumparadise"], 
-        {"Skumparadise": lambda state: logic.has_jobs(state, 3)})
-    multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"])
-    multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"])
+        {"Skumparadise": lambda state: logic.has_jobs(state, 3)}) #forwards
+    multiworld.get_region("Proving Meadows", player).add_exits(["Pale Grotto"]) #backwards
+    multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"]) #forwards
+    multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows"]) #backwards
+    multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"]) #forwards
+    multiworld.get_region("Capital Sequoia", player).add_exits(["Proving Meadows", "Skumparadise"]) #backwards
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
         {"Capital Jail": logic.has_rental_quintar})
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
