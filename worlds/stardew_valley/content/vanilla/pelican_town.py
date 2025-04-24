@@ -4,7 +4,7 @@ from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
-    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement
+    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -307,10 +307,13 @@ pelican_town = ContentPack(
         Hat.cool_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(250000),)),),
         Hat.bowler: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(1000000),)),),
         Hat.sombrero: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(TotalEarningsRequirement(10000000),)),),
-        Hat.blue_ribbon: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(GrangeDisplayRequirement(),)),),
         Hat.infinity_crown: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(ForgeInfinityWeaponRequirement(),)),),
-        # Hat.blue_bonnet,
-        # Hat.cowboy_hat,
+        Hat.blue_ribbon: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(GrangeDisplayRequirement(),)),),
+        Hat.straw: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(EggHuntRequirement(),)),),
+        Hat.official_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(CaughtFishRequirement(24),)),),
+        Hat.blue_bonnet: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(MuseumCompletionRequirement(40),)),),
+        Hat.cowboy: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(MuseumCompletionRequirement(),)),),
+        # Hat.plum_chapeau: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(CookedRecipesRequirement(),)),),
         # Hat.butterfly_bow,
         # Hat.mouse_ears,
         # Hat.cat_ears,
@@ -318,7 +321,6 @@ pelican_town = ContentPack(
         # Hat.santa_hat,
         # Hat.earmuffs,
         # Hat.delicate_bow,
-        # Hat.plum_chapeau,
         # Hat.archers_cap,
         # Hat.tropiclip,
         # Hat.hunters_cap,
@@ -326,7 +328,6 @@ pelican_town = ContentPack(
         # Hat.trucker_hat,
         # Hat.gnomes_cap,
         # Hat.souwester,
-        # Hat.official_cap,
         # Hat.eye_patch,
         # Hat.watermelon_band,
         # Hat.polka_bow,
@@ -335,7 +336,6 @@ pelican_town = ContentPack(
         # Hat.cowgal_hat,
         # Hat.goblin_mask,
         # Hat.chef_hat,
-        # Hat.straw,
         # Hat.sailors_cap,
         # Hat.elegant_turban,
         # Hat.junimo_hat,

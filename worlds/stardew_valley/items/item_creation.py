@@ -154,25 +154,28 @@ def create_weapons(item_factory: StardewItemFactory, options: StardewValleyOptio
     weapons = weapons_count(content)
     items.extend(item_factory(item) for item in [APWeapon.slingshot] * 2)
     monstersanity = options.monstersanity
+
+    ring_classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
+    rings_items = items_by_group[Group.RING]
+    if not content.is_enabled(ginger_island_content_pack):
+        rings_items = [item for item in rings_items if item.classification is not ItemClassification.filler]
+
     if monstersanity == Monstersanity.option_none:  # Without monstersanity, might not be enough checks to split the weapons
         items.extend(item_factory(item) for item in [APWeapon.weapon] * weapons)
         items.extend(create_footwear(item_factory, 3))  # 1-2 | 3-4 | 6-7-8
+        rings_items = [item for item in rings_items if item.classification is ItemClassification.progression]
+        items.extend(item_factory(item, classification_pre_fill=ring_classification) for item in rings_items)
         return
 
     items.extend(item_factory(item) for item in [APWeapon.sword] * weapons)
     items.extend(item_factory(item) for item in [APWeapon.club] * weapons)
     items.extend(item_factory(item) for item in [APWeapon.dagger] * weapons)
     items.extend(create_footwear(item_factory, 4))  # 1-2 | 3-4 | 6-7-8 | 11-13
+
+    items.extend(item_factory(item, classification_pre_fill=ring_classification) for item in rings_items)
     if monstersanity == Monstersanity.option_goals or monstersanity == Monstersanity.option_one_per_category or \
             monstersanity == Monstersanity.option_short_goals or monstersanity == Monstersanity.option_very_short_goals:
         return
-
-    rings_items = items_by_group[Group.RING]
-    if not content.is_enabled(ginger_island_content_pack):
-        rings_items = [item for item in rings_items if item.classification is not ItemClassification.filler]
-
-    ring_classification = ItemClassification.progression if options.bundle_randomization == BundleRandomization.option_meme else ItemClassification.useful
-    items.extend(item_factory(item, classification_pre_fill=ring_classification) for item in rings_items)
 
 
 def create_elevators(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):

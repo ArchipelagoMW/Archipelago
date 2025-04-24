@@ -5,7 +5,7 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
     RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement, GrangeDisplayRequirement, \
-    ForgeInfinityWeaponRequirement
+    ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement
 from ..strings.region_names import Region
 
 
@@ -79,5 +79,17 @@ class RequirementLogic(BaseLogic):
         return self.logic.festival.can_succeed_grange_display()
 
     @meet_requirement.register
+    def _(self, requirement: EggHuntRequirement):
+        return self.logic.festival.can_win_egg_hunt()
+
+    @meet_requirement.register
     def _(self, requirement: ForgeInfinityWeaponRequirement):
         return self.logic.combat.has_galaxy_weapon & self.logic.region.can_reach(Region.volcano_floor_10) & self.logic.has("Galaxy Soul")
+
+    @meet_requirement.register
+    def _(self, requirement: CaughtFishRequirement):
+        return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
+
+    @meet_requirement.register
+    def _(self, requirement: MuseumCompletionRequirement):
+        return self.logic.museum.can_donate_museum_items(requirement.number_donated)

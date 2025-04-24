@@ -118,6 +118,14 @@ class FishingLogic(BaseLogic):
 
         return self.logic.and_(*rules)
 
+    def can_catch_many_fish(self, number: int) -> StardewRule:
+        rules = [
+            self.logic.fishing.can_catch_fish(fish)
+            for fish in self.content.fishes.values()
+        ]
+
+        return self.logic.count(number, *rules)
+
     def has_specific_bait(self, fish: FishItem) -> StardewRule:
         return self.can_catch_fish(fish) & self.logic.has(Machine.bait_maker)
 

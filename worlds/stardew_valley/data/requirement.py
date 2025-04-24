@@ -73,5 +73,20 @@ class GrangeDisplayRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class EggHuntRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
 class ForgeInfinityWeaponRequirement(Requirement):
     pass
+
+
+@dataclass(frozen=True)
+class CaughtFishRequirement(Requirement):
+    number_fish: int
+
+
+@dataclass(frozen=True)
+class MuseumCompletionRequirement(Requirement):
+    number_donated: int = 95
