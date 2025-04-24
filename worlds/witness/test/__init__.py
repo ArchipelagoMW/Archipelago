@@ -128,6 +128,14 @@ class WitnessTestBase(WorldTestBase):
                 found_items = self.get_items_by_name(item)
                 self.assertEqual(len(found_items), expected_quantity)
 
+    def assert_item_exists_and_is_proguseful(self, item_name: str, proguseful = False):
+        items = self.get_items_by_name(item_name)
+        self.assertTrue(items)
+        if proguseful:
+            self.assertTrue(all(item.advancement and item.useful for item in items))
+        else:
+            self.assertTrue(all(item.advancement and not item.useful for item in items))
+
 class WitnessMultiworldTestBase(MultiworldTestBase):
     options_per_world: List[Dict[str, Any]]
     common_options: Dict[str, Any] = {}

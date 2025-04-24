@@ -71,6 +71,16 @@ class TestProgressiveSymbols(WitnessTestBase):
             self.assertTrue(self.multiworld.state.can_reach("Tutorial Patio Floor", "Location", self.player))
             self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
 
+        with self.subTest("Verify proguseful status of progressive & alias items"):
+            self.assert_item_exists_and_is_proguseful("Progressive Symmetry", proguseful=False)
+            self.assert_item_exists_and_is_proguseful("Sound Dots", proguseful=False)
+
+            self.assert_item_exists_and_is_proguseful("Progressive Dots")
+            self.assert_item_exists_and_is_proguseful("Progressive Stars")
+            self.assert_item_exists_and_is_proguseful("Progressive Squares")
+            self.assert_item_exists_and_is_proguseful("Progressive Shapers")
+            self.assert_item_exists_and_is_proguseful("Progressive Discard Symbols")
+
 
 class TestIndependentSecondStageSymbols(WitnessTestBase):
     options = {
@@ -155,6 +165,16 @@ class TestIndependentSecondStageSymbols(WitnessTestBase):
             self.assertTrue(
                 self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
             )
+
+        with self.subTest("Verify proguseful status of progressive & alias items"):
+            self.assert_item_exists_and_is_proguseful("Full Dots", proguseful=False)
+            self.assert_item_exists_and_is_proguseful("Stars + Same Colored Symbol", proguseful=False)
+            self.assert_item_exists_and_is_proguseful("Arrows", proguseful=False)  # Variety
+
+            self.assert_item_exists_and_is_proguseful("Sparse Dots")
+            self.assert_item_exists_and_is_proguseful("Simple Stars")
+            self.assert_item_exists_and_is_proguseful("Triangles")  # Variety
+
 
 class TestDependentSecondStageSymbols(WitnessTestBase):
     options = {
@@ -245,6 +265,15 @@ class TestDependentSecondStageSymbols(WitnessTestBase):
             self.assertTrue(
                 self.multiworld.state.can_reach("Symmetry Island Laser Blue 3", "Location", self.player)
             )
+
+        with self.subTest("Verify proguseful status of progressive & alias items"):
+            self.assert_item_exists_and_is_proguseful("Full Dots", proguseful=False)
+            self.assert_item_exists_and_is_proguseful("Stars + Same Colored Symbol", proguseful=False)
+            self.assert_item_exists_and_is_proguseful("Arrows", proguseful=False)  # Variety
+
+            self.assert_item_exists_and_is_proguseful("Dots")
+            self.assert_item_exists_and_is_proguseful("Stars")
+            self.assert_item_exists_and_is_proguseful("Triangles")  # Variety
 
 
 class TestAlternateProgressiveDots(WitnessTestBase):
@@ -356,6 +385,10 @@ class TestAlternateProgressiveDots(WitnessTestBase):
             )
             self.assertTrue(self.multiworld.state.can_reach("Jungle Popup Wall 6", "Location", self.player))
             self.assertTrue(self.multiworld.state.can_reach("Outside Tutorial Shed Row 5", "Location", self.player))
+
+        with self.subTest("Verify proguseful status of progressive & alias items"):
+            self.assert_item_exists_and_is_proguseful("Progressive Dots")
+            self.assert_item_exists_and_is_proguseful("Simple Stars")
 
 
 class TestSymbolRequirementsMultiworld(WitnessMultiworldTestBase):
