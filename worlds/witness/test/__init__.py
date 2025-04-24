@@ -128,7 +128,7 @@ class WitnessTestBase(WorldTestBase):
                 found_items = self.get_items_by_name(item)
                 self.assertEqual(len(found_items), expected_quantity)
 
-    def assert_item_exists_and_is_proguseful(self, item_name: str, proguseful = False):
+    def assert_item_exists_and_is_proguseful(self, item_name: str, proguseful=True):
         items = self.get_items_by_name(item_name)
         self.assertTrue(items)
         if proguseful:
