@@ -1292,10 +1292,12 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self,
-                *option_names: str,
-                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
-                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
+    def as_dict(
+            self,
+            *option_names: str,
+            casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+            toggles_as_bools: bool = False,
+    ) -> dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
