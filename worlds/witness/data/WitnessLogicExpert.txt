@@ -1017,7 +1017,7 @@ Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 Mountain Floor 1 (Mountain Floor 1) - Mountain Floor 1 Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Eraser & Triangles
 
-Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay:
+Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay - Mountain Floor 1 Trash Pillar - TrueOneWay - Mountain Floor 1 Back Section - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots & Stars & Stars + Same Colored Symbol
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Triangles
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Stars + Same Colored Symbol
