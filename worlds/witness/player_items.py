@@ -158,9 +158,15 @@ class WitnessPlayerItems:
         if self._world.options.puzzle_randomization == "umbra_variety":
             self._proguseful_items.add("Triangles")
 
-        # This needs to be improved when the improved independent&progressive symbols PR is merged
-        for item in list(self._proguseful_items):
-            self._proguseful_items.add(static_witness_logic.get_parent_progressive_item(item))
+        for progressive_item, progressive_item_chain in player_logic.FINALIZED_PROGRESSIVE_LISTS.items():
+            for chain_item in progressive_item_chain:
+                if chain_item in self._proguseful_items:
+                    self._proguseful_items.add(progressive_item)
+                    break
+
+        for alias_item, real_item in static_witness_items.ALL_ITEM_ALIASES.items():
+            if real_item in self._proguseful_items:
+                self._proguseful_items.add(alias_item)
 
         for item_name, item_data in self.item_data.items():
             if item_name in self._proguseful_items:

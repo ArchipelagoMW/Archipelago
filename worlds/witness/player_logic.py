@@ -75,7 +75,6 @@ class WitnessPlayerLogic:
         self.UNREACHABLE_REGIONS: Set[str] = set()
 
         self.THEORETICAL_BASE_ITEMS: Set[str] = set()
-        self.ITEM_TO_PROGRESSIVE_ITEM_AND_COUNT: Dict[str, Tuple[str, int]] = {}
         self.THEORETICAL_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.ENABLED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
         self.FINALIZED_PROGRESSIVE_LISTS: Dict[str, List[str]] = {}
