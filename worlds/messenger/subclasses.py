@@ -1,7 +1,8 @@
 from functools import cached_property
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, Location, Region
+from entrance_rando import ERPlacementState
 from .regions import LOCATIONS, MEGA_SHARDS
 from .shop import FIGURINES, SHOP_ITEMS
 
@@ -10,14 +11,26 @@ if TYPE_CHECKING:
 
 
 class MessengerEntrance(Entrance):
-    world: Optional["MessengerWorld"] = None
+    world: "MessengerWorld | None" = None
+
+    def can_connect_to(self, other: Entrance, dead_end: bool, state: "ERPlacementState") -> bool:
+        can_connect = super().can_connect_to(other, dead_end, state)
+        world: MessengerWorld = getattr(self, "world", None)
+        if not world or world.reachable_locs or not can_connect:
+            return can_connect
+        empty_state = CollectionState(world.multiworld, True)
+        self.connected_region = other.connected_region
+        empty_state.update_reachable_regions(world.player)
+        world.reachable_locs = any(loc.can_reach(empty_state) and not loc.is_event for loc in world.get_locations())
+        self.connected_region = None
+        return world.reachable_locs and (not state.coupled or self.name != other.name)
 
 
 class MessengerRegion(Region):
-    parent: str
+    parent: str | None
     entrance_type = MessengerEntrance
 
-    def __init__(self, name: str, world: "MessengerWorld", parent: Optional[str] = None) -> None:
+    def __init__(self, name: str, world: "MessengerWorld", parent: str | None = None) -> None:
         super().__init__(name, world.player, world.multiworld)
         self.parent = parent
         locations = []
@@ -32,8 +45,9 @@ class MessengerRegion(Region):
                               for shop_loc in SHOP_ITEMS}
             self.add_locations(shop_locations, MessengerShopLocation)
         elif name == "The Craftsman's Corner":
-            self.add_locations({figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
-                               MessengerLocation)
+            self.add_locations(
+                {figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
+                MessengerLocation)
         elif name == "Tower HQ":
             locations.append("Money Wrench")
 
@@ -48,7 +62,7 @@ class MessengerRegion(Region):
 class MessengerLocation(Location):
     game = "The Messenger"
 
-    def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:
+    def __init__(self, player: int, name: str, loc_id: int | None, parent: MessengerRegion) -> None:
         super().__init__(player, name, loc_id, parent)
         if loc_id is None:
             if name == "Rescue Phantom":
@@ -57,9 +71,10 @@ class MessengerLocation(Location):
 
 
 class MessengerShopLocation(MessengerLocation):
+
     @cached_property
     def cost(self) -> int:
-        name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
+        name = self.name.removeprefix("The Shop - ")
         world = self.parent_region.multiworld.worlds[self.player]
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:

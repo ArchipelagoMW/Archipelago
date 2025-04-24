@@ -2,7 +2,7 @@ from .shop import FIGURINES, SHOP_ITEMS
 
 # items
 # listing individual groups first for easy lookup
-NOTES = [
+NOTES: list[str] = [
     "Key of Hope",
     "Key of Chaos",
     "Key of Courage",
@@ -11,7 +11,7 @@ NOTES = [
     "Key of Symbiosis",
 ]
 
-PROG_ITEMS = [
+PROG_ITEMS: list[str] = [
     "Wingsuit",
     "Rope Dart",
     "Lightfoot Tabi",
@@ -28,18 +28,18 @@ PROG_ITEMS = [
     "Seashell",
 ]
 
-PHOBEKINS = [
+PHOBEKINS: list[str] = [
     "Necro",
     "Pyro",
     "Claustro",
     "Acro",
 ]
 
-USEFUL_ITEMS = [
+USEFUL_ITEMS: list[str] = [
     "Windmill Shuriken",
 ]
 
-FILLER = {
+FILLER: dict[str, int] = {
     "Time Shard": 5,
     "Time Shard (10)": 10,
     "Time Shard (50)": 20,
@@ -48,13 +48,13 @@ FILLER = {
     "Time Shard (500)": 5,
 }
 
-TRAPS = {
+TRAPS: dict[str, int] = {
     "Teleport Trap": 5,
     "Prophecy Trap": 10,
 }
 
 # item_name_to_id needs to be deterministic and match upstream
-ALL_ITEMS = [
+ALL_ITEMS: list[str] = [
     *NOTES,
     "Windmill Shuriken",
     "Wingsuit",
@@ -83,7 +83,7 @@ ALL_ITEMS = [
 # locations
 # the names of these don't actually matter, but using the upstream's names for now
 # order must be exactly the same as upstream
-ALWAYS_LOCATIONS = [
+ALWAYS_LOCATIONS: list[str] = [
     # notes
     "Sunken Shrine - Key of Love",
     "Corrupted Future - Key of Courage",
@@ -160,7 +160,7 @@ ALWAYS_LOCATIONS = [
     "Elemental Skylands Seal - Fire",
 ]
 
-BOSS_LOCATIONS = [
+BOSS_LOCATIONS: list[str] = [
     "Autumn Hills - Leaf Golem",
     "Catacombs - Ruxxtin",
     "Howling Grotto - Emerald Golem",
