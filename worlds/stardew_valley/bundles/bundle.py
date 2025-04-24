@@ -60,6 +60,27 @@ class BundleTemplate:
         return True
 
 
+class FixedPriceBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        filtered_items = [item for item in self.items if item.can_appear(content, options)]
+        number_items = len(filtered_items)
+        number_chosen_items = self.number_possible_items
+        if number_chosen_items < self.number_required_items:
+            number_chosen_items = self.number_required_items
+
+        if number_chosen_items > number_items:
+            chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+        else:
+            chosen_items = random.sample(filtered_items, number_chosen_items)
+        chosen_items = [item.as_amount(max(1, math.floor(item.amount))) for item in chosen_items]
+        return Bundle(self.room, self.name, chosen_items, self.number_required_items)
+
+
 class CurrencyBundleTemplate(BundleTemplate):
     item: BundleItem
 
@@ -84,6 +105,16 @@ class CurrencyBundleTemplate(BundleTemplate):
             if self.item.item_name == Currency.star_token:
                 return False
         return True
+
+
+class FixedPriceCurrencyBundleTemplate(CurrencyBundleTemplate):
+
+    def __init__(self, room: str, name: str, item: BundleItem):
+        super().__init__(room, name, item)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        currency_amount = self.item.amount
+        return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
 
 class MoneyBundleTemplate(CurrencyBundleTemplate):
@@ -201,6 +232,7 @@ class JournalistBundleTemplate(BundleTemplate):
             chosen_items = random.sample(filtered_items, number_chosen_items)
         chosen_items = [item.as_amount(max(1, math.floor(item.amount * price_multiplier))) for item in chosen_items]
         return Bundle(self.room, self.name, chosen_items, number_required)
+
 
 @dataclass
 class RecursiveBundleTemplate(BundleTemplate):

@@ -1,11 +1,13 @@
 import unittest
+from typing import Dict, Optional
 
 from .bases import SVTestBase
 from .. import BundleRandomization, location_table
+from ..bundles.bundle import Bundle
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
 from ..locations import LocationTags
 from ..options import BundlePlando, BundlePrice
-from ..strings.bundle_names import BundleName
+from ..strings.bundle_names import BundleName, MemeBundleName
 from ..strings.crop_names import Fruit
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality
 
@@ -103,3 +105,32 @@ class TestMemeBundlesAreResolvable(SVTestBase):
                 continue
             with self.subTest(f"{location_name}"):
                 self.assert_can_reach_location(location_name)
+
+    def test_specific_bundles_are_not_affected_by_price(self):
+        all_bundles = [bundle for bundle_room in self.world.modified_bundles for bundle in bundle_room.bundles]
+        bundles_by_name = {bundle.name: bundle for bundle in all_bundles}
+        self.check_price(bundles_by_name, MemeBundleName.death, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.communist, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.cipher, 1, 1, 4)
+        self.check_price(bundles_by_name, MemeBundleName.amons_fall, 7, 7, 1)
+        self.check_price(bundles_by_name, MemeBundleName.rick, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.obelisks, 8, 8)
+        self.check_price(bundles_by_name, MemeBundleName.eg, 8, 2, 57)
+        self.check_price(bundles_by_name, MemeBundleName.chaos_emerald, 7, 7, 1)
+        self.check_price(bundles_by_name, MemeBundleName.honorable, 2, 1)
+        self.check_price(bundles_by_name, MemeBundleName.snitch, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.commitment, 4, 4)
+        self.check_price(bundles_by_name, MemeBundleName.journalist, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.off_your_back, 6, 6, 1)
+        self.check_price(bundles_by_name, MemeBundleName.sisyphus, 12, 12, 1)
+
+    def check_price(self, bundles: Dict[str, Bundle], bundle_name: str, expected_items: int, expected_required_items: int, stack_amount: Optional[int] = None):
+        if bundle_name not in bundles:
+            return
+        with self.subTest(bundle_name):
+            bundle = bundles[bundle_name]
+            self.assertEqual(len(bundle.items), expected_items)
+            self.assertEqual(bundle.number_required, expected_required_items)
+            if stack_amount is not None:
+                for item in bundle.items:
+                    self.assertEqual(item.amount, stack_amount)
