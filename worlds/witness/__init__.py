@@ -401,6 +401,8 @@ class WitnessWorld(World):
         if hasattr(self, "player_items") and self.player_items:
             item.progressive_chain = self.player_items.all_progressive_item_lists.get(item_name, None)
 
+        return item
+
     def collect(self, state: CollectionState, item: WitnessItem) -> bool:
         changed = super().collect(state, item)
 
