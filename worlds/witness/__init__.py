@@ -390,7 +390,16 @@ class WitnessWorld(World):
         else:
             item_data = static_witness_items.ITEM_DATA[item_name]
 
-        return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+        item = WitnessItem(
+            item_name,
+            item_data.classification,
+            item_data.ap_code,
+            player=self.player,
+        )
+
+        item.is_alias_for = static_witness_items.ALL_ITEM_ALIASES.get(item_name, None)
+        if hasattr(self, "player_items") and self.player_items:
+            item.progressive_chain = self.player_items.all_progressive_item_lists.get(item_name, None)
 
     def collect(self, state: CollectionState, item: WitnessItem) -> bool:
         changed = super().collect(state, item)
@@ -401,15 +410,13 @@ class WitnessWorld(World):
         if changed and item.eggs:
             state.prog_items[self.player]["Egg"] -= item.eggs
 
-        elif item.name in static_witness_items.ALL_ITEM_ALIASES:
-            real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
-            state.prog_items[self.player][real_item] += 1
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] += 1
 
-        elif item.name in self.player_items.all_progressive_item_lists:
-            item_list = self.player_items.all_progressive_item_lists[item.name]
+        elif item.progressive_chain:
             index = state.prog_items[self.player][item.name] - 1
-            if index < len(item_list):
-                state.prog_items[self.player][item_list[index]] += 1
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] += 1
 
         return True
 
@@ -422,15 +429,13 @@ class WitnessWorld(World):
         if changed and item.eggs:
             state.prog_items[self.player]["Egg"] += item.eggs
 
-        elif item.name in static_witness_items.ALL_ITEM_ALIASES:
-            real_item = static_witness_items.ALL_ITEM_ALIASES[item.name]
-            state.prog_items[self.player][real_item] -= 1
+        elif item.is_alias_for:
+            state.prog_items[self.player][item.is_alias_for] -= 1
 
-        elif item.name in self.player_items.all_progressive_item_lists:
-            item_list = self.player_items.all_progressive_item_lists[item.name]
+        elif item.progressive_chain:
             index = state.prog_items[self.player][item.name]
-            if index < len(item_list):
-                state.prog_items[self.player][item_list[index]] -= 1
+            if index < len(item.progressive_chain):
+                state.prog_items[self.player][item.progressive_chain[index]] -= 1
 
         return True
 

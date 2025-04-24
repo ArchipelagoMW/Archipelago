@@ -32,6 +32,8 @@ class WitnessItem(Item):
     """
     game: str = "The Witness"
     eggs: int = 0
+    is_alias_for: str | None = None
+    progressive_chain: list[str] | None = None
 
     @classmethod
     def make_egg_event(cls, item_name: str, player: int):
