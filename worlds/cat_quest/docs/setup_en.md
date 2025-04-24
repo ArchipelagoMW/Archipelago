@@ -14,7 +14,7 @@
 
 2. Start Cat Quest once, so that BepInEx can create its required configuration files.
 
-3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and unpack the files into the root folder. 
+3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and extact the contents of the archive into the game folder.
 
 ## Connecting
 
