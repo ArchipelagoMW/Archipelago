@@ -5,12 +5,13 @@
     size_hint: 1, None
     height: "75dp"
     context_button: context
+    focus_behavior: False
 
     MDRelativeLayout:
         ApAsyncImage:
             source: main.image
             size: (48, 48)
-            size_hint_y: None
+            size_hint: None, None
             pos_hint: {"center_x": 0.1, "center_y": 0.5}
 
         MDLabel:
@@ -37,6 +38,7 @@
             pos_hint:{"center_x": 0.85, "center_y": 0.8}
             theme_text_color: "Custom"
             text_color: app.theme_cls.primaryColor
+            detect_visible: False
             on_release: app.set_favorite(self)
 
         MDIconButton:
@@ -46,6 +48,7 @@
             pos_hint:{"center_x": 0.95, "center_y": 0.8}
             theme_text_color: "Custom"
             text_color: app.theme_cls.primaryColor
+            detect_visible: False
 
         MDButton:
             pos_hint:{"center_x": 0.9, "center_y": 0.25}
@@ -53,7 +56,7 @@
             height: "25dp"
             component: main.component
             on_release: app.component_action(self)
-
+            detect_visible: False
             MDButtonText:
                 text: "Open"
 
@@ -77,7 +80,7 @@ MDFloatLayout:
                 id: all
                 style: "text"
                 type: (Type.CLIENT, Type.TOOL, Type.ADJUSTER, Type.MISC)
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "asterisk"
@@ -87,7 +90,7 @@ MDFloatLayout:
                 id: client
                 style: "text"
                 type: (Type.CLIENT, )
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "controller"
@@ -97,7 +100,7 @@ MDFloatLayout:
                 id: Tool
                 style: "text"
                 type: (Type.TOOL, )
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "desktop-classic"
@@ -107,7 +110,7 @@ MDFloatLayout:
                 id: adjuster
                 style: "text"
                 type: (Type.ADJUSTER, )
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "wrench"
@@ -117,7 +120,7 @@ MDFloatLayout:
                 id: misc
                 style: "text"
                 type: (Type.MISC, )
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "dots-horizontal-circle-outline"
@@ -128,7 +131,7 @@ MDFloatLayout:
                 id: favorites
                 style: "text"
                 type: ("favorites", )
-                on_release: app.filter_clients(self)
+                on_release: app.filter_clients_by_type(self)
 
                 MDButtonIcon:
                     icon: "star"
@@ -138,5 +141,21 @@ MDFloatLayout:
             MDNavigationDrawerDivider:
 
 
-        ScrollBox:
-            id: button_layout
+        MDGridLayout:
+            id: main_layout
+            cols: 1
+            spacing: "10dp"
+
+            MDTextField:
+                id: search_box
+                mode: "outlined"
+                set_text: app.filter_clients_by_name
+
+                MDTextFieldLeadingIcon:
+                    icon: "magnify"
+
+                MDTextFieldHintText:
+                    text: "Search"
+
+            ScrollBox:
+                id: button_layout
