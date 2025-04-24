@@ -79,10 +79,10 @@ class Constants:
     wGameplayType = 0xDB95
     wHealth = 0xDB5A
 
-    wMWDeathLinkRecv = 0xDB59   # RW
+    wMWDeathLinkRecv = 0xDB59 # RW
     wMWRecvIndexHi = 0xDDF6   # RO: The index of the next item to receive.
     wMWRecvIndexLo = 0xDDF7   #     If given something different it will be ignored.
-    wMWCommand = 0xDDF8           # RW: See MWCommands
+    wMWCommand = 0xDDF8       # RW: See MWCommands
     wMWItemCode = 0xDDF9      # RW: Item code to give the player
     wMWItemSenderHi = 0xDDFA  # RW: Unused, but maybe will set up more rom banks in the future
     wMWItemSenderLo = 0xDDFB  # RW: ID for sending player
@@ -512,11 +512,11 @@ class LinksAwakeningClient():
         if self.read_byte(Constants.wGameplayType) == 1: # Credits
             await win_cb()
 
-        if self.death_link_status == DeathLinkStatus.NONE: # natural death
-            if not self.read_byte(Constants.wHealth):
+        if self.death_link_status == DeathLinkStatus.NONE:
+            if not self.read_byte(Constants.wHealth): # natural death
                 death_link_cb()
                 self.death_link_status = DeathLinkStatus.DYING
-        elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared
+        elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared before sending
             if self.read_byte(Constants.WMWDeathLinkRecv):
                 self.gameboy.write_memory(Constants.wMWDeathLinkRecv, 0)
             else:

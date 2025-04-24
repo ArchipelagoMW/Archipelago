@@ -44,9 +44,11 @@ MainLoop:
     and  a
     call nz, LinkSpawnBomb
     ; deathlink
-    ld   a, wMWCommand
+    ld   a, [wMWCommand]
     bit  3, a
     jr   z, .noSpawn
+    ld   a, [wMWDeathLinkRecv]
+    jr   nz, .noSpawn ; if deathlink recv flag is still up, dont do it
     ld   a, [wHasMedicine]
     ; set health and health loss to a
     ; instant kill if no medicine
@@ -62,32 +64,34 @@ MainLoop:
 
 .noSpawn:
     ; Have a location to collect?
-    ld   a, wMWCommand
+    ld   a, [wMWCommand]
     bit  2, a
     jr   z, .noCollect
-    ld   a, wMWMultipurposeE ; location mask
-    ld   b, a ; store it on b
-    ld   hl, wMWMultipurposeC  ; collect location hi
-    ld   a, [wMWMultipurposeD] ; collect location lo
-    or   [hl] ; a is location data
-    ld   c, a ; store it on c
-    or   a, b ; a is location data with mask applied
-    cp   a, c ; if a was unchanged...
-    jr   nz, .finishCommands ; do nothing else
+    ; get current location value onto b
+    ld   a, [wMultipurposeC] ; collect location hi
+    ld   h, a
+    ld   a, [wMultipurposeD] ; collect location lo
+    ld   l, a
+    ld   a, [hl]
+    ld   b, a
+    ld   a, [wMultipurposeE] ; location mask
+    or   b ; apply mask
+    cp   b ; was location already set?
+    jr   z, .finishCommands ; if so, do nothing else
     ld   [hl], a
 
 .noCollect
     ; Have an item to give?
-    ld   a, wMWCommand
+    ld   a, [wMWCommand]
     bit  0, a
     jr   z, .finishCommands
     bit  1, a ; should skip recvindex check
     jr   nz, .skipRecvIndexCheck
-    ld   a, wMWRecvIndexHi
-    cp   a, wMWMultipurposeC
+    ld   a, [wMWRecvIndexHi]
+    cp   [wMWMultipurposeC]
     jr   nz, .finishCommands ; failed check on hi
-    ld   a, wMWRecvIndexLo
-    cp   a, wMWMultipurposeD
+    ld   a, [wMWRecvIndexLo]
+    cp   [wMWMultipurposeD]
     jr   nz, .finishCommands ; failed check on lo
 
 .skipRecvIndexCheck
@@ -116,7 +120,7 @@ MainLoop:
 .finishCommands
     ; clear MW command
     xor  a
-    ld   wMWCommand, a
+    ld   [wMWCommand], a
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
 
