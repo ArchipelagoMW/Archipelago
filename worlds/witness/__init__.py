@@ -408,7 +408,7 @@ class WitnessWorld(World):
             return False
 
         if changed and item.eggs:
-            state.prog_items[self.player]["Egg"] -= item.eggs
+            state.prog_items[self.player]["Egg"] += item.eggs
 
         elif item.is_alias_for:
             state.prog_items[self.player][item.is_alias_for] += 1
@@ -427,7 +427,7 @@ class WitnessWorld(World):
             return False
 
         if changed and item.eggs:
-            state.prog_items[self.player]["Egg"] += item.eggs
+            state.prog_items[self.player]["Egg"] -= item.eggs
 
         elif item.is_alias_for:
             state.prog_items[self.player][item.is_alias_for] -= 1
