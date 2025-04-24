@@ -216,9 +216,8 @@ class WordipelagoWorld(World):
 
         # Change the victory location to an event and place the Victory item there.
         victory_location_name = f"Word {self.options.words_to_win}"
-        self.get_location(victory_location_name).address = None
         self.get_location(victory_location_name).place_locked_item(
-            WordipelagoItem("Word Master", ItemClassification.progression, None, self.player)
+            WordipelagoItem("Word Master", ItemClassification.progression, 1000, self.player)
         )
 
     def set_rules(self):
