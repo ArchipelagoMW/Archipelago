@@ -41,6 +41,7 @@ class AquariaWeb(WebWorld):
     )
 
     tutorials = [setup, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class AquariaWorld(World):
