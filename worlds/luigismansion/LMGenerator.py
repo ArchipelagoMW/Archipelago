@@ -217,7 +217,7 @@ class LuigisMansionRandomizer:
         madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if "Madame Clairvoya" in hint_list else None
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
-        self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, start_inv_list, walk_speed, player_name,
+        self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, self.seed, start_inv_list, walk_speed, player_name,
             random_spawn, king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled, bool_boo_rando_enabled)
 
         self.gcm = update_common_events(self.gcm, bool_randomize_mice)
