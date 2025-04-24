@@ -223,7 +223,7 @@ class MultiWorld():
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
             option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
-                                         f"Please use `self.options.{option_key}` instead.")
+                                         f"Please use `self.options.{option_key}` instead.", True)
             option.update(getattr(args, option_key, {}))
             setattr(self, option_key, option)
 
@@ -1022,9 +1022,6 @@ class Entrance:
     connected_region: Optional[Region] = None
     randomization_group: int
     randomization_type: EntranceType
-    # LttP specific, TODO: should make a LttPEntrance
-    addresses = None
-    target = None
 
     def __init__(self, player: int, name: str = "", parent: Optional[Region] = None,
                  randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
@@ -1043,10 +1040,8 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
+    def connect(self, region: Region) -> None:
         self.connected_region = region
-        self.target = target
-        self.addresses = addresses
         region.entrances.append(self)
 
     def is_valid_source_transition(self, er_state: "ERPlacementState") -> bool:
