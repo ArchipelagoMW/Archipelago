@@ -48,6 +48,10 @@ class CivVIContainer(APContainer, metaclass=AutoPatchRegister):
             opened_zipfile.writestr(filename, yml)
         super().write_contents(opened_zipfile)
 
+def sanitize_value(value: str) -> str:
+  """Removes values that can cause issues in XML"""
+  return value.replace('"', "'").replace('&', 'and')
+
 
 def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
     """
@@ -63,7 +67,7 @@ def get_formatted_player_name(world: 'CivVIWorld', player: int) -> str:
     Returns the name of the player in the world
     """
     if player != world.player:
-        return f"{world.multiworld.player_name[player]}{apo}s"
+        return sanitize_value(f"{world.multiworld.player_name[player]}{apo}s")
     return "Your"
 
 
@@ -106,7 +110,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
       <Row TechnologyType="TECH_BLOCKER" Name="TECH_BLOCKER" EraType="ERA_ANCIENT" UITreeRow="0" Cost="99999" AdvisorType="ADVISOR_GENERIC" Description="Archipelago Tech created to prevent players from researching their own tech. If you can read this, then congrats you have reached the end of your tree before beating the game!"/>
 {"".join([f'{tab}<Row TechnologyType="{location.name}" '
                 f'Name="{get_formatted_player_name(world, location.item.player)} '
-                f'{location.item.name}" '
+                f'{sanitize_value(location.item.name)}" '
                 f'EraType="{world.location_table[location.name].era_type}" '
                 f'UITreeRow="{world.location_table[location.name].uiTreeRow}" '
                 f'Cost="{get_cost(world, world.location_table[location.name])}" '
@@ -122,7 +126,7 @@ def generate_new_items(world: 'CivVIWorld') -> str:
       <Row CivicType="CIVIC_BLOCKER" Name="CIVIC_BLOCKER" EraType="ERA_ANCIENT" UITreeRow="0" Cost="99999" AdvisorType="ADVISOR_GENERIC" Description="Archipelago Civic created to prevent players from researching their own civics. If you can read this, then congrats you have reached the end of your tree before beating the game!"/>
 {"".join([f'{tab}<Row CivicType="{location.name}" '
                     f'Name="{get_formatted_player_name(world, location.item.player)} '
-                    f'{location.item.name}" '
+                    f'{sanitize_value(location.item.name)}" '
                     f'EraType="{world.location_table[location.name].era_type}" '
                     f'UITreeRow="{world.location_table[location.name].uiTreeRow}" '
                     f'Cost="{get_cost(world, world.location_table[location.name])}" '
