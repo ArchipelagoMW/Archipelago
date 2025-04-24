@@ -399,12 +399,10 @@ class WitnessWorld(World):
         return item
 
     def collect(self, state: CollectionState, item: WitnessItem) -> bool:
-        changed = super().collect(state, item)
-
-        if not changed:
+        if not super().collect(state, item):
             return False
 
-        if changed and item.eggs:
+        if item.eggs:
             state.prog_items[self.player]["Egg"] += item.eggs
 
         elif item.is_alias_for:
@@ -418,12 +416,10 @@ class WitnessWorld(World):
         return True
 
     def remove(self, state: CollectionState, item: WitnessItem) -> bool:
-        changed = super().remove(state, item)
-
-        if not changed:
+        if not super().collect(state, item):
             return False
 
-        if changed and item.eggs:
+        if item.eggs:
             state.prog_items[self.player]["Egg"] -= item.eggs
 
         elif item.is_alias_for:
