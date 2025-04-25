@@ -752,7 +752,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest outside the inn", 2985 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch near the assassin lounge", 2762 + treasure_index_offset, logic.has_vertical_movement),
-        LocationData("Shoudu Province", "Shoudu Province Chest - Suitors Hat chest jump along the lampost", 2752 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Suitor Hat chest jump along the lampost", 2752 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion Pouch chest above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Potion chest through the rooftop window south of the fast boi spark", 2763 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Tincture Pouch chest balance above the undercity", 2716 + treasure_index_offset, logic.has_vertical_movement),
@@ -773,11 +773,17 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Malifice chest in 8 Sky Arena Win room", 2805 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Wizards Wall chest in 8 Sky Arena Win room", 2800 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("Shoudu Province", "Shoudu Province Chest - Fall through broken grate below Sky Arena building for Potion chest", 2951 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("Shoudu Province", "Shoudu Province Chest - Shadow Gi chest", 2929 + treasure_index_offset, logic.has_vertical_movement), #(755, 134, -263)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Tincture Pouch chest", 2984 + treasure_index_offset, logic.has_vertical_movement), #(753, 105, -176)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Yasha chest", 2756 + treasure_index_offset, logic.has_vertical_movement), #(753, 134, -263)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Zether chest", 3763 + treasure_index_offset, logic.has_vertical_movement), #(754, 130, -264)
+        LocationData("Shoudu Province", "Shoudu Province Chest - Z-Potion chest", 3764 + treasure_index_offset, logic.has_vertical_movement), #(755, 130, -263)
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
         #Todo NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 6 prizes in exchange for winning fights
+        #Todo NPCs Missable: Z38_ChloesLure ID 2737 (781, 131, -278) gives you a Jigging Lure
         #Todo descriptivize and check requirements on these
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Dust", 2833 + npc_index_offset), #(752, 133, -262)
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond Ingot", 2811 + npc_index_offset), #(756, 133, -261)
@@ -1015,9 +1021,37 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Crystals
         LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: state.has("Item - Red Door Key", player, 3)),
 
+        #Sequoia Athenaeum
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Spellsword Helm chest", 2932 + treasure_index_offset), #(412, 200, -551)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Z-Potion Pouch chest", 2569 + treasure_index_offset), #(403, 199, -547)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2322 + treasure_index_offset), #(415, 180, -570)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2375 + treasure_index_offset), #(396, 180, -570)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2341 + treasure_index_offset), #(396, 164, -570)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2371 + treasure_index_offset), #(415, 164, -572)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2372 + treasure_index_offset), #(434, 164, -570)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2373 + treasure_index_offset), #(424, 148, -570)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Skeleton Key chest", 2335 + treasure_index_offset), #(415, 131, -565)
+
         #Northern Stretch
         #Treasure chests
         LocationData("Northern Stretch", "Northern Stretch Chest - Northern Stretch map chest at the base of Summoners Lookout", 3655 + treasure_index_offset),
+
+        #Castle Ramparts
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Castle Ramparts", "Castle Ramparts Chest - Money chest", 1547 + treasure_index_offset), #(443, 206, -378)
+        LocationData("Castle Ramparts", "Castle Ramparts Chest - Castle Ramparts Map chest", 2908 + treasure_index_offset), #(407, 228, -383)
+        LocationData("Castle Ramparts", "Castle Ramparts Chest - Conquest chest", 2742 + treasure_index_offset), #(440, 227, -386)
+        LocationData("Castle Ramparts", "Castle Ramparts Chest - Rune Sword chest", 2741 + treasure_index_offset), #(369, 227, -386)
+
+        #NPCs
+        LocationData("Castle Ramparts", "Castle Ramparts NPC - Gold Ingot", 2843 + npc_index_offset), #(354, 231, -429)
+        LocationData("Castle Ramparts", "Castle Ramparts NPC - Gold Ore", 2842 + npc_index_offset), #(458, 231, -436)
+
+        #Crystals
+        LocationData("Castle Ramparts", "Castle Ramparts Crystal - Beastmaster", 1370 + crystal_index_offset), #(404, 243, -386)
 
         #The Chalice of Tar
         #Treasure chests
@@ -1046,7 +1080,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #There are no checks here unless an Overpass Scrap shows up
 
         #Jidamba Tangle
-        #Todo descriptivize and check requirements (there's a teleport stone here so... probably going to have to write bird on everything)
         #Treasure chests
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Demon Plate chest inside overgrown building E of Eaclaneya", 1629 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ether chest up a tree N of Foliage Key", 3024 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),

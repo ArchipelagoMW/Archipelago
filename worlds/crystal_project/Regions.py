@@ -90,7 +90,9 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Northern Cave", excluded),
         create_region(world, player, locations_per_region, "Lands End", excluded),
         create_region(world, player, locations_per_region, "Slip Glide Ride", excluded),
+        create_region(world, player, locations_per_region, "Sequoia Athenaeum", excluded),
         create_region(world, player, locations_per_region, "Northern Stretch", excluded),
+        create_region(world, player, locations_per_region, "Castle Ramparts", excluded),
         create_region(world, player, locations_per_region, "The Chalice of Tar", excluded),
         create_region(world, player, locations_per_region, "Flyers Crag", excluded),
         create_region(world, player, locations_per_region, "Flyers Lookout", excluded),
@@ -140,15 +142,15 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Proving Meadows", player).add_exits(["Pale Grotto"]) #backwards
     multiworld.get_region("Skumparadise", player).add_exits(["Capital Sequoia"]) #forwards
     multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows"]) #backwards
-    multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise"],
+    multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise", "Castle Ramparts"],
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
-        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) }) #forwards
+        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) }) #forwards; todo check requirements for Castle Ramparts
     multiworld.get_region("Capital Sequoia", player).add_exits(["Proving Meadows", "Skumparadise"]) #backwards
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
         {"Capital Jail": logic.has_rental_quintar})
     #Boomer Society goes here
-    multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
-        {"Quintar Sanctum": logic.has_rental_quintar})
+    multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum", "Castle Ramparts"], 
+        {"Quintar Sanctum": logic.has_rental_quintar}) #todo check requirements for Castle Ramparts
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Quintar Sanctum", player).add_exits(["Quintar Mausoleum"],
         {"Quintar Mausoleum": logic.has_swimming}) #backwards; Todo check this is correct
@@ -202,16 +204,20 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Flyers Lookout": logic.has_glide}) #todo check this exit is correct
     #Quintar Mausoleum goes here
     #Eastern Chasm goes here
-    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Eastern Chasm", "Northern Cave", "Lands End", "Northern Stretch", "The Chalice of Tar"],
+    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Eastern Chasm", "Northern Cave", "Lands End", "Sequoia Athenaeum", "Northern Stretch", "Castle Ramparts", "The Chalice of Tar"],
         {"Eastern Chasm": logic.has_vertical_movement,
+        "Sequoia Athenaeum": lambda state: state.has("Item - Vermillion Book", world.player) and state.has("Item - Viridian Book", world.player) and state.has("Item - Cerulean Book", world.player),
         "Northern Stretch": logic.has_glide,
+        #todo check requirements for Sequoia Athenaeum and Castle Ramparts
         "The Chalice of Tar": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Northern Cave", player).add_exits(["Slip Glide Ride"],
         {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Lands End", player).add_exits(["Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_glide}) #Todo check
     #Slip Glide Ride goes here
+    #Sequoia Athenaeum goes here
     #Northern Stretch goes here
+    #Castle Ramparts goes here
     #The Chalice of Tar goes here
     multiworld.get_region("Flyers Crag", player).add_exits(["Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_glide}) #Todo check
