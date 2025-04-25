@@ -299,17 +299,14 @@ class StardewValleyWorld(World):
 
         return StardewItem(item.name, override_classification, item.code, self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
+    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: str | None = None):
         if rule is None:
             rule = True_()
         if item is None:
             item = location_data.name
 
         region = self.multiworld.get_region(location_data.region, self.player)
-        location = StardewLocation(self.player, location_data.name, None, region)
-        location.access_rule = rule
-        region.locations.append(location)
-        location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
+        region.add_event(location_data.name, item, rule, StardewLocation, StardewItem)
 
     def set_rules(self):
         set_rules(self)
