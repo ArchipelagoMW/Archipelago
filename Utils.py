@@ -531,7 +531,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
     # Force UTF-8 stream wrapper for stdout/stderr (fixes UnicodeEncodeError in macOS .app bundles)
-    if hasattr(sys.stdout, "buffer") and hasattr(sys.stderr, "buffer"):
+    if hasattr(sys.stdout, "buffer") and hasattr(sys.stderr, "buffer") and is_macos:
         sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
     if sys.stdout:
