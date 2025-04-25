@@ -1,21 +1,6 @@
-from typing import Dict, Union
+from typing import Dict
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .building_logic import BuildingLogicMixin
-from .combat_logic import CombatLogicMixin
-from .cooking_logic import CookingLogicMixin
-from .fishing_logic import FishingLogicMixin
-from .has_logic import HasLogicMixin
-from .mine_logic import MineLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
-from .wallet_logic import WalletLogicMixin
 from ..stardew_rule import StardewRule, Has, True_
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
@@ -43,9 +28,7 @@ class QuestLogicMixin(BaseLogicMixin):
         self.quest = QuestLogic(*args, **kwargs)
 
 
-class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMixin, MineLogicMixin, RegionLogicMixin, RelationshipLogicMixin, ToolLogicMixin,
-                                 FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin,
-                                 BuildingLogicMixin, TimeLogicMixin]]):
+class QuestLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
