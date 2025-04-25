@@ -213,6 +213,39 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Jade Cavern Map")
             excluded_items.add("Item - The Old World Map")
 
+        if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
+            excluded_items.add("Summon - Shaku")
+            excluded_items.add("Summon - Pamoa")
+            excluded_items.add("Summon - Guaba")
+            excluded_items.add("Summon - Niltsi")
+            excluded_items.add("Summon - Ioske")
+            excluded_items.add("Summon - Coyote")
+            excluded_items.add("Summon - Tira")
+            excluded_items.add("Summon - Juses")
+            excluded_items.add("Summon - Pah")
+
+        if self.options.includeScholarAbilities == self.options.includeScholarAbilities.false:
+            excluded_items.add("Scholar - Roost")
+            excluded_items.add("Scholar - Lucky Dice")
+            excluded_items.add("Scholar - Sun Bath")
+            excluded_items.add("Scholar - Sleep Aura")
+            excluded_items.add("Scholar - Regenerate")
+            excluded_items.add("Scholar - Reverse Polarity")
+            excluded_items.add("Scholar - Barrier")
+            excluded_items.add("Scholar - MP Sickle")
+            excluded_items.add("Scholar - Adrenaline")
+            excluded_items.add("Scholar - Fire Breath")
+            excluded_items.add("Scholar - Explode")
+            excluded_items.add("Scholar - Whirlwind")
+            excluded_items.add("Scholar - Atmoshear")
+            excluded_items.add("Scholar - Build Life")
+            excluded_items.add("Scholar - Aero")
+            excluded_items.add("Scholar - Insult")
+            excluded_items.add("Scholar - Infusion")
+            excluded_items.add("Scholar - Overload")
+            excluded_items.add("Scholar - Reflection")
+            excluded_items.add("Scholar - Lifegiver")
+            
         #all end_game_zone progression items get excluded here
         # if (self.options.includedRegions == self.options.includedRegions.option_expert or
         #     self.options.includedRegions == self.options.includedRegions.option_advanced or

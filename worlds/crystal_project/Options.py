@@ -77,6 +77,18 @@ class IncludedRegions(Choice):
     option_all = 3
     default = 3
 
+class IncludeSummonAbilities(DefaultOnToggle):
+    """
+    When enabled, Summon abilities can be found anywhere, when disabled they will be in the regular spot.
+    """
+    display_name = "Include Summoner Abilities in the item pool"
+    
+class IncludeScholarAbilities(DefaultOnToggle):
+    """
+    When enabled, Scholar abilities can be found anywhere, they can still be learned as normal from enemies.
+    """
+    display_name = "Include Scholar Abilities in the item pool"
+
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -87,3 +99,5 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions
+    includeSummonAbilities: IncludeSummonAbilities
+    includeScholarAbilities: IncludeScholarAbilities
