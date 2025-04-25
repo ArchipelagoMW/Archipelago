@@ -1,22 +1,6 @@
-from typing import Dict, Union
+from typing import Dict
 
-from .ability_logic import AbilityLogicMixin
-from .arcade_logic import ArcadeLogicMixin
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .cooking_logic import CookingLogicMixin
-from .has_logic import HasLogicMixin
-from .mine_logic import MineLogicMixin
-from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .shipping_logic import ShippingLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..stardew_rule import StardewRule, Has, false_
@@ -44,10 +28,7 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
         self.special_order = SpecialOrderLogic(*args, **kwargs)
 
 
-class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
-ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
-MineLogicMixin, CookingLogicMixin,
-AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
+class SpecialOrderLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({

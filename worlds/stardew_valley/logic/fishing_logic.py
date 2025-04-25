@@ -1,13 +1,5 @@
-from typing import Union
-
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data import fish_data
 from ..data.fish_data import FishItem
@@ -27,8 +19,7 @@ class FishingLogicMixin(BaseLogicMixin):
         self.fishing = FishingLogic(*args, **kwargs)
 
 
-class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin,
-SkillLogicMixin]]):
+class FishingLogic(BaseLogic):
     def can_fish_in_freshwater(self) -> StardewRule:
         return self.logic.skill.can_fish() & self.logic.region.can_reach_any((Region.forest, Region.town, Region.mountain))
 

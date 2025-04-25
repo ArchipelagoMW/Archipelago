@@ -1,20 +1,10 @@
-import typing
 from functools import cached_property
 from typing import Union, Tuple
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .combat_logic import CombatLogicMixin
-from .harvesting_logic import HarvestingLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
-from ..mods.logic.magic_logic import MagicLogicMixin
 from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
@@ -25,11 +15,6 @@ from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool
 from ..strings.wallet_item_names import Wallet
 
-if typing.TYPE_CHECKING:
-    from ..mods.logic.mod_logic import ModLogicMixin
-else:
-    ModLogicMixin = object
-
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
 
 
@@ -39,8 +24,7 @@ class SkillLogicMixin(BaseLogicMixin):
         self.skill = SkillLogic(*args, **kwargs)
 
 
-class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
-CombatLogicMixin, MagicLogicMixin, HarvestingLogicMixin, ModLogicMixin]]):
+class SkillLogic(BaseLogic):
 
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:

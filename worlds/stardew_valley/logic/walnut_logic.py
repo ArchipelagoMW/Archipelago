@@ -1,12 +1,6 @@
 from functools import cached_property
-from typing import Union
 
-from .ability_logic import AbilityLogicMixin
 from .base_logic import BaseLogic, BaseLogicMixin
-from .combat_logic import CombatLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..options import Walnutsanity
 from ..stardew_rule import StardewRule
@@ -25,8 +19,7 @@ class WalnutLogicMixin(BaseLogicMixin):
         self.walnut = WalnutLogic(*args, **kwargs)
 
 
-class WalnutLogic(BaseLogic[Union[WalnutLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, CombatLogicMixin,
-AbilityLogicMixin]]):
+class WalnutLogic(BaseLogic):
 
     def has_walnut(self, number: int) -> StardewRule:
         if not self.content.is_enabled(ginger_island_content_pack):
