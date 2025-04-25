@@ -154,7 +154,7 @@ if os.path.exists("X:/pw.txt"):
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
     signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+               r'" /fd sha256 /td sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
