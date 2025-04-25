@@ -62,11 +62,11 @@ class IncludedRegions(Choice):
 
     This can be used to make your game shorter/easier or longer/harder.
     
-    Beginner: Only regions up through the end of the cave of trials will have checks.
+    Beginner: Only regions up through the end of Skumparadise will have checks.
     
-    Advanced: Description!
+    Advanced: Regions up to Salmon Bay will have checks
 
-    Expert: Description!
+    Expert: Regions up to the deep sea will have checks (note the depths will not be included)
 
     All: Every region is included
     """
@@ -75,7 +75,7 @@ class IncludedRegions(Choice):
     option_advanced = 1
     option_expert = 2
     option_all = 3
-    default = 0
+    default = 3
 
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):

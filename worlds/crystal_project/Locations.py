@@ -79,7 +79,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende Chest - Tonic Pouch chest before Proving Meadows", 216 + treasure_index_offset),
         LocationData("Delende", "Delende Chest - Tonic Pouch chest in front of fish hatchery below tree", 2997 + treasure_index_offset),
 
-        #Todo NPCs Missable: Astley1 NPC (ID 28) (184, 125, -93) gives you a Home Point Stone, but it"s missable as a location; the item appears elsewhere later
+        LocationData("Delende", "Delende NPC - Astley gives you a home point stone", 28 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
