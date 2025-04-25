@@ -3,7 +3,7 @@ from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
-from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
@@ -162,9 +162,14 @@ class TunicWorld(World):
                 self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
                 self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
                 self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
                 self.options.laurels_location.value = self.options.laurels_location.option_anywhere
                 self.options.combat_logic.value = self.passthrough["combat_logic"]
+
+                self.options.fixed_shop.value = self.options.fixed_shop.option_false
+                if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
+                        or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
+                    self.options.fixed_shop.value = self.options.fixed_shop.option_true
+
             else:
                 self.using_ut = False
         else:
@@ -446,9 +451,10 @@ class TunicWorld(World):
     def pre_fill(self) -> None:
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-            reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
+            sphere_one_locs = self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player)
+            reserved_locations: Set[Location] = set(self.random.sample(sphere_one_locs, 2))
             viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
-                                if loc.name not in reserved_locations
+                                if loc not in reserved_locations
                                 and loc.name not in self.options.priority_locations.value]
 
             if len(viable_locations) < self.amount_to_local_fill:
@@ -672,18 +678,6 @@ class TunicWorld(World):
                     slot_data[start_item] = []
                 for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
-
-        for plando_item in self.multiworld.plando_items[self.player]:
-            if plando_item["from_pool"]:
-                items_to_find = set()
-                for item_type in [key for key in ["item", "items"] if key in plando_item]:
-                    for item in plando_item[item_type]:
-                        items_to_find.add(item)
-                for item in items_to_find:
-                    if item in slot_data_item_names:
-                        slot_data[item] = []
-                        for item_location in self.multiworld.find_item_locations(item, self.player):
-                            slot_data[item].extend(self.get_real_location(item_location))
 
         return slot_data
 
