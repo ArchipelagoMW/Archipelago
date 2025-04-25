@@ -8,7 +8,7 @@ class Goal(Choice):
     """
     Choose what is required to complete the game.
     
-    Talking to Nan in <insert correct place name here!> will tell you the selected goal.
+    Checking the first sign in the Spawning Meadows will tell you the selected goal.
     
     Astley: Defeat Astley (add more here).
     
