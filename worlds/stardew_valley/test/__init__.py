@@ -1,3 +1,4 @@
+import itertools
 import logging
 import os
 import threading
@@ -11,7 +12,8 @@ from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_mul
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
-from .. import StardewValleyWorld, StardewItem
+from .. import StardewValleyWorld, StardewItem, StardewRule
+from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption
 
 logger = logging.getLogger(__name__)
@@ -20,21 +22,19 @@ DEFAULT_TEST_SEED = get_seed()
 logger.info(f"Default Test Seed: {DEFAULT_TEST_SEED}")
 
 
-class SVTestCase(unittest.TestCase):
-    # Set False to not skip some 'extra' tests
-    skip_base_tests: bool = True
-    # Set False to run tests that take long
-    skip_long_tests: bool = True
+def skip_default_tests() -> bool:
+    return not bool(os.environ.get("base", False))
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-        base_tests_key = "base"
-        if base_tests_key in os.environ:
-            cls.skip_base_tests = not bool(os.environ[base_tests_key])
-        long_tests_key = "long"
-        if long_tests_key in os.environ:
-            cls.skip_long_tests = not bool(os.environ[long_tests_key])
+
+def skip_long_tests() -> bool:
+    return not bool(os.environ.get("long", False))
+
+
+class SVTestCase(unittest.TestCase):
+    skip_default_tests: bool = skip_default_tests()
+    """Set False to not skip the base fill tests"""
+    skip_long_tests: bool = skip_long_tests()
+    """Set False to run tests that take long"""
 
     @contextmanager
     def solo_world_sub_test(self, msg: Optional[str] = None,
@@ -92,9 +92,15 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
 
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_base_tests:
+        if self.skip_default_tests:
             return False
         return super().run_default_tests
+
+    def collect_months(self, months: int) -> None:
+        real_total_prog_items = self.world.total_progression_items
+        percent = months * MONTH_COEFFICIENT
+        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        self.world.total_progression_items = real_total_prog_items
 
     def collect_lots_of_money(self, percent: float = 0.25):
         self.collect("Shipping Bin")
@@ -145,11 +151,34 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def create_item(self, item: str) -> StardewItem:
         return self.world.create_item(item)
 
+    def get_all_created_items(self) -> list[str]:
+        return [item.name for item in itertools.chain(self.multiworld.get_items(), self.multiworld.precollected_items[self.player])]
+
     def remove_one_by_name(self, item: str) -> None:
         self.remove(self.create_item(item))
 
-    def reset_collection_state(self):
+    def reset_collection_state(self) -> None:
         self.multiworld.state = self.original_state.copy()
+
+    def assert_rule_true(self, rule: StardewRule, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_true(rule, state)
+
+    def assert_rule_false(self, rule: StardewRule, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_rule_false(rule, state)
+
+    def assert_can_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_location(location, state)
+
+    def assert_cannot_reach_location(self, location: Location | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_cannot_reach_location(location, state)
 
 
 pre_generated_worlds = {}
@@ -165,21 +194,22 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
         yield multiworld, multiworld.worlds[1]
     else:
         multiworld = setup_solo_multiworld(world_options, seed)
-        multiworld.lock.acquire()
-        world = multiworld.worlds[1]
+        try:
+            multiworld.lock.acquire()
+            world = multiworld.worlds[1]
 
-        original_state = multiworld.state.copy()
-        original_itempool = multiworld.itempool.copy()
-        unfilled_locations = multiworld.get_unfilled_locations(1)
+            original_state = multiworld.state.copy()
+            original_itempool = multiworld.itempool.copy()
+            unfilled_locations = multiworld.get_unfilled_locations(1)
 
-        yield multiworld, world
+            yield multiworld, world
 
-        multiworld.state = original_state
-        multiworld.itempool = original_itempool
-        for location in unfilled_locations:
-            location.item = None
-
-        multiworld.lock.release()
+            multiworld.state = original_state
+            multiworld.itempool = original_itempool
+            for location in unfilled_locations:
+                location.item = None
+        finally:
+            multiworld.lock.release()
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
