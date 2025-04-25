@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from functools import cached_property
-from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionDict
+from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionCounter
 from .Items import trap_item_table
 
 
@@ -196,21 +196,20 @@ class TrapEffectDuration(Range):
     default = 30
 
 
-# TODO - Revisit once ArchipelagoMW/Archipelago#3756 is merged.
-class TrapWeights(OptionDict):
+class TrapWeights(OptionCounter):
     """
     The list of traps and corresponding weights that will be randomly added to the item pool. A trap with weight 10 is
     twice as likely to appear as a trap with weight 5. Set a weight to 0 to prevent that trap from appearing altogether.
     If all weights are 0, no traps are created, overriding the values of "Filler * Replaced With Traps."
     """
     display_name = "Trap Weights"
+    min = 0
     default = {trap: 1 for trap in trap_item_table.values()}
     valid_keys = sorted({trap for trap in trap_item_table.values()})
 
     @cached_property
     def weights_pair(self) -> tuple[list[str], list[int]]:
-        return (list(self.value.keys()),
-                list(max(0, v) for v in self.value.values()))
+        return list(self.value.keys()), list(self.value.values())
 
 
 class CompletionCondition(Choice):
