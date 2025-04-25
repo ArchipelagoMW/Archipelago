@@ -274,9 +274,9 @@ class TrackerData:
         Does not include players who have no activity recorded.
         """
         last_activity: Dict[TeamPlayer, datetime.timedelta] = {}
-        now = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
         for (team, player), timestamp in self._multisave.get("client_activity_timers", []):
-            last_activity[team, player] = now - datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc)
+            last_activity[team, player] = now - datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).replace(tzinfo=None)
 
         return last_activity
 
