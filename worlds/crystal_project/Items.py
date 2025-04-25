@@ -828,16 +828,16 @@ item_table: Dict[str, ItemData] = {
     #"Currency": ItemData("Currency", 0 + index_offset, ItemClassification.filler),
 
     #Summons
-    # "Summon - Shaku": ItemData("Summon", 223 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pamoa": ItemData("Summon", 224 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Guaba": ItemData("Summon", 225 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
+    "Summon - Shaku": ItemData("Summon", 223 + summon_index_offset, ItemClassification.useful),
+    "Summon - Pamoa": ItemData("Summon", 224 + summon_index_offset, ItemClassification.useful),
+    "Summon - Guaba": ItemData("Summon", 225 + summon_index_offset, ItemClassification.useful),
+    "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
+    "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
+    "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
+    "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful),
+    "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
+    "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
+    "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
 
     #Monster Abilities for Scholar
     # "Scholar - Roost": ItemData("Scholar", 25 + scholar_index_offset, ItemClassification.useful),
