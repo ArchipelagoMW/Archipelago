@@ -43,6 +43,7 @@ class MissionButton(HoverableButton, MDTooltip):
 
         if self.tooltip_text != "":
             self.display_tooltip()
+            self.ctx.current_tooltip = self._tooltip
 
     def on_leave(self):
         self.remove_tooltip()
