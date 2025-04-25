@@ -530,6 +530,10 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record, "NoFile", False)))
     file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
+    # Force UTF-8 stream wrapper for stdout/stderr (fixes UnicodeEncodeError in macOS .app bundles)
+    if hasattr(sys.stdout, "buffer") and hasattr(sys.stderr, "buffer"):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
     if sys.stdout:
         formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
