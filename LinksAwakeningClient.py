@@ -492,14 +492,8 @@ class LinksAwakeningClient():
                 raise GameboyException("Resetting due to wrong archipelago server")
         logger.info("Game connection ready!")
 
-    def read_byte(self, addr):
-        return self.gameboy.read_memory_cache([addr])[addr]
-
     async def main_tick(self, ctx, item_get_cb, win_cb, death_link_cb):
         await self.gameboy.update_cache()
-
-        if not self.gameboy.cache:
-            return
 
         self.tracker.readChecks(item_get_cb)
         self.item_tracker.readItems()
@@ -509,33 +503,35 @@ class LinksAwakeningClient():
         if not ctx.slot or not self.tracker.has_start_item():
             return
 
-        if self.read_byte(Constants.wGameplayType) == 1: # Credits
+        if (await self.gameboy.async_read_memory(Constants.wGameplayType))[0] == 1: # Credits
             await win_cb()
 
+        wHealth = (await self.gameboy.async_read_memory(Constants.wHealth))[0]
+        wMWDeathLinkRecv = (await self.gameboy.async_read_memory(Constants.wMWDeathLinkRecv))[0]
+
         if self.death_link_status == DeathLinkStatus.NONE:
-            if not self.read_byte(Constants.wHealth): # natural death
+            if not wHealth: # natural death
                 death_link_cb()
                 self.death_link_status = DeathLinkStatus.DYING
         elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared before sending
-            if self.read_byte(Constants.WMWDeathLinkRecv):
+            if wMWDeathLinkRecv:
                 self.gameboy.write_memory(Constants.wMWDeathLinkRecv, 0)
             else:
                 self.death_link_status = DeathLinkStatus.SENDING
         elif self.death_link_status == DeathLinkStatus.SENDING: # send death link until receive flag set
-            if self.read_byte(Constants.WMWDeathLinkRecv):
+            if wMWDeathLinkRecv:
                 self.death_link_status = DeathLinkStatus.DYING
             else:
                 self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK.value)
         elif self.death_link_status == DeathLinkStatus.DYING: # wait until alive again before returning to normal
-            if self.read_byte(Constants.wHealth):
+            if wHealth:
                 self.death_link_status = DeathLinkStatus.NONE
 
-        if self.read_byte(Constants.wMWCommand) or self.death_link_status != DeathLinkStatus.NONE:
+        wMWCommand = (await self.gameboy.async_read_memory(Constants.wMWCommand))[0]
+        if wMWCommand or self.death_link_status != DeathLinkStatus.NONE:
             return
 
-        recv_hi = self.read_byte(Constants.wMWRecvIndexHi)
-        recv_lo = self.read_byte(Constants.wMWRecvIndexLo)
-        recv_index = (recv_hi << 8) + recv_lo
+        recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(Constants.wMWRecvIndexHi, 2))[0]
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
             self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM.value,
