@@ -834,6 +834,7 @@ item_table: Dict[str, ItemData] = {
     "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
     "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
     "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
+    # "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful), (commented out bc you start with Pinga as a summoner)
     "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
     "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
     "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
