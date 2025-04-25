@@ -319,10 +319,13 @@ class OSRSWorld(World):
                 item = self.create_item(item_row.name)
                 self.multiworld.itempool.append(item)
 
-
-
     def get_filler_item_name(self) -> str:
-        return self.random.choice([item for item in item_rows if item.progression == ItemClassification.filler])
+        if self.options.enable_duds:
+            return self.random.choice([item for item in item_rows if item.progression == ItemClassification.filler])
+        else:
+            return self.random.choice([ItemNames.Progressive_Weapons, ItemNames.Progressive_Magic,
+                                       ItemNames.Progressive_Range_Weapon, ItemNames.Progressive_Armor,
+                                       ItemNames.Progressive_Range_Armor, ItemNames.Progressive_Tools])
 
     def create_and_add_location(self, row_index) -> None:
         location_row = location_rows[row_index]
