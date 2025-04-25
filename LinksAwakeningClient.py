@@ -109,6 +109,7 @@ class MWCommands(Enum):
     # bit 1: consider receive index for item send and tick up
     # bit 2: collect location
     # bit 3: send death link
+    SEND_ITEM_SPECIAL = 0b00000001
     SEND_ITEM =         0b00000011
     COLLECT =           0b00000100
     COLLECT_WITH_ITEM = 0b00000101
@@ -359,7 +360,7 @@ class RAGameboy():
             [mp_c, mp_d] = struct.pack('>H', mp_cd)
         if mp_ef:
             [mp_e, mp_f] = struct.pack('>H', mp_ef)
-        msg = [command, item_code, sender_high, sender_low, mp_c, mp_d, mp_e, mp_f]
+        msg = [int(command), item_code, sender_high, sender_low, mp_c, mp_d, mp_e, mp_f]
         self.write_memory(Constants.wMWCommand, msg)
 
 
@@ -462,7 +463,7 @@ class LinksAwakeningClient():
             item = ctx.locations_info[id]
             if item.player == ctx.slot:
                 self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT_WITH_ITEM.value,
+                    command=MWCommands.COLLECT_WITH_ITEM,
                     item_code=item.item - BASE_ID,
                     item_sender=clamp(0, ctx.slot, 100),
                     mp_cd=check.address,
@@ -470,7 +471,7 @@ class LinksAwakeningClient():
                 )
             else:
                 self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT.value,
+                    command=MWCommands.COLLECT,
                     mp_cd=check.address,
                     mp_e=check.mask,
                 )
@@ -522,7 +523,7 @@ class LinksAwakeningClient():
             if wMWDeathLinkRecv:
                 self.death_link_status = DeathLinkStatus.DYING
             else:
-                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK.value)
+                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
         elif self.death_link_status == DeathLinkStatus.DYING: # wait until alive again before returning to normal
             if wHealth:
                 self.death_link_status = DeathLinkStatus.NONE
@@ -534,7 +535,7 @@ class LinksAwakeningClient():
         recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(Constants.wMWRecvIndexHi, 2))[0]
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
-            self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM.value,
+            self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
                                          item_code=item.item - BASE_ID,
                                          item_sender=clamp(0, item.player, 100),
                                          mp_cd=recv_index)
@@ -575,6 +576,17 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
         """Toggles death link."""
         if isinstance(self.ctx, LinksAwakeningContext):
             Utils.async_start(self.ctx.update_death_link("DeathLink" not in self.ctx.tags))
+
+    def _cmd_die(self):
+        """Simulate received death link."""
+        if isinstance(self.ctx, LinksAwakeningContext):
+            self.ctx.client.death_link_status = DeathLinkStatus.PENDING
+
+    def _cmd_send(self, code):
+        """Send item by ID."""
+        if isinstance(self.ctx, LinksAwakeningContext):
+            self.ctx.client.gameboy.send_mw_command(
+                MWCommands.SEND_ITEM_SPECIAL, code, 101)
 
 
 class LinksAwakeningContext(CommonContext):

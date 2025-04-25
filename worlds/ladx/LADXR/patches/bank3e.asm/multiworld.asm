@@ -109,6 +109,10 @@ MainLoop:
     ld   [wMWRecvIndexHi], a
 
 .skipRecvIndexCheck:
+    ; clear command
+    xor  a
+    ld   hl, wMWCommand
+    ld   [hl], a
     ; Give an item to the player
     ld   a, [wMWItemCode]
     ; if zol:
@@ -129,9 +133,6 @@ MainLoop:
     ; Paste the player name
     ld  a, [wMWItemSenderLo]
     call MessageAddPlayerName
-    xor  a
-    ld   hl, wMWCommand
-    ld   [hl], a
     ld   a, $C9
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
