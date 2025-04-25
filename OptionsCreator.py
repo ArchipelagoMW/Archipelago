@@ -6,7 +6,7 @@ from kivymd.uix.behaviors import RotateBehavior
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelContent, MDExpansionPanelHeader
 from kivymd.uix.list import MDListItem, MDListItemTrailingIcon, MDListItemSupportingText
-from kivymd.uix.slider import MDSlider
+from kivymd.uix.slider import MDSlider, MDSliderHandle, MDSliderValueLabel
 from kivymd.uix.snackbar import MDSnackbar, MDSnackbarText
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.button import MDButton, MDButtonText, MDIconButton
@@ -24,7 +24,7 @@ import re
 from urllib.parse import urlparse
 from worlds.AutoWorld import AutoWorldRegister, World
 from Options import (Option, Toggle, TextChoice, Choice, FreeText, NamedRange, Range, OptionSet, OptionList, Removed,
-                     Visibility, VerifyKeys, PlandoTexts, PlandoConnections, ItemLinks)
+                     OptionCounter, Visibility, VerifyKeys, PlandoTexts, PlandoConnections, ItemLinks)
 
 
 def validate_url(x):
@@ -38,7 +38,7 @@ def validate_url(x):
 def filter_tooltip(tooltip):
     if tooltip is None:
         tooltip = "No tooltip available."
-    tooltip = dedent(tooltip).strip().replace("\n", "<br>").replace("&", "&amp;")\
+    tooltip = dedent(tooltip).strip().replace("\n", "<br>").replace("&", "&amp;") \
         .replace("[", "&bl;").replace("]", "&br;")
     tooltip = re.sub(r"\*\*(.+?)\*\*", r"[b]\g<1>[/b]", tooltip)
     tooltip = re.sub(r"\*(.+?)\*", r"[i]\g<1>[/i]", tooltip)
@@ -146,9 +146,9 @@ class VisualToggle(MDBoxLayout):
         super().__init__(*args, **kwargs)
 
 
-class VisualListSet(MDDialog):
+class VisualListSetCounter(MDDialog):
     button: MDIconButton = ObjectProperty(None)
-    option: typing.Type[OptionSet] | typing.Type[OptionList]
+    option: typing.Type[OptionSet] | typing.Type[OptionList] | typing.Type[OptionCounter]
     scrollbox: ScrollBox = ObjectProperty(None)
     add: MDIconButton = ObjectProperty(None)
     save: MDButton = ObjectProperty(None)
@@ -157,7 +157,7 @@ class VisualListSet(MDDialog):
     valid_keys: typing.Iterable[str]
 
     def __init__(self, *args, option: typing.Type[OptionSet] | typing.Type[OptionList],
-                 name: str, valid_keys: typing.Iterable[str],  **kwargs):
+                 name: str, valid_keys: typing.Iterable[str], **kwargs):
         self.option = option
         self.name = name
         self.valid_keys = valid_keys
@@ -174,7 +174,7 @@ class VisualListSet(MDDialog):
                            pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
                 return
 
-        if issubclass(self.option, OptionSet):
+        if not issubclass(self.option, OptionList):
             if any(self.input.text == child.text.text for child in self.scrollbox.layout.children):
                 MDSnackbar(MDSnackbarText(text="This value is already in the set."), y=dp(24),
                            pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
@@ -187,9 +187,21 @@ class VisualListSet(MDDialog):
         list_item = button.parent
         self.scrollbox.layout.remove_widget(list_item)
 
+    def update_points_passthrough(*args):
+        pass
+
     def add_set_item(self, key: str):
         text = MDListItemSupportingText(text=key, id="value")
-        item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
+        if issubclass(self.option, OptionCounter):
+            value = MDSlider(MDSliderHandle(), MDSliderValueLabel(),
+                             min=self.option.min, max=self.option.max, step=1)
+            value._update_points = self.update_points_passthrough
+            item = MDListItem(text,
+                              value,
+                              MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
+            item.value = value
+        else:
+            item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
         item.text = text
         self.scrollbox.layout.add_widget(item)
 
@@ -214,7 +226,7 @@ class VisualListSet(MDDialog):
                     pass  # substring not found
                 else:
                     text = escape_markup(item_name)
-                    text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
+                    text = text[:index] + "[b]" + text[index:index + len(value)] + "[/b]" + text[index + len(value):]
                     self.dropdown.items.append({
                         "text": text,
                         "on_release": lambda txt=text: on_press(txt),
@@ -390,10 +402,8 @@ class OptionsCreator(ThemedApp):
 
         return checkbox
 
-    def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet], name: str,
-                     world: typing.Type[World]):
-        # We're only supporting Set/List
-        # Dict may be feasible in the future, but it needs additional typing work
+    def create_popup(self, option: typing.Type[OptionList] | typing.Type[OptionSet] | typing.Type[OptionCounter],
+                     name: str, world: typing.Type[World]):
 
         valid_keys = sorted(option.valid_keys)
         if option.verify_item_name:
@@ -401,13 +411,20 @@ class OptionsCreator(ThemedApp):
         if option.verify_location_name:
             valid_keys += list(world.location_name_to_id.keys())
 
-        def apply_changes(button):
-            self.options[name].clear()
-            for list_item in dialog.scrollbox.layout.children:
-                self.options[name].append(getattr(list_item.text, "text"))
-            dialog.dismiss()
+        if not issubclass(option, OptionCounter):
+            def apply_changes(button):
+                self.options[name].clear()
+                for list_item in dialog.scrollbox.layout.children:
+                    self.options[name].append(getattr(list_item.text, "text"))
+                dialog.dismiss()
+        else:
+            def apply_changes(button):
+                self.options[name].clear()
+                for list_item in dialog.scrollbox.layout.children:
+                    self.options[name][getattr(list_item.text, "text")] = getattr(list_item.value, "value")
+                dialog.dismiss()
 
-        dialog = VisualListSet(option=option, name=name, valid_keys=valid_keys)
+        dialog = VisualListSetCounter(option=option, name=name, valid_keys=valid_keys)
         dialog.ids.container.spacing = dp(30)
         dialog.scrollbox.layout.theme_bg_color = "Custom"
         dialog.scrollbox.layout.md_bg_color = self.theme_cls.surfaceContainerLowColor
@@ -417,7 +434,10 @@ class OptionsCreator(ThemedApp):
         if name not in self.options:
             # convert from non-mutable to mutable
             # We use list syntax even for sets, set behavior is enforced through GUI
-            self.options[name] = sorted(option.default)
+            if issubclass(option, OptionCounter):
+                self.options[name] = deepcopy(option.default)
+            else:
+                self.options[name] = sorted(option.default)
 
         for value in sorted(self.options[name]):
             dialog.add_set_item(value)
@@ -425,8 +445,8 @@ class OptionsCreator(ThemedApp):
         dialog.save.bind(on_release=apply_changes)
         dialog.open()
 
-    def create_option_set_list(self, option: typing.Type[OptionList] | typing.Type[OptionSet], name: str,
-                               world: typing.Type[World]):
+    def create_option_set_list_counter(self, option: typing.Type[OptionList] | typing.Type[OptionSet] |
+                                       typing.Type[OptionCounter], name: str, world: typing.Type[World]):
         main_button = MDButton(MDButtonText(text="Edit"), on_release=lambda x: self.create_popup(option, name, world))
         return main_button
 
@@ -454,10 +474,8 @@ class OptionsCreator(ThemedApp):
             option_base.add_widget(self.create_choice(option, name))
         elif issubclass(option, FreeText):
             option_base.add_widget(self.create_free_text(option, name))
-        elif issubclass(option, OptionList):
-            option_base.add_widget(self.create_option_set_list(option, name, world))
-        elif issubclass(option, OptionSet):
-            option_base.add_widget(self.create_option_set_list(option, name, world))
+        elif any(issubclass(option, cls) for cls in (OptionSet, OptionList, OptionCounter)):
+            option_base.add_widget(self.create_option_set_list_counter(option, name, world))
         else:
             option_base.add_widget(MDLabel(text="This option isn't supported by the option creator.\n"
                                                 "Please edit your yaml manually to set this option."))
@@ -526,7 +544,7 @@ class OptionsCreator(ThemedApp):
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
                                                                                            on_release=lambda x,
-                                                                                           item=group_item:
+                                                                                                             item=group_item:
                                                                                            self.tap_expansion_chevron(
                                                                                                item, x)),
                                                                  md_bg_color=self.theme_cls.surfaceContainerLowestColor,
