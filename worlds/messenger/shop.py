@@ -80,8 +80,6 @@ def shuffle_shop_prices(world: MessengerWorld) -> tuple[dict[str, int], dict[str
     shop_prices: dict[str, int] = {}
     figurine_prices: dict[str, int] = {}
     for item, price in shop_price_planned.value.items():
-        if not isinstance(price, int):
-            price = world.random.choices(list(price.keys()), weights=list(price.values()))[0]
         if "Figurine" in item:
             figurine_prices[item] = price
         else:

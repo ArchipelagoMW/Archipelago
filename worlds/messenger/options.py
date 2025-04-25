@@ -1,11 +1,18 @@
+import typing
+from copy import deepcopy
 from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Options import Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, \
-    PlandoConnections, Range, StartInventoryPool, Toggle
+from BaseClasses import PlandoOptions
+from Options import (
+    Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionCounter, OptionDict,
+    OptionError, PerGameCommonOptions,
+    PlandoConnections, Range, StartInventoryPool, Toggle,
+)
 from . import RANDOMIZED_CONNECTIONS
 from .portals import CHECKPOINTS, PORTALS, SHOP_POINTS
+from ..AutoWorld import World
 
 
 class MessengerAccessibility(ItemsAccessibility):
@@ -180,43 +187,62 @@ def planned_price(location: str) -> dict[Optional, Or]:
     }
 
 
-class PlannedShopPrices(OptionDict):
+class PlannedShopPrices(OptionCounter):
     """Plan specific prices on shop slots. Supports weighting"""
+    min = 0
     display_name = "Shop Price Plando"
-    schema = Schema({
-        **planned_price("Karuta Plates"),
-        **planned_price("Serendipitous Bodies"),
-        **planned_price("Path of Resilience"),
-        **planned_price("Kusari Jacket"),
-        **planned_price("Energy Shuriken"),
-        **planned_price("Serendipitous Minds"),
-        **planned_price("Prepared Mind"),
-        **planned_price("Meditation"),
-        **planned_price("Rejuvenative Spirit"),
-        **planned_price("Centered Mind"),
-        **planned_price("Strike of the Ninja"),
-        **planned_price("Second Wind"),
-        **planned_price("Currents Master"),
-        **planned_price("Aerobatics Warrior"),
-        **planned_price("Demon's Bane"),
-        **planned_price("Devil's Due"),
-        **planned_price("Time Sense"),
-        **planned_price("Power Sense"),
-        **planned_price("Focused Power Sense"),
-        **planned_price("Green Kappa Figurine"),
-        **planned_price("Blue Kappa Figurine"),
-        **planned_price("Ountarde Figurine"),
-        **planned_price("Red Kappa Figurine"),
-        **planned_price("Demon King Figurine"),
-        **planned_price("Quillshroom Figurine"),
-        **planned_price("Jumping Quillshroom Figurine"),
-        **planned_price("Scurubu Figurine"),
-        **planned_price("Jumping Scurubu Figurine"),
-        **planned_price("Wallaxer Figurine"),
-        **planned_price("Barmath'azel Figurine"),
-        **planned_price("Queen of Quills Figurine"),
-        **planned_price("Demon Hive Figurine"),
-    })
+    valid_keys = frozenset([
+        "Karuta Plates",
+        "Serendipitous Bodies",
+        "Path of Resilience",
+        "Kusari Jacket",
+        "Energy Shuriken",
+        "Serendipitous Minds",
+        "Prepared Mind",
+        "Meditation",
+        "Rejuvenative Spirit",
+        "Centered Mind",
+        "Strike of the Ninja",
+        "Second Wind",
+        "Currents Master",
+        "Aerobatics Warrior",
+        "Demon's Bane",
+        "Devil's Due",
+        "Time Sense",
+        "Power Sense",
+        "Focused Power Sense",
+        "Green Kappa Figurine",
+        "Blue Kappa Figurine",
+        "Ountarde Figurine",
+        "Red Kappa Figurine",
+        "Demon King Figurine",
+        "Quillshroom Figurine",
+        "Jumping Quillshroom Figurine"
+        "Scurubu Figurine",
+        "Jumping Scurubu Figurine",
+        "Wallaxer Figurine",
+        "Barmath'azel Figurine",
+        "Queen of Quills Figurine",
+        "Demon Hive Figurine",
+    ])
+
+    @classmethod
+    def from_any(cls, data: dict[str, int | dict[int, int]]) -> OptionCounter:
+        if not isinstance(data, dict):
+            raise OptionError(f"Cannot Convert from non-dictionary, got {type(data)}")
+        import random
+        actual_data = deepcopy(data)
+        for key, value in data.items():
+            if not isinstance(value, dict):
+                continue
+
+            if not all(
+                    isinstance(k, int) and isinstance(v, int) and k >= 0 and v >= 0
+                    for k, v in value.items()
+                    ):
+                raise OptionError(f"Weight values must be non-negative integers for key '{key}'")
+            actual_data[key] = random.choices(list(value.keys()), weights=list(value.values()))[0]
+        return cls(actual_data)
 
 
 @dataclass
