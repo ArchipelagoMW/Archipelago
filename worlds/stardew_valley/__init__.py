@@ -299,12 +299,7 @@ class StardewValleyWorld(World):
 
         return StardewItem(item.name, override_classification, item.code, self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: str | None = None):
-        if rule is None:
-            rule = True_()
-        if item is None:
-            item = location_data.name
-
+    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
         region = self.multiworld.get_region(location_data.region, self.player)
         region.add_event(location_data.name, item, rule, StardewLocation, StardewItem)
 
