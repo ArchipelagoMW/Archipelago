@@ -47,16 +47,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
         #Todo Secret Herb locations that don"t seem to be used?
-        #48, 112, -36
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset),
-        #79, 112, -30
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 2", 545 + npc_index_offset),
-        #43, 104, -8
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset),
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset), #(48, 112, -36)
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 2", 545 + npc_index_offset), #(79, 112, -30)
+        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset), #(43, 104, -8)
 
         #Abilities Todo: descriptivize and implement
-        #118, 109, 10
-        #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset),
+        #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset), #(118, 109, 10)
 
         #Delende
         #Treasure chests
@@ -87,8 +83,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
-        #276, 116, -204; gives you Fervor Charm
-        LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
+        LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset), #(276, 116, -204); gives you Fervor Charm
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         LocationData("Delende", "Delende NPC - Dizzy noob chucks a Fervor Charm at your face", 831 + npc_index_offset),
@@ -99,14 +94,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Grans House (Delende)
         #Treasure chests
-        #126, 128, -58 style: blank
-        LocationData("Delende", "Delende Chest - Grans House empty chest 1", 87 + treasure_index_offset),
-        #127, 128, -58 style: weapon
-        LocationData("Delende", "Delende Chest - Grans House empty chest 2", 100 + treasure_index_offset),
-        #137, 128, -57 style: consumable
-        LocationData("Delende", "Delende Chest - Grans House empty chest 3", 177 + treasure_index_offset),
-        #137, 128, -56 style: consumable
-        LocationData("Delende", "Delende Chest - Grans House empty chest 4", 178 + treasure_index_offset),
+        LocationData("Delende", "Delende Chest - Grans House empty chest 1", 87 + treasure_index_offset), #(126, 128, -58) style: blank
+        LocationData("Delende", "Delende Chest - Grans House empty chest 2", 100 + treasure_index_offset), #(127, 128, -58) style: weapon
+        LocationData("Delende", "Delende Chest - Grans House empty chest 3", 177 + treasure_index_offset), #(137, 128, -57) style: consumable
+        LocationData("Delende", "Delende Chest - Grans House empty chest 4", 178 + treasure_index_offset), #(137, 128, -56) style: consumable
 
         #Basement (Somehow Not Delende)
         #Treasure chests
@@ -115,14 +106,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Soiled Den
         #Treasure chests
-        #311, 111, -96
-        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest lurking in the shadows by the Bangler", 218 + treasure_index_offset),
-        #322, 111, -101
-        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest by the Bangler", 271 + treasure_index_offset),
-        #326, 111, -116
-        LocationData("Soiled Den", "Soiled Den Chest - Long river jump Dodge Charm chest", 448 + treasure_index_offset),
-        #249, 116, -156
-        LocationData("Soiled Den", "Soiled Den Chest - Riverside Tonic Pouch chest", 1155 + treasure_index_offset),
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest lurking in the shadows by the Bangler", 218 + treasure_index_offset), #(311, 111, -96)
+        LocationData("Soiled Den", "Soiled Den Chest - Clamshell chest by the Bangler", 271 + treasure_index_offset), #(322, 111, -101)
+        LocationData("Soiled Den", "Soiled Den Chest - Long river jump Dodge Charm chest", 448 + treasure_index_offset), #(326, 111, -116)
+        LocationData("Soiled Den", "Soiled Den Chest - Riverside Tonic Pouch chest", 1155 + treasure_index_offset), #(249, 116, -156)
 
         #NPCs
         #296, 112, -155
@@ -132,8 +119,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         #316, 120, -262
         LocationData("Pale Grotto", "Pale Grotto Chest - Fenix Juice chest across from fish island", 228 + treasure_index_offset),
-        #307, 124, -345
-        LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Poisonkiss chest north from save point", 144 + treasure_index_offset), #(307, 124, -345)
         LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop Tonic chest", 229 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Tincture Pouch chest on promontory", 2979 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Island Underpass Scrap chest", 3622 + treasure_index_offset, logic.has_swimming),
@@ -162,32 +148,19 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Tonic chest", 1161 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Scope Bit chest", 447 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Clamshell chest", 270 + treasure_index_offset),
-        #310, 116, -68
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest beneath encampment ledge", 217 + treasure_index_offset),
-        #213, 107, 27
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest on jigsaw mountain", 449 + treasure_index_offset),
-        #307, 113, -22
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest in cliffs nook south of encampment", 80 + treasure_index_offset),
-        #275,108,-28
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below west Delende entrance", 273 + treasure_index_offset),
-        #312, 95, 12
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest above the eastern beach standing stones", 274 + treasure_index_offset),
-        #223, 94, 26
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below jigsaw mountain", 275 + treasure_index_offset),
-        #259, 107, -18
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Island Clamshell chest by the waterfalls", 277 + treasure_index_offset),
-        #281, 98, -3
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest east of the river above the beach", 278 + treasure_index_offset),
-        #302, 101, 4
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest along the eastern beach up the cliffs", 279 + treasure_index_offset),
-        #250, 104, -13
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Parkour Fenix Juice chest by the island waterfalls", 289 + treasure_index_offset),
-        #218, 107, 23
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Headgear chest on jigsaw mountain", 157 + treasure_index_offset),
-        #289, 110, -18
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Jewel of Defense chest south of encampment on the canyon mountainside", 272 + treasure_index_offset),
-        #250, 98, -4
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tincture chest downstream of the island waterfalls", 288 + treasure_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest beneath encampment ledge", 217 + treasure_index_offset), #(310, 116, -68)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Money chest on jigsaw mountain", 449 + treasure_index_offset), #(213, 107, 27)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest in cliffs nook south of encampment", 80 + treasure_index_offset), #(307, 113, -22)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below west Delende entrance", 273 + treasure_index_offset), #(275,108,-28)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest above the eastern beach standing stones", 274 + treasure_index_offset), #(312, 95, 12)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest below jigsaw mountain", 275 + treasure_index_offset), #(223, 94, 26)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Island Clamshell chest by the waterfalls", 277 + treasure_index_offset), #(259, 107, -18)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest east of the river above the beach", 278 + treasure_index_offset), #(281, 98, -3)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Clamshell chest along the eastern beach up the cliffs", 279 + treasure_index_offset), #(302, 101, 4)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Parkour Fenix Juice chest by the island waterfalls", 289 + treasure_index_offset), #(250, 104, -13)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Headgear chest on jigsaw mountain", 157 + treasure_index_offset), #(218, 107, 23)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Jewel of Defense chest south of encampment on the canyon mountainside", 272 + treasure_index_offset), #(289, 110, -18)
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Tincture chest downstream of the island waterfalls", 288 + treasure_index_offset), #(250, 98, -4)
         #Seaside Cliffs Beach
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - The little mermaid Clamshell chest", 276 + treasure_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Hop along the sea stacks to the Clamshell chest south of the peninsula", 280 + treasure_index_offset),
@@ -562,7 +535,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Crystals
         #Technically in River Cat"s Ego map
-        LocationData("Salmon River", "Salmon River Crystal - Appease the QuizFish Nomad Crystal", 630 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Crystal - Appease the QuizFish Nomad Crystal", 630 + crystal_index_offset),
 
         #Poko Poko Desert
         #Treasure chests
@@ -908,11 +881,11 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Overpass Scrap chest on the climb up from the elevator", 3536 + treasure_index_offset),
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Quintar Grass chest in race start hut", 1591 + treasure_index_offset),
-        LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring chest in Mausoleum", 1320 + treasure_index_offset, lambda state: state.has("Item - Owl Drum", player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Chest - Undead Ring chest in Mausoleum", 1320 + treasure_index_offset, logic.has_glide),
 
         #NPCs
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
-        #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar) (789, 191, -338)
+        #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar aka have Babel Quintar item from Mausoleum) (789, 191, -338)
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the quintar nest", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement),
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 3 sneaky Quintar nest north of Mausoleum", 2257 + npc_index_offset),
@@ -946,8 +919,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold Ingot", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)),
 
         #Quintar Mausoleum
-        #Treasure chests Todo descriptivize
-        #LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Babel Quintar chest", 2153 + treasure_index_offset),
+        #Treasure chests Todo descriptivize and check requirements
+        LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Babel Quintar chest", 2153 + treasure_index_offset), #(688, 114, -464)
+        LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Quintar Mausoleum Map chest", 3401 + treasure_index_offset), #(664, 129, -425)
+        LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Wind Thresher chest", 3768 + treasure_index_offset), #(709, 129, -442)
 
         #Eastern Chasm
         #Treasure chests
@@ -1038,7 +1013,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Nickelodeon slime time :) Seekers Garb chest", 1269 + treasure_index_offset),
 
         #Crystals
-        LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + treasure_index_offset, lambda state: state.has("Item - Red Door Key", player, 3)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: state.has("Item - Red Door Key", player, 3)),
 
         #Northern Stretch
         #Treasure chests
@@ -1127,7 +1102,84 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
         #Crystals
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + treasure_index_offset), #(739, 37, 68)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + crystal_index_offset), #(739, 37, 68)
+
+        #The Deep Sea
+        #Todo descriptivize and check requirements (requires swimming to get here.. wait. the neptune shrine is here. check if any checks can be gotten sans salmon ig lol)
+        #Treasure chests
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3451 + treasure_index_offset), #(878, 39, -536)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3658 + treasure_index_offset), #(740, 56, 176)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3659 + treasure_index_offset), #(680, 53, 180)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3660 + treasure_index_offset), #(657, 53, 165)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3661 + treasure_index_offset), #(545, 47, -31)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3662 + treasure_index_offset), #(890, 51, -66)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3663 + treasure_index_offset), #(842, 53, -359)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3666 + treasure_index_offset), #(-23, 39, -557)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3667 + treasure_index_offset), #(94, 59, 133)
+        #next 2 scraps from (Sand Bar) submap
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3664 + treasure_index_offset), #(-364, 53, -183)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3665 + treasure_index_offset), #(-226, 49, 164)
+        #next scrap from (Shrooms) submap
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3668 + treasure_index_offset), #(254, 53, -547)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Forgotten Key chest", 2767 + treasure_index_offset), #(872, 39, -517)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Oven Mitt chest", 2290 + treasure_index_offset), #(838, 52, -357)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Paladin Wand chest", 2937 + treasure_index_offset), #(676, 53, 181)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Rampart Key chest", 2589 + treasure_index_offset), #(582, 47, -51)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Soul Keeper chest", 2766 + treasure_index_offset), #(663, 54, 165)
+        #its crab tiem babey
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 1", 3409 + treasure_index_offset), #(20, 53, 251)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 2", 3426 + treasure_index_offset), #(76, 76, 178)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 3", 3427 + treasure_index_offset), #(96, 60, 131)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 4", 3428 + treasure_index_offset), #(142, 51, -611)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 5", 3429 + treasure_index_offset), #(60, 53, -609)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 6", 3430 + treasure_index_offset), #(54, 62, 155)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 7", 3431 + treasure_index_offset), #(128, 49, 196)
+        #for some reason crab 8 is on (Depths Fix) submap
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 8", 3432 + treasure_index_offset), #(239, 53, -613)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 9", 3433 + treasure_index_offset), #(254, 53, 215)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 10", 3434 + treasure_index_offset), #(306, 53, 224)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 11", 3435 + treasure_index_offset), #(288, 53, -620)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 12", 3436 + treasure_index_offset), #(58, 52, 244)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 13", 3437 + treasure_index_offset), #(54, 52, 200)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 14", 3438 + treasure_index_offset), #(52, 76, -616)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Crab 15", 3439 + treasure_index_offset), #(207, 53, 152)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Zether chest", 2768 + treasure_index_offset), #(649, 53, 195)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Zether Pouch chest", 3726 + treasure_index_offset), #(646, 53, 196)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Treasure Finder chest", 595 + treasure_index_offset), #(270, 29, -591)
+
+        #NPCs
+        LocationData("The Deep Sea", "The Deep Sea NPC - Diamond Dust", 2519 + npc_index_offset), #(639, 54, 182)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Gold Dust", 2518 + npc_index_offset), #(648, 54, 180)
+        #Todo Player Options: Carcinization victory condition
+        LocationData("The Deep Sea", "The Deep Sea NPC - Z35_CrabCollect", 3425 + npc_index_offset), #(255, 62, 124)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Z35_FoundCrabKing", 3424 + npc_index_offset), #(256, 63, 113)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Z35_SpeedOcto", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden quintar but faster than royal salmon)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Gold Dust", 2855 + npc_index_offset), #(-367, 53, -182)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ingot", 2857 + npc_index_offset), #(-356, 55, -167)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ore", 2856 + npc_index_offset), #(-370, 53, -173)
+
+        #Abilities Todo: descriptivize and implement
+        #LocationData("The Deep Sea", "The Deep Sea Ability - Coyote from SWater_Summon", 1140 + ability_index_offset), #(-60, 53, 202)
+
+        #Jade Cavern
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Jade Cavern", "Jade Cavern Chest - Jade Cavern Map chest", 3604 + treasure_index_offset), #(239, 99, -124)
+
+        #NPCs
+        #Todo NPCs CheckOrNot Job Masters: this guy trades you a thing for each job seal you've gotten from a job master for mastering that job
+        #LocationData("Jade Cavern", "Jade Cavern NPC - Jade Cavern Map chest", 3603 + npc_index_offset), #(255, 91, -90)
+        
+        #Continental Tram
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Continental Tram", "Continental Tram Chest - Continental Tram Map chest", 1844 + treasure_index_offset), #(-118, 91, 24)
+        LocationData("Continental Tram", "Continental Tram Chest - Nomads Guard chest", 3012 + treasure_index_offset), #(-149, 67, 65)
+        LocationData("Continental Tram", "Continental Tram Chest - Tram Key chest", 1654 + treasure_index_offset), #(-119, 91, 24)
+
+        #NPCs
+        LocationData("Continental Tram", "Continental Tram NPC - Diamond Dust", 2895 + npc_index_offset), #(231, 54, 40)
+        LocationData("Continental Tram", "Continental Tram NPC - Diamond Ingot", 2894 + npc_index_offset), #(231, 54, 40)
 
     ]
 
