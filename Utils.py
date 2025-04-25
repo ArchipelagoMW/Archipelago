@@ -830,6 +830,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.update()
 
 
+# without terminal, we have to use gui mode
+gui_enabled = not sys.stdout or "--nogui" not in sys.argv
+
+
 def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: Union[str, Dict[str, Any]]) -> str:
