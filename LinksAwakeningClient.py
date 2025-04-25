@@ -462,7 +462,7 @@ class LinksAwakeningClient():
             item = ctx.locations_info[id]
             if item.player == ctx.slot:
                 self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT_WITH_ITEM,
+                    command=MWCommands.COLLECT_WITH_ITEM.value,
                     item_code=item.item - BASE_ID,
                     item_sender=clamp(0, ctx.slot, 100),
                     mp_cd=check.address,
@@ -470,7 +470,7 @@ class LinksAwakeningClient():
                 )
             else:
                 self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT,
+                    command=MWCommands.COLLECT.value,
                     mp_cd=check.address,
                     mp_e=check.mask,
                 )
@@ -525,20 +525,20 @@ class LinksAwakeningClient():
             if self.read_byte(Constants.WMWDeathLinkRecv):
                 self.death_link_status = DeathLinkStatus.DYING
             else:
-                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
+                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK.value)
         elif self.death_link_status == DeathLinkStatus.DYING: # wait until alive again before returning to normal
             if self.read_byte(Constants.wHealth):
                 self.death_link_status = DeathLinkStatus.NONE
 
-        if self.read_byte(Constants.wMWCommand) or self.death_link_status:
+        if self.read_byte(Constants.wMWCommand) or self.death_link_status != DeathLinkStatus.NONE:
             return
 
         recv_hi = self.read_byte(Constants.wMWRecvIndexHi)
         recv_lo = self.read_byte(Constants.wMWRecvIndexLo)
-        recv_index = recv_hi * 0xff + recv_lo
+        recv_index = (recv_hi << 8) + recv_lo
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
-            self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
+            self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM.value,
                                          item_code=item.item - BASE_ID,
                                          item_sender=clamp(0, item.player, 100),
                                          mp_cd=recv_index)

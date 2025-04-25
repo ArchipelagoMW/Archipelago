@@ -28,7 +28,6 @@ MainLoop:
 
     ld   a, [wLinkSpawnDelay]
     and  a
-    ld   hl, wMWCommand ; load command early to do it once
     jr   z, .allowSpawn
     dec  a
     ld   [wLinkSpawnDelay], a
@@ -46,9 +45,9 @@ MainLoop:
     call nz, LinkSpawnBomb
 
     ; deathlink
-    bit  3, [hl] ; wMWCommand
+    ld   hl, wMWCommand
+    bit  3, [hl]
     jr   z, .noSpawn
-    res  3, [hl]
     ld   a, [wMWDeathLinkRecv]
     jr   nz, .noSpawn ; if deathlink recv flag is still up, dont do it
     ld   a, [wHasMedicine]
@@ -66,9 +65,9 @@ MainLoop:
 
 .noSpawn:
     ; Have a location to collect?
-    bit  2, [hl] ; wMWCommand
+    ld   hl, wMWCommand
+    bit  2, [hl]
     jr   z, .noCollect
-    res  2, [hl]
     ; get current location value onto b
     ld   a, [wMWMultipurposeC] ; collect location hi
     ld   h, a
@@ -79,24 +78,35 @@ MainLoop:
     ld   a, [wMWMultipurposeE] ; location mask
     or   b ; apply mask
     cp   b ; was location already set?
-    ret  z ; if so, do nothing else
+    jr   z, .clearAndRet ; if so, do nothing else
     ld   [hl], a
-    ld   hl, wMWCommand
 
 .noCollect:
     ; Have an item to give?
-    bit  0, [hl] ; wMWCommand
-    ret  z
-    res  0, [hl]
+    ld   hl, wMWCommand
+    bit  0, [hl]
+    jr   z, .clearAndRet
+    ld   hl, wMWCommand
     bit  1, [hl] ; do recvindex check only if bit set
     jr   z, .skipRecvIndexCheck
-    res  1, [hl]
     ld   a, [wMWRecvIndexHi]
-    cp   [wMWMultipurposeC]
-    ret  nz ; failed check on hi
+    ld   b, a
+    ld   a, [wMWMultipurposeC]
+    cp   b
+    jr   nz, .clearAndRet ; failed check on hi
     ld   a, [wMWRecvIndexLo]
-    cp   [wMWMultipurposeD]
-    ret  nz ; failed check on lo
+    ld   b, a
+    ld   a, [wMWMultipurposeD]
+    cp   b
+    jr   nz, .clearAndRet ; failed check on lo
+    ; increment recvindex
+    ld   a, [wMWRecvIndexLo]
+    inc  a
+    ld   [wMWRecvIndexLo], a
+    jr   nz, .skipRecvIndexCheck ; no overflow, done
+    ld   a, [wMWRecvIndexHi]
+    inc  a
+    ld   [wMWRecvIndexHi], a
 
 .skipRecvIndexCheck:
     ; Give an item to the player
@@ -119,9 +129,18 @@ MainLoop:
     ; Paste the player name
     ld  a, [wMWItemSenderLo]
     call MessageAddPlayerName
+    xor  a
+    ld   hl, wMWCommand
+    ld   [hl], a
     ld   a, $C9
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
+
+.clearAndRet:
+    xor  a
+    ld   hl, wMWCommand
+    ld   [hl], a
+    ret
 
 LinkGiveSlime:
     ld   a, $05
