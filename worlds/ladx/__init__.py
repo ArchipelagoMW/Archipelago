@@ -110,7 +110,7 @@ class LinksAwakeningWorld(World):
 
     item_name_to_data = links_awakening_items_by_name
 
-    location_name_to_id = links_awakening_location_name_to_id()
+    location_name_to_id = links_awakening_location_name_to_id
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
