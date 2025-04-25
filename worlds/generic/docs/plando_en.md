@@ -104,15 +104,7 @@ A list of all available items and locations can be found in the [website's datap
         - Spirit Temple Silver Gauntlets Chest
       world: false
   
-    # example block 3 - Slay the Spire
-    - items:
-        Boss Relic: 3
-      locations:
-        - Boss Relic 1
-        - Boss Relic 2
-        - Boss Relic 3
-  
-    # example block 4 - Factorio
+    # example block 3 - Factorio
     - items:
         progressive-electric-energy-distribution: 2
         electric-energy-accumulators: 1
@@ -125,7 +117,7 @@ A list of all available items and locations can be found in the [website's datap
       percentage: 80
       force: true
   
-  # example block 5 - Secret of Evermore
+  # example block 4 - Secret of Evermore
     - items:
         Levitate: 1
         Revealer: 1
@@ -136,7 +128,7 @@ A list of all available items and locations can be found in the [website's datap
       world: true
       count: 2
   
-  # example block 6 - A Link to the Past
+  # example block 5 - A Link to the Past
     - items:
         Progressive Sword: 4
       world:
@@ -150,12 +142,11 @@ A list of all available items and locations can be found in the [website's datap
 player's Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
 in their own dungeon major item chests.
-3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
+3. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
 four locations chosen here.
-5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
+4. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
 other players' Master Sword Pedestals or Boss Relic 1 locations.
-6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
+5. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
 into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy.
 
 
