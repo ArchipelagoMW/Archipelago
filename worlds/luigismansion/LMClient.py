@@ -9,7 +9,7 @@ from typing import Any
 
 import dolphin_memory_engine as dme
 
-from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
+from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
 
 from . import CLIENT_VERSION
@@ -17,6 +17,15 @@ from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
+
+# Load Universal Tracker modules with aliases
+tracker_loaded = False
+try:
+    from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
+                                              TrackerGameContext as CommonContext, UT_VERSION)
+    tracker_loaded = True
+except ImportError:
+    from CommonClient import ClientCommandProcessor, CommonContext
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -182,7 +191,7 @@ class LMCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LMContext):
             Utils.async_start(self.ctx.get_debug_info(), name="Get Luigi's Mansion Debug info")
 
-class LMContext(CommonContext):
+class LMContext(CommonContext if not tracker_loaded else TrackerGameContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
@@ -345,17 +354,36 @@ class LMContext(CommonContext):
         from kvui import GameManager
 
         class LMManager(GameManager):
+            source = ""
             logging_pairs = [("Client", "Archipelago")]
-            base_title = "Luigi's Mansion Client v" + CLIENT_VERSION + " Archipelago v"
+            base_title = "Luigi's Mansion Client v" + CLIENT_VERSION
+            if tracker_loaded:
+                base_title += f" | Universal Tracker v{UT_VERSION}"
+            base_title +=  " | Archipelago v"
+
+            def build(self):
+                container = super().build()
+                if tracker_loaded:
+                    self.ctx.build_gui(self)
+                else:
+                    logger.info("To enable a tracker, install Universal Tracker")
+
+                return container
 
         self.ui = LMManager(self)
+        if tracker_loaded:
+            self.load_kv()
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     async def update_boo_count_label(self):
         if not self.check_ingame():
             return
 
-        from kvui import Label
+        # KivyMD support, also keeps support with regular Kivy (hopefully)
+        try:
+            from kvui import MDLabel as Label
+        except ImportError:
+            from kvui import Label
 
         if not self.boo_count:
             self.boo_count = Label(text=f"")
@@ -794,6 +822,14 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
     async def _main(connect, password):
         ctx = LMContext(connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
+
+        # Runs Universal Tracker's internal generator
+        if tracker_loaded:
+            ctx.run_generator()
+            ctx.tags.remove("Tracker")
+        else:
+            logger.warning("Could not find Universal Tracker.")
+
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
