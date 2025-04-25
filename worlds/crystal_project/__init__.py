@@ -224,7 +224,7 @@ class CrystalProjectWorld(World):
             excluded_items.add("Summon - Juses")
             excluded_items.add("Summon - Pah")
 
-        if self.options.includeScholarAbilities == self.options.includeScholarAbilities.false:
+        if self.options.includeScholarAbilities == self.options.includeScholarAbilities.option_false:
             excluded_items.add("Scholar - Roost")
             excluded_items.add("Scholar - Lucky Dice")
             excluded_items.add("Scholar - Sun Bath")
