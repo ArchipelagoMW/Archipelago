@@ -114,10 +114,12 @@ def create_regions_and_locations(world):
                 world.multiworld.regions.append(region)
 
                 for level_location in pre_region.locations:
-                    if level_location.loc_type == LocationType.golden_strawberry \
-                        and not world.options.include_goldens \
-                        and not (level_location.display_name == "Farewell - Golden Strawberry" and world.options.goal_area == "farewell_golden"):
-                        continue
+                    if level_location.loc_type == LocationType.golden_strawberry:
+                        if level_location.display_name == "Farewell - Golden Strawberry":
+                            if not world.options.goal_area == "farewell_golden":
+                                continue
+                        elif not world.options.include_goldens:
+                            continue
 
                     if level_location.loc_type == LocationType.binoculars and not world.options.binosanity:
                         continue
