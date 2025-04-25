@@ -232,10 +232,6 @@
 # Zillion
 /worlds/zillion/ @beauxq
 
-# Zork Grand Inquisitor
-/worlds/zork_grand_inquisitor/ @nbrochu
-
-
 ## Active Unmaintained Worlds
 
 # The following worlds in this repo are currently unmaintained, but currently still work in core. If any update breaks
