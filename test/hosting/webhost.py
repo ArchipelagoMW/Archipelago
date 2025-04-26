@@ -110,10 +110,11 @@ def stop_room(app_client: "FlaskClient",
 
     with db_session:
         room: Room = Room.get(id=room_uuid)
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
         if simulate_idle:
-            new_last_activity = datetime.now(timezone.utc) - timedelta(seconds=room.timeout + 5)
+            new_last_activity = now - timedelta(seconds=room.timeout + 5)
         else:
-            new_last_activity = datetime.now(timezone.utc) - timedelta(days=3)
+            new_last_activity = now - timedelta(days=3)
         room.last_activity = new_last_activity
         address = f"localhost:{room.last_port}" if room.last_port > 0 else None
         if address:
