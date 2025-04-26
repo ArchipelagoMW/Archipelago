@@ -90,6 +90,18 @@ class RandomiseHpBar(DefaultOnToggle):
     """Whether the HP Bar must be an item found elsewhere"""
     display_name = "Randomise HP Bar"
 
+class BrewingXPotion(Choice):
+    """
+    Determine whether you can brew more than one X potion at a time
+
+    One at a time - You can only brew one X potion at a time
+
+    Simultaneously - You can brew multiple X potions at a time, provided you have enough resources to brew them all at once.
+    """
+    display_name = "Brew X Potions"
+
+    option_one_at_a_time = 0
+    option_simultaneously = 1
 
 class EnergyLink(Toggle):
     """Allow sending energy to other worlds. Candy and lollipops can be converted to energy. 25% of the energy is lost in the transfer."""
@@ -138,5 +150,6 @@ class CandyBox2Options(PerGameCommonOptions):
     sorceress_hat_price: SorceressHatPrice
     teapot_hp: TeapotHP
     randomise_hp_bar: RandomiseHpBar
+    x_potion_brewing: BrewingXPotion
     energy_link: EnergyLink
     gifting: Gifting

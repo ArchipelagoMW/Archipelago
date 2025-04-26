@@ -107,6 +107,7 @@ class CandyBox2World(World):
             "energyLink": self.options.energy_link.value,
             "gifting": self.options.gifting.value,
             "expectedClientVersion": EXPECTED_CLIENT_VERSION,
+            "multiX": self.options.x_potion_brewing.value,
             "multipliers": {
                 "candies": self.options.candy_production_multiplier.value,
                 "lollipops": self.options.lollipop_production_multiplier.value
