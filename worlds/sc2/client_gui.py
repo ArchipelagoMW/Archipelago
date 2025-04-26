@@ -14,6 +14,7 @@ from kivy.uix.button import Button
 from kivymd.uix.tooltip import MDTooltip
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty, BooleanProperty
+from kivy.core.window import Window
 
 from .client import SC2Context, calc_unfinished_nodes
 from .item.item_descriptions import item_descriptions
@@ -150,7 +151,7 @@ class SC2Manager(GameManager):
 
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
-            App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
+            Window.remove_widget(self.ctx.current_tooltip)
 
         self.ctx.current_tooltip = None
 
