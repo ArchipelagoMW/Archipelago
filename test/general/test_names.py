@@ -42,9 +42,14 @@ class TestNames(unittest.TestCase):
 
                 multiworld = setup_solo_multiworld(world_type)
 
-                with self.subTest("locations"):
+                with self.subTest("non-event locations"):
                     for location in multiworld.get_locations():
-                        self.assertIsStr(location.name)
+                        if not location.is_event:
+                            self.assertIsStr(location.name)
+                with self.subTest("event locations"):
+                    for location in multiworld.get_locations():
+                        if location.is_event:
+                            self.assertIsStr(location.name)
                 with self.subTest("regions"):
                     for region in multiworld.get_regions():
                         self.assertIsStr(region.name)
@@ -57,9 +62,14 @@ class TestNames(unittest.TestCase):
                 with self.subTest("precollected_items items"):
                     for item in multiworld.precollected_items[1]:
                         self.assertIsStr(item.name)
-                with self.subTest("pre_fill and earlier placed items"):
+                with self.subTest("non-event items placed in pre_fill and earlier"):
                     for loc in multiworld.get_filled_locations():
-                        self.assertIsStr(loc.item.name)
+                        if not loc.item.is_event:
+                            self.assertIsStr(loc.item.name)
+                with self.subTest("event items placed in pre_fill and earlier"):
+                    for loc in multiworld.get_filled_locations():
+                        if loc.item.is_event:
+                            self.assertIsStr(loc.item.name)
 
     def test_location_name_format(self) -> None:
         """Location names must not be all numeric in order to differentiate between ID and name in !hint_location"""
