@@ -252,7 +252,16 @@ def read_weights_yamls(path) -> Tuple[Any, ...]:
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return tuple(parse_yamls(yaml))
+    from yaml.error import MarkedYAMLError
+    try:
+        return tuple(parse_yamls(yaml))
+    except MarkedYAMLError as ex:
+        if ex.problem_mark:
+            lines = yaml.splitlines()
+            problem_line = lines[ex.problem_mark.line]
+            error_line = " " * ex.problem_mark.column + "^"
+            raise Exception(f"{ex.context} {ex.problem}\n{problem_line}\n{error_line}")
+        raise ex
 
 
 def interpret_on_off(value) -> bool:
