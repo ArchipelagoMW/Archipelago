@@ -1134,7 +1134,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
         #Crystals
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + crystal_index_offset)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + crystal_index_offset),
 
         #The Deep Sea
         #Todo descriptivize and check requirements (requires swimming to get here.. wait. the neptune shrine is here. check if any checks can be gotten sans salmon ig lol)

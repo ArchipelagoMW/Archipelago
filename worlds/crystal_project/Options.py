@@ -10,7 +10,7 @@ class Goal(Choice):
     
     Checking the first sign in the Spawning Meadows will tell you the selected goal.
     
-    Astley: Defeat Astley (add more here).
+    Astley: Defeat Astley in the new world. A new world stone will be given to the player after obtaining a certain number of jobs.
     
     True Astley: Defeat Astley but more somehow
 
@@ -41,6 +41,13 @@ class RandomizeJobs(DefaultOnToggle):
     When enabled, Jobs can be found anywhere, when disabled they are always on crystals.
     """
     display_name = "Randomize Jobs"
+
+class NewWorldStoneJobQuantity(Range):
+    """If your goal is Astley, this is where you select how many jobs you need to find before being sent the new world stone (NOTE: the starting jobs do not count towards this number)."""
+    display_name = "Job count that locks the new world stone"
+    range_start = 1
+    range_end = 18
+    default = 18
 
 class StartWithTreasureFinder(DefaultOnToggle):
     """
@@ -96,6 +103,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     clamshellsQuantity: ClamshellsQuantity
     clamshellsInPool: ClamshellsInPool
     randomizeJobs: RandomizeJobs
+    newWorldStoneJobQuantity: NewWorldStoneJobQuantity
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions

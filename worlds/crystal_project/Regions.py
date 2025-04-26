@@ -159,8 +159,8 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
     multiworld.get_region("Capital Pipeline", player).add_exits(["Jidamba Tangle", "Continental Tram"],
-        {"Jidamba Tangle": logic.has_vertical_movement},
-        {"Continental Tram": logic.has_vertical_movement})
+        {"Jidamba Tangle": logic.has_vertical_movement,
+        "Continental Tram": logic.has_vertical_movement})
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": logic.has_horizontal_movement, 
         "Okimoto N.S.": logic.has_horizontal_movement})
@@ -201,7 +201,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     #Beaurior Rock goes here
     #Lake Delende goes here
     multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine", "Quintar Mausoleum"],
-        "Quintar Mausoleum": logic.has_swimming})
+        {"Quintar Mausoleum": logic.has_swimming})
     multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Lands End", "Flyers Lookout"],
         {"Lands End": logic.has_glide,
         "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player),

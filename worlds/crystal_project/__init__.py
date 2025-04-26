@@ -8,6 +8,7 @@ from .Items import item_table, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
 from .Options import CrystalProjectOptions
+from .rules import CrystalProjectLogic
 
 from typing import List, Set, Dict, TextIO, Any
 from worlds.AutoWorld import World
@@ -213,6 +214,9 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Jade Cavern Map")
             excluded_items.add("Item - The Old World Map")
 
+        if self.options.goal == self.options.goal.option_astley:
+            excluded_items.add("Item - New World Stone")
+
         if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
             excluded_items.add("Summon - Shaku")
             excluded_items.add("Summon - Pamoa")
@@ -320,6 +324,7 @@ class CrystalProjectWorld(World):
         return item
 
     def set_rules(self) -> None:
+        logic = CrystalProjectLogic(self.player, self.options)
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
             win_condition_item = "Item - New World Stone"
@@ -328,7 +333,9 @@ class CrystalProjectWorld(World):
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
         
-        if self.options.goal == 0 or self.options.goal == 1:
+        if self.options.goal == 0:
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity)
+        if self.options.goal == 1:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
         if self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
@@ -342,6 +349,7 @@ class CrystalProjectWorld(World):
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "randomizeJobs": bool(self.options.randomizeJobs.value),
+            "jobGoalAmount": self.options.newWorldStoneJobQuantity.value
         }
     
         return slot_data
