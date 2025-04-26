@@ -3,14 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import (Choice,
-                     Toggle,
-                     DefaultOnToggle,
-                     Range,
-                     FreeText,
-                     PerGameCommonOptions,
-                     OptionGroup,
-                     Removed,
+from Options import (Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed,
                      DeathLink)
 from collections import defaultdict
 import Utils

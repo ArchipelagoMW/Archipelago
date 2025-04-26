@@ -72,7 +72,7 @@ def clamp(minimum, number, maximum):
     return max(minimum, min(maximum, number))
 
 
-class Constants:
+class LAClientConstants:
     # Memory locations
     ROMGameID = 0x0051  # 4 bytes
     SlotName = 0x0134
@@ -129,8 +129,8 @@ class RAGameboy():
     socket = None
 
     def __init__(self, address, port) -> None:
-        self.cache_start = Constants.wRamStart
-        self.cache_size = Constants.hRamStart + Constants.hRamSize - Constants.wRamStart
+        self.cache_start = LAClientConstants.wRamStart
+        self.cache_size = LAClientConstants.hRamStart + LAClientConstants.hRamSize - LAClientConstants.wRamStart
 
         self.address = address
         self.port = port
@@ -175,9 +175,9 @@ class RAGameboy():
 
     async def check_safe_gameplay(self, throw=True):
         async def check_wram():
-            check_values = await self.async_read_memory(Constants.wCheckAddress, Constants.WRamCheckSize)
+            check_values = await self.async_read_memory(LAClientConstants.wCheckAddress, LAClientConstants.WRamCheckSize)
 
-            if check_values != Constants.WRamSafetyValue:
+            if check_values != LAClientConstants.WRamSafetyValue:
                 if throw:
                     raise InvalidEmulatorStateError()
                 return False
@@ -188,10 +188,10 @@ class RAGameboy():
                 raise InvalidEmulatorStateError()
             return False
 
-        gameplay_value = await self.async_read_memory(Constants.wGameplayType)
+        gameplay_value = await self.async_read_memory(LAClientConstants.wGameplayType)
         gameplay_value = gameplay_value[0]
         # In gameplay or credits
-        if not (Constants.MinGameplayValue <= gameplay_value <= Constants.MaxGameplayValue) and gameplay_value != 0x1:
+        if not (LAClientConstants.MinGameplayValue <= gameplay_value <= LAClientConstants.MaxGameplayValue) and gameplay_value != 0x1:
             if throw:
                 logger.info("invalid emu state")
                 raise InvalidEmulatorStateError()
@@ -217,7 +217,7 @@ class RAGameboy():
             # RA doesn't let us do an atomic read of a large enough block of RAM
             # Some bytes can't change in between reading location_block and hram_block
             location_block = await self.read_memory_block(self.location_start, self.location_size)
-            hram_block = await self.read_memory_block(Constants.hRamStart, Constants.hRamSize)
+            hram_block = await self.read_memory_block(LAClientConstants.hRamStart, LAClientConstants.hRamSize)
             verification_block = await self.read_memory_block(self.location_start, self.location_size)
 
             valid = True
@@ -247,7 +247,7 @@ class RAGameboy():
         start = self.location_start - self.cache_start
         self.cache[start:start + len(location_block)] = location_block
 
-        start = Constants.hRamStart - self.cache_start
+        start = LAClientConstants.hRamStart - self.cache_start
         self.cache[start:start + len(hram_block)] = hram_block
 
         self.last_cache_read = time.time()
@@ -363,7 +363,7 @@ class RAGameboy():
         if mp_ef:
             [mp_e, mp_f] = struct.pack('>H', mp_ef)
         msg = [int(command), item_code, sender_high, sender_low, mp_c, mp_d, mp_e, mp_f]
-        self.write_memory(Constants.wMWCommand, msg)
+        self.write_memory(LAClientConstants.wMWCommand, msg)
 
 
 class LinksAwakeningClient():
@@ -421,7 +421,7 @@ class LinksAwakeningClient():
                 pass
 
     async def reset_auth(self):
-        auth = binascii.hexlify(await self.gameboy.async_read_memory(Constants.SlotName, 12)).decode()
+        auth = binascii.hexlify(await self.gameboy.async_read_memory(LAClientConstants.SlotName, 12)).decode()
         self.auth = auth
 
     async def wait_and_init_tracker(self, magpie: MagpieBridge):
@@ -506,11 +506,11 @@ class LinksAwakeningClient():
         if not ctx.slot or not self.tracker.has_start_item():
             return
 
-        if (await self.gameboy.async_read_memory(Constants.wGameplayType))[0] == 1: # Credits
+        if (await self.gameboy.async_read_memory(LAClientConstants.wGameplayType))[0] == 1: # Credits
             await win_cb()
 
-        wHealth = (await self.gameboy.async_read_memory(Constants.wHealth))[0]
-        wMWDeathLinkRecv = (await self.gameboy.async_read_memory(Constants.wMWDeathLinkRecv))[0]
+        wHealth = (await self.gameboy.async_read_memory(LAClientConstants.wHealth))[0]
+        wMWDeathLinkRecv = (await self.gameboy.async_read_memory(LAClientConstants.wMWDeathLinkRecv))[0]
 
         if self.death_link_status == DeathLinkStatus.NONE:
             if not wHealth: # natural death
@@ -518,7 +518,7 @@ class LinksAwakeningClient():
                 self.death_link_status = DeathLinkStatus.DYING
         elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared before sending
             if wMWDeathLinkRecv:
-                self.gameboy.write_memory(Constants.wMWDeathLinkRecv, 0)
+                self.gameboy.write_memory(LAClientConstants.wMWDeathLinkRecv, 0)
             else:
                 self.death_link_status = DeathLinkStatus.SENDING
         elif self.death_link_status == DeathLinkStatus.SENDING: # send death link until receive flag set
@@ -530,11 +530,11 @@ class LinksAwakeningClient():
             if wHealth:
                 self.death_link_status = DeathLinkStatus.NONE
 
-        wMWCommand = (await self.gameboy.async_read_memory(Constants.wMWCommand))[0]
+        wMWCommand = (await self.gameboy.async_read_memory(LAClientConstants.wMWCommand))[0]
         if wMWCommand or self.death_link_status != DeathLinkStatus.NONE:
             return
 
-        recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(Constants.wMWRecvIndexHi, 2))[0]
+        recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.wMWRecvIndexHi, 2))[0]
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
             self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
