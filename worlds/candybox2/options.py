@@ -103,6 +103,10 @@ class BrewingXPotion(Choice):
     option_one_at_a_time = 0
     option_simultaneously = 1
 
+class EnableComputer(Toggle):
+    """Whether to enable The Computer. Once you have cleared the game, The Computer can be used to cheat items."""
+    display_name = "Enable The Computer"
+
 class EnergyLink(Toggle):
     """Allow sending energy to other worlds. Candy and lollipops can be converted to energy. 25% of the energy is lost in the transfer."""
     display_name = "Energy Link"
@@ -151,5 +155,6 @@ class CandyBox2Options(PerGameCommonOptions):
     teapot_hp: TeapotHP
     randomise_hp_bar: RandomiseHpBar
     x_potion_brewing: BrewingXPotion
+    enable_computer: EnableComputer
     energy_link: EnergyLink
     gifting: Gifting
