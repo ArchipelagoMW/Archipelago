@@ -581,6 +581,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         #Todo NPCs CheckOrNot: Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
+        #Todo NPCs CheckOrNot: East and West Stable Owners are Crystal Checker guys who give you a Quintar Pass for having enough crystals; don't if you already have the Quintar Pass
+        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar West Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
+        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar East Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
