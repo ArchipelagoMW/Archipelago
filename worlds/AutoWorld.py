@@ -13,7 +13,7 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Generic, Iterable,
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from Utils import deprecate
 from BaseClasses import (
-    CollectionState, Entrance, Item, Location, MultiWorld, Region, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
+    CollectionState, Item, Location, MultiWorld, RegionManager, _T_Reg, _T_Ent, _T_Loc, _T_Item,
     Tutorial,
 )
 
@@ -25,7 +25,7 @@ perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
-    world_types: Dict[str, Type[World[Region, Entrance, Location, Item]]] = {}
+    world_types: Dict[str, Type[World]] = {}
     __file__: str
     zip_path: Optional[str]
     settings_key: str
