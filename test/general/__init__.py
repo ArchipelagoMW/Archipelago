@@ -17,7 +17,7 @@ gen_steps = (
 
 
 def setup_solo_multiworld(
-        world_type: type[World[Region, Entrance, Location, Item]],
+        world_type: type[World],
         steps: tuple[str, ...] = gen_steps,
         seed: int | None = None
 ) -> MultiWorld:
@@ -34,7 +34,7 @@ def setup_solo_multiworld(
 
 
 def setup_multiworld(
-        worlds: list[type[World[Region, Entrance, Location, Item]]] | type[World[Region, Entrance, Location, Item]],
+        worlds: list[type[World]] | type[World],
         steps: tuple[str, ...] = gen_steps,
         seed: int | None = None,
 ) -> MultiWorld:
