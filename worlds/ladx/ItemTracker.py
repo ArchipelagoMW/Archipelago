@@ -154,8 +154,8 @@ class ItemTracker:
         pass
     extraItems = {}
 
-    def readRamByte(self, byte):
-        return (self.gameboy.read_memory_cache([byte]))[byte]
+    async def readRamByte(self, byte):
+        return (await self.gameboy.read_memory_cache([byte]))[byte]
 
     def loadItems(self):
         self.items = [
@@ -226,7 +226,7 @@ class ItemTracker:
 
         self.itemDict = {item.id: item for item in self.items}
 
-    def readItems(self):
+    async def readItems(self):
         extraItems = self.extraItems
         missingItems = {x for x in self.items if x.address == None and x.id != 'RUPEE_COUNT'}
         
@@ -237,13 +237,13 @@ class ItemTracker:
 
             for address, masks in dungeonKeyDoors[i].items():
                 for mask in masks:
-                    value = self.readRamByte(address) & mask
+                    value = await self.readRamByte(address) & mask
                     if value > 0:
                         extraItems[item] += 1
 
         # Main inventory items
         for i in range(inventoryStartAddress, inventoryEndAddress):
-            value = self.readRamByte(i)
+            value = await self.readRamByte(i)
 
             if value in inventoryItemIds:
                 item = self.itemDict[inventoryItemIds[value]]
@@ -258,12 +258,12 @@ class ItemTracker:
         # All other items
         for item in [x for x in self.items if x.address]:
             extra = extraItems[item.id] if item.id in extraItems else 0
-            item.set(self.readRamByte(item.address), extra)
+            item.set(await self.readRamByte(item.address), extra)
         
         # The current rupee count is BCD, but the add/remove values are not
-        currentRupees = self.calculateRupeeCount(self.readRamByte(rupeesHigh), self.readRamByte(rupeesLow))
-        addingRupees = (self.readRamByte(addRupeesHigh) << 8) +  self.readRamByte(addRupeesLow)
-        removingRupees = (self.readRamByte(removeRupeesHigh) << 8) + self.readRamByte(removeRupeesLow)
+        currentRupees = self.calculateRupeeCount(await self.readRamByte(rupeesHigh), await self.readRamByte(rupeesLow))
+        addingRupees = (await self.readRamByte(addRupeesHigh) << 8) +  await self.readRamByte(addRupeesLow)
+        removingRupees = (await self.readRamByte(removeRupeesHigh) << 8) + await self.readRamByte(removeRupeesLow)
         self.itemDict['RUPEE_COUNT'].set(currentRupees + addingRupees - removingRupees, 0)
     
     def calculateRupeeCount(self, high: int, low: int) -> int:

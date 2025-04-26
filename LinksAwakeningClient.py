@@ -262,7 +262,9 @@ class RAGameboy():
 
         return block
 
-    def read_memory_cache(self, addresses):
+    async def read_memory_cache(self, addresses):
+        if not self.last_cache_read or self.last_cache_read + 0.1 < time.time():
+            await self.update_cache()
         if not self.cache:
             return None
         assert (len(self.cache) == self.cache_size)
@@ -496,10 +498,10 @@ class LinksAwakeningClient():
     async def main_tick(self, ctx, item_get_cb, win_cb, death_link_cb):
         await self.gameboy.update_cache()
 
-        self.tracker.readChecks(item_get_cb)
-        self.item_tracker.readItems()
-        self.gps_tracker.read_location()
-        self.gps_tracker.read_entrances()
+        await self.tracker.readChecks(item_get_cb)
+        await self.item_tracker.readItems()
+        await self.gps_tracker.read_location()
+        await self.gps_tracker.read_entrances()
 
         if not ctx.slot or not self.tracker.has_start_item():
             return

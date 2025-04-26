@@ -156,13 +156,13 @@ class LocationTracker:
     def has_start_item(self):
         return self.start_check not in self.remaining_checks
 
-    def readChecks(self, cb):
+    async def readChecks(self, cb):
         new_checks = []
         for check in self.remaining_checks:
             addresses = [check.address]
             if check.alternateAddress:
                 addresses.append(check.alternateAddress)
-            bytes = self.gameboy.read_memory_cache(addresses)
+            bytes = await self.gameboy.read_memory_cache(addresses)
             if not bytes:
                 return False
             check.set(list(bytes.values()))

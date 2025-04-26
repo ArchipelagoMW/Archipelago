@@ -59,8 +59,8 @@ class GpsTracker:
             [Consts.transition_state]
         )
 
-    def read_byte(self, b: int):
-        return (self.gameboy.read_memory_cache([b]))[b]
+    async def read_byte(self, b: int):
+        return (await self.gameboy.read_memory_cache([b]))[b]
 
     def load_slot_data(self, slot_data: typing.Dict[str, typing.Any]):
         if 'entrance_mapping' not in slot_data:
@@ -93,15 +93,15 @@ class GpsTracker:
         self.needs_slot_data = False
         self.needs_found_entrances = True
 
-    def read_location(self):
+    async def read_location(self):
         # We need to wait for screen transitions to finish
-        transition_state = self.read_byte(Consts.transition_state)
-        transition_target_x = self.read_byte(Consts.transition_target_x)
-        transition_target_y = self.read_byte(Consts.transition_target_y)
-        transition_scroll_x = self.read_byte(Consts.transition_scroll_x)
-        transition_scroll_y = self.read_byte(Consts.transition_scroll_y)
-        transition_sequence = self.read_byte(Consts.transition_sequence)
-        motion_state = self.read_byte(Consts.link_motion_state)
+        transition_state = await self.read_byte(Consts.transition_state)
+        transition_target_x = await self.read_byte(Consts.transition_target_x)
+        transition_target_y = await self.read_byte(Consts.transition_target_y)
+        transition_scroll_x = await self.read_byte(Consts.transition_scroll_x)
+        transition_scroll_y = await self.read_byte(Consts.transition_scroll_y)
+        transition_sequence = await self.read_byte(Consts.transition_sequence)
+        motion_state = await self.read_byte(Consts.link_motion_state)
         self.is_transitioning = (transition_state != 0
             or transition_target_x != transition_scroll_x
             or transition_target_y != transition_scroll_y
@@ -109,7 +109,7 @@ class GpsTracker:
         if self.is_transitioning:
             return
 
-        indoors = self.read_byte(Consts.indoor_flag)
+        indoors = await self.read_byte(Consts.indoor_flag)
 
         if indoors != self.indoors and self.indoors != None:
             self.indoors_changed = True
@@ -117,11 +117,11 @@ class GpsTracker:
         self.indoors = indoors
 
         # We use the spawn point to know which entrance was most recently entered
-        spawn_map = self.read_byte(Consts.spawn_map)
+        spawn_map = await self.read_byte(Consts.spawn_map)
         map_digit = Consts.map_map[spawn_map] << 8 if self.spawn_map else 0
-        spawn_room = self.read_byte(Consts.spawn_room) + map_digit
-        spawn_x = self.read_byte(Consts.spawn_x)
-        spawn_y = self.read_byte(Consts.spawn_y)
+        spawn_room = await self.read_byte(Consts.spawn_room) + map_digit
+        spawn_x = await self.read_byte(Consts.spawn_x)
+        spawn_y = await self.read_byte(Consts.spawn_y)
 
         # The spawn point needs to be settled before we can trust location data
         if ((spawn_room != self.spawn_room and self.spawn_room != None)
@@ -141,14 +141,14 @@ class GpsTracker:
         # Spawn point is preferred, but doesn't work for the sidescroller entrances
         # Those can be addressed by keeping track of which room we're in
         # Also used to validate that we came from the right room for what the spawn point is mapped to
-        map_id = self.read_byte(Consts.map_id)
+        map_id = await self.read_byte(Consts.map_id)
         if map_id not in Consts.map_map:
             print(f'Unknown map ID {hex(map_id)}')
             return
 
         map_digit = Consts.map_map[map_id] << 8 if indoors else 0
         self.last_room = self.room
-        self.room = self.read_byte(Consts.room) + map_digit
+        self.room = await self.read_byte(Consts.room) + map_digit
 
         # Again, the room needs to settle before we can trust location data
         if self.last_room != self.room:
@@ -160,11 +160,11 @@ class GpsTracker:
 
         # Only update Link's location when he's not in the air to avoid weirdness
         if motion_state in [0, 1]:
-            coords = self.read_byte(Consts.screen_coord)
+            coords = await self.read_byte(Consts.screen_coord)
             self.screen_x = coords & 0x0F
             self.screen_y = (coords & 0xF0) >> 4
 
-    def read_entrances(self):
+    async def read_entrances(self):
         if not self.last_different_room or not self.entrance_mapping:
             return
 
