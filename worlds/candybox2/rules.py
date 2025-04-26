@@ -138,8 +138,8 @@ def set_rules(world: "CandyBox2World", player: int):
                                                                                           CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
 
     # Castle Entrance rules
-    add_rule(world.get_location(CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED), lambda state: weapon_is_at_least(world, state, player,
-                                                                                                   CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    add_rule(world.get_location(CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED), lambda state: can_fly(state, player) or (weapon_is_at_least(world, state, player,
+                                                                                                   CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR)))
     add_rule(world.get_location(CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED), lambda state: weapon_is_at_least(world, state, player,
                                                                                                  CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
 
