@@ -1,6 +1,6 @@
 from typing import Dict
 
-from .raw.InternalLocationNames import InternalLocationName, ids_by_py_name
+from .InternalLocationNames import InternalLocationName, ids_by_py_name
 
 class LocationName(InternalLocationName):
     Alhafra_32_coins = "Alhafra - Outside Mayor's House East Box"

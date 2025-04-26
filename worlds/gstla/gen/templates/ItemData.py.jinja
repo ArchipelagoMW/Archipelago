@@ -1,22 +1,7 @@
-from enum import Enum
 from typing import List, NamedTuple, Dict
 from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
 from .ItemNames import name_by_item_id
-
-class TrapType(str, Enum):
-   Mimic = "Mimic"
-
-class FillerType(str, Enum):
-    ForgeMaterials = "Forge Materials"
-    RustyMaterials = "Rusty Materials"
-    StatBoosts = "Stat Boosts"
-    UsefulConsumables = "Useful Consumables"
-    ForgedEquipment = "Forged Equipment"
-    LuckyEquipment = "Lucky Equipment"
-    ShopEquipment = "Shop Equipment"
-    Coins = "Coins"
-    CommonConsumables = "Common Consumables"
 
 class ItemData(NamedTuple):
     id: int

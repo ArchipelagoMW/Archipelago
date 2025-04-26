@@ -1,5 +1,5 @@
 from typing import Dict
-from .raw.InternalItemNames import InternalItemName, item_id_by_py_name
+from .InternalItemNames import InternalItemName, item_id_by_py_name
 
 
 class ItemName(InternalItemName):

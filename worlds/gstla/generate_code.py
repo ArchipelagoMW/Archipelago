@@ -210,7 +210,7 @@ def generate_location_names(env: Environment, data: GameData):
             hidden_items.append(loc_name)
         else:
             remainder.append(loc_name)
-    with open(os.path.join(SCRIPT_DIR, 'gen', 'raw', 'InternalLocationNames.py'), 'w') as outfile:
+    with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalLocationNames.py'), 'w') as outfile:
         write_warning(outfile)
         outfile.write(template.render(hiddenItems=hidden_items, keyItems=key_items,
                                       summonTablets=summon_tablets, majorItems=major_items,
@@ -222,7 +222,7 @@ def generate_location_names(env: Environment, data: GameData):
 def generate_item_names(env: Environment, data: GameData):
     template = env.get_template('ItemNames.py.jinja')
 
-    with open(os.path.join(SCRIPT_DIR, 'gen','raw', 'InternalItemNames.py'), 'w') as outfile:
+    with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalItemNames.py'), 'w') as outfile:
         write_warning(outfile)
         name_dict = {
             item.id: {
@@ -252,7 +252,7 @@ def generate_item_names(env: Environment, data: GameData):
 def generate_item_data(env: Environment, data: GameData):
 
     template = env.get_template('ItemData.py.jinja')
-    with open(os.path.join(SCRIPT_DIR, 'gen', 'ItemData.py'), 'w') as outfile:
+    with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalItemData.py'), 'w') as outfile:
         write_warning(outfile)
         names = data.item_names
 
