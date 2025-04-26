@@ -25,7 +25,7 @@ Any of the items which can be shuffled my end up in another player's world.
 - Other items are otherwise visually unchanged.
 
 ## When the player receives an item, what happens?
-When the player receives an item, they will receive an Archipelago Update notification in the status bar telling them
+When the player receives an item, they will receive an Archipelago Update notification telling them
 about the item that they have received.
 
 ## What is the goal of this game when randomized?

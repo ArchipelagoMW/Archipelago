@@ -29,7 +29,7 @@ class CandyBox2WebWorld(WebWorld):
     bug_report_page = "https://github.com/vicr123/candy-box-2/issues"
 
 class CandyBox2World(World):
-    """Text-based web game with fun ASCII art"""
+    """Candy Box 2 is a text-based browser RPG that features beautiful ASCII art"""
 
     game = "Candy Box 2"
     web = CandyBox2WebWorld()
