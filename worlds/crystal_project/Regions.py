@@ -120,13 +120,13 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     connect_menu_region(world)
 
     multiworld.get_region("Spawning Meadows", player).add_exits(["Delende", "Continental Tram"],
-        {"Continental Tram": logic.has_swimming}) #forwards; todo check if continental tram is correct
+        {"Continental Tram": logic.has_swimming}) #forwards
     multiworld.get_region("Delende", player).add_exits(["Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine", "Jade Cavern"],
         {"Jade Cavern": logic.has_swimming}) #forwards; todo check jade cavern if correct
     #todo mercury shrine has no listed connections atm including a backwards
     multiworld.get_region("Delende", player).add_exits(["Spawning Meadows"]) #backwards
     multiworld.get_region("Soiled Den", player).add_exits(["Jade Cavern"],
-        {"Jade Cavern": logic.has_swimming}) #forwards;  todo check if jade cavern is correct (not sure if backwards or if correct connection)
+        {"Jade Cavern": logic.has_swimming}) #forwards;
     multiworld.get_region("Soiled Den", player).add_exits(["Delende"]) #backwards
     multiworld.get_region("Pale Grotto", player).add_exits(["Proving Meadows"]) #forwards
     multiworld.get_region("Pale Grotto", player).add_exits(["Delende"]) #backwards
@@ -144,25 +144,28 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows"]) #backwards
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise", "Castle Ramparts"],
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
-        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) }) #forwards; todo check requirements for Castle Ramparts
+        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6),
+        "Castle Ramparts": logic.has_vertical_movement}) #forwards; todo check requirements for Castle Ramparts
     multiworld.get_region("Capital Sequoia", player).add_exits(["Proving Meadows", "Skumparadise"]) #backwards
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
         {"Capital Jail": logic.has_rental_quintar})
     #Boomer Society goes here
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum", "Castle Ramparts"], 
-        {"Quintar Sanctum": logic.has_rental_quintar}) #todo check requirements for Castle Ramparts
+        {"Quintar Sanctum": logic.has_rental_quintar,
+        "Castle Ramparts": logic.has_vertical_movement}) #todo check requirements for Castle Ramparts
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Quintar Sanctum", player).add_exits(["Quintar Mausoleum"],
         {"Quintar Mausoleum": logic.has_swimming}) #backwards; Todo check this is correct
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
         {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
     multiworld.get_region("Capital Pipeline", player).add_exits(["Jidamba Tangle", "Continental Tram"],
-        {"Jidamba Tangle": logic.has_vertical_movement}) #todo check Continental Tram is correct
+        {"Jidamba Tangle": logic.has_vertical_movement},
+        {"Continental Tram": logic.has_vertical_movement})
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Shoudu Waterfront", "Okimoto N.S."], 
         {"Shoudu Waterfront": logic.has_horizontal_movement, 
         "Okimoto N.S.": logic.has_horizontal_movement})
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Flyers Crag"],
-        {"Flyers Crag": logic.has_glide}) #Todo check this exit is correct
+        {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Salmon Pass", "Tall, Tall Heights"], 
         {"Salmon Pass": logic.has_rental_quintar,
         "Tall, Tall Heights": logic.has_vertical_movement})
@@ -175,7 +178,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
         {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
         "The Open Sea": logic.has_swimming,
-        "Continental Tram": logic.has_swimming}) #todo check if correct
+        "Continental Tram": lambda state: logic.has_swimming or state.has("Item - Tram Key", player)})
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Beaurior Volcano"],
         {"Beaurior Volcano": logic.has_vertical_movement})
     multiworld.get_region("Ancient Reservoir", player).add_exits(["Jade Cavern"],
@@ -191,29 +194,31 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Ganymede Shrine": logic.has_vertical_movement,
         "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
         "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10),
-        "Flyers Crag": logic.has_glide}) #Todo check this exit is correct
+        "Flyers Crag": logic.has_glide and logic.has_vertical_movement})
     #The Undercity goes here
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Beaurior Rock"])
     #Beaurior Rock goes here
     #Lake Delende goes here
-    multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine", "Quintar Mausoleum"]) #todo check if Mausoleum exit is correct
+    multiworld.get_region("Quintar Reserve", player).add_exits(["Dione Shrine", "Quintar Mausoleum"],
+        "Quintar Mausoleum": logic.has_swimming})
     multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Lands End", "Flyers Lookout"],
         {"Lands End": logic.has_glide,
         "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player),
-        "Flyers Lookout": logic.has_glide}) #todo check this exit is correct
+        "Flyers Lookout": logic.has_glide and logic.has_vertical_movement})
     #Quintar Mausoleum goes here
     #Eastern Chasm goes here
     multiworld.get_region("Tall, Tall Heights", player).add_exits(["Eastern Chasm", "Northern Cave", "Lands End", "Sequoia Athenaeum", "Northern Stretch", "Castle Ramparts", "The Chalice of Tar"],
         {"Eastern Chasm": logic.has_vertical_movement,
         "Sequoia Athenaeum": lambda state: state.has("Item - Vermillion Book", world.player) and state.has("Item - Viridian Book", world.player) and state.has("Item - Cerulean Book", world.player),
         "Northern Stretch": logic.has_glide,
-        #todo check requirements for Sequoia Athenaeum and Castle Ramparts
+        "Castle Ramparts": logic.has_vertical_movement,
+        #todo check requirements for Castle Ramparts
         "The Chalice of Tar": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Northern Cave", player).add_exits(["Slip Glide Ride"],
         {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Lands End", player).add_exits(["Jidamba Tangle"],
-        {"Jidamba Tangle": logic.has_glide}) #Todo check
+        {"Jidamba Tangle": logic.has_glide})
     #Slip Glide Ride goes here
     #Sequoia Athenaeum goes here
     #Northern Stretch goes here

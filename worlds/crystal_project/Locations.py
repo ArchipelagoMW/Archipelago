@@ -703,9 +703,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Zones (Expert)
         #The Open Sea
         #Treasure chests
-        #Todo descriptivize & check requirements on these
-        # LocationData("The Open Sea", "The Open Sea Chest - Fenix Syrup chest", 3767 + treasure_index_offset), #(910, 91, 173)
-        # LocationData("The Open Sea", "The Open Sea Chest - Z-Potion chest", 3765 + treasure_index_offset), #(902, 91, 190)
+        LocationData("The Open Sea", "The Open Sea Chest - Fenix Syrup chest south of Jidamba Tangle", 3767 + treasure_index_offset, logic.has_swimming),
+        LocationData("The Open Sea", "The Open Sea Chest - Z-Potion chest south of Jidamba Tangle", 3765 + treasure_index_offset, logic.has_swimming),
 
         #NPCs
         #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
@@ -1121,28 +1120,28 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Jidamba Eaclaneya
         #Treasure chests
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Celestial Crown chest", 2799 + treasure_index_offset), #(739, 70, 152)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flame Sword chest", 2755 + treasure_index_offset), #(694, 66, 150)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Jidamba Eaclaneya Map chest", 2920 + treasure_index_offset), #(727, 66, 99)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Ether Pouch chest", 2282 + treasure_index_offset), #(731, 35, 80)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Staff of Balance chest", 2289 + treasure_index_offset), #(793, 36, 71)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Stardust Wand chest", 2301 + treasure_index_offset), #(659, 37, 46)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flameseeker chest", 2308 + treasure_index_offset), #(844, 27, 98)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Viridian Book chest", 2317 + treasure_index_offset), #(671, 27, 92)
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Salmon Violin", 2288 + treasure_index_offset), #(713, 22, 18)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Celestial Crown chest climb the lamp in the south room", 2799 + treasure_index_offset, logic.has_glide and logic.has_vertical_movement),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flame Sword chest at the end of spike hallway", 2755 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Jidamba Eaclaneya Map chest in the monster cubby", 2920 + treasure_index_offset),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Practice your swimming to reach Ether Pouch chest", 2282 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Staff of Balance chest on the right side of the swimming puzzle", 2289 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Stardust Wand chest in the glass elevator room", 2301 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flameseeker chest in the underwater swimming puzzle", 2308 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Viridian Book chest in underwater swimming puzzle left side", 2317 + treasure_index_offset, logic.has_glide),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Salmon Violin past the fish puzzles", 2288 + treasure_index_offset, logic.has_glide),
 
         #NPCs
         #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
         #Crystals
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + crystal_index_offset), #(739, 37, 68)
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver Crystal", 2403 + crystal_index_offset)
 
         #The Deep Sea
         #Todo descriptivize and check requirements (requires swimming to get here.. wait. the neptune shrine is here. check if any checks can be gotten sans salmon ig lol)
         #Treasure chests
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3451 + treasure_index_offset), #(878, 39, -536)
-        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3658 + treasure_index_offset), #(740, 56, 176)
-        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3659 + treasure_index_offset), #(680, 53, 180)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest touching Jidamba", 3658 + treasure_index_offset),
+        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest in ruins just south of Jidamba", 3659 + treasure_index_offset),
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3660 + treasure_index_offset), #(657, 53, 165)
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3661 + treasure_index_offset), #(545, 47, -31)
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3662 + treasure_index_offset), #(890, 51, -66)
@@ -1156,7 +1155,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3668 + treasure_index_offset), #(254, 53, -547)
         LocationData("The Deep Sea", "The Deep Sea Chest - Forgotten Key chest", 2767 + treasure_index_offset), #(872, 39, -517)
         LocationData("The Deep Sea", "The Deep Sea Chest - Oven Mitt chest", 2290 + treasure_index_offset), #(838, 52, -357)
-        LocationData("The Deep Sea", "The Deep Sea Chest - Paladin Wand chest", 2937 + treasure_index_offset), #(676, 53, 181)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Paladin Wand chest in ruins just south of Jidamba", 2937 + treasure_index_offset),
         LocationData("The Deep Sea", "The Deep Sea Chest - Rampart Key chest", 2589 + treasure_index_offset), #(582, 47, -51)
         LocationData("The Deep Sea", "The Deep Sea Chest - Soul Keeper chest", 2766 + treasure_index_offset), #(663, 54, 165)
         #its crab tiem babey
@@ -1206,13 +1205,13 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Continental Tram
         #Todo descriptivize and check requirements
         #Treasure chests
-        LocationData("Continental Tram", "Continental Tram Chest - Continental Tram Map chest", 1844 + treasure_index_offset), #(-118, 91, 24)
-        LocationData("Continental Tram", "Continental Tram Chest - Nomads Guard chest", 3012 + treasure_index_offset), #(-149, 67, 65)
-        LocationData("Continental Tram", "Continental Tram Chest - Tram Key chest", 1654 + treasure_index_offset), #(-119, 91, 24)
+        LocationData("Continental Tram", "Continental Tram Chest - Continental Tram Map chest tickets please", 1844 + treasure_index_offset),
+        LocationData("Continental Tram", "Continental Tram Chest - Nomads Guard chest end of the line", 3012 + treasure_index_offset),
+        LocationData("Continental Tram", "Continental Tram Chest - Tram Key chest tickets please", 1654 + treasure_index_offset),
 
         #NPCs
-        LocationData("Continental Tram", "Continental Tram NPC - Diamond Dust", 2895 + npc_index_offset), #(231, 54, 40)
-        LocationData("Continental Tram", "Continental Tram NPC - Diamond Ingot", 2894 + npc_index_offset), #(231, 54, 40)
+        LocationData("Continental Tram", "Continental Tram NPC - Diamond Dust hanging out with the conscript", 2895 + npc_index_offset, lambda state: state.has("Item - Tram Key", player) or logic.has_swimming),
+        LocationData("Continental Tram", "Continental Tram NPC - Diamond Ingot hanging out with the conscript", 2894 + npc_index_offset, lambda state: state.has("Item - Tram Key", player) or logic.has_swimming),
 
     ]
 
