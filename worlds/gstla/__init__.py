@@ -24,7 +24,7 @@ from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, cr
 from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
-from .Connections import create_connections
+from .Connections import create_vanilla_connections
 from .gen.ItemData import mimics, characters
 from .gen.LocationData import LocationType, location_name_to_data
 from .gen.ItemNames import ItemName, item_id_by_name, name_by_item_id
@@ -172,7 +172,7 @@ class GSTLAWorld(World):
 
     def create_regions(self) -> None:
         create_regions(self)
-        create_connections(self.multiworld, self.player)
+        create_vanilla_connections(self.multiworld, self.player)
 
     def create_items(self) -> None:
         create_events(self)
@@ -537,8 +537,8 @@ class GSTLAWorld(World):
         debug_file.write('Hard Mode: ' + self.options.enable_hard_mode.name_lookup[self.options.enable_hard_mode] + '\n')
         write_me += self.options.reduced_encounter_rate << 6 #halve-enc
         debug_file.write('Halve Encounter Rate: ' + self.options.reduced_encounter_rate.name_lookup[self.options.reduced_encounter_rate] + '\n')
-        write_me += self.options.major_minor_split << 5 #major-shuffle
-        debug_file.write('Major Minor Split: ' + self.options.major_minor_split.name_lookup[self.options.major_minor_split] + '\n')
+        #write_me += self.options.major_minor_split << 5 #major-shuffle
+        debug_file.write('Major Minor Split: false\n')
         write_me += self.options.easier_bosses << 4 #easier-bosses
         debug_file.write('Easier Bosses: ' + self.options.easier_bosses.name_lookup[self.options.easier_bosses] + '\n')
         if self.options.name_puzzles == 2:

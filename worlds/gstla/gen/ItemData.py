@@ -123,7 +123,7 @@ psyenergy_as_item_list: List[ItemData] = [
     
 ]
 
-djinn_items: List[ItemData] = [
+djinn_items: List[DjinnItemData] = [
     DjinnItemData(0, 'Flint', 16384000, ElementType(ElementType.Earth), 814004, [8, 4, 3, 0, 0, 0]),
     DjinnItemData(1, 'Granite', 16384002, ElementType(ElementType.Earth), 814016, [9, 0, 0, 2, 2, 1]),
     DjinnItemData(2, 'Quartz', 16384004, ElementType(ElementType.Earth), 814028, [10, 3, 0, 0, 3, 0]),

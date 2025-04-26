@@ -19,13 +19,12 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Walnutsanity
-from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
-    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, SkillProgression
+from .options import BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
+    Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
-from .strings.ap_names.ap_option_names import OptionName
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -47,7 +46,7 @@ from .strings.performance_names import Performance
 from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
-from .strings.skill_names import ModSkill, Skill
+from .strings.skill_names import Skill
 from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
@@ -69,8 +68,8 @@ def set_rules(world):
     set_entrance_rules(logic, multiworld, player, world_options)
     set_ginger_island_rules(logic, multiworld, player, world_options)
 
-    set_tool_rules(logic, multiworld, player, world_options)
-    set_skills_rules(logic, multiworld, player, world_options)
+    set_tool_rules(logic, multiworld, player, world_content)
+    set_skills_rules(logic, multiworld, player, world_content)
     set_bundle_rules(bundle_rooms, logic, multiworld, player, world_options)
     set_building_rules(logic, multiworld, player, world_options)
     set_cropsanity_rules(logic, multiworld, player, world_content)
@@ -111,8 +110,8 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
                              logic.season.has(Season.spring))
 
 
-def set_tool_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if not world_options.tool_progression & ToolProgression.option_progressive:
+def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewContent):
+    if not content.features.tool_progression.is_progressive:
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Purchase Fiberglass Rod", player),
@@ -150,7 +149,7 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
             bundle_rules = logic.bundle.can_complete_bundle(bundle)
             if bundle_room.name == CCRoom.raccoon_requests:
                 num = int(bundle.name[-1])
-                extra_raccoons = 1 if world_options.quest_locations >= 0 else 0
+                extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0
                 extra_raccoons = extra_raccoons + num
                 bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
                 if num > 1:
@@ -164,58 +163,21 @@ def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, multiw
         MultiWorldRules.add_rule(multiworld.get_location(room_location, player), And(*room_rules))
 
 
-def set_skills_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    mods = world_options.mods
-    if world_options.skill_progression == SkillProgression.option_vanilla:
+def set_skills_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
+    skill_progression = content.features.skill_progression
+    if not skill_progression.is_progressive:
         return
 
-    for i in range(1, 11):
-        set_vanilla_skill_rule_for_level(logic, multiworld, player, i)
-        set_modded_skill_rule_for_level(logic, multiworld, player, mods, i)
+    for skill in content.skills.values():
+        for level, level_name in skill_progression.get_randomized_level_names_by_level(skill):
+            rule = logic.skill.can_earn_level(skill.name, level)
+            location = multiworld.get_location(level_name, player)
+            MultiWorldRules.set_rule(location, rule)
 
-    if world_options.skill_progression == SkillProgression.option_progressive:
-        return
-
-    for skill in [Skill.farming, Skill.fishing, Skill.foraging, Skill.mining, Skill.combat]:
-        MultiWorldRules.set_rule(multiworld.get_location(f"{skill} Mastery", player), logic.skill.can_earn_mastery(skill))
-
-
-def set_vanilla_skill_rule_for_level(logic: StardewLogic, multiworld, player, level: int):
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.farming, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.fishing, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.foraging, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.mining, level)
-    set_vanilla_skill_rule(logic, multiworld, player, Skill.combat, level)
-
-
-def set_modded_skill_rule_for_level(logic: StardewLogic, multiworld, player, mods, level: int):
-    if ModNames.luck_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.luck, level)
-    if ModNames.magic in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.magic, level)
-    if ModNames.binning_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.binning, level)
-    if ModNames.cooking_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.cooking, level)
-    if ModNames.socializing_skill in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.socializing, level)
-    if ModNames.archaeology in mods:
-        set_modded_skill_rule(logic, multiworld, player, ModSkill.archaeology, level)
-
-
-def get_skill_level_location(multiworld, player, skill: str, level: int):
-    location_name = f"Level {level} {skill}"
-    return multiworld.get_location(location_name, player)
-
-
-def set_vanilla_skill_rule(logic: StardewLogic, multiworld, player, skill: str, level: int):
-    rule = logic.skill.can_earn_level(skill, level)
-    MultiWorldRules.set_rule(get_skill_level_location(multiworld, player, skill, level), rule)
-
-
-def set_modded_skill_rule(logic: StardewLogic, multiworld, player, skill: str, level: int):
-    rule = logic.skill.can_earn_level(skill, level)
-    MultiWorldRules.set_rule(get_skill_level_location(multiworld, player, skill, level), rule)
+        if skill_progression.is_mastery_randomized(skill):
+            rule = logic.skill.can_earn_mastery(skill.name)
+            location = multiworld.get_location(skill.mastery_name, player)
+            MultiWorldRules.set_rule(location, rule)
 
 
 def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -318,13 +280,6 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
-def set_blacksmith_entrance_rules(logic, multiworld, player):
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
-    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
-
-
 def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
     set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
@@ -341,6 +296,13 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
     set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
+
+
+def set_blacksmith_entrance_rules(logic, multiworld, player):
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_copper, MetalBar.copper, ToolMaterial.copper)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iron, MetalBar.iron, ToolMaterial.iron)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_gold, MetalBar.gold, ToolMaterial.gold)
+    set_blacksmith_upgrade_rule(logic, multiworld, player, LogicEntrance.blacksmith_iridium, MetalBar.iridium, ToolMaterial.iridium)
 
 
 def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, item_name: str, tool_material: str):
@@ -473,7 +435,7 @@ def set_walnut_rules(logic: StardewLogic, multiworld, player, world_options: Sta
 
 
 def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_options):
-    if OptionName.walnutsanity_puzzles not in world_options.walnutsanity:
+    if WalnutsanityOptionName.puzzles not in world_options.walnutsanity:
         return
 
     MultiWorldRules.add_rule(multiworld.get_location("Open Golden Coconut", player), logic.has(Geode.golden_coconut))
@@ -500,14 +462,14 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
 
 
 def set_walnut_bushes_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_bushes not in world_options.walnutsanity:
+    if WalnutsanityOptionName.bushes not in world_options.walnutsanity:
         return
     # I don't think any of the bushes require something special, but that might change with ER
     return
 
 
 def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_dig_spots not in world_options.walnutsanity:
+    if WalnutsanityOptionName.dig_spots not in world_options.walnutsanity:
         return
 
     for dig_spot_walnut in locations.locations_by_tag[LocationTags.WALNUTSANITY_DIG]:
@@ -520,7 +482,7 @@ def set_walnut_dig_spot_rules(logic, multiworld, player, world_options):
 
 
 def set_walnut_repeatable_rules(logic, multiworld, player, world_options):
-    if OptionName.walnutsanity_repeatables not in world_options.walnutsanity:
+    if WalnutsanityOptionName.repeatables not in world_options.walnutsanity:
         return
     for i in range(1, 6):
         MultiWorldRules.set_rule(multiworld.get_location(f"Fishing Walnut {i}", player), logic.tool.has_fishing_rod(1))
@@ -543,7 +505,7 @@ def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content:
 
 
 def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    if world_options.quest_locations < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
     for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
         if quest.name in all_location_names and (quest.mod_name is None or quest.mod_name in world_options.mods):
@@ -578,9 +540,9 @@ slay_monsters = "Slay Monsters"
 
 
 def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
-    help_wanted_number = world_options.quest_locations.value
-    if help_wanted_number < 0:
+    if world_options.quest_locations.has_no_story_quests():
         return
+    help_wanted_number = world_options.quest_locations.value
     for i in range(0, help_wanted_number):
         set_number = i // 7
         month_rule = logic.time.has_lived_months(set_number)
@@ -1011,6 +973,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     set_entrance_rule(multiworld, player, SVEEntrance.use_bear_shop, (logic.mod.sve.can_buy_bear_recipe()))
     set_entrance_rule(multiworld, player, SVEEntrance.railroad_to_grampleton_station, logic.received(SVEQuestItem.scarlett_job_offer))
     set_entrance_rule(multiworld, player, SVEEntrance.museum_to_gunther_bedroom, logic.relationship.has_hearts(ModNPC.gunther, 2))
+    set_entrance_rule(multiworld, player, SVEEntrance.to_aurora_basement, logic.mod.quest.has_completed_aurora_vineyard_bundle())
     logic.mod.sve.initialize_rules()
     for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),

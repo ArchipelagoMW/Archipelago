@@ -111,7 +111,7 @@ def set_entrance_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Jupiter_Beacon_Lit, player))
 
     add_rule(world.get_entrance(EntranceName.ShamanVillageCaveToShamanVillage),
-             lambda state: state.has(ItemName.Whirlwind, player))
+             lambda state: state.has(ItemName.Whirlwind, player) or state.has_all([ItemName.Lifting_Gem, ItemName.Frost_Jewel], player))
 
     add_rule(world.get_entrance(EntranceName.WesternSeaToProx),
              lambda state: state.has(ItemName.Magma_Ball, player))
@@ -576,7 +576,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.has(ItemName.Moapa_defeated, player))
 
     add_rule(world.get_location(LocationName.Shaman_Village_Hard_Nut),
-             lambda state: state.has(ItemName.Shamans_Rod, player))
+             lambda state: state.has_all([ItemName.Shamans_Rod, ItemName.Whirlwind], player))
 
     add_rule(world.get_location(LocationName.Shaman_Village_Spirit_Gloves),
              lambda state: state.has(ItemName.Growth, player))
@@ -592,7 +592,7 @@ def set_access_rules(world: 'GSTLAWorld'):
              state.has(ItemName.Lifting_Gem, player) and state.has(ItemName.Whirlwind, player) and state.has(ItemName.Reveal, player))
     
     add_rule(world.get_location(LocationName.Shaman_Village_Moapa_fight),
-             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has(ItemName.Shamans_Rod, player))
+             lambda state: state.count_group(ItemType.Character.name, player) >= 3 and state.has_all([ItemName.Shamans_Rod, ItemName.Whirlwind], player))
 
     #Atteka Inlet
     add_rule(world.get_location(LocationName.Geode),
@@ -917,7 +917,7 @@ def set_access_rules(world: 'GSTLAWorld'):
         if world.options.reveal_hidden_item == 1:
                 for loc in location_type_to_data[LocationType.Hidden]:
                         #for all hidden items that are not eventype 131 (these are scoopable or cyclone places), we require reveal
-                        if loc.event_type != 131:
+                        if loc.event_type != 131 or loc_names_by_id[loc.ap_id] == LocationName.Daila_Psy_Crystal:
                                 add_rule(world.get_location(loc_names_by_id[loc.ap_id]),
                                         lambda state: state.has(ItemName.Reveal, player))
 
@@ -986,14 +986,3 @@ def set_item_rules(world: 'GSTLAWorld'):
 
         if loc.restrictions > 0:
             add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), _RestrictionRule(player, loc.restrictions))
-
-        if world.options.major_minor_split == 1:
-            #do not perform major minor split if the location is specifically prioritizes or excluded
-            if loc_names_by_id[loc.ap_id] in world.options.priority_locations or loc_names_by_id[loc.ap_id] in world.options.exclude_locations:
-                continue
-
-            #All key item locations will be guarenteed not filler, major locations can contain anything and non key non major locations will never contain progression
-            if loc.is_key:
-              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.filler)
-            elif not loc.is_major:
-              add_item_rule(world.get_location(loc_names_by_id[loc.ap_id]), lambda item: item.classification != ItemClassification.progression and item.classification != ItemClassification.progression_skip_balancing)

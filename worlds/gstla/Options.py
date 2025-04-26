@@ -35,8 +35,8 @@ class SecondStartingCharacter(Choice):
     """
     internal_name = "second_starting_character"
     display_name = "Second Starting Character"
-    option_jenna = 1
-    option_sheba= 0
+    option_jenna = 0
+    option_sheba= 1
     option_piers = 2
     option_isaac = 3
     option_garet = 4
@@ -167,13 +167,13 @@ class ShuffleWpnEffects(Toggle):
     """When enabled the effects for weapons are shuffled amongst each other."""
     internal_name = "shuffle_weapon_effect"
     display_name = "Shuffle Weapon Effects"
-    default = 1
+    default = 0
 
 class ShuffleArmEffect(Toggle):
     """When enabled the bonus effects for armour are shuffled amongst each other."""
     internal_name = "shuffle_armour_effect"
     display_name = "Shuffle Armour Effects"
-    default = 1
+    default = 0
 
 class RandomizeEqCurses(Toggle):
     """When enabled the curses for equipment are randomized."""
@@ -188,15 +188,19 @@ class AdjustPsyPower(Toggle):
     default = 0
 
 class DjinnShuffle(Choice):
-    """How djinn should be placed in your own world.
+    """How Djinn should be placed in your own world. The client has extra commands to help find which Djinni locations have (not) been checked.
     Note currently Djinn can only be placed in djinn locations in their own world due to game limitations.
+    Vanilla keeps them in their vanilla locations.
+    Vanilla Shuffled by Element, Djinni are placed in vanilla Djinni locations that share their element.
+    Vanilla Shuffled are placed in any vanilla Djinni location regardless of element.
     """
     internal_name = "shuffle_djinn"
     display_name = "Shuffle Djinn"
     option_vanilla = 0
-    option_vanilla_shuffled = 1
-    #option_anywhere = 2, not supported yet
-    default = 1
+    option_vanilla_shuffled_by_element = 1
+    option_vanilla_shuffled = 2
+    #option_anywhere = 3, not supported yet
+    default = 2
 
 class ShuffleDjinnStats(Toggle):
     """When enabled the stats a djinn grant are shuffled amongst each other."""
@@ -428,12 +432,6 @@ class HalveEncounterRate(Toggle):
     display_name = "Reduce Encounter Rate"
     default = 0
 
-class MajorMinorSplit(Toggle):
-    """When enabled, all major locations will prefer progressive and all minor locations will prefer filler."""
-    internal_name = "major_minor_split"
-    display_name = "Major Minor Split"
-    default = 0
-
 class EasierBosses(Toggle):
     """When enabled, boss fights will be easier by altering their scripts / stats"""
     internal_name = "easier_bosses"
@@ -620,7 +618,6 @@ class AutoRun(Toggle):
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
     item_shuffle: ItemShuffle
-    major_minor_split: MajorMinorSplit
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations
     add_elvenshirt_clericsring: AddGs1Items

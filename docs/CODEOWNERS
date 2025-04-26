@@ -36,11 +36,17 @@
 # Castlevania 64
 /worlds/cv64/ @LiquidCat64
 
+# Castlevania: Circle of the Moon
+/worlds/cvcotm/ @LiquidCat64
+
 # Celeste 64
 /worlds/celeste64/ @PoryGone
 
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
+
+# Civilization VI
+/worlds/civ6/ @hesto2
 
 # Clique
 /worlds/clique/ @ThePhar
@@ -78,6 +84,9 @@
 # Hylics 2
 /worlds/hylics2/ @TRPG0
 
+# Inscryption
+/worlds/inscryption/ @DrBibop @Glowbuzz
+
 # Kirby's Dream Land 3
 /worlds/kdl3/ @Silvris
 
@@ -92,6 +101,9 @@
 
 # Lingo
 /worlds/lingo/ @hatkirby
+
+# Links Awakening DX
+/worlds/ladx/ @threeandthreee
 
 # Lufia II Ancient Cave
 /worlds/lufia2ac/ @el-u
@@ -142,8 +154,11 @@
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
 
+# Saving Princess
+/worlds/saving_princess/ @LeonarthCG
+
 # Shivers
-/worlds/shivers/ @GodlFire
+/worlds/shivers/ @GodlFire @korydondzila
 
 # A Short Hike
 /worlds/shorthike/ @chandler05 @BrandenEK
@@ -199,6 +214,9 @@
 # Wargroove
 /worlds/wargroove/ @FlySniper
 
+# The Wind Waker
+/worlds/tww/ @tanjo3
+
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
@@ -226,9 +244,6 @@
 
 # Final Fantasy (1)
 # /worlds/ff1/
-
-# Links Awakening DX
-# /worlds/ladx/
 
 # Ocarina of Time
 # /worlds/oot/

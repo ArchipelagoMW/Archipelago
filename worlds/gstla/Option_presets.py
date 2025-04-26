@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from Options import StartInventoryPool
-from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
+from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
                       StartWithShip, ShipWings, AnemosAccess, CharacterShuffle, SecondStartingCharacter,
                       CharStatShuffle, CharEleShuffle, NoLearningUtilPsy, RandomizeClassStatBoosts,
                       ClassPsynergy, ClassPsynergyLevels, AdjustPsyPower, AdjustPsyCost, RandomizePsyAoe,
@@ -15,11 +15,10 @@ from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocati
                       TelportEverywhere, TrapChance, MimicTrapWeight, ForgeMaterialsFillerWeight,
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
-                      CoinsFillerWeight, CommonConsumablesFillerWeight)
+                      CoinsFillerWeight, CommonConsumablesFillerWeight,ForgeMaterialsAreFiller, ArtifactsAreFiller)
 
 easy = {
     ItemShuffle.internal_name: ItemShuffle.option_all_chests_and_tablets,
-    MajorMinorSplit.internal_name: MajorMinorSplit.option_false,
     RevealHiddenItem.internal_name: RevealHiddenItem.option_true,
     OmitLocations.internal_name: OmitLocations.option_omit_superbosses_and_inner_sanctum,
     AddGs1Items.internal_name: AddGs1Items.option_false,
@@ -79,7 +78,6 @@ easy = {
 
 open_mode= {
     ItemShuffle.internal_name: ItemShuffle.option_all_chests_and_tablets,
-    MajorMinorSplit.internal_name: MajorMinorSplit.option_false,
     RevealHiddenItem.internal_name: RevealHiddenItem.option_true,
     OmitLocations.internal_name: OmitLocations.option_omit_anemos_inner_sanctum,
     AddGs1Items.internal_name: AddGs1Items.option_true,

@@ -29,9 +29,9 @@ class LocationName(str, Enum):
     Mikasalla_Lucky_Pepper = "Mikasalla - Inn - Barrel"
     Mikasalla_Herb = "Mikasalla - South-East House - Jar"
     E_Tundaria_Islet_Lucky_Medal = "E Tundaria Islet - House - Jar"
-    Garoh_Nut = "Garoh - North-West Ledge Barrel"
+    Garoh_Nut = "Garoh - North-West Ledge - Barrel"
     Garoh_Smoke_Bomb = "Garoh - South-East Barrel"
-    Garoh_Sleep_Bomb = "Garoh - North-East Ledge House - Jar"
+    Garoh_Sleep_Bomb = "Garoh - North-West Ledge House - Jar"
     Garoh_Elixir = "Garoh - Inn - Jar"
     Naribwe_Elixir = "Naribwe - South-West Jar"
     Naribwe_18_coins = "Naribwe - North-West House - Jar"
@@ -352,162 +352,162 @@ class LocationName(str, Enum):
     Shaman_Village_Elixir_Two = "Shaman Village - Trial Road Side Path"
     
 
-    Flint = "Flint"
-    Granite = "Granite"
-    Quartz = "Quartz"
-    Vine = "Vine"
-    Sap = "Sap"
-    Ground = "Ground"
-    Bane = "Bane"
-    Echo = "Echo"
-    Iron = "Iron"
-    Steel = "Steel"
-    Mud = "Mud"
-    Flower = "Flower"
-    Meld = "Meld"
-    Petra = "Petra"
-    Salt = "Salt"
-    Geode = "Geode"
-    Mold = "Mold"
-    Crystal = "Crystal"
+    Flint = "4th Party Member - Venus Djinni Flint"
+    Granite = "5th Party Member - Venus Djinni Granite"
+    Quartz = "6th Party Member - Venus Djinni Quartz"
+    Vine = "7th Party Member - Venus Djinni Vine"
+    Sap = "7th Party Member - Venus Djinni Sap"
+    Ground = "8th Party Member - Venus Djinni Ground"
+    Bane = "Treasure Isle - Venus Djinni Bane"
+    Echo = "South of Daila - Venus Djinni Echo"
+    Iron = "West of Madra - Venus Djinni Iron"
+    Steel = "Gabomba Statue - Venus Djinni Steel"
+    Mud = "Gabomba Catacombs - Venus Djinni Mud"
+    Flower = "Taopa Swamp - Venus Djinni Flower"
+    Meld = "Islet Cave - Venus Djinni Meld"
+    Petra = "Northeast Of Shaman Village - Venus Djinni Petra"
+    Salt = "Contigo - Venus Djinni Salt"
+    Geode = "Atteka Inlet - Venus Djinni Geode"
+    Mold = "Prox - Venus Djinni Mold"
+    Crystal = "Yampi Desert Cave - Venus Djinni Crystal"
     
 
-    Fizz = "Fizz"
-    Sleet = "Sleet"
-    Mist = "Mist"
-    Spritz = "Spritz"
-    Hail = "Hail"
-    Tonic = "Tonic"
-    Dew = "Dew"
-    Fog = "Fog"
-    Sour = "Sour"
-    Spring = "Spring"
-    Shade = "Shade"
-    Chill = "Chill"
-    Steam = "Steam"
-    Rime = "Rime"
-    Gel = "Gel"
-    Eddy = "Eddy"
-    Balm = "Balm"
-    Serac = "Serac"
+    Fizz = "5th Party Member - Mercury Djinni Fizz"
+    Sleet = "6th Party Member - Mercury Djinni Sleet"
+    Mist = "6th Party Member - Mercury Djinni Mist"
+    Spritz = "7th Party Member - Mercury Djinni Spritz"
+    Hail = "7th Party Member - Mercury Djinni Hail"
+    Tonic = "8th Party Member - Mercury Djinni Tonic"
+    Dew = "Prox - Mercury Djinni Dew"
+    Fog = "Kandorean Temple - Mercury Djinni Fog"
+    Sour = "Northeast of Mikasalla - Mercury Djinni Sour"
+    Spring = "3rd Party Member - Mercury Djinni Spring"
+    Shade = "3rd Party Member - Mercury Djinni Shade"
+    Chill = "Southwest of Naribwe - Mercury Djinni Chill"
+    Steam = "Aqua Rock - Mercury Djinni Steam"
+    Rime = "Ancient Lemuria - Mercury Djinni Rime"
+    Gel = "Kalt Island - Mercury Djinni Gel"
+    Eddy = "Shaman Village Cave - Mercury Djinni Eddy"
+    Balm = "Mars Lighthouse - Mercury Djinni Balm"
+    Serac = "Islet Cave - Mercury Djinni Serac"
     
 
-    Forge = "Forge"
-    Fever = "Fever"
-    Corona = "Corona"
-    Scorch = "Scorch"
-    Ember = "Ember"
-    Flash = "Flash"
-    Torch = "Torch"
-    Cannon = "Cannon"
-    Spark = "Spark"
-    Kindle = "Kindle"
-    Char = "Char"
-    Coal = "Coal"
-    Reflux = "Reflux"
-    Core = "Core"
-    Tinder = "Tinder"
-    Shine = "Shine"
-    Fury = "Fury"
-    Fugue = "Fugue"
+    Forge = "4th Party Member - Mars Djinni Forge"
+    Fever = "5th Party Member - Mars Djinni Fever"
+    Corona = "6th Party Member - Mars Djinni Corona"
+    Scorch = "7th Party Member - Mars Djinni Scorch"
+    Ember = "8th Party Member - Mars Djinni Ember"
+    Flash = "8th Party Member - Mars Djinni Flash"
+    Torch = "Magma Rock - Mars Djinni Torch"
+    Cannon = "Dehkan Plateau - Mars Djinni Cannon"
+    Spark = "Mikasalla - Mars Djinni Spark"
+    Kindle = "Gondowan Cliffs - Mars Djinni Kindle"
+    Char = "Madra - Mars Djinni Char"
+    Coal = "Izumo - Mars Djinni Coal"
+    Reflux = "Tundaria Tower - Mars Djinni Reflex"
+    Core = "West of Contigo - Mars Djinni Core"
+    Tinder = "Hesperia Settlement - Mars Djinni Tinder"
+    Shine = "Contigo - Mars Djinni Shine"
+    Fury = "Magma Rock - Mars Djinni Fury"
+    Fugue = "Mars Lighthouse - Mars Djinni Fugue"
     
 
-    Gust = "Gust"
-    Breeze = "Breeze"
-    Zephyr = "Zephyr"
-    Smog = "Smog"
-    Kite = "Kite"
-    Squall = "Squall"
-    Luff = "Luff"
-    Breath = "Breath"
-    Blitz = "Blitz"
-    Ether = "Ether"
-    Waft = "Waft"
-    Haze = "Haze"
-    Wheeze = "Wheeze"
-    Aroma = "Aroma"
-    Whorl = "Whorl"
-    Gasp = "Gasp"
-    Lull = "Lull"
-    Gale = "Gale"
+    Gust = "4th Party Member - Jupiter Djinni Gust"
+    Breeze = "5th Party Member - Jupiter Djinni Breeze"
+    Zephyr = "6th Party Member - Jupiter Djinni Zephyr"
+    Smog = "7th Party Member - Jupiter Djinni Smog"
+    Kite = "8th Party Member - Jupiter Djinni Kite"
+    Squall = "8th Party Member - Jupiter Djinni Squall"
+    Luff = "SW Atteka Islet - Jupiter Djinni Luff"
+    Breath = "Shrine of the Sea God - Jupiter Djinni Breath"
+    Blitz = "Yampi Desert - Jupiter Djinni Blitz"
+    Ether = "Garoh - Jupiter Djinni Ether"
+    Waft = "Kibombo Mountains - Jupiter Djinni Waft"
+    Haze = "Apojii Islands - Jupiter Djinni Haze"
+    Wheeze = "Southwest of Tundaria Tower - Jupiter Djinni Wheeze"
+    Aroma = "Shaman Village - Jupiter Djinni Aroma"
+    Whorl = "Jupiter Lighthouse - Jupiter Djinni Whorl"
+    Gasp = "Shaman Village - Trial Road Side Path - Jupiter Djinni Gasp"
+    Lull = "Loho - Jupiter Djinni Lull"
+    Gale = "Treasure Isle - Jupiter Djinni Gale"
     
 
     def __str__(self):
         return self._value_
 
 ids_by_loc_name: Dict[LocationName, int] = {
-    "Flint": 16384000,
-    "Granite": 16384002,
-    "Quartz": 16384004,
-    "Vine": 16384006,
-    "Sap": 16384008,
-    "Ground": 16384010,
-    "Bane": 16384012,
-    "Echo": 16384014,
-    "Iron": 16384016,
-    "Steel": 16384018,
-    "Mud": 16384020,
-    "Flower": 16384022,
-    "Meld": 16384024,
-    "Petra": 16384026,
-    "Salt": 16384028,
-    "Geode": 16384030,
-    "Mold": 16384032,
-    "Crystal": 16384034,
-    "Fizz": 16384036,
-    "Sleet": 16384038,
-    "Mist": 16384040,
-    "Spritz": 16384042,
-    "Hail": 16384044,
-    "Tonic": 16384046,
-    "Dew": 16384048,
-    "Fog": 16384050,
-    "Sour": 16384052,
-    "Spring": 16384054,
-    "Shade": 16384056,
-    "Chill": 16384058,
-    "Steam": 16384060,
-    "Rime": 16384062,
-    "Gel": 16384064,
-    "Eddy": 16384066,
-    "Balm": 16384068,
-    "Serac": 16384070,
-    "Forge": 16384072,
-    "Fever": 16384074,
-    "Corona": 16384076,
-    "Scorch": 16384078,
-    "Ember": 16384080,
-    "Flash": 16384082,
-    "Torch": 16384084,
-    "Cannon": 16384086,
-    "Spark": 16384088,
-    "Kindle": 16384090,
-    "Char": 16384092,
-    "Coal": 16384094,
-    "Reflux": 16384096,
-    "Core": 16384098,
-    "Tinder": 16384100,
-    "Shine": 16384102,
-    "Fury": 16384104,
-    "Fugue": 16384106,
-    "Gust": 16384108,
-    "Breeze": 16384110,
-    "Zephyr": 16384112,
-    "Smog": 16384114,
-    "Kite": 16384116,
-    "Squall": 16384118,
-    "Luff": 16384120,
-    "Breath": 16384122,
-    "Blitz": 16384124,
-    "Ether": 16384126,
-    "Waft": 16384128,
-    "Haze": 16384130,
-    "Wheeze": 16384132,
-    "Aroma": 16384134,
-    "Whorl": 16384136,
-    "Gasp": 16384138,
-    "Lull": 16384140,
-    "Gale": 16384142,
+    "4th Party Member - Venus Djinni Flint": 16384000,
+    "5th Party Member - Venus Djinni Granite": 16384002,
+    "6th Party Member - Venus Djinni Quartz": 16384004,
+    "7th Party Member - Venus Djinni Vine": 16384006,
+    "7th Party Member - Venus Djinni Sap": 16384008,
+    "8th Party Member - Venus Djinni Ground": 16384010,
+    "Treasure Isle - Venus Djinni Bane": 16384012,
+    "South of Daila - Venus Djinni Echo": 16384014,
+    "West of Madra - Venus Djinni Iron": 16384016,
+    "Gabomba Statue - Venus Djinni Steel": 16384018,
+    "Gabomba Catacombs - Venus Djinni Mud": 16384020,
+    "Taopa Swamp - Venus Djinni Flower": 16384022,
+    "Islet Cave - Venus Djinni Meld": 16384024,
+    "Northeast Of Shaman Village - Venus Djinni Petra": 16384026,
+    "Contigo - Venus Djinni Salt": 16384028,
+    "Atteka Inlet - Venus Djinni Geode": 16384030,
+    "Prox - Venus Djinni Mold": 16384032,
+    "Yampi Desert Cave - Venus Djinni Crystal": 16384034,
+    "5th Party Member - Mercury Djinni Fizz": 16384036,
+    "6th Party Member - Mercury Djinni Sleet": 16384038,
+    "6th Party Member - Mercury Djinni Mist": 16384040,
+    "7th Party Member - Mercury Djinni Spritz": 16384042,
+    "7th Party Member - Mercury Djinni Hail": 16384044,
+    "8th Party Member - Mercury Djinni Tonic": 16384046,
+    "Prox - Mercury Djinni Dew": 16384048,
+    "Kandorean Temple - Mercury Djinni Fog": 16384050,
+    "Northeast of Mikasalla - Mercury Djinni Sour": 16384052,
+    "3rd Party Member - Mercury Djinni Spring": 16384054,
+    "3rd Party Member - Mercury Djinni Shade": 16384056,
+    "Southwest of Naribwe - Mercury Djinni Chill": 16384058,
+    "Aqua Rock - Mercury Djinni Steam": 16384060,
+    "Ancient Lemuria - Mercury Djinni Rime": 16384062,
+    "Kalt Island - Mercury Djinni Gel": 16384064,
+    "Shaman Village Cave - Mercury Djinni Eddy": 16384066,
+    "Mars Lighthouse - Mercury Djinni Balm": 16384068,
+    "Islet Cave - Mercury Djinni Serac": 16384070,
+    "4th Party Member - Mars Djinni Forge": 16384072,
+    "5th Party Member - Mars Djinni Fever": 16384074,
+    "6th Party Member - Mars Djinni Corona": 16384076,
+    "7th Party Member - Mars Djinni Scorch": 16384078,
+    "8th Party Member - Mars Djinni Ember": 16384080,
+    "8th Party Member - Mars Djinni Flash": 16384082,
+    "Magma Rock - Mars Djinni Torch": 16384084,
+    "Dehkan Plateau - Mars Djinni Cannon": 16384086,
+    "Mikasalla - Mars Djinni Spark": 16384088,
+    "Gondowan Cliffs - Mars Djinni Kindle": 16384090,
+    "Madra - Mars Djinni Char": 16384092,
+    "Izumo - Mars Djinni Coal": 16384094,
+    "Tundaria Tower - Mars Djinni Reflex": 16384096,
+    "West of Contigo - Mars Djinni Core": 16384098,
+    "Hesperia Settlement - Mars Djinni Tinder": 16384100,
+    "Contigo - Mars Djinni Shine": 16384102,
+    "Magma Rock - Mars Djinni Fury": 16384104,
+    "Mars Lighthouse - Mars Djinni Fugue": 16384106,
+    "4th Party Member - Jupiter Djinni Gust": 16384108,
+    "5th Party Member - Jupiter Djinni Breeze": 16384110,
+    "6th Party Member - Jupiter Djinni Zephyr": 16384112,
+    "7th Party Member - Jupiter Djinni Smog": 16384114,
+    "8th Party Member - Jupiter Djinni Kite": 16384116,
+    "8th Party Member - Jupiter Djinni Squall": 16384118,
+    "SW Atteka Islet - Jupiter Djinni Luff": 16384120,
+    "Shrine of the Sea God - Jupiter Djinni Breath": 16384122,
+    "Yampi Desert - Jupiter Djinni Blitz": 16384124,
+    "Garoh - Jupiter Djinni Ether": 16384126,
+    "Kibombo Mountains - Jupiter Djinni Waft": 16384128,
+    "Apojii Islands - Jupiter Djinni Haze": 16384130,
+    "Southwest of Tundaria Tower - Jupiter Djinni Wheeze": 16384132,
+    "Shaman Village - Jupiter Djinni Aroma": 16384134,
+    "Jupiter Lighthouse - Jupiter Djinni Whorl": 16384136,
+    "Shaman Village - Trial Road Side Path - Jupiter Djinni Gasp": 16384138,
+    "Loho - Jupiter Djinni Lull": 16384140,
+    "Treasure Isle - Jupiter Djinni Gale": 16384142,
     "Mars Lighthouse - Doom Dragon Fight": 5001,
     "Alhafra Briggs": 5002,
     "Alhafra Prison Briggs": 5003,
@@ -581,9 +581,9 @@ ids_by_loc_name: Dict[LocationName, int] = {
     "Mikasalla - South-East House - Jar": 992424,
     "E Tundaria Islet - House - Jar": 992432,
     "Garoh - Ledge Chest": 992444,
-    "Garoh - North-West Ledge Barrel": 992456,
+    "Garoh - North-West Ledge - Barrel": 992456,
     "Garoh - South-East Barrel": 992464,
-    "Garoh - North-East Ledge House - Jar": 992476,
+    "Garoh - North-West Ledge House - Jar": 992476,
     "Garoh - Inn - Jar": 992484,
     "Air's Rock Exterior - First Room - Lower Left": 992496,
     "Air's Rock Exterior - First Room - Middle": 992504,
@@ -843,78 +843,78 @@ ids_by_loc_name: Dict[LocationName, int] = {
 }
 
 loc_names_by_id: Dict[int, LocationName] = {
-    16384000: "Flint",
-    16384002: "Granite",
-    16384004: "Quartz",
-    16384006: "Vine",
-    16384008: "Sap",
-    16384010: "Ground",
-    16384012: "Bane",
-    16384014: "Echo",
-    16384016: "Iron",
-    16384018: "Steel",
-    16384020: "Mud",
-    16384022: "Flower",
-    16384024: "Meld",
-    16384026: "Petra",
-    16384028: "Salt",
-    16384030: "Geode",
-    16384032: "Mold",
-    16384034: "Crystal",
-    16384036: "Fizz",
-    16384038: "Sleet",
-    16384040: "Mist",
-    16384042: "Spritz",
-    16384044: "Hail",
-    16384046: "Tonic",
-    16384048: "Dew",
-    16384050: "Fog",
-    16384052: "Sour",
-    16384054: "Spring",
-    16384056: "Shade",
-    16384058: "Chill",
-    16384060: "Steam",
-    16384062: "Rime",
-    16384064: "Gel",
-    16384066: "Eddy",
-    16384068: "Balm",
-    16384070: "Serac",
-    16384072: "Forge",
-    16384074: "Fever",
-    16384076: "Corona",
-    16384078: "Scorch",
-    16384080: "Ember",
-    16384082: "Flash",
-    16384084: "Torch",
-    16384086: "Cannon",
-    16384088: "Spark",
-    16384090: "Kindle",
-    16384092: "Char",
-    16384094: "Coal",
-    16384096: "Reflux",
-    16384098: "Core",
-    16384100: "Tinder",
-    16384102: "Shine",
-    16384104: "Fury",
-    16384106: "Fugue",
-    16384108: "Gust",
-    16384110: "Breeze",
-    16384112: "Zephyr",
-    16384114: "Smog",
-    16384116: "Kite",
-    16384118: "Squall",
-    16384120: "Luff",
-    16384122: "Breath",
-    16384124: "Blitz",
-    16384126: "Ether",
-    16384128: "Waft",
-    16384130: "Haze",
-    16384132: "Wheeze",
-    16384134: "Aroma",
-    16384136: "Whorl",
-    16384138: "Gasp",
-    16384140: "Lull",
-    16384142: "Gale",
+    16384000: "4th Party Member - Venus Djinni Flint",
+    16384002: "5th Party Member - Venus Djinni Granite",
+    16384004: "6th Party Member - Venus Djinni Quartz",
+    16384006: "7th Party Member - Venus Djinni Vine",
+    16384008: "7th Party Member - Venus Djinni Sap",
+    16384010: "8th Party Member - Venus Djinni Ground",
+    16384012: "Treasure Isle - Venus Djinni Bane",
+    16384014: "South of Daila - Venus Djinni Echo",
+    16384016: "West of Madra - Venus Djinni Iron",
+    16384018: "Gabomba Statue - Venus Djinni Steel",
+    16384020: "Gabomba Catacombs - Venus Djinni Mud",
+    16384022: "Taopa Swamp - Venus Djinni Flower",
+    16384024: "Islet Cave - Venus Djinni Meld",
+    16384026: "Northeast Of Shaman Village - Venus Djinni Petra",
+    16384028: "Contigo - Venus Djinni Salt",
+    16384030: "Atteka Inlet - Venus Djinni Geode",
+    16384032: "Prox - Venus Djinni Mold",
+    16384034: "Yampi Desert Cave - Venus Djinni Crystal",
+    16384036: "5th Party Member - Mercury Djinni Fizz",
+    16384038: "6th Party Member - Mercury Djinni Sleet",
+    16384040: "6th Party Member - Mercury Djinni Mist",
+    16384042: "7th Party Member - Mercury Djinni Spritz",
+    16384044: "7th Party Member - Mercury Djinni Hail",
+    16384046: "8th Party Member - Mercury Djinni Tonic",
+    16384048: "Prox - Mercury Djinni Dew",
+    16384050: "Kandorean Temple - Mercury Djinni Fog",
+    16384052: "Northeast of Mikasalla - Mercury Djinni Sour",
+    16384054: "3rd Party Member - Mercury Djinni Spring",
+    16384056: "3rd Party Member - Mercury Djinni Shade",
+    16384058: "Southwest of Naribwe - Mercury Djinni Chill",
+    16384060: "Aqua Rock - Mercury Djinni Steam",
+    16384062: "Ancient Lemuria - Mercury Djinni Rime",
+    16384064: "Kalt Island - Mercury Djinni Gel",
+    16384066: "Shaman Village Cave - Mercury Djinni Eddy",
+    16384068: "Mars Lighthouse - Mercury Djinni Balm",
+    16384070: "Islet Cave - Mercury Djinni Serac",
+    16384072: "4th Party Member - Mars Djinni Forge",
+    16384074: "5th Party Member - Mars Djinni Fever",
+    16384076: "6th Party Member - Mars Djinni Corona",
+    16384078: "7th Party Member - Mars Djinni Scorch",
+    16384080: "8th Party Member - Mars Djinni Ember",
+    16384082: "8th Party Member - Mars Djinni Flash",
+    16384084: "Magma Rock - Mars Djinni Torch",
+    16384086: "Dehkan Plateau - Mars Djinni Cannon",
+    16384088: "Mikasalla - Mars Djinni Spark",
+    16384090: "Gondowan Cliffs - Mars Djinni Kindle",
+    16384092: "Madra - Mars Djinni Char",
+    16384094: "Izumo - Mars Djinni Coal",
+    16384096: "Tundaria Tower - Mars Djinni Reflex",
+    16384098: "West of Contigo - Mars Djinni Core",
+    16384100: "Hesperia Settlement - Mars Djinni Tinder",
+    16384102: "Contigo - Mars Djinni Shine",
+    16384104: "Magma Rock - Mars Djinni Fury",
+    16384106: "Mars Lighthouse - Mars Djinni Fugue",
+    16384108: "4th Party Member - Jupiter Djinni Gust",
+    16384110: "5th Party Member - Jupiter Djinni Breeze",
+    16384112: "6th Party Member - Jupiter Djinni Zephyr",
+    16384114: "7th Party Member - Jupiter Djinni Smog",
+    16384116: "8th Party Member - Jupiter Djinni Kite",
+    16384118: "8th Party Member - Jupiter Djinni Squall",
+    16384120: "SW Atteka Islet - Jupiter Djinni Luff",
+    16384122: "Shrine of the Sea God - Jupiter Djinni Breath",
+    16384124: "Yampi Desert - Jupiter Djinni Blitz",
+    16384126: "Garoh - Jupiter Djinni Ether",
+    16384128: "Kibombo Mountains - Jupiter Djinni Waft",
+    16384130: "Apojii Islands - Jupiter Djinni Haze",
+    16384132: "Southwest of Tundaria Tower - Jupiter Djinni Wheeze",
+    16384134: "Shaman Village - Jupiter Djinni Aroma",
+    16384136: "Jupiter Lighthouse - Jupiter Djinni Whorl",
+    16384138: "Shaman Village - Trial Road Side Path - Jupiter Djinni Gasp",
+    16384140: "Loho - Jupiter Djinni Lull",
+    16384142: "Treasure Isle - Jupiter Djinni Gale",
     5001: "Mars Lighthouse - Doom Dragon Fight",
     5002: "Alhafra Briggs",
     5003: "Alhafra Prison Briggs",
@@ -988,9 +988,9 @@ loc_names_by_id: Dict[int, LocationName] = {
     992424: "Mikasalla - South-East House - Jar",
     992432: "E Tundaria Islet - House - Jar",
     992444: "Garoh - Ledge Chest",
-    992456: "Garoh - North-West Ledge Barrel",
+    992456: "Garoh - North-West Ledge - Barrel",
     992464: "Garoh - South-East Barrel",
-    992476: "Garoh - North-East Ledge House - Jar",
+    992476: "Garoh - North-West Ledge House - Jar",
     992484: "Garoh - Inn - Jar",
     992496: "Air's Rock Exterior - First Room - Lower Left",
     992504: "Air's Rock Exterior - First Room - Middle",

@@ -1,5 +1,5 @@
 from Options import StartInventoryPool
-from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
+from .Options import (ItemShuffle, RevealHiddenItem, OmitLocations, AddGs1Items, AddDummyItems,
                       StartWithShip, ShipWings, AnemosAccess, CharacterShuffle, SecondStartingCharacter,
                       CharStatShuffle, CharEleShuffle, NoLearningUtilPsy, RandomizeClassStatBoosts,
                       ClassPsynergy, ClassPsynergyLevels, AdjustPsyPower, AdjustPsyCost, RandomizePsyAoe,
@@ -15,7 +15,7 @@ from .Options import (ItemShuffle, MajorMinorSplit, RevealHiddenItem, OmitLocati
                       RustyMaterialsFillerWeight, StatBoostFillerWeight, UncommonConsumableFillerWeight,
                       ForgedEquipmentFillerWeight, LuckyFountainEquipmentFillerWeight, ShopEquipmentFillerWeight,
                       CoinsFillerWeight, CommonConsumablesFillerWeight, AutoRun, ScaleMimics, ScaleCharacters,
-                      MaxScaledLevel)
+                      MaxScaledLevel, ForgeMaterialsAreFiller, ArtifactsAreFiller)
 
 from Options import OptionGroup
 
@@ -23,7 +23,6 @@ from Options import OptionGroup
 gstla_option_groups = [
     OptionGroup("General Pool", [
         ItemShuffle,
-        MajorMinorSplit,
         OmitLocations,
         AddGs1Items,
         AddDummyItems
@@ -96,6 +95,8 @@ gstla_option_groups = [
         AutoRun,
     ]),
     OptionGroup("Trap and Filler Distribution", [
+        ForgeMaterialsAreFiller,
+        ArtifactsAreFiller,
         TrapChance, 
         MimicTrapWeight,
         ScaleMimics,
