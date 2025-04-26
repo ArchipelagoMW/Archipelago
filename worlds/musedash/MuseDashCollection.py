@@ -37,7 +37,7 @@ class MuseDashCollections:
         "Echo over you... Secret",
         "Tsukuyomi Ni Naru Replaced",
         "Heart Message feat. Aoi Tokimori Secret",
-        "Meow Rock feat. Chun Ge, Yuan Shen"
+        "Meow Rock feat. Chun Ge, Yuan Shen",
     ]
 
     song_items = SONG_DATA
