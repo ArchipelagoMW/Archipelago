@@ -27,7 +27,7 @@ requirement_map = {
     # "FlagPiers": ItemName.Piers,
     # "Boss_Serpent": ItemName.Serpent_defeated,
     # "GabombaCleared": ItemName.Gabomba_Statue_Completed,
-    "ShipWings": ItemName.Wings_of_Anemos.value,
+    "ShipWings": ItemName.Wings_of_Anemos,
     # "Boss_Poseidon": ItemName.Poseidon_defeated,
     # "Boss_Moapa": ItemName.Moapa_defeated,
     # "Boss_AquaHydra": ItemName.Aqua_Hydra_defeated,

@@ -28,4 +28,4 @@ class TestVanillaDjinn(GSTestBase):
             ap_loc = world.get_location(name)
             ap_item = ap_loc.item
             self.assertEqual(ItemType.Djinn, ap_item.item_data.type)
-            self.assertEqual(name, ap_item.name)
+            self.assertTrue(name.endswith(ap_item.name), "Loc Name: %s Item Name: %s" % (name, ap_item.name))

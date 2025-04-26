@@ -109,24 +109,24 @@ class GSTLAWorld(World):
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
         ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
-        "Lash": {ItemName.Lash_Pebble.value},
-        "Pound": {ItemName.Pound_Cube.value},
-        "Force": {ItemName.Orb_of_Force.value},
-        "Douse": {ItemName.Douse_Drop.value},
-        "Frost": {ItemName.Frost_Jewel.value},
-        "Lift": {ItemName.Lifting_Gem.value},
-        "Carry": {ItemName.Carry_Stone.value},
-        "Catch": {ItemName.Catch_Beads.value},
-        "Tremor": {ItemName.Tremor_Bit.value},
-        "Scoop": {ItemName.Scoop_Gem.value},
-        "Cyclone": {ItemName.Cyclone_Chip.value},
-        "Burst": {ItemName.Burst_Brooch.value},
-        "Grind": {ItemName.Grindstone.value},
-        "Teleport": {ItemName.Teleport_Lapis.value},
-        "Hover": {ItemName.Hover_Jade.value},
-        "Shamans Rod": {ItemName.Shamans_Rod.value},
-        "Sea Gods Tear": {ItemName.Sea_Gods_Tear.value},
-        "Lil Turtle": {ItemName.Lil_Turtle.value}
+        "Lash": {ItemName.Lash_Pebble},
+        "Pound": {ItemName.Pound_Cube},
+        "Force": {ItemName.Orb_of_Force},
+        "Douse": {ItemName.Douse_Drop},
+        "Frost": {ItemName.Frost_Jewel},
+        "Lift": {ItemName.Lifting_Gem},
+        "Carry": {ItemName.Carry_Stone},
+        "Catch": {ItemName.Catch_Beads},
+        "Tremor": {ItemName.Tremor_Bit},
+        "Scoop": {ItemName.Scoop_Gem},
+        "Cyclone": {ItemName.Cyclone_Chip},
+        "Burst": {ItemName.Burst_Brooch},
+        "Grind": {ItemName.Grindstone},
+        "Teleport": {ItemName.Teleport_Lapis},
+        "Hover": {ItemName.Hover_Jade},
+        "Shamans Rod": {ItemName.Shamans_Rod},
+        "Sea Gods Tear": {ItemName.Sea_Gods_Tear},
+        "Lil Turtle": {ItemName.Lil_Turtle}
     }
     location_name_groups = goldensuntla_location_groups
 
@@ -497,7 +497,7 @@ class GSTLAWorld(World):
         write_me += self.options.start_with_revive << 1 #start-revive
         debug_file.write('Start Revive: ' + self.options.start_with_revive.name_lookup[self.options.start_with_revive] + '\n')
 
-        if ItemName.Reveal.name in self.options.start_inventory or ItemName.Reveal.name in self.options.start_inventory_from_pool:
+        if ItemName.Reveal in self.options.start_inventory or ItemName.Reveal in self.options.start_inventory_from_pool:
             write_me += 1 #start-reveal
             debug_file.write('Start Reveal: true\n')
         rando_file.write(write_me.to_bytes(length=1, byteorder='big'))

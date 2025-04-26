@@ -1,6 +1,5 @@
-from enum import Enum
 from typing import Dict
-class LocationName(str, Enum):
+class InternalLocationName:
     ##hiddenItems
     {% for name in hiddenItems -%}
         {{name.py_name}} = "{{name.str_name}}"
@@ -47,19 +46,22 @@ class LocationName(str, Enum):
         {{name.name}} = "{{name.name}}"
     {% endfor %}
 
-    def __str__(self):
-        return self._value_
-
-ids_by_loc_name: Dict[LocationName, int] = {
+ids_by_loc_name: Dict[str, int] = {
     {% for d in name_list -%}
-    "{{d['name']}}": {{d['id']}},
+    InternalLocationName.{{d['name']}}: {{d['id']}},
     {% endfor %}
 }
 
-loc_names_by_id: Dict[int, LocationName] = {
+ids_by_py_name: Dict[str, int] = {
     {% for d in name_list -%}
-    {{d['id']}}: "{{d['name']}}",
+       "{{d['name']}}": {{d['id']}},
     {% endfor %}
 }
 
-assert len(LocationName.__members__) == len(ids_by_loc_name)
+loc_names_by_id: Dict[int, str] = {
+    {% for d in name_list -%}
+    {{d['id']}}: InternalLocationName.{{d['name']}},
+    {% endfor %}
+}
+
+assert len([x for x in InternalLocationName.__dict__.keys() if not x.startswith("__")]) == len(ids_by_loc_name)

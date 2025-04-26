@@ -1,8 +1,8 @@
-from enum import Enum, IntEnum
-from typing import List, NamedTuple, Dict, Optional, Set
+from enum import Enum
+from typing import List, NamedTuple, Dict
 from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
-from .ItemNames import ItemName
+from .ItemNames import name_by_item_id
 
 class TrapType(str, Enum):
    Mimic = "Mimic"
@@ -58,25 +58,25 @@ class EventItemData(ItemData):
 
 summon_list: List[ItemData] = [
     {% for summon in summons -%}
-    ItemData({{summon.id}}, '{{summon.name}}', ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
+    ItemData({{summon.id}}, name_by_item_id[{{summon.id}}], ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
     {% endfor %}
 ]
 
 psyenergy_list: List[ItemData] = [
     {% for psyenergy in psyenergies -%}
-    ItemData({{psyenergy.id}}, "{{psyenergy.name}}", ItemClassification.progression, {{psyenergy.addr}}, ItemType.Psyenergy{#, {{psyenergy.event_type}}#}),
+    ItemData({{psyenergy.id}}, name_by_item_id[{{psyenergy.id}}], ItemClassification.progression, {{psyenergy.addr}}, ItemType.Psyenergy{#, {{psyenergy.event_type}}#}),
     {% endfor %}
 ]
 
 psyenergy_as_item_list: List[ItemData] = [
     {% for psyitem in psyitems -%}
-    ItemData({{psyitem.item.use_effect}} + 0xE00, '{{psyitem.name.str_name}}', ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
+    ItemData({{psyitem.item.use_effect}} + 0xE00, name_by_item_id[{{psyitem.item.use_effect}} + 0xE00], ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
     {% endfor %}
 ]
 
-djinn_items: List[ItemData] = [
+djinn_items: List[DjinnItemData] = [
     {% for djinn in djinns -%}
-    DjinnItemData({{djinn.id}}, '{{djinn.name}}', {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
+    DjinnItemData({{djinn.id}}, name_by_item_id[{{djinn.ap_id}}], {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
     {% endfor %}
 ]
 
@@ -88,26 +88,26 @@ events: List[EventItemData] = [
 
 characters: List[ItemData] = [
     {% for char in characters -%}
-    ItemData({{char.id}}, "{{char.name}}", ItemClassification.progression, {{char.addr}}, ItemType.Character),
+    ItemData({{char.id}}, name_by_item_id[{{char.id}}], ItemClassification.progression, {{char.addr}}, ItemType.Character),
     {% endfor %}
 ]
 
 mimics: List[ItemData] = [
 {% for item in mimics -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.trap, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.item.id}}], ItemClassification.trap, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
 other_progression: List[ItemData] = [
 {% for item in other_prog -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
 {% for useful_name, item_ids in useful_groups.items() -%}
 {{useful_name}} = [
     {% for item_id in item_ids -%}{% set item = other_useful[item_id] %}
-        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
@@ -116,7 +116,7 @@ other_progression: List[ItemData] = [
 {% for other_name, item_ids in other_groups.items() -%}
 {{other_name}} = [
     {% for item_id in item_ids -%}{% set item = other_items[item_id] %}
-        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
@@ -124,7 +124,7 @@ other_progression: List[ItemData] = [
 
 useful_remainder = [
     {% for id in useful_remainder -%}{% set item = other_useful[id] %}
-        ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
@@ -132,43 +132,43 @@ other_useful: List[ItemData] = useful_remainder {% for name in useful_groups.key
 
 shop_only: List[ItemData] = [
 {% for item in shop_only -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
 forge_only: List[ItemData] = [
 {% for item in forge_only -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
 lucky_only: List[ItemData] = [
 {% for item in lucky_only -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
 non_vanilla: List[ItemData] = [
 {% for item in non_vanilla -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
 vanilla_coins: List[ItemData] = [
 {% for item in vanilla_coins -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
 misc: List[ItemData] = [
     {% for item in misc -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
     {% endfor %}
 ]
 
 remainder: List[ItemData] = [
     {% for item in remainder -%}
-    ItemData({{item.item.id}}, "{{item.name.str_name}}", ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
     {% endfor %}
 ]
 

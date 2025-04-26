@@ -1,6 +1,5 @@
 from typing import Dict
-from enum import Enum
-class ItemName(str, Enum):
+class InternalItemName:
     {% for type in types -%}
     # {{type.name}}
     {% for item in items -%}
@@ -36,18 +35,13 @@ class ItemName(str, Enum):
     {{name.py_name}} = "{{name.str_name}}"
     {% endfor %}
 
-item_id_by_name: Dict[ItemName, int] = {
-    "???": 0,
+item_id_by_py_name: Dict[str, int] = {
     {% for d in name_list -%}
     "{{d['name']}}": {{d['id']}},
     {% endfor %}
 }
 
-name_by_item_id: Dict[int, ItemName] = {
-    {% for d in name_list -%}
-    {{d['id']}}: "{{d['name']}}",
-    {% endfor %}
-}
+_internal_names_len = len([x for x in InternalItemName.__dict__.keys() if not x.startswith("__")])
 
-assert len(ItemName.__members__) + 1 == len(item_id_by_name), \
-    "Members: %d, Dict: %d" % (len(ItemName.__members__), len(item_id_by_name))
+assert _internal_names_len == len(item_id_by_py_name), \
+    "Members: %d, Dict: %d" % (_internal_names_len, len(item_id_by_py_name))
