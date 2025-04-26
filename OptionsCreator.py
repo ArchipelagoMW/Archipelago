@@ -146,6 +146,13 @@ class VisualToggle(MDBoxLayout):
         super().__init__(*args, **kwargs)
 
 
+class CounterItemValue(ResizableTextField):
+    pat = re.compile('[^0-9]')
+
+    def insert_text(self, substring, from_undo=False):
+        return super().insert_text(re.sub(self.pat, "", substring), from_undo=from_undo)
+
+
 class VisualListSetCounter(MDDialog):
     button: MDIconButton = ObjectProperty(None)
     option: typing.Type[OptionSet] | typing.Type[OptionList] | typing.Type[OptionCounter]
@@ -187,15 +194,10 @@ class VisualListSetCounter(MDDialog):
         list_item = button.parent
         self.scrollbox.layout.remove_widget(list_item)
 
-    def update_points_passthrough(*args):
-        pass
-
     def add_set_item(self, key: str):
         text = MDListItemSupportingText(text=key, id="value")
         if issubclass(self.option, OptionCounter):
-            value = MDSlider(MDSliderHandle(), MDSliderValueLabel(),
-                             min=self.option.min, max=self.option.max, step=1)
-            value._update_points = self.update_points_passthrough
+            value = CounterItemValue(text="0")
             item = MDListItem(text,
                               value,
                               MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
