@@ -10,9 +10,9 @@ from collections import Counter, deque
 from collections.abc import MutableSequence
 from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Generic, Iterable, Iterator, List, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, TypeVar, Union, TYPE_CHECKING)
+                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import NotRequired, TypedDict, TypeVar
 
 import NetUtils
 import Options
@@ -54,10 +54,10 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
-_T_Reg = TypeVar("_T_Reg", bound="Region")
-_T_Ent = TypeVar("_T_Ent", bound="Entrance")
-_T_Loc = TypeVar("_T_Loc", bound="Location")
-_T_Item = TypeVar("_T_Item", bound="Item")
+_T_Reg = TypeVar("_T_Reg", bound="Region", default="Region")
+_T_Ent = TypeVar("_T_Ent", bound="Entrance", default="Entrance")
+_T_Loc = TypeVar("_T_Loc", bound="Location", default="Location")
+_T_Item = TypeVar("_T_Item", bound="Item", default="Item")
 
 
 class RegionManager(Generic[_T_Reg, _T_Ent, _T_Loc]):
