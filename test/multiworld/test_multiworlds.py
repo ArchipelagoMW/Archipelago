@@ -94,8 +94,6 @@ class TestSinglePlayerOutput(MultiworldTestBase):
         # LttP requires this while sprite isn't on the options API
         self.multiworld.__setattr__("sprite", {1: "Link"})
         self.multiworld.__setattr__("sprite_pool", {1: []})
-        for world in self.multiworld.worlds.values():
-            world.options.accessibility.value = Accessibility.option_full
         try:
             call_stage(self.multiworld, "assert_generate")
         except FileNotFoundError:
