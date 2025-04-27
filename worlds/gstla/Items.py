@@ -1,7 +1,7 @@
 from typing import Dict, TYPE_CHECKING, cast, List, Optional
 from BaseClasses import Item, ItemClassification
+from .gen.InternalItemData import InternalItemData
 from .gen.LocationNames import loc_names_by_id
-from .gen.LocationData import LocationRestriction
 from .gen.ItemNames import ItemName
 from .gen.LocationNames import LocationName
 from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psyenergy_list, summon_list, other_progression,
@@ -26,9 +26,9 @@ class GSTLAItem(Item):
             super(GSTLAItem, self).__init__(item.name, classification, item.id, player)
         self.item_data = item
 
-AP_USEFUL_PLACEHOLDER_ITEM = ItemData(0xA00, "AP Useful Placeholder", ItemClassification.useful, -1, ItemType.Consumable)
-AP_PROG_PLACEHOLDER_ITEM = ItemData(0xA0A, "AP Progression Placeholder", ItemClassification.progression, -1, ItemType.Consumable)
-AP_PLACEHOLDER_ITEM = ItemData(0xA0B, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable)
+AP_USEFUL_PLACEHOLDER_ITEM = ItemData(InternalItemData(0xA00, "AP Useful Placeholder", ItemClassification.useful, -1, ItemType.Consumable))
+AP_PROG_PLACEHOLDER_ITEM = ItemData(InternalItemData(0xA0A, "AP Progression Placeholder", ItemClassification.progression, -1, ItemType.Consumable))
+AP_PLACEHOLDER_ITEM = ItemData(InternalItemData(0xA0B, "AP Placeholder", ItemClassification.filler, -1, ItemType.Consumable))
 
 all_items = all_gen_items
 item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
@@ -40,7 +40,7 @@ def _get_coin_item(id: int):
     # number of coins is offset from 0x8000
     if id not in coin_items:
         # TODO: is consumable the right item type?
-        coin_item = ItemData(id, f"{id-0x8000} Coins", ItemClassification.filler, 0, ItemType.Consumable)
+        coin_item = ItemData(InternalItemData(id, f"{id-0x8000} Coins", ItemClassification.filler, 0, ItemType.Consumable))
         coin_items[id] = coin_item
         assert coin_item.name not in item_table
         item_table[coin_item.name] = coin_item

@@ -1,6 +1,7 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Location, Region
 from .GameData import ItemType
+# TODO: revert
 from worlds.gstla.gen.LocationData import LocationData, all_locations as all_gen_locations, LocationType
 from worlds.gstla.gen.LocationNames import loc_names_by_id
 

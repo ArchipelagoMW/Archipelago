@@ -3,7 +3,7 @@ from worlds.gstla.GameData import ElementType, ItemType
 from BaseClasses import ItemClassification
 from .ItemNames import name_by_item_id
 
-class ItemData(NamedTuple):
+class InternalItemData(NamedTuple):
     id: int
     name: str
     progression: ItemClassification
@@ -14,14 +14,14 @@ class ItemData(NamedTuple):
     is_mimic: bool =  False
     is_rare: bool = False
 
-class DjinnItemData(ItemData):
+class InternalDjinnItemData(InternalItemData):
     element: ElementType
     vanilla_id: int
     stats_addr: int
     stats: List[int]
 
     def __new__(cls, id: int, name: str, addr: int, element: ElementType, stats_addr: int, stats: List[int]):
-        self = super(ItemData, cls).__new__(cls, (addr, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
+        self = super(InternalItemData, cls).__new__(cls, (addr, name, ItemClassification.progression_skip_balancing, addr, ItemType.Djinn))
         self.element = element
         self.stats_addr = stats_addr
         self.stats = stats
@@ -31,68 +31,68 @@ class DjinnItemData(ItemData):
     def get_rando_flag(self):
         return 0x30 + self.element * 20 + self.vanilla_id
 
-class EventItemData(ItemData):
+class InternalEventItemData(InternalItemData):
     flag: int
     location: str
 
     def __new__(cls, event_id: int, flag: int, location: str, name: str):
-        self = super(ItemData, cls).__new__(cls, (event_id, name, ItemClassification.progression, 0, ItemType.Event, 0{#, 0 #}))
+        self = super(InternalItemData, cls).__new__(cls, (event_id, name, ItemClassification.progression, 0, ItemType.Event, 0{#, 0 #}))
         self.location = location
         self.flag = flag
         return self
 
-summon_list: List[ItemData] = [
+summon_list: List[InternalItemData] = [
     {% for summon in summons -%}
-    ItemData({{summon.id}}, name_by_item_id[{{summon.id}}], ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
+    InternalItemData({{summon.id}}, name_by_item_id[{{summon.id}}], ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
     {% endfor %}
 ]
 
-psyenergy_list: List[ItemData] = [
+psyenergy_list: List[InternalItemData] = [
     {% for psyenergy in psyenergies -%}
-    ItemData({{psyenergy.id}}, name_by_item_id[{{psyenergy.id}}], ItemClassification.progression, {{psyenergy.addr}}, ItemType.Psyenergy{#, {{psyenergy.event_type}}#}),
+    InternalItemData({{psyenergy.id}}, name_by_item_id[{{psyenergy.id}}], ItemClassification.progression, {{psyenergy.addr}}, ItemType.Psyenergy{#, {{psyenergy.event_type}}#}),
     {% endfor %}
 ]
 
-psyenergy_as_item_list: List[ItemData] = [
+psyenergy_as_item_list: List[InternalItemData] = [
     {% for psyitem in psyitems -%}
-    ItemData({{psyitem.item.use_effect}} + 0xE00, name_by_item_id[{{psyitem.item.use_effect}} + 0xE00], ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
+    InternalItemData({{psyitem.item.use_effect}} + 0xE00, name_by_item_id[{{psyitem.item.use_effect}} + 0xE00], ItemClassification.progression, {{psyitem.item.addr}}, ItemType.PsyenergyItem{#, {{psyitem.item.event_type}}#}),
     {% endfor %}
 ]
 
-djinn_items: List[DjinnItemData] = [
+djinn_items: List[InternalDjinnItemData] = [
     {% for djinn in djinns -%}
-    DjinnItemData({{djinn.id}}, name_by_item_id[{{djinn.ap_id}}], {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
+    InternalDjinnItemData({{djinn.id}}, name_by_item_id[{{djinn.ap_id}}], {{djinn.addr}}, ElementType({{djinn.element}}), {{djinn.stats_addr}}, {{djinn.stats}}),
     {% endfor %}
 ]
 
-events: List[EventItemData] = [
+events: List[InternalEventItemData] = [
     {% for event in events -%}
-    EventItemData({{event.event_id}}, {{event.flag}}, "{{event.location_name}}", "{{event.item_name}}"),
+    InternalEventItemData({{event.event_id}}, {{event.flag}}, "{{event.location_name}}", "{{event.item_name}}"),
     {% endfor %}
 ]
 
-characters: List[ItemData] = [
+characters: List[InternalItemData] = [
     {% for char in characters -%}
-    ItemData({{char.id}}, name_by_item_id[{{char.id}}], ItemClassification.progression, {{char.addr}}, ItemType.Character),
+    InternalItemData({{char.id}}, name_by_item_id[{{char.id}}], ItemClassification.progression, {{char.addr}}, ItemType.Character),
     {% endfor %}
 ]
 
-mimics: List[ItemData] = [
+mimics: List[InternalItemData] = [
 {% for item in mimics -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.item.id}}], ItemClassification.trap, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.item.id}}], ItemClassification.trap, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
-other_progression: List[ItemData] = [
+other_progression: List[InternalItemData] = [
 {% for item in other_prog -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
 {% for useful_name, item_ids in useful_groups.items() -%}
 {{useful_name}} = [
     {% for item_id in item_ids -%}{% set item = other_useful[item_id] %}
-        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
@@ -101,7 +101,7 @@ other_progression: List[ItemData] = [
 {% for other_name, item_ids in other_groups.items() -%}
 {{other_name}} = [
     {% for item_id in item_ids -%}{% set item = other_items[item_id] %}
-        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
@@ -109,57 +109,57 @@ other_progression: List[ItemData] = [
 
 useful_remainder = [
     {% for id in useful_remainder -%}{% set item = other_useful[id] %}
-        ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+        InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {%- endfor %}
 ]
 
-other_useful: List[ItemData] = useful_remainder {% for name in useful_groups.keys() %} + {{name}} {% endfor %}
+other_useful: List[InternalItemData] = useful_remainder {% for name in useful_groups.keys() %} + {{name}} {% endfor %}
 
-shop_only: List[ItemData] = [
+shop_only: List[InternalItemData] = [
 {% for item in shop_only -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
-forge_only: List[ItemData] = [
+forge_only: List[InternalItemData] = [
 {% for item in forge_only -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
-lucky_only: List[ItemData] = [
+lucky_only: List[InternalItemData] = [
 {% for item in lucky_only -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
-non_vanilla: List[ItemData] = [
+non_vanilla: List[InternalItemData] = [
 {% for item in non_vanilla -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
 {% endfor %}
 ]
 
-vanilla_coins: List[ItemData] = [
+vanilla_coins: List[InternalItemData] = [
 {% for item in vanilla_coins -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
 {% endfor %}
 ]
 
-misc: List[ItemData] = [
+misc: List[InternalItemData] = [
     {% for item in misc -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}),
     {% endfor %}
 ]
 
-remainder: List[ItemData] = [
+remainder: List[InternalItemData] = [
     {% for item in remainder -%}
-    ItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
+    InternalItemData({{item.item.id}}, name_by_item_id[{{item.name.id}}], ItemClassification.{{progression[item.item.id]}}, {{item.item.addr}}, {{item.item.item_type}}, {{item.item.is_mimic}}, {{item.item.flags | bitwise_and(4)}}),
     {% endfor %}
 ]
 
-all_items: List[ItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + \
+all_items: List[InternalItemData] = djinn_items + psyenergy_as_item_list + psyenergy_list + summon_list + events + characters + \
     mimics + other_progression + other_useful + shop_only + forge_only + lucky_only + non_vanilla + vanilla_coins + \
     misc {% for name in other_groups.keys() %} + {{name}} {% endfor %} + remainder {# + unique_items + gear#}
 assert len(all_items) == len({x.id for x in all_items})
-item_table: Dict[str, ItemData] = {item.name: item for item in all_items}
-items_by_id: Dict[int, ItemData] = {item.id: item for item in all_items}
+item_table: Dict[str, InternalItemData] = {item.name: item for item in all_items}
+items_by_id: Dict[int, InternalItemData] = {item.id: item for item in all_items}

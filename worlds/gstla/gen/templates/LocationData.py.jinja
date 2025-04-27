@@ -22,7 +22,7 @@ class LocationRestriction(IntFlag):
     NoSummon = auto()
     NoMoney = auto()
 
-class LocationData(NamedTuple):
+class InternalLocationData(NamedTuple):
     rando_flag: int
     flag: int
     id: Optional[int]
@@ -39,14 +39,14 @@ class LocationData(NamedTuple):
 
 djinn_locations = [
 {% for djinn in djinn_locations -%}
-    LocationData({{djinn.vanilla_flag}}, {{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}},
+    InternalLocationData({{djinn.vanilla_flag}}, {{djinn.vanilla_flag}}, {{djinn.addr}}, {{djinn.addr}},
         [{{djinn.addr}}], 128, {{djinn.id}}, True, True, LocationType.Djinn), # {{djinn.name}}
 {% endfor %}
 ]
 
 summon_tablets = [
     {% for summon in summon_locations -%}
-    LocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}},
+    InternalLocationData({{summon.flag}}, {{summon.flag}}, {{summon.id}}, {{summon.addr[0]}}, {{summon.addr}},
             {{summon.event_type}}, {{summon.vanilla_contents}}, {{summon.is_key_item}}, {{summon.is_major_item}},
             LocationType.Item, LocationRestriction({{summon.restrictions}})), #{{summon.vanilla_name}}
     {% endfor %}
@@ -54,7 +54,7 @@ summon_tablets = [
 
 psyenergy_locations = [
     {% for psy in psyenergy_locations -%}
-    LocationData({{psy.rando_flag}}, {{psy.flag}}, {{psy.id}}, {{psy.addr[0]}}, {{psy.addr}},
+    InternalLocationData({{psy.rando_flag}}, {{psy.flag}}, {{psy.id}}, {{psy.addr[0]}}, {{psy.addr}},
         {{psy.event_type}}, {{psy.vanilla_contents}}, {{psy.is_key_item}}, {{psy.is_major_item}}, LocationType.Psyenergy,
         LocationRestriction({{psy.restrictions}})), # {{psy.vanilla_name}}
     {% endfor %}
@@ -62,33 +62,33 @@ psyenergy_locations = [
 
 events = [
     {% for event in events -%}
-    LocationData({{event.flag}}, {{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0,
+    InternalLocationData({{event.flag}}, {{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0,
         {{event.event_id}}, True, True, LocationType.Event, LocationRestriction(7), True), # {{event.location_name}} {{event.item_name}}
     {% endfor %}
 ]
 
 the_rest = [
     {% for loc in other_locations -%}
-    LocationData({{loc.rando_flag}}, {{loc.flag}}, {{loc.id}}, {{loc.addr[0]}},
+    InternalLocationData({{loc.rando_flag}}, {{loc.flag}}, {{loc.id}}, {{loc.addr[0]}},
         {{loc.addr}}, {{loc.event_type}}, {{loc.vanilla_contents}}, {{loc.is_key_item}}, {{loc.is_major_item}},
         LocationType.{{ loc_type_lookup[loc.id] }}, LocationRestriction({{loc.restrictions}})), # {{loc.map_name}} {{loc.vanilla_name}}
     {% endfor %}
 ]
 
 
-def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
-    """Creates a dictionary mapping LocationType to a list of all locations
-    of that type
-    """
-    types: Dict[str, List[LocationData]] = {}
-    for idx, data in enumerate(all_locations):
-        if data.loc_type not in types:
-            types[data.loc_type] = []
-        types[data.loc_type].append(data)
-    return types
+#def create_loctype_to_datamapping() -> Dict[str, List[InternalLocationData]]:
+#    """Creates a dictionary mapping LocationType to a list of all locations
+#    of that type
+#    """
+#    types: Dict[str, List[InternalLocationData]] = {}
+#    for idx, data in enumerate(all_locations):
+#        if data.loc_type not in types:
+#            types[data.loc_type] = []
+#        types[data.loc_type].append(data)
+#    return types
 
-all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
-location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type != LocationType.Event}
-location_id_to_data: Dict[int, LocationData] = {location.ap_id: location for location in all_locations if location.loc_type != LocationType.Event}
+all_locations: List[InternalLocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
+#location_name_to_data: Dict[str, InternalLocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type != LocationType.Event}
+location_id_to_data: Dict[int, InternalLocationData] = {location.ap_id: location for location in all_locations if location.loc_type != LocationType.Event}
 assert len(all_locations) == len(location_id_to_data) + len(events)
-location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()
+#location_type_to_data: Dict[str, List[InternalLocationData]] = create_loctype_to_datamapping()

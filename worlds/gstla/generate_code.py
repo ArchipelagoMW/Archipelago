@@ -364,7 +364,7 @@ def generate_item_data(env: Environment, data: GameData):
 
 def generate_location_data(env: Environment, data: GameData):
     template = env.get_template('LocationData.py.jinja')
-    with open(os.path.join(SCRIPT_DIR, 'gen', 'LocationData.py'), 'w') as outfile:
+    with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalLocationData.py'), 'w') as outfile:
         write_warning(outfile)
         loc_data = data.raw_location_data
         psy_ids = {psy.id for psy in data.raw_psy_data}
