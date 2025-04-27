@@ -85,10 +85,12 @@ By default, the locations in Celeste (Open World) which can contain items are:
 - Cassettes
 
 Additionally, the following locations can optionally be included in the Location Pool:
+- Golden Strawberries
 - Keys
 - Checkpoints
 - Summit Gems
 - Cars
+- Binoculars
 - Rooms
 
 ## How can I get started?
