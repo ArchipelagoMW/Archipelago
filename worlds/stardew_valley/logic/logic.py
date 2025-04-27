@@ -198,7 +198,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             ArtisanGood.targeted_bait: self.artisan.has_targeted_bait(),
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
-            ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
+            ArtisanGood.void_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.void_egg),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),

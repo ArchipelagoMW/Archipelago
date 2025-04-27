@@ -214,7 +214,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
     set_entrance_rule(multiworld, player, Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
-    set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
+    set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
                       (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
                           NPC.krobus)) | logic.mod.magic.can_blink())
