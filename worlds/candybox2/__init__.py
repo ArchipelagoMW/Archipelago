@@ -88,7 +88,7 @@ class CandyBox2World(World):
             required_amount = data.required_amount(self)
             if required_amount > 0:
                 for i in range(required_amount):
-                    self.multiworld.itempool += [self.create_item(name)]
+                    self.multiworld.itempool += [self.create_item(name.value)]
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
