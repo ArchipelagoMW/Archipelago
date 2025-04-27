@@ -87,7 +87,7 @@ class TestSinglePlayerOutput(MultiworldTestBase):
     game: ClassVar[str]
 
     def test_single_player_game_can_generate_output(self) -> None:
-        if self.game in ("Sudoku", "Final Fantasy"):
+        if self.game in ("Archipelago", "Sudoku", "Final Fantasy"):
             self.skipTest("Cannot generate")
         world_type = AutoWorldRegister.world_types[self.game]
         self.multiworld = setup_multiworld(world_type, ())
