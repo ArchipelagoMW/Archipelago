@@ -86,7 +86,9 @@ class QuestLogic(BaseLogic):
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
             Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
                 NPC.krobus),
-            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(ArtisanGood.void_mayonnaise),
+            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp)
+                                  # Void mayo can be fished at 5% chance in the witch swamp while the quest is active. It drops a lot after the quest.
+                                  & (self.logic.has(ArtisanGood.void_mayonnaise) | self.logic.skill.can_fish()),
             Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
