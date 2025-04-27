@@ -48,6 +48,7 @@ class TitsThe3rdWorld(World):
     mysterious dimension of Phantasma. It is highly recommended to pick up the first two
     games before playing this one, Trails in the Sky FC / SC.
     """
+
     game: str = "Trails in the Sky the 3rd"
     options_dataclass = TitsThe3rdOptions
     options: TitsThe3rdOptions
