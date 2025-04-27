@@ -136,6 +136,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows"]) #backwards
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Boomer Society", "Rolling Quintar Fields"]) #forwards
     multiworld.get_region("Capital Sequoia", player).add_exits(["Proving Meadows", "Skumparadise"]) #backwards
+    # todo pretty sure there's a check in the quintar nest that you get to by going through the jojo sewers? not sure if there's another way to get to it without movement items - Eme
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Jail"], 
         {"Capital Jail": logic.has_rental_quintar})
     multiworld.get_region("Capital Jail", player).add_exits(["Capital Pipeline"],
@@ -143,7 +144,8 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Capital Pipeline", player).add_exits(["Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_vertical_movement})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Quintar Nest", "Quintar Sanctum"], 
-        {"Quintar Sanctum": logic.has_rental_quintar})
+        {"Quintar Sanctum": logic.has_rental_quintar}) # forwards
+    multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Capital Sequoia"]) # backwards
     multiworld.get_region("Quintar Nest", player).add_exits(["Cobblestone Crag"])
     multiworld.get_region("Capital Sequoia", player).add_exits(["Cobblestone Crag", "Greenshire Reprise"], 
         {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
@@ -171,7 +173,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Ganymede Shrine", "The Undercity", "Quintar Reserve", "Flyers Crag"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": logic.has_vertical_movement,
-        "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
+        "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement, #feels like it may not actually require horizontal, i tripped into it during the rando without quintar - eme
         "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10),
         "Flyers Crag": logic.has_glide}) #Todo check this exit is correct
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
