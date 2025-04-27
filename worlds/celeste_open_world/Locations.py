@@ -121,6 +121,9 @@ def create_regions_and_locations(world):
                         elif not world.options.include_goldens:
                             continue
 
+                    if level_location.loc_type == LocationType.car and not world.options.carsanity:
+                        continue
+
                     if level_location.loc_type == LocationType.binoculars and not world.options.binosanity:
                         continue
 

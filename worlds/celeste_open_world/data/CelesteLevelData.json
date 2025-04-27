@@ -16753,7 +16753,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": false
+                            "closes_behind": true
                         },
                         {
                             "name": "north-west",

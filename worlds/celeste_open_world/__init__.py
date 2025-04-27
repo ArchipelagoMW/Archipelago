@@ -211,6 +211,8 @@ class CelesteOpenWorld(World):
             shuffled_active_levels = sorted(self.active_levels)
             self.random.shuffle(shuffled_active_levels)
             for level_name in shuffled_active_levels:
+                if level_name == "10b" or level_name == "10c":
+                    continue
                 if level_name not in self.multiworld.precollected_items[self.player]:
                     if total_filler_count > 0:
                         item_pool.append(self.create_item(level_cassette_items[level_name]))

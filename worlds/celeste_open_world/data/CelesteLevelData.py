@@ -1002,7 +1002,7 @@ all_doors: dict[str, Door] = {
     "5a_a-13_west": Door("5a_a-13_west", "5a_a-13", DoorDirection.left, False, False),
     "5a_a-13_east": Door("5a_a-13_east", "5a_a-13", DoorDirection.right, False, False),
 
-    "5a_b-00_west": Door("5a_b-00_west", "5a_b-00", DoorDirection.left, False, False),
+    "5a_b-00_west": Door("5a_b-00_west", "5a_b-00", DoorDirection.left, False, True),
     "5a_b-00_north-west": Door("5a_b-00_north-west", "5a_b-00", DoorDirection.up, False, False),
     "5a_b-00_east": Door("5a_b-00_east", "5a_b-00", DoorDirection.right, False, False),
 
