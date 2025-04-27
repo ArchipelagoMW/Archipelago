@@ -117,7 +117,7 @@ class SMWSNIClient(SNIClient):
         ctx.last_death_link = time.time()
 
 
-    def on_package(self, ctx: SNIClient, cmd: str, args: dict) -> None:
+    def on_package(self, ctx: SNIClient, cmd: str, args: dict[str, Any]) -> None:
         super().on_package(ctx, cmd, args)
 
         if cmd == "Connected":

@@ -117,4 +117,7 @@ trap_name_to_value: typing.Dict[str, int] = {
     "Bomb":               0xBC001D,  # Thwimp Trap
     "Bonk Trap":          0xBC0014,  # Stun Trap
     "Ghost":              0xBC001D,  # Thwimp Trap
+    "Fast Trap":          0xBC0016,  # Timer Trap
+    "Nut Trap":           0xBC001D,  # Thwimp Trap
+    "Army Trap":          0xBC001D,  # Thwimp Trap
 }
