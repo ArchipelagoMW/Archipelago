@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import collections
 import functools
 import logging
 import math
@@ -866,15 +867,49 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     def __len__(self) -> int:
         return self.value.__len__()
 
+    # __getitem__ fallback fails for Counters, so we define this explicitly
+    def __contains__(self, item) -> bool:
+        return item in self.value
 
-class ItemDict(OptionDict):
+
+class OptionCounter(OptionDict):
+    min: int | None = None
+    max: int | None = None
+
+    def __init__(self, value: dict[str, int]) -> None:
+        super(OptionCounter, self).__init__(collections.Counter(value))
+
+    def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        super(OptionCounter, self).verify(world, player_name, plando_options)
+
+        range_errors = []
+
+        if self.max is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is higher than maximum allowed value {self.max}."
+                for key, value in self.value.items() if value > self.max
+            ]
+
+        if self.min is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is lower than minimum allowed value {self.min}."
+                for key, value in self.value.items() if value < self.min
+            ]
+
+        if range_errors:
+            range_errors = [f"For option {getattr(self, 'display_name', self)}:"] + range_errors
+            raise OptionError("\n".join(range_errors))
+
+
+class ItemDict(OptionCounter):
     verify_item_name = True
 
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(item_count is None for item_count in value.values()):
-            raise Exception("Items must have counts associated with them. Please provide positive integer values in the format \"item\": count .")
-        if any(item_count < 1 for item_count in value.values()):
-            raise Exception("Cannot have non-positive item counts.")
+    min = 0
+
+    def __init__(self, value: dict[str, int]) -> None:
+        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
+        value = {item_name: amount for item_name, amount in value.items() if amount != 0}
+
         super(ItemDict, self).__init__(value)
 
 
@@ -1579,6 +1614,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
             player_output = {
                 "Game": multiworld.game[player],
                 "Name": multiworld.get_player_name(player),
+                "ID": player,
             }
             output.append(player_output)
             for option_key, option in world.options_dataclass.type_hints.items():
@@ -1591,7 +1627,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
                     game_option_names.append(display_name)
 
     with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
-        fields = ["Game", "Name", *all_option_names]
+        fields = ["ID", "Game", "Name", *all_option_names]
         writer = DictWriter(file, fields)
         writer.writeheader()
         writer.writerows(output)
