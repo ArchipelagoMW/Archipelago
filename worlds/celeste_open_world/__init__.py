@@ -251,8 +251,8 @@ class CelesteOpenWorld(World):
 
     def fill_slot_data(self):
         return {
-            "apworld_version": 900,
-            "min_mod_version": 900,
+            "apworld_version": 10000,
+            "min_mod_version": 10000,
 
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
