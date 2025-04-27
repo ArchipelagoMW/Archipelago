@@ -8,9 +8,9 @@ class Goal(Choice):
     """
     Choose what is required to complete the game.
     
-    Talking to Nan in <insert correct place name here!> will tell you the selected goal.
+    Checking the first sign in the Spawning Meadows will tell you the selected goal.
     
-    Astley: Defeat Astley (add more here).
+    Astley: Defeat Astley in the new world. A new world stone will be given to the player after obtaining a certain number of jobs.
     
     True Astley: Defeat Astley but more somehow
 
@@ -42,6 +42,13 @@ class RandomizeJobs(DefaultOnToggle):
     """
     display_name = "Randomize Jobs"
 
+class NewWorldStoneJobQuantity(Range):
+    """If your goal is Astley, this is where you select how many jobs you need to find before being sent the new world stone (NOTE: the starting jobs do not count towards this number)."""
+    display_name = "Job count that locks the new world stone"
+    range_start = 1
+    range_end = 18
+    default = 18
+
 class StartWithTreasureFinder(DefaultOnToggle):
     """
     When enabled, the player will start with the treasure finder in their inventory.
@@ -62,11 +69,11 @@ class IncludedRegions(Choice):
 
     This can be used to make your game shorter/easier or longer/harder.
     
-    Beginner: Only regions up through the end of the cave of trials will have checks.
+    Beginner: Only regions up through the end of Skumparadise will have checks.
     
-    Advanced: Description!
+    Advanced: Regions up to Salmon Bay will have checks
 
-    Expert: Description!
+    Expert: Regions up to the deep sea will have checks (note the depths will not be included)
 
     All: Every region is included
     """
@@ -75,7 +82,19 @@ class IncludedRegions(Choice):
     option_advanced = 1
     option_expert = 2
     option_all = 3
-    default = 0
+    default = 3
+
+class IncludeSummonAbilities(DefaultOnToggle):
+    """
+    When enabled, Summon abilities can be found anywhere, when disabled they will be in the regular spot.
+    """
+    display_name = "Include Summoner Abilities in the item pool"
+    
+class IncludeScholarAbilities(DefaultOnToggle):
+    """
+    When enabled, Scholar abilities can be found anywhere, they can still be learned as normal from enemies.
+    """
+    display_name = "Include Scholar Abilities in the item pool"
 
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
@@ -84,6 +103,9 @@ class CrystalProjectOptions(PerGameCommonOptions):
     clamshellsQuantity: ClamshellsQuantity
     clamshellsInPool: ClamshellsInPool
     randomizeJobs: RandomizeJobs
+    newWorldStoneJobQuantity: NewWorldStoneJobQuantity
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions
+    includeSummonAbilities: IncludeSummonAbilities
+    includeScholarAbilities: IncludeScholarAbilities

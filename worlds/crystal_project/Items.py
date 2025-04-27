@@ -149,7 +149,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
 
     #Animal mount summons
-    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 2), #Quintar Pass ID 7 & Quintar Flute ID 39
+    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
     "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
     "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
@@ -828,39 +828,38 @@ item_table: Dict[str, ItemData] = {
     #"Currency": ItemData("Currency", 0 + index_offset, ItemClassification.filler),
 
     #Summons
-    # "Summon - Shaku": ItemData("Summon", 223 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pamoa": ItemData("Summon", 224 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Guaba": ItemData("Summon", 225 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
+    "Summon - Shaku": ItemData("Summon", 223 + summon_index_offset, ItemClassification.useful),
+    "Summon - Pamoa": ItemData("Summon", 224 + summon_index_offset, ItemClassification.useful),
+    "Summon - Guaba": ItemData("Summon", 225 + summon_index_offset, ItemClassification.useful),
+    "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
+    "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
+    "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
+    # "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful), (commented out bc you start with Pinga as a summoner)
+    "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
+    "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
+    "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
 
     #Monster Abilities for Scholar
-    # "Scholar - Roost": ItemData("Scholar", 25 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Lucky Dice": ItemData("Scholar", 70 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Sun Bath": ItemData("Scholar", 101 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Sleep Aura": ItemData("Scholar", 186 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Regenerate": ItemData("Scholar", 197 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Reverse Polarity": ItemData("Scholar", 198 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Barrier": ItemData("Scholar", 199 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - MP Sickle": ItemData("Scholar", 200 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Adrenaline": ItemData("Scholar", 202 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Fire Breath": ItemData("Scholar", 205 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Explode": ItemData("Scholar", 206 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Whirlwind": ItemData("Scholar", 207 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Atmoshear": ItemData("Scholar", 213 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Build Life": ItemData("Scholar", 245 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Aero": ItemData("Scholar", 264 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Insult": ItemData("Scholar", 363 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Infusion": ItemData("Scholar", 364 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Overload": ItemData("Scholar", 365 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Reflection": ItemData("Scholar", 366 + scholar_index_offset, ItemClassification.useful),
-    # "Scholar - Lifegiver": ItemData("Scholar", 376 + scholar_index_offset, ItemClassification.useful),
-
+    "Scholar - Roost": ItemData("Scholar", 25 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Lucky Dice": ItemData("Scholar", 70 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Sun Bath": ItemData("Scholar", 101 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Sleep Aura": ItemData("Scholar", 186 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Regenerate": ItemData("Scholar", 197 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Reverse Polarity": ItemData("Scholar", 198 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Barrier": ItemData("Scholar", 199 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - MP Sickle": ItemData("Scholar", 200 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Adrenaline": ItemData("Scholar", 202 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Fire Breath": ItemData("Scholar", 205 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Explode": ItemData("Scholar", 206 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Whirlwind": ItemData("Scholar", 207 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Atmoshear": ItemData("Scholar", 213 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Build Life": ItemData("Scholar", 245 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Aero": ItemData("Scholar", 264 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Insult": ItemData("Scholar", 363 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Infusion": ItemData("Scholar", 364 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Overload": ItemData("Scholar", 365 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Reflection": ItemData("Scholar", 366 + scholar_index_offset, ItemClassification.useful),
+    "Scholar - Lifegiver": ItemData("Scholar", 376 + scholar_index_offset, ItemClassification.useful),
 }
 
 filler_items: Tuple[str, ...] = (

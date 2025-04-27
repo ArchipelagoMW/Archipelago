@@ -74,7 +74,7 @@ class CrystalProjectLogic:
         return state.has("Item - Ibek Bell", self.player)
 
     def has_glide(self, state: CollectionState) -> bool: 
-        return state.has("Item - Owl Drum", self.player)
+        return state.has("Item - Owl Drum", self.player) or state.has("Item - Progressive Quintar Flute", self.player, 3)
 
     def has_swimming(self, state: CollectionState) -> bool:
-        return state.has_any({"Item - Progressive Salmon Violin"}, self.player)
+        return state.has_any({"Item - Progressive Salmon Violin"}, self.player) or state.has("Item - Progressive Quintar Flute", self.player, 3)
