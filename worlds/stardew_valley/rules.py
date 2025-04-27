@@ -923,9 +923,9 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     set_rule(multiworld.get_location("Analyze: Fireball", player),
              logic.has("Fire Quartz"))
     set_rule(multiworld.get_location("Analyze: Frostbolt", player),
-             logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
+             logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
     set_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
+             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
     # set_rule(multiworld.get_location("Analyze: Lantern", player),)
     set_rule(multiworld.get_location("Analyze: Tendrils", player),
              logic.region.can_reach(Region.farm))
@@ -948,7 +948,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
               logic.has("Coffee") & logic.has("Life Elixir")
               & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-              logic.has("Fire Quartz") & logic.skill.can_fish(difficulty=85) &
+              logic.has("Fire Quartz") & logic.fishing.can_fish(85) &
               logic.region.can_reach(Region.witch_hut) &
               logic.region.can_reach(Region.mines_floor_100) &
               logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))
