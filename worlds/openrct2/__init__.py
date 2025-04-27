@@ -94,7 +94,7 @@ class OpenRCT2World(World):
         self.location_prices = []  # This list is passed to OpenRCT2 to create the unlock shop
         self.rules = []
         self.unique_rides = []
-        print(item_info)
+        # print(item_info)
 
     # Okay future Colby, listen up. Here's the plan. We're going to take the item_table and shuffle it in the next
     # section. We'll generate the unlock shop with the item locations and apply our logic to it. Prereqs can only be
@@ -156,7 +156,7 @@ class OpenRCT2World(World):
             while location < ending_location + 1:
                 if location < 8:
                     locations.append(OpenRCT2Location(self.player, f"White_{location}",
-                                                    self.location_name_to_id[f"White_{location}"], chosen_region))
+                        self.location_name_to_id[f"White_{location}"], chosen_region))
                 else:
                     color_map = {
                         0: "Black",
@@ -170,7 +170,7 @@ class OpenRCT2World(World):
                     }
                     color = color_map[location % 8]
                     locations.append(OpenRCT2Location(self.player, f"{color}_{math.floor(location/8 - 1)}",
-                                                    self.location_name_to_id[f"{color}_{math.floor(location/8 - 1)}"], chosen_region))
+                        self.location_name_to_id[f"{color}_{math.floor(location/8 - 1)}"], chosen_region))
                 location += 1
             return locations
 
