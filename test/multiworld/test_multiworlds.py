@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from typing import ClassVar, List, Tuple
 from unittest import TestCase
@@ -5,7 +6,7 @@ from unittest import TestCase
 from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
-from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
+from worlds.AutoWorld import AutoWorldRegister, call_all, call_single, call_stage
 from ..general import gen_steps, setup_multiworld
 from ..param import classvar_matrix
 
@@ -79,3 +80,31 @@ class TestTwoPlayerMulti(MultiworldTestBase):
             distribute_items_restrictive(self.multiworld)
             call_all(self.multiworld, "post_fill")
             self.assertTrue(self.fulfills_accessibility(), "Collected all locations, but can't beat the game")
+
+
+@classvar_matrix(game=AutoWorldRegister.world_types.keys())
+class TestSinglePlayerOutput(MultiworldTestBase):
+    game: ClassVar[str]
+
+    def test_single_player_game_can_generate_output(self) -> None:
+        if self.game in ("Sudoku", "Final Fantasy"):
+            self.skipTest("Cannot generate")
+        world_type = AutoWorldRegister.world_types[self.game]
+        self.multiworld = setup_multiworld(world_type, ())
+        # LttP requires this while sprite isn't on the options API
+        self.multiworld.sprite = {1: "Link"}
+        self.multiworld.sprite_pool = {1: []}
+        for world in self.multiworld.worlds.values():
+            world.options.accessibility.value = Accessibility.option_full
+        try:
+            call_stage(self.multiworld, "assert_generate")
+        except FileNotFoundError:
+            self.skipTest("Cannot generate")
+        self.assertSteps(gen_steps)
+        with self.subTest("filling multiworld", game=world_type.game, seed=self.multiworld.seed):
+            distribute_items_restrictive(self.multiworld)
+            call_all(self.multiworld, "post_fill")
+            output = tempfile.TemporaryDirectory()
+            with output as temp_dir:
+                call_stage(self.multiworld, "generate_output", temp_dir)
+                call_single(self.multiworld, "generate_output", 1, temp_dir)
