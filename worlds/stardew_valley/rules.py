@@ -452,11 +452,9 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
                       & logic.region.can_reach_all(Region.island_north, Region.island_west, Region.island_east, Region.island_south))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Melon", logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Wheat",
-                      logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location(
-                          "Walnutsanity: Gourmand Frog Melon"))
+                      logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Melon"))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Garlic",
-                      logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location(
-                          "Walnutsanity: Gourmand Frog Wheat"))
+                      logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Wheat"))
     set_location_rule(multiworld, player, "Walnutsanity: Whack A Mole", logic.tool.has_tool(Tool.watering_can, ToolMaterial.iridium))
     set_location_rule(multiworld, player, "Walnutsanity: Complete Large Animal Collection", logic.walnut.can_complete_large_animal_collection())
     set_location_rule(multiworld, player, "Walnutsanity: Complete Snake Collection", logic.walnut.can_complete_snake_collection())
