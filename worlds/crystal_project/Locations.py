@@ -128,7 +128,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Pale Grotto", "Pale Grotto Chest - Jumping puzzle Storm Helm chest", 226 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Money chest south of temple", 136 + treasure_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple antechamber Toothpick chest", 222 + treasure_index_offset),
-        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto Map chest", 1154 + treasure_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary Pale Grotto map chest", 1154 + treasure_index_offset),
         
         #NPCs
         #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don"t have it but it"s missable (it"s in shops)
@@ -528,7 +528,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Salmon River Chest - Bloodbind chest atop river island crown", 1297 + treasure_index_offset),
         LocationData("Salmon River", "Salmon River Chest - Money chest also wishes to be frogger", 325 + treasure_index_offset),
         LocationData("Salmon River", "Salmon River Chest - Ether Pouch chest in the stands of the Salmon race finish line ", 2976 + treasure_index_offset),
-        LocationData("Salmon River", "Salmon River Chest - Salmon River Map chest inside the Salmon Shack", 2913 + treasure_index_offset),
+        LocationData("Salmon River", "Salmon River Chest - Salmon River map chest inside the Salmon Shack", 2913 + treasure_index_offset),
 
         #NPCs
         #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
@@ -854,7 +854,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 3 Potion Pouch chest", 2973 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Bottom Floor Ether chest", 1796 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Small Key chest", 818 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 Map chest", 2916 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 4 map chest", 2916 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 2 Shelter Dress chest", 899 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 2 Fenix Juice chest", 1797 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)),
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Floor 3 Ether Pouch chest", 2044 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 4)),
@@ -929,7 +929,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Quintar Mausoleum
         #Treasure chests Todo descriptivize and check requirements
         LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Babel Quintar chest", 2153 + treasure_index_offset), #(688, 114, -464)
-        LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Quintar Mausoleum Map chest", 3401 + treasure_index_offset), #(664, 129, -425)
+        LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Quintar Mausoleum map chest", 3401 + treasure_index_offset), #(664, 129, -425)
         LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Wind Thresher chest", 3768 + treasure_index_offset), #(709, 129, -442)
 
         #Eastern Chasm
@@ -1044,7 +1044,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo descriptivize and check requirements
         #Treasure chests
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Money chest", 1547 + treasure_index_offset), #(443, 206, -378)
-        LocationData("Castle Ramparts", "Castle Ramparts Chest - Castle Ramparts Map chest", 2908 + treasure_index_offset), #(407, 228, -383)
+        LocationData("Castle Ramparts", "Castle Ramparts Chest - Castle Ramparts map chest", 2908 + treasure_index_offset), #(407, 228, -383)
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Conquest chest", 2742 + treasure_index_offset), #(440, 227, -386)
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Rune Sword chest", 2741 + treasure_index_offset), #(369, 227, -386)
 
@@ -1057,7 +1057,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #The Chalice of Tar
         #Treasure chests
-        LocationData("The Chalice of Tar", "The Chalice of Tar Chest - The Chalice of Tar Map chest at the tippy-top", 3544 + treasure_index_offset, logic.has_vertical_movement),
+        LocationData("The Chalice of Tar", "The Chalice of Tar Chest - The Chalice of Tar map chest at the tippy-top", 3544 + treasure_index_offset, logic.has_vertical_movement),
         LocationData("The Chalice of Tar", "The Chalice of Tar Chest - Dont let your feathers touch the tar Vermillion Book chest", 2587 + treasure_index_offset),
         LocationData("The Chalice of Tar", "The Chalice of Tar Chest - Windsong chest after the tar tunnel", 2806 + treasure_index_offset),
 
@@ -1071,7 +1071,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Flyers Crag
         #Todo descriptivize and check requirements (region entry rules include owl)
         #Treasure chests
-        LocationData("Flyers Crag", "Flyers Crag Chest - Flyers Crag Map chest", 3656 + treasure_index_offset), #(658, 216, -170)
+        LocationData("Flyers Crag", "Flyers Crag Chest - Flyers Crag map chest", 3656 + treasure_index_offset), #(658, 216, -170)
         
         #NPCs
         LocationData("Flyers Crag", "Flyers Crag NPC - Gold Dust", 2820 + npc_index_offset), #(695, 137, -159)
@@ -1101,7 +1101,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Ravens Hood chest hiding in underground sneaky passage by NE cave exit", 2797 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Canopy Key chest smack in the center of, you guessed it, the canopy", 1631 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Demon Helm chest up in the canopy south of shrine", 1171 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
-        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Jidamba Tangle Map chest in Eaclaneya entrance hall", 2919 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Jidamba Tangle map chest in Eaclaneya entrance hall", 2919 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide),
 
         #NPCs
         #Todo NPCs Missable: Z54_ChloeFishing ID 2775 gives you the Super Rod (828, 119, 99)
@@ -1125,7 +1125,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Celestial Crown chest climb the lamp in the south room", 2799 + treasure_index_offset, logic.has_glide and logic.has_vertical_movement),
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Flame Sword chest at the end of spike hallway", 2755 + treasure_index_offset, logic.has_glide),
-        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Jidamba Eaclaneya Map chest in the monster cubby", 2920 + treasure_index_offset),
+        LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Jidamba Eaclaneya map chest in the monster cubby", 2920 + treasure_index_offset),
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Practice your swimming to reach Ether Pouch chest", 2282 + treasure_index_offset, logic.has_glide),
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Staff of Balance chest on the right side of the swimming puzzle", 2289 + treasure_index_offset, logic.has_glide),
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Stardust Wand chest in the glass elevator room", 2301 + treasure_index_offset, logic.has_glide),
@@ -1199,22 +1199,115 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Jade Cavern
         #Todo descriptivize and check requirements
         #Treasure chests
-        LocationData("Jade Cavern", "Jade Cavern Chest - Jade Cavern Map chest", 3604 + treasure_index_offset), #(239, 99, -124)
+        LocationData("Jade Cavern", "Jade Cavern Chest - Jade Cavern map chest", 3604 + treasure_index_offset), #(239, 99, -124)
 
         #NPCs
         #Todo NPCs CheckOrNot Job Masters: this guy trades you a thing for each job seal you've gotten from a job master for mastering that job
         #LocationData("Jade Cavern", "Jade Cavern NPC - Jade Cavern Map chest", 3603 + npc_index_offset), #(255, 91, -90)
         
         #Continental Tram
-        #Todo descriptivize and check requirements
         #Treasure chests
-        LocationData("Continental Tram", "Continental Tram Chest - Continental Tram Map chest tickets please", 1844 + treasure_index_offset),
+        LocationData("Continental Tram", "Continental Tram Chest - Continental Tram map chest tickets please", 1844 + treasure_index_offset),
         LocationData("Continental Tram", "Continental Tram Chest - Nomads Guard chest end of the line", 3012 + treasure_index_offset),
         LocationData("Continental Tram", "Continental Tram Chest - Tram Key chest tickets please", 1654 + treasure_index_offset),
 
         #NPCs
         LocationData("Continental Tram", "Continental Tram NPC - Diamond Dust hanging out with the conscript", 2895 + npc_index_offset, lambda state: state.has("Item - Tram Key", player) or logic.has_swimming),
         LocationData("Continental Tram", "Continental Tram NPC - Diamond Ingot hanging out with the conscript", 2894 + npc_index_offset, lambda state: state.has("Item - Tram Key", player) or logic.has_swimming),
+
+        #Zones (End-Game)
+        #Ancient Labyrinth
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Money chest", 1274 + treasure_index_offset), #(-186, 125, -316) F2
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Archmage Vest chest", 2412 + treasure_index_offset), #(-190, 125, -316) F2
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Vita Crown chest", 1738 + treasure_index_offset), #(-209, 87, -311) F3
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Judgement chest", 2924 + treasure_index_offset), #(-185, 63, -363) F4
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Zether Pouch chest", 2926 + treasure_index_offset), #(-162, 63, -336) F4
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Ancient Labyrinth map chest", 3649 + treasure_index_offset), #(-185, 38, -301) F6
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Mirror Shield chest", 2591 + treasure_index_offset), #(-219, 27, -350) F7
+
+        #NPCs
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Diamond Ingot", 2881 + npc_index_offset), #(-186, 125, -300) F2
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Diamond Ore", 2880 + npc_index_offset), #(-182, 126, -326) F2
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Diamond Ingot", 2882 + npc_index_offset), #(-200, 98, -334) F3
+
+        #The Sequoia
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("The Sequoia", "The Sequoia Chest - Money chest", 2934 + treasure_index_offset), #(-286, 90, -539)
+        LocationData("The Sequoia", "The Sequoia Chest - Battle Band chest", 2437 + treasure_index_offset), #(-250, 174, -512)
+        LocationData("The Sequoia", "The Sequoia Chest - Sange chest", 2935 + treasure_index_offset), #(-296, 182, -533)
+        LocationData("The Sequoia", "The Sequoia Chest - Zether Pouch chest", 2884 + treasure_index_offset), #(-223, 118, -541)
+        LocationData("The Sequoia", "The Sequoia Chest - Z-Potion Pouch chest", 2887 + treasure_index_offset), #(-244, 168, -498)
+        LocationData("The Sequoia", "The Sequoia Chest - Aphotic Edge chest", 2933 + treasure_index_offset), #(-282, 182, -528)
+        LocationData("The Sequoia", "The Sequoia Chest - The Hand of Midas chest", 2451 + treasure_index_offset), #(-272, 241, -544)
+        
+        #NPCs
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Dust", 2885 + treasure_index_offset), #(-223, 160, -530)
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Ore", 2883 + treasure_index_offset), #(-237, 117, -563)
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Ore", 2886 + treasure_index_offset), #(-311, 160, -540)
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Dust", 2889 + treasure_index_offset), #(-269, 240, -545)
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Dust", 2890 + treasure_index_offset), #(-268, 240, -547)
+        LocationData("The Sequoia", "The Sequoia NPC - Diamond Dust", 2888 + treasure_index_offset), #(-275, 240, -546)
+
+        #The Depths
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("The Depths", "The Depths Chest - Cerulean Book chest", 2588 + treasure_index_offset), #(-358, 1, 18)
+        LocationData("The Depths", "The Depths Chest - Z-Potion chest", 2714 + treasure_index_offset), #(-357, 2, 20)
+
+        #NPCs
+        LocationData("The Depths", "The Depths NPC - Diamond Dust", 2865 + npc_index_offset), #(692, 20, -618)
+        LocationData("The Depths", "The Depths NPC - Diamond Dust", 2868 + npc_index_offset), #(823, 17, -595)
+        LocationData("The Depths", "The Depths NPC - Diamond Dust", 2891 + npc_index_offset), #(161, 20, 240)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 1214 + npc_index_offset), #(-377, 20, -220)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 2859 + npc_index_offset), #(-373, 19, -261)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 2863 + npc_index_offset), #(784, 17, -611)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 2866 + npc_index_offset), #(629, 20, -615)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 2893 + npc_index_offset), #(180, 20, 255)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 1213 + npc_index_offset), #(932, 19, -199)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 2858 + npc_index_offset), #(924, 20, -235)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 2864 + npc_index_offset), #(760, 12, -612)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 2867 + npc_index_offset), #(722, 20, -604)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 2892 + npc_index_offset), #(189, 30, 235)
+        LocationData("The Depths", "The Depths NPC - Diamond Dust", 2861 + npc_index_offset), #(-308, 12, 132)
+        LocationData("The Depths", "The Depths NPC - Diamond Ingot", 2862 + npc_index_offset), #(-303, 14, 183)
+        LocationData("The Depths", "The Depths NPC - Diamond Ore", 2860 + npc_index_offset), #(-359, 10, 162)
+
+        #Castle Sequoia
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Castle Sequoia map chest", 3657 + treasure_index_offset), #(371, 231, -457) (Skums)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Decapitator chest", 2758 + treasure_index_offset), #(375, 232, -452) (Skums)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Zether Pouch chest", 2515 + treasure_index_offset), #(422, 169, -406) (Skums)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Z-Potion chest", 1465 + treasure_index_offset), #(427, 170, -441) (Skums)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Z-Potion Pouch chest", 1447 + treasure_index_offset), #(409, 169, -406) (Skums)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Beads of Defense chest", 1472 + treasure_index_offset), #(375, 153, -405) (Bounce)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Ether chest", 2949 + treasure_index_offset), #(401, 151, -404) (Bounce)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Fenix Syrup chest", 2948 + treasure_index_offset), #(401, 151, -424) (Bounce)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Potion chest", 2945 + treasure_index_offset), #(434, 154, -441) (Bounce)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Protector chest", 2922 + treasure_index_offset), #(395, 155, -453) (Bounce)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Kings Guard chest", 2927 + treasure_index_offset), #(387, 134, -431) (Ice)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Royal Guard chest", 1492 + treasure_index_offset), #(387, 134, -427) (Ice)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Dream Hunter chest", 2479 + treasure_index_offset), #(401, 119, -415) (Fish)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Nightingale chest", 2509 + treasure_index_offset), #(388, 122, -445) (Fish)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Oily Sword chest", 2484 + treasure_index_offset), #(397, 119, -415) (Fish)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - Paladin Wand chest", 2510 + treasure_index_offset), #(364, 85, -424) (2D)
+        LocationData("Castle Sequoia", "Castle Sequoia Chest - New World Stone chest", 2505 + treasure_index_offset), #(401, 250, -478) (Throne)
+
+        #NPCs
+        #Todo NPCs CheckOrNot: this gives you a Gaea Shard if you're stuck
+        #LocationData("Castle Sequoia", "Castle Sequoia NPC - Z58_StrandedShard", 3785 + npc_index_offset), #(401, 183, -382)
+        #Todo NPCs Blocker: i think this guy might only show up in the vanilla game's randomizer? checks if Z58_EleOn (Z58 is Castle Sequoia); Z58Progression_Gate ID 3824 (400, 250, -478)
+
+        #The New World
+        #Todo Player Options: if astley is the goal, make the requirement for entering the new world be the number of crystals the player picked to win
+        #Todo descriptivize and check requirements
+        #Treasure chests
+        LocationData("The New World", "The New World Chest - Lunar Mail chest", 2930 + treasure_index_offset), #(-134, 8, 230)
+        LocationData("The New World", "The New World Chest - Lunar Mail chest", 2931 + treasure_index_offset), #(-11, 12, -577)
+        LocationData("The New World", "The New World Chest - The New World map chest", 1938 + treasure_index_offset), #(-85, 8, 142)
 
     ]
 
