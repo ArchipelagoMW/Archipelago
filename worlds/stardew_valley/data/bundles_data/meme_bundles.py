@@ -41,8 +41,6 @@ lemonade_stand_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.lemonade_st
 what_the_rock_is_cooking_items = [stone.as_amount(1), cookout_kit, strange_bun]
 what_the_rock_is_cooking_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.what_the_rock_is_cooking, what_the_rock_is_cooking_items, 3, 3)
 
-death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
-
 amons_fall_items = [stone.as_amount(1)]
 amons_fall_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.amons_fall, amons_fall_items, 7, 7)
 
@@ -180,6 +178,7 @@ clique_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, Bund
 cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
 cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.clic, 5000))  # ?
 communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
+death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
 
 # Stopped at 49 responses on the form
 
@@ -188,21 +187,26 @@ communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName
 # Acrostic Bundle
 
 # Bundles that need special Mod Handling:
+# Vampire Bundle
+# Exhaustion Bundle
+# Tick Tock Bundle
+# Clique Bundle
+# Cipher Bundle
+# Cookie Clicker Bundle
+# Communist Bundle
+# Death Bundle (1 Death)
+# Archipela-Go! Bundle (Steps)
+
 # Form A38 (Chained Items)
-# All Currency Bundles
 # Honorable Bundle (If you take the honorable way, consequences)
-# Deathlink Bundle (1 Death)
 # Trap Bundle (Start filled with traps, have to take them out)
 # Journalist Bundle (Accept literally anything)
 # Mermaid song bundle (1-5-4-2-3)
 # Commitment Bundle (Need to have doved and divorced)
-# Archipela-Go! Bundle (Steps)
 # Side Quest Bundle (Have to do a bunch of shit)
 # Sisyphus Bundle (Donate but it keeps emptying itself)
 # Bundle that sticks
-# Cookie Clicker Bundle
 # Reverse Bundle
-# Communist Bundle
 # Bundle Bundle
 # Scavenger Bundle
 
