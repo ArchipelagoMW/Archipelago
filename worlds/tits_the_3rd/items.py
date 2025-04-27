@@ -5,6 +5,7 @@ import itertools
 from typing import Dict, List, NamedTuple, Optional, Set
 
 from .names.item_name import ItemName
+from .names.location_name import LocationName
 from BaseClasses import Item, ItemClassification
 
 
@@ -105,6 +106,13 @@ character_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.julia: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
 }
 
+character_spoiler_table: Dict[str, TitsThe3rdItemData] = {
+    ItemName.kevin_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 8, ItemClassification.progression),
+    ItemName.ries_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 14, ItemClassification.progression),
+    ItemName.tita_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 6, ItemClassification.progression),
+    ItemName.julia_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
+}
+
 area_unlock_table: Dict[str, TitsThe3rdItemData] = {  # Item ID is 200000 + flag number
     ItemName.jade_corridor_unlock_1: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 256, ItemClassification.progression),
     ItemName.jade_corridor_unlock_2: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 257, ItemClassification.progression),
@@ -122,6 +130,7 @@ item_data_table: Dict[str, TitsThe3rdItemData] = {
     **currency_table,
     **key_item_table,
     **character_table,
+    **character_spoiler_table,
     **area_unlock_table,
     **meta_data_table,
 }
@@ -133,6 +142,7 @@ item_groups: Dict[str, Set[str]] = {
     "Quartz": set(quartz_table.keys()),
     "Currency": set(currency_table.keys()),
     "Characters": set(character_table.keys()),
+    "Characters Spoiler": set(character_spoiler_table.keys()),
     "Area Unlock": set(area_unlock_table.keys()),
 }
 
@@ -152,6 +162,7 @@ default_item_pool: Counter[str] = Counter(
         ItemName.jade_corridor_unlock_1: 1,
         ItemName.jade_corridor_unlock_2: 1,
         ItemName.jade_corridor_arseille_unlock: 1,
+        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
     }
 )
 
@@ -166,7 +177,6 @@ default_chest_pool: Counter[str] = Counter(
         ItemName.reviving_balm: 1,  # Default locations: 9874
         ItemName.ep_charge: 2,  # Default locations: 9721, 9723
         ItemName.smelling_salts: 1,  # Default locations: 9866
-        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
         ItemName.royal_spikes: 1,  # Default locations: 9869
         ItemName.black_bangle: 1,  # Default locations: 9867
         ItemName.glam_choker: 1,  # Default locations: 9868
@@ -192,3 +202,9 @@ default_character_quartz_pool: Counter[str] = Counter(
         ItemName.hp_1: 1,
     }
 )
+
+
+default_character_to_location = {
+    ItemName.tita: LocationName.sealing_stone_tita,
+    ItemName.julia: LocationName.sealing_stone_julia,
+}

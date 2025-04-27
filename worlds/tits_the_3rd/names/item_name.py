@@ -52,9 +52,20 @@ class ItemName:
 
     # Characters
     kevin = "Kevin"
+    kevin_spoiler = "Male Default Character"
     ries = "Ries"
+    ries_spoiler = "Female Default Character"
     tita = "Tita"
+    tita_spoiler = "Chapter 1 First Character"
     julia = "Julia"
+    julia_spoiler = "Chapter 1 Second Character"
+
+    original_to_spoiler_mapping = {
+        kevin: kevin_spoiler,
+        ries: ries_spoiler,
+        tita: tita_spoiler,
+        julia: julia_spoiler,
+    }
 
     # Location Unlock
     jade_corridor_unlock_1 = "Area Expansion: Jade Corridor 1"
