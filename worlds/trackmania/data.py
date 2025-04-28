@@ -99,7 +99,6 @@ filler_item_names = [
     "Two-Wheel of Doom!",
     "Quantum Slide Observation Experiment",
     "Manual Gearbox",
-    "Idea to Finally Make TM Esports Mainstream",
     "TM Esports Format Idea",
     "Banger Identity Idea",
     "Impossible Plugin Request",
