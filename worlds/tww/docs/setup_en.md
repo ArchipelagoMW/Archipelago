@@ -26,8 +26,8 @@ world. Once you're happy with your settings, provide the room host with your YAM
 
 ## Connecting to a Room
 
-The multiworld host will provide you a link to download your `aptww` file or a zip file containing everyone's files. The
-`aptww` file should be named `P#_<name>_XXXXX.aptww`, where `#` is your player ID, `<name>` is your player name, and
+The multiworld host will provide you a link to download your APTWW file or a zip file containing everyone's files. The
+APTWW file should be named `P#_<name>_XXXXX.aptww`, where `#` is your player ID, `<name>` is your player name, and
 `XXXXX` is the room ID. The host should also provide you with the room's server name and port number.
 
 Once you do, follow these steps to connect to the room:
@@ -35,7 +35,7 @@ Once you do, follow these steps to connect to the room:
 path to your The Wind Waker ISO and the output folder for the randomized ISO. These will be saved for the next time you
 open the program.
 2. Modify any cosmetic convenience tweaks and player customization options as desired.
-3. For the APTWW file, browse and locate the path to your `aptww` file.
+3. For the APTWW file, browse and locate the path to your APTWW file.
 4. Click `Randomize` at the bottom right. This randomizes the ISO and puts it in the output folder you specified. The
 file will be named `TWW AP_YYYYY_P# (<name>).iso`, where `YYYYY` is the seed name, `#` is your player ID, and `<name>`
 is your player (slot) name. Verify that the values are correct for the multiworld.
