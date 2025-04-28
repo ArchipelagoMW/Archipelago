@@ -76,7 +76,7 @@ A few presets are available on the [player options page](../player-options) for 
   The preset features 3 required bosses and hard obscurity difficulty, and while the list of enabled progression options
   may seem intimidating, the preset also excludes several locations.
 - **Miniblins 2025**: These are (as close to as possible) the settings used in the WWR Racing Server's
-  [2025 Season of Minblins](https://docs.google.com/document/d/19vT68eU6PepD2BD2ZjR9ikElfqs8pXfqQucZ-TcscV8). This
+  [2025 Season of Miniblins](https://docs.google.com/document/d/19vT68eU6PepD2BD2ZjR9ikElfqs8pXfqQucZ-TcscV8). This
   preset is great if you're new to Wind Waker! There aren't too many locations in the world, and you only need to
   complete two dungeons. You also start with many convenience items, such as double magic, a capacity upgrade for your
   bow and bombs, and six hearts.
@@ -106,7 +106,7 @@ This randomizer would not be possible without the help from:
 - CrainWWR: (multiworld and Dolphin memory assistance, additional programming)
 - Cyb3R: (reference for `TWWClient`)
 - DeamonHunter: (additional programming)
-- Dev5ter: (initial TWW AP implmentation)
+- Dev5ter: (initial TWW AP implementation)
 - Gamma / SageOfMirrors: (additional programming)
 - LagoLunatic: (base randomizer, additional assistance)
 - Lunix: (Linux support, additional programming)
