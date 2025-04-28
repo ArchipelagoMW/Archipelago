@@ -337,7 +337,7 @@ def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> No
     logic = CrystalProjectLogic(world.player, options)
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Mercury Shrine", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine", "Tall Tall Heights", "Jidamba Tangle", "The Deep Sea", "The Old World", "The New World"], 
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Mercury Shrine", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine", "Tall Tall Heights", "Lands End", "Jidamba Tangle", "The Deep Sea", "The Old World", "The New World"], 
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Mercury Shrine": lambda state: state.has_any({"Item - Mercury Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
@@ -345,6 +345,7 @@ def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> No
         "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player),
         "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player),
         "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
+        "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player),
         "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player),
         "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player),
         "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player),
