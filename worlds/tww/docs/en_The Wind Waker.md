@@ -37,6 +37,10 @@ Refer to the [FAQ](https://lagolunatic.github.io/wwrando/faq/) first. Then, try 
 [setup guide](/tutorial/The%20Wind%20Waker/setup/en). If you are still stuck, please ask in the Wind Waker channel in
 the Archipelago server.
 
+## I opened the game in Dolphin, but I don't have any of my starting items!
+
+You must connect to the multiworld room to receive any items, including your starting inventory.
+
 ## Known issues
 
 - Randomized freestanding rupees, spoils, and bait will also be given to the player picking up the item. The item will
