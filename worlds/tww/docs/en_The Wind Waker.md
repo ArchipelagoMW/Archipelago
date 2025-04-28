@@ -19,7 +19,8 @@ a yellow Rupee, which includes a message that the location is not randomized.
 ## What is the goal of The Wind Waker?
 
 Reach and defeat Ganondorf atop Ganon's Tower. This will require all eight shards of the Triforce of Courage, the
-fully-powered Master Sword (unless it's swordless mode), Light Arrows, and any other items necessary to reach Ganondorf.
+fully-powered Master Sword (unless it's swords optional or swordless mode), Light Arrows, and any other items necessary
+to reach Ganondorf.
 
 ## What does another world's item look like in TWW?
 
@@ -86,7 +87,7 @@ A few presets are available on the [player options page](../player-options) for 
   bow and bombs, and six hearts.
 - **Mixed Pools**: These are the settings used in the WWR Racing Server's
   [Mixed Pools Co-op Tournament](https://docs.google.com/document/d/1YGPTtEgP978TIi0PUAD792OtZbE2jBQpI8XCAy63qpg). This
-  preset features full entrance rando and includes many locations behind a randomized entrance. There are also many
+  preset features full entrance rando and includes most locations behind a randomized entrance. There are also many
   overworld locations, as these settings were intended to be played in a two-person co-op team. The preset also has 6
   required bosses, but since entrance pools are randomized, the bosses could be found anywhere! Check your Sea Chart to
   find out which island the bosses are on.
