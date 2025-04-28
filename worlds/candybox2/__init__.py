@@ -12,7 +12,7 @@ from .regions import create_regions, connect_entrances
 from .rooms import entrance_friendly_names, CandyBox2Room
 from .rules import set_rules, can_reach_room
 
-EXPECTED_CLIENT_VERSION = "20250428-1"
+EXPECTED_CLIENT_VERSION = "20250428-1+"
 
 class CandyBox2WebWorld(WebWorld):
     tutorials = [Tutorial(
