@@ -55,13 +55,13 @@ name automatically when you start a new save file.
 * Ensure you are running the same version of Archipelago on which the multiworld was generated.
 * Ensure `tww.apworld` is not in your Archipelago installation's `custom_worlds` folder.
 * Ensure you are using the correct randomizer build for the version of Archipelago you are using. The build should
-provide an error message directing you to the correct version. You can also look at the release notes of TWW AP builds
-[here](https://github.com/tanjo3/wwrando/releases) to see which versions of Archipelago each build is compatible with.
+  provide an error message directing you to the correct version. You can also look at the release notes of TWW AP builds
+  [here](https://github.com/tanjo3/wwrando/releases) to see which versions of Archipelago each build is compatible with.
 * If you encounter issues with authenticating, ensure that the randomized ROM is open in Dolphin and corresponds to the
-multiworld to which you are connecting.
+  multiworld to which you are connecting.
 * Ensure that you do not have any Dolphin cheats or codes enabled. Some cheats or codes can unexpectedly interfere with
-emulation and make troubleshooting errors difficult.
-* If you get an error message, ensure that `Enable Emulated Memory Size Override` in Dolphin (under `Options` >
-`Configuration` > `Advanced`) is **disabled**.
+  emulation and make troubleshooting errors difficult.
+* Ensure that `Enable Emulated Memory Size Override` in Dolphin (under `Options` > `Configuration` > `Advanced`) is
+  **disabled**.
 * If you run with a custom GC boot menu, you'll need to skip it by going to `Options` > `Configuration` > `GameCube`
-and checking `Skip Main Menu`.
+  and checking `Skip Main Menu`.
