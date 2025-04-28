@@ -258,9 +258,12 @@ def read_weights_yamls(path) -> Tuple[Any, ...]:
     except MarkedYAMLError as ex:
         if ex.problem_mark:
             lines = yaml.splitlines()
-            problem_line = lines[ex.problem_mark.line]
+            if ex.context_mark:
+                relevant_lines = "\n".join(lines[ex.context_mark.line:ex.problem_mark.line+1])
+            else:
+                relevant_lines = lines[ex.problem_mark.line]
             error_line = " " * ex.problem_mark.column + "^"
-            raise Exception(f"{ex.context} {ex.problem}\n{problem_line}\n{error_line}")
+            raise Exception(f"{ex.context} {ex.problem}:\n{relevant_lines}\n{error_line}")
         raise ex
 
 
