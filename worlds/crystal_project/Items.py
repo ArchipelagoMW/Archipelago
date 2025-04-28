@@ -787,7 +787,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Beaurior Volcano Map": ItemData("Item", 109 + item_index_offset, ItemClassification.useful),
     "Item - Beaurior Rock Map": ItemData("Item", 110 + item_index_offset, ItemClassification.useful),
     "Item - The Sequoia Map": ItemData("Item", 111 + item_index_offset, ItemClassification.useful),
-    "Item - Tall, Tall Heights Map": ItemData("Item", 112 + item_index_offset, ItemClassification.useful),
+    "Item - Tall Tall Heights Map": ItemData("Item", 112 + item_index_offset, ItemClassification.useful),
     "Item - Slip Glide Ride Map": ItemData("Item", 113 + item_index_offset, ItemClassification.useful),
     "Item - Ganymede Shrine Map": ItemData("Item", 117 + item_index_offset, ItemClassification.useful),
     "Item - Quintar Reserve Map": ItemData("Item", 119 + item_index_offset, ItemClassification.useful),
