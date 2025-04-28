@@ -278,7 +278,7 @@ one file, removing the need to manage separate files if one chooses to do so.
 As a precautionary measure, before submitting a multi-game yaml like this one in a synchronous/sync multiworld, please
 confirm that the other players in the multi are OK with what you are submitting, and please be fairly reasonable about
 the submission. (i.e. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
-reasonable, but submitting a ChecksFinder alongside another game OR submitting multiple Slay the Spire runs is likely
+reasonable, but submitting a ChecksFinder alongside another game is likely
 OK)
 
 To configure your file to generate multiple worlds, use 3 dashes `---` on an empty line to separate the ending of one
@@ -335,7 +335,7 @@ Minecraft:
 
 ---
 
-description: Example of generating multiple worlds. World 3 of 3
+description: Example of generating multiple worlds. World 2 of 2
 name: ExampleFinder
 game: ChecksFinder
 
