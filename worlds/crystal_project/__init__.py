@@ -349,7 +349,8 @@ class CrystalProjectWorld(World):
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "randomizeJobs": bool(self.options.randomizeJobs.value),
-            "jobGoalAmount": self.options.newWorldStoneJobQuantity.value
+            "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
+            "startWithMaps": bool(self.options.startWithMaps.value)
         }
     
         return slot_data

@@ -78,3 +78,12 @@ class CrystalProjectLogic:
 
     def has_swimming(self, state: CollectionState) -> bool:
         return state.has_any({"Item - Progressive Salmon Violin"}, self.player) or state.has("Item - Progressive Quintar Flute", self.player, 3)
+
+    def has_golden_quintar(self, state: CollectionState) -> bool:
+        return state.has("Item - Progressive Quintar Flute", self.player, 3)
+
+    def new_world_requirements(self, state: CollectionState) -> bool:
+        if (self.options.goal.value == self.options.goal.option_astley):
+            return self.has_jobs(state, self.options.newWorldStoneJobQuantity.value)    
+        else:
+            return state.has("Item - New World Stone", self.player)
