@@ -503,7 +503,7 @@ all_doors: dict[str, Door] = {
     "3a_09-b_east": Door("3a_09-b_east", "3a_09-b", DoorDirection.right, False, False),
     "3a_09-b_north-east-right": Door("3a_09-b_north-east-right", "3a_09-b", DoorDirection.right, False, False),
     "3a_09-b_north-east-top": Door("3a_09-b_north-east-top", "3a_09-b", DoorDirection.up, False, False),
-    "3a_09-b_north": Door("3a_09-b_north", "3a_09-b", DoorDirection.up, False, False),
+    "3a_09-b_north": Door("3a_09-b_north", "3a_09-b", DoorDirection.up, False, True),
 
     "3a_10-x_west": Door("3a_10-x_west", "3a_10-x", DoorDirection.up, False, False),
     "3a_10-x_south-east": Door("3a_10-x_south-east", "3a_10-x", DoorDirection.down, False, True),
@@ -1454,7 +1454,7 @@ all_doors: dict[str, Door] = {
     "6a_b-03_west": Door("6a_b-03_west", "6a_b-03", DoorDirection.left, False, False),
     "6a_b-03_east": Door("6a_b-03_east", "6a_b-03", DoorDirection.right, False, False),
 
-    "6a_boss-00_west": Door("6a_boss-00_west", "6a_boss-00", DoorDirection.left, False, False),
+    "6a_boss-00_west": Door("6a_boss-00_west", "6a_boss-00", DoorDirection.left, False, True),
     "6a_boss-00_east": Door("6a_boss-00_east", "6a_boss-00", DoorDirection.down, False, False),
 
     "6a_boss-01_west": Door("6a_boss-01_west", "6a_boss-01", DoorDirection.up, False, False),
@@ -3043,7 +3043,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "3a_00-a_west---3a_00-a_east": RegionConnection("3a_00-a_west", "3a_00-a_east", []),
     "3a_00-a_east---3a_00-a_west": RegionConnection("3a_00-a_east", "3a_00-a_west", []),
 
-    "3a_02-a_west---3a_02-a_east": RegionConnection("3a_02-a_west", "3a_02-a_east", [[ItemName.sinking_platforms, ], [ItemName.dash_refills, ], ]),
+    "3a_02-a_west---3a_02-a_main": RegionConnection("3a_02-a_west", "3a_02-a_main", [[ItemName.sinking_platforms, ], [ItemName.dash_refills, ], ]),
     "3a_02-a_top---3a_02-a_west": RegionConnection("3a_02-a_top", "3a_02-a_west", [[ItemName.dash_refills, ], ]),
     "3a_02-a_top---3a_02-a_main": RegionConnection("3a_02-a_top", "3a_02-a_main", [[ItemName.dash_refills, ], ]),
     "3a_02-a_main---3a_02-a_top": RegionConnection("3a_02-a_main", "3a_02-a_top", [[ItemName.dash_refills, ], ]),
@@ -3171,7 +3171,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "3a_11-d_east---3a_11-d_west": RegionConnection("3a_11-d_east", "3a_11-d_west", [[ItemName.dash_refills, ], ]),
 
     "3a_10-d_west---3a_10-d_main": RegionConnection("3a_10-d_west", "3a_10-d_main", [[ItemName.green_clutter, ], ]),
-    "3a_10-d_main---3a_10-d_west": RegionConnection("3a_10-d_main", "3a_10-d_west", [[ItemName.dash_refills, ], ]),
+    "3a_10-d_main---3a_10-d_west": RegionConnection("3a_10-d_main", "3a_10-d_west", []),
     "3a_10-d_east---3a_10-d_main": RegionConnection("3a_10-d_east", "3a_10-d_main", []),
 
     "3a_11-b_west---3a_11-b_east": RegionConnection("3a_11-b_west", "3a_11-b_east", []),
@@ -3588,7 +3588,7 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "5a_a-08_west---5a_a-08_center": RegionConnection("5a_a-08_west", "5a_a-08_center", []),
     "5a_a-08_center---5a_a-08_west": RegionConnection("5a_a-08_center", "5a_a-08_west", []),
-    "5a_a-08_center---5a_a-08_north-east": RegionConnection("5a_a-08_center", "5a_a-08_north-east", [[ItemName.red_boosters, ], ]),
+    "5a_a-08_center---5a_a-08_north-east": RegionConnection("5a_a-08_center", "5a_a-08_north-east", [[ItemName.red_boosters, ItemName.swap_blocks, ], ]),
     "5a_a-08_center---5a_a-08_south": RegionConnection("5a_a-08_center", "5a_a-08_south", []),
     "5a_a-08_center---5a_a-08_north": RegionConnection("5a_a-08_center", "5a_a-08_north", [[ItemName.swap_blocks, ], ]),
     "5a_a-08_east---5a_a-08_south-east": RegionConnection("5a_a-08_east", "5a_a-08_south-east", []),
@@ -5016,7 +5016,7 @@ all_locations: dict[str, LevelLocation] = {
     "2a_d3_binoculars": LevelLocation("2a_d3_binoculars", "Old Site A - Room d3 Binoculars", "2a_d3_north", LocationType.binoculars, []),
     "2a_d3_strawberry": LevelLocation("2a_d3_strawberry", "Old Site A - Room d3 Strawberry", "2a_d3_south", LocationType.strawberry, []),
     "2a_d2_strawberry_1": LevelLocation("2a_d2_strawberry_1", "Old Site A - Room d2 Strawberry 1", "2a_d2_north-west", LocationType.strawberry, []),
-    "2a_d2_strawberry_2": LevelLocation("2a_d2_strawberry_2", "Old Site A - Room d2 Strawberry 2", "2a_d2_east", LocationType.strawberry, []),
+    "2a_d2_strawberry_2": LevelLocation("2a_d2_strawberry_2", "Old Site A - Room d2 Strawberry 2", "2a_d2_east", LocationType.strawberry, [[ItemName.dream_blocks, ], ]),
     "2a_d9_cassette": LevelLocation("2a_d9_cassette", "Old Site A - Cassette", "2a_d9_north-west", LocationType.cassette, [[ItemName.dream_blocks, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ], ]),
     "2a_d1_strawberry": LevelLocation("2a_d1_strawberry", "Old Site A - Room d1 Strawberry", "2a_d1_south-west", LocationType.strawberry, [[ItemName.dream_blocks, ItemName.strawberry_seeds, ], ]),
     "2a_d6_strawberry": LevelLocation("2a_d6_strawberry", "Old Site A - Room d6 Strawberry", "2a_d6_west", LocationType.strawberry, []),
@@ -5139,7 +5139,7 @@ all_locations: dict[str, LevelLocation] = {
     "4c_02_clear": LevelLocation("4c_02_clear", "Golden Ridge C - Level Clear", "4c_02_goal", LocationType.level_clear, []),
     "4c_02_golden": LevelLocation("4c_02_golden", "Golden Ridge C - Golden Strawberry", "4c_02_goal", LocationType.golden_strawberry, [[ItemName.pink_clouds, ItemName.blue_boosters, ItemName.move_blocks, ItemName.dash_refills, ], ]),
 
-    "5a_a-00x_strawberry": LevelLocation("5a_a-00x_strawberry", "Mirror Temple A - Room a-00x Strawberry", "5a_a-00x_east", LocationType.strawberry, [[ItemName.springs, ], ]),
+    "5a_a-00x_strawberry": LevelLocation("5a_a-00x_strawberry", "Mirror Temple A - Room a-00x Strawberry", "5a_a-00x_east", LocationType.strawberry, []),
     "5a_a-01_strawberry_1": LevelLocation("5a_a-01_strawberry_1", "Mirror Temple A - Room a-01 Strawberry 1", "5a_a-01_center", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
     "5a_a-01_strawberry_2": LevelLocation("5a_a-01_strawberry_2", "Mirror Temple A - Room a-01 Strawberry 2", "5a_a-01_center", LocationType.strawberry, []),
     "5a_a-02_strawberry": LevelLocation("5a_a-02_strawberry", "Mirror Temple A - Room a-02 Strawberry", "5a_a-02_west", LocationType.strawberry, [[ItemName.swap_blocks, ], ]),

@@ -4053,7 +4053,7 @@
                                     "name": "strawberry_2",
                                     "display_name": "Strawberry 2",
                                     "type": "strawberry",
-                                    "rule": []
+                                    "rule": [ [ "dream_blocks" ] ]
                                 }
                             ]
                         }
@@ -7242,7 +7242,7 @@
                             "name": "west",
                             "connections": [
                                 {
-                                    "dest": "east",
+                                    "dest": "main",
                                     "rule": [
                                         [ "sinking_platforms" ],
                                         [ "dash_refills" ]
@@ -8427,7 +8427,7 @@
                             "name": "north",
                             "direction": "up",
                             "blocked": false,
-                            "closes_behind": false
+                            "closes_behind": true
                         }
                     ],
                     "checkpoint": "",
@@ -9045,7 +9045,7 @@
                             "connections": [
                                 {
                                     "dest": "west",
-                                    "rule": [ [ "dash_refills" ] ]
+                                    "rule": []
                                 }
                             ],
                             "locations": [
@@ -15747,7 +15747,7 @@
                                     "name": "strawberry",
                                     "display_name": "Strawberry",
                                     "type": "strawberry",
-                                    "rule": [ [ "springs" ] ]
+                                    "rule": []
                                 }
                             ]
                         }
@@ -16350,7 +16350,7 @@
                                 },
                                 {
                                     "dest": "north-east",
-                                    "rule": [ [ "red_boosters" ] ]
+                                    "rule": [ [ "red_boosters", "swap_blocks" ] ]
                                 },
                                 {
                                     "dest": "south",
@@ -23719,7 +23719,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": false
+                            "closes_behind": true
                         },
                         {
                             "name": "east",
