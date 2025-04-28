@@ -219,7 +219,6 @@ class SMWSNIClient(SNIClient):
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
 
-        trap_link = await snes_read(ctx, SMW_TRAP_LINK_ACTIVE_ADDR, 1)
         if trap_link and bool(trap_link[0] & 0b1) and "TrapLink" not in ctx.tags:
             ctx.tags.add("TrapLink")
             await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
