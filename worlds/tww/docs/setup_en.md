@@ -9,7 +9,7 @@ You'll need the following components to be able to play The Wind Waker:
 * Install [Dolphin Emulator](https://dolphin-emu.org/download/). **We recommend using the latest release.**
     * Linux users can use the flatpak package
     [available on Flathub](https://flathub.org/apps/org.DolphinEmu.dolphin-emu).
-* The 2.5.0 version of the [TWW AP Randomizer Build](https://github.com/tanjo3/wwrando/releases/tag/ap_2.5.0).
+* The latest version of the [TWW AP Randomizer Build](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2).
 * A The Wind Waker ISO (North American version), probably named "Legend of Zelda, The - The Wind Waker (USA).iso".
 
 Optionally, you can also download:
