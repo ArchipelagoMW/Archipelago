@@ -107,17 +107,18 @@ quotes but the name must be entered in the same as it appears on that page and i
 
 ## Item Plando Examples
 ```yaml
-  plando_items:
+ plando_items:
     # Example block - Pokémon Red and Blue
     - items:
         Potion: 3
       locations:
-        - Cerulean Gym - Misty Prize
-        - Celadon Gym - Erika Prize
-        - Saffron Gym - Sabrina Prize
+        - "Route 1 - Free Sample Man" 
+        - "Mt Moon 1F - West Item"
+        - "Mt Moon 1F - South Item"
 ```
-This block will lock 3 Potion items on the 3 listed gym leader prizes. The world value has not been specified, so these 
-locations must be in this player's own world by default.
+This block will lock 3 Potion items on the Route 1 Pokémart employee and 2 Mt Moon items. Note these are all 
+Potions in the vanilla game. The world value has not been specified, so these locations must be in this player's own 
+world by default.
 
 ```yaml
   plando_items:
