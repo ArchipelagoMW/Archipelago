@@ -985,11 +985,11 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
         #Technically 1st Overpass Scrap on Overpass (Cloudy Wind) submap
-        LocationData("Tall Tall Heights", "Overpass Chest - Past Tall,Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
+        LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
         #Technically Underpass Scrap on Underpass (Ice Pass) submap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
         #Technically Potion chest on Underpass (Ice Pass) submap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
 
         #NPCs
         #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
@@ -1005,7 +1005,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
         #Technically 1st Gold Dust on Overpass (Cloudy Wind) submap
-        LocationData("Tall Tall Heights", "Overpass NPC - Gold past Tall,Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
+        LocationData("Tall Tall Heights", "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
 
         #Summons Todo: descriptivize and implement
         #498, 218, -412
