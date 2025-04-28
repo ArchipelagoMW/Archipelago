@@ -4,8 +4,12 @@ from worlds.generic.Rules import set_rule
 if TYPE_CHECKING:
     from . import WordipelagoWorld
 
-def all_needed_locations_checked(state, player):
-    return state.has("Word Master", player)
+def all_needed_locations_checked(state, world):
+    # for loc in state.locations_checked:
+    #     if loc.address == 1000 + world.options.words_to_win:
+    #         return True
+    # return False
+    return state.has("Word Master", world.player)
 
 def needed_for_words(state, player, vowels, score, guesses = 1, yellow = False):
     possible_score = 0
@@ -214,4 +218,4 @@ def create_rules(world: "WordipelagoWorld"):
         world.get_location("YYYYY").item_rule = lambda item: item.name != 'Yellow Letters'
     
 
-    world.multiworld.completion_condition[world.player] = lambda state: all_needed_locations_checked(state, world.player)
+    world.multiworld.completion_condition[world.player] = lambda state: all_needed_locations_checked(state, world)

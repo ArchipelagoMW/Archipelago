@@ -16,28 +16,28 @@ class StartingLetters(Range):
     range_end = 26
 
 class StartingGuesses(Range):
-    """How many letters you start with"""
+    """How many guesses you start with"""
     display_name = "Starting Guesses"
     range_start = 1
     default = 1
     range_end = 6
 
 class StartingCooldown(Range):
-    """How many letters you start with"""
+    """How long the new round cooldown is at the start of the game"""
     display_name = "Starting Cooldown"
     range_start = 0
     default = 120
     range_end = 600
 
 class TimeRewardCount(Range):
-    """The number of cooldown reduction rewards in the pool"""
+    """The number of new round cooldown reduction rewards in the pool"""
     display_name = "Time Reward Count"
     range_start = 0
     default = 10
     range_end = 30
 
 class TimeRewardSeconds(Range):
-    """How many seconds each time reward decreases cooldown by"""
+    """How many seconds each time reward decreases the new round cooldown by"""
     display_name = "Time Reward Seconds"
     range_start = 0
     default = 10
