@@ -1,5 +1,79 @@
 [
     {
+        "name": "World Map",
+        "children": [
+            {
+                "name": "Apeman Facility (Monitoring)",
+                "sections": [
+                    { "name": "AF (Monitoring): Break Corpse" },
+                    { "name": "AF (Monitoring): Upper Right" },
+                    { "name": "AF (Monitoring): Lower Vent" },
+                    { "name": "AF (Monitoring): Examine Apeman Surveillance" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 710,
+                    "y": 375
+                }]
+            },
+            {
+                "name": "Shengwu Hall",
+                "sections": [
+                    { "name": "Examine Sphere Before Jiequan" },
+                    { "name": "Chest Before Jiequan" },
+                    { "name": "Jiequan's Tianhuo Flower" },
+                    { "name": "Chest After Jiequan" },
+                    { "name": "Jiequan's Vital Sanctum" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 415,
+                    "y": 165
+                }]
+            },
+            {
+                "name": "Cortex Center",
+                "sections": [
+                    { "name": "Cortex Center: Defeat Lady Ethereal" },
+                    { "name": "Cortex Center: Tianhuo Flower After Soulscape" },
+                    { "name": "Cortex Center: Retrieve Chip From Shanhai 9000" },
+                    { "name": "Cortex Center: Crystal Caves Upper Right" },
+                    { "name": "Cortex Center: Crystal Caves Central Chamber" },
+                    { "name": "Cortex Center: Near Left Exit" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 660,
+                    "y": 295
+                }]
+            },
+            {
+                "name": "Central Hall",
+                "sections": [
+                    { "name": "Central Hall: Examine Council Sign" },
+                    { "name": "Central Hall: Examine Launch Memoral" },
+                    { "name": "Central Hall: Examine Council Tenets" },
+                    { "name": "Central Hall: Turrets and Double Axe Robot Room" },
+                    { "name": "Central Hall: Vents" }
+                ],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 805,
+                    "y": 295
+                }]
+            },
+            {
+                "name": "Defeat Eigong",
+                "sections": [{ "name": "???" }],
+                "map_locations": [{
+                    "map": "world_map",
+                    "x": 760,
+                    "y": 40
+                }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {

@@ -1,5 +1,11 @@
 [
     {
+        "name": "world_map",
+        "location_size": 20,
+        "location_border_thickness": 3,
+        "img": "./world_map.png"
+    },
+    {
         "name": "sky_tower",
         "location_size": 20,
         "location_border_thickness": 3,
