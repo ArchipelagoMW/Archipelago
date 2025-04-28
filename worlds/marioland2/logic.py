@@ -197,8 +197,8 @@ def pumpkin_zone_2_coins(state, player, coins):
 
 def pumpkin_zone_secret_course_1_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Pumpkin Zone Secret Course 1")
-    # We'll be a bit forgiving.
-    if coins <= 20:
+    # We'll be a bit forgiving. I was able to reach 43 while small.
+    if coins <= 40:
         return True
     if state.has("Carrot", player):
         if auto_scroll:
