@@ -683,7 +683,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #8th Overpass Scrap chest on main map has been categorized under Salmon Bay
         #Todo recategorize and descriptivize
         LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3678 + treasure_index_offset), #(191, 177, -214)
-        #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall, Tall Heights
+        #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
         LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3539 + treasure_index_offset), #(32, 181, -373) (Cloudy Wind)
         LocationData("Overpass", "Overpass Chest - Zether Pouch chest", 1401 + treasure_index_offset), #(-35, 166, -387) (Cloudy Wind)
@@ -695,7 +695,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Overpass main map has Master Hunter ID 3558 (496, 198, -346); gives you Hunter Seal in exchange for job mastery
         #Gold Ingot on main map has been categorized under Dione Shrine
         #Z20_WaterOrigin ID 1583 (gives Springs Oath) has been categorized under Okimoto N.S. (632, 243, -261)
-        #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall, Tall Heights
+        #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
         LocationData("Overpass", "Overpass NPC - Gold Ingot", 2739 + npc_index_offset), #(63, 191, -399) (Cloudy Wind)
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
@@ -724,8 +724,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
         #Todo recategorize and descriptivize
         LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3673 + treasure_index_offset), #(608, 91, -215) (Summon Pah)
-        #Underpass (Ice Pass) Scrap chest has been categorized under Tall, Tall Heights
-        #Underpass (Ice Pass) Potion chest has been categorized under Tall, Tall Heights
+        #Underpass (Ice Pass) Scrap chest has been categorized under Tall Tall Heights
+        #Underpass (Ice Pass) Potion chest has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
         LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3623 + treasure_index_offset), #(191, 172, -437) (Summon Pah)
 
@@ -966,50 +966,50 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Eastern Chasm", "Eastern Chasm Chest - Eastern Chasm map chest at the overgrown opposite of chasm", 3543 + treasure_index_offset),
 
-        #Tall, Tall Heights
+        #Tall Tall Heights
         #Treasure chests
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, logic.has_vertical_movement), #Tear Seed chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Lonely chest", 2428 + treasure_index_offset, logic.has_vertical_movement), #Ether
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, logic.has_vertical_movement), #Tear Seed chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Z-Potion Pouch chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Frost Reaper chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, logic.has_vertical_movement), #Tear Seed chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Lonely chest", 2428 + treasure_index_offset, logic.has_vertical_movement), #Ether
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, logic.has_vertical_movement), #Tear Seed chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Z-Potion Pouch chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
         #Technically Northern Cave
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, logic.has_glide), #Judo Gi chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - East of the souvenir shop", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Money chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Insignia Helm chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Potion Pouch chest
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, logic.has_glide), #Judo Gi chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the souvenir shop", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Money chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Insignia Helm chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Potion Pouch chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
         #Technically 1st Overpass Scrap on Overpass (Cloudy Wind) submap
-        LocationData("Tall, Tall Heights", "Overpass Chest - Past Tall,Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
+        LocationData("Tall Tall Heights", "Overpass Chest - Past Tall,Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
         #Technically Underpass Scrap on Underpass (Ice Pass) submap
-        LocationData("Tall, Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
         #Technically Potion chest on Underpass (Ice Pass) submap
-        LocationData("Tall, Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall,Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
 
         #NPCs
-        #Todo NPCs Job Masters: Tall, Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
+        #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
         #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
-        #LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Z8_FisherInHut", 1549 + npc_index_offset),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold above the Boomer Society", 1600 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Dust
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Ingot
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)),
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold by the breakable ice wall", 2814 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ingot
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Come back with the bird for Gold", 2845 + npc_index_offset, logic.has_glide), #Ingot
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, logic.has_vertical_movement), #Ore
-        LocationData("Tall, Tall Heights", "Tall, Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
+        #LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Z8_FisherInHut", 1549 + npc_index_offset),
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold above the Boomer Society", 1600 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Dust
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Ingot
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)),
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold by the breakable ice wall", 2814 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ingot
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Come back with the bird for Gold", 2845 + npc_index_offset, logic.has_glide), #Ingot
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, logic.has_vertical_movement), #Ore
+        LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
         #Technically 1st Gold Dust on Overpass (Cloudy Wind) submap
-        LocationData("Tall, Tall Heights", "Overpass NPC - Gold past Tall,Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
+        LocationData("Tall Tall Heights", "Overpass NPC - Gold past Tall,Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
 
         #Summons Todo: descriptivize and implement
         #498, 218, -412
-        #LocationData("Tall, Tall Heights", "Tall, Tall Heights Summon - Pamoa from SIce_Summon", 1136 + summon_index_offset),
+        #LocationData("Tall Tall Heights", "Tall Tall Heights Summon - Pamoa from SIce_Summon", 1136 + summon_index_offset),
 
         #Northern Cave
         #Treasure chests

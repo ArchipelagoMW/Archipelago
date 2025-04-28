@@ -86,7 +86,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Dione Shrine", excluded),
         create_region(world, player, locations_per_region, "Quintar Mausoleum", excluded),
         create_region(world, player, locations_per_region, "Eastern Chasm", excluded),
-        create_region(world, player, locations_per_region, "Tall, Tall Heights", excluded),
+        create_region(world, player, locations_per_region, "Tall Tall Heights", excluded),
         create_region(world, player, locations_per_region, "Northern Cave", excluded),
         create_region(world, player, locations_per_region, "Lands End", excluded),
         create_region(world, player, locations_per_region, "Slip Glide Ride", excluded),
@@ -110,7 +110,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
      
     end_game_regions = [
         create_region(world, player, locations_per_region, "Ancient Labyrinth", excluded),
-        create_region(world, player, locations_per_region, "Sequoia Tree", excluded),
+        create_region(world, player, locations_per_region, "The Sequoia", excluded),
         create_region(world, player, locations_per_region, "The Depths", excluded),
         create_region(world, player, locations_per_region, "Castle Sequoia", excluded),
         create_region(world, player, locations_per_region, "The Old World", excluded),
@@ -139,9 +139,9 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Jade Cavern": logic.has_golden_quintar,
         "Pale Grotto": logic.has_swimming,
         "Draft Shaft Conduit": logic.has_swimming})
-    multiworld.get_region("Pale Grotto", player).add_exits(["Delende", "Proving Meadows", "Jojo Sewers", "Tall, Tall Heights", "Salmon Pass"],
+    multiworld.get_region("Pale Grotto", player).add_exits(["Delende", "Proving Meadows", "Jojo Sewers", "Tall Tall Heights", "Salmon Pass"],
         {"Jojo Sewers": logic.has_swimming,
-        "Tall, Tall Heights": logic.has_swimming,
+        "Tall Tall Heights": logic.has_swimming,
         "Salmon Pass": logic.has_swimming})
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Delende", "Draft Shaft Conduit", "The Open Sea", "Mercury Shrine", "Beaurior Volcano"],
         {"Beaurior Volcano": logic.has_vertical_movement,
@@ -149,6 +149,8 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Mercury Shrine": logic.has_vertical_movement})
     multiworld.get_region("Draft Shaft Conduit", player).add_exits(["Seaside Cliffs", "Soiled Den"],
         {"Soiled Den": logic.has_swimming})
+    multiworld.get_region("Mercury Shrine", player).add_exits(["Delende", "Seaside Cliffs", "Beaurior Volcano"],
+        {"Beaurior Volcano": logic.has_vertical_movement})
     multiworld.get_region("Yamagawa M.A.", player).add_exits(["Spawning Meadows", "Delende", "Lake Delende"])
     multiworld.get_region("Proving Meadows", player).add_exits(["Delende", "Pale Grotto", "Skumparadise", "The Open Sea"], 
         {"Skumparadise": lambda state: logic.has_jobs(state, 3),
@@ -183,15 +185,15 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "The Open Sea": logic.has_swimming})
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
         {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
-    multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall, Tall Heights"], 
+    multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"], 
         {"Salmon Pass": logic.has_rental_quintar,
-        "Tall, Tall Heights": logic.has_vertical_movement})
+        "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
         {"Salmon River": logic.has_horizontal_movement,
         "Delende": logic.has_swimming})
-    multiworld.get_region("Salmon River", player).add_exits(["Salmon Bay", "Tall, Tall Heights"], 
+    multiworld.get_region("Salmon River", player).add_exits(["Salmon Bay", "Tall Tall Heights"], 
         {"Salmon Bay": logic.has_swimming or (logic.has_vertical_movement and logic.has_glide),
-        "Tall, Tall Heights": logic.has_vertical_movement})
+        "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Lake Delende", "Salmon Bay", "Ancient Labyrinth"], 
         {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
         "Lake Delende": logic.has_vertical_movement,
@@ -215,7 +217,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "The Deep Sea": logic.has_swimming,
         "Shoudu Province": logic.has_swimming,
         "Proving Meadows": logic.has_swimming,
-        "Seasie Cliffs": logic.has_swimming,
+        "Seaside Cliffs": logic.has_swimming,
         "Beaurior Volcano": logic.has_swimming,
         "Sara Sara Beach": logic.has_swimming,
         "Sara Sara Bazaar": logic.has_swimming,
@@ -240,7 +242,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Delende": logic.has_vertical_movement})
     multiworld.get_region("Quintar Reserve", player).add_exits(["Shoudu Province", "Dione Shrine", "Quintar Mausoleum"],
         {"Quintar Mausoleum": logic.has_swimming})
-    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Jidamba Tangle"],
+    multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Jidamba Tangle", "The Chalice of Tar"],
         {"Jidamba Tangle": logic.has_glide,
         "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player),
         "Eastern Chasm": logic.has_glide and logic.has_vertical_movement})
@@ -250,30 +252,30 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Eastern Chasm", player).add_exits(["Quintar Reserve", "The Open Sea"],
         {"Quintar Reserve": logic.has_glide,
         "The Open Sea": logic.has_swimming})
-    multiworld.get_region("Tall, Tall Heights", player).add_exits(["Salmon River", "Greenshire Reprise", "Lands End", "Sequoia Athenaeum", "Northern Stretch", "Castle Ramparts", "The Chalice of Tar", "Pale Grotto", "Northern Cave"],
+    multiworld.get_region("Tall Tall Heights", player).add_exits(["Salmon River", "Greenshire Reprise", "Lands End", "Sequoia Athenaeum", "Northern Stretch", "Castle Ramparts", "The Chalice of Tar", "Pale Grotto", "Northern Cave"],
         {"Lands End": logic.has_vertical_movement,
         "Sequoia Athenaeum": lambda state: state.has("Item - Vermillion Book", world.player) and state.has("Item - Viridian Book", world.player) and state.has("Item - Cerulean Book", world.player),
         "Northern Stretch": logic.has_glide,
         "Castle Ramparts": logic.has_vertical_movement,
         "Pale Grotto": logic.has_swimming,
         "The Chalice of Tar": logic.has_glide and logic.has_vertical_movement})
-    multiworld.get_region("Northern Cave", player).add_exits(["Tall, Tall Heights", "Slip Glide Ride"],
+    multiworld.get_region("Northern Cave", player).add_exits(["Tall Tall Heights", "Slip Glide Ride"],
         {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement,
-        "Tall, Tall Heights": logic.has_vertical_movement})
-    multiworld.get_region("Lands End", player).add_exits(["Tall, Tall Heights", "Jidamba Tangle"],
+        "Tall Tall Heights": logic.has_vertical_movement})
+    multiworld.get_region("Lands End", player).add_exits(["Tall Tall Heights", "Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_glide,
-        "Tall, Tall Heights": logic.has_vertical_movement})
-    multiworld.get_region("Slip Glide Ride", player).add_exits(["Tall, Tall Heights", "Northern Cave"],
+        "Tall Tall Heights": logic.has_vertical_movement})
+    multiworld.get_region("Slip Glide Ride", player).add_exits(["Tall Tall Heights", "Northern Cave"],
         {"Northern Cave": logic.has_glide,
-        "Tall, Tall Heights": logic.has_vertical_movement and logic.has_glide})
-    multiworld.get_region("Sequoia Athenaeum", player).add_exits(["Tall, Tall Heights"])
-    multiworld.get_region("Northern Stretch", player).add_exits(["Tall, Tall Heights", "The Open Sea"],
+        "Tall Tall Heights": logic.has_vertical_movement and logic.has_glide})
+    multiworld.get_region("Sequoia Athenaeum", player).add_exits(["Tall Tall Heights"])
+    multiworld.get_region("Northern Stretch", player).add_exits(["Tall Tall Heights", "The Open Sea"],
         {"The Open Sea": logic.has_swimming,
-        "Tall, Tall Heights": logic.has_vertical_movement})
-    multiworld.get_region("Castle Ramparts", player).add_exits(["Tall, Tall Heights"],
-        {"Tall, Tall Heights": logic.has_vertical_movement})
-    multiworld.get_region("The Chalice of Tar", player).add_exits(["Tall, Tall Heights", "Quintar Reserve"],
-        {"Tall, Tall Heights": logic.has_glide,
+        "Tall Tall Heights": logic.has_vertical_movement})
+    multiworld.get_region("Castle Ramparts", player).add_exits(["Tall Tall Heights"],
+        {"Tall Tall Heights": logic.has_vertical_movement})
+    multiworld.get_region("The Chalice of Tar", player).add_exits(["Tall Tall Heights", "Quintar Reserve"],
+        {"Tall Tall Heights": logic.has_glide,
         "Quintar Reserve": logic.has_glide})
     multiworld.get_region("Flyers Crag", player).add_exits(["Okimoto N.S.","Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_glide})
@@ -282,18 +284,20 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "The Open Sea": logic.has_swimming})
     multiworld.get_region("Jidamba Eaclaneya", player).add_exits(["Jidamba Tangle", "The Open Sea"],
         {"The Open Sea": logic.has_swimming})
-    multiworld.get_region("The Deep Sea", player).add_exits(["The Open Sea", "The Depths", "Sequoia Tree"],
+    multiworld.get_region("The Deep Sea", player).add_exits(["The Open Sea", "The Depths", "The Sequoia"],
         {"The Open Sea": logic.has_swimming,
         "The Depths": logic.has_swimming,
-        "Sequoia Tree": logic.has_golden_quintar})
+        "The Sequoia": logic.has_golden_quintar})
     multiworld.get_region("Jade Cavern", player).add_exits(["Soiled Den", "Delende"],
         {"Soiled Den": logic.has_swimming,
         "Delende": logic.has_swimming})
     multiworld.get_region("Continental Tram", player).add_exits(["Capital Pipeline", "Sara Sara Bazaar"],
         {"Sara Sara Bazaar": lambda state: logic.has_swimming or state.has("Item - Tram Key", player)})
     multiworld.get_region("Ancient Labyrinth", player).add_exits(["Poko Poko Desert"])
-    multiworld.get_region("Sequoia Tree", player).add_exits(["The Deep Sea"])
+    multiworld.get_region("The Sequoia", player).add_exits(["The Deep Sea"])
     multiworld.get_region("The Depths", player).add_exits(["The Deep Sea"])
+    multiworld.get_region("Castle Sequoia", player).add_exits(["Capital Sequoia"])
+    multiworld.get_region("The New World", player).add_exits(["Menu"])
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
@@ -333,14 +337,14 @@ def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> No
     logic = CrystalProjectLogic(world.player, options)
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region("Menu", world.player)
-    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Mercury Shrine", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine", "Tall, Tall Heights", "Jidamba Tangle", "The Deep Sea", "The Old World", "The New World"], 
+    menu.add_exits(["Spawning Meadows", "Capital Sequoia", "Mercury Shrine", "Salmon River", "Poko Poko Desert", "Ganymede Shrine", "Dione Shrine", "Tall Tall Heights", "Jidamba Tangle", "The Deep Sea", "The Old World", "The New World"], 
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Mercury Shrine": lambda state: state.has_any({"Item - Mercury Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
         "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player),
         "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player),
         "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player),
-        "Tall, Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
+        "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
         "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player),
         "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player),
         "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player),
