@@ -5,9 +5,9 @@ If you're playing The Wind Waker, you must follow a few simple steps to get star
 
 ## Requirements
 
-You'll need the following components to be able to play with The Wind Waker:
+You'll need the following components to be able to play The Wind Waker:
 * Install [Dolphin Emulator](https://dolphin-emu.org/download/). **We recommend using the latest release.**
-    * For Linux users, you can use the flatpak package
+    * Linux users can use the flatpak package
     [available on Flathub](https://flathub.org/apps/org.DolphinEmu.dolphin-emu).
 * The 2.5.0 version of the [TWW AP Randomizer Build](https://github.com/tanjo3/wwrando/releases/tag/ap_2.5.0).
 * A The Wind Waker ISO (North American version), probably named "Legend of Zelda, The - The Wind Waker (USA).iso".
@@ -36,7 +36,7 @@ path to your The Wind Waker ISO and the output folder for the randomized ISO. Th
 open the program.
 2. Modify any cosmetic convenience tweaks and player customization options as desired.
 3. For the APTWW file, browse and locate the path to your `aptww` file.
-4. Click `Randomize` at the bottom-right. This randomizes the ISO and puts it in the output folder you specified. The
+4. Click `Randomize` at the bottom right. This randomizes the ISO and puts it in the output folder you specified. The
 file will be named `TWW AP_YYYYY_P# (<name>).iso`, where `YYYYY` is the seed name, `#` is your player ID, and `<name>`
 is your player (slot) name. Verify that the values are correct for the multiworld.
 5. Open Dolphin and use it to open the randomized ISO.

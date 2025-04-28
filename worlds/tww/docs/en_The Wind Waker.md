@@ -26,10 +26,10 @@ fully-powered Master Sword (unless it's swordless mode), Light Arrows, and any o
 Items belonging to other non-TWW worlds are represented by Father's Letter (the letter Medli gives you to give to
 Komali), an unused item in the randomizer.
 
-## When the player receives an item, what happens?
+## What happens when the player receives an item?
 
-When the player receives an item, it will automatically be added to Link's inventory. Unlike many other Zelda
-randomizers, Link **will not** hold the item above his head.
+When the player receives an item, it will automatically be added to Link's inventory. Link **will not** hold the item
+above his head like many other Zelda randomizers.
 
 ## I need help! What do I do?
 
@@ -41,12 +41,12 @@ the Archipelago server.
 
 - Randomized freestanding rupees, spoils, and bait will also be given to the player picking up the item. The item will
   be sent properly, but the collecting player will receive an extra copy.
-- Demo items (items which are held over Link's head) which are **not** randomized, such as rupees from salvages from
-  random light rings or rewards from minigames, will not work.
+- Demo items (items held over Link's head) that are **not** randomized, such as rupees from salvages from random light
+  rings or rewards from minigames, will not work.
 - Item get messages for progressive items received on locations that send earlier than intended will be incorrect. This
   does not affect gameplay.
 - The Heart Piece count in item get messages will be off by one. This does not affect gameplay.
-- It has been reported that item links can be buggy. Nothing game-breaking, but do be aware of it.
+- It has been reported that item links can be buggy. It is nothing game-breaking, but do be aware of it.
 
 Feel free to report any other issues or suggest improvements in the Wind Waker channel in the Archipelago server!
 
@@ -82,8 +82,8 @@ A few presets are available on the [player options page](../player-options) for 
   bow and bombs, and six hearts.
 - **Mixed Pools**: These are the settings used in the WWR Racing Server's
   [Mixed Pools Co-op Tournament](https://docs.google.com/document/d/1YGPTtEgP978TIi0PUAD792OtZbE2jBQpI8XCAy63qpg). This
-  preset features full entrance rando and includes many locations behind a randomized entrance. There are also a bunch
-  of overworld locations, as these settings were intended to be played in a two-person co-op team. The preset also has 6
+  preset features full entrance rando and includes many locations behind a randomized entrance. There are also many
+  overworld locations, as these settings were intended to be played in a two-person co-op team. The preset also has 6
   required bosses, but since entrance pools are randomized, the bosses could be found anywhere! Check your Sea Chart to
   find out which island the bosses are on.
 
