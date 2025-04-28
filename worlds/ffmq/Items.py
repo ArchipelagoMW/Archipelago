@@ -256,15 +256,18 @@ def create_items(self) -> None:
             if item_name in precollected_item_names:
                 items.append(self.create_filler())
                 precollected_item_names.remove(item_name)
-                return
+                return True
+            return False
 
-        check_precollected()
+        if check_precollected():
+            return
         if self.options.progressive_gear:
             for item_group in prog_map:
                 if item_name in self.item_name_groups[item_group]:
                     item_name = prog_map[item_group]
                     break
-        check_precollected()
+        if check_precollected():
+            return
 
         i = self.create_item(item_name)
         if self.options.logic != "friendly" and item_name in ("Magic Mirror", "Mask"):
