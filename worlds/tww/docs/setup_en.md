@@ -30,7 +30,7 @@ The multiworld host will provide you a link to download your APTWW file or a zip
 APTWW file should be named `P#_<name>_XXXXX.aptww`, where `#` is your player ID, `<name>` is your player name, and
 `XXXXX` is the room ID. The host should also provide you with the room's server name and port number.
 
-Once you do, follow these steps to connect to the room:
+Once you're ready, follow these steps to connect to the room:
 1. Run the TWW AP Randomizer Build. If this is the first time you've opened the randomizer, you'll need to specify the
 path to your The Wind Waker ISO and the output folder for the randomized ISO. These will be saved for the next time you
 open the program.
@@ -47,7 +47,7 @@ text client. If Dolphin is not already open, or you have yet to start a new file
 on the website, this will be `archipelago.gg:<port>`, where `<port>` is the port number. If a game is hosted from the
 `ArchipelagoServer.exe` (without `.exe` on Linux), the port number will default to `38281` but may be changed in the
 `host.yaml`.
-8. If you've opened a ROM corresponding to the multiworld to which you are connected, it should authenticate your slot
+8. If you've opened an ISO corresponding to the multiworld to which you are connected, it should authenticate your slot
 name automatically when you start a new save file.
 
 ## Troubleshooting
