@@ -23,11 +23,11 @@ class StartingGuesses(Range):
     range_end = 6
 
 class StartingCooldown(Range):
-    """How long the new round cooldown is at the start of the game"""
+    """How long (in seconds) the new round cooldown is at the start of the game"""
     display_name = "Starting Cooldown"
     range_start = 0
     default = 120
-    range_end = 600
+    range_end = 18000
 
 class TimeRewardCount(Range):
     """The number of new round cooldown reduction rewards in the pool"""

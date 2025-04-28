@@ -1,6 +1,7 @@
 from typing import List
 
 from BaseClasses import Region, Tutorial, ItemClassification
+from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from .items import WordipelagoItem, item_data_table, item_table
 from .locations import WordipelagoLocation, location_data_table, get_location_table
@@ -35,6 +36,33 @@ class WordipelagoWorld(World):
     location_name_to_id = get_location_table()
     item_name_to_id = item_table
     starting_items = []
+
+    def generate_early(self):
+        location_count = self.options.words_to_win - 1 # Victory Event
+        if(self.options.letter_checks >= 1):
+            location_count += 6
+        if(self.options.letter_checks >= 2):
+            location_count += 13
+        if(self.options.letter_checks == 3):
+            location_count += 7
+        if(self.options.green_checks == 1 or self.options.green_checks == 3):
+            location_count += 5
+        if(self.options.green_checks == 2 or self.options.green_checks == 3):
+            location_count += 31
+        if(self.options.yellow_checks == 1):
+            location_count += 31
+        
+        if(self.multiworld.players == 1):
+            checks_needed = max(4 - self.options.starting_guesses, 0) + max(8 - self.options.starting_letters, 0)
+            if(not self.options.starting_guesses):
+                checks_needed += 1
+
+            can_reach_words = self.options.starting_letters >= 8 and self.options.yellow_unlocked and self.options.starting_guesses >= 4
+            yellow_checks_available = self.options.yellow_checks == 1 and (self.options.green_checks != 0 or self.options.letter_checks != 0)
+            enough_checks = self.options.letter_checks >= 2 or self.options.green_checks >= 2
+            if(not can_reach_words and not yellow_checks_available and not enough_checks):
+                if(not enough_checks):
+                    raise OptionError('No way to reach word checks: Not enough locations')
 
     def fill_slot_data(self):
             """
