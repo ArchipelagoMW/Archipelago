@@ -108,15 +108,15 @@ quotes but the name must be entered in the same as it appears on that page and i
 ## Item Plando Examples
 ```yaml
   plando_items:
-    # Example block - Slay the Spire
+    # Example block - Pokémon Red and Blue
     - items:
-        Boss Relic: 3
+        Potion: 3
       locations:
-        - Boss Relic 1
-        - Boss Relic 2
-        - Boss Relic 3
+        - Cerulean Gym - Misty Prize
+        - Celadon Gym - Erika Prize
+        - Saffron Gym - Sabrina Prize
 ```
-This block will lock 3 Boss Relic items on the 3 Boss Relic locations. The world value has not been specified, so these 
+This block will lock 3 Potion items on the 3 listed gym leader prizes. The world value has not been specified, so these 
 locations must be in this player's own world by default.
 
 ```yaml
