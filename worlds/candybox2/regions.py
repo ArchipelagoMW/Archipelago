@@ -4,7 +4,7 @@ from typing import Callable, Optional, TYPE_CHECKING
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .items import CandyBox2ItemName
-from .locations import candy_box_locations, CandyBox2Location, village_shop_locations, village_house_1_locations, \
+from .locations import candy_box_locations, CandyBox2Location, CandyBox2LocationName, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
     map_stage_6_locations, map_stage_5_locations, map_stage_4_locations, map_stage_3_locations, desert_locations, \
     bridge_locations, cave_locations, forest_locations, castle_entrance_locations, giant_nougat_monster_locations, \
@@ -153,8 +153,8 @@ def create_regions(world: "CandyBox2World"):
     # X Potion region
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_X_POTION, player, multiworld), yourself_fight_locations, candy_box, lambda state: can_brew(state, player, True), [the_lollipop_farm])
 
-def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Region, locations: dict[str, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None, indirect: list[CandyBox2Region] = None):
-    region.locations += [CandyBox2Location(player, location_name, locations[location_name], region) for location_name in locations]
+def populate_region(world: "CandyBox2World", player: int, region: CandyBox2Region, locations: dict[CandyBox2LocationName, int], parent: Region | None, rule: Optional[Callable[[CollectionState], bool]] = None, indirect: list[CandyBox2Region] = None):
+    region.locations += [CandyBox2Location(player, location_name.value, locations[location_name.value], region) for location_name in locations]
     world.multiworld.regions.append(region)
     entrance = None
     if parent is not None:
