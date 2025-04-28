@@ -81,6 +81,7 @@ Currently, the following games are supported:
 * Inscryption
 * Civilization VI
 * The Legend of Zelda: The Wind Waker
+* Celeste (Open World)
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
