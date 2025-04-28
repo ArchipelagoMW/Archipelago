@@ -1002,16 +1002,17 @@ Canvas supports all of [Grid's index functions](#grid-index-functions), as well 
 ```yaml
 type: hopscotch
 width: 7 # Accepts numbers >= 4
+spacer: 2 # Accepts numbers >= 1
 two_start_positions: false # Accepts true/false
 ```
 
 This order alternates between one and two missions becoming available at a time.
 
-`width` determines how many mini columns are allowed to be next to one another before they wrap around the sides.
+`width` determines how many mini columns are allowed to be next to one another before they wrap around the sides. `spacer` determines the amount of empty slots between diagonals in the client.
 
 If `two_start_positions`, the top left corner will be set to `empty: true`, and its two neighbors will be entrances instead.
 
-A `size: 23`, `width: 4` Hopscotch layout has the following indices:
+A `size: 23`, `width: 4`, `spacer: 1` Hopscotch layout has the following indices:
 ```yaml
  0  2
  1  3  5

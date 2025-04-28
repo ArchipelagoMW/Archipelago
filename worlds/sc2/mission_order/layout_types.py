@@ -389,6 +389,7 @@ class Hopscotch(LayoutType):
     """Alternating between one and two available missions.
     Default entrance is index 0 in the top left, default exit is index `size - 1` in the bottom right."""
     width: int
+    spacer: int
     two_start_positions: bool
 
     index_functions = [
@@ -406,6 +407,8 @@ class Hopscotch(LayoutType):
             self.size += 1
         width: int = options.pop("width", 7)
         self.width = max(width, 4)
+        spacer: int = options.pop("spacer", 2)
+        self.spacer = max(spacer, 1)
         return options
 
     def make_slots(self, mission_factory: Callable[[], SC2MOGenMission]) -> List[SC2MOGenMission]:
@@ -445,7 +448,6 @@ class Hopscotch(LayoutType):
             return []
 
     def get_visual_layout(self) -> List[List[int]]:
-        spacer = self.width - 3
         # size offset by 1 to account for first column of two slots
         cols: List[List[int]] = []
         col: List[int] = []
@@ -464,7 +466,7 @@ class Hopscotch(LayoutType):
         final_cols: List[List[int]] = [Hopscotch.space_at_column(idx) for idx in range(min(len(cols), self.width))]
         for (col_idx, col) in enumerate(cols):
             if col_idx >= self.width:
-                final_cols[col_idx % self.width].extend([-1 for _ in range(spacer)])
+                final_cols[col_idx % self.width].extend([-1 for _ in range(self.spacer)])
             final_cols[col_idx % self.width].extend(col)
         
         fill_to_longest(final_cols)
