@@ -28,7 +28,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Behind Nan house", 61 + treasure_index_offset), #Cedar Wand chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Island", 54 + treasure_index_offset), #Cleaver chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Jump on secret tunnel chest", 5 + treasure_index_offset), #Fenix Juice chest
-        LocationData("Spawning Meadows", "Spawning Meadows Chest - on path to Delende", 49 + treasure_index_offset), #Fenix Juice chest
+        LocationData("Spawning Meadows", "Spawning Meadows Chest - On path to Delende", 49 + treasure_index_offset), #Fenix Juice chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Secret tunnel", 47 + treasure_index_offset), #Stabbers chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - On ledge jump from tree", 50 + treasure_index_offset), #Stout Shield chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Cross trees and jump down", 38 + treasure_index_offset), #Tincture chest
@@ -101,8 +101,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Basement (Somehow Not Delende)
         #Treasure chests
-        LocationData("Delende", "Delende Chest - In basement 1", 179 + treasure_index_offset), #Empty chest
-        LocationData("Delende", "Delende Chest - In basement 2", 180 + treasure_index_offset), #Digested Head chest
+        LocationData("Delende", "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
+        LocationData("Delende", "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
 
         #Soiled Den
         #Treasure chests
@@ -283,11 +283,11 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
         #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don"t have one
         #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
-        #Todo Rules: requires 6 crystals and descriptivize; blocker guy who wants 6 crystals to give you Luxury Pass and entry to Luxury Store
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard", 1162 + npc_index_offset),
-        #Todo: (417, 171, -299) descriptivize
-        #Todo Rules: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Guy", 1529 + npc_index_offset),
+        #Todo NPCs Blocker Missable and Multichecks: luxury store guard; won't give you check 1 if you already have Luxury Pass or check 2 if you have V2
+        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 1", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289)
+        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
+        #Todo NPCs Missable: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity; if you already have Luxury Key, he won't give you anything
+        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset), #(417, 171, -299)
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sparkling in the fountain", 2584 + npc_index_offset), #Plug Lure
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
@@ -310,8 +310,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin?", 422 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library roof Lost Penguin", 594 + npc_index_offset),
-        #Todo: descriptivize (440, 171, -296) Z14_Library Scholar
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Scholar", 1948 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Library Morii of the East!", 1948 + npc_index_offset), #(440, 171, -296) Z14_Library Scholar
 
         #Crystals
         LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset, logic.has_vertical_movement),
@@ -1054,17 +1053,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: state.has("Item - Red Door Key", player, 3)),
 
         #Sequoia Athenaeum
-        #Todo descriptivize and check requirements
         #Treasure chests
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Spellsword Helm chest", 2932 + treasure_index_offset), #(412, 200, -551)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Z-Potion Pouch chest", 2569 + treasure_index_offset), #(403, 199, -547)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2322 + treasure_index_offset), #(415, 180, -570)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2375 + treasure_index_offset), #(396, 180, -570)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2341 + treasure_index_offset), #(396, 164, -570)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2371 + treasure_index_offset), #(415, 164, -572)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2372 + treasure_index_offset), #(434, 164, -570)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Ice Puzzle Key chest", 2373 + treasure_index_offset), #(424, 148, -570)
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Skeleton Key chest", 2335 + treasure_index_offset), #(415, 131, -565)
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Atop the shelves above the books door", 2932 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(412, 200, -551) Spellsword Helm chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Bullshit booksmart Chips Challenge", 2569 + treasure_index_offset, logic.has_vertical_movement), #(403, 199, -547) Z-Potion Pouch chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Braindumb Chips Challenge", 2322 + treasure_index_offset), #(415, 180, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - 3rd library Chips Challenge", 2375 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 1) and logic.has_vertical_movement), #(396, 180, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge ice squared", 2341 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 2) and logic.has_vertical_movement), #(396, 164, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge we cheated on this one", 2371 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 3) and logic.has_vertical_movement), #(415, 164, -572) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Triple Chip Challenge", 2372 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 4) and logic.has_vertical_movement), #(434, 164, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Shattered labyrinth Chips Challenge", 2373 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 5) and logic.has_vertical_movement), #(424, 148, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!", 2335 + treasure_index_offset, lambda state: state.has("Item - Ice Puzzle Key", player, 6) and logic.has_vertical_movement), #(415, 131, -565) Skeleton Key chest
 
         #Northern Stretch
         #Treasure chests
@@ -1077,6 +1075,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Below the crystal", 2908 + treasure_index_offset, logic.has_glide), #(407, 228, -383) Castle Ramparts map chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from eastern save point", 2742 + treasure_index_offset, logic.has_glide), #(440, 227, -386) Conquest chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from western save point", 2741 + treasure_index_offset, logic.has_glide), #(369, 227, -386) Rune Sword chest
+        #Technically in Castle Sequoia but they're in a locked room only accessible from Ramparts
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: state.has("Item - Rampart Key") and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: state.has("Item - Rampart Key") and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
 
         #NPCs
         LocationData("Castle Ramparts", "Castle Ramparts NPC - Western Gold above spikes", 2843 + npc_index_offset, logic.has_glide), #(354, 231, -429) Ingot
@@ -1226,9 +1227,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #LocationData("The Deep Sea", "The Deep Sea Summon - Coyote from SWater_Summon", 1140 + summon_index_offset), #(-60, 53, 202)
 
         #Jade Cavern
-        #Todo descriptivize and check requirements
         #Treasure chests
-        LocationData("Jade Cavern", "Jade Cavern Chest - Jade Cavern map chest", 3604 + treasure_index_offset), #(239, 99, -124)
+        LocationData("Jade Cavern", "Jade Cavern Chest - Tell Archie to say hi to the Quizard", 3604 + treasure_index_offset), #(239, 99, -124) Jade Cavern map chest
 
         #NPCs
         #Todo NPCs CheckOrNot Job Masters: this guy trades you a thing for each job seal you've gotten from a job master for mastering that job
@@ -1307,9 +1307,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Castle Sequoia
         #Todo descriptivize and check requirements
         #Treasure chests
-        #Todo maybe categorize map and Decapitator chests as in Castle Ramparts requiring the Ramparts key
-        LocationData("Castle Sequoia", "Castle Sequoia Chest - Castle Sequoia map chest", 3657 + treasure_index_offset), #(371, 231, -457) (Skums)
-        LocationData("Castle Sequoia", "Castle Sequoia Chest - Decapitator chest", 2758 + treasure_index_offset), #(375, 232, -452) (Skums)
+        #Map and Decapitator chests categorized in Castle Ramparts since they're in a locked room there requiring the Ramparts key
         LocationData("Castle Sequoia", "Castle Sequoia Chest - Zether Pouch chest", 2515 + treasure_index_offset), #(422, 169, -406) (Skums)
         LocationData("Castle Sequoia", "Castle Sequoia Chest - Z-Potion chest", 1465 + treasure_index_offset), #(427, 170, -441) (Skums)
         LocationData("Castle Sequoia", "Castle Sequoia Chest - Z-Potion Pouch chest", 1447 + treasure_index_offset), #(409, 169, -406) (Skums)
