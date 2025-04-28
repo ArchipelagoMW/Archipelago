@@ -46,7 +46,8 @@ from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, Networ
     SlotType, LocationStore, Hint, HintStatus
 from BaseClasses import ItemClassification
 
-min_client_version = Version(0, 1, 6)
+
+min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
 
 
@@ -1982,11 +1983,13 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             new_hint = new_hint.re_prioritize(ctx, status)
             if hint == new_hint:
                 return
-            ctx.replace_hint(client.team, hint.finding_player, hint, new_hint)
-            ctx.replace_hint(client.team, hint.receiving_player, hint, new_hint)
+
+            concerning_slots = ctx.slot_set(hint.receiving_player) | {hint.finding_player}
+            for slot in concerning_slots:
+                ctx.replace_hint(client.team, slot, hint, new_hint)
             ctx.save()
-            ctx.on_changed_hints(client.team, hint.finding_player)
-            ctx.on_changed_hints(client.team, hint.receiving_player)
+            for slot in concerning_slots:
+                ctx.on_changed_hints(client.team, slot)
         
         elif cmd == 'StatusUpdate':
             update_client_status(ctx, client, args["status"])
@@ -2416,8 +2419,10 @@ async def console(ctx: Context):
 
 
 def parse_args() -> argparse.Namespace:
+    from settings import get_settings
+
     parser = argparse.ArgumentParser()
-    defaults = Utils.get_settings()["server_options"].as_dict()
+    defaults = get_settings().server_options.as_dict()
     parser.add_argument('multidata', nargs="?", default=defaults["multidata"])
     parser.add_argument('--host', default=defaults["host"])
     parser.add_argument('--port', default=defaults["port"], type=int)
