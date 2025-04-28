@@ -688,7 +688,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Overpass", "Overpass Chest - Zether Pouch chest", 1401 + treasure_index_offset), #(-35, 166, -387) (Cloudy Wind)
         LocationData("Overpass", "Overpass Chest - River Cats Ego map chest", 3654 + treasure_index_offset), #(60, 225, -435) (Snow)
         #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
-        LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3676 + treasure_index_offset), #(45, 215, -465) (Outpost)
+        #Overpass (Outpost) Scrap chest has been categorized under Tall Tall Heights
 
         #NPCs
         #Todo NPCs Job Masters: Overpass main map has Master Hunter ID 3558 (496, 198, -346); gives you Hunter Seal in exchange for job mastery
@@ -985,10 +985,13 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
         #Technically 1st Overpass Scrap on Overpass (Cloudy Wind) submap
         LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
+        #Technically Overpass (Outpost) submap
+        LocationData("Tall Tall Heights", "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) (Outpost) Overpass Scrap chest
         #Technically Underpass Scrap on Underpass (Ice Pass) submap
         LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
         #Technically Potion chest on Underpass (Ice Pass) submap
         LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
+
 
         #NPCs
         #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
@@ -1179,11 +1182,11 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3661 + treasure_index_offset), #(545, 47, -31)
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3662 + treasure_index_offset), #(890, 51, -66)
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3663 + treasure_index_offset), #(842, 53, -359)
-        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3666 + treasure_index_offset), #(-23, 39, -557)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Beside an undersea microruin NW of Tall Tall Heights", 3666 + treasure_index_offset), #(-23, 39, -557) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Underwater cove south of volcano", 3667 + treasure_index_offset), #(94, 59, 133) Deep Sea Scrap chest
         #next 2 scraps from (Sand Bar) submap
-        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3664 + treasure_index_offset), #(-364, 53, -183)
-        LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3665 + treasure_index_offset), #(-226, 49, 164)
+        LocationData("The Deep Sea", "The Deep Sea Chest - Sunken shipwreck off west coast of Sara Sara Beach", 3664 + treasure_index_offset), #(-364, 53, -183) Deep Sea Scrap chest
+        LocationData("The Deep Sea", "The Deep Sea Chest - Undersea valley S of Sara Sara Beach", 3665 + treasure_index_offset), #(-226, 49, 164) Deep Sea Scrap chest
         #next scrap from (Shrooms) submap
         LocationData("The Deep Sea", "The Deep Sea Chest - Deep Sea Scrap chest", 3668 + treasure_index_offset), #(254, 53, -547)
         LocationData("The Deep Sea", "The Deep Sea Chest - Forgotten Key chest", 2767 + treasure_index_offset), #(872, 39, -517)
@@ -1200,24 +1203,22 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Dust", 2518 + npc_index_offset), #(648, 54, 180)
         #Todo Player Options: Carcinization victory condition
         #its crab tiem babey
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 1", 3409 + npc_index_offset), #(20, 53, 251)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 2", 3426 + npc_index_offset), #(76, 76, 178)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Burrow to burrow crab", 3409 + npc_index_offset), #(20, 53, 251) Crab 1
+        LocationData("The Deep Sea", "The Deep Sea NPC - Tall tall crab S of volcano", 3426 + npc_index_offset), #(76, 76, 178) Crab 2
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab in underwater cove south of volcano", 3427 + npc_index_offset), #(96, 60, 131) Crab 3
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 4", 3428 + npc_index_offset), #(142, 51, -611)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 5", 3429 + npc_index_offset), #(60, 53, -609)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 6", 3430 + npc_index_offset), #(54, 62, 155)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 7", 3431 + npc_index_offset), #(128, 49, 196)
-        #for some reason crab 8 is on (Depths Fix) submap
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 8", 3432 + npc_index_offset), #(239, 53, -613)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Zigzaggedy crab NW of Tall Tall Heights", 3428 + npc_index_offset), #(142, 51, -611) Crab 4
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab strolling around the undersea block", 3429 + npc_index_offset), #(60, 53, -609) Crab 5
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab clinging to SW underwater volcano slope", 3430 + npc_index_offset), #(54, 62, 155) Crab 6
+        LocationData("The Deep Sea", "The Deep Sea NPC - Low low crab S of volcano", 3431 + npc_index_offset), #(128, 49, 196) Crab 7
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 8", 3432 + npc_index_offset), #(239, 53, -613) for some reason crab 8 is on (Depths Fix) submap
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab 9", 3433 + npc_index_offset), #(254, 53, 215)
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab 10", 3434 + npc_index_offset), #(306, 53, 224)
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab 11", 3435 + npc_index_offset), #(288, 53, -620)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 12", 3436 + npc_index_offset), #(58, 52, 244)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 13", 3437 + npc_index_offset), #(54, 52, 200)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 14", 3438 + npc_index_offset), #(52, 76, -616)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab 15", 3439 + npc_index_offset), #(207, 53, 152)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Z35_CrabCollect", 3425 + npc_index_offset), #(255, 62, 124)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Z35_FoundCrabKing", 3424 + npc_index_offset), #(256, 63, 113)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Middle of nowhere sandy speedster crab", 3436 + npc_index_offset), #(58, 52, 244) Crab 12
+        LocationData("The Deep Sea", "The Deep Sea NPC - Putt Putt Crab mows the lawn", 3437 + npc_index_offset), #(54, 52, 200) Crab 13
+        LocationData("The Deep Sea", "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda:state state.has("Item - Undersea Crab", player, 15)), #(256, 63, 113)
         LocationData("The Deep Sea", "The Deep Sea NPC - Z35_SpeedOcto", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden quintar but faster than royal salmon)
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Dust", 2855 + npc_index_offset), #(-367, 53, -182)
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ingot", 2857 + npc_index_offset), #(-356, 55, -167)
