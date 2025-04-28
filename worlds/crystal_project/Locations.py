@@ -12,7 +12,7 @@ class LocationData(NamedTuple):
 treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
-#ability_index_offset = 1000000 Abilities Todo
+#summon_index_offset = 1000000 Summons Todo
 
 def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
@@ -51,8 +51,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 2", 545 + npc_index_offset), #(79, 112, -30)
         #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset), #(43, 104, -8)
 
-        #Abilities Todo: descriptivize and implement
-        #LocationData("Spawning Meadows", "Spawning Meadows Ability - Shaku from SFire_Summon", 477 + ability_index_offset), #(118, 109, 10)
+        #Summons Todo: descriptivize and implement
+        #LocationData("Spawning Meadows", "Spawning Meadows Summon - Shaku from SFire_Summon", 477 + summon_index_offset), #(118, 109, 10)
 
         #Delende
         #Treasure chests
@@ -316,10 +316,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Crystals
         LocationData("Capital Sequoia", "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset, logic.has_vertical_movement),
 
-        #Abilities
+        #Summons
         #Todo: descriptivize and implement
         #376, 178, -345 (Capital Sequoia (Maze) map)
-        #LocationData("Capital Sequoia", "Capital Sequoia Ability - Niltsi from SWind_Summon", 1109 + ability_index_offset),
+        #LocationData("Capital Sequoia", "Capital Sequoia Summon - Niltsi from SWind_Summon", 1109 + summon_index_offset),
 
         #Jojo Sewers
         #Treasure chests
@@ -496,7 +496,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver behind room that shall not be named", 691 + npc_index_offset), #Ingot
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver atop yashiki", 2659 + npc_index_offset), #Ore
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Lets get down to business western Silver", 429 + npc_index_offset), #Ore
-        LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, logic.has_swimming), #Springs Oath (632, 243, -261)
+        #Technically in Overpass main map
+        LocationData("Okimoto N.S.", "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, logic.has_swimming), #Springs Oath (632, 243, -261)
 
         #Crystals
         LocationData("Okimoto N.S.", "Okimoto N.S. Crystal - Ninja", 699 + crystal_index_offset),
@@ -664,25 +665,39 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Technically 2nd from bottom in Overpass main map
         LocationData("Salmon Bay", "Overpass NPC - Lonely scrap among half-dead pines above Salmon Bay", 3677 + npc_index_offset), #Overpass Scrap
 
-        #Abilities Todo: descriptivize and implement
+        #Summons Todo: descriptivize and implement
         #-50, 91, -330
-        #LocationData("Salmon Bay", "Salmon Bay Ability - Guaba from SThunder_Summon", 1138 + ability_index_offset),
+        #LocationData("Salmon Bay", "Salmon Bay Summon - Guaba from SThunder_Summon", 1138 + summon_index_offset),
 
         #Overpass
         #Treasure chests
+        #Life Jewel chest on main map has been categorized under Dione Shrine
         #1st Overpass Scrap chest on main map has been categorized under Rolling Quintar Fields
         #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
         #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
         #4th Overpass Scrap chest on main map has been categorized under Dione Shrine
         #5th Overpass Scrap chest on main map has been categorized under Quintar Reserve
+        #Todo recategorize and descriptivize
+        LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3537 + treasure_index_offset), #(148, 151, -114)
         #7th Overpass Scrap chest on main map has been categorized under Sara Sara Beach
         #8th Overpass Scrap chest on main map has been categorized under Salmon Bay
-        #Gold Ingot and Life Jewel chest have been categorized under Dione Shrine
+        #Todo recategorize and descriptivize
+        LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3678 + treasure_index_offset), #(191, 177, -214)
         #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall, Tall Heights
+        #Todo recategorize and descriptivize
+        LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3539 + treasure_index_offset), #(32, 181, -373) (Cloudy Wind)
+        LocationData("Overpass", "Overpass Chest - Zether Pouch chest", 1401 + treasure_index_offset), #(-35, 166, -387) (Cloudy Wind)
+        LocationData("Overpass", "Overpass Chest - River Cats Ego map chest", 3654 + treasure_index_offset), #(60, 225, -435) (Snow)
         #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
+        LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3676 + treasure_index_offset), #(45, 215, -465) (Outpost)
 
         #NPCs
+        #Todo NPCs Job Masters: Overpass main map has Master Hunter ID 3558 (496, 198, -346); gives you Hunter Seal in exchange for job mastery
+        #Gold Ingot on main map has been categorized under Dione Shrine
+        #Z20_WaterOrigin ID 1583 (gives Springs Oath) has been categorized under Okimoto N.S. (632, 243, -261)
         #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall, Tall Heights
+        #Todo recategorize and descriptivize
+        LocationData("Overpass", "Overpass NPC - Gold Ingot", 2739 + npc_index_offset), #(63, 191, -399) (Cloudy Wind)
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Aegis ID 3610 (501, 194, -210); gives you Aegis Seal in exchange for job mastery
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Beastmaster ID 3608 (312, 236, -344); gives you Beastmaster Seal in exchange for job mastery
@@ -695,15 +710,28 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Underpass
         #Treasure chests
+        #Todo recategorize and descriptivize
+        LocationData("Underpass", "Underpass Chest - Basement map chest", 3653 + treasure_index_offset), #(126, 115, -102)
+        LocationData("Underpass", "Underpass Chest - Fenix Juice Pouch chest", 181 + treasure_index_offset), #(129, 98, -111)
+        LocationData("Underpass", "Underpass Chest - Plate of Wolf chest", 182 + treasure_index_offset), #(128, 98, -111)
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3541 + treasure_index_offset), #(64, 98, -111)
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3620 + treasure_index_offset), #(524, 146, -368)
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3621 + treasure_index_offset), #(245, 116, -199)
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3670 + treasure_index_offset), #(337, 155, -319)
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3671 + treasure_index_offset), #(119, 98, -110)
         #6th Underpass Scrap chest on main map has been categorized under the Quintar Mausoleum
-        #The last Underpass Scrap chest on main map has been categorized under the Capital Jail
-        #The Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
+        #7th Underpass Scrap chest on main map has been categorized under the Capital Jail
+        #Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
+        #Todo recategorize and descriptivize
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3673 + treasure_index_offset), #(608, 91, -215) (Summon Pah)
         #Underpass (Ice Pass) Scrap chest has been categorized under Tall, Tall Heights
         #Underpass (Ice Pass) Potion chest has been categorized under Tall, Tall Heights
+        #Todo recategorize and descriptivize
+        LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3623 + treasure_index_offset), #(191, 172, -437) (Summon Pah)
 
-        #Abilities Todo: descriptivize and implement
+        #Summons Todo: descriptivize and implement
         #614, 91, -213
-        #LocationData("Underpass", "Underpass Ability - Pah from SReflect_Summon", 1130 + ability_index_offset),
+        #LocationData("Underpass", "Underpass Summon - Pah from SReflect_Summon", 1130 + summon_index_offset),
 
         #Zones (Expert)
         #The Open Sea
@@ -803,8 +831,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Crystals
         LocationData("Shoudu Province", "Shoudu Province Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, logic.has_vertical_movement),
 
-        #Abilities Todo: descriptivize and implement (720, 138, -278)
-        #LocationData("Shoudu Province", "Shoudu Province Ability - Tira from SShadow_Summon", 1132 + ability_index_offset),
+        #Summons Todo: descriptivize and implement (720, 138, -278)
+        #LocationData("Shoudu Province", "Shoudu Province Summon - Tira from SShadow_Summon", 1132 + summon_index_offset),
 
         #The Undercity
         #Items
@@ -880,9 +908,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset), #Dust
 
-        #Abilities Todo: descriptivize and implement
+        #Summons Todo: descriptivize and implement
         #97, 126, -211
-        #LocationData("Lake Delende", "Lake Delende Ability - Ioske from SEarth_Summon", 1111 + ability_index_offset),
+        #LocationData("Lake Delende", "Lake Delende Summon - Ioske from SEarth_Summon", 1111 + summon_index_offset),
 
         #Quintar Reserve
         #Treasure chests
@@ -979,9 +1007,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Technically 1st Gold Dust on Overpass (Cloudy Wind) submap
         LocationData("Tall, Tall Heights", "Overpass NPC - Gold past Tall,Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
 
-        #Abilities Todo: descriptivize and implement
+        #Summons Todo: descriptivize and implement
         #498, 218, -412
-        #LocationData("Tall, Tall Heights", "Tall, Tall Heights Ability - Pamoa from SIce_Summon", 1136 + ability_index_offset),
+        #LocationData("Tall, Tall Heights", "Tall, Tall Heights Summon - Pamoa from SIce_Summon", 1136 + summon_index_offset),
 
         #Northern Cave
         #Treasure chests
@@ -1040,7 +1068,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Northern Stretch
         #Treasure chests
-        LocationData("Northern Stretch", "Northern Stretch Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map chest
+        #Technically in Overpass (Outpost)
+        LocationData("Northern Stretch", "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map chest
 
         #Castle Ramparts
         #Treasure chests
@@ -1118,8 +1147,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond in the boughs above the shrine", 2898 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ingot
         LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Canopy Gold above big lake", 2899 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ingot
 
-        #Abilities Todo: descriptivize and implement (672, 124, 106)
-        #LocationData("Jidamba Tangle", "Jidamba Tangle Ability - Juses from SLife_Summon", 1134 + ability_index_offset),
+        #Summons Todo: descriptivize and implement (672, 124, 106)
+        #LocationData("Jidamba Tangle", "Jidamba Tangle Summon - Juses from SLife_Summon", 1134 + summon_index_offset),
 
         #Jidamba Eaclaneya
         #Treasure chests
@@ -1193,8 +1222,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ingot", 2857 + npc_index_offset), #(-356, 55, -167)
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ore", 2856 + npc_index_offset), #(-370, 53, -173)
 
-        #Abilities Todo: descriptivize and implement
-        #LocationData("The Deep Sea", "The Deep Sea Ability - Coyote from SWater_Summon", 1140 + ability_index_offset), #(-60, 53, 202)
+        #Summons Todo: descriptivize and implement
+        #LocationData("The Deep Sea", "The Deep Sea Summon - Coyote from SWater_Summon", 1140 + summon_index_offset), #(-60, 53, 202)
 
         #Jade Cavern
         #Todo descriptivize and check requirements
@@ -1307,7 +1336,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo descriptivize and check requirements
         #Treasure chests
         LocationData("The New World", "The New World Chest - Lunar Mail chest", 2930 + treasure_index_offset), #(-134, 8, 230)
-        LocationData("The New World", "The New World Chest - Lunar Mail chest", 2931 + treasure_index_offset), #(-11, 12, -577)
+        LocationData("The New World", "The New World Chest - Mages Pike chest", 2931 + treasure_index_offset), #(-11, 12, -577)
         LocationData("The New World", "The New World Chest - The New World map chest", 1938 + treasure_index_offset), #(-85, 8, 142)
 
     ]
