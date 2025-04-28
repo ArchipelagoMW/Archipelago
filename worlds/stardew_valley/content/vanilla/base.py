@@ -140,7 +140,7 @@ base_game = BaseGameContentPack(
 
         Vegetable.broccoli: (HarvestCropSource(seed=Seed.broccoli, seasons=(Season.fall,)),),
         Vegetable.carrot: (HarvestCropSource(seed=Seed.carrot, seasons=(Season.spring,)),),
-        Fruit.powdermelon: (HarvestCropSource(seed=Seed.powdermelon, seasons=(Season.summer,)),),
+        Fruit.powdermelon: (HarvestCropSource(seed=Seed.powdermelon, seasons=(Season.winter,)),),
         Vegetable.summer_squash: (HarvestCropSource(seed=Seed.summer_squash, seasons=(Season.summer,)),),
 
         Fruit.strawberry: (HarvestCropSource(seed=Seed.strawberry, seasons=(Season.spring,)),),
@@ -150,7 +150,8 @@ base_game = BaseGameContentPack(
         Seed.coffee_starter: (CustomRuleSource(lambda logic: logic.traveling_merchant.has_days(3) & logic.monster.can_kill_many(Monster.dust_sprite)),),
         Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
 
-        Vegetable.tea_leaves: (CustomRuleSource(lambda logic: logic.has(Sapling.tea) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
+        Vegetable.tea_leaves: (
+        CustomRuleSource(lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),

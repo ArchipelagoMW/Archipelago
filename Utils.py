@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.0"
+__version__ = "0.6.2"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -113,6 +113,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             res = function(self, arg)
             cache[arg] = res
             return res
+
+    wrap.__defaults__ = function.__defaults__
 
     return wrap
 
@@ -427,6 +429,9 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by OptionCounter
+        if module == "collections" and name == "Counter":
+            return collections.Counter
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
                                              "SlotType", "NetworkSlot", "HintStatus"}:
@@ -443,7 +448,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection)):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
+                                self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")

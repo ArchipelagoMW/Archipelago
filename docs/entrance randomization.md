@@ -370,19 +370,13 @@ target_group_lookup = bake_target_group_lookup(world, get_target_groups)
 
 #### When to call `randomize_entrances`
 
-The short answer is that you will almost always want to do ER in `pre_fill`. For more information why, continue reading.
+The correct step for this is `World.connect_entrances`.
 
-ER begins by collecting the entire item pool and then uses your access rules to try and prevent some kinds of failures. 
-This means 2 things about when you can call ER:
-1. You must supply your item pool before calling ER, or call ER before setting any rules which require items.
-2. If you have rules dependent on anything other than items (e.g. `Entrance`s or events), you must set your rules
-   and create your events before you call ER if you want to guarantee a correct output.
-
-If the conditions above are met, you could theoretically do ER as early as `create_regions`. However, plando is also 
-a consideration. Since item plando happens between `set_rules` and `pre_fill` and modifies the item pool, doing ER 
-in `pre_fill` is the only way to account for placements made by item plando, otherwise you risk impossible seeds or 
-generation failures. Obviously, if your world implements entrance plando, you will likely want to do that before ER as
-well.
+Currently, you could theoretically do it as early as `World.create_regions` or as late as `pre_fill`.
+However, there are upcoming changes to Item Plando and Generic Entrance Randomizer to make the two features work better
+together.
+These changes necessitate that entrance randomization is done exactly in `World.connect_entrances`.
+It is fine for your Entrances to be connected differently or not at all before this step.
 
 #### Informing your client about randomized entrances
 
