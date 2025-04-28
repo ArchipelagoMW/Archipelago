@@ -44,7 +44,6 @@ class MissionButton(HoverableButton, MDTooltip):
 
         if self.tooltip_text != "":
             self.display_tooltip()
-            self.ctx.current_tooltip = self._tooltip
 
     def on_leave(self):
         self.remove_tooltip()
@@ -150,10 +149,8 @@ class SC2Manager(GameManager):
                 logging.getLogger("Starcraft2").warning(f"{race.name.title()} button color setting: {error}")
 
     def clear_tooltip(self) -> None:
-        if self.ctx.current_tooltip:
-            Window.remove_widget(self.ctx.current_tooltip)
-
-        self.ctx.current_tooltip = None
+        for button in self.mission_id_to_button.values():
+            button.remove_tooltip()
 
     def build(self):
         container = super().build()

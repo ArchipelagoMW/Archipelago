@@ -621,7 +621,6 @@ class SC2Context(CommonContext):
         self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.location_inclusions_by_flag: typing.Dict[LocationFlag, int] = {}
         self.plando_locations: typing.List[str] = []
-        self.current_tooltip = None
         self.difficulty_override = -1
         self.game_speed_override = -1
         self.mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
