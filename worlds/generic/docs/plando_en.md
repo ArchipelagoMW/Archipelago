@@ -36,19 +36,19 @@ in Advanced Settings.
 Item Plando allows a player to place an item in a specific location or locations, or place multiple items into a list 
 of specific locations in their own game and/or in another player's game.
 
-To add item plando to your player yaml, you add a new list item, starting with a dash `-`, under the`plando_items` 
+To add item plando to your player yaml, you add a new list element, starting with a dash `-`, under the`plando_items` 
 block. You should start with `item` if you want to do Single Placement, or `items` if you want to do Multi Placement.
 
-After you define `item/items`, you would add another list item (without a dash `-`) for `location` or `locations`, 
+After you define `item/items`, you would add another list element, without a dash `-`, for `location` or `locations`, 
 depending on if you want to fill one location or many. Note that both `location` and `locations` are optional.
 
 You may do any combination of `item/items` and `location/locations` in a plando block, but the important takeaways are:
-* The block only places items in locations **until the shorter of the two lists is used up.**
+* The block only places items in locations **until the shorter of the two li is used up.**
 * An `item` block will only place a **single item** no matter how many you define in it.
 * A `location` block will only fill a **single location** no matter how many you define in it.
 
-Once you are satisfied with your block, you may continue to define new list items, each starting with a dash `-`. Each 
-list item can have several different options to tailor it the way you like.
+Once you are satisfied with your block, you may continue to define new list elements, each starting with a dash `-`. 
+Each list element can have several different options to tailor it the way you like.
 
 ### `items`
 The `items` list defines the items to use. Each item name should be followed by a colon and a value.
@@ -68,9 +68,9 @@ specified:
     before they become logically reachable).
 
 ### `from_pool`
-This option determines if the item should be taken *from* the item pool or *added* to it. 
-* `false`: Add to the item pool.
-* `true`: Take from the item pool. **(Default)**
+This option determines if the item should be taken *from* the item pool or *created* from scratch. 
+* `false`: Create a new item with the same name (the world will determine its properties e.g. classification).
+* `true`: Take the existing item, if it exists, from the item pool. **(Default)**
 
 ### `world`
 This option is the target world to place the item in. It gets ignored if only one world is generated.
@@ -88,7 +88,7 @@ This option determines whether the generator will fail if the item can't be plac
 * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
 
 ### `percentage` 
-This option is the percentage chance for the relevant list item to trigger. This can be any integer from 0 to 100. 
+This option is the percentage chance for the relevant list element to trigger. This can be any integer from 0 to 100. 
 **(Default: 100)**
 
 ### `count` 
@@ -126,14 +126,14 @@ world by default.
     - items:
         Progressive Sword: 4
       world:
-        - BobsSlaytheSpire
+        - BobsWitness
         - BobsRogueLegacy
       count:
         min: 1
         max: 4
 ```
 This block will attempt to place a random number, between 1 and 4, of Progressive Swords into any locations within the 
-game slots named "BobsSlaytheSpire" and "BobsRogueLegacy."
+game slots named "BobsWitness" and "BobsRogueLegacy."
 
 ```yaml
   plando_items:
@@ -144,13 +144,13 @@ game slots named "BobsSlaytheSpire" and "BobsRogueLegacy."
         Energize: 1
       locations:
         - Master Sword Pedestal
-        - Boss Relic 1
+        - Desert Discard
       world: true
       count: 2
 ```
 This block will choose 2 from the Levitate, Revealer, and Energize items at random and attempt to put them into the 
-locations named "Master Sword Pedestal" and "Boss Relic 1". Because the world value is `true`, these locations must be 
-in other players' worlds.
+locations named "Master Sword Pedestal" and "Desert Discard". Because the world value is `true`, these locations 
+must be in other players' worlds.
 
 ```yaml
   plando_items:
