@@ -21,6 +21,10 @@ env:
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
+permissions:  # permissions required for attestation
+  id-token: 'write'
+  attestations: 'write'
+
 jobs:
   # build-release-macos: # LF volunteer
 
@@ -77,6 +81,17 @@ jobs:
           cmp setup-player-templates.txt generated-player-templates.txt \
             || diff setup-player-templates.txt generated-player-templates.txt
           mv meta.yaml Players/Templates/
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher.exe
+            build/exe.*/ArchipelagoLauncherDebug.exe
+            build/exe.*/ArchipelagoGenerate.exe
+            build/exe.*/ArchipelagoServer.exe
+            dist/${{ env.ZIP_NAME }}
+            setups/${{ env.SETUP_NAME }}
       - name: Test Generate
         shell: bash
         run: |
@@ -142,6 +157,16 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/${{ env.APPIMAGE_NAME }}
+            dist/${{ env.TAR_NAME }}
       - name: Build Again
         run: |
           source venv/bin/activate
