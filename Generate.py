@@ -263,7 +263,8 @@ def read_weights_yamls(path) -> Tuple[Any, ...]:
             else:
                 relevant_lines = lines[ex.problem_mark.line]
             error_line = " " * ex.problem_mark.column + "^"
-            raise Exception(f"{ex.context} {ex.problem}:\n{relevant_lines}\n{error_line}")
+            raise Exception(f"{ex.context} {ex.problem} on line {ex.problem_mark.line}:"
+                            f"\n{relevant_lines}\n{error_line}")
         raise ex
 
 
