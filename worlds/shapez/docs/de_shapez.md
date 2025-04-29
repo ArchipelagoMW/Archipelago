@@ -12,6 +12,8 @@ deine Gebäude schneller zu machen, kannst du bis zu 1000 Upgrades (pro Kategori
 
 Die [Spieler-Optionen-Seite für dieses Spiel](../player-options) enthält alle Optionen zum Erstellen und exportieren 
 einer YAML-Datei.
+Zusätzlich gibt es zu diesem Spiel "Datenpaket-Einstellungen", die du nach 
+[dieser Anleitung](/tutorial/shapez/datapackage_settings/de) einstellen kannst.
 
 ## Inwiefern wird das Spiel randomisiert?
 
@@ -54,6 +56,7 @@ Ein Pop-Up erscheint, das das/die erhaltene(n) Item(s) und eventuell weitere Inf
 ## Was bedeuten die Namen dieser ganzen Shapesanity Dinger?
 
 Hier ist ein Spicker für die Englischarbeit (bloß nicht dem Lehrer zeigen):
+
 ![image](https://raw.githubusercontent.com/BlastSlimey/Archipelago/refs/heads/main/worlds/shapez/docs/shapesanity_full.png)
 
 ## Kann ich auch weitere Mods neben dem AP Client installieren?
@@ -61,9 +64,7 @@ Hier ist ein Spicker für die Englischarbeit (bloß nicht dem Lehrer zeigen):
 Zurzeit wird Kompatibilität mit anderen Mods nicht unterstützt, aber niemand kann dich davon abhalten, es trotzdem zu
 versuchen. Mods, die das Gameplay verändern, werden wahrscheinlich nicht funktionieren, indem sie das Laden der 
 jeweiligen Mods verhindern oder das Spiel zum Abstürzen bringen, während einfache QoL-Mods vielleicht problemlos
-funktionieren könnten. Wenn du es versuchst, dann also auf eigene Gefahr. Solltest du aber mit der Client-Mod spielen,
-ohne mit einem Server verbunden zu sein, dann sollte sich das Spiel so verhalten, als hättest du die Client-Mod gar 
-nicht installiert.
+funktionieren könnten. Wenn du es versuchst, dann also auf eigene Gefahr.
 
 ## Hast du wirklich eine deutschsprachige Infoseite geschrieben, obwohl man sie aktuell nur über Umwege erreichen kann und du eigentlich an dem Praktikumsportfolio arbeiten solltest?
 

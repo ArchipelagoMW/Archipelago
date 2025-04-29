@@ -28,7 +28,8 @@ Alle Spiele in Archipelago müssen eine Liste aller möglichen Locations **unabh
 bereitstellen. Diese Listen aller in einer Multiworld inkludierten Spiele werden in den Daten der Multiworld gespeichert
 und an alle verbundenen Clients gesendet. Je mehr mögliche Locations, desto größer das Datenpaket. Und mit ~80000 
 möglichen Locations hatte shapez zu einem gewissen Zeitpunkt ein (von der Datenmenge her) größeres Datenpaket als alle 
-supporteten zusammen. Um also diese Datenmenge zu reduzieren wurden die ausgeschriebenen Shapesanity-Locations-Namen
-(`Shapesanity Uncolored Circle`, `Shapesanity Blue Rectangle`, ...) durch standardisierte Namen (`Shapesanity 1`, 
-`Shapesanity 2`, ...) ersetzt. Durch das Ändern dieser Maximalwerte, und damit das Erstellen einer custom APWorld, 
-kannst du die Anzahl der möglichen Locations erhöhen, wirst aber auch gleichzeitig das Datenpaket vergrößern.
+supporteten Spiele zusammen. Um also diese Datenmenge zu reduzieren wurden die ausgeschriebenen 
+Shapesanity-Locations-Namen (`Shapesanity Uncolored Circle`, `Shapesanity Blue Rectangle`, ...) durch standardisierte 
+Namen (`Shapesanity 1`, `Shapesanity 2`, ...) ersetzt. Durch das Ändern dieser Maximalwerte, und damit das Erstellen 
+einer custom APWorld, kannst du die Anzahl der möglichen Locations erhöhen, wirst aber auch gleichzeitig das Datenpaket 
+vergrößern.

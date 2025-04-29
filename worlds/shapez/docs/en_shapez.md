@@ -12,6 +12,8 @@ that make your buildings work faster.
 
 The [player options page for this game](../player-options) contains all the options you need to configure
 and export a config file.
+There are also some advanced "datapackage settings" that can be changed by following 
+[this guide](/tutorial/shapez/datapackage_settings/en).
 
 ## What does randomization do to this game?
 
@@ -53,10 +55,11 @@ A pop-up will show, which item(s) were received, with additional information on 
 ## What do the names of all these shapesanity locations mean?
 
 Here's a cheat sheet:
+
 ![image](https://raw.githubusercontent.com/BlastSlimey/Archipelago/refs/heads/main/worlds/shapez/docs/shapesanity_full.png)
 
 ## Can I use other mods alongside the AP client?
 
 At the moment, compatibility with other mods is not supported, but not forbidden. Gameplay altering mods will most
 likely crash the game or disable loading the afflicted mods, while QoL mods might work without problems. Try at your own
-risk. However, as long as the game is not connected to a multiworld, it should behave like there is no client mod.
+risk.
