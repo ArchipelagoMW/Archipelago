@@ -519,7 +519,7 @@ class LinksAwakeningClient():
                 self.death_link_status = DeathLinkStatus.DYING
         elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared before sending
             if wMWDeathLinkRecv:
-                self.gameboy.write_memory(LAClientConstants.wMWDeathLinkRecv, 0)
+                self.gameboy.write_memory(LAClientConstants.wMWDeathLinkRecv, [0])
             else:
                 self.death_link_status = DeathLinkStatus.SENDING
         elif self.death_link_status == DeathLinkStatus.SENDING: # send death link until receive flag set

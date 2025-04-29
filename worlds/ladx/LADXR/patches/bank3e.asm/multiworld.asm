@@ -49,6 +49,7 @@ MainLoop:
     bit  3, [hl]
     jr   z, .noSpawn
     ld   a, [wMWDeathLinkRecv]
+    and  a
     jr   nz, .noSpawn ; if deathlink recv flag is still up, dont do it
     ld   a, [wHasMedicine]
     ; set health and health loss to a
