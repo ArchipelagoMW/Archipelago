@@ -66,5 +66,7 @@ name automatically when you start a new save file.
   emulation and make troubleshooting errors difficult.
 * Ensure that `Enable Emulated Memory Size Override` in Dolphin (under `Options` > `Configuration` > `Advanced`) is
   **disabled**.
+* If the client cannot connect to Dolphin, ensure Dolphin is on the same drive as Archipelago. Having Dolphin on an
+  external drive has reportedly caused connection issues.
 * If you run with a custom GC boot menu, you'll need to skip it by going to `Options` > `Configuration` > `GameCube`
   and checking `Skip Main Menu`.
