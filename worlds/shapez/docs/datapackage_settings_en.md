@@ -2,7 +2,7 @@
 
 ## Where do I find the settings to increase/decrease the amount of possible locations?
 
-The maximum values of the `goal_amount` and `shapesanity_amount` are hardcoded settings that afflict the datapackage. 
+The maximum values of the `goal_amount` and `shapesanity_amount` are hardcoded settings that affect the datapackage. 
 They are stored in a file called `options.json` inside the apworld. By changing them, you will create a custom apworld 
 on your local machine.
 

@@ -24,9 +24,8 @@ randomized.
 As the game has no actual goal where the game ends, there are (currently) 4 different goals you can choose from in the 
 player options:
 1. Vanilla: Complete level 26 (the end of the tutorial).
-2. MAM: Complete an in the player options specified level after level 26. It's recommended to build a 
-Make-Anything-Machine (MAM).
-3. Even Fasterer: Upgrade everything to an in the player options specified tier after tier 8.
+2. MAM: Complete a player-specified level after level 26. It's recommended to build a Make-Anything-Machine (MAM).
+3. Even Fasterer: Upgrade everything to a player-specified tier after tier 8.
 4. Efficiency III: Deliver 256 blueprint shapes per second to the hub.
 
 ## Which items can be in another player's world?

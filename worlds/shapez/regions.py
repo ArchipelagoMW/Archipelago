@@ -29,11 +29,11 @@ def can_cut_half(state: CollectionState, player: int) -> bool:
 
 
 def can_rotate_90(state: CollectionState, player: int) -> bool:
-    return state.has_any([ITEMS.rotator, ITEMS.rotator_ccw], player)
+    return state.has_any((ITEMS.rotator, ITEMS.rotator_ccw), player)
 
 
 def can_rotate_180(state: CollectionState, player: int) -> bool:
-    return state.has_any([ITEMS.rotator, ITEMS.rotator_ccw, ITEMS.rotator_180], player)
+    return state.has_any((ITEMS.rotator, ITEMS.rotator_ccw, ITEMS.rotator_180), player)
 
 
 def can_stack(state: CollectionState, player: int) -> bool:
@@ -41,7 +41,7 @@ def can_stack(state: CollectionState, player: int) -> bool:
 
 
 def can_paint(state: CollectionState, player: int) -> bool:
-    return state.has_any([ITEMS.painter, ITEMS.painter_double], player) or can_use_quad_painter(state, player)
+    return state.has_any((ITEMS.painter, ITEMS.painter_double), player) or can_use_quad_painter(state, player)
 
 
 def can_mix_colors(state: CollectionState, player: int) -> bool:
@@ -49,16 +49,16 @@ def can_mix_colors(state: CollectionState, player: int) -> bool:
 
 
 def has_tunnel(state: CollectionState, player: int) -> bool:
-    return state.has_any([ITEMS.tunnel, ITEMS.tunnel_tier_ii], player)
+    return state.has_any((ITEMS.tunnel, ITEMS.tunnel_tier_ii), player)
 
 
 def has_balancer(state: CollectionState, player: int) -> bool:
-    return state.has(ITEMS.balancer, player) or state.has_all([ITEMS.comp_merger, ITEMS.comp_splitter], player)
+    return state.has(ITEMS.balancer, player) or state.has_all((ITEMS.comp_merger, ITEMS.comp_splitter), player)
 
 
 def can_use_quad_painter(state: CollectionState, player: int) -> bool:
-    return (state.has_all([ITEMS.painter_quad, ITEMS.wires], player) and
-            state.has_any([ITEMS.switch, ITEMS.const_signal], player))
+    return (state.has_all((ITEMS.painter_quad, ITEMS.wires), player) and
+            state.has_any((ITEMS.switch, ITEMS.const_signal), player))
 
 
 def can_make_stitched_shape(state: CollectionState, player: int, floating: bool) -> bool:
@@ -70,8 +70,8 @@ def can_make_stitched_shape(state: CollectionState, player: int, floating: bool)
 def can_build_mam(state: CollectionState, player: int, floating: bool) -> bool:
     return (can_make_stitched_shape(state, player, floating) and can_paint(state, player) and
             can_mix_colors(state, player) and has_balancer(state, player) and has_tunnel(state, player) and
-            state.has_all([ITEMS.belt_reader, ITEMS.storage, ITEMS.item_filter,
-                           ITEMS.wires, ITEMS.logic_gates, ITEMS.virtual_proc], player))
+            state.has_all((ITEMS.belt_reader, ITEMS.storage, ITEMS.item_filter,
+                           ITEMS.wires, ITEMS.logic_gates, ITEMS.virtual_proc), player))
 
 
 def can_make_east_windmill(state: CollectionState, player: int) -> bool:
@@ -82,12 +82,12 @@ def can_make_east_windmill(state: CollectionState, player: int) -> bool:
 
 def can_make_half_half_shape(state: CollectionState, player: int) -> bool:
     # Only used for shapesanity => single layers
-    return can_stack(state, player) and state.has_any([ITEMS.cutter, ITEMS.cutter_quad], player)
+    return can_stack(state, player) and state.has_any((ITEMS.cutter, ITEMS.cutter_quad), player)
 
 
 def can_make_half_shape(state: CollectionState, player: int) -> bool:
     # Only used for shapesanity => single layers
-    return can_cut_half(state, player) or state.has_all([ITEMS.cutter_quad, ITEMS.stacker], player)
+    return can_cut_half(state, player) or state.has_all((ITEMS.cutter_quad, ITEMS.stacker), player)
 
 
 def has_x_belt_multiplier(state: CollectionState, player: int, needed: float) -> bool:
@@ -112,7 +112,7 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: List
 
     if buildings[index] == ITEMS.cutter:
         if buildings.index(ITEMS.stacker) < index:
-            return state.has_any([ITEMS.cutter, ITEMS.cutter_quad], player)
+            return state.has_any((ITEMS.cutter, ITEMS.cutter_quad), player)
         else:
             return can_cut_half(state, player)
     elif buildings[index] == ITEMS.rotator:
@@ -154,15 +154,15 @@ def create_shapez_regions(player: int, multiworld: MultiWorld, floating: bool,
     # Connect Menu to rest of regions
     regions[REGIONS.menu].connect(regions[REGIONS.belt], "Placing belts", lambda state: state.has(ITEMS.belt, player))
     regions[REGIONS.menu].connect(regions[REGIONS.extract], "Extracting shapes from patches",
-                                  lambda state: state.has_any([ITEMS.extractor, ITEMS.extractor_chain], player))
+                                  lambda state: state.has_any((ITEMS.extractor, ITEMS.extractor_chain), player))
     regions[REGIONS.extract].connect(
         regions[REGIONS.main], "Transporting shapes over the canvas",
-        lambda state: state.has_any([ITEMS.belt, ITEMS.comp_merger, ITEMS.comp_splitter], player)
+        lambda state: state.has_any((ITEMS.belt, ITEMS.comp_merger, ITEMS.comp_splitter), player)
     )
 
     # Connect achievement regions
     regions[REGIONS.main].connect(regions[REGIONS.paint_not_quad], "Painting with (double) painter",
-                                  lambda state: state.has_any([ITEMS.painter, ITEMS.painter_double], player))
+                                  lambda state: state.has_any((ITEMS.painter, ITEMS.painter_double), player))
     regions[REGIONS.extract].connect(regions[REGIONS.cut_not_quad], "Cutting with half cutter",
                                      lambda state: can_cut_half(state, player))
     regions[REGIONS.extract].connect(regions[REGIONS.rotate_cw], "Rotating clockwise",
@@ -181,12 +181,12 @@ def create_shapez_regions(player: int, multiworld: MultiWorld, floating: bool,
                                   lambda state: state.has(ITEMS.wires, player))
     regions[REGIONS.main].connect(regions[REGIONS.mam], "Building a MAM",
                                   lambda state: can_build_mam(state, player, floating))
-    regions[REGIONS.menu].connect(regions[REGIONS.any_building], "Placing any building", lambda state: state.has_any([
+    regions[REGIONS.menu].connect(regions[REGIONS.any_building], "Placing any building", lambda state: state.has_any((
         ITEMS.belt, ITEMS.balancer, ITEMS.comp_merger, ITEMS.comp_splitter, ITEMS.tunnel, ITEMS.tunnel_tier_ii,
         ITEMS.extractor, ITEMS.extractor_chain, ITEMS.cutter, ITEMS.cutter_quad, ITEMS.rotator, ITEMS.rotator_ccw,
         ITEMS.rotator_180, ITEMS.stacker, ITEMS.painter, ITEMS.painter_double, ITEMS.painter_quad, ITEMS.color_mixer,
         ITEMS.trash, ITEMS.belt_reader, ITEMS.storage, ITEMS.switch, ITEMS.item_filter, ITEMS.display, ITEMS.wires
-    ], player))
+    ), player))
     regions[REGIONS.main].connect(regions[REGIONS.all_buildings], "Using all main buildings",
                                   lambda state: can_make_stitched_shape(state, player, floating) and
                                                 can_paint(state, player) and can_mix_colors(state, player))
