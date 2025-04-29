@@ -63,7 +63,7 @@ def generate_location_table() -> dict[str, int]:
                 location_table[room.display_name] = location_id_offsets[LocationType.room_enter] + location_counts[LocationType.room_enter]
                 location_counts[LocationType.room_enter] += 1
 
-            if room.checkpoint != None and room.checkpoint != "Start":
+            if room.checkpoint is not None and room.checkpoint != "Start":
                 checkpoint_id: int = location_id_offsets[LocationType.checkpoint] + location_counts[LocationType.checkpoint]
                 checkpoint_name: str = level.display_name + " - " + room.checkpoint
                 location_table[checkpoint_name] = checkpoint_id
@@ -75,7 +75,7 @@ def generate_location_table() -> dict[str, int]:
 
             for region in room.regions:
                 for location in region.locations:
-                    if location_id_offsets[location.loc_type] != None:
+                    if location_id_offsets[location.loc_type] is not None:
                         location_id = location_id_offsets[location.loc_type] + location_counts[location.loc_type]
                         location_table[location.display_name] = location_id
                         location_counts[location.loc_type] += 1
@@ -96,7 +96,7 @@ def create_regions_and_locations(world):
     world.multiworld.regions.append(menu_region)
 
     world.active_checkpoint_names: list[str] = []
-    world.goal_checkpoint_names: dict[str] = dict()
+    world.goal_checkpoint_names: dict[str, str] = dict()
     world.active_key_names: list[str] = []
     world.active_gem_names: list[str] = []
     world.active_clutter_names: list[str] = []
@@ -133,39 +133,55 @@ def create_regions_and_locations(world):
                     if level_location.loc_type == LocationType.gem:
                         world.active_gem_names.append(level_location.display_name)
 
-                    location_rule = lambda state: True
+                    location_rule = None
                     if len(level_location.possible_access) > 0:
-                        location_rule = lambda state, level_location=level_location: any(all(state.has(item, world.player) for item in sublist) for sublist in level_location.possible_access)
+                        def location_rule_func(state, level_location=level_location):
+                            for sublist in level_location.possible_access:
+                                if state.has_all(sublist, world.player):
+                                    return True
+                            return False
+
+                        location_rule = location_rule_func
 
                     if level_location.loc_type == LocationType.clutter:
                         world.active_clutter_names.append(level_location.display_name)
                         location = CelesteLocation(world.player, level_location.display_name, None, region)
-                        set_rule(location, location_rule)
+                        if location_rule is not None:
+                            set_rule(location, location_rule)
                         region.locations.append(location)
                         continue
 
                     location = CelesteLocation(world.player, level_location.display_name, world.location_name_to_id[level_location.display_name], region)
-                    set_rule(location, location_rule)
+                    if location_rule is not None:
+                        set_rule(location, location_rule)
                     region.locations.append(location)
 
             for pre_region in room.regions:
                 region = world.multiworld.get_region(pre_region.name, world.player)
                 for connection in pre_region.connections:
-                    connection_rule = lambda state: True
+                    connection_rule = None
                     if len(connection.possible_access) > 0:
-                        connection_rule = lambda state, connection=connection: any(all(state.has(item, world.player) for item in sublist) for sublist in connection.possible_access)
-                    region.add_exits([connection.destination_name], {connection.destination_name: connection_rule})
+                        def connection_rule_func(state, connection=connection):
+                            for sublist in connection.possible_access:
+                                if state.has_all(sublist, world.player):
+                                    return True
+
+                        connection_rule = connection_rule_func
+
+                    if connection_rule is None:
+                        region.add_exits([connection.destination_name])
+                    else:
+                        region.add_exits([connection.destination_name], {connection.destination_name: connection_rule})
                 region.add_exits([room_region.name])
 
             if room.checkpoint != None:
-                checkpoint_rule = lambda state: True
                 if room.checkpoint == "Start":
                     if world.options.lock_goal_area and (level.name == world.goal_area or (level.name[:2] == world.goal_area[:2] == "10")):
                         world.goal_start_region: str = room.checkpoint_region
                     elif level.name == "8a":
                         world.epilogue_start_region: str = room.checkpoint_region
                     else:
-                        menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
+                        menu_region.add_exits([room.checkpoint_region])
                 else:
                     checkpoint_location_name = level.display_name + " - " + room.checkpoint
                     world.active_checkpoint_names.append(checkpoint_location_name)
@@ -200,7 +216,8 @@ def create_regions_and_locations(world):
 
         if level.name == "10c":
             # Manually connect the Golden room of Farewell
-            golden_rule = lambda state: state.has_all([ItemName.traffic_blocks, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.dream_blocks, ItemName.swap_blocks, ItemName.move_blocks, ItemName.blue_boosters, ItemName.springs, ItemName.feathers, ItemName.coins, ItemName.red_boosters, ItemName.kevin_blocks, ItemName.core_blocks, ItemName.fire_ice_balls, ItemName.badeline_boosters, ItemName.bird, ItemName.breaker_boxes, ItemName.pufferfish, ItemName.jellyfish, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.yellow_cassette_blocks, ItemName.green_cassette_blocks], world.player)
+            golden_items: list[str] = [ItemName.traffic_blocks, ItemName.dash_refills, ItemName.double_dash_refills, ItemName.dream_blocks, ItemName.swap_blocks, ItemName.move_blocks, ItemName.blue_boosters, ItemName.springs, ItemName.feathers, ItemName.coins, ItemName.red_boosters, ItemName.kevin_blocks, ItemName.core_blocks, ItemName.fire_ice_balls, ItemName.badeline_boosters, ItemName.bird, ItemName.breaker_boxes, ItemName.pufferfish, ItemName.jellyfish, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.yellow_cassette_blocks, ItemName.green_cassette_blocks]
+            golden_rule = lambda state: state.has_all(golden_items, world.player)
 
             source_region_end = world.multiworld.get_region("10b_j-19_top", world.player)
             source_region_end.add_exits(["10c_end-golden_bottom"], {"10c_end-golden_bottom": golden_rule})

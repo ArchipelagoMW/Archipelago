@@ -2980,7 +2980,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "2b_01b_west---2b_01b_east": RegionConnection("2b_01b_west", "2b_01b_east", [[ItemName.dream_blocks, ], ]),
     "2b_01b_east---2b_01b_west": RegionConnection("2b_01b_east", "2b_01b_west", [[ItemName.cannot_access, ], ]),
 
-    "2b_02b_west---2b_02b_east": RegionConnection("2b_02b_west", "2b_02b_east", [[ItemName.dream_blocks, ], ]),
+    "2b_02b_west---2b_02b_east": RegionConnection("2b_02b_west", "2b_02b_east", [[ItemName.dream_blocks, ItemName.dash_refills, ], ]),
     "2b_02b_east---2b_02b_west": RegionConnection("2b_02b_east", "2b_02b_west", [[ItemName.cannot_access, ], ]),
 
     "2b_02_west---2b_02_east": RegionConnection("2b_02_west", "2b_02_east", [[ItemName.dream_blocks, ItemName.dash_refills, ], ]),
@@ -5172,7 +5172,7 @@ all_locations: dict[str, LevelLocation] = {
     "5a_d-04_key_4": LevelLocation("5a_d-04_key_4", "Mirror Temple A - Search Key 2", "5a_d-04_south-west-right", LocationType.key, []),
     "5a_d-04_strawberry_2": LevelLocation("5a_d-04_strawberry_2", "Mirror Temple A - Room d-04 Strawberry 2", "5a_d-04_south-east", LocationType.strawberry, [[ItemName.red_boosters, ItemName.swap_blocks, ], ]),
     "5a_d-04_strawberry_1": LevelLocation("5a_d-04_strawberry_1", "Mirror Temple A - Room d-04 Strawberry 1", "5a_d-04_north", LocationType.strawberry, []),
-    "5a_d-15_strawberry_2": LevelLocation("5a_d-15_strawberry_2", "Mirror Temple A - Room d-15 Strawberry 2", "5a_d-15_center", LocationType.strawberry, [[ItemName.swap_blocks, ], ]),
+    "5a_d-15_strawberry_2": LevelLocation("5a_d-15_strawberry_2", "Mirror Temple A - Room d-15 Strawberry 2", "5a_d-15_center", LocationType.strawberry, [[ItemName.swap_blocks, ItemName.dash_refills, ], ]),
     "5a_d-15_key_5": LevelLocation("5a_d-15_key_5", "Mirror Temple A - Search Key 3", "5a_d-15_center", LocationType.key, [[ItemName.swap_blocks, ItemName.seekers, ], ]),
     "5a_d-15_strawberry_1": LevelLocation("5a_d-15_strawberry_1", "Mirror Temple A - Room d-15 Strawberry 1", "5a_d-15_west", LocationType.strawberry, [[ItemName.red_boosters, ], ]),
     "5a_d-13_strawberry": LevelLocation("5a_d-13_strawberry", "Mirror Temple A - Room d-13 Strawberry", "5a_d-13_west", LocationType.strawberry, []),

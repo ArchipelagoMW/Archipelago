@@ -6180,7 +6180,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "dream_blocks" ] ]
+                                    "rule": [ [ "dream_blocks", "dash_refills" ] ]
                                 }
                             ]
                         },
@@ -19242,7 +19242,7 @@
                                     "name": "strawberry_2",
                                     "display_name": "Strawberry 2",
                                     "type": "strawberry",
-                                    "rule": [ [ "swap_blocks" ] ]
+                                    "rule": [ [ "swap_blocks", "dash_refills" ] ]
                                 },
                                 {
                                     "name": "key_5",
