@@ -35436,7 +35436,7 @@
                             "connections": [
                                 {
                                     "dest": "top",
-                                    "rule": [ [ "dash_refills", "core_blocks" ] ]
+                                    "rule": [ [ "dash_refills", "core_blocks", "core_toggles", "springs" ] ]
                                 }
                             ]
                         },
@@ -36004,7 +36004,7 @@
                             "connections": [
                                 {
                                     "dest": "goal",
-                                    "rule": [ [ "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks" ] ]
+                                    "rule": [ [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks" ] ]
                                 }
                             ],
                             "locations": [
@@ -36030,7 +36030,7 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks" ] ]
+                                    "rule": [ [ "springs", "traffic_blocks", "dash_refills", "core_toggles", "dream_blocks", "bumpers", "pink_clouds", "swap_blocks", "kevin_blocks", "core_blocks" ] ]
                                 }
                             ]
                         }
@@ -40527,7 +40527,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": false
+                            "closes_behind": true
                         },
                         {
                             "name": "top",
