@@ -339,7 +339,7 @@ def addupgrades(finaltier: int, logictype: str,
             f(LOCATIONS.upgrade(CATEGORY.painting, roman(x)), REGIONS.upgrades_5)
 
     elif logictype == OPTIONS.logic_category_random:
-        for x in range(2, 6):
+        for x in range(2, 7):
             tier = roman(x)
             f(LOCATIONS.upgrade(CATEGORY.belt, tier),
               upgrade_regions[category_random_logic_amounts[CATEGORY.belt_low]])
@@ -349,7 +349,7 @@ def addupgrades(finaltier: int, logictype: str,
               upgrade_regions[category_random_logic_amounts[CATEGORY.processors_low]])
             f(LOCATIONS.upgrade(CATEGORY.painting, tier),
               upgrade_regions[category_random_logic_amounts[CATEGORY.painting_low]])
-        for x in range(6, finaltier+1):
+        for x in range(7, finaltier+1):
             tier = roman(x)
             for cat in categories:
                 f(LOCATIONS.upgrade(cat, tier), REGIONS.upgrades_5)
