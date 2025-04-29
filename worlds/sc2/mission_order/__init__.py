@@ -37,10 +37,10 @@ class SC2MissionOrder:
     def get_starting_missions(self) -> List[SC2Mission]:
         """Returns a list containing all the missions that are accessible without beating any other missions."""
         return [
-            mission.mission
+            slot.mission
             for campaign in self.mission_order_node.campaigns if campaign.is_always_unlocked()
             for layout in campaign.layouts if layout.is_always_unlocked()
-            for mission in layout.missions if mission.is_always_unlocked() and not mission.option_empty
+            for slot in layout.missions if slot.is_always_unlocked() and not slot.option_empty
         ]
 
     def get_completion_condition(self, player: int) -> Callable[[CollectionState], bool]:
