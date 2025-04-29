@@ -21,7 +21,7 @@ import sys
 import subprocess
 import time
 import typing
-from enum import Enum
+from enum import IntEnum
 
 
 from CommonClient import (CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger, server_loop)
@@ -104,7 +104,7 @@ class LAClientConstants:
     VictoryGameplayAndSub = 0x0102
 
 
-class MWCommands(Enum):
+class MWCommands(IntEnum):
     # bit 0: send item
     # bit 1: consider receive index for item send and tick up
     # bit 2: collect location
@@ -116,7 +116,7 @@ class MWCommands(Enum):
     DEATH_LINK =        0b00001000
 
 
-class DeathLinkStatus(Enum):
+class DeathLinkStatus(IntEnum):
     NONE = 0
     PENDING = 1
     SENDING = 2
@@ -362,7 +362,7 @@ class RAGameboy():
             [mp_c, mp_d] = struct.pack('>H', mp_cd)
         if mp_ef:
             [mp_e, mp_f] = struct.pack('>H', mp_ef)
-        msg = [int(command), item_code, sender_high, sender_low, mp_c, mp_d, mp_e, mp_f]
+        msg = [command, item_code, sender_high, sender_low, mp_c, mp_d, mp_e, mp_f]
         self.write_memory(LAClientConstants.wMWCommand, msg)
 
 
@@ -459,7 +459,8 @@ class LinksAwakeningClient():
             if(is_checked
                or current_room == meta_id[:5] # player is in the location room
                or id not in ctx.locations_info # location scout data not in yet
-               or self.dependent_location_ids.get(id) not in ctx.checked_locations): # location dependency not met
+               or (id in self.dependent_location_ids
+                   and self.dependent_location_ids.get(id) not in ctx.checked_locations)): # location dependency not met
                 continue
             check = self.tracker.meta_to_check[meta_id]
             item = ctx.locations_info[id]
