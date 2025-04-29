@@ -435,11 +435,11 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
         f(LOCATIONS.mam, REGIONS.mam, "Complete any level > 26 without modifications")
     if maxlevel >= 50:
         f(LOCATIONS.cant_stop, presentlocations[LOCATIONS.level(50)][0], "Reach level 50")
-    elif not goal == GOALS.vanilla:
+    elif goal not in [GOALS.vanilla, GOALS.mam]:
         f(LOCATIONS.cant_stop, REGIONS.levels_5, "Reach level 50")
     if maxlevel >= 100:
         f(LOCATIONS.is_this_the_end, presentlocations[LOCATIONS.level(100)][0], "Reach level 100")
-    elif not goal == GOALS.vanilla:
+    elif goal not in [GOALS.vanilla, GOALS.mam]:
         f(LOCATIONS.is_this_the_end, REGIONS.levels_5, "Reach level 100")
 
     # Achievements that depend on player preferences
