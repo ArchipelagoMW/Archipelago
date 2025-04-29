@@ -6,7 +6,8 @@ from .data.strings import OTHER, ITEMS, CATEGORY, LOCATIONS, SLOTDATA, GOALS, OP
 from .items import item_descriptions, item_table, ShapezItem, \
     buildings_routing, buildings_processing, buildings_other, \
     buildings_top_row, buildings_wires, gameplay_unlocks, upgrades, \
-    big_upgrades, filler, trap, bundles, belt_and_extractor, standard_traps, random_draining_trap, split_draining_traps
+    big_upgrades, filler, trap, bundles, belt_and_extractor, standard_traps, random_draining_trap, split_draining_traps, \
+    whacky_upgrade_traps
 from .locations import ShapezLocation, addlevels, addupgrades, addachievements, location_description, \
     addshapesanity, addshapesanity_ut, shapesanity_simple, init_shapesanity_pool, achievement_locations, \
     level_locations, upgrade_locations, shapesanity_locations, categories
@@ -101,7 +102,7 @@ class ShapezWorld(World):
                                  for size in {"", CATEGORY.demonic}}}
            for cat in {CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting}},
         "Bundles": {*bundles},
-        "Traps": {*standard_traps, *random_draining_trap, *split_draining_traps},
+        "Traps": {*standard_traps, *random_draining_trap, *split_draining_traps, *whacky_upgrade_traps},
     }
     location_name_groups = {
         "Levels": {*level_locations},
