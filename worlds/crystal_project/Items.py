@@ -37,7 +37,7 @@ item_table: Dict[str, ItemData] = {
     "Job - Samurai": ItemData("Job", 20 + job_index_offset, ItemClassification.progression),
     "Job - Assassin": ItemData("Job", 19 + job_index_offset, ItemClassification.progression),
     "Job - Valkyrie": ItemData("Job", 15 + job_index_offset, ItemClassification.progression),
-    "Job - Summoner": ItemData("Job", 21 + job_index_offset, ItemClassification.progression),
+    "Job - Summoner": ItemData("Job", 21 + job_index_offset, ItemClassification.progression), #Required for summon fights if we add them to locations; only job checked by NPCs
     "Job - Beastmaster": ItemData("Job", 23 + job_index_offset, ItemClassification.progression),
     "Job - Weaver": ItemData("Job", 16 + job_index_offset, ItemClassification.progression),
     "Job - Mimic": ItemData("Job", 22 + job_index_offset, ItemClassification.progression),
@@ -55,12 +55,12 @@ item_table: Dict[str, ItemData] = {
     "Item - Nan's Cocoa'": ItemData("Item", 8 + item_index_offset, ItemClassification.filler, 0),
     "Item - Nan's Secret Recipe": ItemData("Item", 54 + item_index_offset, ItemClassification.filler, 0),
     "Item - Nuts": ItemData("Item", 14 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Milk": ItemData("Item", 20 + item_index_offset, ItemClassification.progression),
-    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.progression),
+    "Item - Milk": ItemData("Item", 20 + item_index_offset, ItemClassification.progression), #Turn-in: Thirsty Lad, Poko Poko Desert, Advanced Regions
+    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.progression),  #Turn-in: Foreign Foodie, Sara Sara Bazaar, Advanced Regions
     "Item - Sweet Pop Candy": ItemData("Item", 34 + item_index_offset, ItemClassification.filler, 0),
     "Item - Sour Pop Candy": ItemData("Item", 35 + item_index_offset, ItemClassification.filler, 0),
     "Item - Bitter Pop Candy": ItemData("Item", 171 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.progression),
+    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.progression),  #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
     "Item - Decent Cod": ItemData("Item", 38 + item_index_offset, ItemClassification.filler, 0),
     "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.filler, 0),
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
@@ -98,51 +98,51 @@ item_table: Dict[str, ItemData] = {
     "Item - Diamond Dust": ItemData("Item", 72 + item_index_offset, ItemClassification.useful, 18),
 
     #Keys
-    "Item - Gardeners Key": ItemData("Item", 31 + item_index_offset, ItemClassification.progression),
-    "Item - Courtyard Key": ItemData("Item", 33 + item_index_offset, ItemClassification.progression),
-    "Item - Luxury Key": ItemData("Item", 36 + item_index_offset, ItemClassification.progression),
-    "Item - Cell Key": ItemData("Item", 40 + item_index_offset, ItemClassification.progression, 7),
-    "Item - South Wing Key": ItemData("Item", 41 + item_index_offset, ItemClassification.progression),
-    "Item - East Wing Key": ItemData("Item", 42 + item_index_offset, ItemClassification.progression),
-    "Item - West Wing Key": ItemData("Item", 43 + item_index_offset, ItemClassification.progression),
-    "Item - Dark Wing Key": ItemData("Item", 44 + item_index_offset, ItemClassification.progression),
-    "Item - Room 1 Key": ItemData("Item", 32 + item_index_offset, ItemClassification.progression),
-    "Item - Pyramid Key": ItemData("Item", 60 + item_index_offset, ItemClassification.progression),
-    "Item - Tram Key": ItemData("Item", 95 + item_index_offset, ItemClassification.progression),
-    "Item - Small Key": ItemData("Item", 29 + item_index_offset, ItemClassification.progression, 4),
-    "Item - Boss Key": ItemData("Item", 30 + item_index_offset, ItemClassification.progression),
-    "Item - Ice Cell Key": ItemData("Item", 156 + item_index_offset, ItemClassification.progression),
-    "Item - Red Door Key": ItemData("Item", 169 + item_index_offset, ItemClassification.progression, 3),
-    "Item - Ice Puzzle Key": ItemData("Item", 160 + item_index_offset, ItemClassification.progression, 6),
-    "Item - Foliage Key": ItemData("Item", 141 + item_index_offset, ItemClassification.progression),
-    "Item - Cave Key": ItemData("Item", 118 + item_index_offset, ItemClassification.progression),
-    "Item - Canopy Key": ItemData("Item", 116 + item_index_offset, ItemClassification.progression),
-    "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression),
-    "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression),
-    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression),
+    "Item - Gardeners Key": ItemData("Item", 31 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Courtyard Key": ItemData("Item", 33 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Sequoia (Courtyard), Advanced Regions
+    "Item - Luxury Key": ItemData("Item", 36 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Cell Key": ItemData("Item", 40 + item_index_offset, ItemClassification.progression, 7), #Turn-in: Capital Jail, Advanced Regions
+    "Item - South Wing Key": ItemData("Item", 41 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Jail, Advanced Regions
+    "Item - East Wing Key": ItemData("Item", 42 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Jail, Advanced Regions
+    "Item - West Wing Key": ItemData("Item", 43 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Jail, Advanced Regions
+    "Item - Dark Wing Key": ItemData("Item", 44 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Jail, Advanced Regions
+    "Item - Room 1 Key": ItemData("Item", 32 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    "Item - Pyramid Key": ItemData("Item", 60 + item_index_offset, ItemClassification.progression), #Turn-in: Poko Poko Desert (unlocks Ancient Reservoir), Advanced Regions
+    "Item - Tram Key": ItemData("Item", 95 + item_index_offset, ItemClassification.progression), #Turn-in: Continental Tram (unlocks connection between Continental Tram and Sara Sara Bazaar), Expert Regions
+    "Item - Small Key": ItemData("Item", 29 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Beaurior Rock, Expert Regions
+    "Item - Boss Key": ItemData("Item", 30 + item_index_offset, ItemClassification.progression), #Turn-in: Beaurior Rock, Expert Regions
+    "Item - Ice Cell Key": ItemData("Item", 156 + item_index_offset, ItemClassification.progression), #Turn-in: Northern Cave, Expert Regions
+    "Item - Red Door Key": ItemData("Item", 169 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Slip Glide Ride, Expert Regions
+    "Item - Ice Puzzle Key": ItemData("Item", 160 + item_index_offset, ItemClassification.progression, 6), #Turn-in: Sequoia Athenaeum, Expert Regions
+    "Item - Foliage Key": ItemData("Item", 141 + item_index_offset, ItemClassification.progression), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    "Item - Cave Key": ItemData("Item", 118 + item_index_offset, ItemClassification.progression), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    "Item - Canopy Key": ItemData("Item", 116 + item_index_offset, ItemClassification.progression), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression), #Turn-in: Castle Ramparts, Expert Regions
+    "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression), #Turn-in: The Deep Sea, Expert Regions
+    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression), #Everyone's best friend
 
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
-    "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2), #Luxury Pass ID 93; Luxury Pass V2 148
-    "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression),
+    "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
 
     #Key Items
-    "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4),
-    "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3),
+    "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Spawning Meadows, Beginner Regions
+    "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Delende, Beginner Regions
     # Number of clamshells is set dynamically based on your Clamshells in pool variable
-    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0),
-    "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3),
-    "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12),
-    "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 10),
-    "Item - Undersea Crab": ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 15),
-    "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression),
-    "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression),
-    "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression),
-    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression),
+    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0), #Turn-in: Seaside Cliffs, Beginner Regions
+    "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 12), #Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 10), #Turn-in: Shoudu Province, Expert Regions
+    "Item - Undersea Crab": ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 15), #Turn-in: The Deep Sea, Expert Regions
+    "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression), #idk if we'll be adding any checks that require you to speak Quintar tbh
     "Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 12),
-    "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression),
-    "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression),
-    "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression),
+    "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
+    "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
+    "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
     "Item - Ancient Tablet A": ItemData("Item", 161 + item_index_offset, ItemClassification.filler),
     "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler),
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler),
@@ -155,19 +155,19 @@ item_table: Dict[str, ItemData] = {
     "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
 
     #Teleport items (shards not included since they're stones but worse)
-    "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression),
-    "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression),
-    "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression),
-    "Item - Poseidon Stone": ItemData("Item", 57 + item_index_offset, ItemClassification.progression),
-    "Item - Mars Stone": ItemData("Item", 59 + item_index_offset, ItemClassification.progression),
-    "Item - Ganymede Stone": ItemData("Item", 65 + item_index_offset, ItemClassification.progression),
-    "Item - Triton Stone": ItemData("Item", 66 + item_index_offset, ItemClassification.progression),
-    "Item - Callisto Stone": ItemData("Item", 155 + item_index_offset, ItemClassification.progression),
-    "Item - Europa Stone": ItemData("Item", 64 + item_index_offset, ItemClassification.progression),
-    "Item - Dione Stone": ItemData("Item", 166 + item_index_offset, ItemClassification.progression),
-    "Item - Neptune Stone": ItemData("Item", 208 + item_index_offset, ItemClassification.progression),
-    "Item - New World Stone": ItemData("Item", 140 + item_index_offset, ItemClassification.progression),
-    "Item - Old World Stone": ItemData("Item", 253 + item_index_offset, ItemClassification.progression),
+    "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression), #Starter pack
+    "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression), #Teleport to Capital Sequoia, Advanced Regions
+    "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
+    "Item - Poseidon Stone": ItemData("Item", 57 + item_index_offset, ItemClassification.progression), #Teleport to Salmon River, Advanced Regions
+    "Item - Mars Stone": ItemData("Item", 59 + item_index_offset, ItemClassification.progression), #Teleport to Poko Poko Desert, Advanced Regions
+    "Item - Ganymede Stone": ItemData("Item", 65 + item_index_offset, ItemClassification.progression), #Teleport to above Shoudu Province, Expert Regions
+    "Item - Triton Stone": ItemData("Item", 66 + item_index_offset, ItemClassification.progression), #Teleport to Tall Tall Heights, Expert Regions
+    "Item - Callisto Stone": ItemData("Item", 155 + item_index_offset, ItemClassification.progression), #Teleport to Lands End, Expert Regions
+    "Item - Europa Stone": ItemData("Item", 64 + item_index_offset, ItemClassification.progression), #Teleport to Jidamba Tangle, Expert Regions
+    "Item - Dione Stone": ItemData("Item", 166 + item_index_offset, ItemClassification.progression), #Teleport to above Quintar Reserve, Expert Regions
+    "Item - Neptune Stone": ItemData("Item", 208 + item_index_offset, ItemClassification.progression), #Teleport to The Deep Sea, Expert Regions
+    "Item - New World Stone": ItemData("Item", 140 + item_index_offset, ItemClassification.progression), #End-Game Regions
+    "Item - Old World Stone": ItemData("Item", 253 + item_index_offset, ItemClassification.progression), #End-Game Regions
 
     #Weapons
     #Swords
