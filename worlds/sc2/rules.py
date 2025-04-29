@@ -1963,27 +1963,32 @@ class SC2Logic:
                 and self.protoss_fleet(state)
         )
 
-    def terran_engine_of_destruction_requirement(self, state: CollectionState):
-        return (
-                self.marine_medic_upgrade(state)
-                and (state.has(item_names.WRAITH, self.player)
-                     or (
-                             self.terran_competent_anti_air(state)
-                             and self.terran_common_unit(state)
-                     )
-                     )
-        )
+    def terran_engine_of_destruction_requirement(self, state: CollectionState) -> int:
+        power_rating = self.terran_power_rating(state)
+        if power_rating < 3 or not self.marine_medic_upgrade(state) or not self.terran_common_unit(state):
+            return False
+        if power_rating >= 7 and self.terran_competent_comp(state):
+            return True
+        else:
+            return (
+                    state.has_any((item_names.WRAITH, item_names.BATTLECRUISER), self.player)
+                    or self.terran_air_anti_air(state)
+                    and state.has_any((item_names.BANSHEE, item_names.LIBERATOR), self.player)
+            )
 
-    def zerg_engine_of_destruction_requirement(self, state: CollectionState):
-        return (
-                self.zergling_hydra_roach_start(state)
-                and self.zerg_repair_odin(state)
-                and (
-                        self.zerg_competent_anti_air(state)
-                        and self.zerg_common_unit(state)
-                )
-
-        )
+    def zerg_engine_of_destruction_requirement(self, state: CollectionState) -> int:
+        power_rating = self.zerg_power_rating(state)
+        if (
+                power_rating < 3
+                or not self.zergling_hydra_roach_start(state)
+                or not self.zerg_common_unit(state)
+                or not self.zerg_competent_anti_air(state)
+        ):
+            return False
+        if power_rating >= 7 and self.zerg_competent_comp(state):
+            return True
+        else:
+            return self.zerg_base_buster(state)
 
 
     def protoss_engine_of_destruction_requirement(self, state: CollectionState):
@@ -1991,8 +1996,8 @@ class SC2Logic:
                 self.zealot_sentry_slayer_start(state)
                 and self.protoss_repair_odin(state)
                 and (
-                        self.protoss_competent_anti_air(state)
-                        and self.protoss_common_unit(state)
+                        self.protoss_deathball(state)
+                        or self.protoss_fleet(state)
                 )
         )
 
