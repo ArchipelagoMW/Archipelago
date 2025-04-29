@@ -10,6 +10,8 @@ You'll need the following components to be able to play The Wind Waker:
     * Linux users can use the flatpak package
     [available on Flathub](https://flathub.org/apps/org.DolphinEmu.dolphin-emu).
 * The latest version of the [TWW AP Randomizer Build](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2).
+    * Please note that this build is **different** from the one the standalone randomizer uses. This build is
+      specifically for Archipelago.
 * A The Wind Waker ISO (North American version), probably named "Legend of Zelda, The - The Wind Waker (USA).iso".
 
 Optionally, you can also download:
