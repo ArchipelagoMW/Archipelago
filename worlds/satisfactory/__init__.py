@@ -122,12 +122,12 @@ class SatisfactoryWorld(World):
                 "HubLayout": slot_hub_layout,
                 "SlotsPerMilestone": self.game_logic.slots_per_milestone,
                 "ExplorationCosts": {
-                    self.item_id_str("Mercer Sphere"): int(self.options.goal_exploration_collectables_amount * 2),
-                    self.item_id_str("Somersloop"): self.options.goal_exploration_collectables_amount,
-                    self.item_id_str("Hard Drive"): int(self.options.goal_exploration_collectables_amount / 5),
-                    self.item_id_str("Paleberry"): self.options.goal_exploration_collectables_amount * 10,
-                    self.item_id_str("Beryl Nut"): self.options.goal_exploration_collectables_amount * 20,
-                    self.item_id_str("Bacon Agaric"): self.options.goal_exploration_collectables_amount,
+                    self.item_id_str("Mercer Sphere"): int(self.options.goal_exploration_collectables_amount.value * 2),
+                    self.item_id_str("Somersloop"): self.options.goal_exploration_collectables_amount.value,
+                    self.item_id_str("Hard Drive"): int(self.options.goal_exploration_collectables_amount.value / 5),
+                    self.item_id_str("Paleberry"): self.options.goal_exploration_collectables_amount.value * 10,
+                    self.item_id_str("Beryl Nut"): self.options.goal_exploration_collectables_amount.value * 20,
+                    self.item_id_str("Bacon Agaric"): self.options.goal_exploration_collectables_amount.value,
                 },
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
