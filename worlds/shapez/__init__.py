@@ -305,8 +305,9 @@ class ShapezWorld(World):
         self.location_count = len(self.included_locations)
 
         # Create regions and entrances based on included locations and player options
-        self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld, self.included_locations,
-                                                             self.location_name_to_id,
+        self.multiworld.regions.extend(create_shapez_regions(self.player, self.multiworld,
+                                                             bool(self.options.allow_floating_layers.value),
+                                                             self.included_locations, self.location_name_to_id,
                                                              self.level_logic, self.upgrade_logic,
                                                              self.options.early_balancer_tunnel_and_trash.current_key,
                                                              self.options.goal.current_key))

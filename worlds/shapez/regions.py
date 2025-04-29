@@ -61,28 +61,32 @@ def can_use_quad_painter(state: CollectionState, player: int) -> bool:
             state.has_any([ITEMS.switch, ITEMS.const_signal], player))
 
 
-def can_make_stitched_shape(state: CollectionState, player: int) -> bool:
+def can_make_stitched_shape(state: CollectionState, player: int, floating: bool) -> bool:
     return (can_stack(state, player) and
-            (state.has(ITEMS.cutter_quad, player) or (can_cut_half(state, player) and can_rotate_90(state, player))))
+            ((state.has(ITEMS.cutter_quad, player) and not floating) or
+             (can_cut_half(state, player) and can_rotate_90(state, player))))
 
 
-def can_build_mam(state: CollectionState, player: int) -> bool:
-    return (can_make_stitched_shape(state, player) and can_paint(state, player) and can_mix_colors(state, player) and
-            has_balancer(state, player) and has_tunnel(state, player) and
+def can_build_mam(state: CollectionState, player: int, floating: bool) -> bool:
+    return (can_make_stitched_shape(state, player, floating) and can_paint(state, player) and
+            can_mix_colors(state, player) and has_balancer(state, player) and has_tunnel(state, player) and
             state.has_all([ITEMS.belt_reader, ITEMS.storage, ITEMS.item_filter,
                            ITEMS.wires, ITEMS.logic_gates, ITEMS.virtual_proc], player))
 
 
 def can_make_east_windmill(state: CollectionState, player: int) -> bool:
+    # Only used for shapesanity => single layers
     return (can_stack(state, player) and
             (state.has(ITEMS.cutter_quad, player) or (can_cut_half(state, player) and can_rotate_180(state, player))))
 
 
 def can_make_half_half_shape(state: CollectionState, player: int) -> bool:
+    # Only used for shapesanity => single layers
     return can_stack(state, player) and state.has_any([ITEMS.cutter, ITEMS.cutter_quad], player)
 
 
 def can_make_half_shape(state: CollectionState, player: int) -> bool:
+    # Only used for shapesanity => single layers
     return can_cut_half(state, player) or state.has_all([ITEMS.cutter_quad, ITEMS.stacker], player)
 
 
@@ -121,7 +125,7 @@ def has_logic_list_building(state: CollectionState, player: int, buildings: List
         return can_mix_colors(state, player)
 
 
-def create_shapez_regions(player: int, multiworld: MultiWorld,
+def create_shapez_regions(player: int, multiworld: MultiWorld, floating: bool,
                           included_locations: Dict[str, Tuple[str, LocationProgressType]],
                           location_name_to_id: Dict[str, int], level_logic_buildings: List[str],
                           upgrade_logic_buildings: List[str], early_useful: str, goal: str) -> List[Region]:
@@ -171,11 +175,12 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
                                      lambda state: state.has(ITEMS.trash, player))
     regions[REGIONS.main].connect(regions[REGIONS.blueprint], "Copying and placing blueprints",
                                   lambda state: state.has(ITEMS.blueprints, player) and
-                                                can_make_stitched_shape(state, player) and
+                                                can_make_stitched_shape(state, player, floating) and
                                                 can_paint(state, player) and can_mix_colors(state, player))
     regions[REGIONS.menu].connect(regions[REGIONS.wiring], "Using the wires layer",
                                   lambda state: state.has(ITEMS.wires, player))
-    regions[REGIONS.main].connect(regions[REGIONS.mam], "Building a MAM", lambda state: can_build_mam(state, player))
+    regions[REGIONS.main].connect(regions[REGIONS.mam], "Building a MAM",
+                                  lambda state: can_build_mam(state, player, floating))
     regions[REGIONS.menu].connect(regions[REGIONS.any_building], "Placing any building", lambda state: state.has_any([
         ITEMS.belt, ITEMS.balancer, ITEMS.comp_merger, ITEMS.comp_splitter, ITEMS.tunnel, ITEMS.tunnel_tier_ii,
         ITEMS.extractor, ITEMS.extractor_chain, ITEMS.cutter, ITEMS.cutter_quad, ITEMS.rotator, ITEMS.rotator_ccw,
@@ -183,7 +188,7 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         ITEMS.trash, ITEMS.belt_reader, ITEMS.storage, ITEMS.switch, ITEMS.item_filter, ITEMS.display, ITEMS.wires
     ], player))
     regions[REGIONS.main].connect(regions[REGIONS.all_buildings], "Using all main buildings",
-                                  lambda state: can_make_stitched_shape(state, player) and
+                                  lambda state: can_make_stitched_shape(state, player, floating) and
                                                 can_paint(state, player) and can_mix_colors(state, player))
     regions[REGIONS.all_buildings].connect(regions[REGIONS.all_buildings_x1_6_belt],
                                            "Delivering per second with 1.6x belt speed",
@@ -240,24 +245,24 @@ def create_shapez_regions(player: int, multiworld: MultiWorld,
         lambda state: can_make_half_half_shape(state, player))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.stitched, REGIONS.uncol)], "Stitching complex shapes",
-        lambda state: can_make_stitched_shape(state, player))
+        lambda state: can_make_stitched_shape(state, player, floating))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.east_wind, REGIONS.uncol)], "Rotating and stitching a single windmill half",
         lambda state: can_make_east_windmill(state, player))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.col_full, REGIONS.uncol)], "Painting with a quad painter or stitching",
-        lambda state: can_make_stitched_shape(state, player) or can_use_quad_painter(state, player))
+        lambda state: can_make_stitched_shape(state, player, floating) or can_use_quad_painter(state, player))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.col_east_wind, REGIONS.uncol)], "Why windmill, why?",
-        lambda state: can_make_stitched_shape(state, player) or
+        lambda state: can_make_stitched_shape(state, player, floating) or
                       (can_use_quad_painter(state, player) and can_make_east_windmill(state, player)))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.col_half_half, REGIONS.uncol)], "Quad painting a half-half shape",
-        lambda state: can_make_stitched_shape(state, player) or
+        lambda state: can_make_stitched_shape(state, player, floating) or
                       (can_use_quad_painter(state, player) and can_make_half_half_shape(state, player)))
     regions[REGIONS.main].connect(
         regions[REGIONS.sanity(REGIONS.col_half, REGIONS.uncol)], "Quad painting a half shape",
-        lambda state: can_make_stitched_shape(state, player) or
+        lambda state: can_make_stitched_shape(state, player, floating) or
                       (can_use_quad_painter(state, player) and can_make_half_shape(state, player)))
 
     # Progressively connect colored shapesanity regions
