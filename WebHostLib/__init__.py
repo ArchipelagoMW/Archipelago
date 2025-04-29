@@ -63,10 +63,12 @@ Compress(app)
 
 class B64UUIDConverter(BaseConverter):
 
-    def to_python(self, value):
+    @staticmethod
+    def to_python(value):
         return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
 
-    def to_url(self, value):
+    @staticmethod
+    def to_url(value):
         return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
 
 

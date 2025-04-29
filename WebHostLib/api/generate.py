@@ -63,7 +63,7 @@ def generate_api():
             commit()
             return {"text": f"Generation of seed {gen.id} started successfully.",
                     "detail": gen.id,
-                    "encoded": app.url_map.converters["suuid"].to_url(None, gen.id),
+                    "encoded": app.url_map.converters["suuid"].to_url(gen.id),
                     "wait_api_url": url_for("api.wait_seed_api", seed=gen.id, _external=True),
                     "url": url_for("wait_seed", seed=gen.id, _external=True)}, 201
     except Exception as e:

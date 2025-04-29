@@ -103,7 +103,7 @@ def stop_room(app_client: "FlaskClient",
     poll_interval = 2
 
     print(f"Stopping room {room_id}")
-    room_uuid = app.url_map.converters["suuid"].to_python(None, room_id)  # type: ignore[arg-type]
+    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
 
     if timeout is not None:
         sleep(.1)  # should not be required, but other things might use threading
@@ -156,7 +156,7 @@ def set_room_timeout(room_id: str, timeout: float) -> None:
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(None, room_id)  # type: ignore[arg-type]
+    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         room.timeout = timeout
@@ -168,7 +168,7 @@ def get_multidata_for_room(webhost_client: "FlaskClient", room_id: str) -> bytes
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(None, room_id)  # type: ignore[arg-type]
+    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         return cast(bytes, room.seed.multidata)
@@ -180,7 +180,7 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(None, room_id)  # type: ignore[arg-type]
+    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         room.seed.multidata = data
