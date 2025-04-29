@@ -54,7 +54,7 @@ Ein Pop-Up erscheint, das das/die erhaltene(n) Item(s) und eventuell weitere Inf
 ## Was bedeuten die Namen dieser ganzen Shapesanity Dinger?
 
 Hier ist ein Spicker für die Englischarbeit (bloß nicht dem Lehrer zeigen):
-![image](https://i.imgur.com/lbmY1rG.png)
+![image](https://raw.githubusercontent.com/BlastSlimey/Archipelago/refs/heads/main/worlds/shapez/docs/shapesanity_full.png)
 
 ## Kann ich auch weitere Mods neben dem AP Client installieren?
 

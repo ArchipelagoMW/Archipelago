@@ -54,7 +54,7 @@ A pop-up will show, which item(s) were received, with additional information on 
 ## What do the names of all these shapesanity locations mean?
 
 Here's a cheat sheet:
-![image](https://i.imgur.com/lbmY1rG.png)
+![image](https://raw.githubusercontent.com/BlastSlimey/Archipelago/refs/heads/main/worlds/shapez/docs/shapesanity_full.png)
 
 ## Can I use other mods alongside the AP client?
 
