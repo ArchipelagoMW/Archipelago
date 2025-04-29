@@ -1079,8 +1079,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from eastern save point", 2742 + treasure_index_offset, logic.has_glide), #(440, 227, -386) Conquest chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from western save point", 2741 + treasure_index_offset, logic.has_glide), #(369, 227, -386) Rune Sword chest
         #Technically in Castle Sequoia but they're in a locked room only accessible from Ramparts
-        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: state.has("Item - Rampart Key") and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
-        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: state.has("Item - Rampart Key") and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: state.has("Item - Rampart Key", player) and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: state.has("Item - Rampart Key", player) and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
 
         #NPCs
         LocationData("Castle Ramparts", "Castle Ramparts NPC - Western Gold above spikes", 2843 + npc_index_offset, logic.has_glide), #(354, 231, -429) Ingot
@@ -1218,7 +1218,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea NPC - Putt Putt Crab mows the lawn", 3437 + npc_index_offset), #(54, 52, 200) Crab 13
         LocationData("The Deep Sea", "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
-        LocationData("The Deep Sea", "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda:state state.has("Item - Undersea Crab", player, 15)), #(256, 63, 113)
+        LocationData("The Deep Sea", "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has("Item - Undersea Crab", player, 15)), #(256, 63, 113)
         LocationData("The Deep Sea", "The Deep Sea NPC - Z35_SpeedOcto", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden quintar but faster than royal salmon)
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Dust", 2855 + npc_index_offset), #(-367, 53, -182)
         LocationData("The Deep Sea", "The Deep Sea NPC - Gold Ingot", 2857 + npc_index_offset), #(-356, 55, -167)
