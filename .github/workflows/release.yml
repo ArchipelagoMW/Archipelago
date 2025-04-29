@@ -14,6 +14,7 @@ env:
 permissions:  # permissions required for attestation
   id-token: 'write'
   attestations: 'write'
+  contents: 'write'  # additionally required for release
 
 jobs:
   create-release:
