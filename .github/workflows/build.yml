@@ -165,7 +165,7 @@ jobs:
             build/exe.*/ArchipelagoLauncher
             build/exe.*/ArchipelagoGenerate
             build/exe.*/ArchipelagoServer
-            dist/${{ env.APPIMAGE_NAME }}
+            dist/${{ env.APPIMAGE_NAME }}*
             dist/${{ env.TAR_NAME }}
       - name: Build Again
         run: |
