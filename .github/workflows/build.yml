@@ -69,6 +69,17 @@ jobs:
           $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
           $SETUP_NAME=$contents[0].Name
           echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher.exe
+            build/exe.*/ArchipelagoLauncherDebug.exe
+            build/exe.*/ArchipelagoGenerate.exe
+            build/exe.*/ArchipelagoServer.exe
+            dist/${{ env.ZIP_NAME }}
+            setups/${{ env.SETUP_NAME }}
       - name: Check build loads expected worlds
         shell: bash
         run: |
@@ -81,17 +92,6 @@ jobs:
           cmp setup-player-templates.txt generated-player-templates.txt \
             || diff setup-player-templates.txt generated-player-templates.txt
           mv meta.yaml Players/Templates/
-      - name: Attest Build
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: |
-            build/exe.*/ArchipelagoLauncher.exe
-            build/exe.*/ArchipelagoLauncherDebug.exe
-            build/exe.*/ArchipelagoGenerate.exe
-            build/exe.*/ArchipelagoServer.exe
-            dist/${{ env.ZIP_NAME }}
-            setups/${{ env.SETUP_NAME }}
       - name: Test Generate
         shell: bash
         run: |
