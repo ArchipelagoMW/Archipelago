@@ -3,6 +3,7 @@ from uuid import UUID
 
 from flask import abort, url_for
 
+from WebHostLib import B64UUIDConverter
 import worlds.Files
 from . import api_endpoints, get_players
 from ..models import Room
@@ -33,7 +34,7 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
             downloads.append(slot_download)
 
     return {
-        "tracker": room.tracker,
+        "tracker": B64UUIDConverter(room.tracker),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
