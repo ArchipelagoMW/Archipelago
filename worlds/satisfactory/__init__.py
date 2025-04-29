@@ -109,10 +109,8 @@ class SatisfactoryWorld(World):
             for milestone, parts in enumerate(milestones, 1):
                  slot_hub_layout[tier - 1].append({})
                  for part, amount in parts.items():
-                    # ItemIDs of bundles are shared with their component item
-                    bundled_name = f"Bundle: {part}"
-                    multiplied_amount = max(amount * (self.options.milestone_cost_multiplier / 100), 1)
-                    slot_hub_layout[tier - 1][milestone - 1][self.item_name_to_id[bundled_name]] = multiplied_amount
+                    multiplied_amount = int(max(amount * (self.options.milestone_cost_multiplier / 100), 1))
+                    slot_hub_layout[tier-1][milestone-1][self.item_id_str(part)] = multiplied_amount
 
         starting_recipes: tuple[int] = tuple(
             self.item_name_to_id[recipe_name] 
@@ -123,6 +121,14 @@ class SatisfactoryWorld(World):
             "Data": {
                 "HubLayout": slot_hub_layout,
                 "SlotsPerMilestone": self.game_logic.slots_per_milestone,
+                "ExplorationCosts": {
+                    self.item_id_str("Mercer Sphere"): int(self.options.goal_exploration_collectables_amount * 2),
+                    self.item_id_str("Somersloop"): self.options.goal_exploration_collectables_amount,
+                    self.item_id_str("Hard Drive"): int(self.options.goal_exploration_collectables_amount / 5),
+                    self.item_id_str("Paleberry"): self.options.goal_exploration_collectables_amount * 10,
+                    self.item_id_str("Beryl Nut"): self.options.goal_exploration_collectables_amount * 20,
+                    self.item_id_str("Bacon Agaric"): self.options.goal_exploration_collectables_amount,
+                },
                 "Options": {
                     "GoalSelection": self.options.goal_selection.value,
                     "GoalRequirement": self.options.goal_requirement.value,
@@ -171,3 +177,8 @@ class SatisfactoryWorld(World):
     def push_precollected(self, item_name: str) -> None:
         item = self.create_item(item_name)
         self.multiworld.push_precollected(item)
+
+    def item_id_str(self, item_name: str) -> str:
+        # ItemIDs of bundles are shared with their component item
+        bundled_name = f"Bundle: {item_name}"
+        return str(self.item_name_to_id[bundled_name])

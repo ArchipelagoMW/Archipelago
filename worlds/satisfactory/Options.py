@@ -372,7 +372,14 @@ class ExplorationCollectableCount(Range):
     """
     Does nothing if *Exploration Collectables* goal is not enabled.
 
-    Collect this amount of Mercer Spheres and Summer Sloops each to finish.
+    Collect this amount of Mercer Spheres, Somersloops, Harddrives, Paleberry, Beryl Nut and Bacon Agaric each to finish.
+
+    The amount for Mercer Spheres is 2x the selected amount
+    The amount for Somersloops is the selected amount
+    The amount for Harddrives is 1/5th the selected amount
+    The amount for Paleberry is 10x the selected amount
+    The amount for Beryl Nut is 20x the selected amount
+    The amount for Bacon Agaric is the selected amount
     """
     display_name = "Exploration Collectables"
     default = 20
