@@ -56,13 +56,13 @@ item_table: Dict[str, ItemData] = {
     "Item - Nan's Secret Recipe": ItemData("Item", 54 + item_index_offset, ItemClassification.filler, 0),
     "Item - Nuts": ItemData("Item", 14 + item_index_offset, ItemClassification.filler, 0),
     "Item - Milk": ItemData("Item", 20 + item_index_offset, ItemClassification.progression), #Turn-in: Thirsty Lad, Poko Poko Desert, Advanced Regions
-    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.progression),  #Turn-in: Foreign Foodie, Sara Sara Bazaar, Advanced Regions
+    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.progression), #Turn-in: Foreign Foodie, Sara Sara Bazaar, Advanced Regions
     "Item - Sweet Pop Candy": ItemData("Item", 34 + item_index_offset, ItemClassification.filler, 0),
     "Item - Sour Pop Candy": ItemData("Item", 35 + item_index_offset, ItemClassification.filler, 0),
     "Item - Bitter Pop Candy": ItemData("Item", 171 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.progression),  #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
+    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.progression), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
     "Item - Decent Cod": ItemData("Item", 38 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.filler, 0),
+    "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.progression), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
 
     #Bag upgrades
@@ -138,7 +138,7 @@ item_table: Dict[str, ItemData] = {
     "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression), #idk if we'll be adding any checks that require you to speak Quintar tbh
+    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.useful), #idk if we'll be adding any checks that require you to speak Quintar tbh
     "Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 12),
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
     "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
