@@ -35,7 +35,7 @@ jobs:
 
   build-release-win:
     runs-on: windows-latest
-    if: ${{ true }}  # change to true to skip if release is built by hand
+    if: ${{ true }}  # change to false to skip if release is built by hand
     needs: create-release
     steps:
       - name: Set env
