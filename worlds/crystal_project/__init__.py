@@ -259,22 +259,22 @@ class CrystalProjectWorld(World):
         #all expert zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_advanced or
             self.options.includedRegions == self.options.includedRegions.option_beginner):
-            excluded_items.add("Item - Ganymede Stone")
-            excluded_items.add("Item - Dione Stone")
-            excluded_items.add("Item - Triton Stone")
-            excluded_items.add("Item - Europa Stone")
             excluded_items.add("Item - Elevator Part")
             excluded_items.add("Item - Undersea Crab")
+            excluded_items.add("Item - Ganymede Stone")
+            excluded_items.add("Item - Triton Stone")
+            excluded_items.add("Item - Europa Stone")
+            excluded_items.add("Item - Dione Stone")
 
         #all advanced zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_beginner):
+            excluded_items.add("Item - Gardeners Key")
+            excluded_items.add("Item - Progressive Luxury Pass")
+            excluded_items.add("Item - Digested Head")
+            excluded_items.add("Item - Lost Penguin")
             excluded_items.add("Item - Gaea Stone")
             excluded_items.add("Item - Poseidon Stone")
             excluded_items.add("Item - Mars Stone")
-            excluded_items.add("Item - Digested Head")
-            excluded_items.add("Item - Lost Penguin")
-            excluded_items.add("Item - Gardeners Key")
-            excluded_items.add("Item - Progressive Luxury Pass")
 
         if self.options.randomizeJobs == self.options.randomizeJobs.option_false:
             excluded_items.add("Job - Fencer")
