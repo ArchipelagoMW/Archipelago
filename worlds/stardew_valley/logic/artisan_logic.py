@@ -1,8 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
-from .time_logic import TimeLogicMixin
 from ..data.artisan import MachineSource
 from ..data.game_item import ItemTag
 from ..stardew_rule import StardewRule
@@ -20,7 +16,7 @@ class ArtisanLogicMixin(BaseLogicMixin):
         self.artisan = ArtisanLogic(*args, **kwargs)
 
 
-class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMixin]]):
+class ArtisanLogic(BaseLogic):
     def initialize_rules(self):
         # TODO remove this one too once fish are converted to sources
         self.registry.artisan_good_rules.update({ArtisanGood.specific_smoked_fish(fish): self.can_smoke(fish) for fish in all_fish})
