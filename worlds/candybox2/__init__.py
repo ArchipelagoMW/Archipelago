@@ -129,6 +129,7 @@ class CandyBox2World(World):
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
+        self.multiworld.early_items[self.player][CandyBox2ItemName.PROGRESSIVE_WORLD_MAP.value] = 1
         set_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
