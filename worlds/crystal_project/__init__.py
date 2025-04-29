@@ -327,7 +327,7 @@ class CrystalProjectWorld(World):
         logic = CrystalProjectLogic(self.player, self.options)
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
-            win_condition_item = "Item - New World Stone"
+            win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
         elif self.options.goal == self.options.goal.option_true_astley:
             win_condition_item = "Item - Old World Stone"
         elif self.options.goal == self.options.goal.option_clamshells:

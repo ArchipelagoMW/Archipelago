@@ -167,7 +167,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Quintar Nest": logic.has_rental_quintar or logic.has_swimming})
     multiworld.get_region("Boomer Society", player).add_exits(["Jojo Sewers", "Greenshire Reprise"])
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Capital Sequoia", "Quintar Nest", "Quintar Sanctum", "Quintar Reserve"], 
-        {"Quintar Sanctum": logic.has_rental_quintar,
+        {"Quintar Sanctum": logic.has_rental_quintar or logic.has_vertical_movement,
         "Quintar Reserve": logic.has_vertical_movement})
     multiworld.get_region("Quintar Nest", player).add_exits(["Quintar Sanctum", "Cobblestone Crag", "Jojo Sewers"],
         {"Quintar Sanctum": logic.has_swimming})
@@ -186,7 +186,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
         {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"], 
-        {"Salmon Pass": logic.has_rental_quintar,
+        {"Salmon Pass": logic.has_rental_quintar, #todo test if this can be done with ibek
         "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
         {"Salmon River": logic.has_horizontal_movement,

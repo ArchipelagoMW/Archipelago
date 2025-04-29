@@ -65,7 +65,7 @@ class CrystalProjectLogic:
         return state.has("Item - Clamshell", self.player, clamshellsRequired)
 
     def has_rental_quintar(self, state: CollectionState) -> bool:
-        return state.has_any({"Item - Progressive Quintar Flute"}, self.player)
+        return state.has_any({"Item - Progressive Quintar Flute"}, self.player) or state.has("Item - Owl Drum", self.player)
 
     def has_horizontal_movement(self, state: CollectionState) -> bool:
         return state.has("Item - Progressive Quintar Flute", self.player, 2) or state.has("Item - Owl Drum", self.player)
