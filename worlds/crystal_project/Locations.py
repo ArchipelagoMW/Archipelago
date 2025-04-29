@@ -677,16 +677,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #4th Overpass Scrap chest on main map has been categorized under Dione Shrine
         #5th Overpass Scrap chest on main map has been categorized under Quintar Reserve
         #Todo recategorize and descriptivize (pretending these are all in Tall Tall Heights so the seed doesn't break)
-        LocationData("Tall Tall Heights", "Overpass Chest - Overpass Scrap chest", 3537 + treasure_index_offset), #(148, 151, -114)
+        #LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3537 + treasure_index_offset), #(148, 151, -114)
         #7th Overpass Scrap chest on main map has been categorized under Sara Sara Beach
         #8th Overpass Scrap chest on main map has been categorized under Salmon Bay
         #Todo recategorize and descriptivize
-        LocationData("Tall Tall Heights", "Overpass Chest - Overpass Scrap chest", 3678 + treasure_index_offset), #(191, 177, -214)
+        #LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3678 + treasure_index_offset), #(191, 177, -214)
         #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
-        LocationData("Tall Tall Heights", "Overpass Chest - Overpass Scrap chest", 3539 + treasure_index_offset), #(32, 181, -373) (Cloudy Wind)
-        LocationData("Tall Tall Heights", "Overpass Chest - Zether Pouch chest", 1401 + treasure_index_offset), #(-35, 166, -387) (Cloudy Wind)
-        LocationData("Tall Tall Heights", "Overpass Chest - River Cats Ego map chest", 3654 + treasure_index_offset), #(60, 225, -435) (Snow)
+        #LocationData("Overpass", "Overpass Chest - Overpass Scrap chest", 3539 + treasure_index_offset), #(32, 181, -373) (Cloudy Wind)
+        #LocationData("Overpass", "Overpass Chest - Zether Pouch chest", 1401 + treasure_index_offset), #(-35, 166, -387) (Cloudy Wind)
+        #LocationData("Overpass", "Overpass Chest - River Cats Ego map chest", 3654 + treasure_index_offset), #(60, 225, -435) (Snow)
         #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
         #Overpass (Outpost) Scrap chest has been categorized under Tall Tall Heights
 
@@ -696,7 +696,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Z20_WaterOrigin ID 1583 (gives Springs Oath) has been categorized under Okimoto N.S. (632, 243, -261)
         #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
-        LocationData("Tall Tall Heights", "Overpass NPC - Gold Ingot", 2739 + npc_index_offset), #(63, 191, -399) (Cloudy Wind)
+        #LocationData("Overpass", "Overpass NPC - Gold Ingot", 2739 + npc_index_offset), #(63, 191, -399) (Cloudy Wind)
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Aegis ID 3610 (501, 194, -210); gives you Aegis Seal in exchange for job mastery
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Beastmaster ID 3608 (312, 236, -344); gives you Beastmaster Seal in exchange for job mastery
@@ -710,23 +710,23 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Underpass
         #Treasure chests
         #Todo recategorize and descriptivize
-        LocationData("Delende", "Underpass Chest - Basement map chest", 3653 + treasure_index_offset), #(126, 115, -102)
-        LocationData("Delende", "Underpass Chest - Fenix Juice Pouch chest", 181 + treasure_index_offset), #(129, 98, -111)
-        LocationData("Delende", "Underpass Chest - Plate of Wolf chest", 182 + treasure_index_offset), #(128, 98, -111)
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3541 + treasure_index_offset), #(64, 98, -111)
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3620 + treasure_index_offset), #(524, 146, -368)
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3621 + treasure_index_offset), #(245, 116, -199)
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3670 + treasure_index_offset), #(337, 155, -319)
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3671 + treasure_index_offset), #(119, 98, -110)
+        #LocationData("Underpass", "Underpass Chest - Basement map chest", 3653 + treasure_index_offset), #(126, 115, -102)
+        #LocationData("Underpass", "Underpass Chest - Fenix Juice Pouch chest", 181 + treasure_index_offset), #(129, 98, -111)
+        #LocationData("Underpass", "Underpass Chest - Plate of Wolf chest", 182 + treasure_index_offset), #(128, 98, -111)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3541 + treasure_index_offset), #(64, 98, -111)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3620 + treasure_index_offset), #(524, 146, -368)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3621 + treasure_index_offset), #(245, 116, -199)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3670 + treasure_index_offset), #(337, 155, -319)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3671 + treasure_index_offset), #(119, 98, -110)
         #6th Underpass Scrap chest on main map has been categorized under the Quintar Mausoleum
         #7th Underpass Scrap chest on main map has been categorized under the Capital Jail
         #Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
         #Todo recategorize and descriptivize
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3673 + treasure_index_offset), #(608, 91, -215) (Summon Pah)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3673 + treasure_index_offset), #(608, 91, -215) (Summon Pah)
         #Underpass (Ice Pass) Scrap chest has been categorized under Tall Tall Heights
         #Underpass (Ice Pass) Potion chest has been categorized under Tall Tall Heights
         #Todo recategorize and descriptivize
-        LocationData("Delende", "Underpass Chest - Underpass Scrap chest", 3623 + treasure_index_offset), #(191, 172, -437) (Summon Pah)
+        #LocationData("Underpass", "Underpass Chest - Underpass Scrap chest", 3623 + treasure_index_offset), #(191, 172, -437) (Summon Pah)
 
         #Summons Todo: descriptivize and implement
         #614, 91, -213
