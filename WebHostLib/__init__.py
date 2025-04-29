@@ -74,7 +74,7 @@ class B64UUIDConverter(BaseConverter):
 
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
-app.jinja_env.filters['suuid'] = B64UUIDConverter.to_url
+app.jinja_env.filters["suuid"] = B64UUIDConverter.to_url
 app.jinja_env.filters["title_sorted"] = title_sorted
 
 
