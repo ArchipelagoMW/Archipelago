@@ -87,15 +87,15 @@ item_table: Dict[str, ItemData] = {
     "Item - Jigging Lure": ItemData("Item", 97 + item_index_offset, ItemClassification.useful),
 
     #Ore
-    "Item - Silver Ore": ItemData("Item", 3 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Silver Ingot": ItemData("Item", 67 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Silver Dust": ItemData("Item", 68 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Gold Ore": ItemData("Item", 4 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Gold Ingot": ItemData("Item", 69 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Gold Dust": ItemData("Item", 70 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Diamond Ore": ItemData("Item", 5 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Diamond Ingot": ItemData("Item", 71 + item_index_offset, ItemClassification.useful, 18),
-    "Item - Diamond Dust": ItemData("Item", 72 + item_index_offset, ItemClassification.useful, 18),
+    "Item - Silver Ore": ItemData("Item", 3 + item_index_offset, ItemClassification.useful, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
+    "Item - Silver Ingot": ItemData("Item", 67 + item_index_offset, ItemClassification.useful, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
+    "Item - Silver Dust": ItemData("Item", 68 + item_index_offset, ItemClassification.useful, 18), #Used by Capital Blacksmith, Capital Sequoia, Advanced Regions
+    "Item - Gold Ore": ItemData("Item", 4 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Sara Sara Bazaar and Weaponsmith in Shoudu Province, Advanced Regions
+    "Item - Gold Ingot": ItemData("Item", 69 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Sara Sara Bazaar and Weaponsmith in Shoudu Province, Advanced Regions
+    "Item - Gold Dust": ItemData("Item", 70 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Sara Sara Bazaar and Weaponsmith in Shoudu Province, Advanced Regions
+    "Item - Diamond Ore": ItemData("Item", 5 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Tall Tall Heights and Weaponsmith in Jidamba Tangle, Expert Regions
+    "Item - Diamond Ingot": ItemData("Item", 71 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Tall Tall Heights and Weaponsmith in Jidamba Tangle, Expert Regions
+    "Item - Diamond Dust": ItemData("Item", 72 + item_index_offset, ItemClassification.useful, 18), #Used by Armorer in Tall Tall Heights and Weaponsmith in Jidamba Tangle, Expert Regions
 
     #Keys
     "Item - Gardeners Key": ItemData("Item", 31 + item_index_offset, ItemClassification.progression), #Turn-in: Capital Sequoia, Advanced Regions

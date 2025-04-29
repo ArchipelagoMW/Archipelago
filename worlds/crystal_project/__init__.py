@@ -259,19 +259,72 @@ class CrystalProjectWorld(World):
         #all expert zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_advanced or
             self.options.includedRegions == self.options.includedRegions.option_beginner):
+            #Ore
+            excluded_items.add("Item - Diamond Ore")
+            excluded_items.add("Item - Diamond Ingot")
+            excluded_items.add("Item - Diamond Dust")
+            #Keys
+            excluded_items.add("Item - Tram Key")
+            excluded_items.add("Item - Small Key")
+            excluded_items.add("Item - Boss Key")
+            excluded_items.add("Item - Ice Cell Key")
+            excluded_items.add("Item - Red Door Key")
+            excluded_items.add("Item - Ice Puzzle Key")
+            excluded_items.add("Item - Foliage Key")
+            excluded_items.add("Item - Cave Key")
+            excluded_items.add("Item - Canopy Key")
+            excluded_items.add("Item - Rampart Key")
+            excluded_items.add("Item - Forgotten Key")
+            #Passes
+            excluded_items.add("Item - Ferry Pass")
+            #Key Items
             excluded_items.add("Item - Elevator Part")
             excluded_items.add("Item - Undersea Crab")
+            excluded_items.add("Item - Vermillion Book")
+            excluded_items.add("Item - Viridian Book")
+            excluded_items.add("Item - Cerulean Book")
+            #Teleport Stones
             excluded_items.add("Item - Ganymede Stone")
             excluded_items.add("Item - Triton Stone")
+            excluded_items.add("Item - Callisto Stone")
             excluded_items.add("Item - Europa Stone")
             excluded_items.add("Item - Dione Stone")
+            excluded_items.add("Item - Neptune Stone")
 
         #all advanced zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_beginner):
+            #Consumables
+            excluded_items.add("Item - Milk")
+            excluded_items.add("Item - Shoudu Stew")
+            excluded_items.add("Item - Rotten Salmon")
+            excluded_items.add("Item - Fresh Salmon")
+            #Ore
+            excluded_items.add("Item - Silver Ore")
+            excluded_items.add("Item - Silver Ingot")
+            excluded_items.add("Item - Silver Dust")
+            excluded_items.add("Item - Gold Ore")
+            excluded_items.add("Item - Gold Ingot")
+            excluded_items.add("Item - Gold Dust")
+            #Keys
             excluded_items.add("Item - Gardeners Key")
+            excluded_items.add("Item - Courtyard Key")
+            excluded_items.add("Item - Luxury Key")
+            excluded_items.add("Item - Cell Key")
+            excluded_items.add("Item - South Wing Key")
+            excluded_items.add("Item - East Wing Key")
+            excluded_items.add("Item - West Wing Key")
+            excluded_items.add("Item - Dark Wing Key")
+            excluded_items.add("Item - Room 1 Key")
+            excluded_items.add("Item - Pyramid Key")
+            #Passes
             excluded_items.add("Item - Progressive Luxury Pass")
+            #Key Items
             excluded_items.add("Item - Digested Head")
             excluded_items.add("Item - Lost Penguin")
+            excluded_items.add("Item - West Lookout Token")
+            excluded_items.add("Item - Central Lookout Token")
+            excluded_items.add("Item - North Lookout Token")
+            #Teleport Stones
             excluded_items.add("Item - Gaea Stone")
             excluded_items.add("Item - Poseidon Stone")
             excluded_items.add("Item - Mars Stone")
