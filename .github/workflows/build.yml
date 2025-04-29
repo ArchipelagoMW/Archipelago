@@ -28,9 +28,10 @@ permissions:  # permissions required for attestation
 jobs:
   # build-release-macos: # LF volunteer
 
-  build-win: # RCs will still be built and signed by hand
+  build-win: # RCs and releases may still be built and signed by hand
     runs-on: windows-latest
     steps:
+      # - copy code below to release.yml -
       - uses: actions/checkout@v4
       - name: Install python
         uses: actions/setup-python@v5
@@ -69,6 +70,7 @@ jobs:
           $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
           $SETUP_NAME=$contents[0].Name
           echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      # - copy code above to release.yml -
       - name: Attest Build
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/attest-build-provenance@v2
