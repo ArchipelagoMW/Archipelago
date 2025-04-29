@@ -35,6 +35,7 @@ jobs:
   build-release-win:
     runs-on: windows-latest
     if: ${{ false }}  # change to true to skip if release is built by hand
+    needs: create-release
     steps:
       - name: Set env
         shell: bash
@@ -101,6 +102,7 @@ jobs:
 
   build-release-ubuntu2204:
     runs-on: ubuntu-22.04
+    needs: create-release
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
