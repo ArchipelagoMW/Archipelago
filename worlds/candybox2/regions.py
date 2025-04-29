@@ -227,11 +227,11 @@ def connect_entrances(world: "CandyBox2World"):
 
         world.entrance_randomisation = randomize_entrances(world, True, {
             CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
 
             # The lollipop farm can never go behind the X quest because the X quest requires lollipops
-            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value],
         })
         return [entrance_randomisation_entry_lollipop_farm, *world.entrance_randomisation.pairings]
 
