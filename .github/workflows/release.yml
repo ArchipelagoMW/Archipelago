@@ -11,6 +11,10 @@ env:
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
+permissions:  # permissions required for attestation
+  id-token: 'write'
+  attestations: 'write'
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -74,6 +78,14 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -
+      - name: Attest Build
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/*
       - name: Add to Release
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
