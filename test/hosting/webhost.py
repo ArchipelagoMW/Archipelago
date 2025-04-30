@@ -2,6 +2,8 @@ import re
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, cast
 
+from WebHostLib import to_python
+
 if TYPE_CHECKING:
     from flask import Flask
     from werkzeug.test import Client as FlaskClient
@@ -103,7 +105,7 @@ def stop_room(app_client: "FlaskClient",
     poll_interval = 2
 
     print(f"Stopping room {room_id}")
-    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
+    room_uuid = to_python(room_id)
 
     if timeout is not None:
         sleep(.1)  # should not be required, but other things might use threading

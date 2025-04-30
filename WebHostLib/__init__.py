@@ -61,20 +61,26 @@ cache = Cache()
 Compress(app)
 
 
+def to_python(value):
+    return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+
+
+def to_url(value):
+    return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+
+
 class B64UUIDConverter(BaseConverter):
 
-    @staticmethod
-    def to_python(value):
-        return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
+    def to_python(self, value):
+        return to_python(value)
 
-    @staticmethod
-    def to_url(value):
-        return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
+    def to_url(self, value):
+        return to_url(value)
 
 
 # short UUID
 app.url_map.converters["suuid"] = B64UUIDConverter
-app.jinja_env.filters["suuid"] = B64UUIDConverter.to_url
+app.jinja_env.filters["suuid"] = to_url
 app.jinja_env.filters["title_sorted"] = title_sorted
 
 
