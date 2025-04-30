@@ -326,7 +326,7 @@ item_descriptions = {
     """),
     item_names.SIEGE_TANK_ENHANCED_COMBUSTION_ENGINES: "Increases movement speed of Siege Tanks in Tank Mode.",
     item_names.MEDIVAC_RAPID_REIGNITION_SYSTEMS: inspect.cleandoc("""
-        Increases slightly Medivac movement speed.
+        Slightly increases Medivac movement speed.
         Reduces Medivac's Afterburners ability cooldown.
     """),
     item_names.BATTLECRUISER_BEHEMOTH_REACTOR: "All Battlecruiser spells require 25 less energy to cast.",
