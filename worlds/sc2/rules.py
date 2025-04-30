@@ -2376,7 +2376,7 @@ class SC2Logic:
         return (
                 self.protoss_common_unit(state)
                 and self.protoss_anti_light_anti_air(state)
-                and (state.has_any((item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL), self.player)
+                and (state.has_any((item_names.ZEALOT, item_names.CENTURION, item_names.SENTINEL, item_names.ADEPT), self.player)
                      or self.protoss_basic_splash(state))
                 and self.protoss_defense_rating(state, False) >= 5
         )
