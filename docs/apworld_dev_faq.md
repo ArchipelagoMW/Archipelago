@@ -25,7 +25,7 @@ Some alternative ways to try to fix this problem are:
 
 ---
 
-### I have multiple options that change the item/location pool counts and need to balance them out
+### I have multiple options that change the item/location pool counts and need to make sure I am not submitting more/fewer items than locations
 
 In an ideal situation your system for producing locations and items wouldn't leave any opportunity for them to be unbalanced. But in real, complex situations, that might be unfeasible.
 
