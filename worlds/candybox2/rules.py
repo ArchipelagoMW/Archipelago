@@ -250,7 +250,7 @@ def lollipop_count(state: CollectionState, player: int):
 
 # Allows the player to plant enough lollipops at the farm for 1/minute
 def can_grow_lollipops(state: CollectionState, player: int):
-    return lollipop_count(state, player) >= 11 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return lollipop_count(state, player) >= 9 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
 
 def can_farm_lollipops(state: CollectionState, player: int):
     return can_grow_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and state.has(CandyBox2ItemName.PITCHFORK, player) and state.has(CandyBox2ItemName.SHELL_POWDER, player) and state.has(CandyBox2ItemName.GREEN_FIN, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
