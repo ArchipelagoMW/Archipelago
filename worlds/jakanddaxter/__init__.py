@@ -478,10 +478,6 @@ class JakAndDaxterWorld(World):
         return change
 
     def fill_slot_data(self) -> dict[str, Any]:
-        slot_dict = {
-            "slot_name": self.player_name,
-            "slot_seed": self.multiworld.seed_name,
-        }
         options_dict = self.options.as_dict("enable_move_randomizer",
                                             "enable_orbsanity",
                                             "global_orbsanity_bundle_size",
@@ -498,4 +494,4 @@ class JakAndDaxterWorld(World):
                                             "jak_completion_condition",
                                             "require_punch_for_klaww",
                                             )
-        return {**slot_dict, **options_dict}
+        return options_dict

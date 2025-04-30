@@ -95,6 +95,9 @@ class JakAndDaxterContext(CommonContext):
     repl_task: asyncio.Task
     memr_task: asyncio.Task
 
+    # Storing some information for writing save slot identifiers.
+    slot_seed: str
+
     def __init__(self, server_address: str | None, password: str | None) -> None:
         self.repl = JakAndDaxterReplClient(self.on_log_error,
                                            self.on_log_warn,
@@ -134,6 +137,9 @@ class JakAndDaxterContext(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
 
+        if cmd == "RoomInfo":
+            self.slot_seed = args["seed_name"]
+
         if cmd == "Connected":
             slot_data = args["slot_data"]
             orbsanity_option = slot_data["enable_orbsanity"]
@@ -159,8 +165,8 @@ class JakAndDaxterContext(CommonContext):
                                         slot_data["oracle_orb_trade_amount"],
                                         slot_data["trap_effect_duration"],
                                         slot_data["jak_completion_condition"],
-                                        slot_data["slot_name"][:16],
-                                        slot_data["slot_seed"][:8]))
+                                        self.auth[:16],  # The slot name
+                                        self.slot_seed[:8]))
 
             # Because Orbsanity and the orb traders in the game are intrinsically linked, we need the server
             # to track our trades at all times to support async play. "Retrieved" will tell us the orbs we lost,
