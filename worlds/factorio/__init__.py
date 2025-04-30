@@ -234,7 +234,7 @@ class Factorio(World):
                     loc.revealed = True
 
     def get_filler_item_name(self) -> str:
-        tech_name: str = self.multiworld.random.choice(tuple(tech_table))
+        tech_name: str = self.random.choice(tuple(tech_table))
         progressive_item_name: str = tech_to_progressive_lookup.get(tech_name, tech_name)
         want_progressive: bool = self.want_progressives[progressive_item_name]
         return progressive_item_name if want_progressive else tech_name
