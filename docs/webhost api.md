@@ -22,6 +22,11 @@ Current endpoints:
   - [`/get_seeds`](#getseeds)
 
 
+### UUID vs SUUID
+Currently, the server reports back the item's `UUID` (Universally Unique Identifier).  
+The item's `UUID` needs to be converted to a `base64 UUID` (nicknamed a `ShortUUID` and refered to as `SUUID` in the remainder of this document) that are URL safe in order to be queried via API endpoints.
+- [PR 4944](https://github.com/ArchipelagoMW/Archipelago/pull/4944) is in progress to convert API returns into SUUIDs
+
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire and validate that they have a current datapackage for game data.   
 Such as item and location IDs, or name groupings.
@@ -135,7 +140,7 @@ req = requests.post("https://archipelago.gg/api/generate", json=weights)
 #### Successful Generation:
 Upon successful generation you'll be sent a JSON dict response detailing the generation:
 - The UUID of the generation `detail`
-- The seed of the generation `encoded`
+- The SUUID of the generation `encoded`
 - The response text `text`
 - The page that will resolve to the seed/room generation page once generation has completed `url`
 - And the API status page of the generation `wait_api_url` (see [Status Endpoint](#status))
@@ -254,8 +259,8 @@ User endpoints can get room and seed details from the current session tokens (co
 <a name="getrooms"></a>
 Retreives a list of all rooms currently owned by the session token.  
 Each list item will contain a dict with the room's details:
-- Room ID (`room_id`)
-- Seed ID (`seed_id`)
+- Room UUID (`room_id`)
+- Seed UUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - Last activity timestamp (`last_activity`)
 - Last known AP port (`last_port`)
@@ -290,7 +295,7 @@ Example:
 <a name="getseeds"></a>
 Retreives a list of all seeds currently owned by the session token.  
 Each item in the list will contain a dict with the seed's details:
-- Seed ID (`seed_id`)
+- Seed UUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - A list of player slots (`players`)
   - Each item in the list will contain a list of the slot name and game
