@@ -1,4 +1,4 @@
-from ..Items import SuitUpgrade, artifact_table
+from ..Items import SuitUpgrade, ARTIFACT_TABLE
 from ..data.RoomNames import RoomName
 from .. import MetroidPrimeWorld
 from . import MetroidPrimeTestBase
@@ -43,7 +43,7 @@ class TestRequiredArtifactCount(MetroidPrimeTestBase):
 
     def test_required_artifact_count(self):
         self.assertFalse(self.can_reach_region("Impact Crater"))
-        self.collect_all_but(artifact_table.keys())
+        self.collect_all_but(ARTIFACT_TABLE.keys())
         self.assertFalse(self.can_reach_region("Impact Crater"))
         self.collect_by_name("Artifact of Truth")
         self.assertFalse(self.can_reach_region("Impact Crater"))

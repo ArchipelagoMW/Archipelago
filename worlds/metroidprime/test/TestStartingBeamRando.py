@@ -25,7 +25,6 @@ class TestStartingBeamRandomization(MetroidPrimeTestBase):
     def test_power_beam_is_not_the_starting_weapon_when_randomized(self):
         self.world.generate_early()
         world: "MetroidPrimeWorld" = self.world
-        world.create_items()
         self.assertGreater(len(world.multiworld.precollected_items[world.player]), 0)
         self.assertNotIn(
             SuitUpgrade.Power_Beam.value,
@@ -50,7 +49,6 @@ class TestStartingBeamRandomizationDisabled(MetroidPrimeTestBase):
     def test_power_beam_is_the_starting_weapon_when_not_randomized(self):
         self.world.generate_early()
         world: "MetroidPrimeWorld" = self.world
-        world.create_items()
         self.assertGreater(len(world.multiworld.precollected_items[world.player]), 0)
         self.assertIn(
             SuitUpgrade.Power_Beam.value,

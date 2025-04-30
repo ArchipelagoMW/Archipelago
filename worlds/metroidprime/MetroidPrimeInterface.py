@@ -10,9 +10,9 @@ import py_randomprime  # type: ignore
 from .Items import (
     ItemData,
     SuitUpgrade,
-    item_table,
-    custom_suit_upgrade_table,
-    suit_upgrade_table,
+    ITEM_TABLE,
+    CUSTOM_SUIT_UPGRADE_TABLE,
+    SUIT_UPGRADE_TABLE,
 )
 
 _SUPPORTED_VERSIONS = ["0-00", "0-01", "0-02", "jpn", "kor", "pal"]
@@ -139,16 +139,16 @@ class Area:
 
 
 custom_charge_id_to_beam = {
-    custom_suit_upgrade_table[
+    CUSTOM_SUIT_UPGRADE_TABLE[
         SuitUpgrade.Power_Charge_Beam.value
     ].id: SuitUpgrade.Power_Charge_Beam,
-    custom_suit_upgrade_table[
+    CUSTOM_SUIT_UPGRADE_TABLE[
         SuitUpgrade.Wave_Charge_Beam.value
     ].id: SuitUpgrade.Wave_Charge_Beam,
-    custom_suit_upgrade_table[
+    CUSTOM_SUIT_UPGRADE_TABLE[
         SuitUpgrade.Ice_Charge_Beam.value
     ].id: SuitUpgrade.Ice_Charge_Beam,
-    custom_suit_upgrade_table[
+    CUSTOM_SUIT_UPGRADE_TABLE[
         SuitUpgrade.Plasma_Charge_Beam.value
     ].id: SuitUpgrade.Plasma_Charge_Beam,
 }
@@ -244,7 +244,7 @@ class MetroidPrimeInterface:
 
     def get_item(self, item_data: Union[ItemData, int]) -> Optional[InventoryItemData]:
         if isinstance(item_data, int):
-            for item in item_table.values():
+            for item in ITEM_TABLE.values():
                 if item.id == item_data:
                     return self.get_item(item)
         if isinstance(item_data, ItemData):
@@ -271,7 +271,7 @@ class MetroidPrimeInterface:
     def get_current_inventory(self) -> Dict[str, InventoryItemData]:
         MAX_VANILLA_ITEM_ID = 40
         inventory: Dict[str, InventoryItemData] = {}
-        for item in item_table.values():
+        for item in ITEM_TABLE.values():
             i = self.get_item(item)
             if i is not None:
                 if item.id <= MAX_VANILLA_ITEM_ID:
@@ -292,7 +292,7 @@ class MetroidPrimeInterface:
             SuitUpgrade.Gravity_Suit,
             SuitUpgrade.Varia_Suit,
         ]:
-            item = self.get_item(suit_upgrade_table[suit.value])
+            item = self.get_item(SUIT_UPGRADE_TABLE[suit.value])
             if item and item.current_amount > 0:
                 return suit
         return SuitUpgrade.Power_Suit
@@ -349,14 +349,14 @@ class MetroidPrimeInterface:
 
     def get_last_received_index(self) -> Optional[int]:
         """Gets the index of the last item received. This is stored as the current amount for the power suit"""
-        inventory_item = self.get_item(item_table[SuitUpgrade.Power_Suit.value])
+        inventory_item = self.get_item(ITEM_TABLE[SuitUpgrade.Power_Suit.value])
         if inventory_item is not None:
             return inventory_item.current_amount
         return None
 
     def set_last_received_index(self, index: int):
         """Sets the received index to the index of the last item received. This is stored as the max amount for the power suit"""
-        inventory_item = self.get_item(item_table[SuitUpgrade.Power_Suit.value])
+        inventory_item = self.get_item(ITEM_TABLE[SuitUpgrade.Power_Suit.value])
         if inventory_item is not None:
             inventory_item.current_amount = index
             self.give_item_to_player(
@@ -481,7 +481,7 @@ class MetroidPrimeInterface:
         if beam_upgrade is not None:
             self.dolphin_client.write_pointer(
                 cplayer_state,
-                calculate_item_offset(suit_upgrade_table[beam_upgrade.value].id),
+                calculate_item_offset(SUIT_UPGRADE_TABLE[beam_upgrade.value].id),
                 struct.pack(">II", 2, 2),
             )
 
@@ -494,7 +494,7 @@ class MetroidPrimeInterface:
                 ">II",
                 self.dolphin_client.read_pointer(
                     cplayer_state,
-                    calculate_item_offset(suit_upgrade_table[beam_upgrade.value].id),
+                    calculate_item_offset(SUIT_UPGRADE_TABLE[beam_upgrade.value].id),
                     struct.calcsize(">II"),
                 ),
             )

@@ -27,6 +27,8 @@ class ItemData:
 
 class MetroidPrimeItem(Item):
     game: str = "Metroid Prime"
+class MetroidPrimeEvent(Item):
+    game: str = "Civilization VI"
 
 
 class SuitUpgrade(Enum):
@@ -163,7 +165,7 @@ def get_item_for_options(
     return item
 
 
-suit_upgrade_table: Dict[str, ItemData] = {
+SUIT_UPGRADE_TABLE: Dict[str, ItemData] = {
     SuitUpgrade.Power_Beam.value: ItemData(
         SuitUpgrade.Power_Beam.value, 0, ItemClassification.progression
     ),
@@ -244,7 +246,7 @@ suit_upgrade_table: Dict[str, ItemData] = {
     ),
 }
 
-misc_item_table: Dict[str, ItemData] = {
+MISC_ITEM_TABLE: Dict[str, ItemData] = {
     "UnknownItem1": ItemData("UnknownItem1", 25, ItemClassification.useful),
     "HealthRefill": ItemData(
         "HealthRefill", 26, ItemClassification.trap
@@ -253,7 +255,7 @@ misc_item_table: Dict[str, ItemData] = {
 }
 
 # These item ids are invalid in the player state, we'll need to exclude it from logic relying on that
-custom_suit_upgrade_table: Dict[str, ItemData] = {
+CUSTOM_SUIT_UPGRADE_TABLE: Dict[str, ItemData] = {
     SuitUpgrade.Missile_Launcher.value: ItemData(
         SuitUpgrade.Missile_Launcher.value, 41, ItemClassification.progression
     ),
@@ -300,7 +302,7 @@ custom_suit_upgrade_table: Dict[str, ItemData] = {
     ),
 }
 
-artifact_table: Dict[str, ItemData] = {
+ARTIFACT_TABLE: Dict[str, ItemData] = {
     "Artifact of Truth": ItemData(
         "Artifact of Truth", 29, ItemClassification.progression_skip_balancing
     ),
@@ -339,9 +341,9 @@ artifact_table: Dict[str, ItemData] = {
     ),
 }
 
-item_table: Dict[str, ItemData] = {
-    **suit_upgrade_table,
-    **artifact_table,
-    **custom_suit_upgrade_table,
-    **misc_item_table,
+ITEM_TABLE: Dict[str, ItemData] = {
+    **SUIT_UPGRADE_TABLE,
+    **ARTIFACT_TABLE,
+    **CUSTOM_SUIT_UPGRADE_TABLE,
+    **MISC_ITEM_TABLE,
 }

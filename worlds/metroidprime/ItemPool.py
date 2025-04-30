@@ -7,7 +7,7 @@ from .Items import (
     ProgressiveUpgrade,
     SuitUpgrade,
     get_item_for_options,
-    artifact_table,
+    ARTIFACT_TABLE,
 )
 from .Items import MetroidPrimeItem
 
@@ -36,7 +36,7 @@ def generate_base_start_inventory(world: "MetroidPrimeWorld") -> List[str]:
 def generate_item_pool(world: "MetroidPrimeWorld") -> List[MetroidPrimeItem]:
     # These are items that are only added if certain options are set
     items: List[MetroidPrimeItem] = [
-        *[world.create_item(artifact) for artifact in artifact_table],
+        *[world.create_item(artifact) for artifact in ARTIFACT_TABLE],
         world.create_item(SuitUpgrade.Morph_Ball.value),
         world.create_item(SuitUpgrade.Morph_Ball_Bomb.value),
         world.create_item(SuitUpgrade.Thermal_Visor.value),

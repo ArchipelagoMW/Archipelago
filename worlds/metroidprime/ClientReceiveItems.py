@@ -6,7 +6,7 @@ from .Items import (
     PROGRESSIVE_ITEM_MAPPING,
     ProgressiveUpgrade,
     SuitUpgrade,
-    custom_suit_upgrade_table,
+    CUSTOM_SUIT_UPGRADE_TABLE,
 )
 from .MetroidPrimeInterface import ITEMS_USED_FOR_LOCATION_TRACKING, InventoryItemData
 
@@ -296,7 +296,7 @@ def inventory_item_by_network_id(
             return item
 
     # Handle custom items like missile launcher and main power bomb
-    for value in custom_suit_upgrade_table.values():
+    for value in CUSTOM_SUIT_UPGRADE_TABLE.values():
         if value.code == network_id:
             return InventoryItemData(value, 0, 0)
     return None

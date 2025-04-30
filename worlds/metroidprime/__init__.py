@@ -31,24 +31,25 @@ import settings
 from worlds.AutoWorld import World, WebWorld
 from .data.Transports import (
     ELEVATOR_USEFUL_NAMES,
-    default_elevator_mappings,
+    DEFAULT_ELEVATOR_MAPPINGS,
     get_random_elevator_mapping,
 )
 from .Config import make_config
 from .Regions import create_regions
-from .Locations import every_location
+from .Locations import EVERY_LOCATION_TABLE
 from .ItemPool import generate_item_pool, generate_base_start_inventory
 from .PrimeOptions import (
     BlastShieldRandomization,
     DoorColorRandomization,
     MetroidPrimeOptions,
-    prime_option_groups,
+    PRIME_OPTION_GROUPS,
 )
 from .Items import (
+    MetroidPrimeEvent,
     MetroidPrimeItem,
     SuitUpgrade,
-    artifact_table,
-    item_table,
+    ARTIFACT_TABLE,
+    ITEM_TABLE,
 )
 from .data.StartRoomData import (
     StartRoomData,
@@ -109,7 +110,7 @@ class MetroidPrimeWeb(WebWorld):
             ["hesto2", "Electro15"],
         )
     ]
-    option_groups = prime_option_groups
+    option_groups = PRIME_OPTION_GROUPS
 
 
 class MetroidPrimeWorld(World):
@@ -125,10 +126,10 @@ class MetroidPrimeWorld(World):
     options_dataclass = MetroidPrimeOptions
     options: MetroidPrimeOptions  # type: ignore
     topology_present = True
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = every_location
+    item_name_to_id = {name: data.code for name, data in ITEM_TABLE.items()}
+    location_name_to_id = EVERY_LOCATION_TABLE
     settings: MetroidPrimeSettings  # type: ignore
-    item_name_groups = {"Artifacts": set(artifact_table.keys())}
+    item_name_groups = {"Artifacts": set(ARTIFACT_TABLE.keys())}
     starting_room_data: StartRoomData
     prefilled_item_map: Dict[str, str] = {}  # Dict of location name to item name
     elevator_mapping: Dict[str, Dict[str, str]] = defaultdict(dict)
@@ -141,6 +142,8 @@ class MetroidPrimeWorld(World):
     disable_starting_room_bk_prevention: bool = (
         False  # Used in certain scenarios to enable more flexibility with starting loadouts
     )
+    logic: Logic
+    tricks: Tricks
 
     def get_filler_item_name(self) -> str:
         return SuitUpgrade.Missile_Expansion.value
@@ -247,49 +250,58 @@ class MetroidPrimeWorld(World):
             if not len(self.elevator_mapping):
                 self.elevator_mapping = get_random_elevator_mapping(self)
         else:
-            self.elevator_mapping = default_elevator_mappings
+            self.elevator_mapping = DEFAULT_ELEVATOR_MAPPINGS
 
         # Init starting inventory
         starting_items = generate_base_start_inventory(self)
-        option_filled_items = [
-            *[item for item in self.options.start_inventory.value.keys()],
-            *[item for item in self.options.start_inventory_from_pool.value.keys()],
-        ]
+        option_filled_items = {
+            *self.options.start_inventory.value.keys(),
+            *self.options.start_inventory_from_pool.value.keys(),
+        }
 
-        for item in [
-            item for item in starting_items if item not in option_filled_items
-        ]:
+        for item in starting_items:
+            if item in option_filled_items:
+                continue
             self.multiworld.push_precollected(
                 self.create_item(item, ItemClassification.progression)
             )
+        # Select random suit colors if applicable
+        if self.options.randomize_suit_colors:
+            self.select_random_suit_color()
 
     def create_regions(self) -> None:
-        boss_selection = int(self.options.final_bosses)
+        boss_selection = self.options.final_bosses.value
         create_regions(self, boss_selection)
+
+    def create_event(self, event: str):
+        return MetroidPrimeEvent(
+            event, ItemClassification.progression, None, self.player
+        )
 
     def create_item(
         self, name: str, override: Optional[ItemClassification] = None
     ) -> "MetroidPrimeItem":
-        createdthing = item_table[name]
+        item_data = ITEM_TABLE[name]
 
         if hasattr(self.multiworld, "generation_is_fake"):
             # All items should be progression for the Universal Tracker
             override = ItemClassification.progression
         if override:
-            return MetroidPrimeItem(name, override, createdthing.code, self.player)
+            return MetroidPrimeItem(name, override, item_data.code, self.player)
         return MetroidPrimeItem(
-            name, createdthing.classification, createdthing.code, self.player
+            name, item_data.classification, item_data.code, self.player
         )
 
     def create_items(self) -> None:
-        precollected_item_names = [
+        precollected_item_names = {
             item.name for item in self.multiworld.precollected_items[self.player]
-        ]
+        }
         new_map: Dict[str, str] = {}
 
         for location, item in self.prefilled_item_map.items():
             if item not in precollected_item_names:
-                # Prefilled items affect what goes into the item pool. If we already have collected something, we won't need to prefill it
+                # Prefilled items affect what goes into the item pool.
+                # If we already have collected something, we won't need to prefill it
                 new_map[location] = item
 
         self.prefilled_item_map = new_map
@@ -297,52 +309,46 @@ class MetroidPrimeWorld(World):
         item_pool = generate_item_pool(self)
         self.multiworld.itempool += item_pool
 
-    def pre_fill(self) -> None:
         for location_name, item_name in self.prefilled_item_map.items():
             location = self.get_location(location_name)
             item = self.create_item(item_name, ItemClassification.progression)
             location.place_locked_item(item)
 
-    def set_rules(self) -> None:
-        self.multiworld.completion_condition[self.player] = lambda state: (
-            state.can_reach("Mission Complete", "Region", self.player)
-        )
-
     def post_fill(self) -> None:
         if self.options.artifact_hints:
             start_hints: typing.Set[str] = self.options.start_hints.value
-            for i in artifact_table:
+            for i in ARTIFACT_TABLE:
                 start_hints.add(i)
 
+    def select_random_suit_color(self) -> None:
+        options: List[NumericOption] = [
+            self.options.power_suit_color,
+            self.options.varia_suit_color,
+            self.options.gravity_suit_color,
+            self.options.phazon_suit_color,
+        ]
+
+        # Select a random valid suit color index
+        for option in options:
+            if option.value == 0:
+                option.value = self.random.randint(1, 35) * 10
+
     def generate_output(self, output_directory: str) -> None:
-        if self.options.randomize_suit_colors:
-            options: List[NumericOption] = [
-                self.options.power_suit_color,
-                self.options.varia_suit_color,
-                self.options.gravity_suit_color,
-                self.options.phazon_suit_color,
-            ]
-
-            # Select a random valid suit color index
-            for option in options:
-                if option.value == 0:
-                    option.value = self.random.randint(1, 35) * 10
-
         import json
 
         configjson = make_config(self)
-        configjsons = json.dumps(configjson, indent=4)
+        configjsons = json.dumps(configjson)
 
-        if os.environ.get("DEBUG") == "True":
-            with open("test_config.json", "w") as f:
-                f.write(configjsons)
+        # DEBUG
+        # with open("test_config.json", "w") as f:
+        #     f.write(configjsons)
 
         options_dict: Dict[str, Union[int, str]] = {
             "progressive_beam_upgrades": self.options.progressive_beam_upgrades.value,
             "player_name": self.player_name,
         }
 
-        options_json = json.dumps(options_dict, indent=4)
+        options_json = json.dumps(options_dict)
 
         outfile_name = self.multiworld.get_out_file_name_base(self.player)
         apmp1 = MetroidPrimeContainer(
@@ -356,16 +362,17 @@ class MetroidPrimeWorld(World):
         apmp1.write()
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        exclude_options = [
+        exclude_options = {
             "fusion_suit",
             "as_dict",
             "artifact_hints",
             "staggered_suit_damage",
             "start_hints",
-        ]
+        }
+
         non_cosmetic_options = [
             o
-            for o in dir(self.options)
+            for o in type(self.options).type_hints.keys()
             if "suit_color" not in o
             and o not in exclude_options
             and not o.startswith("__")
@@ -385,8 +392,7 @@ class MetroidPrimeWorld(World):
 
         return slot_data
 
-        # for the universal tracker, doesn't get called in standard gen
-
+    # for the universal tracker, doesn't get called in standard gen
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
@@ -407,9 +413,9 @@ class MetroidPrimeWorld(World):
 
         if self.options.elevator_randomization:
             spoiler_handle.write(f"\n\nElevator Mapping({player_name}):\n")
-            for area, mapping in self.elevator_mapping.items():
+            for area, elevator_mapping in self.elevator_mapping.items():
                 spoiler_handle.write(f"{area}:\n")
-                for source, target in mapping.items():
+                for source, target in elevator_mapping.items():
                     spoiler_handle.write(
                         f"    {ELEVATOR_USEFUL_NAMES[source]} -> {ELEVATOR_USEFUL_NAMES[target]}\n"
                     )
@@ -421,9 +427,9 @@ class MetroidPrimeWorld(World):
             assert self.door_color_mapping is not None
             spoiler_handle.write(f"\n\nDoor Color Mapping({player_name}):\n")
 
-            for area, mapping in self.door_color_mapping.items():
+            for area, door_color_mapping in self.door_color_mapping.items():
                 spoiler_handle.write(f"{area}:\n")
-                for door, color in mapping.type_mapping.items():
+                for door, color in door_color_mapping.type_mapping.items():
                     spoiler_handle.write(f"    {door} -> {color}\n")
 
         elif (
@@ -446,11 +452,12 @@ class MetroidPrimeWorld(World):
             spoiler_handle.write(f"\n\nBlast Shield Mapping({player_name}):\n")
             written_mappings: List[List[str]] = []
 
-            for area, mapping in self.blast_shield_mapping.items():
+            for area, blast_shield_mapping in self.blast_shield_mapping.items():
                 spoiler_handle.write(f"{area}:\n")
-                if len(mapping.type_mapping) == 0:
+                if len(blast_shield_mapping.type_mapping) == 0:
                     spoiler_handle.write(f"    None\n")
-                for room, doors in mapping.type_mapping.items():
+                    continue
+                for room, doors in blast_shield_mapping.type_mapping.items():
                     for door in doors.keys():
                         source_room = self.game_region_data[
                             MetroidPrimeArea(area)

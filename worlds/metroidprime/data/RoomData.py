@@ -14,7 +14,7 @@ from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType
 from ..Items import ProgressiveUpgrade, SuitUpgrade
 from ..data.AreaNames import MetroidPrimeArea
-from ..Locations import MetroidPrimeLocation, every_location
+from ..Locations import MetroidPrimeLocation, EVERY_LOCATION_TABLE
 from .RoomNames import RoomName
 from .Tricks import TrickInfo
 from .DoorData import DoorData
@@ -198,7 +198,7 @@ class AreaData:
                     continue
 
                 region.add_locations(
-                    {pickup.name: every_location[pickup.name]}, MetroidPrimeLocation
+                    {pickup.name: EVERY_LOCATION_TABLE[pickup.name]}, MetroidPrimeLocation
                 )
                 location = world.get_location(pickup.name)
                 self._set_pickup_rule(location, world, pickup)

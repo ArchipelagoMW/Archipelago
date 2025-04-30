@@ -1,5 +1,9 @@
 import typing
 
+from ..generic.Rules import set_rule
+
+from .Locations import MetroidPrimeLocation
+
 from .data.RoomNames import RoomName
 from BaseClasses import CollectionState, Region
 
@@ -87,3 +91,17 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
                 )
             ),
         )
+
+    # Set up the victory condition
+    victory = MetroidPrimeLocation(
+        world.player, "Mission Complete", None, mission_complete
+    )
+    victory.place_locked_item(world.create_event("Mission Complete"))
+    set_rule(
+        victory,
+        lambda state: state.can_reach(mission_complete, None, world.player),
+    )
+    mission_complete.locations.append(victory)
+    world.multiworld.completion_condition[world.player] = lambda state: (
+        state.has("Mission Complete", world.player)
+    )

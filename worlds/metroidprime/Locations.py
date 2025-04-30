@@ -10,7 +10,7 @@ class MetroidPrimeLocation(Location):
     game: str = "Metroid Prime"
 
 
-chozo_location_table = {
+CHOZO_LOCATION_TABLE = {
     "Chozo Ruins: Main Plaza - Half-Pipe": 5031100,
     "Chozo Ruins: Main Plaza - Grapple Ledge": 5031101,
     "Chozo Ruins: Main Plaza - Tree": 5031102,
@@ -48,7 +48,7 @@ chozo_location_table = {
     "Chozo Ruins: Antechamber": 5031134,
 }
 
-phen_location_table = {
+PHENDRANA_LOCATION_TABLE = {
     "Phendrana Drifts: Phendrana Shorelines - Behind Ice": 5031135,
     "Phendrana Drifts: Phendrana Shorelines - Spider Track": 5031136,
     "Phendrana Drifts: Chozo Ice Temple": 5031137,
@@ -74,7 +74,7 @@ phen_location_table = {
     "Phendrana Drifts: Security Cave": 5031157,
 }
 
-tallon_location_table = {
+TALLON_LOCATION_TABLE = {
     "Tallon Overworld: Landing Site": 5031158,
     "Tallon Overworld: Alcove": 5031159,
     "Tallon Overworld: Frigate Crash Site": 5031160,
@@ -92,7 +92,7 @@ tallon_location_table = {
     "Tallon Overworld: Life Grove - Underwater Spinner": 5031172,
 }
 
-mines_location_table = {
+MINES_LOCATION_TABLE = {
     "Phazon Mines: Main Quarry": 5031173,
     "Phazon Mines: Security Access A": 5031174,
     "Phazon Mines: Storage Depot B": 5031175,
@@ -112,7 +112,7 @@ mines_location_table = {
     "Phazon Mines: Fungal Hall Access": 5031189,
 }
 
-magmoor_location_table = {
+MAGMOOR_LOCATION_TABLE = {
     "Magmoor Caverns: Lava Lake": 5031190,
     "Magmoor Caverns: Triclops Pit": 5031191,
     "Magmoor Caverns: Storage Cavern": 5031192,
@@ -125,12 +125,12 @@ magmoor_location_table = {
     "Magmoor Caverns: Magmoor Workstation": 5031199,
 }
 
-every_location: Dict[str, int] = {
-    **chozo_location_table,
-    **phen_location_table,
-    **tallon_location_table,
-    **mines_location_table,
-    **magmoor_location_table,
+EVERY_LOCATION_TABLE: Dict[str, int] = {
+    **CHOZO_LOCATION_TABLE,
+    **PHENDRANA_LOCATION_TABLE,
+    **TALLON_LOCATION_TABLE,
+    **MINES_LOCATION_TABLE,
+    **MAGMOOR_LOCATION_TABLE,
 }
 
 PICKUP_LOCATIONS: List[Tuple[MetroidPrimeLevel, int]] = [

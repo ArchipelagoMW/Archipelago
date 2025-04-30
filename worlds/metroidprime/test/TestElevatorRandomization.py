@@ -4,7 +4,7 @@ from ..data.RoomNames import RoomName
 from ..data.StartRoomData import StartRoomData
 from ..data.Transports import get_random_elevator_mapping
 from . import MetroidPrimeTestBase
-from ..data.Transports import default_elevator_mappings
+from ..data.Transports import DEFAULT_ELEVATOR_MAPPINGS
 
 from typing import TYPE_CHECKING
 
@@ -21,7 +21,7 @@ class TestNoElevatorRando(MetroidPrimeTestBase):
         world: "MetroidPrimeWorld" = self.world
         self.assertEqual(
             world.elevator_mapping,
-            default_elevator_mappings,
+            DEFAULT_ELEVATOR_MAPPINGS,
         )
 
 
@@ -39,7 +39,7 @@ class TestNonRandomStartingRoomWithElevatorRando(MetroidPrimeTestBase):
         world: "MetroidPrimeWorld" = self.world
         self.assertNotEqual(
             world.elevator_mapping,
-            default_elevator_mappings,
+            DEFAULT_ELEVATOR_MAPPINGS,
         )
 
 

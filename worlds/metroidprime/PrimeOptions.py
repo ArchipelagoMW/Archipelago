@@ -455,7 +455,7 @@ class MetroidPrimeOptions(PerGameCommonOptions):
     death_link: DeathLink
 
 
-prime_option_groups = [
+PRIME_OPTION_GROUPS = [
     OptionGroup(
         "General",
         [

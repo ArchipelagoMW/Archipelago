@@ -19,7 +19,7 @@ from CommonClient import (
 from NetUtils import ClientStatus
 import Utils
 from .Config import make_version_specific_changes
-from .Items import suit_upgrade_table
+from .Items import SUIT_UPGRADE_TABLE
 from .ClientReceiveItems import handle_receive_items
 from .NotificationManager import NotificationManager
 from .Container import construct_hook_patch
@@ -80,7 +80,7 @@ class MetroidPrimeCommandProcessor(ClientCommandProcessor):
             self.ctx.cosmetic_suit = None
             suit = self.ctx.game_interface.get_highest_owned_suit()
             self.ctx.game_interface.set_cosmetic_suit_by_id(
-                suit_upgrade_table[suit.value].id
+                SUIT_UPGRADE_TABLE[suit.value].id
             )
             self.ctx.game_interface.set_current_suit(
                 self.ctx.game_interface.get_current_cosmetic_suit()

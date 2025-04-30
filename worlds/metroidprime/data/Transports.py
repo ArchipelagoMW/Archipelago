@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .. import MetroidPrimeWorld
 
 
-default_elevator_mappings = {
+DEFAULT_ELEVATOR_MAPPINGS = {
     MetroidPrimeArea.Tallon_Overworld.value: {
         RoomName.Transport_to_Chozo_Ruins_West.value: RoomName.Transport_to_Tallon_Overworld_North.value,
         RoomName.Transport_to_Magmoor_Caverns_East.value: RoomName.Transport_to_Tallon_Overworld_West.value,
@@ -81,7 +81,7 @@ def temple_dest(boss: int) -> str:
 
 
 # Names of the transports that the config json expects
-transport_names_to_room_names: Dict[str, str] = {
+TRANSPORT_NAMES_TO_ROOM_NAMES: Dict[str, str] = {
     "Tallon Overworld North (Tallon Canyon)": RoomName.Transport_to_Chozo_Ruins_West.value,
     "Tallon Overworld West (Root Cave)": RoomName.Transport_to_Magmoor_Caverns_East.value,
     "Tallon Overworld East (Frigate Crash Site)": RoomName.Transport_to_Chozo_Ruins_East.value,
@@ -108,14 +108,14 @@ transport_names_to_room_names: Dict[str, str] = {
 
 
 def get_transport_name_by_room_name(room_name: str) -> str:
-    for transport_name, room in transport_names_to_room_names.items():
+    for transport_name, room in TRANSPORT_NAMES_TO_ROOM_NAMES.items():
         if room == room_name:
             return transport_name
     return room_name
 
 
 def get_room_name_by_transport_name(transport_name: str) -> str:
-    return transport_names_to_room_names.get(transport_name, transport_name)
+    return TRANSPORT_NAMES_TO_ROOM_NAMES.get(transport_name, transport_name)
 
 
 def get_transport_data(world: "MetroidPrimeWorld") -> Dict[str, Dict[str, str]]:
@@ -135,7 +135,7 @@ def get_transport_data(world: "MetroidPrimeWorld") -> Dict[str, Dict[str, str]]:
 
 
 def get_region_by_elevator_name(elevator_name: str) -> str:
-    for region, elevators in default_elevator_mappings.items():
+    for region, elevators in DEFAULT_ELEVATOR_MAPPINGS.items():
         if elevator_name in elevators:
             return region
     raise ValueError(f"Could not find region for elevator {elevator_name}")
@@ -145,7 +145,7 @@ def get_random_elevator_mapping(
     world: "MetroidPrimeWorld",
 ) -> Dict[str, Dict[str, str]]:
     mapped_elevators: Dict[str, Dict[str, str]] = defaultdict(dict)
-    available_elevators_by_region = copy.deepcopy(default_elevator_mappings)
+    available_elevators_by_region = copy.deepcopy(DEFAULT_ELEVATOR_MAPPINGS)
     denied_elevators = world.starting_room_data.denied_elevators or {}
 
     def get_region_with_most_unshuffled_elevators() -> str:
