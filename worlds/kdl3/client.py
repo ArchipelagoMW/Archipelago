@@ -277,7 +277,8 @@ class KDL3SNIClient(SNIClient):
                 self.giftbox_key = f"Giftbox;{ctx.team};{ctx.slot}"
                 self.motherbox_key = f"Giftboxes;{ctx.team}"
                 enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x02)
-                await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key, bool(enable_gifting[0]))
+                await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key,
+                                           bool(int.from_bytes(enable_gifting, "little")))
                 self.initialize_gifting = True
             # can't check debug anymore, without going and copying the value. might be important later.
             if not self.levels:
