@@ -68,5 +68,6 @@ name automatically when you start a new save file.
   **disabled**.
 * If the client cannot connect to Dolphin, ensure Dolphin is on the same drive as Archipelago. Having Dolphin on an
   external drive has reportedly caused connection issues.
+* Ensure the `Fallback Region` in Dolphin (under `Options` > `Configuration` > `General`) is set to `NTSC-U`.
 * If you run with a custom GC boot menu, you'll need to skip it by going to `Options` > `Configuration` > `GameCube`
   and checking `Skip Main Menu`.
