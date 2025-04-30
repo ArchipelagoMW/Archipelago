@@ -1,2 +1,3 @@
 pygbagfx>=0.0.11
 python-bps-continued>=7
+pillow>=10.2.0
