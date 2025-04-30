@@ -7,7 +7,7 @@ import math
 from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
-    tkinter_center_window, data_to_bps_patch
+    tkinter_center_window, data_to_bps_patch, init_logging
 from worlds.pokemon_emerald.sprite_patcher import handle_sprite_pack, extract_palette, extract_sprites, \
     validate_sprite_pack, POKEMON_FOLDERS, TRAINER_FOLDERS
 from argparse import Namespace
@@ -20,7 +20,7 @@ ap_rom = None
 
 GAME_EMERALD = "Pokemon Emerald"
 
-def main():
+async def main():
     parser = get_argparser()
     args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_EMERALD))
     
@@ -369,6 +369,12 @@ def build_sprite_pack_patch(sprite_pack, ap_rom):
     sprite_pack_data = handle_sprite_pack(sprite_pack_path, ap_rom)
     sprite_pack_bps_patch = data_to_bps_patch(sprite_pack_data, ap_rom)
     return sprite_pack_bps_patch
+
+def launch():
+    import colorama, asyncio
+    colorama.just_fix_windows_console()
+    asyncio.run(main())
+    colorama.deinit()
 
 if __name__ == '__main__':
     main()
