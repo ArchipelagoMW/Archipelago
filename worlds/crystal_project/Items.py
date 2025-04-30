@@ -429,28 +429,28 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Wand": ItemData("Equipment", 258 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Aura Focus": ItemData("Equipment", 278 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Paladin Wand": ItemData("Equipment", 276 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Deep Sea, Expert Zones
-    "Equipment - Obelisk": ItemData("Equipment", 307 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Flameseeker": ItemData("Equipment", 358 + equipment_index_offset, ItemClassification.useful),
+    #"Equipment - Obelisk": ItemData("Equipment", 307 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hoboshop)
+    "Equipment - Flameseeker": ItemData("Equipment", 358 + equipment_index_offset, ItemClassification.useful), #Tier 5, Jidamba Eaclaneya, Expert Zones
     #"Equipment - Diamond Wand": ItemData("Equipment", 154 + equipment_index_offset, ItemClassification.useful),
 
     #Books
     #"Equipment - Moby Dick": ItemData("Equipment", 51 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Orylei": ItemData("Equipment", 65 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Pages": ItemData("Equipment", 102 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Craftwork Pages": ItemData("Equipment", 102 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Encyclopedia": ItemData("Equipment", 214 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Gospel": ItemData("Equipment", 194 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Paypirbak": ItemData("Equipment", 223 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Art of War": ItemData("Equipment", 224 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Gospel": ItemData("Equipment", 194 + equipment_index_offset, ItemClassification.useful), #Tier 2, Boomer Society, Advanced Zones
+    "Equipment - Paypirbak": ItemData("Equipment", 223 + equipment_index_offset, ItemClassification.useful), #Tier 2, Salmon Pass, Advanced Zones
+    "Equipment - Art of War": ItemData("Equipment", 224 + equipment_index_offset, ItemClassification.useful), #Tier 2, Okimoto N.S., Advanced Zones
     #"Equipment - Silver Pages": ItemData("Equipment", 121 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Pages": ItemData("Equipment", 167 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Grimoire": ItemData("Equipment", 438 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Blank Pages": ItemData("Equipment", 437 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Tome of Light": ItemData("Equipment", 439 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Blank Pages": ItemData("Equipment", 437 + equipment_index_offset, ItemClassification.useful), #Tier 3, Sara Sara Beach, Advanced Zones
+    "Equipment - Tome of Light": ItemData("Equipment", 439 + equipment_index_offset, ItemClassification.useful), #Tier 3, Beaurior Volcano, Expert Zones
     #"Equipment - Hydrology": ItemData("Equipment", 441 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Gold Pages": ItemData("Equipment", 155 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Dark Gospel": ItemData("Equipment", 440 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Dark Gospel": ItemData("Equipment", 440 + equipment_index_offset, ItemClassification.useful), #Tier 4, Beaurior Volcano, Expert Zones
     #"Equipment - Divination": ItemData("Equipment", 442 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Malifice": ItemData("Equipment", 443 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Malifice": ItemData("Equipment", 443 + equipment_index_offset, ItemClassification.useful), #Tier 4, Shoudu Province, Expert Zones
     #"Equipment - Master Pages": ItemData("Equipment", 259 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Codex": ItemData("Equipment", 436 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Diamond Pages": ItemData("Equipment", 156 + equipment_index_offset, ItemClassification.useful),
@@ -458,118 +458,118 @@ item_table: Dict[str, ItemData] = {
     #Armor
     #Shields
     #"Equipment - Buckler": ItemData("Equipment", 44 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Stout Shield": ItemData("Equipment", 45 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Iron Guard": ItemData("Equipment", 68 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Stalwart Shield": ItemData("Equipment", 88 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Shield": ItemData("Equipment", 506 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Stout Shield": ItemData("Equipment", 45 + equipment_index_offset, ItemClassification.useful), #Tier 1, Spawning Meadows, Beginner Zones
+    "Equipment - Iron Guard": ItemData("Equipment", 68 + equipment_index_offset, ItemClassification.useful), #Tier 1, Yamagawa M.A., Beginner Zones
+    "Equipment - Stalwart Shield": ItemData("Equipment", 88 + equipment_index_offset, ItemClassification.useful), #Tier 1, Trial Caves/Skumparadise, Beginner Zones
+    "Equipment - Craftwork Shield": ItemData("Equipment", 506 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Vanguard": ItemData("Equipment", 111 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Duelling Shield": ItemData("Equipment", 215 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Lucky Platter": ItemData("Equipment", 103 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Boomer Shield": ItemData("Equipment", 178 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Lucky Platter": ItemData("Equipment", 103 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Pipeline, Advanced Zones
+    "Equipment - Boomer Shield": ItemData("Equipment", 178 + equipment_index_offset, ItemClassification.useful), #Tier 2, Boomer Society, Advanced Zones
     #"Equipment - Silver Shield": ItemData("Equipment", 507 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Shield": ItemData("Equipment", 168 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Cross Shield": ItemData("Equipment", 444 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Brass Cross": ItemData("Equipment", 448 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Blood Shield": ItemData("Equipment", 560 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - The Immovable": ItemData("Equipment", 451 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - The Immovable": ItemData("Equipment", 451 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Cross Guard": ItemData("Equipment", 446 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Mages Platter": ItemData("Equipment", 452 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Mages Platter": ItemData("Equipment", 452 + equipment_index_offset, ItemClassification.useful), #Tier 3, Salmon River, Advanced Zones
     #"Equipment - Gold Shield": ItemData("Equipment", 447 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Bulkwark": ItemData("Equipment", 449 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Flame Guard": ItemData("Equipment", 450 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Wizards Wall": ItemData("Equipment", 453 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Flame Guard": ItemData("Equipment", 450 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Tangle, Expert Zones
+    "Equipment - Wizards Wall": ItemData("Equipment", 453 + equipment_index_offset, ItemClassification.useful), #Tier 4, Shoudu Province, Expert Zones
     #"Equipment - Master Shield": ItemData("Equipment", 260 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Turtle Shell": ItemData("Equipment", 445 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Tower Shield": ItemData("Equipment", 344 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Nomads Guard": ItemData("Equipment", 288 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Tower Shield": ItemData("Equipment", 344 + equipment_index_offset, ItemClassification.useful), #Tier 5, Jidamba Tangle, Expert Zones
+    "Equipment - Nomads Guard": ItemData("Equipment", 288 + equipment_index_offset, ItemClassification.useful), #Tier 5, Continental Tram, Expert Zones
     #"Equipment - Ether Shield": ItemData("Equipment", 277 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Mirror Shield": ItemData("Equipment", 246 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Mirror Shield": ItemData("Equipment", 246 + equipment_index_offset, ItemClassification.useful), #Tier 5, Ancient Labyrinth, End-Game Zones
     #"Equipment - Diamond Shield": ItemData("Equipment", 237 + equipment_index_offset, ItemClassification.useful),
 
     #Heavy Head
     #"Equipment - Chain Helm": ItemData("Equipment", 25 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Sturdy Helm": ItemData("Equipment", 26 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Storm Helm": ItemData("Equipment", 74 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Storm Helm": ItemData("Equipment", 74 + equipment_index_offset, ItemClassification.useful), #Tier 1, Pale Grotto, Beginner Zones
     #"Equipment - Copper Helm": ItemData("Equipment", 69 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Helm": ItemData("Equipment", 508 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Craftwork Helm": ItemData("Equipment", 508 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Bronze Helm": ItemData("Equipment", 106 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Scale Helm": ItemData("Equipment", 128 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Iron Helm": ItemData("Equipment", 125 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Battle Helm": ItemData("Equipment", 132 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Iron Helm": ItemData("Equipment", 125 + equipment_index_offset, ItemClassification.useful), #Tier 2, Jojo Sewers, Advanced Zones
+    "Equipment - Battle Helm": ItemData("Equipment", 132 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Jail, Advanced Zones
     #"Equipment - Silver Helm": ItemData("Equipment", 509 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Helm": ItemData("Equipment", 169 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Orion Barbut": ItemData("Equipment", 465 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Iron Barbut": ItemData("Equipment", 468 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Horned Helm": ItemData("Equipment", 464 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Horned Helm": ItemData("Equipment", 464 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Helm": ItemData("Equipment", 469 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Cross Helm": ItemData("Equipment", 466 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Insignia Helm": ItemData("Equipment", 470 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Demon Helm": ItemData("Equipment", 467 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Insignia Helm": ItemData("Equipment", 470 + equipment_index_offset, ItemClassification.useful), #Tier 4, Tall Tall Heights, Expert Zones
+    "Equipment - Demon Helm": ItemData("Equipment", 467 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Tangle, Expert Zones
     #"Equipment - Master Helm": ItemData("Equipment", 261 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Guts Busby": ItemData("Equipment", 308 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Raid Helm": ItemData("Equipment", 471 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Spellsword Helm": ItemData("Equipment", 292 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Spellsword Helm": ItemData("Equipment", 292 + equipment_index_offset, ItemClassification.useful), #Tier 4, Sequoia Athenaeum, Expert Zones
     #"Equipment - Diamond Helm": ItemData("Equipment", 236 + equipment_index_offset, ItemClassification.useful),
 
     #Heavy Body
     #"Equipment - Breastplate": ItemData("Equipment", 18 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Ring Mail": ItemData("Equipment", 28 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Ring Mail": ItemData("Equipment", 28 + equipment_index_offset, ItemClassification.useful), #Tier 1, Pale Grotto, Beginner Zones
     #"Equipment - Copper Suit": ItemData("Equipment", 29 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Plate of Wolf": ItemData("Equipment", 84 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Mail": ItemData("Equipment", 510 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Plate of Wolf": ItemData("Equipment", 84 + equipment_index_offset, ItemClassification.useful), #Tier 1, Underpass, Advanced Zones
+    "Equipment - Craftwork Mail": ItemData("Equipment", 510 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Bronze Suit": ItemData("Equipment", 107 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Scale Mail": ItemData("Equipment", 127 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Iron Armor": ItemData("Equipment", 126 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Battleplate": ItemData("Equipment", 43 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Iron Armor": ItemData("Equipment", 126 + equipment_index_offset, ItemClassification.useful), #Tier 2, Jojo Sewers, Advanced Zones
+    "Equipment - Battleplate": ItemData("Equipment", 43 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Jail, Advanced Zones
     #"Equipment - Silver Mail": ItemData("Equipment", 511 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Mail": ItemData("Equipment", 170 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Orion Armor": ItemData("Equipment", 455 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Plate of Tiger": ItemData("Equipment", 129 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Plate Mail": ItemData("Equipment", 460 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Knights Plate": ItemData("Equipment", 456 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Bone Mail": ItemData("Equipment", 462 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Knights Plate": ItemData("Equipment", 456 + equipment_index_offset, ItemClassification.useful), #Tier 3, The Undercity, Expert Zones
+    "Equipment - Bone Mail": ItemData("Equipment", 462 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Mail": ItemData("Equipment", 459 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Sky Armor": ItemData("Equipment", 461 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Plate of Lion": ItemData("Equipment", 130 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Sky Armor": ItemData("Equipment", 461 + equipment_index_offset, ItemClassification.useful), #Tier 4, Shoudu Province, Expert Zones
+    "Equipment - Plate of Lion": ItemData("Equipment", 130 + equipment_index_offset, ItemClassification.useful), #Tier 4, Slip Glide Ride, Expert Zones
     #"Equipment - Dragon Mail": ItemData("Equipment", 457 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Demon Plate": ItemData("Equipment", 458 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Demon Plate": ItemData("Equipment", 458 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Tangle, Expert Zones
     #"Equipment - Master Mail": ItemData("Equipment", 262 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Construct Mail": ItemData("Equipment", 272 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Guardian Angel": ItemData("Equipment", 291 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Plate of Whale": ItemData("Equipment", 131 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Lunar Mail": ItemData("Equipment", 463 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Plate of Whale": ItemData("Equipment", 131 + equipment_index_offset, ItemClassification.useful), #The Open Sea fisher; Tier 5, The Open Sea, Expert Zones
+    "Equipment - Lunar Mail": ItemData("Equipment", 463 + equipment_index_offset, ItemClassification.useful), #Tier 5, The New World, End-Game Zones
     #"Equipment - Diamond Mail": ItemData("Equipment", 235 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Warrior Mail": ItemData("Equipment", 533 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Warlock Mail": ItemData("Equipment", 534 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Aegis Mail": ItemData("Equipment", 536 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Reaper Mail": ItemData("Equipment", 535 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Samurai Mail": ItemData("Equipment", 538 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Valkyrie Mail": ItemData("Equipment", 537 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Beastmaster Mail": ItemData("Equipment", 557 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Mimic Mail": ItemData("Equipment", 548 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Warrior Mail": ItemData("Equipment", 533 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Warlock Mail": ItemData("Equipment", 534 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Aegis Mail": ItemData("Equipment", 536 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Reaper Mail": ItemData("Equipment", 535 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Samurai Mail": ItemData("Equipment", 538 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Valkyrie Mail": ItemData("Equipment", 537 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Beastmaster Mail": ItemData("Equipment", 557 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Mimic Mail": ItemData("Equipment", 548 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
     
     #Medium Head
     #"Equipment - Leather Cap": ItemData("Equipment", 24 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Beret": ItemData("Equipment", 27 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Storm Cap": ItemData("Equipment", 75 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Headgear": ItemData("Equipment", 30 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Cap": ItemData("Equipment", 512 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Storm Cap": ItemData("Equipment", 75 + equipment_index_offset, ItemClassification.useful), #Tier 1, Seaside Cliffs, Beginner Zones
+    "Equipment - Headgear": ItemData("Equipment", 30 + equipment_index_offset, ItemClassification.useful), #Tier 1, Seaside Cliffs, Beginner Zones
+    "Equipment - Craftwork Cap": ItemData("Equipment", 512 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Rugged Hat": ItemData("Equipment", 219 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Spore Blocker": ItemData("Equipment", 195 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Spore Blocker": ItemData("Equipment", 195 + equipment_index_offset, ItemClassification.useful), #Tier 2, Rolling Quintar Fields, Advanced Zones
     #"Equipment - Vikings Hat": ItemData("Equipment", 220 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Silver Cap": ItemData("Equipment", 513 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Cap": ItemData("Equipment", 171 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Combat Band": ItemData("Equipment", 483 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Red Cap": ItemData("Equipment", 233 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Red Cap": ItemData("Equipment", 233 + equipment_index_offset, ItemClassification.useful), #Tier 3, Ancient Reservoir, Advanced Zones
     #"Equipment - Bandana": ItemData("Equipment", 484 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Suitor Hat": ItemData("Equipment", 485 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Suitor Hat": ItemData("Equipment", 485 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Cap": ItemData("Equipment", 520 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Red Hat": ItemData("Equipment", 480 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Pirate Hat": ItemData("Equipment", 481 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Pirate Hat": ItemData("Equipment", 481 + equipment_index_offset, ItemClassification.useful), #Ice fisher in Tall Tall Heights; Tier 4, Tall Tall Heights, Expert Zones
     #"Equipment - Tall, Tall Hat": ItemData("Equipment", 486 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Master Cap": ItemData("Equipment", 263 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Battle Band": ItemData("Equipment", 345 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Captains Hat": ItemData("Equipment", 482 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Battle Band": ItemData("Equipment", 345 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Sequoia, End-Game Zones
+    "Equipment - Captains Hat": ItemData("Equipment", 482 + equipment_index_offset, ItemClassification.useful), #Tier 5, Sara Sara Bazaar, Advanced Zones
     #"Equipment - Red Headgear": ItemData("Equipment", 487 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Diamond Cap": ItemData("Equipment", 238 + equipment_index_offset, ItemClassification.useful),
 
@@ -577,49 +577,49 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Leather Outfit": ItemData("Equipment", 17 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Studded Armor": ItemData("Equipment", 35 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Leather Mail": ItemData("Equipment", 36 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Vest": ItemData("Equipment", 514 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Craftwork Vest": ItemData("Equipment", 514 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Chain Vest": ItemData("Equipment", 217 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Combat Vest": ItemData("Equipment", 218 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Smelly Gi": ItemData("Equipment", 268 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Training Gi": ItemData("Equipment", 229 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Tuxedo": ItemData("Equipment", 176 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Smelly Gi": ItemData("Equipment", 268 + equipment_index_offset, ItemClassification.useful), #Tier 2, Jojo Sewers, Advanced Zones
+    "Equipment - Training Gi": ItemData("Equipment", 229 + equipment_index_offset, ItemClassification.useful), #Tier 2, Okimoto N.S., Advanced Zones
+    "Equipment - Tuxedo": ItemData("Equipment", 176 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Sequoia, Advanced Zones
     #"Equipment - Silver Vest": ItemData("Equipment", 515 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Vest": ItemData("Equipment", 172 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Power Vest": ItemData("Equipment", 472 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Red Coat": ItemData("Equipment", 57 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Red Coat": ItemData("Equipment", 57 + equipment_index_offset, ItemClassification.useful), #Tier 3, Ancient Reservoir, Advanced Zones
     #"Equipment - Drifters Vest": ItemData("Equipment", 474 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Bandage Wrap": ItemData("Equipment", 558 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Gaia Vest": ItemData("Equipment", 473 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Brigandine": ItemData("Equipment", 477 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Gaia Vest": ItemData("Equipment", 473 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
+    "Equipment - Brigandine": ItemData("Equipment", 477 + equipment_index_offset, ItemClassification.useful), #Tier 3, The Undercity, Expert Zones
     #"Equipment - Gold Vest": ItemData("Equipment", 521 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Onion Gi": ItemData("Equipment", 475 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Martial Vest": ItemData("Equipment", 478 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Judo Gi": ItemData("Equipment", 479 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Judo Gi": ItemData("Equipment", 479 + equipment_index_offset, ItemClassification.useful), #Tier 4, Tall Tall Heights, Expert Zones
     #"Equipment - Master Vest": ItemData("Equipment", 264 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Quintar Pelt": ItemData("Equipment", 493 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Shadow Gi": ItemData("Equipment", 347 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Shadow Gi": ItemData("Equipment", 347 + equipment_index_offset, ItemClassification.useful), #Tier 5, Shoudu Province, Expert Zones
     #"Equipment - Rex Vest": ItemData("Equipment", 476 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Slime Coat": ItemData("Equipment", 524 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Diamond Vest": ItemData("Equipment", 239 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Monk Vest": ItemData("Equipment", 539 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Rogue Vest": ItemData("Equipment", 540 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Fencer Vest": ItemData("Equipment", 541 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Hunter Vest": ItemData("Equipment", 542 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Ninja Vest": ItemData("Equipment", 543 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Nomad Vest": ItemData("Equipment", 544 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Beatsmith Vest": ItemData("Equipment", 545 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Assassin Vest": ItemData("Equipment", 546 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Monk Vest": ItemData("Equipment", 539 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Rogue Vest": ItemData("Equipment", 540 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Fencer Vest": ItemData("Equipment", 541 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Hunter Vest": ItemData("Equipment", 542 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Ninja Vest": ItemData("Equipment", 543 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Nomad Vest": ItemData("Equipment", 544 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Beatsmith Vest": ItemData("Equipment", 545 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Assassin Vest": ItemData("Equipment", 546 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
 
     #Light Head
     #"Equipment - Hemp Hood": ItemData("Equipment", 31 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Cotton Hood": ItemData("Equipment", 32 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Storm Hood": ItemData("Equipment", 76 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Cotton Hood": ItemData("Equipment", 32 + equipment_index_offset, ItemClassification.useful), #Tier 1, Delende, Beginner Zones
+    "Equipment - Storm Hood": ItemData("Equipment", 76 + equipment_index_offset, ItemClassification.useful), #Tier 1, Delende, Beginner Zones
     #"Equipment - Holy Hat": ItemData("Equipment", 33 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Crown": ItemData("Equipment", 516 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Craftwork Crown": ItemData("Equipment", 516 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Silk Hat": ItemData("Equipment", 110 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Circlet": ItemData("Equipment", 133 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Circlet": ItemData("Equipment", 133 + equipment_index_offset, ItemClassification.useful), #Tier 2, Quintar Sanctum, Advanced Zones
     #"Equipment - Holy Miter": ItemData("Equipment", 109 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Woven Hood": ItemData("Equipment", 122 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Woven Hood": ItemData("Equipment", 122 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Jail, Advanced Zones
     #"Equipment - Silver Crown": ItemData("Equipment", 517 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Crown": ItemData("Equipment", 173 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Clerics Hood": ItemData("Equipment", 341 + equipment_index_offset, ItemClassification.useful),
@@ -627,89 +627,89 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Fairys Crown": ItemData("Equipment", 352 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Quilted Hat": ItemData("Equipment", 353 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Blood Hat": ItemData("Equipment", 559 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Plague Mask": ItemData("Equipment", 342 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Guard Crown": ItemData("Equipment", 356 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Plague Mask": ItemData("Equipment", 342 + equipment_index_offset, ItemClassification.useful), #Tier 3, Shoudu Province, Expert Zones
+    "Equipment - Guard Crown": ItemData("Equipment", 356 + equipment_index_offset, ItemClassification.useful), #Tier 3, Beaurior Rock, Expert Zones
     #"Equipment - Gold Crown": ItemData("Equipment", 522 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Bronze Hairpin": ItemData("Equipment", 34 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Bronze Hairpin": ItemData("Equipment", 34 + equipment_index_offset, ItemClassification.useful), #Tall Tall Heights fisher; Tier 4, Tall Tall Heights, Expert Zones
     #"Equipment - Regen Crown": ItemData("Equipment", 343 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Ravens Hood": ItemData("Equipment", 348 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Celestial Crown": ItemData("Equipment", 52 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Ravens Hood": ItemData("Equipment", 348 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Tangle, Expert Zones
+    "Equipment - Celestial Crown": ItemData("Equipment", 52 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Eaclaneya, Expert Zones
     #"Equipment - Master Crown": ItemData("Equipment", 265 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Pointy Hat": ItemData("Equipment", 531 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Vita Crown": ItemData("Equipment", 271 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Pact Crown": ItemData("Equipment", 350 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Protector": ItemData("Equipment", 354 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Pointy Hat": ItemData("Equipment", 531 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Deep Sea, Expert Zones
+    "Equipment - Vita Crown": ItemData("Equipment", 271 + equipment_index_offset, ItemClassification.useful), #Tier 5, Ancient Labyrinth, End-Game Zones
+    #"Equipment - Pact Crown": ItemData("Equipment", 350 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hoboshop)
+    "Equipment - Protector": ItemData("Equipment", 354 + equipment_index_offset, ItemClassification.useful), #Tier 5, Castle Sequoia, End-Game Zones
     #"Equipment - Diamond Crown": ItemData("Equipment", 240 + equipment_index_offset, ItemClassification.useful),
 
     #Light Body
     #"Equipment - Hemp Robe": ItemData("Equipment", 19 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Cotton Robe": ItemData("Equipment", 20 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Mages Robe": ItemData("Equipment", 21 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Swimmers Top": ItemData("Equipment", 81 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Craftwork Robe": ItemData("Equipment", 518 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Mages Robe": ItemData("Equipment", 21 + equipment_index_offset, ItemClassification.useful), #Tier 1, Delende, Beginner Zones
+    "Equipment - Swimmers Top": ItemData("Equipment", 81 + equipment_index_offset, ItemClassification.useful), #Tier 1, Seaside Cliffs, Beginner Zones
+    "Equipment - Craftwork Robe": ItemData("Equipment", 518 + equipment_index_offset, ItemClassification.useful), #Tier 1, Capital Sequoia, Advanced Zones
     #"Equipment - Priest Garb": ItemData("Equipment", 216 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Dress": ItemData("Equipment", 134 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Dress": ItemData("Equipment", 134 + equipment_index_offset, ItemClassification.useful), #Tier 2, Quintar Sanctum, Advanced Zones
     #"Equipment - Silk Shirt": ItemData("Equipment", 108 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Woven Shirt": ItemData("Equipment", 230 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Woven Shirt": ItemData("Equipment", 230 + equipment_index_offset, ItemClassification.useful), #Tier 2, Capital Jail, Advanced Zones
     #"Equipment - Silver Cape": ItemData("Equipment", 519 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Artisan Shirt": ItemData("Equipment", 174 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Wizards Robe": ItemData("Equipment", 124 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Clerics Robe": ItemData("Equipment", 123 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Cosplay Garb": ItemData("Equipment", 336 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Sturdy Cape": ItemData("Equipment", 359 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Shelter Dress": ItemData("Equipment", 357 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Shelter Dress": ItemData("Equipment", 357 + equipment_index_offset, ItemClassification.useful), #Tier 3, Beaurior Rock, Expert Zones
     #"Equipment - Gold Robe": ItemData("Equipment", 523 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Winter Cape": ItemData("Equipment", 325 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Blue Cape": ItemData("Equipment", 360 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Seekers Garb": ItemData("Equipment", 324 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Ravens Cloak": ItemData("Equipment", 349 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Blue Cape": ItemData("Equipment", 360 + equipment_index_offset, ItemClassification.useful), #Tier 4, Lands End, Expert Zones
+    "Equipment - Seekers Garb": ItemData("Equipment", 324 + equipment_index_offset, ItemClassification.useful), #Tier 4, Slip Glide Ride, Expert Zones
+    "Equipment - Ravens Cloak": ItemData("Equipment", 349 + equipment_index_offset, ItemClassification.useful), #Tier 4, Jidamba Tangle, Expert Zones
     #"Equipment - Master Cape": ItemData("Equipment", 266 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Archmage Vest": ItemData("Equipment", 337 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Archmage Vest": ItemData("Equipment", 337 + equipment_index_offset, ItemClassification.useful), #Tier 5, Ancient Labyrinth, End-Game Zones
     #"Equipment - Saviors Cape": ItemData("Equipment", 338 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Assassins Cloak": ItemData("Equipment", 273 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Stealth Cape": ItemData("Equipment", 319 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Assassins Cloak": ItemData("Equipment", 273 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Depths, End-Game Zones
+    "Equipment - Stealth Cape": ItemData("Equipment", 319 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Sequoia, End-Game Zones
     #"Equipment - Shell Gown": ItemData("Equipment", 355 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Diamond Robe": ItemData("Equipment", 241 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Cleric Robe": ItemData("Equipment", 547 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Wizard Robe": ItemData("Equipment", 549 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Shaman Robe": ItemData("Equipment", 550 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Scholar Robe": ItemData("Equipment", 551 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Chemist Robe": ItemData("Equipment", 552 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Dervish Robe": ItemData("Equipment", 553 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Weaver Robe": ItemData("Equipment", 554 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Summoner Robe": ItemData("Equipment", 555 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Cleric Robe": ItemData("Equipment", 547 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Wizard Robe": ItemData("Equipment", 549 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Shaman Robe": ItemData("Equipment", 550 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Scholar Robe": ItemData("Equipment", 551 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Chemist Robe": ItemData("Equipment", 552 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Dervish Robe": ItemData("Equipment", 553 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Weaver Robe": ItemData("Equipment", 554 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
+    "Equipment - Summoner Robe": ItemData("Equipment", 555 + equipment_index_offset, ItemClassification.useful), #Tier Class, Jade Cavern, Expert Zones
 
     #Accessories
-    "Equipment - Fervor Charm": ItemData("Equipment", 48 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Dodge Charm": ItemData("Equipment", 39 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Earring": ItemData("Equipment", 79 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Bracer": ItemData("Equipment", 70 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Jewel of Defense": ItemData("Equipment", 50 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Scope Bit": ItemData("Equipment", 226 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Protect Amulet": ItemData("Equipment", 49 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Fervor Charm": ItemData("Equipment", 48 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Delende, Beginner Zones
+    "Equipment - Dodge Charm": ItemData("Equipment", 39 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Soiled Den, Beginner Zones
+    "Equipment - Earring": ItemData("Equipment", 79 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Delende, Beginner Zones
+    "Equipment - Bracer": ItemData("Equipment", 70 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Delende and Seaside Cliffs, Beginner Zones
+    "Equipment - Jewel of Defense": ItemData("Equipment", 50 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Seaside Cliffs, Beginner Zones
+    "Equipment - Scope Bit": ItemData("Equipment", 226 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Seaside Cliffs and Quintar Nest, Beginner Zones
+    "Equipment - Protect Amulet": ItemData("Equipment", 49 + equipment_index_offset, ItemClassification.useful), #Tier 1 Shop, Delende, Beginner Zones
     #"Equipment - Wasps Stinger": ItemData("Equipment", 86 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Gem Ring": ItemData("Equipment", 332 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Earth Bangle": ItemData("Equipment", 82 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Water Bangle": ItemData("Equipment", 83 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Looters Ring": ItemData("Equipment", 54 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Burglars Glove": ItemData("Equipment", 53 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Torpid Cuffs": ItemData("Equipment", 331 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Squirrel Dung": ItemData("Equipment", 85 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Fang Pendant": ItemData("Equipment", 196 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Mana Ring": ItemData("Equipment", 38 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Awake Ring": ItemData("Equipment", 87 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Looters Ring": ItemData("Equipment", 54 + equipment_index_offset, ItemClassification.useful), #Tier 1 Unique, Delende and Greenshire Reprise, Beginner Zones
+    "Equipment - Burglars Glove": ItemData("Equipment", 53 + equipment_index_offset, ItemClassification.useful), #Tier 1 Unique, Spawning Meadows and Proving Meadows, Beginner Zones
+    "Equipment - Torpid Cuffs": ItemData("Equipment", 331 + equipment_index_offset, ItemClassification.useful), #Tier 1 Unique, Yamagawa M.A., Beginner Zones
+    "Equipment - Squirrel Dung": ItemData("Equipment", 85 + equipment_index_offset, ItemClassification.useful), #Tier 1 Unique, Spawning Meadows, Beginner Zones
+    "Equipment - Fang Pendant": ItemData("Equipment", 196 + equipment_index_offset, ItemClassification.useful), #Tier 2 Shop (Capital), Capital Sequoia, Advanced Zones
+    "Equipment - Mana Ring": ItemData("Equipment", 38 + equipment_index_offset, ItemClassification.useful), #Tier 2 Shop (Capital), Skumparadise, Beginner Zones
+    "Equipment - Awake Ring": ItemData("Equipment", 87 + equipment_index_offset, ItemClassification.useful), #Tier 2 Shop (Capital), Skumparadise, Beginner Zones
     #"Equipment - Prayer Beads": ItemData("Equipment", 186 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Shell Amulet": ItemData("Equipment", 179 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Shell Amulet": ItemData("Equipment", 179 + equipment_index_offset, ItemClassification.useful), #Tier 2 Shop (Capital), Greenshire Reprise, Advanced Zones
     #"Equipment - Samurais Glove": ItemData("Equipment", 185 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Magic Finder": ItemData("Equipment", 323 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Learners Pin": ItemData("Equipment", 492 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Givers Ring": ItemData("Equipment", 182 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Aggro Band": ItemData("Equipment", 505 + equipment_index_offset, ItemClassification.useful), #from Delende fisher
+    "Equipment - Magic Finder": ItemData("Equipment", 323 + equipment_index_offset, ItemClassification.useful), #Tier 2 Loot, Okimoto N.S., Advanced Zones
+    "Equipment - Learners Pin": ItemData("Equipment", 492 + equipment_index_offset, ItemClassification.useful), #Tier 2 Unique, Capital Sequoia, Advanced Zones
+    "Equipment - Givers Ring": ItemData("Equipment", 182 + equipment_index_offset, ItemClassification.useful),#Tier 2 Unique, Capital Sequoia, Advanced Zones
+    "Equipment - Aggro Band": ItemData("Equipment", 505 + equipment_index_offset, ItemClassification.useful), #Delende fisher; Tier 2 Unique, Delende, Advanced Zones
     #"Equipment - Hemoring": ItemData("Equipment", 56 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Float Shoes": ItemData("Equipment", 193 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Float Shoes": ItemData("Equipment", 193 + equipment_index_offset, ItemClassification.useful), #Tier 2 Unique, Okimoto N.S. and Lake Delende, Advanced Zones
     #"Equipment - Hope Cross": ItemData("Equipment", 225 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Defense Shifter": ItemData("Equipment", 191 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Resist Shifter": ItemData("Equipment", 221 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Defense Shifter": ItemData("Equipment", 191 + equipment_index_offset, ItemClassification.useful), #Tier 3 Shop (Sara Sara), Ancient Reservoir, Advanced Zones
+    "Equipment - Resist Shifter": ItemData("Equipment", 221 + equipment_index_offset, ItemClassification.useful), #Tier 3 Shop (Sara Sara), Ancient Reservoir, Advanced Zones
     #"Equipment - Casters Ring": ItemData("Equipment", 9 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Fearsome Ring": ItemData("Equipment", 504 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Crit Fang": ItemData("Equipment", 502 + equipment_index_offset, ItemClassification.useful),
@@ -720,37 +720,37 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Menders Ring": ItemData("Equipment", 529 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Kitsune Mask": ItemData("Equipment", 503 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Pact Ring": ItemData("Equipment", 496 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Scope Specs": ItemData("Equipment", 562 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Scope Specs": ItemData("Equipment", 562 + equipment_index_offset, ItemClassification.useful), #Tier 3 Loot, Poko Poko Desert, Advanced Zones
     #"Equipment - Loot Finder": ItemData("Equipment", 326 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Quiet Shoes": ItemData("Equipment", 495 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Knicked Knackers": ItemData("Equipment", 232 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Looters Pin": ItemData("Equipment", 231 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Acrobat Shoes": ItemData("Equipment", 320 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Knicked Knackers": ItemData("Equipment", 232 + equipment_index_offset, ItemClassification.useful), #Tier 3 Unique, Shoudu Province, Expert Zones
+    "Equipment - Looters Pin": ItemData("Equipment", 231 + equipment_index_offset, ItemClassification.useful), #Tier 3 Unique, Shoudu Province, Expert Zones
+    "Equipment - Acrobat Shoes": ItemData("Equipment", 320 + equipment_index_offset, ItemClassification.useful), #Tier 3 Unique, Shoudu Province, Expert Zones
     #"Equipment - Bone Trophy": ItemData("Equipment", 37 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Gusto Fang": ItemData("Equipment", 47 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Beads of Defense": ItemData("Equipment", 328 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Beads of Defense": ItemData("Equipment", 328 + equipment_index_offset, ItemClassification.useful), #Tier 4 Shop (Tall Tall), Castle Sequoia, End-Game Zones
     #"Equipment - Winter Mitten": ItemData("Equipment", 322 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Glasses": ItemData("Equipment", 327 + equipment_index_offset, ItemClassification.useful), #from Tall Tall Heights fisher
-    "Equipment - Gusto Charm": ItemData("Equipment", 46 + equipment_index_offset, ItemClassification.useful), #from Tall Tall Heights fisher
-    "Equipment - Muggers Glove": ItemData("Equipment", 309 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Fursuit": ItemData("Equipment", 490 + equipment_index_offset, ItemClassification.useful), #crafted but i think its funny
+    "Equipment - Glasses": ItemData("Equipment", 327 + equipment_index_offset, ItemClassification.useful), #Tall Tall Heights fisher; Tier 4 Unique, Tall Tall Heights, Expert Zones
+    "Equipment - Gusto Charm": ItemData("Equipment", 46 + equipment_index_offset, ItemClassification.useful), #Tall Tall Heights fisher; Tier 4 Unique, Tall Tall Heights, Expert Zones
+    "Equipment - Muggers Glove": ItemData("Equipment", 309 + equipment_index_offset, ItemClassification.useful), #Tier 4 Unique, Shoudu Province, Expert Zones
+    "Equipment - Fursuit": ItemData("Equipment", 490 + equipment_index_offset, ItemClassification.useful), #crafted but i think its funny; Tier 5 Crafting, Quintar Reserve, Expert Zones
     #"Equipment - Snow Pendant": ItemData("Equipment", 528 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Ogre Ball": ItemData("Equipment", 78 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Sanity Ring": ItemData("Equipment", 330 + equipment_index_offset, ItemClassification.useful), #from The Open Sea fisher
-    "Equipment - Undead Ring": ItemData("Equipment", 491 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Fairys Ring": ItemData("Equipment", 329 + equipment_index_offset, ItemClassification.useful), #from The Open Sea fisher
-    "Equipment - Oven Mitt": ItemData("Equipment", 321 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Autumns Oath": ItemData("Equipment", 234 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Springs Oath": ItemData("Equipment", 489 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Lucky Socks": ItemData("Equipment", 498 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Lucky Briefs": ItemData("Equipment", 499 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Tall Stand Ring": ItemData("Equipment", 244 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Nomads Emblem": ItemData("Equipment", 287 + equipment_index_offset, ItemClassification.useful), #from The Open Sea fisher
-    #"Equipment - Lockon Lense": ItemData("Equipment", 373 + equipment_index_offset, ItemClassification.useful), #from Delende fisher
-    "Equipment - Red Hairpin": ItemData("Equipment", 247 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Stone of Jodan": ItemData("Equipment", 286 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Ribbon": ItemData("Equipment", 346 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Hand of Midas": ItemData("Equipment", 494 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Sanity Ring": ItemData("Equipment", 330 + equipment_index_offset, ItemClassification.useful), #The Open Sea fisher; Tier 5 Unique, The Open Sea, Expert Zones
+    "Equipment - Undead Ring": ItemData("Equipment", 491 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Quintar Reserve, Expert Zones
+    "Equipment - Fairys Ring": ItemData("Equipment", 329 + equipment_index_offset, ItemClassification.useful), #The Open Sea fisher; Tier 5 Unique, The Open Sea, Expert Zones
+    "Equipment - Oven Mitt": ItemData("Equipment", 321 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, The Deep Sea, Expert Zones
+    "Equipment - Autumns Oath": ItemData("Equipment", 234 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Yamagawa M.A., Beginner Zones
+    "Equipment - Springs Oath": ItemData("Equipment", 489 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Overpass (Okimoto N.S.), Advanced Zones
+    "Equipment - Lucky Socks": ItemData("Equipment", 498 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Capital Sequoia, Advanced Zones
+    "Equipment - Lucky Briefs": ItemData("Equipment", 499 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Capital Sequoia, Advanced Zones
+    "Equipment - Tall Stand Ring": ItemData("Equipment", 244 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Shoudu Province, Expert Zones
+    "Equipment - Nomads Emblem": ItemData("Equipment", 287 + equipment_index_offset, ItemClassification.useful), #The Open Sea fisher; Tier 5 Unique, The Open Sea, Expert Zones
+    #"Equipment - Lockon Lense": ItemData("Equipment", 373 + equipment_index_offset, ItemClassification.useful), Quintar Enthusiast battle drop
+    "Equipment - Red Hairpin": ItemData("Equipment", 247 + equipment_index_offset, ItemClassification.useful), #Delende fisher;  #Tier 5 Unique, Delende, Beginner Zones
+    "Equipment - Stone of Jodan": ItemData("Equipment", 286 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Jojo Sewers, Advanced Zones
+    "Equipment - Ribbon": ItemData("Equipment", 346 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, Shoudu Province, Expert Zones
+    "Equipment - Hand of Midas": ItemData("Equipment", 494 + equipment_index_offset, ItemClassification.useful), #Tier 5 Unique, The Sequoia, End-Game Zones
     #"Equipment - Ghendolfs Ring": ItemData("Equipment", 242 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Master Material": ItemData("Equipment", 284 + equipment_index_offset, ItemClassification.useful),
 
