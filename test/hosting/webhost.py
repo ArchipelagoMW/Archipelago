@@ -158,7 +158,7 @@ def set_room_timeout(room_id: str, timeout: float) -> None:
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
+    room_uuid = to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         room.timeout = timeout
@@ -170,7 +170,7 @@ def get_multidata_for_room(webhost_client: "FlaskClient", room_id: str) -> bytes
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
+    room_uuid = to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         return cast(bytes, room.seed.multidata)
@@ -182,7 +182,7 @@ def set_multidata_for_room(webhost_client: "FlaskClient", room_id: str, data: by
     from WebHostLib.models import Room
     from WebHostLib import app
 
-    room_uuid = app.url_map.converters["suuid"].to_python(room_id)
+    room_uuid = to_python(room_id)
     with db_session:
         room: Room = Room.get(id=room_uuid)
         room.seed.multidata = data
