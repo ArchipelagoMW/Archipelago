@@ -3849,7 +3849,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "5b_b-00_east---5b_b-00_south": RegionConnection("5b_b-00_east", "5b_b-00_south", []),
 
     "5b_b-01_west---5b_b-01_north": RegionConnection("5b_b-01_west", "5b_b-01_north", [[ItemName.swap_blocks, ItemName.dash_refills, ], ]),
-    "5b_b-01_west---5b_b-01_east": RegionConnection("5b_b-01_west", "5b_b-01_east", [[ItemName.red_boosters, ], ]),
+    "5b_b-01_west---5b_b-01_east": RegionConnection("5b_b-01_west", "5b_b-01_east", [[ItemName.red_boosters, "Mirror Temple B - Central Chamber Key 2", ], ]),
 
     "5b_b-04_east---5b_b-04_west": RegionConnection("5b_b-04_east", "5b_b-04_west", [[ItemName.swap_blocks, ItemName.dash_refills, ItemName.red_boosters, ], ]),
 
@@ -3869,12 +3869,13 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "5b_b-07_south---5b_b-07_north": RegionConnection("5b_b-07_south", "5b_b-07_north", [[ItemName.swap_blocks, ], ]),
 
-    "5b_b-03_west---5b_b-03_north": RegionConnection("5b_b-03_west", "5b_b-03_north", [[ItemName.red_boosters, ItemName.dash_switches, ], ]),
-    "5b_b-03_north---5b_b-03_west": RegionConnection("5b_b-03_north", "5b_b-03_west", [[ItemName.red_boosters, ItemName.dash_switches, ], ]),
-    "5b_b-03_east---5b_b-03_west": RegionConnection("5b_b-03_east", "5b_b-03_west", [[ItemName.red_boosters, ], ]),
+    "5b_b-03_main---5b_b-03_north": RegionConnection("5b_b-03_main", "5b_b-03_north", [[ItemName.red_boosters, ItemName.dash_switches, "Mirror Temple B - Central Chamber Key 1", ], ]),
+    "5b_b-03_main---5b_b-03_west": RegionConnection("5b_b-03_main", "5b_b-03_west", [[ItemName.dash_switches, ], ]),
+    "5b_b-03_north---5b_b-03_main": RegionConnection("5b_b-03_north", "5b_b-03_main", [[ItemName.red_boosters, ItemName.dash_switches, ], ]),
+    "5b_b-03_east---5b_b-03_main": RegionConnection("5b_b-03_east", "5b_b-03_main", [[ItemName.red_boosters, ], ]),
 
     "5b_b-08_east---5b_b-08_south": RegionConnection("5b_b-08_east", "5b_b-08_south", [[ItemName.swap_blocks, ItemName.springs, ], ]),
-    "5b_b-08_east---5b_b-08_north": RegionConnection("5b_b-08_east", "5b_b-08_north", [[ItemName.dash_switches, ItemName.swap_blocks, ItemName.springs, ], ]),
+    "5b_b-08_east---5b_b-08_north": RegionConnection("5b_b-08_east", "5b_b-08_north", [[ItemName.dash_switches, ItemName.swap_blocks, ItemName.springs, "Mirror Temple B - Central Chamber Key 1", ], ]),
 
     "5b_b-09_bottom---5b_b-09_mirror": RegionConnection("5b_b-09_bottom", "5b_b-09_mirror", [[ItemName.swap_blocks, ItemName.red_boosters, ItemName.dash_switches, ], ]),
 
@@ -6678,6 +6679,7 @@ all_regions: dict[str, PreRegion] = {
     "5b_b-07_south": PreRegion("5b_b-07_south", "5b_b-07", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_b-07_south"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_b-07_south"]),
 
     "5b_b-03_west": PreRegion("5b_b-03_west", "5b_b-03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_b-03_west"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_b-03_west"]),
+    "5b_b-03_main": PreRegion("5b_b-03_main", "5b_b-03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_b-03_main"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_b-03_main"]),
     "5b_b-03_north": PreRegion("5b_b-03_north", "5b_b-03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_b-03_north"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_b-03_north"]),
     "5b_b-03_east": PreRegion("5b_b-03_east", "5b_b-03", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "5b_b-03_east"], [loc for _, loc in all_locations.items() if loc.region_name == "5b_b-03_east"]),
 

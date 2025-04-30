@@ -20861,7 +20861,7 @@
                                 },
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "red_boosters" ] ]
+                                    "rule": [ [ "red_boosters", "Central Chamber Key 2" ] ]
                                 }
                             ]
                         },
@@ -21159,10 +21159,18 @@
                     "regions": [
                         {
                             "name": "west",
+                            "connections": []
+                        },
+                        {
+                            "name": "main",
                             "connections": [
                                 {
                                     "dest": "north",
-                                    "rule": [ [ "red_boosters", "dash_switches" ] ]
+                                    "rule": [ [ "red_boosters", "dash_switches", "Central Chamber Key 1" ] ]
+                                },
+                                {
+                                    "dest": "west",
+                                    "rule": [ [ "dash_switches" ] ]
                                 }
                             ]
                         },
@@ -21170,7 +21178,7 @@
                             "name": "north",
                             "connections": [
                                 {
-                                    "dest": "west",
+                                    "dest": "main",
                                     "rule": [ [ "red_boosters", "dash_switches" ] ]
                                 }
                             ]
@@ -21179,7 +21187,7 @@
                             "name": "east",
                             "connections": [
                                 {
-                                    "dest": "west",
+                                    "dest": "main",
                                     "rule": [ [ "red_boosters" ] ]
                                 }
                             ]
@@ -21228,7 +21236,7 @@
                                 },
                                 {
                                     "dest": "north",
-                                    "rule": [ [ "dash_switches", "swap_blocks", "springs" ] ]
+                                    "rule": [ [ "dash_switches", "swap_blocks", "springs", "Central Chamber Key 1" ] ]
                                 }
                             ]
                         }
