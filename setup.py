@@ -72,7 +72,6 @@ non_apworlds: Set[str] = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
@@ -154,7 +153,7 @@ if os.path.exists("X:/pw.txt"):
     with open("X:/pw.txt", encoding="utf-8-sig") as f:
         pw = f.read()
     signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /tr http://timestamp.digicert.com/ '
+               r'" /fd sha256 /td sha256 /tr http://timestamp.digicert.com/ '
 else:
     signtool = None
 
@@ -629,12 +628,13 @@ cx_Freeze.setup(
     ext_modules=cythonize("_speedups.pyx"),
     options={
         "build_exe": {
-            "packages": ["worlds", "kivy", "cymem", "websockets"],
+            "packages": ["worlds", "kivy", "cymem", "websockets", "kivymd"],
             "includes": [],
             "excludes": ["numpy", "Cython", "PySide2", "PIL",
-                         "pandas", "zstandard"],
+                         "pandas"],
+            "zip_includes": [],
             "zip_include_packages": ["*"],
-            "zip_exclude_packages": ["worlds", "sc2"],
+            "zip_exclude_packages": ["worlds", "sc2", "kivymd"],
             "include_files": [],  # broken in cx 6.14.0, we use more special sauce now
             "include_msvcr": False,
             "replace_paths": ["*."],

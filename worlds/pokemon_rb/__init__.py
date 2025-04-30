@@ -18,7 +18,7 @@ from .regions import create_regions
 from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
 from .text import encode_text
-from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, RedDeltaPatch, BlueDeltaPatch
+from .rom import generate_output, PokemonRedProcedurePatch, PokemonBlueProcedurePatch
 from .pokemon import process_pokemon_data, process_move_data, verify_hm_moves
 from .encounters import process_pokemon_locations, process_trainer_data
 from .rules import set_rules
@@ -33,12 +33,12 @@ class PokemonSettings(settings.Group):
         """File names of the Pokemon Red and Blue roms"""
         description = "Pokemon Red (UE) ROM File"
         copy_to = "Pokemon Red (UE) [S][!].gb"
-        md5s = [RedDeltaPatch.hash]
+        md5s = [PokemonRedProcedurePatch.hash]
 
     class BlueRomFile(settings.UserFilePath):
         description = "Pokemon Blue (UE) ROM File"
         copy_to = "Pokemon Blue (UE) [S][!].gb"
-        md5s = [BlueDeltaPatch.hash]
+        md5s = [PokemonBlueProcedurePatch.hash]
 
     red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
     blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
@@ -112,16 +112,6 @@ class PokemonRedBlueWorld(World):
         self.trainersanity_table = []
         self.local_locs = []
         self.pc_item = None
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        versions = set()
-        for player in multiworld.player_ids:
-            if multiworld.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(multiworld.worlds[player].options.game_version.current_key)
-        for version in versions:
-            if not os.path.exists(get_base_rom_path(version)):
-                raise FileNotFoundError(get_base_rom_path(version))
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld):
