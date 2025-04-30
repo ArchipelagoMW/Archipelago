@@ -78,8 +78,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende Chest - Off north path", 259 + treasure_index_offset), #Tonic chest
         LocationData("Delende", "Delende Chest - Before Proving Meadows", 216 + treasure_index_offset), #Tonic Pouch chest
         LocationData("Delende", "Delende Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset), #Tonic Pouch chest
-        #Technically 6th Overpass Scrap on Overpass main map
-        LocationData("Delende", "Overpass Chest - Dead tree by Fencers Keep", 3537 + treasure_index_offset, logic.has_vertical_movement), #(148, 151, -114) Overpass Scrap chest
+        LocationData("Delende", "Overpass Chest - Dead tree by Fencers Keep", 3537 + treasure_index_offset, logic.has_vertical_movement), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData("Delende", "Delende NPC - Astley gives you a home point stone", 28 + npc_index_offset),
@@ -123,8 +122,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Pale Grotto
         #Treasure chests
-        #316, 120, -262
-        LocationData("Pale Grotto", "Pale Grotto Chest - Across from fish island", 228 + treasure_index_offset), #Fenix Juice chest
+        LocationData("Pale Grotto", "Pale Grotto Chest - Across from fish island", 228 + treasure_index_offset), #(#316, 120, -262) Fenix Juice chest
         LocationData("Pale Grotto", "Pale Grotto Chest - North from save point", 144 + treasure_index_offset), #(307, 124, -345) Poisonkiss chest
         LocationData("Pale Grotto", "Pale Grotto Chest - Entrance river hop", 229 + treasure_index_offset), #Tonic chest
         LocationData("Pale Grotto", "Pale Grotto Chest - On promontory", 2979 + treasure_index_offset), #Tincture Pouch chest
@@ -180,8 +178,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - ClamHater above the mist", 283 + npc_index_offset),
         LocationData("Seaside Cliffs", "Seaside Cliffs NPC - If you give a Manana Man a clam... (he will ask you for more)", 284 + npc_index_offset, logic.has_enough_clamshells),
-        #343, 81, 0
-        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond below the bay", 2896 + npc_index_offset, logic.has_swimming), #Ore
+        LocationData("Seaside Cliffs", "Seaside Cliffs NPC - Diamond below the bay", 2896 + npc_index_offset, logic.has_swimming), #(343, 81, 0) Ore
         #Todo NPCs Job Masters: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
         #Draft Shaft Conduit
@@ -261,7 +258,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 2", 227 + treasure_index_offset), #Gaea Shard chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 3", 381 + treasure_index_offset), #Gaea Shard chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 4", 548 + treasure_index_offset), #Gaea Shard chest
-        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that"s the logic we"re using
+        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: state.has("Item - Gaea Stone", player)), #Craftwork Bow chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Instrducktor classroom", 1387 + treasure_index_offset), #Craftwork Axe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, logic.has_vertical_movement), #Watering Can chest
@@ -308,7 +305,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 2", 531 + 50001 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 3", 531 + 50002 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
-        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that"s the logic we"re using
+        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
@@ -360,8 +357,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - West of and above sneaky chest", 338 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Money chest
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Tincture Pouch chest
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Spore Blocker chest
-        #Technically the 1st Overpass Scrap chest
-        LocationData("Rolling Quintar Fields", "Overpass Chest - Climb the mountain east of Quintar Sanctum", 3532 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Overpass Scrap chest
+        LocationData("Rolling Quintar Fields", "Overpass Chest - Climb the mountain east of Quintar Sanctum", 3532 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #1st Overpass Scrap chest on main Overpass map
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
@@ -403,8 +399,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - In front of the shrine", 2910 + treasure_index_offset), #Quintar Sanctum map chest
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - West at ground level", 2983 + treasure_index_offset), #Tincture Pouch chest
         LocationData("Quintar Sanctum", "Quintar Sanctum Chest - North at ground level", 593 + treasure_index_offset), #Tonic Pouch chest
-        #Technically this one is in Overpass (2nd Overpass Scrap chest in main map's list)
-        LocationData("Quintar Sanctum", "Overpass Chest - Lonely chest above Quintar Sanctum", 3533 + treasure_index_offset), #Overpass Scrap chest
+        LocationData("Quintar Sanctum", "Overpass Chest - Lonely chest above Quintar Sanctum", 3533 + treasure_index_offset), #2nd Overpass Scrap chest on main map
 
         #NPCs
         #Todo NPCs CheckOrNot: Quintar Egg here (on Quintar Sanctum Mushroom map)
@@ -428,8 +423,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1", 990 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)), #Cell Key chest
         LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 2", 2668 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)), #Iron Rod chest
         LocationData("Capital Jail", "Capital Jail Chest - Locked behind South Wing rubble", 991 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)), #Battleplate chest
-        #Technically in the Underpass but you come from here
-        LocationData("Capital Jail", "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)), #Underpass Scrap chest
+        LocationData("Capital Jail", "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset, lambda state: state.has("Item - South Wing Key", player) and state.has("Item - Cell Key", player, 6)), #7th Underpass Scrap on main map
         LocationData("Capital Jail", "Capital Jail Chest - West Wing jail cell among the glowy plants", 925 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player)), #Cell Key chest
         LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants", 923 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player)), #Battle Helm chest
         LocationData("Capital Jail", "Capital Jail Chest - Locked among the foliage in West Wing", 916 + treasure_index_offset, lambda state: state.has("Item - West Wing Key", player) and state.has("Item - Cell Key", player, 6)), #Cell Key chest
@@ -474,8 +468,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - I totally meant to miss that jump", 2670 + treasure_index_offset), #Skewer chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Upon exiting from Quintar Nest", 478 + treasure_index_offset), #Tonic Pouch chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
-        #Technically on Underpass (Okimoto) map
-        LocationData("Cobblestone Crag", "Underpass Chest - On the way to village hidden among leaves", 3669 + treasure_index_offset, logic.has_horizontal_movement), #Underpass Scrap chest
+        LocationData("Cobblestone Crag", "Underpass Chest - On the way to village hidden among leaves", 3669 + treasure_index_offset, logic.has_horizontal_movement), #Underpass Scrap (Okimoto)
 
         #NPCs
         LocationData("Cobblestone Crag", "Cobblestone Crag NPC - Westernmost Silver", 1120 + npc_index_offset), #Dust
@@ -493,8 +486,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Lurking behind bookcase", 434 + treasure_index_offset), #Potion Pouch chest
         LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Past hidden staircase", 694 + treasure_index_offset), #Tachi chest
         LocationData("Okimoto N.S.", "Okimoto N.S. Chest - Dance above the koi pond", 1103 + treasure_index_offset), #Training Gi chest
-        #Technically 3rd Overpass Scrap in Overpass main map
-        LocationData("Okimoto N.S.", "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, logic.has_vertical_movement or logic.has_swimming), #(605, 228, -270) Overpass Scrap
+        LocationData("Okimoto N.S.", "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, logic.has_vertical_movement or logic.has_swimming), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
 
         #NPCs
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver on the way up", 359 + npc_index_offset), #Dust
@@ -503,8 +495,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver behind room that shall not be named", 691 + npc_index_offset), #Ingot
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Silver atop yashiki", 2659 + npc_index_offset), #Ore
         LocationData("Okimoto N.S.", "Okimoto N.S. NPC - Lets get down to business western Silver", 429 + npc_index_offset), #Ore
-        #Technically in Overpass main map
-        LocationData("Okimoto N.S.", "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, logic.has_swimming), #Springs Oath (632, 243, -261)
+        LocationData("Okimoto N.S.", "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, logic.has_swimming), #Springs Oath (632, 243, -261) Overpass main map
 
         #Crystals
         LocationData("Okimoto N.S.", "Okimoto N.S. Crystal - Ninja", 699 + crystal_index_offset),
@@ -536,21 +527,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Salmon River Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
         LocationData("Salmon River", "Salmon River Chest - In the stands of Salmon race finish line ", 2976 + treasure_index_offset), #Ether Pouch chest
         LocationData("Salmon River", "Salmon River Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
-        #Technically 2nd Overpass scrap on (Cloudy Wind)
-        LocationData("Salmon River", "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, logic.has_vertical_movement), #(32, 181, -373) Overpass Scrap chest (Cloudy Wind)
-        #Technically on Overpass (Snow)
-        LocationData("Salmon River", "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(60, 225, -435) (Snow)
-        #Technically on Overpass (Cloudy Wind)
-        LocationData("Salmon River", "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(-35, 166, -387) (Cloudy Wind) Zether Pouch chest
+        LocationData("Salmon River", "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, logic.has_vertical_movement), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
+        LocationData("Salmon River", "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData("Salmon River", "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
         #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
-        #Technically 2nd Gold Dust on Overpass (Cloudy Wind)
-        LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(63, 191, -399) (Cloudy Wind) Dust
+        LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
         #Crystals
-        #Technically in River Cat"s Ego map
-        LocationData("Salmon River", "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset),
+        LocationData("Salmon River", "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
 
         #Poko Poko Desert
         #Treasure chests
@@ -621,8 +607,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Beach", "Sara Sara Beach Chest - How dare you stand where he stood?", 1084 + treasure_index_offset, logic.has_vertical_movement), #Money chest
         LocationData("Sara Sara Beach", "Sara Sara Beach Chest - Beach cave", 2718 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Blank Pages chest
         LocationData("Sara Sara Beach", "Sara Sara Beach Chest - West beach tightrope walk", 1546 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Potion chest
-        #Technically 7th Overpass Scrap chest on Overpass main map
-        LocationData("Sara Sara Beach", "Overpass Chest - West of Valkyrie Watchtower", 3540 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(1, 129, 62) Overpass scrap
+        LocationData("Sara Sara Beach", "Overpass Chest - West of Valkyrie Watchtower", 3540 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(1, 129, 62) 7th Overpass Scrap on main map
 
         #NPCs
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
@@ -658,8 +643,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up", 2701 + treasure_index_offset, logic.has_swimming), #Grim Scythe chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Goat snack for later", 2915 + treasure_index_offset), #Ancient Reservoir map chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, logic.has_vertical_movement), #Fenix Juice Pouch chest
-        #Technically 1st Underpass Scrap on main map
-        LocationData("Ancient Reservoir", "Underpass Chest - Waterway nook between Gran and Ancient Reservoir", 3541 + treasure_index_offset, logic.has_swimming), #(64, 98, -111) Underpass Scrap chest
+        LocationData("Ancient Reservoir", "Underpass Chest - Waterway nook between Gran and Ancient Reservoir", 3541 + treasure_index_offset, logic.has_swimming), #(64, 98, -111) 1st Underpass Scrap on main map
 
         #NPCs
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver in odd flooded room 1", 2695 + npc_index_offset), #Ingot
@@ -679,8 +663,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon Bay", "Salmon Bay NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),
         LocationData("Salmon Bay", "Salmon Bay NPC - West cliffdiving Ancient Tablet C", 1271 + npc_index_offset),
         LocationData("Salmon Bay", "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
-        #Technically 2nd from bottom in Overpass main map
-        LocationData("Salmon Bay", "Overpass NPC - Lonely scrap among half-dead pines above Salmon Bay", 3677 + npc_index_offset), #Overpass Scrap
+        LocationData("Salmon Bay", "Overpass NPC - Lonely scrap among half-dead pines above Salmon Bay", 3677 + npc_index_offset), #8th Scrap in Overpass main map
 
         #Summons Todo: descriptivize and implement
         #-50, 91, -330
@@ -688,28 +671,28 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Overpass
         #Treasure chests
-        #Life Jewel chest on main map has been categorized under Dione Shrine
-        #1st Overpass Scrap chest on main map has been categorized under Rolling Quintar Fields
-        #2nd Overpass Scrap chest on main map has been categorized under the Quintar Sanctum
-        #3rd Overpass Scrap chest on main map has been categorized under the Okimoto N.S.
-        #4th Overpass Scrap chest on main map has been categorized under Dione Shrine
-        #5th Overpass Scrap chest on main map has been categorized under Quintar Reserve
-        #6th Overpass Scrap chest on main map has been categorized under Delende
-        #7th Overpass Scrap chest on main map has been categorized under Sara Sara Beach
-        #8th Overpass Scrap chest on main map has been categorized under Salmon Bay
-        #9th Overpass Scrap chest on main map has been categorized under Lands End
-        #1st Overpass Scrap chest on (Cloudy Wind) map has been categorized under Tall Tall Heights
+        #Life Jewel on main map has been categorized under Dione Shrine
+        #1st Scrap on main Overpass map has been categorized under Rolling Quintar Fields
+        #2nd Scrap on main Overpass map has been categorized under the Quintar Sanctum
+        #3rd Scrap on main Overpass map has been categorized under the Okimoto N.S.
+        #4th Scrap on main Overpass map has been categorized under Dione Shrine
+        #5th Scrap on main Overpass map has been categorized under Quintar Reserve
+        #6th Scrap on main Overpass map has been categorized under Delende
+        #7th Scrap on main Overpass map has been categorized under Sara Sara Beach
+        #8th Scrap on main Overpass map has been categorized under Salmon Bay
+        #9th Scrap on main Overpass map has been categorized under Lands End
+        #1st Overpass Scrap (Cloudy Wind) has been categorized under Tall Tall Heights
         #Zether Pouch (Cloudy Wind) has been categorized under Salmon River
         #River Cats Ego map (Snow) recategorized under Salmon River
-        #Overpass (Outpost) Northern Stretch map chest has been categorized under Northern Stretch
-        #Overpass (Outpost) Scrap chest has been categorized under Tall Tall Heights
+        #Overpass (Outpost) Northern Stretch map has been categorized under Northern Stretch
+        #Overpass (Outpost) Scrap has been categorized under Tall Tall Heights
 
         #NPCs
         #Todo NPCs Job Masters: Overpass main map has Master Hunter ID 3558 (496, 198, -346); gives you Hunter Seal in exchange for job mastery
-        #Gold Ingot on main map has been categorized under Dione Shrine
+        #Gold Ingot on Overpass main map has been categorized under Dione Shrine
         #Z20_WaterOrigin ID 1583 (gives Springs Oath) has been categorized under Okimoto N.S. (632, 243, -261)
-        #1st Gold Dust on (Cloudy Wind) map has been categorized under Tall Tall Heights
-        #2nd Gold Dust on (Cloudy Wind) map has been categorized under Salmon River
+        #1st Gold Dust (Cloudy Wind) has been categorized under Tall Tall Heights
+        #2nd Gold Dust (Cloudy Wind) has been categorized under Salmon River
         #Todo NPCs CheckOrNot: Overpass 4 Quintar Eggs (Dirt Nest), 1 Quintar Egg (Stone Nest), 1 Quintar Egg (Cave Nest), 1 Quintar Egg (Stone Nest) submap
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Aegis ID 3610 (501, 194, -210); gives you Aegis Seal in exchange for job mastery
         #Todo NPCs Job Masters: Overpass (Outpost) has Master Beastmaster ID 3608 (312, 236, -344); gives you Beastmaster Seal in exchange for job mastery
@@ -723,14 +706,14 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Underpass
         #Treasure chests
         #3 treasures categorized under Delende
-        #1st Underpass Scrap chest main map has been categorized under Ancient Reservoir
-        #1st Underpass Scrap chest main map has been categorized under Quintar Nest
-        #3rd Underpass Scrap chest main map has been categorized under Pale Grotto
-        #4th Underpass Scrap chest main map has been categorized under Jojo Sewers
-        #5th Underpass Scrap on main map categorized under Delende
-        #6th Underpass Scrap chest on main map has been categorized under the Quintar Mausoleum
-        #7th Underpass Scrap chest on main map has been categorized under the Capital Jail
-        #Underpass (Okimoto) Underpass Scrap has been categorized under Cobblestone Crag
+        #1st Scrap main Underpass map has been categorized under Ancient Reservoir
+        #1st Scrap main Underpass map has been categorized under Quintar Nest
+        #3rd Scrap main Underpass map has been categorized under Pale Grotto
+        #4th Scrap main Underpass map has been categorized under Jojo Sewers
+        #5th Scrap main Underpass map categorized under Delende
+        #6th Scrap main Underpass map has been categorized under the Quintar Mausoleum
+        #7th Scrap main Underpass map has been categorized under the Capital Jail
+        #Underpass (Okimoto) Scrap has been categorized under Cobblestone Crag
         #Underpass (Summon Pah) Scrap has been categorized under The Undercity
         #Underpass (Ice Pass) Scrap chest has been categorized under Tall Tall Heights
         #Underpass (Ice Pass) Potion chest has been categorized under Tall Tall Heights
@@ -880,7 +863,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Beaurior Rock
         #Treasure chests
-        #Todo prefer the floor #'s to match the in-game map
         LocationData("Beaurior Rock", "Beaurior Rock Chest - B4 big lava room with optional boss", 1796 + treasure_index_offset), #Ether chest
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged in far corner of B4 big lava room with optional boss", 481 + treasure_index_offset), #Guard Crown chest
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged through secret tunnel in B4 big lava room with optional boss", 724 + treasure_index_offset, lambda state: state.has("Item - Small Key", player, 2)), #Halberd chest
@@ -902,8 +884,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Beaurior Rock", "Beaurior Rock NPC - Gold in B4 big lava room with optional boss", 2822 + npc_index_offset, lambda state: state.has("Item - Small Key", player) and logic.has_horizontal_movement), #Gold Ingot
         LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 cheeky lava platforming Gold", 2823 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4)), #Dust
         LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 Magic Well friendos hiding in the pillars", 2824 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement), #Ore
-	    #Technically Beaurior Volcano but it's at the top so Rock it is
-        LocationData("Beaurior Rock", "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement), #Ore
+        LocationData("Beaurior Rock", "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: state.has("Item - Small Key", player, 4) and logic.has_horizontal_movement), #Ore Beaurior Volcano but it's at the top so Rock it is
 
         #Crystals
 	    LocationData("Beaurior Rock", "Beaurior Volcano Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: state.has("Item - Small Key", player, 4) and state.has("Item - Boss Key", player)),
@@ -922,8 +903,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Quintar Reserve
         #Treasure chests
-        #Technically 5th Overpass Scrap chest on Overpass main map
-        LocationData("Quintar Reserve", "Overpass Chest - Climbing the boughs up from the elevator", 3536 + treasure_index_offset), #Overpass Scrap chest
+        LocationData("Quintar Reserve", "Overpass Chest - Climbing the boughs up from the elevator", 3536 + treasure_index_offset), #5th Scrap on Overpass main map
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Race start hut", 1591 + treasure_index_offset), #Quintar Grass chest
         LocationData("Quintar Reserve", "Quintar Reserve Chest - Hollowed-out wall of Mausoleum", 1320 + treasure_index_offset, logic.has_glide), #Undead Ring chest
 
@@ -952,23 +932,19 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Dione Shrine", "Dione Shrine Chest - Lobby", 2791 + treasure_index_offset), #Dione Shard chest
         LocationData("Dione Shrine", "Dione Shrine Chest - 2nd floor", 2792 + treasure_index_offset), #Dione Shard chest
         LocationData("Dione Shrine", "Dione Shrine Chest - 2nd floor balcony", 1146 + treasure_index_offset), #Dione Shard chest
-        #Technically 4th Overpass Scrap on main map
-        LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Overpass Scrap chest
-        #Technically on Overpass main map
-        LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Life Jewel chest
+        LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #4th Scrap on main Overpass map
+        LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Life Jewel Overpass main map
 
         #NPCs
         LocationData("Dione Shrine", "Dione Shrine NPC - Shedding on roof", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
-        #Technically Gold Ingot on Overpass main map
-        LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Ingot
+        LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
         #Treasure chests
         LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)), #(688, 114, -464) Babel Quintar chest
         LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Rocky room", 3401 + treasure_index_offset), #(664, 129, -425) Quintar Mausoleum map chest
         LocationData("Quintar Mausoleum", "Quintar Mausoleum Chest - Glowing grass room", 3768 + treasure_index_offset), #(709, 129, -442) Wind Thresher chest
-        #Technically 6th Underpass Scrap chest on Underpass main map
-        LocationData("Quintar Mausoleum", "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) Underpass Scrap chest
+        LocationData("Quintar Mausoleum", "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) 6th Scrap chest on main Underpass map
 
         #Eastern Chasm
         #Treasure chests
@@ -985,21 +961,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
-        #Technically Northern Cave
-        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance Northern Cave
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, logic.has_glide), #Judo Gi chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the souvenir shop", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Money chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Insignia Helm chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
-        #Technically 1st Overpass Scrap on Overpass (Cloudy Wind) submap
-        LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #Overpass Scrap chest
-        #Technically Overpass (Outpost) submap
-        LocationData("Tall Tall Heights", "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) (Outpost) Overpass Scrap chest
-        #Technically Underpass Scrap on Underpass (Ice Pass) submap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass Scrap chest
-        #Technically Potion chest on Underpass (Ice Pass) submap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Potion chest
+        LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #1st Overpass (Cloudy Wind) Scrap
+        LocationData("Tall Tall Heights", "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) Overpass (Outpost) Scrap
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
         LocationData("Tall Tall Heights", "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset), #(191, 172, -437) (Underwater) Underpass Scrap chest
 
 
@@ -1016,8 +987,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
         LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Tall Tall Heights", "Tall Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
-        #Technically 1st Gold Dust on Overpass (Cloudy Wind) submap
-        LocationData("Tall Tall Heights", "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #Dust
+        LocationData("Tall Tall Heights", "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #1st Gold Dust Overpass (Cloudy Wind)
 
         #Summons Todo: descriptivize and implement
         #498, 218, -412
@@ -1044,8 +1014,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Lands End", "Lands End Chest - Fancy some spikes cliffdiving?", 1693 + treasure_index_offset), #Rune Ward chest
         LocationData("Lands End", "Lands End Chest - By the lovely owl tree", 1561 + treasure_index_offset), #Callisto Stone chest
         LocationData("Lands End", "Lands End Chest - Inside the shrine", 3017 + treasure_index_offset), #Ether chest
-        #Technically 9th Overpass Scrap on Overpass main map
-        LocationData("Lands End", "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, logic.has_glide), #(191, 177, -214) Overpass Scrap chest
+        LocationData("Lands End", "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, logic.has_glide), #(191, 177, -214) 9th Scrap on main Overpass map
 
         #NPCs
         LocationData("Lands End", "Lands End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset), #Ingot
@@ -1081,8 +1050,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Northern Stretch
         #Treasure chests
-        #Technically in Overpass (Outpost)
-        LocationData("Northern Stretch", "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map chest
+        LocationData("Northern Stretch", "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map in Overpass (Outpost)
 
         #Castle Ramparts
         #Treasure chests
@@ -1090,7 +1058,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Below the crystal", 2908 + treasure_index_offset, logic.has_glide), #(407, 228, -383) Castle Ramparts map chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from eastern save point", 2742 + treasure_index_offset, logic.has_glide), #(440, 227, -386) Conquest chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from western save point", 2741 + treasure_index_offset, logic.has_glide), #(369, 227, -386) Rune Sword chest
-        #Technically in Castle Sequoia but they're in a locked room only accessible from Ramparts
+        #Technically Castle Sequoia but they're in a locked room only accessible from Ramparts
         LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: state.has("Item - Rampart Key", player) and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
         LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: state.has("Item - Rampart Key", player) and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
 
@@ -1179,7 +1147,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Chest - Salmon Violin past the fish puzzles", 2288 + treasure_index_offset, logic.has_glide),
 
         #NPCs
-        #1 Diamond Dust NPC on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
+        #1 Diamond Dust on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
         #Crystals
         LocationData("Jidamba Eaclaneya", "Jidamba Eaclaneya Crystal - Weaver", 2403 + crystal_index_offset),
@@ -1195,10 +1163,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea Chest - Crumbling shrine 1", 3663 + treasure_index_offset), #(842, 53, -359) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Beside an undersea microruin NW of Tall Tall Heights", 3666 + treasure_index_offset), #(-23, 39, -557) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Underwater cove south of volcano", 3667 + treasure_index_offset), #(94, 59, 133) Deep Sea Scrap chest
-        #next 2 scraps from (Sand Bar) submap
+        #next 2 scraps from The Deep Sea (Sand Bar)
         LocationData("The Deep Sea", "The Deep Sea Chest - Sunken shipwreck off west coast of Sara Sara Beach", 3664 + treasure_index_offset), #(-364, 53, -183) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Undersea valley S of Sara Sara Beach", 3665 + treasure_index_offset), #(-226, 49, 164) Deep Sea Scrap chest
-        #next scrap from (Shrooms) submap
+        #next scrap from The Deep Sea (Shrooms)
         LocationData("The Deep Sea", "The Deep Sea Chest - Cavern below N coast of Tall Tall Heights", 3668 + treasure_index_offset), #(254, 53, -547) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Descend into undersea vent where the flesh eaters live 2", 2767 + treasure_index_offset), #(872, 39, -517) Forgotten Key chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Crumbling shrine 2", 2290 + treasure_index_offset), #(838, 52, -357) Oven Mitt chest
@@ -1212,8 +1180,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         LocationData("The Deep Sea", "The Deep Sea NPC - Locked *wink* sunken house 2 off Jidamba Diamond", 2519 + npc_index_offset), #(639, 54, 182) Dust
         LocationData("The Deep Sea", "The Deep Sea NPC - Locked *wink* sunken house 2 off Jidamba Gold", 2518 + npc_index_offset), #(648, 54, 180)  Dust
-        #Todo Player Options: Carcinization victory condition
-        #its crab tiem babey
+        #Todo Player Options: Carcinization victory condition (its crab tiem babey)
         LocationData("The Deep Sea", "The Deep Sea NPC - Burrow to burrow crab", 3409 + npc_index_offset), #(20, 53, 251) Crab 1
         LocationData("The Deep Sea", "The Deep Sea NPC - Tall tall crab S of volcano", 3426 + npc_index_offset), #(76, 76, 178) Crab 2
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab in underwater cove south of volcano", 3427 + npc_index_offset), #(96, 60, 131) Crab 3
