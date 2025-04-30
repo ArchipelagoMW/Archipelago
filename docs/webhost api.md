@@ -259,7 +259,7 @@ Each list item will contain a dict with the room's details:
 - Creation timestamp (`creation_time`)
 - Last activity timestamp (`last_activity`)
 - Last known AP port (`last_port`)
-- Room tiumeout counter (`timeout`)
+- Room timeout counter in seconds (`timeout`)
 - Room tracker UUID (`tracker`)
 
 Example:
