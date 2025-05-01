@@ -30,8 +30,14 @@
     MDNavigationItemLabel:
         text: root.text
         theme_text_color: "Custom"
-        text_color_active: app.theme_cls.primaryColor
+        text_color_active: self.theme_cls.primaryColor
         text_color_normal: 1, 1, 1, 1
+        # indicator is on icon only for some reason
+        canvas.before:
+            Color:
+                rgba: self.theme_cls.secondaryContainerColor if root.active else self.theme_cls.transparentColor
+            Rectangle:
+                size: root.size
 <TooltipLabel>:
     adaptive_height: True
     theme_font_size: "Custom"

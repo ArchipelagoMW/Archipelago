@@ -729,20 +729,9 @@ class MessageBox(Popup):
 class MDNavigationItemBase(MDNavigationItem):
     text = StringProperty(None)
 
-class MDNavigationItemUnderline(Widget):
-    def __init__(self, **kwargs):
-        super().__init__(size_hint=(None, None), height=2, **kwargs)
-        with self.canvas.before:
-            Color(0, 0, 0, 0)
-            self.line = Line(width=2)
-
 class MDScreenManagerBase(MDScreenManager):
-    underline_bar: MDNavigationItemUnderline
     current_tab: MDNavigationItemBase
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.bind(size=self.update_underline, pos=self.update_underline)
 
     def switch_screens(self, new_tab: MDNavigationItemBase) -> None:
 
@@ -753,14 +742,6 @@ class MDScreenManagerBase(MDScreenManager):
             self.transition.direction = "right"
         self.current = name
         self.current_tab = new_tab
-        self.update_underline()
-
-    def update_underline(self, *args) -> None:
-        tab = self.current_tab
-        if self.underline_bar is None or tab is None:
-            return
-        self.underline_bar.line.points = [tab.x, tab.y, tab.right, tab.y]
-        self.underline_bar.canvas.before.children[0].rgba = MDApp.get_running_app().theme_cls.primaryColor
 
 class CommandButton(MDButton, MDTooltip):
     def __init__(self, *args, manager: "GameManager", **kwargs):
@@ -866,7 +847,6 @@ class GameManager(ThemedApp):
             UILog(*(logging.getLogger(logger_name) for logger_name, name in self.logging_pairs)),
         )
         self.log_panels["All"].active = True
-        self.screens.underline_bar = MDNavigationItemUnderline()
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
@@ -880,7 +860,6 @@ class GameManager(ThemedApp):
 
         self.main_area_container = MDGridLayout(size_hint_y=1, cols=1)
         self.main_area_container.add_widget(self.tabs)
-        self.main_area_container.add_widget(self.screens.underline_bar)
         self.main_area_container.add_widget(self.screens)
 
         self.grid.add_widget(self.main_area_container)
@@ -928,7 +907,6 @@ class GameManager(ThemedApp):
         new_screen = MDScreen(name=title)
         new_screen.add_widget(content)
         if -1 < index <= len(self.tabs.children):
-            index = len(self.tabs.children) - index
             self.tabs.add_widget(new_tab, index=index)
             self.screens.add_widget(new_screen, index=index)
         else:
