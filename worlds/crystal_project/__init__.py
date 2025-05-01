@@ -251,42 +251,42 @@ class CrystalProjectWorld(World):
             excluded_items.add("Scholar - Lifegiver")
             
         #all end_game_zone progression items get excluded here
-         if (self.options.includedRegions == self.options.includedRegions.option_expert or
-             self.options.includedRegions == self.options.includedRegions.option_advanced or
-             self.options.includedRegions == self.options.includedRegions.option_beginner):
-             #Swords
-             excluded_items.add("Equipment - Kings Guard")
-             excluded_items.add("Equipment - Oily Sword")
-             #Axes
-             excluded_items.add("Equipment - Aphotic Edge")
-             excluded_items.add("Equipment - Decapitator")
-             #Daggers
-             excluded_items.add("Equipment - Sange")
-             excluded_items.add("Equipment - Mages Pike")
-             #Rapiers
-             excluded_items.add("Equipment - Nightingale")
-             #Spears
-             excluded_items.add("Equipment - Royal Guard")
-             #Bows
-             excluded_items.add("Equipment - Dream Hunter")
-             #Staves
-             excluded_items.add("Equipment - Judgement")
-             #Shields
-             excluded_items.add("Equipment - Mirror Shield")
-             #Heavy Body
-             excluded_items.add("Equipment - Lunar Mail")
-             #Medium Head
-             excluded_items.add("Equipment - Battle Band")
-             #Light Head
-             excluded_items.add("Equipment - Vita Crown")
-             excluded_items.add("Equipment - Protector")
-             #Light Body
-             excluded_items.add("Equipment - Archmage Vest")
-             excluded_items.add("Equipment - Assassins Cloak")
-             excluded_items.add("Equipment - Stealth Cape")
-             #Accessories
-             excluded_items.add("Equipment - Beads of Defense")
-             excluded_items.add("Equipment - Hand of Midas")
+        if (self.options.includedRegions == self.options.includedRegions.option_expert or
+            self.options.includedRegions == self.options.includedRegions.option_advanced or
+            self.options.includedRegions == self.options.includedRegions.option_beginner):
+            #Swords
+            excluded_items.add("Equipment - Kings Guard")
+            excluded_items.add("Equipment - Oily Sword")
+            #Axes
+            excluded_items.add("Equipment - Aphotic Edge")
+            excluded_items.add("Equipment - Decapitator")
+            #Daggers
+            excluded_items.add("Equipment - Sange")
+            excluded_items.add("Equipment - Mages Pike")
+            #Rapiers
+            excluded_items.add("Equipment - Nightingale")
+            #Spears
+            excluded_items.add("Equipment - Royal Guard")
+            #Bows
+            excluded_items.add("Equipment - Dream Hunter")
+            #Staves
+            excluded_items.add("Equipment - Judgement")
+            #Shields
+            excluded_items.add("Equipment - Mirror Shield")
+            #Heavy Body
+            excluded_items.add("Equipment - Lunar Mail")
+            #Medium Head
+            excluded_items.add("Equipment - Battle Band")
+            #Light Head
+            excluded_items.add("Equipment - Vita Crown")
+            excluded_items.add("Equipment - Protector")
+            #Light Body
+            excluded_items.add("Equipment - Archmage Vest")
+            excluded_items.add("Equipment - Assassins Cloak")
+            excluded_items.add("Equipment - Stealth Cape")
+            #Accessories
+            excluded_items.add("Equipment - Beads of Defense")
+            excluded_items.add("Equipment - Hand of Midas")
 
         #all expert zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_advanced or
