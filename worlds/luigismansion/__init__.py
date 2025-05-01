@@ -312,7 +312,7 @@ class LMWorld(World):
                             add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                         else:
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
+                if region.name in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
                     # if fire, require water
                     if self.ghost_affected_regions[region.name] == "Fire":
                         add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
