@@ -736,13 +736,16 @@
         "name": "Radiant Pagoda",
         "children": [
             {
-                "name": "Defeat General Yingzhao",
-                "sections": [{ "name": "Defeat General Yingzhao" }],
-                "map_locations": [{
-                    "map": "radiant_pagoda",
-                    "x": 500,
-                    "y": 50
-                }]
+                "name": "Examine Radiant Pagoda Control Panel", "sections": [{ "name": "Examine Radiant Pagoda Control Panel" }],
+                "map_locations": [{ "map": "radiant_pagoda", "x": 195, "y": 85 }]
+            },
+            {
+                "name": "Defeat General Yingzhao", "sections": [{ "name": "Defeat General Yingzhao" }],
+                "map_locations": [{ "map": "radiant_pagoda", "x": 465, "y": 85 }]
+            },
+            {
+                "name": "Kuafu's Vital Sanctum", "sections": [{ "name": "Kuafu's Vital Sanctum" }],
+                "map_locations": [{ "map": "radiant_pagoda", "x": 715, "y": 85 }]
             }
         ]
     },
