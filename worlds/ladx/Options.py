@@ -428,8 +428,6 @@ class TrendyGame(Choice):
 class GfxMod(DefaultOffToggle):
     """
     If enabled, the patcher will prompt the user for a modification file to change sprites in the game and optionally some text.
-    Grab one from upstream or make your own.
-    https://github.com/daid/LADXR/tree/master/gfx
     """
     display_name = "GFX Modification"
 
