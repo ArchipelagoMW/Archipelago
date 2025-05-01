@@ -5,7 +5,11 @@ class ItemData(NamedTuple):
     category: str
     code: Optional[int]
     classification: ItemClassification
-    amount: Optional[int] = 1
+    #Amount found in each region type; added together for each set you're including
+    beginnerAmount: Optional[int] = 1
+    advancedAmount: Optional[int] = 0
+    expertAmount: Optional[int] = 0
+    endGameAmount: Optional[int] = 0
 
 #Archipelago does not like it if an item has a code of 0, Crystal project starts its database
 #Ids at 0, so we add an offset to the id of each item and remove that offset in the client
@@ -66,14 +70,14 @@ item_table: Dict[str, ItemData] = {
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
 
     #Bag upgrades
-    "Item - Tonic Pouch": ItemData("Item", 133 + item_index_offset, ItemClassification.useful, 21),
-    "Item - Potion Pouch": ItemData("Item", 134 + item_index_offset, ItemClassification.useful, 19),
-    "Item - Z-Potion Pouch": ItemData("Item", 143 + item_index_offset, ItemClassification.useful, 7),
-    "Item - Tincture Pouch": ItemData("Item", 135 + item_index_offset, ItemClassification.useful, 16),
-    "Item - Ether Pouch": ItemData("Item", 136 + item_index_offset, ItemClassification.useful, 15),
-    "Item - Zether Pouch": ItemData("Item", 144 + item_index_offset, ItemClassification.useful, 7),
-    "Item - Fenix Juice Pouch": ItemData("Item", 137 + item_index_offset, ItemClassification.useful, 8),
-    "Item - Fenix Syrup Pouch": ItemData("Item", 146 + item_index_offset, ItemClassification.useful, 2),
+    "Item - Tonic Pouch": ItemData("Item", 133 + item_index_offset, ItemClassification.useful, 9, 7, 1, 0), #17
+    "Item - Potion Pouch": ItemData("Item", 134 + item_index_offset, ItemClassification.useful, 0, 5, 8, 0), #13
+    "Item - Z-Potion Pouch": ItemData("Item", 143 + item_index_offset, ItemClassification.useful, 1, 0, 2, 1), #5
+    "Item - Tincture Pouch": ItemData("Item", 135 + item_index_offset, ItemClassification.useful, 6, 6, 2, 0), #14
+    "Item - Ether Pouch": ItemData("Item", 136 + item_index_offset, ItemClassification.useful, 0, 6, 5, 0), #11
+    "Item - Zether Pouch": ItemData("Item", 144 + item_index_offset, ItemClassification.useful, 0, 1, 1, 3), #5
+    "Item - Fenix Juice Pouch": ItemData("Item", 137 + item_index_offset, ItemClassification.useful, 1, 1, 0, 0), #2
+    "Item - Fenix Syrup Pouch": ItemData("Item", 146 + item_index_offset, ItemClassification.useful, 0, 2, 0, 0), #2
     "Item - Nuts Sack": ItemData("Item", 184 + item_index_offset, ItemClassification.useful),
     "Item - Milk Bag": ItemData("Item", 138 + item_index_offset, ItemClassification.useful),
     "Item - Decent Cod Bag": ItemData("Item", 185 + item_index_offset, ItemClassification.useful),

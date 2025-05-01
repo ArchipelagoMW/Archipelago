@@ -611,7 +611,14 @@ class CrystalProjectWorld(World):
 
         for name, data in item_table.items():
             if name not in excluded_items:
-                for _ in range(data.amount):
+                amount:int = data.beginnerAmount
+                if self.options.includedRegions == self.options.includedRegions.option_advanced:
+                    amount = amount + data.advancedAmount
+                elif self.options.includedRegions == self.options.includedRegions.option_expert:
+                    amount = amount + data.advancedAmount + data.expertAmount
+                elif self.options.includedRegions == self.options.includedRegions.option_all:
+                    amount = amount + data.advancedAmount + data.expertAmount + data.endGameAmount
+                for _ in range(amount):
                     item = self.set_classifications(name)
                     pool.append(item)
 
