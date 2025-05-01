@@ -47,19 +47,11 @@ class SMSettings(settings.Group):
 
 class SMCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
-        
-        # for unit tests where MultiWorld is instantiated before worlds
-        if hasattr(parent, "state"):
-            self.smbm = {player: SMBoolManager(player, parent.state.smbm[player].maxDiff,
-                                    parent.state.smbm[player].onlyBossLeft) for player in
-                                        parent.get_game_players("Super Metroid")}
-            for player, group in parent.groups.items():
-                if (group["game"] == "Super Metroid"):
-                    self.smbm[player] = SMBoolManager(player)
-                    if player not in parent.state.smbm:
-                        parent.state.smbm[player] = SMBoolManager(player)
+        if not parent.worlds:
+            self.smbm = {}  # some tests initialize state before worlds
         else:
-            self.smbm = {}
+            self.smbm = {world.player: world.create_SMBoolManager()
+                         for world in parent.get_game_worlds("Super Metroid")}
 
     def copy_mixin(self, ret) -> CollectionState:
         ret.smbm = {player: copy.deepcopy(self.smbm[player]) for player in self.smbm}
@@ -120,12 +112,17 @@ class SMWorld(World):
         self.locations = {}
         super().__init__(world, player)
 
+    def create_SMBoolManager(self):
+        if not hasattr(self, "variaRando"):  # for Groups or states before generate_early
+            return SMBoolManager(self.player)
+        return SMBoolManager(self.player, self.variaRando.maxDifficulty)
+
     def generate_early(self):
         Logic.factory('vanilla')
 
         dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
         self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player, self.multiworld.seed, self.random)
-        self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
+        self.multiworld.state.smbm[self.player] = self.create_SMBoolManager()
 
         # keeps Nothing items local so no player will ever pickup Nothing
         # doing so reduces contribution of this world to the Multiworld the more Nothing there is though
