@@ -798,6 +798,49 @@
         ]
     },
     {
+        "name": "Apeman Facility (Depths)",
+        "children": [
+            {
+                "name": "Crystal Caves", "sections": [{ "name": "AF (Depths): Crystal Caves" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 365, "y": 155 }]
+            },
+            {
+                "name": "Defeat Celestial Spectre: Shangui", "sections": [
+                    { "name": "AF (Depths): Defeat Celestial Spectre: Shangui (1st Reward)" },
+                    { "name": "AF (Depths): Defeat Celestial Spectre: Shangui (2nd Reward)" }
+                ],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 290, "y": 205 }]
+            },
+            {
+                "name": "Below Root Node", "sections": [{ "name": "AF (Depths): Below Root Node" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 410, "y": 245 }]
+            },
+            {
+                "name": "Hack 3 Statues", "sections": [{ "name": "AF (Depths): Hack 3 Statues" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 375, "y": 280 }]
+            },
+            {
+                "name": "Lower Level", "sections": [{ "name": "AF (Depths): Lower Level" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 550, "y": 330 }]
+            },
+            {
+                "name": "Under Lower Left Exit", "sections": [{ "name": "AF (Depths): Under Lower Left Exit" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 395, "y": 305 }]
+            },
+            {
+                "name": "Tianhuo Flower Under Elevator", "sections": [{ "name": "AF (Depths): Tianhuo Flower Under Elevator" }],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 715, "y": 245 }]
+            },
+            {
+                "name": "Upper Right Chest", "sections": [
+                    { "name": "AF (Depths): Upper Right Chest (1st Reward)" },
+                    { "name": "AF (Depths): Upper Right Chest (2nd Reward)" }
+                ],
+                "map_locations": [{ "map": "apeman_facility_depths", "x": 550, "y": 95 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
