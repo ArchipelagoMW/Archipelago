@@ -1,17 +1,8 @@
-from typing import Union
-
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..data import fish_data
 from ..data.fish_data import FishItem
-from ..options import ExcludeGingerIsland
-from ..options import SpecialOrderLocations
+from ..options import ExcludeGingerIsland, SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.craftable_names import Fishing
@@ -28,8 +19,7 @@ class FishingLogicMixin(BaseLogicMixin):
         self.fishing = FishingLogic(*args, **kwargs)
 
 
-class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin,
-                                   SkillLogicMixin]]):
+class FishingLogic(BaseLogic):
     def can_fish_in_freshwater(self) -> StardewRule:
         return self.logic.skill.can_fish() & self.logic.region.can_reach_any((Region.forest, Region.town, Region.mountain))
 
@@ -93,20 +83,6 @@ class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLog
         rules.extend(
             self.logic.fishing.can_catch_fish(fish)
             for fish in self.content.fishes.values()
-        )
-
-        return self.logic.and_(*rules)
-
-    def can_catch_every_fish_for_fishsanity(self) -> StardewRule:
-        if not self.content.features.fishsanity.is_enabled:
-            return self.can_catch_every_fish()
-
-        rules = [self.has_max_fishing()]
-
-        rules.extend(
-            self.logic.fishing.can_catch_fish_for_fishsanity(fish)
-            for fish in self.content.fishes.values()
-            if self.content.features.fishsanity.is_included(fish)
         )
 
         return self.logic.and_(*rules)
