@@ -733,6 +733,38 @@
         ]
     },
     {
+        "name": "Abandoned Mines",
+        "children": [
+            {
+                "name": "Above Left Exit", "sections": [{ "name": "AM: Above Left Exit" }],
+                "map_locations": [{ "map": "abandoned_mines", "x": 95, "y": 110 }]
+            },
+            {
+                "name": "Defeat Celestial Warden: Yinyue", "sections": [{ "name": "AM: Defeat Celestial Warden: Yinyue" }],
+                "map_locations": [{ "map": "abandoned_mines", "x": 165, "y": 30 }]
+            },
+            {
+                "name": "Near Root Node", "sections": [{ "name": "AM: Near Root Node" }],
+                "map_locations": [{ "map": "abandoned_mines", "x": 630, "y": 125 }]
+            },
+            {
+                "name": "Walking Chest", "sections": [{ "name": "AM: Walking Chest" }],
+                "map_locations": [{ "map": "abandoned_mines", "x": 580, "y": 165 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [{ "name": "AM: Tianhuo Flower" }],
+                "map_locations": [{ "map": "abandoned_mines", "x": 915, "y": 155 }]
+            },
+            {
+                "name": "Chests After Flower", "sections": [
+                    { "name": "AM: 1st Chest After Flower" },
+                    { "name": "AM: 2nd Chest After Flower" }
+                ],
+                "map_locations": [{ "map": "abandoned_mines", "x": 760, "y": 110 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
