@@ -957,7 +957,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, logic.has_vertical_movement), #Tear Seed chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Z-Potion Pouch chest
-        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
