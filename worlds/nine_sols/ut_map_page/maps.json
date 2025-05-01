@@ -1,176 +1,44 @@
 [
-    {
-        "name": "world_map",
-        "location_size": 20,
-        "location_border_thickness": 3,
-        "img": "./world_map.png"
-    },
-    {
-        "name": "abandoned_mines",
-        "img": "./abandoned_mines.png"
-    },
-    {
-        "name": "agrarian_hall",
-        "img": "./agrarian_hall.png"
-    },
-    {
-        "name": "ancient_stone_pillar",
-        "img": "./ancient_stone_pillar.png"
-    },
-    {
-        "name": "apeman_facility_depths",
-        "img": "./apeman_facility_depths.webp"
-    },
-    {
-        "name": "apeman_facility_elevator",
-        "img": "./apeman_facility_elevator.png"
-    },
-    {
-        "name": "apeman_facility_monitoring",
-        "img": "./apeman_facility_monitoring.png"
-    },
-    {
-        "name": "boundless_repository",
-        "img": "./boundless_repository.webp"
-    },
-    {
-        "name": "cortex_center",
-        "img": "./cortex_center.webp"
-    },
-    {
-        "name": "central_transport_hub",
-        "img": "./central_transport_hub.png"
-    },
-    {
-        "name": "empyrean_district_living_area",
-        "img": "./empyrean_district_living_area.webp"
-    },
-    {
-        "name": "empyrean_district_passages",
-        "img": "./empyrean_district_passages.webp"
-    },
-    {
-        "name": "empyrean_district_sanctum",
-        "img": "./empyrean_district_sanctum.png"
-    },
-    {
-        "name": "factory_great_hall",
-        "img": "./factory_great_hall.webp"
-    },
-    {
-        "name": "factory_machine_room",
-        "img": "./factory_machine_room.webp"
-    },
-    {
-        "name": "factory_production_area",
-        "img": "./factory_production_area.webp"
-    },
-    {
-        "name": "factory_underground",
-        "img": "./factory_underground.png"
-    },
-    {
-        "name": "four_seasons_pavilion",
-        "img": "./four_seasons_pavilion.webp"
-    },
-    {
-        "name": "galactic_dock",
-        "img": "./galactic_dock.webp"
-    },
-    {
-        "name": "greenhouse",
-        "img": "./greenhouse.webp"
-    },
-    {
-        "name": "grotto_of_scriptures_east",
-        "img": "./grotto_of_scriptures_east.png"
-    },
-    {
-        "name": "grotto_of_scriptures_entry",
-        "img": "./grotto_of_scriptures_entry.webp"
-    },
-    {
-        "name": "grotto_of_scriptures_west",
-        "img": "./grotto_of_scriptures_west.png"
-    },
-    {
-        "name": "inner_warehouse",
-        "img": "./inner_warehouse.png"
-    },
-    {
-        "name": "lake_yaochi_ruins",
-        "img": "./lake_yaochi_ruins.webp"
-    },
-    {
-        "name": "livestock_harvesting_platform",
-        "img": "./livestock_harvesting_platform.png"
-    },
-    {
-        "name": "central_hall",
-        "img": "./central_hall.webp"
-    },
-    {
-        "name": "nobility_hall",
-        "img": "./nobility_hall.png"
-    },
-    {
-        "name": "outer_warehouse",
-        "img": "./outer_warehouse.png"
-    },
-    {
-        "name": "power_reservoir_central",
-        "img": "./power_reservoir_central.webp"
-    },
-    {
-        "name": "power_reservoir_east",
-        "img": "./power_reservoir_east.webp"
-    },
-    {
-        "name": "power_reservoir_west",
-        "img": "./power_reservoir_west.png"
-    },
-    {
-        "name": "prison",
-        "img": "./prison.png"
-    },
-    {
-        "name": "radiant_pagoda",
-        "location_size": 20,
-        "location_border_thickness": 3,
-        "img": "./radiant_pagoda.png"
-    },
-    {
-        "name": "shengwu_hall",
-        "img": "./shengwu_hall.png"
-    },
-    {
-        "name": "sky_tower",
-        "location_size": 20,
-        "location_border_thickness": 3,
-        "img": "./sky_tower.webp"
-    },
-    {
-        "name": "tiandao_research_center",
-        "img": "./tiandao_research_center.webp"
-    },
-    {
-        "name": "tianhuo_research_institute",
-        "img": "./tianhuo_research_institute.webp"
-    },
-    {
-        "name": "underground_cave",
-        "img": "./underground_cave.png"
-    },
-    {
-        "name": "water_and_oxygen_synthesis",
-        "img": "./water_and_oxygen_synthesis.webp"
-    },
-    {
-        "name": "yangu_hall",
-        "img": "./yangu_hall.png"
-    },
-    {
-        "name": "yinglong_canal",
-        "img": "./yinglong_canal.png"
-    }
+    { "name": "world_map", "img": "./world_map.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "abandoned_mines", "img": "./abandoned_mines.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "agrarian_hall", "img": "./agrarian_hall.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "ancient_stone_pillar", "img": "./ancient_stone_pillar.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "apeman_facility_depths", "img": "./apeman_facility_depths.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "apeman_facility_elevator", "img": "./apeman_facility_elevator.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "apeman_facility_monitoring", "img": "./apeman_facility_monitoring.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "boundless_repository", "img": "./boundless_repository.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "cortex_center", "img": "./cortex_center.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "central_transport_hub", "img": "./central_transport_hub.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "empyrean_district_living_area", "img": "./empyrean_district_living_area.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "empyrean_district_passages", "img": "./empyrean_district_passages.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "empyrean_district_sanctum", "img": "./empyrean_district_sanctum.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "factory_great_hall", "img": "./factory_great_hall.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "factory_machine_room", "img": "./factory_machine_room.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "factory_production_area", "img": "./factory_production_area.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "factory_underground", "img": "./factory_underground.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "four_seasons_pavilion", "img": "./four_seasons_pavilion.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "galactic_dock", "img": "./galactic_dock.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "greenhouse", "img": "./greenhouse.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "grotto_of_scriptures_east", "img": "./grotto_of_scriptures_east.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "grotto_of_scriptures_entry", "img": "./grotto_of_scriptures_entry.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "grotto_of_scriptures_west", "img": "./grotto_of_scriptures_west.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "inner_warehouse", "img": "./inner_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "lake_yaochi_ruins", "img": "./lake_yaochi_ruins.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "livestock_harvesting_platform", "img": "./livestock_harvesting_platform.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "central_hall", "img": "./central_hall.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "nobility_hall", "img": "./nobility_hall.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "outer_warehouse", "img": "./outer_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "power_reservoir_central", "img": "./power_reservoir_central.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "power_reservoir_east", "img": "./power_reservoir_east.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "power_reservoir_west", "img": "./power_reservoir_west.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "prison", "img": "./prison.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "radiant_pagoda", "img": "./radiant_pagoda.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "shengwu_hall", "img": "./shengwu_hall.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "sky_tower", "img": "./sky_tower.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "tiandao_research_center", "img": "./tiandao_research_center.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "tianhuo_research_institute", "img": "./tianhuo_research_institute.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "underground_cave", "img": "./underground_cave.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "water_and_oxygen_synthesis", "img": "./water_and_oxygen_synthesis.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "yangu_hall", "img": "./yangu_hall.png", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "yinglong_canal", "img": "./yinglong_canal.png", "location_size": 20, "location_border_thickness": 3 }
 ]
