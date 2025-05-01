@@ -5,6 +5,7 @@ from worlds.AutoWorld import WebWorld, World
 from .items import NineSolsItem, all_non_event_items_table, item_name_groups, create_item, create_items
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
 from .options import NineSolsGameOptions
+from .tracker.map_page_index import map_page_index
 
 
 class NineSolsWebWorld(WebWorld):
@@ -39,10 +40,8 @@ class NineSolsWorld(World):
         "map_page_folder": "tracker",
         "map_page_maps": "maps.json",
         "map_page_locations": "locations.json",
-        #  "map_page_setting_key" : <optional tag that informs which data storage key will be watched for auto tabbing>
-        #  "map_page_index" : <optional function with signature Callable[Any,int] that will control the auto tabbing>
-        #  "external_pack_key" : <optional string that is the name of the setting string that UT reads in order to find the external pop tracker pack>
-        #  "poptracker_name_mapping" : <optional Dict that maps the poptracker pack names to the location id as they exist in the datapackage >
+        "map_page_setting_key": "{player}_{team}_nine_sols_area",
+        "map_page_index": map_page_index
     }
 
     def generate_early(self) -> None:
