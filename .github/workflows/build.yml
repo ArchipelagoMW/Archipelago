@@ -21,12 +21,17 @@ env:
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
+permissions:  # permissions required for attestation
+  id-token: 'write'
+  attestations: 'write'
+
 jobs:
   # build-release-macos: # LF volunteer
 
-  build-win: # RCs will still be built and signed by hand
+  build-win: # RCs and releases may still be built and signed by hand
     runs-on: windows-latest
     steps:
+      # - copy code below to release.yml -
       - uses: actions/checkout@v4
       - name: Install python
         uses: actions/setup-python@v5
@@ -65,6 +70,18 @@ jobs:
           $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
           $SETUP_NAME=$contents[0].Name
           echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher.exe
+            build/exe.*/ArchipelagoLauncherDebug.exe
+            build/exe.*/ArchipelagoGenerate.exe
+            build/exe.*/ArchipelagoServer.exe
+            dist/${{ env.ZIP_NAME }}
+            setups/${{ env.SETUP_NAME }}
       - name: Check build loads expected worlds
         shell: bash
         run: |
@@ -142,6 +159,16 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
+      - name: Attest Build
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/${{ env.APPIMAGE_NAME }}*
+            dist/${{ env.TAR_NAME }}
       - name: Build Again
         run: |
           source venv/bin/activate
