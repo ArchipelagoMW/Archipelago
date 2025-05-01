@@ -2,6 +2,7 @@ import binascii
 import dataclasses
 import os
 import typing
+import logging
 import re
 
 import settings
@@ -218,6 +219,8 @@ class LinksAwakeningWorld(World):
         return Item(event, ItemClassification.progression, None, self.player)
 
     def create_items(self) -> None:
+        itempool = []
+
         exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
@@ -277,9 +280,9 @@ class LinksAwakeningWorld(World):
                                 self.prefill_own_dungeons.append(item)
                                 self.pre_fill_items.append(item)
                             else:
-                                self.multiworld.itempool.append(item)
+                                itempool.append(item)
                     else:
-                        self.multiworld.itempool.append(item)
+                        itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -302,21 +305,53 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            self.force_start_item()
+        if self.options.tarins_gift != "any_item":
+            self.force_start_item(itempool)
 
-    def force_start_item(self):    
+
+        self.multiworld.itempool += itempool
+
+    def force_start_item(self, itempool):
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
-            possible_start_items = [index for index, item in enumerate(self.multiworld.itempool)
-                if item.player == self.player 
-                    and item.item_data.ladxr_id in start_loc.ladxr_item.OPTIONS and not item.location]
-            if possible_start_items:
-                index = self.random.choice(possible_start_items)
-                start_item = self.multiworld.itempool.pop(index)
+            """
+            Find an item that forces progression or a bush breaker for the player, depending on settings.
+            """
+            def is_possible_start_item(item):
+                return item.advancement and item.name not in self.options.non_local_items
+
+            def opens_new_regions(item):
+                collection_state = base_collection_state.copy()
+                collection_state.collect(item, prevent_sweep=True)
+                collection_state.sweep_for_advancements(self.get_locations())
+                return len(collection_state.reachable_regions[self.player]) > reachable_count
+
+            start_items = [item for item in itempool if is_possible_start_item(item)]
+            self.random.shuffle(start_items)
+
+            if self.options.tarins_gift == "bush_breaker":
+                start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
+
+            else:  # local_progression
+                entrance_mapping = self.ladxr_logic.world_setup.entrance_mapping
+                # Tail key opens a region but not a location if d1 entrance is not mapped to d1 or d4
+                # exclude it in these cases to avoid fill errors
+                if entrance_mapping['d1'] not in ['d1', 'd4']:
+                    start_items = [item for item in start_items if item.name != 'Tail Key']
+                # Exclude shovel unless starting in Mabe Village
+                if entrance_mapping['start_house'] not in ['start_house', 'shop']:
+                    start_items = [item for item in start_items if item.name != 'Shovel']
+                base_collection_state = CollectionState(self.multiworld)
+                base_collection_state.sweep_for_advancements(self.get_locations())
+                reachable_count = len(base_collection_state.reachable_regions[self.player])
+                start_item = next((item for item in start_items if opens_new_regions(item)), None)
+
+            if start_item:
+                itempool.remove(start_item)
                 start_loc.place_locked_item(start_item)
+            else:
+                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
+
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
@@ -422,7 +457,7 @@ class LinksAwakeningWorld(World):
             phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
 
         for phrase, icon in phrases.items():
-            if phrase in uppered:
+            if phrase.upper() in uppered:
                 return icon
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
@@ -541,5 +576,7 @@ class LinksAwakeningWorld(World):
                 option: value.current_key
                 for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
             })
+
+            slot_data.update({"entrance_mapping": self.ladxr_logic.world_setup.entrance_mapping})
 
         return slot_data
