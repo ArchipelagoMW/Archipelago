@@ -4,36 +4,48 @@ MainLoop:
     ; Check if the gameplay is world
     ld   a, [$DB95]
     cp   $0B
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if the world subtype is the normal one
     ld   a, [$DB96]
     cp   $07
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if we are moving between rooms
     ld   a, [$C124]
     and  a
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if link is in a normal walking/swimming state
     ld   a, [$C11C]
     cp   $02
-    ret  nc
+    jr   nc, .clearSafeAndRet
     ; Check if a dialog is open
     ld   a, [$C19F]
     and  a
-    ret  nz
+    jr   nz, .clearSafeAndRet
     ; Check if interaction is blocked
     ldh  a, [$A1]
     and  a
-    ret  nz
+    jr   z, .gameplayIsSafe
+.clearSafeAndRet:
+    xor  a
+    ld   [wConsecutiveSafe], a
+    ret
 
+.gameplayIsSafe:
+    ; Store consecutive safe frames, up to overflow
+    ld   a, [wConsecutiveSafe]
+    inc  a
+    jr   z, .checkSpawnDelay
+    ld   [wConsecutiveSafe], a
+
+.checkSpawnDelay:
     ld   a, [wLinkSpawnDelay]
     and  a
-    jr   z, .allowSpawn
+    jr   z, .spawnThings
     dec  a
     ld   [wLinkSpawnDelay], a
-    jr   .noSpawn
+    jr   .deathLink ; no spawn
 
-.allowSpawn:
+.spawnThings:
     ld   a, [wZolSpawnCount]
     and  a
     call nz, LinkSpawnSlime
@@ -44,13 +56,16 @@ MainLoop:
     and  a
     call nz, LinkSpawnBomb
 
-    ; deathlink
+.deathLink:
     ld   hl, wMWCommand
     bit  3, [hl]
-    jr   z, .noSpawn
-    ld   a, [wMWDeathLinkRecv]
-    and  a
-    jr   nz, .noSpawn ; if deathlink recv flag is still up, dont do it
+    jr   z, .collect
+    ; require an arbitrary number of consecutive safe frames to kill the player
+    ; the goal is to avoid killing a player after they give up a trade item
+    ; but before they get the item in return
+    ld   a, [wConsecutiveSafe]
+    cp   $10
+    ret  c
     ld   a, [wHasMedicine]
     ; set health and health loss to a
     ; instant kill if no medicine
@@ -60,33 +75,32 @@ MainLoop:
     ; set health gain to zero
     xor  a
     ld   [$DB93], a ; wAddHealthBuffer
-    ; flag deathlink as received
-    ld   a, $01
-    ld   [wMWDeathLinkRecv], a
 
-.noSpawn:
-    ; Have a location to collect?
+.collect:
     ld   hl, wMWCommand
     bit  2, [hl]
-    jr   z, .noCollect
+    jr   z, .giveItem
     ; get current location value onto b
     ld   a, [wMWMultipurposeC] ; collect location hi
     ld   h, a
     ld   a, [wMWMultipurposeD] ; collect location lo
     ld   l, a
+    ldh  a, [$F6] ; current room
+    cp   l
+    jr   z, .clearCmdAndRet ; might be in current room
     ld   a, [hl]
     ld   b, a
     ld   a, [wMWMultipurposeE] ; location mask
     or   b ; apply mask
     cp   b ; was location already set?
-    jr   z, .clearAndRet ; if so, do nothing else
+    jr   z, .clearCmdAndRet ; if so, do nothing else
     ld   [hl], a
 
-.noCollect:
+.giveItem:
     ; Have an item to give?
     ld   hl, wMWCommand
     bit  0, [hl]
-    jr   z, .clearAndRet
+    jr   z, .clearCmdAndRet
     ld   hl, wMWCommand
     bit  1, [hl] ; do recvindex check only if bit set
     jr   z, .skipRecvIndexCheck
@@ -94,12 +108,12 @@ MainLoop:
     ld   b, a
     ld   a, [wMWMultipurposeC]
     cp   b
-    jr   nz, .clearAndRet ; failed check on hi
+    jr   nz, .clearCmdAndRet ; failed check on hi
     ld   a, [wMWRecvIndexLo]
     ld   b, a
     ld   a, [wMWMultipurposeD]
     cp   b
-    jr   nz, .clearAndRet ; failed check on lo
+    jr   nz, .clearCmdAndRet ; failed check on lo
     ; increment recvindex
     ld   a, [wMWRecvIndexLo]
     inc  a
@@ -138,10 +152,31 @@ MainLoop:
     ; OpenDialog()
     jp   $2385 ; Opendialog in $000-$0FF range
 
-.clearAndRet:
-    xor  a
+.clearCmdAndRet:
+    ; check if trade item should be cleared
+    ; get mask loaded
+    ld   a, [wMWMultipurposeF]
+    ld   b, a
+
+    ; check trade 1
     ld   hl, wMWCommand
-    ld   [hl], a
+    bit  4, [hl]
+    jr   z, .checkTrade2
+    ld   a, [wTradeSequenceItem]
+    and  b
+    ld   [wTradeSequenceItem], a
+
+.checkTrade2:
+    ld   hl, wMWCommand
+    bit  5, [hl]
+    jr   z, .actuallyClearCmdAndRet
+    ld   a, [wTradeSequenceItem2]
+    and  b
+    ld   [wTradeSequenceItem2], a
+
+.actuallyClearCmdAndRet:
+    xor  a
+    ld   [wMWCommand], a
     ret
 
 LinkGiveSlime:
@@ -297,19 +332,3 @@ placeRandom:
     ld   [hl], a
     ret
 
-Data_004_7AE5: ; @TODO Palette data
-    db   $33, $62, $1A, $01, $FF, $0F, $FF, $7F
-
-loop_7B32:
-    ld   a, [de]                                  ; $7B32: $1A
-    ; ld   [hl+], a                                 ; $7B33: $22
-    db $22
-    inc  de                                       ; $7B34: $13
-    ld   a, l                                     ; $7B35: $7D
-    and  $07                                      ; $7B36: $E6 $07
-    jr   nz, loop_7B32                           ; $7B38: $20 $F8
-
-    ld   a, $02                                   ; $7B3A: $3E $02
-    ld   [$DDD1], a                              ; $7B3C: $EA $D1 $DD
-
-    ret

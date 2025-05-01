@@ -79,7 +79,6 @@ class LAClientConstants:
     wGameplayType = 0xDB95
     wHealth = 0xDB5A
 
-    wMWDeathLinkRecv = 0xDB59 # RW
     wMWRecvIndexHi = 0xDDF6   # RO: The index of the next item to receive.
     wMWRecvIndexLo = 0xDDF7   #     If given something different it will be ignored.
     wMWCommand = 0xDDF8       # RW: See MWCommands
@@ -109,11 +108,15 @@ class MWCommands(IntEnum):
     # bit 1: consider receive index for item send and tick up
     # bit 2: collect location
     # bit 3: send death link
+    # bit 4,5: clear trade item (bit in wMWMultipurposeF)
+    NONE =              0b00000000
     SEND_ITEM_SPECIAL = 0b00000001
     SEND_ITEM =         0b00000011
     COLLECT =           0b00000100
     COLLECT_WITH_ITEM = 0b00000101
     DEATH_LINK =        0b00001000
+    CLEAR_TRADE_1 =     0b00010000
+    CLEAR_TRADE_2 =     0b00100000
 
 
 class DeathLinkStatus(IntEnum):
@@ -449,6 +452,22 @@ class LinksAwakeningClient():
         links_awakening_location_meta_to_id[k]: links_awakening_location_meta_to_id[v]
         for k, v in dependent_location_meta_ids.items()}
 
+    # for these locations, only collect if the player has the trade item, and then take the trade item
+    restricted_trades = {
+        "0x2A6-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<0)&0xFF, "item": "TRADING_ITEM_YOSHI_DOLL" },
+        "0x2B2-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<1)&0xFF, "item": "TRADING_ITEM_RIBBON" },
+        "0x2FE-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<2)&0xFF, "item": "TRADING_ITEM_DOG_FOOD" },
+        "0x07B-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<3)&0xFF, "item": "TRADING_ITEM_BANANAS" },
+        "0x087-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<4)&0xFF, "item": "TRADING_ITEM_STICK" },
+        "0x2D7-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<5)&0xFF, "item": "TRADING_ITEM_HONEYCOMB" },
+        "0x019-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<6)&0xFF, "item": "TRADING_ITEM_PINEAPPLE" },
+        "0x2D9-Trade": {"cmd": MWCommands.CLEAR_TRADE_1, "mask": ~(1<<7)&0xFF, "item": "TRADING_ITEM_HIBISCUS" },
+        "0x2A8-Trade": {"cmd": MWCommands.CLEAR_TRADE_2, "mask": ~(1<<0)&0xFF, "item": "TRADING_ITEM_LETTER" },
+        "0x0CD-Trade": {"cmd": MWCommands.CLEAR_TRADE_2, "mask": ~(1<<1)&0xFF, "item": "TRADING_ITEM_BROOM" },
+        "0x2F5-Trade": {"cmd": MWCommands.CLEAR_TRADE_2, "mask": ~(1<<2)&0xFF, "item": "TRADING_ITEM_FISHING_HOOK" },
+        "0x0C9-Trade": {"cmd": MWCommands.CLEAR_TRADE_2, "mask": ~(1<<3)&0xFF, "item": "TRADING_ITEM_NECKLACE" },
+    }
+
     async def collect(self, ctx):
         if not self.gps_tracker.room or self.gps_tracker.is_transitioning:
             return
@@ -456,28 +475,29 @@ class LinksAwakeningClient():
         for id in ctx.checked_locations:
             meta_id = links_awakening_location_id_to_meta[id]
             is_checked = next(x for x in self.tracker.all_checks if x.id == meta_id).value
+            trade = self.restricted_trades.get(meta_id)
             if(is_checked
                or current_room == meta_id[:5] # player is in the location room
                or id not in ctx.locations_info # location scout data not in yet
+               or (trade and not self.item_tracker.itemDict[trade["item"]].value) # restricted trade not met
                or (id in self.dependent_location_ids
                    and self.dependent_location_ids.get(id) not in ctx.checked_locations)): # location dependency not met
                 continue
             check = self.tracker.meta_to_check[meta_id]
             item = ctx.locations_info[id]
+            args = {
+                "command": MWCommands.COLLECT,
+                "mp_cd": check.address,
+                "mp_e": check.mask,
+            }
             if item.player == ctx.slot:
-                self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT_WITH_ITEM,
-                    item_code=item.item - BASE_ID,
-                    item_sender=clamp(0, ctx.slot, 100),
-                    mp_cd=check.address,
-                    mp_e=check.mask,
-                )
-            else:
-                self.gameboy.send_mw_command(
-                    command=MWCommands.COLLECT,
-                    mp_cd=check.address,
-                    mp_e=check.mask,
-                )
+                args["command"] |= MWCommands.SEND_ITEM_SPECIAL
+                args["item_code"] = item.item - BASE_ID
+                args["item_sender"] = clamp(0, ctx.slot, 100)
+            if trade:
+                args["command"] |= trade["cmd"]
+                args["mp_f"] = trade["mask"]
+            self.gameboy.send_mw_command(**args)
             break # one per cycle
         locations_to_scout = ctx.checked_locations - ctx.scouted_locations
         if len(locations_to_scout):
@@ -507,35 +527,29 @@ class LinksAwakeningClient():
         if not ctx.slot or not self.tracker.has_start_item():
             return
 
-        if (await self.gameboy.async_read_memory(LAClientConstants.wGameplayType))[0] == 1: # Credits
-            await win_cb()
-
+        wGameplayType = (await self.gameboy.async_read_memory(LAClientConstants.wGameplayType))[0]
         wHealth = (await self.gameboy.async_read_memory(LAClientConstants.wHealth))[0]
-        wMWDeathLinkRecv = (await self.gameboy.async_read_memory(LAClientConstants.wMWDeathLinkRecv))[0]
+        cmd_block = await self.gameboy.async_read_memory(LAClientConstants.wMWRecvIndexHi, 3)
+        [wMWRecvIndexHi, wMWRecvIndexLo, wMWCommand] = cmd_block
+
+        if wGameplayType == 1: # Credits
+            await win_cb()
 
         if self.death_link_status == DeathLinkStatus.NONE:
             if not wHealth: # natural death
                 death_link_cb()
                 self.death_link_status = DeathLinkStatus.DYING
-        elif self.death_link_status == DeathLinkStatus.PENDING: # make sure receive flag is cleared before sending
-            if wMWDeathLinkRecv:
-                self.gameboy.write_memory(LAClientConstants.wMWDeathLinkRecv, [0])
-            else:
-                self.death_link_status = DeathLinkStatus.SENDING
-        elif self.death_link_status == DeathLinkStatus.SENDING: # send death link until receive flag set
-            if wMWDeathLinkRecv:
-                self.death_link_status = DeathLinkStatus.DYING
-            else:
-                self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
-        elif self.death_link_status == DeathLinkStatus.DYING: # wait until alive again before returning to normal
+        elif self.death_link_status == DeathLinkStatus.PENDING:
+            self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
+            self.death_link_status = DeathLinkStatus.DYING
+        elif self.death_link_status == DeathLinkStatus.DYING:
             if wHealth:
                 self.death_link_status = DeathLinkStatus.NONE
 
-        wMWCommand = (await self.gameboy.async_read_memory(LAClientConstants.wMWCommand))[0]
-        if wMWCommand or self.death_link_status != DeathLinkStatus.NONE:
+        if wMWCommand or self.death_link_status:
             return
 
-        recv_index = struct.unpack(">H", await self.gameboy.async_read_memory(LAClientConstants.wMWRecvIndexHi, 2))[0]
+        recv_index = wMWRecvIndexHi << 8 | wMWRecvIndexLo
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
             self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
@@ -588,8 +602,7 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
     def _cmd_send(self, code):
         """Send item by ID."""
         if isinstance(self.ctx, LinksAwakeningContext):
-            self.ctx.client.gameboy.send_mw_command(
-                MWCommands.SEND_ITEM_SPECIAL, code, 101)
+            self.ctx.client.gameboy.send_mw_command(MWCommands.SEND_ITEM_SPECIAL, int(code), 0)
 
 
 class LinksAwakeningContext(CommonContext):
