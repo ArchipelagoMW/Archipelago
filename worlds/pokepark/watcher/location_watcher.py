@@ -7,8 +7,8 @@ from CommonClient import logger
 from worlds.pokepark import FRIENDSHIP_ITEMS
 from worlds.pokepark.LocationIds import MinigameLocationIds
 from worlds.pokepark.adresses import UNLOCKS, \
-    stage_id_address, main_menu_stage_id, main_menu2_stage_id, main_menu3_stage_id, PRISMAS, \
-    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS, pokemon_id_address, intro_stage_id, valid_stage_ids
+    stage_id_address, PRISMAS, \
+    POKEMON_STATES, MINIGAME_LOCATIONS, QUEST_LOCATIONS, pokemon_id_address, valid_stage_ids
 from worlds.pokepark.dme_helper import read_memory, write_memory
 
 delay_seconds = 0.3
@@ -142,5 +142,6 @@ async def location_watcher(ctx):
         except Exception as e:
             logger.error(f"Error in location_watcher: {e}")
             logger.error(f"Traceback: {traceback.format_exc()}")
+            dme.un_hook()
 
         await asyncio.sleep(delay_seconds)

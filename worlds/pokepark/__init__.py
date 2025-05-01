@@ -225,7 +225,7 @@ def launch_client():
 
 
 def add_client_to_launcher() -> None:
-    version = "0.2.0"
+    version = "0.2.1"
     found = False
     for c in components:
         if c.display_name == "Pokepark Client":

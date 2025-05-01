@@ -1,6 +1,6 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
-from BaseClasses import CollectionState, Region, ItemClassification
+from BaseClasses import CollectionState, Region
 from worlds.pokepark.locations import PokeparkLocation
 from worlds.pokepark.logic import Requirements, PokeparkRegion, PowerRequirement, WorldStateRequirement, \
     MinigameRequirement, generate_regions
