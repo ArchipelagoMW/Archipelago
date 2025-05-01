@@ -271,6 +271,7 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Foliage Key")
             excluded_items.add("Item - Cave Key")
             excluded_items.add("Item - Canopy Key")
+            excluded_items.add("Item - Ice Cell Key")
             
         #all end_game_zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_expert or
