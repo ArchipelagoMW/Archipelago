@@ -47,8 +47,8 @@ class SMSettings(settings.Group):
 
 class SMCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):
-        if not parent.worlds:
-            self.smbm = {}  # some tests initialize state before worlds
+        if not parent.worlds:  # TODO remove after #4949
+            self.smbm = {}
         else:
             self.smbm = {world.player: world.create_SMBoolManager()
                          for world in parent.get_game_worlds("Super Metroid")}
