@@ -251,10 +251,42 @@ class CrystalProjectWorld(World):
             excluded_items.add("Scholar - Lifegiver")
             
         #all end_game_zone progression items get excluded here
-        # if (self.options.includedRegions == self.options.includedRegions.option_expert or
-        #     self.options.includedRegions == self.options.includedRegions.option_advanced or
-        #     self.options.includedRegions == self.options.includedRegions.option_beginner):
-        #     excluded_items.add()
+         if (self.options.includedRegions == self.options.includedRegions.option_expert or
+             self.options.includedRegions == self.options.includedRegions.option_advanced or
+             self.options.includedRegions == self.options.includedRegions.option_beginner):
+             #Swords
+             excluded_items.add("Equipment - Kings Guard")
+             excluded_items.add("Equipment - Oily Sword")
+             #Axes
+             excluded_items.add("Equipment - Aphotic Edge")
+             excluded_items.add("Equipment - Decapitator")
+             #Daggers
+             excluded_items.add("Equipment - Sange")
+             excluded_items.add("Equipment - Mages Pike")
+             #Rapiers
+             excluded_items.add("Equipment - Nightingale")
+             #Spears
+             excluded_items.add("Equipment - Royal Guard")
+             #Bows
+             excluded_items.add("Equipment - Dream Hunter")
+             #Staves
+             excluded_items.add("Equipment - Judgement")
+             #Shields
+             excluded_items.add("Equipment - Mirror Shield")
+             #Heavy Body
+             excluded_items.add("Equipment - Lunar Mail")
+             #Medium Head
+             excluded_items.add("Equipment - Battle Band")
+             #Light Head
+             excluded_items.add("Equipment - Vita Crown")
+             excluded_items.add("Equipment - Protector")
+             #Light Body
+             excluded_items.add("Equipment - Archmage Vest")
+             excluded_items.add("Equipment - Assassins Cloak")
+             excluded_items.add("Equipment - Stealth Cape")
+             #Accessories
+             excluded_items.add("Equipment - Beads of Defense")
+             excluded_items.add("Equipment - Hand of Midas")
 
         #all expert zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_advanced or
@@ -290,6 +322,132 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Europa Stone")
             excluded_items.add("Item - Dione Stone")
             excluded_items.add("Item - Neptune Stone")
+            #Swords
+            excluded_items.add("Equipment - Cutlass")
+            excluded_items.add("Equipment - Cold Touch")
+            excluded_items.add("Equipment - Temporal Blade")
+            excluded_items.add("Equipment - Defender")
+            excluded_items.add("Equipment - Conquest")
+            excluded_items.add("Equipment - Flame Sword")
+            excluded_items.add("Equipment - Rune Sword")
+            excluded_items.add("Equipment - Soul Keeper")
+            excluded_items.add("Equipment - Crabs Claw")
+            #Axes
+            excluded_items.add("Equipment - Gaia Axe")
+            #Daggers
+            excluded_items.add("Equipment - Soul Kris")
+            excluded_items.add("Equipment - Flamespike")
+            excluded_items.add("Equipment - Yasha")
+            #Rapiers
+            excluded_items.add("Equipment - Fleuret")
+            excluded_items.add("Equipment - Windsong")
+            excluded_items.add("Equipment - Murgleys")
+            #Katanas
+            excluded_items.add("Equipment - Muramasa")
+            #Spears
+            excluded_items.add("Equipment - Halberd")
+            excluded_items.add("Equipment - Radiance")
+            excluded_items.add("Equipment - Partizan")
+            #Scythes
+            excluded_items.add("Equipment - Frost Reaper")
+            excluded_items.add("Equipment - Gravedigger")
+            excluded_items.add("Equipment - Wind Thresher")
+            #Bows
+            excluded_items.add("Equipment - Siege Bow")
+            excluded_items.add("Equipment - Rune Bow")
+            #Staves
+            excluded_items.add("Equipment - Life Jewel")
+            excluded_items.add("Equipment - Apprentice")
+            excluded_items.add("Equipment - Sages Walker")
+            excluded_items.add("Equipment - Staff of Balance")
+            #Wands
+            excluded_items.add("Equipment - Cursegiver")
+            excluded_items.add("Equipment - Rune Wand")
+            excluded_items.add("Equipment - Stardust Wand")
+            excluded_items.add("Equipment - Paladin Wand")
+            excluded_items.add("Equipment - Flameseeker")
+            #Books
+            excluded_items.add("Equipment - Tome of Light")
+            excluded_items.add("Equipment - Dark Gospel")
+            excluded_items.add("Equipment - Malifice")
+            #Shields
+            excluded_items.add("Equipment - The Immovable")
+            excluded_items.add("Equipment - Flame Guard")
+            excluded_items.add("Equipment - Wizards Wall")
+            excluded_items.add("Equipment - Tower Shield")
+            excluded_items.add("Equipment - Nomads Guard")
+            #Heavy Head
+            excluded_items.add("Equipment - Horned Helm")
+            excluded_items.add("Equipment - Insignia Helm")
+            excluded_items.add("Equipment - Demon Helm")
+            excluded_items.add("Equipment - Spellsword Helm")
+            #Heavy Body
+            excluded_items.add("Equipment - Knights Plate")
+            excluded_items.add("Equipment - Bone Mail")
+            excluded_items.add("Equipment - Sky Armor")
+            excluded_items.add("Equipment - Plate of Lion")
+            excluded_items.add("Equipment - Demon Plate")
+            excluded_items.add("Equipment - Plate of Whale")
+            excluded_items.add("Equipment - Warrior Mail")
+            excluded_items.add("Equipment - Warlock Mail")
+            excluded_items.add("Equipment - Aegis Mail")
+            excluded_items.add("Equipment - Reaper Mail")
+            excluded_items.add("Equipment - Samurai Mail")
+            excluded_items.add("Equipment - Valkyrie Mail")
+            excluded_items.add("Equipment - Beastmaster Mail")
+            excluded_items.add("Equipment - Mimic Mail")
+            #Medium Head
+            excluded_items.add("Equipment - Suitor Hat")
+            excluded_items.add("Equipment - Pirate Hat")
+            #Medium Body
+            excluded_items.add("Equipment - Gaia Vest")
+            excluded_items.add("Equipment - Brigandine")
+            excluded_items.add("Equipment - Judo Gi")
+            excluded_items.add("Equipment - Shadow Gi")
+            excluded_items.add("Equipment - Monk Vest")
+            excluded_items.add("Equipment - Rogue Vest")
+            excluded_items.add("Equipment - Fencer Vest")
+            excluded_items.add("Equipment - Hunter Vest")
+            excluded_items.add("Equipment - Ninja Vest")
+            excluded_items.add("Equipment - Nomad Vest")
+            excluded_items.add("Equipment - Beatsmith Vest")
+            excluded_items.add("Equipment - Assassin Vest")
+            #Light Head
+            excluded_items.add("Equipment - Plague Mask")
+            excluded_items.add("Equipment - Guard Crown")
+            excluded_items.add("Equipment - Bronze Hairpin")
+            excluded_items.add("Equipment - Ravens Hood")
+            excluded_items.add("Equipment - Celestial Crown")
+            excluded_items.add("Equipment - Pointy Hat")
+            #Light Body
+            excluded_items.add("Equipment - Shelter Dress")
+            excluded_items.add("Equipment - Blue Cape")
+            excluded_items.add("Equipment - Seekers Garb")
+            excluded_items.add("Equipment - Ravens Cloak")
+            excluded_items.add("Equipment - Cleric Robe")
+            excluded_items.add("Equipment - Wizard Robe")
+            excluded_items.add("Equipment - Shaman Robe")
+            excluded_items.add("Equipment - Scholar Robe")
+            excluded_items.add("Equipment - Chemist Robe")
+            excluded_items.add("Equipment - Dervish Robe")
+            excluded_items.add("Equipment - Weaver Robe")
+            excluded_items.add("Equipment - Summoner Robe")
+            #Accessories
+            excluded_items.add("Equipment - Knicked Knackers")
+            excluded_items.add("Equipment - Looters Pin")
+            excluded_items.add("Equipment - Acrobat Shoes")
+            excluded_items.add("Equipment - Glasses")
+            excluded_items.add("Equipment - Gusto Charm")
+            excluded_items.add("Equipment - Muggers Glove")
+            excluded_items.add("Equipment - Fursuit")
+            excluded_items.add("Equipment - Sanity Ring")
+            excluded_items.add("Equipment - Undead Ring")
+            excluded_items.add("Equipment - Fairys Ring")
+            excluded_items.add("Equipment - Oven Mitt")
+            excluded_items.add("Equipment - Tall Stand Ring")
+            excluded_items.add("Equipment - Nomads Emblem")
+            excluded_items.add("Equipment - Ribbon")
+
 
         #all advanced zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_beginner):
@@ -328,6 +486,103 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Gaea Stone")
             excluded_items.add("Item - Poseidon Stone")
             excluded_items.add("Item - Mars Stone")
+            #Swords
+            excluded_items.add("Equipment - Craftwork Sword")
+            excluded_items.add("Equipment - Boomer Sword")
+            excluded_items.add("Equipment - Bloodbind")
+            #Axes
+            excluded_items.add("Equipment - Craftwork Axe")
+            excluded_items.add("Equipment - Hunting Axe")
+            excluded_items.add("Equipment - Hatchet")
+            excluded_items.add("Equipment - Ragebringer")
+            #Daggers
+            excluded_items.add("Equipment - Craftwork Dagger")
+            excluded_items.add("Equipment - Tanto")
+            excluded_items.add("Equipment - Butterfly")
+            excluded_items.add("Equipment - Ambush Knife")
+            excluded_items.add("Equipment - Parry Knife")
+            excluded_items.add("Equipment - Butter Cutter")
+            #Rapiers
+            excluded_items.add("Equipment - Craftwork Rapier")
+            excluded_items.add("Equipment - Fish Skewer")
+            excluded_items.add("Equipment - Dueller")
+            #Katanas
+            #excluded_items.add("Equipment - Craftwork Katana") beginners can have little a katana as a treat
+            excluded_items.add("Equipment - Tachi")
+            #Spears
+            #excluded_items.add("Equipment - Craftwork Spear") beginners can have little a spear as a treat
+            excluded_items.add("Equipment - Skewer")
+            excluded_items.add("Equipment - Prodder")
+            excluded_items.add("Equipment - Trident")
+            #Scythes
+            excluded_items.add("Equipment - Craftwork Scythe")
+            excluded_items.add("Equipment - Grim Scythe")
+            #Bows
+            #excluded_items.add("Equipment - Craftwork Bow") beginners can have little a bow as a treat
+            excluded_items.add("Equipment - Hunting Bow")
+            #Staves
+            excluded_items.add("Equipment - Craftwork Staff")
+            excluded_items.add("Equipment - Iron Rod")
+            excluded_items.add("Equipment - Walking Stick")
+            excluded_items.add("Equipment - Knockout Stick")
+            #Wands
+            excluded_items.add("Equipment - Craftwork Wand")
+            excluded_items.add("Equipment - Static Rod")
+            excluded_items.add("Equipment - Storm Rod")
+            #Books
+            #excluded_items.add("Equipment - Craftwork Pages") beginners can have little a book as a treat
+            excluded_items.add("Equipment - Gospel")
+            excluded_items.add("Equipment - Paypirbak")
+            excluded_items.add("Equipment - Art of War")
+            excluded_items.add("Equipment - Blank Pages")
+            #Shields
+            excluded_items.add("Equipment - Craftwork Shield")
+            excluded_items.add("Equipment - Lucky Platter")
+            excluded_items.add("Equipment - Boomer Shield")
+            excluded_items.add("Equipment - Mages Platter")
+            #Heavy Head
+            excluded_items.add("Equipment - Craftwork Helm")
+            excluded_items.add("Equipment - Iron Helm")
+            excluded_items.add("Equipment - Battle Helm")
+            #Heavy Body
+            excluded_items.add("Equipment - Plate of Wolf")
+            excluded_items.add("Equipment - Craftwork Mail")
+            excluded_items.add("Equipment - Iron Armor")
+            excluded_items.add("Equipment - Battleplate")
+            #Medium Head
+            excluded_items.add("Equipment - Craftwork Cap")
+            excluded_items.add("Equipment - Spore Blocker")
+            excluded_items.add("Equipment - Red Cap")
+            excluded_items.add("Equipment - Captains Hat")
+            #Medium Body
+            #excluded_items.add("Equipment - Craftwork Vest") beginners can have little a medium body as a treat
+            excluded_items.add("Equipment - Smelly Gi")
+            excluded_items.add("Equipment - Training Gi")
+            excluded_items.add("Equipment - Tuxedo")
+            excluded_items.add("Equipment - Red Coat")
+            #Light Head
+            excluded_items.add("Equipment - Craftwork Crown")
+            excluded_items.add("Equipment - Circlet")
+            excluded_items.add("Equipment - Woven Hood")
+            #Light Body
+            excluded_items.add("Equipment - Craftwork Robe")
+            excluded_items.add("Equipment - Dress")
+            excluded_items.add("Equipment - Woven Shirt")
+            #Accessories
+            excluded_items.add("Equipment - Fang Pendant")
+            excluded_items.add("Equipment - Shell Amulet")
+            excluded_items.add("Equipment - Magic Finder")
+            excluded_items.add("Equipment - Learners Pin")
+            excluded_items.add("Equipment - Givers Ring")
+            excluded_items.add("Equipment - Aggro Band")
+            excluded_items.add("Equipment - Float Shoes")
+            excluded_items.add("Equipment - Defense Shifter")
+            excluded_items.add("Equipment - Resist Shifter")
+            excluded_items.add("Equipment - Scope Specs")
+            excluded_items.add("Equipment - Springs Oath")
+            excluded_items.add("Equipment - Lucky Socks")
+            excluded_items.add("Equipment - Lucky Briefs")
+            excluded_items.add("Equipment - Stone of Jodan")
 
         if self.options.randomizeJobs == self.options.randomizeJobs.option_false:
             excluded_items.add("Job - Fencer")
