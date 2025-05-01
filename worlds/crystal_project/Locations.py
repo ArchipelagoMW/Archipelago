@@ -563,8 +563,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, logic.has_horizontal_movement), #Dust
-        #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
+        #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar, he's commented out because he have an AddInventory so any item placed on him is not obtainable
+        #LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, logic.has_vertical_movement), #Ingot
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Dust
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond on Tower of Zotts outside", 2879 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
