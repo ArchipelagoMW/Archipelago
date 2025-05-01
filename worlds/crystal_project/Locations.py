@@ -133,7 +133,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Pale Grotto", "Pale Grotto Chest - South of temple", 136 + treasure_index_offset), #Money chest
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple antechamber", 222 + treasure_index_offset), #Toothpick chest
         LocationData("Pale Grotto", "Pale Grotto Chest - Temple sanctuary", 1154 + treasure_index_offset), #Pale Grotto map chest
-        LocationData("Pale Grotto", "Underpass Chest - Blue flower ledge between Pale Grotto and Soiled Den", 3621 + treasure_index_offset, logic.has_swimming), #(245, 116, -199) Underpass Scrap chest
+        LocationData("Pale Grotto", "Underpass Chest - Blue flower ledge between Pale Grotto & Soiled Den", 3621 + treasure_index_offset, logic.has_swimming), #(245, 116, -199) Underpass Scrap chest
         
         #NPCs
         #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don"t have it but it"s missable (it"s in shops)
@@ -643,7 +643,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up", 2701 + treasure_index_offset, logic.has_swimming), #Grim Scythe chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Goat snack for later", 2915 + treasure_index_offset), #Ancient Reservoir map chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, logic.has_vertical_movement), #Fenix Juice Pouch chest
-        LocationData("Ancient Reservoir", "Underpass Chest - Waterway nook between Gran and Ancient Reservoir", 3541 + treasure_index_offset, logic.has_swimming), #(64, 98, -111) 1st Underpass Scrap on main map
+        LocationData("Ancient Reservoir", "Underpass Chest - Waterway nook between Gran & Ancient Reservoir", 3541 + treasure_index_offset, logic.has_swimming), #(64, 98, -111) 1st Underpass Scrap on main map
 
         #NPCs
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver in odd flooded room 1", 2695 + npc_index_offset), #Ingot
@@ -948,7 +948,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Eastern Chasm
         #Treasure chests
-        LocationData("Eastern Chasm", "Eastern Chasm Chest - Eastern Chasm map chest at the overgrown opposite of chasm", 3543 + treasure_index_offset),
+        LocationData("Eastern Chasm", "Eastern Chasm Chest - Overgrown opposite of chasm", 3543 + treasure_index_offset), #Eastern Chasm map chest
 
         #Tall Tall Heights
         #Treasure chests
@@ -1259,8 +1259,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #The Depths
         #Treasure chests
-        LocationData("The Depths", "The Depths Chest - Down among glowing blue seaweed between Poko Poko Desert and Jidamba 1", 2588 + treasure_index_offset), #(-358, 1, 18) Cerulean Book chest
-        LocationData("The Depths", "The Depths Chest - Down among glowing blue seaweed between Poko Poko Desert and Jidamba 2", 2714 + treasure_index_offset), #(-357, 2, 20) #Z-Potion chest
+        LocationData("The Depths", "The Depths Chest - Down among glowing blue seaweed between Poko Poko Desert & Jidamba 1", 2588 + treasure_index_offset), #(-358, 1, 18) Cerulean Book chest
+        LocationData("The Depths", "The Depths Chest - Down among glowing blue seaweed between Poko Poko Desert & Jidamba 2", 2714 + treasure_index_offset), #(-357, 2, 20) #Z-Potion chest
 
         #NPCs
         LocationData("The Depths", "The Depths NPC - S of Jidamba Diamond on blue rock 1", 2865 + npc_index_offset), #(692, 20, -618) Dust
