@@ -21,10 +21,9 @@ import Utils
 import Options
 from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
-
+from settings import get_settings
 
 def mystery_argparse():
-    from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
 
@@ -119,9 +118,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-
     player_id = 1
     player_files = {}
+    allow_quantity = get_settings().generator.allow_quantity
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
@@ -133,8 +132,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                     if yaml is None:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
-                        quantity = yaml.get("quantity", 1)
-                        
+                        quantity = yaml.get("quantity", 1) if allow_quantity else 1
+
                         for i in range(quantity):
                             weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
