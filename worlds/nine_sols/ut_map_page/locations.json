@@ -765,6 +765,39 @@
         ]
     },
     {
+        "name": "Agrarian Hall",
+        "children": [
+            {
+                "name": "Chest After Goumang", "sections": [
+                    { "name": "Chest After Goumang (1st Reward)" },
+                    { "name": "Chest After Goumang (2nd Reward)" }
+                ],
+                "map_locations": [{ "map": "agrarian_hall", "x": 430, "y": 180 }]
+            },
+            {
+                "name": "Goumang's Vital Sanctum", "sections": [{ "name": "Goumang's Vital Sanctum" }],
+                "map_locations": [{ "map": "agrarian_hall", "x": 270, "y": 180 }]
+            }
+        ]
+    },
+    {
+        "name": "Ancient Stone Pillar",
+        "children": [
+            {
+                "name": "Examine Ji", "sections": [{ "name": "Examine Ji" }],
+                "map_locations": [{ "map": "ancient_stone_pillar", "x": 370, "y": 140 }]
+            },
+            {
+                "name": "Ji's Vital Sanctum", "sections": [{ "name": "Ji's Vital Sanctum" }],
+                "map_locations": [{ "map": "ancient_stone_pillar", "x": 650, "y": 140 }]
+            },
+            {
+                "name": "Retrieve Chip From Shanhai 1000", "sections": [{ "name": "Retrieve Chip From Shanhai 1000" }],
+                "map_locations": [{ "map": "ancient_stone_pillar", "x": 830, "y": 140 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
