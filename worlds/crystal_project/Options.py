@@ -94,7 +94,7 @@ class KeyMode(Choice):
 
     Vanilla: All vanilla keys will be included in checks
     """
-    display_name = "Regions to include in game"
+    display_name = "Key Mode"
     option_skeleton = 0
     option_key_ring = 1
     option_vanilla = 2
