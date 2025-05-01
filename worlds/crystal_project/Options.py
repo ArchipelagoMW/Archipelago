@@ -84,6 +84,22 @@ class IncludedRegions(Choice):
     option_all = 3
     default = 3
 
+class KeyMode(Choice):
+    """
+    Choose how keys behave.
+    
+    Skeleton Key: Only the skeleton key which can open any locked door will be in your item pool.
+    
+    Key Ring: One check will give all the keys needed to complete one dungeon, the skeleton key will still be in the pool NOT IMPLEMENTED
+
+    Vanilla: All vanilla keys will be included in checks
+    """
+    display_name = "Regions to include in game"
+    option_skeleton = 0
+    option_key_ring = 1
+    option_vanilla = 2
+    default = 2
+
 class IncludeSummonAbilities(DefaultOnToggle):
     """
     When enabled, Summon abilities can be found anywhere, when disabled they will be in the regular spot.
@@ -107,5 +123,6 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions
+    keyMode: KeyMode
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities

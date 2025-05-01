@@ -249,6 +249,28 @@ class CrystalProjectWorld(World):
             excluded_items.add("Scholar - Overload")
             excluded_items.add("Scholar - Reflection")
             excluded_items.add("Scholar - Lifegiver")
+
+        if self.options.keyMode == self.options.keyMode.option_skeleton:
+            excluded_items.add("Item - Luxury Key")
+            excluded_items.add("Item - Gardeners Key")
+            excluded_items.add("Item - South Wing Key")
+            excluded_items.add("Item - East Wing Key")
+            excluded_items.add("Item - West Wing Key")
+            excluded_items.add("Item - Dark Wing Key")
+            excluded_items.add("Item - Cell Key")
+            excluded_items.add("Item - Room 1 Key")
+            excluded_items.add("Item - Small Key")
+            excluded_items.add("Item - Boss Key")
+            excluded_items.add("Item - Red Door Key")
+            excluded_items.add("Item - Ice Puzzle Key")
+            excluded_items.add("Item - Rampart Key")
+            excluded_items.add("Item - Forgotten Key")
+            excluded_items.add("Item - Tram Key")
+            excluded_items.add("Item - Courtyard Key")
+            excluded_items.add("Item - Pyramid Key")
+            excluded_items.add("Item - Foliage Key")
+            excluded_items.add("Item - Cave Key")
+            excluded_items.add("Item - Canopy Key")
             
         #all end_game_zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_expert or

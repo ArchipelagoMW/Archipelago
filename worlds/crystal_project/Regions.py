@@ -158,7 +158,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows", "Capital Sequoia"],
         {"Proving Meadows": lambda state: logic.has_jobs(state, 3)})
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise", "Castle Sequoia", "Skumparadise"],
-        {"Cobblestone Crag": lambda state: state.has_any({"Item - Courtyard Key"}, world.player), 
+        {"Cobblestone Crag": logic.has_courtyard_key, 
         "Greenshire Reprise": lambda state: logic.has_jobs(state, 6),
         "Castle Sequoia": logic.has_vertical_movement and logic.has_glide})
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Sequoia", "Boomer Society", "Pale Grotto", "Capital Jail", "Quintar Nest"], 
@@ -175,7 +175,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Quintar Mausoleum": logic.has_swimming,
         "Quintar Nest": logic.has_swimming})
     multiworld.get_region("Capital Jail", player).add_exits(["Jojo Sewers", "Capital Pipeline"],
-        {"Capital Pipeline": lambda state: state.has("Item - South Wing Key", world.player) and state.has("Item - Cell Key", world.player, 6)})
+        {"Capital Pipeline": lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)})
     multiworld.get_region("Capital Pipeline", player).add_exits(["Capital Jail", "Jidamba Tangle", "Continental Tram"],
         {"Jidamba Tangle": logic.has_vertical_movement,
         "Continental Tram": logic.has_vertical_movement})
@@ -186,7 +186,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
         {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"], 
-        {"Salmon Pass": logic.has_rental_quintar, #todo test if this can be done with ibek
+        {"Salmon Pass": logic.has_rental_quintar or logic.has_vertical_movement,
         "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
         {"Salmon River": logic.has_horizontal_movement,
@@ -195,14 +195,14 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Salmon Bay": logic.has_swimming or (logic.has_vertical_movement and logic.has_glide),
         "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Lake Delende", "Salmon Bay", "Ancient Labyrinth"], 
-        {"Ancient Reservoir": lambda state: state.has("Item - Pyramid Key", world.player),
+        {"Ancient Reservoir": logic.has_pyramid_key,
         "Lake Delende": logic.has_vertical_movement,
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
         "Ancient Labyrinth": logic.has_vertical_movement and logic.has_glide})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
         {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
         "The Open Sea": logic.has_swimming,
-        "Continental Tram": lambda state: logic.has_swimming or state.has("Item - Tram Key", player)})
+        "Continental Tram": logic.has_swimming or logic.has_tram_key})
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano"],
         {"Beaurior Volcano": logic.has_vertical_movement,
         "The Open Sea": logic.has_swimming})
@@ -280,7 +280,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Flyers Crag", player).add_exits(["Okimoto N.S.","Jidamba Tangle"],
         {"Jidamba Tangle": logic.has_glide})
     multiworld.get_region("Jidamba Tangle", player).add_exits(["The Open Sea", "Jidamba Eaclaneya"],
-        {"Jidamba Eaclaneya": lambda state: state.has("Item - Foliage Key", world.player) and state.has("Item - Cave Key", world.player) and state.has("Item - Canopy Key", world.player),
+        {"Jidamba Eaclaneya": logic.has_jidamba_keys,
         "The Open Sea": logic.has_swimming})
     multiworld.get_region("Jidamba Eaclaneya", player).add_exits(["Jidamba Tangle", "The Open Sea"],
         {"The Open Sea": logic.has_swimming})
