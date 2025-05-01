@@ -24,6 +24,34 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+def triangular(lower: int, end: int, tri: float = 0.5) -> int:
+    """
+    Integer triangular distribution for `lower` inclusive to `end` inclusive.
+
+    Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
+    """
+    # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
+    # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
+    # when a != b, so ensure the result is never more than `end`.
+    return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
+
+
+def random_weighted_range(text: str, range_start: int, range_end: int):
+    if text == "random-low":
+        return triangular(range_start, range_end, 0.0)
+    elif text == "random-high":
+        return triangular(range_start, range_end, 1.0)
+    elif text == "random-middle":
+        return triangular(range_start, range_end)
+    elif text == "random":
+        return random.randint(range_start, range_end)
+    else:
+        raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                        f"Acceptable values are: random, random-high, random-middle, random-low, "
+                        f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                        f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+
+
 class OptionError(ValueError):
     pass
 
@@ -689,27 +717,16 @@ class Range(NumericOption):
 
     @classmethod
     def weighted_range(cls, text) -> Range:
-        if text == "random-low":
-            return cls(cls.triangular(cls.range_start, cls.range_end, 0.0))
-        elif text == "random-high":
-            return cls(cls.triangular(cls.range_start, cls.range_end, 1.0))
-        elif text == "random-middle":
-            return cls(cls.triangular(cls.range_start, cls.range_end))
-        elif text.startswith("random-range-"):
+        if text.startswith("random-range-"):
             return cls.custom_range(text)
-        elif text == "random":
-            return cls(random.randint(cls.range_start, cls.range_end))
         else:
-            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                            f"Acceptable values are: random, random-high, random-middle, random-low, "
-                            f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                            f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            return cls(random_weighted_range(text, cls.range_start, cls.range_end))
 
     @classmethod
     def custom_range(cls, text) -> Range:
         textsplit = text.split("-")
         try:
-            random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+            random_range = [int(textsplit[-2]), int(textsplit[-1])]
         except ValueError:
             raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
         random_range.sort()
@@ -717,14 +734,9 @@ class Range(NumericOption):
             raise Exception(
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
-        if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], 0.0))
-        elif text.startswith("random-range-middle"):
-            return cls(cls.triangular(random_range[0], random_range[1]))
-        elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], 1.0))
-        else:
-            return cls(random.randint(random_range[0], random_range[1]))
+        if {"low", "middle", "high"}.intersection(textsplit):
+            return cls(random_weighted_range(f"{textsplit[0]}-{textsplit[2]}", random_range[0], random_range[1]))
+        return cls(random_weighted_range("random", random_range[0], random_range[1]))
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
@@ -738,18 +750,6 @@ class Range(NumericOption):
 
     def __str__(self) -> str:
         return str(self.value)
-
-    @staticmethod
-    def triangular(lower: int, end: int, tri: float = 0.5) -> int:
-        """
-        Integer triangular distribution for `lower` inclusive to `end` inclusive.
-
-        Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
-        """
-        # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
-        # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
-        # when a != b, so ensure the result is never more than `end`.
-        return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
 class NamedRange(Range):
@@ -977,15 +977,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
                 choice_list.extend(sorted(world.location_names))
                 if self.convert_name_groups:
                     choice_list.extend(sorted(world.location_name_groups.keys()))
-            if self.random_str == "random":
-                choice_count = random.randint(0, len(choice_list))
-            elif self.random_str == "random-low":
-                choice_count = int(round(random.triangular(0, len(choice_list), 0)))
-            elif self.random_str == "random-high":
-                choice_count = int(round(random.triangular(0, len(choice_list), len(choice_list))))
-            elif self.random_str == "random-middle":
-                choice_count = int(round(random.triangular(0, len(choice_list))))
-            elif self.random_str.startswith("random-range-"):
+            if self.random_str.startswith("random-range-"):
                 textsplit = self.random_str.split("-")
                 try:
                     random_range = [int(textsplit[-2]), int(textsplit[-1])]
@@ -997,20 +989,13 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
                     raise Exception(
                         f"{random_range[0]}-{random_range[1]} is outside allowed range "
                         f"0-{len(choice_list)} for option {self.__name__} for player {player_name}")
-                if self.random_str.startswith("random-range-low"):
-                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[0])))
-                elif self.random_str.startswith("random-range-high"):
-                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[1])))
-                elif self.random_str.startswith("random-range-middle"):
-                    choice_count = int(round(random.triangular(random_range[0], random_range[1])))
+                if {"low", "middle", "high"}.intersection(textsplit):
+                    choice_count = random_weighted_range(f"{textsplit[0]}-{textsplit[2]}",
+                                                         random_range[0], random_range[1])
                 else:
-                    choice_count = random.randint(random_range[0], random_range[1])
+                    choice_count = random_weighted_range("random", random_range[0], random_range[1])
             else:
-                raise Exception(f"Random text \"{self.random_str}\" for option {self.__name__} for player {player_name}"
-                                f"did not resolve to a recognized pattern."
-                                f"Acceptable values are: random, random-high, random-middle, random-low, "
-                                f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                                f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+                choice_count = random_weighted_range(self.random_str, 0, len(choice_list))
             self.value = set(random.sample(choice_list, k=choice_count))
         super().verify(self, world, player_name, plando_options)
 
