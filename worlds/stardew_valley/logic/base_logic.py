@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic, Dict, Collection
+import typing
+from typing import Dict, Collection
 
 from ..content.game_content import StardewContent
 from ..options import StardewValleyOptions
 from ..stardew_rule import StardewRule
+
+if typing.TYPE_CHECKING:
+    from .logic import StardewLogic
 
 
 class LogicRegistry:
@@ -30,18 +34,16 @@ class BaseLogicMixin:
         pass
 
 
-T = TypeVar("T", bound=BaseLogicMixin)
-
-
-class BaseLogic(BaseLogicMixin, Generic[T]):
+class BaseLogic(BaseLogicMixin):
     player: int
     registry: LogicRegistry
     options: StardewValleyOptions
     content: StardewContent
     regions: Collection[str]
-    logic: T
+    logic: StardewLogic
 
-    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, content: StardewContent, regions: Collection[str], logic: T):
+    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, content: StardewContent, regions: Collection[str],
+                 logic: StardewLogic):
         super().__init__(player, registry, options, content, regions, logic)
         self.player = player
         self.registry = registry
