@@ -6,18 +6,6 @@
         "img": "./world_map.png"
     },
     {
-        "name": "sky_tower",
-        "location_size": 20,
-        "location_border_thickness": 3,
-        "img": "./sky_tower.webp"
-    },
-    {
-        "name": "radiant_pagoda",
-        "location_size": 20,
-        "location_border_thickness": 3,
-        "img": "./radiant_pagoda.png"
-    },
-    {
         "name": "abandoned_mines",
         "img": "./abandoned_mines.png"
     },
@@ -146,8 +134,20 @@
         "img": "./prison.png"
     },
     {
+        "name": "radiant_pagoda",
+        "location_size": 20,
+        "location_border_thickness": 3,
+        "img": "./radiant_pagoda.png"
+    },
+    {
         "name": "shengwu_hall",
         "img": "./shengwu_hall.png"
+    },
+    {
+        "name": "sky_tower",
+        "location_size": 20,
+        "location_border_thickness": 3,
+        "img": "./sky_tower.webp"
     },
     {
         "name": "tiandao_research_center",
