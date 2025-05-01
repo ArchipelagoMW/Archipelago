@@ -5,7 +5,7 @@ from worlds.AutoWorld import WebWorld, World
 from .items import NineSolsItem, all_non_event_items_table, item_name_groups, create_item, create_items
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
 from .options import NineSolsGameOptions
-from .tracker.map_page_index import map_page_index
+from .ut_map_page.map_page_index import map_page_index
 
 
 class NineSolsWebWorld(WebWorld):
@@ -37,7 +37,7 @@ class NineSolsWorld(World):
     ut_can_gen_without_yaml = True
 
     tracker_world: ClassVar = {
-        "map_page_folder": "tracker",
+        "map_page_folder": "ut_map_page",
         "map_page_maps": "maps.json",
         "map_page_locations": "locations.json",
         "map_page_setting_key": "{player}_{team}_nine_sols_area",
