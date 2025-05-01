@@ -60,7 +60,7 @@ adding more randomness and "mystery" to your options. Every configurable setting
 
 Currently, there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root
-are `description`, `name`, `game`, `requires`, and the name of the games you want options for.
+are `description`, `name`, `game`, `quantity`, `requires`, and the name of the games you want options for.
 
 * `description` is ignored by the generator and is simply a good way for you to organize if you have multiple files
   using this to detail the intention of the file.
