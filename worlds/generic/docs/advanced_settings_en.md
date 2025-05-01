@@ -78,6 +78,9 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
 * `game` is where either your chosen game goes or, if you would like, can be filled with multiple games each with
   different weights.
 
+* `quantity` is the amount of times this yaml should be used when generating. This option is optional, the default value is 1.
+  To ensure that the name is unique with a value of at least two, the keywords from above must be used.
+
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
   is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
   options may be missing and as such it will not work as expected. If any plando is used in the file then requiring it
