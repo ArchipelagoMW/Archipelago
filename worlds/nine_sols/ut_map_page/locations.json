@@ -1215,6 +1215,39 @@
         ]
     },
     {
+        "name": "Factory (Machine Room)",
+        "children": [
+            {
+                "name": "Below Right Elevator", "sections": [{ "name": "Factory (MR): Below Right Elevator" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 730, "y": 142 }]
+            },
+            {
+                "name": "Break Turret Below Elevator", "sections": [{ "name": "Factory (MR): Break Turret Below Elevator" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 625, "y": 142 }]
+            },
+            {
+                "name": "Above Left Elevator", "sections": [{ "name": "Factory (MR): Above Left Elevator" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 40, "y": 185 }]
+            },
+            {
+                "name": "Walking Chest Above Green Pillar", "sections": [{ "name": "Factory (MR): Walking Chest Above Green Pillar" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 182, "y": 35 }]
+            },
+            {
+                "name": "Behind Turret Near Green Pillar", "sections": [{ "name": "Factory (MR): Behind Turret Near Green Pillar" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 250, "y": 180 }]
+            },
+            {
+                "name": "Near Moving Platforms", "sections": [{ "name": "Factory (MR): Near Moving Platforms" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 325, "y": 45 }]
+            },
+            {
+                "name": "Tianhuo Flower Above Right Elevator", "sections": [{ "name": "Factory (MR): Tianhuo Flower Above Right Elevator" }],
+                "map_locations": [{ "map": "factory_machine_room", "x": 610, "y": 80 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
