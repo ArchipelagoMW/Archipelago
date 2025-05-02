@@ -191,7 +191,7 @@ class LMCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LMContext):
             Utils.async_start(self.ctx.get_debug_info(), name="Get Luigi's Mansion Debug info")
 
-class LMContext(CommonContext if not tracker_loaded else TrackerGameContext):
+class LMContext(CommonContext):
     command_processor = LMCommandProcessor
     game = "Luigi's Mansion"
     items_handling = 0b111
