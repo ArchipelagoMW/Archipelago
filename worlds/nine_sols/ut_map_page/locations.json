@@ -1308,6 +1308,47 @@
         ]
     },
     {
+        "name": "Factory (Underground)",
+        "children": [
+            {
+                "name": "Near Upper Right Exit", "sections": [{ "name": "Factory (U): Near Upper Right Exit" }],
+                "map_locations": [{ "map": "factory_underground", "x": 800, "y": 60 }]
+            },
+            {
+                "name": "Defeat Red Tiger Elite: Kuiyan", "sections": [{ "name": "Factory (U): Defeat Red Tiger Elite: Kuiyan" }],
+                "map_locations": [{ "map": "factory_underground", "x": 760, "y": 120 }]
+            },
+            {
+                "name": "Near Lower Elevator", "sections": [{ "name": "Factory (U): Near Lower Elevator" }],
+                "map_locations": [{ "map": "factory_underground", "x": 675, "y": 155 }]
+            },
+            {
+                "name": "Hack 2 Statues", "sections": [{ "name": "Factory (U): Hack 2 Statues" }],
+                "map_locations": [{ "map": "factory_underground", "x": 800, "y": 185 }]
+            },
+            {
+                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "Factory (U): Find Broken Shanhai 9000" }],
+                "map_locations": [{ "map": "factory_underground", "x": 930, "y": 115 }]
+            },
+            {
+                "name": "Examine Evacuation Notice", "sections": [{ "name": "Factory (U): Examine Evacuation Notice" }],
+                "map_locations": [{ "map": "factory_underground", "x": 1105, "y": 110 }]
+            },
+            {
+                "name": "Above Root Node", "sections": [{ "name": "Factory (U): Above Root Node" }],
+                "map_locations": [{ "map": "factory_underground", "x": 535, "y": 135 }]
+            },
+            {
+                "name": "Below Walkway to Left Exit", "sections": [{ "name": "Factory (U): Below Walkway to Left Exit" }],
+                "map_locations": [{ "map": "factory_underground", "x": 240, "y": 200 }]
+            },
+            {
+                "name": "Behind Moving Boxes", "sections": [{ "name": "Factory (U): Behind Moving Boxes" }],
+                "map_locations": [{ "map": "factory_underground", "x": 350, "y": 80 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
