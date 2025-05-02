@@ -1349,6 +1349,61 @@
         ]
     },
     {
+        "name": "Four Seasons Pavilion",
+        "children": [
+            {
+                "name": "Kuafu", "sections": [
+                    { "name": "FSP: Kuafu's 1st Gift" },
+                    { "name": "FSP: Kuafu's 2nd Gift" },
+                    { "name": "FSP: Give Kuafu the Homing Darts" },
+                    { "name": "FSP: Give Kuafu the Thunderburst Bomb" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 160, "y": 185 }]
+            },
+            {
+                "name": "Chiyou", "sections": [
+                    { "name": "FSP: Give Yi's Portrait to Chiyou" },
+                    { "name": "FSP: Give Shuanshuan's Book to Chiyou" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 385, "y": 185 }]
+            },
+            {
+                "name": "Reveal the Kunlun Immortal Portrait's Secret", "sections": [{ "name": "FSP: Reveal the Kunlun Immortal Portrait's Secret" }],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 227, "y": 220 }]
+            },
+            {
+                "name": "Decode the Ancient Sheet Music", "sections": [{ "name": "FSP: Decode the Ancient Sheet Music" }],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 358, "y": 220 }]
+            },
+            {
+                "name": "Shuanshuan's Desk and Bookshelf", "sections": [
+                    { "name": "FSP: Have Yi's Portrait Painted" },
+                    { "name": "FSP: Take Shuanshuan's Book" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 304, "y": 220 }]
+            },
+            {
+                "name": "Receive Peach Blossom Village Quest", "sections": [{ "name": "FSP: Receive Peach Blossom Village Quest" }],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 430, "y": 220 }]
+            },
+            {
+                "name": "Half-Grown Tree Chest", "sections": [{ "name": "FSP: Half-Grown Tree Chest" }],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 430, "y": 185 }]
+            },
+            {
+                "name": "Fully Grown Tree Chests", "sections": [
+                    { "name": "FSP: Fully Grown Tree 1st Chest" },
+                    { "name": "FSP: Fully Grown Tree 2nd Chest" }
+                ],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 300, "y": 130 }]
+            },
+            {
+                "name": "Isolate the Mutant Gene Sequence", "sections": [{ "name": "FSP: Isolate the Mutant Gene Sequence" }],
+                "map_locations": [{ "map": "four_seasons_pavilion", "x": 652, "y": 215 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
