@@ -334,7 +334,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jojo Sewers", "Underpass Chest - Walking the plank above Pale Grotto waterfall", 3670 + treasure_index_offset, logic.has_swimming), #(337, 155, -319) Underpass Scrap chest
 
         #NPCs
-        LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has("Item - Crag Demon Horn")),
+        LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has("Item - Crag Demon Horn", player)),
 
         #Boomer Society
         #Treasure chests

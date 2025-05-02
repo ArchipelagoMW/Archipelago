@@ -314,6 +314,8 @@ class CrystalProjectWorld(World):
         #all expert zone progression items get excluded here
         if (self.options.includedRegions == self.options.includedRegions.option_advanced or
             self.options.includedRegions == self.options.includedRegions.option_beginner):
+            #Bag Upgrades
+            excluded_items.add("Item - Decent Cod Bag")
             #Ore
             excluded_items.add("Item - Diamond Ore")
             excluded_items.add("Item - Diamond Ingot")
@@ -479,6 +481,9 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Shoudu Stew")
             excluded_items.add("Item - Rotten Salmon")
             excluded_items.add("Item - Fresh Salmon")
+            #Bag Upgrades
+            excluded_items.add("Item - Nuts Sack")
+            excluded_items.add("Item - Milk Bag")
             #Ore
             excluded_items.add("Item - Silver Ore")
             excluded_items.add("Item - Silver Ingot")

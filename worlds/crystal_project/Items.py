@@ -78,9 +78,9 @@ item_table: Dict[str, ItemData] = {
     "Item - Zether Pouch": ItemData("Item", 144 + item_index_offset, ItemClassification.useful, 0, 1, 1, 3), #5
     "Item - Fenix Juice Pouch": ItemData("Item", 137 + item_index_offset, ItemClassification.useful, 1, 1, 0, 0), #2
     "Item - Fenix Syrup Pouch": ItemData("Item", 146 + item_index_offset, ItemClassification.useful, 0, 2, 0, 0), #2
-    "Item - Nuts Sack": ItemData("Item", 184 + item_index_offset, ItemClassification.useful),
-    "Item - Milk Bag": ItemData("Item", 138 + item_index_offset, ItemClassification.useful),
-    "Item - Decent Cod Bag": ItemData("Item", 185 + item_index_offset, ItemClassification.useful),
+    "Item - Nuts Sack": ItemData("Item", 184 + item_index_offset, ItemClassification.useful), #Capital Sequoia, Advanced Zones
+    "Item - Milk Bag": ItemData("Item", 138 + item_index_offset, ItemClassification.useful), #Poko Poko Desert, Advanced Zones
+    "Item - Decent Cod Bag": ItemData("Item", 185 + item_index_offset, ItemClassification.useful), #Shoudu Province, Expert Zones
 
     #Fishing
     "Item - Flimsy Rod": ItemData("Item", 55 + item_index_offset, ItemClassification.useful),
