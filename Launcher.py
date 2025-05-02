@@ -227,7 +227,7 @@ refresh_components: Optional[Callable[[], None]] = None
 
 def run_gui(path: str, args: Any) -> None:
     from kvui import (ThemedApp, MDFloatLayout, MDGridLayout, ScrollBox)
-    from kivy.properties import ObjectProperty
+    from kivy.properties import ObjectProperty, BooleanProperty
     from kivy.core.window import Window
     from kivy.metrics import dp
     from kivymd.uix.button import MDIconButton, MDButton
@@ -257,6 +257,7 @@ def run_gui(path: str, args: Any) -> None:
         search_box: MDTextField = ObjectProperty(None)
         cards: list[LauncherCard]
         current_filter: Sequence[str | Type] | None
+        compact: bool = BooleanProperty(False)
 
         def __init__(self, ctx=None, path=None, args=None):
             self.title = self.base_title + " " + Utils.__version__
@@ -280,7 +281,11 @@ def run_gui(path: str, args: Any) -> None:
                             else:
                                 filters.append(Type[filter])
                         self.current_filter = filters
+                if "compact" in persistent["launcher"]:
+                    self.compact = persistent["launcher"]["compact"]
             super().__init__()
+
+            components.sort(key=lambda x: x.display_name)
 
         def set_favorite(self, caller):
             if caller.component.display_name in self.favorites:
@@ -426,7 +431,11 @@ def run_gui(path: str, args: Any) -> None:
             Utils.persistent_store("launcher", "favorites", self.favorites)
             Utils.persistent_store("launcher", "filter", ", ".join(filter.name if isinstance(filter, Type) else filter
                                                                    for filter in self.current_filter))
+            Utils.persistent_store("launcher", "compact", self.compact)
             super().on_stop()
+
+        def toggle_compact(self):
+            self.compact = not self.compact
 
     Launcher(path=path, args=args).run()
 
