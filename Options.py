@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import collections
 import functools
 import logging
 import math
@@ -689,9 +690,9 @@ class Range(NumericOption):
     @classmethod
     def weighted_range(cls, text) -> Range:
         if text == "random-low":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_start))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 0.0))
         elif text == "random-high":
-            return cls(cls.triangular(cls.range_start, cls.range_end, cls.range_end))
+            return cls(cls.triangular(cls.range_start, cls.range_end, 1.0))
         elif text == "random-middle":
             return cls(cls.triangular(cls.range_start, cls.range_end))
         elif text.startswith("random-range-"):
@@ -717,11 +718,11 @@ class Range(NumericOption):
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
         if text.startswith("random-range-low"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[0]))
+            return cls(cls.triangular(random_range[0], random_range[1], 0.0))
         elif text.startswith("random-range-middle"):
             return cls(cls.triangular(random_range[0], random_range[1]))
         elif text.startswith("random-range-high"):
-            return cls(cls.triangular(random_range[0], random_range[1], random_range[1]))
+            return cls(cls.triangular(random_range[0], random_range[1], 1.0))
         else:
             return cls(random.randint(random_range[0], random_range[1]))
 
@@ -739,8 +740,16 @@ class Range(NumericOption):
         return str(self.value)
 
     @staticmethod
-    def triangular(lower: int, end: int, tri: typing.Optional[int] = None) -> int:
-        return int(round(random.triangular(lower, end, tri), 0))
+    def triangular(lower: int, end: int, tri: float = 0.5) -> int:
+        """
+        Integer triangular distribution for `lower` inclusive to `end` inclusive.
+
+        Expects `lower <= end` and `0.0 <= tri <= 1.0`. The result of other inputs is undefined.
+        """
+        # Use the continuous range [lower, end + 1) to produce an integer result in [lower, end].
+        # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
+        # when a != b, so ensure the result is never more than `end`.
+        return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
 
 
 class NamedRange(Range):
@@ -858,15 +867,49 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
     def __len__(self) -> int:
         return self.value.__len__()
 
+    # __getitem__ fallback fails for Counters, so we define this explicitly
+    def __contains__(self, item) -> bool:
+        return item in self.value
 
-class ItemDict(OptionDict):
+
+class OptionCounter(OptionDict):
+    min: int | None = None
+    max: int | None = None
+
+    def __init__(self, value: dict[str, int]) -> None:
+        super(OptionCounter, self).__init__(collections.Counter(value))
+
+    def verify(self, world: type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        super(OptionCounter, self).verify(world, player_name, plando_options)
+
+        range_errors = []
+
+        if self.max is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is higher than maximum allowed value {self.max}."
+                for key, value in self.value.items() if value > self.max
+            ]
+
+        if self.min is not None:
+            range_errors += [
+                f"\"{key}: {value}\" is lower than minimum allowed value {self.min}."
+                for key, value in self.value.items() if value < self.min
+            ]
+
+        if range_errors:
+            range_errors = [f"For option {getattr(self, 'display_name', self)}:"] + range_errors
+            raise OptionError("\n".join(range_errors))
+
+
+class ItemDict(OptionCounter):
     verify_item_name = True
 
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(item_count is None for item_count in value.values()):
-            raise Exception("Items must have counts associated with them. Please provide positive integer values in the format \"item\": count .")
-        if any(item_count < 1 for item_count in value.values()):
-            raise Exception("Cannot have non-positive item counts.")
+    min = 0
+
+    def __init__(self, value: dict[str, int]) -> None:
+        # Backwards compatibility: Cull 0s to make "in" checks behave the same as when this wasn't a OptionCounter
+        value = {item_name: amount for item_name, amount in value.items() if amount != 0}
+
         super(ItemDict, self).__init__(value)
 
 
@@ -1249,42 +1292,47 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self,
-                *option_names: str,
-                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
-                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
+    def as_dict(
+            self,
+            *option_names: str,
+            casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+            toggles_as_bools: bool = False,
+    ) -> dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
-        :param option_names: names of the options to return
-        :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
-        :param toggles_as_bools: whether toggle options should be output as bools instead of strings
+        :param option_names: Names of the options to get the values of.
+        :param casing: Casing of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`.
+        :param toggles_as_bools: Whether toggle options should be returned as bools instead of ints.
+
+        :return: A dictionary of each option name to the value of its Option. If the option is an OptionSet, the value
+        will be returned as a sorted list.
         """
         assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
-            if option_name in type(self).type_hints:
-                if casing == "snake":
-                    display_name = option_name
-                elif casing == "camel":
-                    split_name = [name.title() for name in option_name.split("_")]
-                    split_name[0] = split_name[0].lower()
-                    display_name = "".join(split_name)
-                elif casing == "pascal":
-                    display_name = "".join([name.title() for name in option_name.split("_")])
-                elif casing == "kebab":
-                    display_name = option_name.replace("_", "-")
-                else:
-                    raise ValueError(f"{casing} is invalid casing for as_dict. "
-                                     "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
-                value = getattr(self, option_name).value
-                if isinstance(value, set):
-                    value = sorted(value)
-                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
-                    value = bool(value)
-                option_results[display_name] = value
-            else:
+            if option_name not in type(self).type_hints:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
+
+            if casing == "snake":
+                display_name = option_name
+            elif casing == "camel":
+                split_name = [name.title() for name in option_name.split("_")]
+                split_name[0] = split_name[0].lower()
+                display_name = "".join(split_name)
+            elif casing == "pascal":
+                display_name = "".join([name.title() for name in option_name.split("_")])
+            elif casing == "kebab":
+                display_name = option_name.replace("_", "-")
+            else:
+                raise ValueError(f"{casing} is invalid casing for as_dict. "
+                                 "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
+            value = getattr(self, option_name).value
+            if isinstance(value, set):
+                value = sorted(value)
+            elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                value = bool(value)
+            option_results[display_name] = value
         return option_results
 
 
@@ -1571,10 +1619,11 @@ def dump_player_options(multiworld: MultiWorld) -> None:
             player_output = {
                 "Game": multiworld.game[player],
                 "Name": multiworld.get_player_name(player),
+                "ID": player,
             }
             output.append(player_output)
             for option_key, option in world.options_dataclass.type_hints.items():
-                if issubclass(Removed, option):
+                if option.visibility == Visibility.none:
                     continue
                 display_name = getattr(option, "display_name", option_key)
                 player_output[display_name] = getattr(world.options, option_key).current_option_name
@@ -1583,7 +1632,7 @@ def dump_player_options(multiworld: MultiWorld) -> None:
                     game_option_names.append(display_name)
 
     with open(output_path(f"generate_{multiworld.seed_name}.csv"), mode="w", newline="") as file:
-        fields = ["Game", "Name", *all_option_names]
+        fields = ["ID", "Game", "Name", *all_option_names]
         writer = DictWriter(file, fields)
         writer.writeheader()
         writer.writerows(output)

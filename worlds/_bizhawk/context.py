@@ -6,7 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-from typing import Any, Dict, Optional
+from typing import Any
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
 import Patch
@@ -41,17 +41,18 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
 
 class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
+    server_seed_name: str | None = None
     auth_status: AuthStatus
     password_requested: bool
-    client_handler: Optional[BizHawkClient]
-    slot_data: Optional[Dict[str, Any]] = None
-    rom_hash: Optional[str] = None
+    client_handler: BizHawkClient | None
+    slot_data: dict[str, Any] | None = None
+    rom_hash: str | None = None
     bizhawk_ctx: BizHawkContext
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]):
+    def __init__(self, server_address: str | None, password: str | None):
         super().__init__(server_address, password)
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.password_requested = False
@@ -68,6 +69,8 @@ class BizHawkClientContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
             self.auth_status = AuthStatus.AUTHENTICATED
+        elif cmd == "RoomInfo":
+            self.server_seed_name = args.get("seed_name", None)
 
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
@@ -100,6 +103,7 @@ class BizHawkClientContext(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool=False):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
+        self.server_seed_name = None
         await super().disconnect(allow_autoreconnect)
 
 
@@ -238,10 +242,11 @@ def _patch_and_run_game(patch_file: str):
         return metadata
     except Exception as exc:
         logger.exception(exc)
+        Utils.messagebox("Error Patching Game", str(exc), True)
         return {}
 
 
-def launch(*launch_args) -> None:
+def launch(*launch_args: str) -> None:
     async def main():
         parser = get_base_parser()
         parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an Archipelago patch file")
@@ -271,6 +276,6 @@ def launch(*launch_args) -> None:
 
     Utils.init_logging("BizHawkClient", exception_logger="Client")
     import colorama
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

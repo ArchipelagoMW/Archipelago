@@ -1,13 +1,4 @@
-from typing import Union
-
 from .base_logic import BaseLogicMixin, BaseLogic
-from .cooking_logic import CookingLogicMixin
-from .mine_logic import MineLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .skill_logic import SkillLogicMixin
-from .tool_logic import ToolLogicMixin
-from ..mods.logic.magic_logic import MagicLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill, ModSkill
@@ -20,7 +11,7 @@ class AbilityLogicMixin(BaseLogicMixin):
         self.ability = AbilityLogic(*args, **kwargs)
 
 
-class AbilityLogic(BaseLogic[Union[AbilityLogicMixin, RegionLogicMixin, ReceivedLogicMixin, ToolLogicMixin, SkillLogicMixin, MineLogicMixin, MagicLogicMixin]]):
+class AbilityLogic(BaseLogic):
     def can_mine_perfectly(self) -> StardewRule:
         return self.logic.mine.can_progress_in_the_mines_from_floor(160)
 

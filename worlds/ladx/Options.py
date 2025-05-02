@@ -527,6 +527,27 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
+class TarinsGift(Choice):
+    """
+    [Local Progression] Forces Tarin's gift to be an item that immediately opens up local checks.
+    Has little effect in single player games, and isn't always necessary with randomized entrances.
+    [Bush Breaker] Forces Tarin's gift to be an item that can destroy bushes.
+    [Any Item] Tarin's gift can be any item for any world
+    """
+    display_name = "Tarin's Gift"
+    option_local_progression = 0
+    option_bush_breaker = 1
+    option_any_item = 2
+    default = option_local_progression
+
+
+class StabilizeItemPool(DefaultOffToggle):
+    """
+    By default, rupees in the item pool may be randomly swapped with bombs, arrows, powders, or capacity upgrades. This option disables that swapping, which is useful for plando.
+    """
+    display_name = "Stabilize Item Pool"
+
+
 class ForeignItemIcons(Choice):
     """
     Choose how to display foreign items.
@@ -558,10 +579,12 @@ ladx_option_groups = [
     OptionGroup("Miscellaneous", [
         TradeQuest,
         Rooster,
+        TarinsGift,
         Overworld,
         TrendyGame,
         InGameHints,
         NagMessages,
+        StabilizeItemPool,
         Quickswap,
         HardMode,
         BootsControls
@@ -630,7 +653,9 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     text_mode: TextMode
     no_flash: NoFlash
     in_game_hints: InGameHints
+    tarins_gift: TarinsGift
     overworld: Overworld
+    stabilize_item_pool: StabilizeItemPool
 
     warp_improvements: Removed
     additional_warp_points: Removed

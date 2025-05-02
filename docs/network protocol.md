@@ -47,6 +47,9 @@ Packets are simple JSON lists in which any number of ordered network commands ca
 
 An object can contain the "class" key, which will tell the content data type, such as "Version" in the following example.
 
+Websocket connections should support per-message compression. Uncompressed connections are deprecated and may stop
+working in the future.
+
 Example:
 ```javascript
 [{"cmd": "RoomInfo", "version": {"major": 0, "minor": 1, "build": 3, "class": "Version"}, "tags": ["WebHost"], ... }]
@@ -261,6 +264,7 @@ Sent to clients in response to a [Set](#Set) package if want_reply was set to tr
 | key            | str  | The key that was updated.                                                                  |
 | value          | any  | The new value for the key.                                                                 |
 | original_value | any  | The value the key had before it was updated. Not present on "_read" prefixed special keys. |
+| slot           | int  | The slot that originally sent the Set package causing this change.                         |
 
 Additional arguments added to the [Set](#Set) package that triggered this [SetReply](#SetReply) will also be passed along.
 
@@ -359,11 +363,11 @@ An enumeration containing the possible hint states.
 ```python
 import enum
 class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0        # The location has been collected. Status cannot be changed once found.
-    HINT_UNSPECIFIED = 1  # The receiving player has not specified any status
+    HINT_UNSPECIFIED = 0  # The receiving player has not specified any status
     HINT_NO_PRIORITY = 10 # The receiving player has specified that the item is unneeded
     HINT_AVOID = 20       # The receiving player has specified that the item is detrimental
     HINT_PRIORITY = 30    # The receiving player has specified that the item is needed
+    HINT_FOUND = 40       # The location has been collected. Status cannot be changed once found.
 ```
 - Hints for items with `ItemClassification.trap` default to `HINT_AVOID`.
 - Hints created with `LocationScouts`, `!hint_location`, or similar (hinting a location) default to `HINT_UNSPECIFIED`.
@@ -466,7 +470,7 @@ The following operations can be applied to a datastorage key
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
 | pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
-| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
+| update | List or Dict: Adds the elements of `value` to the container if they weren't already present. In the case of a Dict, already present keys will have their corresponding values updated. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
@@ -529,9 +533,9 @@ In JSON this may look like:
     {"item": 3, "location": 3, "player": 3, "flags": 0}
 ]
 ```
-`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`item` is the item id of the item. Item ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
-`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup>, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
+`location` is the location id of the item inside the world. Location ids are only supported in the range of [-2<sup>53</sup> + 1, 2<sup>53</sup> - 1], with anything ≤ 0 reserved for Archipelago use.
 
 `player` is the player slot of the world the item is located in, except when inside an [LocationInfo](#LocationInfo) Packet then it will be the slot of the player to receive the item
 
@@ -744,6 +748,7 @@ Tags are represented as a list of strings, the common client tags follow:
 | HintGame  | Indicates the client is a hint game, made to send hints instead of locations. Special join/leave message,¹ `game` is optional.²      |
 | Tracker   | Indicates the client is a tracker, made to track instead of sending locations. Special join/leave message,¹ `game` is optional.²     |
 | TextOnly  | Indicates the client is a basic client, made to chat instead of sending locations. Special join/leave message,¹ `game` is optional.² |
+| NoText    | Indicates the client does not want to receive text messages, improving performance if not needed.                                    |
 
 ¹: When connecting or disconnecting, the chat message shows e.g. "tracking".\
 ²: Allows `game` to be empty or null in [Connect](#connect). Game and version validation will then be skipped.
@@ -751,8 +756,8 @@ Tags are represented as a list of strings, the common client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name   | Type  | Notes                                                                                                                                                  |
-|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
-| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
-| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |
+| Name   | Type  | Notes                                                                                                                                                                            |
+|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                                                |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, if the string is non-empty, it should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                                                    |
