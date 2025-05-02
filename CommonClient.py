@@ -258,25 +258,11 @@ class CommonContext:
             self.lookup_type: typing.Literal["item", "location"] = lookup_type
             self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
             self._archipelago_lookup: typing.Dict[int, str] = {}
-            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
             self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
-            self.warned: bool = False
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
-            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
-            if isinstance(key, int):
-                if not self.warned:
-                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
-                    self.warned = True
-                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
-                                  f"backwards compatibility for now. If multiple games share the same id for a "
-                                  f"{self.lookup_type}, name could be incorrect. Please use "
-                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
-                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
-                return self._flat_store[key]  # type: ignore
-
             return self._game_store[key]
 
         def __len__(self) -> int:
@@ -316,7 +302,6 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
-            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
@@ -679,9 +664,6 @@ class CommonContext:
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
-        current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
-        current_cache.update(data_package["games"])
-        Utils.persistent_store("datapackage", "games", current_cache)
         logger.info(f"Got new ID/Name DataPackage for {', '.join(data_package['games'])}")
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
@@ -979,6 +961,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
+            ctx.disconnected_intentionally = True
             raise Exception('Server reported your client version as incompatible. '
                             'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
@@ -1181,7 +1164,7 @@ def run_as_textclient(*args):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
             await self.get_username()
-            await self.send_connect()
+            await self.send_connect(game="")
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
@@ -1213,7 +1196,7 @@ def run_as_textclient(*args):
     args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()
