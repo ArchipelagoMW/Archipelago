@@ -951,6 +951,31 @@
         ]
     },
     {
+        "name": "Central Hall",
+        "children": [
+            {
+                "name": "Examine Council Sign", "sections": [{ "name": "Central Hall: Examine Council Sign" }],
+                "map_locations": [{ "map": "central_hall", "x": 240, "y": 150 }]
+            },
+            {
+                "name": "Examine Launch Memoral", "sections": [{ "name": "Central Hall: Examine Launch Memoral" }],
+                "map_locations": [{ "map": "central_hall", "x": 600, "y": 155 }]
+            },
+            {
+                "name": "Examine Council Tenets", "sections": [{ "name": "Central Hall: Examine Council Tenets" }],
+                "map_locations": [{ "map": "central_hall", "x": 95, "y": 165 }]
+            },
+            {
+                "name": "Turrets and Double Axe Robot Room", "sections": [{ "name": "Central Hall: Turrets and Double Axe Robot Room" }],
+                "map_locations": [{ "map": "central_hall", "x": 62, "y": 200 }]
+            },
+            {
+                "name": "Vents", "sections": [{ "name": "Central Hall: Vents" }],
+                "map_locations": [{ "map": "central_hall", "x": 252, "y": 185 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
