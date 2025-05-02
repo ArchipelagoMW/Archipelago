@@ -29,7 +29,7 @@ item_table: Dict[str, ItemData] = {
     "Job - Warlock": ItemData("Job", 14 + job_index_offset, ItemClassification.progression),
     "Job - Fencer": ItemData("Job", 1 + job_index_offset, ItemClassification.progression),
     "Job - Shaman": ItemData("Job", 8 + job_index_offset, ItemClassification.progression),
-    "Job - Scholar": ItemData("Job", 13 + job_index_offset, ItemClassification.progression),
+    "Job - Scholar": ItemData("Job", 13 + job_index_offset, ItemClassification.progression), #requirement for Grans subbasement
     "Job - Aegis": ItemData("Job", 10 + job_index_offset, ItemClassification.progression),
     "Job - Hunter": ItemData("Job", 7 + job_index_offset, ItemClassification.progression),
     "Job - Chemist": ItemData("Job", 17 + job_index_offset, ItemClassification.progression),
@@ -144,6 +144,7 @@ item_table: Dict[str, ItemData] = {
     "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.useful), #idk if we'll be adding any checks that require you to speak Quintar tbh
     "Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 12),
+    "Item - Crag Demon Horn": ItemData("Item", 172 + item_index_offset, ItemClassification.progression), #Turn-in: Jojo Sewers, Advanced Regions
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
     "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
     "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions

@@ -505,6 +505,7 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - West Lookout Token")
             excluded_items.add("Item - Central Lookout Token")
             excluded_items.add("Item - North Lookout Token")
+            excluded_items.add("Item - Crag Demon Horn")
             #Teleport Stones
             excluded_items.add("Item - Gaea Stone")
             excluded_items.add("Item - Poseidon Stone")

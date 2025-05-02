@@ -83,7 +83,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         LocationData("Delende", "Delende NPC - Astley gives you a home point stone", 28 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
-        LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset),
+        LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has("Item - Dog Bone", player, 3)),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
@@ -104,10 +104,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Delende", "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData("Delende", "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset), #(126, 115, -102) Basement map chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset), #(128, 98, -111) Plate of Wolf chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset), #(119, 98, -110) Underpass Scrap
+        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(126, 115, -102) Basement map chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
@@ -307,7 +307,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
@@ -334,7 +334,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jojo Sewers", "Underpass Chest - Walking the plank above Pale Grotto waterfall", 3670 + treasure_index_offset, logic.has_swimming), #(337, 155, -319) Underpass Scrap chest
 
         #NPCs
-        LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset),
+        LocationData("Jojo Sewers", "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has("Item - Crag Demon Horn")),
 
         #Boomer Society
         #Treasure chests
@@ -365,7 +365,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset), #Dust
         #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
-        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
+        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Ore
 
@@ -588,8 +588,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Worried Mom", 1196 + npc_index_offset), #Ferry Pass
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Circle the western desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player) and state.has("Item - Fresh Salmon", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Shoudu Stew", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver", 2905 + npc_index_offset, logic.has_swimming), #Dust
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer", 2906 + npc_index_offset, logic.has_swimming), #Dust
