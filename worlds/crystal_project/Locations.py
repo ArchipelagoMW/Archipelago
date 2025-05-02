@@ -86,12 +86,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has("Item - Dog Bone", player, 3)),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
+        LocationData("Delende", "Delende NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         #Todo NPCs CheckOrNot: guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74))
         #LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
-        #Todo NPCs CheckOrNot: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
         #Grans House (Delende)
         #Treasure chests
@@ -104,10 +104,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Delende", "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData("Delende", "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(126, 115, -102) Basement map chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
+        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(126, 115, -102) Basement map chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
@@ -307,7 +307,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
