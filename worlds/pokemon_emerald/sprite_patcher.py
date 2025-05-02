@@ -1,3 +1,4 @@
+import math
 import os
 import zlib
 
@@ -12,23 +13,20 @@ sprite_pack_data = { }
 resource_address_to_insert_to = 0x00
 current_rom = None
 
+data_addresses = DATA_ADDRESSES_MOCK_AP
+
 ####################
 ## Main Functions ##
 ####################
 
 def handle_sprite_pack(_sprite_pack_path, _rom):
-    global data_addresses
-    if zlib.crc32(_rom) == ORIGINAL_ROM_CRC32:
-        print("Original Emerald ROM detected! Loading its address dictionary...")
-        data_addresses = DATA_ADDRESSES_ORIGINAL
+    handle_address_collection(_rom, True)
 
     global sprite_pack_data, resource_address_to_insert_to
     # Build patch data, fetch end of file
     sprite_pack_data = { "length": 16777216, "data": [] }
     resource_address_to_insert_to = ((data_addresses["sEmpty6"] >> 12) + 1) << 12 # Should be E3D000
 
-    global current_rom
-    current_rom = _rom
     # Handle existing Trainer & Pokemon folders
     handle_folder(_sprite_pack_path, TRAINER_FOLDERS, TRAINER_SPRITES, TRAINER_PALETTES, False)
     handle_folder(_sprite_pack_path, POKEMON_FOLDERS, POKEMON_SPRITES, POKEMON_PALETTES, True)
@@ -49,7 +47,7 @@ def clean_up():
 ## Patch Data Building ##
 #########################
 
-def handle_folder(_sprite_pack_path, _folders_list, _sprites_list, _palettes_list, _is_pokemon):
+def handle_folder(_sprite_pack_path, _folders_list, _sprites_list, _palette_lists, _is_pokemon):
     for object_name in _folders_list:
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
         if not os.path.exists(object_folder_path):
@@ -70,7 +68,7 @@ def handle_folder(_sprite_pack_path, _folders_list, _sprites_list, _palettes_lis
                     continue
                 found_sprites[matching_sprite_name] = sprite_name
                 add_sprite(_is_pokemon, object_name, matching_sprite_name, extra_sprite_data, sprite_path)
-        for palette, palette_extraction_priority_queue in _palettes_list.items():
+        for palette, palette_extraction_priority_queue in _palette_lists.items():
             # Generate palettes if sprites exist
             found_sprite = False
             for sprite_name in palette_extraction_priority_queue:
@@ -102,15 +100,15 @@ def add_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path):
         # Fetch internal Pokemon ID & sprite address
         pokemon_id = POKEMON_NAME_TO_ID[_object_name]
         pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
-        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](pokemon_internal_id)
+        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](data_addresses, pokemon_internal_id)
         if is_palette_indexed_icon:
             # Special case: Palette indexed icons, since icons have 3 palettes
-            icon_index_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key + "_index"](pokemon_internal_id)
+            icon_index_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key + "_index"](data_addresses, pokemon_internal_id)
             add_data_to_patch({ "address": icon_index_address, "length": 1, "data": palette_index.to_bytes(1, 'little')})
     else:
         # Fetch named Trainer sprite address
         named_key = _object_name.lower() + "_" + _sprite_name
-        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key]()
+        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key](data_addresses)
 
     if is_complex_sprite(sprite_key):
         # Special case: Some Trainer sprites point to info struct, not sprite itself
@@ -144,14 +142,14 @@ def add_palette(_is_pokemon, _object_name, _palette_name, _path):
         pokemon_id = POKEMON_NAME_TO_ID[_object_name]
         pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
         palette_key = "pokemon_" + _palette_name
-        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[palette_key](pokemon_internal_id)
+        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[palette_key](data_addresses, pokemon_internal_id)
     else:
         # Trainer: Fetch from trainer battle palette table
         named_key = _object_name.lower() + "_" + _palette_name
         data_address_func = INTERNAL_ID_TO_SPRITE_ADDRESS.get(named_key)
         if not data_address_func:
             raise Exception('Could not find trainer sprite with key {}.'.format(named_key))
-        data_address = data_address_func()
+        data_address = data_address_func(data_addresses)
 
     add_resource(True, palette_key, _palette_name, data_address, _path)
 
@@ -230,25 +228,23 @@ def replace_complex_sprite(_sprite_list_address, _sprite_key, _info_object_addre
         set_overworld_sprite_data(_info_object_address, 'sprite_height', sprite_height)
         set_overworld_sprite_data(_info_object_address, 'size_draw_ptr', data_addresses[_size_data.get('data')])
 
-def extract_complex_sprite(_data_address, _sprite_key):
+def extract_complex_sprite(_data_address, _sprite_key, _object_name, _sprite_name):
     # Extracts complex sprite graphics
     overworld_struct_address = int.from_bytes(bytes(current_rom[_data_address:_data_address + 3]), 'little')
     start_sprite_address = get_overworld_sprite_data(overworld_struct_address, 'sprites_ptr')
+    sprite_width = get_overworld_sprite_data(overworld_struct_address, 'sprite_width')
+    sprite_height = get_overworld_sprite_data(overworld_struct_address, 'sprite_height')
     sprite_data = SPRITES_REQUIREMENTS.get(_sprite_key)
-    sprite_size = 0
     if not sprite_data:
         return
-    for i in range(sprite_data["frames"]):
-        size_address = _data_address + i * 8 + 4
-        sprite_size = sprite_size + int.from_bytes(bytes(current_rom[size_address:size_address+1]), 'little')
-    extract_sprite(start_sprite_address, _sprite_key, sprite_size)
+    return extract_sprite(start_sprite_address, _sprite_key, _object_name, _sprite_name, (sprite_width, sprite_height * sprite_data['frames']))
 
 
 #####################
 ## Data Extraction ##
 #####################
 
-def extract_palette(_path):
+def extract_palette_from_file(_path):
     # Extracts a palette from an existing sprite
     sprite_image = Image.open(_path)
     sprite_palette = sprite_image.getpalette() or []
@@ -259,51 +255,104 @@ def extract_palette(_path):
         sprite_palette_colors.append(hex(color)[2:].zfill(6))
     return sprite_palette_colors
 
-def extract_sprites(_object_name, _output_path):
+def extract_sprites(_object_name, _output_path, _rom):
+    handle_address_collection(_rom)
+
     # Extracts all sprites from given object from ROM into output folder
     is_pokemon = not _object_name in TRAINER_FOLDERS
     sprite_list = POKEMON_SPRITES if is_pokemon else TRAINER_SPRITES
 
-    for sprite_name in sprite_list:
-        sprite_key = ('pokemon' if is_pokemon else 'trainer') + '_' + _object_name + ('_2' if _object_name == 'battle_back' else '')
-        
+    def handle_sprite_extraction(_sprite_name):
+        # TODO: Handle sprites per sprite pool & palette pools
+        sprite_key = ('pokemon' if is_pokemon else 'trainer') + '_' + _sprite_name
+
         if is_pokemon:
             # Fetch internal Pokemon ID & sprite address
             pokemon_id = POKEMON_NAME_TO_ID[_object_name]
             pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
-            data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](pokemon_internal_id)
+            data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](data_addresses, pokemon_internal_id)
         else:
             # Fetch named Trainer sprite address
             named_key = _object_name.lower() + "_" + sprite_name
-            data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key]()
+            data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key](data_addresses)
+        data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), 'little')
 
         if is_complex_sprite(sprite_key):
-            sprite_data = extract_complex_sprite(data_address, sprite_key)
+            sprite_object = extract_complex_sprite(data_address, sprite_key, _object_name, sprite_name)
         else:
-            sprite_data = extract_sprite(data_address, sprite_key)
-        
-        # Save data as gba sprite, compressed or not, then transform into actual sprite
-        needs_compression = OBJECT_NEEDS_COMPRESSION.get(sprite_key, False)
-        file_format = (".1bpp" if sprite_key.endswith("footprint") else ".4bpp") + ('.lz' if needs_compression else '')
-        full_path_with_no_extension = os.path.join(_output_path, _object_name)
-        full_path = full_path_with_no_extension + file_format
-        with open(full_path, "wb") as sprite_file:
-            sprite_file.write(sprite_data)
-        
-        handle_gba_sprite_to_sprite(full_path, needs_compression)
+            sprite_object = extract_sprite(data_address, sprite_key, _object_name, sprite_name)
+        full_path = os.path.join(_output_path, _sprite_name + '.png')
+        sprite_object.save(full_path)
 
-def extract_sprite(_data_address, _sprite_key, _preset_size = 0):
-    # TODO: Find out how much data to extract & handle compression case
-    # TODO: List awaited sprite size & frame amount
-    # TODO: Extract awaited sprite size * frames
-    # TODO: If compression, go through LZ and record the requied blocks, truncate the rest
-    if _preset_size:
-        sprite_size = _preset_size
-    else:
-        pass
+    extracted_sprites = []
+    for sprite_name in sprite_list:
+        handle_sprite_extraction(sprite_name)
+        extracted_sprites.append(sprite_name)
+    palette_lists = POKEMON_PALETTES if is_pokemon else TRAINER_PALETTES
+    palette_sprites = [(not sprite in extracted_sprites for sprite in palette_lists[palette_list]) for palette_list in palette_lists]
+    for sprite_name in palette_sprites:
+        handle_sprite_extraction(sprite_name)
+
+def extract_sprite(_data_address, _sprite_key, _object_name, _sprite_name, _preset_size = 0):
     needs_compression = OBJECT_NEEDS_COMPRESSION.get(_sprite_key, False)
-    print('TODO: Extract sprite with key {} at address {} from ROM.'.format(_sprite_key, _data_address))
-    pass
+    sprite_requirements = SPRITES_REQUIREMENTS.get(_sprite_key)
+    sprite_palette_size = sprite_requirements.get('palette_size', 16)
+    pixel_byte_size, _ = get_pixel_size_and_extension_from_palette_size(sprite_palette_size)
+    if _preset_size:
+        sprite_width = _preset_size[0]
+        sprite_height = _preset_size[1]
+    else:
+        sprite_width = sprite_requirements['width']
+        sprite_height = sprite_requirements['height'] * sprite_requirements['frames']
+    
+    # Extract the sprite's pixel data
+    sprite_size = round(sprite_width * sprite_height * pixel_byte_size)
+    end_address = _data_address + sprite_size + (4 + math.ceil(sprite_size / 8) if needs_compression else 0)
+    sprite_pixel_data = current_rom[_data_address:end_address]
+    if needs_compression:
+        sprite_pixel_data = truncate_lz_compressed_data(sprite_pixel_data, sprite_size)
+        sprite_pixel_data = uncompress_lz_data(sprite_pixel_data)
+    sprite_pixel_data = decompress_sprite(sprite_pixel_data, round(8 * pixel_byte_size))
+    sprite_pixel_data = dechunk_sprite(sprite_pixel_data, sprite_width, sprite_height)
+    
+    # Extract the sprite's palette
+    sprite_palette = extract_palette(_object_name, _sprite_name, _sprite_key.startswith('pokemon_'))
+    if not sprite_palette or not sprite_pixel_data:
+        return
+
+    # Assemble the sprite
+    extracted_image = Image.new('P', (sprite_width, sprite_height))
+    extracted_image.putdata(sprite_pixel_data)
+    extracted_image.putpalette(sprite_palette)
+    return extracted_image
+
+def extract_palette(_object_name, _sprite_name, _is_pokemon):
+    palette_lists = POKEMON_PALETTES if _is_pokemon else TRAINER_PALETTES
+    palette_list_name = next(filter(lambda palette_list: palette_list if _sprite_name in palette_lists[palette_list] else None, palette_lists), None)
+    sprite_key = ('pokemon_' if _is_pokemon else 'trainer_') + palette_list_name
+    if _is_pokemon:
+        pokemon_id = POKEMON_NAME_TO_ID[_object_name]
+        pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
+        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](data_addresses, pokemon_internal_id)
+    else:
+        named_key = _object_name.lower() + '_' + palette_list_name
+        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key](data_addresses)
+    data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), 'little')
+
+    needs_compression = OBJECT_NEEDS_COMPRESSION.get(sprite_key, False)
+    end_address = data_address + 32 + (8 if needs_compression else 0)
+    palette_data = current_rom[data_address:end_address]
+    if needs_compression:
+        palette_data = truncate_lz_compressed_data(palette_data, 32)
+        palette_data = uncompress_lz_data(palette_data)
+
+    palette = []
+    for i in range(16):
+        palette_five_bits_color = int.from_bytes(palette_data[i*2:i*2+2], 'little')
+        for _ in range(3):
+            palette.append(five_to_eight_bits_palette(palette_five_bits_color % 32))
+            palette_five_bits_color >>= 5
+    return palette
 
 #####################
 ## Data Conversion ##
@@ -359,8 +408,7 @@ def handle_sprite_to_palette(_sprite_path, _palette_name, _needs_compression) ->
 ###################
 
 def validate_sprite_pack(_sprite_pack_path, _rom):
-    global current_rom
-    current_rom = _rom
+    handle_address_collection(_rom)
 
     errors = ""
     has_error = False
@@ -374,7 +422,7 @@ def validate_sprite_pack(_sprite_pack_path, _rom):
     add_error(*validate_folder(_sprite_pack_path, POKEMON_FOLDERS, POKEMON_SPRITES, POKEMON_PALETTES, True))
     return errors, has_error
 
-def validate_folder(_sprite_pack_path, _folders_list, _sprites_list, _palettes_list, _is_pokemon):
+def validate_folder(_sprite_pack_path, _folders_list, _sprites_list, _palette_lists, _is_pokemon):
     errors = ""
     has_error = False
     def add_error(_error, _is_error = False, _processed = False):
@@ -396,7 +444,7 @@ def validate_folder(_sprite_pack_path, _folders_list, _sprites_list, _palettes_l
             matching_sprite_name = next(filter(lambda f: sprite_name.startswith(f), _sprites_list), None)
             if not matching_sprite_name:
                 # Allow sprites with a matching palette
-                if not next(filter(lambda palette_list: sprite_name[:-4] in _palettes_list[palette_list], _palettes_list), None):
+                if not next(filter(lambda palette_list: sprite_name[:-4] in _palette_lists[palette_list], _palette_lists), None):
                     add_error('File {} in folder {}: Cannot be linked to a valid internal sprite or palette.'.format(sprite_name, object_name))
                     continue
                 matching_sprite_name = sprite_name[:-4]
@@ -449,7 +497,7 @@ def validate_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path)
                     # Icon palette ID must be fetched from the 
                     pokemon_id = POKEMON_NAME_TO_ID[_object_name]
                     pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
-                    icon_index_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key + "_index"](pokemon_internal_id)
+                    icon_index_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key + "_index"](data_addresses, pokemon_internal_id)
                     palette_index = int.from_bytes(bytes(current_rom[icon_index_address]), 'little')
                 if valid_palette_model:
                     sprite_palette_model = sprite_palette_model[palette_index]
@@ -482,6 +530,129 @@ def is_palette_valid(_palette, _palette_model):
         if _palette_model[i] != -1 and _palette[i] != _palette_model[i]:
             return False
     return True
+
+####################
+## LZ Compression ##
+####################
+
+def truncate_lz_compressed_data(_data, _data_size):
+    data_length = len(_data)
+    shift = 4
+    while True:
+        control_byte = int(_data[shift])
+        shift += 1
+        for i in range(8):
+            if shift >= data_length:
+                return _data
+            is_compressed = control_byte >= 128
+            control_byte = (control_byte << 1) % 256
+            if not is_compressed:
+                _data_size -= 1
+                shift += 1
+            else:
+                diff = 3 + (int(_data[shift]) >> 4)
+                shift += 2
+                _data_size -= diff
+            if _data_size <= 0:
+                return _data[:shift]
+
+def uncompress_lz_data(_src:bytes):
+    src_size = len(_src)
+    if src_size < 4:
+        raise Exception('Fatal error while decompressing LZ file: size of file is {}'.format(src_size))
+    
+    dest_size = int.from_bytes(bytes(_src[1:4]), 'little')
+    dest = [0 for _ in range(dest_size)]
+
+    src_pos = 4
+    dest_pos = 0
+    compressed_byte_count = 0
+
+    while True:
+        if src_pos >= src_size:
+            raise Exception('Fatal error while decompressing LZ file: {}/{}'.format(src_pos, src_size))
+        
+        control_byte = int(_src[src_pos])
+        src_pos += 1
+
+        for i in range(8):
+            if control_byte >= 128:
+                if src_pos + 1 >= src_size:
+                    raise Exception('Fatal error while decompressing LZ file: {}/{}'.format(src_pos, src_size))
+                
+                compressed_byte_count += 1
+                block = int.from_bytes(bytes(_src[src_pos:src_pos+2]), 'big')
+                block_size = (block >> 12) + 3
+                block_distance = (block & 0xFFF) + 1
+
+                src_pos += 2
+
+                block_pos = dest_pos - block_distance
+                if dest_pos + block_size > dest_size:
+                    block_size = dest_size - dest_pos
+                    print('LZ decompression: Destination buffer overflow.')
+
+                if block_pos < 0:
+                    raise Exception('Fatal error while decompressing LZ file: Distance is {} ({} - {}).'.format(block_pos, dest_pos, block_distance))
+
+                for j in range(block_size):
+                    dest[dest_pos] = dest[block_pos + j]
+                    dest_pos += 1
+            else:
+                if src_pos >= src_size or dest_pos >= dest_size:
+                    raise Exception('Fatal error while decompressing LZ file: {}/{} and {}/{}.'.format(src_pos, src_size, dest_pos, dest_size))
+                dest[dest_pos] = _src[src_pos]
+                dest_pos += 1
+                src_pos += 1
+            
+            if dest_pos == dest_size:
+                return bytes(dest)
+            
+            control_byte = (control_byte << 1) % 256
+
+###########################
+## Sprite Transformation ##
+###########################
+
+def decompress_sprite(_data, _bits_per_pixel):
+    pixels_per_bytes = round(8 / _bits_per_pixel)
+    data_per_pixel = int(math.pow(2, _bits_per_pixel))
+
+    data_size = len(_data)
+    dest_size = data_size * pixels_per_bytes
+    dest = [0 for _ in range(dest_size)]
+
+    data_shift = 0
+    for byte_index in range(data_size):
+        bits = 8
+        byte = int(_data[byte_index])
+        while bits > 0:
+            pixel = byte & (data_per_pixel - 1)
+            byte >>= _bits_per_pixel
+            bits -= _bits_per_pixel
+            dest[data_shift] = pixel
+            data_shift += 1
+    return bytes(dest)
+
+def dechunk_sprite(_data, _width, _height):
+    data_size = _width * _height
+    dest = [0 for _ in range(data_size)]
+
+    shift = 0
+    block_x = 0
+    block_y = 0
+    while shift < data_size:
+        for y in range(min(_height - (block_y * 8), 8)):
+            for x in range(min(_width - (block_x * 8), 8)):
+                new_pos = (block_y * 8 + y) * _width + block_x * 8 + x
+                dest[new_pos] = int(_data[shift])
+                shift += 1
+        block_x += 1
+        if block_x * 8 >= _width:
+            block_x = 0
+            block_y += 1
+    return bytes(dest)
+
 
 #######################
 ## Utility Functions ##
@@ -530,3 +701,18 @@ def is_complex_sprite(_sprite_key):
 
 def is_overworld_sprite(_sprite_key:str):
     return _sprite_key.startswith('trainer_') and not 'battle' in _sprite_key
+
+def handle_address_collection(_rom, _display_message = False):
+    global data_addresses
+    if zlib.crc32(_rom) == ORIGINAL_ROM_CRC32:
+        if _display_message:
+            print("Original Emerald ROM detected! Loading its address dictionary...")
+        data_addresses = DATA_ADDRESSES_ORIGINAL
+    else:
+        data_addresses = DATA_ADDRESSES_MOCK_AP
+    
+    global current_rom
+    current_rom = _rom
+
+def five_to_eight_bits_palette(value):
+    return value * 8 + math.floor(value / 4.4)

@@ -537,7 +537,7 @@ POKEMON_PALETTES = {
 
 TRAINER_FOLDERS = ["Brendan", "May"]
 TRAINER_SPRITES = ["walking_running", "acro_bike", "mach_bike", "surfing", "field_move", "underwater", "fishing", "watering", "decorating", "battle_front", "battle_back"]
-TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ["walking_running", "acro_bike", "mach_bike", "surfing", "fishing", "watering", "decorating"]
+TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ["walking_running", "acro_bike", "mach_bike", "surfing", "field_move", "fishing", "watering", "decorating"]
 TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY = ["reflection"]
 TRAINER_UNDERWATER_PALETTE_EXTRACTION_PRIORITY = ["underwater"]
 TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY = ["battle_back"]
@@ -548,6 +548,16 @@ TRAINER_PALETTES = {
     "palette_underwater": TRAINER_UNDERWATER_PALETTE_EXTRACTION_PRIORITY,
     "palette_battle_back": TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY,
     "palette_battle_front": TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
+}
+
+PALETTE_IMAGE_SPRITE_REFERENCE = {
+    "pokemon_palette": "front_anim",
+    "pokemon_palette_shiny": "front_anim",
+    "trainer_palette": "walking_running",
+    "trainer_palette_reflection": "walking_running",
+    "trainer_palette_underwater": "underwater",
+    "trainer_palette_battle_back": "battle_back",
+    "trainer_palette_battle_front": "battle_front",
 }
 
 OBJECT_NEEDS_COMPRESSION = {
@@ -561,49 +571,49 @@ OBJECT_NEEDS_COMPRESSION = {
 }
 
 INTERNAL_ID_TO_SPRITE_ADDRESS = {
-    "pokemon_front_anim":    lambda a : data_addresses["gMonFrontPicTable"]      + 8 * a,
-    "pokemon_back":          lambda a : data_addresses["gMonBackPicTable"]       + 8 * a,
-    "pokemon_icon":          lambda a : data_addresses["gMonIconTable"]          + 4 * a,
-    "pokemon_icon_index":    lambda a : data_addresses["gMonIconPaletteIndices"] + a,
-    "pokemon_footprint":     lambda a : data_addresses["gMonFootprintTable"]     + 4 * a,
-    "pokemon_palette":       lambda a : data_addresses["gMonPaletteTable"]       + 8 * a,
-    "pokemon_palette_shiny": lambda a : data_addresses["gMonShinyPaletteTable"]  + 8 * a,
+    "pokemon_front_anim":    lambda c, a : c["gMonFrontPicTable"]      + 8 * a,
+    "pokemon_back":          lambda c, a : c["gMonBackPicTable"]       + 8 * a,
+    "pokemon_icon":          lambda c, a : c["gMonIconTable"]          + 4 * a,
+    "pokemon_icon_index":    lambda c, a : c["gMonIconPaletteIndices"] + a,
+    "pokemon_footprint":     lambda c, a : c["gMonFootprintTable"]     + 4 * a,
+    "pokemon_palette":       lambda c, a : c["gMonPaletteTable"]       + 8 * a,
+    "pokemon_palette_shiny": lambda c, a : c["gMonShinyPaletteTable"]  + 8 * a,
 
-    "brendan_walking_running":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 400,
-    "brendan_mach_bike":            lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 404,
-    "brendan_acro_bike":            lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 408,
-    "brendan_surfing":              lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 412,
-    "brendan_field_move":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 416,
-    "brendan_underwater":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 444,
-    "brendan_fishing":              lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 548,
-    "brendan_watering":             lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 764,
-    "brendan_decorating":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 772,
-    "brendan_battle_front":         lambda : data_addresses["gTrainerFrontPicTable"] + 568,
-    "brendan_battle_back":          lambda : data_addresses["gTrainerBackPicTable"],
-    "brendan_battle_back_2":        lambda : data_addresses["sTrainerBackSpriteTemplates"],
-    "brendan_palette":              lambda : data_addresses["sObjectEventSpritePalettes"] + 64,
-    "brendan_palette_reflection":   lambda : data_addresses["sObjectEventSpritePalettes"] + 72,
-    "brendan_palette_underwater":   lambda : data_addresses["sObjectEventSpritePalettes"] + 88,
-    "brendan_palette_battle_back":  lambda : data_addresses["gTrainerBackPicPaletteTable"],
-    "brendan_palette_battle_front": lambda : data_addresses["gTrainerFrontPicPaletteTable"] + 568,
+    "brendan_walking_running":      lambda c : c["gObjectEventGraphicsInfoPointers"] + 400,
+    "brendan_mach_bike":            lambda c : c["gObjectEventGraphicsInfoPointers"] + 404,
+    "brendan_acro_bike":            lambda c : c["gObjectEventGraphicsInfoPointers"] + 408,
+    "brendan_surfing":              lambda c : c["gObjectEventGraphicsInfoPointers"] + 412,
+    "brendan_field_move":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 416,
+    "brendan_underwater":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 444,
+    "brendan_fishing":              lambda c : c["gObjectEventGraphicsInfoPointers"] + 548,
+    "brendan_watering":             lambda c : c["gObjectEventGraphicsInfoPointers"] + 764,
+    "brendan_decorating":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 772,
+    "brendan_battle_front":         lambda c : c["gTrainerFrontPicTable"] + 568,
+    "brendan_battle_back":          lambda c : c["gTrainerBackPicTable"],
+    "brendan_battle_back_2":        lambda c : c["sTrainerBackSpriteTemplates"],
+    "brendan_palette":              lambda c : c["sObjectEventSpritePalettes"] + 64,
+    "brendan_palette_reflection":   lambda c : c["sObjectEventSpritePalettes"] + 72,
+    "brendan_palette_underwater":   lambda c : c["sObjectEventSpritePalettes"] + 88,
+    "brendan_palette_battle_back":  lambda c : c["gTrainerBackPicPaletteTable"],
+    "brendan_palette_battle_front": lambda c : c["gTrainerFrontPicPaletteTable"] + 568,
 
-    "may_walking_running":      lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 420,
-    "may_mach_bike":            lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 424,
-    "may_acro_bike":            lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 428,
-    "may_surfing":              lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 432,
-    "may_field_move":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 436,
-    "may_underwater":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 448,
-    "may_fishing":              lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 552,
-    "may_watering":             lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 768,
-    "may_decorating":           lambda : data_addresses["gObjectEventGraphicsInfoPointers"] + 776,
-    "may_battle_front":         lambda : data_addresses["gTrainerFrontPicTable"] + 576,
-    "may_battle_back":          lambda : data_addresses["gTrainerBackPicTable"] + 8,
-    "may_battle_back_2":        lambda : data_addresses["sTrainerBackSpriteTemplates"] + 24,
-    "may_palette":              lambda : data_addresses["sObjectEventSpritePalettes"] + 136,
-    "may_palette_reflection":   lambda : data_addresses["sObjectEventSpritePalettes"] + 144,
-    "may_palette_underwater":   lambda : data_addresses["sObjectEventSpritePalettes"] + 88,
-    "may_palette_battle_back":  lambda : data_addresses["gTrainerBackPicPaletteTable"] + 8,
-    "may_palette_battle_front": lambda : data_addresses["gTrainerFrontPicPaletteTable"] + 576,
+    "may_walking_running":      lambda c : c["gObjectEventGraphicsInfoPointers"] + 420,
+    "may_mach_bike":            lambda c : c["gObjectEventGraphicsInfoPointers"] + 424,
+    "may_acro_bike":            lambda c : c["gObjectEventGraphicsInfoPointers"] + 428,
+    "may_surfing":              lambda c : c["gObjectEventGraphicsInfoPointers"] + 432,
+    "may_field_move":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 436,
+    "may_underwater":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 448,
+    "may_fishing":              lambda c : c["gObjectEventGraphicsInfoPointers"] + 552,
+    "may_watering":             lambda c : c["gObjectEventGraphicsInfoPointers"] + 768,
+    "may_decorating":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 776,
+    "may_battle_front":         lambda c : c["gTrainerFrontPicTable"] + 576,
+    "may_battle_back":          lambda c : c["gTrainerBackPicTable"] + 8,
+    "may_battle_back_2":        lambda c : c["sTrainerBackSpriteTemplates"] + 24,
+    "may_palette":              lambda c : c["sObjectEventSpritePalettes"] + 136,
+    "may_palette_reflection":   lambda c : c["sObjectEventSpritePalettes"] + 144,
+    "may_palette_underwater":   lambda c : c["sObjectEventSpritePalettes"] + 88,
+    "may_palette_battle_back":  lambda c : c["gTrainerBackPicPaletteTable"] + 8,
+    "may_palette_battle_front": lambda c : c["gTrainerFrontPicPaletteTable"] + 576,
 }
 
 COMPLEX_SPRITES_LIST = [
@@ -675,9 +685,6 @@ DATA_ADDRESSES_ORIGINAL = {
     "sOamTables_32x32": 0x5095f4,
     "sEmpty6": 0xe3cf31
 }
-
-# TODO: Replace DATA_ADDRESSES_MOCK_AP with data.rom_addresses
-data_addresses = DATA_ADDRESSES_MOCK_AP
 
 VALID_OVERWORLD_SPRITE_SIZES = [
     { "width": 16, "height": 16, "data": 'sOamTables_16x16' },
@@ -793,7 +800,7 @@ SPRITES_REQUIREMENTS = {
     "trainer_fishing":         { "frames": 12, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
     "trainer_watering":        { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
     "trainer_decorating":      { "frames": 1,  "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_battle_back_2":   { "frames": 4,  "width": 64, "height": 64 },
     "trainer_battle_front":    { "frames": 1,  "width": 64, "height": 64 },
-    "trainer_battle_back":     { "frames": 4,  "width": 64, "height": 64 }
+    "trainer_battle_back":     { "frames": 4,  "width": 64, "height": 64 },
+    "trainer_battle_back_2":   { "frames": 4,  "width": 64, "height": 64 }
 }

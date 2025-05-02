@@ -7,9 +7,9 @@ import math
 from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
-    tkinter_center_window, data_to_bps_patch, init_logging
-from worlds.pokemon_emerald.sprite_patcher import handle_sprite_pack, extract_palette, extract_sprites, \
-    validate_sprite_pack, POKEMON_FOLDERS, TRAINER_FOLDERS
+    tkinter_center_window, data_to_bps_patch
+from worlds.pokemon_emerald.sprite_patcher import handle_sprite_pack, extract_palette_from_file, \
+    extract_sprites, validate_sprite_pack, POKEMON_FOLDERS, TRAINER_FOLDERS
 from argparse import Namespace
 
 logger = logging.getLogger('EmeraldAdjuster')
@@ -63,21 +63,22 @@ def adjustGUI():
 
     patchDialogFrame = Frame(mainWindowFrame, padx=8, pady=2)
     patchLabel = Label(patchDialogFrame, text='Patch / Modified Rom')
-    opts.patch = StringVar(value=adjuster_settings.patch)
+    opts.patch = StringVar()
     patchEntry = Entry(patchDialogFrame, textvariable=opts.patch)
     spritePackFrame = Frame(mainWindowFrame, padx=8, pady=2)
     spritePackLabel = Label(spritePackFrame, text='Sprite pack to load')
-    opts.sprite_pack = StringVar(value=adjuster_settings.sprite_pack)
+    opts.sprite_pack = StringVar()
     spritePackEntry = Entry(spritePackFrame, textvariable=opts.sprite_pack)
 
     def PatchSelect(_forcedPatch = None):
+        global isPatchValid
+
         if not _forcedPatch is None:
             patch = _forcedPatch
         else:
-            patch = filedialog.askopenfilename(filetypes=[("Rom & Patch Files", [".gba", ".apemerald"]), ("All Files", "*")])
+            patch = filedialog.askopenfilename(initialfile=opts.patch.get() if isPatchValid else None, filetypes=[("Rom & Patch Files", [".gba", ".apemerald"]), ("All Files", "*")])
         opts.patch.set(patch)
 
-        global isPatchValid
         isPatchValid = len(patch) > 0 and os.path.exists(patch)
         tryValidateSpritePack(opts.sprite_pack.get(), True)
 
@@ -96,13 +97,13 @@ def adjustGUI():
         SwitchSpriteFolder(folder)
 
     def SpritePackSelect(_forcedSpritePack = None):
+        global isSpritePackValid
+
         if not _forcedSpritePack is None:
             spritePack = _forcedSpritePack
         else:
-            spritePack = filedialog.askdirectory(mustexist=True)
+            spritePack = filedialog.askdirectory(initialdir=opts.sprite_pack.get() if isSpritePackValid else None, mustexist=True)
         opts.sprite_pack.set(spritePack)
-
-        global isSpritePackValid
         isSpritePackValid = len(spritePack) > 0 and os.path.isdir(spritePack)
         tryValidateSpritePack(opts.sprite_pack.get())
 
@@ -159,14 +160,19 @@ def adjustGUI():
             spriteExtractorWarning['text'] = 'The name given is not a known Trainer or Pokemon!'
             return
         
-        baseFolderPath:str = os.path.join(opts.sprite_pack.get(), spriteExtractorFolder.get())
-        if os.path.isdir(baseFolderPath):
-            baseFolderPath = baseFolderPath + '-original'
-        outputFolder = filedialog.askdirectory(initialdir=baseFolderPath, mustexist=True, title='Select a folder to extract the sprites to.')
-        if len(outputFolder) == 0 and os.path.isdir(outputFolder):
+
+        baseFolderPath:str = None
+        if isSpritePackValid:
+            baseFolderPath = os.path.join(opts.sprite_pack.get(), spriteExtractorFolder.get())
+            if os.path.isdir(baseFolderPath):
+                baseFolderPath = baseFolderPath + '-original'
+        outputFolder = filedialog.askdirectory(initialdir=baseFolderPath, mustexist=False, title='Select a folder to extract the sprites to.')
+        if len(outputFolder) == 0:
             return
+        if not os.path.isdir(outputFolder):
+            os.makedirs(outputFolder)
         
-        extract_sprites(spriteExtractorFolder.get(), opts.patch.get(), outputFolder)
+        extract_sprites(spriteExtractorFolder.get(), outputFolder, build_ap_rom(opts.patch.get()))
         
 
     spriteExtractorFolder = StringVar()
@@ -224,7 +230,7 @@ def adjustGUI():
         spriteLabelImage.image = newImage
 
         # Extract the colors from the sprite
-        palette = extract_palette(sprite)
+        palette = extract_palette_from_file(sprite)
         for i in range(16):
             palettePreviews[i]['bg'] = '#' + (palette[i] if i < len(palette) else '000000')
 
@@ -321,8 +327,8 @@ def adjustGUI():
             adjustButton['state'] = tk.DISABLED
             spritePreviewErrorLabel['text'] = 'Both a sprite pack and a patch/ROM must be selected to validate the sprite pack.'
 
-    PatchSelect(opts.patch.get() or '')
-    SpritePackSelect(opts.sprite_pack.get() or '')
+    PatchSelect(adjuster_settings.patch or '')
+    SpritePackSelect(adjuster_settings.sprite_pack or '')
 
     tkinter_center_window(window)
     window.mainloop()
