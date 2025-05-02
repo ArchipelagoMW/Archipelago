@@ -850,7 +850,7 @@ item_table: Dict[str, ItemData] = {
     "Scholar - Sun Bath": ItemData("Scholar", 101 + scholar_index_offset, ItemClassification.useful, 0, 1),
     "Scholar - Sleep Aura": ItemData("Scholar", 186 + scholar_index_offset, ItemClassification.useful, 0, 1),
     "Scholar - Regenerate": ItemData("Scholar", 197 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Reverse Polarity": ItemData("Scholar", 198 + scholar_index_offset, ItemClassification.useful), #left in pool so you can merc Gran
+    "Scholar - Reverse Polarity": ItemData("Scholar", 198 + scholar_index_offset, ItemClassification.progression), #left in pool so you can merc Gran
     "Scholar - Barrier": ItemData("Scholar", 199 + scholar_index_offset, ItemClassification.useful, 0, 1),
     "Scholar - MP Sickle": ItemData("Scholar", 200 + scholar_index_offset, ItemClassification.useful, 0, 1),
     "Scholar - Adrenaline": ItemData("Scholar", 202 + scholar_index_offset, ItemClassification.useful, 0, 1),
