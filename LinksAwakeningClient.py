@@ -584,11 +584,6 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, LinksAwakeningContext):
             self.ctx.client.death_link_status = DeathLinkStatus.PENDING
 
-    def _cmd_send(self, code):
-        """Send item by ID."""
-        if isinstance(self.ctx, LinksAwakeningContext):
-            self.ctx.client.gameboy.send_mw_command(MWCommands.SEND_ITEM_SPECIAL, int(code), 0)
-
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
