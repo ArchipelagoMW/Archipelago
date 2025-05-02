@@ -841,6 +841,34 @@
         ]
     },
     {
+        "name": "Apeman Facility (Elevator)",
+        "children": [
+            {
+                "name": "Hidden Atop Upper Level Pagoda", "sections": [
+                    { "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Left Chest)" },
+                    { "name": "AF (Elevator): Hidden Atop Upper Level Pagoda (Right Chest)" }
+                ],
+                "map_locations": [{ "map": "apeman_facility_elevator", "x": 537, "y": 110 }]
+            },
+            {
+                "name": "Moving Boxes", "sections": [{ "name": "AF (Elevator): Moving Boxes" }],
+                "map_locations": [{ "map": "apeman_facility_elevator", "x": 360, "y": 210 }]
+            },
+            {
+                "name": "Defeat Red Tiger Elite: Baichang", "sections": [{ "name": "AF (Elevator): Defeat Red Tiger Elite: Baichang" }],
+                "map_locations": [{ "map": "apeman_facility_elevator", "x": 680, "y": 285 }]
+            },
+            {
+                "name": "Hack Statue", "sections": [{ "name": "AF (Elevator): Hack Statue" }],
+                "map_locations": [{ "map": "apeman_facility_elevator", "x": 180, "y": 285 }]
+            },
+            {
+                "name": "Over Electrified Floor", "sections": [{ "name": "AF (Elevator): Over Electrified Floor" }],
+                "map_locations": [{ "map": "apeman_facility_elevator", "x": 420, "y": 300 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
