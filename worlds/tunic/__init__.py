@@ -486,10 +486,10 @@ class TunicWorld(World):
             multiworld.random.shuffle(non_grass_fill_locations)
 
             for filler_item in grass_fill:
-                multiworld.push_item(grass_fill_locations.pop(), filler_item, collect=False)
+                grass_fill_locations.pop().place_locked_item(filler_item)
 
             for filler_item in non_grass_fill:
-                multiworld.push_item(non_grass_fill_locations.pop(), filler_item, collect=False)
+                non_grass_fill_locations.pop().place_locked_item(filler_item)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}

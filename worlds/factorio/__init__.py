@@ -27,7 +27,7 @@ def launch_client():
     launch_component(launch, name="FactorioClient")
 
 
-components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Factorio Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioSettings(settings.Group):
