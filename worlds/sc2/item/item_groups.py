@@ -1,5 +1,6 @@
 import typing
 from . import item_tables, item_names
+from .item_tables import key_item_table
 from ..mission_tables import campaign_mission_table, SC2Campaign, SC2Mission, SC2Race
 
 """
@@ -178,6 +179,8 @@ class ItemGroupNames:
     OVERPOWERED_ITEMS = "Overpowered Items"
     UNRELEASED_ITEMS = "Unreleased Items"
     LEGACY_ITEMS = "Legacy Items"
+
+    KEYS = "Keys"
 
     @classmethod
     def get_all_group_names(cls) -> typing.Set[str]:
@@ -883,4 +886,8 @@ item_name_groups[ItemGroupNames.LEGACY_ITEMS] = legacy_items = [
     item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY,
     item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION,
     item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
+]
+
+item_name_groups[ItemGroupNames.KEYS] = keys = [
+    item_name for item_name in key_item_table.keys()
 ]
