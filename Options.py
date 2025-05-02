@@ -1311,7 +1311,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
-            if not option_name in type(self).type_hints:
+            if option_name not in type(self).type_hints:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
 
             if casing == "snake":
