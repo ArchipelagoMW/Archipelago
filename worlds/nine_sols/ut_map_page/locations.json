@@ -890,6 +890,38 @@
         ]
     },
     {
+        "name": "Boundless Repository",
+        "children": [
+            {
+                "name": "Examine Console", "sections": [{ "name": "BR: Examine Console" }],
+                "map_locations": [{ "map": "boundless_repository", "x": 535, "y": 230 }]
+            },
+            {
+                "name": "Near Xingtian Console", "sections": [{ "name": "BR: Near Xingtian Console" }],
+                "map_locations": [{ "map": "boundless_repository", "x": 465, "y": 230 }]
+            },
+            {
+                "name": "Gauntlet", "sections": [
+                    { "name": "BR: Gauntlet Part 1 Chest" },
+                    { "name": "BR: Gauntlet Part 2 First Chest" },
+                    { "name": "BR: Gauntlet Part 2 Chest Past Lasers" },
+                    { "name": "BR: Gauntlet Part 2 Chest Past Beetle" }
+                ],
+                "map_locations": [{ "map": "boundless_repository", "x": 180, "y": 325 }]
+            },
+            {
+                "name": "Vault", "sections": [
+                    { "name": "BR: Vault 1st Chest" },
+                    { "name": "BR: Vault 2nd Chest" },
+                    { "name": "BR: Examine Vault Scroll" },
+                    { "name": "BR: Vault 3rd Chest" },
+                    { "name": "BR: Vault 4th Chest" }
+                ],
+                "map_locations": [{ "map": "boundless_repository", "x": 569, "y": 312 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
