@@ -297,7 +297,9 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("The Sequoia", player).add_exits(["The Deep Sea"])
     multiworld.get_region("The Depths", player).add_exits(["The Deep Sea"])
     multiworld.get_region("Castle Sequoia", player).add_exits(["Capital Sequoia"])
+    # regions without connections don't get parsed by Jsonifier
     multiworld.get_region("The New World", player).add_exits(["Menu"])
+    multiworld.get_region("The Old World", player).add_exits(["Menu"])
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
