@@ -869,6 +869,27 @@
         ]
     },
     {
+        "name": "Apeman Facility (Monitoring)",
+        "children": [
+            {
+                "name": "Break Corpse", "sections": [{ "name": "AF (Monitoring): Break Corpse" }],
+                "map_locations": [{ "map": "apeman_facility_monitoring", "x": 343, "y": 40 }]
+            },
+            {
+                "name": "Upper Right", "sections": [{ "name": "AF (Monitoring): Upper Right" }],
+                "map_locations": [{ "map": "apeman_facility_monitoring", "x": 820, "y": 80 }]
+            },
+            {
+                "name": "Lower Vent", "sections": [{ "name": "AF (Monitoring): Lower Vent" }],
+                "map_locations": [{ "map": "apeman_facility_monitoring", "x": 400, "y": 110 }]
+            },
+            {
+                "name": "Examine Apeman Surveillance", "sections": [{ "name": "AF (Monitoring): Examine Apeman Surveillance" }],
+                "map_locations": [{ "map": "apeman_facility_monitoring", "x": 473, "y": 210 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
