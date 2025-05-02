@@ -1,4 +1,3 @@
-<FLAGON>(199)
 <MENUOFF>
 
 =======================================================================
@@ -9,7 +8,6 @@
 <BGM>(7)
 <WARP>(12)
 <WAIT>(10)
-<FLAGOFF>(199)
 <END>
 
 =======================================================================
@@ -23,10 +21,10 @@
 <SAY><COLOR>(6)You defeated Boolossus!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
+<FLAGON>(34)
 <SETLUIGI>(5)
 <WIPEKIND>(3)
 <WARP>(2)
-<FLAGOFF>(199)
 <END>
 
 =====================================================================
@@ -41,10 +39,10 @@
 <SAY><COLOR>(2)You defeated Bogmire!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
+<FLAGON>(34)
 <SETLUIGI>(2)
 <WIPEKIND>(3)
 <WARP>(2)
-<FLAGOFF>(199)
 <END>
 
 =====================================================================
@@ -57,13 +55,12 @@
 <SAY><COLOR>(1)You defeated Chauncey!\nSending you back...
 <WAIT>(120)
 <CLOSEWINDOW>(0)
+<FLAGON>(34)
 <SETLUIGI>(1)
 <WIPEKIND>(3)
 <WARP>(2)
-<FLAGOFF>(199)
 <END>
 
 =====================================================================---
 <CASE>"46off"
-<FLAGOFF>(199)
 <END>
