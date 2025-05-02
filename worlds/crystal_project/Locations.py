@@ -307,7 +307,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
