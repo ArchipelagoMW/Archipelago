@@ -1005,6 +1005,78 @@
         ]
     },
     {
+        "name": "Empyrean Dist. (Living Area)",
+        "children": [
+            {
+                "name": "Above Right Elevator", "sections": [{ "name": "ED (Living Area): Above Right Elevator" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 375, "y": 90 }]
+            },
+            {
+                "name": "Retrieve Chip From Shanhai 9000", "sections": [{ "name": "ED (Living Area): Retrieve Chip From Shanhai 9000" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 340, "y": 125 }]
+            },
+            {
+                "name": "Examine Bulletin Board", "sections": [{ "name": "ED (Living Area): Examine Bulletin Board" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 360, "y": 140 }]
+            },
+            {
+                "name": "Walking Chest In East Building", "sections": [{ "name": "ED (Living Area): Walking Chest In East Building" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 300, "y": 100 }]
+            },
+            {
+                "name": "Above Root Node", "sections": [{ "name": "ED (Living Area): Above Root Node" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 160, "y": 145 }]
+            },
+            {
+                "name": "Middle Elevator Chest Room", "sections": [{ "name": "ED (Living Area): Middle Elevator Chest Room" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 245, "y": 125 }]
+            },
+            {
+                "name": "Defeat Mutated Zouyan in Middle Elevator Room", "sections": [{ "name": "ED (Living Area): Defeat Mutated Zouyan in Middle Elevator Room" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 240, "y": 100 }]
+            },
+            {
+                "name": "Fuxi's Vital Sanctum", "sections": [{ "name": "ED (Living Area): Fuxi's Vital Sanctum" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 100, "y": 90 }]
+            },
+            {
+                "name": "Upper Right of Five Bells Room", "sections": [{ "name": "ED (Living Area): Upper Right of Five Bells Room" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 150, "y": 110 }]
+            },
+            {
+                "name": "Defeat Mutated A-Shou in Five Bells Room", "sections": [{ "name": "ED (Living Area): Defeat Mutated A-Shou in Five Bells Room" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 135, "y": 110 }]
+            },
+            {
+                "name": "Roof Right of Opera Theater", "sections": [{ "name": "ED (Living Area): Roof Right of Opera Theater" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 152, "y": 22 }]
+            },
+            {
+                "name": "Roof Right of Opera Theater", "sections": [{ "name": "ED (Living Area): Roof Left of Opera Theater" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 30, "y": 27 }]
+            },
+            {
+                "name": "East Building Rooftops", "sections": [{ "name": "ED (Living Area): East Building Rooftops" }],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 300, "y": 45 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [
+                    { "name": "ED (Living Area): Dusk Guardian Recording Device" },
+                    { "name": "ED (Living Area): Tianhuo Flower" }
+                ],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 345, "y": 45 }]
+            },
+            {
+                "name": "Backer Room", "sections": [
+                    { "name": "ED (Living Area): Backer Room 1st Chest" },
+                    { "name": "ED (Living Area): Backer Room 2nd Chest" },
+                    { "name": "ED (Living Area): Backer Room 3rd Chest" }
+                ],
+                "map_locations": [{ "map": "empyrean_district_living_area", "x": 100, "y": 130 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {

@@ -9,7 +9,9 @@
     { "name": "boundless_repository", "img": "./boundless_repository.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "cortex_center", "img": "./cortex_center.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "central_transport_hub", "img": "./central_transport_hub.png", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "empyrean_district_living_area", "img": "./empyrean_district_living_area.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "empyrean_district_living_area", "img": "./empyrean_district_living_area.webp",
+        "location_size": 10, "location_border_thickness": 2
+    },
     { "name": "empyrean_district_passages", "img": "./empyrean_district_passages.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "empyrean_district_sanctum", "img": "./empyrean_district_sanctum.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "factory_great_hall", "img": "./factory_great_hall.webp", "location_size": 20, "location_border_thickness": 3 },
