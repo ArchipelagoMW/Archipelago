@@ -45,7 +45,8 @@ MinVersion={#min_windows}
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}";
+Name: "deletelib"; Description: "Clean existing /lib folder and subfolders including /worlds (leave checked if unsure)"; Check: ShouldShowDeleteLibTask
 
 [Types]
 Name: "full"; Description: "Full installation"
@@ -83,18 +84,8 @@ Filename: "{app}\ArchipelagoLauncher"; Description: "{cm:LaunchProgram,{#StringC
 Type: dirifempty; Name: "{app}"
 
 [InstallDelete]
-Type: files; Name: "{app}\lib\worlds\_bizhawk.apworld"
-Type: files; Name: "{app}\ArchipelagoLttPClient.exe"
-Type: files; Name: "{app}\ArchipelagoPokemonClient.exe"
+Type: files; Name: "{app}\*.exe"
 Type: files; Name: "{app}\data\lua\connector_pkmn_rb.lua"
-Type: filesandordirs; Name: "{app}\lib\worlds\rogue-legacy"
-Type: dirifempty; Name: "{app}\lib\worlds\rogue-legacy"
-Type: files; Name: "{app}\lib\worlds\sc2wol.apworld"
-Type: filesandordirs; Name: "{app}\lib\worlds\sc2wol"
-Type: dirifempty; Name: "{app}\lib\worlds\sc2wol"
-Type: filesandordirs; Name: "{app}\lib\worlds\bk_sudoku"
-Type: dirifempty; Name: "{app}\lib\worlds\bk_sudoku"
-Type: files; Name: "{app}\ArchipelagoLauncher(DEBUG).exe"
 Type: filesandordirs; Name: "{app}\SNI\lua*"
 Type: filesandordirs; Name: "{app}\EnemizerCLI*"
 #include "installdelete.iss"
@@ -259,5 +250,19 @@ begin
     // Not even an old version installed
     Log('VC Redist x64 is not already installed');
     Result := True;
+  end;
+end;
+
+function ShouldShowDeleteLibTask: Boolean;
+begin
+  Result := DirExists(ExpandConstant('{app}\lib'));
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssInstall then
+  begin
+    if WizardIsTaskSelected('deletelib') then
+      DelTree(ExpandConstant('{app}\lib'), True, True, True);
   end;
 end;

@@ -27,7 +27,7 @@ from enum import IntEnum
 from CommonClient import (CommonContext, ClientCommandProcessor, get_base_parser, gui_enabled, logger, server_loop)
 from NetUtils import ClientStatus
 from worlds.ladx import LinksAwakeningWorld
-from worlds.ladx.Common import BASE_ID, LINKS_AWAKENING
+from worlds.ladx import Common
 from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
@@ -52,21 +52,6 @@ class InvalidEmulatorStateError(GameboyException):
 class BadRetroArchResponse(GameboyException):
     pass
 
-
-def magpie_logo():
-    from kivy.uix.image import CoreImage
-    binary_data = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXN
-SR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA
-7DAcdvqGQAAADGSURBVDhPhVLBEcIwDHOYhjHCBuXHj2OTbAL8+
-MEGZIxOQ1CinOOk0Op0bmo7tlXXeR9FJMYDLOD9mwcLjQK7+hSZ
-wgcWMZJOAGeGKtChNHFL0j+FZD3jSCuo0w7l03wDrWdg00C4/aW
-eDEYNenuzPOfPspBnxf0kssE80vN0L8361j10P03DK4x6FHabuV
-ear8fHme+b17rwSjbAXeUMLb+EVTV2QHm46MWQanmnydA98KsVS
-XkV+qFpGQXrLhT/fqraQeQLuplpNH5g+WkAAAAASUVORK5CYII="""
-    binary_data = base64.b64decode(binary_data)
-    data = io.BytesIO(binary_data)
-    return CoreImage(data, ext="png").texture
 
 def clamp(minimum, number, maximum):
     return max(minimum, min(maximum, number))
@@ -492,7 +477,7 @@ class LinksAwakeningClient():
             }
             if item.player == ctx.slot:
                 args["command"] |= MWCommands.SEND_ITEM_SPECIAL
-                args["item_code"] = item.item - BASE_ID
+                args["item_code"] = item.item - Common.BASE_ID
                 args["item_sender"] = clamp(0, ctx.slot, 100)
             if trade:
                 args["command"] |= trade["cmd"]
@@ -553,7 +538,7 @@ class LinksAwakeningClient():
         if recv_index in ctx.recvd_checks:
             item = ctx.recvd_checks[recv_index]
             self.gameboy.send_mw_command(command=MWCommands.SEND_ITEM,
-                                         item_code=item.item - BASE_ID,
+                                         item_code=item.item - Common.BASE_ID,
                                          item_sender=clamp(0, item.player, 100),
                                          mp_cd=recv_index)
             return
@@ -607,7 +592,7 @@ class LinksAwakeningCommandProcessor(ClientCommandProcessor):
 
 class LinksAwakeningContext(CommonContext):
     tags = {"AP"}
-    game = LINKS_AWAKENING
+    game = Common.LINKS_AWAKENING
     command_processor = LinksAwakeningCommandProcessor
     items_handling = 0b101
     want_slot_data = True
@@ -638,7 +623,9 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        from kvui import GameManager, ImageButton
+        from kvui import GameManager
+        from kivy.metrics import dp
+        from kivymd.uix.button import MDButton, MDButtonText
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -651,8 +638,10 @@ class LinksAwakeningContext(CommonContext):
                 b = super().build()
 
                 if self.ctx.magpie_enabled:
-                    button = ImageButton(texture=magpie_logo(), fit_mode="cover", image_size=(32, 32), size_hint_x=None,
-                                on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    button = MDButton(MDButtonText(text="Open Tracker"), style="filled", size=(dp(100), dp(70)), radius=5,
+                                      size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.55},
+                                      on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    button.height = self.server_connect_bar.height
                     self.connect_layout.add_widget(button)
 
                 return b

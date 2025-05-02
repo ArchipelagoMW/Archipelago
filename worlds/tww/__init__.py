@@ -462,7 +462,7 @@ class TWWWorld(World):
             "Seed": multiworld.seed_name,
             "Slot": player,
             "Name": self.player_name,
-            "Options": self.options.as_dict(*self.options_dataclass.type_hints),
+            "Options": self.options.get_output_dict(),
             "Required Bosses": self.boss_reqs.required_boss_item_locations,
             "Locations": {},
             "Entrances": {},
