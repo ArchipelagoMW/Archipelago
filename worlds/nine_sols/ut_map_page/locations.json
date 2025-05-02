@@ -1077,6 +1077,58 @@
         ]
     },
     {
+        "name": "Empyrean Dist. (Passages)",
+        "children": [
+            {
+                "name": "Above Transporter", "sections": [{ "name": "ED (Passages): Above Transporter" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 1180, "y": 180 }]
+            },
+            {
+                "name": "Hack 2 Statues", "sections": [{ "name": "ED (Passages): Hack 2 Statues" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 542, "y": 250 }]
+            },
+            {
+                "name": "Alcove Right of Root Node", "sections": [
+                    { "name": "ED (Passages): Alcove Right of Root Node 1st Chest" },
+                    { "name": "ED (Passages): Alcove Right of Root Node 2nd Chest" }
+                ],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 745, "y": 277 }]
+            },
+            {
+                "name": "Slider Right Of Root Node", "sections": [{ "name": "ED (Passages): Slider Right Of Root Node" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 885, "y": 175 }]
+            },
+            {
+                "name": "Above Pink Pool Left Of Root Node", "sections": [{ "name": "ED (Passages): Above Pink Pool Left Of Root Node" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 340, "y": 155 }]
+            },
+            {
+                "name": "Far Left Rooms", "sections": [{ "name": "ED (Passages): Far Left Rooms" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 220, "y": 255 }]
+            },
+            {
+                "name": "Defeat The Great Miner: Tianshou", "sections": [{ "name": "ED (Passages): Defeat The Great Miner: Tianshou" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 640, "y": 145 }]
+            },
+            {
+                "name": "Examine Water Tower", "sections": [{ "name": "ED (Passages): Examine Water Tower" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 1075, "y": 70 }]
+            },
+            {
+                "name": "Alcove Between Lasers", "sections": [{ "name": "ED (Passages): Alcove Between Lasers" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 1043, "y": 140 }]
+            },
+            {
+                "name": "Covered By Lasers", "sections": [{ "name": "ED (Passages): Covered By Lasers" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 1025, "y": 215 }]
+            },
+            {
+                "name": "Above Upper Hallway Turret", "sections": [{ "name": "ED (Passages): Above Upper Hallway Turret" }],
+                "map_locations": [{ "map": "empyrean_district_passages", "x": 889, "y": 53 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
