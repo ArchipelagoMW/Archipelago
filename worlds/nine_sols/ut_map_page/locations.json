@@ -1248,6 +1248,66 @@
         ]
     },
     {
+        "name": "Factory (Production Area)",
+        "children": [
+            {
+                "name": "Behind Fire in Lower Left Vents", "sections": [{ "name": "Factory (PA): Behind Fire in Lower Left Vents" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 93, "y": 200 }]
+            },
+            {
+                "name": "Hallway Near Jiequan Statue", "sections": [{ "name": "Factory (PA): Hallway Near Jiequan Statue" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 145, "y": 145 }]
+            },
+            {
+                "name": "Three Guard Spawners", "sections": [{ "name": "Factory (PA): Three Guard Spawners" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 375, "y": 130 }]
+            },
+            {
+                "name": "Behind Hack in Upper Left Vents", "sections": [{ "name": "Factory (PA): Behind Hack in Upper Left Vents" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 60, "y": 125 }]
+            },
+            {
+                "name": "Examine Production Station", "sections": [{ "name": "Factory (PA): Examine Production Station" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 295, "y": 185 }]
+            },
+            {
+                "name": "Vents Below Production Station", "sections": [{ "name": "Factory (PA): Vents Below Production Station" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 300, "y": 200 }]
+            },
+            {
+                "name": "Below Double Sniper Zone", "sections": [{ "name": "Factory (PA): Below Double Sniper Zone" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 285, "y": 110 }]
+            },
+            {
+                "name": "Pharmacy", "sections": [
+                    { "name": "Factory (PA): Examine Pharmacy Panel" },
+                    { "name": "Factory (PA): Ball Drop in Pharmacy" }
+                ],
+                "map_locations": [{ "map": "factory_production_area", "x": 160, "y": 90 }]
+            },
+            {
+                "name": "Bottom of Right Fire Zone", "sections": [{ "name": "Factory (PA): Bottom of Right Fire Zone" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 413, "y": 185 }]
+            },
+            {
+                "name": "Defeat Shanhai 9000", "sections": [{ "name": "Factory (PA): Defeat Shanhai 9000" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 500, "y": 185 }]
+            },
+            {
+                "name": "Top of Right Fire Zone", "sections": [{ "name": "Factory (PA): Top of Right Fire Zone" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 490, "y": 110 }]
+            },
+            {
+                "name": "Far Side of Wuqiang Arena", "sections": [{ "name": "Factory (PA): Far Side of Wuqiang Arena" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 565, "y": 163 }]
+            },
+            {
+                "name": "Defeat Celestial Sentinel: Wuqiang", "sections": [{ "name": "Factory (PA): Defeat Celestial Sentinel: Wuqiang" }],
+                "map_locations": [{ "map": "factory_production_area", "x": 510, "y": 160 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
