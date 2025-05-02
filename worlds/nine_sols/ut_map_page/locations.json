@@ -922,6 +922,35 @@
         ]
     },
     {
+        "name": "Cortex Center",
+        "children": [
+            {
+                "name": "Defeat Lady Ethereal", "sections": [{ "name": "Cortex Center: Defeat Lady Ethereal" }],
+                "map_locations": [{ "map": "cortex_center", "x": 585, "y": 300 }]
+            },
+            {
+                "name": "Tianhuo Flower After Soulscape", "sections": [{ "name": "Cortex Center: Tianhuo Flower After Soulscape" }],
+                "map_locations": [{ "map": "cortex_center", "x": 550, "y": 300 }]
+            },
+            {
+                "name": "Retrieve Chip From Shanhai 9000", "sections": [{ "name": "Cortex Center: Retrieve Chip From Shanhai 9000" }],
+                "map_locations": [{ "map": "cortex_center", "x": 680, "y": 300 }]
+            },
+            {
+                "name": "Crystal Caves Upper Right", "sections": [{ "name": "Cortex Center: Crystal Caves Upper Right" }],
+                "map_locations": [{ "map": "cortex_center", "x": 310, "y": 30 }]
+            },
+            {
+                "name": "Crystal Caves Central Chamber", "sections": [{ "name": "Cortex Center: Crystal Caves Central Chamber" }],
+                "map_locations": [{ "map": "cortex_center", "x": 245, "y": 100 }]
+            },
+            {
+                "name": "Near Left Exit", "sections": [{ "name": "Cortex Center: Near Left Exit" }],
+                "map_locations": [{ "map": "cortex_center", "x": 190, "y": 295 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
