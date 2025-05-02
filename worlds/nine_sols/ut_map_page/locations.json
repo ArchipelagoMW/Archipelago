@@ -976,6 +976,35 @@
         ]
     },
     {
+        "name": "Central Transport Hub",
+        "children": [
+            {
+                "name": "Large Elevator Shaft", "sections": [{ "name": "CTH: Large Elevator Shaft" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 365, "y": 255 }]
+            },
+            {
+                "name": "Defeat Red Tiger Elite: Yanren", "sections": [{ "name": "CTH: Defeat Red Tiger Elite: Yanren" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 160, "y": 260 }]
+            },
+            {
+                "name": "Side Room Near Right Exit", "sections": [{ "name": "CTH: Side Room Near Right Exit" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 370, "y": 320 }]
+            },
+            {
+                "name": "Lower Left Vents", "sections": [{ "name": "CTH: Lower Left Vents" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 185, "y": 370 }]
+            },
+            {
+                "name": "Examine Panel by Root Node", "sections": [{ "name": "CTH: Examine Panel by Root Node" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 335, "y": 350 }]
+            },
+            {
+                "name": "Hack 2 Statues", "sections": [{ "name": "CTH: Hack 2 Statues" }],
+                "map_locations": [{ "map": "central_transport_hub", "x": 350, "y": 410 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
