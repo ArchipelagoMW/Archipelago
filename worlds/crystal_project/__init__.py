@@ -1,13 +1,15 @@
+import ast
+import logging
 import settings
 import os
 import typing
 import threading
 import pkgutil
 
-from .Items import item_table, filler_items, get_item_names_per_category
+from .Items import item_table, optional_scholar_abilities, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
-from .Options import CrystalProjectOptions
+from .Options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
 
 from typing import List, Set, Dict, TextIO, Any
@@ -31,6 +33,8 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     item_name_groups = get_item_names_per_category()
+
+    logger = logging.getLogger()
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
@@ -119,6 +123,10 @@ class CrystalProjectWorld(World):
         pool = self.get_item_pool(self.get_excluded_items())
 
         self.multiworld.itempool += pool
+
+    #making randomized scholar ability pool
+    def get_optional_scholar_abilities(self, count: int):
+        return self.random.sample(optional_scholar_abilities, count)
 
     def get_filler_item_name(self) -> str:
         # traps go here if we have any
@@ -654,6 +662,12 @@ class CrystalProjectWorld(World):
         for _ in range (self.options.clamshellsInPool):
             item = self.set_classifications("Item - Clamshell")
             pool.append(item)
+
+        #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
+        if self.options.includedRegions == self.options.includedRegions.option_beginner:
+            for scholar_ability in self.get_optional_scholar_abilities(7):
+                item = self.create_item(scholar_ability)
+                pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())

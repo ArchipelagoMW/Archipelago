@@ -104,10 +104,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Delende", "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData("Delende", "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(126, 115, -102) Basement map chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: state.has("Job - Scholar", player) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
+        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(126, 115, -102) Basement map chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
