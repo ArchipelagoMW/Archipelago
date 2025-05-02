@@ -59,7 +59,7 @@ class ZillionWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["beauxq"]
+        ["beauxq"],
     )]
 
     option_groups = z_option_groups
@@ -365,7 +365,7 @@ class ZillionWorld(World):
                 z_loc.zz_loc.item = multi_item
                 multi_items[z_loc.zz_loc.name] = (
                     z_loc.item.name,
-                    self.multiworld.get_player_name(z_loc.item.player)
+                    self.multiworld.get_player_name(z_loc.item.player),
                 )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():

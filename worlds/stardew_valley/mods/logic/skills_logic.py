@@ -1,17 +1,4 @@
-from typing import Union
-
-from .magic_logic import MagicLogicMixin
-from ...logic.action_logic import ActionLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.building_logic import BuildingLogicMixin
-from ...logic.cooking_logic import CookingLogicMixin
-from ...logic.crafting_logic import CraftingLogicMixin
-from ...logic.fishing_logic import FishingLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogicMixin
-from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...stardew_rule import StardewRule, False_, True_, And
 from ...strings.building_names import Building
@@ -30,8 +17,7 @@ class ModSkillLogicMixin(BaseLogicMixin):
         self.skill = ModSkillLogic(*args, **kwargs)
 
 
-class ModSkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, ActionLogicMixin, RelationshipLogicMixin, BuildingLogicMixin,
-ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, CraftingLogicMixin, MagicLogicMixin]]):
+class ModSkillLogic(BaseLogic):
     def has_mod_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
             return True_()
