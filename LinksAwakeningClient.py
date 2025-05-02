@@ -107,8 +107,7 @@ class MWCommands(IntEnum):
 class DeathLinkStatus(IntEnum):
     NONE = 0
     PENDING = 1
-    SENDING = 2
-    DYING = 3
+    DYING = 2
 
 
 class RAGameboy():
