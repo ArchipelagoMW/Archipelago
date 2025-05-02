@@ -61,8 +61,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
         pickup_val = [0x01]
         gem_val = [0x05]
 
-        # Write additional code to enable Custom Pickup animations when animations are turned off.
-        dol.data.seek(0xAD624)
+        # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
+        dol.data.seek(0x0AD624)
         dol.data.write(bytes.fromhex("4842D769"))
     else:
         pickup_val = [0x02]

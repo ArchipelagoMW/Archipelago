@@ -629,6 +629,10 @@ class LMContext(CommonContext if not tracker_loaded else TrackerGameContext):
             # This allows the in-game display to work correctly.
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
 
+            # This allows the player to finish the game as expected in King Boo's fight.
+            if self.pickup_anim_off:
+                dme.write_bytes(0x804DE028, bytes.fromhex("00000001"))
+
             # Update the in-game counter to reflect how many boos you got.
             boo_received_list = [item.item for item in self.items_received if item.item in BOO_AP_ID_LIST]
 
