@@ -60,6 +60,7 @@ name automatically when you start a new save file.
   provide an error message directing you to the correct version. You can also look at the release notes of TWW AP builds
   [here](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2) to see which versions of Archipelago each build is
   compatible with.
+* Do not run the Archipelago Launcher or Dolphin as an administrator on Windows.
 * If you encounter issues with authenticating, ensure that the randomized ROM is open in Dolphin and corresponds to the
   multiworld to which you are connecting.
 * Ensure that you do not have any Dolphin cheats or codes enabled. Some cheats or codes can unexpectedly interfere with
