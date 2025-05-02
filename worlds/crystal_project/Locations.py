@@ -86,12 +86,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has("Item - Dog Bone", player, 3)),
         LocationData("Delende", "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         LocationData("Delende", "Delende NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
+        LocationData("Delende", "Delende NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
         #Todo NPCs CheckOrNot: guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74))
         #LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
-        #Todo NPCs CheckOrNot: (Z2_RottenFishGuy ID 124 (181, 132, -200)) sells Rotten Salmon (progression item)
 
         #Grans House (Delende)
         #Treasure chests
