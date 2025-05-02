@@ -377,7 +377,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Quintar Nest", "Quintar Nest Chest - Northwest Donut Lake sprinkle", 432 + treasure_index_offset), #Potion chest
         LocationData("Quintar Nest", "Quintar Nest Chest - Welcome", 3078 + treasure_index_offset), #Potion chest
         LocationData("Quintar Nest", "Quintar Nest Chest - Mighty jump along east side wall", 746 + treasure_index_offset), #Scope Bit chest
-        LocationData("Quintar Nest", "Quintar Nest Chest - North of sewers", 638 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Static Rod chest
+        LocationData("Quintar Nest", "Quintar Nest Chest - Detour through the sewers", 638 + treasure_index_offset), #Static Rod chest
         LocationData("Quintar Nest", "Quintar Nest Chest - North Donut Lake sprinkle", 852 + treasure_index_offset), #Tincture chest
         LocationData("Quintar Nest", "Quintar Nest Chest - Hop along west side wall", 2982 + treasure_index_offset), #Tincture Pouch chest
         LocationData("Quintar Nest", "Quintar Nest Chest - Donut Lake crown sprinkle", 851 + treasure_index_offset), #Tonic chest
