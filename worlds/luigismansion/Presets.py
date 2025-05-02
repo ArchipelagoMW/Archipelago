@@ -13,7 +13,7 @@ all_random_settings = {
     LMOptions.StartWithBooRadar.internal_name:         "random",
     LMOptions.StartHiddenMansion.internal_name:        "random",
     LMOptions.PickupAnim.internal_name:                "random",
-    LMOptions.LuigiMaxHealth:                          "random",
+    LMOptions.LuigiMaxHealth.internal_name:            "random",
     LMOptions.RandomMusic.internal_name:               "random",
     LMOptions.DoorModelRando.internal_name:            "random",
     LMOptions.EarlyFirstKey.internal_name:             "random",
