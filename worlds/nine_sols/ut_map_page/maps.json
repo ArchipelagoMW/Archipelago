@@ -14,7 +14,9 @@
     },
     { "name": "empyrean_district_passages", "img": "./empyrean_district_passages.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "empyrean_district_sanctum", "img": "./empyrean_district_sanctum.png", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "factory_great_hall", "img": "./factory_great_hall.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "factory_great_hall", "img": "./factory_great_hall.webp",
+        "location_size": 15, "location_border_thickness": 2
+    },
     { "name": "factory_machine_room", "img": "./factory_machine_room.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "factory_production_area", "img": "./factory_production_area.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "factory_underground", "img": "./factory_underground.png", "location_size": 20, "location_border_thickness": 3 },

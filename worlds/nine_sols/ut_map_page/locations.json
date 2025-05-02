@@ -1129,6 +1129,92 @@
         ]
     },
     {
+        "name": "Empyrean Dist. (Sanctum)",
+        "children": [
+            {
+                "name": "Examine Monitoring Panel", "sections": [{ "name": "ED (Sanctum): Examine Monitoring Panel" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 680, "y": 125 }]
+            },
+            {
+                "name": "East Rooftop Walking Chest", "sections": [{ "name": "ED (Sanctum): East Rooftop Walking Chest" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 505, "y": 85 }]
+            },
+            {
+                "name": "Right Of East Rooftop", "sections": [{ "name": "ED (Sanctum): Right Of East Rooftop" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 737, "y": 90 }]
+            },
+            {
+                "name": "Above East Rooftop", "sections": [{ "name": "ED (Sanctum): Above East Rooftop" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 725, "y": 55 }]
+            },
+            {
+                "name": "Defeat Mutated Xipu Below Nobility Hall", "sections": [{ "name": "ED (Sanctum): Defeat Mutated Xipu Below Nobility Hall" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 285, "y": 165 }]
+            },
+            {
+                "name": "Defeat Mutated Yangfan Below Root Node", "sections": [{ "name": "ED (Sanctum): Defeat Mutated Yangfan Below Root Node" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 415, "y": 245 }]
+            },
+            {
+                "name": "Lower Left Garden", "sections": [{ "name": "ED (Sanctum): Lower Left Garden" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 20, "y": 250 }]
+            },
+            {
+                "name": "Above Lower Left Garden", "sections": [{ "name": "ED (Sanctum): Above Lower Left Garden" }],
+                "map_locations": [{ "map": "empyrean_district_sanctum", "x": 70, "y": 200 }]
+            }
+        ]
+    },
+    {
+        "name": "Factory (Great Hall)",
+        "children": [
+            {
+                "name": "Near Rightmost Shield Orb", "sections": [{ "name": "Factory (GH): Near Rightmost Shield Orb" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 505, "y": 105 }]
+            },
+            {
+                "name": "Near Root Node", "sections": [{ "name": "Factory (GH): Near Root Node" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 430, "y": 75 }]
+            },
+            {
+                "name": "Near Middle Shield Orb", "sections": [{ "name": "Factory (GH): Near Middle Shield Orb" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 375, "y": 100 }]
+            },
+            {
+                "name": "Tianhuo Flower Below Hammers", "sections": [{ "name": "Factory (GH): Tianhuo Flower Below Hammers" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 270, "y": 105 }]
+            },
+            {
+                "name": "Break the Hammers", "sections": [{ "name": "Factory (GH): Break the Hammers" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 294, "y": 75 }]
+            },
+            {
+                "name": "Examine Furnace Monitor", "sections": [{ "name": "Factory (GH): Examine Furnace Monitor" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 162, "y": 82 }]
+            },
+            {
+                "name": "Raise the Bridge for Chiyou", "sections": [{ "name": "Factory (GH): Raise the Bridge for Chiyou" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 95, "y": 82 }]
+            },
+            {
+                "name": "Roof Above Root Node", "sections": [{ "name": "Factory (GH): Roof Above Root Node" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 435, "y": 55 }]
+            },
+            {
+                "name": "Near Right Elevator", "sections": [{ "name": "Factory (GH): Near Right Elevator" }],
+                "map_locations": [{ "map": "factory_great_hall", "x": 600, "y": 40 }]
+            },
+            {
+                "name": "Platform Puzzle Room", "sections": [
+                    { "name": "Factory (GH): Ball Drop in Platform Puzzle Room" },
+                    { "name": "Factory (GH): Recording Device in Platform Puzzle Room" },
+                    { "name": "Factory (GH): Tianhuo Flower in Platform Puzzle Room" }
+                ],
+                "map_locations": [{ "map": "factory_great_hall", "x": 620, "y": 40 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
