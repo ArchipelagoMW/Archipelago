@@ -192,7 +192,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Salmon River": logic.has_horizontal_movement,
         "Delende": logic.has_swimming})
     multiworld.get_region("Salmon River", player).add_exits(["Salmon Bay", "Tall Tall Heights"], 
-        {"Salmon Bay": logic.has_swimming or (logic.has_vertical_movement and logic.has_glide),
+        {"Salmon Bay": (logic.has_vertical_movement and logic.has_glide) or logic.has_swimming,
         "Tall Tall Heights": logic.has_vertical_movement})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Lake Delende", "Salmon Bay", "Ancient Labyrinth"], 
         {"Ancient Reservoir": logic.has_pyramid_key,
