@@ -541,7 +541,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 6th place price", 639 + 50005 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 4th place price", 639 + 50006 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 3rd place price", 639 + 50007 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 2ndth place price", 639 + 50008 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 2nd place price", 639 + 50008 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Win the Salmon Race", 639 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
