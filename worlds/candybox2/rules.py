@@ -1,4 +1,6 @@
+from enum import IntEnum
 from typing import TYPE_CHECKING
+from unittest import case
 
 from BaseClasses import CollectionState
 from worlds.candybox2.items import candy_box_2_base_id, items, CandyBox2ItemName
@@ -45,6 +47,16 @@ armors = [
     CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR,
 ]
 
+class CandyBox2Castable(IntEnum):
+    ACID_RAIN = 0
+    FIREBALL = 1
+    TELEPORT = 2
+    ERASE_MAGIC = 3
+    THORNS_SHIELD = 4
+    OBSIDIAN_WALL = 5
+    BLACK_DEMONS = 6
+    BLACK_HOLE = 7
+
 def has_projectiles(world: "CandyBox2World", state: CollectionState, player: int):
     return state.has(CandyBox2ItemName.RED_ENCHANTED_GLOVES, player) or state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) or has_weapon(world, state, player, CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF)
 
@@ -55,7 +67,7 @@ def can_fly(state: CollectionState, player: int):
     return (state.has(CandyBox2ItemName.ROCKET_BOOTS, player) and state.has(CandyBox2ItemName.POGO_STICK, player)) or state.has(CandyBox2ItemName.PROGRESSIVE_JUMP, player, 3)
 
 def can_escape_hole(state: CollectionState, player: int):
-    return can_fly(state, player) or state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player)
+    return can_fly(state, player) or can_cast(state, player, CandyBox2Castable.TELEPORT)
 
 def can_brew(state: CollectionState, player: int, also_require_lollipops: bool):
     return (state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player) and can_farm_candies(state, player)
@@ -73,6 +85,25 @@ def sea_entrance(world: "CandyBox2World", state: CollectionState, player: int):
 def can_beat_sharks(world: "CandyBox2World", state: CollectionState, player: int):
     return sea_entrance(world, state, player) and weapon_is_at_least(world, state, player,
                                                                      CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF)
+
+def can_cast(state: CollectionState, player: int, castable: CandyBox2Castable):
+    match castable:
+        case CandyBox2Castable.ACID_RAIN:
+            return state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 1)
+        case CandyBox2Castable.FIREBALL:
+            return state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 1)
+        case CandyBox2Castable.TELEPORT:
+            return state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 1)
+        case CandyBox2Castable.ERASE_MAGIC:
+            return state.has(CandyBox2ItemName.ADVANCED_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 2)
+        case CandyBox2Castable.THORNS_SHIELD:
+            return state.has(CandyBox2ItemName.ADVANCED_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 2)
+        case CandyBox2Castable.OBSIDIAN_WALL:
+            return state.has(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 3)
+        case CandyBox2Castable.BLACK_DEMONS:
+            return state.has(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE, player) or state.has(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, player, 3)
+        case CandyBox2Castable.BLACK_HOLE:
+            return state.has(CandyBox2ItemName.PURPLE_FIN, player)
 
 def set_rules(world: "CandyBox2World", player: int):
 
@@ -119,7 +150,8 @@ def set_rules(world: "CandyBox2World", player: int):
     # Cave rules
     add_rule(world.get_location(CandyBox2LocationName.OCTOPUS_KING_DEFEATED), lambda state: state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player) and weapon_is_at_least(
         world, state, player, CandyBox2ItemName.TROLLS_BLUDGEON) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
-    add_rule(world.get_location(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED), lambda state: state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED), lambda state: state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and can_cast(
+        state, player, CandyBox2Castable.TELEPORT) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and weapon_is_at_least(
         world, state, player, CandyBox2ItemName.TROLLS_BLUDGEON) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
 
     # The Hole rules
@@ -144,7 +176,7 @@ def set_rules(world: "CandyBox2World", player: int):
                                                                                                  CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player) and armor_is_at_least(state, player, CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
 
     # Castle rules
-    add_rule(world.get_location(CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED), lambda state: state.has(CandyBox2ItemName.PURPLE_FIN, player) and weapon_is_at_least(
+    add_rule(world.get_location(CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED), lambda state: can_cast(state, player, CandyBox2Castable.BLACK_HOLE) and weapon_is_at_least(
         world, state, player, CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR) and state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN, player))
 
     # Egg Room
@@ -155,13 +187,15 @@ def set_rules(world: "CandyBox2World", player: int):
     add_rule(world.get_location(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED), lambda state: can_fly(state, player))
     add_rule(world.get_location(CandyBox2LocationName.TEAPOT_DEFEATED), lambda state: weapon_is_at_least(world, state, player,
                                                                                      CandyBox2ItemName.SCYTHE) and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN, player) and state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player) and state.has(CandyBox2ItemName.XINOPHERYDON_CLAW, player))
-    add_rule(world.get_location(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED), lambda state: can_fly(state, player) or (state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and can_jump(state, player) and state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player) and (state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN, player) or has_weapon(world, state, player, CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))))
+    add_rule(world.get_location(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED), lambda state: can_fly(state, player) or (state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and can_jump(state, player) and can_cast(
+        state, player, CandyBox2Castable.TELEPORT) and (state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN, player) or has_weapon(world, state, player, CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))))
 
     # Hell rules
-    add_rule(world.get_location(CandyBox2LocationName.DEVIL_DEFEATED), lambda state: state.has(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE, player) and state.has(CandyBox2ItemName.UNICORN_HORN, player) and state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and armor_is_at_least(state, player, CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR) and state.has(CandyBox2ItemName.PINK_ENCHANTED_GLOVES, player) and has_weapon(world, state, player, CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF))
+    add_rule(world.get_location(CandyBox2LocationName.DEVIL_DEFEATED), lambda state: can_cast(state, player, CandyBox2Castable.BLACK_DEMONS) and state.has(CandyBox2ItemName.UNICORN_HORN, player) and state.has(CandyBox2ItemName.BOOTS_OF_INTROSPECTION, player) and armor_is_at_least(state, player, CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR) and state.has(CandyBox2ItemName.PINK_ENCHANTED_GLOVES, player) and has_weapon(world, state, player, CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF))
 
     # Developer rules
-    add_rule(world.get_location(CandyBox2LocationName.THE_DEVELOPER_DEFEATED), lambda state: can_farm_candies(state, player) and state.has(CandyBox2ItemName.PURPLE_FIN, player) and state.has(CandyBox2ItemName.BEGINNERS_GRIMOIRE, player))
+    add_rule(world.get_location(CandyBox2LocationName.THE_DEVELOPER_DEFEATED), lambda state: can_farm_candies(state, player) and can_cast(
+        state, player, CandyBox2Castable.BLACK_HOLE) and can_cast(state, player, CandyBox2Castable.TELEPORT))
 
     # The Sea rules
 
@@ -177,7 +211,7 @@ def set_rules(world: "CandyBox2World", player: int):
 
     add_rule(world.get_location(CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED),
              lambda state: can_beat_sharks(world, state, player)
-                           and state.has(CandyBox2ItemName.ADVANCED_GRIMOIRE, player)
+                           and can_cast(state, player, CandyBox2Castable.ERASE_MAGIC)
                            and state.has(CandyBox2ItemName.PINK_ENCHANTED_GLOVES, player)
                            and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player))
 
@@ -185,7 +219,7 @@ def set_rules(world: "CandyBox2World", player: int):
              lambda state: can_beat_sharks(world, state, player)
                            and state.has(CandyBox2ItemName.HEART_PENDANT, player)
                            and state.has(CandyBox2ItemName.HEART_PLUG, player)
-                           and state.has(CandyBox2ItemName.ADVANCED_GRIMOIRE, player)
+                           and can_cast(state, player, CandyBox2Castable.ERASE_MAGIC)
                            and state.has(CandyBox2ItemName.PINK_ENCHANTED_GLOVES, player)
                            and state.has(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS, player)
                            and state.has(CandyBox2ItemName.UNICORN_HORN, player))

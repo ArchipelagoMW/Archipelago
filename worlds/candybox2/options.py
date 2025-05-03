@@ -86,6 +86,19 @@ class StartingWeapon(Choice):
     option_scythe = 27
     option_giant_spoon_of_doom = 35
 
+class Grimoire(Choice):
+    """
+    Select how spells will be itemised
+
+    Individual Grimoires - The item pool will be filled with Beginner's Grimoire, Advanced Grimoire and Black Magic Grimoire
+
+    Progressive Grimoires - The item pool will have three Progressive Grimoires
+    """
+    display_name = "Spells"
+
+    option_individual_grimoires = 0
+    option_progressive_grimoires = 1
+
 class RandomiseHpBar(DefaultOnToggle):
     """Whether the HP Bar must be an item found elsewhere"""
     display_name = "Randomise HP Bar"
@@ -124,6 +137,7 @@ candy_box_2_options_groups = [
     OptionGroup("Inventory Customisation", [
         StartingWeapon,
         ProgressiveJump,
+        Grimoire
     ]),
     OptionGroup("Production Multipliers", [
         CandyProductionMultiplier,
@@ -156,5 +170,6 @@ class CandyBox2Options(PerGameCommonOptions):
     randomise_hp_bar: RandomiseHpBar
     x_potion_brewing: BrewingXPotion
     enable_computer: EnableComputer
+    grimoires: Grimoire
     energy_link: EnergyLink
     gifting: Gifting
