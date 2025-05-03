@@ -87,6 +87,7 @@ class CandyBox2ItemName(StrEnum):
     PROGRESSIVE_WEAPON = "Progressive Weapon"
     PROGRESSIVE_JUMP = "Progressive Jump"
     PROGRESSIVE_GRIMOIRE = "Progressive Grimoire"
+    TWO_PAINS_AU_CHOCOLAT = "2 Pains au Chocolat"
 
 
 items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
@@ -150,11 +151,12 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.PURPLE_FIN: CandyBox2ItemData(candy_box_2_base_id + 57, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.LOCKED_CANDY_BOX: CandyBox2ItemData(candy_box_2_base_id + 58, lambda _: 1, ItemClassification.progression),
     CandyBox2ItemName.BOOTS_OF_INTROSPECTION: CandyBox2ItemData(candy_box_2_base_id + 59, lambda _: 1, ItemClassification.progression | ItemClassification.useful),
-    CandyBox2ItemName.PAIN_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 60, lambda _: 5, ItemClassification.useful),
+    CandyBox2ItemName.PAIN_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 60, lambda world: pain_au_chocolat_count(world, 1), ItemClassification.useful),
     CandyBox2ItemName.NOTHING_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 61, lambda world: weapon_item_count(world, 61), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.PROGRESSIVE_WEAPON: CandyBox2ItemData(candy_box_2_base_id + 62, lambda world: progressive_weapon_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.PROGRESSIVE_JUMP: CandyBox2ItemData(candy_box_2_base_id + 63, lambda world: progressive_jump_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.PROGRESSIVE_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 64, lambda world: progressive_grimoire_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.TWO_PAINS_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 65, lambda world: pain_au_chocolat_count(world, 2), ItemClassification.useful),
 }
 
 filler_items: list[str] = [
@@ -209,5 +211,14 @@ def progressive_jump_count(world: "CandyBox2World"):
 def hp_bar_count(world: "CandyBox2World"):
     if world.options.randomise_hp_bar:
         return 1
+
+    return 0
+
+def pain_au_chocolat_count(world: "CandyBox2World", value: int):
+    if value == 1:
+        return 10 - world.pains_au_chocolat
+
+    if value == 2:
+        return world.pains_au_chocolat - 5
 
     return 0

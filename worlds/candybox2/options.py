@@ -99,6 +99,14 @@ class Grimoire(Choice):
     option_individual_grimoires = 0
     option_progressive_grimoires = 1
 
+
+class PainAuChocolatCount(Range):
+    """The number of available Pains au Chocolat."""
+    display_name = "Pains au Chocolat Count"
+    range_start = 5
+    range_end = 10
+    default = 8
+
 class RandomiseHpBar(DefaultOnToggle):
     """Whether the HP Bar must be an item found elsewhere"""
     display_name = "Randomise HP Bar"
@@ -137,7 +145,8 @@ candy_box_2_options_groups = [
     OptionGroup("Inventory Customisation", [
         StartingWeapon,
         ProgressiveJump,
-        Grimoire
+        Grimoire,
+        PainAuChocolatCount
     ]),
     OptionGroup("Production Multipliers", [
         CandyProductionMultiplier,
@@ -171,5 +180,6 @@ class CandyBox2Options(PerGameCommonOptions):
     x_potion_brewing: BrewingXPotion
     enable_computer: EnableComputer
     grimoires: Grimoire
+    pain_au_chocolat_count: PainAuChocolatCount
     energy_link: EnergyLink
     gifting: Gifting
