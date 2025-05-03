@@ -529,9 +529,9 @@ class MegaMan3Client(BizHawkClient):
         if recv_amount < len(ctx.items_received):
             item = ctx.items_received[recv_amount]
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names[item.item], 'red', 'bold'),
+                color(ctx.item_names.lookup_in_slot(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
-                ctx.location_names[item.location], recv_amount, len(ctx.items_received)))
+                ctx.location_names.lookup_in_slot(item.location, item.player), recv_amount, len(ctx.items_received)))
 
             if item.item & 0x120 == 0:
                 # Robot Master Weapon, or Rush
