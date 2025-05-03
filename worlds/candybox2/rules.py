@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 from .locations import locations, CandyBox2LocationName
 from .rooms import CandyBox2Room, entrance_friendly_names
-from .items import CandyBox2ItemName
+from .items import CandyBox2ItemName, items, candy_box_2_base_id
 from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
@@ -40,6 +40,12 @@ class CandyBox2RulesPackageRuleConstantExpression(CandyBox2RulesPackageRuleExpre
         super().__init__()
         self.constant = constant
 
+    def __and__(self, other):
+        return self if self.constant == False else other
+
+    def __or__(self, other):
+        return self if self.constant == True else other
+
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int):
         return self.constant
 
@@ -59,7 +65,7 @@ class CandyBox2RulesPackageRuleItemExpression(CandyBox2RulesPackageRuleExpressio
         return state.has(self.item, player, self.count)
 
     def default(self):
-        return ["item", self.item.value, self.count]
+        return ["item", items[self.item].code, self.count]
 
 class CandyBox2RulesPackageRuleRoomExpression(CandyBox2RulesPackageRuleExpression):
     room: "CandyBox2Room"
@@ -115,6 +121,22 @@ class CandyBox2RulesPackageRuleCountExpression(CandyBox2RulesPackageRuleExpressi
 
     def default(self):
         return ["count", self.item, self.inequality, self.required]
+
+class CandyBox2RulesPackageRuleStartWeaponExpression(CandyBox2RulesPackageRuleExpression):
+    weapon: "CandyBox2ItemName"
+
+    def __init__(self, weapon: "CandyBox2ItemName"):
+        super().__init__()
+        self.weapon = weapon
+
+    def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
+        for item in items:
+            if items[item].code - candy_box_2_base_id == world.starting_weapon and item == self.weapon:
+                return True
+        return False
+
+    def default(self):
+        return ["startWeapon", items[self.weapon].code]
 
 class CandyBox2RulesPackageRuleBooleanExpression(CandyBox2RulesPackageRuleExpression):
     op1: CandyBox2RulesPackageRuleExpression
@@ -238,8 +260,7 @@ def rule_room(room: "CandyBox2Room"):
     return CandyBox2RulesPackageRuleRoomExpression(room)
 
 def has_weapon(weapon: CandyBox2ItemName):
-    # TODO: Starting Weapon?
-    return rule_item(weapon) | rule_item(CandyBox2ItemName.PROGRESSIVE_WEAPON, weapons.index(weapon))
+    return rule_item(weapon) | rule_item(CandyBox2ItemName.PROGRESSIVE_WEAPON, weapons.index(weapon)) | CandyBox2RulesPackageRuleStartWeaponExpression(weapon)
 
 def weapon_is_at_least(minimum_weapon: CandyBox2ItemName):
     condition = CandyBox2RulesPackageRuleConstantExpression(False)
