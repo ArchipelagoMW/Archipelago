@@ -3,7 +3,7 @@ from typing import Callable, Optional, TYPE_CHECKING
 
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
-from .items import CandyBox2ItemName
+from .items import CandyBox2ItemName, items, candy_box_2_base_id
 from .locations import candy_box_locations, CandyBox2Location, CandyBox2LocationName, village_shop_locations, village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
     map_stage_6_locations, map_stage_5_locations, map_stage_4_locations, map_stage_3_locations, desert_locations, \
@@ -16,7 +16,7 @@ from .locations import candy_box_locations, CandyBox2Location, CandyBox2Location
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations, pogo_stick_spot_locations, \
     pier_locations, lollipop_farm_locations, forge_locations, village_minigame_locations
 from .rooms import CandyBox2Room, quests, x_quest, rooms, entrance_friendly_names, lollipop_farm
-from .rules import weapon_is_at_least, can_reach_room, can_brew
+from .rules import weapon_strength, weapons
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -73,6 +73,46 @@ class CandyBox2RoomRegion(CandyBox2Region):
             self.randomization_group = CandyBox2RandomizationGroup.ROOM
         if room in lollipop_farm:
             self.randomization_group = CandyBox2RandomizationGroup.LOLLIPOP_FARM
+
+def can_reach_room(state: CollectionState, room: CandyBox2Room, player: int):
+    return state.can_reach_region(entrance_friendly_names[room], player)
+
+def can_brew(state: CollectionState, player: int, also_require_lollipops: bool):
+    return (state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player) and can_farm_candies(state, player) and (not also_require_lollipops or can_farm_lollipops(state, player)))
+
+# Allows the player to plant enough lollipops at the farm for 1/minute
+def can_grow_lollipops(state: CollectionState, player: int):
+    return lollipop_count(state, player) >= 9 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+
+def can_farm_lollipops(state: CollectionState, player: int):
+    return can_grow_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and state.has(CandyBox2ItemName.PITCHFORK, player) and state.has(CandyBox2ItemName.SHELL_POWDER, player) and state.has(CandyBox2ItemName.GREEN_FIN, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+
+# Ideally allows the player to stumble upon a quest they can use to farm candies
+def can_farm_candies(state: CollectionState, player: int):
+    return can_farm_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+
+def lollipop_count(state: CollectionState, player: int):
+    return state.count(CandyBox2ItemName.THREE_LOLLIPOPS, player)*3 + state.count(CandyBox2ItemName.LOLLIPOP, player)
+
+def weapon_is_at_least(world: "CandyBox2World", state: CollectionState, player: int, minimum_weapon: CandyBox2ItemName):
+    for weapon in weapon_strength[weapon_strength.index(minimum_weapon):]:
+        if has_weapon(world, state, player, weapon):
+            return True
+    return False
+
+def has_weapon(world: "CandyBox2World", state: CollectionState, player: int, weapon: CandyBox2ItemName):
+    if state.has(weapon, player):
+        return True
+
+    if world.starting_weapon == -1:
+        if state.has(CandyBox2ItemName.PROGRESSIVE_WEAPON, player, weapons.index(weapon)):
+            return True
+    else:
+        for item in items:
+            if items[item].code - candy_box_2_base_id == world.starting_weapon and item == weapon:
+                return True
+
+    return False
 
 def create_regions(world: "CandyBox2World"):
     multiworld = world.multiworld

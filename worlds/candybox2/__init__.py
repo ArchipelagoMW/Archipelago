@@ -8,9 +8,9 @@ from worlds.AutoWorld import World, WebWorld
 from .locations import location_descriptions, locations, CandyBox2LocationName
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
 from .options import CandyBox2Options, candy_box_2_options_groups
-from .regions import create_regions, connect_entrances
+from .regions import create_regions, connect_entrances, can_reach_room
 from .rooms import entrance_friendly_names, CandyBox2Room
-from .rules import set_rules, can_reach_room
+from .rules import CandyBox2RulesPackage, generate_rules_package
 
 EXPECTED_CLIENT_VERSION = "20250430-1+"
 
@@ -49,6 +49,8 @@ class CandyBox2World(World):
     entrance_randomisation: ERPlacementState = None
     original_entrances: list[tuple[str, str]]
     calculated_entrances: list[tuple[str, str]]
+
+    rules_package: CandyBox2RulesPackage = generate_rules_package()
 
     def __init__(self, multiworld, player):
         super(CandyBox2World, self).__init__(multiworld, player)
@@ -136,7 +138,7 @@ class CandyBox2World(World):
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
         self.multiworld.early_items[self.player][CandyBox2ItemName.PROGRESSIVE_WORLD_MAP.value] = 1
-        set_rules(self, self.player)
+        self.rules_package.apply_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
         return can_reach_room(state, CandyBox2Room.TOWER, self.player) and \
