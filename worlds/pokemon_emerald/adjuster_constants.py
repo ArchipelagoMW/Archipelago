@@ -550,14 +550,10 @@ TRAINER_PALETTES = {
     "palette_battle_front": TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
 }
 
-PALETTE_IMAGE_SPRITE_REFERENCE = {
-    "pokemon_palette": "front_anim",
-    "pokemon_palette_shiny": "front_anim",
-    "trainer_palette": "walking_running",
-    "trainer_palette_reflection": "walking_running",
-    "trainer_palette_underwater": "underwater",
-    "trainer_palette_battle_back": "battle_back",
-    "trainer_palette_battle_front": "battle_front",
+SPRITE_PIXEL_REFERENCE = {
+    "sfront_anim": "front_anim",
+    "sback":       "back",
+    "reflection":  "walking_running"
 }
 
 OBJECT_NEEDS_COMPRESSION = {
@@ -803,4 +799,15 @@ SPRITES_REQUIREMENTS = {
     "trainer_battle_front":    { "frames": 1,  "width": 64, "height": 64 },
     "trainer_battle_back":     { "frames": 4,  "width": 64, "height": 64 },
     "trainer_battle_back_2":   { "frames": 4,  "width": 64, "height": 64 }
+}
+
+SPRITES_REQUIREMENTS_EXCEPTIONS = {
+    "Castform": {
+        "pokemon_front_anim": { "frames": 4, "palette_size": 16, "palettes": 4 },
+        "pokemon_back":       { "frames": 4, "palette_size": 16, "palettes": 4 },
+    },
+    "Deoxys": {
+        "pokemon_back":       { "frames": 2 },
+        "pokemon_icon":       { "frames": 4 },
+    }
 }

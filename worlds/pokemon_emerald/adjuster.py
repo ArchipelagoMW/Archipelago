@@ -11,6 +11,7 @@ from Utils import local_path, persistent_store, get_adjuster_settings, get_adjus
 from worlds.pokemon_emerald.sprite_patcher import handle_sprite_pack, extract_palette_from_file, \
     extract_sprites, validate_sprite_pack, POKEMON_FOLDERS, TRAINER_FOLDERS
 from argparse import Namespace
+from tkinter import messagebox
 
 logger = logging.getLogger('EmeraldAdjuster')
 isSpritePackValid = False
@@ -44,8 +45,8 @@ def get_argparser():
 def adjustGUI():
     adjuster_settings = get_adjuster_settings(GAME_EMERALD)
 
-    from tkinter import LEFT, TOP, X, StringVar, LabelFrame, Frame, Label, \
-        Entry, Button, OptionMenu, PhotoImage, filedialog, messagebox
+    from tkinter import LEFT, TOP, X, E, W, StringVar, LabelFrame, Frame, Label, \
+        Entry, Button, OptionMenu, PhotoImage, filedialog
     from Utils import __version__ as MWVersion
 
     window = tk.Tk()
@@ -150,9 +151,6 @@ def adjustGUI():
     ####################
 
     def ExtractSprites():
-        if not opts.sprite_pack:
-            spriteExtractorWarning['text'] = 'You need to select a sprite pack to extract sprites!'
-            return
         if not spriteExtractorFolder.get():
             spriteExtractorWarning['text'] = 'Write the name of the object you want to extract!'
             return
@@ -173,20 +171,45 @@ def adjustGUI():
             os.makedirs(outputFolder)
         
         extract_sprites(spriteExtractorFolder.get(), outputFolder, build_ap_rom(opts.patch.get()))
+        messagebox.showinfo(title='Success', message=f'All sprites for {spriteExtractorFolder.get()} have successfully been extracted!')
+        
+    def ExtractAllSprites():
+        baseFolderPath:str = None
+        if isSpritePackValid:
+            baseFolderPath = opts.sprite_pack.get()
+        outputFolder = filedialog.askdirectory(initialdir=baseFolderPath, mustexist=False, title='Select a folder to extract all sprites to.')
+        if len(outputFolder) == 0:
+            return
+        if not os.path.isdir(outputFolder):
+            os.makedirs(outputFolder)
+
+        rom = build_ap_rom(opts.patch.get())
+        for object in objectFolders:
+            if object == 'Castform':
+                # Castform has a very specific way to handle its sprites and it's not yet supported
+                continue
+            currentOutput = os.path.join(outputFolder, object)
+            if not os.path.isdir(currentOutput):
+                os.makedirs(currentOutput)
+            extract_sprites(object, currentOutput, rom)
+        messagebox.showinfo(title='Success', message=f'All sprites have successfully been extracted, except for Castform!')
         
 
     spriteExtractorFolder = StringVar()
 
     spriteExtractorFrame = LabelFrame(mainWindowFrame, text='Sprite Extractor', padx=8, pady=8)
+    spriteExtractorFrame.grid_columnconfigure(0, weight=1)
+    spriteExtractorFrame.grid_columnconfigure(1, weight=1)
     spriteExtractorInfo = Label(spriteExtractorFrame, text='Type the name of the Trainer/Pokemon you want to\nextract then press the button below.')
+    spriteExtractorInfo.grid(row=0, column=0, columnspan=2, pady=2)
     spriteExtractorEntry = Entry(spriteExtractorFrame, textvariable=spriteExtractorFolder)
+    spriteExtractorEntry.grid(row=1, column=0, columnspan=2, pady=2)
     spriteExtractorWarning = Label(spriteExtractorFrame, text='If any error happens, it will be shown here!')
+    spriteExtractorWarning.grid(row=2, column=0, columnspan=2, pady=2)
     spriteExtractorButton = Button(spriteExtractorFrame, text='Extract', command=ExtractSprites)
-
-    spriteExtractorInfo.pack(side=TOP, pady=2)
-    spriteExtractorEntry.pack(side=TOP, pady=2)
-    spriteExtractorWarning.pack(side=TOP, pady=2)
-    spriteExtractorButton.pack(side=TOP, pady=2)
+    spriteExtractorButton.grid(row=3, column=0, sticky=E, padx=5, pady=2)
+    spriteExtractorButtonAll = Button(spriteExtractorFrame, text='Extract All (takes a long time)', command=ExtractAllSprites)
+    spriteExtractorButtonAll.grid(row=3, column=1, sticky=W, padx=5, pady=2)
     
     #############################
     # Sprite and Palette Viewer #
@@ -326,6 +349,7 @@ def adjustGUI():
         else: 
             adjustButton['state'] = tk.DISABLED
             spritePreviewErrorLabel['text'] = 'Both a sprite pack and a patch/ROM must be selected to validate the sprite pack.'
+        return has_error
 
     PatchSelect(adjuster_settings.patch or '')
     SpritePackSelect(adjuster_settings.sprite_pack or '')
@@ -343,7 +367,13 @@ def adjust(args):
 
     # Build sprite pack patch & apply patch
     if not args.sprite_pack:
-        raise Exception("A sprite pack is required!")
+        messagebox.showerror(title='Failure', message=f'Cannot adjust the ROM, a sprite pack is required!')
+        return
+
+    _, has_error = validate_sprite_pack(args.sprite_pack, ap_rom)
+    if has_error:
+        messagebox.showerror(title='Failure', message=f'Cannot adjust the ROM as the sprite pack is erroneous!')
+        return
     sprite_pack_bps_patch = build_sprite_pack_patch(args.sprite_pack, ap_rom)
     adjusted_ap_rom = bytearray(len(ap_rom))
     apply_bps_patch(sprite_pack_bps_patch, ap_rom, adjusted_ap_rom)
@@ -356,7 +386,8 @@ def adjust(args):
 
 def build_ap_rom(_patch):
     if not _patch:
-        raise Exception("A patch file or a patched ROM is required!")
+        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: a patch file or a patched ROM is required!')
+        return
     if os.path.splitext(_patch)[-1] == '.gba':
         # Load up the ROM directly
         with open(_patch, 'rb') as stream:
@@ -368,7 +399,8 @@ def build_ap_rom(_patch):
         with open(ap_rom_path, 'rb') as stream:
             return bytearray(stream.read())
     else:
-        raise Exception("Invalid file extension; requires .gba or .apemerald")
+        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: invalid file extension: requires .gba or .apemerald')
+        return
 
 def build_sprite_pack_patch(sprite_pack, ap_rom):
     sprite_pack_path = sprite_pack

@@ -124,7 +124,7 @@ def add_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path):
             if _extra_data:
                 # If size given, extract it and check if it is supported
                 sprite_size_data = handle_overworld_custom_size(_extra_data)
-        replace_complex_sprite(data_address, sprite_key, info_object_address, sprite_size_data)
+        replace_complex_sprite(data_address, sprite_key, info_object_address, _object_name, sprite_size_data)
 
     if sprite_key != "trainer_battle_back":
         add_resource(False, sprite_key, _sprite_name, data_address, _path)
@@ -193,10 +193,10 @@ def call_gbagfx(_input, _output, _delete_input = False):
 ## Complex Sprite Handling ##
 #############################
 
-def replace_complex_sprite(_sprite_list_address, _sprite_key, _info_object_address, _size_data = None):
+def replace_complex_sprite(_sprite_list_address, _sprite_key, _info_object_address, _object_name, _size_data = None):
     # TODO: Handle having to replace SEVERAL complex sprites for duplicate overworld objects (ex: duplicate player sprites)
     # Replaces complex sprite's sprite data and update sprite fields if needed
-    sprite_data = SPRITES_REQUIREMENTS.get(_sprite_key)
+    sprite_data = get_sprite_requirements(_sprite_key, _object_name)
     temp_address = resource_address_to_insert_to
     if not sprite_data:
         raise Exception('Could not find sprite data for the sprite with key {}.'.format(_sprite_key))
@@ -228,16 +228,30 @@ def replace_complex_sprite(_sprite_list_address, _sprite_key, _info_object_addre
         set_overworld_sprite_data(_info_object_address, 'sprite_height', sprite_height)
         set_overworld_sprite_data(_info_object_address, 'size_draw_ptr', data_addresses[_size_data.get('data')])
 
-def extract_complex_sprite(_data_address, _sprite_key, _object_name, _sprite_name):
+def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name, _palette_sprite_name):
     # Extracts complex sprite graphics
-    overworld_struct_address = int.from_bytes(bytes(current_rom[_data_address:_data_address + 3]), 'little')
-    start_sprite_address = get_overworld_sprite_data(overworld_struct_address, 'sprites_ptr')
-    sprite_width = get_overworld_sprite_data(overworld_struct_address, 'sprite_width')
-    sprite_height = get_overworld_sprite_data(overworld_struct_address, 'sprite_height')
-    sprite_data = SPRITES_REQUIREMENTS.get(_sprite_key)
+    start_sprite_pointer = get_overworld_sprite_data(_overworld_struct_address, 'sprites_ptr')
+    sprite_width = get_overworld_sprite_data(_overworld_struct_address, 'sprite_width')
+    sprite_height = get_overworld_sprite_data(_overworld_struct_address, 'sprite_height')
+    sprite_data = get_sprite_requirements(_sprite_key, _object_name)
     if not sprite_data:
         return
-    return extract_sprite(start_sprite_address, _sprite_key, _object_name, _sprite_name, (sprite_width, sprite_height * sprite_data['frames']))
+    sprites_pixel_data = []
+    sprite_palette = None
+    extra_sprite_name = ''
+    for i in range(sprite_data['frames']):
+        start_sprite_address = int.from_bytes(bytes(current_rom[start_sprite_pointer:start_sprite_pointer + 3]), 'little')
+        sprite, current_extra_sprite_name = extract_sprite(start_sprite_address, _sprite_key, _object_name, _palette_sprite_name, (sprite_width, sprite_height))
+        sprites_pixel_data += sprite.getdata()
+        if i == 0:
+            sprite_palette = sprite.getpalette()
+            extra_sprite_name = current_extra_sprite_name
+        start_sprite_pointer += 8
+    
+    final_image = Image.new('P', (sprite_width, sprite_height * sprite_data['frames']))
+    final_image.putdata(sprites_pixel_data)
+    final_image.putpalette(sprite_palette)
+    return final_image, extra_sprite_name
 
 
 #####################
@@ -256,15 +270,12 @@ def extract_palette_from_file(_path):
     return sprite_palette_colors
 
 def extract_sprites(_object_name, _output_path, _rom):
+    # TODO: Handle Castform
     handle_address_collection(_rom)
 
-    # Extracts all sprites from given object from ROM into output folder
-    is_pokemon = not _object_name in TRAINER_FOLDERS
-    sprite_list = POKEMON_SPRITES if is_pokemon else TRAINER_SPRITES
-
     def handle_sprite_extraction(_sprite_name):
-        # TODO: Handle sprites per sprite pool & palette pools
-        sprite_key = ('pokemon' if is_pokemon else 'trainer') + '_' + _sprite_name
+        reference_sprite_name = SPRITE_PIXEL_REFERENCE.get(_sprite_name, _sprite_name)
+        sprite_key = ('pokemon' if is_pokemon else 'trainer') + '_' + reference_sprite_name
 
         if is_pokemon:
             # Fetch internal Pokemon ID & sprite address
@@ -273,31 +284,40 @@ def extract_sprites(_object_name, _output_path, _rom):
             data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[sprite_key](data_addresses, pokemon_internal_id)
         else:
             # Fetch named Trainer sprite address
-            named_key = _object_name.lower() + "_" + sprite_name
+            named_key = _object_name.lower() + "_" + reference_sprite_name
             data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key](data_addresses)
         data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), 'little')
 
         if is_complex_sprite(sprite_key):
-            sprite_object = extract_complex_sprite(data_address, sprite_key, _object_name, sprite_name)
+            sprite_object, extra_sprite_name = extract_complex_sprite(data_address, sprite_key, _object_name, _sprite_name)
         else:
-            sprite_object = extract_sprite(data_address, sprite_key, _object_name, sprite_name)
-        full_path = os.path.join(_output_path, _sprite_name + '.png')
+            sprite_object, extra_sprite_name = extract_sprite(data_address, sprite_key, _object_name, _sprite_name)
+        full_path = os.path.join(_output_path, _sprite_name + extra_sprite_name + '.png')
         sprite_object.save(full_path)
 
+    # Extracts all sprites from given object from ROM into output folder
+    is_pokemon = not _object_name in TRAINER_FOLDERS
     extracted_sprites = []
+    sprite_list = POKEMON_SPRITES if is_pokemon else TRAINER_SPRITES
     for sprite_name in sprite_list:
         handle_sprite_extraction(sprite_name)
         extracted_sprites.append(sprite_name)
+
     palette_lists = POKEMON_PALETTES if is_pokemon else TRAINER_PALETTES
-    palette_sprites = [(not sprite in extracted_sprites for sprite in palette_lists[palette_list]) for palette_list in palette_lists]
+    palette_sprites = [palette_lists[palette_list] for palette_list in palette_lists]
+    palette_sprites = filter(lambda s: s, [sprite if not sprite in extracted_sprites else None for sprite in flatten_2d(palette_sprites)])
+
     for sprite_name in palette_sprites:
         handle_sprite_extraction(sprite_name)
 
-def extract_sprite(_data_address, _sprite_key, _object_name, _sprite_name, _preset_size = 0):
+def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_name, _preset_size = 0):
+    extra_sprite_name = ''
+
     needs_compression = OBJECT_NEEDS_COMPRESSION.get(_sprite_key, False)
-    sprite_requirements = SPRITES_REQUIREMENTS.get(_sprite_key)
+    sprite_requirements = get_sprite_requirements(_sprite_key, _object_name)
     sprite_palette_size = sprite_requirements.get('palette_size', 16)
     pixel_byte_size, _ = get_pixel_size_and_extension_from_palette_size(sprite_palette_size)
+    # Retrieve the sprite's size
     if _preset_size:
         sprite_width = _preset_size[0]
         sprite_height = _preset_size[1]
@@ -315,16 +335,24 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _sprite_name, _pres
     sprite_pixel_data = decompress_sprite(sprite_pixel_data, round(8 * pixel_byte_size))
     sprite_pixel_data = dechunk_sprite(sprite_pixel_data, sprite_width, sprite_height)
     
-    # Extract the sprite's palette
-    sprite_palette = extract_palette(_object_name, _sprite_name, _sprite_key.startswith('pokemon_'))
-    if not sprite_palette or not sprite_pixel_data:
-        return
+    # Extract the sprite's palette(s)
+    if _palette_sprite_name == 'icon':
+        pokemon_id = POKEMON_NAME_TO_ID[_object_name]
+        pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
+        icon_index_address = INTERNAL_ID_TO_SPRITE_ADDRESS[_sprite_key + "_index"](data_addresses, pokemon_internal_id)
+        icon_index = int(current_rom[icon_index_address])
+        sprite_palette = bytes(VALID_ICON_PALETTES[icon_index])
+        extra_sprite_name = '-{}'.format(int(icon_index))
+    elif _palette_sprite_name == 'footprint':
+        sprite_palette = bytes(VALID_FOOTPRINT_PALETTE)
+    else:
+        sprite_palette = extract_palette(_object_name, _palette_sprite_name, _sprite_key.startswith('pokemon_'))
 
     # Assemble the sprite
     extracted_image = Image.new('P', (sprite_width, sprite_height))
     extracted_image.putdata(sprite_pixel_data)
     extracted_image.putpalette(sprite_palette)
-    return extracted_image
+    return extracted_image, extra_sprite_name
 
 def extract_palette(_object_name, _sprite_name, _is_pokemon):
     palette_lists = POKEMON_PALETTES if _is_pokemon else TRAINER_PALETTES
@@ -469,7 +497,7 @@ def validate_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path)
             errors += ('\n' if errors else '') + ('Error: ' if _is_error else 'Warning: ') + _error
 
     sprite_key = ("pokemon_" if _is_pokemon else "trainer_") + _sprite_name
-    sprite_requirements = SPRITES_REQUIREMENTS.get(sprite_key, {})
+    sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
     sprite_image = Image.open(_path)
 
@@ -480,7 +508,7 @@ def validate_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path)
         sprite_palette_colors = sprite_image.getpalette()
         sprite_palette_model = sprite_requirements.get('palette', None)
         # TODO: Support sprites with more/less palette colors if there is no requirement
-        sprite_palette_required_size = sprite_requirements.get('palette_size', 16)
+        sprite_palette_required_size = sprite_requirements.get('palette_size', 16) * sprite_requirements.get('palettes', 1)
         if round(len(sprite_palette_colors) / 3) != sprite_palette_required_size:
             add_error('File {} in folder {}: The sprite\'s palette has {} colors but should have {}.'.format(_sprite_name, _object_name, round(len(sprite_palette_colors) / 3), sprite_palette_required_size), True)
         elif sprite_palette_model:
@@ -653,7 +681,6 @@ def dechunk_sprite(_data, _width, _height):
             block_y += 1
     return bytes(dest)
 
-
 #######################
 ## Utility Functions ##
 #######################
@@ -696,6 +723,12 @@ def set_overworld_sprite_data(_data_address, _key, _value:int):
     size = value_data.get('size')
     add_data_to_patch({ "address": starting_address, "length": size, "data": _value.to_bytes(size, 'little')})
 
+def get_sprite_requirements(_sprite_key, _object_name):
+    reqs = SPRITES_REQUIREMENTS.get(_sprite_key, {})
+    reqs_exceptions_list = SPRITES_REQUIREMENTS_EXCEPTIONS.get(_object_name, {})
+    reqs_exceptions = reqs_exceptions_list.get(_sprite_key, {})
+    return reqs | reqs_exceptions
+
 def is_complex_sprite(_sprite_key):
     return _sprite_key in COMPLEX_SPRITES_LIST
 
@@ -716,3 +749,10 @@ def handle_address_collection(_rom, _display_message = False):
 
 def five_to_eight_bits_palette(value):
     return value * 8 + math.floor(value / 4.4)
+
+def flatten_2d(input_list):
+   result = []
+   for sublist in input_list:
+      for item in sublist:
+        result.append(item)
+   return result
