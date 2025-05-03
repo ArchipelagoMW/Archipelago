@@ -3721,9 +3721,9 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "South Defiler", SC2_RACESWAP_LOC_ID_OFFSET + 3403, LocationType.VANILLA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Close Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3404, LocationType.EXTRA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Northwest Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3405, LocationType.EXTRA),
-        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "North Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3406, LocationType.EXTRA),
-        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Northeast Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3407, LocationType.EXTRA),
-        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Southwest Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3408, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "North Instigator", SC2_RACESWAP_LOC_ID_OFFSET + 3406, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Northeast Instigator", SC2_RACESWAP_LOC_ID_OFFSET + 3407, LocationType.EXTRA),
+        make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Southwest Instigator", SC2_RACESWAP_LOC_ID_OFFSET + 3408, LocationType.EXTRA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Southeast Immortal", SC2_RACESWAP_LOC_ID_OFFSET + 3409, LocationType.EXTRA),
         make_location_data(SC2Mission.THE_GREAT_TRAIN_ROBBERY_P.mission_name, "Kill Team", SC2_RACESWAP_LOC_ID_OFFSET + 3410, LocationType.CHALLENGE,
             lambda state: (
