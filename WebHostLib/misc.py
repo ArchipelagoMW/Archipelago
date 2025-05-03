@@ -38,9 +38,14 @@ def render_markdown(path: str) -> str:
             "mdx_breakless_lists",
             "markdown.extensions.fenced_code",
             "markdown.extensions.smarty",
+            "toc",
         ],
         extension_configs={
-            "toc": {"anchorlink": True},
+            "toc": {
+                "anchorlink": True,
+                # documentation says setting this to an empty string speeds up parsing if no marker present
+                "marker": "",
+            },
         }
     )
 
