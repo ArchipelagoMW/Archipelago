@@ -84,6 +84,7 @@ class TunicWorld(World):
     """
     game = "TUNIC"
     web = TunicWeb()
+    author: str = "SilentSR & ScipioWright"
 
     options: TunicOptions
     options_dataclass = TunicOptions
