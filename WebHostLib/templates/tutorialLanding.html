@@ -19,7 +19,7 @@
             <ul>
                 {% for file_name, file_data in tutorial_data.files.items() %}
                     <li>
-                        <a href="/tutorial/{{ world_name }}/{{ file_name }}">{{ file_data.language }}</a>
+                        <a href="{{ url_for("tutorial", game=world_name, file=file_name) }}">{{ file_data.language }}</a>
                         by
                         {% for author in file_data.authors %}
                             {{ author }}
