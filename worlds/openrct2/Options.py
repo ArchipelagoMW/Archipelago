@@ -692,8 +692,8 @@ class ShopMaximumTotalCustomers(Range):
     """
     display_name = "Maximum Shop Total Customers Requirement"
     range_start = 0
-    range_end = 2000
-    default = 800
+    range_end = 1000
+    default = 400
 
 class BalanceGuestCounts(OpenRCT2OnToggle):
     """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
