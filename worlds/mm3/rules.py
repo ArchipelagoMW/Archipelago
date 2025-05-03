@@ -7,7 +7,6 @@ from .locations import (needle_man_locations, magnet_man_locations, gemini_man_l
                         doc_wood_locations, doc_heat_locations, doc_metal_locations, doc_quick_locations,
                         wily_1_locations, wily_2_locations, wily_3_locations, wily_5_locations,
                         wily_6_locations, energy_pickups, etank_1ups, break_man_location)
-from .options import Consumables
 from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
@@ -344,8 +343,8 @@ def set_rules(world: "MM3World") -> None:
     # However, Wily 3 requires beating Wily 2, and Wily 2 explicitly needs Jet
     # So we can skip the additional rule on Wily 3
 
-    if world.options.consumables in (Consumables.option_1up_etank,
-                                     Consumables.option_all):
+    if world.options.consumables in (world.options.consumables.option_1up_etank,
+                                     world.options.consumables.option_all):
         add_rule(world.get_location(names.needle_man_c2), lambda state: has_rush_jet(state, world.player))
         add_rule(world.get_location(names.gemini_man_c1), lambda state: has_rush_jet(state, world.player))
         add_rule(world.get_location(names.gemini_man_c3),
@@ -367,8 +366,8 @@ def set_rules(world: "MM3World") -> None:
             if location == names.wily_2_c3:
                 continue
             add_rule(world.get_location(location), lambda state: has_rush_jet(state, world.player))
-    if world.options.consumables in (Consumables.option_weapon_health,
-                                     Consumables.option_all):
+    if world.options.consumables in (world.options.consumables.option_weapon_health,
+                                     world.options.consumables.option_all):
         add_rule(world.get_location(names.gemini_man_c2), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.gemini_man_c4), lambda state: has_rush_vertical(state, world.player))
         add_rule(world.get_location(names.gemini_man_c5), lambda state: has_rush_vertical(state, world.player))
