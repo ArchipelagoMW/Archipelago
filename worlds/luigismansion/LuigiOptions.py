@@ -543,7 +543,7 @@ class GhostTrapWeight(Range):
 
 class DoorModelRando(Toggle):
     """
-    Randomly choose models for every door in the mansion except the double doors.
+    Randomly choose models for every door in the mansion.
     """
     display_name = "Randomized Door Model"
     internal_name = "door_model_rando"
