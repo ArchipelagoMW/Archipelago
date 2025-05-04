@@ -17,6 +17,7 @@
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"BlackoutON"
+<FLAGOFF>(34)
 <FORCEMOVE>(3500)(-550)(-2164)(15)
 <WAIT>(60)
 <HLIGHTON>
@@ -81,6 +82,7 @@
 <FRAMEEND>
 <FLAGOFF>(8)
 <FLAGOFF>(115)
+<FLAGON>(34)
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Close"
