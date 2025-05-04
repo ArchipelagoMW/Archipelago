@@ -1425,6 +1425,47 @@
         ]
     },
     {
+        "name": "Greenhouse",
+        "children": [
+            {
+                "name": "Hackable Rope Near Wreckage", "sections": [{ "name": "Greenhouse: Hackable Rope Near Wreckage" }],
+                "map_locations": [{ "map": "greenhouse", "x": 667, "y": 120 }]
+            },
+            {
+                "name": "Examine Water Report", "sections": [{ "name": "Greenhouse: Examine Water Report" }],
+                "map_locations": [{ "map": "greenhouse", "x": 590, "y": 55 }]
+            },
+            {
+                "name": "Retrieve Chip From Shanhai 9000", "sections": [{ "name": "Greenhouse: Retrieve Chip From Shanhai 9000" }],
+                "map_locations": [{ "map": "greenhouse", "x": 565, "y": 55 }]
+            },
+            {
+                "name": "Near Rightmost Hanging Pool", "sections": [{ "name": "Greenhouse: Near Rightmost Hanging Pool" }],
+                "map_locations": [{ "map": "greenhouse", "x": 540, "y": 85 }]
+            },
+            {
+                "name": "Hidden in Upper Level Foliage", "sections": [{ "name": "Greenhouse: Hidden in Upper Level Foliage" }],
+                "map_locations": [{ "map": "greenhouse", "x": 410, "y": 55 }]
+            },
+            {
+                "name": "Vase In Water Above Root Node", "sections": [{ "name": "Greenhouse: Vase In Water Above Root Node" }],
+                "map_locations": [{ "map": "greenhouse", "x": 470, "y": 135 }]
+            },
+            {
+                "name": "In Leftmost Hanging Pool", "sections": [{ "name": "Greenhouse: In Leftmost Hanging Pool" }],
+                "map_locations": [{ "map": "greenhouse", "x": 230, "y": 95 }]
+            },
+            {
+                "name": "Examine Mutated Crops", "sections": [{ "name": "Greenhouse: Examine Mutated Crops" }],
+                "map_locations": [{ "map": "greenhouse", "x": 70, "y": 135 }]
+            },
+            {
+                "name": "Defeat Celestial Spectre: Shuigui", "sections": [{ "name": "Greenhouse: Defeat Celestial Spectre: Shuigui" }],
+                "map_locations": [{ "map": "greenhouse", "x": 138, "y": 220 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
