@@ -37,11 +37,10 @@ tracker_pages = {
     "shengwu_hall": 33,
     "sky_tower": 34,
     "tiandao_research_center": 35,
-    "tianhuo_research_institute": 36,
-    "underground_cave": 37,
-    "water_and_oxygen_synthesis": 38,
-    "yangu_hall": 39,
-    "yinglong_canal": 40,
+    "underground_cave": 36,
+    "water_and_oxygen_synthesis": 37,
+    "yangu_hall": 38,
+    "yinglong_canal": 39,
 }
 
 

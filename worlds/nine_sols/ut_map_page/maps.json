@@ -45,7 +45,6 @@
     { "name": "shengwu_hall", "img": "./shengwu_hall.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "sky_tower", "img": "./sky_tower.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "tiandao_research_center", "img": "./tiandao_research_center.webp", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "tianhuo_research_institute", "img": "./tianhuo_research_institute.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "underground_cave", "img": "./underground_cave.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "water_and_oxygen_synthesis", "img": "./water_and_oxygen_synthesis.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "yangu_hall", "img": "./yangu_hall.png", "location_size": 20, "location_border_thickness": 3 },
