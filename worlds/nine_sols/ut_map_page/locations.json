@@ -1962,5 +1962,66 @@
                 "map_locations": [{ "map": "sky_tower", "x": 620, "y": 140 }]
             }
         ]
+    },
+    {
+        "name": "Tiandao Research Center",
+        "children": [
+            {
+                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 825, "y": 75 }]
+            },
+            {
+                "name": "Covered In Spikes", "sections": [{ "name": "TRC: Covered In Spikes" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 740, "y": 190 }]
+            },
+            {
+                "name": "Ground Floor Bookshelf", "sections": [{ "name": "TRC: Ground Floor Bookshelf" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 390, "y": 225 }]
+            },
+            {
+                "name": "Before Chien Arena", "sections": [{ "name": "TRC: Before Chien Arena" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 285, "y": 360 }]
+            },
+            {
+                "name": "Above Sol Statue", "sections": [{ "name": "TRC: Above Sol Statue" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 385, "y": 145 }]
+            },
+            {
+                "name": "Past Spikes In Sickbay Vents", "sections": [{ "name": "TRC: Past Spikes In Sickbay Vents" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 22, "y": 144 }]
+            },
+            {
+                "name": "Dusk Guardian Recording Device", "sections": [{ "name": "TRC: Dusk Guardian Recording Device" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 95, "y": 100 }]
+            },
+            {
+                "name": "Destroy Tendril In The Highest Room", "sections": [{ "name": "TRC: Destroy Tendril In The Highest Room" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 420, "y": 55 }]
+            },
+            {
+                "name": "Defeat Mutated Shiyangyue Near Xingtian Sickbay", "sections": [{ "name": "TRC: Defeat Mutated Shiyangyue Near Xingtian Sickbay" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 275, "y": 45 }]
+            },
+            {
+                "name": "Behind Mutant Barrier", "sections": [{ "name": "TRC: Behind Mutant Barrier" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 660, "y": 145 }]
+            },
+            {
+                "name": "Destroy Tendril Near Sol Statue", "sections": [{ "name": "TRC: Destroy Tendril Near Sol Statue" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 475, "y": 200 }]
+            },
+            {
+                "name": "Chest Near Dusk Guardian HQ Screen", "sections": [{ "name": "TRC: Chest Near Dusk Guardian HQ Screen" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 488, "y": 311 }]
+            },
+            {
+                "name": "Destroy Tendril Near Guardian HQ Screen", "sections": [{ "name": "TRC: Destroy Tendril Near Guardian HQ Screen" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 388, "y": 300 }]
+            },
+            {
+                "name": "Examine Dusk Guardian HQ Screen", "sections": [{ "name": "TRC: Examine Dusk Guardian HQ Screen" }],
+                "map_locations": [{ "map": "tiandao_research_center", "x": 420, "y": 305 }]
+            }
+        ]
     }
 ]
