@@ -183,6 +183,7 @@ class CandyBox2RulesPackageRuleUnaryExpression(CandyBox2RulesPackageRuleExpressi
 class CandyBox2RulesPackage(JSONEncoder):
     locations: dict[int, str]
     location_rules: dict["CandyBox2LocationName", CandyBox2RulesPackageRuleExpression]
+    room_rules: dict["CandyBox2Room", CandyBox2RulesPackageRuleExpression]
 
     def __init__(self, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False,
                  indent=None, separators=None, default=None):
@@ -191,15 +192,20 @@ class CandyBox2RulesPackage(JSONEncoder):
                          default=default)
         self.locations = {location: name for name, location in locations.items()}
         self.location_rules = {}
+        self.room_rules = {}
 
     def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression):
         self.location_rules[location] = rule
+
+    def add_room_rule(self, room: "CandyBox2Room", rule: CandyBox2RulesPackageRuleExpression):
+        self.room_rules[room] = rule
 
     def default(self, o):
         return {
             "locations": o.locations,
             "rules": {
-                **{f"loc_{locations[location]}": rule.default() for location, rule in o.location_rules.items()}
+                "locations": {locations[location]: rule.default() for location, rule in o.location_rules.items()},
+                "rooms": {room: rule.default() for room, rule in o.room_rules.items()}
             }
         }
 
@@ -342,10 +348,15 @@ def can_beat_sharks():
 
 def generate_rules_package():
     rules_package = CandyBox2RulesPackage()
+    generate_rules_package_location_rules(rules_package)
+    generate_rules_package_room_rules(rules_package)
+
+    return rules_package
+
+def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies())
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies())
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3))
-    
 
     # TODO: Forge locations should depend on previous forge location where applicable
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3) & rule_room(CandyBox2Room.DRAGON))
@@ -440,4 +451,24 @@ def generate_rules_package():
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR, can_farm_candies())
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT, can_farm_candies())
 
-    return rules_package
+def generate_rules_package_room_rules(rules_package: CandyBox2RulesPackage):
+    rules_package.add_room_rule(CandyBox2Room.SQUIRREL_TREE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1))
+    rules_package.add_room_rule(CandyBox2Room.LONELY_HOUSE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1))
+    rules_package.add_room_rule(CandyBox2Room.DIG_SPOT, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1) & rule_room(CandyBox2Room.CAVE))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_DESERT, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1))
+    rules_package.add_room_rule(CandyBox2Room.LOLLIPOP_FARM, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 2))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_BRIDGE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 2))
+    rules_package.add_room_rule(CandyBox2Room.WISHING_WELL, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 2))
+    rules_package.add_room_rule(CandyBox2Room.POGO_STICK_SPOT, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 2))
+    rules_package.add_room_rule(CandyBox2Room.CAVE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 2))
+    rules_package.add_room_rule(CandyBox2Room.SORCERESS_HUT, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_FOREST, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 4))
+    rules_package.add_room_rule(CandyBox2Room.PIER, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 4))
+    rules_package.add_room_rule(CandyBox2Room.HOLE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 5))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 5))
+    rules_package.add_room_rule(CandyBox2Room.CASTLE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 6))
+    rules_package.add_room_rule(CandyBox2Room.TOWER, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 7))
+    rules_package.add_room_rule(CandyBox2Room.VILLAGE_MINIGAME, rule_item(CandyBox2ItemName.THIRD_HOUSE_KEY))
+    rules_package.add_room_rule(CandyBox2Room.DESERT_FORTRESS, rule_item(CandyBox2ItemName.DESERT_FORTRESS_KEY))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_CELLAR, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD))
+    rules_package.add_room_rule(CandyBox2Room.QUEST_THE_X_POTION, can_brew(True))
