@@ -586,7 +586,7 @@ INTERNAL_ID_TO_SPRITE_ADDRESS = {
     "brendan_decorating":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 772,
     "brendan_battle_front":         lambda c : c["gTrainerFrontPicTable"] + 568,
     "brendan_battle_back":          lambda c : c["gTrainerBackPicTable"],
-    "brendan_battle_back_2":        lambda c : c["sTrainerBackSpriteTemplates"],
+    "brendan_battle_back_throw":    lambda c : c["sTrainerBackSpriteTemplates"],
     "brendan_palette":              lambda c : c["sObjectEventSpritePalettes"] + 64,
     "brendan_palette_reflection":   lambda c : c["sObjectEventSpritePalettes"] + 72,
     "brendan_palette_underwater":   lambda c : c["sObjectEventSpritePalettes"] + 88,
@@ -604,12 +604,33 @@ INTERNAL_ID_TO_SPRITE_ADDRESS = {
     "may_decorating":           lambda c : c["gObjectEventGraphicsInfoPointers"] + 776,
     "may_battle_front":         lambda c : c["gTrainerFrontPicTable"] + 576,
     "may_battle_back":          lambda c : c["gTrainerBackPicTable"] + 8,
-    "may_battle_back_2":        lambda c : c["sTrainerBackSpriteTemplates"] + 24,
+    "may_battle_back_throw":    lambda c : c["sTrainerBackSpriteTemplates"] + 24,
     "may_palette":              lambda c : c["sObjectEventSpritePalettes"] + 136,
     "may_palette_reflection":   lambda c : c["sObjectEventSpritePalettes"] + 144,
     "may_palette_underwater":   lambda c : c["sObjectEventSpritePalettes"] + 88,
     "may_palette_battle_back":  lambda c : c["gTrainerBackPicPaletteTable"] + 8,
     "may_palette_battle_front": lambda c : c["gTrainerFrontPicPaletteTable"] + 576,
+}
+
+OVERWORLD_SPRITE_ADDRESSES = {
+    "brendan_walking_running": lambda c : [ c["gObjectEventGraphicsInfoPointers"],       c["gObjectEventGraphicsInfoPointers"] + 400, c["gObjectEventGraphicsInfoPointers"] + 864 ],
+    "brendan_mach_bike":       lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 4,   c["gObjectEventGraphicsInfoPointers"] + 404 ],
+    "brendan_acro_bike":       lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 252, c["gObjectEventGraphicsInfoPointers"] + 408 ],
+    "brendan_surfing":         lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 8,   c["gObjectEventGraphicsInfoPointers"] + 412 ],
+    "brendan_field_move":      lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 12,  c["gObjectEventGraphicsInfoPointers"] + 416 ],
+    "brendan_underwater":      lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 444 ],
+    "brendan_fishing":         lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 548 ],
+    "brendan_watering":        lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 764 ],
+    "brendan_decorating":      lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 772 ],
+    "may_walking_running":     lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 356, c["gObjectEventGraphicsInfoPointers"] + 420, c["gObjectEventGraphicsInfoPointers"] + 868 ],
+    "may_mach_bike":           lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 360, c["gObjectEventGraphicsInfoPointers"] + 424 ],
+    "may_acro_bike":           lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 364, c["gObjectEventGraphicsInfoPointers"] + 428 ],
+    "may_surfing":             lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 368, c["gObjectEventGraphicsInfoPointers"] + 432 ],
+    "may_field_move":          lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 372, c["gObjectEventGraphicsInfoPointers"] + 436 ],
+    "may_underwater":          lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 448 ],
+    "may_fishing":             lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 552 ],
+    "may_watering":            lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 768 ],
+    "may_decorating":          lambda c : [ c["gObjectEventGraphicsInfoPointers"] + 776 ],
 }
 
 COMPLEX_SPRITES_LIST = [
@@ -622,7 +643,7 @@ COMPLEX_SPRITES_LIST = [
     "trainer_fishing",
     "trainer_watering",
     "trainer_decorating",
-    "trainer_battle_back_2"
+    "trainer_battle_back_throw"
 ]
 
 OVERWORLD_SPRITE_OBJECT_INFO = {
@@ -783,28 +804,28 @@ VALID_OVERWORLD_PALETTE = [
 ]
 
 SPRITES_REQUIREMENTS = {
-    "pokemon_front_anim":      { "frames": 2,  "width": 64, "height": 64 },
-    "pokemon_back":            { "frames": 1,  "width": 64, "height": 64 },
-    "pokemon_icon":            { "frames": 2,  "width": 32, "height": 32, "palette": VALID_ICON_PALETTES },
-    "pokemon_footprint":       { "frames": 1,  "width": 16, "height": 16, "palette_size": 2, "palette": VALID_FOOTPRINT_PALETTE },
-    "trainer_walking_running": { "frames": 18, "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_mach_bike":       { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_acro_bike":       { "frames": 27, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_surfing":         { "frames": 12, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_field_move":      { "frames": 5,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_underwater":      { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_UNDERWATER_PALETTE },
-    "trainer_fishing":         { "frames": 12, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_watering":        { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_decorating":      { "frames": 1,  "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
-    "trainer_battle_front":    { "frames": 1,  "width": 64, "height": 64 },
-    "trainer_battle_back":     { "frames": 4,  "width": 64, "height": 64 },
-    "trainer_battle_back_2":   { "frames": 4,  "width": 64, "height": 64 }
+    "pokemon_front_anim":        { "frames": 2,  "width": 64, "height": 64 },
+    "pokemon_back":              { "frames": 1,  "width": 64, "height": 64 },
+    "pokemon_icon":              { "frames": 2,  "width": 32, "height": 32, "palette": VALID_ICON_PALETTES },
+    "pokemon_footprint":         { "frames": 1,  "width": 16, "height": 16, "palette_size": 2, "palette": VALID_FOOTPRINT_PALETTE },
+    "trainer_walking_running":   { "frames": 18, "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_mach_bike":         { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_acro_bike":         { "frames": 27, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_surfing":           { "frames": 12, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_field_move":        { "frames": 5,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_underwater":        { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_UNDERWATER_PALETTE },
+    "trainer_fishing":           { "frames": 12, "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_watering":          { "frames": 9,  "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_decorating":        { "frames": 1,  "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE },
+    "trainer_battle_front":      { "frames": 1,  "width": 64, "height": 64 },
+    "trainer_battle_back":       { "frames": 4,  "width": 64, "height": 64 },
+    "trainer_battle_back_throw": { "frames": 4,  "width": 64, "height": 64 }
 }
 
 SPRITES_REQUIREMENTS_EXCEPTIONS = {
     "Castform": {
-        "pokemon_front_anim": { "frames": 4, "palette_size": 16, "palettes": 4 },
-        "pokemon_back":       { "frames": 4, "palette_size": 16, "palettes": 4 },
+        "pokemon_front_anim": { "frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True },
+        "pokemon_back":       { "frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True },
     },
     "Deoxys": {
         "pokemon_back":       { "frames": 2 },

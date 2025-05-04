@@ -8,7 +8,7 @@ from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
     tkinter_center_window, data_to_bps_patch
-from worlds.pokemon_emerald.sprite_patcher import handle_sprite_pack, extract_palette_from_file, \
+from worlds.pokemon_emerald.sprite_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
     extract_sprites, validate_sprite_pack, POKEMON_FOLDERS, TRAINER_FOLDERS
 from argparse import Namespace
 from tkinter import messagebox
@@ -185,14 +185,11 @@ def adjustGUI():
 
         rom = build_ap_rom(opts.patch.get())
         for object in objectFolders:
-            if object == 'Castform':
-                # Castform has a very specific way to handle its sprites and it's not yet supported
-                continue
             currentOutput = os.path.join(outputFolder, object)
             if not os.path.isdir(currentOutput):
                 os.makedirs(currentOutput)
             extract_sprites(object, currentOutput, rom)
-        messagebox.showinfo(title='Success', message=f'All sprites have successfully been extracted, except for Castform!')
+        messagebox.showinfo(title='Success', message=f'All sprites have successfully been extracted!')
         
 
     spriteExtractorFolder = StringVar()
@@ -263,29 +260,29 @@ def adjustGUI():
     sprites = []
 
     spritePreviewFrame = LabelFrame(mainWindowFrame, text="Sprite Preview", padx=8, pady=8)
-    selectorFrame = Frame(spritePreviewFrame, padx=2, pady=2)
-    selectorFrame.grid_rowconfigure(0, weight=1)
-    selectorFrame.grid_rowconfigure(1, weight=1)
-    selectorFrame.grid_columnconfigure(0, weight=1)
-    selectorFrame.grid_columnconfigure(1, weight=1)
+    spritePreviewFrame.grid_rowconfigure(0, weight=1)
+    spritePreviewFrame.grid_rowconfigure(1, weight=1)
+    spritePreviewFrame.grid_columnconfigure(0, weight=1)
+    spritePreviewFrame.grid_columnconfigure(1, weight=1)
+    #spritePreviewFrame.grid_columnconfigure(2, weight=1)
 
-    folderSelectorFrame = Frame(selectorFrame)
-    folderSelectorFrame.grid(row=0, column=0)
+    folderSelectorFrame = Frame(spritePreviewFrame)
+    folderSelectorFrame.grid(row=0, column=0, padx=8)
     folderSelectorLabel = Label(folderSelectorFrame, text="Current Folder")
     folderSelector = OptionMenu(folderSelectorFrame, currentSpriteFolder, "--------", *folders)
 
-    spriteSelectorFrame = Frame(selectorFrame)
-    spriteSelectorFrame.grid(row=0, column=1)
+    spriteSelectorFrame = Frame(spritePreviewFrame)
+    spriteSelectorFrame.grid(row=0, column=1, padx=8)
     spriteSelectorLabel = Label(spriteSelectorFrame, text="Current Sprite")
     spriteSelector = OptionMenu(spriteSelectorFrame, currentSprite, "--------", *sprites)
 
-    spriteFrame = Frame(selectorFrame, padx=2, pady=2)
-    spriteFrame.grid(row=1, column=0)
+    spriteFrame = Frame(spritePreviewFrame, padx=2, pady=2)
+    spriteFrame.grid(row=1, column=0, padx=8)
     spriteLabel = Label(spriteFrame, text="Sprite")
     spriteLabelImage = Label(spriteFrame, width=128, height=126)
 
-    palettePreviewFrame = Frame(selectorFrame, width=128)
-    palettePreviewFrame.grid(row=1, column=1)
+    palettePreviewFrame = Frame(spritePreviewFrame, width=128)
+    palettePreviewFrame.grid(row=1, column=1, padx=8)
     paletteLabel = Label(palettePreviewFrame, text="Palette")
     paletteLabel.grid(row=0, column=0, columnspan=4)
     palettePreviews = []
@@ -294,10 +291,78 @@ def adjustGUI():
         palettePreview.grid(row=1+math.floor(i/4), column=i%4)
         palettePreviews.append(palettePreview)
     
-    spritePreviewErrorLabel = Label(selectorFrame, text='No error detected! The sprite pack is valid.', pady=2)
-    spritePreviewErrorLabel.grid(row=2, column=0, columnspan=2)
+    '''
+    dataChangeFrame = LabelFrame(spritePreviewFrame, text="Sprite Preview", padx=2, pady=2)
+    dataChangeFrame.grid(row=0, column=2, rowspan=2)
+    dataChangeFrame.grid_rowconfigure(0, weight=1)
+    dataChangeFrame.grid_rowconfigure(1, weight=1)
+    dataChangeFrame.grid_columnconfigure(0, weight=1)
+    dataChangeFrame.grid_columnconfigure(1, weight=1)
+    dataChangeFrame.grid_columnconfigure(2, weight=1)
+    
+    pokemonHP = StringVar()
+    pokemonSPD = StringVar()
+    pokemonATK = StringVar()
+    pokemonDEF = StringVar()
+    pokemonSPATK = StringVar()
+    pokemonSPDEF = StringVar()
 
-    selectorFrame.pack(side=TOP, expand=True, fill=X)
+    def CheckStatValue(entry):
+        try:
+            value = float(entry.get().strip())
+            valid = 0 <= value <= 255
+        except ValueError:
+            valid = False
+        entry.config(fg='black' if valid else 'red')
+
+    statHPFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statHPFrame.grid(row=0, column=0)
+    statHPLabel = Label(statHPFrame, text="HP")
+    statHPInput = Entry(statHPFrame, textvariable=pokemonHP, width=7)
+    statSPDFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statSPDFrame.grid(row=0, column=1)
+    statSPDLabel = Label(statSPDFrame, text="Speed")
+    statSPDInput = Entry(statSPDFrame, textvariable=pokemonSPD, width=7)
+    statATKFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statATKFrame.grid(row=1, column=0)
+    statATKLabel = Label(statATKFrame, text="Attack")
+    statATKInput = Entry(statATKFrame, textvariable=pokemonATK, width=7)
+    statDEFFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statDEFFrame.grid(row=1, column=1)
+    statDEFLabel = Label(statDEFFrame, text="Defense")
+    statDEFInput = Entry(statDEFFrame, textvariable=pokemonDEF, width=7)
+    statSPATKFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statSPATKFrame.grid(row=2, column=0)
+    statSPATKLabel = Label(statSPATKFrame, text="Sp. Atk.")
+    statSPATKInput = Entry(statSPATKFrame, textvariable=pokemonSPATK, width=7)
+    statSPDEFFrame = Frame(dataChangeFrame, padx=2, pady=2)
+    statSPDEFFrame.grid(row=2, column=1)
+    statSPDEFLabel = Label(statSPDEFFrame, text="Sp. Def.")
+    statSPDEFInput = Entry(statSPDEFFrame, textvariable=pokemonSPDEF, width=7)
+
+    statHPLabel.pack(side=TOP)
+    statHPInput.pack(side=TOP)
+    statHPInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    statSPDLabel.pack(side=TOP)
+    statSPDInput.pack(side=TOP)
+    statSPDInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    statATKLabel.pack(side=TOP)
+    statATKInput.pack(side=TOP)
+    statATKInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    statDEFLabel.pack(side=TOP)
+    statDEFInput.pack(side=TOP)
+    statDEFInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    statSPATKLabel.pack(side=TOP)
+    statSPATKInput.pack(side=TOP)
+    statSPATKInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    statSPDEFLabel.pack(side=TOP)
+    statSPDEFInput.pack(side=TOP)
+    statSPDEFInput.bind('<KeyRelease>', lambda e: CheckStatValue(e.widget))
+    '''
+    
+    spritePreviewErrorLabel = Label(spritePreviewFrame, text='No error detected! The sprite pack is valid.', pady=2)
+    spritePreviewErrorLabel.grid(row=2, column=0, columnspan=4)
+
     folderSelectorLabel.pack(side=TOP, expand=True, fill=X)
     folderSelector.pack(side=TOP, expand=True, fill=X)
     spriteSelectorLabel.pack(side=TOP, expand=True, fill=X)
@@ -339,6 +404,7 @@ def adjustGUI():
     bottomFrame.pack(side=TOP, pady=(5,5))
     
     def tryValidateSpritePack(_sprite_pack, _patch_changed = False):
+        has_error = False
         global ap_rom
         if isPatchValid:
             ap_rom = ap_rom if not _patch_changed else build_ap_rom(opts.patch.get())
@@ -365,16 +431,20 @@ def adjust(args):
     global ap_rom
     ap_rom = ap_rom or build_ap_rom(args.patch)
 
-    # Build sprite pack patch & apply patch
     if not args.sprite_pack:
         messagebox.showerror(title='Failure', message=f'Cannot adjust the ROM, a sprite pack is required!')
         return
-
-    _, has_error = validate_sprite_pack(args.sprite_pack, ap_rom)
-    if has_error:
-        messagebox.showerror(title='Failure', message=f'Cannot adjust the ROM as the sprite pack is erroneous!')
+    
+    # Build sprite pack patch & apply patch
+    try:
+        sprite_pack_bps_patch = build_sprite_pack_patch(args.sprite_pack, ap_rom)
+    except Exception as e:
+        if hasattr(e, 'message'):
+            messagebox.showerror(title='Failure', message=e.message)
+        else:
+            messagebox.showerror(title='Failure', message=str(e))
+        
         return
-    sprite_pack_bps_patch = build_sprite_pack_patch(args.sprite_pack, ap_rom)
     adjusted_ap_rom = bytearray(len(ap_rom))
     apply_bps_patch(sprite_pack_bps_patch, ap_rom, adjusted_ap_rom)
 
@@ -403,8 +473,12 @@ def build_ap_rom(_patch):
         return
 
 def build_sprite_pack_patch(sprite_pack, ap_rom):
+    _, has_error = validate_sprite_pack(sprite_pack, ap_rom)
+    if has_error:
+        raise Exception('Cannot adjust the ROM as the sprite pack is erroneous!')
+    
     sprite_pack_path = sprite_pack
-    sprite_pack_data = handle_sprite_pack(sprite_pack_path, ap_rom)
+    sprite_pack_data = get_patch_from_sprite_pack(sprite_pack_path, ap_rom)
     sprite_pack_bps_patch = data_to_bps_patch(sprite_pack_data, ap_rom)
     return sprite_pack_bps_patch
 
