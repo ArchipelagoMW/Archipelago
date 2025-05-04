@@ -1466,6 +1466,157 @@
         ]
     },
     {
+        "name": "Grotto of Scriptures (East)",
+        "children": [
+            {
+                "name": "Lurker Near Lower Exit", "sections": [{ "name": "GoS (East): Lurker Near Lower Exit" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 120, "y": 380 }]
+            },
+            {
+                "name": "Guarded By Phantom Ninja", "sections": [{ "name": "GoS (East): Guarded By Phantom Ninja" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 30, "y": 330 }]
+            },
+            {
+                "name": "Spike Ball Hall Upper Right", "sections": [{ "name": "GoS (East): Spike Ball Hall Upper Right" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 492, "y": 295 }]
+            },
+            {
+                "name": "Spike Ball Hall Upper Left", "sections": [{ "name": "GoS (East): Spike Ball Hall Upper Left" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 190, "y": 290 }]
+            },
+            {
+                "name": "Lurkers Under Tunnel Walkway", "sections": [{ "name": "GoS (East): Lurkers Under Tunnel Walkway" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 365, "y": 210 }]
+            },
+            {
+                "name": "Portal Below Root Node", "sections": [{ "name": "GoS (East): Portal Below Root Node" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 240, "y": 215 }]
+            },
+            {
+                "name": "Alcove Between Tombs", "sections": [
+                    { "name": "GoS (East): Alcove Between Tombs 1st Chest" },
+                    { "name": "GoS (East): Alcove Between Tombs 2nd Chest" },
+                    { "name": "GoS (East): Alcove Between Tombs 3rd Chest" }
+                ],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 305, "y": 85 }]
+            },
+            {
+                "name": "Upper Right of Room Above Yin Jifu's Tomb", "sections": [{ "name": "GoS (East): Upper Right of Room Above Yin Jifu's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 545, "y": 35 }]
+            },
+            {
+                "name": "Examine Mural in Yin Jifu's Tomb", "sections": [{ "name": "GoS (East): Examine Mural in Yin Jifu's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 392, "y": 140 }]
+            },
+            {
+                "name": "Examine Stone Carvings", "sections": [{ "name": "GoS (East): Examine Stone Carvings" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 270, "y": 45 }]
+            },
+            {
+                "name": "Outside Guiguzi's Tomb", "sections": [{ "name": "GoS (East): Outside Guiguzi's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 30, "y": 100 }]
+            },
+            {
+                "name": "Examine Mural in Guiguzi's Tomb", "sections": [{ "name": "GoS (East): Examine Mural in Guiguzi's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_east", "x": 87, "y": 115 }]
+            }
+        ]
+    },
+    {
+        "name": "Grotto of Scriptures (Entry)",
+        "children": [
+            {
+                "name": "Examine Painting", "sections": [{ "name": "GoS (Entry): Examine Painting" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 272, "y": 95 }]
+            },
+            {
+                "name": "Examine Coffin", "sections": [{ "name": "GoS (Entry): Examine Coffin" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 305, "y": 200 }]
+            },
+            {
+                "name": "Poem Treasure", "sections": [
+                    { "name": "GoS (Entry): Poem Treasure 1st Chest" },
+                    { "name": "GoS (Entry): Poem Treasure 2nd Chest" },
+                    { "name": "GoS (Entry): Poem Treasure 3rd Chest" },
+                    { "name": "GoS (Entry): Poem Treasure 4th Chest" },
+                    { "name": "GoS (Entry): Poem Treasure 5th Chest" },
+                    { "name": "GoS (Entry): Poem Treasure 6th Chest" }
+                ],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 272, "y": 60 }]
+            },
+            {
+                "name": "Lower Caves Portal", "sections": [{ "name": "GoS (Entry): Lower Caves Portal" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 420, "y": 345 }]
+            },
+            {
+                "name": "Lower Left Caves", "sections": [{ "name": "GoS (Entry): Lower Left Caves" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 340, "y": 290 }]
+            },
+            {
+                "name": "Alcove Above Middle Caves Portal", "sections": [{ "name": "GoS (Entry): Alcove Above Middle Caves Portal" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 510, "y": 245 }]
+            },
+            {
+                "name": "Yellow Pool Above Middle Caves Portal", "sections": [{ "name": "GoS (Entry): Yellow Pool Above Middle Caves Portal" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 640, "y": 240 }]
+            },
+            {
+                "name": "Upper Right Caves Portal", "sections": [
+                    { "name": "GoS (Entry): Upper Right Caves Portal 1st Chest" },
+                    { "name": "GoS (Entry): Upper Right Caves Portal 2nd Chest" },
+                    { "name": "GoS (Entry): Upper Right Caves Portal 3rd Chest" }
+                ],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 620, "y": 125 }]
+            },
+            {
+                "name": "Near Greenhouse Roof", "sections": [{ "name": "GoS (Entry): Near Greenhouse Roof" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 420, "y": 115 }]
+            },
+            {
+                "name": "Greenhouse Between Elevators", "sections": [{ "name": "GoS (Entry): Greenhouse Between Elevators" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 375, "y": 150 }]
+            },
+            {
+                "name": "Near Upper Right Exit", "sections": [{ "name": "GoS (Entry): Near Upper Right Exit" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_entry", "x": 602, "y": 30 }]
+            }
+        ]
+    },
+    {
+        "name": "Grotto of Scriptures (West)",
+        "children": [
+            {
+                "name": "Above Elevator", "sections": [{ "name": "GoS (West): Above Elevator" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 825, "y": 205 }]
+            },
+            {
+                "name": "Platforms In Top Middle Room", "sections": [{ "name": "GoS (West): Platforms In Top Middle Room" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 495, "y": 40 }]
+            },
+            {
+                "name": "Below Western Cliffs", "sections": [{ "name": "GoS (West): Below Western Cliffs" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 265, "y": 330 }]
+            },
+            {
+                "name": "Below Luyan's Tomb", "sections": [{ "name": "GoS (West): Below Luyan's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 495, "y": 190 }]
+            },
+            {
+                "name": "Examine Mural in Luyan's Tomb", "sections": [{ "name": "GoS (West): Examine Mural in Luyan's Tomb" }],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 550, "y": 150 }]
+            },
+            {
+                "name": "Lear's Grave", "sections": [
+                    { "name": "GoS (West): Yin Jifu's Tianhuo Flower" },
+                    { "name": "GoS (West): Guiguzi's Tianhuo Flower" },
+                    { "name": "GoS (West): Luyan's Tianhuo Flower" },
+                    { "name": "GoS (West): Chest in Lear's Grave" }
+                ],
+                "map_locations": [{ "map": "grotto_of_scriptures_west", "x": 639, "y": 390 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
