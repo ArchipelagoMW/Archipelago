@@ -813,8 +813,13 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
-        #Todo NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 6 prizes in exchange for winning fights
         #Todo NPCs Missable: Z38_ChloesLure ID 2737 (781, 131, -278) gives you a Jigging Lure
+        #Todo NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, logic.has_vertical_movement), #(752, 133, -262) Dust
         LocationData("Shoudu Province", "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, logic.has_vertical_movement), #(756, 133, -261) Ingot
         LocationData("Shoudu Province", "Shoudu Province NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, logic.has_vertical_movement), #(753, 130, -264) Ore
