@@ -301,9 +301,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
         # The original check the corresponds to the npc id should be last so that when when it completes it stops showing up on your minimap.
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 531 + 50000 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 2", 531 + 50001 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 3", 531 + 50002 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 2", 50532 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 3", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
@@ -533,15 +533,15 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race Participiation Prize", 639 + 50000 + npc_index_offset),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 14th place price", 639 + 50001 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 12th place price", 639 + 50002 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 10th place price", 639 + 50003 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 8th place price", 639 + 50004 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 6th place price", 639 + 50005 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 4th place price", 639 + 50006 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 3rd place price", 639 + 50007 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race 2nd place price", 639 + 50008 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race Participiation Prize", 50639 + npc_index_offset),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 14th place price", 50640 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 12th place price", 50641 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 10th place price", 50642 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 8th place price", 50643 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 6th place price", 50644 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 4th place price", 50645 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, logic.has_swimming),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Win the Salmon Race", 639 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
