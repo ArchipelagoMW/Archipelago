@@ -1645,6 +1645,58 @@
         ]
     },
     {
+        "name": "Lake Yaochi Ruins",
+        "children": [
+            {
+                "name": "In Leftmost Pool", "sections": [
+                    { "name": "LYR: First Chest in Leftmost Pool" },
+                    { "name": "LYR: Second Chest in Leftmost Pool" }
+                ],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 55, "y": 50 }]
+            },
+            {
+                "name": "Above Leftmost Pool", "sections": [{ "name": "LYR: Above Leftmost Pool" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 25, "y": 30 }]
+            },
+            {
+                "name": "Right of Leftmost Pool", "sections": [{ "name": "LYR: Right of Leftmost Pool" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 83, "y": 50 }]
+            },
+            {
+                "name": "Hear Ji Reminisce About Daybreak Tower", "sections": [{ "name": "LYR: Hear Ji Reminisce About Daybreak Tower" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 200, "y": 50 }]
+            },
+            {
+                "name": "Daybreak Tower Chest", "sections": [{ "name": "LYR: Daybreak Tower Chest" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 200, "y": 35 }]
+            },
+            {
+                "name": "Daybreak Tower Bell Puzzle", "sections": [{ "name": "LYR: Daybreak Tower Bell Puzzle" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 174, "y": 35 }]
+            },
+            {
+                "name": "Above Root Node", "sections": [{ "name": "LYR: Above Root Node" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 223, "y": 40 }]
+            },
+            {
+                "name": "Statue Hack Room Near Root Node", "sections": [{ "name": "LYR: Statue Hack Room Near Root Node" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 248, "y": 50 }]
+            },
+            {
+                "name": "Examine Stele", "sections": [{ "name": "LYR: Examine Stele" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 570, "y": 50 }]
+            },
+            {
+                "name": "Nymph Puzzle Room Near Stele", "sections": [{ "name": "LYR: Nymph Puzzle Room Near Stele" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 638, "y": 45 }]
+            },
+            {
+                "name": "Ropes Near Right Exit", "sections": [{ "name": "LYR: Ropes Near Right Exit" }],
+                "map_locations": [{ "map": "lake_yaochi_ruins", "x": 670, "y": 50 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {

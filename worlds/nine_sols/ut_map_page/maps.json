@@ -29,7 +29,9 @@
     { "name": "grotto_of_scriptures_entry", "img": "./grotto_of_scriptures_entry.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "grotto_of_scriptures_west", "img": "./grotto_of_scriptures_west.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "inner_warehouse", "img": "./inner_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "lake_yaochi_ruins", "img": "./lake_yaochi_ruins.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "lake_yaochi_ruins", "img": "./lake_yaochi_ruins.webp",
+        "location_size": 10, "location_border_thickness": 2
+    },
     { "name": "central_hall", "img": "./central_hall.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "nobility_hall", "img": "./nobility_hall.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "outer_warehouse", "img": "./outer_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
