@@ -1903,6 +1903,30 @@
         ]
     },
     {
+        "name": "Shengwu Hall",
+        "children": [
+            {
+                "name": "Stuff Before Jiequan", "sections": [
+                    { "name": "Chest Before Jiequan" },
+                    { "name": "Examine Sphere Before Jiequan" }
+                ],
+                "map_locations": [{ "map": "shengwu_hall", "x": 925, "y": 120 }]
+            },
+            {
+                "name": "Jiequan's Tianhuo Flower", "sections": [{ "name": "Jiequan's Tianhuo Flower" }],
+                "map_locations": [{ "map": "shengwu_hall", "x": 460, "y": 120 }]
+            },
+            {
+                "name": "Chest After Jiequan", "sections": [{ "name": "Chest After Jiequan" }],
+                "map_locations": [{ "map": "shengwu_hall", "x": 230, "y": 120 }]
+            },
+            {
+                "name": "Jiequan's Vital Sanctum", "sections": [{ "name": "Jiequan's Vital Sanctum" }],
+                "map_locations": [{ "map": "shengwu_hall", "x": 105, "y": 120 }]
+            }
+        ]
+    },
+    {
         "name": "Sky Tower",
         "children": [
             {
