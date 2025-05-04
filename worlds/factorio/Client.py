@@ -523,7 +523,9 @@ rcon_password = args.rcon_password if args.rcon_password else ''.join(
 factorio_server_logger = logging.getLogger("FactorioServer")
 settings: FactorioSettings = get_settings().factorio_options
 if os.path.samefile(settings.executable, sys.executable):
-    raise Exception(f"FactorioClient was set to run itself {settings.executable}, aborting process bomb.")
+    selected_executable = settings.executable
+    settings.executable = FactorioSettings.executable  # reset to default
+    raise Exception(f"FactorioClient was set to run itself {selected_executable}, aborting process bomb.")
 
 executable = settings.executable
 
