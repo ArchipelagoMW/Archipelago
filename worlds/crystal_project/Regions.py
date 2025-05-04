@@ -229,7 +229,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": logic.has_vertical_movement,
         "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
-        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Item - Elevator Part", world.player, 10)})
+        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Elevator Part", world.player, 10)})
     multiworld.get_region("The Undercity", player).add_exits(["Shoudu Province", "The Open Sea"],
         {"The Open Sea": logic.has_swimming})
     multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
