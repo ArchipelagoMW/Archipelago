@@ -1849,6 +1849,43 @@
         ]
     },
     {
+        "name": "Prison",
+        "children": [
+            {
+                "name": "Examine Scroll in Lower Right Cell", "sections": [{ "name": "Prison: Examine Scroll in Lower Right Cell" }],
+                "map_locations": [{ "map": "prison", "x": 810, "y": 250 }]
+            },
+            {
+                "name": "Lower Left Cell", "sections": [{ "name": "Prison: Lower Left Cell" }],
+                "map_locations": [{ "map": "prison", "x": 20, "y": 220 }]
+            },
+            {
+                "name": "Above Stairs on Second Level", "sections": [{ "name": "Prison: Above Stairs on Second Level" }],
+                "map_locations": [{ "map": "prison", "x": 255, "y": 145 }]
+            },
+            {
+                "name": "Near Root Node", "sections": [{ "name": "Prison: Near Root Node" }],
+                "map_locations": [{ "map": "prison", "x": 820, "y": 90 }]
+            },
+            {
+                "name": "Examine Scroll in Upper Left Cell", "sections": [{ "name": "Prison: Examine Scroll in Upper Left Cell" }],
+                "map_locations": [{ "map": "prison", "x": 30, "y": 50 }]
+            },
+            {
+                "name": "Chests Before Kanghui", "sections": [
+                    { "name": "Prison: 1st Chest in Room Before Kanghui" },
+                    { "name": "Prison: 2nd Chest in Room Before Kanghui" },
+                    { "name": "Prison: 3rd Chest in Room Before Kanghui" }
+                ],
+                "map_locations": [{ "map": "prison", "x": 160, "y": 50 }]
+            },
+            {
+                "name": "Defeat Kanghui", "sections": [{ "name": "Prison: Defeat Kanghui" }],
+                "map_locations": [{ "map": "prison", "x": 450, "y": 50 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
