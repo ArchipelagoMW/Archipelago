@@ -99,9 +99,8 @@ ITEM_TABLE: dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D5DB2, bit_position=5), LMRamData(0x803D339E, bit_position=3)]),
     "Water Element Medal": LMItemData("Medal", 56, IC.progression,
         update_ram_addr=[LMRamData(0x803D5DB2, bit_position=7), LMRamData(0x803D339E, bit_position=4)]),
-    "Ice Element Medal": LMItemData("Medal", 57, IC.progression, # Turns on flag 22 and 45
-        update_ram_addr=[LMRamData(0x803D5DB2, bit_position=6), LMRamData(0x803D339B, bit_position=6),
-                         LMRamData(0x803D339E, bit_position=4)]),
+    "Ice Element Medal": LMItemData("Medal", 57, IC.progression, # Flag 45
+        update_ram_addr=[LMRamData(0x803D5DB2, bit_position=6), LMRamData(0x803D339E, bit_position=4)]),
     "Mario's Glove": LMItemData("Mario Item", 58, IC.progression, # Flag 21
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=6), LMRamData(0x803D339B, bit_position=5)]),
     "Mario's Hat": LMItemData("Mario Item", 59, IC.progression, # Flag 24
