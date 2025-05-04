@@ -151,11 +151,6 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["pos_z"] = spawn_data["pos_z"]
             x["pos_x"] = spawn_data["pos_x"]
 
-        # Removes the zoom on Bogmire's tombstone
-        if x["EventNo"] == 65:
-
-            x["disappear_flag"] = 67
-
         # Removes the Mr. Bones requirement. He will spawn instantly
         if x["EventNo"] == 23:
             x["EventFlag"] = 0
