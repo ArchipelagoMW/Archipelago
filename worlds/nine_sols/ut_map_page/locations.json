@@ -1697,6 +1697,23 @@
         ]
     },
     {
+        "name": "Nobility Hall",
+        "children": [
+            {
+                "name": "Nuwa's Vital Sanctum", "sections": [{ "name": "Nuwa's Vital Sanctum" }],
+                "map_locations": [{ "map": "nobility_hall", "x": 215, "y": 110 }]
+            },
+            {
+                "name": "Chest After Fengs", "sections": [{ "name": "Chest After Fengs" }],
+                "map_locations": [{ "map": "nobility_hall", "x": 25, "y": 110 }]
+            },
+            {
+                "name": "Nuwa's Tianhuo Flower", "sections": [{ "name": "Nuwa's Tianhuo Flower" }],
+                "map_locations": [{ "map": "nobility_hall", "x": 515, "y": 110 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
