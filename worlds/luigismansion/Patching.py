@@ -1239,7 +1239,8 @@ def update_treasure_table(treasure_info, character_info, output_data):
             continue
 
         for char_entry in list([charinfo for charinfo in character_info.info_file_field_entries if
-            int(charinfo["room_no"]) == int(item_data["room_no"]) and "takara" in charinfo["name"]]):
+            int(charinfo["room_no"]) == int(item_data["room_no"]) and ("takara" in charinfo["name"] or
+            charinfo["name"] == "nut")]):
 
             # Special Case: Move the Laundry room chest back from Butler door
             if char_entry["room_no"] == 5:
@@ -1260,7 +1261,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 else:
                     chest_size = __get_chest_size_from_key(item_data["door_id"])
 
-            treasure_item_name = ""
+            treasure_item_name = __get_item_name(item_data, slot_num)
             coin_amount = 0
             bill_amount = 0
             gold_bar_amount = 0
@@ -1273,7 +1274,6 @@ def update_treasure_table(treasure_info, character_info, output_data):
             # Define the actor name to use from the Location in the generation output. Act differently if it's a key.
             if item_data["name"] in ALL_ITEMS_TABLE.keys():
                 lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
-                treasure_item_name = __get_item_name(item_data, slot_num)
                 if lm_item_data.update_ram_addr and any(update_addr.item_count for update_addr in
                         lm_item_data.update_ram_addr if update_addr.item_count and update_addr.item_count > 0):
                     item_amt = next(update_addr.item_count for update_addr in lm_item_data.update_ram_addr if
