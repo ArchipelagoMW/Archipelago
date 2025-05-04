@@ -2042,11 +2042,30 @@
         ]
     },
     {
-        "name": "Tiandao Research Center",
+        "name": "Water & Oxygen Synthesis",
         "children": [
             {
-                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
-                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 825, "y": 75 }]
+                "name": "High Platforms Right of Center", "sections": [{ "name": "W&OS: High Platforms Right of Center" }],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 295, "y": 30 }]
+            },
+            {
+                "name": "High Platforms Left of Center", "sections": [{ "name": "W&OS: High Platforms Left of Center" }],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 210, "y": 35 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [
+                    { "name": "W&OS: Tianhuo Flower" },
+                    { "name": "W&OS: Dusk Guardian Recording Device" }
+                ],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 82, "y": 50 }]
+            },
+            {
+                "name": "Examine Pipeline Panel", "sections": [{ "name": "W&OS: Examine Pipeline Panel" }],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 120, "y": 50 }]
+            },
+            {
+                "name": "Climb Elevator Shaft By Root Node", "sections": [{ "name": "W&OS: Climb Elevator Shaft By Root Node" }],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 395, "y": 50 }]
             }
         ]
     },
