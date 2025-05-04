@@ -6,7 +6,7 @@ import typing
 import threading
 import pkgutil
 
-from .Items import item_table, optional_scholar_abilities, job_list, filler_items, get_item_names_per_category
+from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, IncludedRegions
@@ -33,7 +33,7 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     item_name_groups = get_item_names_per_category()
-    startingJobs = job_list
+    startingJobs = get_random_starting_jobs()
 
     logger = logging.getLogger()
 
@@ -145,7 +145,6 @@ class CrystalProjectWorld(World):
         excluded_items.add("Item - Home Point Stone")
 
         if self.options.randomizeStartingJobs:
-            startingJobs = self.random.sample(job_list, 6)
             for job in startingJobs:
                 excluded_items.add(job.name)
         else:
@@ -705,6 +704,13 @@ class CrystalProjectWorld(World):
         if self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
+    def get_job_id_list(self) -> List[int]:
+        jobIds: List[int] = []
+        for job in self.startingJobs:
+            jobIds.append(job.id)
+
+        return jobIds   
+
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
@@ -718,7 +724,7 @@ class CrystalProjectWorld(World):
             "startWithMaps": bool(self.options.startWithMaps.value),
             "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
-            "startingJobs": self.startingJobs
+            "startingJobs": self.get_job_id_list()
         }
     
         return slot_data

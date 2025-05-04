@@ -1,4 +1,4 @@
-from typing import Dict, Set, Tuple, NamedTuple, Optional
+from typing import Dict, Set, Tuple, NamedTuple, Optional, List
 from BaseClasses import ItemClassification
 
 class ItemData(NamedTuple):
@@ -11,7 +11,7 @@ class ItemData(NamedTuple):
     expertAmount: Optional[int] = 0
     endGameAmount: Optional[int] = 0
 
-class Job(NamedTuple) :
+class Job(NamedTuple):
     name: str
     id: int
 
@@ -952,3 +952,6 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
             categories.setdefault(data.category, set()).add(name)
 
     return categories
+
+def get_random_starting_jobs() -> List[Job]:
+    return random.sample(job_list, 6)

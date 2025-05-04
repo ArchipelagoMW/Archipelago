@@ -13,11 +13,23 @@ class CrystalProjectLogic:
         self.player = player
         self.options = options
 
-    def has_jobs(self, state:CollectionState, jobMinimum:int) -> bool:
+    def has_jobs(self, state: CollectionState, jobMinimum: int) -> bool:
         return self.get_job_count(state) >= jobMinimum
     
     def get_job_count(self, state: CollectionState) -> int:
         count = 0
+        if state.has("Job - Warrior", self.player):
+            count += 1
+        if state.has("Job - Monk", self.player):
+            count += 1
+        if state.has("Job - Rogue", self.player):
+            count += 1
+        if state.has("Job - Cleric", self.player):
+            count += 1
+        if state.has("Job - Wizard", self.player):
+            count += 1
+        if state.has("Job - Warlock", self.player):
+            count += 1
         if state.has("Job - Fencer", self.player):
             count += 1
         if state.has("Job - Shaman", self.player):
