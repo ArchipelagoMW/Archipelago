@@ -1,6 +1,5 @@
 <CANCEL>
 <RAMDOMJMP>"case1"
-
 <CASE>"case1"
 <GENON>"gr2"
 <END>

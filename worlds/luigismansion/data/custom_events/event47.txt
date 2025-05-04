@@ -1,7 +1,6 @@
 <MENUOFF>
 <LUIGISTOP2>
 <FULLSCREEN>
-<FLAGON>(199)
 <RAMDOMJMP>"{CaseBegin}"
 ------------------------------------
 <CASE>"CheckBoos"
@@ -26,5 +25,4 @@
 <NORMALSCREEN>
 <LUIGIFREE2>
 <MENUON>
-<FLAGOFF>(199)
 <END>

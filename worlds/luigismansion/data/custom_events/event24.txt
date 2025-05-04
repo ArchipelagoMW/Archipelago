@@ -1,15 +1,12 @@
 <CHECKFLAG>(197)"197on""197off"
-<FLAGON>(199)
 ----------------------------------
 <CASE>"197on"
-<FLAGOFF>(199)
 <END>
 ----------------------------------
 <CASE>"197off"
 <CHECKFLAG>(170)"ON""OFF"
 ----------------------------------
 <CASE>"ON"
-<FLAGOFF>(199)
 <END>
 ----------------------------------
 <CASE>"OFF"
@@ -30,7 +27,6 @@
 <LUIGIFREE>
 <LUIGIFREE2>
 <MENUON>
-<FLAGOFF>(199)
 <END>
 
 

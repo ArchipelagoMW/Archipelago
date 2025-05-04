@@ -1,4 +1,3 @@
-<FLAGON>(199)
 <CHECKFLAG>(8)"8ON""8OFF"
 -------------------------
 <CASE>"8ON"
@@ -85,9 +84,7 @@
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Close"
-<FLAGOFF>(199)
 <BGM>(7)
 <LUIGIFREE2>
 <MENUON>
-<FLAGOFF>(199)
 <END>
