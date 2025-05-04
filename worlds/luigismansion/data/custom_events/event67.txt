@@ -15,7 +15,6 @@
 <CHECKFLAG>(81)"81on""81off"
 -----------------------------------------------------------------------
 <CASE>"81on"
-<FLAGON>(11)
 <BGM>(7)
 <WINDOW>(0)<COLOR>(4)
 <SAY><COLOR>(6)You defeated Boolossus!\nSending you back...
@@ -32,7 +31,6 @@
 <CHECKFLAG>(67)"67on""67off"
 ----------------------------------------------------------------------
 <CASE>"67on"
-<FLAGON>(16)
 <FLAGOFF>(59)
 <BGM>(7)
 <WINDOW>(0)<COLOR>(4)

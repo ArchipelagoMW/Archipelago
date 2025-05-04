@@ -153,7 +153,8 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Removes the zoom on Bogmire's tombstone
         if x["EventNo"] == 65:
-            x["disappear_flag"] = 16
+
+            x["disappear_flag"] = 67
 
         # Removes the Mr. Bones requirement. He will spawn instantly
         if x["EventNo"] == 23:
@@ -1052,7 +1053,7 @@ def update_generator_info(generator_info):
         # This prevents being softlocked in Boolossus and having to reset the game without saving.
         if x["type"] == "demotel2":
             x["appear_flag"] = 45
-            x["disappear_flag"] = 11
+            x["disappear_flag"] = 81
 
 
 def update_obj_info(obj_info):
