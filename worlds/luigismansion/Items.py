@@ -102,15 +102,15 @@ ITEM_TABLE: dict[str, LMItemData] = {
     "Ice Element Medal": LMItemData("Medal", 57, IC.progression, # Turns on flag 22 and 45
         update_ram_addr=[LMRamData(0x803D5DB2, bit_position=6), LMRamData(0x803D339B, bit_position=6),
                          LMRamData(0x803D339E, bit_position=4)]),
-    "Mario's Glove": LMItemData("Mario Item", 58, IC.progression,
+    "Mario's Glove": LMItemData("Mario Item", 58, IC.progression, # Flag 21
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=6), LMRamData(0x803D339B, bit_position=5)]),
-    "Mario's Hat": LMItemData("Mario Item", 59, IC.progression,
+    "Mario's Hat": LMItemData("Mario Item", 59, IC.progression, # Flag 24
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=4), LMRamData(0x803D339D, bit_position=1)]),
-    "Mario's Letter": LMItemData("Mario Item", 60, IC.progression,
+    "Mario's Letter": LMItemData("Mario Item", 60, IC.progression, # Flag 27
         update_ram_addr=[LMRamData(0x803D5DBC, bit_position=0), LMRamData(0x803D339C, bit_position=3)]),
-    "Mario's Star": LMItemData("Mario Item", 61, IC.progression,
+    "Mario's Star": LMItemData("Mario Item", 61, IC.progression, # Flag 30
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=5), LMRamData(0x803D339C, bit_position=6)]),
-    "Mario's Shoe": LMItemData("Mario Item", 62, IC.progression,
+    "Mario's Shoe": LMItemData("Mario Item", 62, IC.progression, # Flag 33
         update_ram_addr=[LMRamData(0x803D5DBB, bit_position=7), LMRamData(0x803D339C, bit_position=0)]),
     "Boo Radar": LMItemData("Upgrade", 63, IC.progression,
         update_ram_addr=[LMRamData(0x803D33A2, bit_position=1), LMRamData(0x803D33A2, bit_position=3)]),
