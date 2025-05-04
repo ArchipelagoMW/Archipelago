@@ -2023,5 +2023,49 @@
                 "map_locations": [{ "map": "tiandao_research_center", "x": 420, "y": 305 }]
             }
         ]
+    },
+    {
+        "name": "Underground Cave",
+        "children": [
+            {
+                "name": "Examine Stone Inscription", "sections": [{ "name": "UC: Examine Stone Inscription" }],
+                "map_locations": [{ "map": "underground_cave", "x": 70, "y": 355 }]
+            },
+            {
+                "name": "Examine Note", "sections": [{ "name": "UC: Examine Note" }],
+                "map_locations": [{ "map": "underground_cave", "x": 535, "y": 475 }]
+            },
+            {
+                "name": "Examine Scroll", "sections": [{ "name": "UC: Examine Scroll" }],
+                "map_locations": [{ "map": "underground_cave", "x": 785, "y": 465 }]
+            }
+        ]
+    },
+    {
+        "name": "Tiandao Research Center",
+        "children": [
+            {
+                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
+                "map_locations": [{ "map": "water_and_oxygen_synthesis", "x": 825, "y": 75 }]
+            }
+        ]
+    },
+    {
+        "name": "Tiandao Research Center",
+        "children": [
+            {
+                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
+                "map_locations": [{ "map": "yangu_hall", "x": 825, "y": 75 }]
+            }
+        ]
+    },
+    {
+        "name": "Tiandao Research Center",
+        "children": [
+            {
+                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 825, "y": 75 }]
+            }
+        ]
     }
 ]
