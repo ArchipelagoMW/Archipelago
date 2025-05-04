@@ -125,7 +125,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being soft locked in Boolossus and having to reset the game without saving.
         if x["EventNo"] == 71:
-            x["EventFlag"] = 22
+            x["EventFlag"] = 45
 
         # Cause the Chauncey spawn event to only load once, preventing later warps to map10
         if x["EventNo"] == 50:
@@ -153,7 +153,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Removes the zoom on Bogmire's tombstone
         if x["EventNo"] == 65:
-            x["disappear_flag"] = 10
+            x["disappear_flag"] = 16
 
         # Removes the Mr. Bones requirement. He will spawn instantly
         if x["EventNo"] == 23:
@@ -1051,7 +1051,7 @@ def update_generator_info(generator_info):
         # Allows the Ring of Boos on the 3F Balcony to only appear when the Ice Medal has been collected.
         # This prevents being softlocked in Boolossus and having to reset the game without saving.
         if x["type"] == "demotel2":
-            x["appear_flag"] = 22
+            x["appear_flag"] = 45
             x["disappear_flag"] = 11
 
 
