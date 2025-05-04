@@ -490,12 +490,16 @@ def generate_itempool(world):
         # Otherwise, logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
         # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
         # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-        if world.options.item_pool in ['easy', 'normal', 'hard'] and not (multiworld.custom and multiworld.customitemarray[30] == 0):
-            next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
-        elif world.options.item_pool in ['expert'] and not (multiworld.custom and multiworld.customitemarray[29] < 4):
+        try:
+            next(item for item in items if item.name == 'Boss Heart Container').classification \
+                |= ItemClassification.progression
+        except StopIteration:
             adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
             for i in range(4):
-                next(adv_heart_pieces).classification = ItemClassification.progression
+                try:
+                    next(adv_heart_pieces).classification |= ItemClassification.progression
+                except StopIteration:
+                    break  # logically health tanking is an option, so rules should still resolve to something beatable
 
     world.required_medallions = (world.options.misery_mire_medallion.current_key.title(),
                                  world.options.turtle_rock_medallion.current_key.title())
