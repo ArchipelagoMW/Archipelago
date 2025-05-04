@@ -14,12 +14,12 @@ def launch_client():
     from .client import launch
     launch_subprocess(launch, name="TrackmaniaClient")
 
-icon_path : str = local_path('data', 'ngowo.png')
+icon_path : str = local_path('data', 'tmicon.ico')
 icon: str = 'icon'
 
 if os.path.exists(icon_path):
-    icon_paths['ngowo'] = icon_path
-    icon = 'ngowo'
+    icon_paths['tmicon'] = icon_path
+    icon = 'tmicon'
 
 components.append(Component("Trackmania Client", "TrackmaniaClient", func=launch_client,
                             component_type=Type.CLIENT, icon=icon))
