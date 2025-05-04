@@ -408,6 +408,7 @@ class MegaMan3Client(BizHawkClient):
         deathlink = (await read(ctx.bizhawk_ctx, [(0x3F336, 1, "PRG ROM")]))[0][0]
         if deathlink & 0x01:
             self.death_link = True
+            await ctx.update_death_link(self.death_link)
         if deathlink & 0x02:
             self.energy_link = True
 
@@ -495,8 +496,6 @@ class MegaMan3Client(BizHawkClient):
         writes = []
 
         # deathlink
-        if self.death_link:
-            await ctx.update_death_link(self.death_link)
         if self.pending_death_link:
             writes.append((MM3_MEGAMAN_STATE, bytes([0x0E]), "RAM"))
             self.pending_death_link = False
