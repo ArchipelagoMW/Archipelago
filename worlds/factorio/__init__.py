@@ -27,7 +27,7 @@ def launch_client():
     launch_component(launch, name="FactorioClient")
 
 
-components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Factorio Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class FactorioSettings(settings.Group):
@@ -102,7 +102,7 @@ class Factorio(World):
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 0)
     if Utils.version_tuple < required_client_version:
         raise Exception(f"Update Archipelago to use this world ({game}).")
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
@@ -115,6 +115,7 @@ class Factorio(World):
     settings: typing.ClassVar[FactorioSettings]
     trap_names: tuple[str] = ("Evolution", "Attack", "Teleport", "Grenade", "Cluster Grenade", "Artillery",
                               "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
+    want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -133,6 +134,8 @@ class Factorio(World):
                 self.options.max_tech_cost.value, self.options.min_tech_cost.value
         self.tech_mix = self.options.tech_cost_mix.value
         self.skip_silo = self.options.silo.value == Silo.option_spawn
+        self.want_progressives = collections.defaultdict(
+            lambda: self.options.progressive.want_progressives(self.random))
 
     def create_regions(self):
         player = self.player
@@ -201,9 +204,6 @@ class Factorio(World):
                                             range(getattr(self.options,
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")))
 
-        want_progressives = collections.defaultdict(lambda: self.options.progressive.
-                                                    want_progressives(self.random))
-
         cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
         special_index = {"automation": 0,
                          "logistics": 1,
@@ -218,7 +218,7 @@ class Factorio(World):
         for tech_name in base_tech_table:
             if tech_name not in self.removed_technologies:
                 progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
-                want_progressive = want_progressives[progressive_item_name]
+                want_progressive = self.want_progressives[progressive_item_name]
                 item_name = progressive_item_name if want_progressive else tech_name
                 tech_item = self.create_item(item_name)
                 index = special_index.get(tech_name, None)
@@ -232,6 +232,12 @@ class Factorio(World):
                         loc.count = min(loc.count, 10)
                     loc.place_locked_item(tech_item)
                     loc.revealed = True
+
+    def get_filler_item_name(self) -> str:
+        tech_name: str = self.random.choice(tuple(tech_table))
+        progressive_item_name: str = tech_to_progressive_lookup.get(tech_name, tech_name)
+        want_progressive: bool = self.want_progressives[progressive_item_name]
+        return progressive_item_name if want_progressive else tech_name
 
     def set_rules(self):
         player = self.player
