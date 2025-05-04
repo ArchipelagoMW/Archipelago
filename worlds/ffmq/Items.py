@@ -241,8 +241,6 @@ def create_items(self) -> None:
     def add_item(item_name):
         if item_name in ["Steel Armor", "Sky Fragment"] or "Progressive" in item_name:
             return
-        if item_name.lower().replace(" ", "_") == self.options.starting_weapon.current_key:
-            return
         if item_name == "Sky Coin":
             if self.options.sky_coin_mode == "shattered_sky_coin":
                 for _ in range(40):
