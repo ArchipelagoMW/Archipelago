@@ -98,6 +98,7 @@ enemy_addresses: Dict[str, int] = {
     "Top Man": 0xD2,
     "Shadow Man": 0xD3,
     "Top Man's Top": 0xD5,
+    "Shadow Man (Sliding)": 0xD8, # Capcom I swear
     "Hard Man": 0xE0,
     "Spark Man": 0xE2,
     "Snake Man": 0xE4,
@@ -240,18 +241,22 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         for boss in bosses:
             if boss == "Kamegoro Maker":
                 enemy_weaknesses["Kamegoro"] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
-                enemy_weaknesses["Kamegoro Shell"] = {i: world.weapon_damage[i][bosses[boss]] for i in
-                                                      world.weapon_damage}
+                enemy_weaknesses["Kamegoro Shell"] = {i: world.weapon_damage[i][bosses[boss]]
+                                                      for i in world.weapon_damage}
             elif boss == "Gemini Man":
                 enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
-                enemy_weaknesses["Gemini Man (Clone)"] = {i: world.weapon_damage[i][bosses[boss]] for i in
-                                                          world.weapon_damage}
+                enemy_weaknesses["Gemini Man (Clone)"] = {i: world.weapon_damage[i][bosses[boss]]
+                                                          for i in world.weapon_damage}
+            elif boss == "Shadow Man":
+                enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
+                enemy_weaknesses["Shadow Man (Sliding)"] = {i: world.weapon_damage[i][bosses[boss]]
+                                                            for i in world.weapon_damage}
             else:
                 enemy_weaknesses[boss] = {i: world.weapon_damage[i][bosses[boss]] for i in world.weapon_damage}
 
     if world.options.enemy_weakness:
         for enemy in enemy_addresses:
-            if enemy in [*bosses.keys(), "Kamegoro", "Kamegoro Shell", "Gemini Man (Clone)"]:
+            if enemy in [*bosses.keys(), "Kamegoro", "Kamegoro Shell", "Gemini Man (Clone)", "Shadow Man (Sliding)"]:
                 continue
             enemy_weaknesses[enemy] = {weapon: world.random.randint(-4, 4) for weapon in enemy_weakness_ptrs}
             if enemy in ["Tama", "Giant Snakey", "Proto Man", "Giant Metall"] and enemy_weaknesses[enemy][0] <= 0:
