@@ -533,7 +533,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
-        LocationData("Salmon River", "Salmon River NPC - Salmon Race Participiation Prize", 50639 + npc_index_offset),
+        LocationData("Salmon River", "Salmon River NPC - Salmon Race Participation Prize", 50639 + npc_index_offset),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 14th place price", 50640 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 12th place price", 50641 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 10th place price", 50642 + npc_index_offset, logic.has_swimming),
