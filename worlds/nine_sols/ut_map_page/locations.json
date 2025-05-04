@@ -1890,7 +1890,7 @@
         "children": [
             {
                 "name": "Examine Radiant Pagoda Control Panel", "sections": [{ "name": "Examine Radiant Pagoda Control Panel" }],
-                "map_locations": [{ "map": "radiant_pagoda", "x": 195, "y": 85 }]
+                "map_locations": [{ "map": "radiant_pagoda", "x": 170, "y": 85 }]
             },
             {
                 "name": "Defeat General Yingzhao", "sections": [{ "name": "Defeat General Yingzhao" }],
