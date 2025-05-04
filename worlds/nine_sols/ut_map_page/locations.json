@@ -1404,6 +1404,27 @@
         ]
     },
     {
+        "name": "Galactic Dock & Village",
+        "children": [
+            {
+                "name": "Lieguan", "sections": [{ "name": "Village: Defeat Red Tiger Elite: Lieguan" }],
+                "map_locations": [{ "map": "galactic_dock_and_village", "x": 220, "y": 60 }]
+            },
+            {
+                "name": "Examine Sign", "sections": [{ "name": "Galactic Dock: Examine Sign" }],
+                "map_locations": [{ "map": "galactic_dock_and_village", "x": 850, "y": 63 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [{ "name": "Galactic Dock: Tianhuo Flower" }],
+                "map_locations": [{ "map": "galactic_dock_and_village", "x": 525, "y": 50 }]
+            },
+            {
+                "name": "Shaman's Gift", "sections": [{ "name": "Galactic Dock: Shaman's Gift" }],
+                "map_locations": [{ "map": "galactic_dock_and_village", "x": 397, "y": 60 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
