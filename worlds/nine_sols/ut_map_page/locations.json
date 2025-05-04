@@ -1617,6 +1617,34 @@
         ]
     },
     {
+        "name": "Inner Warehouse",
+        "children": [
+            {
+                "name": "Hack 3 Statues", "sections": [{ "name": "IW: Hack 3 Statues" }],
+                "map_locations": [{ "map": "inner_warehouse", "x": 315, "y": 165 }]
+            },
+            {
+                "name": "Shielded Walking Chest", "sections": [{ "name": "IW: Shielded Walking Chest" }],
+                "map_locations": [{ "map": "inner_warehouse", "x": 353, "y": 90 }]
+            },
+            {
+                "name": "Defeat Celestial Enforcer: Tieyan", "sections": [{ "name": "IW: Defeat Celestial Enforcer: Tieyan" }],
+                "map_locations": [{ "map": "inner_warehouse", "x": 370, "y": 40 }]
+            },
+            {
+                "name": "Nymph Puzzle Room", "sections": [{ "name": "IW: Nymph Puzzle Room" }],
+                "map_locations": [{ "map": "inner_warehouse", "x": 70, "y": 220 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [
+                    { "name": "IW: Dusk Guardian Recording Device" },
+                    { "name": "IW: Tianhuo Flower" }
+                ],
+                "map_locations": [{ "map": "inner_warehouse", "x": 265, "y": 23 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
