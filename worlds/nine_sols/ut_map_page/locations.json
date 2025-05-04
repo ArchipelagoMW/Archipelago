@@ -1714,6 +1714,39 @@
         ]
     },
     {
+        "name": "Outer Warehouse",
+        "children": [
+            {
+                "name": "Retrieve Chip From Shanhai 9000", "sections": [{ "name": "OW: Retrieve Chip From Shanhai 9000" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 650, "y": 355 }]
+            },
+            {
+                "name": "Above Sol Statue", "sections": [{ "name": "OW: Above Sol Statue" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 650, "y": 315 }]
+            },
+            {
+                "name": "Crusher Gauntlet", "sections": [{ "name": "OW: Crusher Gauntlet" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 210, "y": 200 }]
+            },
+            {
+                "name": "Enemy Gauntlet Room", "sections": [{ "name": "OW: Enemy Gauntlet Room" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 323, "y": 200 }]
+            },
+            {
+                "name": "Vents Above Robot", "sections": [{ "name": "OW: Vents Above Robot" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 500, "y": 15 }]
+            },
+            {
+                "name": "Inside Crate Dropped From Vent Hack", "sections": [{ "name": "OW: Inside Crate Dropped From Vent Hack" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 625, "y": 70 }]
+            },
+            {
+                "name": "Examine Warehouse Database", "sections": [{ "name": "OW: Examine Warehouse Database" }],
+                "map_locations": [{ "map": "outer_warehouse", "x": 215, "y": 125 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
