@@ -160,7 +160,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
 
     #Teleport items (shards not included since they're stones but worse)
-    "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.progression), #Starter pack
+    "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.useful), #Starter pack
     "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression), #Teleport to Capital Sequoia, Advanced Regions
     "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
     "Item - Poseidon Stone": ItemData("Item", 57 + item_index_offset, ItemClassification.progression), #Teleport to Salmon River, Advanced Regions
