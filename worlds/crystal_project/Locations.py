@@ -301,10 +301,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
         # The original check the corresponds to the npc id should be last so that when when it completes it stops showing up on your minimap.
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 2", 50532 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 3", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Penguin Keeper 4", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 3 Lost Penguins to Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
