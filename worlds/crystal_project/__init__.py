@@ -145,7 +145,7 @@ class CrystalProjectWorld(World):
         excluded_items.add("Item - Home Point Stone")
 
         if self.options.randomizeStartingJobs:
-            for job in startingJobs:
+            for job in self.startingJobs:
                 excluded_items.add(job.name)
         else:
             excluded_items.add("Job - Warrior")

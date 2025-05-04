@@ -1,6 +1,8 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List
 from BaseClasses import ItemClassification
 
+import random
+
 class ItemData(NamedTuple):
     category: str
     code: Optional[int]
