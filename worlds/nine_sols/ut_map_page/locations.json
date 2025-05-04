@@ -2083,11 +2083,35 @@
         ]
     },
     {
-        "name": "Tiandao Research Center",
+        "name": "Yinglong Canal",
         "children": [
             {
-                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
-                "map_locations": [{ "map": "yinglong_canal", "x": 825, "y": 75 }]
+                "name": "Top Left of Upper Caves", "sections": [{ "name": "Yinglong Canal: Top Left of Upper Caves" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 55, "y": 100 }]
+            },
+            {
+                "name": "Bottom Left of Upper Caves", "sections": [{ "name": "Yinglong Canal: Bottom Left of Upper Caves" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 265, "y": 215 }]
+            },
+            {
+                "name": "Examine Farmland Markings", "sections": [{ "name": "Yinglong Canal: Examine Farmland Markings" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 625, "y": 270 }]
+            },
+            {
+                "name": "Climbing Puzzle Above Farmland Markings", "sections": [{ "name": "Yinglong Canal: Climbing Puzzle Above Farmland Markings" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 400, "y": 125 }]
+            },
+            {
+                "name": "Between Egg Cave and Farmland Markings", "sections": [{ "name": "Yinglong Canal: Between Egg Cave and Farmland Markings" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 345, "y": 270 }]
+            },
+            {
+                "name": "Break Center Yinglong Egg", "sections": [{ "name": "Yinglong Canal: Break Center Yinglong Egg" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 165, "y": 345 }]
+            },
+            {
+                "name": "Near Root Node", "sections": [{ "name": "Yinglong Canal: Near Root Node" }],
+                "map_locations": [{ "map": "yinglong_canal", "x": 285, "y": 397 }]
             }
         ]
     }
