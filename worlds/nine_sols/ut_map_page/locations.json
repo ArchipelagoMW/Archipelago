@@ -2070,11 +2070,15 @@
         ]
     },
     {
-        "name": "Tiandao Research Center",
+        "name": "Yangu Hall",
         "children": [
             {
-                "name": "Find Broken Shanhai 9000", "sections": [{ "name": "TRC: Find Broken Shanhai 9000" }],
-                "map_locations": [{ "map": "yangu_hall", "x": 825, "y": 75 }]
+                "name": "Yanlao's Tianhuo Flower", "sections": [{ "name": "Yanlao's Tianhuo Flower" }],
+                "map_locations": [{ "map": "yangu_hall", "x": 365, "y": 125 }]
+            },
+            {
+                "name": "Yanlao's Vital Sanctum", "sections": [{ "name": "Yanlao's Vital Sanctum" }],
+                "map_locations": [{ "map": "yangu_hall", "x": 585, "y": 125 }]
             }
         ]
     },
