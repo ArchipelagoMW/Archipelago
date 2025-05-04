@@ -35,7 +35,9 @@
     { "name": "central_hall", "img": "./central_hall.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "nobility_hall", "img": "./nobility_hall.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "outer_warehouse", "img": "./outer_warehouse.png", "location_size": 20, "location_border_thickness": 3 },
-    { "name": "power_reservoir_central", "img": "./power_reservoir_central.webp", "location_size": 20, "location_border_thickness": 3 },
+    { "name": "power_reservoir_central", "img": "./power_reservoir_central.webp",
+        "location_size": 10, "location_border_thickness": 2
+    },
     { "name": "power_reservoir_east", "img": "./power_reservoir_east.webp", "location_size": 20, "location_border_thickness": 3 },
     { "name": "power_reservoir_west", "img": "./power_reservoir_west.png", "location_size": 20, "location_border_thickness": 3 },
     { "name": "prison", "img": "./prison.png", "location_size": 20, "location_border_thickness": 3 },

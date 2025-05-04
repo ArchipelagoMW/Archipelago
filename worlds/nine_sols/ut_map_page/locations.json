@@ -1747,6 +1747,108 @@
         ]
     },
     {
+        "name": "Power Reservoir (Central)",
+        "children": [
+            {
+                "name": "Breakable Wall Near Right Transporter", "sections": [{ "name": "PR (Central): Breakable Wall Near Right Transporter" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 574, "y": 82 }]
+            },
+            {
+                "name": "Near Moving Box", "sections": [{ "name": "PR (Central): Near Moving Box" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 510, "y": 60 }]
+            },
+            {
+                "name": "Hack Statue", "sections": [{ "name": "PR (Central): Hack Statue" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 490, "y": 47 }]
+            },
+            {
+                "name": "Guarded By Beetle", "sections": [{ "name": "PR (Central): Guarded By Beetle" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 390, "y": 35 }]
+            },
+            {
+                "name": "Near One-Way Door Right of Pagoda", "sections": [{ "name": "PR (Central): Near One-Way Door Right of Pagoda" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 400, "y": 48 }]
+            },
+            {
+                "name": "Retrieve Chip From Shanhai 9000", "sections": [{ "name": "PR (Central): Retrieve Chip From Shanhai 9000" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 320, "y": 60 }]
+            },
+            {
+                "name": "Examine Energy Meter", "sections": [{ "name": "PR (Central): Examine Energy Meter" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 198, "y": 60 }]
+            },
+            {
+                "name": "Near Left Transporter", "sections": [{ "name": "PR (Central): Near Left Transporter" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 117, "y": 45 }]
+            },
+            {
+                "name": "Left of Light Bridge", "sections": [{ "name": "PR (Central): Left of Light Bridge" }],
+                "map_locations": [{ "map": "power_reservoir_central", "x": 260, "y": 47 }]
+            }
+        ]
+    },
+    {
+        "name": "Power Reservoir (East)",
+        "children": [
+            {
+                "name": "After Lasers", "sections": [{ "name": "PR (East): After Lasers" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 668, "y": 170 }]
+            },
+            {
+                "name": "Under Moving Box", "sections": [{ "name": "PR (East): Under Moving Box" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 720, "y": 215 }]
+            },
+            {
+                "name": "Top Platform in Upper Right Shaft", "sections": [{ "name": "PR (East): Top Platform in Upper Right Shaft" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 725, "y": 45 }]
+            },
+            {
+                "name": "Hack Statue", "sections": [{ "name": "PR (East): Hack Statue" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 510, "y": 70 }]
+            },
+            {
+                "name": "Upper Left Room", "sections": [{ "name": "PR (East): Upper Left Room" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 305, "y": 70 }]
+            },
+            {
+                "name": "Defeat Celestial Guardian: Jiaoduan", "sections": [{ "name": "PR (East): Defeat Celestial Guardian: Jiaoduan" }],
+                "map_locations": [{ "map": "power_reservoir_east", "x": 470, "y": 170 }]
+            }
+        ]
+    },
+    {
+        "name": "Power Reservoir (West)",
+        "children": [
+            {
+                "name": "Below Root Node", "sections": [{ "name": "PR (West): Below Root Node" }],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 305, "y": 220 }]
+            },
+            {
+                "name": "Guarded By Turret", "sections": [{ "name": "PR (West): Guarded By Turret" }],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 377, "y": 72 }]
+            },
+            {
+                "name": "Vents", "sections": [{ "name": "PR (West): Vents" }],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 430, "y": 92 }]
+            },
+            {
+                "name": "Hack Statue", "sections": [{ "name": "PR (West): Hack Statue" }],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 720, "y": 217 }]
+            },
+            {
+                "name": "Tianhuo Flower", "sections": [
+                    { "name": "PR (West): Dusk Guardian Recording Device" },
+                    { "name": "PR (West): Tianhuo Flower" }
+                ],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 390, "y": 217 }]
+            },
+            {
+                "name": "Near Right Transporter", "sections": [{ "name": "PR (West): Near Right Transporter" }],
+                "map_locations": [{ "map": "power_reservoir_west", "x": 695, "y": 75 }]
+            }
+        ]
+    },
+    {
         "name": "Radiant Pagoda",
         "children": [
             {
