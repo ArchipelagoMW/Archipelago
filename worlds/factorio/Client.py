@@ -9,7 +9,6 @@ import random
 import re
 import string
 import subprocess
-
 import sys
 import time
 import typing
@@ -17,15 +16,16 @@ from queue import Queue
 
 import factorio_rcon
 
-import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start, get_file_safe_name
+from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between
+from .settings import FactorioSettings
+from settings import get_settings
 
 
 def check_stdin() -> None:
-    if Utils.is_windows and sys.stdin:
+    if is_windows and sys.stdin:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
 
@@ -67,7 +67,7 @@ class FactorioContext(CommonContext):
     items_handling = 0b111  # full remote
 
     # updated by spinup server
-    mod_version: Utils.Version = Utils.Version(0, 0, 0)
+    mod_version: Version = Version(0, 0, 0)
 
     def __init__(self, server_address, password, filter_item_sends: bool, bridge_chat_out: bool):
         super(FactorioContext, self).__init__(server_address, password)
@@ -133,7 +133,7 @@ class FactorioContext(CommonContext):
         elif self.current_energy_link_value is None:
             return "Standby"
         else:
-            return f"{Utils.format_SI_prefix(self.current_energy_link_value)}J"
+            return f"{format_SI_prefix(self.current_energy_link_value)}J"
 
     def on_deathlink(self, data: dict):
         if self.rcon_client:
@@ -155,10 +155,10 @@ class FactorioContext(CommonContext):
                 if self.energy_link_increment and args.get("last_deplete", -1) == self.last_deplete:
                     # it's our deplete request
                     gained = int(args["original_value"] - args["value"])
-                    gained_text = Utils.format_SI_prefix(gained) + "J"
+                    gained_text = format_SI_prefix(gained) + "J"
                     if gained:
                         logger.debug(f"EnergyLink: Received {gained_text}. "
-                                     f"{Utils.format_SI_prefix(args['value'])}J remaining.")
+                                     f"{format_SI_prefix(args['value'])}J remaining.")
                         self.rcon_client.send_command(f"/ap-energylink {gained}")
 
     def on_user_say(self, text: str) -> typing.Optional[str]:
@@ -278,7 +278,7 @@ async def game_watcher(ctx: FactorioContext):
                                 }]))
                                 ctx.rcon_client.send_command(
                                     f"/ap-energylink -{value}")
-                                logger.debug(f"EnergyLink: Sent {Utils.format_SI_prefix(value)}J")
+                                logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 
@@ -439,9 +439,9 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
                 factorio_server_logger.info(msg)
                 if "Loading mod AP-" in msg and msg.endswith("(data.lua)"):
                     parts = msg.split()
-                    ctx.mod_version = Utils.Version(*(int(number) for number in parts[-2].split(".")))
+                    ctx.mod_version = Version(*(int(number) for number in parts[-2].split(".")))
                 elif "Write data path: " in msg:
-                    ctx.write_data_path = Utils.get_text_between(msg, "Write data path: ", " [")
+                    ctx.write_data_path = get_text_between(msg, "Write data path: ", " [")
                     if "AppData" in ctx.write_data_path:
                         logger.warning("It appears your mods are loaded from Appdata, "
                                        "this can lead to problems with multiple Factorio instances. "
@@ -521,10 +521,16 @@ rcon_port = args.rcon_port
 rcon_password = args.rcon_password if args.rcon_password else ''.join(
     random.choice(string.ascii_letters) for x in range(32))
 factorio_server_logger = logging.getLogger("FactorioServer")
-options = Utils.get_settings()
-executable = options["factorio_options"]["executable"]
+settings: FactorioSettings = get_settings().factorio_options
+if os.path.samefile(settings.executable, sys.executable):
+    selected_executable = settings.executable
+    settings.executable = FactorioSettings.executable  # reset to default
+    raise Exception(f"FactorioClient was set to run itself {selected_executable}, aborting process bomb.")
+
+executable = settings.executable
+
 server_settings = args.server_settings if args.server_settings \
-    else options["factorio_options"].get("server_settings", None)
+    else getattr(settings, "server_settings", None)
 server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password)
 
 
@@ -535,12 +541,8 @@ def launch():
 
     if server_settings:
         server_settings = os.path.abspath(server_settings)
-    if not isinstance(options["factorio_options"]["filter_item_sends"], bool):
-        logging.warning(f"Warning: Option filter_item_sends should be a bool.")
-    initial_filter_item_sends = bool(options["factorio_options"]["filter_item_sends"])
-    if not isinstance(options["factorio_options"]["bridge_chat_out"], bool):
-        logging.warning(f"Warning: Option bridge_chat_out should be a bool.")
-    initial_bridge_chat_out = bool(options["factorio_options"]["bridge_chat_out"])
+    initial_filter_item_sends = bool(settings.filter_item_sends)
+    initial_bridge_chat_out = bool(settings.bridge_chat_out)
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
