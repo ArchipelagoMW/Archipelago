@@ -20,6 +20,13 @@ class Goal(Choice):
     option_all = 4
     default = 0
 
+class DeathLinkTraps(DefaultOnToggle):
+    """
+    Instead of killing the player, Death Link triggers traps.
+    Only affects the game when Death Link is enabled.
+    """
+    display_name = "Death Link Traps"
+
 class StartingBook(Choice):
     """
     Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
@@ -160,8 +167,9 @@ poy_option_presets: dict[str, dict[str, any]] = {
 
 @dataclass
 class PeaksOfYoreOptions(PerGameCommonOptions):
-    death_link: DeathLink
     goal: Goal
+    death_link: DeathLink
+    death_link_traps: DeathLinkTraps
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
     start_with_oil_lamp: StartWithOilLamp
