@@ -1682,6 +1682,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.last_received_update: int = 0
         self.last_trade_cargo: set = set()
         self.last_supply_used: int = 0
+        self.trade_reply_cooldown: int = 0
         self.setup_done = False
         self.ctx = ctx
         self.ctx.last_bot = self
@@ -1812,6 +1813,12 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                                 async_start(self.ctx.trade_receive(5))
                             else:
                                 self.ctx.trade_response = "?TradeFail Void Trade rejected: Not enough supply."
+                    elif not unit.is_idle and self.trade_reply_cooldown > 0:
+                        self.trade_reply_cooldown -= 1
+                    elif unit.is_idle and self.trade_reply_cooldown > 0:
+                        self.trade_reply_cooldown = 0
+                        self.ctx.trade_response = None
+                        self.ctx.trade_underway = False
                     else:
                         # The API returns no passengers for researching/training buildings,
                         # so we need to buffer the passengers each frame
@@ -1877,10 +1884,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             self.boni[x] = True
                     
                     # Send Void Trade results
-                    if self.ctx.trade_response is not None:
+                    if self.ctx.trade_response is not None and self.trade_reply_cooldown == 0:
                         await self.chat_send(self.ctx.trade_response)
-                        self.ctx.trade_response = None
-                        self.ctx.trade_underway = False
+                        # Wait an arbitrary amount of frames before trying again
+                        self.trade_reply_cooldown = 60
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
