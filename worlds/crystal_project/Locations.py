@@ -136,7 +136,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Pale Grotto", "Underpass Chest - Blue flower ledge between Pale Grotto & Soiled Den", 3621 + treasure_index_offset, logic.has_swimming), #(245, 116, -199) Underpass Scrap chest
         
         #NPCs
-        #Todo NPCs Missable: Pale Grotto Temple map (Z2_ReidCamp ID 1166 (273, 122, -327)) gives you Ring Mail if you don"t have it but it"s missable (it"s in shops)
+        LocationData("Pale Grotto", "Pale Grotto NPC - Reid gives you gently worn armor", 1166 + npc_index_offset), #Pale Grotto Temple map (Z2_ReidCamp (273, 122, -327)) gives you Ring Mail
 
         #Crystals
         LocationData("Pale Grotto", "Pale Grotto Crystal - Fencer", 130 + crystal_index_offset),
