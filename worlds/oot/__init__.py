@@ -203,7 +203,8 @@ class OOTWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom = Rom(file=get_settings()['oot_options']['rom_file'])
+        oot_settings = OOTWorld.settings
+        rom = Rom(file=oot_settings.rom_file)
 
 
     # Option parsing, handling incompatible options, building useful-item table
@@ -1087,7 +1088,8 @@ class OOTWorld(World):
             self.hint_rng = self.random
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
-            rom = Rom(file=get_settings()['oot_options']['rom_file'])
+            oot_settings = OOTWorld.settings
+            rom = Rom(file=oot_settings.rom_file)
             try:
                 if self.hints != 'none':
                     buildWorldGossipHints(self)
