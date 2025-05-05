@@ -42,6 +42,12 @@ class RandomizeJobs(DefaultOnToggle):
     """
     display_name = "Randomize Jobs"
 
+class RandomizeStartingJobs(DefaultOnToggle):
+    """
+    When enabled, you will start with 6 random jobs.
+    """
+    display_name = "Randomize starting Jobs"
+
 class NewWorldStoneJobQuantity(Range):
     """If your goal is Astley, this is where you select how many jobs you need to find before being sent the new world stone (NOTE: the starting jobs do not count towards this number)."""
     display_name = "Job count that locks the new world stone"
@@ -119,6 +125,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     clamshellsQuantity: ClamshellsQuantity
     clamshellsInPool: ClamshellsInPool
     randomizeJobs: RandomizeJobs
+    randomizeStartingJobs: RandomizeStartingJobs
     newWorldStoneJobQuantity: NewWorldStoneJobQuantity
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps

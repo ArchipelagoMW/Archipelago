@@ -6,7 +6,7 @@ import typing
 import threading
 import pkgutil
 
-from .Items import item_table, optional_scholar_abilities, filler_items, get_item_names_per_category
+from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, get_item_names_per_category
 from .Locations import get_locations
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, IncludedRegions
@@ -33,6 +33,7 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     item_name_groups = get_item_names_per_category()
+    startingJobs = get_random_starting_jobs()
 
     logger = logging.getLogger()
 
@@ -142,12 +143,17 @@ class CrystalProjectWorld(World):
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
         excluded_items.add("Item - Home Point Stone")
-        excluded_items.add("Job - Warrior")
-        excluded_items.add("Job - Monk")
-        excluded_items.add("Job - Rogue")
-        excluded_items.add("Job - Cleric")
-        excluded_items.add("Job - Wizard")
-        excluded_items.add("Job - Warlock")
+
+        if self.options.randomizeStartingJobs:
+            for job in self.startingJobs:
+                excluded_items.add(job.name)
+        else:
+            excluded_items.add("Job - Warrior")
+            excluded_items.add("Job - Monk")
+            excluded_items.add("Job - Rogue")
+            excluded_items.add("Job - Cleric")
+            excluded_items.add("Job - Wizard")
+            excluded_items.add("Job - Warlock")
 
         if self.options.startWithTreasureFinder:
             excluded_items.add("Item - Treasure Finder")
@@ -698,8 +704,15 @@ class CrystalProjectWorld(World):
         if self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
+    def get_job_id_list(self) -> List[int]:
+        jobIds: List[int] = []
+        for job in self.startingJobs:
+            jobIds.append(job.id)
+
+        return jobIds   
+
     # This is data that needs to be readable from within the modded version of the game.
-        # Example job rando makes the crystals behave differently, so the game needs to know about it.
+    # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
     
@@ -709,7 +722,9 @@ class CrystalProjectWorld(World):
             "randomizeJobs": bool(self.options.randomizeJobs.value),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
-            "includedRegions": self.options.includedRegions.value
+            "includedRegions": self.options.includedRegions.value,
+            "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
+            "startingJobs": self.get_job_id_list()
         }
     
         return slot_data

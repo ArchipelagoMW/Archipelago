@@ -1,5 +1,7 @@
-from typing import Dict, Set, Tuple, NamedTuple, Optional
+from typing import Dict, Set, Tuple, NamedTuple, Optional, List
 from BaseClasses import ItemClassification
+
+import random
 
 class ItemData(NamedTuple):
     category: str
@@ -10,6 +12,10 @@ class ItemData(NamedTuple):
     advancedAmount: Optional[int] = 0
     expertAmount: Optional[int] = 0
     endGameAmount: Optional[int] = 0
+
+class Job(NamedTuple):
+    name: str
+    id: int
 
 #Archipelago does not like it if an item has a code of 0, Crystal project starts its database
 #Ids at 0, so we add an offset to the id of each item and remove that offset in the client
@@ -888,7 +894,34 @@ optional_scholar_abilities: Tuple[str, ...] = (
     "Scholar - Overload",
     "Scholar - Reflection",
     "Scholar - Lifegiver"
-    )
+)
+
+job_list: Tuple[Job, ...] = (
+    Job("Job - Warrior", 0),
+    Job("Job - Monk", 5),
+    Job("Job - Rogue", 2),
+    Job("Job - Cleric", 4),
+    Job("Job - Wizard", 3),
+    Job("Job - Warlock", 14),
+    Job("Job - Fencer", 1),
+    Job("Job - Shaman", 8),
+    Job("Job - Scholar", 13),
+    Job("Job - Aegis", 10),
+    Job("Job - Hunter", 7),
+    Job("Job - Chemist", 17),
+    Job("Job - Reaper", 6),
+    Job("Job - Ninja", 18),
+    Job("Job - Nomad", 12),
+    Job("Job - Dervish", 11),
+    Job("Job - Beatsmith", 9),
+    Job("Job - Samurai", 20),
+    Job("Job - Assassin", 19),
+    Job("Job - Valkyrie", 15),
+    Job("Job - Summoner", 21),
+    Job("Job - Beastmaster", 23),
+    Job("Job - Weaver", 16),
+    Job("Job - Mimic", 22),
+)
 
 filler_items: Tuple[str, ...] = (
     "Item - Tonic",
@@ -921,3 +954,6 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
             categories.setdefault(data.category, set()).add(name)
 
     return categories
+
+def get_random_starting_jobs() -> List[Job]:
+    return random.sample(job_list, 6)
