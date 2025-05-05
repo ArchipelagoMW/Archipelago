@@ -64,6 +64,19 @@ class _RestrictiveFillBatcher:
     When a swap displaces an item that the partial exploration state had collected, the partial exploration state must
     be destroyed in some cases. For this reason, the partial exploration state is created lazily and is only re-created
     when needed.
+
+    :param base_state: The base_state passed as an argument to the fill_restrictive call. When there are lots of items
+        already placed, this state should have already swept for advancements to collect every reachable advancement
+        item.
+    :param reachable_items: Items remaining to place, per-player. Because fill uses a reverse-fill algorithm, these
+        items are always considered reachable until they are removed and placed.
+    :param item_pool: The entire item pool of items to place. Items are removed from it when placed.
+    :param one_item_per_player: True to place one item per player simultaneously, False to place one item at a time.
+        When True, this significantly increases fill performance at the cost of introducing a small bias towards
+        placing items in earlier locations. This bias occurs because items can, usually, only be placed at locations
+        that are reachable without themselves, but when multiple items are placed simultaneously the reachable
+        locations will be reduced to locations reachable without *any* of the items that are being placed
+        simultaneously.
     """
 
     # Adjust these ClassVars to adjust batch sizes, as needed, when external changes to generation performance are made.
@@ -90,44 +103,40 @@ class _RestrictiveFillBatcher:
     class _RestrictiveFillBatch(abc.ABC):
         """
         Base class for a batch of items to fill in _RestrictiveFillBatcher.
+
+        :param batch_base_state: Base state for the batch. It must have collected all items that will be placed in
+            future batches and must not have explored any locations besides those in the base_state at the start of
+            fill_restrictive.
+        :param batch_empty_spaces: The number of empty spaces for items for each player in the batch. If the size of
+            the batch if 5 items per player and one player only had 3 items remaining, they would have 2 empty
+            spaces in the batch.
+            When swapping items out of already filled locations, the swapped out item can be added into the current
+            batch if there is space for it.
+        :param batch_item_pool: All items to be placed in this batch. Items are removed from it when picked to be
+            placed.
+        :param item_pool: All items remaining to be placed. Items are removed from it when picked to be placed. The
+            items in this list must also be present in the deques in `reachable_items`.
+        :param batched_placements_remaining: The maximum number of placements the batch can make before being
+            exhausted.
+        :param reachable_items: All items remaining to be placed, by player. The items in the deques in this dict
+            must also be present in `item_pool`.
         """
         batch_base_state: CollectionState
-        """
-        Base state for the batch. It must have collected all items that will be placed in future batches and must not
-        have explored any locations besides those in the base_state at the start of fill_restrictive.
-        """
         batch_empty_spaces: dict[int, int]
-        """
-        The number of empty spaces for items for each player in the batch. If the size of the batch if 5 items per
-        player and one player only had 3 items remaining, they would have 2 empty spaces in the batch.
-        
-        When swapping items out of already filled locations, the swapped out item can be added into the current batch if
-        there is space for it. 
-        """
         batch_item_pool: list[Item]
-        """
-        All items to be placed in this batch. Items are removed from it when picked to be placed. 
-        """
         reachable_items: dict[int, deque[Item]]
-        """
-        All items remaining to be placed, by player.
-        
-        The items in this dict must also be present in `item_pool`.
-        """
+        batched_placements_remaining: int
         item_pool: list[Item]
-        """
-        All items remaining to be placed. Items are removed from it when picked to be placed.
-        
-        The items in this list must also be present in `reachable_items`.
-        """
 
+        # An exploration state containing the items reachable starting from `batch_base_state`.
+        # Maximum exploration states and some swap states will be swept from `_partial_exploration_state`.
         _partial_exploration_state: CollectionState | None
-        """
-        An exploration state containing the items reachable starting from `batch_base_state`.
-        
-        Maximum exploration states and some swap states will be swept from `_partial_exploration_state`.
-        """
 
+        # When an item is swapped from an existing placement into the current batch, the _partial_exploration_state must
+        # be destroyed and re-created once it is time to place the swapped item.
+        # The set tracks the unique object identifiers of swapped items because Item implements __eq__, so a set[Item]
+        # would not be usable here.
+        # The list tracks the Item instances, whose unique object identifiers must be in the set.
         _deferred_swap_item_ids: set[int]
         _deferred_swap_items: list[Item]
 
@@ -428,18 +437,22 @@ class _RestrictiveFillBatcher:
         A batch that places one item at a time.
 
         This improves placement accuracy, at the cost of performance.
+
+        :param batch_base_state: See _RestrictiveFillBatch
+        :param batch_empty_spaces: See _RestrictiveFillBatch
+        :param batch_item_pool: See _RestrictiveFillBatch
+        :param item_pool: See _RestrictiveFillBatch
+        :param batched_placements_remaining: See _RestrictiveFillBatch
+        :param reachable_items: See _RestrictiveFillBatch
+        :param items_per_player_in_batch: The number of items, per player, remaining in the batch.
+        :param next_player_override: When set, specifies which player the next item to place will belong to, instead of
+            picking randomly.
+            This should be set when the previous batch attempted to place an item belonging to a player that still has
+            items remaining to be placed, but had no items remaining in the batch.
         """
 
         next_player_override: int | None
-        """
-        When set, specifies which player the next item to place will belong to, instead of picking randomly.
-        
-        This is set when the previous batch attempted to place an item belonging to a player that still has items
-        remaining to be placed, but had no items remaining in the batch.
-        """
-
         items_per_player_in_batch: dict[int, int]
-        """The number of items, per player, remaining in the batch."""
 
         def __init__(self,
                      batch_base_state: CollectionState,
@@ -499,46 +512,21 @@ class _RestrictiveFillBatcher:
             # of items in the batch to place.
             self.batched_placements_remaining += 1
 
+    # Protected attributes for each of the __init__ parameters.
     _base_state: CollectionState
-    """
-    The base state at the start of the fill_restrictive call. When there are lots of items already placed, this state
-    should have already swept for advancements to collect every reachable advancement item.
-    """
-
     _reachable_items: dict[int, deque[Item]]
-    """
-    Items remaining to place, per-player. Because fill uses a reverse-fill algorithm, these items are always considered
-    reachable.
-    """
-
     _item_pool: list[Item]
-    """
-    The item pool passed into fill_restrictive. Items are removed from it when placed.
-    """
-
-    _max_one_item_per_player_batch_size: float
-    """
-    The maximum batch size to be reached once only the player with the largest number of items has items remaining to be
-    placed.
-    """
-
-    _min_batch_size: int
-    """
-    The minimum batch size for this batcher. Typically will equal MIN_BATCH_SIZE, but can be larger when 
-    """
-
     _one_item_per_player: bool
-    """
-    The placement mode of the batcher.
-    When True, one item is removed from self.reachable_items per player and those items are placed simultaneously. This
-    is less accurate because the items to be placed cannot be logically locked behind any of the other items being
-    placed, but this has significant performance benefits.
-    When False, one item is picked from self.reachable_items at a time and placed on its own. This gives full accuracy
-    to placements, but is slower.
-    """
 
+    # The maximum batch size to be reached once only the player with the largest number of items has items remaining to
+    # be placed.
+    _max_one_item_per_player_batch_size: float
+
+    # The minimum batch size for this batcher, typically equal to MIN_BATCH_SIZE.
+    _min_batch_size: int
+
+    # The current batch of the batcher, or `None` when there are no more items to place.
     _current_batch: _RestrictiveFillBatch | None
-    """The current batch of the batcher, or `None` when there are no more items to place."""
 
     def __init__(self,
                  base_state: CollectionState,
@@ -549,9 +537,8 @@ class _RestrictiveFillBatcher:
         self._reachable_items = reachable_items
         self._item_pool = item_pool
         self._one_item_per_player = one_item_per_player
-
         # With a low number of players, adjust the minimum items to take per player so that there is at least
-        # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch, assuming each player has enough items remaining to fully
+        # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch. Some players could have fewer items remaining  assuming each player has enough items remaining to fully
         # fill out the batch.
         num_players = len(reachable_items)
         if num_players > 0 and self._MIN_BATCH_ITEMS_PER_PLAYER * num_players < self._MIN_TOTAL_ITEMS_PER_BATCH:
