@@ -222,7 +222,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
         #LocationData("Proving Meadows", "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
 
-        #Skumparadise (we"re smushing Trial Caves into there)
+        #Skumparadise (we're smushing Trial Caves into there)
         #Treasure chests
         LocationData("Skumparadise", "Skumparadise Chest - Stairs are lava", 126 + treasure_index_offset), #Stalwart Shield chest
         LocationData("Skumparadise", "Skumparadise Chest - Shroom dodging", 120 + treasure_index_offset), #Help the Prince chest
@@ -258,7 +258,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 2", 227 + treasure_index_offset), #Gaea Shard chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 3", 381 + treasure_index_offset), #Gaea Shard chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 4", 548 + treasure_index_offset), #Gaea Shard chest
-        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so thats the logic were using
+        #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that's the logic were using
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: state.has("Item - Gaea Stone", player)), #Craftwork Bow chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Instrducktor classroom", 1387 + treasure_index_offset), #Craftwork Axe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, logic.has_vertical_movement), #Watering Can chest
@@ -300,12 +300,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
-        # The original check the corresponds to the npc id should be last so that when when it completes it stops showing up on your minimap.
+        # The original check that corresponds to the npc id should be last so that when it completes it stops showing up on your minimap.
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 3 Lost Penguins to Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
-        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so thats the logic were using
+        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
@@ -560,7 +560,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Central Lookout Tower (ok maybe that jumping puzzle wasnt that bad)", 1189 + treasure_index_offset), #Central Lookout Token chest
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Balance beam", 97 + treasure_index_offset), #Scope Specs chest
         LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Past Lost Son", 1667 + treasure_index_offset), #Ether Pouch chest
-        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Cooling off in the tent before the Tower of Zott", 2914 + treasure_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Salmon Bay map chest
+        LocationData("Poko Poko Desert", "Poko Poko Desert Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Salmon Bay map chest
 
         #NPCs
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
@@ -577,8 +577,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, logic.has_vertical_movement), #Ingot
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Dust
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond on Tower of Zotts outside", 2879 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold on far end of the Tower of Zott", 2816 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold on far end of the Tower of Zot", 2816 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset, logic.has_horizontal_movement), #Ore
         
         #Sara Sara Bazaar
@@ -630,7 +630,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the back cliff wall", 2694 + npc_index_offset, logic.has_horizontal_movement), #Ingot
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver at the foot of the Tower of Zott", 2699 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver", 2878 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
@@ -666,12 +666,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Salmon Bay
         #Treasure chests
-        LocationData("Salmon Bay", "Salmon Bay Chest - Cliffdiving", 2975 + treasure_index_offset), #Ether Pouch chest
+        LocationData("Salmon Bay", "Salmon Bay Chest - Cliff diving", 2975 + treasure_index_offset), #Ether Pouch chest
         LocationData("Salmon Bay", "Salmon Bay Chest - Across the bridge", 2974 + treasure_index_offset), #Potion Pouch chest
         
         #NPCs
         LocationData("Salmon Bay", "Salmon Bay NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),
-        LocationData("Salmon Bay", "Salmon Bay NPC - West cliffdiving Ancient Tablet C", 1271 + npc_index_offset),
+        LocationData("Salmon Bay", "Salmon Bay NPC - West cliff diving Ancient Tablet C", 1271 + npc_index_offset),
         LocationData("Salmon Bay", "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
         LocationData("Salmon Bay", "Overpass NPC - Lonely scrap among half-dead pines above Salmon Bay", 3677 + npc_index_offset), #8th Scrap in Overpass main map
 
@@ -803,7 +803,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, logic.has_vertical_movement), #Malifice chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, logic.has_vertical_movement), #Wizards Wall chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Fall through broken grate below Sky Arena building", 2951 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ballpit by goldsmith", 2984 + treasure_index_offset, logic.has_vertical_movement), #(753, 105, -176) Tincture Pouch chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset, logic.has_vertical_movement), #(753, 105, -176) Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, logic.has_vertical_movement), #(753, 134, -263) Yasha chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, logic.has_vertical_movement), #(754, 134, -264) Muramasa chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, logic.has_vertical_movement), #(755, 134, -263) Shadow Gi chest
@@ -868,7 +868,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Ganymede Shrine
         #Treasure chests
-        LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: lambda state: state.has("Item - Ganymede Stone", player)),
+        LocationData("Ganymede Shrine", "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has("Item - Ganymede Stone", player)),
 
         #Beaurior Volcano
         #Treasure chests
@@ -1026,7 +1026,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Lands End", "Lands End Chest - To defeat the Huns", 2740 + treasure_index_offset), #Blue Cape chest
         LocationData("Lands End", "Lands End Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
         LocationData("Lands End", "Lands End Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)), #Defender chest
-        LocationData("Lands End", "Lands End Chest - Fancy some spikes cliffdiving?", 1693 + treasure_index_offset), #Rune Ward chest
+        LocationData("Lands End", "Lands End Chest - Fancy some spikes cliff diving?", 1693 + treasure_index_offset), #Rune Ward chest
         LocationData("Lands End", "Lands End Chest - By the lovely owl tree", 1561 + treasure_index_offset), #Callisto Stone chest
         LocationData("Lands End", "Lands End Chest - Inside the shrine", 3017 + treasure_index_offset), #Ether chest
         LocationData("Lands End", "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, logic.has_glide), #(191, 177, -214) 9th Scrap on main Overpass map
@@ -1054,8 +1054,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Sequoia Athenaeum
         #Treasure chests
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Atop the shelves above the books door", 2932 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(412, 200, -551) Spellsword Helm chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Bullshit booksmart Chips Challenge", 2569 + treasure_index_offset, logic.has_vertical_movement), #(403, 199, -547) Z-Potion Pouch chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Braindumb Chips Challenge", 2322 + treasure_index_offset), #(415, 180, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Bullshit book-smart Chips Challenge", 2569 + treasure_index_offset, logic.has_vertical_movement), #(403, 199, -547) Z-Potion Pouch chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Brain-dumb Chips Challenge", 2322 + treasure_index_offset), #(415, 180, -570) Ice Puzzle Key chest
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - 3rd library Chips Challenge", 2375 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 1) and logic.has_vertical_movement), #(396, 180, -570) Ice Puzzle Key chest
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge ice squared", 2341 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 2) and logic.has_vertical_movement), #(396, 164, -570) Ice Puzzle Key chest
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge we cheated on this one", 2371 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 3) and logic.has_vertical_movement), #(415, 164, -572) Ice Puzzle Key chest
@@ -1247,7 +1247,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset), #(-185, 63, -363) F4 Judgement chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset), #(-162, 63, -336) F4 Zether Pouch chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset), #(-185, 38, -301) F6 Ancient Labyrinth map chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dogheaded dogshit boss", 2591 + treasure_index_offset), #(-219, 27, -350) F7 Mirror Shield chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset), #(-219, 27, -350) F7 Mirror Shield chest
 
         #NPCs
         LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot
