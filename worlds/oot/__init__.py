@@ -30,7 +30,6 @@ from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-from settings import get_settings
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
 from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
 from Fill import fill_restrictive, fast_fill, FillError
