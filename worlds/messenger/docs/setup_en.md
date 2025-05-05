@@ -29,15 +29,6 @@ These steps can also be followed to launch the game and check for mod updates af
        [The Messenger Randomizer Mod AP releases page](https://github.com/alwaysintreble/TheMessengerRandomizerModAP/releases)
     2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
         * You cannot have both the non-AP randomizer and the AP randomizer installed at the same time
-    3. Optionally, Backup your save game
-        * On Windows
-            1. Press `Windows Key + R` to open run
-            2. Type `%appdata%` to access AppData
-            3. Navigate to `AppData/locallow/SabotageStudios/The Messenger`
-            4. Rename `SaveGame.txt` to any name of your choice
-        * On Linux
-            1. Navigate to `steamapps/compatdata/764790/pfx/drive_c/users/steamuser/AppData/LocalLow/Sabotage Studio/The Messenger`
-            2. Rename `SaveGame.txt` to any name of your choice
 
 ## Joining a MultiWorld Game
 
