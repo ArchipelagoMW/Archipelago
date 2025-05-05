@@ -90,7 +90,7 @@ Common situations where this can happen include:
 
 ### Some locations are technically possible to check with few or no items, but they'd be very tedious or frustrating. How do worlds deal with this?
 
-Sometimes the game can be modded to skip these locations or make them less tedious. But when this is due to a fundamental aspect of the game, then the general answer is "soft logic" (and its subtypes like "combat logic", "money logic", etc). For example: you can logically require that a player have several helpful items before fighting the final boss, even if a skilled player technically needs no items to beat it. Randomizer logic should describe what's *fun* rather than what's technically possible.
+Sometimes the game can be modded to skip these locations or make them less tedious. But when this issue is due to a fundamental aspect of the game, then the general answer is "soft logic" (and its subtypes like "combat logic", "money logic", etc.). For example: you can logically require that a player have several helpful items before fighting the final boss, even if a skilled player technically needs no items to beat it. Randomizer logic should describe what's *fun* rather than what's technically possible.
 
 Concrete examples of soft logic include:
 - Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc that aren't strictly necessary.
