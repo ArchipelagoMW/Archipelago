@@ -52,6 +52,11 @@ class _RestrictiveFillBatcher:
     from the batch's partial exploration state, this saves a lot of work compared to sweeping for advancements from the
     `base_state` argument of the `fill_restrictive` call.
 
+    Creating a partial exploration state is a cost that typically occurs once per batch (may occur multiple times due to
+    some swaps). If batches are too small then the extra cost of creating the partial exploration state can outweigh the
+    savings of sweeping from the partial exploration state rather than from the `base_state` of the `fill_restrictive`
+    call.
+
     Swap states can also be created from the partial exploration state, but only if the partial exploration state has
     not collected the item from the swap location. If the partial exploration state has collected the item from the swap
     location, then the swap state will have to be swept from the base state instead.
@@ -63,7 +68,7 @@ class _RestrictiveFillBatcher:
 
     # Adjust these ClassVars to adjust batch sizes, as needed, when external changes to generation performance are made.
 
-    _MIN_BATCH_SIZE: typing.ClassVar[int] = 5
+    _MIN_BATCH_ITEMS_PER_PLAYER: typing.ClassVar[int] = 5
     """
     Pick no fewer than this many items per player for each batch, unless that player does not have enough items
     remaining. This is a magic number and will typically be used for most batches.
@@ -160,7 +165,7 @@ class _RestrictiveFillBatcher:
             """
             After getting items to place, update the item pools.
 
-            :param items_to_place: Items that have been removed from the batch, to be placed.
+            :param items_to_place: Items that have been removed from the batch, and are going to be placed.
             """
             batch_item_pool = self.batch_item_pool
             item_pool = self.item_pool
@@ -180,8 +185,7 @@ class _RestrictiveFillBatcher:
             """
             Get and remove items to place from this batch.
 
-            :return: A list of items to place, or an empty list if the batch is exhausted and a new batch should be
-                created if there are still items remaining to place.
+            :return: A list of items to place, or an empty list if the batch is exhausted.
             """
             batched_placements_remaining = self.batched_placements_remaining
             if batched_placements_remaining <= 0:
@@ -216,14 +220,14 @@ class _RestrictiveFillBatcher:
             """
             Get the maximum exploration state for the currently reachable items.
 
-            An item is reachable if it matches any one of the following:
-            1. It is in `self.item_pool` and is not being placed in this batch. `self.batch_base_state` has collected
-               these items in advance because they do not change within a batch.
-            2. It is in both `self.item_pool` and `self.batch_item_pool` (both should always contain the same items as
-               one another), so it is an item that is going to be placed as part of this batch, but later on.
-            3. It is in `unplaced_items`, so could not be placed at any location. These items must be included because
+            An item is considered reachable if it matches any one of the following:
+            A. It is in `self.item_pool` and is not being placed in this batch. `self.batch_base_state` collected these
+               items in advance because they do not change within a batch.
+            B. It is in both `self.item_pool` and `self.batch_item_pool` (the items in batch_item_pool should always be
+               present in item_pool), so it is an item that is going to be placed as part of this batch, but later on.
+            C. It is in `unplaced_items`, so could not be placed at any location. These items must be included because
                fill_restrictive allows for partial fills and retries depending on its arguments.
-            4. It is at a location in `explore_locations` that is reachable with all items in 1-4.
+            D. It is at a location in `explore_locations` that is reachable with all items in A-D.
 
             Items already placed at reachable locations, items not being placed in this batch, items yet to be removed
             from this batch in order to be placed, and items that could not be placed at any location are all considered
@@ -243,13 +247,16 @@ class _RestrictiveFillBatcher:
                 if explore_locations is None:
                     explore_locations = self.batch_base_state.multiworld.get_filled_locations()
                 # batch_base_state has already collected all items that still need to be placed, but are not being
-                # placed in this batch.
+                # placed in this batch (A. items).
+                # The sweep to create `partial_exploration_state` collects many additional reachable items (some D.
+                # items).
                 partial_exploration_state = sweep_from_pool(self.batch_base_state, locations=explore_locations)
                 self._partial_exploration_state = partial_exploration_state
 
+            # Collect items in this batch that have yet to be removed in order to be placed (B. items), and collect all
+            # items that could not be placed at any location (C. items), and then sweep to collect all remaining
+            # reachable items (the remaining D. items).
             maximum_exploration_state = sweep_from_pool(
-                # Collect items in this batch that have yet to be removed in order to be placed, and collect all items
-                # that could not be placed at any location.
                 partial_exploration_state, self.batch_item_pool + unplaced_items, explore_locations)
 
             return maximum_exploration_state
@@ -547,10 +554,10 @@ class _RestrictiveFillBatcher:
         # MIN_TOTAL_ITEMS_PER_BATCH total items in the batch, assuming each player has enough items remaining to fully
         # fill out the batch.
         num_players = len(reachable_items)
-        if num_players > 0 and self._MIN_BATCH_SIZE * num_players < self._MIN_TOTAL_ITEMS_PER_BATCH:
+        if num_players > 0 and self._MIN_BATCH_ITEMS_PER_PLAYER * num_players < self._MIN_TOTAL_ITEMS_PER_BATCH:
             self._min_batch_size = self._MIN_TOTAL_ITEMS_PER_BATCH // num_players
         else:
-            self._min_batch_size = self._MIN_BATCH_SIZE
+            self._min_batch_size = self._MIN_BATCH_ITEMS_PER_PLAYER
 
         # Gradually increase the number of items placed in each batch until only the player with the largest item pool
         # has items remaining, at which point, place a percentage of their original item pool in each batch. Most fills
@@ -578,14 +585,14 @@ class _RestrictiveFillBatcher:
         # Calculate the number of items, per player, to place in the new batch.
         reachable_items = self._reachable_items
 
-        # Get the count of and individual lengths of non-empty remaining items pools.
+        # Get the count of, and individual lengths of, non-empty remaining per-player item pools.
         nonzero_remaining_per_player = [len(items) for items in reachable_items.values() if items]
         num_players_with_remaining_items = len(nonzero_remaining_per_player)
 
         if num_players_with_remaining_items == 0:
             # No more items to place, so return None to signal this.
             # Later code in this function does not check for iterables being empty, and would need to be updated if this
-            # early return is changed to occur later or is removed entirely.
+            # early return is changed to occur later, or if this early return is removed entirely.
             return None
 
         # Find the length of the largest remaining item pool.
@@ -612,7 +619,7 @@ class _RestrictiveFillBatcher:
 
         # If a player has fewer items remaining than the size of the batch, then that player has some empty spaces for
         # items in the batch. This allows for items belonging to that player, that were displaced by a swap, to be added
-        # to the current batch until the spaces are used up.
+        # to the current batch until the empty spaces for that player are used up.
         batch_empty_spaces = {player: batch_size - min(len(player_items), batch_size)
                               for player, player_items in reachable_items.items()}
 
@@ -678,10 +685,10 @@ class _RestrictiveFillBatcher:
             # No more items to place.
             return []
         # Batches are given references to `self.reachable_items` and `self.item_pool` when they are created, so do not
-        # need to be given again.
+        # need to be given these collections of items again.
         popped_items = current_batch.pop_items_to_place()
         if not popped_items:
-            # Current batch is exhausted, so create a new one.
+            # The current batch is exhausted, so create a new one and retry with the new batch.
             self._current_batch = self._new_batch(current_batch)
             # This recursive call is expected to only recurse at most once.
             # In the recursive call, either there are no more items to place, so `self._current_batch` became `None` and
@@ -700,9 +707,9 @@ class _RestrictiveFillBatcher:
         items to place, or after self.finish_fill() has been called.
 
         An item is reachable if it matches any one of the following:
-        1. It is in `self.item_pool`, so has not been placed yet and is not currently being placed.
-        2. It is in `unplaced_items`, so could not be placed at any location.
-        3. It is at a location in `explore_locations` that is reachable with all items in 1-3.
+        A. It is in `self.item_pool`, so has not been placed yet and is not currently being placed.
+        B. It is in `unplaced_items`, so could not be placed at any location.
+        C. It is at a location in `explore_locations` that is reachable with all items in A-C.
 
         :param explore_locations: The locations to explore for reachable items. Defaults to all filled locations when
             `None`.
