@@ -289,7 +289,19 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
     patch.write_byte(energylink_ptr + 1, world.options.energy_link.value)
 
     if world.options.reduce_flashing:
-        pass
+        # Spark Man
+        patch.write_byte(0x12649, 8)
+        patch.write_byte(0x1264E, 8)
+        patch.write_byte(0x12653, 8)
+        # Shadow Man
+        patch.write_byte(0x12658, 0x10)
+        # Gemini Man
+        patch.write_byte(0x12637, 0x20)
+        patch.write_byte(0x1263D, 0x20)
+        patch.write_byte(0x12643, 0x20)
+        # Gamma
+        patch.write_byte(0x7DA4A, 0xF)
+
 
     if world.options.music_shuffle:
         if world.options.music_shuffle.current_key == "no_music":

@@ -125,16 +125,11 @@ class WeaknessPlando(OptionDict):
     default = {}
 
 
-class ReduceFlashing(Choice):
+class ReduceFlashing(Toggle):
     """
-    Reduce flashing seen in gameplay, such as the stage select and when defeating a Wily boss.
+    Reduce flashing seen in gameplay, such as in stages and when defeating certain bosses.
     """
     display_name = "Reduce Flashing"
-    option_none = 0
-    option_virtual_console = 1
-    option_full = 2
-    default = 1
-    visibility = Visibility.none
 
 
 class MusicShuffle(Choice):
