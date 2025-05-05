@@ -440,7 +440,7 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Wand": ItemData("Equipment", 258 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Aura Focus": ItemData("Equipment", 278 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Paladin Wand": ItemData("Equipment", 276 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Deep Sea, Expert Zones
-    #"Equipment - Obelisk": ItemData("Equipment", 307 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hoboshop)
+    #"Equipment - Obelisk": ItemData("Equipment", 307 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hobo shop)
     "Equipment - Flameseeker": ItemData("Equipment", 358 + equipment_index_offset, ItemClassification.useful), #Tier 5, Jidamba Eaclaneya, Expert Zones
     #"Equipment - Diamond Wand": ItemData("Equipment", 154 + equipment_index_offset, ItemClassification.useful),
 
@@ -648,7 +648,7 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Crown": ItemData("Equipment", 265 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Pointy Hat": ItemData("Equipment", 531 + equipment_index_offset, ItemClassification.useful), #Tier 5, The Deep Sea, Expert Zones
     "Equipment - Vita Crown": ItemData("Equipment", 271 + equipment_index_offset, ItemClassification.useful), #Tier 5, Ancient Labyrinth, End-Game Zones
-    #"Equipment - Pact Crown": ItemData("Equipment", 350 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hoboshop)
+    #"Equipment - Pact Crown": ItemData("Equipment", 350 + equipment_index_offset, ItemClassification.useful),  #black market shop (Z14_hobo shop)
     "Equipment - Protector": ItemData("Equipment", 354 + equipment_index_offset, ItemClassification.useful), #Tier 5, Castle Sequoia, End-Game Zones
     #"Equipment - Diamond Crown": ItemData("Equipment", 240 + equipment_index_offset, ItemClassification.useful),
 

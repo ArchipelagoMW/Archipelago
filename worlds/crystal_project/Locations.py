@@ -925,8 +925,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
         #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar aka have Babel Quintar item from Mausoleum) (789, 191, -338)
-        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the quintar nest 1", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 1
-        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the quintar nest 2", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 2
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the Quintar nest 1", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 1
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the Quintar nest 2", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 2
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding in sneaky Quintar nest north of Mausoleum", 2257 + npc_index_offset), #Shedding 3
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding east of shrine", 2259 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 4
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 5
@@ -1212,7 +1212,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
         LocationData("The Deep Sea", "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has("Item - Undersea Crab", player, 15)), #(256, 63, 113)
-        LocationData("The Deep Sea", "The Deep Sea NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden quintar but faster than royal salmon) Z35_SpeedOcto
+        LocationData("The Deep Sea", "The Deep Sea NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden Quintar but faster than royal salmon) Z35_SpeedOcto
         LocationData("The Deep Sea", "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
         LocationData("The Deep Sea", "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot
         LocationData("The Deep Sea", "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 3", 2856 + npc_index_offset), #(-370, 53, -173) Ore
