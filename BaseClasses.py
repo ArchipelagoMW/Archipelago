@@ -223,7 +223,7 @@ class MultiWorld():
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
             option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
-                                         f"Please use `self.options.{option_key}` instead.")
+                                         f"Please use `self.options.{option_key}` instead.", True)
             option.update(getattr(args, option_key, {}))
             setattr(self, option_key, option)
 
@@ -1197,6 +1197,48 @@ class Region:
             location_type = Location
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
+
+    def add_event(
+        self,
+        location_name: str,
+        item_name: str | None = None,
+        rule: Callable[[CollectionState], bool] | None = None,
+        location_type: type[Location] | None = None,
+        item_type: type[Item] | None = None,
+        show_in_spoiler: bool = True,
+    ) -> Item:
+        """
+        Adds an event location/item pair to the region.
+
+        :param location_name: Name for the event location.
+        :param item_name: Name for the event item. If not provided, defaults to location_name.
+        :param rule: Callable to determine access for this event location within its region.
+        :param location_type: Location class to create the event location with. Defaults to BaseClasses.Location.
+        :param item_type: Item class to create the event item with. Defaults to BaseClasses.Item.
+        :param show_in_spoiler: Will be passed along to the created event Location's show_in_spoiler attribute.
+        :return: The created Event Item
+        """
+        if location_type is None:
+            location_type = Location
+
+        if item_name is None:
+            item_name = location_name
+
+        if item_type is None:
+            item_type = Item
+
+        event_location = location_type(self.player, location_name, None, self)
+        event_location.show_in_spoiler = show_in_spoiler
+        if rule is not None:
+            event_location.access_rule = rule
+
+        event_item = item_type(item_name, ItemClassification.progression, None, self.player)
+
+        event_location.place_locked_item(event_item)
+
+        self.locations.append(event_location)
+
+        return event_item
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
                 rule: Optional[Callable[[CollectionState], bool]] = None) -> Entrance:
