@@ -114,6 +114,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             cache[arg] = res
             return res
 
+    wrap.__defaults__ = function.__defaults__
+
     return wrap
 
 
@@ -427,6 +429,9 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by OptionCounter
+        if module == "collections" and name == "Counter":
+            return collections.Counter
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
                                              "SlotType", "NetworkSlot", "HintStatus"}:
@@ -630,6 +635,8 @@ def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit:
     import jellyfish
 
     def get_fuzzy_ratio(word1: str, word2: str) -> float:
+        if word1 == word2:
+            return 1.01
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
@@ -650,8 +657,10 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
     picks = get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
-        if picks[0][1] == 100:
+        if picks[0][1] == 101:
             return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] == 100:
+            return picks[0][0], True, "Case Insensitive Perfect Match"
         elif picks[0][1] < 75:
             return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
