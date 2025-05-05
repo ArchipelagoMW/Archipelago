@@ -628,4 +628,5 @@ def launch():
 
 
 if __name__ == "__main__":
+    Utils.init_logging("OptionsCreator")
     launch()
