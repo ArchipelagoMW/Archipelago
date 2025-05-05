@@ -93,6 +93,6 @@ Common situations where this can happen include:
 Sometimes the game can be modded to skip these locations or make them less tedious. But when this issue is due to a fundamental aspect of the game, then the general answer is "soft logic" (and its subtypes like "combat logic", "money logic", etc.). For example: you can logically require that a player have several helpful items before fighting the final boss, even if a skilled player technically needs no items to beat it. Randomizer logic should describe what's *fun* rather than what's technically possible.
 
 Concrete examples of soft logic include:
-- Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc that aren't strictly necessary.
+- Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc. that aren't strictly necessary.
 - Entering a high-level area might logically require access to enough other parts of the game that checking other locations should naturally get the player to the soft-required level.
 - Buying expensive shop items might logically require access to a place where you can quickly farm money, or logically require access to enough parts of the game that checking other locations should naturally generate enough money without grinding.
