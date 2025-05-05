@@ -11,14 +11,13 @@ from . import api_endpoints
 
 @api_endpoints.route("/downloads/<string:build>")
 def get_download(build: str) -> Response:
-    # download_data = ArchipelagoDownload.select(platform=build).sort_by(A)
     download_data = select(download for download in ArchipelagoDownload
-                           if download.platform == build).sort_by(ArchipelagoDownload.version).first()
+                           if download.build == build).sort_by(ArchipelagoDownload.version).first()
     try:
         # ping GitHub API to make sure it's alive and cache the latest data
         if get_latest_release():
             download_data = select(download for download in ArchipelagoDownload
-                                   if download.platform == build).sort_by(ArchipelagoDownload.version).first()
+                                   if download.build == build).sort_by(ArchipelagoDownload.version).first()
     except HTTPError:
         # failed to hit the api endpoint, just send the latest known link anyway
         pass

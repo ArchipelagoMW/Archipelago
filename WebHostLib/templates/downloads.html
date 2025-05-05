@@ -26,9 +26,11 @@
         <br/>
         <ul class="downloads">
             <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/latest">Patch Notes</a></li>
-            <li><a href="{{ url_for("api.get_download", build="windows") }}">Download for Windows 10+</a></li>
-            <li><a href="{{ url_for("api.get_download", build="appimage") }}">Download for Linux (AppImage)</a></li>
-            <li><a href="{{ url_for("api.get_download", build="tar") }}">Download for Linux (.tar.gz)</a></li>
+            <!-- <platform>-<arch>-<fmt> -->
+            <li><a href="{{ url_for("api.get_download", build="windows--setup") }}">Download for Windows 10+</a></li>
+            <li><a href="{{ url_for("api.get_download", build="linux-x86_64-appimage") }}">Download for Linux (AppImage)</a></li>
+            <li><a href="{{ url_for("api.get_download", build="linux-x86_64-tar") }}">Download for Linux (.tar.gz)</a></li>
+            <!-- add links here if we add more supported builds -->
         </ul>
     </div>
     {% include "islandFooter.html" %}
