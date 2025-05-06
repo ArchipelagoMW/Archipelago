@@ -228,7 +228,7 @@ def launch():
         ctx = TrackmaniaContext(args.connect, args.password)
         logger.info("Starting Trackmania proxy server")
         ctx.proxy = websockets.serve(functools.partial(proxy, ctx=ctx),
-                                     host="localhost", port=22422, ping_timeout=999999, ping_interval=999999)
+                                     host="", port=22422, ping_timeout=999999, ping_interval=999999)
         ctx.proxy_task = asyncio.create_task(proxy_loop(ctx), name="ProxyLoop")
 
         if gui_enabled:

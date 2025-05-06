@@ -135,10 +135,14 @@ filler_item_names = [
     "widePolarStrut Affiliation",
     "Fire D&B Remix",
     "A01 but its 1910",
-    "Greece Flag Pole Bounce",
+    "Greek Flag Pole Bounce",
     "Tiktok Background Gameplay",
     "Secret Weekly Shorts Times",
     "Ice Gears Understanding",
+    "horsn",
+    "pedro",
+    "So Unlucky landing",
+    "Brick Bob"
 ]
 
 def get_all_map_tags() -> list[str]:
