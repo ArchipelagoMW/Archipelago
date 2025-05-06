@@ -54,34 +54,36 @@ def add_sprite_pack_object_collection(_sprite_pack_path, _folders_list, _sprites
         if not os.path.exists(object_folder_path):
             continue
         found_sprites = { }
-        for sprite_name in os.listdir(object_folder_path):
-            if not sprite_name.endswith('.png'):
+        for resource_name in os.listdir(object_folder_path):
+            if resource_name == 'data.txt':
+                add_pokemon_data(object_name, os.path.join(object_folder_path, resource_name))
+            if not resource_name.endswith('.png'):
                 continue
             # Only handle sprites which are awaited for the current object
-            matching_sprite_name = next(filter(lambda f: sprite_name.startswith(f), _sprites_list), None)
+            matching_sprite_name = next(filter(lambda f: resource_name.startswith(f), _sprites_list), None)
             if not matching_sprite_name:
                 continue
-            sprite_file_name_data = sprite_name[:-4].split('-')[1:]
+            sprite_file_name_data = resource_name[:-4].split('-')[1:]
             extra_sprite_data = sprite_file_name_data or None
-            sprite_path = os.path.join(object_folder_path, sprite_name)
+            sprite_path = os.path.join(object_folder_path, resource_name)
             if os.path.exists(sprite_path):
                 if found_sprites.get(matching_sprite_name):
                     continue
-                found_sprites[matching_sprite_name] = sprite_name
+                found_sprites[matching_sprite_name] = resource_name
                 add_sprite(_is_pokemon, object_name, matching_sprite_name, extra_sprite_data, sprite_path)
         for palette, palette_extraction_priority_queue in _palette_lists.items():
             # Generate palettes if sprites exist
             found_sprite = False
-            for sprite_name in palette_extraction_priority_queue:
-                if sprite_name in found_sprites:
-                    sprite_path = os.path.join(object_folder_path, found_sprites.get(sprite_name))
+            for resource_name in palette_extraction_priority_queue:
+                if resource_name in found_sprites:
+                    sprite_path = os.path.join(object_folder_path, found_sprites.get(resource_name))
                     found_sprite = True
                     add_palette(_is_pokemon, object_name, palette, sprite_path)
                     break
             if not found_sprite:
                 # Try to find raw sprites if they have not been recorded yet
-                for sprite_name in palette_extraction_priority_queue:
-                    sprite_path = os.path.join(object_folder_path, sprite_name + '.png')
+                for resource_name in palette_extraction_priority_queue:
+                    sprite_path = os.path.join(object_folder_path, resource_name + '.png')
                     if os.path.exists(sprite_path):
                         add_palette(_is_pokemon, object_name, palette, sprite_path)
                         break
@@ -130,11 +132,35 @@ def add_resource(_is_palette, _key, _name, _data_address, _path):
     file_data = file.read()
 
     add_data_to_patch({ "address": resource_address_to_insert_to, "length": len(file_data), "data": file_data })
-    # TODO: Fill in a free space list from the replaced data to fit more resources in the ROM
     resource_address_to_insert_to = resource_address_to_insert_to + len(file_data)
     if resource_address_to_insert_to > 0xFFFFFF:
         # Out of bounds: Too much data to add
         raise Exception('Too much data to add to the ROM! Please remove some resources.')
+
+def add_pokemon_data(_pokemon_name, _data_path):
+    # Adds a given pokemon data and move pool to the patch
+    with open(_data_path) as data_file:
+        new_pokemon_data = destringify_pokemon_data(_pokemon_name, data_file.read())
+    old_pokemon_data = get_pokemon_data(_pokemon_name)
+
+    # Replace the pokemon data as a whole
+    pokemon_data = merge_pokemon_data(old_pokemon_data, new_pokemon_data, True)
+    pokemon_data_bytes = encode_pokemon_data(pokemon_data)
+    data_address_stats = get_address_from_address_collection(_pokemon_name, 'pokemon_stats', 'stats')
+    add_data_to_patch({ "address": data_address_stats, "length": 28, "data": pokemon_data_bytes })
+
+    if 'move_pool' in new_pokemon_data:
+        # Add a new move pool table and replace the pointer to it
+        pokemon_move_pool_bytes = encode_move_pool(pokemon_data['move_pool'])
+        global resource_address_to_insert_to
+        new_resource_address_bytes = (resource_address_to_insert_to + 2).to_bytes(3, 'little')
+        data_pointer_move_pool = get_address_from_address_collection(_pokemon_name, 'pokemon_move_pool', 'move_pool')
+        add_data_to_patch({ "address": data_pointer_move_pool, "length": 3, "data": new_resource_address_bytes })
+        add_data_to_patch({ "address": resource_address_to_insert_to, "length": len(pokemon_move_pool_bytes), "data": pokemon_move_pool_bytes })
+        resource_address_to_insert_to = resource_address_to_insert_to + len(pokemon_move_pool_bytes)
+        if resource_address_to_insert_to > 0xFFFFFF:
+            # Out of bounds: Too much data to add
+            raise Exception('Too much data to add to the ROM! Please remove some resources.')
 
 def add_data_to_patch(_data):
     # Adds the given data to the patch
@@ -235,7 +261,6 @@ def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name,
     final_image.putdata(sprites_pixel_data)
     final_image.putpalette(sprite_palette)
     return final_image, extra_sprite_name
-
 
 #####################
 ## Data Extraction ##
@@ -444,26 +469,30 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
         if not os.path.exists(object_folder_path):
             continue
         found_sprites = { }
-        for sprite_name in os.listdir(object_folder_path):
-            if not sprite_name.endswith('.png'):
-                add_error('File {} in folder {}: Not a sprite and should be removed.'.format(sprite_name, object_name))
+        for resource_name in os.listdir(object_folder_path):
+            if resource_name == 'data.txt':
+                with open(os.path.join(object_folder_path, resource_name)) as pokemon_data_file:
+                    add_error(*validate_pokemon_data_string(object_name, pokemon_data_file.read()), True)
+                    continue
+            if not resource_name.endswith('.png'):
+                add_error('File {} in folder {}: Not a sprite and should be removed.'.format(resource_name, object_name))
                 continue
             # Only handle sprites which are awaited for the current object
-            matching_sprite_name = next(filter(lambda f: sprite_name.startswith(f), _sprites_list), None)
+            matching_sprite_name = next(filter(lambda f: resource_name.startswith(f), _sprites_list), None)
             if not matching_sprite_name:
                 # Allow sprites depicting an awaited palette
-                if not next(filter(lambda palette_list: sprite_name[:-4] in _palette_lists[palette_list], _palette_lists), None):
-                    add_error('File {} in folder {}: Cannot be linked to a valid internal sprite or palette.'.format(sprite_name, object_name))
+                if not next(filter(lambda palette_list: resource_name[:-4] in _palette_lists[palette_list], _palette_lists), None):
+                    add_error('File {} in folder {}: Cannot be linked to a valid internal sprite or palette.'.format(resource_name, object_name))
                     continue
-                matching_sprite_name = sprite_name[:-4]
-            sprite_file_name_data = sprite_name[:-4].split('-')[1:]
+                matching_sprite_name = resource_name[:-4]
+            sprite_file_name_data = resource_name[:-4].split('-')[1:]
             extra_sprite_data = sprite_file_name_data or None
-            sprite_path = os.path.join(object_folder_path, sprite_name)
+            sprite_path = os.path.join(object_folder_path, resource_name)
             if os.path.exists(sprite_path):
                 if found_sprites.get(matching_sprite_name):
-                    add_error('File {} in folder {}: Duplicate internal sprite entry with sprite {}.'.format(sprite_name, object_name, found_sprites.get(matching_sprite_name)), True)
+                    add_error('File {} in folder {}: Duplicate internal sprite entry with sprite {}.'.format(resource_name, object_name, found_sprites.get(matching_sprite_name)), True)
                     continue
-                found_sprites[matching_sprite_name] = sprite_name
+                found_sprites[matching_sprite_name] = resource_name
                 add_error(*validate_sprite(object_name, matching_sprite_name, extra_sprite_data, sprite_path), True)
     return errors, has_error
 
@@ -540,6 +569,110 @@ def is_palette_valid(_palette, _palette_model):
         if _palette_model[i] != -1 and _palette[i] != _palette_model[i]:
             return False
     return True
+
+def validate_pokemon_data_string(_pokemon_name, _data_string):
+    # Validates given Pokemon data, making sure that all fields are valid
+    errors = ""
+    has_error = False
+    def add_error(_error, _is_error = False, _processed = False):
+        nonlocal errors, has_error
+        if _error:
+            has_error = has_error or _is_error
+            errors += ('\n' if errors else '') + ('' if _processed else 'Error: ' if _is_error else 'Warning: ') + _error
+
+    # If the given data is a string, extracts its data first
+    try:
+        _data = destringify_pokemon_data(_pokemon_name, _data_string, True)
+    except Exception as e:
+        if hasattr(e, 'message'):
+            return e.message, True
+        else:
+            return str(e), True
+
+    for field_name in _data:
+        field_value = _data[field_name]
+        if field_name in { 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' }:
+            # Data must be a number between 1 and 255
+            try:
+                field_number_value = int(field_value)
+                if field_number_value < 1 or field_number_value > 255:
+                    add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+            except Exception:
+                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+        elif field_name in { 'type1', 'type2' }:
+            # Data must be a number corresponding to a valid type
+            try:
+                if not field_value.capitalize() in POKEMON_TYPES:
+                    field_number_value = int(field_value)
+                    if field_number_value < 0 or field_number_value >= len(POKEMON_TYPES):
+                        add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+            except Exception:
+                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+        elif field_name in { 'ability1', 'ability2' }:
+            # Data must be a number corresponding to a valid ability
+            try:
+                if not field_value.upper() in POKEMON_ABILITIES:
+                    field_number_value = int(field_value)
+                    if field_number_value < 0 or field_number_value >= len(POKEMON_ABILITIES):
+                        add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+            except Exception:
+                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+        elif field_name == 'gender_ratio':
+            # Data must be a number corresponding to a valid gender ratio
+            try:
+                if not field_value in list(POKEMON_GENDER_RATIOS.values()):
+                    field_number_value = int(field_value)
+                    if not field_number_value in list(POKEMON_GENDER_RATIOS.keys()):
+                        add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+            except Exception:
+                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+        elif field_name == 'dex':
+            # Data must either be a 0 (allowed) or a 1 (forbidden)
+            if not field_value in [ 0, 1, 'True', 'False' ]:
+                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+        elif field_name == 'move_pool':
+            # Data must be a valid move pool table string
+            if len(field_value) < 4:
+                add_error('{}\'s move pool is too short.'.format(_pokemon_name))
+            else:
+                add_error(*validate_move_pool_string(_pokemon_name, field_value.replace(', ', '\n')[2:-2]), True)
+    return errors, has_error
+
+def validate_ability(_ability):
+    # Validates a given ability
+    return _ability.upper() in POKEMON_ABILITIES
+
+def validate_move_pool_string(_pokemon_name, _move_pool):
+    # Validates a move pool given as a string
+    errors = ""
+    has_error = False
+    def add_error(_error, _is_error = False):
+        nonlocal errors, has_error
+        if _error:
+            has_error = has_error or _is_error
+            errors += ('\n' if errors else '') + ('Error: ' if _is_error else 'Warning: ') + _error
+
+    move_lines =_move_pool.split('\n')
+    for i in range(len(move_lines)):
+        move_line = move_lines[i]
+        if not move_line:
+            continue
+        move_info = move_line.split(':', 1)
+        if len(move_info) != 2:
+            add_error('{}\'s move #{} is malformed: \'{}\''.format(_pokemon_name, i + 1, move_line), True)
+            continue
+        move_name = move_info[0].strip()
+        if not move_name.upper() in POKEMON_MOVES:
+            add_error('{}\'s move #{} \'{}\' is unknown.'.format(_pokemon_name, i + 1, move_name), True)
+        move_level = move_info[1].strip()
+        try:
+            move_level_value = int(move_level)
+            move_level_valid = 1 <= move_level_value <= 100
+        except Exception:
+            move_level_valid = False
+        if not move_level_valid:
+            add_error('{}\'s move #{}\'s ({}) level \'{}\' is invalid.'.format(_pokemon_name, i + 1, move_name, move_level), True)
+    return errors, has_error
 
 ####################
 ## LZ Compression ##
@@ -685,6 +818,167 @@ def spread_palettes_to_sprite_frames(_data, _width, _height, _frames):
             _data[shift + pixel] |= frame << 4
     return bytes(_data)
 
+###############################
+## Pokemon Data Manipulation ##
+###############################
+
+def get_pokemon_data(_pokemon_name, _data_type = None):
+    # Gets a given field or all data from a given pokemon
+    data_container_name = 'move_pool' if _data_type == 'move_pool' else 'stats'
+    data_key = 'pokemon_' + data_container_name
+    data_address = get_address_from_address_collection(_pokemon_name, data_key, data_container_name)
+    if _data_type == 'move_pool':
+        # Move pools are given as pointers, so seek their value
+        data_address = int.from_bytes(bytes(current_rom[data_address:data_address+3]), 'little')
+    end_address = data_address + (100 if _data_type == 'move_pool' else 28)
+    data = current_rom[data_address:end_address]
+    if _data_type == 'move_pool':
+        return decode_move_pool(data)
+    if not _data_type:
+        return get_all_pokemon_data(_pokemon_name, data)
+    return data[_data_type]
+
+def get_all_pokemon_data(_pokemon_name, _data):
+    # Gets all the data from a given pokemon
+    result = {}
+    for field in POKEMON_DATA_INFO:
+        field_info = POKEMON_DATA_INFO[field]
+        data_address = field_info['shift']
+        end_address = data_address + field_info['size']
+        result[field] = int.from_bytes(bytes(_data[data_address:end_address]), 'little')
+    result['move_pool'] = get_pokemon_data(_pokemon_name, 'move_pool')
+    return result
+
+def encode_pokemon_data(_data: dict[str,int]):
+    # Encodes pokemon data into data to add to the ROM
+    output = bytearray(28)
+    for field_name in _data:
+        if field_name == 'move_pool':
+            continue
+        shift = POKEMON_DATA_INFO[field_name]['shift']
+        size = POKEMON_DATA_INFO[field_name]['size']
+        output[shift:shift+size] = _data[field_name].to_bytes(size, 'little')
+    return bytes(output)
+
+def stringify_pokemon_data(_data):
+    # Transforms a pokemon's data into a string
+    result = ''
+    for field_name in _data:
+        field_value = _data[field_name]
+        if field_name in { 'type1', 'type2' }:
+            field_value = POKEMON_TYPES[field_value]
+        elif field_name in { 'ability1', 'ability2' }:
+            field_value = POKEMON_ABILITIES[field_value].title()
+        elif field_name == 'gender_ratio':
+            field_value = POKEMON_GENDER_RATIOS[field_value]
+        elif field_name == 'dex':
+            # The dex value is stored as a boolean named 'forbidFlip' for clarity
+            field_value = 'True' if field_value & 0x80 else 'False'
+            field_name = 'forbidFlip'
+        elif field_name == 'move_pool':
+            field_value = '[ ' + stringify_move_pool(field_value).replace('\n', ', ') + ' ]'
+        result += '{}: {}\n'.format(field_name, field_value)
+    return result[:-1]
+
+def destringify_pokemon_data(_pokemon_name, _data_string, _safe_mode = False):
+    # Transforms a pokemon's data given as a string into a dictionary holding said pokemon's data
+    result = {}
+    for field_line in _data_string.split('\n'):
+        field_info = field_line.split(':', 1)
+        field_name = field_info[0].strip()
+        field_value = field_info[1].strip()
+        if field_name in { 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' }:
+            field_value = field_value if _safe_mode else int(field_value)
+        elif field_name in { 'type1', 'type2' }:
+            field_value = field_value if _safe_mode else POKEMON_TYPES.index(field_value)
+        elif field_name in { 'ability1', 'ability2' }:
+            field_value = field_value if _safe_mode else POKEMON_ABILITIES.index(field_value.upper())
+        elif field_name == 'gender_ratio':
+            field_value = field_value if _safe_mode else REVERSE_POKEMON_GENDER_RATIOS[field_value]
+        elif field_name == 'forbidFlip':
+            # The dex value is stored as a boolean named 'forbidFlip' for clarity
+            field_value = field_value if _safe_mode else (1 if field_value == 'True' else 0)
+            field_name = 'dex'
+        elif field_name == 'move_pool':
+            if not _safe_mode:
+                move_pool_errors, has_move_pool_error = validate_move_pool_string(_pokemon_name, field_value[2:-2].replace(', ', '\n'))
+                if has_move_pool_error:
+                    raise Exception('Bad move pool: {}'.format(move_pool_errors))
+                field_value = destringify_move_pool(field_value[2:-2].replace(', ', '\n'))
+        result[field_name] = field_value
+    return result
+
+def merge_pokemon_data(_old_data, _new_data, _is_dex_simple = False):
+    # Merges two pokemon data objects
+    merged_data = _old_data
+    for field_name in _new_data:
+        if _is_dex_simple and field_name == 'dex':
+            merged_data[field_name] = (_new_data[field_name] << 7) + (_old_data[field_name] & 0x7F)
+        else:
+            merged_data[field_name] = _new_data[field_name]
+    return merged_data
+
+def keep_different_pokemon_data(_old_data, _new_data):
+    # Returns only different fields between the two pokemon data objects given
+    different_data = { k: v for k, v in _new_data.items() if v != _old_data[k] and k != 'move_pool' }
+    if not are_move_pools_equal(_new_data['move_pool'], _old_data['move_pool']):
+        different_data['move_pool'] = _new_data['move_pool']
+    return different_data
+
+def stringify_move_pool(_move_pool):
+    # Transforms a pokemon's move pool a string
+    result = ''
+    for move_info in _move_pool:
+        result += '{}: {}\n'.format(move_info['move'], move_info['level'])
+    return result[:-1]
+
+def destringify_move_pool(_move_pool_string):
+    # Transforms a pokemon's move pool given as a string into a list of dictionaries holding said move pool data
+    result = []
+    for move_line in _move_pool_string.split('\n'):
+        if not move_line:
+            continue
+        move_info = move_line.split(':', 1)
+        move_name = move_info[0].strip()
+        move_level = int(move_info[1].strip())
+        result.append({ 'move': move_name, 'level': move_level })
+    return result
+
+def decode_move_pool(_data):
+    # Decodes move pool data from a list of bytes into a list of moves
+    result = []
+    data_size = round(len(_data) / 2)
+    for i in range(data_size):
+        move_data = int.from_bytes(bytes(_data[i*2:(i+1)*2]), 'little')
+        if move_data == 0xFFFF:
+            break
+        move_id = move_data & 0x1FF
+        move_level = move_data >> 9
+        result.append({ 'move': POKEMON_MOVES[move_id - 1].title(), 'level': move_level })
+    return result
+
+def encode_move_pool(_move_pool):
+    # Encodes move pool data from a list of moves into a list of bytes
+    result = bytearray()
+    for move_data in _move_pool:
+        move_id = POKEMON_MOVES.index(move_data['move'].upper()) + 1
+        move_level = move_data['level']
+        move_data = (move_level << 9) + move_id
+        result += move_data.to_bytes(2, 'little')
+    # Surround the table by FFFF as the move pool functions looks for the beginning and end of the table
+    return bytes(b'\xff\xff' + result + b'\xff\xff')
+
+def are_move_pools_equal(_move_pool_1, _move_pool_2):
+    # Compares two move pool objects
+    if len(_move_pool_1) != len(_move_pool_2):
+        return False
+    for i in range(len(_move_pool_1)):
+        move_data_1 = _move_pool_1[i]
+        move_data_2 = _move_pool_2[i]
+        if move_data_1['move'] != move_data_2['move'] or move_data_1['level'] != move_data_2['level']:
+            return False
+    return True
+
 #######################
 ## Utility Functions ##
 #######################
@@ -703,11 +997,11 @@ def get_address_from_address_collection(_object_name, _resource_key, _resource_n
         # Fetches internal Pokemon ID then resource address
         pokemon_id = POKEMON_NAME_TO_ID[_object_name]
         pokemon_internal_id = POKEMON_ID_TO_INTERNAL_ID.get(pokemon_id, pokemon_id)
-        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[_resource_key](data_addresses, pokemon_internal_id)
+        data_address = INTERNAL_ID_TO_OBJECT_ADDRESS[_resource_key](data_addresses, pokemon_internal_id)
     else:
         # Fetches named Trainer resource address
         named_key = _object_name.lower() + "_" + _resource_name
-        data_address = INTERNAL_ID_TO_SPRITE_ADDRESS[named_key](data_addresses)
+        data_address = INTERNAL_ID_TO_OBJECT_ADDRESS[named_key](data_addresses)
     return data_address
 
 def get_overworld_sprite_addresses(_object_name, _resource_name):

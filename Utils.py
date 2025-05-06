@@ -382,7 +382,7 @@ def get_default_adjuster_settings(game_name: str) -> Namespace:
     if game_name == LttPAdjuster.GAME_ALTTP:
         return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
     elif game_name == EmeraldAdjuster.GAME_EMERALD:
-        return EmeraldAdjuster.get_argparser().parse_known_args(args=[])[0]
+        return EmeraldAdjuster.getArgparser().parse_known_args(args=[])[0]
 
     return adjuster_settings
 
