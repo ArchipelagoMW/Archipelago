@@ -8,6 +8,7 @@ from .locations import locations, CandyBox2LocationName
 from .rooms import CandyBox2Room, entrance_friendly_names
 from .items import CandyBox2ItemName, items, candy_box_2_base_id
 from worlds.generic.Rules import add_rule
+from .expected_client_version import EXPECTED_CLIENT_VERSION
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -181,28 +182,42 @@ class CandyBox2RulesPackageRuleUnaryExpression(CandyBox2RulesPackageRuleExpressi
         return [self.expr, self.op.default()]
 
 class CandyBox2RulesPackage(JSONEncoder):
+    expected_client_version: str
     locations: dict[int, str]
     location_rules: dict["CandyBox2LocationName", CandyBox2RulesPackageRuleExpression]
     room_rules: dict["CandyBox2Room", CandyBox2RulesPackageRuleExpression]
+    location_parents: dict["CandyBox2LocationName", CandyBox2Room]
+    room_exits: dict["CandyBox2Room", list["CandyBox2Room"]]
 
-    def __init__(self, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False,
+    def __init__(self, expected_client_version: str = "", *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False,
                  indent=None, separators=None, default=None):
         super().__init__(skipkeys=skipkeys, ensure_ascii=ensure_ascii, check_circular=check_circular,
                          allow_nan=allow_nan, sort_keys=sort_keys, indent=indent, separators=separators,
                          default=default)
+        self.expected_client_version = expected_client_version
         self.locations = {location: name for name, location in locations.items()}
         self.location_rules = {}
         self.room_rules = {}
+        self.location_parents = {}
+        self.room_exits = {}
 
-    def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression):
+    def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression, parent: CandyBox2Room | None):
         self.location_rules[location] = rule
+        if parent is not None:
+            self.location_parents[location] = parent
 
     def add_room_rule(self, room: "CandyBox2Room", rule: CandyBox2RulesPackageRuleExpression):
         self.room_rules[room] = rule
 
+    def assign_room_exits(self, room: "CandyBox2Room", exits: list["CandyBox2Room"]):
+        self.room_exits[room] = exits
+
     def default(self, o):
         return {
+            "expectedClientVersion": o.expected_client_version,
             "locations": o.locations,
+            "locationParents": {locations[location]: room.value for location, room in o.location_parents.items()},
+            "roomExits": {room.value: [exit.value for exit in exits] for room, exits in o.room_exits.items()},
             "rules": {
                 "locations": {locations[location]: rule.default() for location, rule in o.location_rules.items()},
                 "rooms": {room: rule.default() for room, rule in o.room_rules.items()}
@@ -264,6 +279,9 @@ def rule_item(item: "CandyBox2ItemName", count: int = 1):
 
 def rule_room(room: "CandyBox2Room"):
     return CandyBox2RulesPackageRuleRoomExpression(room)
+
+def no_conditions():
+    return CandyBox2RulesPackageRuleConstantExpression(True)
 
 def has_weapon(weapon: CandyBox2ItemName):
     return rule_item(weapon) | rule_item(CandyBox2ItemName.PROGRESSIVE_WEAPON, weapons.index(weapon)) | CandyBox2RulesPackageRuleStartWeaponExpression(weapon)
@@ -347,109 +365,136 @@ def can_beat_sharks():
     return sea_entrance() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF)
 
 def generate_rules_package():
-    rules_package = CandyBox2RulesPackage()
+    rules_package = CandyBox2RulesPackage(EXPECTED_CLIENT_VERSION)
     generate_rules_package_location_rules(rules_package)
     generate_rules_package_room_rules(rules_package)
+    generate_rules_package_exits(rules_package)
 
     return rules_package
 
 def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
-    rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies())
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies())
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3))
+    rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies(), None)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3), CandyBox2Room.VILLAGE_FORGE)
 
     # TODO: Forge locations should depend on previous forge location where applicable
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3) & rule_room(CandyBox2Room.DRAGON))
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3) & rule_room(CandyBox2Room.DRAGON), CandyBox2Room.VILLAGE_FORGE)
+
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
 
     # Cellar rules
-    rules_package.add_location_rule(CandyBox2LocationName.CELLAR_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD))
+    rules_package.add_location_rule(CandyBox2LocationName.CELLAR_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD), CandyBox2Room.QUEST_THE_CELLAR)
+
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_FIRST_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_SECOND_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_THIRD_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_FOURTH_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_FIFTH_QUESTION, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SQUIRRELS_PUZZLE, no_conditions(), CandyBox2Room.SQUIRREL_TREE)
+    rules_package.add_location_rule(CandyBox2LocationName.X_MARKS_THE_SPOT, no_conditions(), CandyBox2Room.DIG_SPOT)
+    rules_package.add_location_rule(CandyBox2LocationName.LOCKED_CANDY_BOX_ACQUIRED, no_conditions(), CandyBox2Room.LONELY_HOUSE)
 
     # Desert rules
-    rules_package.add_location_rule(CandyBox2LocationName.DESERT_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.IRON_AXE))
+    rules_package.add_location_rule(CandyBox2LocationName.DESERT_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.IRON_AXE), CandyBox2Room.QUEST_THE_DESERT)
+    rules_package.add_location_rule(CandyBox2LocationName.DESERT_BIRD_FEATHER_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.IRON_AXE) & has_projectiles(), CandyBox2Room.QUEST_THE_DESERT)
 
-    rules_package.add_location_rule(CandyBox2LocationName.DESERT_BIRD_FEATHER_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.IRON_AXE) & has_projectiles())
+    rules_package.add_location_rule(CandyBox2LocationName.POGO_STICK, no_conditions(), CandyBox2Room.POGO_STICK_SPOT)
 
     # Wishing Well rules
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_RED_ENCHANTED_GLOVES, rule_item(CandyBox2ItemName.LEATHER_GLOVES) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_PINK_ENCHANTED_GLOVES, rule_item(CandyBox2ItemName.LEATHER_GLOVES) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_SUMMONING_TRIBAL_SPEAR, has_weapon(CandyBox2ItemName.TRIBAL_SPEAR) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_ENCHANTED_MONKEY_WIZARD_STAFF, has_weapon(CandyBox2ItemName.MONKEY_WIZARD_STAFF) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_ENCHANTED_KNIGHT_BODY_ARMOUR, rule_item(CandyBox2ItemName.KNIGHT_BODY_ARMOUR) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_JASPERS, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_OBSIDIAN, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN) & has_all_chocolates())
-    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_GIANT_SPOON_OF_DOOM, has_weapon(CandyBox2ItemName.GIANT_SPOON) & has_all_chocolates())
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_RED_ENCHANTED_GLOVES, rule_item(CandyBox2ItemName.LEATHER_GLOVES) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_PINK_ENCHANTED_GLOVES, rule_item(CandyBox2ItemName.LEATHER_GLOVES) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_SUMMONING_TRIBAL_SPEAR, has_weapon(CandyBox2ItemName.TRIBAL_SPEAR) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_ENCHANTED_MONKEY_WIZARD_STAFF, has_weapon(CandyBox2ItemName.MONKEY_WIZARD_STAFF) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_ENCHANTED_KNIGHT_BODY_ARMOUR, rule_item(CandyBox2ItemName.KNIGHT_BODY_ARMOUR) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_JASPERS, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_OBSIDIAN, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
+    rules_package.add_location_rule(CandyBox2LocationName.ENCHANT_GIANT_SPOON_OF_DOOM, has_weapon(CandyBox2ItemName.GIANT_SPOON) & has_all_chocolates(), CandyBox2Room.WISHING_WELL)
 
     # Bridge rules
-    rules_package.add_location_rule(CandyBox2LocationName.TROLL_DEFEATED, weapon_is_at_least(CandyBox2ItemName.POLISHED_SILVER_SWORD))
-    rules_package.add_location_rule(CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.POLISHED_SILVER_SWORD))
+    rules_package.add_location_rule(CandyBox2LocationName.TROLL_DEFEATED, weapon_is_at_least(CandyBox2ItemName.POLISHED_SILVER_SWORD), CandyBox2Room.QUEST_THE_BRIDGE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.POLISHED_SILVER_SWORD), CandyBox2Room.QUEST_THE_BRIDGE)
 
     # Cave rules
-    rules_package.add_location_rule(CandyBox2LocationName.OCTOPUS_KING_DEFEATED, rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
-    rules_package.add_location_rule(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED, rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_cast(CandyBox2Castable.TELEPORT) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_CHOCOLATE_BAR, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_HEART_PLUG, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_EXIT, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
+    rules_package.add_location_rule(CandyBox2LocationName.OCTOPUS_KING_DEFEATED, rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
+    rules_package.add_location_rule(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED, rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_cast(CandyBox2Castable.TELEPORT) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD)
 
     # The Hole rules
-    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED, can_jump())
-    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE))
-    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE) & can_jump())
-    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED, can_escape_hole() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED, can_jump(), CandyBox2Room.QUEST_THE_HOLE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE), CandyBox2Room.QUEST_THE_HOLE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE) & can_jump(), CandyBox2Room.QUEST_THE_HOLE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED, can_escape_hole() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_HOLE)
 
     # TODO: possibly fly over?
-    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED, can_escape_hole() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED, can_escape_hole() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_HOLE)
 
     # The Forest rules
-    rules_package.add_location_rule(CandyBox2LocationName.FOREST_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    rules_package.add_location_rule(CandyBox2LocationName.FOREST_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_FOREST)
 
     # Castle Entrance rules
-    rules_package.add_location_rule(CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED, can_fly() | (weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR)))
-    rules_package.add_location_rule(CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR))
+    rules_package.add_location_rule(CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED, can_fly() | (weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR)), CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE)
+    rules_package.add_location_rule(CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE)
 
     # Castle rules
-    rules_package.add_location_rule(CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED, can_cast(CandyBox2Castable.BLACK_HOLE) & weapon_is_at_least(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR) & rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN))
+    rules_package.add_location_rule(CandyBox2LocationName.PITCHFORK_ACQUIRED, no_conditions(), CandyBox2Room.CASTLE_DARK_ROOM)
+    rules_package.add_location_rule(CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED, can_cast(CandyBox2Castable.BLACK_HOLE) & weapon_is_at_least(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR) & rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN), CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER)
 
     # Egg Room
-    rules_package.add_location_rule(CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED, can_fly() | has_weapon(CandyBox2ItemName.NOTHING_WEAPON))
+    rules_package.add_location_rule(CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED, can_fly() | has_weapon(CandyBox2ItemName.NOTHING_WEAPON), CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM)
 
     # The Desert Fortress
-    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_DEFEATED, can_fly() & (has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) | rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS)))
-    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED, can_fly())
-    rules_package.add_location_rule(CandyBox2LocationName.TEAPOT_DEFEATED, weapon_is_at_least(CandyBox2ItemName.SCYTHE) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) & rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & rule_item(CandyBox2ItemName.XINOPHERYDON_CLAW))
-    rules_package.add_location_rule(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED, can_fly() | (rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_jump() & can_cast(CandyBox2Castable.TELEPORT) & (rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) | has_weapon(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))))
+    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_DEFEATED, can_fly() & (has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) | rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS)), CandyBox2Room.QUEST_THE_XINOPHERYDON)
+    rules_package.add_location_rule(CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED, can_fly(), CandyBox2Room.QUEST_THE_XINOPHERYDON)
+    rules_package.add_location_rule(CandyBox2LocationName.TEAPOT_DEFEATED, weapon_is_at_least(CandyBox2ItemName.SCYTHE) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) & rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & rule_item(CandyBox2ItemName.XINOPHERYDON_CLAW), CandyBox2Room.QUEST_THE_TEAPOT)
+    rules_package.add_location_rule(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED, can_fly() | (rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_jump() & can_cast(CandyBox2Castable.TELEPORT) & (rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) | has_weapon(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))), CandyBox2Room.QUEST_THE_TEAPOT)
 
     # Hell rules
-    rules_package.add_location_rule(CandyBox2LocationName.DEVIL_DEFEATED, can_cast(CandyBox2Castable.BLACK_DEMONS) & rule_item(CandyBox2ItemName.UNICORN_HORN) & rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & armor_is_at_least(CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF))
+    rules_package.add_location_rule(CandyBox2LocationName.DEVIL_DEFEATED, can_cast(CandyBox2Castable.BLACK_DEMONS) & rule_item(CandyBox2ItemName.UNICORN_HORN) & rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & armor_is_at_least(CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF), CandyBox2Room.QUEST_HELL)
 
     # Developer rules
-    rules_package.add_location_rule(CandyBox2LocationName.THE_DEVELOPER_DEFEATED, can_farm_candies() & can_cast(CandyBox2Castable.BLACK_HOLE) & can_cast(CandyBox2Castable.TELEPORT))
+    rules_package.add_location_rule(CandyBox2LocationName.THE_DEVELOPER_DEFEATED, can_farm_candies() & can_cast(CandyBox2Castable.BLACK_HOLE) & can_cast(CandyBox2Castable.TELEPORT), CandyBox2Room.QUEST_THE_DEVELOPER)
 
     # The Sea rules
-    rules_package.add_location_rule(CandyBox2LocationName.THE_SPONGE_ACQUIRED, sea_entrance())
-    rules_package.add_location_rule(CandyBox2LocationName.THE_SHELL_POWDER_ACQUIRED, sea_entrance())
-    rules_package.add_location_rule(CandyBox2LocationName.THE_RED_FIN_ACQUIRED, can_beat_sharks() & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS))
-    rules_package.add_location_rule(CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED, can_beat_sharks() & can_cast(CandyBox2Castable.ERASE_MAGIC) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS))
-    rules_package.add_location_rule(CandyBox2LocationName.THE_PURPLE_FIN_ACQUIRED, can_beat_sharks() & rule_item(CandyBox2ItemName.HEART_PENDANT) & rule_item(CandyBox2ItemName.HEART_PLUG) & can_cast(CandyBox2Castable.ERASE_MAGIC) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & rule_item(CandyBox2ItemName.UNICORN_HORN))
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SPONGE_ACQUIRED, sea_entrance(), CandyBox2Room.QUEST_THE_SEA)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_SHELL_POWDER_ACQUIRED, sea_entrance(), CandyBox2Room.QUEST_THE_SEA)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_RED_FIN_ACQUIRED, can_beat_sharks() & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS), CandyBox2Room.QUEST_THE_SEA)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED, can_beat_sharks() & can_cast(CandyBox2Castable.ERASE_MAGIC) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS), CandyBox2Room.QUEST_THE_SEA)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_PURPLE_FIN_ACQUIRED, can_beat_sharks() & rule_item(CandyBox2ItemName.HEART_PENDANT) & rule_item(CandyBox2ItemName.HEART_PLUG) & can_cast(CandyBox2Castable.ERASE_MAGIC) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & rule_item(CandyBox2ItemName.UNICORN_HORN), CandyBox2Room.QUEST_THE_SEA)
 
     # Cyclops Puzzle
-    rules_package.add_location_rule(CandyBox2LocationName.SOLVE_CYCLOPS_PUZZLE, rule_room(CandyBox2Room.DRAGON))
+    rules_package.add_location_rule(CandyBox2LocationName.SOLVE_CYCLOPS_PUZZLE, rule_room(CandyBox2Room.DRAGON), CandyBox2Room.LIGHTHOUSE)
 
     # X Potion
-    rules_package.add_location_rule(CandyBox2LocationName.YOURSELF_DEFEATED, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN))
+    rules_package.add_location_rule(CandyBox2LocationName.YOURSELF_DEFEATED, rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN), CandyBox2Room.QUEST_THE_X_POTION)
 
     # Cooking
-    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_1, has_at_least_chocolates(9))
-    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_2, has_at_least_chocolates(10))
-    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_3, has_at_least_chocolates(11))
-    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4, has_at_least_chocolates(12))
-    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5, has_all_chocolates())
+    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_1, has_at_least_chocolates(9), CandyBox2Room.CASTLE_BAKEHOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_2, has_at_least_chocolates(10), CandyBox2Room.CASTLE_BAKEHOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_3, has_at_least_chocolates(11), CandyBox2Room.CASTLE_BAKEHOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4, has_at_least_chocolates(12), CandyBox2Room.CASTLE_BAKEHOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5, has_all_chocolates(), CandyBox2Room.CASTLE_BAKEHOUSE)
 
     # Sorceress items
-    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE, can_grow_lollipops())
-    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE, can_grow_lollipops())
-    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_HAT, can_farm_lollipops())
-    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_CAULDRON, can_grow_lollipops())
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_HAT, can_farm_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_CAULDRON, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
 
     # Merchant items
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR, can_farm_candies())
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT, can_farm_candies())
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_TOP_LOLLIPOP, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CENTRE_LOLLIPOP, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_BOTTOM_LOLLIPOP, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_TIME_RING, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_LEATHER_BOOTS, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_LEATHER_GLOVES, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR, can_farm_candies(), CandyBox2Room.VILLAGE_SHOP)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT, can_farm_candies(), CandyBox2Room.VILLAGE_SHOP)
 
 def generate_rules_package_room_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_room_rule(CandyBox2Room.SQUIRREL_TREE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1))
@@ -472,3 +517,62 @@ def generate_rules_package_room_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_room_rule(CandyBox2Room.DESERT_FORTRESS, rule_item(CandyBox2ItemName.DESERT_FORTRESS_KEY))
     rules_package.add_room_rule(CandyBox2Room.QUEST_THE_CELLAR, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD))
     rules_package.add_room_rule(CandyBox2Room.QUEST_THE_X_POTION, can_brew(True))
+
+def generate_rules_package_exits(rules_package: CandyBox2RulesPackage):
+    rules_package.assign_room_exits(CandyBox2Room.VILLAGE, [
+        CandyBox2Room.VILLAGE_SHOP,
+        CandyBox2Room.VILLAGE_FORGE,
+        CandyBox2Room.VILLAGE_MINIGAME,
+        CandyBox2Room.VILLAGE_QUEST_HOUSE,
+        CandyBox2Room.VILLAGE_FURNISHED_HOUSE
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.VILLAGE_QUEST_HOUSE, [
+        CandyBox2Room.QUEST_THE_CELLAR
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.WORLD_MAP, [
+        CandyBox2Room.SQUIRREL_TREE,
+        CandyBox2Room.LONELY_HOUSE,
+        CandyBox2Room.DIG_SPOT,
+        CandyBox2Room.QUEST_THE_DESERT,
+        CandyBox2Room.DESERT_FORTRESS,
+        CandyBox2Room.LOLLIPOP_FARM,
+        CandyBox2Room.WISHING_WELL,
+        CandyBox2Room.POGO_STICK_SPOT,
+        CandyBox2Room.QUEST_THE_BRIDGE,
+        CandyBox2Room.SORCERESS_HUT,
+        CandyBox2Room.CAVE,
+        CandyBox2Room.PIER,
+        CandyBox2Room.QUEST_THE_FOREST,
+        CandyBox2Room.HOLE,
+        CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE,
+        CandyBox2Room.CASTLE,
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.DESERT_FORTRESS, [
+        CandyBox2Room.QUEST_THE_LEDGE_ROOM,
+        CandyBox2Room.QUEST_THE_XINOPHERYDON,
+        CandyBox2Room.QUEST_THE_TEAPOT
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.CAVE, [
+        CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD,
+        CandyBox2Room.QUEST_THE_OCTOPUS_KING
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.PIER, [
+        CandyBox2Room.QUEST_THE_SEA,
+        CandyBox2Room.LIGHTHOUSE
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.HOLE, [
+        CandyBox2Room.QUEST_THE_HOLE
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.CASTLE, [
+        CandyBox2Room.CASTLE_DARK_ROOM,
+        CandyBox2Room.CASTLE_BAKEHOUSE,
+        CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM,
+        CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM,
+        CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER,
+        CandyBox2Room.DRAGON,
+        CandyBox2Room.TOWER
+    ])
+    rules_package.assign_room_exits(CandyBox2Room.DRAGON, [
+        CandyBox2Room.QUEST_THE_DEVELOPER,
+        CandyBox2Room.QUEST_HELL
+    ])

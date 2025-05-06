@@ -43,7 +43,11 @@ class CandyBox2Room(StrEnum):
     CASTLE_DARK_ROOM = "CASTLE_DARK_ROOM",
     DRAGON = "DRAGON",
     TOWER = "TOWER",
-    LOLLIPOP_FARM = "LOLLIPOP_FARM"
+    LOLLIPOP_FARM = "LOLLIPOP_FARM",
+
+    # These do not participate in ER
+    VILLAGE = "VILLAGE",
+    WORLD_MAP = "WORLD_MAP"
 
 
 entrance_friendly_names: Dict[CandyBox2Room, str] = {

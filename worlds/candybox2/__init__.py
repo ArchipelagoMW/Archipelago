@@ -5,14 +5,13 @@ from typing import TextIO, Dict
 from BaseClasses import CollectionState, Tutorial, MultiWorld
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
+from .expected_client_version import EXPECTED_CLIENT_VERSION
 from .locations import location_descriptions, locations, CandyBox2LocationName
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
 from .options import CandyBox2Options, candy_box_2_options_groups
 from .regions import create_regions, connect_entrances, can_reach_room
 from .rooms import entrance_friendly_names, CandyBox2Room
 from .rules import CandyBox2RulesPackage, generate_rules_package
-
-EXPECTED_CLIENT_VERSION = "20250430-1+"
 
 class CandyBox2WebWorld(WebWorld):
     tutorials = [Tutorial(
