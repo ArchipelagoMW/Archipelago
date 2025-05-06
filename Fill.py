@@ -426,7 +426,6 @@ class _RestrictiveFillBatcher:
         item at a time when there are multiple players with items remaining to be placed.
         """
 
-        @typing.override
         def _pop_items_to_place(self) -> list[Item]:
             # Pop one item per player that has items remaining.
             # The batch is carefully constructed such that `self.batched_placements_remaining` will reach zero before
@@ -469,7 +468,6 @@ class _RestrictiveFillBatcher:
             self.items_per_player_in_batch = items_per_player_in_batch
             self.next_player_override = next_player_override
 
-        @typing.override
         def _pop_items_to_place(self) -> list[Item]:
             if self.next_player_override is None:
                 # Randomly pick the next player that will have an item placed.
@@ -506,7 +504,6 @@ class _RestrictiveFillBatcher:
 
             return items_to_place
 
-        @typing.override
         def _add_swapped_item_into_batch(self, placed_item: Item, swap_location: Location) -> None:
             super()._add_swapped_item_into_batch(placed_item, swap_location)
             # Update the count of items remaining in the batch for this player.
