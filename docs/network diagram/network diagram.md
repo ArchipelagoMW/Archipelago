@@ -17,14 +17,6 @@ flowchart LR
     end
     CC <-- Integrated --> SC2C
 
-    %% ChecksFinder
-    subgraph ChecksFinder
-        CFC[ChecksFinderClient]
-        CF[ChecksFinder]
-        CFC <--> CF
-    end
-    CC <-- Integrated --> CFC
-
     %% A Link to the Past
     subgraph A Link to the Past
         LTTP[SNES]
