@@ -154,7 +154,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Dos", 447 + treasure_index_offset), #Scope Bit chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Three Amigos Tres", 270 + treasure_index_offset), #Clamshell chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Beneath encampment ledge", 217 + treasure_index_offset), #(310, 116, -68) Money chest
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - On jigsaw mountain", 449 + treasure_index_offset), #(213, 107, 27) Money chest
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - On jigsaw mountain 1", 449 + treasure_index_offset), #(213, 107, 27) Money chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - In cliffs nook south of encampment", 80 + treasure_index_offset), #(307, 113, -22) Clamshell chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Below west Delende entrance", 273 + treasure_index_offset), #(275,108,-28) Clamshell chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Above the eastern beach standing stones", 274 + treasure_index_offset), #(312, 95, 12) Clamshell chest
@@ -163,7 +163,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - East of the river above the beach", 278 + treasure_index_offset), #(281, 98, -3) Clamshell chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Along the eastern beach up the cliffs", 279 + treasure_index_offset), #(302, 101, 4) Clamshell chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Parkour by the island waterfalls", 289 + treasure_index_offset), #(250, 104, -13) Fenix Juice chest
-        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - On jigsaw mountain", 157 + treasure_index_offset), #(218, 107, 23) Headgear chest
+        LocationData("Seaside Cliffs", "Seaside Cliffs Chest - On jigsaw mountain 2", 157 + treasure_index_offset), #(218, 107, 23) Headgear chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - South of encampment on the canyon mountainside", 272 + treasure_index_offset), #(289, 110, -18) Jewel of Defense chest
         LocationData("Seaside Cliffs", "Seaside Cliffs Chest - Downstream of the island waterfalls", 288 + treasure_index_offset), #(250, 98, -4) Tincture chest
         #Seaside Cliffs Beach
