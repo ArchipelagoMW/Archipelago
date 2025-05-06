@@ -15,6 +15,7 @@ ModuleUpdate.update()
 import Utils
 death_link = False
 item_num = 1
+remote_location_ids = []
 
 logger = logging.getLogger("Client")
 
@@ -34,61 +35,51 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     def __init__(self, ctx):
         super().__init__(ctx)
     
+    def _cmd_slot_data(self):
+        """Prints slot data settings for the connected seed"""
+        for key in self.ctx.slot_data.keys():
+            if key not in ["remote_location_ids", "synthesis_item_name_byte_arrays"]:
+                self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
+    
     def _cmd_deathlink(self):
-        """Toggles Deathlink"""
-        global death_link
-        if death_link:
-            death_link = False
-            self.output(f"Death Link turned off")
-        else:
-            death_link = True
-            self.output(f"Death Link turned on")
-    
-    def _cmd_goal(self):
-        """Prints goal setting"""
-        if "goal" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["goal"]))
-        else:
-            self.output("Unknown")
-    
-    def _cmd_eotw_unlock(self):
-        """Prints End of the World Unlock setting"""
-        if "required_reports_door" in self.ctx.slot_data.keys():
-            if self.ctx.slot_data["required_reports_door"] > 13:
-                self.output("Item")
+        """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
+        if "death_link" in self.ctx.slot_data.keys():
+            if self.ctx.slot_data["death_link"] == "toggle":
+                global death_link
+                if death_link:
+                    death_link = False
+                    self.output(f"Death Link turned off")
+                else:
+                    death_link = True
+                    self.output(f"Death Link turned on")
             else:
-                self.output(str(self.ctx.slot_data["required_reports_eotw"]) + " reports")
+                self.output(f"'death_link' is not set to 'toggle' for this seed.")
+                self.output(f"'death_link' = " + str(self.ctx.slot_data["death_link"]))
         else:
-            self.output("Unknown")
+            self.output(f"No 'death_link' in slot_data keys. You probably aren't connected or are playing an older seed.")
     
-    def _cmd_door_unlock(self):
-        """Prints Final Rest Door Unlock setting"""
-        if "door" in self.ctx.slot_data.keys():
-            if self.ctx.slot_data["door"] == "reports":
-                self.output(str(self.ctx.slot_data["required_reports_door"]) + " reports")
-            else:
-                self.output(str(self.ctx.slot_data["door"]))
+    def _cmd_communication_path(self):
+        """Opens a file browser to allow Linux users to manually set their %LOCALAPPDATA% path"""
+        directory = Utils.open_directory("Select %LOCALAPPDATA% dir", "~/.local/share/Steam/steamapps/compatdata/2552430/pfx/drive_c/users/steamuser/AppData/Local")
+        if directory:
+            directory += "/KH1FM"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            self.ctx.game_communication_path = directory
         else:
-            self.output("Unknown")
-    
-    def _cmd_advanced_logic(self):
-        """Prints advanced logic setting"""
-        if "advanced_logic" in self.ctx.slot_data.keys():
-            self.output(str(self.ctx.slot_data["advanced_logic"]))
-        else:
-            self.output("Unknown")
+            self.output(self.ctx.game_communication_path)
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
-    items_handling = 0b111  # full remote
+    items_handling = 0b011  # full remote except start inventory
 
     def __init__(self, server_address, password):
         super(KH1Context, self).__init__(server_address, password)
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
-        self.hinted_synth_location_ids = False
+        self.hinted_location_ids = []
         self.slot_data = {}
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
@@ -103,6 +94,10 @@ class KH1Context(CommonContext):
                     os.remove(root+"/"+file)
 
     async def server_auth(self, password_requested: bool = False):
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
         if password_requested and not self.password:
             await super(KH1Context, self).server_auth(password_requested)
         await self.get_username()
@@ -134,6 +129,7 @@ class KH1Context(CommonContext):
         item_num = 1
 
     def on_package(self, cmd: str, args: dict):
+        global remote_location_ids
         if cmd in {"Connected"}:
             if not os.path.exists(self.game_communication_path):
                 os.makedirs(self.game_communication_path)
@@ -148,15 +144,12 @@ class KH1Context(CommonContext):
                 with open(os.path.join(self.game_communication_path, key + ".cfg"), 'w') as f:
                     f.write(str(args['slot_data'][key]))
                     f.close()
-                    
-            ###Support Legacy Games
-            if "Required Reports" in list(args['slot_data'].keys()) and "required_reports_eotw" not in list(args['slot_data'].keys()):
-                reports_required = args['slot_data']["Required Reports"]
-                with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
-                    f.write(str(reports_required))
-                    f.close()
-            ###End Support Legacy Games
-            
+                if key == "remote_location_ids":
+                    remote_location_ids = args['slot_data'][key]
+                if key == "death_link":
+                    if args['slot_data']["death_link"] != "off":
+                        global death_link
+                        death_link = True
             #End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:
@@ -170,10 +163,11 @@ class KH1Context(CommonContext):
                         if filename == item_filename:
                             found = True
                     if not found:
-                        with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
-                            f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
-                            f.close()
-                            item_num = item_num + 1
+                        if (NetworkItem(*item).player == self.slot and (NetworkItem(*item).location in remote_location_ids) or (NetworkItem(*item).location < 0)) or NetworkItem(*item).player != self.slot:
+                            with open(os.path.join(self.game_communication_path, item_filename), 'w') as f:
+                                f.write(str(NetworkItem(*item).item) + "\n" + str(NetworkItem(*item).location) + "\n" + str(NetworkItem(*item).player))
+                                f.close()
+                                item_num = item_num + 1
 
         if cmd in {"RoomUpdate"}:
             if "checked_locations" in args:
@@ -189,18 +183,59 @@ class KH1Context(CommonContext):
                 recieverID = args["receiving"]
                 senderID = networkItem.player
                 locationID = networkItem.location
-                if recieverID != self.slot and senderID == self.slot:
-                    itemName = self.item_names.lookup_in_slot(networkItem.item, recieverID)
+                if recieverID == self.slot or senderID == self.slot:
+                    itemName = self.item_names.lookup_in_slot(networkItem.item, recieverID)[:20]
                     itemCategory = networkItem.flags
-                    recieverName = self.player_names[recieverID]
-                    filename = "sent"
+                    recieverName = self.player_names[recieverID][:20]
+                    senderName = self.player_names[senderID][:20]
+                    message = ""
+                    if recieverID == self.slot and recieverID != senderID: # Item received from someone else
+                        message = "From " + senderName + "\n" + itemName
+                    elif senderID == self.slot and recieverID != senderID: # Item sent to someone else
+                        message = itemName + "\nTo " + recieverName
+                    elif locationID in remote_location_ids: # Found a remote item
+                        message = itemName
+                    filename = "msg"
+                    if message != "":
+                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                            f.write(message)
+                            f.close()
+        if cmd in {"PrintJSON"} and "type" in args:
+            if args["type"] == "ItemSend":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                senderID = networkItem.player
+                locationID = networkItem.location
+                if recieverID == self.slot or senderID == self.slot:
+                    itemName = self.item_names.lookup_in_slot(networkItem.item, recieverID)[:20]
+                    itemCategory = networkItem.flags
+                    recieverName = self.player_names[recieverID][:20]
+                    senderName = self.player_names[senderID][:20]
+                    message = ""
+                    if recieverID == self.slot and recieverID != senderID: # Item received from someone else
+                        message = "From " + senderName + "\n" + itemName
+                    elif senderID == self.slot and recieverID != senderID: # Item sent to someone else
+                        message = itemName + "\nto " + recieverName
+                    elif locationID in remote_location_ids: # Found a remote item
+                        message = itemName
+                    filename = "msg"
+                    if message != "":
+                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                            f.write(message)
+                            f.close()
+            if args["type"] == "ItemCheat":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                if recieverID == self.slot:
+                    itemName = self.item_names.lookup_in_slot(networkItem.item, recieverID)[:20]
+                    filename = "msg"
+                    message = "Recieved " + itemName + "\nfrom server"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                        f.write(
-                          re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
-                        + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
-                        + str(itemCategory) + "\n"
-                        + str(locationID))
+                        f.write(message)
                         f.close()
+
 
     def on_deathlink(self, data: dict[str, object]):
         self.last_death_link = max(data["time"], self.last_death_link)
@@ -256,14 +291,15 @@ async def game_watcher(ctx: KH1Context):
                     if st != "nil":
                         if timegm(time.strptime(st, '%Y%m%d%H%M%S')) > ctx.last_death_link and int(time.time()) % int(timegm(time.strptime(st, '%Y%m%d%H%M%S'))) < 10:
                             await ctx.send_death(death_text = "Sora was defeated!")
-                if file.find("insynthshop") > -1:
-                    if not ctx.hinted_synth_location_ids:
+                if file.find("hint") > -1:
+                    hint_location_id = int(file.split("hint", -1)[1])
+                    if hint_location_id not in ctx.hinted_location_ids:
                         await ctx.send_msgs([{
                             "cmd": "LocationScouts",
-                            "locations": [2656401,2656402,2656403,2656404,2656405,2656406],
+                            "locations": [hint_location_id],
                             "create_as_hint": 2
                         }])
-                        ctx.hinted_synth_location_ids = True
+                        ctx.hinted_location_ids.append(hint_location_id)
         ctx.locations_checked = sending
         message = [{"cmd": 'LocationChecks', "locations": sending}]
         await ctx.send_msgs(message)
@@ -295,6 +331,6 @@ def launch():
     parser = get_base_parser(description="KH1 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.just_fix_windows_console()
+    colorama.init()
     asyncio.run(main(args))
     colorama.deinit()
