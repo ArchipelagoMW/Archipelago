@@ -8,7 +8,7 @@ from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
     tkinter_center_window, data_to_bps_patch
-from worlds.pokemon_emerald.sprite_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
+from worlds.pokemon_emerald.adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
     extract_sprites, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, validate_ability, \
     validate_pokemon_data_string, validate_move_pool_string, stringify_move_pool, destringify_move_pool, \
     keep_different_pokemon_data, validate_sprite_pack
@@ -23,7 +23,7 @@ isPatchValid = False
 objectFolders = []
 ap_rom = None
 
-GAME_EMERALD = "Pokemon Emerald"
+GAME_EMERALD = 'Pokemon Emerald'
 
 async def main():
     parser = getArgparser()
@@ -57,7 +57,7 @@ def adjustGUI():
     from Utils import __version__ as MWVersion
 
     window = Tk()
-    window.wm_title(f"Archipelago {MWVersion} Emerald Adjuster")
+    window.wm_title(f'Archipelago {MWVersion} Emerald Adjuster')
     setIcon(window)
 
     mainWindowFrame = Frame(window, padx=8, pady=8)
@@ -86,7 +86,7 @@ def adjustGUI():
         else:
             oldPatchFolder = os.path.dirname(opts.patch.get()) if isPatchValid else None
             oldPatchFile = opts.patch.get() if isPatchValid else None
-            patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, filetypes=[("Rom & Patch Files", [".gba", ".apemerald"]), ("All Files", "*")])
+            patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, filetypes=[('Rom & Patch Files', ['.gba', '.apemerald']), ('All Files', '*')])
         opts.patch.set(patch)
 
         isPatchValid = len(patch) > 0 and os.path.exists(patch)
@@ -267,7 +267,7 @@ def adjustGUI():
                     edited_data_string = edited_data_file.read()
                 edited_data_errors, has_edited_data_error = validate_pokemon_data_string(folder, edited_data_string)
                 if has_edited_data_error:
-                    messagebox.showerror(title="Error while loading Pokemon data", message=edited_data_errors)
+                    messagebox.showerror(title='Error while loading Pokemon data', message=edited_data_errors)
                 else:
                     edited_data = destringify_pokemon_data(currentSpriteFolder.get(), edited_data_string)
                     for field in edited_data:
@@ -313,12 +313,12 @@ def adjustGUI():
         for i in range(16):
             palettePreviews[i]['bg'] = '#' + (palette[i] if i < len(palette) else '000000')
 
-    currentSpriteFolder = StringVar(value="--------")
-    currentSprite = StringVar(value="--------")
+    currentSpriteFolder = StringVar(value='--------')
+    currentSprite = StringVar(value='--------')
     folders = []
     sprites = []
 
-    spritePreviewFrame = LabelFrame(mainWindowFrame, text="Sprite Preview", padx=8, pady=8)
+    spritePreviewFrame = LabelFrame(mainWindowFrame, text='Sprite Preview', padx=8, pady=8)
     spritePreviewFrame.grid_rowconfigure(0, weight=1)
     spritePreviewFrame.grid_rowconfigure(1, weight=1)
     spritePreviewFrame.grid_columnconfigure(0, weight=1)
@@ -326,22 +326,22 @@ def adjustGUI():
 
     folderSelectorFrame = Frame(spritePreviewFrame)
     folderSelectorFrame.grid(row=0, column=0, padx=8)
-    folderSelectorLabel = Label(folderSelectorFrame, text="Current Folder")
-    folderSelector = OptionMenu(folderSelectorFrame, currentSpriteFolder, "--------", *folders)
+    folderSelectorLabel = Label(folderSelectorFrame, text='Current Folder')
+    folderSelector = OptionMenu(folderSelectorFrame, currentSpriteFolder, '--------', *folders)
 
     spriteSelectorFrame = Frame(spritePreviewFrame)
     spriteSelectorFrame.grid(row=0, column=1, padx=8)
-    spriteSelectorLabel = Label(spriteSelectorFrame, text="Current Sprite")
-    spriteSelector = OptionMenu(spriteSelectorFrame, currentSprite, "--------", *sprites)
+    spriteSelectorLabel = Label(spriteSelectorFrame, text='Current Sprite')
+    spriteSelector = OptionMenu(spriteSelectorFrame, currentSprite, '--------', *sprites)
 
     spriteFrame = Frame(spritePreviewFrame, padx=2, pady=2)
     spriteFrame.grid(row=1, column=0, padx=8)
-    spriteLabel = Label(spriteFrame, text="Sprite")
+    spriteLabel = Label(spriteFrame, text='Sprite')
     spriteLabelImage = Label(spriteFrame, width=128, height=126)
 
     palettePreviewFrame = Frame(spritePreviewFrame, width=128)
     palettePreviewFrame.grid(row=1, column=1, padx=8)
-    paletteLabel = Label(palettePreviewFrame, text="Palette")
+    paletteLabel = Label(palettePreviewFrame, text='Palette')
     paletteLabel.grid(row=0, column=0, columnspan=4)
     palettePreviews = []
     for i in range(16):
@@ -386,7 +386,7 @@ def adjustGUI():
         if new_data_string:
             with open(data_path, 'w') as data_file:
                 data_file.write(new_data_string)
-        messagebox.showinfo(title="Success", message=f"Data for the Pokemon {pokemon_name} has been successfully saved!")
+        messagebox.showinfo(title='Success', message=f'Data for the Pokemon {pokemon_name} has been successfully saved!')
 
     dataEditionNotebook = Notebook(dataEditionLabelFrame, padding=2)
     dataEditionNotebook.pack(side=TOP)
@@ -453,27 +453,27 @@ def adjustGUI():
 
         statHPFrame = Frame(statFrame, padx=2, pady=2)
         statHPFrame.grid(row=0, column=0)
-        statHPLabel = Label(statHPFrame, text="HP")
+        statHPLabel = Label(statHPFrame, text='HP')
         statHPInput = Entry(statHPFrame, textvariable=pokemonHP, width=7)
         statSPDFrame = Frame(statFrame, padx=2, pady=2)
         statSPDFrame.grid(row=0, column=1)
-        statSPDLabel = Label(statSPDFrame, text="Speed")
+        statSPDLabel = Label(statSPDFrame, text='Speed')
         statSPDInput = Entry(statSPDFrame, textvariable=pokemonSPD, width=7)
         statATKFrame = Frame(statFrame, padx=2, pady=2)
         statATKFrame.grid(row=1, column=0)
-        statATKLabel = Label(statATKFrame, text="Attack")
+        statATKLabel = Label(statATKFrame, text='Attack')
         statATKInput = Entry(statATKFrame, textvariable=pokemonATK, width=7)
         statDEFFrame = Frame(statFrame, padx=2, pady=2)
         statDEFFrame.grid(row=2, column=0)
-        statDEFLabel = Label(statDEFFrame, text="Defense")
+        statDEFLabel = Label(statDEFFrame, text='Defense')
         statDEFInput = Entry(statDEFFrame, textvariable=pokemonDEF, width=7)
         statSPATKFrame = Frame(statFrame, padx=2, pady=2)
         statSPATKFrame.grid(row=1, column=1)
-        statSPATKLabel = Label(statSPATKFrame, text="Sp. Atk.")
+        statSPATKLabel = Label(statSPATKFrame, text='Sp. Atk.')
         statSPATKInput = Entry(statSPATKFrame, textvariable=pokemonSPATK, width=7)
         statSPDEFFrame = Frame(statFrame, padx=2, pady=2)
         statSPDEFFrame.grid(row=2, column=1)
-        statSPDEFLabel = Label(statSPDEFFrame, text="Sp. Def.")
+        statSPDEFLabel = Label(statSPDEFFrame, text='Sp. Def.')
         statSPDEFInput = Entry(statSPDEFFrame, textvariable=pokemonSPDEF, width=7)
 
         statHPLabel.pack(side=TOP)
@@ -512,27 +512,27 @@ def adjustGUI():
 
         type1Frame = Frame(extraDataFrame, padx=2, pady=2)
         type1Frame.grid(row=0, column=0)
-        type1Label = Label(type1Frame, text="Type 1")
+        type1Label = Label(type1Frame, text='Type 1')
         type1Input = OptionMenu(type1Frame, pokemonType1, 'Normal', *POKEMON_TYPES[1:])
         type2Frame = Frame(extraDataFrame, padx=2, pady=2)
         type2Frame.grid(row=1, column=0)
-        type2Label = Label(type2Frame, text="Type 2")
+        type2Label = Label(type2Frame, text='Type 2')
         type2Input = OptionMenu(type2Frame, pokemonType2, 'Normal', *POKEMON_TYPES[1:])
         ability1Frame = Frame(extraDataFrame, padx=2, pady=2)
         ability1Frame.grid(row=0, column=1)
-        ability1Label = Label(ability1Frame, text="Ability 1")
+        ability1Label = Label(ability1Frame, text='Ability 1')
         ability1Input = Entry(ability1Frame, textvariable=pokemonAbility1, width=12)
         ability2Frame = Frame(extraDataFrame, padx=2, pady=2)
         ability2Frame.grid(row=1, column=1)
-        ability2Label = Label(ability2Frame, text="Ability 2")
+        ability2Label = Label(ability2Frame, text='Ability 2')
         ability2Input = Entry(ability2Frame, textvariable=pokemonAbility2, width=12)
         genderFrame = Frame(extraDataFrame, padx=2, pady=2)
         genderFrame.grid(row=2, column=0)
-        genderLabel = Label(genderFrame, text="Gender")
+        genderLabel = Label(genderFrame, text='Gender')
         genderInput = OptionMenu(genderFrame, pokemonGender, '100% M', *list(POKEMON_GENDER_RATIOS.values())[1:])
         forbidFlipFrame = Frame(extraDataFrame, padx=2, pady=2)
         forbidFlipFrame.grid(row=2, column=1)
-        forbidFlipLabel = Label(forbidFlipFrame, text="Forbid Flip")
+        forbidFlipLabel = Label(forbidFlipFrame, text='Forbid Flip')
         forbidFlipInput = Checkbutton(forbidFlipFrame, variable=pokemonForbidFlip)
 
         type1Label.pack(side=TOP)
@@ -555,7 +555,7 @@ def adjustGUI():
         movePoolFrame = Frame(spritePreviewFrame)
         dataEditionNotebook.add(movePoolFrame, text='Move Pool')
 
-        movePoolLabel = Label(movePoolFrame, text="Move Pool")
+        movePoolLabel = Label(movePoolFrame, text='Move Pool')
         movePoolInput = ScrolledText(movePoolFrame, undo=True, width=24, height=10)
 
         def checkMovePool(entry, label, validField):
@@ -594,16 +594,16 @@ def adjustGUI():
             path = adjust(guiargs)
         except Exception as e:
             logging.exception(e)
-            messagebox.showerror(title="Error while adjusting Rom", message=str(e))
+            messagebox.showerror(title='Error while adjusting Rom', message=str(e))
         else:
-            messagebox.showinfo(title="Success", message=f"Rom patched successfully to {path}")
+            messagebox.showinfo(title='Success', message=f'Rom patched successfully to {path}')
 
     def saveGUISettings():
         guiargs = Namespace()
         guiargs.patch = opts.patch.get()
         guiargs.sprite_pack = opts.sprite_pack.get()
-        persistent_store("adjuster", GAME_EMERALD, guiargs)
-        messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
+        persistent_store('adjuster', GAME_EMERALD, guiargs)
+        messagebox.showinfo(title='Success', message='Settings saved to persistent storage')
 
     # Adjust button
     bottomFrame = Frame(mainWindowFrame)

@@ -25,8 +25,8 @@ def get_patch_from_sprite_pack(_sprite_pack_path, _rom):
 
     global sprite_pack_data, resource_address_to_insert_to
     # Build patch data, fetch end of file
-    sprite_pack_data = { "length": 16777216, "data": [] }
-    resource_address_to_insert_to = ((data_addresses["sEmpty6"] >> 12) + 1) << 12 # Should be E3D000
+    sprite_pack_data = { 'length': 16777216, 'data': [] }
+    resource_address_to_insert_to = ((data_addresses['sEmpty6'] >> 12) + 1) << 12 # Should be E3D000
 
     # Handle existing Trainer & Pokemon folders
     add_sprite_pack_object_collection(_sprite_pack_path, TRAINER_FOLDERS, TRAINER_SPRITES, TRAINER_PALETTES, False)
@@ -90,29 +90,29 @@ def add_sprite_pack_object_collection(_sprite_pack_path, _folders_list, _sprites
 
 def add_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path):
     # Adds a sprite to the patch
-    sprite_key = ("pokemon_" if _is_pokemon else "trainer_") + _sprite_name
+    sprite_key = ('pokemon_' if _is_pokemon else 'trainer_') + _sprite_name
     data_address = get_address_from_address_collection(_object_name, sprite_key, _sprite_name)
 
     if _is_pokemon and _sprite_name == 'icon' and _extra_data:
         # Pokemon palette indexed icon: Switch the palette to use if it's forced within the file's name
         palette_index = int(_extra_data[0])
         icon_index_address = get_address_from_address_collection(_object_name, sprite_key + '_index', _sprite_name)
-        add_data_to_patch({ "address": icon_index_address, "length": 1, "data": palette_index.to_bytes(1, 'little')})
+        add_data_to_patch({ 'address': icon_index_address, 'length': 1, 'data': palette_index.to_bytes(1, 'little')})
 
     if is_complex_sprite(sprite_key):
         data_address = replace_complex_sprite(data_address, sprite_key, _object_name, _extra_data)
 
-    if sprite_key != "trainer_battle_back":
+    if sprite_key != 'trainer_battle_back':
         add_resource(False, sprite_key, _sprite_name, data_address, _path)
     else:
         # In case of Trainer battle back sprite, rerun this function to fill in the ball throwing animation table
         address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
-        add_data_to_patch({ "address": data_address, "length": 3, "data": address_bytes })
-        add_sprite(_is_pokemon, _object_name, _sprite_name + "_throw", _extra_data, _path)
+        add_data_to_patch({ 'address': data_address, 'length': 3, 'data': address_bytes })
+        add_sprite(_is_pokemon, _object_name, _sprite_name + '_throw', _extra_data, _path)
 
 def add_palette(_is_pokemon, _object_name, _palette_name, _path):
     # Adds a palette to the patch
-    palette_key = ("pokemon" if _is_pokemon else "trainer") + "_" + _palette_name
+    palette_key = ('pokemon' if _is_pokemon else 'trainer') + '_' + _palette_name
     data_address = get_address_from_address_collection(_object_name, palette_key, _palette_name)
     add_resource(True, palette_key, _palette_name, data_address, _path)
 
@@ -120,7 +120,7 @@ def add_resource(_is_palette, _key, _name, _data_address, _path):
     # Adds a resource (sprite or palette) to the patch
     global resource_address_to_insert_to
     address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
-    add_data_to_patch({ "address": _data_address, "length": 3, "data": address_bytes })
+    add_data_to_patch({ 'address': _data_address, 'length': 3, 'data': address_bytes })
     
     needs_compression = OBJECT_NEEDS_COMPRESSION.get(_key, False)
     if _is_palette:
@@ -128,10 +128,10 @@ def add_resource(_is_palette, _key, _name, _data_address, _path):
     else:
         _path = handle_sprite_to_gba_sprite(_path, needs_compression)
     
-    file = open(_path, "rb")
+    file = open(_path, 'rb')
     file_data = file.read()
 
-    add_data_to_patch({ "address": resource_address_to_insert_to, "length": len(file_data), "data": file_data })
+    add_data_to_patch({ 'address': resource_address_to_insert_to, 'length': len(file_data), 'data': file_data })
     resource_address_to_insert_to = resource_address_to_insert_to + len(file_data)
     if resource_address_to_insert_to > 0xFFFFFF:
         # Out of bounds: Too much data to add
@@ -147,7 +147,7 @@ def add_pokemon_data(_pokemon_name, _data_path):
     pokemon_data = merge_pokemon_data(old_pokemon_data, new_pokemon_data, True)
     pokemon_data_bytes = encode_pokemon_data(pokemon_data)
     data_address_stats = get_address_from_address_collection(_pokemon_name, 'pokemon_stats', 'stats')
-    add_data_to_patch({ "address": data_address_stats, "length": 28, "data": pokemon_data_bytes })
+    add_data_to_patch({ 'address': data_address_stats, 'length': 28, 'data': pokemon_data_bytes })
 
     if 'move_pool' in new_pokemon_data:
         # Add a new move pool table and replace the pointer to it
@@ -155,8 +155,8 @@ def add_pokemon_data(_pokemon_name, _data_path):
         global resource_address_to_insert_to
         new_resource_address_bytes = (resource_address_to_insert_to + 2).to_bytes(3, 'little')
         data_pointer_move_pool = get_address_from_address_collection(_pokemon_name, 'pokemon_move_pool', 'move_pool')
-        add_data_to_patch({ "address": data_pointer_move_pool, "length": 3, "data": new_resource_address_bytes })
-        add_data_to_patch({ "address": resource_address_to_insert_to, "length": len(pokemon_move_pool_bytes), "data": pokemon_move_pool_bytes })
+        add_data_to_patch({ 'address': data_pointer_move_pool, 'length': 3, 'data': new_resource_address_bytes })
+        add_data_to_patch({ 'address': resource_address_to_insert_to, 'length': len(pokemon_move_pool_bytes), 'data': pokemon_move_pool_bytes })
         resource_address_to_insert_to = resource_address_to_insert_to + len(pokemon_move_pool_bytes)
         if resource_address_to_insert_to > 0xFFFFFF:
             # Out of bounds: Too much data to add
@@ -166,15 +166,15 @@ def add_data_to_patch(_data):
     # Adds the given data to the patch
     index = 0
     # Order entries by ascending starting address
-    for existing_data in sprite_pack_data["data"]:
-        if existing_data["address"] < _data["address"]:
+    for existing_data in sprite_pack_data['data']:
+        if existing_data['address'] < _data['address']:
             index = index + 1
-        elif existing_data["address"] == _data["address"]:
+        elif existing_data['address'] == _data['address']:
             # Do not duplicate values
             return
         else:
             break
-    sprite_pack_data["data"].insert(index, _data)
+    sprite_pack_data['data'].insert(index, _data)
 
 def call_gbagfx(_input, _output, _delete_input = False):
     # Calls the sprite processing C app
@@ -189,7 +189,7 @@ def call_gbagfx(_input, _output, _delete_input = False):
 def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data):
     # Replaces a complex sprite's sprite data and update its other fields if needed
     sprite_size_data = None
-    if _sprite_key == "trainer_battle_back_throw":
+    if _sprite_key == 'trainer_battle_back_throw':
         # Trainer back sprites need further pointer seeking
         info_object_address = _data_address
         _data_address = int.from_bytes(bytes(current_rom[_data_address + 12:_data_address + 15]), 'little')
@@ -223,7 +223,7 @@ def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data
         output_data.extend(sprite_size.to_bytes(2, 'little'))
         output_data.extend(b'\x00\x00')
         temp_address += sprite_size
-    add_data_to_patch({"address": _data_address, "length": len(output_data), "data": bytes(output_data)})
+    add_data_to_patch({'address': _data_address, 'length': len(output_data), 'data': bytes(output_data)})
     
     if is_overworld_sprite(_sprite_key) and sprite_size_data:
         # If custom size given, update overworld sprite data
@@ -391,7 +391,7 @@ def extract_palette(_object_name, _sprite_name, _is_pokemon):
 def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression) -> str:
     # Transforms indexed/grayscale PNG sprites into GBA sprites
     sprite_path_with_no_extension = str(os.path.splitext(_sprite_path)[0])
-    file_format = ".1bpp" if sprite_path_with_no_extension.endswith("footprint") else ".4bpp"
+    file_format = '.1bpp' if sprite_path_with_no_extension.endswith('footprint') else '.4bpp'
     gba_sprite_path = sprite_path_with_no_extension + file_format
     call_gbagfx(_sprite_path, gba_sprite_path, False)
     if not _needs_compression:
@@ -399,7 +399,7 @@ def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression) -> str:
         return gba_sprite_path
     else:
         # Compresses sprite if needed
-        compressed_gba_sprite_path = gba_sprite_path + ".lz"
+        compressed_gba_sprite_path = gba_sprite_path + '.lz'
         call_gbagfx(gba_sprite_path, compressed_gba_sprite_path, True)
         files_to_clean_up.append(compressed_gba_sprite_path)
         return compressed_gba_sprite_path
@@ -407,9 +407,9 @@ def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression) -> str:
 def handle_gba_sprite_to_sprite(_gba_sprite_path, _needs_compression) -> str:
     # Transforms GBA sprite into indexed/grayscale PNG sprites
     _gba_sprite_path_with_no_extension = str(os.path.splitext(_gba_sprite_path)[0])
-    file_format = ".1bpp" if _gba_sprite_path_with_no_extension.endswith("footprint") else ".4bpp"
+    file_format = '.1bpp' if _gba_sprite_path_with_no_extension.endswith('footprint') else '.4bpp'
     decompressed_gba_sprite_path = _gba_sprite_path_with_no_extension + file_format
-    sprite_path = _gba_sprite_path_with_no_extension + ".png"
+    sprite_path = _gba_sprite_path_with_no_extension + '.png'
     if _needs_compression:
         # Decompresses sprite if needed
         call_gbagfx(_gba_sprite_path, decompressed_gba_sprite_path, True)
@@ -420,8 +420,8 @@ def handle_sprite_to_palette(_sprite_path, _palette_name, _needs_compression) ->
     # Transforms indexed/grayscale PNG sprites into GBA palettes
     sprite_path_with_no_extension = str(os.path.splitext(_sprite_path)[0])
     palette_path_with_no_extension = os.path.join(os.path.dirname(sprite_path_with_no_extension), _palette_name)
-    palette_path = sprite_path_with_no_extension + ".pal"
-    gba_palette_path = palette_path_with_no_extension + ".gbapal"
+    palette_path = sprite_path_with_no_extension + '.pal'
+    gba_palette_path = palette_path_with_no_extension + '.gbapal'
     call_gbagfx(_sprite_path, palette_path, False)
     call_gbagfx(palette_path, gba_palette_path, True)
     if not _needs_compression:
@@ -429,7 +429,7 @@ def handle_sprite_to_palette(_sprite_path, _palette_name, _needs_compression) ->
         return gba_palette_path
     else:
         # Compress palette if needed
-        compressed_gba_palette_path = gba_palette_path + ".lz"
+        compressed_gba_palette_path = gba_palette_path + '.lz'
         call_gbagfx(gba_palette_path, compressed_gba_palette_path, True)
         files_to_clean_up.append(compressed_gba_palette_path)
         return str(compressed_gba_palette_path)
@@ -442,7 +442,7 @@ def validate_sprite_pack(_sprite_pack_path, _rom):
     # Validates an entire sprite pack to see if it can be applied to the given ROM
     handle_address_collection(_rom)
 
-    errors = ""
+    errors = ''
     has_error = False
     def add_error(_error, _is_error = False):
         nonlocal errors, has_error
@@ -456,7 +456,7 @@ def validate_sprite_pack(_sprite_pack_path, _rom):
 
 def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, _palette_lists):
     # Validates all pokemon or all trainers if a folder including their name can be found
-    errors = ""
+    errors = ''
     has_error = False
     def add_error(_error, _is_error = False, _processed = False):
         nonlocal errors, has_error
@@ -498,7 +498,7 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
 
 def validate_sprite(_object_name, _sprite_name, _extra_data, _path):
     # Validates a given sprite using metrics registered in the sprite requirements table
-    errors = ""
+    errors = ''
     has_error = False
     def add_error(_error, _is_error = False):
         nonlocal errors, has_error
@@ -507,7 +507,7 @@ def validate_sprite(_object_name, _sprite_name, _extra_data, _path):
             errors += ('\n' if errors else '') + ('Error: ' if _is_error else 'Warning: ') + _error
 
     is_pokemon = _object_name in POKEMON_FOLDERS
-    sprite_key = ("pokemon_" if is_pokemon else "trainer_") + _sprite_name
+    sprite_key = ('pokemon_' if is_pokemon else 'trainer_') + _sprite_name
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
     sprite_image = Image.open(_path)
@@ -572,7 +572,7 @@ def is_palette_valid(_palette, _palette_model):
 
 def validate_pokemon_data_string(_pokemon_name, _data_string):
     # Validates given Pokemon data, making sure that all fields are valid
-    errors = ""
+    errors = ''
     has_error = False
     def add_error(_error, _is_error = False, _processed = False):
         nonlocal errors, has_error
@@ -629,7 +629,7 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
         elif field_name == 'dex':
             # Data must either be a 0 (allowed) or a 1 (forbidden)
             if not field_value in [ 0, 1, 'True', 'False' ]:
-                add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
+                add_error('{}\'s forbid_flip value is invalid: \'{}\'.'.format(_pokemon_name, field_value), True)
         elif field_name == 'move_pool':
             # Data must be a valid move pool table string
             if len(field_value) < 4:
@@ -644,7 +644,7 @@ def validate_ability(_ability):
 
 def validate_move_pool_string(_pokemon_name, _move_pool):
     # Validates a move pool given as a string
-    errors = ""
+    errors = ''
     has_error = False
     def add_error(_error, _is_error = False):
         nonlocal errors, has_error
@@ -872,9 +872,9 @@ def stringify_pokemon_data(_data):
         elif field_name == 'gender_ratio':
             field_value = POKEMON_GENDER_RATIOS[field_value]
         elif field_name == 'dex':
-            # The dex value is stored as a boolean named 'forbidFlip' for clarity
+            # The dex value is stored as a boolean named 'forbid_flip' for clarity
             field_value = 'True' if field_value & 0x80 else 'False'
-            field_name = 'forbidFlip'
+            field_name = 'forbid_flip'
         elif field_name == 'move_pool':
             field_value = '[ ' + stringify_move_pool(field_value).replace('\n', ', ') + ' ]'
         result += '{}: {}\n'.format(field_name, field_value)
@@ -895,8 +895,8 @@ def destringify_pokemon_data(_pokemon_name, _data_string, _safe_mode = False):
             field_value = field_value if _safe_mode else POKEMON_ABILITIES.index(field_value.upper())
         elif field_name == 'gender_ratio':
             field_value = field_value if _safe_mode else REVERSE_POKEMON_GENDER_RATIOS[field_value]
-        elif field_name == 'forbidFlip':
-            # The dex value is stored as a boolean named 'forbidFlip' for clarity
+        elif field_name == 'forbid_flip':
+            # The dex value is stored as a boolean named 'forbid_flip' for clarity
             field_value = field_value if _safe_mode else (1 if field_value == 'True' else 0)
             field_name = 'dex'
         elif field_name == 'move_pool':
@@ -1000,12 +1000,12 @@ def get_address_from_address_collection(_object_name, _resource_key, _resource_n
         data_address = INTERNAL_ID_TO_OBJECT_ADDRESS[_resource_key](data_addresses, pokemon_internal_id)
     else:
         # Fetches named Trainer resource address
-        named_key = _object_name.lower() + "_" + _resource_name
+        named_key = _object_name.lower() + '_' + _resource_name
         data_address = INTERNAL_ID_TO_OBJECT_ADDRESS[named_key](data_addresses)
     return data_address
 
 def get_overworld_sprite_addresses(_object_name, _resource_name):
-    named_key = _object_name.lower() + "_" + _resource_name
+    named_key = _object_name.lower() + '_' + _resource_name
     return OVERWORLD_SPRITE_ADDRESSES[named_key](data_addresses)
 
 def handle_overworld_custom_size(_extra_data):
@@ -1036,7 +1036,7 @@ def set_overworld_sprite_data(_data_address, _key, _value:int):
         raise Exception('Could not set the value {} from an overworld sprite\'s data.'.format(_key))
     starting_address = _data_address + value_data.get('shift')
     size = value_data.get('size')
-    add_data_to_patch({ "address": starting_address, "length": size, "data": _value.to_bytes(size, 'little')})
+    add_data_to_patch({ 'address': starting_address, 'length': size, 'data': _value.to_bytes(size, 'little')})
 
 def get_sprite_requirements(_sprite_key, _object_name):
     # Returns the requirements of a given sprite for a given pokemon or trainer
@@ -1062,7 +1062,7 @@ def handle_address_collection(_rom, _display_message = False):
     global data_addresses
     if zlib.crc32(_rom) == ORIGINAL_ROM_CRC32:
         if _display_message:
-            print("Original Emerald ROM detected! Loading its address dictionary...")
+            print('Original Emerald ROM detected! Loading its address dictionary...')
         data_addresses = DATA_ADDRESSES_ORIGINAL
     else:
         data_addresses = DATA_ADDRESSES_MOCK_AP
