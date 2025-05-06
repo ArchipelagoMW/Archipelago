@@ -85,3 +85,14 @@ Common situations where this can happen include:
   Also, consider using the `options.as_dict("option_name", "option_two")` helper.
 * Using enums as Location/Item names in the datapackage. When building out `location_name_to_id` and `item_name_to_id`,
   make sure that you are not using your enum class for either the names or ids in these mappings.
+
+---
+
+### What if my game has "missable" or "one-time-only" locations or region connections?
+
+Archipelago logic assumes that once a region or location becomes reachable, it stays reachable forever. Slightly more formally: Receiving an AP item must never cause a region connection or location to "go out of logic" (become unreachable when it was previously reachable), and receiving AP items is the only kind of state change that AP logic acknowledges; nothing else is allowed to change reachability.
+
+So when a game violates this assumption, the options are:
+- Don't include that location/connection in logic
+- Mod the game to make that location/connection repeatable
+- Decide that resetting the save file is part of the game's logic, and warn players about that
