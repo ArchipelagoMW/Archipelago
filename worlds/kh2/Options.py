@@ -46,7 +46,9 @@ class WisdomEXP(Range):
 
 
 class ValorEXP(Range):
-    """Valor Form Exp Multiplier"""
+    """Valor Form Exp Multiplier
+
+    If Multiplier is greater than 1 then required hits to level Valor Form can never be greater than 120 hits."""
     display_name = "Valor Form EXP"
     range_start = 1
     range_end = 10
