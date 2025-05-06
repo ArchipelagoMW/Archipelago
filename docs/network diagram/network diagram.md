@@ -140,6 +140,16 @@ flowchart LR
     end
     AS <-- WebSockets --> NM
 
+    %% Godot Based Games
+    subgraph Godot
+        GT[Game using GodotAP project]
+        ASU[APSudoku]
+        CF[ChecksFinder]
+        GT <--> ASU
+        GT <--> CF
+    end
+    AS <-- WebSockets --> GT
+
     %% Archipelago WebHost
     subgraph "WebHost (archipelago.gg)"
         WHNOTE(["Configurable (waitress, gunicorn, flask)"])
