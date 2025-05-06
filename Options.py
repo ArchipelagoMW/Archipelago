@@ -1292,42 +1292,47 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self,
-                *option_names: str,
-                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
-                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
+    def as_dict(
+            self,
+            *option_names: str,
+            casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+            toggles_as_bools: bool = False,
+    ) -> dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
-        :param option_names: names of the options to return
-        :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
-        :param toggles_as_bools: whether toggle options should be output as bools instead of strings
+        :param option_names: Names of the options to get the values of.
+        :param casing: Casing of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`.
+        :param toggles_as_bools: Whether toggle options should be returned as bools instead of ints.
+
+        :return: A dictionary of each option name to the value of its Option. If the option is an OptionSet, the value
+        will be returned as a sorted list.
         """
         assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
-            if option_name in type(self).type_hints:
-                if casing == "snake":
-                    display_name = option_name
-                elif casing == "camel":
-                    split_name = [name.title() for name in option_name.split("_")]
-                    split_name[0] = split_name[0].lower()
-                    display_name = "".join(split_name)
-                elif casing == "pascal":
-                    display_name = "".join([name.title() for name in option_name.split("_")])
-                elif casing == "kebab":
-                    display_name = option_name.replace("_", "-")
-                else:
-                    raise ValueError(f"{casing} is invalid casing for as_dict. "
-                                     "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
-                value = getattr(self, option_name).value
-                if isinstance(value, set):
-                    value = sorted(value)
-                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
-                    value = bool(value)
-                option_results[display_name] = value
-            else:
+            if option_name not in type(self).type_hints:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
+
+            if casing == "snake":
+                display_name = option_name
+            elif casing == "camel":
+                split_name = [name.title() for name in option_name.split("_")]
+                split_name[0] = split_name[0].lower()
+                display_name = "".join(split_name)
+            elif casing == "pascal":
+                display_name = "".join([name.title() for name in option_name.split("_")])
+            elif casing == "kebab":
+                display_name = option_name.replace("_", "-")
+            else:
+                raise ValueError(f"{casing} is invalid casing for as_dict. "
+                                 "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
+            value = getattr(self, option_name).value
+            if isinstance(value, set):
+                value = sorted(value)
+            elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                value = bool(value)
+            option_results[display_name] = value
         return option_results
 
 
