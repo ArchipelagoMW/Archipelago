@@ -104,7 +104,12 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+            meta["error"] = (e.__class__.__name__ + ": " + str(e))
+            if e.__cause__:
+                cause = e.__cause__
+                meta["source"] = cause.__class__.__name__ + ": " + str(cause)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         return redirect(url_for("view_seed", seed=seed_id))
 
