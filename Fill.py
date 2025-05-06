@@ -130,10 +130,14 @@ class _RestrictiveFillBatcher:
 
         # An exploration state containing the items reachable starting from `batch_base_state`.
         # Maximum exploration states and some swap states will be swept from `_partial_exploration_state`.
+        # Swaps may cause the partial exploration state to become invalid, which the batch accounts for when sweeping
+        # new states from it, but the partial exploration state would otherwise be invalid to use in isolation, so it is
+        # not exposed as a public attribute.
         _partial_exploration_state: CollectionState | None
 
-        # When an item is swapped from an existing placement into the current batch, the _partial_exploration_state must
-        # be destroyed and re-created once it is time to place the swapped item.
+        # When an item is swapped from an existing placement, that _partial_exploration_state has already collected
+        # from, into the current batch, the _partial_exploration_state must be destroyed and re-created once it is time
+        # to place the swapped item.
         # The set tracks the unique object identifiers of swapped items because Item implements __eq__, so a set[Item]
         # would not be usable here.
         # The list tracks the Item instances, whose unique object identifiers must be in the set.
