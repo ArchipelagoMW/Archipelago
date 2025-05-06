@@ -8,7 +8,8 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 ### My game has a restrictive start that leads to fill errors
 
-A "restrictive start" here means having a combination of very few sphere 1 locations and potentially requiring multiple items to get a player to sphere 2.
+A "restrictive start" here means having a combination of very few sphere 1 locations and potentially requiring more
+than one item to get a player to sphere 2.
 
 One way to fix this is to hint to the Generator that an item needs to be in sphere one with local_early_items. 
 Here, `1` represents the number of "Sword" items the Generator will attempt to place in sphere one.
