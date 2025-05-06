@@ -462,6 +462,8 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
             if not component:
                 logging.warning(f"Could not identify Component responsible for {path}")
         else:
+            args["args"] = (path, *args.get("args", ()))
+            # add the url arg to the passthrough args
             components, text_client_component = handle_uri(path)
             if not components:
                 args['component'] = text_client_component
@@ -475,11 +477,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        if "launch_components" in args:
-            passthrough_args = (path, *args.get("args", ()))
-            run_gui(args['launch_components'], passthrough_args)
-        else:
-            run_gui(None, args.get("args", ()))
+        run_gui(args.get('launch_components', None), args.get("args", ()))
 
 
 if __name__ == '__main__':
