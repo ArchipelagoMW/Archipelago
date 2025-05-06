@@ -29,9 +29,8 @@ In an ideal situation your system for producing locations and items wouldn't lea
 unbalanced. But in real, complex situations, that might be unfeasible.
 
 If that's the case, you can create extra filler based on the difference between your unfilled locations and your
-itempool by comparing [get_unfilled_locations]
-(https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#:~:text=get_unfilled_locations) to your list of
-items to submit
+itempool by comparing [get_unfilled_locations](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#:~:text=get_unfilled_locations)
+to your list of items to submit
 
 Note: to use self.create_filler(), self.get_filler_item_name() should be defined to only return valid filler item names
 ```py
@@ -44,16 +43,15 @@ for _ in range(total_locations - len(item_pool)):
 self.multiworld.itempool += item_pool
 ```
 
-A faster alternative to the `for` loop would be to use a [list comprehension]
-(https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
+A faster alternative to the `for` loop would be to use a
+[list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
 ```py
 item_pool += [self.create_filler() for _ in range(total_locations - len(item_pool))]
 ```
 
 ---
 
-### I learned about indirect conditions in the world API document, but I want to know more.
-    What are they and why are they necessary?
+### I learned about indirect conditions in the world API document, but I want to know more. What are they and why are they necessary?
 
 The world API document mentions how to use `multiworld.register_indirect_condition` to register indirect conditions and
 **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is
