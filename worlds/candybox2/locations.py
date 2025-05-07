@@ -310,6 +310,10 @@ village_minigame_locations = {
 
 }
 
+hole_entrance_locations = {
+
+}
+
 locations: dict[CandyBox2LocationName, int] = {
     **candy_box_locations,
     **village_locations,

@@ -227,7 +227,7 @@ class CandyBox2RulesPackage(JSONEncoder):
 
     def apply_rules(self, world: "CandyBox2World", player: int):
         for target, rule in self.location_rules.items():
-            add_rule(world.get_location(target), lambda state: rule.evaluate(world, state, player))
+            add_rule(world.get_location(target), lambda state: True if rule is None else rule.evaluate(world, state, player))
 
 weapons = [
     CandyBox2ItemName.NOTHING_WEAPON,
@@ -384,9 +384,9 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     # TODO: Forge locations should depend on previous forge location where applicable
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE, can_farm_candies() & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 3) & rule_room(CandyBox2Room.DRAGON), CandyBox2Room.VILLAGE_FORGE)
 
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
-    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG, no_conditions(), CandyBox2Room.VILLAGE_FURNISHED_HOUSE)
 
     # Cellar rules
     rules_package.add_location_rule(CandyBox2LocationName.CELLAR_QUEST_CLEARED, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD), CandyBox2Room.QUEST_THE_CELLAR)

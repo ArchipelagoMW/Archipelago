@@ -4,7 +4,8 @@ from typing import Callable, Optional, TYPE_CHECKING
 from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .items import CandyBox2ItemName, items, candy_box_2_base_id
-from .locations import candy_box_locations, CandyBox2Location, CandyBox2LocationName, village_shop_locations, village_house_1_locations, \
+from .locations import candy_box_locations, CandyBox2Location, CandyBox2LocationName, village_shop_locations, \
+    village_house_1_locations, \
     village_locations, village_cellar_locations, map_stage_1_locations, map_stage_2_locations, map_stage_7_locations, \
     map_stage_6_locations, map_stage_5_locations, map_stage_4_locations, map_stage_3_locations, desert_locations, \
     bridge_locations, cave_locations, forest_locations, castle_entrance_locations, giant_nougat_monster_locations, \
@@ -14,7 +15,7 @@ from .locations import candy_box_locations, CandyBox2Location, CandyBox2Location
     desert_fortress_locations, teapot_quest_locations, xinopherydon_quest_locations, ledge_room_quest_locations, \
     castle_trap_room_locations, squirrel_tree_locations, the_sea_locations, lonely_house_locations, dig_spot_locations, \
     yourself_fight_locations, castle_dark_room_locations, castle_bakehouse_locations, pogo_stick_spot_locations, \
-    pier_locations, lollipop_farm_locations, forge_locations, village_minigame_locations
+    pier_locations, lollipop_farm_locations, forge_locations, village_minigame_locations, hole_entrance_locations
 from .rooms import CandyBox2Room, quests, x_quest, rooms, entrance_friendly_names, lollipop_farm
 from .rules import weapon_strength, weapons
 
@@ -171,9 +172,11 @@ def create_regions(world: "CandyBox2World"):
     # The Forest
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_FOREST, player, multiworld), forest_locations, world_map_4)
 
+    hole_entrance = populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.HOLE, player, multiworld), hole_entrance_locations, world_map_5)
+    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_HOLE, player, multiworld), hole_locations, hole_entrance)
+
     # The Castle
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE, player, multiworld), castle_entrance_locations, world_map_5)
-    populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_HOLE, player, multiworld), hole_locations, world_map_5)
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER, player, multiworld), giant_nougat_monster_locations, castle)
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM, player, multiworld), castle_trap_room_locations, castle)
     populate_region(world, player, CandyBox2RoomRegion(CandyBox2Room.CASTLE_DARK_ROOM, player, multiworld), castle_dark_room_locations, castle)
