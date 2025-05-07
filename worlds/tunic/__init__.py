@@ -120,7 +120,6 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
-    ut_player: int = -1
 
     def generate_early(self) -> None:
         try:
@@ -719,7 +718,7 @@ class TunicWorld(World):
     tracker_world = {
         "map_page_maps": ["maps/maps_pop.json"],
         "map_page_locations": ["locations/locations_pop_er.json"],
-        "map_page_setting_key": f"Slot:{ut_player}:Current Map",
+        "map_page_setting_key": "Slot:{player}:Current Map",
         "map_page_index": ut_stuff.map_page_index,
         "external_pack_key": "ut_poptracker_path",
         "poptracker_name_mapping": ut_stuff.poptracker_data
