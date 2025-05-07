@@ -519,7 +519,7 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Helm": ItemData("Equipment", 261 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Guts Busby": ItemData("Equipment", 308 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Raid Helm": ItemData("Equipment", 471 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Spellsword Helm": ItemData("Equipment", 292 + equipment_index_offset, ItemClassification.useful), #Tier 4, Sequoia Athenaeum, Expert Zones
+    "Equipment - Spellsword Helm": ItemData("Equipment", 292 + equipment_index_offset, ItemClassification.useful), #Tier 5, Sequoia Athenaeum, Expert Zones
     #"Equipment - Diamond Helm": ItemData("Equipment", 236 + equipment_index_offset, ItemClassification.useful),
 
     #Heavy Body
