@@ -174,9 +174,11 @@ class Group:
                 for cls in candidates:
                     assert isinstance(cls, type), f"{self.__class__.__name__}.{k}: type {cls} not supported in settings"
                     if hasattr(cls, "validate_input"):
+                        # Trust the class to validate and handle the input itself
                         cls.validate_input(v)
-                        setattr(self, k, v)
+                        setattr(self, k, cls.__call__(v))
                         break
+
                     if v is None and cls is none_type:
                         # assign None, i.e. from Optional
                         setattr(self, k, v)
