@@ -861,7 +861,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Undercity", "The Undercity NPC - Gold hiding from the bats under the awning", 2835 + npc_index_offset), #Dust
         LocationData("The Undercity", "The Undercity NPC - Gated-off room Gold", 2825 + npc_index_offset), #Ore
         LocationData("The Undercity", "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)), #Dust
-        LocationData("The Undercity", "The Undercity NPC - Storage room Gold of the Undercity Inns", 1696 + npc_index_offset), #Ingot
+        LocationData("The Undercity", "The Undercity NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset), #Ingot
 
         #Crystals
         LocationData("The Undercity", "The Undercity Crystal - Assassin", 1204 + crystal_index_offset),
