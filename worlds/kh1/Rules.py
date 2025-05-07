@@ -49,7 +49,7 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
         "Progressive Aero": level,
         "Progressive Stop": level}, player)
 
-def has_offensive_magic(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
+def has_offensive_magic(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
         state.has_any({"Progressive Fire", "Progressive Blizzard"}, player)
         or (logic_difficulty > 5 and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
@@ -85,14 +85,14 @@ def can_dumbo_skip(state: CollectionState, player: int) -> bool:
             and state.has_group("Magic", player)
         )
 
-def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
+def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Progressive Fire", player)
             or (logic_difficulty and state.has("High Jump", player, 2))
             or (logic_difficulty and state.has("High Jump", player) and state.has("Progressive Glide", player))
         )
 
-def has_item_workshop(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
+def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Green Trinity", player)
             or (logic_difficulty == 5 and state.has("High Jump", player, 3))
@@ -672,7 +672,7 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Progressive Glide", player)
             or (state.has("Progressive Blizzard", player) and has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
-            or state.has("Progressive Glide")
+            or state.has("Progressive Glide", player)
             or (difficulty > 0 and state.has("High Jump", player, 3))
             or (difficulty > 5 and (state.has("High Jump", player) or state.has("Combo Master", player)))
             or difficulty > 10
