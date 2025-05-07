@@ -483,6 +483,7 @@ In addition, the following methods can be implemented and are called in this ord
   called per player before any items or locations are created. You can set properties on your
   world here. Already has access to player options and RNG. This is the earliest step where the world should start
   setting up for the current multiworld, as the multiworld itself is still setting up before this point.
+  You cannot modify `local_items`, or `non_local_items` after this step.
 * `create_regions(self)`
   called to place player's regions and their locations into the MultiWorld's regions list.
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
