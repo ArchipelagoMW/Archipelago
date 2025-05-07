@@ -1,4 +1,4 @@
-from .bundle_data import all_bundle_items_except_money
+from .bundle_data import all_bundle_items_by_name
 from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
 from ...bundles.bundle import BureaucracyBundleTemplate, JournalistBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
@@ -39,7 +39,7 @@ lemonade_stand_items = [grape]
 lemonade_stand_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.lemonade_stand, lemonade_stand_items, 3, 1)
 
 what_the_rock_is_cooking_items = [stone.as_amount(1), cookout_kit, strange_bun]
-what_the_rock_is_cooking_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.what_the_rock_is_cooking, what_the_rock_is_cooking_items, 3, 3)
+what_the_rock_is_cooking_bundle = FixedPriceBundleTemplate(CCRoom.pantry, MemeBundleName.what_the_rock_is_cooking, what_the_rock_is_cooking_items, 3, 3)
 
 amons_fall_items = [stone.as_amount(1)]
 amons_fall_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.amons_fall, amons_fall_items, 7, 7)
@@ -61,6 +61,7 @@ balls_items = [blue_jazz, cauliflower, blueberry, melon, red_cabbage, tomato, po
                amethyst_crystal_ball, aquamarine_crystal_ball, emerald_crystal_ball, ruby_crystal_ball, topaz_crystal_ball, apple, pizza, explosive_ammo, peach,
                orange, apricot, tigerseye, coconut, gold_ore, golden_coconut, pufferfish, lucky_lunch, salad, cactus_fruit, radioactive_ore, opal, broken_cd,
                void_essence, wild_plum, pomegranate]
+balls_items = [item.as_amount(1) for item in balls_items]
 balls_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.balls, balls_items, 12, 6)
 
 tilesanity_items = [wood_floor.as_amount(100), rustic_plank_floor.as_amount(100), straw_floor.as_amount(100), weathered_floor.as_amount(100),
@@ -77,7 +78,7 @@ big_grapes_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.big_grapes, big
 
 obelisks_items = [earth_crystal.as_amount(10), clam.as_amount(10), coral.as_amount(10), coconut.as_amount(10), cactus_fruit.as_amount(10),
                   banana.as_amount(10), dragon_tooth.as_amount(10), iridium_bar.as_amount(45)]
-obelisks_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.obelisks, obelisks_items, 8, 8)
+obelisks_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.obelisks, obelisks_items, 8, 8)
 
 burger_king_revenge_items = [fossilized_tail, void_salmon, ostrich_egg.as_amount(3), tea_leaves.as_amount(10), purple_slime_egg,
                              moss_soup.as_amount(3), radioactive_ore.as_amount(5), mystic_syrup.as_amount(10), truffle, aged_crimsonfish_roe]
@@ -118,7 +119,7 @@ hats_off_to_you_items = [living_hat, garbage_hat, golden_helmet, laurel_wreath_c
 hats_off_to_you_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.hats_off_to_you, hats_off_to_you_items, 8, 2)
 
 speedrunners_items = [parsnip, wine, cheese, sea_urchin, lucky_purple_shorts, mayonnaise]
-speedrunners_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.speedrunners, speedrunners_items, 6, 6)
+speedrunners_bundle = FixedPriceBundleTemplate(CCRoom.pantry, MemeBundleName.speedrunners, speedrunners_items, 6, 6)
 
 snitch_items = [lucky_purple_shorts]
 snitch_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.snitch, snitch_items, 1, 1)
@@ -129,7 +130,7 @@ mermaid_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.mermaid, mermai
 commitment_items = [bouquet, mermaid_pendant, wilted_bouquet, ancient_doll.as_amount(2)]
 commitment_bundle_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.commitment, commitment_items, 4, 4)
 
-all_simple_items = [bundle_item for bundle_item in all_bundle_items_except_money if bundle_item.amount == 1 and bundle_item.quality.startswith("Basic")]
+all_simple_items = [bundle_item for bundle_item in all_bundle_items_by_name.values() if bundle_item.amount == 1 and bundle_item.quality.startswith("Basic")]
 
 bureaucracy_items = [*all_simple_items]
 bureaucracy_bundle = BureaucracyBundleTemplate(CCRoom.vault, MemeBundleName.bureaucracy, bureaucracy_items, 1, 8)
@@ -172,11 +173,11 @@ bun_dle_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.bun_dle, bun_dle_i
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.health, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
-tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 24))
+tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 5000))
-clique_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
+clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
 cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
-cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.clic, 5000))  # ?
+cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 5000))  # ?
 communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
 

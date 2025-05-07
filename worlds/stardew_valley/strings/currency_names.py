@@ -22,3 +22,4 @@ class MemeCurrency:
     time = "Time"
     energy = "Energy"
     health = "Health"
+    cookies = "CookieClics"
