@@ -951,7 +951,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Life Jewel Overpass main map
 
         #NPCs
-        LocationData("Dione Shrine", "Dione Shrine NPC - Shedding on roof", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
+        LocationData("Dione Shrine", "Dione Shrine NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
         LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
