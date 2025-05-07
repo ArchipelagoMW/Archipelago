@@ -44,9 +44,9 @@ class ModSkillLogic(BaseLogic):
 
     def can_earn_luck_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
-            return self.logic.fishing.can_fish_chests() | self.logic.action.can_open_geode(Geode.magma)
+            return self.logic.fishing.can_fish_chests | self.logic.action.can_open_geode(Geode.magma)
         if level >= 3:
-            return self.logic.fishing.can_fish_chests() | self.logic.action.can_open_geode(Geode.geode)
+            return self.logic.fishing.can_fish_chests | self.logic.action.can_open_geode(Geode.geode)
         return True_()  # You can literally wake up and or get them by opening starting chests.
 
     def can_earn_magic_skill_level(self, level: int) -> StardewRule:
