@@ -32,22 +32,43 @@ class SeriesNumber(Range):
     range_end = 20
     default = 5
 
-class SeriesMapNumber(Range):
-    """Sets the number of maps in each series."""
-    display_name = "Number of Maps per Series"
+class SeriesMinimumMapNumber(Range):
+    """Sets the minimum number of maps in each series."""
+    display_name = "Minimum Number of Maps per Series"
     range_start = 1
     range_end = 20
-    default = 10
+    default = 5
+
+class SeriesMaximumMapNumber(Range):
+    """Sets the maximum number of maps in each series."""
+    display_name = "Maximum Number of Maps per Series"
+    range_start = 1
+    range_end = 20
+    default = 15
+
+class RandomSeriesTags(Toggle):
+    """Enable to pick one of your tags at random to use for each series, instead of using all tags for each series"""
+    display_name = "Pick Random Tag for each Series"
+
+class FirstSeriesSize(Range):
+    """This is an override setting to manually set the size of the first series. Some games, like Super Metroid, work best with small first areas. This setting is here to enable that!
+
+    Set this to zero to have the first series randomized the same as all the others.
+    """
+    display_name = "Size of First Series"
+    range_start = 0
+    range_end = 20
+    default = 0
 
 class MedalRequirement(Range):
-    """The number of progression medals required to advance to the next series.
+    """Percentage of maps in each series you must get the progression medal from.
     
     Your progression medal is the quickest medal equal to or below your target time.
     """
-    display_name = "Series Medal Requirement"
+    display_name = "Series Medal Percentage"
     range_start = 1
-    range_end = 20
-    default = 8
+    range_end = 100
+    default = 80
 
 class SkipPercentage(Range):
     """The number of map skips in the item pool, calculated as a percentage of the total number of maps.
@@ -97,7 +118,10 @@ class TrackmaniaOptions(PerGameCommonOptions):
 
     target_time: TargetTime
     series_number : SeriesNumber
-    series_map_number: SeriesMapNumber
+    series_minimum_map_number: SeriesMinimumMapNumber
+    series_maximum_map_number: SeriesMaximumMapNumber
+    random_series_tags: RandomSeriesTags
+    first_series_size: FirstSeriesSize
     medal_requirement: MedalRequirement
     skip_percentage: SkipPercentage
     target_progression_chance : ProgressiveTargetTimeChance
@@ -109,7 +133,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
-    "Campaign Configuration":[SeriesNumber, SeriesMapNumber, MedalRequirement, ProgressiveTargetTimeChance],
+    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, RandomSeriesTags, FirstSeriesSize],
     "Map Tags":[MapTagsInclusive, MapTags, MapETags]
 }
 

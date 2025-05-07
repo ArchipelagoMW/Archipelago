@@ -1,4 +1,6 @@
 import os
+import random
+
 from .options import TrackmaniaOptions, create_option_groups
 from .items import build_items, trackmania_item_groups, create_itempool, create_item, get_filler_item_name
 from .locations import build_locations
@@ -50,6 +52,10 @@ class TrackmaniaWorld(World):
 
     item_name_groups = trackmania_item_groups
 
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.slot_data: dict = {}
+
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
 
@@ -63,17 +69,39 @@ class TrackmaniaWorld(World):
     def set_rules(self):
         set_rules(self)
 
-    def fill_slot_data(self) -> dict:
-        slot_data: dict = {"TargetTimeSetting": (float(self.options.target_time.value)/100.0),
-                           "SeriesNumber": self.options.series_number.value,
-                           "SeriesMapNumber": self.options.series_map_number.value,
-                           "MedalRequirement": self.options.medal_requirement.value,
-                           "MapTags": encode(self.options.map_tags.value),
-                           "MapTagsInclusive": self.options.map_tags_inclusive.value,
-                           "MapETags": encode(self.options.map_etags.value),
-                           "Difficulties": encode(self.options.difficulties.value),}
+    def generate_early(self):
+        series_data: list = []
+        medal_percent: float = float(self.options.medal_requirement.value) / 100.0
+        for x in range(self.options.series_number):
+            map_count: int = random.randint(self.options.series_minimum_map_number.value,
+                                            self.options.series_maximum_map_number.value)
+            if x == 0 and self.options.first_series_size.value > 0:
+                map_count = self.options.first_series_size.value
 
-        return slot_data
+            medals: int = round(map_count * medal_percent)
+            medals = max(1, min(medals, map_count))  # clamp between 1 and map_count
+
+            tags: list = list(self.options.map_tags.value)
+            if self.options.random_series_tags > 0 and len(tags) > 0:
+                tag = random.choice(tags)
+                tags = [tag]
+
+            values : dict = {"MedalTotal": medals,
+                             "MapCount": map_count,
+                             "MapTags": tags}
+
+            series_data.append(values)
+
+        self.slot_data = {"TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
+                           "SeriesNumber": self.options.series_number.value,
+                           "MapTagsInclusive": self.options.map_tags_inclusive.value,
+                           "MapETags": self.options.map_etags.value,
+                           "Difficulties": self.options.difficulties.value,
+                           "SeriesData": series_data}
+
+
+    def fill_slot_data(self) -> dict:
+        return self.slot_data
 
     def get_filler_item_name(self) -> str:
         return get_filler_item_name()

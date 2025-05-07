@@ -1,6 +1,6 @@
 from enum import Enum
 from BaseClasses import Location
-from .options import SeriesNumber, SeriesMapNumber
+from .options import SeriesNumber, SeriesMinimumMapNumber
 from .data import base_id
 
 class TrackmaniaLocation(Location):  # or from Locations import MyGameLocation
@@ -19,7 +19,7 @@ def build_locations() -> dict[str, int]:
 
     #since we don't have preferences yet, we have to return every possible location, not just the ones we need ;-;
     for x in range(SeriesNumber.range_end):
-        for y in range(SeriesMapNumber.range_end):
+        for y in range(SeriesMinimumMapNumber.range_end):
             trackmania_locations[get_location_name(x,y,MapCheckTypes.Bronze)] = base_id + id_offset
             trackmania_locations[get_location_name(x,y,MapCheckTypes.Silver)] = base_id + id_offset + 1
             trackmania_locations[get_location_name(x,y,MapCheckTypes.Gold)]   = base_id + id_offset + 2

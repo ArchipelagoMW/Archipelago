@@ -141,7 +141,7 @@ filler_item_names = [
     "Ice Gears Understanding",
     "horsn",
     "pedro",
-    "So Unlucky landing",
+    "Super Unlucky Landing",
     "Brick Bob"
 ]
 

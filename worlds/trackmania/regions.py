@@ -45,7 +45,7 @@ def create_series_region(world: "TrackmaniaWorld", series: int) -> Region:
     reg = Region(series_name, world.player, world.multiworld)
     world.multiworld.regions.append(reg)
 
-    for x in range(world.options.series_map_number):
+    for x in range(world.slot_data["SeriesData"][series]["MapCount"]):
         create_track_checks(world, reg, x)
 
     return reg
