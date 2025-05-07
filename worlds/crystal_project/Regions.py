@@ -95,7 +95,6 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Castle Ramparts", excluded),
         create_region(world, player, locations_per_region, "The Chalice of Tar", excluded),
         create_region(world, player, locations_per_region, "Flyers Crag", excluded),
-        create_region(world, player, locations_per_region, "Flyers Lookout", excluded),
         create_region(world, player, locations_per_region, "Jidamba Tangle", excluded),
         create_region(world, player, locations_per_region, "Jidamba Eaclaneya", excluded),
         create_region(world, player, locations_per_region, "The Deep Sea", excluded),
