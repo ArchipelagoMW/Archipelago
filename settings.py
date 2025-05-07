@@ -199,9 +199,8 @@ class Group:
                     # assign scalar and hope for the best
                     setattr(self, k, v)
                     if annotation:
-                        warnings.warn(
-                            f"{self.__class__.__name__}.{k} assigned from incompatible type {type(v).__name__}"
-                        )
+                        warnings.warn(f"{self.__class__.__name__}.{k} "
+                                      f"assigned from incompatible type {type(v).__name__}")
 
     def as_dict(self, *args: str, downcast: bool = True) -> Dict[str, Any]:
         return {
