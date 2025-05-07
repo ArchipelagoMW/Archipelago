@@ -13,6 +13,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch_subprocess, icon_paths
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -33,6 +34,19 @@ from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptio
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
+
+
+def launch_client(*args):
+    from .LinksAwakeningClient import launch
+    launch_subprocess(launch, name=f"{LINKS_AWAKENING} Client", args=args)
+
+components.append(Component(f"{LINKS_AWAKENING} Client",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            icon=LINKS_AWAKENING,
+                            file_identifier=SuffixIdentifier('.apladx')))
+
+icon_paths[LINKS_AWAKENING] = "ap:worlds.ladx/assets/MarinV-3_small.png"
 
 
 class LinksAwakeningSettings(settings.Group):
