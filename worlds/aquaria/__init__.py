@@ -94,7 +94,7 @@ class AquariaWorld(World):
     options: AquariaOptions
     "Every options of the world"
 
-    regions: AquariaRegions | None
+    _regions: AquariaRegions | None
     "Used to manage Regions"
 
     exclude: List[str]
@@ -102,7 +102,7 @@ class AquariaWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
         super(AquariaWorld, self).__init__(multiworld, player)
-        self.regions = None
+        self._regions = None
         self.ingredients_substitution = []
         self.exclude = []
 
@@ -111,15 +111,15 @@ class AquariaWorld(World):
         Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
         results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
         """
-        self.regions = AquariaRegions(self.multiworld, self.player)
+        self._regions = AquariaRegions(self.multiworld, self.player)
 
     def create_regions(self) -> None:
         """
         Create every Region in `regions`
         """
-        self.regions.add_regions_to_world()
-        self.regions.connect_regions()
-        self.regions.add_event_locations()
+        self._regions.add_regions_to_world()
+        self._regions.connect_regions()
+        self._regions.add_event_locations()
 
     def create_item(self, name: str) -> AquariaItem:
         """
@@ -201,7 +201,8 @@ class AquariaWorld(World):
             self.multiworld.early_items[self.player][ItemNames.BIND_SONG] = 1
         elif self.options.early_bind_song == EarlyBindSong.option_early_and_local:
             self.multiworld.local_early_items[self.player][ItemNames.BIND_SONG] = 1
-        self.regions.adjusting_rules(self.options)
+
+        self._regions.adjusting_rules(self.options)
         self.multiworld.completion_condition[self.player] = lambda \
                 state: state.has(ItemNames.VICTORY, self.player)
 

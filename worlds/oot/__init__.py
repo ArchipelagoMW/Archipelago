@@ -224,7 +224,7 @@ class OOTWorld(World):
                 option_value = result.current_key
             setattr(self, option_name, option_value)
 
-        self.regions = []  # internal caches of regions for this world, used later
+        self._regions = []  # internal caches of regions for this world, used later
         self._regions_cache = {}
 
         self.shop_prices = {}
@@ -591,7 +591,7 @@ class OOTWorld(World):
                         new_region.exits.append(new_exit)
 
             self.multiworld.regions.append(new_region)
-            self.regions.append(new_region)
+            self._regions.append(new_region)
             self._regions_cache[new_region.name] = new_region
 
 
@@ -629,7 +629,7 @@ class OOTWorld(World):
     def random_shop_prices(self):
         shop_item_indexes = ['7', '5', '8', '6']
         self.shop_prices = {}
-        for region in self.regions:
+        for region in self._regions:
             if self.shopsanity == 'random':
                 shop_item_count = self.random.randint(0, 4)
             else:
@@ -761,7 +761,7 @@ class OOTWorld(World):
         self.set_scrub_prices()
 
         # Bind entrances to vanilla
-        for region in self.regions:
+        for region in self._regions:
             for exit in region.exits:
                 exit.connect(self.get_region(exit.vanilla_connected_region))
 
@@ -1126,7 +1126,7 @@ class OOTWorld(World):
             items_by_region = {}
             for player in barren_hint_players:
                 items_by_region[player] = {}
-                for r in multiworld.worlds[player].regions:
+                for r in multiworld.worlds[player]._regions:
                     items_by_region[player][r._hint_text] = {'dungeon': False, 'weight': 0, 'is_barren': True}
                 for d in multiworld.worlds[player].dungeons:
                     items_by_region[player][d.hint_text] = {'dungeon': True, 'weight': 0, 'is_barren': True}
@@ -1280,7 +1280,7 @@ class OOTWorld(World):
 
         if (self.shuffle_interior_entrances != 'off' or self.shuffle_dungeon_entrances
             or self.shuffle_grotto_entrances or self.shuffle_bosses != 'off'):
-            for region in self.regions:
+            for region in self._regions:
                 if not any(bool(loc.address) for loc in region.locations): # check if region has any non-event locations
                     continue
                 main_entrance = get_entrance_to_region(region)
@@ -1345,12 +1345,6 @@ class OOTWorld(World):
     def get_shuffled_entrances(self, type=None, only_primary=False):
         return [entrance for entrance in self.get_shufflable_entrances(type=type, only_primary=only_primary) if
                 entrance.shuffled]
-
-    def get_locations(self):
-        return self.multiworld.get_locations(self.player)
-
-    def get_entrances(self):
-        return self.multiworld.get_entrances(self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':
