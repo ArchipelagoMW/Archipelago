@@ -265,7 +265,7 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Sai": ItemData("Equipment", 396 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Kodachi": ItemData("Equipment", 400 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Butter Cutter": ItemData("Equipment", 198 + equipment_index_offset, ItemClassification.useful), #Tier 3 Regular, Poko Poko Desert, Advanced Zones
-    "Equipment - Soul Kris": ItemData("Equipment", 3 + equipment_index_offset, ItemClassification.useful), #Tier 3 Regular, Shoudu Province, Expert Zones
+    "Equipment - Soul Kris": ItemData("Equipment", 305 + equipment_index_offset, ItemClassification.useful), #Tier 3 Regular, Shoudu Province, Expert Zones
     #"Equipment - Gouger": ItemData("Equipment", 61 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Fanged Knife": ItemData("Equipment", 526 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Cinquedea": ItemData("Equipment", 393 + equipment_index_offset, ItemClassification.useful), #from Delende fisher; Tier 3 Regular, Delende, Beginner Zones
