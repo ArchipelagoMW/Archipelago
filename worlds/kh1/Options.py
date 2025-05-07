@@ -419,7 +419,12 @@ class InteractInBattle(Toggle):
 
 class LogicDifficulty(Choice):
     """
-    If on, logic may expect you to do advanced skips like using Combo Master, Dumbo, and other unusual methods to reach locations.
+    Determines what the randomizer logic may expect you to do to reach certain locations.
+
+    Beginner: Logic only expects what would be the natural solution in vanilla gameplay or similar, as well as a guarantee of tools for boss fights.
+    Normal: Logic expects some clever use of abilities, exploration of options, and competent combat ability; generally does not require advanced knowledge.
+    Proud: Logic expects advanced knowledge of tricks and obscure interactions, such as using Combo Master, Dumbo, and other unusual methods to reach locations.
+    Minimal: Logic expects the bare minimum to get to locations; may require extensive grinding, beating fights with no tools, and performing very difficult or tedious tricks.
     """
     display_name = "Logic Difficulty"
     option_beginner = 0

@@ -11,7 +11,7 @@ WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "M
 KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool, logic_difficulty: int) -> bool:
-    if logic_difficulty > 10:
+    if logic_difficulty > 14:
         return True
     else:
         worlds_acquired = 0.0
@@ -108,8 +108,8 @@ def has_phantom(state: CollectionState, player: int, logic_difficulty: int, keyb
                 has_all_magic_lvx(state, player, 3)
                 or (logic_difficulty > 0 and has_all_magic_lvx(state, player, 2))
                 or (logic_difficulty > 5 and state.has_all_counts({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1,"Progressive Cure": 1}, player))
-                #or (logic_difficulty > 7 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player)
-                or logic_difficulty > 10
+                or (logic_difficulty > 10 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player))
+                or logic_difficulty > 14
             )
             and (state.has("Leaf Bracer", player) or logic_difficulty > 5)
     )
@@ -685,7 +685,7 @@ def set_rules(kh1world):
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 or (difficulty > 0 and state.has("High Jump", player, 3) and state.has("Progressive Glide", player))
                 or (difficulty > 5 and (state.has("High Jump", player, 2) or can_dumbo_skip(state, player)) and state.has("Progressive Glide", player))
-                or (difficulty > 10 and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
+                or (difficulty > 10 and state.has("High Jump", player) and state.has("Progressive Glide", player))
             )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Castle Gates Freestanding Pillar Chest"),
@@ -729,7 +729,7 @@ def set_rules(kh1world):
         lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Progressive Gravity", player)
-            and (state.has("Progressive Glide", player) or options.advanced_logic)
+            and (difficulty > 0 and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"),
         lambda state: state.has("Progressive Gravity", player))
@@ -1153,7 +1153,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or (difficulty > 0 and state.has("Progressive Glide", player))
-                    or (difficulty > 5 and options.advanced_logic)
+                    or difficulty > 5
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
@@ -1477,20 +1477,20 @@ def set_rules(kh1world):
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
                 and
                 (
                     state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
                     or (difficulty > 0 and (state.has("Progressive Blizzard", player, 2) or state.has("Progressive Fire", player, 2) or state.has("Progressive Thunder", player, 3)))
                     or (difficulty > 5 and (state.has("Progressive Blizzard", player, 1) or state.has("Progressive Fire", player, 1) or state.has("Progressive Thunder", player, 2) or state.has("Mushu", player)))
-                    or (difficulty > 10 and state.has("Progressive Thunder", player, 1))
+                    or (difficulty > 10 and state.has("Progressive Thunder", player, 1) or state.has("Genie", player))
                 ) 
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
                 and
                 (
                     state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
@@ -1508,7 +1508,7 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
             ))
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
             lambda state: (
@@ -1518,20 +1518,20 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 14 or has_defensive_tools(state, player))
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
     if options.jungle_slider:
@@ -2125,23 +2125,23 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("End of the World Final Dimension 1st Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 2nd Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 4th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 5th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 6th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 10th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
@@ -2175,17 +2175,17 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
             lambda state: state.has("Wishing Star", player))
         add_rule(kh1world.get_location("Neverland Hold Aero Chest"),
-            lambda state: state.has("Fairy Harp", player) or options.advanced_logic)
+            lambda state: state.has("Fairy Harp", player) or difficulty > 0)
         add_rule(kh1world.get_location("Hollow Bastion Library 1st Floor Turn the Carousel Chest"),
-            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+            lambda state: state.has("Divine Rose", player) or difficulty > 0)
         add_rule(kh1world.get_location("Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest"),
-            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+            lambda state: state.has("Divine Rose", player) or difficulty > 0)
         add_rule(kh1world.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 1st Chest"),
-            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+            lambda state: state.has("Divine Rose", player) or difficulty > 0)
         add_rule(kh1world.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 2nd Chest"),
-            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+            lambda state: state.has("Divine Rose", player) or difficulty > 0)
         add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"),
-            lambda state: state.has("Divine Rose", player) or options.advanced_logic)
+            lambda state: state.has("Divine Rose", player) or difficulty > 0)
         if options.hundred_acre_wood:
             add_rule(kh1world.get_location("100 Acre Wood Meadow Inside Log Chest"),
                 lambda state: state.has("Spellbinder", player))
