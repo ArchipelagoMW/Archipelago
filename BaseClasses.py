@@ -160,6 +160,7 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
+        self.completion_condition = {}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
@@ -168,7 +169,6 @@ class MultiWorld():
             set_player_attr('plando_texts', {})
             set_player_attr('plando_connections', [])
             set_player_attr('game', "Archipelago")
-            set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
         self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
                                                     "world's random object instead (usually self.random)")
@@ -233,6 +233,8 @@ class MultiWorld():
             options_dataclass: type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
+            # TODO for back compatibility
+            self.completion_condition[player] = self.worlds[player].completion_condition
 
     def set_item_links(self):
         from worlds import AutoWorld
