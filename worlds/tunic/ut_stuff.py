@@ -10,8 +10,6 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
             world.using_ut = True
-            world.ut_player = world.player
-            world.tracker_world["map_page_setting_key"] = f"Slot:{world.ut_player}:Current Map"
             world.passthrough = world.multiworld.re_gen_passthrough["TUNIC"]
             world.options.start_with_sword.value = world.passthrough["start_with_sword"]
             world.options.keys_behind_bosses.value = world.passthrough["keys_behind_bosses"]
