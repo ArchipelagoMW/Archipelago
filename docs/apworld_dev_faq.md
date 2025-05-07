@@ -109,3 +109,16 @@ Common situations where this can happen include:
   Also, consider using the `options.as_dict("option_name", "option_two")` helper.
 * Using enums as Location/Item names in the datapackage. When building out `location_name_to_id` and `item_name_to_id`,
   make sure that you are not using your enum class for either the names or ids in these mappings.
+
+---
+
+### Some locations are technically possible to check with few or no items, but they'd be very tedious or frustrating. How do worlds deal with this?
+
+Sometimes the game can be modded to skip these locations or make them less tedious. But when this issue is due to a fundamental aspect of the game, then the general answer is "soft logic" (and its subtypes like "combat logic", "money logic", etc.). For example: you can logically require that a player have several helpful items before fighting the final boss, even if a skilled player technically needs no items to beat it. Randomizer logic should describe what's *fun* rather than what's technically possible.
+
+Concrete examples of soft logic include:
+- Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc. that aren't strictly necessary.
+- Entering a high-level area might logically require access to enough other parts of the game that checking other locations should naturally get the player to the soft-required level.
+- Buying expensive shop items might logically require access to a place where you can quickly farm money, or logically require access to enough parts of the game that checking other locations should naturally generate enough money without grinding.
+
+Remember that all items referenced by logic (however hard or soft) must be `progression`. Since you typically don't want to turn a ton of `filler` items into `progression` just for this, it's common to e.g. write money logic using only the rare "$100" item, so the dozens of "$1" and "$10" items in your world can remain `filler`.
