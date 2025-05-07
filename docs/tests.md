@@ -120,7 +120,7 @@ variable to keep all the benefits of the test framework while not running the ma
 
 In PyCharm, running all tests can be done by right-clicking the root test directory and selecting Run 'Archipelago Unittests'.
 If you have never previously run UpdateModule.py, you will need to do this once before the tests will run.  The documentation for
-[running_from_source.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20source.md#windows) contains
+[running from source.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20source.md#windows) contains
 instructions for how to run UpdateModule.py.  Unless you configured PyCharm to use pytest as a test runner, you may get import 
 failures. To solve this, edit the run configuration, and set the working directory to the Archipelago directory which contains 
 all the project files. 
