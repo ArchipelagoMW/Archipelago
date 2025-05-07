@@ -96,11 +96,6 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Center Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Left Chest")
     regions["Deep Jungle"].locations.append("Deep Jungle Hippo's Lagoon Right Chest")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Red Trinity Event")
     regions["Deep Jungle"].locations.append("Deep Jungle Tent Chest")
@@ -440,7 +435,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Crystal Trident Event")
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
-    if options.cups:
+    if options.cups.current_key != "off":
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup")
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Phil Cup Time Trial")
@@ -450,6 +445,10 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup")
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Hercules Cup Time Trial")
+        regions["Olympus Coliseum"].locations.append("Hercules Cup Defeat Cloud Event")
+        regions["Olympus Coliseum"].locations.append("Hercules Cup Yellow Trinity Event")
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Olympia Chest")
+    if options.cups.current_key == "hades_cup":
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup")
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup Solo")
         regions["Olympus Coliseum"].locations.append("Complete Hades Cup Time Trial")
@@ -458,22 +457,26 @@ def create_regions(multiworld: MultiWorld, player: int, options):
         regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cerberus Event")
         regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Behemoth Event")
         regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
-        regions["Olympus Coliseum"].locations.append("Hercules Cup Defeat Cloud Event")
-        regions["Olympus Coliseum"].locations.append("Hercules Cup Yellow Trinity Event")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
-        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Olympia Chest")
-        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
-    if options.super_bosses:
+    if options.cups.current_key == "hades_cup" and (options.super_bosses or options.final_rest_door.current_key == "superbosses"):
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
+    if options.super_bosses or options.final_rest_door.current_key == "superbosses":
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
-    if options.super_bosses or options.goal.current_key == "sephiroth":
+    if options.super_bosses or options.goal.current_key == "sephiroth" or options.final_rest_door.current_key == "superbosses":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event")
-    if options.super_bosses or options.goal.current_key == "unknown":
+    if options.super_bosses or options.goal.current_key == "unknown" or options.final_rest_door.current_key == "superbosses":
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
         regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown EXP Necklace Event")
+    if options.jungle_slider:
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 10 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 20 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 30 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 40 Fruits")
+        regions["Deep Jungle"].locations.append("Deep Jungle Jungle Slider 50 Fruits")
     for i in range(options.level_checks):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3, '0'))
     if options.goal.current_key == "final_ansem":
