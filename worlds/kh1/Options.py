@@ -177,7 +177,7 @@ class RequiredPuppies(Choice):
 
 class PuppyValue(Range):
     """
-    Determines how many dalmation puppies are given when a puppy item is found.
+    Determines how many dalmatian puppies are given when a puppy item is found.
     """
     display_name = "Puppy Value"
     default = 3
@@ -423,10 +423,10 @@ class LogicDifficulty(Choice):
     """
     display_name = "Logic Difficulty"
     option_beginner = 0
-    option_normal = 1
-    option_proud = 2
-    option_minimal = 3
-    default = 1
+    option_normal = 5
+    option_proud = 10
+    option_minimal = 15
+    default = 5
 
 class ExtraSharedAbilities(Toggle):
     """

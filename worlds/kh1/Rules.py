@@ -10,22 +10,25 @@ from .Items import KH1Item, item_table, get_items_by_type, get_items_by_category
 WORLDS =    ["Wonderland", "Olympus Coliseum", "Deep Jungle", "Agrabah",      "Monstro",      "Atlantica", "Halloween Town", "Neverland",  "Hollow Bastion", "End of the World"]
 KEYBLADES = ["Lady Luck",  "Olympia",          "Jungle King", "Three Wishes", "Wishing Star", "Crabclaw",  "Pumpkinhead",    "Fairy Harp", "Divine Rose",    "Oblivion"]
 
-def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool) -> bool:
-    worlds_acquired = 0.0
-    for i in range(len(WORLDS)):
-        if state.has(WORLDS[i], player):
-            worlds_acquired = worlds_acquired + 0.5
-        if (state.has(WORLDS[i], player) and (not keyblades_unlock_chests or state.has(KEYBLADES[i], player))) or (state.has(WORLDS[i], player) and WORLDS[i] == "Atlantica"):
-            worlds_acquired = worlds_acquired + 0.5
-    return worlds_acquired >= num_of_worlds
+def has_x_worlds(state: CollectionState, player: int, num_of_worlds: int, keyblades_unlock_chests: bool, logic_difficulty: int) -> bool:
+    if logic_difficulty > 10:
+        return True
+    else:
+        worlds_acquired = 0.0
+        for i in range(len(WORLDS)):
+            if state.has(WORLDS[i], player):
+                worlds_acquired = worlds_acquired + 0.5
+            if (state.has(WORLDS[i], player) and (not keyblades_unlock_chests or state.has(KEYBLADES[i], player))) or (state.has(WORLDS[i], player) and WORLDS[i] == "Atlantica"):
+                worlds_acquired = worlds_acquired + 0.5
+        return worlds_acquired >= num_of_worlds
 
-def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bool) -> bool:
+def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bool, logic_difficulty: int) -> bool:
     return state.has_all({
         "Emblem Piece (Flame)",
         "Emblem Piece (Chest)",
         "Emblem Piece (Statue)",
         "Emblem Piece (Fountain)",
-        "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests)
+        "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests, logic_difficulty)
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int, puppy_value: int) -> bool:
     return (state.count("Puppy", player) * puppy_value) >= puppies_required
@@ -46,8 +49,12 @@ def has_all_magic_lvx(state: CollectionState, player: int, level) -> bool:
         "Progressive Aero": level,
         "Progressive Stop": level}, player)
 
-def has_offensive_magic(state: CollectionState, player: int) -> bool:
-    return state.has_any({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Gravity", "Progressive Stop"}, player)
+def has_offensive_magic(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
+    return (
+        state.has_any({"Progressive Fire", "Progressive Blizzard"}, player)
+        or (logic_difficulty > 5 and state.has_any({"Progressive Thunder", "Progressive Gravity"}, player))
+        or (logic_difficulty > 10 and state.has("Progressive Stop", player))
+    )
 
 def has_lucky_emblems(state: CollectionState, player: int, required_amt: int) -> bool:
     return state.has("Lucky Emblem", player, required_amt)
@@ -66,8 +73,10 @@ def has_defensive_tools(state: CollectionState, player: int) -> bool:
 
 def has_basic_tools(state: CollectionState, player: int) -> bool:
     return (
-            state.has({"Dodge Roll": 1}, player)
-            and state.has_any_count({"Combo Master": 1, "Strike Raid": 1}, player)
+            state.has_all_counts({"Dodge Roll": 1, "Progressive Cure": 1}, player)
+            and state.has_any_count({"Combo Master": 1, "Strike Raid": 1, "Sonic Blade": 1, "Counterattack": 1,}, player)
+            and state.has_any_count({"Leaf Bracer": 1, "Second Chance": 1, "Guard": 1}, player)
+            and has_offensive_magic(state, player, 6)
         )
 
 def can_dumbo_skip(state: CollectionState, player: int) -> bool:
@@ -78,17 +87,43 @@ def can_dumbo_skip(state: CollectionState, player: int) -> bool:
 
 def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
     return (
-                state.has("Progressive Fire", player)
-                or (logic_difficulty and state.has("High Jump", player, 2))
-                or (logic_difficulty and state.has("High Jump", player) and state.has("Progressive Glide", player))
+            state.has("Progressive Fire", player)
+            or (logic_difficulty and state.has("High Jump", player, 2))
+            or (logic_difficulty and state.has("High Jump", player) and state.has("Progressive Glide", player))
         )
 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: bool) -> bool:
     return (
-                state.has("Green Trinity", player)
-                or (logic_difficulty == 5 and state.has("High Jump", player, 3))
-                or (logic_difficulty > 5 and state.has("High Jump", player, 2))
+            state.has("Green Trinity", player)
+            or (logic_difficulty == 5 and state.has("High Jump", player, 3))
+            or (logic_difficulty > 5 and state.has("High Jump", player, 2))
         )
+
+def has_phantom(state: CollectionState, player: int, logic_difficulty: int, keyblade_unlocking: bool) -> bool:
+    return (
+            state.has("Green Trinity", player)
+            and has_emblems(state, player, keyblade_unlocking, logic_difficulty)
+            and 
+            (
+                has_all_magic_lvx(state, player, 3)
+                or (logic_difficulty > 0 and has_all_magic_lvx(state, player, 2))
+                or (logic_difficulty > 5 and state.has_all_counts({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1,"Progressive Cure": 1}, player))
+                #or (logic_difficulty > 7 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player)
+                or logic_difficulty > 10
+            )
+            and (state.has("Leaf Bracer", player) or logic_difficulty > 5)
+    )
+
+def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int, worlds: bool) -> bool:
+    return (
+            state.has("Monstro", player)
+            and
+            (
+                state.has("High Jump", player)
+                or (logic_difficulty > 0 and state.has("Progressive Glide", player))
+            )
+            and worlds
+    )
 
 def set_rules(kh1world):
     multiworld                             = kh1world.multiworld
@@ -99,16 +134,7 @@ def set_rules(kh1world):
     final_rest_door_requirement            = kh1world.options.final_rest_door_key.current_key
     day_2_materials                        = kh1world.options.day_2_materials.value
     homecoming_materials                   = kh1world.options.homecoming_materials.value
-    
-    #I didn't do bool because I wanted greater than/less than comparisons, and I chose multiples of 5 in case more difficulty options were ever added.
-    if options.logic_difficulty == LogicDifficulty.option_beginner:
-        difficulty = 0
-    elif options.logic_difficulty == LogicDifficulty.option_proud:
-        difficulty = 10
-    elif options.logic_difficulty == LogicDifficulty.option_minimal:
-        difficulty = 15
-    else: #options.logic_difficulty == LogicDifficulty.option_normal:
-        difficulty = 5
+    difficulty                             = kh1world.options.logic_difficulty.value
 
     add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
         lambda state: state.has("Progressive Blizzard", player))
@@ -125,15 +151,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Secret Waterway White Trinity Chest"),
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Chest"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (difficulty > 5 and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))))
     add_rule(kh1world.get_location("Traverse Town Item Workshop Right Chest"),
         lambda state: (has_item_workshop(state, player, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Item Workshop Left Chest"),
@@ -171,7 +189,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Rabbit Hole Green Trinity Chest"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Wonderland Rabbit Hole Defeat Heartless 3 Chest"),
-        lambda state: has_x_worlds(state, player, 5, options.keyblades_unlock_chests))
+        lambda state: has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Green Trinity Chest"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Wonderland Queen's Castle Hedge Left Red Chest"),
@@ -261,7 +279,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Bear and Clock Puzzle Chest"),
         lambda state: (
            state.has("Footprints", player)
-           or (difficulty > 0 and state.has("Progressive Glide", player))
+           or state.has("Progressive Glide", player)
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"),
         lambda state: (
@@ -436,7 +454,7 @@ def set_rules(kh1world):
                 state.has("Progressive Glide", player)
                 or state.has("High Jump", player, 3)
                 or (difficulty > 0 and state.has("High Jump", player, 2))
-                or (difficulty > 5 and state.has("High Jump", player, 2))
+                or (difficulty > 5 and state.has("High Jump", player, 1))
                 or difficulty > 10
             )
         ))
@@ -572,18 +590,18 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Monstro Mouth High Platform Boat Side Chest"),
         lambda state: (
             state.has("High Jump", player)
-            or state.has("Progressive Glide", player)
+            or (difficulty > 0 and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Monstro Mouth High Platform Across from Boat Chest"),
         lambda state: (
             state.has("High Jump", player)
-            or state.has("Progressive Glide", player)
+            or (difficulty > 0 and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Monstro Mouth Green Trinity Top of Boat Chest"),
         lambda state: (
             (
                 state.has("High Jump", player)
-                or state.has("Progressive Glide", player)
+                or (difficulty > 0 and state.has("Progressive Glide", player))
             )
             and state.has("Green Trinity", player)
         ))
@@ -592,17 +610,17 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest"),
         lambda state: (
             state.has("High Jump", player)
-            or options.advanced_logic
+            or difficulty > 5
         ))
     add_rule(kh1world.get_location("Monstro Chamber 3 Platform Near Chamber 6 Entrance Chest"),
         lambda state: (
             state.has("High Jump", player)
-            or options.advanced_logic
+            or difficulty > 5
         ))
     add_rule(kh1world.get_location("Monstro Chamber 5 Atop Barrel Chest"),
         lambda state: (
            state.has("High Jump", player)
-           or options.advanced_logic
+           or difficulty > 5
         ))
     add_rule(kh1world.get_location("Neverland Pirate Ship Deck White Trinity Chest"),
         lambda state: (
@@ -622,26 +640,22 @@ def set_rules(kh1world):
         lambda state: (
            state.has("Green Trinity", player)
            or state.has("Progressive Glide", player)
-           or state.has("High Jump", player, 3)
+           or (difficulty > 0 and state.has("High Jump", player, 3))
         ))
     add_rule(kh1world.get_location("Neverland Clock Tower Chest"),
-        lambda state: (
-            state.has("Green Trinity", player)
-            and has_all_magic_lvx(state, player, 2)
-            and has_defensive_tools(state, player)
-        ))
+        lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
     add_rule(kh1world.get_location("Neverland Hold Flight 2nd Chest"),
         lambda state: (
            state.has("Green Trinity", player)
            or state.has("Progressive Glide", player)
-           or state.has("High Jump", player, 3)
+           or (difficulty > 0 and state.has("High Jump", player, 3))
         ))
     add_rule(kh1world.get_location("Neverland Hold Yellow Trinity Green Chest"),
         lambda state: state.has("Yellow Trinity", player))
     add_rule(kh1world.get_location("Neverland Captain's Cabin Chest"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Rising Falls Under Water 2nd Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Rising Falls Floating Platform Near Save Chest"),
         lambda state: (
            state.has("High Jump", player)
@@ -657,57 +671,63 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Hollow Bastion Rising Falls High Platform Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
-            or (state.has("Progressive Blizzard", player) and has_emblems(state, player, options.keyblades_unlock_chests))
-            or (options.advanced_logic and (state.has("Combo Master", player) or state.has("High Jump", player)))
+            or (state.has("Progressive Blizzard", player) and has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
+            or state.has("Progressive Glide")
+            or (difficulty > 0 and state.has("High Jump", player, 3))
+            or (difficulty > 5 and (state.has("High Jump", player) or state.has("Combo Master", player)))
+            or difficulty > 10
         ))
     add_rule(kh1world.get_location("Hollow Bastion Castle Gates Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
             and
             (
-                has_emblems(state, player, options.keyblades_unlock_chests)
-                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
-                or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                or (difficulty > 0 and state.has("High Jump", player, 3) and state.has("Progressive Glide", player))
+                or (difficulty > 5 and (state.has("High Jump", player, 2) or can_dumbo_skip(state, player)) and state.has("Progressive Glide", player))
+                or (difficulty > 10 and state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
             )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Castle Gates Freestanding Pillar Chest"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
-            or state.has("High Jump", player, 2)
-            or (options.advanced_logic and can_dumbo_skip(state, player))
+            has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+            or (difficulty > 0 and state.has("High Jump", player, 3))
+            or (difficulty > 5 and state.has("High Jump", player, 2) or can_dumbo_skip(state, player))
+            or (difficulty > 10 and state.has("High Jump", player) and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Castle Gates High Pillar Chest"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
-            or state.has("High Jump", player, 2)
-            or (options.advanced_logic and can_dumbo_skip(state, player))
+            has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+            or (difficulty > 0 and state.has("High Jump", player, 3))
+            or (difficulty > 5 and state.has("High Jump", player, 2) or can_dumbo_skip(state, player))
+            or (difficulty > 10 and state.has("High Jump", player) and state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Great Crest Lower Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Great Crest After Battle Platform Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion High Tower 2nd Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Hollow Bastion High Tower 1st Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Hollow Bastion High Tower Above Sliding Blocks Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest"),
         lambda state: (
             state.has("Progressive Gravity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Library Node Gravity Chest"),
         lambda state: state.has("Progressive Gravity", player))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
+            has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Progressive Gravity", player)
             and (state.has("Progressive Glide", player) or options.advanced_logic)
         ))
@@ -718,30 +738,31 @@ def set_rules(kh1world):
             state.has("Progressive Gravity", player)
             and
             (
-                has_emblems(state, player, options.keyblades_unlock_chests)
-                or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
-                or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                or (difficulty > 0 and state.has("High Jump", player, 3) and state.has("Progressive Glide", player))
+                or (difficulty > 5 and (state.has("High Jump", player, 2) or can_dumbo_skip(state, player)) and state.has("Progressive Glide", player))
+                or (difficulty > 10 and state.has("High Jump") and state.has("Progressive Glide", player))
             )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Waterway Blizzard on Bubble Chest"),
         lambda state: (
             (state.has("Progressive Blizzard", player) and state.has("High Jump", player))
-            or state.has("High Jump", player, 3)
+            or (difficulty > 0 and state.has("High Jump", player, 3))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Grand Hall Steps Right Side Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Grand Hall Oblivion Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Grand Hall Left of Gate Chest"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Left of Emblem Door Chest"),
         lambda state: (
             state.has("High Jump", player)
             or
             (
-                options.advanced_logic
+                difficulty > 5
                 and can_dumbo_skip(state, player)
-                and has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Rising Falls White Trinity Chest"),
@@ -749,7 +770,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
-            or options.advanced_logic
+            or difficulty > 5
         ))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 1st Chest"),
         lambda state: (
@@ -759,7 +780,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("End of the World Giant Crevasse 4th Chest"),
         lambda state: (
             (
-                options.advanced_logic
+                difficulty > 5
                 and 
                 (
                     state.has_all({"High Jump", "Combo Master"}, player)
@@ -773,24 +794,24 @@ def set_rules(kh1world):
             state.has("High Jump", player)
             or
             (
-                options.advanced_logic
+                difficulty > 5
                 and can_dumbo_skip(state, player)
-                and state.has("Progressive Glide", player)
+                and (difficulty > 10 or state.has("Progressive Glide", player))
             )
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
+            has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Hollow Bastion", player)
-            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
+            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
+            has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Hollow Bastion", player)
-            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
+            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
         lambda state: state.has("Slides", player))
@@ -809,14 +830,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"),
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Monstro Defeat Parasite Cage II Stop Event"),
-        lambda state: (
-            state.has("High Jump", player)
-            or
-            (
-                options.advanced_logic
-                and state.has("Progressive Glide", player)
-            )
-        ))
+        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))))
     add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"),
         lambda state: (
             state.has_all({
@@ -853,15 +867,15 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Dragon Maleficent Fireglow Event"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Riku II Ragnarok Event"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Behemoth Omega Arts Event"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Speak to Princesses Fire Event"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Traverse Town Mail Postcard 01 Event"),
         lambda state: state.has("Postcard", player))
     add_rule(kh1world.get_location("Traverse Town Mail Postcard 02 Event"),
@@ -887,100 +901,46 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Navi-G Piece Event"),
         lambda state: state.has("Red Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Ansem's Report 5"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 6"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"),
         lambda state: (
             state.has_all({
                 "Jack-In-The-Box",
-                "Forget-Me-Not",
-                "Progressive Fire"}, player)
+                "Forget-Me-Not"}, player)
+            and has_oogie_manor(state, player, difficulty)
         ))
     add_rule(kh1world.get_location("Neverland Defeat Hook Ansem's Report 9"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 1"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 2"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 3"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 4"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 5"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto All Summons Reward"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
+        lambda state: 
+            has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)
             and has_all_summons(state, player)
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
         ))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Talk to Pinocchio"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Magician's Study Obtained All Arts Items"),
         lambda state: (
             has_all_magic_lvx(state, player, 1)
             and has_all_arts(state, player)
-            and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+            and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, 0) #due to the softlock potential, I'm forcing it to logic normally instead of allowing the bypass
         ))
     add_rule(kh1world.get_location("Traverse Town Magician's Study Obtained All LV1 Magic"),
         lambda state: has_all_magic_lvx(state, player, 1))
@@ -1059,60 +1019,52 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Item Workshop Postcard"),
         lambda state: (has_item_workshop(state, player, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Postcard"),
-        lambda state: (
-            state.has("Monstro", player)
-            and
-            (
-                state.has("High Jump", player)
-                or (options.advanced_logic and state.has("Progressive Glide", player))
-            )
-            and has_x_worlds(state, player, 2, options.keyblades_unlock_chests)
-        ))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)"),
         lambda state: (
             (
                 state.has("Theon Vol. 6", player)
-                or state.has("High Jump", player, 3)
-                or has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
+                or has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                or (difficulty > 0 and state.has("High Jump", player, 3))
+                or (difficulty > 5 and state.has("High Jump", player, 2))
             )
             and state.has("Progressive Fire", player)
             and
             (
-                state.has("High Jump", player)
-                or state.has("Progressive Glide", player)
+                state.has("Progressive Glide", player)
                 or state.has("Progressive Thunder", player)
-                or options.advanced_logic
+                or (difficulty > 0 and state.has("High Jump", player))
+                or difficulty > 5
             )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)"),
         lambda state: (
             state.has("Theon Vol. 6", player)
-            or state.has("High Jump", player, 3)
-            or has_emblems(state, player, options.keyblades_unlock_chests)
-            or (options.advanced_logic and state.has("High Jump", player, 2))
+            or has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+            or (difficulty > 0 and state.has("High Jump", player, 3))
+            or (difficulty > 5 and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)"),
         lambda state: (
             (
                 state.has("Theon Vol. 6", player)
-                or state.has("High Jump", player, 3)
-                or has_emblems(state, player, options.keyblades_unlock_chests)
-                or (options.advanced_logic and state.has("High Jump", player, 2))
+                or has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                or (difficulty > 0 and state.has("High Jump", player, 3))
+                or (difficulty > 5 and state.has("High Jump", player, 2))
             )
             and state.has("Red Trinity", player)
         ))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)"),
         lambda state: (
             state.has("Theon Vol. 6", player)
-            or state.has("High Jump", player, 3)
-            or has_emblems(state, player, options.keyblades_unlock_chests)
-            or (options.advanced_logic and state.has("High Jump", player, 2))
+            or has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+            or (difficulty > 0 and state.has("High Jump", player, 3))
+            or (difficulty > 5 and state.has("High Jump", player, 2))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Library Speak to Belle Divine Rose"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Hollow Bastion Library Speak to Aerith Cure"),
-        lambda state: has_emblems(state, player, options.keyblades_unlock_chests))
+        lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Traverse Town 1st District Blue Trinity by Exit Door"),
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Traverse Town 3rd District Blue Trinity"),
@@ -1137,22 +1089,14 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Monstro Throat Blue Trinity"),
         lambda state: (
             state.has("Blue Trinity", player)
-            and 
-            (
-                state.has("High Jump", player)
-                or
-                (
-                    options.advanced_logic
-                    and state.has("Progressive Glide", player)
-                )
-            )
-        ))
+            and has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
+            ))
     add_rule(kh1world.get_location("Monstro Chamber 5 Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
     add_rule(kh1world.get_location("Hollow Bastion Great Crest Blue Trinity"),
         lambda state: (
             state.has("Blue Trinity", player)
-            and has_emblems(state, player, options.keyblades_unlock_chests)
+            and has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Hollow Bastion Dungeon Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
@@ -1193,17 +1137,14 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop from Waterway Examine Node"),
         lambda state: (
-            has_emblems(state, player, options.keyblades_unlock_chests)
-            or (state.has("High Jump", player, 2) and state.has("Progressive Glide", player))
-            or (options.advanced_logic and can_dumbo_skip(state, player) and state.has("Progressive Glide", player))
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                or (difficulty > 0 and state.has("High Jump", player, 3) and state.has("Progressive Glide", player))
+                or (difficulty > 5 and (state.has("High Jump", player, 2) or can_dumbo_skip(state, player)) and state.has("Progressive Glide", player))
+                or (difficulty > 10 and state.has("High Jump", player) and state.has("Progressive Glide", player))
         ))
     for i in range(1,13):
             add_rule(kh1world.get_location("Neverland Clock Tower " + str(i).rjust(2, "0") + ":00 Door"),
-                lambda state: (
-                    state.has("Green Trinity", player)
-                    and has_all_magic_lvx(state, player, 2)
-                    and has_defensive_tools(state, player)
-                ))
+                lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
     if options.hundred_acre_wood:
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
             lambda state: (
@@ -1211,8 +1152,8 @@ def set_rules(kh1world):
                 and
                 (
                     state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
-                    or options.advanced_logic
+                    or (difficulty > 0 and state.has("Progressive Glide", player))
+                    or (difficulty > 5 and options.advanced_logic)
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
@@ -1221,7 +1162,7 @@ def set_rules(kh1world):
                 and
                 (
                     state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
+                    or (difficulty > 0 and state.has("Progressive Glide", player))
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Under Giant Pot Chest"),
@@ -1233,9 +1174,9 @@ def set_rules(kh1world):
                 state.has("Torn Page", player, 4)
                 and
                 (
-                    state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
-                    or options.advanced_logic
+                    state.has("High Jump", player) and state.has("Progressive Glide", player)
+                    or (difficulty > 0 and (state.has("Progressive Glide", player) or state.has("High Jump", player)))
+                    or difficulty > 5
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"),
@@ -1243,9 +1184,9 @@ def set_rules(kh1world):
                 state.has("Torn Page", player, 4)
                 and
                 (
-                    state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
-                    or options.advanced_logic
+                    state.has("High Jump", player) and state.has("Progressive Glide", player)
+                    or (difficulty > 0 and (state.has("Progressive Glide", player) or state.has("High Jump", player)))
+                    or difficulty > 5
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"),
@@ -1253,9 +1194,9 @@ def set_rules(kh1world):
                 state.has("Torn Page", player, 4)
                 and
                 (
-                    state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
-                    or options.advanced_logic
+                    state.has("High Jump", player) and state.has("Progressive Glide", player)
+                    or (difficulty > 0 and (state.has("Progressive Glide", player) or state.has("High Jump", player)))
+                    or difficulty > 5
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"),
@@ -1264,7 +1205,7 @@ def set_rules(kh1world):
                 and
                 (
                     state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
+                    or (difficulty > 0 and state.has("Progressive Glide", player))
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Pooh's House Owl Cheer"),
@@ -1288,9 +1229,9 @@ def set_rules(kh1world):
                 state.has("Torn Page", player, 4)
                 and
                 (
-                    state.has("High Jump", player)
-                    or state.has("Progressive Glide", player)
-                    or options.advanced_logic
+                    state.has("High Jump", player) and state.has("Progressive Glide", player)
+                    or (difficulty > 0 and (state.has("Progressive Glide", player) or state.has("High Jump", player)))
+                    or difficulty > 5
                 )
             ))
     if options.atlantica:
@@ -1304,19 +1245,19 @@ def set_rules(kh1world):
             lambda state: state.has("White Trinity", player))
         add_rule(kh1world.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"),
             lambda state: (
-                has_offensive_magic(state, player)
+                has_offensive_magic(state, player, difficulty)
                 and state.has("Crystal Trident", player)
             ))
         add_rule(kh1world.get_location("Atlantica Defeat Ursula II Thunder Event"),
             lambda state: (
                 state.has("Mermaid Kick", player)
-                and has_offensive_magic(state, player)
+                and has_offensive_magic(state, player, difficulty)
                 and state.has("Crystal Trident", player)
             ))
         add_rule(kh1world.get_location("Atlantica Seal Keyhole Crabclaw Event"),
             lambda state: (
                 state.has("Mermaid Kick", player)
-                and has_offensive_magic(state, player)
+                and has_offensive_magic(state, player, difficulty)
                 and state.has("Crystal Trident", player)
             ))
         add_rule(kh1world.get_location("Atlantica Undersea Gorge Blizzard Clam"),
@@ -1332,7 +1273,7 @@ def set_rules(kh1world):
                 state.has_all({
                     "Mermaid Kick",
                     "Crystal Trident"}, player)
-                and has_offensive_magic(state, player)
+                and has_offensive_magic(state, player, difficulty)
             ))
     if options.cups.current_key != "off":
         if options.cups.current_key == "hades_cup":
@@ -1343,7 +1284,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
         add_rule(kh1world.get_location("Complete Phil Cup"),
@@ -1387,21 +1328,21 @@ def set_rules(kh1world):
                 state.has_all({
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
         add_rule(kh1world.get_location("Complete Hercules Cup Solo"),
             lambda state: (
                 state.has_all({
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
         add_rule(kh1world.get_location("Complete Hercules Cup Time Trial"),
             lambda state: (
                 state.has_all({
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
         if options.cups.current_key == "hades_cup":
             add_rule(kh1world.get_location("Complete Hades Cup"),
@@ -1411,7 +1352,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Solo"),
@@ -1421,7 +1362,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Time Trial"),
@@ -1431,7 +1372,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cloud and Leon Event"),
@@ -1441,7 +1382,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Yuffie Event"),
@@ -1451,7 +1392,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cerberus Event"),
@@ -1461,7 +1402,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
@@ -1471,7 +1412,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Hades Event"),
@@ -1481,7 +1422,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
         add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
@@ -1489,14 +1430,14 @@ def set_rules(kh1world):
                 state.has_all({
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
         add_rule(kh1world.get_location("Hercules Cup Yellow Trinity Event"),
             lambda state: (
                 state.has_all({
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
         if options.cups.current_key == "hades_cup":
             add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
@@ -1507,7 +1448,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass",
                         "Guard"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
             add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
@@ -1517,7 +1458,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player)
                 ))
         add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
@@ -1527,29 +1468,36 @@ def set_rules(kh1world):
                     "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
     if options.super_bosses:
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
-            lambda state: (
-                state.has("Green Trinity", player)
-                and has_all_magic_lvx(state, player, 2)
-                and (state.has("Leaf Bracer", player) or options.advanced_logic)
-                and has_emblems(state, player, options.keyblades_unlock_chests)
-            ))
+            lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests, difficulty)))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
-                and state.has("Progressive Blizzard", player, 3)
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
+                and
+                (
+                    state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
+                    or (difficulty > 0 and (state.has("Progressive Blizzard", player, 2) or state.has("Progressive Fire", player, 2) or state.has("Progressive Thunder", player, 3)))
+                    or (difficulty > 5 and (state.has("Progressive Blizzard", player, 1) or state.has("Progressive Fire", player, 1) or state.has("Progressive Thunder", player, 2) or state.has("Mushu", player)))
+                    or (difficulty > 10 and state.has("Progressive Thunder", player, 1))
+                ) 
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
-                and state.has("Progressive Blizzard", player, 3)
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
+                and
+                (
+                    state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
+                    or (difficulty > 0 and (state.has("Progressive Blizzard", player, 2) or state.has("Progressive Fire", player, 2) or state.has("Progressive Thunder", player, 3)))
+                    or (difficulty > 5 and (state.has("Progressive Blizzard", player, 1) or state.has("Progressive Fire", player, 1) or state.has("Progressive Thunder", player, 2) or state.has("Mushu", player)))
+                    or (difficulty > 10 and state.has("Progressive Thunder", player, 1))
+                ) 
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
@@ -1559,8 +1507,8 @@ def set_rules(kh1world):
                     "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
             ))
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
             lambda state: (
@@ -1569,20 +1517,22 @@ def set_rules(kh1world):
                     "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
-                and has_defensive_tools(state, player)
+                has_emblems(state, player, options.keyblades_unlock_chests, difficulty) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and (difficulty > 10 or has_defensive_tools(state, player))
+                and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
     if options.jungle_slider:
         add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),
@@ -1625,16 +1575,16 @@ def set_rules(kh1world):
     for i in range(1,options.level_checks+1):
         add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 1)"),
             lambda state, level_num=i: (
-                has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests)
+                has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests, difficulty)
             ))
         if i+1 in kh1world.get_slot_2_levels():
             add_rule(kh1world.get_location("Level " + str(i+1).rjust(3,'0') + " (Slot 2)"),
                 lambda state, level_num=i: (
-                    has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests)
+                    has_x_worlds(state, player, min(((level_num//10)*2), 8), options.keyblades_unlock_chests, difficulty)
                 ))
     add_rule(kh1world.get_location("Final Ansem"),
         lambda state: (
-            has_x_worlds(state, player, 7, options.keyblades_unlock_chests) # In logic, player is strong enough
+            has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty) # In logic, player is strong enough
             and 
             (
                 ( # Can DI Finish
@@ -1652,6 +1602,155 @@ def set_rules(kh1world):
             )
             and has_defensive_tools(state, player)
         ))
+    if difficulty == 0:
+        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Dodge Roll Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Fire Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Blue Trinity Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Leon Secret Waterway Earthshine Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Brave Warrior Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Deep Jungle Defeat Clayton Cure Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Jungle King Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Red Trinity Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Clear Phil's Training Thunder Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Blizzard Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Pot Centipede Ray of Light Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Jafar Blizzard Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Jafar Genie Fire Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Seal Keyhole Genie Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Seal Keyhole Three Wishes Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Seal Keyhole Green Trinity Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Monstro Defeat Parasite Cage I Goofy Cheer Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Monstro Defeat Parasite Cage II Stop Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Atlantica Defeat Ursula II Thunder Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Atlantica Seal Keyhole Crabclaw Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Halloween Town Defeat Oogie's Manor Gravity Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Halloween Town Seal Keyhole Pumpkinhead Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Defeat Anti Sora Raven's Claw Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Encounter Hook Cure Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Seal Keyhole Fairy Harp Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Seal Keyhole Tinker Bell Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Seal Keyhole Glide Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Riku I White Trinity Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Dragon Maleficent Fireglow Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Riku II Ragnarok Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Behemoth Omega Arts Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Speak to Princesses Fire Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("End of the World Defeat Chernabog Superglide Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Seal Keyhole Navi-G Piece Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Jafar Genie Ansem's Report 1"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Library Speak to Aerith Cure"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Library Speak to Belle Divine Rose"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 6"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Ansem's Report 5"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Atlantica Defeat Ursula II Ansem's Report 3"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Neverland Defeat Hook Ansem's Report 9"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hades Cup Defeat Cloud and Leon Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hades Cup Defeat Yuffie Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hades Cup Defeat Cerberus Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hades Cup Defeat Hades Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Wonderland Rabbit Hole Defeat Heartless 3 Chest"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Aero Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Navi-G Piece Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
+            lambda state: has_basic_tools(state, player))
+        add_rule(kh1world.get_location("Final Ansem"),
+            lambda state: has_basic_tools(state, player))
     if options.keyblades_unlock_chests:
         add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
             lambda state: state.has("Lionheart", player))
@@ -2149,26 +2248,26 @@ def set_rules(kh1world):
     add_rule(kh1world.get_entrance("Destiny Islands"),
         lambda state: state.has("Destiny Islands", player))
     add_rule(kh1world.get_entrance("Wonderland"),
-        lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Olympus Coliseum"),
-        lambda state: state.has("Olympus Coliseum", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Olympus Coliseum", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Deep Jungle"),
-        lambda state: state.has("Deep Jungle", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Deep Jungle", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Agrabah"),
-        lambda state: state.has("Agrabah", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Agrabah", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Monstro"),
-        lambda state: state.has("Monstro", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Monstro", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     if options.atlantica:
         add_rule(kh1world.get_entrance("Atlantica"),
-            lambda state: state.has("Atlantica", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+            lambda state: state.has("Atlantica", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Halloween Town"),
-        lambda state: state.has("Halloween Town", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
+        lambda state: state.has("Halloween Town", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Neverland"),
-        lambda state: state.has("Neverland", player) and has_x_worlds(state, player, 3, options.keyblades_unlock_chests))
+        lambda state: state.has("Neverland", player) and has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Hollow Bastion"),
-        lambda state: state.has("Hollow Bastion", player) and has_x_worlds(state, player, 5, options.keyblades_unlock_chests))
+        lambda state: state.has("Hollow Bastion", player) and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("End of the World"),
-        lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and (has_lucky_emblems(state, player, eotw_required_lucky_emblems) or state.has("End of the World", player)))
+        lambda state: has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty) and (has_lucky_emblems(state, player, eotw_required_lucky_emblems) or state.has("End of the World", player)))
     add_rule(kh1world.get_entrance("100 Acre Wood"),
         lambda state: state.has("Progressive Fire", player))
 
