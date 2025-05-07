@@ -7,7 +7,6 @@ class SubnauticaTest(unittest.TestCase):
     scancutoff: int = 33999
 
     def testIDRange(self):
-        raise RuntimeError("intentionally break an __init__.py test")
         for name, id in subnautica.SubnauticaWorld.location_name_to_id.items():
             with self.subTest(location=name):
                 if "Scan" in name:
