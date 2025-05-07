@@ -186,6 +186,21 @@ death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.dea
 # kents_toolshed_bundle
 # Side Quest Bundle
 # Acrostic Bundle
+# Flashbang Bundle
+# Connection Bundle
+# Schrödinger’s Bundle
+# NFT Bundle
+# Firstborn Bundle
+# Clickbait Bundle
+# ASMR Bundle
+# Gacha Bundle
+# Restraint Bundle
+# QA Bundle
+# Fast Bundle
+# IKEA Bundle
+# Floor Is Lava Bundle
+# Bad Farmer Bundle
+# This Is Fine Bundle
 
 # Bundles that need special Mod Handling:
 # Vampire Bundle
