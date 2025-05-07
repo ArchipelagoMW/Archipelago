@@ -153,8 +153,9 @@ class TrapCountPercentage(Range):
     display_name = "Trap Percentage"
 
 
-class SongSet(OptionSet):
-    valid_keys = SONG_DATA.keys()
+class SongSet(OptionSet):    
+    valid_keys = {x for x in SONG_DATA.keys()}
+
 
 
 class IncludeSongs(SongSet):
