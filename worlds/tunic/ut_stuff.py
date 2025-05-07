@@ -42,6 +42,17 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
         world.using_ut = False
 
 
+    # for setting up the poptracker integration
+    tracker_world = {
+        "map_page_maps": ["maps/maps_pop.json"],
+        "map_page_locations": ["locations/locations_pop_er.json"],
+        "map_page_setting_key": "Slot:{player}:Current Map",
+        "map_page_index": ut_stuff.map_page_index,
+        "external_pack_key": "ut_poptracker_path",
+        "poptracker_name_mapping": ut_stuff.poptracker_data
+    }
+
+
 # for UT poptracker integration map tab switching
 def map_page_index(data: Any) -> int:
     mapping: dict[str, int] = {
