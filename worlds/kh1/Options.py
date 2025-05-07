@@ -417,11 +417,16 @@ class InteractInBattle(Toggle):
     """
     display_name = "Interact in Battle"
 
-class AdvancedLogic(Toggle):
+class LogicDifficulty(Choice):
     """
     If on, logic may expect you to do advanced skips like using Combo Master, Dumbo, and other unusual methods to reach locations.
     """
-    display_name = "Advanced Logic"
+    display_name = "Logic Difficulty"
+    option_beginner = 0
+    option_normal = 1
+    option_proud = 2
+    option_minimal = 3
+    default = 1
 
 class ExtraSharedAbilities(Toggle):
     """
@@ -722,7 +727,7 @@ class KH1Options(PerGameCommonOptions):
     keyblades_unlock_chests: KeybladesUnlockChests
     interact_in_battle: InteractInBattle
     exp_multiplier: EXPMultiplier
-    advanced_logic: AdvancedLogic
+    logic_difficulty: LogicDifficulty
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
     randomize_emblem_pieces: RandomizeEmblemPieces
@@ -852,7 +857,7 @@ kh1_option_groups = [
         RandomizePuppies,
         PuppyValue,
         InteractInBattle,
-        AdvancedLogic,
+        LogicDifficulty,
         ExtraSharedAbilities,
         EXPZeroInPool,
         RandomizePartyMemberStartingAccessories,

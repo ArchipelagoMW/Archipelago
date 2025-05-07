@@ -253,7 +253,7 @@ class KH1World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-                    "advanced_logic": bool(self.options.advanced_logic),
+                    "logic_difficulty": str(self.options.logic_difficulty),
                     "atlantica": bool(self.options.atlantica),
                     "auto_attack": bool(self.options.auto_attack),
                     "auto_save": bool(self.options.auto_save),
