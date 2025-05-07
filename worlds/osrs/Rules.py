@@ -219,7 +219,7 @@ def generate_special_rules_for(entrance, region_row, outbound_region_name, playe
     elif outbound_region_name == RegionNames.Crafting_Guild:
         add_rule(entrance, get_crafting_skill_rule(40, player, options))
         # Literally the only brown apron access in the entirety of f2p is buying it in varrock
-        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Central_Varrock))
+        add_rule(entrance, lambda state: state.can_reach_region(RegionNames.Central_Varrock, player))
     elif outbound_region_name == RegionNames.Corsair_Cove:
         # Need to be able to start Corsair Curse in addition to having the item
         add_rule(entrance, lambda state: state.can_reach(RegionNames.Falador_Farm, "Region", player))
