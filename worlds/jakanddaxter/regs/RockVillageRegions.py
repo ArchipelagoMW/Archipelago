@@ -61,10 +61,11 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
 
         bundle_count = 50 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
+            amount = world.orb_bundle_size * (bundle_index + 1)
             orbs.add_orb_locations(6,
                                    bundle_index,
-                                   access_rule=lambda state, level=level_name, bundle=bundle_index:
-                                   can_reach_orbs_level(state, player, world, level, bundle))
+                                   access_rule=lambda state, level=level_name, orb_amount=amount:
+                                   can_reach_orbs_level(state, player, world, level, orb_amount))
         multiworld.regions.append(orbs)
         main_area.connect(orbs)
 

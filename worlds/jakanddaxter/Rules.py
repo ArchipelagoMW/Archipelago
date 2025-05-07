@@ -29,27 +29,26 @@ def set_orb_trade_rule(world: JakAndDaxterWorld):
 
 def recalculate_reachable_orbs(state: CollectionState, player: int, world: JakAndDaxterWorld) -> None:
 
-    if not state.prog_items[player]["Reachable Orbs Fresh"]:
+    # Recalculate every level, every time the cache is stale, because you don't know
+    # when a specific bundle of orbs in one level may unlock access to another.
+    accessible_total_orbs = 0
+    for level in level_table:
+        accessible_level_orbs = count_reachable_orbs_level(state, world, level)
+        accessible_total_orbs += accessible_level_orbs
+        state.prog_items[player][f"{level} Reachable Orbs".lstrip()] = accessible_level_orbs
 
-        # Recalculate every level, every time the cache is stale, because you don't know
-        # when a specific bundle of orbs in one level may unlock access to another.
-        for level in level_table:
-            state.prog_items[player][f"{level} Reachable Orbs".strip()] = (
-                count_reachable_orbs_level(state, world, level))
-
-        # Also recalculate the global count, still used even when Orbsanity is Off.
-        state.prog_items[player]["Reachable Orbs"] = count_reachable_orbs_global(state, world)
-        state.prog_items[player]["Reachable Orbs Fresh"] = True
+    # Also recalculate the global count, still used even when Orbsanity is Off.
+    state.prog_items[player]["Reachable Orbs"] = accessible_total_orbs
+    state.prog_items[player]["Reachable Orbs Fresh"] = True
 
 
 def count_reachable_orbs_global(state: CollectionState,
                                 world: JakAndDaxterWorld) -> int:
 
     accessible_orbs = 0
-    for level_regions in world.level_to_regions.values():
+    for level_regions in world.level_to_orb_regions.values():
         for region in level_regions:
-            # Rely on short-circuiting to skip region.can_reach whenever possible.
-            if region.orb_count > 0 and region.can_reach(state):
+            if region.can_reach(state):
                 accessible_orbs += region.orb_count
     return accessible_orbs
 
@@ -59,9 +58,8 @@ def count_reachable_orbs_level(state: CollectionState,
                                level_name: str = "") -> int:
 
     accessible_orbs = 0
-    for region in world.level_to_regions[level_name]:
-        # Rely on short-circuiting to skip region.can_reach whenever possible.
-        if region.orb_count > 0 and region.can_reach(state):
+    for region in world.level_to_orb_regions[level_name]:
+        if region.can_reach(state):
             accessible_orbs += region.orb_count
     return accessible_orbs
 
@@ -69,20 +67,24 @@ def count_reachable_orbs_level(state: CollectionState,
 def can_reach_orbs_global(state: CollectionState,
                           player: int,
                           world: JakAndDaxterWorld,
-                          bundle: int) -> bool:
+                          orb_amount: int) -> bool:
 
-    recalculate_reachable_orbs(state, player, world)
-    return state.has("Reachable Orbs", player, world.orb_bundle_size * (bundle + 1))
+    if not state.prog_items[player]["Reachable Orbs Fresh"]:
+        recalculate_reachable_orbs(state, player, world)
+
+    return state.has("Reachable Orbs", player, orb_amount)
 
 
 def can_reach_orbs_level(state: CollectionState,
                          player: int,
                          world: JakAndDaxterWorld,
                          level_name: str,
-                         bundle: int) -> bool:
+                         orb_amount: int) -> bool:
 
-    recalculate_reachable_orbs(state, player, world)
-    return state.has(f"{level_name} Reachable Orbs", player, world.orb_bundle_size * (bundle + 1))
+    if not state.prog_items[player]["Reachable Orbs Fresh"]:
+        recalculate_reachable_orbs(state, player, world)
+
+    return state.has(f"{level_name} Reachable Orbs", player, orb_amount)
 
 
 def can_trade_vanilla(state: CollectionState,
@@ -92,7 +94,9 @@ def can_trade_vanilla(state: CollectionState,
                       required_previous_trade: typing.Optional[int] = None) -> bool:
 
     # With Orbsanity Off, Reachable Orbs are in fact Tradeable Orbs.
-    recalculate_reachable_orbs(state, player, world)
+    if not state.prog_items[player]["Reachable Orbs Fresh"]:
+        recalculate_reachable_orbs(state, player, world)
+
     if required_previous_trade:
         name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
         return (state.has("Reachable Orbs", player, required_orbs)
@@ -107,7 +111,9 @@ def can_trade_orbsanity(state: CollectionState,
                         required_previous_trade: typing.Optional[int] = None) -> bool:
 
     # Yes, even Orbsanity trades may unlock access to new Reachable Orbs.
-    recalculate_reachable_orbs(state, player, world)
+    if not state.prog_items[player]["Reachable Orbs Fresh"]:
+        recalculate_reachable_orbs(state, player, world)
+
     if required_previous_trade:
         name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
         return (state.has("Tradeable Orbs", player, required_orbs)

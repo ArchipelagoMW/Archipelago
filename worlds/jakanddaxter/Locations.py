@@ -10,13 +10,6 @@ from .locs import (OrbLocations as Orbs,
 class JakAndDaxterLocation(Location):
     game: str = jak1_name
 
-    # In AP 0.5.0, the base Location.can_reach function had its two boolean conditions swapped for a faster
-    # short-circuit for better performance. However, Jak seeds actually generate faster using the older method,
-    # which has been re-implemented below.
-    def can_reach(self, state: CollectionState) -> bool:
-        assert self.parent_region, "Can't reach location without region"
-        return self.parent_region.can_reach(state) and self.access_rule(state)
-
 
 # Different tables for location groups.
 # Each Item ID == its corresponding Location ID. While we're here, do all the ID conversions needed.

@@ -226,14 +226,16 @@ class JakAndDaxterWorld(World):
     power_cell_thresholds: list[int]
     trap_weights: tuple[list[str], list[int]]
 
-    # Store a dictionary of levels to regions for faster access.
-    level_to_regions: dict[str, list[JakAndDaxterRegion]]
+    # Store these dictionaries for speed improvements.
+    level_to_regions: dict[str, list[JakAndDaxterRegion]]  # Contains all levels and regions.
+    level_to_orb_regions: dict[str, list[JakAndDaxterRegion]]  # Contains only regions which contain orbs.
 
     # Handles various options validation, rules enforcement, and caching of important information.
     def generate_early(self) -> None:
 
         # Initialize the level-region dictionary.
         self.level_to_regions = defaultdict(list)
+        self.level_to_orb_regions = defaultdict(list)
 
         # Cache the power cell threshold values for quicker reference.
         self.power_cell_thresholds = [
@@ -315,16 +317,22 @@ class JakAndDaxterWorld(World):
         create_regions(self)
 
         # Don't forget to add the created regions to the multiworld!
-        for level_regions in self.level_to_regions.values():
-            self.multiworld.regions.extend(level_regions)
+        for level in self.level_to_regions:
+            self.multiworld.regions.extend(self.level_to_regions[level])
+
+            # As a lazy measure, let's also fill level_to_orb_regions here.
+            # This should help speed up orbsanity calculations.
+            self.level_to_orb_regions[level] = [reg for reg in self.level_to_regions[level] if reg.orb_count > 0]
 
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")
 
-    # Helper function to reuse some nasty if/else trees. This outputs a list of pairs of item count and classification.
-    # For instance, not all 101 power cells need to be marked progression if you only need 72 to beat the game. So we
-    # will have 72 Progression Power Cells, and 29 Filler Power Cells.
     def item_type_helper(self, item: int) -> list[tuple[int, ItemClass]]:
+        """
+        Helper function to reuse some nasty if/else trees. This outputs a list of pairs of item count and classification.
+        For instance, not all 101 power cells need to be marked progression if you only need 72 to beat the game. So we
+        will have 72 Progression Power Cells, and 29 Filler Power Cells.
+        """
         counts_and_classes: list[tuple[int, ItemClass]] = []
 
         # Make N Power Cells. We only want AP's Progression Fill routine to handle the amount of cells we need

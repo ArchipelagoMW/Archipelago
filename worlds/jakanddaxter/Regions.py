@@ -55,10 +55,11 @@ def create_regions(world: JakAndDaxterWorld):
         for bundle_index in range(bundle_count):
 
             # Unlike Per-Level Orbsanity, Global Orbsanity Locations always have a level_index of 16.
+            amount = world.orb_bundle_size * (bundle_index + 1)
             orbs.add_orb_locations(16,
                                    bundle_index,
-                                   access_rule=lambda state, bundle=bundle_index:
-                                   can_reach_orbs_global(state, player, world, bundle))
+                                   access_rule=lambda state, orb_amount=amount:
+                                   can_reach_orbs_global(state, player, world, orb_amount))
         multiworld.regions.append(orbs)
         menu.connect(orbs)
 
