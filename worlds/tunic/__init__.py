@@ -1,3 +1,4 @@
+from dataclasses import fields
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -16,7 +17,7 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
 from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError
+from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
 from settings import Group, Bool
 
 
@@ -120,6 +121,20 @@ class TunicWorld(World):
             raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
                             "This would cause an error at the end of generation.\n"
                             "Please remove one of them, most likely the one in lib/worlds.")
+        
+        if self.options.all_random:
+            for option_name in (attr.name for attr in fields(TunicOptions)
+                                if attr not in fields(PerGameCommonOptions)):
+                option = getattr(self.options, option_name)
+                if option_name == "all_random":
+                    continue
+                if isinstance(option, Removed):
+                    continue
+                if option.supports_weighting:
+                    if isinstance(option, Range):
+                        option.value = self.random.randint(option.range_start, option.range_end)
+                    else:
+                        option.value = self.random.choice(list(option.name_lookup))
 
         check_options(self)
 

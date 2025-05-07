@@ -332,6 +332,16 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 class LogicRules(Choice):
     """
     This option has been superseded by the individual trick options.
@@ -392,6 +402,8 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+      
+    all_random: HiddenAllRandom
 
     fixed_shop: FixedShop  # will be removed at a later date
     logic_rules: Removed  # fully removed in the direction pairs update
