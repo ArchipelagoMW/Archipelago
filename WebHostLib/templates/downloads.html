@@ -1,0 +1,37 @@
+{% extends "markdown_document.html" %}
+
+{% block head %}
+    {% include "header/oceanIslandHeader.html" %}
+    <title>Downloads</title>
+    <!-- html style because a full css file for this much change seems overkill -->
+    <style>
+        .downloads-wrapper {
+            text-align: center
+        }
+
+        .downloads {
+            display: inline-block;
+            text-align: left
+        }
+
+        > li:first-child {
+            margin-bottom: 24px
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="downloads-wrapper">
+        <h1>Download Latest Archipelago Release</h1>
+        <br/>
+        <ul class="downloads">
+            <li><a href="https://github.com/ArchipelagoMW/Archipelago/releases/latest">Patch Notes</a></li>
+            <!-- <platform>-<arch>-<fmt> -->
+            <li><a href="{{ url_for("api.get_download", build="windows--setup") }}">Download for Windows 10+</a></li>
+            <li><a href="{{ url_for("api.get_download", build="linux-x86_64-appimage") }}">Download for Linux (AppImage)</a></li>
+            <li><a href="{{ url_for("api.get_download", build="linux-x86_64-tar") }}">Download for Linux (.tar.gz)</a></li>
+            <!-- add links here if we add more supported builds -->
+        </ul>
+    </div>
+    {% include "islandFooter.html" %}
+{% endblock %}
