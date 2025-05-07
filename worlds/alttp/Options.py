@@ -573,6 +573,11 @@ class Scams(Choice):
         return self.value in {0, 1}
 
 
+class StarScams(Toggle):
+    """If on, Power Stars (used to indicate non-LTTP items) will all appear gold.
+    If off, only progression items appear gold, while non-progression items appear silver."""
+    display_name = "Star Scams"
+
 class EnemyShuffle(Toggle):
     """Randomize every enemy spawn.
     If mode is Standard, Hyrule Castle is left out (may result in visually wrong enemy sprites in that area.)"""
@@ -779,6 +784,7 @@ class ALTTPOptions(PerGameCommonOptions):
     retro_caves: RetroCaves
     hints: Hints
     scams: Scams
+    star_scams: StarScams
     boss_shuffle: LTTPBosses
     pot_shuffle: PotShuffle
     enemy_shuffle: EnemyShuffle
