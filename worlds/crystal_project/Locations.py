@@ -984,8 +984,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
         LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #1st Overpass (Cloudy Wind) Scrap
         LocationData("Tall Tall Heights", "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) Overpass (Outpost) Scrap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
         LocationData("Tall Tall Heights", "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset), #(191, 172, -437) (Underwater) Underpass Scrap chest
 
 
