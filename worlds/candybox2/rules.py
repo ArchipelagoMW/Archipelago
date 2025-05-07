@@ -47,7 +47,7 @@ class CandyBox2RulesPackageRuleConstantExpression(CandyBox2RulesPackageRuleExpre
     def __or__(self, other):
         return self if self.constant == True else other
 
-    def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int):
+    def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         return self.constant
 
     def default(self):
@@ -201,8 +201,9 @@ class CandyBox2RulesPackage(JSONEncoder):
         self.location_parents = {}
         self.room_exits = {}
 
-    def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression, parent: CandyBox2Room | None):
-        self.location_rules[location] = rule
+    def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression | None, parent: CandyBox2Room | None):
+        if rule is not None:
+            self.location_rules[location] = rule
         if parent is not None:
             self.location_parents[location] = parent
 
@@ -281,7 +282,7 @@ def rule_room(room: "CandyBox2Room"):
     return CandyBox2RulesPackageRuleRoomExpression(room)
 
 def no_conditions():
-    return CandyBox2RulesPackageRuleConstantExpression(True)
+    return None
 
 def has_weapon(weapon: CandyBox2ItemName):
     return rule_item(weapon) | rule_item(CandyBox2ItemName.PROGRESSIVE_WEAPON, weapons.index(weapon)) | CandyBox2RulesPackageRuleStartWeaponExpression(weapon)
@@ -374,6 +375,7 @@ def generate_rules_package():
 
 def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies(), None)
+    rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD, can_farm_candies(), CandyBox2Room.VILLAGE_FORGE)
@@ -419,9 +421,9 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED, weapon_is_at_least(CandyBox2ItemName.POLISHED_SILVER_SWORD), CandyBox2Room.QUEST_THE_BRIDGE)
 
     # Cave rules
-    rules_package.add_location_rule(CandyBox2LocationName.CAVE_CHOCOLATE_BAR, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
-    rules_package.add_location_rule(CandyBox2LocationName.CAVE_HEART_PLUG, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
-    rules_package.add_location_rule(CandyBox2LocationName.CAVE_EXIT, no_conditions(), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_CHOCOLATE_BAR, no_conditions(), CandyBox2Room.CAVE)
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_HEART_PLUG, no_conditions(), CandyBox2Room.CAVE)
+    rules_package.add_location_rule(CandyBox2LocationName.CAVE_EXIT, no_conditions(), CandyBox2Room.CAVE)
     rules_package.add_location_rule(CandyBox2LocationName.OCTOPUS_KING_DEFEATED, rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_OCTOPUS_KING)
     rules_package.add_location_rule(CandyBox2LocationName.MONKEY_WIZARD_DEFEATED, rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_cast(CandyBox2Castable.TELEPORT) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & weapon_is_at_least(CandyBox2ItemName.TROLLS_BLUDGEON) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD)
 
