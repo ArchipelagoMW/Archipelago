@@ -550,6 +550,13 @@ class World(metaclass=AutoWorldRegister):
     def get_location(self, location_name: str) -> "Location":
         return self.multiworld.get_location(location_name, self.player)
 
+    def get_location_if_available(self, location_name: str) -> "Location | None":
+        """Like get_location, but returns None if the location isn't in the world.
+
+        This still throws an exception if the location name isn't even recognized.
+        """
+        return self.multiworld.get_location_if_available(location_name, self.player)
+
     def get_locations(self) -> "Iterable[Location]":
         return self.multiworld.get_locations(self.player)
 

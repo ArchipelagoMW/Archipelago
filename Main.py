@@ -105,9 +105,10 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info('Calculating Access Rules.')
 
     for player in multiworld.player_ids:
-        # items can't be both local and non-local, prefer local
+        # items and locations can't be both local and non-local, prefer local
         multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
         multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
+        multiworld.worlds[player].options.non_local_locations.value -= multiworld.worlds[player].options.local_locations.value
 
     AutoWorld.call_all(multiworld, "set_rules")
 
@@ -116,9 +117,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld.worlds[player].options.priority_locations.value -= multiworld.worlds[player].options.exclude_locations.value
         world_excluded_locations = set()
         for location_name in multiworld.worlds[player].options.priority_locations.value:
-            try:
-                location = multiworld.get_location(location_name, player)
-            except KeyError:
+            location = multiworld.get_location_if_available(location_name, player)
+            if not location:
                 continue
 
             if location.progress_type != LocationProgressType.EXCLUDED:
@@ -134,6 +134,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     else:
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
+        multiworld.worlds[1].options.non_local_locations.value = set()
+        multiworld.worlds[1].options.local_locations.value = set()
 
     AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
