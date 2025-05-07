@@ -8,7 +8,11 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 ### My game has a restrictive start that leads to fill errors
 
-Hint to the Generator that an item needs to be in sphere one with local_early_items. Here, `1` represents the number of "Sword" items to attempt to place in sphere one.
+A "restrictive start" here means having a combination of very few sphere 1 locations and potentially requiring more
+than one item to get a player to sphere 2.
+
+One way to fix this is to hint to the Generator that an item needs to be in sphere one with local_early_items. 
+Here, `1` represents the number of "Sword" items the Generator will attempt to place in sphere one.
 ```py
 early_item_name = "Sword"
 self.multiworld.local_early_items[self.player][early_item_name] = 1
@@ -22,7 +26,7 @@ Some alternative ways to try to fix this problem are:
 
 ---
 
-### I have multiple settings that change the item/location pool counts and need to balance them out
+### I have multiple options that change the item/location pool counts and need to make sure I am not submitting more/fewer items than locations
 
 In an ideal situation your system for producing locations and items wouldn't leave any opportunity for them to be unbalanced. But in real, complex situations, that might be unfeasible.
 
