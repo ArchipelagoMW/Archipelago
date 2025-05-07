@@ -624,16 +624,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, logic.has_vertical_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, logic.has_vertical_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, logic.has_vertical_movement), #Dust
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver", 2693 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver past angry birds", 2697 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, logic.has_vertical_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset), #Ingot
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the back cliff wall", 2694 + npc_index_offset, logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver", 2878 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on western beach along the cliffside", 2692 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver chilling in beach cave", 2698 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
