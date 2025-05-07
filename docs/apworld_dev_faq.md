@@ -96,3 +96,5 @@ Concrete examples of soft logic include:
 - Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc. that aren't strictly necessary.
 - Entering a high-level area might logically require access to enough other parts of the game that checking other locations should naturally get the player to the soft-required level.
 - Buying expensive shop items might logically require access to a place where you can quickly farm money, or logically require access to enough parts of the game that checking other locations should naturally generate enough money without grinding.
+
+Remember that all items referenced by logic (however hard or soft) must be `progression`. Since you typically don't want to turn a ton of `filler` items into `progression` just for this, it's common to e.g. write money logic using only the rare "$100" item, so the dozens of "$1" and "$10" items in your world can remain `filler`.
