@@ -8,6 +8,5 @@ class Animal:
     rabbit = "Rabbit"
     goat = "Goat"
     ostrich = "Ostrich"
-
-coop_animals = [Animal.chicken, "Rabbit", "Duck", "Dinosaur"]
-barn_animals = [Animal.cow, "Sheep", "Pig", "Ostrich"]
+    void_chicken = "Void Chicken"
+    golden_chicken = "Golden Chicken"

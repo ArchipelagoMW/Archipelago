@@ -1,12 +1,13 @@
 import itertools
+from typing import ClassVar
 
 from BaseClasses import ItemClassification
-from Options import NamedRange
+from test.param import classvar_matrix
 from . import SVTestCase, solo_multiworld, SVTestBase
 from .assertion import WorldAssertMixin
-from .long.option_names import all_option_choices
+from .options.option_names import all_option_choices
 from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
-from .. import items_by_group, Group, StardewValleyWorld
+from .. import items_by_group, Group
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
 from ..strings.goal_names import Goal as GoalName
@@ -18,42 +19,36 @@ SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 
 
+@classvar_matrix(option_and_choice=all_option_choices)
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
-    def test_given_special_range_when_generate_then_basic_checks(self):
-        options = StardewValleyWorld.options_dataclass.type_hints
-        for option_name, option in options.items():
-            if not issubclass(option, NamedRange):
-                continue
-            for value in option.special_range_names:
-                world_options = {option_name: option.special_range_names[value]}
-                with self.solo_world_sub_test(f"{option_name}: {value}", world_options) as (multiworld, _):
-                    self.assert_basic_checks(multiworld)
+    option_and_choice: ClassVar[tuple[str, str]]
 
-    def test_given_choice_when_generate_then_basic_checks(self):
-        options = StardewValleyWorld.options_dataclass.type_hints
-        for option_name, option in options.items():
-            if not option.options:
-                continue
-            for value in option.options:
-                world_options = {option_name: option.options[value]}
-                with self.solo_world_sub_test(f"{option_name}: {value}", world_options) as (multiworld, _):
-                    self.assert_basic_checks(multiworld)
+    def test_given_option_and_choice_when_generate_then_basic_checks(self):
+        option, choice = self.option_and_choice
+        world_options = {option: choice}
+        with solo_multiworld(world_options) as (multiworld, stardew_world):
+            self.assert_basic_checks(multiworld)
 
 
+@classvar_matrix(goal_and_location=[
+    ("community_center", GoalName.community_center),
+    ("grandpa_evaluation", GoalName.grandpa_evaluation),
+    ("bottom_of_the_mines", GoalName.bottom_of_the_mines),
+    ("cryptic_note", GoalName.cryptic_note),
+    ("master_angler", GoalName.master_angler),
+    ("complete_collection", GoalName.complete_museum),
+    ("full_house", GoalName.full_house),
+    ("perfection", GoalName.perfection),
+])
 class TestGoal(SVTestCase):
+    goal_and_location: ClassVar[tuple[str, str]]
+
     def test_given_goal_when_generate_then_victory_is_in_correct_location(self):
-        for goal, location in [("community_center", GoalName.community_center),
-                               ("grandpa_evaluation", GoalName.grandpa_evaluation),
-                               ("bottom_of_the_mines", GoalName.bottom_of_the_mines),
-                               ("cryptic_note", GoalName.cryptic_note),
-                               ("master_angler", GoalName.master_angler),
-                               ("complete_collection", GoalName.complete_museum),
-                               ("full_house", GoalName.full_house),
-                               ("perfection", GoalName.perfection)]:
-            world_options = {Goal.internal_name: Goal.options[goal]}
-            with self.solo_world_sub_test(f"Goal: {goal}, Location: {location}", world_options) as (multi_world, _):
-                victory = multi_world.find_item("Victory", 1)
-                self.assertEqual(victory.name, location)
+        goal, location = self.goal_and_location
+        world_options = {Goal.internal_name: goal}
+        with solo_multiworld(world_options) as (multi_world, _):
+            victory = multi_world.find_item("Victory", 1)
+            self.assertEqual(victory.name, location)
 
 
 class TestSeasonRandomization(SVTestCase):
@@ -104,26 +99,28 @@ class TestToolProgression(SVTestBase):
         self.assertEqual(useful_count, 1)
 
 
+@classvar_matrix(option_and_choice=all_option_choices)
 class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase):
+    option_and_choice: ClassVar[tuple[str, str]]
 
     def test_given_choice_when_generate_exclude_ginger_island_then_ginger_island_is_properly_excluded(self):
-        for option, option_choice in all_option_choices:
-            if option is ExcludeGingerIsland:
-                continue
+        option, option_choice = self.option_and_choice
 
-            world_options = {
-                ExcludeGingerIsland: ExcludeGingerIsland.option_true,
-                option: option_choice
-            }
+        if option == ExcludeGingerIsland.internal_name:
+            self.skipTest("ExcludeGingerIsland is forced to true")
 
-            with self.solo_world_sub_test(f"{option.internal_name}: {option_choice}", world_options) as (multiworld, stardew_world):
+        world_options = {
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+            option: option_choice
+        }
 
-                # Some options, like goals, will force Ginger island back in the game. We want to skip testing those.
-                if stardew_world.options.exclude_ginger_island != ExcludeGingerIsland.option_true:
-                    continue
+        with solo_multiworld(world_options) as (multiworld, stardew_world):
 
-                self.assert_basic_checks(multiworld)
-                self.assert_no_ginger_island_content(multiworld)
+            if stardew_world.options.exclude_ginger_island != ExcludeGingerIsland.option_true:
+                self.skipTest("Some options, like goals, will force Ginger island back in the game. We want to skip testing those.")
+
+            self.assert_basic_checks(multiworld)
+            self.assert_no_ginger_island_content(multiworld)
 
 
 class TestTraps(SVTestCase):

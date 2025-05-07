@@ -156,8 +156,8 @@ def set_region_rules(world: "TunicWorld") -> None:
 
     if options.ladder_storage >= LadderStorage.option_medium:
         # ls at any ladder in a safe spot in quarry to get to the monastery rope entrance
-        world.get_region("Quarry Back").connect(world.get_region("Monastery"),
-                                                rule=lambda state: can_ladder_storage(state, world))
+        add_rule(world.get_entrance(entrance_name="Quarry Back -> Monastery"),
+                 rule=lambda state: can_ladder_storage(state, world))
 
 
 def set_location_rules(world: "TunicWorld") -> None:
