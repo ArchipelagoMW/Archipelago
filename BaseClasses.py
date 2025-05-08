@@ -1753,7 +1753,7 @@ class Tutorial(NamedTuple):
     description: str
     language: str
     file_name: str
-    link: str
+    link: str  # unused
     authors: List[str]
 
 
