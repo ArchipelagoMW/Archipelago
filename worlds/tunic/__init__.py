@@ -1,3 +1,4 @@
+from dataclasses import fields
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from dataclasses import fields
 from logging import warning
@@ -137,19 +138,21 @@ class TunicWorld(World):
             raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
                             "This would cause an error at the end of generation.\n"
                             "Please remove one of them, most likely the one in lib/worlds.")
+
         if self.options.all_random:
             for option_name in (attr.name for attr in fields(TunicOptions)
                                 if attr not in fields(PerGameCommonOptions)):
                 option = getattr(self.options, option_name)
                 if option_name == "all_random":
                     continue
-                if issubclass(option.__class__, Removed):
+                if isinstance(option, Removed):
                     continue
                 if option.supports_weighting:
-                    if issubclass(option.__class__, Range):
+                    if isinstance(option, Range):
                         option.value = self.random.randint(option.range_start, option.range_end)
                     else:
                         option.value = self.random.choice(list(option.name_lookup))
+
         check_options(self)
         self.er_regions = tunic_er_regions.copy()
         if self.options.plando_connections and not self.options.entrance_rando:
