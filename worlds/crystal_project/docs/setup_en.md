@@ -1,4 +1,4 @@
-# Rogue Legacy Randomizer Setup Guide
+# Crystal Project Randomizer Setup Guide
 
 ## Required Software
 
