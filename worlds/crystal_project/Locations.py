@@ -122,7 +122,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Soiled Den", "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
 
         #Boss
-        LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset)
+        LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
 
         #Pale Grotto
         #Treasure chests
