@@ -766,28 +766,29 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Material": ItemData("Equipment", 284 + equipment_index_offset, ItemClassification.useful),
 
     #Progressive Equipment
-    "Equipment - Progressive 1H Sword": ItemData("Equipment", 11 + equipment_index_offset, ItemClassification.useful, 4, 1, 7, 1), #1H Sword IDs 11, 71, 89, 93, 200, 377, 375, 380, 372, 381, 303, 411, 316
-    "Equipment - Progressive 2H Sword": ItemData("Equipment", 12 + equipment_index_offset, ItemClassification.useful, 1, 2, 2, 1), # 2H Sword IDs 12, 177, 197, 525, 382, 279
-    "Equipment - Progressive 1H Axe": ItemData("Equipment", 94 + equipment_index_offset, ItemClassification.useful, 0, 3, 0, 1), # 1H Axe IDs 94, 187, 386, 388
-    "Equipment - Progressive 2H Axe": ItemData("Equipment", 2 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 1), # 2H Axe IDs 2, 385, 280, 274
-    "Equipment - Progressive Dagger": ItemData("Equipment", 63 + equipment_index_offset, ItemClassification.useful, 3, 3, 2, 1), # Dagger IDs 63, 40, 95, 184, 198, 305, 393, 72, 306
-    "Equipment - Progressive Ninja Dagger": ItemData("Equipment", 192 + equipment_index_offset, ItemClassification.useful, 0, 3, 1, 1), # Ninja Dagger IDs 192, 203, 397, 317, 318
-    "Equipment - Progressive Rapier": ItemData("Equipment", 42 + equipment_index_offset, ItemClassification.useful, 2, 3, 3, 1), # Rapier IDs 42, 96, 175, 10, 404, 407, 401, 403, 406
-    "Equipment - Progressive Katana": ItemData("Equipment", 97 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 0), # Katana IDs 97, 399, 367
-    "Equipment - Progressive Spear": ItemData("Equipment", 98 + equipment_index_offset, ItemClassification.useful, 1, 3, 3, 1), # Spear IDs 98, 190, 183, 409, 418, 417, 416, 275
-    "Equipment - Progressive Scythe": ItemData("Equipment", 6 + equipment_index_offset, ItemClassification.useful, 1, 2, 3, 0), # Scythe IDs 6, 99, 293, 414, 415, 590
-    "Equipment - Progressive Bow": ItemData("Equipment", 105 + equipment_index_offset, ItemClassification.useful, 1, 1, 2, 1), # Bow IDs 105, 181, 301, 299, 420
-    "Equipment - Progressive Staff": ItemData("Equipment", 62 + equipment_index_offset, ItemClassification.useful, 1, 2, 4, 1), # Staff IDs 62, 100, 188, 422, 424, 425, 290, 429
-    "Equipment - Progressive Beating Staff": ItemData("Equipment", 14 + equipment_index_offset, ItemClassification.useful, 1, 2, 0, 0), # Beating Staff IDs 14, 426, 335
-    "Equipment - Progressive Wand": ItemData("Equipment", 13 + equipment_index_offset, ItemClassification.useful, 2, 3, 5, 0), # Wand IDs 13, 64, 101, 189, 267, 432, 435, 430, 276, 358
-    "Equipment - Progressive Book": ItemData("Equipment", 102 + equipment_index_offset, ItemClassification.useful, 1, 4, 3, 0), # Book IDs 102, 194, 223, 224, 437, 439, 440, 443
-    "Equipment - Progressive Shield": ItemData("Equipment", 45 + equipment_index_offset, ItemClassification.useful, 3, 4, 5, 1), # Shield IDs 45, 68, 88, 506, 103, 178, 451, 452, 450, 453, 344, 288, 246
-    "Equipment - Progressive Heavy Head": ItemData("Equipment", 74 + equipment_index_offset, ItemClassification.useful, 1, 3, 4, 0), # Heavy Head IDs 74, 508, 125, 132, 464, 470, 467, 292
-    "Equipment - Progressive Heavy Body": ItemData("Equipment", 28 + equipment_index_offset, ItemClassification.useful, 1, 4, 14, 1), # Heavy Body IDs 28, 84, 510, 126, 43, 456, 462, 461, 130, 458, 131, 463, 533, 534, 536, 535, 538, 537, 557, 548
-    "Equipment - Progressive Medium Head": ItemData("Equipment", 75 + equipment_index_offset, ItemClassification.useful, 2, 4, 2, 1), # Medium Head IDs 75, 30, 512, 195, 233, 485, 481, 345, 482
-    "Equipment - Progressive Medium Body": ItemData("Equipment", 514 + equipment_index_offset, ItemClassification.useful, 1, 4, 12, 0), # Medium Body IDs 514, 268, 229, 176, 57, 473, 477, 479, 347, 539, 540, 541, 542, 543, 544, 545, 546
-    "Equipment - Progressive Light Head": ItemData("Equipment", 32 + equipment_index_offset, ItemClassification.useful, 2, 3, 6, 2), # Light Head IDs 32, 76, 516, 133, 122, 342, 356, 34, 348, 52, 531, 271, 354
-    "Equipment - Progressive Light Body": ItemData("Equipment", 21 + equipment_index_offset, ItemClassification.useful, 2, 3, 12, 3), # Light Body IDs 21, 81, 518, 134, 230, 357, 360, 324, 349, 337, 273, 319, 547, 549, 550, 551, 552, 553, 554, 555
+    #highest equipment id is 590 so these ids start at 600
+    "Equipment - Progressive 1H Sword": ItemData("Equipment", 600 + equipment_index_offset, ItemClassification.useful, 4, 1, 7, 1), #1H Sword IDs 11, 71, 89, 93, 200, 377, 375, 380, 372, 381, 303, 411, 316
+    "Equipment - Progressive 2H Sword": ItemData("Equipment", 601 + equipment_index_offset, ItemClassification.useful, 1, 2, 2, 1), # 2H Sword IDs 12, 177, 197, 525, 382, 279
+    "Equipment - Progressive 1H Axe": ItemData("Equipment", 602 + equipment_index_offset, ItemClassification.useful, 0, 3, 0, 1), # 1H Axe IDs 94, 187, 386, 388
+    "Equipment - Progressive 2H Axe": ItemData("Equipment", 603 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 1), # 2H Axe IDs 2, 385, 280, 274
+    "Equipment - Progressive Dagger": ItemData("Equipment", 604 + equipment_index_offset, ItemClassification.useful, 3, 3, 2, 1), # Dagger IDs 63, 40, 95, 184, 198, 305, 393, 72, 306
+    "Equipment - Progressive Ninja Dagger": ItemData("Equipment", 605 + equipment_index_offset, ItemClassification.useful, 0, 3, 1, 1), # Ninja Dagger IDs 192, 203, 397, 317, 318
+    "Equipment - Progressive Rapier": ItemData("Equipment", 606 + equipment_index_offset, ItemClassification.useful, 2, 3, 3, 1), # Rapier IDs 42, 96, 175, 10, 404, 407, 401, 403, 406
+    "Equipment - Progressive Katana": ItemData("Equipment", 607 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 0), # Katana IDs 97, 399, 367
+    "Equipment - Progressive Spear": ItemData("Equipment", 608 + equipment_index_offset, ItemClassification.useful, 1, 3, 3, 1), # Spear IDs 98, 190, 183, 409, 418, 417, 416, 275
+    "Equipment - Progressive Scythe": ItemData("Equipment", 609 + equipment_index_offset, ItemClassification.useful, 1, 2, 3, 0), # Scythe IDs 6, 99, 293, 414, 415, 590
+    "Equipment - Progressive Bow": ItemData("Equipment", 610 + equipment_index_offset, ItemClassification.useful, 1, 1, 2, 1), # Bow IDs 105, 181, 301, 299, 420
+    "Equipment - Progressive Staff": ItemData("Equipment", 611 + equipment_index_offset, ItemClassification.useful, 1, 2, 4, 1), # Staff IDs 62, 100, 188, 422, 424, 425, 290, 429
+    "Equipment - Progressive Beating Staff": ItemData("Equipment", 612 + equipment_index_offset, ItemClassification.useful, 1, 2, 0, 0), # Beating Staff IDs 14, 426, 335
+    "Equipment - Progressive Wand": ItemData("Equipment", 613 + equipment_index_offset, ItemClassification.useful, 2, 3, 5, 0), # Wand IDs 13, 64, 101, 189, 267, 432, 435, 430, 276, 358
+    "Equipment - Progressive Book": ItemData("Equipment", 614 + equipment_index_offset, ItemClassification.useful, 1, 4, 3, 0), # Book IDs 102, 194, 223, 224, 437, 439, 440, 443
+    "Equipment - Progressive Shield": ItemData("Equipment", 615 + equipment_index_offset, ItemClassification.useful, 3, 4, 5, 1), # Shield IDs 45, 68, 88, 506, 103, 178, 451, 452, 450, 453, 344, 288, 246
+    "Equipment - Progressive Heavy Head": ItemData("Equipment", 616 + equipment_index_offset, ItemClassification.useful, 1, 3, 4, 0), # Heavy Head IDs 74, 508, 125, 132, 464, 470, 467, 292
+    "Equipment - Progressive Heavy Body": ItemData("Equipment", 617 + equipment_index_offset, ItemClassification.useful, 1, 4, 14, 1), # Heavy Body IDs 28, 84, 510, 126, 43, 456, 462, 461, 130, 458, 131, 463, 533, 534, 536, 535, 538, 537, 557, 548
+    "Equipment - Progressive Medium Head": ItemData("Equipment", 618 + equipment_index_offset, ItemClassification.useful, 2, 4, 2, 1), # Medium Head IDs 75, 30, 512, 195, 233, 485, 481, 345, 482
+    "Equipment - Progressive Medium Body": ItemData("Equipment", 619 + equipment_index_offset, ItemClassification.useful, 1, 4, 12, 0), # Medium Body IDs 514, 268, 229, 176, 57, 473, 477, 479, 347, 539, 540, 541, 542, 543, 544, 545, 546
+    "Equipment - Progressive Light Head": ItemData("Equipment", 620 + equipment_index_offset, ItemClassification.useful, 2, 3, 6, 2), # Light Head IDs 32, 76, 516, 133, 122, 342, 356, 34, 348, 52, 531, 271, 354
+    "Equipment - Progressive Light Body": ItemData("Equipment", 621 + equipment_index_offset, ItemClassification.useful, 2, 3, 12, 3), # Light Body IDs 21, 81, 518, 134, 230, 357, 360, 324, 349, 337, 273, 319, 547, 549, 550, 551, 552, 553, 554, 555
 
     #Maps
     "Item - Spawning Meadows Map": ItemData("Item", 73 + item_index_offset, ItemClassification.useful),
