@@ -90,6 +90,14 @@ class IncludedRegions(Choice):
     option_all = 3
     default = 3
 
+class ProgressiveEquipmentMode(DefaultOnToggle):
+    """
+    When enabled, each category of weapon and armor will be sent to the player in progressive order from weakest to strongest.
+
+    When disabled, weapons and armor are fully randomized.
+    """
+    display_name = "Progressive Equipment"
+
 class KeyMode(Choice):
     """
     Choose how keys behave.
@@ -130,6 +138,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions
+    progressiveEquipmentMode: ProgressiveEquipmentMode
     keyMode: KeyMode
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities

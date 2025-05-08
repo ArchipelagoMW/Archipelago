@@ -1,4 +1,4 @@
-# Rogue Legacy (PC)
+# Crystal Project (PC)
 
 ## Where is the options page?
 

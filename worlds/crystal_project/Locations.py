@@ -263,7 +263,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 3", 381 + treasure_index_offset), #Gaea Shard chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 4", 548 + treasure_index_offset), #Gaea Shard chest
         #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that's the logic were using
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: state.has("Item - Gaea Stone", player)), #Craftwork Bow chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)), #Craftwork Bow chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Instrducktor classroom", 1387 + treasure_index_offset), #Craftwork Axe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, logic.has_vertical_movement), #Watering Can chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset), #Craftwork Pages chest
@@ -310,10 +310,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin?", 422 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library roof Lost Penguin", 594 + npc_index_offset),
@@ -628,16 +628,16 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, logic.has_vertical_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, logic.has_vertical_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, logic.has_vertical_movement), #Dust
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver", 2693 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver past angry birds", 2697 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, logic.has_vertical_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset), #Ingot
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on the back cliff wall", 2694 + npc_index_offset, logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Lonely Islet Silver", 2878 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ingot
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on western beach along the cliffside", 2692 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver chilling in beach cave", 2698 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
@@ -767,7 +767,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Reservoir above the water", 3508 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge", 3511 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement), #Fleuret chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Among crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
@@ -778,7 +779,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 1", 2717 + treasure_index_offset, logic.has_vertical_movement), #Ether chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, logic.has_vertical_movement), #Ether Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Ether Pouch chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge", 1541 + treasure_index_offset, logic.has_vertical_movement), #Fleuret chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement), #Knicked Knackers chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement), #Looters Pin chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, logic.has_vertical_movement), #Muggers Glove chest
@@ -865,7 +865,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Undercity", "The Undercity NPC - Gold hiding from the bats under the awning", 2835 + npc_index_offset), #Dust
         LocationData("The Undercity", "The Undercity NPC - Gated-off room Gold", 2825 + npc_index_offset), #Ore
         LocationData("The Undercity", "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)), #Dust
-        LocationData("The Undercity", "The Undercity NPC - Storage room Gold of the Undercity Inns", 1696 + npc_index_offset), #Ingot
+        LocationData("The Undercity", "The Undercity NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset), #Ingot
 
         #Crystals
         LocationData("The Undercity", "The Undercity Crystal - Assassin", 1204 + crystal_index_offset),
@@ -911,10 +911,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Lake Delende
         #Treasure chests
         LocationData("Lake Delende", "Lake Delende Chest - North edge 1", 1263 + treasure_index_offset), #Float Shoes chest
-        LocationData("Lake Delende", "Lake Delende Chest - North edge 2", 2917 + treasure_index_offset, logic.has_vertical_movement), #Lake Delende map chest
+        LocationData("Lake Delende", "Lake Delende Chest - North edge 2", 2917 + treasure_index_offset), #Lake Delende map chest
 
         #NPCs
-        LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset), #Dust
+        LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset, logic.has_vertical_movement), #Dust
 
         #Summons Todo: descriptivize and implement
         #97, 126, -211
@@ -955,7 +955,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Dione Shrine", "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Life Jewel Overpass main map
 
         #NPCs
-        LocationData("Dione Shrine", "Dione Shrine NPC - Shedding on roof", 2265 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
+        LocationData("Dione Shrine", "Dione Shrine NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
         LocationData("Dione Shrine", "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide and state.has("Item - Dione Stone", player)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
@@ -988,8 +988,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
         LocationData("Tall Tall Heights", "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #1st Overpass (Cloudy Wind) Scrap
         LocationData("Tall Tall Heights", "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) Overpass (Outpost) Scrap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
-        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
+        LocationData("Tall Tall Heights", "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
         LocationData("Tall Tall Heights", "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset), #(191, 172, -437) (Underwater) Underpass Scrap chest
 
 
