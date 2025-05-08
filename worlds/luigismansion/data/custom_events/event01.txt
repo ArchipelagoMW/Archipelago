@@ -1,6 +1,0 @@
-<WINDOW>(0)<COLOR>(2)
-<SAY><COLOR>(5)Another key has myseteriously\nentered your pockets. Those boos...
-<ANYKEY>
-<CLOSEWINDOW>(0)
-<FLAGOFF>(10)
-<END>
