@@ -232,8 +232,8 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     name_counter = Counter()
     erargs.player_options = {}
 
-    player = 0
-    while player < args.multi:
+    player = 1
+    while player <= args.multi:
         path = player_path_cache[player]
         if not path:
             player_errors.append(f'No weights specified for player {player}')
