@@ -10,8 +10,6 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
             world.using_ut = True
-            world.ut_player = world.player
-            world.tracker_world["map_page_setting_key"] = f"Slot:{world.ut_player}:Current Map"
             world.passthrough = world.multiworld.re_gen_passthrough["TUNIC"]
             world.options.start_with_sword.value = world.passthrough["start_with_sword"]
             world.options.keys_behind_bosses.value = world.passthrough["keys_behind_bosses"]
@@ -371,4 +369,15 @@ poptracker_data: dict[str, int] = {
     "[North] Page Pickup/Survival Tips": 509342699,
     "[Southeast Lowlands] Ice Dagger Pickup/Ice Dagger Cave": 509342700,
     "Hero's Grave/Effigy Relic": 509342701,
+}
+
+
+# for setting up the poptracker integration
+tracker_world = {
+    "map_page_maps": ["maps/maps_pop.json"],
+    "map_page_locations": ["locations/locations_pop_er.json"],
+    "map_page_setting_key": "Slot:{player}:Current Map",
+    "map_page_index": map_page_index,
+    "external_pack_key": "ut_poptracker_path",
+    "poptracker_name_mapping": poptracker_data
 }
