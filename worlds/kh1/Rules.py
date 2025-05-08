@@ -357,8 +357,16 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Agrabah Cave of Wonders Entrance Tall Tower Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
-            or (options.advanced_logic and state.has("Combo Master", player))
-            or (options.advanced_logic and can_dumbo_skip(state, player))
+             or
+            (
+                options.advanced_logic
+                and
+                (
+                    state.has("Combo Master", player)
+                    or can_dumbo_skip(state, player)
+                    or state.has("High Jump", player, 1)
+                )
+            )
             or state.has("High Jump", player, 2)
         ))
     add_rule(kh1world.get_location("Agrabah Cave of Wonders Bottomless Hall Pillar Chest"),
@@ -424,6 +432,7 @@ def set_rules(kh1world):
             and
             (
                 state.has("Progressive Glide", player)
+                or state.has("High Jump", player, 3)
                 or options.advanced_logic
             )
         ))
@@ -638,7 +647,8 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Progressive Glide", player)
             or (state.has("Progressive Blizzard", player) and has_emblems(state, player, options.keyblades_unlock_chests))
-            or (options.advanced_logic and state.has("Combo Master", player))
+            or state.has("High Jump", player, 2)
+            or (options.advanced_logic and (state.has("Combo Master", player) or state.has("High Jump", player, 1)))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Castle Gates Gravity Chest"),
         lambda state: (
@@ -688,9 +698,8 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"),
         lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests)
-            and state.has_all({
-                "Progressive Glide",
-                "Progressive Gravity"}, player)
+            and state.has("Progressive Gravity", player)
+            and (state.has("Progressive Glide", player) or options.advanced_logic)
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"),
         lambda state: state.has("Progressive Gravity", player))
@@ -1142,6 +1151,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or state.has("Progressive Glide", player)
+                    or options.advanced_logic
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Right Tree Alcove Chest"),
@@ -1164,6 +1174,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or state.has("Progressive Glide", player)
+                    or options.advanced_logic
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 3"),
@@ -1173,6 +1184,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or state.has("Progressive Glide", player)
+                    or options.advanced_logic
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 4"),
@@ -1182,6 +1194,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or state.has("Progressive Glide", player)
+                    or options.advanced_logic
                 )
             ))
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Turn in Rare Nut 5"),
@@ -1216,6 +1229,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player)
                     or state.has("Progressive Glide", player)
+                    or options.advanced_logic
                 )
             ))
     if options.atlantica:
@@ -1457,20 +1471,34 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
             lambda state: (
                 state.has("Green Trinity", player)
-                and has_all_magic_lvx(state, player, 2)
-                and has_defensive_tools(state, player)
                 and has_emblems(state, player, options.keyblades_unlock_chests)
+                and (
+                    has_all_magic_lvx(state, player, 2)
+                    or (options.advanced_logic and state.has_all_counts({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1,"Progressive Cure": 1}, player))
+                )
+                and state.has("Leaf Bracer", player)
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
-                and state.has("Progressive Blizzard", player, 3)
+                and (
+                    state.has("Progressive Blizzard", player, 3)
+                    or state.has("Progressive Fire", player, 3)
+                    or (options.advanced_logic and (state.has("Progressive Thunder", player, 3) or state.has("Mushu", player)))
+                ) 
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests) and has_defensive_tools(state, player) and state.has("Progressive Blizzard", player, 3)
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                and has_defensive_tools(state, player)
+                and (
+                    state.has("Progressive Blizzard", player, 3)
+                    or state.has("Progressive Fire", player, 3)
+                    or (options.advanced_logic and (state.has("Progressive Thunder", player, 3) or state.has("Mushu", player)))
+                )
             ))
     if options.super_bosses or options.goal.current_key == "sephiroth" or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
@@ -1499,11 +1527,14 @@ def set_rules(kh1world):
                 has_emblems(state, player, options.keyblades_unlock_chests)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
+                and (state.has("Progressive Gravity", player) or options.advanced_logic)
             ))
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
             lambda state: (
-                has_emblems(state, player, options.keyblades_unlock_chests) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
+                has_emblems(state, player, options.keyblades_unlock_chests)
+                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests)
                 and has_defensive_tools(state, player)
+                and (state.has("Progressive Gravity", player) or options.advanced_logic)
             ))
     if options.jungle_slider:
         add_rule(kh1world.get_location("Deep Jungle Jungle Slider 10 Fruits"),

@@ -215,18 +215,18 @@ class KH1Context(CommonContext):
             if args["type"] == "ItemSend":
                 item = args["item"]
                 networkItem = NetworkItem(*item)
-                recieverID = args["receiving"]
+                receiverID = args["receiving"]
                 senderID = networkItem.player
                 locationID = networkItem.location
-                if recieverID != self.slot and senderID == self.slot:
-                    itemName = self.item_names.lookup_in_slot(networkItem.item, recieverID)
+                if receiverID != self.slot and senderID == self.slot:
+                    itemName = self.item_names.lookup_in_slot(networkItem.item, receiverID)
                     itemCategory = networkItem.flags
-                    recieverName = self.player_names[recieverID]
+                    receiverName = self.player_names[receiverID]
                     filename = "sent"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.write(
                           re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
-                        + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
+                        + re.sub('[^A-Za-z0-9 ]+', '',str(receiverName))[:6] + "\n"
                         + str(itemCategory) + "\n"
                         + str(locationID))
                         f.close()
