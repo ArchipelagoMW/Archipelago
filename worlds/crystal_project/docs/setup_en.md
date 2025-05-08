@@ -1,35 +1,35 @@
-# Crystal Project Randomizer Setup Guide
+# Crystal Project AP World Setup Guide
 
-## Required Software
+## What You Need
 
-- Rogue Legacy Randomizer from the
-  [Rogue Legacy Randomizer Releases Page](https://github.com/ThePhar/RogueLegacyRandomizer/releases)
+- Crystal Project patch file from the
+  [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
 
 ## Recommended Installation Instructions
 
-Please read the README file on the 
-[Rogue Legacy Randomizer GitHub](https://github.com/ThePhar/RogueLegacyRandomizer/blob/master/README.md) page for 
-up-to-date installation instructions.
+Go to [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases).
+Download the installer file, extract it, and run the executable. When prompted, choose your Crystal Project installation location.
 
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
 
-Your YAML file contains a set of configuration options which provide the generator with information about how it should
-generate your game. Each player of a multiworld will provide their own YAML file. This setup allows each player to enjoy
-an experience customized for their taste, and different players in the same multiworld can all have different options.
+A YAML file lets you configure options for your randomizer game.
+See [Archipelago Multiworld Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup/en#generating-a-game) for a more in-depth explanation!
 
 ### Where do I get a YAML file?
 
-you can customize your options by visiting the [Rogue Legacy Options Page](/games/Rogue%20Legacy/player-options).
+A YAML file is included on the [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
 
 ### Connect to the MultiServer
 
-Once in game, press the start button and the AP connection screen should appear. You will fill out the hostname, port,
-slot name, and password (if applicable). You should only need to fill out hostname, port, and password if the server
-provides an alternative one to the default values.
+Start a new game in Crystal Project. Don't touch the in-game randomizer settings (some of them may still work, but some of them will break things lol).
+Once loaded into the world, open the menu and select Archipelago from the sidebar.
+Fill out the hostname and port (archipelago.gg: ######), slot name, and password (if applicable), and hit the Save button. You should now be connected!
+(Note: settings like starting job randomization will only apply after you've connected to the multiworld for the first time.)
 
 ### Play the game
 
-Once you have entered the required values, you go to Connect and then select Confirm on the "Ready to Start" screen. Now
-you're off to start your legacy!
+After you've successfully connected once, your save file will automatically reconnect to the multiworld the next time you open the game.
+(Remember to refresh the multiworld room page if no one has connected in a while.)
+Set forth on adventure!
