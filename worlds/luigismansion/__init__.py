@@ -16,7 +16,8 @@ from worlds.generic.Rules import add_item_rule, add_rule
 from Options import OptionGroup
 
 # Relative Imports
-from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE
+from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE, \
+    trap_filler_items, other_filler_items
 from .Locations import *
 from . import LuigiOptions
 from .Hints import get_hints_by_option, ALWAYS_HINT, PORTRAIT_HINTS
@@ -80,6 +81,7 @@ class LMWeb(WebWorld):
         ]),
         OptionGroup("QOL Changes", [
             LuigiOptions.TrapLink,
+            LuigiOptions.TrapPercentage,
             LuigiOptions.LuigiFearAnim,
             LuigiOptions.PickupAnim,
             LuigiOptions.LuigiWalkSpeed,
@@ -703,12 +705,44 @@ class LMWorld(World):
         n_locations = len(self.multiworld.get_unfilled_locations(self.player))
         n_items = len(self.pre_fill_items) + len(self.itempool)
         n_filler_items = n_locations - n_items
+        n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
+        n_other_filler = n_filler_items-n_trap_items
 
         # Add filler items to the item pool.
-        for _ in range(n_filler_items):
-            self.itempool.append(self.create_item(self.get_filler_item_name()))
+        for _ in range(n_trap_items):
+            self.itempool.append(self.create_item(self.get_trap_item_name()))
+
+        for _ in range(n_other_filler):
+            self.itempool.append(self.create_item((self.get_other_filler_item())))
 
         self.multiworld.itempool += self.itempool
+
+    def get_trap_item_name(self) -> str:
+        filler = list(trap_filler_items.keys())
+        filler_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
+                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
+                          self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
+                          self.options.ghost_weight]
+        return self.random.choices(filler, weights=filler_weights, k=1)[0]
+
+
+    def get_other_filler_item(self) -> str:
+        filler = list(other_filler_items.keys())
+        thircoin = 0 if self.options.coin_weight.value - 10 <= 0 else self.options.coin_weight.value - 10
+        twencoin = 0 if self.options.coin_weight.value - 5 <= 0 else self.options.coin_weight.value - 5
+        twenbill = 0 if self.options.bill_weight.value - 5 <= 0 else self.options.bill_weight.value - 5
+        morebar = 0 if self.options.bars_weight.value - 5 <= 0 else self.options.bars_weight.value - 5
+        diamweight = math.ceil(self.options.gems_weight.value * 0.4)
+        lheart = 0 if self.options.heart_weight.value - 5 <= 0 else self.options.heart_weight.value - 5
+        filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
+                          self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
+                          # emerald, ruby, diamond
+                          self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.coin_weight.value, twencoin, thircoin,
+                          # banana, 10coin, 20coin, 30coin
+                          self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
+                          morebar]
+        return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
     def get_filler_item_name(self) -> str:
         filler = list(filler_items.keys())

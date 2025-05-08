@@ -223,7 +223,7 @@ BOO_ITEM_TABLE: dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x804DDF0E, bit_position=1)]),
 }
 
-filler_items: Dict[str, LMItemData] = {
+other_filler_items: Dict[str, LMItemData] = {
     "20 Coins & Bills": LMItemData("Money", 119, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=20),
                          LMRamData(0x803D8B7C, pointer_offset=0x328, ram_byte_size=4, item_count=20)]),
@@ -235,21 +235,11 @@ filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x338, ram_byte_size=4, item_count=1)]),
     "Diamond": LMItemData("Money", 124, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
-    "Poison Mushroom": LMItemData("Trap", 125, IC.trap,
-        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=6)]), # value of 6
-    "Ghost": LMItemData("Trap", 126, IC.trap,
-        update_ram_addr=[LMRamData(0x804DD940, ram_byte_size=4, item_count=1)]),
     "Nothing": LMItemData("Nothing Item", 127, IC.filler),
     "Small Heart": LMItemData("Heart", 128, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=20)]),
     "Large Heart": LMItemData("Heart", 129, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=50)]),
-    "Bomb": LMItemData("Trap", 130, IC.trap,
-        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=1)]), # value of 1
-    "Ice Trap": LMItemData("Trap", 131, IC.trap,
-        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=3)]), # value of 3
-    "Banana Trap": LMItemData("Trap", 132, IC.trap,
-        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=2)]), # value of 2
     "10 Coins": LMItemData("Money", 133, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x324, ram_byte_size=4, item_count=10)]),
     "20 Coins": LMItemData("Money", 134, IC.filler,
@@ -264,11 +254,28 @@ filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=1)]),
     "2 Gold Bars": LMItemData("Money", 139, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x32C, ram_byte_size=4, item_count=2)]),
+}
+
+trap_filler_items: Dict[str, LMItemData] = {
     "Possession Trap": LMItemData("Trap", 141, IC.trap,
         update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=5)]),
     "Bonk Trap": LMItemData("Trap", 142, IC.trap,
         update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=4)]),
+    "Bomb": LMItemData("Trap", 130, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=1)]), # value of 1
+    "Ice Trap": LMItemData("Trap", 131, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=3)]), # value of 3
+    "Banana Trap": LMItemData("Trap", 132, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=2)]), # value of 2
+    "Poison Mushroom": LMItemData("Trap", 125, IC.trap,
+        update_ram_addr=[LMRamData(0x804DDD4C, ram_byte_size=4, item_count=6)]), # value of 6
+    "Ghost": LMItemData("Trap", 126, IC.trap,
+        update_ram_addr=[LMRamData(0x804DD940, ram_byte_size=4, item_count=1)]),
+
 }
+
+filler_items = {**other_filler_items,
+                **trap_filler_items}
 
 ALL_ITEMS_TABLE = {**ITEM_TABLE,
                    **BOO_ITEM_TABLE,
