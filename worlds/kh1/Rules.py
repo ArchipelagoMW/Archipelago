@@ -65,8 +65,11 @@ def has_final_rest_door(state: CollectionState, player: int, final_rest_door_req
     else:
         return state.has("Final Door Key", player)
 
-def has_defensive_tools(state: CollectionState, player: int) -> bool:
-    return (
+def has_defensive_tools(state: CollectionState, player: int, logic_difficulty: int) -> bool:
+    if logic_difficulty > 14:
+        return True
+    else:
+        return (
             state.has_all_counts({"Progressive Cure": 2, "Leaf Bracer": 1, "Dodge Roll": 1}, player)
             and state.has_any_count({"Second Chance": 1, "MP Rage": 1, "Progressive Aero": 2}, player)
         )
@@ -88,8 +91,8 @@ def can_dumbo_skip(state: CollectionState, player: int) -> bool:
 def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) -> bool:
     return (
             state.has("Progressive Fire", player)
-            or (logic_difficulty and state.has("High Jump", player, 2))
-            or (logic_difficulty and state.has("High Jump", player) and state.has("Progressive Glide", player))
+            or (logic_difficulty > 0 and state.has("High Jump", player, 3))
+            or (logic_difficulty > 5 and state.has("High Jump", player, 2) or (state.has("High Jump", player) and state.has("Progressive Glide", player)))
         )
 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
@@ -1285,7 +1288,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
         add_rule(kh1world.get_location("Complete Phil Cup"),
             lambda state: (
@@ -1353,7 +1356,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Solo"),
                 lambda state: (
@@ -1363,7 +1366,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Time Trial"),
                 lambda state: (
@@ -1373,7 +1376,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cloud and Leon Event"),
                 lambda state: (
@@ -1383,7 +1386,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Yuffie Event"),
                 lambda state: (
@@ -1393,7 +1396,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cerberus Event"),
                 lambda state: (
@@ -1403,7 +1406,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
                 lambda state: (
@@ -1413,7 +1416,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Hades Event"),
                 lambda state: (
@@ -1423,7 +1426,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
         add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
             lambda state: (
@@ -1449,7 +1452,7 @@ def set_rules(kh1world):
                         "Entry Pass",
                         "Guard"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
                 lambda state: (
@@ -1459,7 +1462,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
         add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
             lambda state: (
@@ -1477,7 +1480,7 @@ def set_rules(kh1world):
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
                 and
                 (
                     state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
@@ -1490,7 +1493,7 @@ def set_rules(kh1world):
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
                 and
                 (
                     state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
@@ -1508,7 +1511,7 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
             ))
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
             lambda state: (
@@ -1518,20 +1521,20 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
                 and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty) and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                and (difficulty > 14 or has_defensive_tools(state, player))
+                and has_defensive_tools(state, player, difficulty)
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
     if options.jungle_slider:
@@ -1600,7 +1603,7 @@ def set_rules(kh1world):
                     and has_final_rest_door(state, player, final_rest_door_requirement, final_rest_door_required_lucky_emblems) # Can open the Door
                 )
             )
-            and has_defensive_tools(state, player)
+            and has_defensive_tools(state, player, difficulty)
         ))
     if difficulty == 0:
         add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Dodge Roll Event"),
