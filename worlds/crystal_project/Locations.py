@@ -907,10 +907,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Lake Delende
         #Treasure chests
         LocationData("Lake Delende", "Lake Delende Chest - North edge 1", 1263 + treasure_index_offset), #Float Shoes chest
-        LocationData("Lake Delende", "Lake Delende Chest - North edge 2", 2917 + treasure_index_offset, logic.has_vertical_movement), #Lake Delende map chest
+        LocationData("Lake Delende", "Lake Delende Chest - North edge 2", 2917 + treasure_index_offset), #Lake Delende map chest
 
         #NPCs
-        LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset), #Dust
+        LocationData("Lake Delende", "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset, logic.has_vertical_movement), #Dust
 
         #Summons Todo: descriptivize and implement
         #97, 126, -211
