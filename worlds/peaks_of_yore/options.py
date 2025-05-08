@@ -27,6 +27,12 @@ class DeathLinkTraps(DefaultOnToggle):
     """
     display_name = "Death Link Traps"
 
+class FillerTraps(DefaultOnToggle):
+    """
+    Adds traps to the item pool if enabled.
+    """
+    display_name = "Traps in pool"
+
 class StartingBook(Choice):
     """
     Choose what book to start with. If the book is not enabled, the easiest enabled book will be chosen.
@@ -170,6 +176,7 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     goal: Goal
     death_link: DeathLink
     death_link_traps: DeathLinkTraps
+    item_traps: FillerTraps
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
     start_with_oil_lamp: StartWithOilLamp

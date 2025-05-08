@@ -246,7 +246,8 @@ extra_items_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
         ItemOrLocation('Extra Rope', 0 + extra_item_offset, ItemClassification.filler),
         ItemOrLocation('Extra Chalk', 1 + extra_item_offset, ItemClassification.filler),
         ItemOrLocation('Extra Coffee', 2 + extra_item_offset, ItemClassification.filler),
-        ItemOrLocation('Extra Seed', 3 + extra_item_offset, ItemClassification.filler)
+        ItemOrLocation('Extra Seed', 3 + extra_item_offset, ItemClassification.filler),
+        ItemOrLocation('Trap', 4 + extra_item_offset, ItemClassification.filler)
     ]
 }
 
