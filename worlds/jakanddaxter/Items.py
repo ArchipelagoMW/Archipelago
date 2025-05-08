@@ -1,4 +1,5 @@
-from BaseClasses import Item
+from enum import IntEnum
+from BaseClasses import Item, ItemClassification
 from .GameID import jak1_name, jak1_max
 from .locs import (OrbLocations as Orbs,
                    CellLocations as Cells,
@@ -7,8 +8,31 @@ from .locs import (OrbLocations as Orbs,
                    OrbCacheLocations as Caches)
 
 
+class OrbAssoc(IntEnum):
+    """
+    Identifies an item's association to unlocking new sources of Precursor Orbs. For example, Double Jump will unlock
+    new orbs, but Freed the Green Sage will not. Power Cells conditionally unlock new orbs if they get you across
+    connector levels.
+    """
+    NEVER_UNLOCKS_ORBS = 0
+    ALWAYS_UNLOCKS_ORBS = 1
+    IS_POWER_CELL = 2
+
+
 class JakAndDaxterItem(Item):
     game: str = jak1_name
+    orb_assoc: OrbAssoc
+    orb_amount: int  # Only non-zero for Orb Bundle items.
+
+    def __init__(self, name: str,
+                 classification: ItemClassification,
+                 code: int | None,
+                 player: int,
+                 orb_assoc: OrbAssoc = OrbAssoc.NEVER_UNLOCKS_ORBS,
+                 orb_amount: int = 0):
+        super().__init__(name, classification, code, player)
+        self.orb_assoc = orb_assoc
+        self.orb_amount = orb_amount
 
 
 # Power Cells are generic, fungible, interchangeable items. Every cell is indistinguishable from every other.

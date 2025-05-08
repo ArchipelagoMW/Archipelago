@@ -14,17 +14,17 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
     # This level is full of short-medium gaps that cannot be crossed by single jump alone.
     # These helper functions list out the moves that can cross all these gaps (painting with a broad brush but...)
     def can_jump_farther(state: CollectionState, p: int) -> bool:
-        return (state.has_any({"Double Jump", "Jump Kick"}, p)
-                or state.has_all({"Punch", "Punch Uppercut"}, p))
+        return (state.has_any(("Double Jump", "Jump Kick"), p)
+                or state.has_all(("Punch", "Punch Uppercut"), p))
 
     def can_triple_jump(state: CollectionState, p: int) -> bool:
-        return state.has_all({"Double Jump", "Jump Kick"}, p)
+        return state.has_all(("Double Jump", "Jump Kick"), p)
 
     def can_jump_stairs(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
                 or state.has("Jump Dive", p)
-                or state.has_all({"Crouch", "Crouch Jump"}, p)
-                or state.has_all({"Crouch", "Crouch Uppercut"}, p))
+                or state.has_all(("Crouch", "Crouch Jump"), p)
+                or state.has_all(("Crouch", "Crouch Uppercut"), p))
 
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 0)
     main_area.add_fly_locations([91], access_rule=lambda state: can_free_scout_flies(state, player))
@@ -60,36 +60,36 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
 
     # Jump Dive required for a lot of buttons, prepare yourself.
     main_area.connect(robot_scaffolding, rule=lambda state:
-                      state.has("Jump Dive", player) or state.has_all({"Roll", "Roll Jump"}, player))
+                      state.has("Jump Dive", player) or state.has_all(("Roll", "Roll Jump"), player))
     main_area.connect(jump_pad_room)
 
     robot_scaffolding.connect(main_area, rule=lambda state: state.has("Jump Dive", player))
     robot_scaffolding.connect(blast_furnace, rule=lambda state:
                               state.has("Jump Dive", player)
                               and can_jump_farther(state, player)
-                              and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
+                              and (can_triple_jump(state, player) or state.has_all(("Roll", "Roll Jump"), player)))
     robot_scaffolding.connect(bunny_room, rule=lambda state:
                               state.has("Jump Dive", player)
                               and can_jump_farther(state, player)
-                              and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
+                              and (can_triple_jump(state, player) or state.has_all(("Roll", "Roll Jump"), player)))
 
     jump_pad_room.connect(main_area)
     jump_pad_room.connect(robot_scaffolding, rule=lambda state:
                           state.has("Jump Dive", player)
-                          and (can_triple_jump(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
+                          and (can_triple_jump(state, player) or state.has_all(("Roll", "Roll Jump"), player)))
 
     blast_furnace.connect(robot_scaffolding)  # Blue eco elevator takes you right back.
 
     bunny_room.connect(robot_scaffolding, rule=lambda state:
                        state.has("Jump Dive", player)
-                       and (can_jump_farther(state, player) or state.has_all({"Roll", "Roll Jump"}, player)))
+                       and (can_jump_farther(state, player) or state.has_all(("Roll", "Roll Jump"), player)))
 
     # Final climb.
     robot_scaffolding.connect(rotating_tower, rule=lambda state:
                               can_jump_stairs(state, player)
-                              and state.has_all({"Freed The Blue Sage",
+                              and state.has_all(("Freed The Blue Sage",
                                                  "Freed The Red Sage",
-                                                 "Freed The Yellow Sage"}, player))
+                                                 "Freed The Yellow Sage"), player))
 
     rotating_tower.connect(main_area)  # Take stairs back down.
 

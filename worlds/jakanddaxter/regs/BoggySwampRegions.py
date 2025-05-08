@@ -13,13 +13,14 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     # This level is full of short-medium gaps that cannot be crossed by single jump alone.
     # These helper functions list out the moves that can cross all these gaps (painting with a broad brush but...)
     def can_jump_farther(state: CollectionState, p: int) -> bool:
-        return state.has_any({"Double Jump", "Jump Kick"}, p) or state.has_all({"Punch", "Punch Uppercut"}, p)
+        return (state.has_any(("Double Jump", "Jump Kick"), p)
+                or state.has_all(("Punch", "Punch Uppercut"), p))
 
     def can_jump_higher(state: CollectionState, p: int) -> bool:
         return (state.has("Double Jump", p)
-                or state.has_all({"Crouch", "Crouch Jump"}, p)
-                or state.has_all({"Crouch", "Crouch Uppercut"}, p)
-                or state.has_all({"Punch", "Punch Uppercut"}, p))
+                or state.has_all(("Crouch", "Crouch Jump"), p)
+                or state.has_all(("Crouch", "Crouch Uppercut"), p)
+                or state.has_all(("Punch", "Punch Uppercut"), p))
 
     # Orb crates and fly box in this area can be gotten with yellow eco and goggles.
     # Start with the first yellow eco cluster near first_bats and work your way backward toward the entrance.
@@ -94,8 +95,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     first_tether.connect(first_bats)
     first_tether.connect(first_tether_rat_colony, rule=lambda state:
-                         (state.has_all({"Roll", "Roll Jump"}, player)
-                          or state.has_all({"Double Jump", "Jump Kick"}, player)))
+                         (state.has_all(("Roll", "Roll Jump"), player)
+                          or state.has_all(("Double Jump", "Jump Kick"), player)))
     first_tether.connect(second_jump_pad)
     first_tether.connect(first_pole_course)
 

@@ -28,7 +28,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
     orb_cache = JakAndDaxterRegion("Orb Cache", player, multiworld, level_name, 20)
 
     # You need roll jump to be able to reach this before the blue eco runs out.
-    orb_cache.add_cache_locations([10945], access_rule=lambda state: state.has_all({"Roll", "Roll Jump"}, player))
+    orb_cache.add_cache_locations([10945], access_rule=lambda state: state.has_all(("Roll", "Roll Jump"), player))
 
     # Fly here can be gotten with Yellow Eco from Boggy, goggles, and no extra movement options (see fly ID 43).
     pontoon_bridge = JakAndDaxterRegion("Pontoon Bridge", player, multiworld, level_name, 7)
@@ -36,7 +36,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
 
     klaww_cliff = JakAndDaxterRegion("Klaww's Cliff", player, multiworld, level_name, 0)
 
-    main_area.connect(orb_cache, rule=lambda state: state.has_all({"Roll", "Roll Jump"}, player))
+    main_area.connect(orb_cache, rule=lambda state: state.has_all(("Roll", "Roll Jump"), player))
     main_area.connect(pontoon_bridge, rule=lambda state: state.has("Warrior's Pontoons", player))
 
     orb_cache.connect(main_area)
@@ -44,8 +44,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> tuple[JakAndDaxt
     pontoon_bridge.connect(main_area, rule=lambda state: state.has("Warrior's Pontoons", player))
     pontoon_bridge.connect(klaww_cliff, rule=lambda state:
                            state.has("Double Jump", player)
-                           or state.has_all({"Crouch", "Crouch Jump"}, player)
-                           or state.has_all({"Crouch", "Crouch Uppercut", "Jump Kick"}, player))
+                           or state.has_all(("Crouch", "Crouch Jump"), player)
+                           or state.has_all(("Crouch", "Crouch Uppercut", "Jump Kick"), player))
 
     klaww_cliff.connect(pontoon_bridge)  # Just jump back down.
 

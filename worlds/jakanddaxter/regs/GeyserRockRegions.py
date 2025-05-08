@@ -20,8 +20,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     main_area.connect(cliff, rule=lambda state:
                       state.has("Double Jump", player)
-                      or state.has_all({"Crouch", "Crouch Jump"}, player)
-                      or state.has_all({"Crouch", "Crouch Uppercut"}, player))
+                      or state.has_all(("Crouch", "Crouch Jump"), player)
+                      or state.has_all(("Crouch", "Crouch Uppercut"), player))
 
     cliff.connect(main_area)  # Jump down or ride blue eco elevator.
 

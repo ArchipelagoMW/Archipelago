@@ -24,7 +24,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     # The rest of the crystals can be destroyed with yellow eco in main_area.
     dark_crystals.add_cell_locations([79], access_rule=lambda state:
                                      can_fight(state, player)
-                                     and state.has_all({"Roll", "Roll Jump"}, player))
+                                     and state.has_all(("Roll", "Roll Jump"), player))
 
     dark_cave = JakAndDaxterRegion("Dark Cave", player, multiworld, level_name, 5)
     dark_cave.add_cell_locations([80])
@@ -60,7 +60,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     main_area.connect(dark_cave, rule=lambda state:
                       can_fight(state, player)
                       and (state.has("Double Jump", player)
-                           or state.has_all({"Crouch", "Crouch Jump"}, player)))
+                           or state.has_all(("Crouch", "Crouch Jump"), player)))
 
     robot_cave.connect(main_area)
     robot_cave.connect(pole_course)                 # Nothing special required.
@@ -73,7 +73,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     # Elevator, but the orbs need double jump or jump kick.
     scaffolding_level_one.connect(scaffolding_level_zero, rule=lambda state:
-                                  state.has_any({"Double Jump", "Jump Kick"}, player))
+                                  state.has_any(("Double Jump", "Jump Kick"), player))
 
     # Narrow enough that enemies are unavoidable.
     scaffolding_level_one.connect(scaffolding_level_two, rule=lambda state: can_fight(state, player))

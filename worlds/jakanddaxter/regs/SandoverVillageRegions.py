@@ -22,7 +22,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     # The farmer's scout fly. You can either get the Orb Cache Cliff blue eco, or break it normally.
     main_area.add_fly_locations([196683], access_rule=lambda state:
                                 state.has("Double Jump", player)
-                                or state.has_all({"Crouch", "Crouch Jump"}, player)
+                                or state.has_all(("Crouch", "Crouch Jump"), player)
                                 or can_free_scout_flies(state, player))
 
     orb_cache_cliff = JakAndDaxterRegion("Orb Cache Cliff", player, multiworld, level_name, 15)
@@ -41,17 +41,17 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     main_area.connect(orb_cache_cliff, rule=lambda state:
                       state.has("Double Jump", player)
-                      or state.has_all({"Crouch", "Crouch Jump"}, player)
-                      or state.has_all({"Crouch", "Crouch Uppercut", "Jump Kick"}, player))
+                      or state.has_all(("Crouch", "Crouch Jump"), player)
+                      or state.has_all(("Crouch", "Crouch Uppercut", "Jump Kick"), player))
 
     main_area.connect(yakow_cliff, rule=lambda state:
                       state.has("Double Jump", player)
-                      or state.has_all({"Crouch", "Crouch Jump"}, player)
-                      or state.has_all({"Crouch", "Crouch Uppercut", "Jump Kick"}, player))
+                      or state.has_all(("Crouch", "Crouch Jump"), player)
+                      or state.has_all(("Crouch", "Crouch Uppercut", "Jump Kick"), player))
 
     main_area.connect(oracle_platforms, rule=lambda state:
-                      state.has_all({"Roll", "Roll Jump"}, player)
-                      or state.has_all({"Double Jump", "Jump Kick"}, player))
+                      state.has_all(("Roll", "Roll Jump"), player)
+                      or state.has_all(("Double Jump", "Jump Kick"), player))
 
     # All these can go back to main_area immediately.
     orb_cache_cliff.connect(main_area)

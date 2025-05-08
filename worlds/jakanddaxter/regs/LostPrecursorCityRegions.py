@@ -21,7 +21,7 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     # Need jump dive to activate button, double jump to reach blue eco to unlock cache.
     first_room_orb_cache.add_cache_locations([14507], access_rule=lambda state:
-                                             state.has_all({"Jump Dive", "Double Jump"}, player))
+                                             state.has_all(("Jump Dive", "Double Jump"), player))
 
     first_hallway = JakAndDaxterRegion("First Hallway", player, multiworld, level_name, 10)
     first_hallway.add_fly_locations([131121], access_rule=lambda state: can_free_scout_flies(state, player))
@@ -60,16 +60,16 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     # Use jump dive to activate button inside the capsule. Blue eco vent can ready the chamber and get the scout fly.
     capsule_room.add_cell_locations([47], access_rule=lambda state:
                                     state.has("Jump Dive", player)
-                                    and (state.has_any({"Double Jump", "Jump Kick"}, player)
-                                         or state.has_all({"Punch", "Punch Uppercut"}, player)))
+                                    and (state.has_any(("Double Jump", "Jump Kick"), player)
+                                         or state.has_all(("Punch", "Punch Uppercut"), player)))
     capsule_room.add_fly_locations([327729])
 
     # You can slide to the bottom of the city, but if you spawn down there, you have no momentum from the slide.
     # So you need some kind of jump to reach this cell.
     second_slide = JakAndDaxterRegion("Second Slide", player, multiworld, level_name, 31)
     second_slide.add_cell_locations([46], access_rule=lambda state:
-                                    state.has_any({"Double Jump", "Jump Kick"}, player)
-                                    or state.has_all({"Punch", "Punch Uppercut"}, player))
+                                    state.has_any(("Double Jump", "Jump Kick"), player)
+                                    or state.has_all(("Punch", "Punch Uppercut"), player))
 
     # If you can enter the helix room, you can jump or fight your way to the top. But you need some kind of movement
     # to enter it in the first place.
@@ -88,9 +88,9 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     # Needs some movement to reach these orbs and orb cache.
     first_room_lower.connect(first_room_orb_cache, rule=lambda state:
-                             state.has_all({"Jump Dive", "Double Jump"}, player))
+                             state.has_all(("Jump Dive", "Double Jump"), player))
     first_room_orb_cache.connect(first_room_lower, rule=lambda state:
-                                 state.has_all({"Jump Dive", "Double Jump"}, player))
+                                 state.has_all(("Jump Dive", "Double Jump"), player))
 
     first_hallway.connect(first_room_upper)                         # Run and jump down.
     first_hallway.connect(second_room)                              # Run and jump (floating platforms).
@@ -114,8 +114,8 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
                          state.has("Jump Dive", player))            # (Assume one-way for sanity.)
 
     second_slide.connect(helix_room, rule=lambda state:                           # As stated above, you need to jump
-                         state.has_any({"Double Jump", "Jump Kick"}, player)      # across the dark eco pool before
-                         or state.has_all({"Punch", "Punch Uppercut"}, player))   # you can climb the helix room.
+                         state.has_any(("Double Jump", "Jump Kick"), player)      # across the dark eco pool before
+                         or state.has_all(("Punch", "Punch Uppercut"), player))   # you can climb the helix room.
 
     helix_room.connect(quick_platforms, rule=lambda state:          # Escape to get back to here.
                        state.has("Double Jump", player)             # Capsule is a convenient exit to the level.

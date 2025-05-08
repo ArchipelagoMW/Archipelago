@@ -18,6 +18,7 @@ from Options import OptionGroup
 from .Options import *
 from .GameID import jak1_id, jak1_name, jak1_max
 from .Items import (JakAndDaxterItem,
+                    OrbAssoc,
                     item_table,
                     cell_item_table,
                     scout_item_table,
@@ -224,6 +225,7 @@ class JakAndDaxterWorld(World):
     total_trap_cells: int = 0
     total_filler_cells: int = 0
     power_cell_thresholds: list[int]
+    power_cell_thresholds_minus_one: list[int]
     trap_weights: tuple[list[str], list[int]]
 
     # Store these dictionaries for speed improvements.
@@ -251,6 +253,9 @@ class JakAndDaxterWorld(World):
             self.options.fire_canyon_cell_count.value = self.power_cell_thresholds[0]
             self.options.mountain_pass_cell_count.value = self.power_cell_thresholds[1]
             self.options.lava_tube_cell_count.value = self.power_cell_thresholds[2]
+
+        # Store this for remove function.
+        self.power_cell_thresholds_minus_one = [x - 1 for x in self.power_cell_thresholds]
 
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
@@ -327,52 +332,55 @@ class JakAndDaxterWorld(World):
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "jakanddaxter.puml")
 
-    def item_type_helper(self, item: int) -> list[tuple[int, ItemClass]]:
+    def item_data_helper(self, item: int) -> list[tuple[int, ItemClass, OrbAssoc, int]]:
         """
-        Helper function to reuse some nasty if/else trees. This outputs a list of pairs of item count and classification.
-        For instance, not all 101 power cells need to be marked progression if you only need 72 to beat the game. So we
-        will have 72 Progression Power Cells, and 29 Filler Power Cells.
+        Helper function to reuse some nasty if/else trees. This outputs a list of pairs of item count and class.
+        For instance, not all 101 power cells need to be marked progression if you only need 72 to beat the game.
+        So we will have 72 Progression Power Cells, and 29 Filler Power Cells.
         """
-        counts_and_classes: list[tuple[int, ItemClass]] = []
+        data: list[tuple[int, ItemClass, OrbAssoc, int]] = []
 
         # Make N Power Cells. We only want AP's Progression Fill routine to handle the amount of cells we need
         # to reach the furthest possible region. Even for early completion goals, all areas in the game must be
         # reachable or generation will fail. TODO - Option-driven region creation would be an enormous refactor.
         if item in range(jak1_id, jak1_id + Scouts.fly_offset):
-            counts_and_classes.append((self.total_prog_cells, ItemClass.progression_skip_balancing))
-            counts_and_classes.append((self.total_filler_cells, ItemClass.filler))
+            data.append((self.total_prog_cells, ItemClass.progression_skip_balancing, OrbAssoc.IS_POWER_CELL, 0))
+            data.append((self.total_filler_cells, ItemClass.filler, OrbAssoc.IS_POWER_CELL, 0))
 
         # Make 7 Scout Flies per level.
         elif item in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset):
-            counts_and_classes.append((7, ItemClass.progression_skip_balancing))
+            data.append((7, ItemClass.progression_skip_balancing, OrbAssoc.NEVER_UNLOCKS_ORBS, 0))
 
         # Make only 1 of each Special Item.
         elif item in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset):
-            counts_and_classes.append((1, ItemClass.progression | ItemClass.useful))
+            data.append((1, ItemClass.progression | ItemClass.useful, OrbAssoc.ALWAYS_UNLOCKS_ORBS, 0))
 
         # Make only 1 of each Move Item.
         elif item in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
-            counts_and_classes.append((1, ItemClass.progression | ItemClass.useful))
+            data.append((1, ItemClass.progression | ItemClass.useful, OrbAssoc.ALWAYS_UNLOCKS_ORBS, 0))
 
         # Make N Precursor Orb bundles. Like Power Cells, only a fraction of these will be marked as Progression
-        # with the remainder as Filler, but they are still entirely fungible.
+        # with the remainder as Filler, but they are still entirely fungible. See collect function for why these
+        # are OrbAssoc.NEVER_UNLOCKS_ORBS.
         elif item in range(jak1_id + Orbs.orb_offset, jak1_max - max(trap_item_table)):
-            counts_and_classes.append((self.total_prog_orb_bundles, ItemClass.progression_skip_balancing))
-            counts_and_classes.append((self.total_filler_orb_bundles, ItemClass.filler))
+            data.append((self.total_prog_orb_bundles, ItemClass.progression_skip_balancing,
+                         OrbAssoc.NEVER_UNLOCKS_ORBS, self.orb_bundle_size))
+            data.append((self.total_filler_orb_bundles, ItemClass.filler,
+                         OrbAssoc.NEVER_UNLOCKS_ORBS, self.orb_bundle_size))
 
         # We will manually create trap items as needed.
         elif item in range(jak1_max - max(trap_item_table), jak1_max):
-            counts_and_classes.append((0, ItemClass.trap))
+            data.append((0, ItemClass.trap, OrbAssoc.NEVER_UNLOCKS_ORBS, 0))
 
         # We will manually create filler items as needed.
         elif item == jak1_max:
-            counts_and_classes.append((0, ItemClass.filler))
+            data.append((0, ItemClass.filler, OrbAssoc.NEVER_UNLOCKS_ORBS, 0))
 
         # If we try to make items with ID's higher than we've defined, something has gone wrong.
         else:
             raise KeyError(f"Tried to fill item pool with unknown ID {item}.")
 
-        return counts_and_classes
+        return data
 
     def create_items(self) -> None:
         items_made: int = 0
@@ -401,9 +409,10 @@ class JakAndDaxterWorld(World):
                 continue
 
             # In almost every other scenario, do this. Not all items with the same name will have the same item class.
-            counts_and_classes = self.item_type_helper(item_id)
-            for (count, classification) in counts_and_classes:
-                self.multiworld.itempool += [JakAndDaxterItem(item_name, classification, item_id, self.player)
+            data = self.item_data_helper(item_id)
+            for (count, classification, orb_assoc, orb_amount) in data:
+                self.multiworld.itempool += [JakAndDaxterItem(item_name, classification, item_id,
+                                                              self.player, orb_assoc, orb_amount)
                                              for _ in range(count)]
                 items_made += count
 
@@ -427,13 +436,15 @@ class JakAndDaxterWorld(World):
 
     def create_item(self, name: str) -> Item:
         item_id = self.item_name_to_id[name]
-        _, classification = self.item_type_helper(item_id)[0]  # Use first tuple (will likely be the most important).
-        return JakAndDaxterItem(name, classification, item_id, self.player)
+
+        # Use first tuple (will likely be the most important).
+        _, classification, orb_assoc, orb_amount = self.item_data_helper(item_id)[0]
+        return JakAndDaxterItem(name, classification, item_id, self.player, orb_assoc, orb_amount)
 
     def get_filler_item_name(self) -> str:
         return "Green Eco Pill"
 
-    def collect(self, state: CollectionState, item: Item) -> bool:
+    def collect(self, state: CollectionState, item: JakAndDaxterItem) -> bool:
         change = super().collect(state, item)
         if change:
             # Orbsanity as an option is no-factor to these conditions. Matching the item name implies Orbsanity is ON,
@@ -442,47 +453,36 @@ class JakAndDaxterWorld(World):
 
             # Orb items do not intrinsically unlock anything that contains more Reachable Orbs, so they do not need to
             # set the cache to stale. They just change how many orbs you have to trade with.
-            if item.name == self.orb_bundle_item_name:
+            if item.orb_amount > 0:
                 state.prog_items[self.player]["Tradeable Orbs"] += self.orb_bundle_size  # Give a bundle of Trade Orbs
-
-            # Scout Flies ALSO do not unlock anything that contains more Reachable Orbs, NOR do they give you more
-            # tradeable orbs. So let's just pass on them.
-            elif item.name in self.item_name_groups["Scout Flies"]:
-                pass
 
             # Power Cells DO unlock new regions that contain more Reachable Orbs - the connector levels and new
             # hub levels - BUT they only do that when you have a number of them equal to one of the threshold values.
-            elif (item.name == "Power Cell"
-                  and state.count("Power Cell", self.player) not in self.power_cell_thresholds):
-                pass
-
-            # However, every other item that changes the CollectionState should set the cache to stale, because they
-            # likely made it possible to reach more orb locations (level unlocks, region unlocks, etc.).
-            else:
+            elif (item.orb_assoc == OrbAssoc.ALWAYS_UNLOCKS_ORBS
+                  or (item.orb_assoc == OrbAssoc.IS_POWER_CELL
+                      and state.count("Power Cell", self.player) in self.power_cell_thresholds)):
                 state.prog_items[self.player]["Reachable Orbs Fresh"] = False
+
+            # However, every other item that does not have an appropriate OrbAssoc that changes the CollectionState
+            # should NOT set the cache to stale, because they did not make it possible to reach more orb locations
+            # (level unlocks, region unlocks, etc.).
         return change
 
-    def remove(self, state: CollectionState, item: Item) -> bool:
+    def remove(self, state: CollectionState, item: JakAndDaxterItem) -> bool:
         change = super().remove(state, item)
         if change:
 
             # Do the same thing we did in collect, except subtract trade orbs instead of add.
-            if item.name == self.orb_bundle_item_name:
+            if item.orb_amount > 0:
                 state.prog_items[self.player]["Tradeable Orbs"] -= self.orb_bundle_size  # Take a bundle of Trade Orbs
 
-            # Ditto Scout Flies.
-            elif item.name in self.item_name_groups["Scout Flies"]:
-                pass
-
-            # Ditto Power Cells, but check count + 1, because we potentially crossed the threshold in the opposite
+            # Ditto Power Cells, but check thresholds - 1, because we potentially crossed the threshold in the opposite
             # direction. E.g. we've removed the 20th power cell, our count is now 19, so we should stale the cache.
-            elif (item.name == "Power Cell"
-                  and state.count("Power Cell", self.player) + 1 not in self.power_cell_thresholds):
-                pass
-
-            # Ditto everything else.
-            else:
+            elif (item.orb_assoc == OrbAssoc.ALWAYS_UNLOCKS_ORBS
+                  or (item.orb_assoc == OrbAssoc.IS_POWER_CELL
+                      and state.count("Power Cell", self.player) in self.power_cell_thresholds_minus_one)):
                 state.prog_items[self.player]["Reachable Orbs Fresh"] = False
+
         return change
 
     def fill_slot_data(self) -> dict[str, Any]:

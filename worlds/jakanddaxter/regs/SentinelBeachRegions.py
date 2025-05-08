@@ -31,9 +31,9 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
     # Only these specific attacks can push the flut flut egg off the cliff.
     flut_flut_egg = JakAndDaxterRegion("Flut Flut Egg", player, multiworld, level_name, 0)
     flut_flut_egg.add_cell_locations([17], access_rule=lambda state:
-                                     state.has_any({"Punch", "Kick", "Jump Kick"}, player))
+                                     state.has_any(("Punch", "Kick", "Jump Kick"), player))
     flut_flut_egg.add_special_locations([17], access_rule=lambda state:
-                                        state.has_any({"Punch", "Kick", "Jump Kick"}, player))
+                                        state.has_any(("Punch", "Kick", "Jump Kick"), player))
 
     eco_harvesters = JakAndDaxterRegion("Eco Harvesters", player, multiworld, level_name, 0)
     eco_harvesters.add_cell_locations([15], access_rule=lambda state: can_fight(state, player))
@@ -55,14 +55,14 @@ def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegi
 
     # We need a helper function for the uppercut logs.
     def can_uppercut_and_jump_logs(state: CollectionState, p: int) -> bool:
-        return (state.has_any({"Double Jump", "Jump Kick"}, p)
-                and (state.has_all({"Crouch", "Crouch Uppercut"}, p)
-                     or state.has_all({"Punch", "Punch Uppercut"}, p)))
+        return (state.has_any(("Double Jump", "Jump Kick"), p)
+                and (state.has_all(("Crouch", "Crouch Uppercut"), p)
+                     or state.has_all(("Punch", "Punch Uppercut"), p)))
 
     # If you have double jump or crouch jump, you don't need the logs to reach this place.
     main_area.connect(green_ridge, rule=lambda state:
                       state.has("Double Jump", player)
-                      or state.has_all({"Crouch", "Crouch Jump"}, player)
+                      or state.has_all(("Crouch", "Crouch Jump"), player)
                       or can_uppercut_and_jump_logs(state, player))
 
     # If you have the blue eco jump pad, you don't need the logs to reach this place.
