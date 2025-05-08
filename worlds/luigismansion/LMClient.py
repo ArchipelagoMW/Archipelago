@@ -233,6 +233,9 @@ class LMContext(CommonContext):
         self.boo_final_count = None
         self.received_trap_link = False
 
+        # Debug Flag 10 announcement.
+        self.debug_flag_ten = False
+
         # Used for handling various weird item checks.
         self.last_map_id = 0
 
@@ -616,6 +619,12 @@ class LMContext(CommonContext):
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
             for addr_to_update in lm_item.update_ram_addr:
                 dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
+
+        if not self.debug_flag_ten:
+            curr_val = int.from_bytes(dme.read_bytes(0x803D339A, 1))
+            if (curr_val & (1 << 2)) > 0:
+                logger.info("DEBUG -- Please inform the Luigi's Mansion channel in AP's discord server " +
+                    "that you saw this message and please explain what you last did to trigger it.")
 
         # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
