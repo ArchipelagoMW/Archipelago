@@ -1,7 +1,6 @@
 import typing
 from BaseClasses import CollectionState
 from Options import OptionError
-from . import JakAndDaxterWorld
 from .Options import (EnableOrbsanity,
                       GlobalOrbsanityBundleSize,
                       PerLevelOrbsanityBundleSize,
@@ -14,8 +13,11 @@ from .locs import CellLocations as Cells
 from .Locations import location_table
 from .Levels import level_table
 
+if typing.TYPE_CHECKING:
+    from . import JakAndDaxterWorld
 
-def set_orb_trade_rule(world: JakAndDaxterWorld):
+
+def set_orb_trade_rule(world: "JakAndDaxterWorld"):
     options = world.options
     player = world.player
 
@@ -27,7 +29,7 @@ def set_orb_trade_rule(world: JakAndDaxterWorld):
             can_trade_orbsanity(state, player, world, required_orbs, required_previous_trade))
 
 
-def recalculate_reachable_orbs(state: CollectionState, player: int, world: JakAndDaxterWorld) -> None:
+def recalculate_reachable_orbs(state: CollectionState, player: int, world: "JakAndDaxterWorld") -> None:
 
     # Recalculate every level, every time the cache is stale, because you don't know
     # when a specific bundle of orbs in one level may unlock access to another.
@@ -43,7 +45,7 @@ def recalculate_reachable_orbs(state: CollectionState, player: int, world: JakAn
 
 
 def count_reachable_orbs_global(state: CollectionState,
-                                world: JakAndDaxterWorld) -> int:
+                                world: "JakAndDaxterWorld") -> int:
 
     accessible_orbs = 0
     for level_regions in world.level_to_orb_regions.values():
@@ -54,7 +56,7 @@ def count_reachable_orbs_global(state: CollectionState,
 
 
 def count_reachable_orbs_level(state: CollectionState,
-                               world: JakAndDaxterWorld,
+                               world: "JakAndDaxterWorld",
                                level_name: str = "") -> int:
 
     accessible_orbs = 0
@@ -66,7 +68,7 @@ def count_reachable_orbs_level(state: CollectionState,
 
 def can_reach_orbs_global(state: CollectionState,
                           player: int,
-                          world: JakAndDaxterWorld,
+                          world: "JakAndDaxterWorld",
                           orb_amount: int) -> bool:
 
     if not state.prog_items[player]["Reachable Orbs Fresh"]:
@@ -77,7 +79,7 @@ def can_reach_orbs_global(state: CollectionState,
 
 def can_reach_orbs_level(state: CollectionState,
                          player: int,
-                         world: JakAndDaxterWorld,
+                         world: "JakAndDaxterWorld",
                          level_name: str,
                          orb_amount: int) -> bool:
 
@@ -89,7 +91,7 @@ def can_reach_orbs_level(state: CollectionState,
 
 def can_trade_vanilla(state: CollectionState,
                       player: int,
-                      world: JakAndDaxterWorld,
+                      world: "JakAndDaxterWorld",
                       required_orbs: int,
                       required_previous_trade: typing.Optional[int] = None) -> bool:
 
@@ -106,7 +108,7 @@ def can_trade_vanilla(state: CollectionState,
 
 def can_trade_orbsanity(state: CollectionState,
                         player: int,
-                        world: JakAndDaxterWorld,
+                        world: "JakAndDaxterWorld",
                         required_orbs: int,
                         required_previous_trade: typing.Optional[int] = None) -> bool:
 
@@ -129,7 +131,7 @@ def can_fight(state: CollectionState, player: int) -> bool:
     return state.has_any(("Jump Dive", "Jump Kick", "Punch", "Kick"), player)
 
 
-def enforce_multiplayer_limits(world: JakAndDaxterWorld):
+def enforce_multiplayer_limits(world: "JakAndDaxterWorld"):
     options = world.options
     friendly_message = ""
 
@@ -188,7 +190,7 @@ def enforce_multiplayer_limits(world: JakAndDaxterWorld):
                           f"(Use at your own risk!)")
 
 
-def enforce_singleplayer_limits(world: JakAndDaxterWorld):
+def enforce_singleplayer_limits(world: "JakAndDaxterWorld"):
     options = world.options
     friendly_message = ""
 
@@ -219,7 +221,7 @@ def enforce_singleplayer_limits(world: JakAndDaxterWorld):
                           f"(Use at your own risk!)")
 
 
-def verify_orb_trade_amounts(world: JakAndDaxterWorld):
+def verify_orb_trade_amounts(world: "JakAndDaxterWorld"):
 
     if world.total_trade_orbs > 2000:
         raise OptionError(f"{world.player_name}: Required number of orbs for all trades ({world.total_trade_orbs}) "

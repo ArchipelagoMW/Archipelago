@@ -1,7 +1,5 @@
 import typing
-
 from Options import OptionError
-from . import JakAndDaxterWorld
 from .Items import item_table
 from .Options import EnableOrbsanity, CompletionCondition
 from .Rules import can_reach_orbs_global
@@ -24,8 +22,11 @@ from .regs import (GeyserRockRegions as GeyserRock,
                    GolAndMaiasCitadelRegions as GolAndMaiasCitadel)
 from .regs.RegionBase import JakAndDaxterRegion
 
+if typing.TYPE_CHECKING:
+    from . import JakAndDaxterWorld
 
-def create_regions(world: JakAndDaxterWorld):
+
+def create_regions(world: "JakAndDaxterWorld"):
     multiworld = world.multiworld
     options = world.options
     player = world.player

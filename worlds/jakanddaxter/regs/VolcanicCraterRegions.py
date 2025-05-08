@@ -1,11 +1,13 @@
 from .RegionBase import JakAndDaxterRegion
 from ..Options import EnableOrbsanity
-from .. import JakAndDaxterWorld
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .. import JakAndDaxterWorld
 from ..Rules import can_free_scout_flies, can_reach_orbs_level
 from ..locs import ScoutLocations as Scouts
 
 
-def build_regions(level_name: str, world: JakAndDaxterWorld) -> JakAndDaxterRegion:
+def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRegion:
     multiworld = world.multiworld
     options = world.options
     player = world.player

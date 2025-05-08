@@ -34,6 +34,11 @@ from .Locations import (JakAndDaxterLocation,
                         special_location_table,
                         cache_location_table,
                         orb_location_table)
+from .Regions import create_regions
+from .Rules import (enforce_multiplayer_limits,
+                    enforce_singleplayer_limits,
+                    verify_orb_trade_amounts,
+                    set_orb_trade_rule)
 from .locs import (CellLocations as Cells,
                    ScoutLocations as Scouts,
                    SpecialLocations as Specials,
@@ -263,10 +268,8 @@ class JakAndDaxterWorld(World):
         enforce_friendly_options = self.settings.enforce_friendly_options
         if enforce_friendly_options:
             if self.multiworld.players > 1:
-                from .Rules import enforce_multiplayer_limits
                 enforce_multiplayer_limits(self)
             else:
-                from .Rules import enforce_singleplayer_limits
                 enforce_singleplayer_limits(self)
 
         # Calculate the number of power cells needed for full region access, the number being replaced by traps,
@@ -283,7 +286,6 @@ class JakAndDaxterWorld(World):
         # Verify that we didn't overload the trade amounts with more orbs than exist in the world.
         # This is easy to do by accident even in a singleplayer world.
         self.total_trade_orbs = (9 * self.options.citizen_orb_trade_amount) + (6 * self.options.oracle_orb_trade_amount)
-        from .Rules import verify_orb_trade_amounts
         verify_orb_trade_amounts(self)
 
         # Cache the orb bundle size and item name for quicker reference.
@@ -313,12 +315,10 @@ class JakAndDaxterWorld(World):
         self.trap_weights = self.options.trap_weights.weights_pair
 
         # Options drive which trade rules to use, so they need to be setup before we create_regions.
-        from .Rules import set_orb_trade_rule
         set_orb_trade_rule(self)
 
     # This will also set Locations, Location access rules, Region access rules, etc.
     def create_regions(self) -> None:
-        from .Regions import create_regions
         create_regions(self)
 
         # Don't forget to add the created regions to the multiworld!
