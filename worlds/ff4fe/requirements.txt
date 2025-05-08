@@ -1,0 +1,11 @@
+pillow
+cherrypy
+jinja2
+pymongo
+chardet
+requests
+markdown
+javascripthon
+python-dotenv
+lark
+FreeEnterprise4 @ git+https://github.com/Rosalie-A/FreeEnterprise4@v7
