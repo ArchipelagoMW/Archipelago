@@ -12,6 +12,7 @@ class LocationData(NamedTuple):
 treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
+boss_index_offset = 1000000
 #summon_index_offset = 1000000 Summons Todo
 
 def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
@@ -119,6 +120,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #296, 112, -155
         LocationData("Soiled Den", "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
+
+        #Boss
+        LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset)
 
         #Pale Grotto
         #Treasure chests
