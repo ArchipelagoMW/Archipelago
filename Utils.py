@@ -1077,6 +1077,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
 
 
 def get_full_typename(t: type) -> str:
+    """Returns the full qualified name of a type, including its module (if not builtins)."""
     module = t.__module__
     if module and module != "builtins":
         return f"{module}.{t.__qualname__}"
@@ -1086,13 +1087,17 @@ def get_full_typename(t: type) -> str:
 def get_all_causes(ex: Exception) -> str:
     """Return a string describing the recursive causes of this exception.
 
-    For example:
+    :param ex: The exception to be described.
+    :return A multiline string starting with the initial exception on the first line and each resulting exception
+            on subsequent lines with progressive indentation.
 
-    ```
-    Exception: Invalid value 'bad'.
-     Which caused: Options.OptionError: Error generating option
-      Which caused: ValueError: File bad.yaml is invalid.
-    ```
+            For example:
+
+            ```
+            Exception: Invalid value 'bad'.
+             Which caused: Options.OptionError: Error generating option
+              Which caused: ValueError: File bad.yaml is invalid.
+            ```
     """
     cause = ex
     causes = [f"{get_full_typename(type(ex))}: {ex}"]

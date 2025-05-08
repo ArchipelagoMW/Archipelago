@@ -157,9 +157,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
 
     if args.multi == 0:
         if player_errors:
-            errors = '\n\n'.join(player_errors)
-            raise Exception(f"Encountered {len(player_errors)} error(s) in player files. "
-                            f"See logs for full tracebacks.\n\n{errors}")
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise ValueError(
             "No individual player files found and number of players is 0. "
             "Provide individual player files or specify the number of players via host.yaml or --multi."
@@ -170,9 +170,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
 
     if not weights_cache:
         if player_errors:
-            errors = '\n\n'.join(player_errors)
-            raise Exception(f"Encountered {len(player_errors)} error(s) in player files. "
-                            f"See logs for full tracebacks.\n\n{errors}")
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
@@ -222,9 +222,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                 )
         # Exit early here to avoid throwing the same errors again later
         if player_errors:
-            errors = '\n\n'.join(player_errors)
-            raise Exception(f"Encountered {len(player_errors)} error(s) in player files. "
-                            f"See logs for full tracebacks.\n\n{errors}")
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
 
     player_path_cache: Dict[int, str] = {}
     for player in range(1, args.multi + 1):
@@ -245,8 +245,11 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
             try:
                 # Use the cached settings object if it exists, otherwise roll settings within the try-catch
                 # Invariant: settings_cache[path] and weights_cache[path] have the same length
-                settingsObject: argparse.Namespace = settings_cache[path][doc_index] if settings_cache[path] else \
-                    roll_settings(yaml, args.plando)
+                settingsObject: argparse.Namespace = (
+                    settings_cache[path][doc_index]
+                    if settings_cache[path]
+                    else roll_settings(yaml, args.plando)
+                )
                 
                 for k, v in vars(settingsObject).items():
                     if v is not None:
@@ -281,9 +284,9 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         )
 
     if player_errors:
-        errors = '\n\n'.join(player_errors)
-        raise Exception(f"Encountered {len(player_errors)} error(s) in player files. "
-                        f"See logs for full tracebacks.\n\n{errors}")
+        errors = "\n\n".join(player_errors)
+        raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                         f"See logs for full tracebacks.\n\n{errors}")
 
     return erargs, seed
 
