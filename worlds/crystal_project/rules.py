@@ -67,7 +67,8 @@ class CrystalProjectLogic:
         if state.has("Job - Mimic", self.player):
             count += 1
 
-        return count
+        #subtract 6 to account for starting jobs
+        return count - 6
 
     def has_enough_clamshells(self, state: CollectionState):
         return state.has("Item - Clamshell", self.player, self.options.clamshellsQuantity)
