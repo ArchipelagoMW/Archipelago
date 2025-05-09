@@ -1,5 +1,6 @@
 {% extends 'pageWrapper.html' %}
 {% import "macros.html" as macros %}
+{% set show_footer = True %}
 
 {% block head %}
     <title>Generation in Progress</title>
@@ -15,5 +16,34 @@
             Waiting for game to generate, this page auto-refreshes to check.
         </div>
     </div>
-    {% include 'islandFooter.html' %}
+    <script>
+        const waitSeedDiv = document.getElementById("wait-seed");
+        async function checkStatus() {
+            try {
+                const response = await fetch("{{ url_for('api.wait_seed_api', seed=seed_id) }}");
+                if (response.status !== 202) {
+                    // Seed is ready; reload page to load seed page.
+                    location.reload();
+                    return;
+                }
+
+                const data = await response.json();
+                waitSeedDiv.innerHTML = `
+                    <h1>Generation in Progress</h1>
+                    <p>${data.text}</p>
+                `;
+
+                setTimeout(checkStatus, 1000); // Continue polling.
+            } catch (error) {
+                waitSeedDiv.innerHTML = `
+                    <h1>Progress Unknown</h1>
+                    <p>${error.message}<br />(Last checked: ${new Date().toLocaleTimeString()})</p>
+                `;
+
+                setTimeout(checkStatus, 1000);
+            }
+        }
+
+        setTimeout(checkStatus, 1000);
+    </script>
 {% endblock %}

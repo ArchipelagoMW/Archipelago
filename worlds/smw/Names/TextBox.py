@@ -117,6 +117,31 @@ def generate_received_text(item_name: str, player_name: str):
     return out_array
 
 
+def generate_received_trap_link_text(item_name: str, player_name: str):
+    out_array = bytearray()
+
+    item_name = item_name[:18]
+    player_name = player_name[:18]
+
+    item_buffer = max(0, math.floor((18 - len(item_name)) / 2))
+    player_buffer = max(0, math.floor((18 - len(player_name)) / 2))
+
+    out_array += bytearray([0x9F, 0x9F])
+    out_array += string_to_bytes(" Received linked")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * item_buffer)
+    out_array += string_to_bytes(item_name)
+    out_array[-1] += 0x80
+    out_array += string_to_bytes("       from")
+    out_array[-1] += 0x80
+    out_array += bytearray([0x1F] * player_buffer)
+    out_array += string_to_bytes(player_name)
+    out_array[-1] += 0x80
+    out_array += bytearray([0x9F, 0x9F])
+
+    return out_array
+
+
 def generate_sent_text(item_name: str, player_name: str):
     out_array = bytearray()
 
