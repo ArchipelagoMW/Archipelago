@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from BaseClasses import Tutorial, Region, Entrance
+from BaseClasses import CollectionState, Item, Tutorial, Region, Entrance
 from worlds.AutoWorld import World, WebWorld
 from .items import item_table, PaintItem, item_data_table
 from .locations import location_table, PaintLocation, location_data_table
@@ -92,3 +92,16 @@ class PaintWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return dict(self.options.as_dict("logic_percent", "goal_percent", "goal_image", "death_link"),
                     version = "0.4.0")
+
+    def collect(self, state: CollectionState, item: Item) -> bool:
+        change = super().collect(state, item)
+        if change:
+            state.paint_percent_stale[self.player] = True
+        return change
+
+    def remove(self, state: CollectionState, item: Item) -> bool:
+        change = super().remove(state, item)
+        if change:
+            state.paint_percent_stale[self.player] = True
+        return change
+
