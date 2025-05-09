@@ -1349,7 +1349,7 @@ class NonLocalItems(ItemSet):
 
 
 class StartInventory(ItemDict):
-    """Start with these items. Capped at 30000 per item."""
+    """Start with these items. Capped at 10000 per item."""
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
