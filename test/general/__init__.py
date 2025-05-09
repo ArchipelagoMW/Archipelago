@@ -58,6 +58,10 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
             setattr(args, key, updated_options)
     multiworld.set_options(args)
     for step in steps:
+        if step == "create_regions":
+            multiworld.collect_starting_inventory()
+        elif step == "pre_fill":
+            multiworld.remove_starting_inventory_from_pool()
         call_all(multiworld, step)
     return multiworld
 
