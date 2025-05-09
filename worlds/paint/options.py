@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Range, PerGameCommonOptions, Toggle, Choice, Visibility
+from Options import Range, PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Visibility
 
 
 class LogicPercent(Range):
@@ -83,3 +83,4 @@ class PaintOptions(PerGameCommonOptions):
     starting_tool: StartingTool
     trap_count: TrapCount
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

@@ -33,6 +33,15 @@ class PaintWorld(World):
     location_name_to_id = location_table
     item_name_to_id = item_table
 
+    def get_filler_item_name(self):
+        if self.random.randint(0, 99) >= self.options.trap_count:
+            return "Additional Palette Color"
+        elif self.options.death_link:
+            return self.random.choice(["Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"])
+        else:
+            return self.random.choice(["Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap",
+                                       "Flip Vertical Trap"])
+
     def create_item(self, name: str) -> PaintItem:
         item = PaintItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
         return item
