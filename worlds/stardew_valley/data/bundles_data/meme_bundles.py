@@ -126,7 +126,7 @@ snitch_items = [lucky_purple_shorts]
 snitch_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.snitch, snitch_items, 1, 1)
 
 mermaid_items = [pearl, clam.as_amount(2), mermaid_pendant, mermaid_boots, flute_block.as_amount(5)]
-mermaid_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.mermaid, mermaid_items, 5, 5)
+mermaid_bundle = FixedPriceBundleTemplate(CCRoom.fish_tank, MemeBundleName.mermaid, mermaid_items, 5, 5)
 
 commitment_items = [bouquet, mermaid_pendant, wilted_bouquet, ancient_doll.as_amount(2)]
 commitment_bundle_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.commitment, commitment_items, 4, 4)
@@ -193,12 +193,12 @@ ikea_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.ikea, 
 this_is_fine_items = [coffee, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz]
 this_is_fine_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.this_is_fine, this_is_fine_items, 8, 8)
 
-vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.health, 200))
+vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 5000))
 clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
-cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
+# cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
 cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 20000))  # ?
 communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
@@ -270,8 +270,8 @@ bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_r
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
 vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
-                      clique_bundle, cipher_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
-                      restraint_bundle, fast_bundle, floor_is_lava_bundle]
+                      clique_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
+                      restraint_bundle, fast_bundle, floor_is_lava_bundle]  # cipher_bundle
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,

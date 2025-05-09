@@ -93,7 +93,7 @@ class MoneyLogic(BaseLogic):
                 self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
-        if currency == MemeCurrency.code or currency == MemeCurrency.energy or currency == MemeCurrency.health:
+        if currency == MemeCurrency.code or currency == MemeCurrency.energy or currency == MemeCurrency.blood:
             return self.logic.true_
         if (currency == MemeCurrency.clic or currency == MemeCurrency.steps) and amount < 100:
             return self.logic.true_
