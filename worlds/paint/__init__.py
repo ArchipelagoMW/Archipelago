@@ -88,7 +88,7 @@ class PaintWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return dict(self.options.as_dict("logic_percent", "goal_percent", "goal_image", "death_link"),
-                    version = "0.4.0")
+                    version = "0.4.1")
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
