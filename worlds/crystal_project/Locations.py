@@ -1333,7 +1333,39 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
+        LocationData("Delende", "Delende Boss - Troll", 153 + boss_index_offset),
+        LocationData("Delende", "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player))),
         LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
+        LocationData("Pale Grotto", "Pale Grotto Boss - Guardian", 143 + boss_index_offset),
+        LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
+        LocationData("Yamagawa", "Yamagawa Boss - Sepulchra", 167 + boss_index_offset),
+        LocationData("Skumparadise", "Skumparadise Boss - Parasite", 333 + boss_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Boss - Enami", 458 + boss_index_offset, logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement),
+        LocationData("Jojo Sewers", "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset),
+        LocationData("Capital Jail", "Capital Jail Boss - Warden", 907 + boss_index_offset, logic.has_dark_wing_key),
+        LocationData("Cobblestone Crag", "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset),
+        LocationData("Okimoto N.S.", "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset),
+        LocationData("Ancient Reservoir", "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset),
+        LocationData("The Undercity", "The Undercity Boss - Blade Master", 1939 + boss_index_offset),
+        LocationData("The Undercity", "The Undercity Boss - Shadow Master", 1940 + boss_index_offset),
+        LocationData("The Undercity", "The Undercity Boss - Duel Master", 1941 + boss_index_offset),
+        LocationData("Beaurior Rock", "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_small_key(state, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Boss - Iguanadon & Iguanadin", 106 + boss_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_boss_key),
+        LocationData("Eastern Chasm", "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, logic.has_vertical_movement),
+        LocationData("Lands End", "Lands End Boss - The Owlbear", 2104 + boss_index_offset),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Boss - Red Guardian", 1713 + boss_index_offset),
+        LocationData("Castle Ramparts", "Castle Ramparts Boss - Rampart Demon", 1373 + boss_index_offset),
+        LocationData("Continental Tram", "Continental Tram Boss - Conscript", 1621 + boss_index_offset),
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Boss - Anubis", 2473 + boss_index_offset),
+        LocationData("The Sequoia", "The Sequoia Boss - Spirit Cage", 2453 + boss_index_offset),
+        LocationData("The Depths", "The Depths Boss - The Devourer", 1265 + boss_index_offset),
+        LocationData("The Depths", "The Depths Boss - The Old One", 206 + boss_index_offset),
+        LocationData("The Depths", "The Depths Boss - The Enforcer", 1128 + boss_index_offset),
+        LocationData("The Depths", "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset),
+        LocationData("The Old World", "The Old World Boss - Periculum", 3650 + boss_index_offset),
+
     ]
 
     return location_table
