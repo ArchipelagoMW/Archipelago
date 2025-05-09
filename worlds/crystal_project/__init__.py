@@ -34,6 +34,7 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
+    location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
     startingJobs = get_random_starting_jobs()
 
@@ -117,16 +118,10 @@ class CrystalProjectWorld(World):
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
-        self.logger.info("--------locations list------")
-        self.logger.info(locations)
 
         if self.options.killBossesMode:
             bosses = get_bosses(self.player, self.options)
-            self.logger.info("--------bosses list------")
-            self.logger.info(bosses)
             locations.extend(bosses)
-            self.logger.info("--------combined list------")
-            self.logger.info(locations)
 
         init_areas(self, locations, self.options)
 
@@ -404,7 +399,9 @@ class CrystalProjectWorld(World):
             "startWithMaps": bool(self.options.startWithMaps.value),
             "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
-            "startingJobs": self.get_job_id_list()
+            "startingJobs": self.get_job_id_list(),
+            "easyLeveling": bool(self.options.easyLeveling.value),
+            "randomizeMusic": bool(self.options.randomizeMusic.value)
         }
     
         return slot_data
