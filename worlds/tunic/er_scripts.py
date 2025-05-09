@@ -424,7 +424,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                         break
                 else:
                     if p_entrance.startswith("Shop Portal "):
-                        portal_num = int(p_entrance.split("Shop Portal ")[-1])
+                        try:
+                            portal_num = int(p_entrance.split("Shop Portal ")[-1])
+                        except ValueError:
+                            if "Previous Region" in p_entrance:
+                                raise Exception("TUNIC: APWorld used for generation is incompatible with newer APWorld. "
+                                                "Please use the APWorld from Archipelago 0.6.1 instead.")
+                            else:
+                                raise Exception("TUNIC: Unknown error occurred in UT entrance setup, please contact "
+                                                "the TUNIC APWorld devs.")
                         # shops 1-6 are south, 7 and 8 are east, and after that it just breaks direction pairs
                         if portal_num <= 6:
                             pdir = Direction.south
@@ -457,7 +465,15 @@ def pair_portals(world: "TunicWorld", regions: Dict[str, Region]) -> Dict[Portal
                 else:
                     if not portal2:
                         if p_exit.startswith("Shop Portal "):
-                            portal_num = int(p_exit.split("Shop Portal ")[-1])
+                            try:
+                                portal_num = int(p_exit.split("Shop Portal ")[-1])
+                            except ValueError:
+                                if "Previous Region" in p_exit:
+                                    raise Exception("TUNIC: APWorld used for generation is incompatible with newer APWorld. "
+                                                    "Please use the APWorld from Archipelago 0.6.1 instead.")
+                                else:
+                                    raise Exception("TUNIC: Unknown error occurred in UT entrance setup, please contact "
+                                                    "the TUNIC APWorld devs.")
                             if portal_num <= 6:
                                 pdir = Direction.south
                             elif portal_num in [7, 8]:
