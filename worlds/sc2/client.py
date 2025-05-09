@@ -1364,7 +1364,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     if ctx.slot_data_version < 4:
         for compat_item in API3_TO_API4_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
-        received_item_ids = set(item.item for item in ctx.items_received if item.player == ctx.slot)
+        received_item_ids = set(item.item for item in ctx.items_received)
         if item_list[item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
             items.append(create_network_item(item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY))
         if item_list[item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
