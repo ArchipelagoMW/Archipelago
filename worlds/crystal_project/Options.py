@@ -96,7 +96,7 @@ class IncludedRegions(Choice):
     default = 3
 
 """Progression Options"""
-class EasyLeveling(DefaultOnToggle):
+class EasyLeveling(Toggle):
     """
     When enabled, characters will not receive reduced exp for being dead or for being a higher level than the fought enemy.
     """
@@ -154,7 +154,7 @@ class IncludeScholarAbilities(DefaultOnToggle):
     display_name = "Include Scholar Abilities in the item pool"
 
 """Bonus Fun"""
-class RandomizeMusic(DefaultOnToggle):
+class RandomizeMusic(Toggle):
     """
     When enabled, music will be randomized upon connecting to the AP World.
     """
