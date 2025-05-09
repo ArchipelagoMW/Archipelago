@@ -227,11 +227,11 @@ class SC2MOGenCampaign(MissionOrderNode):
     def is_beaten(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.exits)
 
-    def is_always_unlocked(self) -> bool:
-        return self.entry_rule.is_always_fulfilled()
+    def is_always_unlocked(self, in_region_creation = False) -> bool:
+        return self.entry_rule.is_always_fulfilled(in_region_creation)
 
-    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.entry_rule.is_fulfilled(beaten_missions)
+    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission], in_region_creation = False) -> bool:
+        return self.entry_rule.is_fulfilled(beaten_missions, in_region_creation)
 
     def search(self, term: str) -> Union[List[MissionOrderNode], None]:
         return [
@@ -421,11 +421,11 @@ class SC2MOGenLayout(MissionOrderNode):
     def is_beaten(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
         return beaten_missions.issuperset(self.exits)
 
-    def is_always_unlocked(self) -> bool:
-        return self.entry_rule.is_always_fulfilled()
+    def is_always_unlocked(self, in_region_creation = False) -> bool:
+        return self.entry_rule.is_always_fulfilled(in_region_creation)
     
-    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.entry_rule.is_fulfilled(beaten_missions)
+    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission], in_region_creation = False) -> bool:
+        return self.entry_rule.is_fulfilled(beaten_missions, in_region_creation)
 
     def resolve_index_term(self, term: Union[str, int], *, ignore_out_of_bounds: bool = True, reject_none: bool = True) -> Union[Set[int], None]:
         try:
@@ -558,11 +558,11 @@ class SC2MOGenMission(MissionOrderNode):
         self.option_mission_pool = data.get("mission_pool", self.option_mission_pool)
         self.option_victory_cache = data.get("victory_cache", -1)
     
-    def is_always_unlocked(self) -> bool:
-        return self.entry_rule.is_always_fulfilled()
+    def is_always_unlocked(self, in_region_creation = False) -> bool:
+        return self.entry_rule.is_always_fulfilled(in_region_creation)
     
-    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.entry_rule.is_fulfilled(beaten_missions)
+    def is_unlocked(self, beaten_missions: Set[SC2MOGenMission], in_region_creation = False) -> bool:
+        return self.entry_rule.is_fulfilled(beaten_missions, in_region_creation)
     
     def beat_item(self) -> str:
         return f"Beat {self.mission.mission_name}"
