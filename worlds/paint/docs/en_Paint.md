@@ -25,3 +25,8 @@ With the addition of a second canvas to display the target image, there are some
 intuitive. There is a feature in Extras->Difference Mode (shortcut Ctrl+M) that visualizes the differences between
 what has been drawn and the target image. Additionally, once unlocked, the Pick Color tool can be used on both the main
 and target canvases.
+
+Custom colors have been streamlined for Archipelago play. The only starting palette options are black and white, but
+additional palette slots can be unlocked as Archipelago items. Double-clicking on any palette slot will allow you to
+edit the color in that slot directly and shift-clicking a palette slot will allow you to override the slot with your
+currently selected color.
