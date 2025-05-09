@@ -29,7 +29,8 @@ class PaintWorld(World):
     """
     game = "Paint"
     options_dataclass = PaintOptions
-    options = PaintOptions
+    options: PaintOptions
+    web = PaintWebWorld()
     location_name_to_id = location_table
     item_name_to_id = item_table
 
