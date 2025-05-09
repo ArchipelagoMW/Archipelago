@@ -11,6 +11,7 @@ class LogicPercent(Range):
     range_end = 95
     default = 80
 
+
 class GoalPercent(Range):
     """Sets the percent similarity required to achieve your goal.
     If this number is higher than the value for logic percent,
@@ -19,6 +20,7 @@ class GoalPercent(Range):
     range_start = 50
     range_end = 95
     default = 80
+
 
 class HalfPercentChecks(Range):
     """Sets the lowest percent at which locations will be created for each 0.5% of similarity.
@@ -29,6 +31,7 @@ class HalfPercentChecks(Range):
     range_end = 95
     default = 50
 
+
 class QuarterPercentChecks(Range):
     """Sets the lowest percent at which locations will be created for each 0.25% of similarity.
     This number will override Half Percent Checks if it is lower."""
@@ -36,6 +39,7 @@ class QuarterPercentChecks(Range):
     range_start = 0
     range_end = 95
     default = 70
+
 
 class GoalImage(Range):
     """Sets the numbered image you will be required to match.
@@ -45,8 +49,9 @@ class GoalImage(Range):
     display_name = "Goal Image"
     range_start = 1
     range_end = 1
-    default = "random"
+    default = 1
     visibility = Visibility.none
+
 
 class StartingTool(Choice):
     """Sets which tool (other than Magnifier) you will be able to use from the start."""
@@ -60,6 +65,7 @@ class StartingTool(Choice):
     option_rounded_rectangle = 7
     default = 0
 
+
 class TrapCount(Range):
     """Sets the percentage of filler items to be replaced by random traps."""
     display_name = "Trap Fill Percent"
@@ -67,11 +73,13 @@ class TrapCount(Range):
     range_end = 100
     default = 0
 
+
 class DeathLink(Toggle):
     """If on, using the Undo or Clear Image functions will send a death to all other players with death link on.
     Receiving a death will clear the image and reset the history.
     This option also prevents Undo and Clear Image traps from being generated in the item pool."""
     display_name = "Death Link"
+
 
 @dataclass
 class PaintOptions(PerGameCommonOptions):

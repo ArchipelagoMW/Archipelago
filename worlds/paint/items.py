@@ -34,7 +34,7 @@ item_data_table: Dict[str, PaintItemData] = {
     "Polygon":                          PaintItemData(198519, ItemClassification.useful),
     "Ellipse":                          PaintItemData(198520, ItemClassification.useful),
     "Rounded Rectangle":                PaintItemData(198521, ItemClassification.useful),
-    #"Change Background Color":          PaintItemData(198522, ItemClassification.useful),
+    # "Change Background Color":          PaintItemData(198522, ItemClassification.useful),
     "Additional Palette Color":         PaintItemData(198523, ItemClassification.filler),
     "Undo Trap":                        PaintItemData(198524, ItemClassification.trap),
     "Clear Image Trap":                 PaintItemData(198525, ItemClassification.trap),
