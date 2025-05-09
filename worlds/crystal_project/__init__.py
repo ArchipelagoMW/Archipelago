@@ -117,16 +117,10 @@ class CrystalProjectWorld(World):
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
-        self.logger.info("--------locations list------")
-        self.logger.info(locations)
 
         if self.options.includeBossKillsAsChecks:
             bosses = get_bosses(self.player, self.options)
-            self.logger.info("--------bosses list------")
-            self.logger.info(bosses)
             locations.extend(bosses)
-            self.logger.info("--------combined list------")
-            self.logger.info(locations)
 
         init_areas(self, locations, self.options)
 
@@ -404,7 +398,9 @@ class CrystalProjectWorld(World):
             "startWithMaps": bool(self.options.startWithMaps.value),
             "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
-            "startingJobs": self.get_job_id_list()
+            "startingJobs": self.get_job_id_list(),
+            "easyLeveling": bool(self.options.easyLeveling.value),
+            "randomizeMusic": bool(self.options.randomizeMusic.value)
         }
     
         return slot_data

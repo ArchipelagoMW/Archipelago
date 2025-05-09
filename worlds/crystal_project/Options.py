@@ -55,6 +55,18 @@ class NewWorldStoneJobQuantity(Range):
     range_end = 18
     default = 18
 
+class EasyLeveling(DefaultOnToggle):
+    """
+    When enabled, characters will not recieve reduced exp for being dead nor for being a higher level than the fought enemy.
+    """
+    display_name = "Easy Leveling"
+
+class RandomizeMusic(DefaultOnToggle):
+    """
+    When enabled, music will be randomized upon connecting to the AP World.
+    """
+    display_name = "Randomize Music"
+
 class StartWithTreasureFinder(DefaultOnToggle):
     """
     When enabled, the player will start with the treasure finder in their inventory.
@@ -141,6 +153,8 @@ class CrystalProjectOptions(PerGameCommonOptions):
     randomizeJobs: RandomizeJobs
     randomizeStartingJobs: RandomizeStartingJobs
     newWorldStoneJobQuantity: NewWorldStoneJobQuantity
+    easyLeveling: EasyLeveling
+    randomizeMusic: RandomizeMusic
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includedRegions: IncludedRegions
