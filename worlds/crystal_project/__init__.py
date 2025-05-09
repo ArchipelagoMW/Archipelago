@@ -43,6 +43,17 @@ class CrystalProjectWorld(World):
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
+        if self.options.randomizeStartingJobs:
+            for job in self.startingJobs:
+                self.multiworld.push_precollected(self.create_item(job.name))
+        else:
+            self.multiworld.push_precollected(self.create_item("Job - Warrior"))
+            self.multiworld.push_precollected(self.create_item("Job - Monk"))
+            self.multiworld.push_precollected(self.create_item("Job - Rogue"))
+            self.multiworld.push_precollected(self.create_item("Job - Cleric"))
+            self.multiworld.push_precollected(self.create_item("Job - Wizard"))
+            self.multiworld.push_precollected(self.create_item("Job - Warlock"))
+
         if self.options.startWithTreasureFinder:
             self.multiworld.push_precollected(self.create_item("Item - Treasure Finder"))
 
@@ -152,17 +163,6 @@ class CrystalProjectWorld(World):
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
         excluded_items.add("Item - Home Point Stone")
-
-        if self.options.randomizeStartingJobs:
-            for job in self.startingJobs:
-                excluded_items.add(job.name)
-        else:
-            excluded_items.add("Job - Warrior")
-            excluded_items.add("Job - Monk")
-            excluded_items.add("Job - Rogue")
-            excluded_items.add("Job - Cleric")
-            excluded_items.add("Job - Wizard")
-            excluded_items.add("Job - Warlock")
 
         if self.options.startWithTreasureFinder:
             excluded_items.add("Item - Treasure Finder")
