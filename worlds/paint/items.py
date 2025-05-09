@@ -44,3 +44,5 @@ item_data_table: Dict[str, PaintItemData] = {
 }
 
 item_table = {name: data.code for name, data in item_data_table.items()}
+traps = ["Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"]
+deathlink_traps = ["Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"]

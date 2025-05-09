@@ -2,7 +2,7 @@ from typing import Dict, Any
 
 from BaseClasses import CollectionState, Item, Tutorial, Region, Entrance
 from worlds.AutoWorld import World, WebWorld
-from .items import item_table, PaintItem, item_data_table
+from .items import item_table, PaintItem, item_data_table, traps, deathlink_traps
 from .locations import location_table, PaintLocation, location_data_table
 from .options import PaintOptions
 
@@ -38,10 +38,9 @@ class PaintWorld(World):
         if self.random.randint(0, 99) >= self.options.trap_count:
             return "Additional Palette Color"
         elif self.options.death_link:
-            return self.random.choice(["Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"])
+            return self.random.choice(deathlink_traps)
         else:
-            return self.random.choice(["Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap",
-                                       "Flip Vertical Trap"])
+            return self.random.choice(traps)
 
     def create_item(self, name: str) -> PaintItem:
         item = PaintItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
@@ -63,11 +62,9 @@ class PaintWorld(World):
         to_fill = len(self.get_region("Canvas").locations)
         while len(items_to_create) < (to_fill - pre_filled) * (self.options.trap_count / 100) + pre_filled:
             if self.options.death_link:
-                items_to_create += [self.random.choice(["Invert Colors Trap", "Flip Horizontal Trap",
-                                                        "Flip Vertical Trap"])]
+                items_to_create += [self.random.choice(deathlink_traps)]
             else:
-                items_to_create += [self.random.choice(["Undo Trap", "Clear Image Trap", "Invert Colors Trap",
-                                                        "Flip Horizontal Trap", "Flip Vertical Trap"])]
+                items_to_create += [self.random.choice(traps)]
         while len(items_to_create) < to_fill:
             items_to_create += ["Additional Palette Color"]
         self.multiworld.itempool += [self.create_item(item) for item in items_to_create]
