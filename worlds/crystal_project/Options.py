@@ -55,13 +55,13 @@ class NewWorldStoneJobQuantity(Range):
     range_end = 18
     default = 18
 
-class EasyLeveling(DefaultOnToggle):
+class EasyLeveling(Toggle):
     """
     When enabled, characters will not recieve reduced exp for being dead nor for being a higher level than the fought enemy.
     """
     display_name = "Easy Leveling"
 
-class RandomizeMusic(DefaultOnToggle):
+class RandomizeMusic(Toggle):
     """
     When enabled, music will be randomized upon connecting to the AP World.
     """
