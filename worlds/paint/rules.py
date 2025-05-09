@@ -3,7 +3,7 @@ from math import sqrt
 from BaseClasses import CollectionState, MultiWorld
 from worlds.AutoWorld import LogicMixin
 from worlds.generic.Rules import set_rule
-from . import PaintWorld
+from . import PaintWorld, location_exists_with_options
 
 
 class PaintState(LogicMixin):
@@ -44,8 +44,7 @@ def set_single_rule(world: PaintWorld, player: int, i: int):
 
 def set_rules(world: PaintWorld, player: int):
     for i in range(1, world.options.logic_percent * 4 + 1):
-        if (i % 4 == 0 or (i > world.options.half_percent_checks * 4 and i % 2 == 0) or
-            i > world.options.quarter_percent_checks * 4): set_single_rule(world, player, i)
+        if location_exists_with_options(world, i): set_single_rule(world, player, i)
 
 
 def set_completion_rules(world: PaintWorld, player: int):

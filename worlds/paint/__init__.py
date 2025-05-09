@@ -75,9 +75,7 @@ class PaintWorld(World):
         canvas = Region("Canvas", self.player, self.multiworld)
         canvas.locations += [PaintLocation(self.player, loc_name, loc_data.address, canvas)
                              for loc_name, loc_data in location_data_table.items()
-                             if loc_data.address <= 198600 + self.options.logic_percent * 4 and (loc_data.address % 4 == 0 or
-                             (loc_data.address - 198600 > self.options.half_percent_checks * 4 and loc_data.address % 2 == 0) or
-                             loc_data.address - 198600 > self.options.quarter_percent_checks * 4)]
+                             if location_exists_with_options(self, loc_data.address)]
 
         connection = Entrance(self.player, "New Canvas", menu)
         menu.exits.append(connection)
@@ -105,3 +103,7 @@ class PaintWorld(World):
             state.paint_percent_stale[self.player] = True
         return change
 
+def location_exists_with_options(world: PaintWorld, location: int):
+    l = location % 198600
+    return l <= world.options.logic_percent * 4 and (l % 4 == 0 or \
+		(l > world.options.half_percent_checks * 4 and l % 2 == 0) or l > world.options.quarter_percent_checks * 4)
