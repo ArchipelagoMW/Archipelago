@@ -120,7 +120,7 @@ class CrystalProjectWorld(World):
         self.logger.info("--------locations list------")
         self.logger.info(locations)
 
-        if self.options.includeBossKillsAsChecks:
+        if self.options.killBossesMode:
             bosses = get_bosses(self.player, self.options)
             self.logger.info("--------bosses list------")
             self.logger.info(bosses)
