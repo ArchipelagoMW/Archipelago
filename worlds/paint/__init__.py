@@ -50,8 +50,7 @@ class PaintWorld(World):
         starting_tools = ["Brush", "Pencil", "Eraser/Color Eraser", "Airbrush", "Line", "Rectangle", "Ellipse",
                           "Rounded Rectangle"]
         self.multiworld.push_precollected(self.create_item("Magnifier"))
-        self.multiworld.push_precollected(self.create_item(starting_tools[self.options.starting_tool]))
-        starting_tools.pop(self.options.starting_tool)
+        self.multiworld.push_precollected(self.create_item(starting_tools.pop(self.options.starting_tool)))
         items_to_create = ["Free-Form Select", "Select", "Fill With Color", "Pick Color", "Text", "Curve", "Polygon"]
         items_to_create += starting_tools
         items_to_create += ["Progressive Canvas Width"] * 4
