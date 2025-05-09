@@ -4,7 +4,7 @@ from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
 
-"""Goal Options"""
+#"""Goal Options"""
 class Goal(Choice):
     """
     Choose what is required to complete the game.
@@ -52,7 +52,7 @@ class ClamshellsInPool(Range):
     range_end = 100
     default = 19
 
-"""Location Options"""
+#"""Location Options"""
 class RandomizeJobs(DefaultOnToggle):
     """
     When enabled, Jobs can be found anywhere; when disabled, they are always on crystals.
@@ -95,7 +95,7 @@ class IncludedRegions(Choice):
     option_all = 3
     default = 3
 
-"""Progression Options"""
+#"""Progression Options"""
 class EasyLeveling(Toggle):
     """
     When enabled, characters will not receive reduced exp for being dead or for being a higher level than the fought enemy.
@@ -126,7 +126,7 @@ class KeyMode(Choice):
     option_vanilla = 2
     default = 2
 
-"""Item Pool Options"""
+#"""Item Pool Options"""
 class StartWithTreasureFinder(DefaultOnToggle):
     """
     When enabled, the player will start with the Treasure Finder in their inventory. When disabled, it will be in the item pool.
@@ -138,6 +138,8 @@ class StartWithTreasureFinder(DefaultOnToggle):
 class StartWithMaps(DefaultOnToggle):
     """
     When enabled, the player will start with all maps in their inventory.
+
+    Note: The in-game minimap hides when in an area without its map. The world map will display check location icons but will not draw an area without its map.
     """
     display_name = "Begin with Area Maps"
 
@@ -153,7 +155,7 @@ class IncludeScholarAbilities(DefaultOnToggle):
     """
     display_name = "Include Scholar Abilities in the item pool"
 
-"""Bonus Fun"""
+#"""Bonus Fun"""
 class RandomizeMusic(Toggle):
     """
     When enabled, music will be randomized upon connecting to the AP World.
