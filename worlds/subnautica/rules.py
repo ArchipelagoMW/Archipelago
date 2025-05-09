@@ -254,8 +254,8 @@ def can_access_location(state: "CollectionState", player: int, loc: LocationDict
     return get_max_depth(state, player) >= depth
 
 
-def set_location_rule(world, player: int, loc: LocationDict):
-    set_rule(world.get_location(loc["name"], player), lambda state: can_access_location(state, player, loc))
+def set_location_rule(world: "SubnauticaWorld", player: int, loc: LocationDict):
+    set_rule(world.get_location(loc["name"]), lambda state: can_access_location(state, player, loc))
 
 
 def can_scan_creature(state: "CollectionState", player: int, creature: str) -> bool:
@@ -264,8 +264,8 @@ def can_scan_creature(state: "CollectionState", player: int, creature: str) -> b
     return get_max_depth(state, player) >= all_creatures[creature]
 
 
-def set_creature_rule(world, player: int, creature_name: str) -> "Location":
-    location = world.get_location(creature_name + suffix, player)
+def set_creature_rule(world: "SubnauticaWorld", player: int, creature_name: str) -> "Location":
+    location = world.get_location(creature_name + suffix)
     set_rule(location,
              lambda state: can_scan_creature(state, player, creature_name))
     return location
@@ -293,13 +293,13 @@ def set_rules(subnautica_world: "SubnauticaWorld"):
     multiworld = subnautica_world.multiworld
 
     for loc in location_table.values():
-        set_location_rule(multiworld, player, loc)
+        set_location_rule(subnautica_world, player, loc)
 
     if subnautica_world.creatures_to_scan:
         option = multiworld.worlds[player].options.creature_scan_logic
 
         for creature_name in subnautica_world.creatures_to_scan:
-            location = set_creature_rule(multiworld, player, creature_name)
+            location = set_creature_rule(subnautica_world, player, creature_name)
             if creature_name in containment:  # there is no other way, hard-required containment
                 add_rule(location, lambda state: has_containment(state, player))
             elif creature_name in aggressive:
