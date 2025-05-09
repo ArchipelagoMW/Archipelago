@@ -12,10 +12,12 @@ class Currency:
     @staticmethod
     def is_currency(item: str) -> bool:
         return item in [Currency.qi_coin, Currency.golden_walnut, Currency.qi_gem, Currency.star_token, Currency.money,
-                        MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.health]
+                        MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.health,
+                        MemeCurrency.cookies, MemeCurrency.child]
 
 
 class MemeCurrency:
+    child = "Child"
     code = "Code"
     clic = "Clic"
     steps = "Steps"

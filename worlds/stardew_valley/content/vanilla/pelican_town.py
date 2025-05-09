@@ -4,7 +4,7 @@ from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
-    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement
+    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -349,6 +349,7 @@ pelican_town = ContentPack(
 
         # Catalogues
         Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer),),
+        Catalogue.furniture: (ShopSource(price=200000, shop_region=Region.carpenter, other_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
     },
     fishes=(
         fish_data.albacore,

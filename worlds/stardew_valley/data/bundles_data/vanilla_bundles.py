@@ -112,7 +112,7 @@ fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla
 fish_tank_vanilla = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_vanilla, 6)
 
 # Boiler Room
-blacksmith_items_vanilla = [copper_bar, iron_Bar, gold_bar]
+blacksmith_items_vanilla = [copper_bar, iron_bar, gold_bar]
 blacksmith_bundle_vanilla = BundleTemplate(CCRoom.boiler_room, BundleName.blacksmith, blacksmith_items_vanilla, 3, 3)
 
 geologist_items_vanilla = [quartz, earth_crystal, frozen_tear, fire_quartz]

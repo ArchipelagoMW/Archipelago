@@ -121,6 +121,8 @@ class Lighting:
 
 
 class Furniture:
+    modern_lamp = "Modern Lamp"
+    candle_lamp = "Candle Lamp"
     tub_o_flowers = "Tub o' Flowers"
     wicked_statue = "Wicked Statue"
     flute_block = "Flute Block"

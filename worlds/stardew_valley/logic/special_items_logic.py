@@ -1,9 +1,11 @@
 from .base_logic import BaseLogic, BaseLogicMixin
+from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..stardew_rule import StardewRule
 from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.craftable_names import Consumable
 from ..strings.forageable_names import Forageable
 from ..strings.metal_names import Artifact
+from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_item_names import SpecialItem
@@ -35,3 +37,8 @@ class SpecialItemsLogic(BaseLogic):
         if SecretsanityOptionName.secret_notes in self.options.secretsanity:
             return self.logic.received(SpecialItem.solid_gold_lewis) & self.logic.region.can_reach(Region.town)
         return self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.town)
+
+    def has_advanced_tv_remote(self) -> StardewRule:
+        if ginger_island_content_pack.name in self.content.registered_packs:
+            return self.logic.relationship.has_hearts(NPC.george, 10)
+        return self.logic.quest.can_complete_quest(Quest.the_pirates_wife) & self.logic.relationship.can_meet(NPC.george)

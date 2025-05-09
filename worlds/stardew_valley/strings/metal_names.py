@@ -26,7 +26,7 @@ class MetalBar:
     iron = "Iron Bar"
     gold = "Gold Bar"
     iridium = "Iridium Bar"
-    radioactive = "Radioactive Ore"
+    radioactive = "Radioactive Bar"
 
 
 class Mineral:

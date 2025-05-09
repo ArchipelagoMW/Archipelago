@@ -49,7 +49,9 @@ class RelationshipLogic(BaseLogic):
         if not self.content.features.friendsanity.is_enabled:
             return self.logic.relationship.can_reproduce(number_children)
 
-        return self.logic.received_n(*possible_kids, count=number_children) & self.logic.building.has_building(Building.kids_room)
+        return self.logic.received_n(*possible_kids, count=number_children) &\
+               self.logic.building.has_building(Building.kids_room) &\
+               self.logic.relationship.can_reproduce(number_children)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."

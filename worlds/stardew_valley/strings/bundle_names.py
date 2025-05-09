@@ -127,6 +127,19 @@ class BundleName:
 
 
 class MemeBundleName:
+    floor_is_lava = meme_bundle("The Floor Is Lava")
+    fast = meme_bundle("Fast")
+    restraint = meme_bundle("Restraint")
+    firstborn = meme_bundle("Firstborn")
+    nft = meme_bundle("NFT")
+    connection = meme_bundle("Connection")
+    flashbang = meme_bundle("Flashbang")
+    this_is_fine = meme_bundle("This Is Fine")
+    ikea = meme_bundle("IKEA")
+    schrodinger = meme_bundle("Schrodinger's")
+    animal_well = meme_bundle("ANIMAL WELL")
+    automation = meme_bundle("Automation")
+    celeste = meme_bundle("Celeste")
     AAAA = meme_bundle("AAAA")
     amons_fall = meme_bundle("Amon's Fall")
     anything_for_beyonce = meme_bundle("Anything For Beyonce")

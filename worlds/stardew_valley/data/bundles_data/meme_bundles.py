@@ -6,8 +6,9 @@ from ...bundles.bundle import BureaucracyBundleTemplate, JournalistBundleTemplat
 from ...strings.bundle_names import MemeBundleName
 from ...strings.currency_names import MemeCurrency
 from ...strings.flower_names import all_flowers
+from ...strings.machine_names import Machine
 from ...strings.meme_item_names import MemeItem
-from ...strings.quality_names import AnimalProductQuality
+from ...strings.quality_names import AnimalProductQuality, CropQuality
 
 burger_king_items = [survival_burger, joja_cola, apple_slices, ice_cream, strange_doll, strange_doll_green, hashbrowns, infinity_crown]
 burger_king_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.burger_king, burger_king_items, 6, 3)
@@ -130,7 +131,8 @@ mermaid_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.mermaid, mermai
 commitment_items = [bouquet, mermaid_pendant, wilted_bouquet, ancient_doll.as_amount(2)]
 commitment_bundle_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.commitment, commitment_items, 4, 4)
 
-all_simple_items = [bundle_item for bundle_item in all_bundle_items_by_name.values() if bundle_item.amount == 1 and bundle_item.quality.startswith("Basic")]
+all_simple_items = [bundle_item for bundle_item in all_bundle_items_by_name.values() if
+                    bundle_item.amount == 1 and bundle_item.quality.startswith("Basic") and bundle_item.flavor is None]
 
 bureaucracy_items = [*all_simple_items]
 bureaucracy_bundle = BureaucracyBundleTemplate(CCRoom.vault, MemeBundleName.bureaucracy, bureaucracy_items, 1, 8)
@@ -142,7 +144,7 @@ trap_items = [BundleItem(MemeItem.trap)]
 trap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.trap, trap_items, 5, 5)
 
 off_your_back_items = [BundleItem(MemeItem.worn_hat), BundleItem(MemeItem.worn_shirt), BundleItem(MemeItem.worn_pants),
-                       BundleItem(MemeItem.worn_boots), BundleItem(MemeItem.worn_ring), BundleItem(MemeItem.worn_ring)]
+                       BundleItem(MemeItem.worn_boots), BundleItem(MemeItem.worn_left_ring), BundleItem(MemeItem.worn_right_ring)]
 off_your_back_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.off_your_back, off_your_back_items, 6, 6)
 
 sisyphus_items = [stone.as_amount(1)]
@@ -171,36 +173,56 @@ bundle_bundle = RecursiveBundleTemplate(CCRoom.fish_tank, MemeBundleName.bundle,
 bun_dle_items = [strange_bun, bread, tortilla, rabbit_foot]
 bun_dle_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.bun_dle, bun_dle_items, 4, 4)
 
+celeste_items = [strawberry.as_amount(175), strawberry_seeds.as_amount(4), strawberry.as_quality(CropQuality.gold).as_amount(26)]
+celeste_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.celeste, celeste_items, 3, 3)
+
+automation_items = [copper_bar.as_amount(15), iron_bar.as_amount(36), iron_bar.as_amount(20), copper_bar.as_amount(10)]
+automation_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.automation, automation_items, 4, 4)
+
+animal_well_items = [rare_disc, bone_flute, ruby_crystal_ball, cherry_bomb.as_amount(1), candle_lamp, modern_lamp, advanced_tv_remote]
+animal_well_bundle = FixedPriceBundleTemplate(CCRoom.pantry, MemeBundleName.animal_well, animal_well_items, 7, 7)
+
+schrodinger_items = [*all_simple_items]
+schrodinger_bundle = FixedPriceBundleTemplate(CCRoom.fish_tank, MemeBundleName.schrodinger, schrodinger_items, 2, 2)
+
+ikea_craftables = [Machine.mayonnaise_machine, Machine.bee_house, Machine.preserves_jar, Machine.cheese_press, Machine.keg, Machine.fish_smoker,
+                   Machine.crystalarium, Machine.worm_bin, Furniture.tub_o_flowers]
+ikea_items = [BundleItem(craftable) for craftable in ikea_craftables]
+ikea_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.ikea, ikea_items, 1, 1)
+
+this_is_fine_items = [coffee, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz]
+this_is_fine_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.this_is_fine, this_is_fine_items, 8, 8)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.health, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 5000))
 clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
 cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
-cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 5000))  # ?
+cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 20000))  # ?
 communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
+flashbang_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.flashbang, BundleItem.money_bundle(0))
+connection_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.connection, BundleItem.money_bundle(0))
+nft_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.nft, BundleItem.money_bundle(0))
+firstborn_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.firstborn, BundleItem(MemeCurrency.child, 1))
+restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.restraint, BundleItem.money_bundle(0))
+fast_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem.money_bundle(0))
+floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
 
 # Stopped at 49 responses on the form
 
+# Bundles to make
 # kents_toolshed_bundle
 # Side Quest Bundle
 # Acrostic Bundle
-# Flashbang Bundle
-# Connection Bundle
-# Schrödinger’s Bundle
-# NFT Bundle
-# Firstborn Bundle
+# Cooperation Bundle
 # Clickbait Bundle
 # ASMR Bundle
 # Gacha Bundle
-# Restraint Bundle
 # QA Bundle
-# Fast Bundle
-# IKEA Bundle
-# Floor Is Lava Bundle
 # Bad Farmer Bundle
-# This Is Fine Bundle
+# Humble Bundle
 
 # Bundles that need special Mod Handling:
 # Vampire Bundle
@@ -213,7 +235,7 @@ death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.dea
 # Death Bundle (1 Death)
 # Archipela-Go! Bundle (Steps)
 
-# Form A38 (Chained Items)
+# Permit A38 (Chained Items)
 # Honorable Bundle (If you take the honorable way, consequences)
 # Trap Bundle (Start filled with traps, have to take them out)
 # Journalist Bundle (Accept literally anything)
@@ -226,22 +248,30 @@ death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.dea
 # Bundle Bundle
 # Scavenger Bundle
 
-pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle, big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle]
+pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle,
+                       big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
-crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, cap_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle]
+crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, cap_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
+                            ikea_bundle, this_is_fine_bundle]
 crafts_room_meme = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_meme, 6)
 
-fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, mermaid_bundle, legendairy_bundle, kent_c_bundle, bundle_bundle]
+fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, mermaid_bundle, legendairy_bundle, kent_c_bundle, bundle_bundle,
+                          schrodinger_bundle]
 fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
-boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle, honorable_bundle, sisyphus_bundle]
+boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle,
+                            honorable_bundle, sisyphus_bundle, automation_bundle]
 boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 3)
 
-bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle, snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle]
+bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,
+                               snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle,
+                               celeste_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
-vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle, clique_bundle, cipher_bundle, cookie_clicker_bundle, communist_bundle]
+vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
+                      clique_bundle, cipher_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
+                      restraint_bundle, fast_bundle, floor_is_lava_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,

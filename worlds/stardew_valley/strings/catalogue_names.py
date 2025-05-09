@@ -3,6 +3,7 @@ from typing import Dict, List
 
 class Catalogue:
     wizard = "Wizard Catalogue"
+    furniture = "Wizard Catalogue"
 
 
 items_by_catalogue: Dict[str, List[str]] = dict()
@@ -17,6 +18,10 @@ def catalogue_item(item: str, catalogue: str) -> str:
 
 def wizard_catalogue_item(item: str) -> str:
     return catalogue_item(item, Catalogue.wizard)
+
+
+def furniture_catalogue_item(item: str) -> str:
+    return catalogue_item(item, Catalogue.furniture)
 
 
 class CatalogueItem:
@@ -83,3 +88,10 @@ class CatalogueItem:
     curly_tree = wizard_catalogue_item("Curly Tree")
     swamp_plant = wizard_catalogue_item("Swamp Plant")
     stone_flooring = wizard_catalogue_item("Stone Flooring")
+
+    stone_flooring = furniture_catalogue_item("Country Lamp")
+    box_lamp = furniture_catalogue_item("Box Lamp")
+    modern_lamp = furniture_catalogue_item("Modern Lamp")
+    classic_lamp = furniture_catalogue_item("Classic Lamp")
+    candle_lamp = furniture_catalogue_item("Candle Lamp")
+    ornate_lamp = furniture_catalogue_item("Ornate Lamp")

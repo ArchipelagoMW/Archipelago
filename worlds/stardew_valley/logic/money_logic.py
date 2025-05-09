@@ -99,6 +99,10 @@ class MoneyLogic(BaseLogic):
             return self.logic.true_
         if currency == MemeCurrency.clic or currency == MemeCurrency.steps or currency == MemeCurrency.time:
             return self.logic.time.has_lived_months(1)
+        if currency == MemeCurrency.cookies:
+            return self.logic.time.has_lived_months(amount // 10000)
+        if currency == MemeCurrency.child:
+            return self.logic.relationship.has_children(1)
 
         return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
 

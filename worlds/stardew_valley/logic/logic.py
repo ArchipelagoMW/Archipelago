@@ -310,6 +310,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             SpecialItem.trimmed_purple_shorts: self.has(SpecialItem.lucky_purple_shorts) & self.has(Machine.sewing_machine),
             SpecialItem.far_away_stone: self.special_items.has_far_away_stone(),
             SpecialItem.solid_gold_lewis: self.special_items.has_solid_gold_lewis(),
+            SpecialItem.advanced_tv_remote: self.special_items.has_advanced_tv_remote(),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Trash.broken_cd: self.fishing.can_crab_pot_anywhere,

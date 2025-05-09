@@ -90,3 +90,8 @@ class CaughtFishRequirement(Requirement):
 @dataclass(frozen=True)
 class MuseumCompletionRequirement(Requirement):
     number_donated: int = 95
+
+
+@dataclass(frozen=True)
+class BuildingRequirement(Requirement):
+    building: str
