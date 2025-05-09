@@ -859,6 +859,8 @@ class GameManager(ThemedApp):
         # middle part
         self.screens = MDScreenManagerBase(pos_hint={"center_x": 0.5})
         self.tabs = MDNavigationBar(orientation="horizontal", size_hint_y=None, height=dp(40), set_bars_color=True)
+        # bind the method to the bar for back compatibility
+        self.tabs.remove_tab = self.remove_client_tab
         self.screens.current_tab = self.add_client_tab(
             "All" if len(self.logging_pairs) > 1 else "Archipelago",
             UILog(*(logging.getLogger(logger_name) for logger_name, name in self.logging_pairs)),
@@ -941,6 +943,31 @@ class GameManager(ThemedApp):
             self.tabs.add_widget(new_tab)
             self.screens.add_widget(new_screen)
         return new_tab
+
+    def remove_client_tab(self, tab: MDNavigationItemBase) -> None:
+        """
+        Called to remove a tab and its screen.
+
+        :param tab: The tab to remove.
+        """
+        tab_index = self.tabs.children.index(tab)
+        # if the tab is currently active we need to swap before removing it
+        if tab == self.screens.current_tab:
+            if not tab_index:
+                # account for the divider
+                swap_index = tab_index + 2
+            else:
+                swap_index = tab_index - 2
+            self.tabs.children[swap_index].on_release()
+            # self.screens.switch_screens(self.tabs.children[swap_index])
+        # get the divider to the left if we can
+        if not tab_index:
+            divider_index = tab_index + 1
+        else:
+            divider_index = tab_index - 1
+        self.tabs.remove_widget(self.tabs.children[divider_index])
+        self.tabs.remove_widget(tab)
+        self.screens.remove_widget(self.screens.get_screen(tab.text))
 
     def update_texts(self, dt):
         if self.ctx.server:
