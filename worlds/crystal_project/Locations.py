@@ -1338,7 +1338,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Boss - Guardian", 143 + boss_index_offset),
         LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
-        LocationData("Yamagawa", "Yamagawa Boss - Sepulchra", 167 + boss_index_offset),
+        LocationData("Yamagawa M.A.", "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset),
         LocationData("Skumparadise", "Skumparadise Boss - Parasite", 333 + boss_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia Boss - Enami", 458 + boss_index_offset, logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement),
         LocationData("Jojo Sewers", "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset),
