@@ -8,7 +8,7 @@ import pkgutil
 
 from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment
-from .Locations import get_locations
+from .Locations import get_locations, get_bosses
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
@@ -33,6 +33,7 @@ class CrystalProjectWorld(World):
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
+    boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
     item_name_groups = get_item_names_per_category()
     startingJobs = get_random_starting_jobs()
 
@@ -115,7 +116,19 @@ class CrystalProjectWorld(World):
             self.multiworld.push_precollected(self.create_item("Item - The Old World Map"))
 
     def create_regions(self) -> None:
-        init_areas(self, get_locations(self.player, self.options), self.options)
+        locations = get_locations(self.player, self.options)
+        self.logger.info("--------locations list------")
+        self.logger.info(locations)
+
+        if self.options.includeBossKillsAsChecks:
+            bosses = get_bosses(self.player, self.options)
+            self.logger.info("--------bosses list------")
+            self.logger.info(bosses)
+            locations.extend(bosses)
+            self.logger.info("--------combined list------")
+            self.logger.info(locations)
+
+        init_areas(self, locations, self.options)
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]

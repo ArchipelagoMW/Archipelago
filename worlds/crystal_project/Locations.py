@@ -121,9 +121,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #296, 112, -155
         LocationData("Soiled Den", "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
 
-        #Boss
-        LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
-
         #Pale Grotto
         #Treasure chests
         LocationData("Pale Grotto", "Pale Grotto Chest - Across from fish island", 228 + treasure_index_offset), #(#316, 120, -262) Fenix Juice chest
@@ -1329,7 +1326,14 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The New World", "The New World Chest - NW lavafall", 2930 + treasure_index_offset), #(-134, 8, 230) Lunar Mail chest
         LocationData("The New World", "The New World Chest - Desolate peninsula past bounce shrooms", 2931 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(-11, 12, -577) Mages Pike chest
         LocationData("The New World", "The New World Chest - Tiny shrooms keep shed", 1938 + treasure_index_offset), #(-85, 8, 142) The New World map chest
+    ]
 
+    return location_table
+
+def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+    logic = CrystalProjectLogic(player, options)
+    location_table: List[LocationData] = [
+        LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
     ]
 
     return location_table

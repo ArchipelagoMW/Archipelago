@@ -114,6 +114,12 @@ class KeyMode(Choice):
     option_vanilla = 2
     default = 2
 
+class IncludeBossKillsAsChecks(DefaultOnToggle):
+    """
+    When enabled, defeating a boss will provide checks.
+    """
+    display_name = "Boss Kill Checks"
+
 class IncludeSummonAbilities(DefaultOnToggle):
     """
     When enabled, Summon abilities can be found anywhere, when disabled they will be in the regular spot.
@@ -140,5 +146,6 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includedRegions: IncludedRegions
     progressiveEquipmentMode: ProgressiveEquipmentMode
     keyMode: KeyMode
+    includeBossKillsAsChecks: IncludeBossKillsAsChecks
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
