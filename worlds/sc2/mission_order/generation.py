@@ -143,13 +143,13 @@ def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
     Flood-fills the mission order by following its entry rules to determine the depth of all nodes.
     This also ensures theoretical total accessibility of all nodes, but this is allowed to be violated by item placement and the accessibility setting.
     """
-    accessible_campaigns: Set[SC2MOGenCampaign] = {campaign for campaign in mission_order.campaigns if campaign.is_always_unlocked()}
+    accessible_campaigns: Set[SC2MOGenCampaign] = {campaign for campaign in mission_order.campaigns if campaign.is_always_unlocked(in_region_creation=True)}
     next_campaigns: Set[SC2MOGenCampaign] = set(mission_order.campaigns).difference(accessible_campaigns)
 
     accessible_layouts: Set[SC2MOGenLayout] = {
         layout
         for campaign in accessible_campaigns for layout in campaign.layouts
-        if layout.is_always_unlocked()
+        if layout.is_always_unlocked(in_region_creation=True)
     }
     next_layouts: Set[SC2MOGenLayout] = {layout for campaign in accessible_campaigns for layout in campaign.layouts}.difference(accessible_layouts)
 
@@ -165,7 +165,7 @@ def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
         # Check for accessible missions
         cur_missions: Set[SC2MOGenMission] = {
             mission for mission in next_missions
-            if mission.is_unlocked(beaten_missions)
+            if mission.is_unlocked(beaten_missions, in_region_creation=True)
         }
         if len(cur_missions) == 0:
             raise Exception(f"Mission order ran out of accessible missions during iteration {iterations}")
@@ -193,7 +193,7 @@ def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
         # Check for newly accessible campaigns & layouts
         new_campaigns: Set[SC2MOGenCampaign] = set()
         for campaign in next_campaigns:
-            if campaign.is_unlocked(beaten_missions):
+            if campaign.is_unlocked(beaten_missions, in_region_creation=True):
                 new_campaigns.add(campaign)
         for campaign in new_campaigns:
             accessible_campaigns.add(campaign)
@@ -203,7 +203,7 @@ def fill_depths(mission_order: SC2MOGenMissionOrder) -> None:
                 layout.entry_rule.min_depth = campaign.entry_rule.get_depth(beaten_missions)
         new_layouts: Set[SC2MOGenLayout] = set()
         for layout in next_layouts:
-            if layout.is_unlocked(beaten_missions):
+            if layout.is_unlocked(beaten_missions, in_region_creation=True):
                 new_layouts.add(layout)
         for layout in new_layouts:
             accessible_layouts.add(layout)

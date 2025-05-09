@@ -19,20 +19,23 @@ class EntryRule(ABC):
         self.buffer_fulfilled = False
         self.buffer_depth = -1
     
-    def is_always_fulfilled(self) -> bool:
-        return self.is_fulfilled(set())
+    def is_always_fulfilled(self, in_region_creation: bool = False) -> bool:
+        return self.is_fulfilled(set(), in_region_creation)
 
     @abstractmethod
-    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        """Used during region creation to ensure a beatable mission order."""
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_creation: bool) -> bool:
+        """Used during region creation to ensure a beatable mission order.
+        
+        `in_region_creation` should determine whether rules that cannot be handled during region creation (like Item rules)
+        report themselves as fulfilled or unfulfilled."""
         return False
 
-    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_creation: bool) -> bool:
         if len(beaten_missions) == 0:
             # Special-cased to avoid the buffer
             # This is used to determine starting missions
-            return self._is_fulfilled(beaten_missions)
-        self.buffer_fulfilled = self.buffer_fulfilled or self._is_fulfilled(beaten_missions)
+            return self._is_fulfilled(beaten_missions, in_region_creation)
+        self.buffer_fulfilled = self.buffer_fulfilled or self._is_fulfilled(beaten_missions, in_region_creation)
         return self.buffer_fulfilled
 
     @abstractmethod
@@ -41,7 +44,7 @@ class EntryRule(ABC):
         return -1
     
     def get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
-        if not self.is_fulfilled(beaten_missions):
+        if not self.is_fulfilled(beaten_missions, in_region_creation = True):
             return -1
         if self.buffer_depth == -1:
             self.buffer_depth = self._get_depth(beaten_missions)
@@ -86,7 +89,7 @@ class BeatMissionsEntryRule(EntryRule):
         self.missions_to_beat = missions_to_beat
         self.visual_reqs = visual_reqs
     
-    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_check: bool) -> bool:
         return beaten_missions.issuperset(self.missions_to_beat)
     
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
@@ -151,7 +154,7 @@ class CountMissionsEntryRule(EntryRule):
             self.target_amount = target_amount
         self.visual_reqs = visual_reqs
 
-    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_check: bool) -> bool:
         return self.target_amount <= len(beaten_missions.intersection(self.missions_to_count))
     
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
@@ -240,8 +243,8 @@ class SubRuleEntryRule(EntryRule):
         else:
             self.target_amount = target_amount
 
-    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        return self.target_amount <= sum(rule.is_fulfilled(beaten_missions) for rule in self.rules_to_check)
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_check: bool) -> bool:
+        return self.target_amount <= sum(rule.is_fulfilled(beaten_missions, in_region_check) for rule in self.rules_to_check)
     
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
         if len(self.rules_to_check) == 0:
@@ -376,9 +379,10 @@ class ItemEntryRule(EntryRule):
         super().__init__()
         self.items_to_check = items_to_check
 
-    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission]) -> bool:
-        # Region creation should assume items can be placed
-        return True
+    def _is_fulfilled(self, beaten_missions: Set[SC2MOGenMission], in_region_check: bool) -> bool:
+        # Region creation should assume items can be placed,
+        # but later uses (eg. starter missions) should respect that this locks a mission
+        return in_region_check
     
     def _get_depth(self, beaten_missions: Set[SC2MOGenMission]) -> int:
         # Depth 0 means this rule requires 0 prior beaten missions
