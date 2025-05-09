@@ -1351,7 +1351,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("The Undercity", "The Undercity Boss - Shadow Master", 1940 + boss_index_offset),
         LocationData("The Undercity", "The Undercity Boss - Duel Master", 1941 + boss_index_offset),
         LocationData("Beaurior Rock", "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_small_key(state, 2)),
-        LocationData("Beaurior Rock", "Beaurior Rock Boss - Iguanadon & Iguanadin", 106 + boss_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_boss_key),
+        LocationData("Beaurior Rock", "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_boss_key),
         LocationData("Eastern Chasm", "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset),
         LocationData("Tall Tall Heights", "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, logic.has_vertical_movement),
         LocationData("Lands End", "Lands End Boss - The Owlbear", 2104 + boss_index_offset),
