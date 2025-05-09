@@ -731,12 +731,25 @@ class MDNavigationItemBase(MDNavigationItem):
 
 class MDScreenManagerBase(MDScreenManager):
     current_tab: MDNavigationItemBase
+    local_screen_names: list[str]
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(size=self.update_underline, pos=self.update_underline)
+        self.local_screen_names = []
+
+    def add_widget(self, widget, *args, **kwargs):
+        super().add_widget(widget, *args, **kwargs)
+        index = kwargs.get("index", -1)
+        if index > -1:
+            self.local_screen_names.insert(index, widget.name)
+        else:
+            self.local_screen_names.append(widget.name)
 
     def switch_screens(self, new_tab: MDNavigationItemBase) -> None:
 
         name = new_tab.text
-        if self.screen_names.index(name) > self.screen_names.index(self.current_screen.name):
+        if self.local_screen_names.index(name) > self.local_screen_names.index(self.current_screen.name):
             self.transition.direction = "left"
         else:
             self.transition.direction = "right"
@@ -842,11 +855,12 @@ class GameManager(ThemedApp):
         # middle part
         self.screens = MDScreenManagerBase(pos_hint={"center_x": 0.5})
         self.tabs = MDNavigationBar(orientation="horizontal", size_hint_y=None, height=dp(40), set_bars_color=True)
-        self.screens.current_tab = self.log_panels["All"] = self.add_client_tab(
+        self.screens.current_tab = self.add_client_tab(
             "All" if len(self.logging_pairs) > 1 else "Archipelago",
             UILog(*(logging.getLogger(logger_name) for logger_name, name in self.logging_pairs)),
         )
-        self.log_panels["All"].active = True
+        self.log_panels["All"] = self.screens.current_tab.content
+        self.screens.current_tab.active = True
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
@@ -907,7 +921,8 @@ class GameManager(ThemedApp):
         new_screen = MDScreen(name=title)
         new_screen.add_widget(content)
         if -1 < index <= len(self.tabs.children):
-            self.tabs.add_widget(new_tab, index=index)
+            remapped_index = len(self.tabs.children) - index
+            self.tabs.add_widget(new_tab, index=remapped_index)
             self.screens.add_widget(new_screen, index=index)
         else:
             self.tabs.add_widget(new_tab)
