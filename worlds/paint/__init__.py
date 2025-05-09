@@ -51,11 +51,11 @@ class PaintWorld(World):
         items_to_create += ["Progressive Color Depth (Green)"] * 7
         items_to_create += ["Progressive Color Depth (Blue)"] * 7
         pre_filled = len(items_to_create)
-        to_fill = len(self.multiworld.get_region("Canvas", self.player).locations)
+        to_fill = len(self.get_region("Canvas").locations)
         while len(items_to_create) < (to_fill - pre_filled) * (self.options.trap_count / 100) + pre_filled:
-            if self.options.death_link: items_to_create += [self.multiworld.random.choice(
+            if self.options.death_link: items_to_create += [self.random.choice(
             ["Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"])]
-            else: items_to_create += [self.multiworld.random.choice(
+            else: items_to_create += [self.random.choice(
             ["Undo Trap", "Clear Image Trap", "Invert Colors Trap", "Flip Horizontal Trap", "Flip Vertical Trap"])]
         while len(items_to_create) < to_fill:
             items_to_create += ["Additional Palette Color"]
