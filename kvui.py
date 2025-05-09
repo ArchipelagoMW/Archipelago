@@ -729,25 +729,28 @@ class MessageBox(Popup):
 class MDNavigationItemBase(MDNavigationItem):
     text = StringProperty(None)
 
+
 class MDScreenManagerBase(MDScreenManager):
     current_tab: MDNavigationItemBase
     local_screen_names: list[str]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.bind(size=self.update_underline, pos=self.update_underline)
         self.local_screen_names = []
 
-    def add_widget(self, widget, *args, **kwargs):
+    def add_widget(self, widget: Widget, *args, **kwargs) -> None:
         super().add_widget(widget, *args, **kwargs)
-        index = kwargs.get("index", -1)
-        if index > -1:
-            self.local_screen_names.insert(index, widget.name)
+        if "index" in kwargs:
+            self.local_screen_names.insert(kwargs["index"], widget.name)
         else:
             self.local_screen_names.append(widget.name)
 
     def switch_screens(self, new_tab: MDNavigationItemBase) -> None:
+        """
+        Called whenever the user clicks a tab to switch to a different screen.
 
+        :param new_tab: The new screen to switch to's tab.
+        """
         name = new_tab.text
         if self.local_screen_names.index(name) > self.local_screen_names.index(self.current_screen.name):
             self.transition.direction = "left"
@@ -755,6 +758,7 @@ class MDScreenManagerBase(MDScreenManager):
             self.transition.direction = "right"
         self.current = name
         self.current_tab = new_tab
+
 
 class CommandButton(MDButton, MDTooltip):
     def __init__(self, *args, manager: "GameManager", **kwargs):
@@ -911,9 +915,18 @@ class GameManager(ThemedApp):
 
         return self.container
 
-    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> Widget:
-        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
-         Returns the new tab widget, with the provided content being placed on the tab as content."""
+    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> MDNavigationItemBase:
+        """
+        Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+        Returns the new tab widget, with the provided content being placed on the tab as content.
+
+        :param title: The title of the tab.
+        :param content: The Widget to be added as content for this tab's new MDScreen. Will also be added to the
+         returned tab as tab.content.
+        :param index: The index to insert the tab at. Defaults to -1, meaning the tab will be appended to the end.
+
+        :return: The new tab.
+        """
         if self.tabs.children:
             self.tabs.add_widget(MDDivider(orientation="vertical"))
         new_tab = MDNavigationItemBase(text=title)
