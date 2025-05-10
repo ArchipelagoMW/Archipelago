@@ -71,14 +71,14 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
 container_version: int = 6
 
 
-def is_ap_player_container(data: bytes, game: str):
+def is_ap_player_container(data: bytes, game: str, player: int):
     if not zipfile.is_zipfile(BytesIO(data)):
         return False
     with zipfile.ZipFile(BytesIO(data), mode='r') as zf:
         if "archipelago.json" in zf.namelist():
             manifest = json.loads(zf.read("archipelago.json"))
-            if "game" in manifest:
-                if game == manifest["game"]:
+            if "game" in manifest and "player" in manifest:
+                if game == manifest["game"] and player == manifest["player"]:
                     return True
     return False
 
