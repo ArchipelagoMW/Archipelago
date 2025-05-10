@@ -1,20 +1,4 @@
-from typing import Union
-
-from .action_logic import ActionLogicMixin
-from .animal_logic import AnimalLogicMixin
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .fishing_logic import FishingLogicMixin
-from .gift_logic import GiftLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogicMixin
-from .museum_logic import MuseumLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
@@ -36,8 +20,7 @@ class FestivalLogicMixin(BaseLogicMixin):
         self.festival = FestivalLogic(*args, **kwargs)
 
 
-class FestivalLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, FestivalLogicMixin, ArtisanLogicMixin, AnimalLogicMixin, MoneyLogicMixin, TimeLogicMixin,
-SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, RelationshipLogicMixin, FishingLogicMixin, MuseumLogicMixin, GiftLogicMixin]]):
+class FestivalLogic(BaseLogic):
 
     def initialize_rules(self):
         self.registry.festival_rules.update({
@@ -171,7 +154,7 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
         # Salads at the bar are good enough
         cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)
 
-        fish_rule = self.logic.skill.can_fish(difficulty=50)
+        fish_rule = self.logic.fishing.can_fish_anywhere(50)
 
         # Hazelnut always available since the grange display is in fall
         forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))
@@ -196,7 +179,7 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
         return animal_rule & artisan_rule & cooking_rule & fish_rule & forage_rule & fruit_rule & mineral_rule & vegetable_rule
 
     def can_win_fishing_competition(self) -> StardewRule:
-        return self.logic.skill.can_fish(difficulty=60)
+        return self.logic.fishing.can_fish(60)
 
     def has_all_rarecrows(self) -> StardewRule:
         rules = []
