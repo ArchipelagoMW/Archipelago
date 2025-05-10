@@ -2,9 +2,10 @@ import sys
 import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
+
 from schema import And, Schema
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, OptionDict, Removed
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
 from ..items import items_by_group, Group
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
@@ -695,7 +696,7 @@ class TrapDifficulty(Choice):
 trap_default_weight = 100
 
 
-class TrapDistribution(OptionDict):
+class TrapDistribution(OptionCounter):
     """
     Specify the weighted chance of rolling individual traps when rolling random filler items.
     The average filler item should be considered to be "100", as in 100%.
@@ -705,6 +706,8 @@ class TrapDistribution(OptionDict):
     internal_name = "trap_distribution"
     display_name = "Trap Distribution"
     default_weight = trap_default_weight
+    min = 0
+    max = 1000
     schema = Schema({
         trap_data.name: And(int, lambda n: 0 <= n <= 1000)
         for trap_data in items_by_group[Group.TRAP]
