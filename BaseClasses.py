@@ -427,6 +427,16 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
+    def get_location_if_available(self, location_name: str, player: int) -> Location | None:
+        """Like `self.get_location`, but returns `None` if the location isn't in
+        the world.
+
+        This still throws an exception if the location name isn't even recognized.
+        """
+        if location_name not in self.worlds[player].location_name_to_id:
+            raise Exception(f"Unknown location {location_name} in player {player}'s world.")
+        return self.regions.location_cache[player].get(location_name)
+
     def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
@@ -1325,14 +1335,16 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
-        return ((
-            self.always_allow(state, item)
-            and item.name not in state.multiworld.worlds[item.player].options.non_local_items
-        ) or (
-            (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+        if self.always_allow(state, item):
+            options = state.multiworld.worlds[item.player].options
+            if item.name not in options.non_local_items and self.name not in options.non_local_locations:
+                return True
+
+        return (
+            (self.progress_type != LocationProgressType.EXCLUDED or item.excludable)
             and self.item_rule(item)
             and (not check_access or self.can_reach(state))
-        ))
+        )
 
     def can_reach(self, state: CollectionState) -> bool:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average

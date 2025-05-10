@@ -14,7 +14,7 @@ else:
     ItemRule = typing.Callable[[object], bool]
 
 
-def locality_needed(multiworld: MultiWorld) -> bool:
+def item_locality_needed(multiworld: MultiWorld) -> bool:
     for player in multiworld.player_ids:
         if multiworld.worlds[player].options.local_items.value:
             return True
@@ -29,10 +29,21 @@ def locality_needed(multiworld: MultiWorld) -> bool:
             return True
         if group["non_local_items"]:
             return True
+    return False
+
+
+def location_locality_needed(multiworld: MultiWorld) -> bool:
+    """Returns whether the multiworld sets any location-specific locality settings."""
+    for player in multiworld.player_ids:
+        if multiworld.worlds[player].options.local_locations.value:
+            return True
+        if multiworld.worlds[player].options.non_local_locations.value:
+            return True
+    return False
 
 
 def locality_rules(multiworld: MultiWorld):
-    if locality_needed(multiworld):
+    if item_locality_needed(multiworld):
 
         forbid_data: typing.Dict[int, typing.Dict[int, typing.Set[str]]] = \
             collections.defaultdict(lambda: collections.defaultdict(set))
@@ -81,19 +92,59 @@ def locality_rules(multiworld: MultiWorld):
                                             old_rule = location.item_rule: \
                     i.name not in sending_blockers[i.player] and old_rule(i)
 
+    if location_locality_needed(multiworld):
+
+        # create fewer lambdas to save memory and cache misses
+        for player in multiworld.player_ids:
+            world = multiworld.worlds[player]
+            local_func_cache = {}
+            for loc_name in world.options.local_locations.value:
+                location = world.get_location_if_available(loc_name)
+                if not location:
+                    continue
+
+                if location.item_rule in local_func_cache:
+                    location.item_rule = local_func_cache[location.item_rule]
+                # empty rule that just returns True, overwrite
+                elif location.item_rule is location.__class__.item_rule:
+                    local_func_cache[location.item_rule] = location.item_rule = \
+                        lambda i, p = player: i.player == p
+                # special rule, needs to also be fulfilled.
+                else:
+                    local_func_cache[location.item_rule] = location.item_rule = \
+                        lambda i, p = player, old_rule = location.item_rule: \
+                        i.player == p and old_rule(i)
+
+            non_local_func_cache = {}
+            for loc_name in world.options.non_local_locations.value:
+                location = world.get_location_if_available(loc_name)
+                if not location:
+                    continue
+
+                location = world.get_location(loc_name)
+                if location.item_rule in non_local_func_cache:
+                    location.item_rule = non_local_func_cache[location.item_rule]
+                # empty rule that just returns True, overwrite
+                elif location.item_rule is location.__class__.item_rule:
+                    non_local_func_cache[location.item_rule] = location.item_rule = \
+                        lambda i, p = player: i.player != p
+                # special rule, needs to also be fulfilled.
+                else:
+                    non_local_func_cache[location.item_rule] = location.item_rule = \
+                        lambda i, p = player, old_rule = location.item_rule: \
+                        i.player != p and old_rule(i)
+
 
 def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
-        try:
-            location = multiworld.get_location(loc_name, player)
-        except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
-            if loc_name not in multiworld.worlds[player].location_name_to_id:
-                raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
+        location = multiworld.get_location_if_available(loc_name, player)
+        if not location:
+            continue
+
+        if not location.advancement:
+            location.progress_type = LocationProgressType.EXCLUDED
         else:
-            if not location.advancement:
-                location.progress_type = LocationProgressType.EXCLUDED
-            else:
-                logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
+            logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
 
 
 def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule):

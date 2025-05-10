@@ -1395,6 +1395,18 @@ class PriorityLocations(LocationSet):
     rich_text_doc = True
 
 
+class LocalLocations(LocationSet):
+    """Forces these locations to contain items from their native world."""
+    display_name = "Local Locations"
+    rich_text_doc = True
+
+
+class NonLocalLocations(LocationSet):
+    """Forces these locations to contain items from outside their native world."""
+    display_name = "Non-local Locations"
+    rich_text_doc = True
+
+
 class DeathLink(Toggle):
     """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
     display_name = "Death Link"
@@ -1490,6 +1502,8 @@ class PerGameCommonOptions(CommonOptions):
     start_location_hints: StartLocationHints
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
+    local_locations: LocalLocations
+    non_local_locations: NonLocalLocations
     item_links: ItemLinks
 
 
@@ -1509,7 +1523,8 @@ class OptionGroup(typing.NamedTuple):
 
 
 item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
-                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+                        StartLocationHints, ExcludeLocations, PriorityLocations, LocalLocations,
+                        NonLocalLocations, ItemLinks]
 """
 Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
 If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
