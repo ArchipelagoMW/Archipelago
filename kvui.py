@@ -6,7 +6,6 @@ import re
 import io
 import pkgutil
 from collections import deque
-
 assert "kivy" not in sys.modules, "kvui should be imported before kivy for frozen compatibility"
 
 if sys.platform == "win32":
@@ -57,6 +56,7 @@ from kivy.animation import Animation
 from kivy.uix.popup import Popup
 from kivy.uix.image import AsyncImage
 from kivymd.app import MDApp
+from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupportingText, MDDialogButtonContainer
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -710,18 +710,60 @@ class CommandPromptTextInput(ResizableTextField):
         self.text = self._command_history[self._command_history_index]
 
 
+class MessageBoxLabel(MDLabel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._label.refresh()
+
+
 class MessageBox(Popup):
-    class MessageBoxLabel(MDLabel):
-        def __init__(self, **kwargs):
-            super().__init__(**kwargs)
-            self._label.refresh()
 
     def __init__(self, title, text, error=False, **kwargs):
-        label = MessageBox.MessageBoxLabel(text=text)
+        label = MessageBoxLabel(text=text)
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
         super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
+
+
+class ButtonsPrompt(MDDialog):
+    def __init__(self, title: str, text: str, response: typing.Callable[[str], None],
+                 *prompts: str, **kwargs) -> None:
+        """
+        Customizable popup box that lets you create any number of buttons. The text of the pressed button is returned to
+        the callback.
+
+        :param title: The title of the popup.
+        :param text: The message prompt in the popup.
+        :param response: A callable that will get called when the user presses a button. The prompt will not close
+         itself so should be done here if you want to close it when certain buttons are pressed.
+        :param prompts: Any number of strings to be used for the buttons.
+        """
+        layout = MDBoxLayout(orientation="vertical")
+        label = MessageBoxLabel(text=text)
+        layout.add_widget(label)
+
+        def on_release(button: MDButton, *args) -> None:
+            response(button.text)
+
+        buttons = [MDDivider()]
+        for prompt in prompts:
+            button = MDButton(
+                MDButtonText(text=prompt, pos_hint={"center_x": 0.5, "center_y": 0.5}),
+                on_release=on_release,
+                style="text",
+                theme_width="Custom",
+                size_hint_x=1,
+            )
+            button.text = prompt
+            buttons.extend([button, MDDivider()])
+
+        super().__init__(
+            MDDialogHeadlineText(text=title),
+            MDDialogSupportingText(text=text),
+            MDDialogButtonContainer(*buttons, orientation="vertical"),
+            **kwargs,
+        )
 
 
 class ClientTabs(MDTabsSecondary):
