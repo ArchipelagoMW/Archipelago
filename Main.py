@@ -301,6 +301,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
+                data_package["Archipelago"] = worlds.network_data_package["games"]["Archipelago"]
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 
