@@ -348,6 +348,6 @@ def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> No
         "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
         "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player),
         "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player),
-        "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player),
+        "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player) and logic.has_swimming,
         "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player),
         "The New World": logic.new_world_requirements})
