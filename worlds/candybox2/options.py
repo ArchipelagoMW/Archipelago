@@ -34,6 +34,14 @@ class CandyProductionMultiplier(Range):
     default = 1
 
 
+class CandyDropMultiplier(Range):
+    """The number of candies dropped in quests will be multiplied by this number."""
+    display_name = "Candy Drop Multiplier"
+    range_start = 1
+    range_end = 100
+    default = 1
+
+
 class LollipopProductionMultiplier(Range):
     """The number of lollipops generated per second will be multiplied by this number."""
     display_name = "Lollipop Production Multiplier"
@@ -152,7 +160,7 @@ candy_box_2_options_groups = [
         Grimoire,
         PainAuChocolatCount
     ]),
-    OptionGroup("Production Multipliers", [
+    OptionGroup("Multipliers", [
         CandyProductionMultiplier,
         LollipopProductionMultiplier,
     ]),
@@ -176,6 +184,7 @@ class CandyBox2Options(PerGameCommonOptions):
     starting_weapon: StartingWeapon
     progressive_jump: ProgressiveJump
     candy_production_multiplier: CandyProductionMultiplier
+    candy_drop_multiplier: CandyDropMultiplier
     lollipop_production_multiplier: LollipopProductionMultiplier
     candy_merchant_hat_price: CandyMerchantHatPrice
     sorceress_hat_price: SorceressHatPrice

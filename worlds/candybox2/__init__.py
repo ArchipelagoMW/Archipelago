@@ -117,6 +117,7 @@ class CandyBox2World(World):
             "scouting": self.options.scouting.value,
             "multipliers": {
                 "candies": self.options.candy_production_multiplier.value,
+                "candyDrops": self.options.candy_drop_multiplier.value,
                 "lollipops": self.options.lollipop_production_multiplier.value
             },
             "prices": {
