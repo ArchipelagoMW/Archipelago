@@ -13,7 +13,7 @@ class Currency:
     def is_currency(item: str) -> bool:
         return item in [Currency.qi_coin, Currency.golden_walnut, Currency.qi_gem, Currency.star_token, Currency.money,
                         MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.blood,
-                        MemeCurrency.cookies, MemeCurrency.child]
+                        MemeCurrency.cookies, MemeCurrency.child, MemeCurrency.dead_pumpkins]
 
 
 class MemeCurrency:

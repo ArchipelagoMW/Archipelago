@@ -3,8 +3,10 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency, MemeCurrency
 from ..strings.region_names import Region, LogicRegion
+from ..strings.season_names import Season
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -103,6 +105,9 @@ class MoneyLogic(BaseLogic):
             return self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
             return self.logic.relationship.has_children(1)
+        if currency == MemeCurrency.dead_pumpkins:
+            return self.logic.season.has(Season.fall) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter]) &\
+                   self.logic.has(Vegetable.pumpkin) & self.logic.money.can_spend(amount * 100)
 
         return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
 
