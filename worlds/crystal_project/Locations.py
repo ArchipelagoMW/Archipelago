@@ -414,7 +414,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Quintar Sanctum", "Quintar Sanctum NPC - Two Toads crown Bowsette", 964 + npc_index_offset),
 
         #Crystals
-        LocationData("Quintar Sanctum", "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)", 810 + crystal_index_offset),
+        LocationData("Quintar Sanctum", "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)", 970 + crystal_index_offset),
 
         #Capital Jail
         #Treasure chests
@@ -544,7 +544,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Win the Salmon Race", 639 + npc_index_offset, logic.has_swimming),
-        LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
+        LocationData("Salmon River", "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
         #Crystals
         LocationData("Salmon River", "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
