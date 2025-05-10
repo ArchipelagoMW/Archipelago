@@ -67,6 +67,8 @@ minor_location_names = [location.name for location in minor_locations]
 # This is actually a custom data table for the reward locations, mimicking the format of the treasure locations.
 locationscsv = csvdb.CsvDb(pkgutil.get_data(__name__, "data/rewardslots.csvdb").decode().splitlines())
 
+miab_slots = []
+
 for location in locationscsv.create_view():
     # All reward locations are given their ID plus 512 so we can't confuse them with regular chests.
     new_location = LocationData("", location.world, location.area, int(location.fecode, 16) + 0x200, True)
@@ -74,6 +76,8 @@ for location in locationscsv.create_view():
     new_location.name = (f"{location.spoilerarea}"
                          f"{subname}"
                          f" -- {location.spoilerdetail}")
+    if "Monster in a Box" in new_location.name:
+        miab_slots.append(new_location.name)
     all_locations.append(new_location)
 
 major_locations = [location for location in all_locations if location.major_slot == True]
@@ -198,6 +202,10 @@ for location in all_locations:
             area_groups[area_name] = []
         if location.name not in character_locations and "Objective" not in location.name:
             area_groups[area_name].append(location.name)
+
+area_groups["MIABs"] = []
+for location in miab_slots:
+    area_groups["MIABs"].append(location)
 
 for i in range(32):
     all_locations.append(LocationData(f"Objective {i + 1} Status", "Overworld", "BaronTown", 0xEE00 + i, False))

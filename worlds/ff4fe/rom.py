@@ -84,8 +84,9 @@ class FF4FEPatchExtension(APPatchExtension):
         junked_items = placements["junked_items"]
         kept_items = placements["kept_items"]
         data_dir = Utils.user_path("data", "ff4fe")
-        placements = json.dumps(json.loads(caller.get_file(placement_file)))
-        # We try to fetch FE from the data directory in case up patcher updates...
+        placements["data_dir"] = data_dir
+        placement_string = json.dumps(placements)
+        # We try to fetch FE from the data directory in case of patcher updates...
         try:
             logging.info(f"Loading Free Enterprise from {data_dir}")
             import sys
@@ -110,7 +111,7 @@ class FF4FEPatchExtension(APPatchExtension):
                 f"-s={seed}",
                 f"-f={flags}",
                 f"-o={os.path.join(directory, output_file)}",
-                f"-a={placements}"
+                f"-a={placement_string}"
             ]
             args = parser.parse_args(arguments)
             cmd.execute(args)

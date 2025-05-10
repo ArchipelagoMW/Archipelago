@@ -7,9 +7,9 @@ from typing import Mapping, Any
 import Utils
 import settings
 from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial, Location, Item
-from Fill import fill_restrictive
+from Fill import remaining_fill
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import add_rule, add_item_rule, forbid_items_for_player
+from worlds.generic.Rules import add_rule, add_item_rule
 from . import events, items, locations, csvdb
 from . import rules as FERules
 from .Client import FF4FEClient
@@ -260,9 +260,9 @@ class FF4FEWorld(World):
                 # No key items except Dark Matters in minor slots when we're doing major/minor split.
                 if (self.options.ItemPlacement.current_key == "major_minor_split" and not location.major_slot
                         and location.name not in self.options.priority_locations):
-                    forbid_items_for_player(self.get_location(location.name),
-                                            set([item.name for item in items.key_items if item.name != "DkMatter"]),
-                                            self.player)
+                    add_item_rule(self.get_location(location.name),
+                                  lambda item: (not (item.classification & ItemClassification.progression))
+                                                or (item.player == self.player and item.name == "DkMatter"))
 
         # If we're doing Hero Challenge and we're not doing Forge the Crystal, Kokkol has a fancy weapon for our Hero.
         # The actual weapon is determined by Free Enterprise, so you can't hint if it's an Excalipur and remove the
@@ -413,7 +413,7 @@ class FF4FEWorld(World):
                     if (item.name == "DkMatter" and item.player == self.player)]
         for item in itempool:
             self.multiworld.itempool.remove(item)
-        fill_restrictive(self.multiworld, self.multiworld.state, location_set, itempool, allow_partial=True)
+        remaining_fill(self.multiworld, location_set, itempool, check_location_can_fill=True)
 
     def post_fill(self) -> None:
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
@@ -503,7 +503,6 @@ class FF4FEWorld(World):
         placement_dict["junk_tier"] = self.options.JunkTier.value
         placement_dict["junked_items"] = list(self.options.JunkedItems.value)
         placement_dict["kept_items"] = list(self.options.KeptItems.value)
-        placement_dict["data_dir"] = Utils.user_path("data/ff4fe")
 
         # Our actual patch is just a set of instructions and data for FE to use.
         patch = FF4FEProcedurePatch(player=self.player, player_name=self.player_name)
