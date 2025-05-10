@@ -543,8 +543,9 @@ class ServerOptions(Group):
     class HintCost(int):
         """
         Relative point cost to receive a hint via !hint for players
-        so for example hint_cost: 20 would mean that for every 20% of available checks, you get the ability to hint,
+        i.e. "hint_cost: 20" would mean that for every 20% of available checks, you get the ability to hint,
         for a total of 5
+        If this value is set to a value >100, hinting will be fully disabled, including from LocationScouts
         """
 
     class ReleaseMode(str):
