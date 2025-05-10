@@ -156,10 +156,10 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
+            return world.worlds[player].options.goal.current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
-            return world.goal[player].current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
-            and (world.entrance_shuffle[player].current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
+            return world.worlds[player].options.goal.current_key in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
+            and (world.worlds[player].options.entrance_shuffle.current_key in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
