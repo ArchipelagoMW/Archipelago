@@ -1476,12 +1476,11 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         if not items:
                             raise OptionError("You must specify at least one item to place items with plando.")
                         count = 1
-                        if isinstance(items, str):
-                            items = [items]
-                        elif not isinstance(items, dict):
-                            raise OptionError(f"Plando 'item' has to be string or dictionary, not {type(items)}.")
                     if isinstance(items, str):
                         items = [items]
+                    elif not isinstance(items, dict | list):
+                        raise OptionError(f"Plando 'items' has to be string, list, or "
+                                          f"dictionary, not {type(items)}")
                     locations = item.get("locations", [])
                     if not locations:
                         locations = item.get("location", ["Everywhere"])
