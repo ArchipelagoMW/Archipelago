@@ -14,7 +14,7 @@ from .assertion import RuleAssertMixin
 from .options.utils import fill_namespace_with_default, parse_class_option_keys, fill_dataclass_with_default
 from .. import StardewValleyWorld, StardewItem, StardewRule
 from ..logic.time_logic import MONTH_COEFFICIENT
-from ..options import StardewValleyOption
+from ..options import StardewValleyOption, options
 
 logger = logging.getLogger(__name__)
 
@@ -221,9 +221,9 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
     # If the simple dict caching ends up taking too much memory, we could replace it with some kind of lru cache. 
-    should_cache = "start_inventory" not in test_options
+    should_cache = should_cache_world(test_options)
     if should_cache:
-        frozen_options = frozenset(test_options.items()).union({("seed", seed)})
+        frozen_options = make_hashable(test_options, seed)
         cached_multi_world = search_world_cache(_cache, frozen_options)
         if cached_multi_world:
             print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}] [Cache size = {len(_cache)}]")
@@ -250,6 +250,27 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
     setattr(multiworld, "lock", threading.Lock())
 
     return multiworld
+
+
+def should_cache_world(test_options):
+    if "start_inventory" in test_options:
+        return False
+
+    trap_distribution_key = "trap_distribution"
+    if trap_distribution_key not in test_options:
+        return True
+
+    trap_distribution = test_options[trap_distribution_key]
+    for key in trap_distribution:
+        if trap_distribution[key] != options.TrapDistribution.default_weight:
+            return False
+
+    return True
+
+
+
+def make_hashable(test_options, seed):
+    return frozenset(test_options.items()).union({("seed", seed)})
 
 
 def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:

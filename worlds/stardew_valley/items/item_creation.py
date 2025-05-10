@@ -1,165 +1,26 @@
-import csv
-import enum
 import logging
-from dataclasses import dataclass, field
-from functools import reduce
-from pathlib import Path
 from random import Random
-from typing import Dict, List, Protocol, Union, Set, Optional
+from typing import List, Set
 
 from BaseClasses import Item, ItemClassification
-from . import data
-from .content.feature import friendsanity
-from .content.game_content import StardewContent
-from .data.game_item import ItemTag
-from .logic.logic_event import all_events
-from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
+from .item_data import StardewItemFactory, items_by_group, Group, item_table, ItemData
+from ..content.feature import friendsanity
+from ..content.game_content import StardewContent
+from ..data.game_item import ItemTag
+from ..mods.mod_data import ModNames
+from ..options import StardewValleyOptions, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs
-from .strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
-from .strings.ap_names.ap_weapon_names import APWeapon
-from .strings.ap_names.buff_names import Buff
-from .strings.ap_names.community_upgrade_names import CommunityUpgrade
-from .strings.ap_names.mods.mod_items import SVEQuestItem
-from .strings.currency_names import Currency
-from .strings.tool_names import Tool
-from .strings.wallet_item_names import Wallet
-
-ITEM_CODE_OFFSET = 717000
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, EnabledFillerBuffs, TrapDifficulty
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName
+from ..strings.ap_names.ap_weapon_names import APWeapon
+from ..strings.ap_names.buff_names import Buff
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
+from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.currency_names import Currency
+from ..strings.tool_names import Tool
+from ..strings.wallet_item_names import Wallet
 
 logger = logging.getLogger(__name__)
-world_folder = Path(__file__).parent
-
-
-class Group(enum.Enum):
-    RESOURCE_PACK = enum.auto()
-    FRIENDSHIP_PACK = enum.auto()
-    COMMUNITY_REWARD = enum.auto()
-    TRASH = enum.auto()
-    FOOTWEAR = enum.auto()
-    HATS = enum.auto()
-    RING = enum.auto()
-    WEAPON = enum.auto()
-    WEAPON_GENERIC = enum.auto()
-    WEAPON_SWORD = enum.auto()
-    WEAPON_CLUB = enum.auto()
-    WEAPON_DAGGER = enum.auto()
-    WEAPON_SLINGSHOT = enum.auto()
-    PROGRESSIVE_TOOLS = enum.auto()
-    SKILL_LEVEL_UP = enum.auto()
-    SKILL_MASTERY = enum.auto()
-    BUILDING = enum.auto()
-    WIZARD_BUILDING = enum.auto()
-    ARCADE_MACHINE_BUFFS = enum.auto()
-    BASE_RESOURCE = enum.auto()
-    WARP_TOTEM = enum.auto()
-    GEODE = enum.auto()
-    ORE = enum.auto()
-    FERTILIZER = enum.auto()
-    SEED = enum.auto()
-    CROPSANITY = enum.auto()
-    FISHING_RESOURCE = enum.auto()
-    SEASON = enum.auto()
-    TRAVELING_MERCHANT_DAY = enum.auto()
-    MUSEUM = enum.auto()
-    FRIENDSANITY = enum.auto()
-    FESTIVAL = enum.auto()
-    RARECROW = enum.auto()
-    TRAP = enum.auto()
-    BONUS = enum.auto()
-    MAXIMUM_ONE = enum.auto()
-    AT_LEAST_TWO = enum.auto()
-    DEPRECATED = enum.auto()
-    RESOURCE_PACK_USEFUL = enum.auto()
-    SPECIAL_ORDER_BOARD = enum.auto()
-    SPECIAL_ORDER_QI = enum.auto()
-    BABY = enum.auto()
-    GINGER_ISLAND = enum.auto()
-    WALNUT_PURCHASE = enum.auto()
-    TV_CHANNEL = enum.auto()
-    QI_CRAFTING_RECIPE = enum.auto()
-    CHEFSANITY = enum.auto()
-    CHEFSANITY_STARTER = enum.auto()
-    CHEFSANITY_QOS = enum.auto()
-    CHEFSANITY_PURCHASE = enum.auto()
-    CHEFSANITY_FRIENDSHIP = enum.auto()
-    CHEFSANITY_SKILL = enum.auto()
-    CRAFTSANITY = enum.auto()
-    BOOK_POWER = enum.auto()
-    LOST_BOOK = enum.auto()
-    PLAYER_BUFF = enum.auto()
-    # Mods
-    MAGIC_SPELL = enum.auto()
-    MOD_WARP = enum.auto()
-
-
-@dataclass(frozen=True)
-class ItemData:
-    code_without_offset: Optional[int]
-    name: str
-    classification: ItemClassification
-    mod_name: Optional[str] = None
-    groups: Set[Group] = field(default_factory=frozenset)
-
-    def __post_init__(self):
-        if not isinstance(self.groups, frozenset):
-            super().__setattr__("groups", frozenset(self.groups))
-
-    @property
-    def code(self):
-        return ITEM_CODE_OFFSET + self.code_without_offset if self.code_without_offset is not None else None
-
-    def has_any_group(self, *group: Group) -> bool:
-        groups = set(group)
-        return bool(groups.intersection(self.groups))
-
-
-class StardewItemFactory(Protocol):
-    def __call__(self, name: Union[str, ItemData], override_classification: ItemClassification = None) -> Item:
-        raise NotImplementedError
-
-
-def load_item_csv():
-    from importlib.resources import files
-
-    items = []
-    with files(data).joinpath("items.csv").open() as file:
-        item_reader = csv.DictReader(file)
-        for item in item_reader:
-            id = int(item["id"]) if item["id"] else None
-            classification = reduce((lambda a, b: a | b), {ItemClassification[str_classification] for str_classification in item["classification"].split(",")})
-            groups = {Group[group] for group in item["groups"].split(",") if group}
-            mod_name = str(item["mod_name"]) if item["mod_name"] else None
-            items.append(ItemData(id, item["name"], classification, mod_name, groups))
-    return items
-
-
-events = [
-    ItemData(None, e, ItemClassification.progression)
-    for e in sorted(all_events)
-]
-
-all_items: List[ItemData] = load_item_csv() + events
-item_table: Dict[str, ItemData] = {}
-items_by_group: Dict[Group, List[ItemData]] = {}
-
-
-def initialize_groups():
-    for item in all_items:
-        for group in item.groups:
-            item_group = items_by_group.get(group, list())
-            item_group.append(item)
-            items_by_group[group] = item_group
-
-
-def initialize_item_table():
-    item_table.update({item.name: item for item in all_items})
-
-
-initialize_item_table()
-initialize_groups()
-
 
 def get_too_many_items_error_message(locations_count: int, items_count: int) -> str:
     return f"There should be at least as many locations [{locations_count}] as there are mandatory items [{items_count}]"
@@ -712,13 +573,15 @@ def weapons_count(options: StardewValleyOptions):
 def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
                                        items_already_added: List[Item],
                                        available_item_slots: int) -> List[Item]:
-    include_traps = options.trap_items != TrapItems.option_no_traps
+    include_traps = options.trap_difficulty != TrapDifficulty.option_no_traps
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
     trap_items = [trap for trap in items_by_group[Group.TRAP]
                   if trap.name not in items_already_added_names and
-                  (trap.mod_name is None or trap.mod_name in options.mods)]
+                  Group.DEPRECATED not in trap.groups and
+                  (trap.mod_name is None or trap.mod_name in options.mods) and
+                  options.trap_distribution[trap.name] > 0]
     player_buffs = get_allowed_player_buffs(options.enabled_filler_buffs)
 
     priority_filler_items = []
@@ -750,11 +613,13 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                         (filler_pack.name not in [priority_item.name for priority_item in
                                                   priority_filler_items] and filler_pack.name not in items_already_added_names)]
 
+    filler_weights = get_filler_weights(options, all_filler_packs)
+
     while available_item_slots > 0:
-        resource_pack = random.choice(all_filler_packs)
+        resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
         exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
         while exactly_2 and available_item_slots == 1:
-            resource_pack = random.choice(all_filler_packs)
+            resource_pack = random.choices(all_filler_packs, weights=filler_weights, k=1)[0]
             exactly_2 = Group.AT_LEAST_TWO in resource_pack.groups
         classification = ItemClassification.useful if resource_pack.classification == ItemClassification.progression else resource_pack.classification
         items.append(item_factory(resource_pack, classification))
@@ -763,9 +628,22 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
             items.append(item_factory(resource_pack, classification))
             available_item_slots -= 1
         if exactly_2 or Group.MAXIMUM_ONE in resource_pack.groups:
-            all_filler_packs.remove(resource_pack)
+            index = all_filler_packs.index(resource_pack)
+            all_filler_packs.pop(index)
+            filler_weights.pop(index)
 
     return items
+
+
+def get_filler_weights(options: StardewValleyOptions, all_filler_packs: List[ItemData]):
+    weights = []
+    for filler in all_filler_packs:
+        if filler.name in options.trap_distribution:
+            num = options.trap_distribution[filler.name]
+        else:
+            num = options.trap_distribution.default_weight
+        weights.append(num)
+    return weights
 
 
 def filter_deprecated_items(items: List[ItemData]) -> List[ItemData]:
@@ -792,7 +670,7 @@ def remove_excluded_items_island_mods(items, exclude_ginger_island: bool, mods: 
 
 
 def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
-    include_traps = options.trap_items != TrapItems.option_no_traps
+    include_traps = options.trap_difficulty != TrapDifficulty.option_no_traps
     exclude_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     available_filler = get_all_filler_items(include_traps, exclude_island)
