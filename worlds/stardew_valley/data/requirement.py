@@ -93,5 +93,9 @@ class MuseumCompletionRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class FullShipmentRequirement(Requirement):
+    pass
+
+@dataclass(frozen=True)
 class BuildingRequirement(Requirement):
     building: str

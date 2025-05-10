@@ -17,6 +17,7 @@ class Currency:
 
 
 class MemeCurrency:
+    dead_pumpkins = "Dead Pumpkins"
     child = "Child"
     code = "Code"
     clic = "Clic"

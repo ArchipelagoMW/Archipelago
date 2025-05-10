@@ -23,7 +23,7 @@ class Hat:
     blue_bonnet = hat("Blue Bonnet")
     plum_chapeau = hat("Plum Chapeau", False)
     skeleton_mask = hat("Skeleton Mask", False)
-    goblin_mask = hat("Goblin Mask", False)
+    goblin_mask = hat("Goblin Mask")
     chicken_mask = hat("Chicken Mask", False)
     earmuffs = hat("Earmuffs", False)
     delicate_bow = hat("Delicate Bow", False)

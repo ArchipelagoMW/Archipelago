@@ -49,6 +49,7 @@ class BundleName:
     sticky = cc_bundle("Sticky")
     forest = cc_bundle("Forest")
     green_rain = cc_bundle("Green Rain")
+    totems = cc_bundle("Totems")
     wild_medicine = cc_bundle("Wild Medicine")
     quality_foraging = cc_bundle("Quality Foraging")
     spring_crops = cc_bundle("Spring Crops")
@@ -127,6 +128,9 @@ class BundleName:
 
 
 class MemeBundleName:
+    shitty = meme_bundle("Shitty")
+    emmalution = meme_bundle("Emmalution")
+    joetg = meme_bundle("Joetg")
     floor_is_lava = meme_bundle("The Floor Is Lava")
     fast = meme_bundle("Fast")
     restraint = meme_bundle("Restraint")

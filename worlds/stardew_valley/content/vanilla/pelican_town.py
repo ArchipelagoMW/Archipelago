@@ -4,7 +4,7 @@ from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
-    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement
+    GrangeDisplayRequirement, ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, FullShipmentRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -313,6 +313,7 @@ pelican_town = ContentPack(
         Hat.official_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(CaughtFishRequirement(24),)),),
         Hat.blue_bonnet: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(MuseumCompletionRequirement(40),)),),
         Hat.cowboy: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(MuseumCompletionRequirement(),)),),
+        Hat.goblin_mask: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse, other_requirements=(FullShipmentRequirement(),)),),
         # Hat.plum_chapeau: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse, other_requirements=(CookedRecipesRequirement(),)),),
         # Hat.butterfly_bow,
         # Hat.mouse_ears,

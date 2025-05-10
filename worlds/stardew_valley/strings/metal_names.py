@@ -53,6 +53,7 @@ class Mineral:
     thunder_egg = "Thunder Egg"
     tigerseye = "Tigerseye"
     topaz = "Topaz"
+    mudstone = "Mudstone"
 
 
 class Artifact:

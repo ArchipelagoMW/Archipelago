@@ -5,7 +5,7 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.game_item import Requirement
 from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
     RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement, GrangeDisplayRequirement, \
-    ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement
+    ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, FullShipmentRequirement
 from ..strings.region_names import Region
 
 
@@ -93,6 +93,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: MuseumCompletionRequirement):
         return self.logic.museum.can_donate_museum_items(requirement.number_donated)
+
+    @meet_requirement.register
+    def _(self, requirement: FullShipmentRequirement):
+        return self.logic.shipping.can_ship_everything()
 
     @meet_requirement.register
     def _(self, requirement: BuildingRequirement):

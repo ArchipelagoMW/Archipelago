@@ -72,7 +72,7 @@ tilesanity_items = [wood_floor.as_amount(100), rustic_plank_floor.as_amount(100)
 tilesanity_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.tilesanity, tilesanity_items, 4, 4)
 
 cap_items = [wood.as_amount(999), sap.as_amount(999), pine_cone.as_amount(100), acorn.as_amount(100), maple_seed.as_amount(100), moss.as_amount(500)]
-cap_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.cap, cap_items, 6, 4)
+cap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cap, cap_items, 6, 4)
 
 big_grapes_items = [coconut]
 big_grapes_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.big_grapes, big_grapes_items, 4, 4)
@@ -193,6 +193,12 @@ ikea_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.ikea, 
 this_is_fine_items = [coffee, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz]
 this_is_fine_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.this_is_fine, this_is_fine_items, 8, 8)
 
+shitty_items = [clay, mudstone, truffle, sunflower_seeds, roasted_hazelnuts, plum_pudding, rotten_plant, taro_root]
+shitty_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.shitty, shitty_items, 4, 4)
+
+emmalution_items = [garlic, bread, trash, goblin_mask, rain_totem]
+emmalution_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.emmalution, emmalution_items, 5, 5)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
@@ -209,6 +215,7 @@ firstborn_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName
 restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.restraint, BundleItem.money_bundle(0))
 fast_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem.money_bundle(0))
 floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
+joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 750))
 
 # Stopped at 49 responses on the form
 
@@ -252,7 +259,7 @@ pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemon
                        big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
-crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, cap_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
+crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
                             ikea_bundle, this_is_fine_bundle]
 crafts_room_meme = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_meme, 6)
 
@@ -261,12 +268,12 @@ fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, 
 fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
 boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle,
-                            honorable_bundle, sisyphus_bundle, automation_bundle]
+                            honorable_bundle, sisyphus_bundle, automation_bundle, shitty_bundle]
 boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 3)
 
 bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,
                                snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle,
-                               celeste_bundle]
+                               celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
 vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,

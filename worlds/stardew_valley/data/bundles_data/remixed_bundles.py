@@ -44,6 +44,10 @@ quality_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.quality_
 green_rain_items = [moss.as_amount(200), fiber.as_amount(200), mossy_seed.as_amount(20), fiddlehead_fern.as_amount(10)]
 green_rain_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.green_rain, green_rain_items, 4, 3)
 
+totems_items = [warp_totem_beach.as_amount(5), warp_totem_mountains.as_amount(5), warp_totem_farm.as_amount(5), warp_totem_desert.as_amount(5),
+                warp_totem_island.as_amount(5), rain_totem.as_amount(5), treasure_totem.as_amount(5)]
+totems_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.totems, totems_items, 4, 3)
+
 crafts_room_bundles_remixed = [*crafts_room_bundles_thematic, beach_foraging_bundle, mines_foraging_bundle, desert_foraging_bundle,
                                island_foraging_bundle, sticky_bundle, forest_bundle, wild_medicine_bundle, quality_foraging_bundle, green_rain_bundle]
 crafts_room_remixed = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_remixed, 6)

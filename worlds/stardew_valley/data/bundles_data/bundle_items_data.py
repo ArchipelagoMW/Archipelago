@@ -6,6 +6,7 @@ from ...strings.catalogue_names import CatalogueItem
 from ...strings.craftable_names import Consumable, Lighting, Fishing, Craftable, Bomb, Furniture, Floor
 from ...strings.crop_names import Vegetable, Fruit
 from ...strings.currency_names import Currency
+from ...strings.decoration_names import Decoration
 from ...strings.fertilizer_names import Fertilizer, SpeedGro, RetainingSoil
 from ...strings.fish_names import Fish, WaterItem, Trash
 from ...strings.flower_names import Flower
@@ -84,6 +85,7 @@ mystic_tree_seed = BundleItem(TreeSeed.mystic, source=BundleItem.Sources.masteri
 mossy_seed = BundleItem(TreeSeed.mossy)
 
 strawberry_seeds = BundleItem(Seed.strawberry)
+sunflower_seeds = BundleItem(Seed.sunflower)
 
 blue_jazz = BundleItem(Flower.blue_jazz)
 cauliflower = BundleItem(Vegetable.cauliflower)
@@ -276,6 +278,7 @@ thunder_egg = BundleItem(Mineral.thunder_egg)
 ghost_crystal = BundleItem(Mineral.ghost_crystal)
 kyanite = BundleItem(Mineral.kyanite)
 lemon_stone = BundleItem(Mineral.lemon_stone)
+mudstone = BundleItem(Mineral.mudstone)
 
 slime = BundleItem(Loot.slime, 99)
 bug_meat = BundleItem(Loot.bug_meat, 10)
@@ -342,6 +345,7 @@ lucky_lunch = BundleItem(Meal.lucky_lunch)
 joja_cola = BundleItem(Trash.joja_cola)
 strange_bun = BundleItem(Meal.strange_bun)
 moss_soup = BundleItem(Meal.moss_soup)
+roasted_hazelnuts = BundleItem(Meal.roasted_hazelnuts)
 
 green_algae = BundleItem(WaterItem.green_algae)
 white_algae = BundleItem(WaterItem.white_algae)
@@ -449,6 +453,7 @@ gold_mystery_box = BundleItem(Consumable.gold_mystery_box, source=BundleItem.Sou
 calico_egg = BundleItem(Currency.calico_egg)
 golden_tag = BundleItem(Currency.golden_tag)
 stardrop_tea = BundleItem(ArtisanGood.stardrop_tea)
+rotten_plant = BundleItem(Decoration.rotten_plant)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
 
@@ -466,6 +471,7 @@ dark_cowboy_hat = BundleItem(Hat.dark_cowboy_hat)
 tiger_hat = BundleItem(Hat.tiger_hat)
 mystery_hat = BundleItem(Hat.mystery_hat)
 dark_ballcap = BundleItem(Hat.dark_ballcap)
+goblin_mask = BundleItem(Hat.goblin_mask, source=BundleItem.Sources.island)
 
 mermaid_boots = BundleItem(Boots.mermaid_boots)
 
@@ -541,6 +547,14 @@ gravel_path = BundleItem(Floor.gravel_path)
 cobblestone_path = BundleItem(Floor.cobblestone_path)
 stepping_stone_path = BundleItem(Floor.stepping_stone_path)
 crystal_path = BundleItem(Floor.crystal_path)
+
+warp_totem_beach = BundleItem(Consumable.warp_totem_beach)
+warp_totem_mountains = BundleItem(Consumable.warp_totem_mountains)
+warp_totem_farm = BundleItem(Consumable.warp_totem_farm)
+warp_totem_desert = BundleItem(Consumable.warp_totem_desert, source=BundleItem.Sources.content)
+warp_totem_island = BundleItem(Consumable.warp_totem_island, source=BundleItem.Sources.island)
+rain_totem = BundleItem(Consumable.rain_totem)
+treasure_totem = BundleItem(Consumable.treasure_totem, source=BundleItem.Sources.masteries)
 
 death = BundleItem(NotReallyAnItem.death)
 
