@@ -14,14 +14,24 @@ from .Options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
 
 from typing import List, Set, Dict, TextIO, Any
-from worlds.AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
 
-#class CrystalProjectSettings(settings.Group):
-    # class RomFile(settings.SNESRomPath):
-    #     """Insert help text for host.yaml here."""
+class CrystalProjectWeb(WebWorld):
+    #theme = "partyTime" #pick a theme!
+    bug_report_page = "https://github.com/Emerassi/CrystalProjectAPWorld/issues"
+    setup_en = Tutorial(
+        "Mod Setup and Use Guide",
+        "A guide to setting up the Crystal Project Archipelago Mod.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["dragons but also rabbits"]
+    )
 
-    # rom_file: RomFile = RomFile("MyGame.sfc")
+    tutorials = [setup_en]
+    #options_presets = MuseDashPresets
+    #option_groups = md_option_groups
 
 class CrystalProjectWorld(World):
     """Insert description of the world/game here."""
@@ -37,6 +47,7 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
     startingJobs = get_random_starting_jobs()
+    web = CrystalProjectWeb()
 
     logger = logging.getLogger()
 
