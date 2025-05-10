@@ -309,6 +309,8 @@ class SC2Manager(GameManager):
         COLOR_FINAL_PARENT_LOCKED = "D0C0BE" # gray + orange
         COLOR_FINAL_MISSION_REMINDER = "FF5151" # light red
         COLOR_VICTORY_LOCATION = "FFC156" # gold
+        COLOR_TOOLTIP_DONE = "00FF00" # green
+        COLOR_TOOLTIP_NOT_DONE = "FF0000" # red
 
         text = mission_obj.mission_name
         tooltip: str = ""
@@ -344,7 +346,7 @@ class SC2Manager(GameManager):
                 text = f"[color={COLOR_MISSION_LOCKED}]{text}[/color]"
                 tooltip += "To unlock this mission, "
                 shown_rule = mission_rule
-            rule_tooltip = shown_rule.tooltip(0, lookup_id_to_mission)
+            rule_tooltip = shown_rule.tooltip(0, lookup_id_to_mission, COLOR_TOOLTIP_DONE, COLOR_TOOLTIP_NOT_DONE)
             tooltip += rule_tooltip.replace(rule_tooltip[0], rule_tooltip[0].lower(), 1)
             extra_word = "are"
             if shown_rule.shows_single_rule():
