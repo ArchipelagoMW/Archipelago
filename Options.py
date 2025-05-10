@@ -1547,7 +1547,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
 
     @classmethod
     def get_option_name(cls, value: list[PlandoItem]) -> str:
-        return ", ".join(["%s-%s" % (item.items, item.locations) for item in value])  #TODO: see what a better way to display would be
+        return ", ".join(["(%s: %s)" % (item.items, item.locations) for item in value])  #TODO: see what a better way to display would be
 
     def __getitem__(self, index: typing.SupportsIndex) -> PlandoItem:
         return self.value.__getitem__(index)
