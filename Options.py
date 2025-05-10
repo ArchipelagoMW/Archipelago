@@ -1353,6 +1353,7 @@ class StartInventory(ItemDict):
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
+    max = 10000
 
 
 class StartInventoryPool(StartInventory):
