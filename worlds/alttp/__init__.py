@@ -505,20 +505,20 @@ class ALTTPWorld(World):
     def pre_fill(self):
         from Fill import fill_restrictive, FillError
         attempts = 5
-        world = self.multiworld
-        player = self.player
-        all_state = world.get_all_state(use_cache=True)
+        all_state = self.multiworld.get_all_state(use_cache=False)
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
-        crystal_locations = [world.get_location('Turtle Rock - Prize', player),
-                             world.get_location('Eastern Palace - Prize', player),
-                             world.get_location('Desert Palace - Prize', player),
-                             world.get_location('Tower of Hera - Prize', player),
-                             world.get_location('Palace of Darkness - Prize', player),
-                             world.get_location('Thieves\' Town - Prize', player),
-                             world.get_location('Skull Woods - Prize', player),
-                             world.get_location('Swamp Palace - Prize', player),
-                             world.get_location('Ice Palace - Prize', player),
-                             world.get_location('Misery Mire - Prize', player)]
+        for crystal in crystals:
+            all_state.remove(crystal)
+        crystal_locations = [self.get_location('Turtle Rock - Prize'),
+                             self.get_location('Eastern Palace - Prize'),
+                             self.get_location('Desert Palace - Prize'),
+                             self.get_location('Tower of Hera - Prize'),
+                             self.get_location('Palace of Darkness - Prize'),
+                             self.get_location('Thieves\' Town - Prize'),
+                             self.get_location('Skull Woods - Prize'),
+                             self.get_location('Swamp Palace - Prize'),
+                             self.get_location('Ice Palace - Prize'),
+                             self.get_location('Misery Mire - Prize')]
         placed_prizes = {loc.item.name for loc in crystal_locations if loc.item}
         unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
         empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
@@ -526,8 +526,8 @@ class ALTTPWorld(World):
             try:
                 prizepool = unplaced_prizes.copy()
                 prize_locs = empty_crystal_locations.copy()
-                world.random.shuffle(prize_locs)
-                fill_restrictive(world, all_state, prize_locs, prizepool, True, lock=True,
+                self.multiworld.random.shuffle(prize_locs)
+                fill_restrictive(self.multiworld, all_state, prize_locs, prizepool, True, lock=True,
                                  name="LttP Dungeon Prizes")
             except FillError as e:
                 lttp_logger.exception("Failed to place dungeon prizes (%s). Will retry %s more times", e,
@@ -541,7 +541,7 @@ class ALTTPWorld(World):
         if self.options.mode == 'standard' and self.options.small_key_shuffle \
                 and self.options.small_key_shuffle != small_key_shuffle.option_universal and \
                 self.options.small_key_shuffle != small_key_shuffle.option_own_dungeons:
-            world.local_early_items[player]["Small Key (Hyrule Castle)"] = 1
+            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
 
     @classmethod
     def stage_pre_fill(cls, world):
@@ -811,12 +811,15 @@ class ALTTPWorld(World):
         return GetBeemizerItem(self.multiworld, self.player, item)
 
     def get_pre_fill_items(self):
-        res = []
+        res = [self.create_item(name) for name in ('Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1',
+                                                   'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5',
+                                                   'Crystal 6')]
         if self.dungeon_local_item_names:
             for dungeon in self.dungeons.values():
                 for item in dungeon.all_items:
                     if item.name in self.dungeon_local_item_names:
                         res.append(item)
+
         return res
 
     def fill_slot_data(self):

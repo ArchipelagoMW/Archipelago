@@ -35,9 +35,6 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
         args.multi = 1
         args.race = None
         args.plando_options = self.multiworld.plando_options
-        args.plando_items = self.multiworld.plando_items
-        args.plando_texts = self.multiworld.plando_texts
-        args.plando_connections = self.multiworld.plando_connections
         args.game = self.multiworld.game
         args.name = self.multiworld.player_name
         args.sprite = {}
