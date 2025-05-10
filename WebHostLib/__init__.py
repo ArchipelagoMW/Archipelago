@@ -82,8 +82,8 @@ def register():
     # has automatic patch integration
     import worlds.AutoWorld
     import worlds.Files
-    app.jinja_env.filters['is_applayercontainer'] = lambda game, data: \
-        worlds.Files.is_ap_player_container(data, game)
+    app.jinja_env.filters['is_applayercontainer'] = lambda game, data, player: \
+        worlds.Files.is_ap_player_container(data, game, player)
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
