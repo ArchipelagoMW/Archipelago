@@ -16,9 +16,10 @@ from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_op
                       get_hexagons_in_pool, HexagonQuestAbilityUnlockType, EntranceLayout)
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
+from . import ut_stuff
 from worlds.AutoWorld import WebWorld, World
 from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
-from settings import Group, Bool
+from settings import Group, Bool, FilePath
 
 
 class TunicSettings(Group):
@@ -27,9 +28,15 @@ class TunicSettings(Group):
 
     class LimitGrassRando(Bool):
         """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
+    
+    class UTPoptrackerPath(FilePath):
+        """Path to the user's TUNIC Poptracker Pack."""
+        description = "TUNIC Poptracker Pack zip file"
+        required = False
 
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
+    ut_poptracker_path: Union[UTPoptrackerPath, str] = UTPoptrackerPath()
 
 
 class TunicWeb(WebWorld):
@@ -113,6 +120,7 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+    tracker_world: ClassVar = ut_stuff.tracker_world
 
     def generate_early(self) -> None:
         try:
@@ -168,39 +176,7 @@ class TunicWorld(World):
                                       f"They have Direction Pairs enabled and the connection "
                                       f"{cxn.entrance} --> {cxn.exit} does not abide by this option.")
 
-        # Universal tracker stuff, shouldn't do anything in standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "TUNIC" in self.multiworld.re_gen_passthrough:
-                self.using_ut = True
-                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = self.passthrough["sword_progression"]
-                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
-                self.options.laurels_zips.value = self.passthrough["laurels_zips"]
-                self.options.ice_grappling.value = self.passthrough["ice_grappling"]
-                self.options.ladder_storage.value = self.passthrough["ladder_storage"]
-                self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
-                self.options.lanternless.value = self.passthrough["lanternless"]
-                self.options.maskless.value = self.passthrough["maskless"]
-                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
-                self.options.hexagon_quest_ability_type.value = self.passthrough.get("hexagon_quest_ability_type", 0)
-                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
-                self.options.entrance_layout.value = EntranceLayout.option_standard
-                if ("ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].keys()
-                        or "ziggurat2020_3, ziggurat2020_1_zig2_skip" in self.passthrough["Entrance Rando"].values()):
-                    self.options.entrance_layout.value = EntranceLayout.option_fixed_shop
-                self.options.decoupled = self.passthrough.get("decoupled", 0)
-                self.options.laurels_location.value = LaurelsLocation.option_anywhere
-                self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
-                self.options.breakable_shuffle.value = self.passthrough.get("breakable_shuffle", 0)
-                self.options.laurels_location.value = self.options.laurels_location.option_anywhere
-                self.options.combat_logic.value = self.passthrough.get("combat_logic", 0)
-            else:
-                self.using_ut = False
-        else:
-            self.using_ut = False
+        ut_stuff.setup_options_from_slot_data(self)
 
         self.player_location_table = standard_location_name_to_id.copy()
 
