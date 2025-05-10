@@ -509,7 +509,7 @@ class ALTTPWorld(World):
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         for crystal in crystals:
             all_state.remove(crystal)
-        crystal_locations = [self.multiworld.get_location('Turtle Rock - Prize'),
+        crystal_locations = [self.get_location('Turtle Rock - Prize'),
                              self.get_location('Eastern Palace - Prize'),
                              self.get_location('Desert Palace - Prize'),
                              self.get_location('Tower of Hera - Prize'),
