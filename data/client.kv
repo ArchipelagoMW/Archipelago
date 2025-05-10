@@ -14,23 +14,60 @@
     salmon: "FA8072"  # typically trap item
     white: "FFFFFF"  # not used, if you want to change the generic text color change color in Label
     orange: "FF7700"  # Used for command echo
-<Label>:
-    color: "FFFFFF"
-<TabbedPanel>:
-    tab_width: root.width / app.tab_count
+    # KivyMD theming parameters
+    theme_style: "Dark" # Light/Dark
+    primary_palette: "Lightsteelblue" # Many options
+    dynamic_scheme_name: "VIBRANT"
+    dynamic_scheme_contrast: 0.0
+<MDLabel>:
+    color: self.theme_cls.primaryColor
+<BaseButton>:
+    ripple_color: app.theme_cls.primaryColor
+    ripple_duration_in_fast: 0.2
+<MDTabsItemBase>:
+    ripple_color: app.theme_cls.primaryColor
+    ripple_duration_in_fast: 0.2
 <TooltipLabel>:
-    text_size: self.width, None
-    size_hint_y: None
-    height: self.texture_size[1]
-    font_size: dp(20)
+    adaptive_height: True
+    theme_font_size: "Custom"
+    font_size: "20dp"
     markup: True
+    halign: "left"
 <SelectableLabel>:
+    size_hint: 1, None
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1)
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
         Rectangle:
             size: self.size
             pos: self.pos
+<MarkupDropdownItem>
+    orientation: "vertical"
+
+    MDLabel:
+        text: root.text
+        valign: "center"
+        padding_x: "12dp"
+        shorten: True
+        shorten_from: "right"
+        theme_text_color: "Custom"
+        markup: True
+        text_color:
+            app.theme_cls.onSurfaceVariantColor \
+            if not root.text_color else \
+            root.text_color
+
+    MDDivider:
+        md_bg_color:
+            ( \
+            app.theme_cls.outlineVariantColor \
+            if not root.divider_color \
+            else root.divider_color \
+            ) \
+            if root.divider else \
+            (0, 0, 0, 0)
 <UILog>:
     messages: 1000 # amount of messages stored in client logs.
     cols: 1
@@ -49,7 +86,7 @@
 <HintLabel>:
     canvas.before:
         Color:
-            rgba: (.0, 0.9, .1, .3) if self.selected else (0.2, 0.2, 0.2, 1) if self.striped else (0.18, 0.18, 0.18, 1)
+            rgba: (.0, 0.9, .1, .3) if self.selected else self.theme_cls.surfaceContainerHighColor if self.striped else self.theme_cls.surfaceContainerLowColor
         Rectangle:
             size: self.size
             pos: self.pos
@@ -126,9 +163,12 @@
 <ToolTip>:
     size: self.texture_size
     size_hint: None, None
+    theme_font_size: "Custom"
     font_size: dp(18)
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
     halign: "left"
+    theme_text_color: "Custom"
+    text_color: (1, 1, 1, 1)
     canvas.before:
         Color:
             rgba: 0.2, 0.2, 0.2, 1
@@ -147,8 +187,38 @@
             rectangle: self.x-2, self.y-2, self.width+4, self.height+4
 <ServerToolTip>:
     pos_hint: {'center_y': 0.5, 'center_x': 0.5}
-<AutocompleteHintInput>
+<AutocompleteHintInput>:
     size_hint_y: None
-    height: dp(30)
+    height: "30dp"
     multiline: False
     write_tab: False
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+<ConnectBarTextInput>:
+    height: "30dp"
+    multiline: False
+    write_tab: False
+    role: "medium"
+    size_hint_y: None
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+<CommandPromptTextInput>:
+    size_hint_y: None
+    height: "30dp"
+    multiline: False
+    write_tab: False
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+<MessageBoxLabel>:
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
+<ScrollBox>:
+    layout: layout
+    bar_width: "12dp"
+    scroll_wheel_distance: 40
+    do_scroll_x: False
+    scroll_type: ['bars', 'content']
+
+    MDBoxLayout:
+        id: layout
+        orientation: "vertical"
+        spacing: 10
+        size_hint_y: None
+        height: self.minimum_height

@@ -10,8 +10,9 @@ from BaseClasses import Entrance, Region
 from worlds.generic.Rules import CollectionRule
 
 from .data import static_logic as static_witness_logic
+from .data.definition_classes import WitnessRule
 from .data.static_logic import StaticWitnessLogicObj
-from .data.utils import WitnessRule, optimize_witness_rule
+from .data.utils import optimize_witness_rule
 from .locations import WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 
@@ -114,20 +115,25 @@ class WitnessPlayerRegions:
             if k not in player_logic.UNREACHABLE_REGIONS
         }
 
-        event_locations_per_region = defaultdict(dict)
+        event_locations_per_region: Dict[str, Dict[str, int]] = defaultdict(dict)
 
         for event_location, event_item_and_entity in player_logic.EVENT_ITEM_PAIRS.items():
-            region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
-            if region is None:
-                region_name = "Entry"
+            entity_or_region = event_item_and_entity[1]
+            if entity_or_region in static_witness_logic.ALL_REGIONS_BY_NAME:
+                region_name = entity_or_region
+                order = -1
             else:
-                region_name = region["name"]
-            order = self.reference_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["order"]
+                region = static_witness_logic.ENTITIES_BY_HEX[event_item_and_entity[1]]["region"]
+                if region is None:
+                    region_name = "Entry"
+                else:
+                    region_name = region.name
+                order = self.reference_logic.ENTITIES_BY_HEX[entity_or_region]["order"]
             event_locations_per_region[region_name][event_location] = order
 
         for region_name, region in regions_to_create.items():
             location_entities_for_this_region = [
-                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region["entities"]
+                self.reference_logic.ENTITIES_BY_HEX[entity] for entity in region.logical_entities
             ]
             locations_for_this_region = {
                 entity["checkName"]: entity["order"] for entity in location_entities_for_this_region

@@ -31,6 +31,7 @@ import ssl
 
 if typing.TYPE_CHECKING:
     import kvui
+    import argparse
 
 logger = logging.getLogger("Client")
 
@@ -195,25 +196,11 @@ class CommonContext:
             self.lookup_type: typing.Literal["item", "location"] = lookup_type
             self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
             self._archipelago_lookup: typing.Dict[int, str] = {}
-            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
             self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
-            self.warned: bool = False
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
-            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
-            if isinstance(key, int):
-                if not self.warned:
-                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
-                    self.warned = True
-                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
-                                  f"backwards compatibility for now. If multiple games share the same id for a "
-                                  f"{self.lookup_type}, name could be incorrect. Please use "
-                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
-                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
-                return self._flat_store[key]  # type: ignore
-
             return self._game_store[key]
 
         def __len__(self) -> int:
@@ -253,7 +240,6 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
-            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
@@ -355,7 +341,6 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
-        self.versions = {}
         self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
@@ -412,7 +397,8 @@ class CommonContext:
             await self.server.socket.close()
         if self.server_task is not None:
             await self.server_task
-        self.ui.update_hints()
+        if self.ui:
+            self.ui.update_hints()
 
     async def send_msgs(self, msgs: typing.List[typing.Any]) -> None:
         """ `msgs` JSON serializable """
@@ -458,6 +444,13 @@ class CommonContext:
             payload.update(kwargs)
         await self.send_msgs([payload])
         await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
+
+    async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
+        """Send new location checks to the server. Returns the set of actually new locations that were sent."""
+        locations = set(locations) & self.missing_locations
+        if locations:
+            await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
+        return locations
 
     async def console_input(self) -> str:
         if self.ui:
@@ -562,7 +555,6 @@ class CommonContext:
     
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
-                                   remote_date_package_versions: typing.Dict[str, int],
                                    remote_data_package_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
@@ -571,33 +563,26 @@ class CommonContext:
 
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_date_package_versions and game not in remote_data_package_checksums:
+            if game not in remote_data_package_checksums:
                 continue
 
-            remote_version: int = remote_date_package_versions.get(game, 0)
             remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
 
-            if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
+            if not remote_checksum:  # custom data package and no checksum for this game
                 needed_updates.add(game)
                 continue
 
-            cached_version: int = self.versions.get(game, 0)
             cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
-            if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
-                    or remote_checksum != cached_checksum:
-                local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            if remote_checksum != cached_checksum:
                 local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
-                if ((remote_checksum or remote_version <= local_version and remote_version != 0)
-                        and remote_checksum == local_checksum):
+                if remote_checksum == local_checksum:
                     self.update_game(network_data_package["games"][game], game)
                 else:
                     cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                    cache_version: int = cached_game.get("version", 0)
                     cache_checksum: typing.Optional[str] = cached_game.get("checksum")
                     # download remote version if cache is not new enough
-                    if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
-                            or remote_checksum != cache_checksum:
+                    if remote_checksum != cache_checksum:
                         needed_updates.add(game)
                     else:
                         self.update_game(cached_game, game)
@@ -607,7 +592,6 @@ class CommonContext:
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
-        self.versions[game] = game_package.get("version", 0)
         self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
@@ -616,9 +600,6 @@ class CommonContext:
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
-        current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
-        current_cache.update(data_package["games"])
-        Utils.persistent_store("datapackage", "games", current_cache)
         logger.info(f"Got new ID/Name DataPackage for {', '.join(data_package['games'])}")
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
@@ -701,8 +682,16 @@ class CommonContext:
         logger.exception(msg, exc_info=exc_info, extra={'compact_gui': True})
         self._messagebox_connection_loss = self.gui_error(msg, exc_info[1])
 
-    def make_gui(self) -> typing.Type["kvui.GameManager"]:
-        """To return the Kivy App class needed for run_gui so it can be overridden before being built"""
+    def make_gui(self) -> "type[kvui.GameManager]":
+        """
+        To return the Kivy `App` class needed for `run_gui` so it can be overridden before being built
+
+        Common changes are changing `base_title` to update the window title of the client and
+        updating `logging_pairs` to automatically make new tabs that can be filled with their respective logger.
+
+        ex. `logging_pairs.append(("Foo", "Bar"))`
+        will add a "Bar" tab which follows the logger returned from `logging.getLogger("Foo")`
+        """
         from kvui import GameManager
 
         class TextManager(GameManager):
@@ -873,9 +862,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
 
             # update data package
-            data_package_versions = args.get("datapackage_versions", {})
             data_package_checksums = args.get("datapackage_checksums", {})
-            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums)
+            await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
 
             await ctx.server_auth(args['password'])
 
@@ -891,6 +879,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
+            ctx.disconnected_intentionally = True
             raise Exception('Server reported your client version as incompatible. '
                             'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
@@ -1041,6 +1030,32 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
+def handle_url_arg(args: "argparse.Namespace",
+                   parser: "typing.Optional[argparse.ArgumentParser]" = None) -> "argparse.Namespace":
+    """
+    Parse the url arg "archipelago://name:pass@host:port" from launcher into correct launch args for CommonClient
+    If alternate data is required the urlparse response is saved back to args.url if valid
+    """
+    if not args.url:
+        return args
+        
+    url = urllib.parse.urlparse(args.url)
+    if url.scheme != "archipelago":
+        if not parser:
+            parser = get_base_parser()
+        parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+        return args
+
+    args.url = url
+    args.connect = url.netloc
+    if url.username:
+        args.name = urllib.parse.unquote(url.username)
+    if url.password:
+        args.password = urllib.parse.unquote(url.password)
+
+    return args
+
+
 def run_as_textclient(*args):
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
@@ -1053,7 +1068,7 @@ def run_as_textclient(*args):
             if password_requested and not self.password:
                 await super(TextContext, self).server_auth(password_requested)
             await self.get_username()
-            await self.send_connect()
+            await self.send_connect(game="")
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
@@ -1082,20 +1097,10 @@ def run_as_textclient(*args):
     parser.add_argument("url", nargs="?", help="Archipelago connection url")
     args = parser.parse_args(args)
 
-    # handle if text client is launched using the "archipelago://name:pass@host:port" url from webhost
-    if args.url:
-        url = urllib.parse.urlparse(args.url)
-        if url.scheme == "archipelago":
-            args.connect = url.netloc
-            if url.username:
-                args.name = urllib.parse.unquote(url.username)
-            if url.password:
-                args.password = urllib.parse.unquote(url.password)
-        else:
-            parser.error(f"bad url, found {args.url}, expected url in form of archipelago://archipelago.gg:38281")
+    args = handle_url_arg(args, parser=parser)
 
     # use colorama to display colored text highlighting on windows
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()

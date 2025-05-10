@@ -2938,7 +2938,7 @@ id,region,name,tags,mod_name
 7440,Farm,Craft Copper Slot Machine,"CRAFTSANITY",Luck Skill
 7441,Farm,Craft Gold Slot Machine,"CRAFTSANITY",Luck Skill
 7442,Farm,Craft Iridium Slot Machine,"CRAFTSANITY",Luck Skill
-7443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY",Luck Skill
+7443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,GINGER_ISLAND",Luck Skill
 7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded

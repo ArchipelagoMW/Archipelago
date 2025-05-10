@@ -45,6 +45,9 @@
 # ChecksFinder
 /worlds/checksfinder/ @SunCatMC
 
+# Civilization VI
+/worlds/civ6/ @hesto2
+
 # Clique
 /worlds/clique/ @ThePhar
 
@@ -181,9 +184,6 @@
 # Secret of Evermore
 /worlds/soe/ @black-sliver
 
-# Slay the Spire
-/worlds/spire/ @KonoTyran
-
 # Stardew Valley
 /worlds/stardew_valley/ @agilbert1412
 
@@ -211,6 +211,9 @@
 # Wargroove
 /worlds/wargroove/ @FlySniper
 
+# The Wind Waker
+/worlds/tww/ @tanjo3
+
 # The Witness
 /worlds/witness/ @NewSoupVi @blastron
 
@@ -225,10 +228,6 @@
 
 # Zillion
 /worlds/zillion/ @beauxq
-
-# Zork Grand Inquisitor
-/worlds/zork_grand_inquisitor/ @nbrochu
-
 
 ## Active Unmaintained Worlds
 
