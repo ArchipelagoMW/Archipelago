@@ -13,9 +13,10 @@ from worlds.generic.Rules import add_item_rule
 
 class FillError(RuntimeError):
     def __init__(self, *args: str | object, **kwargs: object) -> None:
-        if "multiworld" in kwargs and isinstance(args[0], str):
+        multiworld = kwargs.get("multiworld")
+        if isinstance(multiworld, MultiWorld) and isinstance(args[0], str):
             placements = (args[0] + "\nAll Placements:\n" +
-                          f"{[(loc, loc.item) for loc in kwargs['multiworld'].get_filled_locations()]}")
+                          f"{[(loc, loc.item) for loc in multiworld.get_filled_locations()]}")
             args = (placements, *args[1:])
         super().__init__(*args)
 
@@ -317,7 +318,7 @@ def remaining_fill(multiworld: MultiWorld,
     if unplaced_items and locations:
         # There are leftover unplaceable items and locations that won't accept them
         if move_unplaceable_to_start_inventory:
-            last_batch = []
+            last_batch: list[Item] = []
             for item in unplaced_items:
                 logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
                 multiworld.push_precollected(item)
@@ -527,8 +528,8 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
             maximum_exploration_state = sweep_from_pool(multiworld.state)
             fill_restrictive(multiworld, maximum_exploration_state, prioritylocations, progitempool,
-                            single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                            name="Priority Retry", one_item_per_player=False)
+                             single_player_placement=single_player, swap=False, on_place=mark_for_locking,
+                             name="Priority Retry", one_item_per_player=False)
         accessibility_corrections(multiworld, multiworld.state, prioritylocations, progitempool)
         defaultlocations = prioritylocations + defaultlocations
 
