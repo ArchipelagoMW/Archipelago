@@ -1546,7 +1546,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             plando.items.extend(sorted(world.item_name_groups[item]))
 
     @classmethod
-    def get_option_name(cls, value: typing.List[PlandoItem]) -> str:
+    def get_option_name(cls, value: list[PlandoItem]) -> str:
         return ", ".join(["%s-%s" % (item.items, item.locations) for item in value])  #TODO: see what a better way to display would be
 
     def __getitem__(self, index: typing.SupportsIndex) -> PlandoItem:

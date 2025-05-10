@@ -869,14 +869,14 @@ def swap_location_item(location_1: Location, location_2: Location, check_locked:
     location_2.item.location = location_2
 
 
-def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List[PlandoItemBlock]]:
-    def warn(warning: str, force: typing.Union[bool, str]) -> None:
+def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlock]]:
+    def warn(warning: str, force: bool | str) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
         else:
             logging.debug(f"{warning}")
 
-    def failed(warning: str, force: typing.Union[bool, str]) -> None:
+    def failed(warning: str, force: bool | str) -> None:
         if force is True:
             raise Exception(warning)
         else:
@@ -884,15 +884,15 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
 
     world_name_lookup = multiworld.world_name_lookup
 
-    plando_blocks: typing.Dict[int, typing.List[PlandoItemBlock]] = dict()
-    player_ids = set(multiworld.player_ids)
+    plando_blocks: dict[int, list[PlandoItemBlock]] = dict()
+    player_ids: set[int] = set(multiworld.player_ids)
     for player in player_ids:
         plando_blocks[player] = []
         for block in multiworld.worlds[player].options.plando_items:
             new_block: PlandoItemBlock = PlandoItemBlock(player, block.from_pool, block.force)
             target_world = block.world
             if target_world is False or multiworld.players == 1:  # target own world
-                worlds: typing.Set[int] = {player}
+                worlds: set[int] = {player}
             elif target_world is True:  # target any worlds besides own
                 worlds = set(multiworld.player_ids) - {player}
             elif target_world is None:  # target all worlds
@@ -920,9 +920,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                 worlds = {world_name_lookup[target_world]}
             new_block.worlds = worlds
 
-            items: typing.Union[typing.List[str], typing.Dict[str, typing.Any]] = block.items
+            items: list[str] | dict[str, typing.Any] = block.items
             if isinstance(items, dict):
-                item_list: typing.List[str] = []
+                item_list: list[str] = []
                 for key, value in items.items():
                     if value is True:
                         value = multiworld.itempool.count(multiworld.worlds[player].create_item(key))
@@ -930,12 +930,12 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
                 items = item_list
             new_block.items = items
 
-            locations: typing.List[str] = block.locations
+            locations: list[str] = block.locations
             if isinstance(locations, str):
                 locations = [locations]
 
-            locations_from_groups: typing.List[str] = []
-            resolved_locations: typing.List[Location] = []
+            locations_from_groups: list[str] = []
+            resolved_locations: list[Location] = []
             for target_player in worlds:
                 world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
@@ -963,13 +963,13 @@ def parse_planned_blocks(multiworld: MultiWorld) -> typing.Dict[int, typing.List
 
 
 def resolve_early_locations_for_planned(multiworld: MultiWorld):
-    def warn(warning: str, force: typing.Union[bool, str]) -> None:
+    def warn(warning: str, force: bool | str) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
         else:
             logging.debug(f"{warning}")
 
-    def failed(warning: str, force: typing.Union[bool, str]) -> None:
+    def failed(warning: str, force: bool | str) -> None:
         if force is True:
             raise Exception(warning)
         else:
@@ -978,8 +978,8 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
     swept_state = multiworld.state.copy()
     swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
-    early_locations: typing.Dict[int, typing.List[Location]] = collections.defaultdict(list)
-    non_early_locations: typing.Dict[int, typing.List[Location]] = collections.defaultdict(list)
+    early_locations: dict[int, list[Location]] = collections.defaultdict(list)
+    non_early_locations: dict[int, list[Location]] = collections.defaultdict(list)
     for loc in multiworld.get_unfilled_locations():
         if loc in reachable:
             early_locations[loc.player].append(loc)
@@ -1021,14 +1021,14 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
             multiworld.plando_item_blocks[player].remove(block)
 
 
-def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: typing.List[PlandoItemBlock]):
-    def warn(warning: str, force: typing.Union[bool, str]) -> None:
+def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[PlandoItemBlock]):
+    def warn(warning: str, force: bool | str) -> None:
         if isinstance(force, bool):
             logging.warning(f"{warning}")
         else:
             logging.debug(f"{warning}")
 
-    def failed(warning: str, force: typing.Union[bool, str]) -> None:
+    def failed(warning: str, force: bool | str) -> None:
         if force is True:
             raise Exception(warning)
         else:

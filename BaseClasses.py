@@ -59,12 +59,12 @@ class HasNameAndPlayer(Protocol):
 class PlandoItemBlock:
     player: int
     from_pool: bool
-    force: Union[bool, Literal["silent"]]
-    worlds: Set[int] = dataclasses.field(default_factory=set)
-    items: List[str] = dataclasses.field(default_factory=list)
-    locations: List[str] = dataclasses.field(default_factory=list)
-    resolved_locations: List[Location] = dataclasses.field(default_factory=list)
-    count: Dict[str, int] = dataclasses.field(default_factory=dict)
+    force: bool | Literal["silent"]
+    worlds: set[int] = dataclasses.field(default_factory=set)
+    items: list[str] = dataclasses.field(default_factory=list)
+    locations: list[str] = dataclasses.field(default_factory=list)
+    resolved_locations: list[Location] = dataclasses.field(default_factory=list)
+    count: dict[str, int] = dataclasses.field(default_factory=dict)
 
 
 class MultiWorld():
