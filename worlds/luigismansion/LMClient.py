@@ -628,9 +628,9 @@ class LMContext(CommonContext):
 
         # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
-        #if self.pickup_anim_off:
-        #    crown_helper_val = "01"
-        #    dme.write_bytes(0x804DDFF8, bytes.fromhex(crown_helper_val))
+        if self.pickup_anim_off:
+            crown_helper_val = "00000001"
+            dme.write_bytes(0x804DE028, bytes.fromhex(crown_helper_val))
 
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.
