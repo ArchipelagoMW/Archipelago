@@ -291,7 +291,7 @@ like entrance randomization in logic.
 
 Regions have a list called `exits`, containing `Entrance` objects representing transitions to other regions.
 
-There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L295-L296)),
+There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)),
 from which the logic unfolds. AP assumes that a player will always be able to return to this starting region by resetting the game ("Save and quit").
 
 ### Entrances
@@ -331,7 +331,7 @@ Even doing `state.can_reach_location` or `state.can_reach_entrance` is problemat
 You can use `multiworld.register_indirect_condition(region, entrance)` to explicitly tell the generator that, when a given region becomes accessible, it is necessary to re-check a specific entrance.
 You **must** use `multiworld.register_indirect_condition` if you perform this kind of `can_reach` from an entrance access rule, unless you have a **very** good technical understanding of the relevant code and can reason why it will never lead to problems in your case.
 
-Alternatively, you can set [world.explicit_indirect_conditions = False](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L301),
+Alternatively, you can set [world.explicit_indirect_conditions = False](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L301-L304),
 avoiding the need for indirect conditions at the expense of performance.
 
 ### Item Rules
@@ -561,7 +561,7 @@ from .items import is_progression  # this is just a dummy
 
 
 def create_item(self, item: str) -> MyGameItem:
-    # this is called when AP wants to create an item by name (for plando) or when you call it from your own code
+    # this is called when AP wants to create an item by name (for plando, start inventory, item links) or when you call it from your own code
     classification = ItemClassification.progression if is_progression(item) else ItemClassification.filler
     return MyGameItem(item, classification, self.item_name_to_id[item], self.player)
 
@@ -606,8 +606,8 @@ from .items import get_item_type
 
 def set_rules(self) -> None:
     # For some worlds this step can be omitted if either a Logic mixin 
-    # (see below) is used, it's easier to apply the rules from data during
-    # location generation or everything is in generate_basic
+    # (see below) is used or it's easier to apply the rules from data during
+    # location generation
 
     # set a simple rule for an region
     set_rule(self.multiworld.get_entrance("Boss Door", self.player),
