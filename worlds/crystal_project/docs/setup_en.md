@@ -2,7 +2,7 @@
 
 ## What You Need
 
-- Crystal Project patch file from the
+- Crystal Project Installer from the
   [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
 
 ## Recommended Installation Instructions
@@ -27,7 +27,8 @@ A YAML file is included on the [Crystal Project AP World Releases Page](https://
 
 Start a new game in Crystal Project. Don't touch the in-game randomizer settings (some of them may still work, but some of them will break things lol).
 Once loaded into the world, open the menu and select Archipelago from the sidebar.
-Fill out the hostname and port (archipelago.gg: ######), slot name, and password (if applicable), and hit the Save button. You should now be connected!
+Fill out the hostname and port (archipelago.gg: ######), slot name, and password (if applicable).  You can use your keyboard to type here FYI!
+ Then hit the Save button. You should now be connected! 
 (Note: settings like starting job randomization will only apply after you've connected to the multiworld for the first time.)
 
 ### Play the game
