@@ -141,6 +141,10 @@ class ProgressiveJump(DefaultOnToggle):
     """Obtain the Pogo Stick, the Desert Bird Feather and the Rocket Boots in that order"""
     display_name = "Progressive Jump"
 
+class CreateHints(DefaultOnToggle):
+    """Do you want to create hints when you first enter a shop?"""
+    display_name = "Create Hints"
+
 candy_box_2_options_groups = [
     OptionGroup("Inventory Customisation", [
         StartingWeapon,
@@ -183,3 +187,4 @@ class CandyBox2Options(PerGameCommonOptions):
     pain_au_chocolat_count: PainAuChocolatCount
     energy_link: EnergyLink
     gifting: Gifting
+    scouting: CreateHints
