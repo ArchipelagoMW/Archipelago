@@ -3,8 +3,6 @@ import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from schema import And, Schema
-
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
 from ..items import items_by_group, Group
 from ..mods.mod_data import ModNames
@@ -706,6 +704,7 @@ class TrapDistribution(OptionCounter):
     internal_name = "trap_distribution"
     display_name = "Trap Distribution"
     default_weight = trap_default_weight
+    visibility = Visibility.all ^ Visibility.simple_ui
     min = 0
     max = 1000
     valid_keys = frozenset({
