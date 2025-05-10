@@ -509,16 +509,16 @@ class ALTTPWorld(World):
         crystals = [self.create_item(name) for name in ['Red Pendant', 'Blue Pendant', 'Green Pendant', 'Crystal 1', 'Crystal 2', 'Crystal 3', 'Crystal 4', 'Crystal 7', 'Crystal 5', 'Crystal 6']]
         for crystal in crystals:
             all_state.remove(crystal)
-        crystal_locations = [self.multiworld.get_location('Turtle Rock - Prize', self.player),
-                             self.multiworld.get_location('Eastern Palace - Prize', self.player),
-                             self.multiworld.get_location('Desert Palace - Prize', self.player),
-                             self.multiworld.get_location('Tower of Hera - Prize', self.player),
-                             self.multiworld.get_location('Palace of Darkness - Prize', self.player),
-                             self.multiworld.get_location('Thieves\' Town - Prize', self.player),
-                             self.multiworld.get_location('Skull Woods - Prize', self.player),
-                             self.multiworld.get_location('Swamp Palace - Prize', self.player),
-                             self.multiworld.get_location('Ice Palace - Prize', self.player),
-                             self.multiworld.get_location('Misery Mire - Prize', self.player)]
+        crystal_locations = [self.multiworld.get_location('Turtle Rock - Prize'),
+                             self.get_location('Eastern Palace - Prize'),
+                             self.get_location('Desert Palace - Prize'),
+                             self.get_location('Tower of Hera - Prize'),
+                             self.get_location('Palace of Darkness - Prize'),
+                             self.get_location('Thieves\' Town - Prize'),
+                             self.get_location('Skull Woods - Prize'),
+                             self.get_location('Swamp Palace - Prize'),
+                             self.get_location('Ice Palace - Prize'),
+                             self.get_location('Misery Mire - Prize')]
         placed_prizes = {loc.item.name for loc in crystal_locations if loc.item}
         unplaced_prizes = [crystal for crystal in crystals if crystal.name not in placed_prizes]
         empty_crystal_locations = [loc for loc in crystal_locations if not loc.item]
