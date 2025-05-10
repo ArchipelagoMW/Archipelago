@@ -94,7 +94,7 @@ TRADE_RECEIVE_5_BUTTON = "AP_TradeStructureDummyReceive5" # ID of the button
 TRADE_DATASTORAGE_TEAM = "SC2_VoidTrade_" # + Team
 TRADE_DATASTORAGE_SLOT = "slot_" # + Slot
 TRADE_DATASTORAGE_LOCK = "_lock"
-TRADE_LOCK_TIME = 5000 # Time in ms that the DataStorage may be considered safe to edit
+TRADE_LOCK_TIME = 5 # Time in seconds that the DataStorage may be considered safe to edit
 TRADE_LOCK_WAIT_LIMIT = 540000 / 1.4 # Time in ms that the client may spend trying to get a lock (540000 = 9 minutes, 1.4 is 'faster' game speed's time scale)
 
 # Games
@@ -1076,7 +1076,7 @@ class SC2Context(CommonContext):
         acquire the lock.
         """
         while not self.exit_event.is_set() and self.last_bot and self.last_bot.game_running:
-            lock = int(time.time_ns() / 1000000)
+            lock = int(time.time_ns() / 1000000000) # in seconds
 
             # Make sure we're not past the waiting limit
             # SC2 needs to be notified within 10 minutes of game time (training time of the dummy units)
@@ -1135,7 +1135,7 @@ class SC2Context(CommonContext):
                 # too new when we replaced it, we should wait for increasingly longer periods so that
                 # eventually the lock will expire and a client will acquire it.
                 self.trade_lock_wait += TRADE_LOCK_TIME
-                self.trade_lock_wait += random.randrange(100, 500)
+                self.trade_lock_wait += random.randrange(100, 500) / 1000
 
                 await asyncio.sleep(self.trade_lock_wait)
                 continue
