@@ -7,6 +7,8 @@
 
 ## Recommended Installation Instructions
 
+In your Steam library, right-click Crystal Project in the list and select "Properties...". Go to the Betas section, open the Beta Participation dropdown, and select the archipelago branch (version 1.6.5). 
+
 Go to [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases).
 Download the installer file, extract it, and run the executable. When prompted, choose your Crystal Project installation location.
 
