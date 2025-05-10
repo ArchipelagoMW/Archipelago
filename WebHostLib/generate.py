@@ -99,7 +99,12 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            return render_template("seedError.html", seed_error=(e.__class__.__name__ + ": " + str(e)))
+            meta["error"] = (e.__class__.__name__ + ": " + str(e))
+            if e.__cause__:
+                cause = e.__cause__
+                meta["source"] = cause.__class__.__name__ + ": " + str(cause)
+            details = json.dumps(meta, indent=4).strip()
+            return render_template("seedError.html", seed_error=meta["error"], details=details)
 
         return redirect(url_for("view_seed", seed=seed_id))
 
@@ -170,6 +175,9 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                     meta["error"] = (
                             "Allowed time for Generation exceeded, please consider generating locally instead. " +
                             e.__class__.__name__ + ": " + str(e))
+                    if e.__cause__:
+                        cause = e.__cause__
+                        meta["source"] = cause.__class__.__name__ + ": " + str(cause)
                     gen.meta = json.dumps(meta)
                     commit()
     except BaseException as e:
@@ -180,6 +188,9 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
                     meta["error"] = (e.__class__.__name__ + ": " + str(e))
+                    if e.__cause__:
+                        cause = e.__cause__
+                        meta["source"] = cause.__class__.__name__ + ": " + str(cause)
                     gen.meta = json.dumps(meta)
                     commit()
         raise
@@ -196,7 +207,9 @@ def wait_seed(seed: UUID):
     if not generation:
         return "Generation not found."
     elif generation.state == STATE_ERROR:
-        return render_template("seedError.html", seed_error=generation.meta)
+        meta = json.loads(generation.meta)
+        details = json.dumps(meta, indent=4).strip()
+        return render_template("seedError.html", seed_error=meta["error"], details=details)
     return render_template("waitSeed.html", seed_id=seed_id)
 
 
