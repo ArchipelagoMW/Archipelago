@@ -708,8 +708,8 @@ class TrapDistribution(OptionCounter):
     default_weight = trap_default_weight
     min = 0
     max = 1000
-    schema = Schema({
-        trap_data.name: And(int, lambda n: 0 <= n <= 1000)
+    valid_keys = frozenset({
+        trap_data.name
         for trap_data in items_by_group[Group.TRAP]
         if Group.DEPRECATED not in trap_data.groups
     })
