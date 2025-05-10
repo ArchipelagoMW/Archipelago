@@ -908,4 +908,3 @@ class StardewValleyOptions(PerGameCommonOptions):
 
     # removed:
     trap_items: TrapItems
-    
