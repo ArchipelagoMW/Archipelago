@@ -212,6 +212,8 @@ components: List[Component] = [
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
+    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
+              description="Visual creator for Archipelago option files."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
@@ -238,7 +240,7 @@ components: List[Component] = [
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
 
-    #MegaMan Battle Network 3
+    # MegaMan Battle Network 3
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
