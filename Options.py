@@ -1478,7 +1478,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         count = 1
                     if isinstance(items, str):
                         items = [items]
-                    elif not isinstance(items, dict | list):
+                    elif not isinstance(items, (dict, list)):
                         raise OptionError(f"Plando 'items' has to be string, list, or "
                                           f"dictionary, not {type(items)}")
                     locations = item.get("locations", [])
