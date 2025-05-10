@@ -106,17 +106,17 @@ def holy_mountain_unlock_conditions(world: "NoitaWorld") -> None:
 
         if victory_condition == VictoryCondition.option_greed_ending:
             location.access_rule = lambda state, items_needed=lock.items_needed: (
-                state.has_group_unique("Perks", world.player, items_needed//2)
+                state.has_group_unique("Perks", world.player, items_needed // 2)
             )
         elif victory_condition == VictoryCondition.option_pure_ending:
             location.access_rule = lambda state, items_needed=lock.items_needed: (
-                state.has_group_unique("Perks", world.player, items_needed//2) and
+                state.has_group_unique("Perks", world.player, items_needed // 2) and
                 state.has("Orb", world.player, items_needed)
             )
         elif victory_condition == VictoryCondition.option_peaceful_ending:
             location.access_rule = lambda state, items_needed=lock.items_needed: (
-                state.has_group_unique("Perks", world.player, items_needed//2) and
-                state.has("Orb", world.player, items_needed)
+                state.has_group_unique("Perks", world.player, items_needed // 2) and
+                state.has("Orb", world.player, items_needed * 3)
             )
 
 
