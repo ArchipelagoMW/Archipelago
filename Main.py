@@ -56,29 +56,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
-    max_item = 0
-    max_location = 0
-    for cls in AutoWorld.AutoWorldRegister.world_types.values():
-        if cls.item_id_to_name:
-            max_item = max(max_item, max(cls.item_id_to_name))
-            max_location = max(max_location, max(cls.location_id_to_name))
-
-    item_digits = len(str(max_item))
-    location_digits = len(str(max_location))
     item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
     location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
-    del max_item, max_location
 
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
-                        f"{max(cls.item_id_to_name):{item_digits}}) | "
-                        f"{len(cls.location_names):{location_count}} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
-                        f"{max(cls.location_id_to_name):{location_digits}})")
+            logger.info(f" {name:{longest_name}}: Items: {len(cls.item_names):{item_count}} | "
+                        f"Locations: {len(cls.location_names):{location_count}}")
 
-    del item_digits, location_digits, item_count, location_count
+    del item_count, location_count
 
     # This assertion method should not be necessary to run if we are not outputting any multidata.
     if not args.skip_output and not args.spoiler_only:
@@ -315,6 +301,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
+                data_package["Archipelago"] = worlds.network_data_package["games"]["Archipelago"]
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 

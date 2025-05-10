@@ -278,6 +278,9 @@ class MMBN3World(World):
         self.multiworld.get_location(LocationName.Help_with_rehab, self.player).access_rule = \
             lambda state: \
                 state.can_reach_region(RegionName.Beach_Overworld, self.player)
+        self.multiworld.get_location(LocationName.Help_with_rehab_bonus, self.player).access_rule = \
+            lambda state: \
+                state.can_reach_region(RegionName.Beach_Overworld, self.player)
         self.multiworld.get_location(LocationName.Old_Master, self.player).access_rule = \
             lambda state: \
                 state.can_reach_region(RegionName.ACDC_Overworld, self.player) and \

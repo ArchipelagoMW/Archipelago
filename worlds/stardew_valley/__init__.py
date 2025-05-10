@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Iterable, Optional, List, TextIO, cast
+from typing import Dict, Any, Iterable, Optional, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
@@ -148,8 +148,8 @@ class StardewValleyWorld(World):
         self.precollect_building_items()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
-                            if not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK,
-                                                                                 Group.FRIENDSHIP_PACK)]
+                            if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
+                            or not item_table[excluded_items.name].has_any_group(Group.RESOURCE_PACK, Group.FRIENDSHIP_PACK)]
 
         if self.options.season_randomization == SeasonRandomization.option_disabled:
             items_to_exclude = [item for item in items_to_exclude
@@ -206,7 +206,8 @@ class StardewValleyWorld(World):
         if not building_progression.is_progressive:
             return
 
-        for building in building_progression.starting_buildings:
+        # starting_buildings is a set, so sort for deterministic order.
+        for building in sorted(building_progression.starting_buildings):
             item, quantity = building_progression.to_progressive_item(building)
             for _ in range(quantity):
                 self.multiworld.push_precollected(self.create_item(item))
@@ -298,17 +299,9 @@ class StardewValleyWorld(World):
 
         return StardewItem(item.name, override_classification, item.code, self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
-        if rule is None:
-            rule = True_()
-        if item is None:
-            item = location_data.name
-
+    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
         region = self.multiworld.get_region(location_data.region, self.player)
-        location = StardewLocation(self.player, location_data.name, None, region)
-        location.access_rule = rule
-        region.locations.append(location)
-        location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
+        region.add_event(location_data.name, item, rule, StardewLocation, StardewItem)
 
     def set_rules(self):
         set_rules(self)
