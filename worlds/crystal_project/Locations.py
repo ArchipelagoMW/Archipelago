@@ -449,7 +449,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Jail", "Capital Jail NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, logic.has_dark_wing_key), #Dust
 
         #Crystals
-        LocationData("Capital Jail", "Capital Jail Crystal - Reaper, above hell pool", 908 + crystal_index_offset),
+        LocationData("Capital Jail", "Capital Jail Crystal - Reaper, above hell pool", 908 + crystal_index_offset, logic.has_dark_wing_key),
 
         #Capital Pipeline
         #Treasure chests
@@ -879,8 +879,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Beaurior Rock
         #Treasure chests
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B4 big lava room with optional boss", 1796 + treasure_index_offset), #Ether chest
-	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged in far corner of B4 big lava room with optional boss", 481 + treasure_index_offset), #Guard Crown chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B4 big lava room with optional boss", 1796 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Ether chest
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged in far corner of B4 big lava room with optional boss", 481 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Guard Crown chest
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged through secret tunnel in B4 big lava room with optional boss", 724 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Halberd chest
 	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Island in B4 big lava room with optional boss", 1682 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Small Key chest
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Elevator down from entrance to happy spike land", 894 + treasure_index_offset), #Small Key chest
