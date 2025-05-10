@@ -631,6 +631,12 @@ class GeneratorOptions(Group):
     class Players(int):
         """amount of players, 0 to infer from player files"""
 
+    class AllowQuantity(Bool):
+        """
+        allow players to set an individual quantity for their yaml settings
+        with 'false' any amounts from the players will be ignored and set to 1
+        """
+
     class WeightsFilePath(str):
         """
         general weights file, within the stated player_files_path location
@@ -677,6 +683,7 @@ class GeneratorOptions(Group):
     enemizer_path: EnemizerPath = EnemizerPath("EnemizerCLI/EnemizerCLI.Core")  # + ".exe" is implied on Windows
     player_files_path: PlayerFilesPath = PlayerFilesPath("Players")
     players: Players = Players(0)
+    allow_quantity: AllowQuantity = False
     weights_file_path: WeightsFilePath = WeightsFilePath("weights.yaml")
     meta_file_path: MetaFilePath = MetaFilePath("meta.yaml")
     spoiler: Spoiler = Spoiler(3)
