@@ -10,7 +10,7 @@ class TestPresets(SVTestCase):
         omitted_option_names = {option_key for option_key in PerGameCommonOptions.type_hints} | {TrapItems.internal_name}
         mandatory_option_names = {option_key for option_key in all_option_names
                                   if option_key not in omitted_option_names and
-                                  not issubclass(StardewValleyOptions.type_hints[option_key], OptionSet | OptionDict)
+                                  not issubclass(StardewValleyOptions.type_hints[option_key], OptionSet | OptionDict)}
 
         for preset_name in sv_options_presets:
             with self.subTest(f"{preset_name}"):
