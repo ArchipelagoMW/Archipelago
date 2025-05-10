@@ -1,24 +1,10 @@
-import typing
-from typing import Union
-
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .grind_logic import GrindLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .time_logic import TimeLogicMixin
 from ..data.shop import ShopSource
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.currency_names import Currency
 from ..strings.region_names import Region, LogicRegion
-
-if typing.TYPE_CHECKING:
-    from .shipping_logic import ShippingLogicMixin
-else:
-    ShippingLogicMixin = object
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -30,8 +16,7 @@ class MoneyLogicMixin(BaseLogicMixin):
         self.money = MoneyLogic(*args, **kwargs)
 
 
-class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin, SeasonLogicMixin,
-GrindLogicMixin, ShippingLogicMixin]]):
+class MoneyLogic(BaseLogic):
 
     @cache_self1
     def can_have_earned_total(self, amount: int) -> StardewRule:
