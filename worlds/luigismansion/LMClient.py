@@ -353,30 +353,16 @@ class LMContext(CommonContext):
         self.set_luigi_dead()
         return
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class LMManager(GameManager):
-            source = ""
-            logging_pairs = [("Client", "Archipelago")]
-            base_title = "Luigi's Mansion Client v" + CLIENT_VERSION
-            if tracker_loaded:
-                base_title += f" | Universal Tracker v{UT_VERSION}"
-            base_title +=  " | Archipelago v"
-
-            def build(self):
-                container = super().build()
-                if tracker_loaded:
-                    self.ctx.build_gui(self)
-                else:
-                    logger.info("To enable a tracker, install Universal Tracker")
-
-                return container
-
-        self.ui = LMManager(self)
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = f"Luigi's Mansion Client v{CLIENT_VERSION}"
         if tracker_loaded:
-            self.load_kv()
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
+
+        ui.base_title += " | Archipelago" 
+        # AP version is added behind this automatically
+        
+        return ui
 
     async def update_boo_count_label(self):
         if not self.check_ingame():
