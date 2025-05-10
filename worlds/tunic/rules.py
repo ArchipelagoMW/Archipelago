@@ -1,9 +1,8 @@
-from random import Random
 from typing import Dict, TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
-from .options import TunicOptions, LadderStorage, IceGrappling
+from .options import LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -34,14 +33,21 @@ bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Win
               "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
-def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str, int]:
+def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
+    random = world.random
+    options = world.options
+
+    abilities = [prayer, holy_cross, icebolt]
     ability_requirement = [1, 1, 1]
-    if options.hexagon_quest.value:
+    random.shuffle(abilities)
+
+    if options.hexagon_quest.value and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         hexagon_goal = options.hexagon_goal.value
         # Set ability unlocks to 25, 50, and 75% of goal amount
         ability_requirement = [hexagon_goal // 4, hexagon_goal // 2, hexagon_goal * 3 // 4]
-    abilities = [prayer, holy_cross, icebolt]
-    random.shuffle(abilities)
+        if any(req == 0 for req in ability_requirement):
+            ability_requirement = [1, 2, 3]
+
     return dict(zip(abilities, ability_requirement))
 
 
@@ -50,7 +56,7 @@ def has_ability(ability: str, state: CollectionState, world: "TunicWorld") -> bo
     ability_unlocks = world.ability_unlocks
     if not options.ability_shuffling:
         return True
-    if options.hexagon_quest:
+    if options.hexagon_quest and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
         return state.has(gold_hexagon, world.player, ability_unlocks[ability])
     return state.has(ability, world.player)
 
@@ -118,18 +124,24 @@ def set_region_rules(world: "TunicWorld") -> None:
                        # there's some boxes in the way
                        and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand), player)))
     world.get_entrance("Ruined Atoll -> Library").access_rule = \
-        lambda state: state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
+        lambda state: (state.has_any({grapple, laurels}, player) and has_ability(prayer, state, world)
+                       and (has_sword(state, player) or state.has_any((fire_wand, gun), player)))
     world.get_entrance("Overworld -> Quarry").access_rule = \
         lambda state: (has_sword(state, player) or state.has(fire_wand, player)) \
         and (state.has_any({grapple, laurels, gun}, player) or can_ladder_storage(state, world))
     world.get_entrance("Quarry Back -> Quarry").access_rule = \
         lambda state: has_sword(state, player) or state.has(fire_wand, player)
+    world.get_entrance("Quarry Back -> Monastery").access_rule = \
+        lambda state: state.has(laurels, player)
+    world.get_entrance("Monastery -> Monastery Back").access_rule = \
+        lambda state: (has_sword(state, player) or state.has(fire_wand, player)
+                       or laurels_zip(state, world))
     world.get_entrance("Quarry -> Lower Quarry").access_rule = \
         lambda state: has_mask(state, world)
     world.get_entrance("Lower Quarry -> Rooted Ziggurat").access_rule = \
         lambda state: state.has(grapple, player) and has_ability(prayer, state, world)
     world.get_entrance("Swamp -> Cathedral").access_rule = \
-        lambda state: (state.has(laurels, player) and has_ability(prayer, state, world)) \
+        lambda state: (state.has(laurels, player) and has_ability(prayer, state, world) and has_sword(state, player)) \
         or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
     world.get_entrance("Overworld -> Spirit Arena").access_rule = \
         lambda state: ((state.has(gold_hexagon, player, options.hexagon_goal.value) if options.hexagon_quest.value
@@ -144,8 +156,8 @@ def set_region_rules(world: "TunicWorld") -> None:
 
     if options.ladder_storage >= LadderStorage.option_medium:
         # ls at any ladder in a safe spot in quarry to get to the monastery rope entrance
-        world.get_region("Quarry Back").connect(world.get_region("Monastery"),
-                                                rule=lambda state: can_ladder_storage(state, world))
+        add_rule(world.get_entrance(entrance_name="Quarry Back -> Monastery"),
+                 rule=lambda state: can_ladder_storage(state, world))
 
 
 def set_location_rules(world: "TunicWorld") -> None:
@@ -323,7 +335,8 @@ def set_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player))
+             lambda state: has_lantern(state, world) and
+                           (has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player)))
     set_rule(world.get_location("Beneath the Fortress - Obscured Behind Waterfall"),
              lambda state: has_melee(state, player) and has_lantern(state, world))
 
