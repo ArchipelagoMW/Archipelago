@@ -271,7 +271,7 @@ def patch_rom(world, rom):
         world_str = ""
     rom.write_bytes(rom.sym('WORLD_STRING_TXT'), makebytes(world_str, 12))
 
-    time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M") + " UTC"
+    time_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M") + " UTC"
     rom.write_bytes(rom.sym('TIME_STRING_TXT'), makebytes(time_str, 25))
 
     rom.write_byte(rom.sym('CFG_SHOW_SETTING_INFO'), 0x01)
