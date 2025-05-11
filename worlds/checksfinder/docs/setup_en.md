@@ -19,7 +19,7 @@ You can customize your options by visiting the [ChecksFinder Player Options Page
 
 ## Joining a MultiWorld Game
 
-1. Start ChecksFinder, and press `Play Online`
+1. Start ChecksFinder and press `Play Online`
 2. Switch to the console window/tab
 3. Enter the following information:
     - Server url
