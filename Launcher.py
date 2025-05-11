@@ -453,15 +453,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
 
     path = args.get("Patch|Game|Component|url", None)
     if path is not None:
-        if not path.startswith("archipelago://"):
-            file, component = identify(path)
-            if file:
-                args['file'] = file
-            if component:
-                args['component'] = component
-            if not component:
-                logging.warning(f"Could not identify Component responsible for {path}")
-        else:
+        if path.startswith("archipelago://"):
             args["args"] = (path, *args.get("args", ()))
             # add the url arg to the passthrough args
             components, text_client_component = handle_uri(path)
@@ -469,6 +461,14 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
                 args["component"] = text_client_component
             else:
                 args['launch_components'] = [text_client_component, *components]
+        else:
+            file, component = identify(path)
+            if file:
+                args['file'] = file
+            if component:
+                args['component'] = component
+            if not component:
+                logging.warning(f"Could not identify Component responsible for {path}")
 
     if args["update_settings"]:
         update_settings()
