@@ -651,7 +651,7 @@ class ShopMinimumTotalCustomers(Range):
     """
     display_name = "Minimum Shop Customers Requirement"
     range_start = 0
-    range_end = 2000
+    range_end = 1000
     default = 0
 
 class ShopMaximumExcitement(Range):
