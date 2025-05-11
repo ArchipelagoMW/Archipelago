@@ -148,7 +148,7 @@ item_table: Dict[str, ItemData] = {
     "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.useful), #idk if we'll be adding any checks that require you to speak Quintar tbh
+    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.useful), #I don't know if we'll be adding any checks that require you to speak Quintar tbh
     #"Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 0), #12
     "Item - Crag Demon Horn": ItemData("Item", 197 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Jojo Sewers, Advanced Regions
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
@@ -158,6 +158,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
     "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
+    "Item - Progressive Level Cap": ItemData("Item", 999 + item_index_offset, ItemClassification.progression, 5),
 
     #Animal mount summons
     "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
@@ -165,7 +166,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
     "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
 
-    #Teleport items (shards not included since they're stones but worse)
+    #Teleport items (shards not included since they are stones but worse)
     "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.useful), #Starter pack
     "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Capital Sequoia, Advanced Regions
     "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
@@ -766,7 +767,7 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Master Material": ItemData("Equipment", 284 + equipment_index_offset, ItemClassification.useful),
 
     #Progressive Equipment
-    #highest equipment id is 590 so these ids start at 600
+    #the highest equipment id is 590 so these ids start at 600
     "Equipment - Progressive 1H Sword": ItemData("Equipment", 600 + equipment_index_offset, ItemClassification.useful, 4, 1, 7, 1), #1H Sword IDs 11, 71, 89, 93, 200, 377, 375, 380, 372, 381, 303, 411, 316
     "Equipment - Progressive 2H Sword": ItemData("Equipment", 601 + equipment_index_offset, ItemClassification.useful, 1, 2, 2, 1), # 2H Sword IDs 12, 177, 197, 525, 382, 279
     "Equipment - Progressive 1H Axe": ItemData("Equipment", 602 + equipment_index_offset, ItemClassification.useful, 0, 3, 0, 1), # 1H Axe IDs 94, 187, 386, 388
@@ -1149,7 +1150,7 @@ non_progressive_equipment: Tuple[str, ...] = (
     #"Equipment - Future Sight",
     #"Equipment - Battle Staff",
     #"Equipment - Digested Staff",
-    #"Equipment - Nature's Gift'",
+    #"Equipment - Nature's Gift",
     "Equipment - Life Jewel",
     #"Equipment - Gold Staff",
     #"Equipment - War Staff",

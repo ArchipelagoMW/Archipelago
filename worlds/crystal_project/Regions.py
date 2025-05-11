@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import List, Dict
 from BaseClasses import Region, Location, MultiWorld
 from .Options import CrystalProjectOptions
 from .Locations import LocationData
@@ -102,7 +102,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Continental Tram", excluded),
     ]
 
-    if (options.includedRegions == options.includedRegions.option_all):
+    if options.includedRegions == options.includedRegions.option_all:
         excluded = False
     else:
         excluded = True
@@ -124,169 +124,190 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     connect_menu_region(world, options)
 
     multiworld.get_region("Spawning Meadows", player).add_exits(["Delende", "Mercury Shrine", "Poko Poko Desert", "Continental Tram", "Beaurior Volcano", "Yamagawa M.A."],
-        {"Continental Tram": logic.has_swimming,
+        {"Continental Tram": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Mercury Shrine": logic.has_vertical_movement,
-        "Poko Poko Desert": logic.has_vertical_movement,
-        "Beaurior Volcano": logic.has_vertical_movement,
-        "Yamagawa M.A.": logic.has_swimming or logic.has_vertical_movement})
+        "Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
+        "Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "Yamagawa M.A.": lambda state: (logic.has_swimming or logic.has_vertical_movement)  and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Delende", player).add_exits(["Spawning Meadows", "Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine", "Jade Cavern", "Greenshire Reprise", "Salmon Pass", "Proving Meadows"],
-        {"Jade Cavern": logic.has_golden_quintar,
-        "Salmon Pass": logic.has_swimming,
-        "Greenshire Reprise": logic.has_swimming,
-        "Proving Meadows": logic.has_horizontal_movement})
+        {"Jade Cavern": lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
+        "Salmon Pass": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
+        "Greenshire Reprise": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
+        "Proving Meadows": logic.has_horizontal_movement,
+        "Yamagawa M.A.": lambda state: logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Soiled Den", player).add_exits(["Jade Cavern", "Delende", "Pale Grotto", "Draft Shaft Conduit"],
-        {"Jade Cavern": logic.has_golden_quintar,
+        {"Jade Cavern": lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
         "Pale Grotto": logic.has_swimming,
         "Draft Shaft Conduit": logic.has_swimming})
     multiworld.get_region("Pale Grotto", player).add_exits(["Delende", "Proving Meadows", "Jojo Sewers", "Tall Tall Heights", "Salmon Pass"],
-        {"Jojo Sewers": logic.has_swimming,
-        "Tall Tall Heights": logic.has_swimming,
+        {"Jojo Sewers": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 1),
+        "Tall Tall Heights": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 4),
         "Salmon Pass": logic.has_swimming})
     multiworld.get_region("Seaside Cliffs", player).add_exits(["Delende", "Draft Shaft Conduit", "The Open Sea", "Mercury Shrine", "Beaurior Volcano"],
-        {"Beaurior Volcano": logic.has_vertical_movement,
-        "The Open Sea": logic.has_swimming,
+        {"Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Mercury Shrine": logic.has_vertical_movement})
     multiworld.get_region("Draft Shaft Conduit", player).add_exits(["Seaside Cliffs", "Soiled Den"],
         {"Soiled Den": logic.has_swimming})
     multiworld.get_region("Mercury Shrine", player).add_exits(["Delende", "Seaside Cliffs", "Beaurior Volcano"],
-        {"Beaurior Volcano": logic.has_vertical_movement})
-    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Spawning Meadows", "Delende", "Lake Delende"])
+        {"Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
+    multiworld.get_region("Yamagawa M.A.", player).add_exits(["Spawning Meadows", "Delende", "Lake Delende"],
+        {"Lake Delende": lambda state: logic.is_area_in_level_range(state, 3)})
     multiworld.get_region("Proving Meadows", player).add_exits(["Delende", "Pale Grotto", "Skumparadise", "The Open Sea"], 
-        {"Skumparadise": lambda state: logic.has_jobs(state, 3),
-        "The Open Sea": logic.has_swimming})
+        {"Skumparadise": lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 1),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Skumparadise", player).add_exits(["Proving Meadows", "Capital Sequoia"],
         {"Proving Meadows": lambda state: logic.has_jobs(state, 3)})
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise", "Castle Sequoia", "Skumparadise"],
-        {"Cobblestone Crag": logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement,
-        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6),
-        "Castle Sequoia": logic.has_vertical_movement and logic.has_glide})
+        {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1),
+        "Rolling Quintar Fields": lambda state: logic.is_area_in_level_range(state, 1),
+        "Cobblestone Crag": logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement,
+        "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) and logic.is_area_in_level_range(state, 2),
+        "Castle Sequoia": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5),
+        "Skumparadise": lambda state: logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Sequoia", "Boomer Society", "Pale Grotto", "Capital Jail", "Quintar Nest"], 
-        {"Capital Jail": logic.has_rental_quintar or logic.has_swimming,
+        {"Capital Jail": lambda state: logic.has_rental_quintar or logic.has_swimming and logic.is_area_in_level_range(state, 2),
         "Pale Grotto": logic.has_swimming,
-        "Quintar Nest": logic.has_rental_quintar or logic.has_swimming})
-    multiworld.get_region("Boomer Society", player).add_exits(["Jojo Sewers", "Greenshire Reprise"])
+        "Quintar Nest": lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 1)})
+    multiworld.get_region("Boomer Society", player).add_exits(["Jojo Sewers", "Greenshire Reprise"],
+        {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1),
+        "Greenshire Reprise": lambda state: logic.is_area_in_level_range(state, 2)})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Capital Sequoia", "Quintar Nest", "Quintar Sanctum", "Quintar Reserve"], 
-        {"Quintar Sanctum": logic.has_rental_quintar or logic.has_vertical_movement,
-        "Quintar Reserve": logic.has_vertical_movement})
+        {"Capital Nest": lambda state: logic.is_area_in_level_range(state, 1),
+        "Quintar Sanctum": lambda state: (logic.has_rental_quintar or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 2),
+        "Quintar Reserve": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Quintar Sanctum", "Cobblestone Crag", "Jojo Sewers"],
-        {"Quintar Sanctum": logic.has_swimming})
+        {"Quintar Sanctum": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
+        "Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Quintar Sanctum", player).add_exits(["Rolling Quintar Fields", "Quintar Nest", "Quintar Mausoleum"],
-        {"Quintar Mausoleum": logic.has_swimming,
-        "Quintar Nest": logic.has_swimming})
+        {"Rolling Quintar Fields": lambda state: logic.is_area_in_level_range(state, 1),
+        "Quintar Mausoleum": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Quintar Nest": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Capital Jail", player).add_exits(["Jojo Sewers", "Capital Pipeline"],
-        {"Capital Pipeline": lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)})
+        {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1) and logic.is_area_in_level_range(state, 1),
+        "Capital Pipeline": lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6) and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Capital Pipeline", player).add_exits(["Capital Jail", "Jidamba Tangle", "Continental Tram"],
-        {"Jidamba Tangle": logic.has_vertical_movement,
+        {"Jidamba Tangle": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 5),
         "Continental Tram": logic.has_vertical_movement})
     multiworld.get_region("Cobblestone Crag", player).add_exits(["Capital Sequoia", "The Open Sea", "Shoudu Waterfront", "Okimoto N.S."], 
-        {"Shoudu Waterfront": logic.has_horizontal_movement, 
-        "Okimoto N.S.": logic.has_horizontal_movement,
-        "The Open Sea": logic.has_swimming})
+        {"Shoudu Waterfront": logic.has_horizontal_movement,
+        "Okimoto N.S.": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
         {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"], 
         {"Salmon Pass": logic.has_rental_quintar or logic.has_vertical_movement,
-        "Tall Tall Heights": logic.has_vertical_movement})
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
-        {"Salmon River": logic.has_horizontal_movement,
+        {"Greenshire Reprise": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
+        "Salmon River": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
         "Delende": logic.has_swimming})
     multiworld.get_region("Salmon River", player).add_exits(["Salmon Bay", "Tall Tall Heights"], 
         {"Salmon Bay": (logic.has_vertical_movement and logic.has_glide) or logic.has_swimming,
-        "Tall Tall Heights": logic.has_vertical_movement})
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Lake Delende", "Salmon Bay", "Ancient Labyrinth"], 
-        {"Ancient Reservoir": logic.has_pyramid_key,
-        "Lake Delende": logic.has_vertical_movement,
+        {"Ancient Reservoir": lambda state: logic.has_pyramid_key and logic.is_area_in_level_range(state, 3),
+        "Lake Delende": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
-        "Ancient Labyrinth": logic.has_vertical_movement and logic.has_glide})
+        "Ancient Labyrinth": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
-        {"Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player),
-        "The Open Sea": logic.has_swimming,
+        {"Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
+        "Sara Sara Beach": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),
+        "Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player) and logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Continental Tram": logic.has_swimming or logic.has_tram_key})
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano"],
-        {"Beaurior Volcano": logic.has_vertical_movement,
-        "The Open Sea": logic.has_swimming})
+        {"Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Ancient Reservoir", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Delende"],
         {"Delende": logic.has_swimming,
-        "Sara Sara Beach": logic.has_vertical_movement})
+        "Poko Poko Desert": lambda state: logic.is_area_in_level_range(state, 2),
+        "Sara Sara Beach": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
     multiworld.get_region("Salmon Bay", player).add_exits(["The Open Sea", "Salmon River"],
-        {"The Open Sea": logic.has_swimming,
-        "Salmon River": logic.has_swimming})
+        {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Salmon River": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2)})
     multiworld.get_region("The Open Sea", player).add_exits(["Jidamba Tangle", "The Deep Sea", "Shoudu Province", "Proving Meadows", "Seaside Cliffs", "Beaurior Volcano", "Sara Sara Beach", "Sara Sara Bazaar", "Salmon Bay"],
-        {"Jidamba Tangle": logic.has_swimming,
-        "The Deep Sea": logic.has_swimming,
-        "Shoudu Province": logic.has_swimming,
+        {"Jidamba Tangle": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "The Deep Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Shoudu Province": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
         "Proving Meadows": logic.has_swimming,
         "Seaside Cliffs": logic.has_swimming,
-        "Beaurior Volcano": logic.has_swimming,
-        "Sara Sara Beach": logic.has_swimming,
+        "Beaurior Volcano": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+        "Sara Sara Beach": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
         "Sara Sara Bazaar": logic.has_swimming,
         "Salmon Bay": logic.has_swimming})
     multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province", "Cobblestone Crag"],
-        {"Shoudu Province": logic.has_vertical_movement,
+        {"Shoudu Province": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Cobblestone Crag": logic.has_horizontal_movement})
     multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Shoudu Waterfront", "Ganymede Shrine", "The Undercity", "Quintar Reserve"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
         "Ganymede Shrine": logic.has_vertical_movement,
-        "The Undercity": logic.has_vertical_movement and logic.has_horizontal_movement,
-        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Elevator Part", world.player, 10)})
+        "The Undercity": lambda state: logic.has_vertical_movement and logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),
+        "Quintar Reserve": lambda state: logic.has_vertical_movement and state.has("Item - Elevator Part", world.player, 10) and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("The Undercity", player).add_exits(["Shoudu Province", "The Open Sea"],
-        {"The Open Sea": logic.has_swimming})
-    multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"])
+        {"Shoudu Province": lambda state: logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
+    multiworld.get_region("Ganymede Shrine", player).add_exits(["Shoudu Province"],
+        {"Shoudu Province": lambda state: logic.is_area_in_level_range(state, 3)})
     multiworld.get_region("Beaurior Volcano", player).add_exits(["Sara Sara Beach", "Beaurior Rock", "The Open Sea"],
-        {"Beaurior Rock": logic.has_vertical_movement,
-        "The Open Sea": logic.has_swimming})
+        {"Sara Sara Beach": lambda state: logic.is_area_in_level_range(state, 3),
+        "Beaurior Rock": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Beaurior Rock", player).add_exits(["Beaurior Volcano"])
     multiworld.get_region("Lake Delende", player).add_exits(["Poko Poko Desert", "Delende"],
-        {"Poko Poko Desert": logic.has_vertical_movement,
+        {"Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
         "Delende": logic.has_vertical_movement})
     multiworld.get_region("Quintar Reserve", player).add_exits(["Shoudu Province", "Dione Shrine", "Quintar Mausoleum"],
-        {"Quintar Mausoleum": logic.has_swimming})
+        {"Shoudu Province": lambda state: logic.is_area_in_level_range(state, 3),
+        "Quintar Mausoleum": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Dione Shrine", player).add_exits(["Quintar Reserve", "Eastern Chasm", "Jidamba Tangle", "The Chalice of Tar"],
-        {"Jidamba Tangle": logic.has_glide,
-        "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player),
+        {"Jidamba Tangle": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 5),
+        "The Chalice of Tar": lambda state: logic.has_glide and state.has("Item - Dione Stone", world.player) and logic.is_area_in_level_range(state, 5),
         "Eastern Chasm": logic.has_glide and logic.has_vertical_movement})
     multiworld.get_region("Quintar Mausoleum", player).add_exits(["Quintar Reserve", "Quintar Sanctum"],
-        {"Quintar Reserve": logic.has_swimming,
-        "Quintar Sanctum": logic.has_swimming})
+        {"Quintar Reserve": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 4),
+        "Quintar Sanctum": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2)})
     multiworld.get_region("Eastern Chasm", player).add_exits(["Quintar Reserve", "The Open Sea"],
-        {"Quintar Reserve": logic.has_glide,
-        "The Open Sea": logic.has_swimming})
+        {"Quintar Reserve": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Tall Tall Heights", player).add_exits(["Salmon River", "Greenshire Reprise", "Lands End", "Sequoia Athenaeum", "Northern Stretch", "Castle Ramparts", "The Chalice of Tar", "Pale Grotto", "Northern Cave"],
-        {"Lands End": logic.has_vertical_movement,
+        {"Lands End": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4),
         "Sequoia Athenaeum": lambda state: state.has("Item - Vermillion Book", world.player) and state.has("Item - Viridian Book", world.player) and state.has("Item - Cerulean Book", world.player),
         "Northern Stretch": logic.has_glide,
-        "Castle Ramparts": logic.has_vertical_movement,
+        "Castle Ramparts": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4),
         "Pale Grotto": logic.has_swimming,
-        "The Chalice of Tar": logic.has_glide and logic.has_vertical_movement})
+        "The Chalice of Tar": lambda state: logic.has_glide and logic.has_vertical_movement and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Northern Cave", player).add_exits(["Tall Tall Heights", "Slip Glide Ride"],
         {"Slip Glide Ride": logic.has_glide and logic.has_vertical_movement,
-        "Tall Tall Heights": logic.has_vertical_movement})
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Lands End", player).add_exits(["Tall Tall Heights", "Jidamba Tangle"],
-        {"Jidamba Tangle": logic.has_glide,
-        "Tall Tall Heights": logic.has_vertical_movement})
+        {"Jidamba Tangle": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 5),
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Slip Glide Ride", player).add_exits(["Tall Tall Heights", "Northern Cave"],
-        {"Northern Cave": logic.has_glide,
-        "Tall Tall Heights": logic.has_vertical_movement and logic.has_glide})
-    multiworld.get_region("Sequoia Athenaeum", player).add_exits(["Tall Tall Heights"])
+        {"Northern Cave": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 4)})
+    multiworld.get_region("Sequoia Athenaeum", player).add_exits(["Tall Tall Heights"],
+        {"Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Northern Stretch", player).add_exits(["Tall Tall Heights", "The Open Sea"],
-        {"The Open Sea": logic.has_swimming,
-        "Tall Tall Heights": logic.has_vertical_movement})
+        {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Castle Ramparts", player).add_exits(["Tall Tall Heights"],
-        {"Tall Tall Heights": logic.has_vertical_movement})
+        {"Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("The Chalice of Tar", player).add_exits(["Tall Tall Heights", "Quintar Reserve"],
-        {"Tall Tall Heights": logic.has_glide,
-        "Quintar Reserve": logic.has_glide})
+        {"Tall Tall Heights": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
+        "Quintar Reserve": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Flyers Crag", player).add_exits(["Okimoto N.S.","Jidamba Tangle"],
-        {"Jidamba Tangle": logic.has_glide})
+        {"Okimoto N.S.": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 2),
+        "Jidamba Tangle": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jidamba Tangle", player).add_exits(["The Open Sea", "Jidamba Eaclaneya"],
-        {"Jidamba Eaclaneya": logic.has_jidamba_keys,
-        "The Open Sea": logic.has_swimming})
+        {"Jidamba Eaclaneya": lambda state: logic.has_jidamba_keys and logic.is_area_in_level_range(state, 5),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jidamba Eaclaneya", player).add_exits(["Jidamba Tangle", "The Open Sea"],
-        {"The Open Sea": logic.has_swimming})
+        {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("The Deep Sea", player).add_exits(["The Open Sea", "The Depths", "The Sequoia"],
-        {"The Open Sea": logic.has_swimming,
-        "The Depths": logic.has_swimming,
-        "The Sequoia": logic.has_golden_quintar})
+        {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "The Depths": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "The Sequoia": lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jade Cavern", player).add_exits(["Soiled Den", "Delende"],
         {"Soiled Den": logic.has_swimming,
         "Delende": logic.has_swimming})
@@ -342,12 +363,12 @@ def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> No
         {"Capital Sequoia": lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         "Mercury Shrine": lambda state: state.has_any({"Item - Mercury Stone"}, world.player),
         "Salmon River": lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
-        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player),
+        "Poko Poko Desert": lambda state: state.has_any({"Item - Mars Stone"}, world.player) and logic.is_area_in_level_range(state, 2),
         "Ganymede Shrine": lambda state: state.has_any({"Item - Ganymede Stone"}, world.player),
         "Dione Shrine": lambda state: state.has_any({"Item - Dione Stone"}, world.player),
-        "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player),
-        "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player),
-        "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player),
-        "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player) and logic.has_swimming,
-        "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player),
+        "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player) and logic.is_area_in_level_range(state, 4),
+        "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player) and logic.is_area_in_level_range(state, 4),
+        "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
+        "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player) and logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
         "The New World": logic.new_world_requirements})

@@ -175,6 +175,20 @@ class CrystalProjectWorld(World):
         excluded_items: Set[str] = set()
         excluded_items.add("Item - Home Point Stone")
 
+        if self.options.randomizeStartingJobs:
+            for job in self.startingJobs:
+                excluded_items.add(job.name)
+        else:
+            excluded_items.add("Job - Warrior")
+            excluded_items.add("Job - Monk")
+            excluded_items.add("Job - Rogue")
+            excluded_items.add("Job - Cleric")
+            excluded_items.add("Job - Wizard")
+            excluded_items.add("Job - Warlock")
+
+        if not self.options.levelGating:
+            excluded_items.add("Item - Progressive Level Cap")
+
         if self.options.startWithTreasureFinder:
             excluded_items.add("Item - Treasure Finder")
 
@@ -391,18 +405,16 @@ class CrystalProjectWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
-        jobIds: List[int] = []
+        job_ids: List[int] = []
         for job in self.startingJobs:
-            jobIds.append(job.id)
+            job_ids.append(job.id)
 
-        return jobIds   
+        return job_ids
 
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data: Dict[str, Any] = {}
-    
-        slot_data = {
+        return {
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "randomizeJobs": bool(self.options.randomizeJobs.value),
@@ -412,7 +424,6 @@ class CrystalProjectWorld(World):
             "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
             "startingJobs": self.get_job_id_list(),
             "easyLeveling": bool(self.options.easyLeveling.value),
-            "randomizeMusic": bool(self.options.randomizeMusic.value)
+            "randomizeMusic": bool(self.options.randomizeMusic.value),
+            "levelGating": bool(self.options.levelGating.value),
         }
-    
-        return slot_data
