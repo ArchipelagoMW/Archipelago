@@ -104,7 +104,7 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            meta["error"] = (e.__class__.__name__ + ": " + str(e))
+            meta["error"] = f"{e.__class__.__name__}: {e}"
             if e.__cause__:
                 cause = e.__cause__
                 meta["source"] = cause.__class__.__name__ + ": " + str(cause)
