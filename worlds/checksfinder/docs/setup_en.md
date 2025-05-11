@@ -27,5 +27,5 @@ You can customize your options by visiting the [ChecksFinder Player Options Page
     - The name of the slot you wish to connect to
     - The room password (optional)
 4. Press `Connect` to connect
-5. Switch to game window/tab
+5. Switch to the game window/tab
 6. Start playing!
