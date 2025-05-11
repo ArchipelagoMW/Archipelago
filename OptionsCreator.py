@@ -194,14 +194,14 @@ class VisualListSetCounter(MDDialog):
         list_item = button.parent
         self.scrollbox.layout.remove_widget(list_item)
 
-    def add_set_item(self, key: str):
+    def add_set_item(self, key: str, value: int | None = None):
         text = MDListItemSupportingText(text=key, id="value")
         if issubclass(self.option, OptionCounter):
-            value = CounterItemValue(text="0")
+            value_txt = CounterItemValue(text=str(value) if value else "0")
             item = MDListItem(text,
-                              value,
+                              value_txt,
                               MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
-            item.value = value
+            item.value = value_txt
         else:
             item = MDListItem(text, MDIconButton(icon="minus", on_release=self.remove_item), focus_behavior=False)
         item.text = text
@@ -423,7 +423,7 @@ class OptionsCreator(ThemedApp):
             def apply_changes(button):
                 self.options[name].clear()
                 for list_item in dialog.scrollbox.layout.children:
-                    self.options[name][getattr(list_item.text, "text")] = getattr(list_item.value, "value")
+                    self.options[name][getattr(list_item.text, "text")] = int(getattr(list_item.value, "text"))
                 dialog.dismiss()
 
         dialog = VisualListSetCounter(option=option, name=name, valid_keys=valid_keys)
@@ -441,8 +441,12 @@ class OptionsCreator(ThemedApp):
             else:
                 self.options[name] = sorted(option.default)
 
-        for value in sorted(self.options[name]):
-            dialog.add_set_item(value)
+        if issubclass(option, OptionCounter):
+            for value in sorted(self.options[name]):
+                dialog.add_set_item(value, self.options[name].get(value, None))
+        else:
+            for value in sorted(self.options[name]):
+                dialog.add_set_item(value)
 
         dialog.save.bind(on_release=apply_changes)
         dialog.open()
