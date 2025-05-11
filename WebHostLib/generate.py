@@ -72,6 +72,10 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
+def format_exception(e: BaseException) -> str:
+    return f"{e.__class__.__name__}: {e}"
+
+
 def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
@@ -104,10 +108,9 @@ def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
         except BaseException as e:
             from .autolauncher import handle_generation_failure
             handle_generation_failure(e)
-            meta["error"] = f"{e.__class__.__name__}: {e}"
+            meta["error"] = format_exception(e)
             if e.__cause__:
-                cause = e.__cause__
-                meta["source"] = f"{cause.__class__.__name__}: {str(cause)}"
+                meta["source"] = format_exception(e.__cause__)
             details = json.dumps(meta, indent=4).strip()
             return render_template("seedError.html", seed_error=meta["error"], details=details)
 
@@ -180,12 +183,11 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (
-                            "Allowed time for Generation exceeded, please consider generating locally instead. " +
-                            e.__class__.__name__ + ": " + str(e))
+                    meta["error"] = (f"Allowed time for Generation exceeded, "
+                                     f"please consider generating locally instead. "
+                                     f"{format_exception(e)}")
                     if e.__cause__:
-                        cause = e.__cause__
-                        meta["source"] = f"{cause.__class__.__name__}: {str(cause)}"
+                        meta["source"] = format_exception(e.__cause__)
                     gen.meta = json.dumps(meta)
                     commit()
     except BaseException as e:
@@ -195,10 +197,9 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = f"{e.__class__.__name__}: {str(e)}"
+                    meta["error"] = format_exception(e)
                     if e.__cause__:
-                        cause = e.__cause__
-                        meta["source"] = f"{cause.__class__.__name__}: {str(cause)}"
+                        meta["source"] = format_exception(e.__cause__)
                     gen.meta = json.dumps(meta)
                     commit()
         raise
