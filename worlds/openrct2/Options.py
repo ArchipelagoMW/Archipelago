@@ -786,7 +786,7 @@ class Skips(Range):
     be found in the item pool."""
     display_name = "Skips"
     range_start = 0
-    range_end = 50
+    range_end = 100
     default = 7
 
 openrct2_option_groups = [
