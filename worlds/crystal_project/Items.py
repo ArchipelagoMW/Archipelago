@@ -158,7 +158,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
     "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
-    "Item - Progressive Level Cap": ItemData("Item", 999 + item_index_offset, ItemClassification.progression, 5),
+    "Item - Progressive Level Cap": ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 5),
 
     #Animal mount summons
     "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115

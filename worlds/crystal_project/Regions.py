@@ -166,7 +166,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Castle Sequoia": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5),
         "Skumparadise": lambda state: logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Jojo Sewers", player).add_exits(["Capital Sequoia", "Boomer Society", "Pale Grotto", "Capital Jail", "Quintar Nest"], 
-        {"Capital Jail": lambda state: logic.has_rental_quintar or logic.has_swimming and logic.is_area_in_level_range(state, 2),
+        {"Capital Jail": lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 2),
         "Pale Grotto": logic.has_swimming,
         "Quintar Nest": lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Boomer Society", player).add_exits(["Jojo Sewers", "Greenshire Reprise"],
