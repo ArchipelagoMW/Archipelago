@@ -369,6 +369,11 @@ class CrystalProjectWorld(World):
             item = self.set_classifications("Item - Clamshell")
             pool.append(item)
 
+        if self.options.levelGating:
+            for _ in range (self.options.levelUpsInPool):
+                item = self.set_classifications("Item - Progressive Level Cap")
+                pool.append(item)
+
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
         if self.options.includedRegions == self.options.includedRegions.option_beginner:
             for scholar_ability in self.get_optional_scholar_abilities(7):
