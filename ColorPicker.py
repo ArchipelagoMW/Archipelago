@@ -2,13 +2,13 @@ import os
 
 import Utils
 import typing
-from kvui import ContainerLayout, MainLayout, KivyJSONtoTextParser
-from kivy.app import App
+from kvui import ContainerLayout, MainLayout, KivyJSONtoTextParser, ThemedApp
+from kivymd.app import MDApp
 from kivy.metrics import dp
 from kivy.uix.textinput import TextInput
 from kivy.lang.builder import Builder
 from kivy.lang.parser import Parser
-from kivy.uix.button import Button
+from kivymd.uix.button import MDButton, MDButtonText
 from kivy.uix.colorpicker import ColorPicker
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -63,17 +63,18 @@ color_usages: typing.Dict[str, str] = {
     "orange": "Command Echo",
 }
 
-class ColorPickerApp(App):
+
+class ColorPickerApp(ThemedApp):
     base_title: str = "Archipelago Color Picker"
     container: ContainerLayout
     grid: MainLayout
     color_picker: ColorPicker
     button_layout: GridLayout
     options_layout: BoxLayout
-    presets_button: Button
+    presets_button: MDButton
     preset_dropdown: DropDown
     text_colors: typing.Dict[str, str] = default_colors.copy()
-    buttons: typing.Dict[str, Button] = {}
+    buttons: typing.Dict[str, MDButton] = {}
     current_color: str = "red"
 
     def __init__(self, ctx=None) -> None:
@@ -86,6 +87,7 @@ class ColorPickerApp(App):
             self.text_colors[color] = getattr(text_colors, color, "FFFFFF")
 
     def build(self) -> Widget:
+        self.set_colors()
         self.container = ContainerLayout()
         self.grid = MainLayout(cols=1)
         self.grid.spacing = 20
@@ -95,17 +97,17 @@ class ColorPickerApp(App):
         self.color_picker.bind(color=lambda picker, x: self.on_color(picker, x))
         self.grid.add_widget(self.color_picker)
         self.options_layout = BoxLayout(size_hint_y=None, height=dp(40), orientation="horizontal")
-        defaults_button = Button(text="Restore Defaults")
+        defaults_button = MDButton(MDButtonText(text="Restore Defaults"))
         defaults_button.bind(on_release=lambda _: self.restore_defaults())
         self.options_layout.add_widget(defaults_button)
-        current_button = Button(text="Restore Current")
+        current_button = MDButton(MDButtonText(text="Restore Current"))
         current_button.bind(on_release=lambda _: self.restore_current())
         self.options_layout.add_widget(current_button)
-        self.presets_button = Button(text="Preset Loaded: None")
+        self.presets_button = MDButton(MDButtonText(text="Preset Loaded: None"))
         self.preset_dropdown = DropDown()
         self.populate_dropdown(self.preset_dropdown)
 
-        def open_dropdown(button: Button) -> None:
+        def open_dropdown(button: MDButton) -> None:
             self.preset_dropdown.open(button)
 
         self.presets_button.bind(on_release=self.preset_dropdown.open)
@@ -117,7 +119,12 @@ class ColorPickerApp(App):
         self.button_layout.padding = (10, 5)
 
         for color in self.text_colors:
-            new_button = Button(text=color_usages[color], background_color=hex_color_to_tuple(self.text_colors[color]))
+            new_button = MDButton(MDButtonText(text=color_usages[color], theme_text_color="Custom",
+                                               text_color="white"),
+                                  theme_bg_color="Custom",
+                                  md_bg_color=hex_color_to_tuple(self.text_colors[color]),
+                                  theme_width="Custom",
+                                  size_hint_x=None)
             new_button.real_name = color
             new_button.bind(on_release=lambda button: self.set_color(button))
             self.buttons[color] = new_button
@@ -128,15 +135,15 @@ class ColorPickerApp(App):
 
     def populate_dropdown(self, dropdown: DropDown) -> None:
         dropdown.clear_widgets()
-        path = Utils.local_path("data", "presets")
+        path = Utils.user_path("data", "presets")
         for dirpath, _, files in os.walk(path):
             for file in files:
                 if file.endswith(".kv"):
-                    new_button = Button(text=file.replace(".kv", ""), size_hint_y=None)
+                    new_button = MDButton(MDButtonText(text=file.replace(".kv", "")), size_hint_y=None)
                     new_button.path = os.path.join(dirpath, file)
                     new_button.bind(on_release=lambda button: self.preset_dropdown.select(button.path))
                     dropdown.add_widget(new_button)
-        save_button = Button(text="Save as new Preset?", size_hint_y=None)
+        save_button = MDButton(MDButtonText(text="Save as new Preset?"), size_hint_y=None)
         save_button.bind(on_release=lambda button: self.save_preset_menu())
         dropdown.add_widget(save_button)
 
@@ -145,7 +152,7 @@ class ColorPickerApp(App):
         setattr(self.presets_button, "text", f"Preset Loaded: {preset_name}")
         self.parse_preset_kv(path)
 
-    def set_color(self, button: Button):
+    def set_color(self, button: MDButton):
         self.current_color = button.real_name.lower()
         self.color_picker.set_color(hex_color_to_tuple(self.text_colors[self.current_color]))
 
@@ -157,7 +164,7 @@ class ColorPickerApp(App):
         self.buttons[self.current_color].background_color = value
 
     def restore_defaults(self):
-        self.set_colors(default_colors)
+        self.set_text_colors(default_colors)
         setattr(self.presets_button, "text", "Preset Loaded: None")
 
     def restore_current(self):
@@ -165,7 +172,7 @@ class ColorPickerApp(App):
         self.parse_preset_kv(user_colors)
         setattr(self.presets_button, "text", "Preset Loaded: None")
 
-    def set_colors(self, colors):
+    def set_text_colors(self, colors):
         self.text_colors = colors.copy()
         for button in self.buttons:
             self.buttons[button].background_color = hex_color_to_tuple(self.text_colors[button])
@@ -181,7 +188,7 @@ class ColorPickerApp(App):
             elif selector.key == "textcolors":
                 for prop in rule.properties:
                     colors[prop] = rule.properties[prop].co_value
-        self.set_colors(colors)
+        self.set_text_colors(colors)
 
     def save_preset_menu(self):
         save: bool = False
@@ -190,8 +197,8 @@ class ColorPickerApp(App):
         inner_box = BoxLayout(orientation="horizontal", spacing=10)
         outer_box.add_widget(preset_name)
         outer_box.add_widget(inner_box)
-        cancel = Button(text="Cancel", size_hint_y=None, height=50)
-        confirm = Button(text="Confirm", size_hint_y=None, height=50)
+        cancel = MDButton(MDButtonText(text="Cancel"), size_hint_y=None, height=50)
+        confirm = MDButton(MDButtonText(text="Confirm"), size_hint_y=None, height=50)
         inner_box.add_widget(cancel)
         inner_box.add_widget(confirm)
         popup = Popup(title="Save Preset As...",
@@ -225,7 +232,7 @@ class ColorPickerApp(App):
         file.write(f"<Label>:\n\tcolor: \"{colors['white']}\"")
 
     def on_stop(self):
-        user_colors = open(Utils.local_path("data", "user.kv"), 'w')
+        user_colors = open(Utils.user_path("data", "user.kv"), 'w')
         self.write_color_file(user_colors, self.text_colors)
         super().on_stop()
 

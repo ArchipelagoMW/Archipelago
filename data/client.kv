@@ -38,7 +38,7 @@
     selected_color: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3)
     canvas.before:
         Color:
-            rgba: self.selected_color if self.selected else self.base_color
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerLowestColor
         Rectangle:
             size: self.size
             pos: self.pos
@@ -88,7 +88,7 @@
     striped_color: self.theme_cls.surfaceContainerHighColor
     canvas.before:
         Color:
-            rgba: self.selected_color if self.selected else self.striped_color if self.striped else self.base_color
+            rgba: (self.theme_cls.primaryColor[0], self.theme_cls.primaryColor[1], self.theme_cls.primaryColor[2], .3) if self.selected else self.theme_cls.surfaceContainerHighColor if self.striped else self.theme_cls.surfaceContainerLowestColor
         Rectangle:
             size: self.size
             pos: self.pos
