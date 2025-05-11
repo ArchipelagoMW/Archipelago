@@ -310,7 +310,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin?", 422 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Library roof Lost Penguin", 594 + npc_index_offset),
