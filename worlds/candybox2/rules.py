@@ -487,6 +487,7 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_HAT, can_farm_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_CAULDRON, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES, no_conditions(), CandyBox2Room.SORCERESS_HUT)
 
     # Merchant items
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_SHOP_TOP_LOLLIPOP, no_conditions(), CandyBox2Room.VILLAGE_SHOP)
