@@ -26,7 +26,7 @@ interactions in the world interact as expected, you will want to use the [WorldT
 comes with the basics for test setup as well as a few preloaded tests that most worlds might want to check on varying
 options combinations.
 
-Example `/worlds/<my_game>/test/__init__.py`:
+Example `/worlds/<my_game>/test/bases.py`:
 
 ```python
 from test.bases import WorldTestBase
@@ -54,7 +54,7 @@ with `test_`.
 Example `/worlds/<my_game>/test/test_chest_access.py`:
 
 ```python
-from . import MyGameTestBase
+from .bases import MyGameTestBase
 
 
 class TestChestAccess(MyGameTestBase):
