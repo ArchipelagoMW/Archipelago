@@ -641,7 +641,7 @@ class ShopMinimumLength(Range):
     display_name = "Minimum Shop Length Requirement"
     range_start = 0
     range_end = 2500
-    default = 610
+    default = 0
 
 class ShopMinimumTotalCustomers(Range):
     """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
@@ -684,7 +684,7 @@ class ShopMaximumLength(Range):
     display_name = "Maximum Shop Length Requirement"
     range_start = 0
     range_end = 2500
-    default = 1250
+    default = 500
 
 class ShopMaximumTotalCustomers(Range):
     """If the shop determines you need a ride with a minimum total number of customers, this value will be the 
@@ -786,8 +786,8 @@ class Skips(Range):
     be found in the item pool."""
     display_name = "Skips"
     range_start = 0
-    range_end = 10
-    default = 3
+    range_end = 50
+    default = 7
 
 openrct2_option_groups = [
     OptionGroup("Scenario Options", [
