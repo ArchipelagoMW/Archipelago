@@ -477,7 +477,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     elif "component" in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
-        run_gui(args.get('launch_components', None), args.get("args", ()))
+        run_gui(args.get("launch_components", None), args.get("args", ()))
 
 
 if __name__ == '__main__':
