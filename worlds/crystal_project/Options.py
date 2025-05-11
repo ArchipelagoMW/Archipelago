@@ -96,6 +96,24 @@ class IncludedRegions(Choice):
     default = 3
 
 #"""Progression Options"""
+class LevelGating(Toggle):
+    """
+    When enabled, the parties maximum level will be capped, with items in the pool increasing that cap.
+    Areas in the game will be considered out of logic (but still accessible) if the party level cap is below the area level.
+    """
+    display_name = "Level Gating"
+
+class LevelUpsInPool(Range):
+    """
+    If level gating is enabled, this will control how many max level ups are in the pool.
+    Each max level up increases the max character level by 10, so a value of 5 here is a maximum possible level of 60
+    Changing this value to a higher number will allow the player to exceed the default level cap.
+    """
+    display_name = "Max level ups in the pool"
+    range_start = 5
+    range_end = 8
+    default = 5
+
 class EasyLeveling(Toggle):
     """
     When enabled, characters will not receive reduced exp for being dead or for being a higher level than the fought enemy.
@@ -173,6 +191,8 @@ class CrystalProjectOptions(PerGameCommonOptions):
     randomizeStartingJobs: RandomizeStartingJobs
     killBossesMode: KillBossesMode
     includedRegions: IncludedRegions
+    levelGating: LevelGating
+    levelUpsInPool: LevelUpsInPool
     easyLeveling: EasyLeveling
     progressiveEquipmentMode: ProgressiveEquipmentMode
     keyMode: KeyMode

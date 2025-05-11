@@ -13,8 +13,8 @@ class CrystalProjectLogic:
         self.player = player
         self.options = options
 
-    def has_jobs(self, state: CollectionState, jobMinimum: int) -> bool:
-        return self.get_job_count(state) >= jobMinimum
+    def has_jobs(self, state: CollectionState, job_minimum: int) -> bool:
+        return self.get_job_count(state) >= job_minimum
     
     def get_job_count(self, state: CollectionState) -> int:
         count = 0
@@ -92,10 +92,15 @@ class CrystalProjectLogic:
         return state.has("Item - Progressive Quintar Flute", self.player, 3)
 
     def new_world_requirements(self, state: CollectionState) -> bool:
-        if (self.options.goal.value == self.options.goal.option_astley):
+        if self.options.goal.value == self.options.goal.option_astley:
             return self.has_jobs(state, self.options.newWorldStoneJobQuantity.value)    
         else:
             return state.has("Item - New World Stone", self.player)
+
+    def is_area_in_level_range(self, state: CollectionState, count: int) -> bool:
+        if self.options.levelGating:
+            return state.has("Item - Progressive Level Cap", self.player, count)
+        return true
 
     def has_luxury_key(self, state: CollectionState) -> bool:
         return state.has("Item - Luxury Key", self.player) or state.has("Item - Skeleton Key", self.player)
