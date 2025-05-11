@@ -173,7 +173,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1),
         "Greenshire Reprise": lambda state: logic.is_area_in_level_range(state, 2)})
     multiworld.get_region("Rolling Quintar Fields", player).add_exits(["Capital Sequoia", "Quintar Nest", "Quintar Sanctum", "Quintar Reserve"], 
-        {"Capital Nest": lambda state: logic.is_area_in_level_range(state, 1),
+        {"Quintar Nest": lambda state: logic.is_area_in_level_range(state, 1),
         "Quintar Sanctum": lambda state: (logic.has_rental_quintar or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 2),
         "Quintar Reserve": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Quintar Nest", player).add_exits(["Quintar Sanctum", "Cobblestone Crag", "Jojo Sewers"],
