@@ -624,10 +624,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, logic.has_vertical_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, logic.has_vertical_movement), #Dust
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset, logic.has_vertical_movement), #Dust
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, logic.has_vertical_movement), #Silver
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset, logic.has_vertical_movement), #Ore
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset, logic.has_vertical_movement), #Ore
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset), #Ore
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Cross my palms with Silver", 2693 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver past angry birds", 2697 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Dust
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, logic.has_vertical_movement), #Ingot
