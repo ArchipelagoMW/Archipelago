@@ -59,6 +59,14 @@ class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
     display_name = "Start with Barometer"
 
+class StartWithChalk(Toggle):
+    """Choose to start with the Chalk Bag, also unlocking bird seeds."""
+    display_name = "Start with Chalk"
+
+class StartWithCoffee(Toggle):
+    """Choose to start with the Coffee Flask"""
+    display_name = "Start with Coffee"
+
 class StartWithOilLamp(Toggle):
     """
     Choose whether the Aldr Grotto oil lamp is given at the start.
@@ -129,6 +137,8 @@ poy_option_groups = [
     OptionGroup("Starting Items", [
         StartingBook,
         StartWithBarometer,
+        StartWithChalk,
+        StartWithCoffee,
         StartWithOilLamp,
         RopeUnlockMode,
         StartingHands,
@@ -179,6 +189,8 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     item_traps: FillerTraps
     starting_book: StartingBook
     start_with_barometer: StartWithBarometer
+    start_with_chalk: StartWithChalk
+    start_with_coffee: StartWithCoffee
     start_with_oil_lamp: StartWithOilLamp
     start_with_hands: StartingHands
     early_hands: EarlyHands

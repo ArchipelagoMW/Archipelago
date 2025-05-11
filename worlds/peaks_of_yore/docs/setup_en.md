@@ -52,16 +52,13 @@ The auto connect option will connect automatically when the game is restarted la
 changed, which might happen if the server has been offline for a while.
 
 Once everything is entered click the Connect button to connect to the server, and if everything is correct
-you should be connected!
-If the game instead freezes for a short while, there may have been an error connecting.
-
-It is recommended to check the console after connecting, when launching the game, a logging console should
-have opened. Right after connecting, one of the bottom lines should say `Login result: True`, if it says
-`Login result: False` then you are **NOT CONNECTED**.
+you should be connected and a green notification saying `Connection Successful` should pop up near the center of your screen.
+If the connection fails, showing `Connection failed, see the console for more details` in red, 
+the console that opened together with the game should give more information about the fail.
 
 To start the game, begin on a new save, to continue, use the same save you have used before.
 
-**WARNING**: Loading vanilla saves has a **very high** probability of breaking progression.
+**WARNING**: Loading vanilla (unmodded) saves has a **very high** probability of breaking progression.
 
 ### Gameplay
 When playing randomised peaks of yore, tool unlocking, books, and most other things in your cabin are turned into items,
