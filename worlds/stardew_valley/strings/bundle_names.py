@@ -152,7 +152,7 @@ class MemeBundleName:
     big_grapes = meme_bundle("Big Grapes")
     bun_dle = register_bundle("Bun-dle", True)
     bundle = meme_bundle("Bundle")
-    bureaucracy = meme_bundle("Bureaucracy")
+    permit_a38 = meme_bundle("Permit A38")
     burger_king = meme_bundle("Burger King")
     burger_king_revenge = meme_bundle("Burger King's Revenge")
     caffeinated = meme_bundle("Caffeinated")

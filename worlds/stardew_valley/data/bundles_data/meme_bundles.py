@@ -1,7 +1,7 @@
 from .bundle_data import all_bundle_items_by_name
 from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
-from ...bundles.bundle import BureaucracyBundleTemplate, JournalistBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
+from ...bundles.bundle import BureaucracyBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
     FixedPriceBundleTemplate
 from ...strings.bundle_names import MemeBundleName
 from ...strings.currency_names import MemeCurrency
@@ -134,11 +134,11 @@ commitment_bundle_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeB
 all_simple_items = [bundle_item for bundle_item in all_bundle_items_by_name.values() if
                     bundle_item.amount == 1 and bundle_item.quality.startswith("Basic") and bundle_item.flavor is None]
 
-bureaucracy_items = [*all_simple_items]
-bureaucracy_bundle = BureaucracyBundleTemplate(CCRoom.vault, MemeBundleName.bureaucracy, bureaucracy_items, 1, 8)
+permit_a38_items = [*all_simple_items]
+permit_a38_bundle = BureaucracyBundleTemplate(CCRoom.vault, MemeBundleName.permit_a38, permit_a38_items, 1, 8)
 
 journalist_items = [*all_simple_items]
-journalist_bundle = JournalistBundleTemplate(CCRoom.bulletin_board, MemeBundleName.journalist, journalist_items)
+journalist_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.journalist, journalist_items, 1, 1)
 
 trap_items = [BundleItem(MemeItem.trap)]
 trap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.trap, trap_items, 5, 5)
@@ -219,41 +219,35 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 
 # Stopped at 49 responses on the form
 
-# Bundles to make
-# kents_toolshed_bundle
-# Side Quest Bundle
-# Acrostic Bundle
-# Cooperation Bundle
-# Clickbait Bundle
-# ASMR Bundle
-# Gacha Bundle
-# QA Bundle
-# Bad Farmer Bundle
-# Humble Bundle
+# Todo Bundles
+#   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
+#   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
+#   Cooperation Bundle  (Asks for normal items but can only be donated through gifting)
+#   Clickbait Bundle    (Scouts a super critical progression item, but actually contains garbage)
+#   ASMR Bundle         (Relaxing Bundle, it plays ASMR noise)
+#   Gacha Bundle        (Open lootboxes until you get a T5 reward)
+#   QA Bundle           (Some sort of bug, not sure yet)
+#   Bad Farmer Bundle   (Dead Crops)
+#   Humble Bundle       (Pay what you want, 3 rewards (useful, filler, trap). Other two are auto-checked when finishing the CC)
+#   Crowdfunding Bundle (Purchase with Bank Money)
+#   Relay Bundle        (Relay Stick passed around the multiworld)
+#   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
+#   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
+#   Sticky Bundle       (But it sticks, somehow?)
+
 
 # Bundles that need special Mod Handling:
-# Vampire Bundle
 # Exhaustion Bundle
-# Tick Tock Bundle
 # Clique Bundle
 # Cipher Bundle
-# Cookie Clicker Bundle
 # Communist Bundle
 # Death Bundle (1 Death)
-# Archipela-Go! Bundle (Steps)
 
-# Permit A38 (Chained Items)
-# Honorable Bundle (If you take the honorable way, consequences)
 # Trap Bundle (Start filled with traps, have to take them out)
 # Journalist Bundle (Accept literally anything)
 # Mermaid song bundle (1-5-4-2-3)
 # Commitment Bundle (Need to have doved and divorced)
-# Side Quest Bundle (Have to do a bunch of shit)
-# Sisyphus Bundle (Donate but it keeps emptying itself)
-# Bundle that sticks
-# Reverse Bundle
 # Bundle Bundle
-# Scavenger Bundle
 
 pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle,
                        big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle]
@@ -276,7 +270,7 @@ bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_r
                                celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
-vault_bundles_meme = [capitalist_bundle, death_bundle, bureaucracy_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
+vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
                       clique_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
                       restraint_bundle, fast_bundle, floor_is_lava_bundle]  # cipher_bundle
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
