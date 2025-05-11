@@ -89,7 +89,16 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered in 
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
-            AutoWorldRegister.world_types[dct["game"]] = new_class
+            # TODO remove our hack before we push our fork to main
+            if (dct["game"] == "Crystal Project"  # the game I actually want to test
+                    # all the "magic" game names that core AP tests assume exist and fail without
+                    or dct["game"] == "Archipelago"
+                    or dct["game"] == "Test Game"
+                    or dct["game"] == "A Link to the Past"
+                    or dct["game"] == "Timespinner"
+                    # these two are easy to miss since they're only required by the CI-only hosting/__main__.py test
+                    or dct["game"] == "Clique" or dct["game"] == "Temp World"):
+                AutoWorldRegister.world_types[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
