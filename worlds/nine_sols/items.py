@@ -121,6 +121,19 @@ def create_items(world: "NineSolsWorld") -> None:
             for _ in range(0, instances):
                 prog_and_useful_items.append(create_item(player, name))
 
+    if not options.shuffle_sol_seals:
+        for (location, item) in [
+            ["Kuafu's Vital Sanctum", "Seal of Kuafu"],
+            ["Goumang's Vital Sanctum", "Seal of Goumang"],
+            ["Yanlao's Vital Sanctum", "Seal of Yanlao"],
+            ["Jiequan's Vital Sanctum", "Seal of Jiequan"],
+            ["Cortex Center: Defeat Lady Ethereal", "Seal of Lady Ethereal"],
+            ["Ji's Vital Sanctum", "Seal of Ji"],
+            ["ED (Living Area): Fuxi's Vital Sanctum", "Seal of Fuxi"],
+            ["Nuwa's Vital Sanctum", "Seal of Nuwa"],
+        ]:
+            multiworld.get_location(location, player).place_locked_item(create_item(player, item))
+
     # unique_filler_with_traps = unique_filler
 
     # replace some unique filler items with trap items, depending on trap settings
@@ -176,16 +189,3 @@ def create_items(world: "NineSolsWorld") -> None:
 
     itempool = prog_and_useful_items + unique_filler + repeatable_filler_items
     multiworld.itempool += itempool
-
-    if not options.shuffle_sol_seals:
-        for (location, item) in [
-            ["Kuafu's Vital Sanctum", "Seal of Kuafu"],
-            ["Goumang's Vital Sanctum", "Seal of Goumang"],
-            ["Yanlao's Vital Sanctum", "Seal of Yanlao"],
-            ["Jiequan's Vital Sanctum", "Seal of Jiequan"],
-            ["Cortex Center: Defeat Lady Ethereal", "Seal of Lady Ethereal"],
-            ["Ji's Vital Sanctum", "Seal of Ji"],
-            ["ED (Living Area): Fuxi's Vital Sanctum", "Seal of Fuxi"],
-            ["Nuwa's Vital Sanctum", "Seal of Nuwa"],
-        ]:
-            multiworld.get_location(location, player).place_locked_item(create_item(player, item))
