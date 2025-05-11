@@ -183,9 +183,9 @@ def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, 
                 if gen is not None:
                     gen.state = STATE_ERROR
                     meta = json.loads(gen.meta)
-                    meta["error"] = (f"Allowed time for Generation exceeded, "
-                                     f"please consider generating locally instead. "
-                                     f"{format_exception(e)}")
+                    meta["error"] = ("Allowed time for Generation exceeded, " +
+                                     "please consider generating locally instead. " +
+                                     format_exception(e))
                     if e.__cause__:
                         meta["source"] = format_exception(e.__cause__)
                     gen.meta = json.dumps(meta)
