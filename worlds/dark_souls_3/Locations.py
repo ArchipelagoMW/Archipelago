@@ -706,7 +706,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("US: Whip - back alley, behind wooden wall", "Whip", hidden=True),
         DS3LocationData("US: Great Scythe - building by white tree, balcony", "Great Scythe"),
         DS3LocationData("US: Homeward Bone - foot, drop overlook", "Homeward Bone",
-                        static='02,0:53100540::'),
+                        static='02,0:53100950::'),
         DS3LocationData("US: Large Soul of a Deserted Corpse - around corner by Cliff Underside",
                         "Large Soul of a Deserted Corpse", hidden=True),  # Hidden corner
         DS3LocationData("US: Ember - behind burning tree", "Ember"),
@@ -930,7 +930,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         "Great Swamp Ring", miniboss=True),  # Giant Crab drop
         DS3LocationData("RS: Blue Sentinels - Horace", "Blue Sentinels",
                         missable=True, npc=True),  # Horace quest
-        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem"),
+        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem", lizard=True),
         DS3LocationData("RS: Fading Soul - woods by Crucifixion Woods bonfire", "Fading Soul",
                         static='03,0:53300210::'),
 

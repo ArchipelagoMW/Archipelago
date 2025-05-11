@@ -1,6 +1,15 @@
 # Super Mario World - Changelog
 
 
+## v2.1
+
+### Features:
+- Trap Link
+	- When you receive a trap, you send a copy of it to every other player with Trap Link enabled
+- Ring Link
+	- Any coin amounts gained and lost by a linked player will be instantly shared with all other active linked players
+
+
 ## v2.0
 
 ### Features:
