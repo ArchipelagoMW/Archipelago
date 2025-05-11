@@ -669,12 +669,12 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Salmon Bay", "Salmon Bay Chest - Cliff diving", 2975 + treasure_index_offset), #Ether Pouch chest
         LocationData("Salmon Bay", "Salmon Bay Chest - Across the bridge", 2974 + treasure_index_offset), #Potion Pouch chest
+        LocationData("Salmon Bay", "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
         
         #NPCs
         LocationData("Salmon Bay", "Salmon Bay NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),
         LocationData("Salmon Bay", "Salmon Bay NPC - West cliff diving Ancient Tablet C", 1271 + npc_index_offset),
         LocationData("Salmon Bay", "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
-        LocationData("Salmon Bay", "Overpass NPC - Lonely scrap among half-dead pines above Salmon Bay", 3677 + npc_index_offset), #8th Scrap in Overpass main map
 
         #Summons Todo: descriptivize and implement
         #-50, 91, -330
