@@ -449,7 +449,8 @@ class SelectedDifficulty(Choice):
 
 class SelectedIntensity(Choice):
     """Choose a preferred intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
-    to a minimum of 8 intensity in most circumstances. Normal is recommended for most players.
+    to a minimum of 8 intensity in most circumstances. Normal is highly recommended for most players! Seriously, unless you really know what you 
+    are doing and want the (likely very tedious) challenge, you shouldn't change this.
     """
     display_name = "Preferred Intensity"
     option_less_intense = PreferredIntensity.less_intense.value
