@@ -11,7 +11,7 @@ found in the [general test directory](/test/general).
 ## Defining World Tests
 
 In order to run tests from your world, you will need to create a `test` package within your world package. This can be
-done by creating a `test` directory with a file named `__init__.py` inside it inside your world. By convention, a base
+done by creating a `test` directory with an (empty) `__init__.py` inside it inside your world. By convention, a base
 for your world tests can be created in `bases.py` or any file that does not start with `test`, that you can then import
 into other modules. All tests should be defined in files named `test_*.py` (all lower case) and be member functions
 (named `test_*`) of classes (named `Test*` or `*Test`) that inherit from `unittest.TestCase` or a test base.
