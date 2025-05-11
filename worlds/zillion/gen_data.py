@@ -19,7 +19,7 @@ class GenData:
         jsonable = {
             "multi_items": self.multi_items,
             "zz_game": self.zz_game.to_jsonable(),
-            "game_id": list(self.game_id)
+            "game_id": list(self.game_id),
         }
         return json.dumps(jsonable)
 
@@ -37,5 +37,5 @@ class GenData:
         return GenData(
             from_json["multi_items"],
             ZzGame.from_jsonable(from_json["zz_game"]),
-            bytes(from_json["game_id"])
+            bytes(from_json["game_id"]),
         )
