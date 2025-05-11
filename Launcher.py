@@ -127,7 +127,7 @@ def handle_uri(path: str) -> tuple[list[Component], Component]:
     return client_component, text_client_component
 
 
-def build_uri_popup(component_list: list[Component], launch_args: Tuple[str, ...]) -> None:
+def build_uri_popup(component_list: list[Component], launch_args: tuple[str, ...]) -> None:
     from kvui import MDButton, MDButtonText
     from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
     from kivymd.uix.divider import MDDivider
@@ -466,7 +466,7 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
             # add the url arg to the passthrough args
             components, text_client_component = handle_uri(path)
             if not components:
-                args['component'] = text_client_component
+                args["component"] = text_client_component
             else:
                 args['launch_components'] = [text_client_component, *components]
 
