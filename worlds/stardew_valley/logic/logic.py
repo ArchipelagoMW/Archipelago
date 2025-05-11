@@ -404,7 +404,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         return self.logic.false_
 
     def has_abandoned_jojamart(self) -> StardewRule:
-        return self.received(CommunityUpgrade.movie_theater, 1)
+        return (self.received(CommunityUpgrade.movie_theater, 1) & self.season.has_any_not_winter()) | self.has_movie_theater()
 
     def has_movie_theater(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 2)
