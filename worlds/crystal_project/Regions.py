@@ -128,7 +128,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Mercury Shrine": logic.has_vertical_movement,
         "Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
         "Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
-        "Yamagawa M.A.": lambda state: (logic.has_swimming or logic.has_vertical_movement)  and logic.is_area_in_level_range(state, 1)})
+        "Yamagawa M.A.": lambda state: (logic.has_swimming or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Delende", player).add_exits(["Spawning Meadows", "Soiled Den", "Pale Grotto", "Yamagawa M.A.", "Seaside Cliffs", "Mercury Shrine", "Jade Cavern", "Greenshire Reprise", "Salmon Pass", "Proving Meadows"],
         {"Jade Cavern": lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
         "Salmon Pass": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),

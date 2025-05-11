@@ -100,7 +100,7 @@ class CrystalProjectLogic:
     def is_area_in_level_range(self, state: CollectionState, count: int) -> bool:
         if self.options.levelGating:
             return state.has("Item - Progressive Level Cap", self.player, count)
-        return true
+        return True
 
     def has_luxury_key(self, state: CollectionState) -> bool:
         return state.has("Item - Luxury Key", self.player) or state.has("Item - Skeleton Key", self.player)
