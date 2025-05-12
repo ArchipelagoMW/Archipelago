@@ -1,11 +1,11 @@
 """
 Archipelago Launcher
 
-* if run with APBP as argument, launch corresponding client.
-* if run with executable as argument, run it passing argv[2:] as arguments
-* if run without arguments, open launcher GUI
+* If run with a patch file as argument, launch corresponding client with the patch file as an argument.
+* If run with component name as argument, run it passing argv[2:] as arguments.
+* If run without arguments or unknown arguments, open launcher GUI.
 
-Scroll down to components= to add components to the launcher as well as setup.py
+Additional components can be added to worlds.LauncherComponents.components.
 """
 
 import argparse
@@ -84,12 +84,16 @@ def browse_files():
 def open_folder(folder_path):
     if is_linux:
         exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, folder_path])
     else:
         webbrowser.open(folder_path)
+        return
+
+    if exe:
+        subprocess.Popen([exe, folder_path])
+    else:
+        logging.warning(f"No file browser available to open {folder_path}")
 
 
 def update_settings():
