@@ -551,14 +551,14 @@ In JSON this may look like:
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
 
 ```python
-from typing import TypedDict, Optional
+from typing import TypedDict
 class JSONMessagePart(TypedDict):
-    type: Optional[str]
-    text: Optional[str]
-    color: Optional[str] # only available if type is a color
-    flags: Optional[int] # only available if type is an item_id or item_name
-    player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[HintStatus] # only available if type is hint_status
+    type: str | None
+    text: str | None
+    color: str | None # only available if type is a color
+    flags: int | None # only available if type is an item_id or item_name
+    player: int | None # only available if type is either item or location
+    hint_status: HintStatus | None # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
