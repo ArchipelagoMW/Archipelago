@@ -1,24 +1,25 @@
 from dataclasses import fields
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Set, TextIO
+
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
+from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
+from settings import Group, Bool
+from worlds.AutoWorld import WebWorld, World
+from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
+from .combat_logic import area_data, CombatState
+from .er_data import portal_mapping, RegionInfo, tunic_er_regions
+from .er_rules import set_er_location_rules
+from .er_scripts import create_er_regions, verify_plando_directions
+from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
 from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
-from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
-from .er_rules import set_er_location_rules
-from .regions import tunic_regions
-from .er_scripts import create_er_regions, verify_plando_directions
-from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
-from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
                       LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options,
                       get_hexagons_in_pool, HexagonQuestAbilityUnlockType, EntranceLayout)
-from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
-from .combat_logic import area_data, CombatState
-from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
-from settings import Group, Bool
+from .regions import tunic_regions
+from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 
 
 class TunicSettings(Group):
@@ -28,8 +29,8 @@ class TunicSettings(Group):
     class LimitGrassRando(Bool):
         """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
 
-    disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
-    limit_grass_rando: Union[LimitGrassRando, bool] = True
+    disable_local_spoiler: DisableLocalSpoiler | bool = False
+    limit_grass_rando: LimitGrassRando | bool = True
 
 
 class TunicWeb(WebWorld):
