@@ -1,8 +1,7 @@
 name: Task
 description: Submit a task to be done. If this is not targeting core, it should likely be elsewhere.
-title: "Core: "
+title: ""
 labels:
-  - core
   - enhancement
 body:
   - type: textarea
