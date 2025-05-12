@@ -2,3 +2,12 @@ name: Feature Request
 description: Request a feature!
 labels:
   - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature Request goes here!
+  - type: textarea
+    id: feature
+    attributes:
+      label: What feature would you like to see?
