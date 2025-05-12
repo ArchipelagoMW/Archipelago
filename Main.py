@@ -124,7 +124,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 world_excluded_locations.add(location_name)
         multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
-    # set local and non-local item rules.
+    # Set local and non-local item rules.
     if multiworld.players > 1:
         locality_rules(multiworld)
     else:
