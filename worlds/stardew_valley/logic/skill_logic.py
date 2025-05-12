@@ -35,7 +35,7 @@ class SkillLogic(BaseLogic):
 
         if skill == Skill.fishing:
             # Not checking crab pot has this is used for not randomized skills logic, for which players need a fishing rod to start gaining xp.
-            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
+            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3)) & self.logic.fishing.can_fish_anywhere()
         elif skill == Skill.farming:
             xp_rule = self.can_get_farming_xp & self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
