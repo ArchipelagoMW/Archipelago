@@ -160,7 +160,6 @@ class MemeBundleName:
     cap = meme_bundle("Cap")
     capitalist = meme_bundle("Capitalist's")
     chaos_emerald = meme_bundle("Chaos Emerald")
-    cipher = meme_bundle("Cipher")
     clique = meme_bundle("Clique")
     commitment = meme_bundle("Commitment")
     communist = meme_bundle("Communist's")

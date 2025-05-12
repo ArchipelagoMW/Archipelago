@@ -208,7 +208,6 @@ exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhausti
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 5000))
 clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
-# cipher_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cipher, BundleItem(MemeCurrency.code, 4))
 cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 20000))  # ?
 communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
@@ -239,12 +238,12 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Sticky Bundle       (But it sticks, somehow?)
 #   Investment Bundle   (Give anything you want, you get it back double in a month)
+#   Cipher Bundle       (Some sort of code?)
 
 
 # Bundles that need special Mod Handling:
 # Exhaustion Bundle
 # Clique Bundle
-# Cipher Bundle
 # Communist Bundle
 # Death Bundle (1 Death)
 
@@ -272,12 +271,12 @@ boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_me
 
 bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,
                                snitch_bundle, commitment_bundle_bundle, journalist_bundle, trap_bundle, off_your_back_bundle, vocaloid_bundle, fruit_bundle,
-                               celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle]
+                               celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle, honeywell_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
 vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
                       clique_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
-                      restraint_bundle, fast_bundle, floor_is_lava_bundle]  # cipher_bundle
+                      restraint_bundle, fast_bundle, floor_is_lava_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,
