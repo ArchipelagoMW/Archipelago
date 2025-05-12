@@ -66,11 +66,10 @@ def add_sprite_pack_object_collection(_sprite_pack_path, _folders_list, _sprites
             sprite_file_name_data = resource_name[:-4].split('-')[1:]
             extra_sprite_data = sprite_file_name_data or None
             sprite_path = os.path.join(object_folder_path, resource_name)
-            if os.path.exists(sprite_path):
-                if found_sprites.get(matching_sprite_name):
-                    continue
-                found_sprites[matching_sprite_name] = resource_name
-                add_sprite(_is_pokemon, object_name, matching_sprite_name, extra_sprite_data, sprite_path)
+            if found_sprites.get(matching_sprite_name):
+                continue
+            found_sprites[matching_sprite_name] = resource_name
+            add_sprite(_is_pokemon, object_name, matching_sprite_name, extra_sprite_data, sprite_path)
         for palette, palette_extraction_priority_queue in _palette_lists.items():
             # Generate palettes if sprites exist
             found_sprite = False
@@ -153,11 +152,13 @@ def add_pokemon_data(_pokemon_name, _data_path):
         # Add a new move pool table and replace the pointer to it
         pokemon_move_pool_bytes = encode_move_pool(pokemon_data['move_pool'])
         global resource_address_to_insert_to
-        new_resource_address_bytes = (resource_address_to_insert_to + 2).to_bytes(3, 'little')
+        # Move pool data MUST be isolated in its own 16 byte blocks, or reading it WILL cause garbage code execution
+        resource_address_to_insert_to = (((resource_address_to_insert_to - 1) >> 4) + 1) << 4
+        new_resource_address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
         data_pointer_move_pool = get_address_from_address_collection(_pokemon_name, 'pokemon_move_pool', 'move_pool')
         add_data_to_patch({ 'address': data_pointer_move_pool, 'length': 3, 'data': new_resource_address_bytes })
         add_data_to_patch({ 'address': resource_address_to_insert_to, 'length': len(pokemon_move_pool_bytes), 'data': pokemon_move_pool_bytes })
-        resource_address_to_insert_to = resource_address_to_insert_to + len(pokemon_move_pool_bytes)
+        resource_address_to_insert_to += (((len(pokemon_move_pool_bytes) - 1) >> 4) + 1) << 4
         if resource_address_to_insert_to > 0xFFFFFF:
             # Out of bounds: Too much data to add
             raise Exception('Too much data to add to the ROM! Please remove some resources.')
@@ -452,9 +453,17 @@ def validate_sprite_pack(_sprite_pack_path, _rom):
     
     add_error(*validate_object_collection(_sprite_pack_path, TRAINER_FOLDERS, TRAINER_SPRITES, TRAINER_PALETTES))
     add_error(*validate_object_collection(_sprite_pack_path, POKEMON_FOLDERS, POKEMON_SPRITES, POKEMON_PALETTES))
+    
+    if not sprite_pack_folder_list:
+        add_error('Error: The current sprite pack contains no resource to apply.', True)
+
     return errors, has_error
 
+sprite_pack_folder_list = []
 def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, _palette_lists):
+    global sprite_pack_folder_list
+    sprite_pack_folder_list = []
+    
     # Validates all pokemon or all trainers if a folder including their name can be found
     errors = ''
     has_error = False
@@ -463,6 +472,11 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
         if _error:
             has_error = has_error or _is_error
             errors += ('\n' if errors else '') + ('' if _processed else 'Error: ' if _is_error else 'Warning: ') + _error
+
+    def add_to_folder_list(_folder):
+        global sprite_pack_folder_list
+        if not _folder in sprite_pack_folder_list:
+            sprite_pack_folder_list.append(_folder)
 
     for object_name in _folders_list:
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
@@ -473,6 +487,7 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
             if resource_name == 'data.txt':
                 with open(os.path.join(object_folder_path, resource_name)) as pokemon_data_file:
                     add_error(*validate_pokemon_data_string(object_name, pokemon_data_file.read()), True)
+                    add_to_folder_list(object_name)
                     continue
             if not resource_name.endswith('.png'):
                 add_error('File {} in folder {}: Not a sprite and should be removed.'.format(resource_name, object_name))
@@ -488,12 +503,11 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
             sprite_file_name_data = resource_name[:-4].split('-')[1:]
             extra_sprite_data = sprite_file_name_data or None
             sprite_path = os.path.join(object_folder_path, resource_name)
-            if os.path.exists(sprite_path):
-                if found_sprites.get(matching_sprite_name):
-                    add_error('File {} in folder {}: Duplicate internal sprite entry with sprite {}.'.format(resource_name, object_name, found_sprites.get(matching_sprite_name)), True)
-                    continue
-                found_sprites[matching_sprite_name] = resource_name
-                add_error(*validate_sprite(object_name, matching_sprite_name, extra_sprite_data, sprite_path), True)
+            if found_sprites.get(matching_sprite_name):
+                add_error('File {} in folder {}: Duplicate internal sprite entry with sprite {}.'.format(resource_name, object_name, found_sprites.get(matching_sprite_name)), True)
+                continue
+            found_sprites[matching_sprite_name] = resource_name
+            add_error(*validate_sprite(object_name, matching_sprite_name, extra_sprite_data, sprite_path), True)
     return errors, has_error
 
 def validate_sprite(_object_name, _sprite_name, _extra_data, _path):
@@ -581,17 +595,20 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
             errors += ('\n' if errors else '') + ('' if _processed else 'Error: ' if _is_error else 'Warning: ') + _error
 
     # If the given data is a string, extracts its data first
-    try:
-        _data = destringify_pokemon_data(_pokemon_name, _data_string, True)
-    except Exception as e:
-        if hasattr(e, 'message'):
-            return e.message, True
-        else:
-            return str(e), True
+    if type(_data_string) is str:
+        try:
+            data_dict = destringify_pokemon_data(_pokemon_name, _data_string, True)
+        except Exception as e:
+            if hasattr(e, 'message'):
+                return e.message, True
+            else:
+                return str(e), True
+    else:
+        data_dict = _data_string
 
-    for field_name in _data:
-        field_value = _data[field_name]
-        if field_name in { 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' }:
+    for field_name in data_dict:
+        field_value = data_dict[field_name]
+        if field_name in [ 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' ]:
             # Data must be a number between 1 and 255
             try:
                 field_number_value = int(field_value)
@@ -599,7 +616,7 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
                     add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
             except Exception:
                 add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
-        elif field_name in { 'type1', 'type2' }:
+        elif field_name in [ 'type1', 'type2' ]:
             # Data must be a number corresponding to a valid type
             try:
                 if not field_value.capitalize() in POKEMON_TYPES:
@@ -608,7 +625,7 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
                         add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
             except Exception:
                 add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
-        elif field_name in { 'ability1', 'ability2' }:
+        elif field_name in [ 'ability1', 'ability2' ]:
             # Data must be a number corresponding to a valid ability
             try:
                 if not field_value.upper() in POKEMON_ABILITIES:
@@ -628,7 +645,7 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
                 add_error('{}\'s {} value is invalid: \'{}\'.'.format(_pokemon_name, field_name, field_value), True)
         elif field_name == 'dex':
             # Data must either be a 0 (allowed) or a 1 (forbidden)
-            if not field_value in [ 0, 1, 'True', 'False' ]:
+            if not field_value in [ 0, 1, '0', '1', 'True', 'False' ]:
                 add_error('{}\'s forbid_flip value is invalid: \'{}\'.'.format(_pokemon_name, field_value), True)
         elif field_name == 'move_pool':
             # Data must be a valid move pool table string
@@ -865,9 +882,9 @@ def stringify_pokemon_data(_data):
     result = ''
     for field_name in _data:
         field_value = _data[field_name]
-        if field_name in { 'type1', 'type2' }:
+        if field_name in [ 'type1', 'type2' ]:
             field_value = POKEMON_TYPES[field_value]
-        elif field_name in { 'ability1', 'ability2' }:
+        elif field_name in [ 'ability1', 'ability2' ]:
             field_value = POKEMON_ABILITIES[field_value].title()
         elif field_name == 'gender_ratio':
             field_value = POKEMON_GENDER_RATIOS[field_value]
@@ -887,17 +904,17 @@ def destringify_pokemon_data(_pokemon_name, _data_string, _safe_mode = False):
         field_info = field_line.split(':', 1)
         field_name = field_info[0].strip()
         field_value = field_info[1].strip()
-        if field_name in { 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' }:
+        if field_name in [ 'hp', 'atk', 'def', 'spatk', 'spdef', 'spd' ]:
             field_value = field_value if _safe_mode else int(field_value)
-        elif field_name in { 'type1', 'type2' }:
+        elif field_name in [ 'type1', 'type2' ]:
             field_value = field_value if _safe_mode else POKEMON_TYPES.index(field_value)
-        elif field_name in { 'ability1', 'ability2' }:
+        elif field_name in [ 'ability1', 'ability2' ]:
             field_value = field_value if _safe_mode else POKEMON_ABILITIES.index(field_value.upper())
         elif field_name == 'gender_ratio':
             field_value = field_value if _safe_mode else REVERSE_POKEMON_GENDER_RATIOS[field_value]
-        elif field_name == 'forbid_flip':
+        elif field_name in [ 'dex', 'forbid_flip' ]:
             # The dex value is stored as a boolean named 'forbid_flip' for clarity
-            field_value = field_value if _safe_mode else (1 if field_value == 'True' else 0)
+            field_value = field_value if _safe_mode else (1 if field_value in [ 1, '1', 'True' ] else 0)
             field_name = 'dex'
         elif field_name == 'move_pool':
             if not _safe_mode:
@@ -920,8 +937,8 @@ def merge_pokemon_data(_old_data, _new_data, _is_dex_simple = False):
 
 def keep_different_pokemon_data(_old_data, _new_data):
     # Returns only different fields between the two pokemon data objects given
-    different_data = { k: v for k, v in _new_data.items() if v != _old_data[k] and k != 'move_pool' }
-    if not are_move_pools_equal(_new_data['move_pool'], _old_data['move_pool']):
+    different_data = { k: v for k, v in _new_data.items() if not k in list(_old_data.keys()) or (v != _old_data[k] and k != 'move_pool') }
+    if 'move_pool' in list(_new_data.keys()) and 'move_pool' in list(_old_data.keys()) and not are_move_pools_equal(_new_data['move_pool'], _old_data['move_pool']):
         different_data['move_pool'] = _new_data['move_pool']
     return different_data
 
@@ -966,7 +983,7 @@ def encode_move_pool(_move_pool):
         move_data = (move_level << 9) + move_id
         result += move_data.to_bytes(2, 'little')
     # Surround the table by FFFF as the move pool functions looks for the beginning and end of the table
-    return bytes(b'\xff\xff' + result + b'\xff\xff')
+    return bytes(result + b'\xff\xff')
 
 def are_move_pools_equal(_move_pool_1, _move_pool_2):
     # Compares two move pool objects

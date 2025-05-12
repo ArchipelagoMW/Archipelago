@@ -34,7 +34,7 @@ from worlds.LauncherComponents import Component, components, Type, launch as lau
 
 def launch_adjuster(*args) -> None:
     launch_component(launch, name="EmeraldAdjuster", args=args)
-components.append(Component('Emerald Adjuster', 'EmeraldAdjuster', func=launch_adjuster, component_type=Type.ADJUSTER))
+components.append(Component('Emerald Adjuster', func=launch_adjuster, component_type=Type.ADJUSTER))
 
 class PokemonEmeraldWebWorld(WebWorld):
     """
