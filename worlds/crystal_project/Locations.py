@@ -819,7 +819,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
-        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
+        LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(752, 133, -262) Dust
         LocationData("Shoudu Province", "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(756, 133, -261) Ingot
