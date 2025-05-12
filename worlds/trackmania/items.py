@@ -57,8 +57,8 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     itempool: list[Item] = []
 
     total_map_count: int = 0#world.options.series_number * world.options.series_map_number
-    for x in range(0, world.options.series_number):
-        total_map_count += world.slot_data["SeriesData"][x]["MapCount"]
+    for series in world.series_data:
+        total_map_count += series["MapCount"]
 
     #create medals for each map
     itempool += create_medals(world, "Author Medal", 300, total_map_count)

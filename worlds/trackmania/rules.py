@@ -7,12 +7,12 @@ if TYPE_CHECKING:
     from . import TrackmaniaWorld
 
 def set_rules(world: "TrackmaniaWorld"):
-    medal_total: int = world.slot_data["SeriesData"][0]["MedalTotal"]
+    medal_total: int = world.series_data[0]["MedalTotal"]
     for i in range(1,world.options.series_number):
         set_series_rules(world, i, medal_total)
-        medal_total += world.slot_data["SeriesData"][i]["MedalTotal"]
+        medal_total += world.series_data[i]["MedalTotal"]
 
-    final_medal_requirement :int = medal_total
+    final_medal_requirement: int = medal_total
 
     set_rule(world.multiworld.get_entrance("Victory!", world.player),
              lambda state: state.has(get_progression_medal(world), world.player, final_medal_requirement))
