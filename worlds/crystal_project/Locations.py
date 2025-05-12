@@ -288,7 +288,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
         #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don"t have one
         #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
-        #Todo NPCs Blocker Missable and Multichecks: luxury store guard; won't give you check 1 if you already have Luxury Pass or check 2 if you have V2
+        #Todo NPCs Blocker Missable and Multichecks: luxury store guard; gives you 1st check at 6 crystals and the 2nd at 15; won't give you check 1 if you already have Luxury Pass or check 2 if you have V2
         #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 1", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289)
         #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
         #Todo NPCs Missable: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity; if you already have Luxury Key, he won't give you anything
