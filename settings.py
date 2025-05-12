@@ -12,7 +12,7 @@ import typing
 import warnings
 from enum import IntEnum
 from threading import Lock
-from typing import cast, Any, BinaryIO, ClassVar, Iterator, Sequence, TextIO, TypeVar
+from typing import cast, Any, BinaryIO, ClassVar, Iterator, Sequence, TextIO, TypeVar, Union
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -166,7 +166,7 @@ class Group:
                 candidates = (
                     [] if annotation is None else (
                         typing.get_args(annotation)
-                        if typing.get_origin(annotation) is types.UnionType
+                        if typing.get_origin(annotation) in (Union, types.UnionType)
                         else [annotation]
                     )
                 )
@@ -283,7 +283,7 @@ class Group:
                 attr_cls = type_hints[name] if name in type_hints else attr.__class__
                 attr_cls_origin = typing.get_origin(attr_cls)
                 # resolve to first type for doc string
-                while attr_cls_origin is types.UnionType:
+                while attr_cls_origin is Union or attr_cls_origin is types.UnionType:
                     attr_cls = typing.get_args(attr_cls)[0]
                     attr_cls_origin = typing.get_origin(attr_cls)
                 if attr_cls.__doc__ and attr_cls.__module__ != "builtins":
