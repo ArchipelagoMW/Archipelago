@@ -1,7 +1,7 @@
 name: Feature Request
 description: Request a feature!
 labels:
-  - enhancement
+  - feature request
 body:
   - type: markdown
     attributes:
