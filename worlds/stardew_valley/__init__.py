@@ -10,11 +10,13 @@ from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
 from .early_items import setup_early_items
-from .items import item_table, create_items, ItemData, Group, items_by_group, generate_filler_choice_pool
+from .items import item_table, ItemData, Group, items_by_group
+from .items.item_creation import create_items, get_all_filler_items, remove_limited_amount_packs, \
+    generate_filler_choice_pool
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
-from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, NumberOfMovementBuffs, \
-    BuildingProgression, EntranceRandomization, FarmType
+from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
+    NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType
 from .options.forced_options import force_change_options_if_incompatible
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
@@ -299,17 +301,9 @@ class StardewValleyWorld(World):
 
         return StardewItem(item.name, override_classification, item.code, self.player)
 
-    def create_event_location(self, location_data: LocationData, rule: StardewRule = None, item: Optional[str] = None):
-        if rule is None:
-            rule = True_()
-        if item is None:
-            item = location_data.name
-
+    def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
         region = self.multiworld.get_region(location_data.region, self.player)
-        location = StardewLocation(self.player, location_data.name, None, region)
-        location.access_rule = rule
-        region.locations.append(location)
-        location.place_locked_item(StardewItem(item, ItemClassification.progression, None, self.player))
+        region.add_event(location_data.name, item, rule, StardewLocation, StardewItem)
 
     def set_rules(self):
         set_rules(self)

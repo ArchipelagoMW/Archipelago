@@ -11,6 +11,11 @@ env:
   ENEMIZER_VERSION: 7.1
   APPIMAGETOOL_VERSION: 13
 
+permissions:  # permissions required for attestation
+  id-token: 'write'
+  attestations: 'write'
+  contents: 'write'  # additionally required for release
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -26,11 +31,79 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # build-release-windows: # this is done by hand because of signing
   # build-release-macos: # LF volunteer
+
+  build-release-win:
+    runs-on: windows-latest
+    if: ${{ true }}  # change to false to skip if release is built by hand
+    needs: create-release
+    steps:
+      - name: Set env
+        shell: bash
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      # - code below copied from build.yml -
+      - uses: actions/checkout@v4
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '~3.12.7'
+          check-latest: true
+      - name: Download run-time dependencies
+        run: |
+          Invoke-WebRequest -Uri https://github.com/Ijwu/Enemizer/releases/download/${Env:ENEMIZER_VERSION}/win-x64.zip -OutFile enemizer.zip
+          Expand-Archive -Path enemizer.zip -DestinationPath EnemizerCLI -Force
+          choco install innosetup --version=6.2.2 --allow-downgrade
+      - name: Build
+        run: |
+          python -m pip install --upgrade pip
+          python setup.py build_exe --yes
+          if ( $? -eq $false ) {
+            Write-Error "setup.py failed!"
+            exit 1
+          }
+          $NAME="$(ls build | Select-String -Pattern 'exe')".Split('.',2)[1]
+          $ZIP_NAME="Archipelago_$NAME.7z"
+          echo "$NAME -> $ZIP_NAME"
+          echo "ZIP_NAME=$ZIP_NAME" >> $Env:GITHUB_ENV
+          New-Item -Path dist -ItemType Directory -Force
+          cd build
+          Rename-Item "exe.$NAME" Archipelago
+          7z a -mx=9 -mhe=on -ms "../dist/$ZIP_NAME" Archipelago
+          Rename-Item Archipelago "exe.$NAME"  # inno_setup.iss expects the original name
+      - name: Build Setup
+        run: |
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe" inno_setup.iss /DNO_SIGNTOOL
+          if ( $? -eq $false ) {
+            Write-Error "Building setup failed!"
+            exit 1
+          }
+          $contents = Get-ChildItem -Path setups/*.exe -Force -Recurse
+          $SETUP_NAME=$contents[0].Name
+          echo "SETUP_NAME=$SETUP_NAME" >> $Env:GITHUB_ENV
+      # - code above copied from build.yml -
+      - name: Attest Build
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher.exe
+            build/exe.*/ArchipelagoLauncherDebug.exe
+            build/exe.*/ArchipelagoGenerate.exe
+            build/exe.*/ArchipelagoServer.exe
+            setups/*
+      - name: Add to Release
+        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        with:
+          draft: true  # see above
+          prerelease: false
+          name: Archipelago ${{ env.RELEASE_VERSION }}
+          files: |
+            setups/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-release-ubuntu2204:
     runs-on: ubuntu-22.04
+    needs: create-release
     steps:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -74,6 +147,14 @@ jobs:
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -
+      - name: Attest Build
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            build/exe.*/ArchipelagoLauncher
+            build/exe.*/ArchipelagoGenerate
+            build/exe.*/ArchipelagoServer
+            dist/*
       - name: Add to Release
         uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:

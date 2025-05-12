@@ -42,7 +42,7 @@ class SpecialOrderLogic(BaseLogic):
             SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_shipping_bin,
-            SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
+            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere,
             SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
             SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
             SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &
