@@ -84,12 +84,16 @@ def browse_files():
 def open_folder(folder_path):
     if is_linux:
         exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, folder_path])
     else:
         webbrowser.open(folder_path)
+        return
+
+    if exe:
+        subprocess.Popen([exe, folder_path])
+    else:
+        logging.warning(f"No file browser available to open {folder_path}")
 
 
 def update_settings():
