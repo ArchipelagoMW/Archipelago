@@ -596,7 +596,10 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
-    trap_items = remove_excluded_items((trap for trap in items_by_group[Group.TRAP] if trap.name not in items_already_added_names), content)
+    trap_items = remove_excluded_items((trap
+                                        for trap in items_by_group[Group.TRAP]
+                                        if trap.name not in items_already_added_names
+                                        and options.trap_distribution[trap.name] > 0), content)
     player_buffs = remove_excluded_items(get_allowed_player_buffs(options.enabled_filler_buffs), content)
 
     priority_filler_items = []
