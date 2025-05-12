@@ -292,12 +292,10 @@ def disconnect_portals(world: "MessengerWorld") -> None:
 
 
 def validate_portals(world: "MessengerWorld") -> bool:
-    if world.options.shuffle_transitions:
-        return True
-    new_state = CollectionState(world.multiworld)
+    new_state = CollectionState(world.multiworld, True)
     new_state.update_reachable_regions(world.player)
     reachable_locs = 0
-    for loc in world.multiworld.get_locations(world.player):
+    for loc in world.get_locations():
         reachable_locs += loc.can_reach(new_state)
         if reachable_locs > 5:
             return True

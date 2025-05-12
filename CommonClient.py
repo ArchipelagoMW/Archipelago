@@ -196,25 +196,11 @@ class CommonContext:
             self.lookup_type: typing.Literal["item", "location"] = lookup_type
             self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
             self._archipelago_lookup: typing.Dict[int, str] = {}
-            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
             self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
-            self.warned: bool = False
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
-            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
-            if isinstance(key, int):
-                if not self.warned:
-                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
-                    self.warned = True
-                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
-                                  f"backwards compatibility for now. If multiple games share the same id for a "
-                                  f"{self.lookup_type}, name could be incorrect. Please use "
-                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
-                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
-                return self._flat_store[key]  # type: ignore
-
             return self._game_store[key]
 
         def __len__(self) -> int:
@@ -254,7 +240,6 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
-            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
@@ -356,7 +341,6 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
-        self.versions = {}
         self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
@@ -571,7 +555,6 @@ class CommonContext:
     
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
-                                   remote_date_package_versions: typing.Dict[str, int],
                                    remote_data_package_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
@@ -580,33 +563,26 @@ class CommonContext:
 
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_date_package_versions and game not in remote_data_package_checksums:
+            if game not in remote_data_package_checksums:
                 continue
 
-            remote_version: int = remote_date_package_versions.get(game, 0)
             remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
 
-            if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
+            if not remote_checksum:  # custom data package and no checksum for this game
                 needed_updates.add(game)
                 continue
 
-            cached_version: int = self.versions.get(game, 0)
             cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
-            if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
-                    or remote_checksum != cached_checksum:
-                local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            if remote_checksum != cached_checksum:
                 local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
-                if ((remote_checksum or remote_version <= local_version and remote_version != 0)
-                        and remote_checksum == local_checksum):
+                if remote_checksum == local_checksum:
                     self.update_game(network_data_package["games"][game], game)
                 else:
                     cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                    cache_version: int = cached_game.get("version", 0)
                     cache_checksum: typing.Optional[str] = cached_game.get("checksum")
                     # download remote version if cache is not new enough
-                    if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
-                            or remote_checksum != cache_checksum:
+                    if remote_checksum != cache_checksum:
                         needed_updates.add(game)
                     else:
                         self.update_game(cached_game, game)
@@ -616,7 +592,6 @@ class CommonContext:
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
-        self.versions[game] = game_package.get("version", 0)
         self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
@@ -887,9 +862,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
 
             # update data package
-            data_package_versions = args.get("datapackage_versions", {})
             data_package_checksums = args.get("datapackage_checksums", {})
-            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums)
+            await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
 
             await ctx.server_auth(args['password'])
 
