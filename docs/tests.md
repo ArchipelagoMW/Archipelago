@@ -119,8 +119,12 @@ variable to keep all the benefits of the test framework while not running the ma
 #### Using Pycharm
 
 In PyCharm, running all tests can be done by right-clicking the root test directory and selecting Run 'Archipelago Unittests'. 
-Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, edit the run configuration, 
-and set the working directory to the Archipelago directory which contains all the project files. 
+If you have never previously run ModuleUpdate.py, then you will need to do this once before the tests will run. 
+You can run ModuleUpdate.py by right-clicking ModuleUpdate.py and selecting `Run 'ModuleUpdate'`. 
+After running ModuleUpdate.py you may still get a `ModuleNotFoundError: No module named 'flask'` for the webhost tests. 
+If this happens, run WebHost.py by right-clicking it and selecting `Run 'WebHost'`. Make sure to press enter when prompted. 
+Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, 
+edit the run configuration, and set the working directory to the Archipelago directory which contains all the project files. 
 
 If you only want to run your world's defined tests, repeat the steps for the test directory within your world.
 Your working directory should be the directory of your world in the worlds directory and the script should be the 
