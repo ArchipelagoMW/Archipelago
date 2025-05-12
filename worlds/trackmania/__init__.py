@@ -109,7 +109,6 @@ class TrackmaniaWorld(World):
                              "MapCount": map_count,
                              "SearchCriteria": search_criteria}
             self.series_data.append(values)
-            print(values)
 
     def fill_slot_data(self) -> dict:
         return {
