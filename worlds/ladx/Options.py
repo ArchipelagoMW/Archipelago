@@ -341,9 +341,7 @@ class Overworld(Choice, LADXROption):
 
 class Quickswap(Choice, LADXROption):
     """
-    Adds that the *SELECT* button swaps with either *A* or *B*. The item is
-    swapped with the top inventory slot. The map is not available when quickswap
-    is enabled.
+    Instead of opening the map, the *SELECT* button swaps the top item of your inventory on to your *A* or *B* button.
     """
     display_name = "Quickswap"
     ladxr_name = "quickswap"
