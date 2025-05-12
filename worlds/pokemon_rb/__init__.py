@@ -112,6 +112,9 @@ class PokemonRedBlueWorld(World):
         self.trainersanity_table = []
         self.local_locs = []
         self.pc_item = None
+        self.rock_tunnel_1f_data = None
+        self.rock_tunnel_b1f_data = None
+        self.rock_tunnel_seed = None
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld):

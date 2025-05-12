@@ -10,7 +10,6 @@ from .items import item_table
 from .text import encode_text
 from .pokemon import set_mon_palettes
 from .regions import PokemonRBWarp, map_ids, town_map_coords
-from .rock_tunnel import randomize_rock_tunnel
 from .rom_addresses import rom_addresses
 
 if typing.TYPE_CHECKING:
@@ -606,14 +605,13 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
     write_bytes(rom_addresses["TM_Moves"], TM_IDs)
 
     if world.options.randomize_rock_tunnel:
-        seed = randomize_rock_tunnel(patch, world.random)
-        write_bytes(rom_addresses["Text_Rock_Tunnel_Sign"], encode_text(f"SEED: <LINE>{seed}"))
+        # seed = randomize_rock_tunnel(patch, world.random)
+        write_bytes(rom_addresses["Text_Rock_Tunnel_Sign"], encode_text(f"SEED: <LINE>{world.rock_tunnel_seed}"))
+        patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_Tunnel1F"], world.rock_tunnel_1f_data)
+        patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_TunnelB1F"], world.rock_tunnel_b1f_data)
 
     mons = [mon["id"] for mon in poke_data.pokemon_data.values()]
     world.random.shuffle(mons)
-    write_bytes(rom_addresses["Title_Mon_First"], mons.pop())
-    for mon in range(0, 16):
-        write_bytes(rom_addresses["Title_Mons"] + mon, mons.pop())
     if world.options.game_version.value:
         mons.sort(key=lambda mon: 0 if mon == world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name
                   else 1 if mon == world.multiworld.get_location("Oak's Lab - Starter 2", world.player).item.name else
@@ -622,6 +620,10 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
         mons.sort(key=lambda mon: 0 if mon == world.multiworld.get_location("Oak's Lab - Starter 2", world.player).item.name
                   else 1 if mon == world.multiworld.get_location("Oak's Lab - Starter 1", world.player).item.name else
                   2 if mon == world.multiworld.get_location("Oak's Lab - Starter 3", world.player).item.name else 3)
+    write_bytes(rom_addresses["Title_Mon_First"], mons.pop())
+    for mon in range(0, 16):
+        write_bytes(rom_addresses["Title_Mons"] + mon, mons.pop())
+
     write_bytes(rom_addresses["Title_Seed"], encode_text(world.multiworld.seed_name[-20:], 20, True))
 
     slot_name = world.multiworld.player_name[world.player]
