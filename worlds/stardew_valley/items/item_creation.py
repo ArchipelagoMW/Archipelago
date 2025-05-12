@@ -21,6 +21,7 @@ from ..strings.ap_names.buff_names import Buff
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.backpack_tiers import Backpack
+from ..strings.building_names import Building
 from ..strings.currency_names import Currency
 from ..strings.tool_names import Tool
 from ..strings.wallet_item_names import Wallet
@@ -90,7 +91,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_tools(item_factory, content, items)
     create_skills(item_factory, content, items)
     create_wizard_buildings(item_factory, options, content, items)
-    create_carpenter_buildings(item_factory, content, items)
+    create_carpenter_buildings(item_factory, options, content, items)
     items.append(item_factory("Railroad Boulder Removed"))
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
@@ -232,14 +233,17 @@ def create_wizard_buildings(item_factory: StardewItemFactory, options: StardewVa
         items.append(item_factory("Woods Obelisk"))
 
 
-def create_carpenter_buildings(item_factory: StardewItemFactory, content: StardewContent, items: List[Item]):
+def create_carpenter_buildings(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     building_progression = content.features.building_progression
     if not building_progression.is_progressive:
         return
 
     for building in content.farm_buildings.values():
         item_name, _ = building_progression.to_progressive_item(building.name)
-        items.append(item_factory(item_name))
+        if item_name in [Building.stable, Building.well] and options.bundle_randomization != BundleRandomization.option_meme:
+            items.append(item_factory(item_name, classification_pre_fill=ItemClassification.useful))
+        else:
+            items.append(item_factory(item_name))
 
 
 def create_quest_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
