@@ -16,7 +16,7 @@ from ..options import BundleRandomization, StardewValleyOptions
 from ..strings.bundle_names import CCRoom
 
 
-def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
+def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
     if options.bundle_randomization == BundleRandomization.option_vanilla:
         return get_vanilla_bundles(random, content, options)
     elif options.bundle_randomization == BundleRandomization.option_thematic:
@@ -28,7 +28,7 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
     elif options.bundle_randomization == BundleRandomization.option_shuffled:
         return get_shuffled_bundles(random, logic, content, options)
     elif options.bundle_randomization == BundleRandomization.option_meme:
-        return get_meme_bundles(random, content, options)
+        return get_meme_bundles(random, content, options, player_name)
 
     raise NotImplementedError
 
@@ -71,8 +71,8 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
 
-def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    big_room = community_center_meme_bundles.create_bundle_room(random, content, options)
+def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
+    big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name)
     all_chosen_bundles = big_room.bundles
     random.shuffle(all_chosen_bundles)
 

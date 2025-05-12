@@ -13,19 +13,33 @@ class BundleRoom:
     bundles: List[Bundle]
 
 
+def simplify_name(name: str) -> str:
+    return name.lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "")
+
+
+# In the context of meme bundles, some of the bundles are directly references to specific people, mostly content creators.
+# This ensures that they roll their own bundle as part of their community center.
+def is_bundle_related_to_player(bundle: BundleTemplate, player_name: str) -> bool:
+    if player_name == "":
+        return False
+    simple_bundle = simplify_name(bundle.name)
+    simple_player = simplify_name(player_name)
+    return simple_player in simple_bundle or simple_bundle in simple_player
+
+
 @dataclass
 class BundleRoomTemplate:
     name: str
     bundles: List[BundleTemplate]
     number_bundles: int
 
-    def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions):
+    def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str = ""):
         filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(options)]
 
         priority_bundles = []
         unpriority_bundles = []
         for bundle in filtered_bundles:
-            if bundle.name in options.bundle_plando:
+            if bundle.name in options.bundle_plando or is_bundle_related_to_player(bundle, player_name):
                 priority_bundles.append(bundle)
             else:
                 unpriority_bundles.append(bundle)
