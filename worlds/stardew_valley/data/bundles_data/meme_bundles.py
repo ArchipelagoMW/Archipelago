@@ -201,7 +201,7 @@ emmalution_items = [garlic, bread, trash, goblin_mask, rain_totem]
 emmalution_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.emmalution, emmalution_items, 5, 5)
 
 honeywell_items = [honey, BundleItem(Building.well)]
-honeywell_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, emmalution_items, 2, 2)
+honeywell_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, honeywell_items, 2, 2)
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
