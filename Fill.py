@@ -529,7 +529,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             priority_retry_2_state = sweep_from_pool(multiworld.state, regular_progression)
             fill_restrictive(multiworld, priority_retry_2_state, prioritylocations, deprioritized_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry 2", one_item_per_player=False, allow_partial=True)
+                             name="Priority Retry 2", one_item_per_player=True, allow_partial=True)
 
         if prioritylocations and deprioritized_progression:
             # retry with deprioritized items AND without one_item_per_player optimisation
