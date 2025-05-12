@@ -231,11 +231,11 @@ Sent to clients after a client requested this message be sent to them, more info
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
-| original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
-| text | str | A descriptive message of the problem at hand. |
+| Name | Type        | Notes |
+| ---- |-------------| ----- |
+| type | str         | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
+| original_cmd | str \| None | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text | str         | A descriptive message of the problem at hand. |
 
 ##### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
