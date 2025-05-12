@@ -72,7 +72,6 @@ non_apworlds: Set[str] = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
     "VVVVVV",
