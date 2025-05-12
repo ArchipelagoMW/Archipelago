@@ -54,7 +54,7 @@ sunmaid_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.sunmaid, sunmaid_i
 rick_items = [pickles]
 rick_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.rick, rick_items, 1, 1)
 
-minecraft_items = [coal.as_amount(1), copper_ore, iron_ore, quartz, amethyst, emerald, gold_ore, diamond, obsidian]
+minecraft_items = [coal, copper_ore, iron_ore, quartz, amethyst, emerald, gold_ore, diamond, obsidian]
 minecraft_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.minecraft, minecraft_items, 9, 8)
 
 balls_items = [blue_jazz, cauliflower, blueberry, melon, red_cabbage, tomato, powdermelon, cranberries, fairy_rose, grape, pumpkin, ancient_fruit,
@@ -183,7 +183,7 @@ animal_well_items = [rare_disc, bone_flute, ruby_crystal_ball, cherry_bomb.as_am
 animal_well_bundle = FixedPriceBundleTemplate(CCRoom.pantry, MemeBundleName.animal_well, animal_well_items, 7, 7)
 
 schrodinger_items = [*all_simple_items]
-schrodinger_bundle = FixedPriceBundleTemplate(CCRoom.fish_tank, MemeBundleName.schrodinger, schrodinger_items, 2, 2)
+schrodinger_bundle = FixedPriceBundleTemplate(CCRoom.fish_tank, MemeBundleName.schrodinger, schrodinger_items, 2, 1)
 
 ikea_craftables = [Machine.mayonnaise_machine, Machine.bee_house, Machine.preserves_jar, Machine.cheese_press, Machine.keg, Machine.fish_smoker,
                    Machine.crystalarium, Machine.worm_bin, Furniture.tub_o_flowers]

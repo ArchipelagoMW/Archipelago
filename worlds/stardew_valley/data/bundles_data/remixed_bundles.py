@@ -28,7 +28,7 @@ island_foraging_bundle = IslandBundleTemplate(CCRoom.crafts_room, BundleName.isl
 sticky_items = [sap.as_amount(500), sap.as_amount(500)]
 sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_items, 1, 1)
 
-forest_items = [moss, fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
+forest_items = [moss.as_amount(10), fiber.as_amount(200), acorn.as_amount(10), maple_seed.as_amount(10), pine_cone.as_amount(10), mahogany_seed,
                 mushroom_tree_seed, mossy_seed.as_amount(5), mystic_tree_seed]
 forest_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.forest, forest_items, 4, 2)
 

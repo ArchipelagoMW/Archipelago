@@ -33,7 +33,7 @@ fall_foraging_bundle_thematic = BundleTemplate.extend_from(fall_foraging_bundle_
 winter_foraging_items_thematic = [*winter_foraging_items_vanilla, holly, nautilus_shell]
 winter_foraging_bundle_thematic = BundleTemplate.extend_from(winter_foraging_bundle_vanilla, winter_foraging_items_thematic)
 
-construction_items_thematic = [*construction_items_vanilla, clay, fiber, sap.as_amount(50)]
+construction_items_thematic = [*construction_items_vanilla, clay.as_amount(10), fiber.as_amount(99), sap.as_amount(50)]
 construction_bundle_thematic = BundleTemplate.extend_from(construction_bundle_vanilla, construction_items_thematic)
 
 exotic_foraging_items_thematic = [*exotic_foraging_items_vanilla, coral, sea_urchin, clam, cockle, mussel, oyster, seaweed]
@@ -102,7 +102,7 @@ blacksmith_bundle_thematic = BundleTemplate.extend_from(blacksmith_bundle_vanill
 geologist_items_thematic = [*geologist_items_vanilla, emerald, aquamarine, ruby, amethyst, topaz, jade, diamond]
 geologist_bundle_thematic = BundleTemplate.extend_from(geologist_bundle_vanilla, geologist_items_thematic)
 
-adventurer_items_thematic = [*adventurer_items_vanilla, bug_meat, coal, bone_fragment.as_amount(10)]
+adventurer_items_thematic = [*adventurer_items_vanilla, bug_meat, coal.as_amount(5), bone_fragment.as_amount(10)]
 adventurer_bundle_thematic = BundleTemplate.extend_from(adventurer_bundle_vanilla, adventurer_items_thematic)
 
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]

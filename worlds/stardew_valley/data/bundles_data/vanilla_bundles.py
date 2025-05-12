@@ -29,7 +29,7 @@ raccoon_fish_items_deep = [raccoon_crab_pot_fish_items, raccoon_smoked_fish_item
 all_specific_dried_mushrooms = [BundleItem(ArtisanGood.dried_mushroom, flavor=mushroom, source=BundleItem.Sources.content) for mushroom in all_edible_mushrooms]
 raccoon_food_items = [egg.as_amount(5), cave_carrot.as_amount(5), white_algae.as_amount(5)]
 
-raccoon_foraging_items = [moss, rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
+raccoon_foraging_items = [moss.as_amount(10), rusty_spoon, trash.as_amount(5), slime.as_amount(99), bat_wing.as_amount(10), geode.as_amount(8),
                           frozen_geode.as_amount(5), magma_geode.as_amount(3), coral.as_amount(4), sea_urchin.as_amount(2), bug_meat.as_amount(10),
                           diamond, topaz.as_amount(3), ghostfish.as_amount(3)]
 
