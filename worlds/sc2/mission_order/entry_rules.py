@@ -64,7 +64,7 @@ class EntryRule(ABC):
 @dataclass
 class RuleData(ABC):
     @abstractmethod
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission], done_color: str, not_done_color: str) -> str:
         return ""
     
     @abstractmethod
@@ -112,7 +112,7 @@ class BeatMissionsRuleData(RuleData):
     mission_ids: List[int]
     visual_reqs: List[Union[str, int]]
 
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission], done_color: str, not_done_color: str) -> str:
         indent = " ".join("" for _ in range(indents))
         if len(self.visual_reqs) == 1:
             req = self.visual_reqs[0]
@@ -181,7 +181,7 @@ class CountMissionsRuleData(RuleData):
     amount: int
     visual_reqs: List[Union[str, int]]
 
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission], done_color: str, not_done_color: str) -> str:
         indent = " ".join("" for _ in range(indents))
         if self.amount == len(self.mission_ids):
             amount = "all"
@@ -314,18 +314,29 @@ class SubRuleRuleData(RuleData):
     def empty() -> SubRuleRuleData:
         return SubRuleRuleData(-1, [], 0)
     
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission], done_color: str, not_done_color: str) -> str:
         indent = " ".join("" for _ in range(indents))
         if self.amount == len(self.sub_rules):
             if self.amount == 1:
-                return self.sub_rules[0].tooltip(indents, missions)
+                return self.sub_rules[0].tooltip(indents, missions, done_color, not_done_color)
             amount = "all"
         elif self.amount == 1:
             amount = "any"
         else:
             amount = str(self.amount)
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
-        tooltip += f"\n{indent}- ".join(rule.tooltip(indents + 4, missions) for rule in self.sub_rules)
+        color_tooltips = any([getattr(rule, "was_accessible", False) for rule in self.sub_rules])
+        subrule_tooltips: List[str] = []
+        for rule in self.sub_rules:
+            sub_tooltip = rule.tooltip(indents + 4, missions, done_color, not_done_color)
+            if color_tooltips:
+                if getattr(rule, "was_accessible", False):
+                    subrule_tooltips.append(f"[color={done_color}]{sub_tooltip}[/color]")
+                else:
+                    subrule_tooltips.append(f"[color={not_done_color}]{sub_tooltip}[/color]")
+            else:
+                subrule_tooltips.append(sub_tooltip)
+        tooltip += f"\n{indent}- ".join(sub_tooltip for sub_tooltip in subrule_tooltips)
         return tooltip
 
     def shows_single_rule(self) -> bool:
@@ -352,10 +363,13 @@ class SubRuleRuleData(RuleData):
         if self.amount > 0:
             for rule in self.sub_rules:
                 if rule.is_accessible(beaten_missions, received_items, mission_id_to_entry_rules, accessible_rules, seen_rules):
+                    rule.was_accessible = True
                     accessible_count += 1
                     if accessible_count >= self.amount:
                         success = True
                         break
+                else:
+                    rule.was_accessible = False
         
         if self.rule_id >= 0:
             if success:
@@ -405,7 +419,7 @@ class ItemRuleData(RuleData):
     item_ids: Dict[int, int]
     visual_reqs: List[str]
 
-    def tooltip(self, indents: int, missions: Dict[int, SC2Mission]) -> str:
+    def tooltip(self, indents: int, missions: Dict[int, SC2Mission], done_color: str, not_done_color: str) -> str:
         indent = " ".join("" for _ in range(indents))
         if len(self.visual_reqs) == 1:
             return f"Find {self.visual_reqs[0]}"
