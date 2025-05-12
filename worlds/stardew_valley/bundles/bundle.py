@@ -4,9 +4,9 @@ from random import Random
 from typing import List, Tuple
 
 from .bundle_item import BundleItem
-from .. import EntranceRandomization
 from ..content import StardewContent
 from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
+from ..options import EntranceRandomization
 from ..strings.currency_names import Currency, MemeCurrency
 
 
