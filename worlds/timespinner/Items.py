@@ -208,7 +208,9 @@ item_table: Dict[str, ItemData] = {
     'Lab Access Research': ItemData('Lab Access', 1337196, progression=True),
     'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
     'Drawbridge Key': ItemData('Key', 1337198, progression=True),
-    # 1337199 - 1337248 Reserved
+    # 1337199 Reserved
+    'Spider Trap': ItemData('Trap', 1337200, 0, trap=True),
+    # 1337201 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
