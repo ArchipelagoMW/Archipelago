@@ -3,8 +3,10 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency, MemeCurrency
+from ..strings.food_names import Beverage
 from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 
@@ -108,6 +110,14 @@ class MoneyLogic(BaseLogic):
         if currency == MemeCurrency.dead_pumpkins:
             return self.logic.season.has(Season.fall) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter]) &\
                    self.logic.has(Vegetable.pumpkin) & self.logic.money.can_spend(amount * 100)
+        if currency == MemeCurrency.time_elapsed:
+            if amount <= 1000:
+                return self.logic.true_
+            if amount <= 1400:
+                return self.logic.has(Beverage.coffee)
+            if amount <= 1800:
+                return self.logic.building.has_building(Building.stable)
+            return self.logic.has(Beverage.coffee) & self.logic.building.has_building(Building.stable)
 
         return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
 

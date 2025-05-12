@@ -3,6 +3,7 @@ from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
 from ...bundles.bundle import BureaucracyBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
     FixedPriceBundleTemplate
+from ...strings.building_names import Building
 from ...strings.bundle_names import MemeBundleName
 from ...strings.currency_names import MemeCurrency
 from ...strings.flower_names import all_flowers
@@ -193,11 +194,14 @@ ikea_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.ikea, 
 this_is_fine_items = [coffee, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz, fire_quartz]
 this_is_fine_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.this_is_fine, this_is_fine_items, 8, 8)
 
-shitty_items = [clay, mudstone, truffle, sunflower_seeds, roasted_hazelnuts, plum_pudding, rotten_plant, taro_root]
-shitty_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.shitty, shitty_items, 4, 4)
+crap_pot_items = [clay, mudstone, truffle, sunflower_seeds, roasted_hazelnuts, plum_pudding, rotten_plant, taro_root]
+crap_pot_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.crap_pot, crap_pot_items, 4, 4)
 
 emmalution_items = [garlic, bread, trash, goblin_mask, rain_totem]
 emmalution_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.emmalution, emmalution_items, 5, 5)
+
+honeywell_items = [honey, BundleItem(Building.well)]
+honeywell_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, emmalution_items, 2, 2)
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
@@ -213,7 +217,7 @@ connection_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleNam
 nft_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.nft, BundleItem.money_bundle(0))
 firstborn_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.firstborn, BundleItem(MemeCurrency.child, 1))
 restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.restraint, BundleItem.money_bundle(0))
-fast_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem.money_bundle(0))
+fast_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem(MemeCurrency.time_elapsed, 1000))
 floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
 joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 750))
 
@@ -234,6 +238,7 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 #   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Sticky Bundle       (But it sticks, somehow?)
+#   Investment Bundle   (Give anything you want, you get it back double in a month)
 
 
 # Bundles that need special Mod Handling:
@@ -262,7 +267,7 @@ fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, 
 fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
 boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle,
-                            honorable_bundle, sisyphus_bundle, automation_bundle, shitty_bundle]
+                            honorable_bundle, sisyphus_bundle, automation_bundle, crap_pot_bundle]
 boiler_room_meme = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_meme, 3)
 
 bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_revenge_bundle, smapi_bundle, sappy_bundle, hats_off_to_you_bundle,

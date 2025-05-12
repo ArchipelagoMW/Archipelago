@@ -128,7 +128,8 @@ class BundleName:
 
 
 class MemeBundleName:
-    shitty = meme_bundle("Shitty")
+    honeywell = meme_bundle("Honeywell")
+    crap_pot = meme_bundle("Crap Pot")
     emmalution = meme_bundle("Emmalution")
     joetg = meme_bundle("Joetg")
     floor_is_lava = meme_bundle("The Floor Is Lava")

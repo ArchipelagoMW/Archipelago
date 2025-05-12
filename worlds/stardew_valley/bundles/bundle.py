@@ -4,9 +4,10 @@ from random import Random
 from typing import List, Tuple
 
 from .bundle_item import BundleItem
+from .. import EntranceRandomization
 from ..content import StardewContent
 from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
-from ..strings.currency_names import Currency
+from ..strings.currency_names import Currency, MemeCurrency
 
 
 @dataclass
@@ -103,6 +104,9 @@ class CurrencyBundleTemplate(BundleTemplate):
                 return False
         if options.festival_locations == FestivalLocations.option_disabled:
             if self.item.item_name == Currency.star_token:
+                return False
+        if options.entrance_randomization != EntranceRandomization.option_disabled:
+            if self.item.item_name == MemeCurrency.time_elapsed:
                 return False
         return True
 
