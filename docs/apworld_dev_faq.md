@@ -127,11 +127,16 @@ Remember that all items referenced by logic (however hard or soft) must be `prog
 
 ### What if my game has "missable" or "one-time-only" locations or region connections?
 
-Archipelago logic assumes that once a region or location becomes reachable, it stays reachable forever, no matter what the player does in-game. Slightly more formally: Receiving an AP item must never cause a region connection or location to "go out of logic" (become unreachable when it was previously reachable), and receiving AP items is the only kind of state change that AP logic acknowledges. No other actions or events can change reachability.
+Archipelago logic assumes that once a region or location becomes reachable, it stays reachable forever, no matter what 
+the player does in-game. Slightly more formally: Receiving an AP item must never cause a region connection or location 
+to "go out of logic" (become unreachable when it was previously reachable), and receiving AP items is the only kind of 
+state change that AP logic acknowledges. No other actions or events can change reachability.
 
-So when a game violates this assumption, the options are:
-- Simply don't generate the missable location/connection at all
-  - If it's a connection, this assumes all of your logical regions will still be reachable through other, *repeatable* connections 
-- If there are both missable and repeatable ways to check the location/traverse the connection, then write logic for only the repeatable ways
+So when a game does not follow this assumption, the options are:
 - Modify the game to make that location/connection repeatable
+- If there are both missable and repeatable ways to check the location/traverse the connection, then write logic for 
+  only the repeatable ways
+- Don't generate the missable location/connection at all
+  - For connections, any logical regions will still need to be reachable through other, *repeatable* connections
+  - For locations, this may require game changes to remove the vanilla item if it affects logic
 - Decide that resetting the save file is part of the game's logic, and warn players about that
