@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Set, Tuple, Union
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld, Region
-from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, distribute_planned, \
-    flood_items
+from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
+    parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple, get_settings
 from settings import get_settings
@@ -37,9 +37,6 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger = logging.getLogger()
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     multiworld.plando_options = args.plando_options
-    multiworld.plando_items = args.plando_items.copy()
-    multiworld.plando_texts = args.plando_texts.copy()
-    multiworld.plando_connections = args.plando_connections.copy()
     multiworld.game = args.game.copy()
     multiworld.player_name = args.name.copy()
     multiworld.sprite = args.sprite.copy()
@@ -56,29 +53,15 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
-    max_item = 0
-    max_location = 0
-    for cls in AutoWorld.AutoWorldRegister.world_types.values():
-        if cls.item_id_to_name:
-            max_item = max(max_item, max(cls.item_id_to_name))
-            max_location = max(max_location, max(cls.location_id_to_name))
-
-    item_digits = len(str(max_item))
-    location_digits = len(str(max_location))
     item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
     location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
-    del max_item, max_location
 
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f" {name:{longest_name}}: {len(cls.item_names):{item_count}} "
-                        f"Items (IDs: {min(cls.item_id_to_name):{item_digits}} - "
-                        f"{max(cls.item_id_to_name):{item_digits}}) | "
-                        f"{len(cls.location_names):{location_count}} "
-                        f"Locations (IDs: {min(cls.location_id_to_name):{location_digits}} - "
-                        f"{max(cls.location_id_to_name):{location_digits}})")
+            logger.info(f" {name:{longest_name}}: Items: {len(cls.item_names):{item_count}} | "
+                        f"Locations: {len(cls.location_names):{location_count}}")
 
-    del item_digits, location_digits, item_count, location_count
+    del item_count, location_count
 
     # This assertion method should not be necessary to run if we are not outputting any multidata.
     if not args.skip_output and not args.spoiler_only:
@@ -149,6 +132,8 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld.worlds[1].options.non_local_items.value = set()
         multiworld.worlds[1].options.local_items.value = set()
 
+    multiworld.plando_item_blocks = parse_planned_blocks(multiworld)
+
     AutoWorld.call_all(multiworld, "connect_entrances")
     AutoWorld.call_all(multiworld, "generate_basic")
 
@@ -193,8 +178,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         multiworld._all_state = None
 
     logger.info("Running Item Plando.")
-
-    distribute_planned(multiworld)
+    resolve_early_locations_for_planned(multiworld)
+    distribute_planned_blocks(multiworld, [x for player in multiworld.plando_item_blocks
+                                           for x in multiworld.plando_item_blocks[player]])
 
     logger.info('Running Pre Main Fill.')
 
@@ -315,6 +301,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
+                data_package["Archipelago"] = worlds.network_data_package["games"]["Archipelago"]
 
                 checks_in_area: Dict[int, Dict[str, Union[int, List[int]]]] = {}
 

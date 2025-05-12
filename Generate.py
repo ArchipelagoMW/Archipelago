@@ -252,7 +252,20 @@ def read_weights_yamls(path) -> Tuple[Any, ...]:
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return tuple(parse_yamls(yaml))
+    from yaml.error import MarkedYAMLError
+    try:
+        return tuple(parse_yamls(yaml))
+    except MarkedYAMLError as ex:
+        if ex.problem_mark:
+            lines = yaml.splitlines()
+            if ex.context_mark:
+                relevant_lines = "\n".join(lines[ex.context_mark.line:ex.problem_mark.line+1])
+            else:
+                relevant_lines = lines[ex.problem_mark.line]
+            error_line = " " * ex.problem_mark.column + "^"
+            raise Exception(f"{ex.context} {ex.problem} on line {ex.problem_mark.line}:"
+                            f"\n{relevant_lines}\n{error_line}")
+        raise ex
 
 
 def interpret_on_off(value) -> bool:
@@ -321,12 +334,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def roll_percentage(percentage: Union[int, float]) -> bool:
-    """Roll a percentage chance.
-    percentage is expected to be in range [0, 100]"""
-    return random.random() < (float(percentage) / 100)
-
-
 def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
@@ -392,7 +399,7 @@ def roll_linked_options(weights: dict) -> dict:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
         try:
-            if roll_percentage(option_set["percentage"]):
+            if Options.roll_percentage(option_set["percentage"]):
                 logging.debug(f"Linked option {option_set['name']} triggered.")
                 new_options = option_set["options"]
                 for category_name, category_options in new_options.items():
@@ -425,7 +432,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, currently_targeted_weights)
             currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            if result == trigger_result and Options.roll_percentage(get_choice("percentage", option_set, 100)):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
@@ -456,6 +463,14 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
+    """
+    Roll options from specified weights, usually originating from a .yaml options file.
+
+    Important note:
+    The same weights dict is shared between all slots using the same yaml (e.g. generic weights file for filler slots).
+    This means it should never be modified without making a deepcopy first.
+    """
+
     from worlds import AutoWorldRegister
 
     if "linked_options" in weights:
@@ -521,10 +536,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
 
-    # TODO remove plando_items after moving it to the options system
-    valid_keys.add("plando_items")
-    if PlandoOptions.items in plando_options:
-        ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
         # TODO there are still more LTTP options not on the options system
         valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
