@@ -2,17 +2,6 @@ from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import DKC2World
-    
-
-def location_icon_coords(map_index: int, coords: dict[str, Any]) -> tuple[int, int, str] | None:
-    if not coords:
-        return None
-    
-    dx, dy = MAP_OFFSETS[map_index]
-    x = int((coords.get("X", 0) + (ROOM_WIDTH / 2) + dx) / MAP_SCALE_X)
-    y = int((coords.get("Y", 0) - (ROOM_HEIGHT / 2) + dy) / MAP_SCALE_Y)
-    icon = CHARACTER_ICONS.get(coords.get("Character", 1), "algus")
-    return x, y, f"images/icons/{icon}.png"
 
 def map_page_index(data: Any) -> int:
     mapping: dict[str, int] = {
