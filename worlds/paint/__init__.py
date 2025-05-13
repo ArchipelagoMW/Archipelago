@@ -1,7 +1,7 @@
 from typing import Dict, Any
 
-from BaseClasses import CollectionState, Item, Tutorial, Region, Entrance
-from worlds.AutoWorld import World, WebWorld
+from BaseClasses import CollectionState, Item, MultiWorld, Tutorial, Region, Entrance
+from worlds.AutoWorld import LogicMixin, World, WebWorld
 from .items import item_table, PaintItem, item_data_table, traps, deathlink_traps
 from .locations import location_table, PaintLocation, location_data_table
 from .options import PaintOptions
@@ -108,3 +108,12 @@ def location_exists_with_options(world: PaintWorld, location: int):
     return l <= world.options.logic_percent * 4 and (l % 4 == 0 or
                                                     (l > world.options.half_percent_checks * 4 and l % 2 == 0) or
                                                     l > world.options.quarter_percent_checks * 4)
+
+
+class PaintState(LogicMixin):
+    paint_percent_available: dict[int, float]  # per player
+    paint_percent_stale: dict[int, bool]
+
+    def init_mixin(self, multiworld: MultiWorld) -> None:
+        self.paint_percent_available = {player: 0 for player in multiworld.get_game_players("Paint")}
+        self.paint_percent_stale = {player: True for player in multiworld.get_game_players("Paint")}

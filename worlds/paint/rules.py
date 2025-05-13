@@ -1,18 +1,8 @@
 from math import sqrt
 
-from BaseClasses import CollectionState, MultiWorld
-from worlds.AutoWorld import LogicMixin
+from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
 from . import PaintWorld, location_exists_with_options
-
-
-class PaintState(LogicMixin):
-    paint_percent_available: dict[int, float]  # per player
-    paint_percent_stale: dict[int, bool]
-
-    def init_mixin(self, multiworld: MultiWorld) -> None:
-        self.paint_percent_available = {player: 0 for player in multiworld.get_game_players("Paint")}
-        self.paint_percent_stale = {player: True for player in multiworld.get_game_players("Paint")}
 
 
 def paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> bool:
