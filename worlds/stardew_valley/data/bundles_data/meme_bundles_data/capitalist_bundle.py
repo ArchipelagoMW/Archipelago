@@ -24,7 +24,9 @@ pomegranate_saplings = {ArtisanQuality.basic: 1500, ArtisanQuality.silver: 1875,
 
 
 def get_capitalist_item(item: BundleItem, quality: str, value: int) -> BundleItem:
-    return item.as_quality(quality).as_amount(math.ceil(capitalist_value / value))
+    amount = math.ceil(capitalist_value / value)
+    assert amount < 1000
+    return item.as_quality(quality).as_amount(amount)
 
 
 def get_capitalist_items(item: BundleItem, values_by_quality: Dict[str, int]) -> List[BundleItem]:

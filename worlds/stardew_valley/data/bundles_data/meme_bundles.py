@@ -14,7 +14,7 @@ from ...strings.quality_names import AnimalProductQuality, CropQuality
 burger_king_items = [survival_burger, joja_cola, apple_slices, ice_cream, strange_doll, strange_doll_green, hashbrowns, infinity_crown]
 burger_king_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.burger_king, burger_king_items, 6, 3)
 
-capitalist_bundle = BundleTemplate(CCRoom.vault, MemeBundleName.capitalist, capitalist_items, 12, 2)
+capitalist_bundle = FixedPriceBundleTemplate(CCRoom.vault, MemeBundleName.capitalist, capitalist_items, 12, 2)
 
 romance_items = [lucky_purple_shorts, truffle_oil, super_cucumber, good_ol_cap]
 romance_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.romance, romance_items, 4, 4)
@@ -223,22 +223,24 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 # Stopped at 49 responses on the form
 
 # Todo Bundles
-#   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
-#   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
-#   Cooperation Bundle  (Asks for normal items but can only be donated through gifting)
-#   Clickbait Bundle    (Scouts a super critical progression item, but actually contains garbage)
 #   ASMR Bundle         (Relaxing Bundle, it plays ASMR noise)
-#   Gacha Bundle        (Open lootboxes until you get a T5 reward)
-#   QA Bundle           (Some sort of bug, not sure yet)
+#   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
 #   Bad Farmer Bundle   (Dead Crops)
-#   Humble Bundle       (Pay what you want, 3 rewards (useful, filler, trap). Other two are auto-checked when finishing the CC)
-#   Crowdfunding Bundle (Purchase with Bank Money)
-#   Relay Bundle        (Relay Stick passed around the multiworld)
-#   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
-#   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
-#   Sticky Bundle       (But it sticks, somehow?)
-#   Investment Bundle   (Give anything you want, you get it back double in a month)
 #   Cipher Bundle       (Some sort of code?)
+#   Clickbait Bundle    (Scouts a super critical progression item, but actually contains garbage)
+#   Cooperation Bundle  (Asks for normal items but can only be donated through gifting)
+#   Crowdfunding Bundle (Purchase with Bank Money)
+#   Deathlink Bundle    (Completes after N deathlinks are sent across the multiworld)
+#   FrazzleDuck Bundle  (Duck and eggplant)
+#   Gacha Bundle        (Open lootboxes until you get a T5 reward)
+#   Humble Bundle       (Pay what you want, 3 rewards (useful, filler, trap). Other two are auto-checked when finishing the CC)
+#   Investment Bundle   (Give anything you want, you get it back double in a month)
+#   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
+#   QA Bundle           (Some sort of bug, not sure yet)
+#   Relay Bundle        (Relay Stick passed around the multiworld)
+#   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
+#   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
+#   Sticky Bundle       (But it sticks, somehow?)
 
 
 # Bundles that need special Mod Handling:
