@@ -3,6 +3,7 @@ from BaseClasses import Region, Location, MultiWorld
 from .Options import CrystalProjectOptions
 from .Locations import LocationData
 from .rules import CrystalProjectLogic
+from .Constants import *
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
@@ -161,7 +162,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Capital Sequoia", player).add_exits(["Jojo Sewers", "Rolling Quintar Fields", "Cobblestone Crag", "Greenshire Reprise", "Castle Sequoia", "Skumparadise"],
         {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1),
         "Rolling Quintar Fields": lambda state: logic.is_area_in_level_range(state, 1),
-        "Cobblestone Crag": logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement,
+        "Cobblestone Crag": lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar or logic.has_horizontal_movement,
         "Greenshire Reprise": lambda state: logic.has_jobs(state, 6) and logic.is_area_in_level_range(state, 2),
         "Castle Sequoia": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5),
         "Skumparadise": lambda state: logic.is_area_in_level_range(state, 1)})
@@ -185,7 +186,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Quintar Nest": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region("Capital Jail", player).add_exits(["Jojo Sewers", "Capital Pipeline"],
         {"Jojo Sewers": lambda state: logic.is_area_in_level_range(state, 1) and logic.is_area_in_level_range(state, 1),
-        "Capital Pipeline": lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6) and logic.is_area_in_level_range(state, 4)})
+        "Capital Pipeline": lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6) and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Capital Pipeline", player).add_exits(["Capital Jail", "Jidamba Tangle", "Continental Tram"],
         {"Jidamba Tangle": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 5),
         "Continental Tram": logic.has_vertical_movement})
@@ -206,7 +207,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Salmon Bay": (logic.has_vertical_movement and logic.has_glide) or logic.has_swimming,
         "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Poko Poko Desert", player).add_exits(["Sara Sara Bazaar", "Ancient Reservoir", "Lake Delende", "Salmon Bay", "Ancient Labyrinth"], 
-        {"Ancient Reservoir": lambda state: logic.has_pyramid_key and logic.is_area_in_level_range(state, 3),
+        {"Ancient Reservoir": lambda state: logic.has_key(state, PYRAMID_KEY) and logic.is_area_in_level_range(state, 3),
         "Lake Delende": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
         "Ancient Labyrinth": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
@@ -215,7 +216,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Sara Sara Beach": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),
         "Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player) and logic.is_area_in_level_range(state, 3),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
-        "Continental Tram": logic.has_swimming or logic.has_tram_key})
+        "Continental Tram": lambda state: logic.has_swimming or logic.has_key(state, TRAM_KEY)})
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano"],
         {"Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})

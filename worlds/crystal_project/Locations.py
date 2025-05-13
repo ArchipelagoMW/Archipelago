@@ -2,6 +2,7 @@ from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
 from .Options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
+from .Constants import *
 
 class LocationData(NamedTuple):
     region: str
@@ -248,9 +249,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic shop attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour", 1390 + treasure_index_offset), #Craftwork Katana chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Behind Luxury Shop", 2651 + treasure_index_offset), #Craftwork Cap chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 1", 1533 + treasure_index_offset, lambda state: logic.has_luxury_key and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Fenix Syrup Pouch chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 2", 1532 + treasure_index_offset, lambda state: logic.has_luxury_key and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Briefs chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 3", 1531 + treasure_index_offset, lambda state: logic.has_luxury_key and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Socks chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Fenix Syrup Pouch chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Briefs chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Socks chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn attic by Master Monk", 2656 + treasure_index_offset), #Craftwork Vest chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - By Master Warrior atop the Luxury Shop", 2655 + treasure_index_offset), #Craftwork Shield chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Atop library bookcases", 1392 + treasure_index_offset), #Craftwork Sword chest
@@ -272,9 +273,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Accompanied by blue flower pair in maze", 390 + treasure_index_offset), #Craftwork Crown chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Below maze-cheating Lost Penguin", 388 + treasure_index_offset), #Gardeners Key chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Above maze fountain", 387 + treasure_index_offset), #Givers Ring chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 1", 2652 + treasure_index_offset, logic.has_gardeners_key), #Craftwork Mail chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 2", 2663 + treasure_index_offset, logic.has_gardeners_key), #Tuber Seed
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 3", 2664 + treasure_index_offset, logic.has_gardeners_key), #Tuber Seed
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 1", 2652 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Craftwork Mail chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 2", 2663 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 3", 2664 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
 
         #NPCs 
         #Todo NPCs Missable: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it"s on the ground here)
@@ -419,37 +420,37 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Capital Jail
         #Treasure chests
         LocationData("Capital Jail", "Capital Jail Chest - Touchdown", 640 + treasure_index_offset), #South Wing Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - South Wing jail cell across from busted wall", 930 + treasure_index_offset, logic.has_south_wing_key), #West Wing Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell in South Wing dead end", 931 + treasure_index_offset, logic.has_south_wing_key), #East Wing Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1", 990 + treasure_index_offset, lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)), #Cell Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 2", 2668 + treasure_index_offset, lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)), #Iron Rod chest
-        LocationData("Capital Jail", "Capital Jail Chest - Locked behind South Wing rubble", 991 + treasure_index_offset, lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)), #Battleplate chest
-        LocationData("Capital Jail", "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset, lambda state: logic.has_south_wing_key and logic.has_cell_key(state, 6)), #7th Underpass Scrap on main map
-        LocationData("Capital Jail", "Capital Jail Chest - West Wing jail cell among the glowy plants", 925 + treasure_index_offset, logic.has_west_wing_key), #Cell Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants", 923 + treasure_index_offset, logic.has_west_wing_key), #Battle Helm chest
-        LocationData("Capital Jail", "Capital Jail Chest - Locked among the foliage in West Wing", 916 + treasure_index_offset, lambda state: logic.has_west_wing_key and logic.has_cell_key(state, 6)), #Cell Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - East Wing bedroom closet twinsies the 1st", 2999 + treasure_index_offset, logic.has_east_wing_key), #empty chest
-        LocationData("Capital Jail", "Capital Jail Chest - East Wing bedroom closet twinsies the 2nd", 906 + treasure_index_offset, logic.has_east_wing_key), #Potion chest
-        LocationData("Capital Jail", "Capital Jail Chest - Waterlogged East Wing hallway twinsies the 1st", 676 + treasure_index_offset, logic.has_east_wing_key), #Cell Key top chest
-        LocationData("Capital Jail", "Capital Jail Chest - Waterlogged East Wing hallway twinsies the 2nd", 707 + treasure_index_offset, logic.has_east_wing_key), #Cell Key bottom chest
+        LocationData("Capital Jail", "Capital Jail Chest - South Wing jail cell across from busted wall", 930 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #West Wing Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Haunted jail cell in South Wing dead end", 931 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #East Wing Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1", 990 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 2", 2668 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Iron Rod chest
+        LocationData("Capital Jail", "Capital Jail Chest - Locked behind South Wing rubble", 991 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Battleplate chest
+        LocationData("Capital Jail", "Underpass Chest - Drop down behind Capital Jail South Wing rubble", 3675 + treasure_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #7th Underpass Scrap on main map
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing jail cell among the glowy plants", 925 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY)), #Cell Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - West Wing arrow plants", 923 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY)), #Battle Helm chest
+        LocationData("Capital Jail", "Capital Jail Chest - Locked among the foliage in West Wing", 916 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - East Wing bedroom closet twinsies the 1st", 2999 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #empty chest
+        LocationData("Capital Jail", "Capital Jail Chest - East Wing bedroom closet twinsies the 2nd", 906 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Potion chest
+        LocationData("Capital Jail", "Capital Jail Chest - Waterlogged East Wing hallway twinsies the 1st", 676 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Cell Key top chest
+        LocationData("Capital Jail", "Capital Jail Chest - Waterlogged East Wing hallway twinsies the 2nd", 707 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY)), #Cell Key bottom chest
 
-        LocationData("Capital Jail", "Capital Jail Chest - Locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: logic.has_east_wing_key and logic.has_cell_key(state, 6)), #Cell Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: logic.has_east_wing_key and logic.has_cell_key(state, 6)), #Cell Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: logic.has_west_wing_key and logic.has_cell_key(state, 6)), #Dark Wing Key chest
-        LocationData("Capital Jail", "Capital Jail Chest - Dark Wing entry left cell", 2911 + treasure_index_offset, logic.has_dark_wing_key), #Capital Jail map chest
-        LocationData("Capital Jail", "Capital Jail Chest - Sneaky chest in Dark Wing", 929 + treasure_index_offset, logic.has_dark_wing_key), #Woven Hood chest
-        LocationData("Capital Jail", "Capital Jail Chest - Corner lava jump in Dark Wing", 920 + treasure_index_offset, logic.has_dark_wing_key), #Woven Shirt chest
+        LocationData("Capital Jail", "Capital Jail Chest - Locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Locked beyond overgrown West Wing hallway", 909 + treasure_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dark Wing Key chest
+        LocationData("Capital Jail", "Capital Jail Chest - Dark Wing entry left cell", 2911 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Capital Jail map chest
+        LocationData("Capital Jail", "Capital Jail Chest - Sneaky chest in Dark Wing", 929 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Hood chest
+        LocationData("Capital Jail", "Capital Jail Chest - Corner lava jump in Dark Wing", 920 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Shirt chest
 
         #NPCs
-        LocationData("Capital Jail", "Capital Jail NPC - Silver in haunted South Wing jail cell", 972 + npc_index_offset, logic.has_south_wing_key), #Ingot
-        LocationData("Capital Jail", "Capital Jail NPC - Silver in zombified South Wing jail cell", 989 + npc_index_offset, logic.has_south_wing_key), #Ingot
-        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: logic.has_east_wing_key and logic.has_cell_key(state, 6)), #Ore
-        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in East Wing bedroom", 782 + npc_index_offset, lambda state: logic.has_east_wing_key and logic.has_cell_key(state, 6)), #Dust
-        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: logic.has_west_wing_key and logic.has_cell_key(state, 6)), #Ore
-        LocationData("Capital Jail", "Capital Jail NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, logic.has_dark_wing_key), #Dust
+        LocationData("Capital Jail", "Capital Jail NPC - Silver in haunted South Wing jail cell", 972 + npc_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #Ingot
+        LocationData("Capital Jail", "Capital Jail NPC - Silver in zombified South Wing jail cell", 989 + npc_index_offset, lambda state: logic.has_key(state, SOUTH_WING_KEY)), #Ingot
+        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Ore
+        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in East Wing bedroom", 782 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dust
+        LocationData("Capital Jail", "Capital Jail NPC - Silver locked in overgrown West Wing hallway", 759 + npc_index_offset, lambda state: logic.has_key(state, WEST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Ore
+        LocationData("Capital Jail", "Capital Jail NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Dust
 
         #Crystals
-        LocationData("Capital Jail", "Capital Jail Crystal - Reaper, above hell pool", 908 + crystal_index_offset, logic.has_dark_wing_key),
+        LocationData("Capital Jail", "Capital Jail Crystal - Reaper, above hell pool", 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
 
         #Capital Pipeline
         #Treasure chests
@@ -584,7 +585,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         
         #Sara Sara Bazaar
         #Treasure chests
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a...", 408 + treasure_index_offset, logic.has_room_one_key), #Knockout Stick chest
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Someone took the St James and left a...", 408 + treasure_index_offset, lambda state: logic.has_key(state, ROOM_ONE_KEY)), #Knockout Stick chest
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Potion chest
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Storm Rod chest
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Potion Mixer", 1194 + treasure_index_offset), #Beaurior Volcano map chest
@@ -879,31 +880,31 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Beaurior Rock
         #Treasure chests
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B4 big lava room with optional boss", 1796 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Ether chest
-	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged in far corner of B4 big lava room with optional boss", 481 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Guard Crown chest
-	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged through secret tunnel in B4 big lava room with optional boss", 724 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Halberd chest
-	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Island in B4 big lava room with optional boss", 1682 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Small Key chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B4 big lava room with optional boss", 1796 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Ether chest
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged in far corner of B4 big lava room with optional boss", 481 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Guard Crown chest
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Caged through secret tunnel in B4 big lava room with optional boss", 724 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Halberd chest
+	    LocationData("Beaurior Rock", "Beaurior Rock Chest - Island in B4 big lava room with optional boss", 1682 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Small Key chest
         LocationData("Beaurior Rock", "Beaurior Rock Chest - Elevator down from entrance to happy spike land", 894 + treasure_index_offset), #Small Key chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 balcony above the lava", 1337 + treasure_index_offset, lambda state: logic.has_small_key(state, 1)), #Small Key chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B2 with the Lets Make a Deal doors", 2973 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Potion Pouch chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 overlooking the catwalks room", 818 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Small Key chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 square pokeball room", 2916 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #map chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 behind wrought-iron fence", 899 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Shelter Dress chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 ominous green dumplings room", 1797 + treasure_index_offset, lambda state: logic.has_small_key(state, 2)), #Fenix Juice chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B2 danger hops back to purple", 2044 + treasure_index_offset, lambda state: logic.has_small_key(state, 4)), #Ether Pouch chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 cheeky lava platforming 1", 2041 + treasure_index_offset, lambda state: logic.has_small_key(state, 4)), #Potion
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 cheeky lava platforming 2", 1799 + treasure_index_offset, lambda state: logic.has_small_key(state, 4)), #Ether
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 jump to odd ice block", 2040 + treasure_index_offset, lambda state: logic.has_small_key(state, 4)), #Cold Touch chest
-        LocationData("Beaurior Rock", "Beaurior Rock Chest - Top floor ominous lamps room", 1683 + treasure_index_offset, lambda state: logic.has_small_key(state, 4)), #Boss Key chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 balcony above the lava", 1337 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY)), #Small Key chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B2 with the Lets Make a Deal doors", 2973 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Potion Pouch chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 overlooking the catwalks room", 818 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Small Key chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 square pokeball room", 2916 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #map chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 behind wrought-iron fence", 899 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Shelter Dress chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B3 ominous green dumplings room", 1797 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)), #Fenix Juice chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B2 danger hops back to purple", 2044 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Ether Pouch chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 cheeky lava platforming 1", 2041 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Potion
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 cheeky lava platforming 2", 1799 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Ether
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - B1 jump to odd ice block", 2040 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Cold Touch chest
+        LocationData("Beaurior Rock", "Beaurior Rock Chest - Top floor ominous lamps room", 1683 + treasure_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Boss Key chest
 
         #NPCs
-        LocationData("Beaurior Rock", "Beaurior Rock NPC - Gold in B4 big lava room with optional boss", 2822 + npc_index_offset, lambda state: logic.has_small_key(state, 1) and logic.has_horizontal_movement), #Gold Ingot
-        LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 cheeky lava platforming Gold", 2823 + npc_index_offset, lambda state: logic.has_small_key(state, 4)), #Dust
-        LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 Magic Well friendos hiding in the pillars", 2824 + npc_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_horizontal_movement), #Ore
-        LocationData("Beaurior Rock", "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_horizontal_movement), #Ore Beaurior Volcano but it's at the top so Rock it is
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - Gold in B4 big lava room with optional boss", 2822 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY) and logic.has_horizontal_movement), #Gold Ingot
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 cheeky lava platforming Gold", 2823 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Dust
+        LocationData("Beaurior Rock", "Beaurior Rock NPC - B1 Magic Well friendos hiding in the pillars", 2824 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_horizontal_movement), #Ore
+        LocationData("Beaurior Rock", "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_horizontal_movement), #Ore Beaurior Volcano but it's at the top so Rock it is
 
         #Crystals
-	    LocationData("Beaurior Rock", "Beaurior Volcano Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_boss_key),
+	    LocationData("Beaurior Rock", "Beaurior Volcano Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
         #Lake Delende
         #Treasure chests
@@ -1041,28 +1042,28 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Slip Glide Ride
         #Treasure chests
-        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Back out to 1st room", 2554 + treasure_index_offset, lambda state: logic.has_red_door_key(state, 1)), #Money chest
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Back out to 1st room", 2554 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY)), #Money chest
         LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Climb up and fall down", 1172 + treasure_index_offset), #Plate of Lion chest
         LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Sparks and tar", 1298 + treasure_index_offset), #Red Door Key chest
-        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - To the left through 2nd red lock", 1698 + treasure_index_offset, lambda state: logic.has_red_door_key(state, 2)), #Red Door Key chest
-        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Through 1st red lock", 1716 + treasure_index_offset, lambda state: logic.has_red_door_key(state, 1)), #Red Door Key chest
-        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Past the mean Ibek jump", 1282 + treasure_index_offset, lambda state: logic.has_red_door_key(state, 1)), #Sages Walker chest
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - To the left through 2nd red lock", 1698 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 2)), #Red Door Key chest
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Through 1st red lock", 1716 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY)), #Red Door Key chest
+        LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Past the mean Ibek jump", 1282 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY)), #Sages Walker chest
         LocationData("Slip Glide Ride", "Slip Glide Ride Chest - Nickelodeon slime time :)", 1269 + treasure_index_offset), #Seekers Garb chest
 
         #Crystals
-        LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: logic.has_red_door_key(state, 3)),
+        LocationData("Slip Glide Ride", "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
 
         #Sequoia Athenaeum
         #Treasure chests
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Atop the shelves above the books door", 2932 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(412, 200, -551) Spellsword Helm chest
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Bullshit book-smart Chips Challenge", 2569 + treasure_index_offset, logic.has_vertical_movement), #(403, 199, -547) Z-Potion Pouch chest
         LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Brain-dumb Chips Challenge", 2322 + treasure_index_offset), #(415, 180, -570) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - 3rd library Chips Challenge", 2375 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 1) and logic.has_vertical_movement), #(396, 180, -570) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge ice squared", 2341 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 2) and logic.has_vertical_movement), #(396, 164, -570) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge we cheated on this one", 2371 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 3) and logic.has_vertical_movement), #(415, 164, -572) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Triple Chip Challenge", 2372 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 4) and logic.has_vertical_movement), #(434, 164, -570) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Shattered labyrinth Chips Challenge", 2373 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 5) and logic.has_vertical_movement), #(424, 148, -570) Ice Puzzle Key chest
-        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!", 2335 + treasure_index_offset, lambda state: logic.has_ice_puzzle_key(state, 6) and logic.has_vertical_movement), #(415, 131, -565) Skeleton Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - 3rd library Chips Challenge", 2375 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY) and logic.has_vertical_movement), #(396, 180, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge ice squared", 2341 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 2) and logic.has_vertical_movement), #(396, 164, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Chips Challenge we cheated on this one", 2371 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 3) and logic.has_vertical_movement), #(415, 164, -572) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Triple Chip Challenge", 2372 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 4) and logic.has_vertical_movement), #(434, 164, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - Shattered labyrinth Chips Challenge", 2373 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 5) and logic.has_vertical_movement), #(424, 148, -570) Ice Puzzle Key chest
+        LocationData("Sequoia Athenaeum", "Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!", 2335 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 6) and logic.has_vertical_movement), #(415, 131, -565) Skeleton Key chest
 
         #Northern Stretch
         #Treasure chests
@@ -1075,8 +1076,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from eastern save point", 2742 + treasure_index_offset, logic.has_glide), #(440, 227, -386) Conquest chest
         LocationData("Castle Ramparts", "Castle Ramparts Chest - Jump down from western save point", 2741 + treasure_index_offset, logic.has_glide), #(369, 227, -386) Rune Sword chest
         #Technically Castle Sequoia but they're in a locked room only accessible from Ramparts
-        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, logic.has_rampart_key and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
-        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, logic.has_rampart_key and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY) and logic.has_glide), #(375, 232, -452) (Skums) Decapitator chest
+        LocationData("Castle Ramparts", "Castle Sequoia Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY) and logic.has_glide), #(371, 231, -457) (Skums) Castle Sequoia map chest
 
         #NPCs
         LocationData("Castle Ramparts", "Castle Ramparts NPC - Western Gold above spikes", 2843 + npc_index_offset, logic.has_glide), #(354, 231, -429) Ingot
@@ -1173,7 +1174,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea Chest - Descend into undersea vent where the flesh eaters live 1", 3451 + treasure_index_offset), #(878, 39, -536) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Touching Jidamba", 3658 + treasure_index_offset), #Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Ruins just south of Jidamba 1", 3659 + treasure_index_offset), #Deep Sea Scrap chest
-        LocationData("The Deep Sea", "The Deep Sea Chest - Locked sunken house off Jidamba with mighty arch 1", 3660 + treasure_index_offset, logic.has_forgotten_key), #(657, 53, 165) Deep Sea Scrap chest
+        LocationData("The Deep Sea", "The Deep Sea Chest - Locked sunken house off Jidamba with mighty arch 1", 3660 + treasure_index_offset, lambda state: logic.has_key(state, FORGOTTEN_KEY)), #(657, 53, 165) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Buried tunnel NW of Jidamba", 3661 + treasure_index_offset), #(545, 47, -31) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - By The Depths chasm SE of Shoudu Province", 3662 + treasure_index_offset), #(890, 51, -66) Deep Sea Scrap chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Crumbling shrine 1", 3663 + treasure_index_offset), #(842, 53, -359) Deep Sea Scrap chest
@@ -1188,7 +1189,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Deep Sea", "The Deep Sea Chest - Crumbling shrine 2", 2290 + treasure_index_offset), #(838, 52, -357) Oven Mitt chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Ruins just south of Jidamba 2", 2937 + treasure_index_offset), #Paladin Wand chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Cheeky sunroof NW of Jidamba", 2589 + treasure_index_offset), #(582, 47, -51) Rampart Key chest
-        LocationData("The Deep Sea", "The Deep Sea Chest - Locked sunken house off Jidamba with mighty arch 2", 2766 + treasure_index_offset, logic.has_forgotten_key), #(663, 54, 165) Soul Keeper chest
+        LocationData("The Deep Sea", "The Deep Sea Chest - Locked sunken house off Jidamba with mighty arch 2", 2766 + treasure_index_offset, lambda state: logic.has_key(state, FORGOTTEN_KEY)), #(663, 54, 165) Soul Keeper chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Locked *wink* sunken house off Jidamba 1", 2768 + treasure_index_offset), #(649, 53, 195) Zether chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Locked *wink* sunken house off Jidamba 2", 3726 + treasure_index_offset), #(646, 53, 196) Zether Pouch chest
         LocationData("The Deep Sea", "The Deep Sea Chest - Quizard challenge below N coast of Tall Tall Heights", 595 + treasure_index_offset), #(270, 29, -591) Treasure Finder chest
@@ -1340,18 +1341,18 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
         LocationData("Yamagawa M.A.", "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset),
         LocationData("Skumparadise", "Skumparadise Boss - Parasite", 333 + boss_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_courtyard_key or logic.has_rental_quintar or logic.has_horizontal_movement) and logic.is_area_in_level_range(state, 5)),
+        LocationData("Capital Sequoia", "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar or logic.has_horizontal_movement) and logic.is_area_in_level_range(state, 5)),
         LocationData("Jojo Sewers", "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 2)),
         LocationData("Quintar Sanctum", "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset),
-        LocationData("Capital Jail", "Capital Jail Boss - Warden", 907 + boss_index_offset, logic.has_dark_wing_key),
+        LocationData("Capital Jail", "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
         LocationData("Cobblestone Crag", "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
         LocationData("Okimoto N.S.", "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset),
         LocationData("The Undercity", "The Undercity Boss - Blade Master", 1939 + boss_index_offset),
         LocationData("The Undercity", "The Undercity Boss - Shadow Master", 1940 + boss_index_offset),
         LocationData("The Undercity", "The Undercity Boss - Duel Master", 1941 + boss_index_offset),
-        LocationData("Beaurior Rock", "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_small_key(state, 2)),
-        LocationData("Beaurior Rock", "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_small_key(state, 4) and logic.has_boss_key),
+        LocationData("Beaurior Rock", "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)),
+        LocationData("Beaurior Rock", "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
         LocationData("Eastern Chasm", "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
         LocationData("Tall Tall Heights", "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)),
         LocationData("Lands End", "Lands End Boss - The Owlbear", 2104 + boss_index_offset),

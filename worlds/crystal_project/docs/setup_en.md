@@ -5,14 +5,14 @@
 - Crystal Project Installer from the
   [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
 
-- .Net 8.0 Desktop Runtime or .Net 8.0 Runtime (not the SDK!) is required to run the Crystal Project Archipelago Mod Installer: 
+- .Net 8.0 Desktop Runtime x64 or .Net 8.0 Runtime x64 (not the SDK!) is required to run the Crystal Project Archipelago Mod Installer: 
 https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 
 ## Recommended Installation Instructions
 
 In your Steam library, right-click Crystal Project in the list and select "Properties...". Go to the Betas section, open the Beta Participation dropdown, and select the archipelago branch (version 1.6.5). 
 
-Install .Net 8.0 if you don't already have it.
+Install .Net 8.0 x64 if you don't already have it.
 
 Go to [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases).
 Download the installer file, extract it, and run the executable. When prompted, choose your Crystal Project installation location.
