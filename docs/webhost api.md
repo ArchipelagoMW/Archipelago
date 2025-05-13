@@ -9,17 +9,17 @@ The returned data will be formated in a combination of JSON lists or dicts, with
 
 Current endpoints:
 - Datapackage API
-  - [`/datapackage`](#datapackage)
-  - [`/datapackage/<string:checksum>`](#datapackagestringchecksum)
-  - [`/datapackage_checksum`](#datapackagechecksum)
+    - [`/datapackage`](#datapackage)
+    - [`/datapackage/<string:checksum>`](#datapackagestringchecksum)
+    - [`/datapackage_checksum`](#datapackagechecksum)
 - Generation API
-  - [`/generate`](#generate)
-  - [`/status/<suuid:seed>`](#status)
+    - [`/generate`](#generate)
+    - [`/status/<suuid:seed>`](#status)
 - Room API
-  - [`/room_status/<suuid:room_id>`](#roomstatus)
+    - [`/room_status/<suuid:room_id>`](#roomstatus)
 - User API
-  - [`/get_rooms`](#getrooms)
-  - [`/get_seeds`](#getseeds)
+    - [`/get_rooms`](#getrooms)
+    - [`/get_seeds`](#getseeds)
 
 
 ### UUID vs SUUID
@@ -34,7 +34,7 @@ Such as item and location IDs, or name groupings.
 ### `/datapackage`
 <a name="datapackage"></a>
 Fetches the current datapackage from the WebHost.  
-You'll receive an dict named `games` that contain a named dict of every game and its data currently supported by Archipelago.  
+You'll receive a dict named `games` that contains a named dict of every game and its data currently supported by Archipelago.  
 Each game will have:
 - A checksum `checksum`
 - A dict of item groups `item_name_groups`
@@ -92,7 +92,7 @@ Its format will be identical to the whole-datapackage endpoint (`/datapackage`),
 ### `/datapackage_checksum`
 <a name="datapackagechecksum"></a>
 Fetches the checksums of the current static datapackages on the WebHost.
-You'll receive a dict with `game:checksum` key-pairs for all the current officially supported games.  
+You'll receive a dict with `game:checksum` key-value pairs for all the current officially supported games.  
 Example:
 ```
 {
@@ -105,14 +105,14 @@ Example:
 
 
 ## Generation Endpoint
-These endpoints are used internally for the WebHost to generate games and validate their generation, and also used by external applications to generate games automatically.
+These endpoints are used internally for the WebHost to generate games and validate their generation. They are also used by external applications to generate games automatically.
 
 ### `/generate`
 <a name="generate"></a>
 Submits a game to the WebHost for generation.  
 **This endpoint only accepts a POST HTTP request.**  
 
-There are two ways to submit data for generation; With a file, and with JSON.
+There are two ways to submit data for generation: With a file and with JSON.
 
 #### With a file:
 Have your ZIP of yaml(s) or a single yaml, and submit a POST request to the `/generate` endpoint.  
@@ -138,12 +138,12 @@ req = requests.post("https://archipelago.gg/api/generate", json=weights)
 
 ### Generation Response:
 #### Successful Generation:
-Upon successful generation you'll be sent a JSON dict response detailing the generation:
+Upon successful generation, you'll be sent a JSON dict response detailing the generation:
 - The UUID of the generation `detail`
 - The SUUID of the generation `encoded`
 - The response text `text`
 - The page that will resolve to the seed/room generation page once generation has completed `url`
-- And the API status page of the generation `wait_api_url` (see [Status Endpoint](#status))
+- The API status page of the generation `wait_api_url` (see [Status Endpoint](#status))
 
 Example:
 ```
@@ -158,30 +158,29 @@ Example:
 
 #### Failed Generation:
 
-Upon failed generation, you'll be returned a single keypair. The key will always be: `text`  
+Upon failed generation, you'll be returned a single key-value pair. The key will always be `text`  
 The value will give you a hint as to what may have gone wrong.
 - Options without tags, and a 400 status code
 - Options in a string, and a 400 status code
 - Invalid file/weight string, `No options found. Expected file attachment or json weights.` with a 400 status code
 - Too many slots for the server to process, `Max size of multiworld exceeded` with a 409 status code
 
-In a single edgecase you'll be sent a dict with two keypairs `text` and `detail` with a 400 status code  
-If the generation detects a issue in generation, you'll be notified with:
+If the generation detects a issue in generation, you'll be sent a dict with two key-value pairs (`text` and `detail`) and a 400 status code. The values will be:
 - Summary of issue in `text`
-- Detailed issed in `detail`
+- Detailed issue in `detail`
 
 In the event of an unhandled server exception, you'll be provided a dict with a single key `text`:
 - Exception, `Uncought Exception: <error>` with a 500 status code
 
 ### `/status/<suuid:seed>`
 <a name="status"></a>
-Retreives the status of the seed's generation.  
-This endpoint will return a dict with a single keypair. The key will always be: `text`  
+Retrieves the status of the seed's generation.  
+This endpoint will return a dict with a single key-vlaue pair. The key will always be `text`  
 The value will tell you the status of the generation:
-- Generation was completed, `Generation done` with a 201 status code
-- Generation request was not found, `Generation not found` with a 404 status code
-- Generation of the seed failed, `Generation failed` with a 500 status code
-- Generation is in progress still, `Generation running` with a 202 status code
+- Generation was completed: `Generation done` with a 201 status code
+- Generation request was not found: `Generation not found` with a 404 status code
+- Generation of the seed failed: `Generation failed` with a 500 status code
+- Generation is in progress still: `Generation running` with a 202 status code
 
 ## Room Endpoints
 Endpoints to fetch information of the active WebHost room with the supplied room_ID.
@@ -191,12 +190,12 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 Will provide a dict of room data with the following keys:
 - Tracker UUID (`tracker`)
 - A list of players (`players`)
-  - Each item containing a list with the Slot name and Game
+    - Each item containing a list with the Slot name and Game
 - Last known hosted port (`last_port`)
 - Last activity timestamp (`last_activity`)
 - The room timeout counter (`timeout`)
 - A list of downloads for files required for gameplay (`downloads`)
-  - Each item is a dict containings the download URL and slot (`slot`, `download`)
+    - Each item is a dict containings the download URL and slot (`slot`, `download`)
 
 Example:
 ```
@@ -298,7 +297,7 @@ Each item in the list will contain a dict with the seed's details:
 - Seed UUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - A list of player slots (`players`)
-  - Each item in the list will contain a list of the slot name and game
+    - Each item in the list will contain a list of the slot name and game
 
 Example:
 ```
