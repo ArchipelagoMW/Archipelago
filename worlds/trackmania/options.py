@@ -124,7 +124,7 @@ class CustomSeries(OptionDict):
     """Define custom search parameters for Trackmania Exchange for each series.
 
     The expected format is a dictionary containing the series number you wish to customize, followed by a list of
-    options and search parameters.
+    options and search parameters. The series number may also be "all", to customize all series at once.
 
     The following options may be redefined on a per-series basis to override them:
     - "map_tags"
@@ -147,23 +147,23 @@ class CustomSeries(OptionDict):
     Example:
     ```
     custom_series:
+      all:
+        has_award: true
       1:
         map_tags: ["LOL"]
         difficulties: ["Beginner", "Intermediate"]
-        max_length: 20000
         uploaded_after: "2019-12-31"
       2:
         map_tags: ["Tech"]
         min_length: 40000
         max_length: 75000
-        has_award: true
     ```
     """
     display_name = "Custom Series"
     visibility = Visibility.template|Visibility.spoiler
     default = {}
     schema = Schema({
-        Optional(And(int, lambda v: 1 <= v <= SeriesNumber.range_end)): {
+        Optional(Or("all", And(int, lambda v: 1 <= v <= SeriesNumber.range_end))): {
             # Duplicates of options normally present, for overriding
             Optional("map_tags"): TagList,
             Optional("map_etags"): TagList,

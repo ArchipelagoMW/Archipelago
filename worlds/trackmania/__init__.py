@@ -71,6 +71,7 @@ class TrackmaniaWorld(World):
 
     def generate_early(self):
         medal_percent: float = float(self.options.medal_requirement.value) / 100.0
+        base_search_criteria: dict = self.options.custom_series.value.get("all", {})
 
         for series in range(1, self.options.series_number.value + 1):
             map_count: int = random.randint(self.options.series_minimum_map_number.value,
@@ -81,7 +82,8 @@ class TrackmaniaWorld(World):
             medals: int = round(map_count * medal_percent)
             medals = max(1, min(medals, map_count))  # clamp between 1 and map_count
 
-            search_criteria: dict = self.options.custom_series.value.get(series, {}).copy()
+            search_criteria: dict = base_search_criteria.copy()
+            search_criteria.update(self.options.custom_series.value.get(series, {}))
 
             # Fill in global defaults and settings
             if "map_tags" not in search_criteria:
