@@ -289,7 +289,7 @@ class BuildingProgression(Choice):
     Progressive: You will receive the buildings and will be able to build the first one of each type for free,
         once it is received. If you want more of the same building, it will cost the vanilla price.
     Cheap: Buildings will have a 50% discount
-    Very Cheap: Buildings will an 80% discount
+    Very Cheap: Buildings will have an 80% discount
     """
     internal_name = "building_progression"
     display_name = "Building Progression"
@@ -435,7 +435,7 @@ class Museumsanity(Choice):
 class Monstersanity(Choice):
     """Locations for slaying monsters?
     None: There are no checks for slaying monsters
-    One per category: Every category visible at the adventure guild gives one check
+    One per Category: Every category visible at the adventure guild gives one check
     One per Monster: Every unique monster gives one check
     Monster Eradication Goals: The Monster Eradication Goals each contain one check
     Short Monster Eradication Goals: The Monster Eradication Goals each contain one check, but are reduced by 60%
@@ -498,7 +498,7 @@ class Cooksanity(Choice):
 class Chefsanity(NamedRange):
     """Locations for learning cooking recipes?
     Vanilla: All cooking recipes are learned normally
-    Queen of Sauce: Every Queen of sauce episode is a check, all queen of sauce recipes are items
+    Queen of Sauce: Every Queen of Sauce episode is a check, all Queen of Sauce recipes are items
     Purchases: Every purchasable recipe is a check
     Friendship: Recipes obtained from friendship are checks
     Skills: Recipes obtained from skills are checks
@@ -589,7 +589,7 @@ class Booksanity(Choice):
 
 
 class Walnutsanity(OptionSet):
-    """Shuffle walnuts?
+    """Shuffle Walnuts?
     Puzzles: Walnuts obtained from solving a special puzzle or winning a minigame
     Bushes: Walnuts that are in a bush and can be collected by clicking it
     Dig Spots: Walnuts that are underground and must be digged up. Includes Journal scrap walnuts
