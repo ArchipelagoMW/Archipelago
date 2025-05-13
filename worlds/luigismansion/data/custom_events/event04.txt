@@ -46,9 +46,11 @@
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Heal"
+<WINDOW>(0)<COLOR>(17)
 <SPEAK>(8)
 <ANYKEY>
 <ACTOR>"demo_luigi"<HP>({LUIGIMAXHP})
+<CLOSEWINDOW>(0)
 <RAMDOMJMP>"Close"
 -------------------------
 <CASE>"Close"
