@@ -41,6 +41,18 @@ class QuarterPercentChecks(Range):
     default = 70
 
 
+class CanvasSizeIncrement(Choice):
+    """Sets the number of pixels the canvas will expand for each width/height item received.
+    Ensure an adequate number of locations are generated if setting this below 50."""
+    display_name = "Canvas Size Increment"
+    # option_10 = 10
+    # option_20 = 20
+    option_25 = 25
+    option_50 = 50
+    option_100 = 100
+    default = 100
+
+
 class GoalImage(Range):
     """Sets the numbered image you will be required to match.
     See https://github.com/MarioManTAW/jspaint/tree/master/images/archipelago
@@ -87,6 +99,7 @@ class PaintOptions(PerGameCommonOptions):
     goal_percent: GoalPercent
     half_percent_checks: HalfPercentChecks
     quarter_percent_checks: QuarterPercentChecks
+    canvas_size_increment: CanvasSizeIncrement
     goal_image: GoalImage
     starting_tool: StartingTool
     trap_count: TrapCount

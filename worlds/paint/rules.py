@@ -23,8 +23,9 @@ def calculate_paint_percent_available(state: CollectionState, world: PaintWorld,
         b = min(b, 2)
     w = state.count("Progressive Canvas Width", player)
     h = state.count("Progressive Canvas Height", player)
-    return ((765 - sqrt(((2 ** (7 - r) - 1) ** 2 + (2 ** (7 - g) - 1) ** 2 + (2 ** (7 - b) - 1) ** 2) * 3)) *
-            (4 + w) * (3 + h) * world.options.logic_percent / 36720)
+    return ((1 - ((sqrt(((2 ** (7 - r) - 1) ** 2 + (2 ** (7 - g) - 1) ** 2 + (2 ** (7 - b) - 1) ** 2) * 12)) / 765)) *
+            (400 + w * world.options.canvas_size_increment) * (300 + h * world.options.canvas_size_increment) *
+            world.options.logic_percent / 480000)
 
 
 def set_single_rule(world: PaintWorld, player: int, i: int) -> None:

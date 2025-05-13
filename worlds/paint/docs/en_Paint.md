@@ -8,8 +8,8 @@ You can read through all the options and generate a YAML [here](../player-option
 
 Most tools are locked from the start, leaving only the Magnifier and one drawing tool, specified in the game options.
 Canvas size is locked and will only expand when the Progressive Canvas Width and Progressive Canvas Height items are
-obtained. Additionally, color selection is limited, starting with only 8 possible colors but gaining more options when
-Progressive Color Depth items are obtained in each of the red, green, and blue components.
+obtained. Additionally, color selection is limited, starting with only a few possible colors but gaining more options
+when Progressive Color Depth items are obtained in each of the red, green, and blue components.
 
 Location checks are sent out based on similarity to a target image, measured as a percentage. Every percentage point up
 to a maximum set in the game options will send a new check, and the game will be considered done when a certain target
