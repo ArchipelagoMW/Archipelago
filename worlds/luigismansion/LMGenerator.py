@@ -248,6 +248,7 @@ class LuigisMansionRandomizer:
             door_to_close_list)
 
         if bool_boo_checks:
+            logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
             boo_list_events = ["16", "47", "96"]
             for event_no in boo_list_events:
                 if event_no == "16":
@@ -261,7 +262,6 @@ class LuigisMansionRandomizer:
                     self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry: not (
                         info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
-                logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
                 self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count, bool_boo_rando_enabled)
 
         logger.info("Updating the blackout event with the customized version.")
