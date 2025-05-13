@@ -375,7 +375,7 @@ class LMContext(CommonContext):
             from kvui import Label
 
         if not self.boo_count:
-            self.boo_count = Label(text=f"")
+            self.boo_count = Label(text=f"", size_hint_x=None, width=120, halign="center")
             self.ui.connect_layout.add_widget(self.boo_count)
 
         curr_boo_count = len(set(([item.item for item in self.items_received if item.item in BOO_AP_ID_LIST])))
