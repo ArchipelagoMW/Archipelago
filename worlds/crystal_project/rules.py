@@ -108,57 +108,6 @@ class CrystalProjectLogic:
     def has_key(self, state: CollectionState, key_name: str, count: int = 1) -> bool:
         return state.has(key_name, self.player, count) or state.has(SKELETON_KEY, self.player)
 
-    # def has_luxury_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Luxury Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_gardeners_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Gardeners Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_south_wing_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - South Wing Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_west_wing_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - West Wing Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_east_wing_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - East Wing Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_dark_wing_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Dark Wing Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_cell_key(self, state: CollectionState, count: int) -> bool:
-    #     return state.has("Item - Cell Key", self.player, count) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_room_one_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Room 1 Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_small_key(self, state: CollectionState, count: int) -> bool:
-    #     return state.has("Item - Small Key", self.player, count) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_boss_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Boss Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_red_door_key(self, state: CollectionState, count: int) -> bool:
-    #     return state.has("Item - Red Door Key", self.player, count) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_ice_puzzle_key(self, state: CollectionState, count: int) -> bool:
-    #     return state.has("Item - Ice Puzzle Key", self.player, count) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_rampart_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Rampart Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_forgotten_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Forgotten Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_tram_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Tram Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_courtyard_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Courtyard Key", self.player) or state.has("Item - Skeleton Key", self.player)
-    #
-    # def has_pyramid_key(self, state: CollectionState) -> bool:
-    #     return state.has("Item - Pyramid Key", self.player) or state.has("Item - Skeleton Key", self.player)
-
     def has_jidamba_keys(self, state: CollectionState) -> bool:
         if state.has(SKELETON_KEY, self.player):
             return True
