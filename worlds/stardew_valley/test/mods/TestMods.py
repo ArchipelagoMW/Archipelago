@@ -3,9 +3,9 @@ from typing import ClassVar
 
 from BaseClasses import get_seed
 from test.param import classvar_matrix
-from .. import SVTestBase, SVTestCase, solo_multiworld
 from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
+from ..bases import SVTestCase, SVTestBase, solo_multiworld
 from ..options.presets import allsanity_mods_6_x_x
 from ..options.utils import fill_dataclass_with_default
 from ... import options, Group, create_content
