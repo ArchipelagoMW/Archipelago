@@ -359,8 +359,7 @@ class WarpTileShuffle(Choice):
 
 
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel. If Full, Insanity, or Decoupled Door Shuffle is on, this will cause only the
-    main entrances to Rock Tunnel to be shuffled."""
+    """Randomize the layout of Rock Tunnel."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 
