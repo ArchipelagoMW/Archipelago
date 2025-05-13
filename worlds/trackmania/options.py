@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from datetime import datetime  # for custom_series: uploaded_before and uploaded_after
+from schema import Schema, And, Or, Optional  # for custom series validation
 from typing import List, Dict, Any
-from Options import Toggle, Range, OptionSet, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility
+from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility
 from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
@@ -111,6 +113,78 @@ class MapDifficulties(OptionSet):
     default = get_default_map_difficulties()
 
 
+# Schema for custom series options below.
+LuaBool = Or(bool, And(int, lambda v: v in (0, 1)))
+MapIdList = And([int], lambda v: len(v) <= 100)
+TagList = And([And(str, lambda v: v in get_all_map_tags())], lambda v: len(v) <= 100)
+DifficultyList = And([And(str, lambda v: v in get_all_map_difficulties())], lambda v: len(v) <= 4)
+DateTimeString = And(str, lambda v: datetime.fromisoformat(v))
+
+class CustomSeries(OptionDict):
+    """Define custom search parameters for Trackmania Exchange for each series.
+
+    The expected format is a dictionary containing the series number you wish to customize, followed by a list of
+    options and search parameters. The series number may also be "all", to customize all series at once.
+
+    The following options may be redefined on a per-series basis to override them:
+    - "map_tags"
+    - "map_etags"
+    - "map_tags_inclusive"
+    - "difficulties"
+
+    In addition, the following custom search parameters are available:
+    - "map_ids": A list of specific map IDs to randomly choose between (max 100)
+    - "name": The name of the map must contain the given string (partial search)
+    - "author": The map must be authored by the given user on TMX (by ID, not name)
+    - "map_pack": The map must be in the given map pack on TMX (by ID, not name)
+    - "uploaded_after": The map must have been uploaded after the given date
+    - "uploaded_before": The map must have been uploaded before the given date
+    - "min_length": The author time of the map must be longer than the given time, in milliseconds
+    - "max_length": The author time of the map must be shorter than the given time, in milliseconds
+    - "has_award": If true, the map must have at least 1 award
+    - "has_replay": If true, the map must have at least 1 replay
+
+    Example:
+    ```
+    custom_series:
+      all:
+        has_award: true
+      1:
+        map_tags: ["LOL"]
+        difficulties: ["Beginner", "Intermediate"]
+        uploaded_after: "2019-12-31"
+      2:
+        map_tags: ["Tech"]
+        min_length: 40000
+        max_length: 75000
+    ```
+    """
+    display_name = "Custom Series"
+    visibility = Visibility.template|Visibility.spoiler
+    default = {}
+    schema = Schema({
+        Optional(Or("all", And(int, lambda v: 1 <= v <= SeriesNumber.range_end))): {
+            # Duplicates of options normally present, for overriding
+            Optional("map_tags"): TagList,
+            Optional("map_etags"): TagList,
+            Optional("map_tags_inclusive"): LuaBool,
+            Optional("difficulties"): DifficultyList,
+
+            # Advanced search parameters
+            Optional("map_ids"): MapIdList,  # API ref: `id`
+            Optional("name"): str,  # API ref: `name` - Full text search by name, partial
+            Optional("author"): int,  # API ref: `authoruserid`
+            Optional("map_pack"): int,  # API ref: `mappackid`
+            Optional("uploaded_after"): DateTimeString,  # API ref: `uploadedafter`
+            Optional("uploaded_before"): DateTimeString,  # API ref: `uploadedbefore`
+            Optional("min_length"): int,  # API ref: `authortimemin`
+            Optional("max_length"): int,  # API ref: `authortimemax`
+            Optional("has_award"): LuaBool,  # API ref: `inlatestawardedauthor`
+            Optional("has_replay"): LuaBool,  # API ref: `inhasreplay`
+        }
+    })
+
+
 @dataclass
 class TrackmaniaOptions(PerGameCommonOptions):
     progression_balancing: ProgressionBalancing
@@ -130,11 +204,13 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_etags: MapETags
     difficulties: MapDifficulties
 
+    custom_series: CustomSeries
+
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
-    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, RandomSeriesTags, FirstSeriesSize],
-    "Map Tags":[MapTagsInclusive, MapTags, MapETags]
+    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, FirstSeriesSize],
+    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, MapTags, MapETags, CustomSeries]
 }
 
 def create_option_groups() -> List[OptionGroup]:

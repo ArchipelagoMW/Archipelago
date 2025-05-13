@@ -54,7 +54,7 @@ class TrackmaniaWorld(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.slot_data: dict = {}
+        self.series_data: list = []
 
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
@@ -70,38 +70,52 @@ class TrackmaniaWorld(World):
         set_rules(self)
 
     def generate_early(self):
-        series_data: list = []
         medal_percent: float = float(self.options.medal_requirement.value) / 100.0
-        for x in range(self.options.series_number):
+        base_search_criteria: dict = self.options.custom_series.value.get("all", {})
+
+        for series in range(1, self.options.series_number.value + 1):
             map_count: int = random.randint(self.options.series_minimum_map_number.value,
                                             self.options.series_maximum_map_number.value)
-            if x == 0 and self.options.first_series_size.value > 0:
+            if series == 1 and self.options.first_series_size.value > 0:
                 map_count = self.options.first_series_size.value
 
             medals: int = round(map_count * medal_percent)
             medals = max(1, min(medals, map_count))  # clamp between 1 and map_count
 
-            tags: list = list(self.options.map_tags.value)
-            if self.options.random_series_tags > 0 and len(tags) > 0:
-                tag = random.choice(tags)
-                tags = [tag]
+            search_criteria: dict = base_search_criteria.copy()
+            search_criteria.update(self.options.custom_series.value.get(series, {}))
+
+            # Fill in global defaults and settings
+            if "map_tags" not in search_criteria:
+                tags: list = list(self.options.map_tags.value)
+                if self.options.random_series_tags > 0 and len(tags) > 1:
+                    search_criteria["map_tags"] = [random.choice(tags)]
+                else:
+                    search_criteria["map_tags"] = tags
+
+            if "map_etags" not in search_criteria:
+                search_criteria["map_etags"] = list(self.options.map_etags.value)
+
+            if "map_tags_inclusive" not in search_criteria:
+                search_criteria["map_tags_inclusive"] = self.options.map_tags_inclusive.value
+
+            if "difficulties" not in search_criteria:
+                search_criteria["difficulties"] = list(self.options.difficulties.value)
+
+            if "max_length" not in search_criteria:
+                search_criteria["max_length"] = 5*60*1000  # Enforce a default 5 minute upper limit
 
             values : dict = {"MedalTotal": medals,
                              "MapCount": map_count,
-                             "MapTags": tags}
-
-            series_data.append(values)
-
-        self.slot_data = {"TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
-                           "SeriesNumber": self.options.series_number.value,
-                           "MapTagsInclusive": self.options.map_tags_inclusive.value,
-                           "MapETags": self.options.map_etags.value,
-                           "Difficulties": self.options.difficulties.value,
-                           "SeriesData": series_data}
-
+                             "SearchCriteria": search_criteria}
+            self.series_data.append(values)
 
     def fill_slot_data(self) -> dict:
-        return self.slot_data
+        return {
+            "TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
+            "SeriesNumber": self.options.series_number.value,
+            "SeriesData": self.series_data
+        }
 
     def get_filler_item_name(self) -> str:
         return get_filler_item_name()
