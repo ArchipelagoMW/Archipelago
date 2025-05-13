@@ -3,6 +3,7 @@ import os
 import yaml
 
 from collections import Counter
+from CommonClient import logger
 
 def counter_constructor(loader, node):
     args = loader.construct_sequence(node)
@@ -52,6 +53,7 @@ class LuigisMansionRandomizer:
             self.output_data = yaml.safe_load(stream)
 
         # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
+        logger.info("Verifying if the provided ISO is a valid copy of Luigi's Mansion USA edition.")
         self.__verify_supported_version()
 
         # After verifying, this will also read the entire iso, including system files and their content
@@ -60,6 +62,7 @@ class LuigisMansionRandomizer:
         self.dol = DOL()
 
         # Change game ID so save files are different
+        logger.info("Updating the ISO game id with the AP generated seed.")
         self.seed = self.output_data["Seed"]
         magic_seed = str(self.seed)
         bin_data = self.gcm.read_file_data("sys/boot.bin")
@@ -68,10 +71,12 @@ class LuigisMansionRandomizer:
         self.gcm.changed_files["sys/boot.bin"] = bin_data
 
         # Updates the Game USA folder to have the correct ghost file we expect.
+        logger.info("Updating game_usa.szp to import the ghost files as we expect.")
         self.gcm = update_game_usa(self.gcm)
 
         # Important note: SZP are just RARC / Arc files that are yay0 compressed, at least for Luigi's Mansion
         # Get Arc automatically handles decompressing RARC data from yay0, but compressing is on us later.
+        logger.info("Loading all of the main mansion map files into memory.")
         self.map_two_file = self.get_arc("files/Map/map2.szp")
 
         # Loads all the specific JMP tables AP may potentially change / update.
@@ -230,11 +235,15 @@ class LuigisMansionRandomizer:
         madam_hint_dict: dict[str, str] = hint_list["Madame Clairvoya"] if "Madame Clairvoya" in hint_list else None
         bool_portrait_hints: bool = True if self.output_data["Options"]["portrait_hints"] == 1 else False
 
+        logger.info("Updating all the main.dol offsets with their appropriate values.")
         self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, self.seed, start_inv_list, walk_speed, player_name,
             random_spawn, king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled, bool_boo_rando_enabled,
             door_model_rando_on)
 
+        logger.info("Updating all of the common events with the customized version.")
         self.gcm = update_common_events(self.gcm, bool_randomize_mice)
+
+        logger.info("Updating the intro and lab events with the customized version.")
         self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list,
             door_to_close_list)
 
@@ -252,24 +261,33 @@ class LuigisMansionRandomizer:
                     self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry: not (
                         info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
+                logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
                 self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count, bool_boo_rando_enabled)
 
+        logger.info("Updating the blackout event with the customized version.")
         self.gcm = update_blackout_event(self.gcm)
 
+        logger.info("Updating Clairvoya's event with the customized version.")
         self.gcm = randomize_clairvoya(self.gcm, req_mario_count, hint_dist, madam_hint_dict, self.seed)
+
+        logger.info("Updating common events with the generated in-game hints.")
         self.gcm = write_in_game_hints(self.gcm, hint_dist, hint_list, max_health, self.seed)
 
         if bool_portrait_hints:
+            logger.info("Portrait Hints are enabled, updating portrait ghost hearts with the generated in-game hints.")
             self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
 
         if bool_randomize_music:
+            logger.info("Randomized Music is enabled, updating all events with various in-game music.")
             self.gcm = randomize_music(self.gcm, self.seed)
 
+        logger.info("Updating the in-game tables for chests, furniture, ghosts, etc.")
         self.update_maptwo_jmp_tables()
 
         # Save the map two file changes
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
+        logger.info("Saving all files back into the main mansion file, then generating the new ISO file...")
         self.map_two_file.save_changes()
         self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
