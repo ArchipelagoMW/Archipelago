@@ -13,6 +13,7 @@ import sys
 import time
 import typing
 
+import worlds.stardew_valley.test.bases
 from BaseClasses import CollectionState, Location
 from Utils import init_logging
 from worlds.stardew_valley.stardew_rule.rule_explain import explain
@@ -61,7 +62,7 @@ def run_locations_benchmark():
                 location = args.location
                 state = args.state
 
-                multiworld = test.setup_solo_multiworld(options, seed)
+                multiworld = worlds.stardew_valley.test.bases.setup_solo_multiworld(options, seed)
                 gc.collect()
 
                 if location:
