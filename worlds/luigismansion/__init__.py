@@ -398,9 +398,10 @@ class LMWorld(World):
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
                 if entry.parent_region.name == self.origin_region_name:
-                    keys = spawn_locations[self.origin_region_name]["door_keys"]
-                    for key in keys:
-                        add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
+                    if self.spawn_full_locked:
+                        keys = spawn_locations[self.origin_region_name]["door_keys"]
+                        for key in keys:
+                            add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -445,9 +446,10 @@ class LMWorld(World):
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
                 if entry.parent_region.name == self.origin_region_name:
-                    keys = spawn_locations[self.origin_region_name]["door_keys"]
-                    for key in keys:
-                        add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
+                    if self.spawn_full_locked:
+                        keys = spawn_locations[self.origin_region_name]["door_keys"]
+                        for key in keys:
+                            add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 entry.code = None
                 if len(entry.access) != 0:
                     for item in entry.access:
@@ -552,7 +554,13 @@ class LMWorld(World):
             v = list(self.open_doors.values())
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
-            doors_to_check = []
+            spawn_doors = spawn_locations[self.origin_region_name]["door_ids"]
+            if spawn_doors:
+                for door in spawn_locations[self.origin_region_name]["door_ids"]:
+                    if self.open_doors[door] == 1:
+                        spawn_doors.remove(door)
+                if not spawn_doors:
+                    self.spawn_full_locked: bool = True
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
