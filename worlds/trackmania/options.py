@@ -163,7 +163,7 @@ class CustomSeries(OptionDict):
     visibility = Visibility.template|Visibility.spoiler
     default = {}
     schema = Schema({
-        Optional(And(int, lambda v: 1 <= v <= 10)): {
+        Optional(And(int, lambda v: 1 <= v <= SeriesNumber.range_end)): {
             # Duplicates of options normally present, for overriding
             Optional("map_tags"): TagList,
             Optional("map_etags"): TagList,

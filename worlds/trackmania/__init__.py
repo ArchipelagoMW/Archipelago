@@ -52,11 +52,9 @@ class TrackmaniaWorld(World):
 
     item_name_groups = trackmania_item_groups
 
-    series_data: list
-
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.series_data = []
+        self.series_data: list = []
 
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
