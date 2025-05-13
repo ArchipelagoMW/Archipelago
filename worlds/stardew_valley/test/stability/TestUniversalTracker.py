@@ -1,11 +1,12 @@
 import unittest
 from unittest.mock import Mock
 
-from .. import SVTestBase, fill_namespace_with_default
+from .. import SVTestBase, fill_namespace_with_default, skip_long_tests
 from ..options.presets import allsanity_mods_6_x_x
 from ... import STARDEW_VALLEY, FarmType, BundleRandomization, EntranceRandomization
 
 
+@unittest.skipIf(skip_long_tests(), "Long tests disabled")
 class TestUniversalTrackerGenerationIsStable(SVTestBase):
     options = allsanity_mods_6_x_x()
     options.update({
@@ -16,8 +17,6 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
         # This might open a kivy window temporarily, but it's the only way to test this...
-        if self.skip_long_tests:
-            raise unittest.SkipTest("Long tests disabled")
 
         try:
             # This test only run if UT is present, so no risk of running in the CI.
@@ -30,7 +29,7 @@ class TestUniversalTrackerGenerationIsStable(SVTestBase):
 
         fake_context = Mock()
         fake_context.re_gen_passthrough = {STARDEW_VALLEY: ut_data}
-        args = fill_namespace_with_default({0: self.options})
+        args = fill_namespace_with_default([self.options])
         args.outputpath = None
         args.outputname = None
         args.multi = 1

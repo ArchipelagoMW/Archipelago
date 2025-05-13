@@ -611,6 +611,7 @@ class LMContext(CommonContext):
             if (curr_val & (1 << 2)) > 0:
                 logger.info("DEBUG -- Please inform the Luigi's Mansion channel in AP's discord server " +
                     "that you saw this message and please explain what you last did to trigger it.")
+                self.debug_flag_ten = True
 
         # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
