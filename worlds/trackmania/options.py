@@ -209,9 +209,8 @@ class TrackmaniaOptions(PerGameCommonOptions):
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
-    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, RandomSeriesTags, FirstSeriesSize],
-    "Map Tags":[MapTagsInclusive, MapTags, MapETags],
-    "Advanced":[CustomSeries]
+    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, FirstSeriesSize],
+    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, MapTags, MapETags, CustomSeries]
 }
 
 def create_option_groups() -> List[OptionGroup]:
