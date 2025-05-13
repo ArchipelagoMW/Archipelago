@@ -174,6 +174,7 @@ class LMWorld(World):
         self.finished_boo_scaling = threading.Event()
         self.boo_spheres: dict[str, int] = {}
         self.hints: dict[str, dict[str, str]] = {}
+        self.spawn_full_locked: bool = False
 
     def interpret_slot_data(self, slot_data):
         # There are more clever ways to do this, but all would require much larger changes
@@ -387,8 +388,7 @@ class LMWorld(World):
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
                 region: Region = self.get_region(data.region)
                 entry: Location = LMLocation(self.player, location, region, data)
-                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
-                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 675 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if data.code == 674 and self.open_doors.get(27) == 0:
@@ -435,8 +435,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 entry.address = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
-                if self.options.boo_gates == 1 and self.options.boo_radar != 2:
-                    add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if data.code == 675 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if data.code == 674 and self.open_doors.get(27) == 0:
@@ -553,6 +552,7 @@ class LMWorld(World):
             v = list(self.open_doors.values())
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
+            doors_to_check = []
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
