@@ -1,4 +1,4 @@
-from . import SM64TestBase
+from .bases import SM64TestBase
 from .. import Options
 from ..Regions import sm64_entrances_to_level, sm64_level_to_entrances
 

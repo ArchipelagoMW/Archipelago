@@ -1,4 +1,4 @@
-from . import SM64TestBase
+from .bases import SM64TestBase
 from .. import Options
 from ..Locations import loc100Coin_table, location_table
 from ..Regions import sm64_entrances_to_level, sm64_level_to_paintings, sm64_level_to_secrets
