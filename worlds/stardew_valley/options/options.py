@@ -504,15 +504,11 @@ class Shipsanity(Choice):
     default = 0
     option_none = 0
     option_crops = 1
-    # option_quality_crops = 2
     option_fish = 3
-    # option_quality_fish = 4
+    option_crops_and_fish = 4
     option_full_shipment = 5
-    # option_quality_full_shipment = 6
     option_full_shipment_with_fish = 7
-    # option_quality_full_shipment_with_fish = 8
     option_everything = 9
-    # option_quality_everything = 10
 
 
 class Cooksanity(Choice):

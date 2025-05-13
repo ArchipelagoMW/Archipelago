@@ -433,9 +433,9 @@ def extend_shipsanity_locations(randomized_locations: List[LocationData], option
         randomized_locations.extend(filtered_ship_locations)
         return
     shipsanity_locations = set()
-    if shipsanity == Shipsanity.option_fish or shipsanity == Shipsanity.option_full_shipment_with_fish:
+    if shipsanity == Shipsanity.option_fish or shipsanity == Shipsanity.option_crops_and_fish or shipsanity == Shipsanity.option_full_shipment_with_fish:
         shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FISH]})
-    if shipsanity == Shipsanity.option_crops:
+    if shipsanity == Shipsanity.option_crops or shipsanity == Shipsanity.option_crops_and_fish:
         shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_CROP]})
     if shipsanity == Shipsanity.option_full_shipment or shipsanity == Shipsanity.option_full_shipment_with_fish:
         shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]})
