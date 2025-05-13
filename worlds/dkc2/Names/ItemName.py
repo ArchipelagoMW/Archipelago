@@ -46,9 +46,6 @@ barrel_kong = "Kong Barrels"
 barrel_warp = "Warp Barrels"
 barrel_control = "Controllable Barrels"
 
-# Victory
-victory = "Donkey Kong"
-
 # Currency (Hintables)
 kremkoins = "Kremkoin"
 dk_coin = "DK Coin"
@@ -69,3 +66,6 @@ dk_barrel = "Backup DK Barrel"
 
 # Energy Link
 extractinator = "Banana Extractinator"
+
+# Universal Tracker
+glitched = "Glitched Item"

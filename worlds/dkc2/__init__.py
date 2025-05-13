@@ -15,8 +15,9 @@ from .Client import DKC2SNIClient
 from .Levels import generate_level_list, level_map, location_id_to_level_id, lost_world_levels
 from .Rules import DKC2StrictRules, DKC2LooseRules, DKC2ExpertRules
 from .Rom import patch_rom, DKC2ProcedurePatch, generate_game_trivia, HASH_US_REV_1
+from . import Tracker
 
-from typing import Dict, Set, List, ClassVar, Any
+from typing import Dict, Set, List, ClassVar, Any, Union
 
 class DKC2Settings(settings.Group):
     class RomFile(settings.SNESRomPath):
@@ -26,6 +27,13 @@ class DKC2Settings(settings.Group):
         md5s = [HASH_US_REV_1]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
+
+    class UTPoptrackerPath(settings.FilePath):
+        """Path to the user's Donkey Kong Country 2 Poptracker Pack."""
+        description = "Donkey Kong Country 2 Poptracker Pack zip file"
+        required = False
+
+    ut_poptracker_path: Union[UTPoptrackerPath, str] = UTPoptrackerPath()
 
 
 class DKC2Web(WebWorld):
@@ -72,7 +80,16 @@ class DKC2World(World):
     required_client_version = (0, 6, 0)
     
     using_ut: bool # so we can check if we're using UT only once
-    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+    ut_can_gen_without_yaml = False  # class var that tells it to ignore the player yaml
+    glitches_item_name = ItemName.glitched
+    tracker_world = {  # map tracker data for UT
+        "map_page_maps": ["maps/maps.json"],
+        "map_page_locations": Tracker.map_locations,
+        "map_page_setting_key": r"dkc2_current_map_{team}_{player}",
+        "map_page_index": Tracker.map_page_index,
+        "external_pack_key": "ut_poptracker_path",
+        "poptracker_name_mapping": Tracker.poptracker_data,
+    }
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -89,8 +106,7 @@ class DKC2World(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
-
-
+        
     def create_regions(self) -> None:
         location_table = setup_locations(self)
         create_regions(self, location_table)
@@ -109,6 +125,13 @@ class DKC2World(World):
         else:
             raise ValueError(f"Somehow you have a logic option that's currently invalid."
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")
+
+        # Universal Tracker: If we're using UT, scan the rules again to build "glitched logic" during the regen
+        if self.using_ut:
+            if logic == Logic.option_strict:
+                DKC2LooseRules(self).set_dkc2_glitched_rules()
+            elif logic == Logic.option_loose:
+                DKC2ExpertRules(self).set_dkc2_glitched_rules()
 
  
     def create_items(self) -> None:
