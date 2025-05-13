@@ -10,10 +10,10 @@ import sys
 import types
 import typing
 import warnings
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from enum import IntEnum
 from threading import Lock
-from typing import cast, Any, BinaryIO, ClassVar, Iterator, TextIO, TypeVar, Union
+from typing import cast, Any, BinaryIO, ClassVar, TextIO, TypeVar, Union
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",

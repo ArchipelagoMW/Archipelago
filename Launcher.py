@@ -16,9 +16,10 @@ import subprocess
 import sys
 import urllib.parse
 import webbrowser
+from collections.abc import Callable, Sequence
 from os.path import isfile
 from shutil import which
-from typing import Callable, Sequence, Any
+from typing import Any
 
 if __name__ == "__main__":
     import ModuleUpdate
