@@ -60,6 +60,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     if pickup_anim_enabled == 1:
         pickup_val = [0x01]
         gem_val = [0x05]
+        hat_val = [0x05]
+        elem_val = [0x15]
 
         # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
         dol.data.seek(0x0AD624)
@@ -67,6 +69,8 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     else:
         pickup_val = [0x02]
         gem_val = [0x06]
+        hat_val = [0x06]
+        elem_val = [0x16]
 
     # Keys and important animations
     dol.data.seek(0xCD39B)
@@ -75,6 +79,14 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     # Diamonds and other treasure animations
     dol.data.seek(0xCE8D3)
     dol.data.write(struct.pack(">B", *gem_val))
+
+    # Disable Mario Item pickup animations
+    dol.data.seek(0x0CD707)
+    dol.data.write(">B", *hat_val)
+
+    # Disable Elemental Medal pickup animations
+    dol.data.seek(0x0CF4A3)
+    dol.data.write(">B", *elem_val)
 
     # Turn off luigi scare animations
     if fear_anim_disabled == 1:
