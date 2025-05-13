@@ -58,35 +58,35 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
 
     # Turn off pickup animations
     if pickup_anim_enabled == 1:
-        pickup_val = [0x01]
-        gem_val = [0x05]
-        hat_val = [0x05]
-        elem_val = [0x15]
+        keys_and_others_val = "01"
+        gem_val = "05"
+        hat_val = "05"
+        elem_val = "15"
 
         # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
         dol.data.seek(0x0AD624)
         dol.data.write(bytes.fromhex("4842D769"))
     else:
-        pickup_val = [0x02]
-        gem_val = [0x06]
-        hat_val = [0x06]
-        elem_val = [0x16]
+        keys_and_others_val = "02"
+        gem_val = "06"
+        hat_val = "06"
+        elem_val = "16"
 
     # Keys and important animations
     dol.data.seek(0xCD39B)
-    dol.data.write(struct.pack(">B", *pickup_val))
+    dol.data.write(bytes.fromhex(keys_and_others_val))
 
     # Diamonds and other treasure animations
     dol.data.seek(0xCE8D3)
-    dol.data.write(struct.pack(">B", *gem_val))
+    dol.data.write(bytes.fromhex(gem_val))
 
     # Disable Mario Item pickup animations
     dol.data.seek(0x0CD707)
-    dol.data.write(">B", *hat_val)
+    dol.data.write(bytes.fromhex(hat_val))
 
     # Disable Elemental Medal pickup animations
     dol.data.seek(0x0CF4A3)
-    dol.data.write(">B", *elem_val)
+    dol.data.write(bytes.fromhex(elem_val))
 
     # Turn off luigi scare animations
     if fear_anim_disabled == 1:
