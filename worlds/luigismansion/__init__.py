@@ -385,8 +385,8 @@ class LMWorld(World):
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
-                region = self.get_region(data.region)
-                entry = LMLocation(self.player, location, region, data)
+                region: Region = self.get_region(data.region)
+                entry: Location = LMLocation(self.player, location, region, data)
                 if self.options.boo_gates == 1 and self.options.boo_radar != 2:
                     add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 if entry.code == 675 and self.open_doors.get(28) == 0:
@@ -397,6 +397,10 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
+                if entry.parent_region.name == self.origin_region_name:
+                    keys = spawn_locations[self.origin_region_name]["door_keys"]
+                    for key in keys:
+                        add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -441,6 +445,10 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
+                if entry.parent_region.name == self.origin_region_name:
+                    keys = spawn_locations[self.origin_region_name]["door_keys"]
+                    for key in keys:
+                        add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 entry.code = None
                 if len(entry.access) != 0:
                     for item in entry.access:
