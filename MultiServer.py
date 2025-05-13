@@ -23,7 +23,6 @@ import weakref
 import zlib
 
 import ModuleUpdate
-import worlds.stardew_valley.test.bases
 
 ModuleUpdate.update()
 
@@ -34,7 +33,6 @@ if typing.TYPE_CHECKING:
 import colorama
 import websockets
 from websockets.extensions.permessage_deflate import PerMessageDeflate
-
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -47,6 +45,7 @@ from Utils import version_tuple, restricted_loads, Version, async_start, get_int
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, Hint, HintStatus
 from BaseClasses import ItemClassification
+
 
 min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
@@ -82,12 +81,10 @@ def queue_gc():
     from threading import Thread
 
     gc_thread: typing.Optional[Thread] = getattr(queue_gc, "_thread", None)
-
     def async_collect():
         time.sleep(2)
         setattr(queue_gc, "_thread", None)
         gc.collect()
-
     if not gc_thread:
         gc_thread = Thread(target=async_collect)
         setattr(queue_gc, "_thread", gc_thread)
@@ -387,7 +384,7 @@ class Context:
 
     def broadcast_text_all(self, text: str, additional_arguments: dict = {}):
         self.logger.info("Notice (all): %s" % text)
-        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{"text": text}]}, **additional_arguments}])
+        self.broadcast_all([{**{"cmd": "PrintJSON", "data": [{ "text": text }]}, **additional_arguments}])
 
     def broadcast_team(self, team: int, msgs: typing.List[dict]):
         msg_is_text = all(msg["cmd"] == "PrintJSON" for msg in msgs)
@@ -414,13 +411,13 @@ class Context:
         if not client.auth or client.no_text:
             return
         self.logger.info("Notice (Player %s in team %d): %s" % (client.name, client.team + 1, text))
-        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{"text": text}], **additional_arguments}]))
+        async_start(self.send_msgs(client, [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}]))
 
     def notify_client_multiple(self, client: Client, texts: typing.List[str], additional_arguments: dict = {}):
         if not client.auth or client.no_text:
             return
         async_start(self.send_msgs(client,
-                                   [{"cmd": "PrintJSON", "data": [{"text": text}], **additional_arguments}
+                                   [{"cmd": "PrintJSON", "data": [{ "text": text }], **additional_arguments}
                                     for text in texts]))
 
     # loading
@@ -698,7 +695,7 @@ class Context:
                     continue
                 for player in self.slot_set(hint.receiving_player) | {hint.finding_player}:
                     if changed is not None:
-                        changed.add((hint_team, player))
+                        changed.add((hint_team,player))
                     if slot is not None and slot != player:
                         self.replace_hint(hint_team, player, hint, new_hint)
             self.hints[hint_team, hint_slot] = new_hints
@@ -794,12 +791,12 @@ class Context:
             if hint.location == seeked_location and hint.finding_player == finding_player:
                 return hint
         return None
-
+    
     def replace_hint(self, team: int, slot: int, old_hint: Hint, new_hint: Hint) -> None:
         if old_hint in self.hints[team, slot]:
             self.hints[team, slot].remove(old_hint)
             self.hints[team, slot].add(new_hint)
-
+    
     # "events"
 
     def on_goal_achieved(self, client: Client):
@@ -967,7 +964,7 @@ async def countdown(ctx: Context, timer: int):
         ctx.countdown_timer = timer
         while ctx.countdown_timer > 0:
             ctx.broadcast_text_all(f"[Server]: {ctx.countdown_timer}",
-                                   {"type": "Countdown", "countdown": ctx.countdown_timer})
+                {"type": "Countdown", "countdown": ctx.countdown_timer})
             ctx.countdown_timer -= 1
             await asyncio.sleep(1)
         ctx.broadcast_text_all(f"[Server]: GO", {"type": "Countdown", "countdown": 0})
@@ -1006,7 +1003,7 @@ def get_status_string(ctx: Context, team: int, tag: str):
             " and has finished." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_GOAL else
             " and is ready." if ctx.client_game_state[team, slot] == ClientStatus.CLIENT_READY else
             "."
-        )
+            )
         text += f"\n{ctx.get_aliased_name(team, slot)} has {connected} connection{'' if connected == 1 else 's'}" \
                 f"{tag_text}{status_text} {completion_text}"
     return text
@@ -1155,7 +1152,7 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             elif item_flags & ItemClassification.trap:
                 new_status = HintStatus.HINT_AVOID
             hints.append(Hint(receiving_player, finding_player, location_id, item_id, found, entrance,
-                              item_flags, new_status))
+                                       item_flags, new_status))
 
     return hints
 
@@ -1183,7 +1180,7 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
         elif item_flags & ItemClassification.trap:
             new_status = HintStatus.HINT_AVOID
         return [Hint(receiving_player, slot, seeked_location, item_id, found, entrance, item_flags,
-                     new_status)]
+                              new_status)]
     return []
 
 
@@ -1194,8 +1191,6 @@ status_names: typing.Dict[HintStatus, str] = {
     HintStatus.HINT_AVOID: "(avoid)",
     HintStatus.HINT_PRIORITY: "(priority)",
 }
-
-
 def format_hint(ctx: Context, team: int, hint: Hint) -> str:
     text = f"[Hint]: {ctx.player_names[team, hint.receiving_player]}'s " \
            f"{ctx.item_names[ctx.slot_info[hint.receiving_player].game][hint.item]} is " \
@@ -1204,7 +1199,7 @@ def format_hint(ctx: Context, team: int, hint: Hint) -> str:
 
     if hint.entrance:
         text += f" at {hint.entrance}"
-
+    
     return text + ". " + status_names.get(hint.status, "(unknown)")
 
 
@@ -1240,8 +1235,6 @@ class CommandMeta(type):
 
 
 _Return = typing.TypeVar("_Return")
-
-
 # TODO: when python 3.10 is lowest supported, typing.ParamSpec
 
 
@@ -1436,7 +1429,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
             self.output(get_players_string(self.ctx))
         return True
 
-    def _cmd_status(self, tag: str = "") -> bool:
+    def _cmd_status(self, tag:str="") -> bool:
         """Get status information about your team.
         Optionally mention a Tag name and get information on who has that Tag.
         For example: DeathLink or EnergyLink."""
@@ -1909,7 +1902,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 if set(old_tags) != set(client.tags):
                     client.no_locations = bool(client.tags & _non_game_messages.keys())
                     client.no_text = "NoText" in client.tags or (
-                            "PopTracker" in client.tags and client.version < (0, 5, 1)
+                        "PopTracker" in client.tags and client.version < (0, 5, 1)
                     )
                     ctx.broadcast_text_all(
                         f"{ctx.get_aliased_name(client.team, client.slot)} (Team #{client.team + 1}) has changed tags "
@@ -1953,7 +1946,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             if locs and create_as_hint:
                 ctx.save()
             await ctx.send_msgs(client, [{'cmd': 'LocationInfo', 'locations': locs}])
-
+        
         elif cmd == 'UpdateHint':
             location = args["location"]
             player = args["player"]
@@ -2036,7 +2029,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             keys = args["keys"]
             args["keys"] = {
                 key: ctx.read_data.get(key[6:], lambda: None)() if key.startswith("_read_") else
-                ctx.stored_data.get(key, None)
+                     ctx.stored_data.get(key, None)
                 for key in keys
             }
             await ctx.send_msgs(client, [args])
@@ -2503,7 +2496,7 @@ async def auto_shutdown(ctx, to_cancel=None):
         if to_cancel:
             for task in to_cancel:
                 task.cancel()
-        worlds.stardew_valley.test.bases.logger.info("Shutting down due to inactivity.")
+        ctx.logger.info("Shutting down due to inactivity.")
 
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
