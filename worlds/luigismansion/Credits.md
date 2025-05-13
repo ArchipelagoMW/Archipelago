@@ -1,3 +1,6 @@
+Thanks to @Malkierian and @MelonSpeedruns for their initial help getting us off the ground and starting to randomize
+both items and chests in game, as well as helping us piece together how the game's files interact with each other.
+
 Thanks to discord users Mobby and Darki for their work in discovering various bits and address for flags in the game
 
 Thanks to discord user rishingfod for the Archiboolego icon used in the client
