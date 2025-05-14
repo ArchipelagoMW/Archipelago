@@ -267,7 +267,7 @@ class Mineral:
                              geodes=(Geode.geode, Geode.omni))
     basalt = create_mineral("Basalt",
                             geodes=(Geode.magma, Geode.omni))
-    limestone = create_mineral("Limestone",
+    limestone = create_mineral(Mineral.limestone,
                                geodes=(Geode.geode, Geode.omni))
     soapstone = create_mineral("Soapstone",
                                geodes=(Geode.frozen, Geode.omni))

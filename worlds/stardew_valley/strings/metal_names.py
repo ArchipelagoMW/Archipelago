@@ -54,6 +54,7 @@ class Mineral:
     tigerseye = "Tigerseye"
     topaz = "Topaz"
     mudstone = "Mudstone"
+    limestone = "Limestone"
 
 
 class Artifact:
