@@ -1,11 +1,13 @@
 # Look at `Rules.dsv` first to get an idea for how this works
 
+import logging
 from typing import Union, Tuple, List, Dict, Set
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Region, ItemClassification, Tutorial, CollectionState
 from .Checks import (
     TerrariaItem,
     TerrariaLocation,
+    Condition,
     goals,
     rules,
     rule_indices,
@@ -25,7 +27,7 @@ from .Checks import (
     armor_minions,
     accessory_minions,
 )
-from .Options import TerrariaOptions
+from .Options import TerrariaOptions, Goal
 
 
 class TerrariaWeb(WebWorld):
@@ -55,8 +57,8 @@ class TerrariaWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
-    # Turn into an option when calamity is supported in the mod
     calamity = False
+    getfixedboi = False
 
     ter_items: List[str]
     ter_locations: List[str]
@@ -70,72 +72,100 @@ class TerrariaWorld(World):
         ter_goals = {}
         goal_items = set()
         for location in goal_locations:
-            _, flags, _, _ = rules[rule_indices[location]]
+            flags = rules[rule_indices[location]].flags
+            if not self.options.calamity.value and "Calamity" in flags:
+                logging.warning(
+                    f"Terraria goal `{Goal.name_lookup[self.options.goal.value]}`, which requires Calamity, was selected with Calamity disabled; enabling Calamity"
+                )
+                self.options.calamity.value = True
+
             item = flags.get("Item") or f"Post-{location}"
             ter_goals[item] = location
             goal_items.add(item)
 
-        achievements = self.options.achievements.value
         location_count = 0
         locations = []
-        for rule, flags, _, _ in rules[:goal]:
-            if (
-                (not self.calamity and "Calamity" in flags)
-                or (achievements < 1 and "Achievement" in flags)
-                or (achievements < 2 and "Grindy" in flags)
-                or (achievements < 3 and "Fishing" in flags)
-                or (
-                    rule == "Zenith" and self.options.goal.value != 11
-                )  # Bad hardcoding
-            ):
-                continue
-            if "Location" in flags or ("Achievement" in flags and achievements >= 1):
-                # Location
-                location_count += 1
-                locations.append(rule)
-            elif (
-                "Achievement" not in flags
-                and "Location" not in flags
-                and "Item" not in flags
-            ):
-                # Event
-                locations.append(rule)
-
         item_count = 0
         items = []
-        for rule, flags, _, _ in rules[:goal]:
-            if not self.calamity and "Calamity" in flags:
+        for rule in rules[:goal]:
+            early = "Early" in rule.flags
+            grindy = "Grindy" in rule.flags
+            fishing = "Fishing" in rule.flags
+
+            if (
+                (not self.options.getfixedboi.value and "Getfixedboi" in rule.flags)
+                or (self.options.getfixedboi.value and "Not Getfixedboi" in rule.flags)
+                or (not self.options.calamity.value and "Calamity" in rule.flags)
+                or (self.options.calamity.value and "Not Calamity" in rule.flags)
+                or (
+                    self.options.getfixedboi.value
+                    and self.options.calamity.value
+                    and "Not Calamity Getfixedboi" in rule.flags
+                )
+                or (not self.options.early_achievements.value and early)
+                or (
+                    not self.options.normal_achievements.value
+                    and "Achievement" in rule.flags
+                    and not early
+                    and not grindy
+                    and not fishing
+                )
+                or (not self.options.grindy_achievements.value and grindy)
+                or (not self.options.fishing_achievements.value and fishing)
+            ) and rule.name not in goal_locations:
                 continue
-            if "Item" in flags:
-                # Item
-                item_count += 1
-                if rule not in goal_locations:
-                    items.append(rule)
+
+            if "Location" in rule.flags or "Achievement" in rule.flags:
+                # Location
+                location_count += 1
+                locations.append(rule.name)
             elif (
-                "Achievement" not in flags
-                and "Location" not in flags
-                and "Item" not in flags
+                "Achievement" not in rule.flags
+                and "Location" not in rule.flags
+                and "Item" not in rule.flags
             ):
                 # Event
-                items.append(rule)
+                locations.append(rule.name)
 
-        extra_checks = self.options.fill_extra_checks_with.value
+            if "Item" in rule.flags and not (
+                "Achievement" in rule.flags and rule.name not in goal_locations
+            ):
+                # Item
+                item_count += 1
+                if rule.name not in goal_locations:
+                    items.append(rule.name)
+            elif (
+                "Achievement" not in rule.flags
+                and "Location" not in rule.flags
+                and "Item" not in rule.flags
+            ):
+                # Event
+                items.append(rule.name)
+
         ordered_rewards = [
             reward
             for reward in labels["ordered"]
-            if self.calamity or "Calamity" not in rewards[reward]
+            if self.options.calamity.value or "Calamity" not in rewards[reward]
         ]
-        while extra_checks == 1 and item_count < location_count and ordered_rewards:
+        while (
+            self.options.fill_extra_checks_with.value == 1
+            and item_count < location_count
+            and ordered_rewards
+        ):
             items.append(ordered_rewards.pop(0))
             item_count += 1
 
         random_rewards = [
             reward
             for reward in labels["random"]
-            if self.calamity or "Calamity" not in rewards[reward]
+            if self.options.calamity.value or "Calamity" not in rewards[reward]
         ]
         self.multiworld.random.shuffle(random_rewards)
-        while extra_checks == 1 and item_count < location_count and random_rewards:
+        while (
+            self.options.fill_extra_checks_with.value == 1
+            and item_count < location_count
+            and random_rewards
+        ):
             items.append(random_rewards.pop(0))
             item_count += 1
 
@@ -173,9 +203,9 @@ class TerrariaWorld(World):
     def create_items(self) -> None:
         for item in self.ter_items:
             if (rule_index := rule_indices.get(item)) is not None:
-                _, flags, _, _ = rules[rule_index]
-                if "Item" in flags:
-                    name = flags.get("Item") or f"Post-{item}"
+                rule = rules[rule_index]
+                if "Item" in rule.flags:
+                    name = rule.flags.get("Item") or f"Post-{item}"
                 else:
                     continue
             else:
@@ -186,8 +216,8 @@ class TerrariaWorld(World):
         locked_items = {}
 
         for location in self.ter_locations:
-            _, flags, _, _ = rules[rule_indices[location]]
-            if "Location" not in flags and "Achievement" not in flags:
+            rule = rules[rule_indices[location]]
+            if "Location" not in rule.flags and "Achievement" not in rule.flags:
                 if location in progression:
                     classification = ItemClassification.progression
                 else:
@@ -202,95 +232,92 @@ class TerrariaWorld(World):
         for location, item in locked_items.items():
             self.multiworld.get_location(location, self.player).place_locked_item(item)
 
-    def check_condition(
-        self,
-        state,
-        sign: bool,
-        ty: int,
-        condition: Union[str, Tuple[Union[bool, None], list]],
-        arg: Union[str, int, None],
-    ) -> bool:
-        if ty == COND_ITEM:
-            _, flags, _, _ = rules[rule_indices[condition]]
-            if "Item" in flags:
-                name = flags.get("Item") or f"Post-{condition}"
+    def check_condition(self, state, condition: Condition) -> bool:
+        if condition.type == COND_ITEM:
+            rule = rules[rule_indices[condition.condition]]
+            if "Item" in rule.flags:
+                name = rule.flags.get("Item") or f"Post-{condition.condition}"
             else:
-                name = condition
+                name = condition.condition
 
-            return sign == state.has(name, self.player)
-        elif ty == COND_LOC:
-            _, _, operator, conditions = rules[rule_indices[condition]]
-            return sign == self.check_conditions(state, operator, conditions)
-        elif ty == COND_FN:
-            if condition == "npc":
-                if type(arg) is not int:
+            return condition.sign == state.has(name, self.player)
+        elif condition.type == COND_LOC:
+            rule = rules[rule_indices[condition.condition]]
+            return condition.sign == self.check_conditions(
+                state, rule.operator, rule.conditions
+            )
+        elif condition.type == COND_FN:
+            if condition.condition == "npc":
+                if type(condition.argument) is not int:
                     raise Exception("@npc requires an integer argument")
 
                 npc_count = 0
                 for npc in npcs:
                     if state.has(npc, self.player):
                         npc_count += 1
-                        if npc_count >= arg:
-                            return sign
+                        if npc_count >= condition.argument:
+                            return condition.sign
 
-                return not sign
-            elif condition == "calamity":
-                return sign == self.calamity
-            elif condition == "grindy":
-                return sign == (self.options.achievements.value >= 2)
-            elif condition == "pickaxe":
-                if type(arg) is not int:
+                return not condition.sign
+            elif condition.condition == "calamity":
+                return condition.sign == self.options.calamity.value
+            elif condition.condition == "grindy":
+                return condition.sign == self.options.grindy_achievements.value
+            elif condition.condition == "pickaxe":
+                if type(condition.argument) is not int:
                     raise Exception("@pickaxe requires an integer argument")
 
                 for pickaxe, power in pickaxes.items():
-                    if power >= arg and state.has(pickaxe, self.player):
-                        return sign
+                    if power >= condition.argument and state.has(pickaxe, self.player):
+                        return condition.sign
 
-                return not sign
-            elif condition == "hammer":
-                if type(arg) is not int:
+                return not condition.sign
+            elif condition.condition == "hammer":
+                if type(condition.argument) is not int:
                     raise Exception("@hammer requires an integer argument")
 
                 for hammer, power in hammers.items():
-                    if power >= arg and state.has(hammer, self.player):
-                        return sign
+                    if power >= condition.argument and state.has(hammer, self.player):
+                        return condition.sign
 
-                return not sign
-            elif condition == "mech_boss":
-                if type(arg) is not int:
+                return not condition.sign
+            elif condition.condition == "mech_boss":
+                if type(condition.argument) is not int:
                     raise Exception("@mech_boss requires an integer argument")
 
                 boss_count = 0
                 for boss in mech_bosses:
                     if state.has(boss, self.player):
                         boss_count += 1
-                        if boss_count >= arg:
-                            return sign
+                        if boss_count >= condition.argument:
+                            return condition.sign
 
-                return not sign
-            elif condition == "minions":
-                if type(arg) is not int:
+                return not condition.sign
+            elif condition.condition == "minions":
+                if type(condition.argument) is not int:
                     raise Exception("@minions requires an integer argument")
 
                 minion_count = 1
                 for armor, minions in armor_minions.items():
                     if state.has(armor, self.player) and minions + 1 > minion_count:
                         minion_count = minions + 1
-                        if minion_count >= arg:
-                            return sign
+                        if minion_count >= condition.argument:
+                            return condition.sign
 
                 for accessory, minions in accessory_minions.items():
                     if state.has(accessory, self.player):
                         minion_count += minions
-                        if minion_count >= arg:
-                            return sign
+                        if minion_count >= condition.argument:
+                            return condition.sign
 
-                return not sign
+                return not condition.sign
+            elif condition.condition == "getfixedboi":
+                return condition.sign == self.options.getfixedboi.value
             else:
-                raise Exception(f"Unknown function {condition}")
-        elif ty == COND_GROUP:
-            operator, conditions = condition
-            return sign == self.check_conditions(state, operator, conditions)
+                raise Exception(f"Unknown function {condition.condition}")
+        elif condition.type == COND_GROUP:
+            operator, conditions = condition.condition
+            return condition.sign == self.check_conditions(state, operator, conditions)
 
     def check_conditions(
         self,
@@ -310,22 +337,22 @@ class TerrariaWorld(World):
                 return True
             if len(conditions) > 1:
                 raise Exception("Found multiple conditions without an operator")
-            return self.check_condition(state, *conditions[0])
+            return self.check_condition(state, conditions[0])
         elif operator:
             return any(
-                self.check_condition(state, *condition) for condition in conditions
+                self.check_condition(state, condition) for condition in conditions
             )
         else:
             return all(
-                self.check_condition(state, *condition) for condition in conditions
+                self.check_condition(state, condition) for condition in conditions
             )
 
     def set_rules(self) -> None:
         for location in self.ter_locations:
 
             def check(state: CollectionState, location=location):
-                _, _, operator, conditions = rules[rule_indices[location]]
-                return self.check_conditions(state, operator, conditions)
+                rule = rules[rule_indices[location]]
+                return self.check_conditions(state, rule.operator, rule.conditions)
 
             self.multiworld.get_location(location, self.player).access_rule = check
 
@@ -336,6 +363,12 @@ class TerrariaWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         return {
             "goal": list(self.goal_locations),
-            "achievements": self.options.achievements.value,
             "deathlink": bool(self.options.death_link),
+            # The rest of these are included for trackers
+            "calamity": self.options.calamity.value,
+            "getfixedboi": self.options.getfixedboi.value,
+            "early_achievements": self.options.early_achievements.value,
+            "normal_achievements": self.options.normal_achievements.value,
+            "grindy_achievements": self.options.grindy_achievements.value,
+            "fishing_achievements": self.options.fishing_achievements.value,
         }
