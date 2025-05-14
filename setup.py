@@ -12,10 +12,9 @@ import threading
 import urllib.request
 import warnings
 import zipfile
+from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
-from typing import Iterable, Sequence, Set
-
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
 requirement = 'cx-Freeze==8.0.0'
@@ -59,7 +58,7 @@ from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-non_apworlds: Set[str] = {
+non_apworlds: set[str] = {
     "Archipelago",
     "Final Fantasy",
     "Raft",
