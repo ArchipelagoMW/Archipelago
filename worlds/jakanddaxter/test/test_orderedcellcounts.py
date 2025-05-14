@@ -1,4 +1,4 @@
-from ..test import JakAndDaxterTestBase
+from .bases import JakAndDaxterTestBase
 
 
 class ReorderedCellCountsTest(JakAndDaxterTestBase):

@@ -1,5 +1,5 @@
 from BaseClasses import ItemClassification
-from ..test import JakAndDaxterTestBase
+from .bases import JakAndDaxterTestBase
 
 
 class NoTrapsTest(JakAndDaxterTestBase):
