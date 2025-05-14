@@ -348,11 +348,13 @@ class _RestrictiveFillBatcher:
                         # from `swap_location`.
                         partial_exploration_state.collect(item_to_place, True)
                     else:
-                        # In minimal accessibility or in rare cases where `spot_to_fill` was only reachable because of
-                        # the item that was placed at it, e.g. self-locking keys, `spot_to_fill` can be unreachable.
+                        # In rare cases, `spot_to_fill` was only reachable because of the item that was placed at it,
+                        # which can happen with some self-locking item implementations.
                         # Future sweeps will have to retry `spot_to_fill`, so remove it from the state's set of
                         # collected advancement locations.
                         partial_exploration_state.advancements.remove(swap_location)
+                        # Also remove the location from locations_checked for completeness.
+                        partial_exploration_state.locations_checked.remove(swap_location)
 
         def update_for_swap(self, displaced_item: Item, item_to_place: Item, swap_location: Location) -> None:
             """
