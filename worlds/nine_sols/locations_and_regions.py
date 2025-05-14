@@ -61,7 +61,7 @@ wos = set(n for n in location_names if n.startswith("W&OS: "))
 yc = set(n for n in location_names if n.startswith("Yinglong Canal: "))
 fgh = set(n for n in location_names if n.startswith("Factory (GH): "))
 fu = set(n for n in location_names if n.startswith("Factory (U): "))
-p = set(n for n in location_names if n.startswith("Prison: "))
+prison = set(n for n in location_names if n.startswith("Prison: "))
 fmr = set(n for n in location_names if n.startswith("Factory (MR): "))
 fpa = set(n for n in location_names if n.startswith("Factory (PA): "))
 am = set(n for n in location_names if n.startswith("AM: "))
@@ -70,9 +70,9 @@ gd = set(n for n in location_names if n.startswith("Galactic Dock: "))
 ow = set(n for n in location_names if n.startswith("OW: "))
 iw = set(n for n in location_names if n.startswith("IW: "))
 br = set(n for n in location_names if n.startswith("BR: "))
-gosy = set(n for n in location_names if n.startswith("GoS (Entry): "))
-gose = set(n for n in location_names if n.startswith("GoS (East): "))
-gosw = set(n for n in location_names if n.startswith("GoS (West): "))
+gos_y = set(n for n in location_names if n.startswith("GoS (Entry): "))
+gos_e = set(n for n in location_names if n.startswith("GoS (East): "))
+gos_w = set(n for n in location_names if n.startswith("GoS (West): "))
 st = set(n for n in location_names if n.startswith("Sky Tower: "))
 edp = set(n for n in location_names if n.startswith("ED (Passages): "))
 edla = set(n for n in location_names if n.startswith("ED (Living Area): "))
@@ -98,7 +98,7 @@ location_name_groups = {
     "YC": yc, "Yinglong Canal": yc,
     "FGH": fgh, "Factory (GH)": fgh, "Factory (Great Hall)": fgh,
     "FU": fu, "Factory (U)": fu, "Factory (Underground)": fu,
-    "P": p, "Prison": p,
+    "P": prison, "Prison": prison,
     "FMR": fmr, "Factory (MR)": fmr, "Factory (Machine Room)": fmr,
     "FPA": fpa, "Factory (PA)": fpa, "Factory (Production Area)": fpa,
     "AM": am, "Abandoned Mines": am,
@@ -107,9 +107,9 @@ location_name_groups = {
     "OW": ow, "Outer Warehouse": ow,
     "IW": iw, "Inner Warehouse": iw,
     "BR": br, "Boundless Repository": br,
-    "GoSY": gosy, "GoS (Entry)": gosy, "Grotto of Scriptures (Entry)": gosy,
-    "GoSE": gose, "GoS (East)": gose, "Grotto of Scriptures (East)": gose,
-    "GoSW": gosw, "GoS (West)": gosw, "Grotto of Scriptures (West)": gosw,
+    "GoSY": gos_y, "GoS (Entry)": gos_y, "Grotto of Scriptures (Entry)": gos_y,
+    "GoSE": gos_e, "GoS (East)": gos_e, "Grotto of Scriptures (East)": gos_e,
+    "GoSW": gos_w, "GoS (West)": gos_w, "Grotto of Scriptures (West)": gos_w,
     "ST": st, "Sky Tower": st,
     "EDP": edp, "ED (Passages)": edp, "Empyrean District (Passages)": edp,
     "EDLA": edla, "ED (Living Area)": edla, "Empyrean District (Living Area)": edla,
@@ -167,7 +167,7 @@ def create_regions(world: "NineSolsWorld") -> None:
                     {"item": "Event - Lady Ethereal Soulscape Unlocked"},
                     {"item": "Air Dash"}
                 ]
-            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, r)
+            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, r)  # noqa
             entrance = region.connect(mw.get_region(to, p), None, rule)
             indirect_region_names = regions_referenced_by_rule(requires)
             for indirect_region_name in indirect_region_names:
@@ -177,7 +177,7 @@ def create_regions(world: "NineSolsWorld") -> None:
     for ld in locations_data:
         if ld["name"] in locations_to_create and len(ld["requires"]) > 0:
             set_rule(mw.get_location(ld["name"], p),
-                     lambda state, r=ld["requires"]: eval_rule(state, p, r))
+                     lambda state, r=ld["requires"]: eval_rule(state, p, r))  # noqa
 
     world.origin_region_name = "FSP - Root Node"
     # add dynamic logic, i.e. connections based on player options

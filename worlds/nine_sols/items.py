@@ -187,5 +187,5 @@ def create_items(world: "NineSolsWorld") -> None:
     # )
     # repeatable_filler_with_traps = list(create_item(player, name) for name in repeatable_filler_names_with_traps)
 
-    itempool = prog_and_useful_items + unique_filler + repeatable_filler_items
-    multiworld.itempool += itempool
+    pool = prog_and_useful_items + unique_filler + repeatable_filler_items
+    multiworld.itempool += pool
