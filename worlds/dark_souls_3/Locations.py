@@ -706,7 +706,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("US: Whip - back alley, behind wooden wall", "Whip", hidden=True),
         DS3LocationData("US: Great Scythe - building by white tree, balcony", "Great Scythe"),
         DS3LocationData("US: Homeward Bone - foot, drop overlook", "Homeward Bone",
-                        static='02,0:53100540::'),
+                        static='02,0:53100950::'),
         DS3LocationData("US: Large Soul of a Deserted Corpse - around corner by Cliff Underside",
                         "Large Soul of a Deserted Corpse", hidden=True),  # Hidden corner
         DS3LocationData("US: Ember - behind burning tree", "Ember"),
@@ -732,8 +732,9 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         missable=True),  # requires projectile
         DS3LocationData("US: Flame Stoneplate Ring - hanging corpse by Mound-Maker transport",
                         "Flame Stoneplate Ring"),
-        DS3LocationData("US: Red and White Shield - chasm, hanging corpse", "Red and White Shield",
-                        static="02,0:53100740::", missable=True),  # requires projectile
+        DS3LocationData("US: Red and White Round Shield - chasm, hanging corpse",
+                        "Red and White Round Shield", static="02,0:53100740::",
+                        missable=True),  # requires projectile
         DS3LocationData("US: Small Leather Shield - first building, hanging corpse by entrance",
                         "Small Leather Shield"),
         DS3LocationData("US: Pale Tongue - tower village, hanging corpse", "Pale Tongue"),
@@ -764,29 +765,29 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("US -> RS", None),
 
         # Yoel/Yuria of Londor
-        DS3LocationData("FS: Soul Arrow - Yoel/Yuria", "Soul Arrow",
+        DS3LocationData("FS: Soul Arrow - Yoel/Yuria shop", "Soul Arrow",
                         static='99,0:-1:50000,110000,70000116:', missable=True, npc=True,
                         shop=True),
-        DS3LocationData("FS: Heavy Soul Arrow - Yoel/Yuria", "Heavy Soul Arrow",
+        DS3LocationData("FS: Heavy Soul Arrow - Yoel/Yuria shop", "Heavy Soul Arrow",
                         static='99,0:-1:50000,110000,70000116:',
                         missable=True, npc=True, shop=True),
-        DS3LocationData("FS: Magic Weapon - Yoel/Yuria", "Magic Weapon",
+        DS3LocationData("FS: Magic Weapon - Yoel/Yuria shop", "Magic Weapon",
                         static='99,0:-1:50000,110000,70000116:', missable=True, npc=True,
                         shop=True),
-        DS3LocationData("FS: Magic Shield - Yoel/Yuria", "Magic Shield",
+        DS3LocationData("FS: Magic Shield - Yoel/Yuria shop", "Magic Shield",
                         static='99,0:-1:50000,110000,70000116:', missable=True, npc=True,
                         shop=True),
-        DS3LocationData("FS: Soul Greatsword - Yoel/Yuria", "Soul Greatsword",
+        DS3LocationData("FS: Soul Greatsword - Yoel/Yuria shop", "Soul Greatsword",
                         static='99,0:-1:50000,110000,70000450,70000475:', missable=True,
                         npc=True, shop=True),
-        DS3LocationData("FS: Dark Hand - Yoel/Yuria", "Dark Hand", missable=True, npc=True),
-        DS3LocationData("FS: Untrue White Ring - Yoel/Yuria", "Untrue White Ring", missable=True,
+        DS3LocationData("FS: Dark Hand - Yuria shop", "Dark Hand", missable=True, npc=True),
+        DS3LocationData("FS: Untrue White Ring - Yuria shop", "Untrue White Ring", missable=True,
                         npc=True),
-        DS3LocationData("FS: Untrue Dark Ring - Yoel/Yuria", "Untrue Dark Ring", missable=True,
+        DS3LocationData("FS: Untrue Dark Ring - Yuria shop", "Untrue Dark Ring", missable=True,
                         npc=True),
-        DS3LocationData("FS: Londor Braille Divine Tome - Yoel/Yuria", "Londor Braille Divine Tome",
+        DS3LocationData("FS: Londor Braille Divine Tome - Yuria shop", "Londor Braille Divine Tome",
                         static='99,0:-1:40000,110000,70000116:', missable=True, npc=True),
-        DS3LocationData("FS: Darkdrift - Yoel/Yuria", "Darkdrift", missable=True, drop=True,
+        DS3LocationData("FS: Darkdrift - kill Yuria", "Darkdrift", missable=True, drop=True,
                         npc=True),  # kill her or kill Soul of Cinder
 
         # Cornyx of the Great Swamp
@@ -930,7 +931,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         "Great Swamp Ring", miniboss=True),  # Giant Crab drop
         DS3LocationData("RS: Blue Sentinels - Horace", "Blue Sentinels",
                         missable=True, npc=True),  # Horace quest
-        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem"),
+        DS3LocationData("RS: Crystal Gem - stronghold, lizard", "Crystal Gem", lizard=True),
         DS3LocationData("RS: Fading Soul - woods by Crucifixion Woods bonfire", "Fading Soul",
                         static='03,0:53300210::'),
 
@@ -2476,13 +2477,13 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         "Firelink Leggings", boss=True, shop=True),
 
         # Yuria (quest, after Soul of Cinder)
-        DS3LocationData("FS: Billed Mask - Yuria after killing KFF boss", "Billed Mask",
+        DS3LocationData("FS: Billed Mask - shop after killing Yuria", "Billed Mask",
                         missable=True, npc=True),
-        DS3LocationData("FS: Black Dress - Yuria after killing KFF boss", "Black Dress",
+        DS3LocationData("FS: Black Dress - shop after killing Yuria", "Black Dress",
                         missable=True, npc=True),
-        DS3LocationData("FS: Black Gauntlets - Yuria after killing KFF boss", "Black Gauntlets",
+        DS3LocationData("FS: Black Gauntlets - shop after killing Yuria", "Black Gauntlets",
                         missable=True, npc=True),
-        DS3LocationData("FS: Black Leggings - Yuria after killing KFF boss", "Black Leggings",
+        DS3LocationData("FS: Black Leggings - shop after killing Yuria", "Black Leggings",
                         missable=True, npc=True),
     ],
 
