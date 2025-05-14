@@ -71,11 +71,6 @@ class KillBossesMode(Toggle):
     """
     display_name = "Kill Bosses Mode"
 
-class Shopsanity(Toggle):
-    """
-    When enabled, buying from shops will provide checks.
-    """
-    display_name = "Shopsanity"
 
 class IncludedRegions(Choice):
     """
@@ -195,7 +190,6 @@ class CrystalProjectOptions(PerGameCommonOptions):
     randomizeJobs: RandomizeJobs
     randomizeStartingJobs: RandomizeStartingJobs
     killBossesMode: KillBossesMode
-    shopsanity: Shopsanity
     includedRegions: IncludedRegions
     levelGating: LevelGating
     levelUpsInPool: LevelUpsInPool
