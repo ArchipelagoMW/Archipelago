@@ -721,7 +721,7 @@ class MultiWorld:
         return False
 
 
-PathValue = tuple[str, "PathValue" | None]
+PathValue = tuple[str, Iterable[PathValue]]
 
 
 class CollectionState:
