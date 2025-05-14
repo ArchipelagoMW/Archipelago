@@ -16,8 +16,8 @@ from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffl
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
-from .transitions import shuffle_transitions
+from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
+from .transitions import disconnect_entrances, shuffle_transitions
 
 components.append(
     Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
@@ -266,6 +266,8 @@ class MessengerWorld(World):
         #     MessengerOOBRules(self).set_messenger_rules()
 
     def connect_entrances(self) -> None:
+        if self.options.shuffle_transitions:
+            disconnect_entrances(self)
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
         attempts = 5

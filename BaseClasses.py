@@ -9,8 +9,9 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -54,12 +55,21 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
+@dataclasses.dataclass
+class PlandoItemBlock:
+    player: int
+    from_pool: bool
+    force: bool | Literal["silent"]
+    worlds: set[int] = dataclasses.field(default_factory=set)
+    items: list[str] = dataclasses.field(default_factory=list)
+    locations: list[str] = dataclasses.field(default_factory=list)
+    resolved_locations: list[Location] = dataclasses.field(default_factory=list)
+    count: dict[str, int] = dataclasses.field(default_factory=dict)
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
-    plando_texts: List[Dict[str, str]]
-    plando_items: List[List[Dict[str, Any]]]
-    plando_connections: List
     worlds: Dict[int, "AutoWorld.World"]
     groups: Dict[int, Group]
     regions: RegionManager
@@ -82,6 +92,8 @@ class MultiWorld():
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
+
+    plando_item_blocks: Dict[int, List[PlandoItemBlock]]
 
     game: Dict[int, str]
 
@@ -160,13 +172,12 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
+        self.plando_item_blocks = {}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
                 self.__dict__.setdefault(attr, {})[player] = val
-            set_player_attr('plando_items', [])
-            set_player_attr('plando_texts', {})
-            set_player_attr('plando_connections', [])
+            set_player_attr('plando_item_blocks', [])
             set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
@@ -427,7 +438,8 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
+    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False,
+                      collect_pre_fill_items: bool = True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
@@ -436,10 +448,11 @@ class MultiWorld():
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
-        for player in self.player_ids:
-            subworld = self.worlds[player]
-            for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
+        if collect_pre_fill_items:
+            for player in self.player_ids:
+                subworld = self.worlds[player]
+                for item in subworld.get_pre_fill_items():
+                    subworld.collect(ret, item)
         ret.sweep_for_advancements()
 
         if use_cache:
