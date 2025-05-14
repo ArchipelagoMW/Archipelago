@@ -12,10 +12,9 @@ import threading
 import urllib.request
 import warnings
 import zipfile
-from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple, Union
+from typing import Iterable, Sequence, Set
 
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
@@ -60,27 +59,11 @@ from Cython.Build import cythonize
 
 
 # On  Python < 3.10 LogicMixin is not currently supported.
-non_apworlds: set[str] = {
-    "A Link to the Past",
-    "Adventure",
-    "ArchipIDLE",
+non_apworlds: Set[str] = {
     "Archipelago",
-    "Clique",
     "Final Fantasy",
-    "Lufia II Ancient Cave",
-    "Meritous",
-    "Ocarina of Time",
-    "Overcooked! 2",
     "Raft",
-    "Sudoku",
-    "Super Mario 64",
-    "VVVVVV",
-    "Wargroove",
 }
-
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3, 10):
-    non_apworlds.add("Hollow Knight")
 
 
 def download_SNI() -> None:
@@ -378,10 +361,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
-        disabled_worlds_folder = "worlds_disabled"
-        for entry in os.listdir(disabled_worlds_folder):
-            if os.path.isdir(os.path.join(disabled_worlds_folder, entry)):
-                folders_to_remove.append(entry)
         generate_yaml_templates(self.buildfolder / "Players" / "Templates", False)
         for worldname, worldtype in AutoWorldRegister.world_types.items():
             if worldname not in non_apworlds:
