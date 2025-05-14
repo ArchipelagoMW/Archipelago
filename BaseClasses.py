@@ -10,7 +10,7 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import AbstractSet, Any, ClassVar, Literal, NamedTuple, Protocol, TYPE_CHECKING
+from typing import Any, ClassVar, Literal, NamedTuple, Protocol, TYPE_CHECKING
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -26,8 +26,8 @@ if TYPE_CHECKING:
 class Group(TypedDict):
     name: str
     game: str
-    world: "AutoWorld.World"
-    players: AbstractSet[int]
+    world: AutoWorld.World
+    players: set[int]
     item_pool: NotRequired[set[str]]
     replacement_items: NotRequired[dict[int, str | None]]
     local_items: NotRequired[set[str]]
@@ -37,6 +37,7 @@ class Group(TypedDict):
 
 class ThreadBarrierProxy:
     """Passes through getattr while passthrough is True"""
+
     def __init__(self, obj: object) -> None:
         self.passthrough = True
         self.obj = obj
@@ -66,10 +67,10 @@ class PlandoItemBlock:
     count: dict[str, int] = dataclasses.field(default_factory=dict)
 
 
-class MultiWorld():
+class MultiWorld:
     debug_types = False
     player_name: dict[int, str]
-    worlds: dict[int, "AutoWorld.World"]
+    worlds: dict[int, AutoWorld.World]
     groups: dict[int, Group]
     regions: RegionManager
     itempool: list[Item]
@@ -100,7 +101,7 @@ class MultiWorld():
     per_slot_randoms: Utils.DeprecateDict[int, random.Random]
     """Deprecated. Please use `self.random` instead."""
 
-    class AttributeProxy():
+    class AttributeProxy:
         def __init__(self, rule):
             self.rule = rule
 
@@ -113,9 +114,9 @@ class MultiWorld():
         location_cache: dict[int, dict[str, Location]]
 
         def __init__(self, players: int):
-            self.region_cache = {player: {} for player in range(1, players+1)}
-            self.entrance_cache = {player: {} for player in range(1, players+1)}
-            self.location_cache = {player: {} for player in range(1, players+1)}
+            self.region_cache = {player: {} for player in range(1, players + 1)}
+            self.entrance_cache = {player: {} for player in range(1, players + 1)}
+            self.location_cache = {player: {} for player in range(1, players + 1)}
 
         def __iadd__(self, other: Iterable[Region]):
             self.extend(other)
@@ -148,7 +149,8 @@ class MultiWorld():
         # world-local random state is saved for multiple generations running concurrently
         self.random = ThreadBarrierProxy(random.Random())
         self.players = players
-        self.player_types = {player: NetUtils.SlotType.player for player in self.player_ids}
+        self.player_types: dict[int, NetUtils.SlotType] = {player: NetUtils.SlotType.player for player in
+                                                           self.player_ids}
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)
@@ -176,6 +178,7 @@ class MultiWorld():
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
                 self.__dict__.setdefault(attr, {})[player] = val
+
             set_player_attr('plando_item_blocks', [])
             set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
@@ -187,7 +190,7 @@ class MultiWorld():
     def get_all_ids(self) -> tuple[int, ...]:
         return self.player_ids + tuple(self.groups)
 
-    def add_group(self, name: str, game: str, players: AbstractSet[int] = frozenset()) -> tuple[int, Group]:
+    def add_group(self, name: str, game: str, players: set[int]) -> tuple[int, Group]:
         """Create a group with name and return the assigned player ID and group.
         If a group of this name already exists, the set of players is extended instead of creating a new one."""
         from worlds import AutoWorld
@@ -359,8 +362,8 @@ class MultiWorld():
                 count = common_item_count.get(item.player, {}).get(item.name, 0)
                 if count:
                     loc = Location(group_id, f"Item Link: {item.name} -> {self.player_name[item.player]} {count}",
-                        None, region)
-                    loc.access_rule = lambda state, item_name = item.name, group_id_ = group_id, count_ = count: \
+                                   None, region)
+                    loc.access_rule = lambda state, item_name=item.name, group_id_=group_id, count_=count: \
                         state.has(item_name, group_id_, count_)
 
                     locations.append(loc)
@@ -381,7 +384,7 @@ class MultiWorld():
                         item_player = player
                     if group["replacement_items"][player]:
                         items_to_add.append(AutoWorld.call_single(self, "create_item", item_player,
-                            group["replacement_items"][player]))
+                                                                  group["replacement_items"][player]))
                     else:
                         items_to_add.append(AutoWorld.call_single(self, "create_filler", item_player))
                 self.random.shuffle(items_to_add)
@@ -527,7 +530,8 @@ class MultiWorld():
 
     def get_placeable_locations(self, state=None, player=None) -> list[Location]:
         state: CollectionState = state if state else self.state
-        return [location for location in self.get_locations(player) if location.item is None and location.can_reach(state)]
+        return [location for location in self.get_locations(player) if
+                location.item is None and location.can_reach(state)]
 
     def get_unfilled_locations_for_players(self, location_names: list[str], players: Iterable[int]):
         for player in players:
@@ -721,7 +725,7 @@ class MultiWorld():
 PathValue = tuple[str, "PathValue" | None]
 
 
-class CollectionState():
+class CollectionState:
     prog_items: dict[int, Counter[str]]
     multiworld: MultiWorld
     reachable_regions: dict[int, set[Region]]
@@ -1108,7 +1112,10 @@ class Region:
             return self._list.__getitem__(index)
 
         def __setitem__(self, index: int, value: Location) -> None:
-            raise NotImplementedError()
+            return self._list.__setitem__(index, value)
+
+        def __delitem__(self, index):
+            return self._list.__delitem__(index)
 
         def __len__(self) -> int:
             return self._list.__len__()
@@ -1116,18 +1123,17 @@ class Region:
         def __iter__(self):
             return iter(self._list)
 
-        # This seems to not be needed, but that's a bit suspicious.
-        # def __del__(self):
-        #     self.clear()
-
         def copy(self):
             return self._list.copy()
+
+        def insert(self, index: int, value: Location):
+            self._list.insert(index, value)
 
     class LocationRegister(Register):
         def __delitem__(self, index: int) -> None:
             location: Location = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del(self.region_manager.location_cache[location.player][location.name])
+            del (self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
             assert value.name not in self.region_manager.location_cache[value.player], \
@@ -1139,7 +1145,7 @@ class Region:
         def __delitem__(self, index: int) -> None:
             entrance: Entrance = self._list.__getitem__(index)
             self._list.__delitem__(index)
-            del(self.region_manager.entrance_cache[entrance.player][entrance.name])
+            del (self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
             assert value.name not in self.region_manager.entrance_cache[value.player], \
@@ -1211,13 +1217,13 @@ class Region:
             self.locations.append(location_type(self.player, location, address, self))
 
     def add_event(
-        self,
-        location_name: str,
-        item_name: str | None = None,
-        rule: Callable[[CollectionState], bool] | None = None,
-        location_type: type[Location] | None = None,
-        item_type: type[Item] | None = None,
-        show_in_spoiler: bool = True,
+            self,
+            location_name: str,
+            item_name: str | None = None,
+            rule: Callable[[CollectionState], bool] | None = None,
+            location_type: type[Location] | None = None,
+            item_type: type[Item] | None = None,
+            show_in_spoiler: bool = True,
     ) -> Item:
         """
         Adds an event location/item pair to the region.
@@ -1307,7 +1313,8 @@ class Region:
         ]
 
     def __repr__(self):
-        return self.multiworld.get_name_string_for_object(self) if self.multiworld else f'{self.name} (Player {self.player})'
+        return self.multiworld.get_name_string_for_object(
+            self) if self.multiworld else f'{self.name} (Player {self.player})'
 
 
 class LocationProgressType(IntEnum):
@@ -1338,13 +1345,13 @@ class Location:
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((
-            self.always_allow(state, item)
-            and item.name not in state.multiworld.worlds[item.player].options.non_local_items
-        ) or (
-            (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
-            and self.item_rule(item)
-            and (not check_access or self.can_reach(state))
-        ))
+                        self.always_allow(state, item)
+                        and item.name not in state.multiworld.worlds[item.player].options.non_local_items
+                ) or (
+                        (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+                        and self.item_rule(item)
+                        and (not check_access or self.can_reach(state))
+                ))
 
     def can_reach(self, state: CollectionState) -> bool:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average
@@ -1553,7 +1560,8 @@ class Spoiler:
                 logging.debug('The following items could not be reached: %s', ['%s (Player %d) at %s (Player %d)' % (
                     location.item.name, location.item.player, location.name, location.player) for location in
                                                                                sphere_candidates])
-                if any([multiworld.worlds[location.item.player].options.accessibility != 'minimal' for location in sphere_candidates]):
+                if any([multiworld.worlds[location.item.player].options.accessibility != 'minimal' for location in
+                        sphere_candidates]):
                     raise RuntimeError(f'Not all progression items reachable ({sphere_candidates}). '
                                        f'Something went terribly wrong here.')
                 else:
