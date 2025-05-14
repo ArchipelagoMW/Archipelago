@@ -73,7 +73,7 @@ class KillBossesMode(Toggle):
 
 class Shopsanity(Toggle):
     """
-    When enabled, buying from shops will provide checks.
+    When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
     """
     display_name = "Shopsanity"
 
