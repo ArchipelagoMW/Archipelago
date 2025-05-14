@@ -66,6 +66,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
     placed = 0
 
     while any(reachable_items.values()) and locations:
+        items_to_place: list[Item]
         if one_item_per_player:
             # grab one item per player
             items_to_place = [items.pop()
@@ -573,7 +574,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
     remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded",
-                   move_unplaceable_to_start_inventory=panic_method == "start_inventory")
+                   move_unplaceable_to_start_inventory=(panic_method == "start_inventory"))
 
     if excludedlocations:
         raise FillError(
@@ -585,7 +586,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     restitempool = filleritempool + usefulitempool
 
     remaining_fill(multiworld, defaultlocations, restitempool,
-                   move_unplaceable_to_start_inventory=panic_method == "start_inventory")
+                   move_unplaceable_to_start_inventory=(panic_method == "start_inventory"))
 
     unplaced = restitempool
     unfilled = defaultlocations
@@ -907,13 +908,19 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
         for block in multiworld.worlds[player].options.plando_items:
             new_block: PlandoItemBlock = PlandoItemBlock(player, block.from_pool, block.force)
             target_world = block.world
+            # TODO: This doesn't handle the plando API correctly
+            # It says `world` can be other containers other than list,
+            # but this is checking specifically for list.
+            # (But it's not simple to just change the check to Iterable,
+            #  because that will catch the str case too early.)
+            # (And it will be broken without failing unit tests. So also TODO: unit test this.)
             if target_world is False or multiworld.players == 1:  # target own world
                 worlds: set[int] = {player}
             elif target_world is True:  # target any worlds besides own
                 worlds = set(multiworld.player_ids) - {player}
             elif target_world is None:  # target all worlds
                 worlds = set(multiworld.player_ids)
-            elif isinstance(target_world, Sequence):  # list of target worlds
+            elif type(target_world) == list:  # list of target worlds
                 worlds = set()
                 for listed_world in target_world:
                     if listed_world not in world_name_lookup:
@@ -921,7 +928,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                                block.force)
                         continue
                     worlds.add(world_name_lookup[listed_world])
-            elif isinstance(target_world, int):  # target world by slot number
+            elif type(target_world) == int:  # target world by slot number
                 if target_world not in range(1, multiworld.players + 1):
                     failed(
                         f"Cannot place item in world {target_world} as it is not in range of (1, {multiworld.players})",
@@ -936,7 +943,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                 worlds = {world_name_lookup[target_world]}
             new_block.worlds = worlds
 
-            items: list[str] | dict[str, typing.Any] = block.items
+            items = block.items
             if isinstance(items, dict):
                 item_list: list[str] = []
                 for key, value in items.items():
@@ -994,8 +1001,8 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
     swept_state = multiworld.state.copy()
     swept_state.sweep_for_advancements()
     reachable = frozenset(multiworld.get_reachable_locations(swept_state))
-    early_locations: dict[int, list[Location]] = collections.defaultdict(list)
-    non_early_locations: dict[int, list[Location]] = collections.defaultdict(list)
+    early_locations: dict[int, list[Location]] = defaultdict(list)
+    non_early_locations: dict[int, list[Location]] = defaultdict(list)
     for loc in multiworld.get_unfilled_locations():
         if loc in reachable:
             early_locations[loc.player].append(loc)
@@ -1003,7 +1010,7 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
             non_early_locations[loc.player].append(loc)
 
     for player in multiworld.plando_item_blocks:
-        removed = []
+        removed: list[PlandoItemBlock] = []
         for block in multiworld.plando_item_blocks[player]:
             locations = block.locations
             resolved_locations = block.resolved_locations
@@ -1027,8 +1034,7 @@ def resolve_early_locations_for_planned(multiworld: MultiWorld):
                 block.count["max"] = len(block.resolved_locations)
                 if block.count["min"] > len(block.resolved_locations):
                     block.count["min"] = len(block.resolved_locations)
-            block.count["target"] = multiworld.random.randint(block.count["min"],
-                                                                     block.count["max"])
+            block.count["target"] = multiworld.random.randint(block.count["min"], block.count["max"])
 
             if not block.count["target"]:
                 removed.append(block)
@@ -1066,7 +1072,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
             maxcount = placement.count["target"]
             from_pool = placement.from_pool
 
-            item_candidates = []
+            item_candidates: list[Item] = []
             if from_pool:
                 instances = [item for item in multiworld.itempool if item.player == player and item.name in items]
                 for item in multiworld.random.sample(items, maxcount):
@@ -1092,8 +1098,9 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
                 continue
             else:
                 is_real = item_candidates[0].code is not None
-            candidates = [candidate for candidate in locations if candidate.item is None
-                          and bool(candidate.address) == is_real]
+            candidates = [candidate
+                          for candidate in locations
+                          if candidate.item is None and bool(candidate.address) == is_real]
             multiworld.random.shuffle(candidates)
             allstate = multiworld.get_all_state(False)
             mincount = placement.count["min"]
