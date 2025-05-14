@@ -18,7 +18,7 @@ class TestDefaultWorld(NineSolsTestBase):
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
 
         # breathing tests for logic assertion helpers
-        self.assertReachableWith("Central Hall: Examine Launch Memoral", [])
+        self.assertReachableWith("Central Hall: Examine Launch Memorial", [])
         self.assertNotReachableWith("Central Hall: Examine Council Tenets", [])
         self.assertReachableWith("Central Hall: Examine Council Tenets", [
             "Mystic Nymph: Scout Mode"
