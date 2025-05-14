@@ -132,7 +132,7 @@ the player does in-game. Slightly more formally: Receiving an AP item must never
 to "go out of logic" (become unreachable when it was previously reachable), and receiving AP items is the only kind of 
 state change that AP logic acknowledges. No other actions or events can change reachability.
 
-So when a game does not follow this assumption, the options are:
+So when the game itself does not follow this assumption, the options are:
 - Modify the game to make that location/connection repeatable
 - If there are both missable and repeatable ways to check the location/traverse the connection, then write logic for 
   only the repeatable ways
