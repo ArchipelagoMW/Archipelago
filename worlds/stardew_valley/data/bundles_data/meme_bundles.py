@@ -3,7 +3,6 @@ from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
 from ...bundles.bundle import BureaucracyBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
     FixedPriceBundleTemplate
-from ...strings.building_names import Building
 from ...strings.bundle_names import MemeBundleName
 from ...strings.currency_names import MemeCurrency
 from ...strings.flower_names import all_flowers
@@ -200,9 +199,6 @@ crap_pot_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.crap_pot, cr
 emmalution_items = [garlic, bread, trash, goblin_mask, rain_totem]
 emmalution_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.emmalution, emmalution_items, 5, 5)
 
-honeywell_items = [honey, BundleItem(Building.well)]
-honeywell_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, honeywell_items, 2, 2)
-
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
@@ -219,6 +215,7 @@ restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName
 fast_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem(MemeCurrency.time_elapsed, 1000))
 floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
 joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 750))
+honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, BundleItem(MemeCurrency.honeywell, 1))
 
 # Stopped at 49 responses on the form
 

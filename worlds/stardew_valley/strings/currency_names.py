@@ -13,7 +13,8 @@ class Currency:
     def is_currency(item: str) -> bool:
         return item in [Currency.qi_coin, Currency.golden_walnut, Currency.qi_gem, Currency.star_token, Currency.money,
                         MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.blood,
-                        MemeCurrency.cookies, MemeCurrency.child, MemeCurrency.dead_pumpkins, MemeCurrency.time_elapsed]
+                        MemeCurrency.cookies, MemeCurrency.child, MemeCurrency.dead_crops, MemeCurrency.dead_pumpkins, MemeCurrency.missed_fish,
+                        MemeCurrency.time_elapsed, MemeCurrency.honeywell]
 
 
 class MemeCurrency:
@@ -22,8 +23,11 @@ class MemeCurrency:
     clic = "Clic"
     code = "Code"
     cookies = "CookieClics"
-    dead_pumpkins = "Dead Pumpkins"
+    dead_crops = "Dead Crop"
+    dead_pumpkins = "Dead Pumpkin"
     energy = "Energy"
     steps = "Steps"
     time = "Time"
     time_elapsed = "Time Elapsed"
+    honeywell = "Honeywell"
+    missed_fish = "Missed Fish"

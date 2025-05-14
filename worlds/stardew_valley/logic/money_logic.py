@@ -3,6 +3,7 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable
 from ..strings.currency_names import Currency, MemeCurrency
@@ -107,9 +108,15 @@ class MoneyLogic(BaseLogic):
             return self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
             return self.logic.relationship.has_children(1)
+        if currency == MemeCurrency.dead_crops:
+            return self.logic.season.has_all() & self.logic.skill.can_get_farming_xp & self.logic.money.can_spend(amount * 100)
         if currency == MemeCurrency.dead_pumpkins:
             return self.logic.season.has(Season.fall) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter]) &\
                    self.logic.has(Vegetable.pumpkin) & self.logic.money.can_spend(amount * 100)
+        if currency == MemeCurrency.missed_fish:
+            return self.logic.fishing.can_catch_many_fish(amount)
+        if currency == MemeCurrency.honeywell:
+            return self.logic.has(ArtisanGood.honey) & self.logic.building.has_building(Building.well)
         if currency == MemeCurrency.time_elapsed:
             if amount <= 1000:
                 return self.logic.true_
