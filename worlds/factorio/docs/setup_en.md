@@ -184,7 +184,7 @@ factorio_options:
 By default, all player joined and player stopped tracking notifications are displayed in-game. In larger async seeds this may become overly spammy.
 To hide all connection changes, do one of the following:
 - Type `/toggle-ap-connection-change-filter` in-game
-- Type `/toggle-connection-change-filter` in the Achipelago Client
+- Type `/toggle_connection_change_filter` in the Achipelago Client
 - In your `host.yaml` set
 ```
 factorio_options:

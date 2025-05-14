@@ -56,7 +56,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Toggle filtering of item sends that get displayed in-game to only those that involve you."""
         self.ctx.toggle_filter_item_sends()
 
-    def _cmd_toggle_connection_filter(self):
+    def _cmd_toggle_connection_change_filter(self):
         """Toggle filtering of Connected/Disconnected players."""
         self.ctx.toggle_filter_connection_changes()
 
@@ -362,7 +362,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-send-filter$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_filter_item_sends()
-                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-connection-changes$", msg):
+                elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-connection-change-filter$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_connection_changes()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
