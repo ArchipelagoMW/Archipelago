@@ -492,7 +492,7 @@ class CommonContext:
     
     def is_connection_change(self, print_json_packet: dict) -> bool:
         """Helper function for filtering out connection changes."""
-        return print_json_packet.get("type", "") not in ["Join","Part"]
+        return print_json_packet.get("type", "") in ["Join","Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
