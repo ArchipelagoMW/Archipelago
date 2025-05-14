@@ -135,6 +135,7 @@ class CustomSeries(OptionDict):
     - "map_etags"
     - "map_tags_inclusive"
     - "difficulties"
+    - "has_award"
 
     In addition, the following custom search parameters are available:
     - "map_ids": A list of specific map IDs to randomly choose between (max 100)
@@ -145,7 +146,6 @@ class CustomSeries(OptionDict):
     - "uploaded_before": The map must have been uploaded before the given date
     - "min_length": The author time of the map must be longer than the given time, in milliseconds
     - "max_length": The author time of the map must be shorter than the given time, in milliseconds
-    - "has_award": If true, the map must have at least 1 award
     - "has_replay": If true, the map must have at least 1 replay
 
     Example:
