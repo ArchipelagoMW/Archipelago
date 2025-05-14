@@ -279,6 +279,7 @@ ghost_crystal = BundleItem(Mineral.ghost_crystal)
 kyanite = BundleItem(Mineral.kyanite)
 lemon_stone = BundleItem(Mineral.lemon_stone)
 mudstone = BundleItem(Mineral.mudstone)
+limestone = BundleItem(Mineral.limestone)
 
 slime = BundleItem(Loot.slime, 99)
 bug_meat = BundleItem(Loot.bug_meat, 10)

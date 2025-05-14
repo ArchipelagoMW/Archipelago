@@ -100,7 +100,7 @@ smapi_items = [camping_stove, decorative_pot, slime_crate, supply_crate, warp_to
                artifact_spot, twig, weeds, lumber, green_rain_weeds_0, seed_spot, pot_of_gold]
 smapi_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.smapi, smapi_items, 4, 4)
 
-chaos_emerald_items = [diamond, emerald, ruby, ghost_crystal, obsidian, kyanite, lemon_stone]
+chaos_emerald_items = [diamond, emerald, ruby, linestone, obsidian, kyanite, lemon_stone]
 chaos_emerald_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.chaos_emerald, chaos_emerald_items, 7, 7)
 
 not_the_bees_items = [BundleItem(ArtisanGood.specific_honey(flower)) for flower in all_flowers]
