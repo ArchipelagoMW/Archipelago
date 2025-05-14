@@ -19,15 +19,15 @@ Download the installer file, extract it, and run the executable. When prompted, 
 
 ## Switching Between Different Versions of Archipelago
 
-FYI: Your save files for the unmodified game will not be visible inside the Arhcipelago version of the game, and vice versa.
+Your save files for the unmodified game will not be visible inside the Archipelago version of the game and vice versa.
  The unmodified game and the AP version of the game store saves in different folders to prevent you from loading incompatible saves and getting errors.
 
 If you want to switch back to unmodded Crystal Project:
  1. In your Steam library, right-click Crystal Project in the list and select "Properties...".
  1. In the Betas menu, select the branch that matches the save file you want to switch to (likely the release branch, a.k.a. None in the Beta Participation dropdown).
 
-When you want to back to the Archipelago version of Crystal Project:
- 1. Change back to the archipelago branch in Steam's Beta Participation menu
+When you want to switch back to the Archipelago version of Crystal Project:
+ 1. Change back to the archipelago branch in Steam's Beta Participation menu.
  1. Run the installer for the version you want.
 
 If you want to switch to a different version of Archipelago Crystal Project:
