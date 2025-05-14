@@ -44,7 +44,7 @@ ALLOWED_CHARACTERS = frozenset({
     "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
     "o", "p", "q", "r", "s", "t", "u", "v", "w", "x",
     "y", "z", " ", "!", ":", ",", ".", "/", "?", "-",
-    "=", "+", "'",
+    "=", "+", "'", "(", ")", "\""
 })
 
 
@@ -273,8 +273,8 @@ class JakAndDaxterReplClient:
         self.log_info(logger, msg)
 
     # To properly display in-game text:
-    # - It must be a valid character from the
-    # - All lowercase letters must be uppercase
+    # - It must be a valid character from the ALLOWED_CHARACTERS list.
+    # - All lowercase letters must be uppercase.
     # - It must be wrapped in double quotes (for the REPL command).
     # - Apostrophes must be handled specially - GOAL uses invisible ASCII character 0x12.
     # I also only allotted 32 bytes to each string in OpenGOAL, so we must truncate.
