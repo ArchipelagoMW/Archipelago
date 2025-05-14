@@ -846,7 +846,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     def __iter__(self) -> typing.Iterator[typing.Any]:
         return self.value.__iter__()
 
-    
+
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
     default = {}
     supports_weighting = False
@@ -967,7 +967,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
         if is_iterable_except_str(data):
             return cls(data)
         return cls.from_text(str(data))
-    
+
     @classmethod
     def get_option_name(cls, value):
         return ", ".join(sorted(value))
@@ -1602,7 +1602,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     def __len__(self) -> int:
         return len(self.value)
 
-        
+
 class Removed(FreeText):
     """This Option has been Removed."""
     rich_text_doc = True

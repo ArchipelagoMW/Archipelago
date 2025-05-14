@@ -135,7 +135,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     else:
                         weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
-                        
+
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 
@@ -204,7 +204,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     player_path_cache = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
-    name_counter: Counter = Counter()
+    name_counter: Counter[str] = Counter()
     erargs.player_options = {}
 
     player = 1
@@ -317,7 +317,7 @@ class SafeFormatter(string.Formatter):
             return kwargs.get(key, "{" + key + "}")
 
 
-def handle_name(name: str, player: int, name_counter: Counter):
+def handle_name(name: str, player: int, name_counter: Counter[str]):
     name_counter[name.lower()] += 1
     number = name_counter[name.lower()]
     new_name = "%".join([x.replace("%number%", "{number}").replace("%player%", "{player}") for x in name.split("%%")])
