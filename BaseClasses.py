@@ -47,7 +47,7 @@ class ThreadBarrierProxy:
             return getattr(self.obj, name)
         else:
             raise RuntimeError("You are in a threaded context and global random state was removed for your safety. "
-                               "Please use multiworld.per_slot_randoms[player] or randomize ahead of output.")
+                               "Please use self.random or randomize ahead of output.")
 
 
 class HasNameAndPlayer(Protocol):
@@ -149,8 +149,7 @@ class MultiWorld:
         # world-local random state is saved for multiple generations running concurrently
         self.random = ThreadBarrierProxy(random.Random())
         self.players = players
-        self.player_types: dict[int, NetUtils.SlotType] = {player: NetUtils.SlotType.player for player in
-                                                           self.player_ids}
+        self.player_types: dict[int, NetUtils.SlotType] = {player: NetUtils.SlotType.player for player in self.player_ids}
         self.algorithm = 'balanced'
         self.groups = {}
         self.regions = self.RegionManager(players)
@@ -1060,7 +1059,7 @@ class Entrance:
         self.connected_region = region
         region.entrances.append(self)
 
-    def is_valid_source_transition(self, er_state: "ERPlacementState") -> bool:
+    def is_valid_source_transition(self, er_state: ERPlacementState) -> bool:
         """
         Determines whether this is a valid source transition, that is, whether the entrance
         randomizer is allowed to pair it to place any other regions. By default, this is the
@@ -1071,7 +1070,7 @@ class Entrance:
         """
         return self.can_reach(er_state.collection_state)
 
-    def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
+    def can_connect_to(self, other: Entrance, dead_end: bool, er_state: ERPlacementState) -> bool:
         """
         Determines whether a given Entrance is a valid target transition, that is, whether
         the entrance randomizer is allowed to pair this Entrance to that Entrance. By default,
