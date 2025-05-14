@@ -197,7 +197,7 @@ class FactorioContext(CommonContext):
         logger.info(announcement)
         self.print_to_game(announcement)
 
-    def toggle_connection_changes(self) -> None:
+    def toggle_filter_connection_changes(self) -> None:
         self.filter_connection_changes = not self.filter_connection_changes
         if self.filter_connection_changes:
             announcement = "Connection changes are now filtered."
