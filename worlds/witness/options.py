@@ -55,6 +55,7 @@ class EarlyGoodItems(OptionSet):
     """
     Put one random helpful item of each of the chosen types on an early check, specifically a sphere 1 Tutorial location.
     If a type is chosen, but no items of that type exist in the itempool, it is skipped.
+    The possible types are: "Symbol", "Door / Door Panel", "Obelisk Key".
 
     If there aren't enough sphere 1 Tutorial locations, Tutorial First Hallway Straight and Tutorial First Hallway Bend may be added as locations.
     If there still aren't enough sphere 1 Tutorial locations, a random local sphere 1 location is picked.
