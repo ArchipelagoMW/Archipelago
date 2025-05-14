@@ -63,6 +63,12 @@ class PeaksOfWorld(World):
         if self.options.start_with_barometer:
             self.push_precollected(self.create_item("Barometer"))
 
+        if self.options.start_with_chalk:
+            self.multiworld.push_precollected(self.create_item("Chalkbag"))
+
+        if self.options.start_with_coffee:
+            self.multiworld.push_precollected(self.create_item("Coffee Unlock"))
+
         if self.options.start_with_oil_lamp:
             self.push_precollected(self.create_item("Oil Lamp"))
 
@@ -131,7 +137,9 @@ class PeaksOfWorld(World):
 
         for tool in get_all_items_or_locations(tools_list):
             if (tool.name != "Barometer" or not self.options.start_with_barometer) \
-                    and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp):
+                    and (tool.name != "Oil Lamp" or not self.options.start_with_oil_lamp)\
+                    and (tool.name != "Chalkbag" or not self.options.start_with_chalk) \
+                    and (tool.name != "Coffee Unlock" or not self.options.start_with_coffee):
                 if tool.name == "Progressive Crampons":
                     local_itempool.append(self.create_item(tool.name))
 

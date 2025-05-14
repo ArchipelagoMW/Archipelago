@@ -140,7 +140,7 @@ ropes_list: dict[PeaksOfYoreRegion, list[ItemOrLocation]] = {
         ItemOrLocation('Land\'s End: Rope', 12 + rope_offset),
         ItemOrLocation('Evergreen\'s End: Rope', 13 + rope_offset),
         ItemOrLocation('The Great Crevice: Rope', 14 + rope_offset),
-        ItemOrLocation('Old Hagger Rope', 15 + rope_offset),
+        ItemOrLocation('Old Hagger: Rope', 15 + rope_offset),
     ],
     PeaksOfYoreRegion.INTERMEDIATE: [],
     PeaksOfYoreRegion.ADVANCED: [
