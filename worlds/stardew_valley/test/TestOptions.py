@@ -3,13 +3,13 @@ from typing import ClassVar
 
 from BaseClasses import ItemClassification
 from test.param import classvar_matrix
-from . import SVTestCase, solo_multiworld, SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestCase, SVTestBase, solo_multiworld
 from .options.option_names import all_option_choices
 from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group
 from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
+from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, SpecialOrderLocations, ArcadeMachineLocations
 from ..strings.goal_names import Goal as GoalName
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
@@ -126,7 +126,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase
 class TestTraps(SVTestCase):
     def test_given_no_traps_when_generate_then_no_trap_in_pool(self):
         world_options = allsanity_no_mods_6_x_x().copy()
-        world_options[TrapItems.internal_name] = TrapItems.option_no_traps
+        world_options[TrapDifficulty.internal_name] = TrapDifficulty.option_no_traps
         with solo_multiworld(world_options) as (multi_world, _):
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP]]
             multiworld_items = [item.name for item in multi_world.get_items()]
@@ -136,12 +136,12 @@ class TestTraps(SVTestCase):
                     self.assertNotIn(item, multiworld_items)
 
     def test_given_traps_when_generate_then_all_traps_in_pool(self):
-        trap_option = TrapItems
+        trap_option = TrapDifficulty
         for value in trap_option.options:
             if value == "no_traps":
                 continue
             world_options = allsanity_mods_6_x_x()
-            world_options.update({TrapItems.internal_name: trap_option.options[value]})
+            world_options.update({TrapDifficulty.internal_name: trap_option.options[value]})
             with solo_multiworld(world_options) as (multi_world, _):
                 trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if
                               Group.DEPRECATED not in item_data.groups and item_data.mod_name is None]
