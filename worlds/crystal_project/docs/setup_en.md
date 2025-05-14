@@ -23,17 +23,17 @@ FYI: Your save files for the unmodified game will not be visible inside the Arhc
  The unmodified game and the AP version of the game store saves in different folders to prevent you from loading incompatible saves and getting errors.
 
 If you want to switch back to unmodded Crystal Project:
- - In your Steam library, right-click Crystal Project in the list and select "Properties...".
- - In the Betas menu, select the branch that matches the save file you want to switch to (likely the release branch, a.k.a. None in the Beta Participation dropdown).
+ 1. In your Steam library, right-click Crystal Project in the list and select "Properties...".
+ 1. In the Betas menu, select the branch that matches the save file you want to switch to (likely the release branch, a.k.a. None in the Beta Participation dropdown).
 
 When you want to back to the Archipelago version of Crystal Project:
- - Change back to the archipelago branch in Steam's Beta Participation menu
- - Run the installer for the version you want.
+ 1. Change back to the archipelago branch in Steam's Beta Participation menu
+ 1. Run the installer for the version you want.
 
 If you want to switch to a different version of Archipelago Crystal Project:
- - In your Steam library, right-click Crystal Project in the list and select "Properties...".
- - Go to the Installed Files section and select "Verify integrity of game files"
- - Run the installer for the version of Crystal Project Archipelago you want to switch to.
+ 1. In your Steam library, right-click Crystal Project in the list and select "Properties...".
+ 1. Go to the Installed Files section and select "Verify integrity of game files"
+ 1. Run the installer for the version of Crystal Project Archipelago you want to switch to.
 
 ## Configuring your YAML file
 
