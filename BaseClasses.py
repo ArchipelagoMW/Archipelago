@@ -721,8 +721,6 @@ class MultiWorld:
         return False
 
 
-PathValue = tuple[str, Iterable[PathValue]]
-
 
 class CollectionState:
     prog_items: dict[int, Counter[str]]
@@ -730,7 +728,7 @@ class CollectionState:
     reachable_regions: dict[int, set[Region]]
     blocked_connections: dict[int, set[Entrance]]
     advancements: set[Location]
-    path: dict[Region | Entrance, PathValue]
+    path: dict[Region | Entrance, Iterable[str]]
     locations_checked: set[Location]
     stale: dict[int, bool]
     allow_partial_entrances: bool
