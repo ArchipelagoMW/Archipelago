@@ -226,6 +226,7 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 #   ASMR Bundle         (Relaxing Bundle, it plays ASMR noise)
 #   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
 #   Bad Farmer Bundle   (Dead Crops)
+#   Bad Fisherman Bundle(Uncaught Fish)
 #   Cipher Bundle       (Some sort of code?)
 #   Clickbait Bundle    (Scouts a super critical progression item, but actually contains garbage)
 #   Cooperation Bundle  (Asks for normal items but can only be donated through gifting)
