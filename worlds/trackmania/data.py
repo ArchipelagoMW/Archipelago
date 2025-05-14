@@ -17,7 +17,7 @@ tmx_map_tags = ["Race","FullSpeed","Tech","RPG","LOL","Press Forward","SpeedTech
 
 tmx_map_difficulties = ["Beginner","Intermediate","Advanced","Expert","Lunatic","Impossible"]
 
-tmx_default_excluded_tags = ["Kacky", "Royal", "Arena"]
+tmx_default_excluded_tags = ["Kacky", "Royal", "Arena", "FlagRush", "Puzzle"]
 
 tmx_default_map_difficulties = ["Beginner","Intermediate","Advanced","Expert"]
 
@@ -142,7 +142,13 @@ filler_item_names = [
     "horsn",
     "pedro",
     "Super Unlucky Landing",
-    "Brick Bob"
+    "Brick Bob",
+    "GPS",
+    "Green Timer",
+    "borpaspin",
+    "Blind Jump",
+    "Loop Cut",
+    "First Connection in 9999999 Days!"
 ]
 
 def get_all_map_tags() -> list[str]:
