@@ -150,7 +150,7 @@ def local_path(*path: str) -> str:
             # pray
             local_path.cached_path = os.path.abspath(".")
 
-    return os.path.join(local_path.cached_path, *path).__repr__()
+    return os.path.join(local_path.cached_path, *path)
 
 
 def home_path(*path: str) -> str:
