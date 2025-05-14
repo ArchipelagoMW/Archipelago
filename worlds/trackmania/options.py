@@ -112,6 +112,10 @@ class MapDifficulties(OptionSet):
     valid_keys = get_all_map_difficulties()
     default = get_default_map_difficulties()
 
+class HasAward(Toggle):
+    """Enable to guarantee every rolled track will have at least one award on Trackmania Exchange."""
+    display_name = "Must Be Awarded"
+
 
 # Schema for custom series options below.
 LuaBool = Or(bool, And(int, lambda v: v in (0, 1)))
@@ -203,6 +207,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_tags_inclusive: MapTagsInclusive
     map_etags: MapETags
     difficulties: MapDifficulties
+    has_award: HasAward
 
     custom_series: CustomSeries
 
@@ -210,7 +215,7 @@ option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, FirstSeriesSize],
-    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, MapTags, MapETags, CustomSeries]
+    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags, CustomSeries]
 }
 
 def create_option_groups() -> List[OptionGroup]:
