@@ -241,6 +241,8 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
 #   Sticky Bundle       (But it sticks, somehow?)
+#   Coma Bundle         (Very Long Multisleep)
+#   Puzzle Bundle       (Some sort of sliding puzzle)
 
 
 # Bundles that need special Mod Handling:
