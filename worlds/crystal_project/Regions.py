@@ -61,6 +61,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Greenshire Reprise", excluded),
         create_region(world, player, locations_per_region, "Salmon Pass", excluded),
         create_region(world, player, locations_per_region, "Salmon River", excluded),
+        create_region(world, player, locations_per_region, "Shoudu Waterfront", excluded), #moved Shoudu Waterfront from Expert to Advanced
         create_region(world, player, locations_per_region, "Poko Poko Desert", excluded),
         create_region(world, player, locations_per_region, "Sara Sara Bazaar", excluded),
         create_region(world, player, locations_per_region, "Sara Sara Beach", excluded),
@@ -76,7 +77,6 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
 
     expert_regions = [
         create_region(world, player, locations_per_region, "The Open Sea", excluded),
-        create_region(world, player, locations_per_region, "Shoudu Waterfront", excluded),
         create_region(world, player, locations_per_region, "Shoudu Province", excluded),
         create_region(world, player, locations_per_region, "The Undercity", excluded),
         create_region(world, player, locations_per_region, "Ganymede Shrine", excluded),
