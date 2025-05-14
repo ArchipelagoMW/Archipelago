@@ -721,6 +721,7 @@ class MultiWorld:
         return False
 
 
+PathValue: Iterable[str]
 
 class CollectionState:
     prog_items: dict[int, Counter[str]]
