@@ -57,11 +57,10 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
-    "Archipelago",
-    "Final Fantasy",
-    "Raft",
+    "Archipelago",  # needs a way to specify load order
+    "Final Fantasy",  # loads json files badly
+    "Raft",  # loads json files badly
 }
 
 
