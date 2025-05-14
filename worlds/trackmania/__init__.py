@@ -117,6 +117,10 @@ class TrackmaniaWorld(World):
         return {
             "TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
             "SeriesNumber": self.options.series_number.value,
+            "DisableBronze": self.options.disable_bronze.value,
+            "DisableSilver": self.options.disable_silver.value,
+            "DisableGold": self.options.disable_gold.value,
+            "DisableAuthor": self.options.disable_author.value,
             "SeriesData": self.series_data
         }
 
