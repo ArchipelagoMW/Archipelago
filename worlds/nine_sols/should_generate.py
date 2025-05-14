@@ -1,9 +1,7 @@
-from typing import Optional
-
 from .options import NineSolsGameOptions
 
 
-def should_generate(category: Optional[str], options: NineSolsGameOptions) -> bool:
+def should_generate(category: str | None, options: NineSolsGameOptions) -> bool:
     if category is None:  # this item/location/connection gets generated no matter what the player options are
         return True
     elif '&' in category:

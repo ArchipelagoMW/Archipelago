@@ -1,6 +1,6 @@
 import pkgutil
 import typing
-from typing import NamedTuple, Optional
+from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 from Utils import restricted_loads
@@ -16,9 +16,9 @@ class NineSolsItem(Item):
 
 class NineSolsItemData(NamedTuple):
     name: str = None
-    code: Optional[int] = None
+    code: int | None = None
     type: ItemClassification = ItemClassification.filler
-    category: Optional[str] = None
+    category: str | None = None
 
 
 pickled_data = pkgutil.get_data(__name__, "shared_static_logic/static_logic.pickle")

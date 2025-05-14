@@ -1,7 +1,7 @@
 import json
 import pkgutil
 import typing
-from typing import Any, NamedTuple, Optional
+from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
@@ -18,8 +18,8 @@ class NineSolsLocation(Location):
 
 class NineSolsLocationData(NamedTuple):
     region: str
-    address: Optional[int] = None
-    category: Optional[str] = None
+    address: int | None = None
+    category: str | None = None
 
 
 class NineSolsRegionData(NamedTuple):
