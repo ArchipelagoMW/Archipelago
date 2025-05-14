@@ -116,6 +116,22 @@ class HasAward(Toggle):
     """Enable to guarantee every rolled track will have at least one award on Trackmania Exchange."""
     display_name = "Must Be Awarded"
 
+class DisableBronzeLocations(Toggle):
+    """Disable Bronze Medal times from counting as locations, and removes all Bronze Medals from the Item Pool (unless is is the progression medal)."""
+    display_name = "Remove Bronze Medals"
+
+class DisableSilverLocations(Toggle):
+    """Disable Silver Medal times from counting as locations, and removes all Silver Medals from the Item Pool (unless is is the progression medal)."""
+    display_name = "Remove Silver Medals"
+
+class DisableGoldLocations(Toggle):
+    """Disable Gold Medal times from counting as locations, and removes all Gold Medals from the Item Pool (unless is is the progression medal)."""
+    display_name = "Remove Gold Medals"
+
+class DisableAuthorLocations(Toggle):
+    """Disable Author Medal times from counting as locations, and removes all Author Medals from the Item Pool (unless is is the progression medal)."""
+    display_name = "Remove Author Medals"
+
 
 # Schema for custom series options below.
 LuaBool = Or(bool, And(int, lambda v: v in (0, 1)))
@@ -208,14 +224,19 @@ class TrackmaniaOptions(PerGameCommonOptions):
     map_etags: MapETags
     difficulties: MapDifficulties
     has_award: HasAward
+    disable_bronze: DisableBronzeLocations
+    disable_silver: DisableSilverLocations
+    disable_gold: DisableGoldLocations
+    disable_author: DisableAuthorLocations
 
     custom_series: CustomSeries
 
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
-    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber, FirstSeriesSize],
-    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags, CustomSeries]
+    "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
+    "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags],
+    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries]
 }
 
 def create_option_groups() -> List[OptionGroup]:
