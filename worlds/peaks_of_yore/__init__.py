@@ -64,10 +64,10 @@ class PeaksOfWorld(World):
             self.push_precollected(self.create_item("Barometer"))
 
         if self.options.start_with_chalk:
-            self.multiworld.push_precollected(self.create_item("Chalkbag"))
+            self.push_precollected(self.create_item("Chalkbag"))
 
         if self.options.start_with_coffee:
-            self.multiworld.push_precollected(self.create_item("Coffee Unlock"))
+            self.push_precollected(self.create_item("Coffee Unlock"))
 
         if self.options.start_with_oil_lamp:
             self.push_precollected(self.create_item("Oil Lamp"))
