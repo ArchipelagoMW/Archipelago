@@ -65,7 +65,7 @@ class RandomizeStartingJobs(DefaultOnToggle):
     """
     display_name = "Randomize starting Jobs"
 
-class KillBossesMode(DefaultOnToggle):
+class KillBossesMode(Toggle):
     """
     When enabled, defeating a boss will provide checks.
     """

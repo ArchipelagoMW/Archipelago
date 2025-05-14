@@ -428,6 +428,7 @@ class CrystalProjectWorld(World):
             "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
             "startingJobs": self.get_job_id_list(),
+            "killBossesMode" : bool(self.options.killBossesMode.value),
             "easyLeveling": bool(self.options.easyLeveling.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
