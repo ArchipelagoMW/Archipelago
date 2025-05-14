@@ -128,6 +128,8 @@ class BundleName:
 
 
 class MemeBundleName:
+    bad_farmer = meme_bundle("Bad Farmer")
+    bad_fisherman = meme_bundle("Bad Fisherman")
     honeywell = meme_bundle("Honeywell")
     crap_pot = meme_bundle("Crap Pot")
     emmalution = meme_bundle("Emmalution")

@@ -215,6 +215,8 @@ restraint_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName
 fast_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.fast, BundleItem(MemeCurrency.time_elapsed, 1000))
 floor_is_lava_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.floor_is_lava, BundleItem.money_bundle(0))
 joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joetg, BundleItem(MemeCurrency.dead_pumpkins, 750))
+bad_farmer_bundle = CurrencyBundleTemplate(CCRoom.pantry, MemeBundleName.bad_farmer, BundleItem(MemeCurrency.dead_crops, 100))
+bad_fisherman_bundle = CurrencyBundleTemplate(CCRoom.fish_tank, MemeBundleName.bad_fisherman, BundleItem(MemeCurrency.missed_fish, 20))
 honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, BundleItem(MemeCurrency.honeywell, 1))
 
 # Stopped at 49 responses on the form
@@ -256,7 +258,7 @@ honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.
 # Bundle Bundle
 
 pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle,
-                       big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle]
+                       big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle, bad_farmer_bundle]
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
 crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
@@ -264,7 +266,7 @@ crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bun
 crafts_room_meme = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_meme, 6)
 
 fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, mermaid_bundle, legendairy_bundle, kent_c_bundle, bundle_bundle,
-                          schrodinger_bundle]
+                          schrodinger_bundle, bad_fisherman_bundle]
 fish_tank_meme = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_meme, 6)
 
 boiler_room_bundles_meme = [amons_fall_bundle, screw_you_bundle, rick_bundle, minecraft_bundle, balls_bundle, tilesanity_bundle, obelisks_bundle,
