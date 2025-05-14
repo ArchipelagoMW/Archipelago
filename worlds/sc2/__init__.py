@@ -618,7 +618,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
 def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Adds the `Allowed_Orphan` flag to items that shouldn't be filtered with their parents, like combat shield"""
     missions = get_all_missions(world.custom_mission_order)
-    terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in mission.flags for mission in missions)
+    terran_nobuild_missions = any((MissionFlag.Terran|MissionFlag.NoBuild) in mission.flags and mission.campaign != SC2Campaign.NCO for mission in missions)
     if terran_nobuild_missions:
         for item in item_list:
             if item.name in (
