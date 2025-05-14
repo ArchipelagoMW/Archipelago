@@ -12,7 +12,6 @@ from enum import IntEnum, IntFlag
 from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, Literal)
 import dataclasses
->>>>>>> origin
 
 from typing_extensions import NotRequired, TypedDict
 
