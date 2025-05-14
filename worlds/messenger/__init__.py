@@ -11,7 +11,7 @@ from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
@@ -35,6 +35,7 @@ class MessengerSettings(Group):
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
+    rich_text_options_doc = True
 
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
@@ -56,6 +57,7 @@ class MessengerWeb(WebWorld):
     )
 
     tutorials = [tut_en, plando_en]
+    option_groups = option_groups
 
 
 class MessengerWorld(World):
