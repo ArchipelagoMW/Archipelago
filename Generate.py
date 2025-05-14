@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse():
+def mystery_argparse() -> argparse.Namespace:
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -68,7 +68,7 @@ def mystery_argparse():
         args.weights_file_path = os.path.join(args.player_files_path, args.weights_file_path)
     if not os.path.isabs(args.meta_file_path):
         args.meta_file_path = os.path.join(args.player_files_path, args.meta_file_path)
-    args.plando: PlandoOptions = PlandoOptions.from_option_string(args.plando)
+    args.plando = PlandoOptions.from_option_string(args.plando)
 
     return args
 
@@ -180,7 +180,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
-    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
+    settings_cache: dict[str, tuple[argparse.Namespace, ...] | None] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
@@ -204,7 +204,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     player_path_cache = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
-    name_counter = Counter()
+    name_counter: Counter = Counter()
     erargs.player_options = {}
 
     player = 1
@@ -212,7 +212,8 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
         path = player_path_cache[player]
         if path:
             try:
-                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                cached_settings = settings_cache[path]
+                settings: tuple[argparse.Namespace, ...] = cached_settings if cached_settings else \
                     tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
                 for settingsObject in settings:
                     for k, v in vars(settingsObject).items():
@@ -445,7 +446,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
     return weights
 
 
-def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type(Options.Option), plando_options: PlandoOptions):
+def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, option: type[Options.Option], plando_options: PlandoOptions):
     try:
         if option_key in game_weights:
             if not option.supports_weighting:
