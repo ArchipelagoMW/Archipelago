@@ -61,18 +61,18 @@ class PeaksOfWorld(World):
                               "Please choose another goal or enable time attack in the options.")
 
         if self.options.start_with_barometer:
-            self.multiworld.push_precollected(self.create_item("Barometer"))
+            self.push_precollected(self.create_item("Barometer"))
 
         if self.options.start_with_oil_lamp:
-            self.multiworld.push_precollected(self.create_item("Oil Lamp"))
+            self.push_precollected(self.create_item("Oil Lamp"))
 
         if self.options.start_with_hands.value == 0:
-            self.multiworld.push_precollected(self.create_item("Right Hand"))
-            self.multiworld.push_precollected(self.create_item("Left Hand"))
+            self.push_precollected(self.create_item("Right Hand"))
+            self.push_precollected(self.create_item("Left Hand"))
         elif self.options.start_with_hands.value == 1:
-            self.multiworld.push_precollected(self.create_item("Left Hand"))
+            self.push_precollected(self.create_item("Left Hand"))
         else:
-            self.multiworld.push_precollected(self.create_item("Right Hand"))
+            self.push_precollected(self.create_item("Right Hand"))
 
         starting_book_options: dict[str, Toggle] = {
             "Fundamentals Book": self.options.enable_fundamental,
@@ -101,9 +101,9 @@ class PeaksOfWorld(World):
 
         self.options.starting_book.value = book_names.index(start_book)
         if self.options.starting_book.value == StartingBook.option_expert:
-            self.multiworld.push_precollected(self.create_item("Progressive Crampons"))
+            self.push_precollected(self.create_item("Progressive Crampons"))
             # make sure player gets at least 6pt crampons before expert books
-        self.multiworld.push_precollected(self.create_item(start_book))
+        self.push_precollected(self.create_item(start_book))
 
     def create_regions(self) -> None:
         self.checks_in_pool = create_poy_regions(self, self.options)
