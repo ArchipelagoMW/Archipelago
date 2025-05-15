@@ -123,7 +123,8 @@ class FishingLogic(BaseLogic):
             self.logic.fishing.can_catch_fish(fish)
             for fish in self.content.fishes.values()
         ]
-
+        if number > len(rules):
+            number = len(rules)
         return self.logic.count(number, *rules)
 
     def has_specific_bait(self, fish: FishItem) -> StardewRule:
