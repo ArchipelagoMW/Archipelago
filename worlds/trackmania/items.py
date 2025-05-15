@@ -70,6 +70,8 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     if spots_remaining < 0:
         spots_remaining = 0 # just in case
 
+    print (get_locations_per_map(world),total_map_count * get_locations_per_map(world), len(itempool), spots_remaining)
+
     #each map has one additional check for reaching the target time we can fill with skips and filler
     skip_count = round(float(spots_remaining) * (world.options.skip_percentage / 100.0))
     itempool += create_items(world, "Map Skip", skip_count)
@@ -82,7 +84,7 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     return itempool
 
 def create_medals(world: "TrackmaniaWorld", medal: str, minimum_target_time:int, map_count: int) -> list[Item]:
-    if get_progression_medal(world) != medal && !get_medal_enabled(world, medal):
+    if get_progression_medal(world) != medal and not get_medal_enabled(world, medal):
         return []
     if world.options.target_time >= minimum_target_time:
         return create_items(world, medal, map_count)
@@ -116,18 +118,18 @@ def get_medal_enabled(world: "TrackmaniaWorld", medal: str) -> bool:
         case "Author Medal":
             return world.options.disable_author <= 0
         case _:
-            return true
+            return True
 
 def get_locations_per_map(world: "TrackmaniaWorld") -> int:
     checks: int = 1
     if world.options.disable_bronze <= 0:
         checks += 1
-    if world.options.target_time >=100 && world.options.disable_silver <= 0:
-        checks += 2
-    if world.options.target_time >=200 && world.options.disable_gold <= 0:
-        checks += 3
-    if world.options.target_time >=300 && world.options.disable_author <= 0:
-        checks += 4
+    if world.options.target_time >=100 and world.options.disable_silver <= 0:
+        checks += 1
+    if world.options.target_time >=200 and world.options.disable_gold <= 0:
+        checks += 1
+    if world.options.target_time >=300 and world.options.disable_author <= 0:
+        checks += 1
     return checks
     
 
