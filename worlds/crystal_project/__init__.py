@@ -18,7 +18,7 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
 
 class CrystalProjectWeb(WebWorld):
-    #theme = "partyTime" #pick a theme!
+    theme = "jungle"
     bug_report_page = "https://github.com/Emerassi/CrystalProjectAPWorld/issues"
     setup_en = Tutorial(
         "Mod Setup and Use Guide",
