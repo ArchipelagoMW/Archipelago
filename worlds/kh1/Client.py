@@ -217,6 +217,7 @@ class KH1Context(CommonContext):
                         message = "From " + senderName + "\n" + itemName
                     elif senderID == self.slot and receiverID != senderID: # Item sent to someone else
                         message = itemName + "\nto " + receiverName
+
                     elif locationID in remote_location_ids: # Found a remote item
                         message = itemName
                     filename = "msg"
