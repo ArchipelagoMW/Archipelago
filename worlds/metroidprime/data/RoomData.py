@@ -8,7 +8,7 @@ from BaseClasses import (
     LocationProgressType,
     Region,
 )
-from ...generic.Rules import add_rule
+from worlds.generic.Rules import add_rule
 from ..PrimeOptions import DoorColorRandomization
 from ..BlastShieldRando import BlastShieldType
 from ..DoorRando import DoorLockType

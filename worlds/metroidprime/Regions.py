@@ -1,7 +1,5 @@
 import typing
 
-from ..generic.Rules import set_rule
-
 from .Locations import MetroidPrimeLocation
 
 from .data.RoomNames import RoomName
@@ -29,18 +27,19 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
     starting_room = world.get_region(world.starting_room_data.name)
     menu.connect(starting_room, "Starting Room")
 
-    def can_access_elevator(world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        if world.options.pre_scan_elevators:
-            return True
-        return world.logic.can_scan(world, state)
+    if world.options.pre_scan_elevators:
+        # Pre-scanned, so no requirements.
+        can_access_elevator = lambda state: True
+    else:
+
+        def can_access_elevator(state: CollectionState) -> bool:
+            return world.logic.can_scan(world, state)
 
     for mappings in world.elevator_mapping.values():
         for elevator, target in mappings.items():
             source = world.get_region(elevator)
             destination = world.get_region(target)
-            source.connect(
-                destination, elevator, lambda state: can_access_elevator(world, state)
-            )
+            source.connect(destination, elevator, can_access_elevator)
 
     artifact_temple = world.get_region(RoomName.Artifact_Temple.value)
 
@@ -71,7 +70,7 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
             mission_complete,
             "Mission Complete",
             lambda state, artifact_count=world.options.required_artifacts.value: world.logic.can_missile(
-                world, state
+                world, state, 1
             )
             and world.logic.has_required_artifact_count(world, state, artifact_count)
             and (
@@ -97,10 +96,6 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
         world.player, "Mission Complete", None, mission_complete
     )
     victory.place_locked_item(world.create_event("Mission Complete"))
-    set_rule(
-        victory,
-        lambda state: state.can_reach(mission_complete, None, world.player),
-    )
     mission_complete.locations.append(victory)
     world.multiworld.completion_condition[world.player] = lambda state: (
         state.has("Mission Complete", world.player)

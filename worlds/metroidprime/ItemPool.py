@@ -157,7 +157,7 @@ def requires_beam_combos_for_progression(world: "MetroidPrimeWorld") -> bool:
         world.options.blast_shield_available_types.value
         == BlastShieldAvailableTypes.option_all
         and world.options.blast_shield_randomization.value
-        != BlastShieldRandomization.option_none  # type: ignore
+        != BlastShieldRandomization.option_none
     )
 
 

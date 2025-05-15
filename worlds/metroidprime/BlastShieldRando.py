@@ -182,7 +182,7 @@ def _get_available_blast_shields(
 ) -> List[BlastShieldType]:
     available_shields = [
         shield
-        for shield in ALL_SHIELDS.copy()
+        for shield in ALL_SHIELDS
         if shield not in [BlastShieldType.Disabled, BlastShieldType.No_Blast_Shield]
     ]
 

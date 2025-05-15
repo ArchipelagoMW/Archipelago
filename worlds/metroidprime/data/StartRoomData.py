@@ -293,10 +293,10 @@ def get_available_start_rooms(world: "MetroidPrimeWorld", difficulty: int) -> Li
             or not world.options.randomize_starting_beam
         ):
             return True
-        return (
+        return bool(
             world.options.randomize_starting_beam
             and room.loadouts[0].starting_beam == SuitUpgrade.Power_Beam
-        ) == True
+        )
 
     return [
         name

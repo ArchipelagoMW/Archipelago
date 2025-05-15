@@ -12,6 +12,20 @@ from typing import TYPE_CHECKING, Callable, Optional
 if TYPE_CHECKING:
     from . import MetroidPrimeWorld
 
+PROGRESSIVE_UPGRADE_REQUIREMENTS_FOR_CHARGE = {upgrade.value: 2 for upgrade in ProgressiveUpgrade}
+
+# Frequently used item combinations
+POWER_BOMB_REQUIREMENTS = [SuitUpgrade.Power_Bomb_Expansion.value, SuitUpgrade.Morph_Ball.value]
+MAIN_POWER_BOMB_REQUIREMENTS = [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Main_Power_Bomb.value]
+BOOST_BALL_REQUIREMENTS = [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Boost_Ball.value]
+BOMB_REQUIREMENTS = [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Morph_Ball_Bomb.value]
+POWER_BEAM_REQUIREMENTS = [SuitUpgrade.Power_Beam.value, ProgressiveUpgrade.Progressive_Power_Beam.value]
+SPIDER_BALL_REQUIREMENTS = [SuitUpgrade.Spider_Ball.value, SuitUpgrade.Morph_Ball.value]
+SUPER_MISSILE_REQUIREMENTS = [SuitUpgrade.Charge_Beam.value, SuitUpgrade.Super_Missile.value]
+WAVE_BEAM_REQUIREMENTS = [SuitUpgrade.Wave_Beam.value, ProgressiveUpgrade.Progressive_Wave_Beam.value]
+ICE_BEAM_REQUIREMENTS = [SuitUpgrade.Ice_Beam.value, ProgressiveUpgrade.Progressive_Ice_Beam.value]
+PLASMA_BEAM_REQUIREMENTS = [SuitUpgrade.Plasma_Beam.value, ProgressiveUpgrade.Progressive_Plasma_Beam.value]
+HEAT_PROTECTION_REQUIREMENTS = [SuitUpgrade.Varia_Suit.value, SuitUpgrade.Phazon_Suit.value, SuitUpgrade.Gravity_Suit.value]
 
 class CombatLogicDifficulty(Enum):
     NO_LOGIC = -1
@@ -38,18 +52,12 @@ class Logic:
     def _can_power_bomb(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
-        return state.has_all(
-            [SuitUpgrade.Power_Bomb_Expansion.value, SuitUpgrade.Morph_Ball.value],
-            world.player,
-        )
+        return state.has_all(POWER_BOMB_REQUIREMENTS, world.player)
 
     def _can_main_power_bomb(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
-        return state.has_all(
-            [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Main_Power_Bomb.value],
-            world.player,
-        )
+        return state.has_all(MAIN_POWER_BOMB_REQUIREMENTS, world.player)
 
     def has_required_artifact_count(
         self, world: "MetroidPrimeWorld", state: CollectionState, required_count: int
@@ -57,31 +65,18 @@ class Logic:
         return state.has_group("Artifacts", world.player, required_count)
 
     def can_boost(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        return state.has_all(
-            [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Boost_Ball.value], world.player
-        )
+        return state.has_all(BOOST_BALL_REQUIREMENTS, world.player)
 
     def can_bomb(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        return state.has_all(
-            [SuitUpgrade.Morph_Ball.value, SuitUpgrade.Morph_Ball_Bomb.value],
-            world.player,
-        )
+        return state.has_all(BOMB_REQUIREMENTS, world.player)
 
     def can_power_beam(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
-        return state.has_any(
-            [
-                SuitUpgrade.Power_Beam.value,
-                ProgressiveUpgrade.Progressive_Power_Beam.value,
-            ],
-            world.player,
-        )
+        return state.has_any(POWER_BEAM_REQUIREMENTS, world.player)
 
     def can_spider(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        return state.has_all(
-            [SuitUpgrade.Spider_Ball.value, SuitUpgrade.Morph_Ball.value], world.player
-        )
+        return state.has_all(SPIDER_BALL_REQUIREMENTS, world.player)
 
     def _can_missile_launcher(
         self,
@@ -116,10 +111,7 @@ class Logic:
             self.can_power_beam(world, state)
             and self.can_missile(world, state, 1)
             and (
-                state.has_all(
-                    [SuitUpgrade.Charge_Beam.value, SuitUpgrade.Super_Missile.value],
-                    world.player,
-                )
+                state.has_all(SUPER_MISSILE_REQUIREMENTS, world.player)
                 or state.has(
                     ProgressiveUpgrade.Progressive_Power_Beam.value, world.player, 3
                 )
@@ -127,30 +119,15 @@ class Logic:
         )
 
     def can_wave_beam(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        return state.has_any(
-            [
-                SuitUpgrade.Wave_Beam.value,
-                ProgressiveUpgrade.Progressive_Wave_Beam.value,
-            ],
-            world.player,
-        )
+        return state.has_any(WAVE_BEAM_REQUIREMENTS, world.player)
 
     def can_ice_beam(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        return state.has_any(
-            [SuitUpgrade.Ice_Beam.value, ProgressiveUpgrade.Progressive_Ice_Beam.value],
-            world.player,
-        )
+        return state.has_any(ICE_BEAM_REQUIREMENTS, world.player)
 
     def can_plasma_beam(
         self, world: "MetroidPrimeWorld", state: CollectionState
     ) -> bool:
-        return state.has_any(
-            [
-                SuitUpgrade.Plasma_Beam.value,
-                ProgressiveUpgrade.Progressive_Plasma_Beam.value,
-            ],
-            world.player,
-        )
+        return state.has_any(PLASMA_BEAM_REQUIREMENTS, world.player)
 
     can_melt_ice = can_plasma_beam
 
@@ -229,7 +206,7 @@ class Logic:
         return state.has(
             SuitUpgrade.Charge_Beam.value, world.player
         ) or state.has_any_count(
-            {upgrade.value: 2 for upgrade in ProgressiveUpgrade}, world.player
+            PROGRESSIVE_UPGRADE_REQUIREMENTS_FOR_CHARGE, world.player
         )
 
     def can_beam_combo(
@@ -271,14 +248,7 @@ class Logic:
         if world.options.non_varia_heat_damage:
             return state.has(SuitUpgrade.Varia_Suit.value, world.player)
         else:
-            return state.has_any(
-                [
-                    SuitUpgrade.Varia_Suit.value,
-                    SuitUpgrade.Phazon_Suit.value,
-                    SuitUpgrade.Gravity_Suit.value,
-                ],
-                world.player,
-            )
+            return state.has_any(HEAT_PROTECTION_REQUIREMENTS, world.player)
 
     def can_phazon(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
         return state.has(SuitUpgrade.Phazon_Suit.value, world.player)

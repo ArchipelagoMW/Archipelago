@@ -374,7 +374,6 @@ class MetroidPrimeWorld(World):
             for o in type(self.options).type_hints.keys()
             if "suit_color" not in o
             and o not in exclude_options
-            and not o.startswith("__")
         ]
         slot_data: Dict[str, Any] = self.options.as_dict(*non_cosmetic_options)
         slot_data["elevator_mapping"] = dict(self.elevator_mapping)
