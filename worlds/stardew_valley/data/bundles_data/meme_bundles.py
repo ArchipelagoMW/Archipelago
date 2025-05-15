@@ -205,7 +205,7 @@ tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock
 archipela_go_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.archipela_go, BundleItem(MemeCurrency.steps, 5000))
 clique_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clique, BundleItem(MemeCurrency.clic, 1))
 cookie_clicker_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.cookie_clicker, BundleItem(MemeCurrency.cookies, 20000))  # ?
-communist_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communist, BundleItem.money_bundle(1))
+communism_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.communism, BundleItem.money_bundle(1))
 death_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.death, death)
 flashbang_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.flashbang, BundleItem.money_bundle(0))
 connection_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.connection, BundleItem.money_bundle(0))
@@ -246,7 +246,7 @@ honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.
 
 
 # Bundles that need special Mod Handling:
-# Communist Bundle
+# Communism Bundle
 
 # Commitment Bundle (Need to have doved and divorced)
 
@@ -272,7 +272,7 @@ bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_r
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
 vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
-                      clique_bundle, cookie_clicker_bundle, communist_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
+                      clique_bundle, cookie_clicker_bundle, communism_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
                       restraint_bundle, fast_bundle, floor_is_lava_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 

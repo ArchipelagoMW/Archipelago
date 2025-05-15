@@ -164,7 +164,7 @@ class MemeBundleName:
     chaos_emerald = meme_bundle("Chaos Emerald")
     clique = meme_bundle("Clique")
     commitment = meme_bundle("Commitment")
-    communist = meme_bundle("Communist's")
+    communism = meme_bundle("Communism")
     cookie_clicker = meme_bundle("Cookie Clicker")
     crab_rave = meme_bundle("Crab Rave")
     death = meme_bundle("Death")
