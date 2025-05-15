@@ -1278,216 +1278,214 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Weaver Robe",
     "Equipment - Summoner Robe",
     
-    #Accessories not progressive
+    #Accessories aren't replaced by progressive items
+
+    #Shop Equipment
+    # Weapons
+    # Swords
+    "Equipment - Short Sword",
+    "Equipment - Razor Edge",
+    "Equipment - Artisan Sword",
+    "Equipment - Longsword",
+    "Equipment - Scimitar",
+    "Equipment - War Sword",
+    # "Equipment - Highland Blade",
+    # "Equipment - Crystal Sword",
+    "Equipment - Master Sword",
+    "Equipment - Master Bigsword",
+
+    # Axes
+    "Equipment - Hand Axe",
+    "Equipment - Chopper",
+    "Equipment - Stone Splitter",
+    "Equipment - Broadaxe",
+    "Equipment - Artisan Axe",
+    "Equipment - War Axe",
+    # "Equipment - Berserker Axe",
+    "Equipment - Master Axe",
+    # "Equipment - Ancient Axe",
+    "Equipment - Master Bigaxe",
+
+    # Daggers
+    "Equipment - Dirk",
+    "Equipment - Fishgutter",
+    "Equipment - Shank",
+    "Equipment - Kris",
+    "Equipment - Rondel",
+    "Equipment - Artisan Dagger",
+    "Equipment - Janbiya",
+    # "Equipment - Sai",
+    # "Equipment - Kodachi",
+    # "Equipment - Fanged Knife",
+    # "Equipment - Poignard",
+    "Equipment - Master Dagger",
+
+    # Rapiers
+    "Equipment - Rapier",
+    "Equipment - Stinger",
+    "Equipment - Estoc",
+    "Equipment - Scarlette",
+    "Equipment - Artisan Rapier",
+    "Equipment - Vulture",
+    # "Equipment - Falcon Dance",
+    # "Equipment - Epee",
+    "Equipment - Master Rapier",
+
+    # Katanas
+    "Equipment - Artisan Katana",
+    "Equipment - Nansen",
+    # "Equipment - Mitsutada",
+    # "Equipment - Hitofuri",
+    # "Equipment - Kokaiji",
+    # "Equipment - Tomokirimaru",
+    "Equipment - Master Katana",
+
+    # Spears
+    "Equipment - Short Spear",
+    "Equipment - Javelin",
+    "Equipment - Artisan Spear",
+    "Equipment - Wind Lance",
+    # "Equipment - Voulge",
+    "Equipment - Master Spear",
+
+    # Scythes
+    "Equipment - War Scythe",
+    "Equipment - Artisan Scythe",
+    "Equipment - Thresher",
+    # "Equipment - Great Thresher",
+    "Equipment - Master Scythe",
+
+    # Bows
+    "Equipment - Short Bow",
+    "Equipment - Long Bow",
+    "Equipment - Artisan Bow",
+    "Equipment - Battle Bow",
+    "Equipment - Composite Bow",
+    # "Equipment - Razor Bow",
+    # "Equipment - War Bow",
+    "Equipment - Master Bow",
+    # "Equipment - Artemis",
+
+    # Staves
+    "Equipment - Short Staff",
+    "Equipment - Gnarled Root",
+    "Equipment - Quarterstaff",
+    "Equipment - Maplewood",
+    "Equipment - Artisan Staff",
+    "Equipment - Skullbasher",
+    # "Equipment - Battle Staff",
+    "Equipment - Natures Gift",
+    # "Equipment - War Staff",
+    "Equipment - Master Staff",
+
+    # Wands
+    "Equipment - Ash Wand",
+    "Equipment - Oak Wand",
+    "Equipment - Soul Wand",
+    "Equipment - Maple Wand",
+    "Equipment - Artisan Wand",
+    "Equipment - Baton",
+    # "Equipment - Effigy",
+    # "Equipment - Sentinel Rod",
+    "Equipment - Master Wand",
+
+    # Books
+    "Equipment - Moby Dick",
+    "Equipment - Orylei",
+    "Equipment - Encyclopedia",
+    "Equipment - Artisan Pages",
+    "Equipment - Grimoire",
+    # "Equipment - Hydrology",
+    # "Equipment - Divination",
+    "Equipment - Master Pages",
+
+    # Armor
+    # Shields
+    "Equipment - Buckler",
+    "Equipment - Vanguard",
+    "Equipment - Duelling Shield",
+    "Equipment - Artisan Shield",
+    "Equipment - Cross Shield",
+    # "Equipment - Brass Cross",
+    # "Equipment - Cross Guard",
+    # "Equipment - Bulkwark",
+    "Equipment - Master Shield",
+    # "Equipment - Turtle Shell",
+
+    # Heavy Head
+    "Equipment - Chain Helm",
+    "Equipment - Sturdy Helm",
+    "Equipment - Copper Helm",
+    "Equipment - Bronze Helm",
+    "Equipment - Scale Helm",
+    "Equipment - Artisan Helm",
+    "Equipment - Orion Barbut",
+    # "Equipment - Iron Barbut",
+    # "Equipment - Cross Helm",
+    "Equipment - Master Helm",
+
+    # Heavy Body
+    "Equipment - Breastplate",
+    "Equipment - Copper Suit",
+    "Equipment - Bronze Suit",
+    "Equipment - Scale Mail",
+    "Equipment - Artisan Mail",
+    "Equipment - Orion Armor",
+    # "Equipment - Plate Mail",
+    # "Equipment - Dragon Mail",
+    "Equipment - Master Mail",
+
+    # Medium Head
+    "Equipment - Leather Cap",
+    "Equipment - Beret",
+    "Equipment - Rugged Hat",
+    "Equipment - Vikings Hat",
+    "Equipment - Artisan Cap",
+    "Equipment - Combat Band",
+    # "Equipment - Bandana",
+    # "Equipment - Tall Tall Hat",
+    "Equipment - Master Cap",
+    # "Equipment - Red Headgear",
+
+    # Medium Body
+    "Equipment - Leather Outfit",
+    "Equipment - Studded Armor",
+    "Equipment - Leather Mail",
+    "Equipment - Chain Vest",
+    "Equipment - Combat Vest",
+    "Equipment - Artisan Vest",
+    "Equipment - Power Vest",
+    # "Equipment - Drifters Vest",
+    # "Equipment - Martial Vest",
+    "Equipment - Master Vest",
+    # "Equipment - Quintar Pelt",
+
+    # Light Head
+    "Equipment - Hemp Hood",
+    "Equipment - Holy Hat",
+    "Equipment - Silk Hat",
+    "Equipment - Holy Miter",
+    "Equipment - Artisan Crown",
+    "Equipment - Clerics Hood",
+    # "Equipment - Wizards Hat",
+    # "Equipment - Quilted Hat",
+    # "Equipment - Regen Crown",
+    "Equipment - Master Crown",
+
+    # Light Body
+    "Equipment - Hemp Robe",
+    "Equipment - Cotton Robe",
+    "Equipment - Priest Garb",
+    "Equipment - Silk Shirt",
+    "Equipment - Artisan Shirt",
+    "Equipment - Wizards Robe",
+    # "Equipment - Clerics Robe",
+    # "Equipment - Sturdy Cape",
+    # "Equipment - Winter Cape",
+    "Equipment - Master Cape",
+
+    #Accessories aren't replaced by progressive items
 )
-
-# didn't end up using these but they might be useful at some point
-# shop_equipment: Tuple[str, ...] = (
-#     # Weapons
-#     # Swords
-#     "Equipment - Short Sword",
-#     "Equipment - Razor Edge",
-#     "Equipment - Artisan Sword",
-#     "Equipment - Longsword",
-#     "Equipment - Scimitar",
-#     "Equipment - War Sword",
-#     # "Equipment - Highland Blade",
-#     # "Equipment - Crystal Sword",
-#     "Equipment - Master Sword",
-#     "Equipment - Master Bigsword",
-
-#     # Axes
-#     "Equipment - Hand Axe",
-#     "Equipment - Chopper",
-#     "Equipment - Stone Splitter",
-#     "Equipment - Broadaxe",
-#     "Equipment - Artisan Axe",
-#     "Equipment - War Axe",
-#     # "Equipment - Berserker Axe",
-#     "Equipment - Master Axe",
-#     # "Equipment - Ancient Axe",
-#     "Equipment - Master Bigaxe",
-
-#     # Daggers
-#     "Equipment - Dirk",
-#     "Equipment - Fishgutter",
-#     "Equipment - Shank",
-#     "Equipment - Kris",
-#     "Equipment - Rondel",
-#     "Equipment - Artisan Dagger",
-#     "Equipment - Janbiya",
-#     # "Equipment - Sai",
-#     # "Equipment - Kodachi",
-#     # "Equipment - Fanged Knife",
-#     # "Equipment - Poignard",
-#     "Equipment - Master Dagger",
-
-#     # Rapiers
-#     "Equipment - Rapier",
-#     "Equipment - Stinger",
-#     "Equipment - Estoc",
-#     "Equipment - Scarlette",
-#     "Equipment - Artisan Rapier",
-#     "Equipment - Vulture",
-#     # "Equipment - Falcon Dance",
-#     # "Equipment - Epee",
-#     "Equipment - Master Rapier",
-
-#     # Katanas
-#     "Equipment - Artisan Katana",
-#     "Equipment - Nansen",
-#     # "Equipment - Mitsutada",
-#     # "Equipment - Hitofuri",
-#     # "Equipment - Kokaiji",
-#     # "Equipment - Tomokirimaru",
-#     "Equipment - Master Katana",
-
-#     # Spears
-#     "Equipment - Short Spear",
-#     "Equipment - Javelin",
-#     "Equipment - Artisan Spear",
-#     "Equipment - Wind Lance",
-#     # "Equipment - Voulge",
-#     "Equipment - Master Spear",
-
-#     # Scythes
-#     "Equipment - War Scythe",
-#     "Equipment - Artisan Scythe",
-#     "Equipment - Thresher",
-#     # "Equipment - Great Thresher",
-#     "Equipment - Master Scythe",
-
-#     # Bows
-#     "Equipment - Short Bow",
-#     "Equipment - Long Bow",
-#     "Equipment - Artisan Bow",
-#     "Equipment - Battle Bow",
-#     "Equipment - Composite Bow",
-#     # "Equipment - Razor Bow",
-#     # "Equipment - War Bow",
-#     "Equipment - Master Bow",
-#     # "Equipment - Artemis",
-
-#     # Staves
-#     "Equipment - Short Staff",
-#     "Equipment - Gnarled Root",
-#     "Equipment - Quarterstaff",
-#     "Equipment - Maplewood",
-#     "Equipment - Artisan Staff",
-#     "Equipment - Skullbasher",
-#     # "Equipment - Battle Staff",
-#     "Equipment - Natures Gift",
-#     # "Equipment - War Staff",
-#     "Equipment - Master Staff",
-
-#     # Wands
-#     "Equipment - Ash Wand",
-#     "Equipment - Oak Wand",
-#     "Equipment - Soul Wand",
-#     "Equipment - Maple Wand",
-#     "Equipment - Artisan Wand",
-#     "Equipment - Baton",
-#     # "Equipment - Effigy",
-#     # "Equipment - Sentinel Rod",
-#     "Equipment - Master Wand",
-
-#     # Books
-#     "Equipment - Moby Dick",
-#     "Equipment - Orylei",
-#     "Equipment - Encyclopedia",
-#     "Equipment - Artisan Pages",
-#     "Equipment - Grimoire",
-#     # "Equipment - Hydrology",
-#     # "Equipment - Divination",
-#     "Equipment - Master Pages",
-
-#     # Armor
-#     # Shields
-#     "Equipment - Buckler",
-#     "Equipment - Vanguard",
-#     "Equipment - Duelling Shield",
-#     "Equipment - Artisan Shield",
-#     "Equipment - Cross Shield",
-#     # "Equipment - Brass Cross",
-#     # "Equipment - Cross Guard",
-#     # "Equipment - Bulkwark",
-#     "Equipment - Master Shield",
-#     # "Equipment - Turtle Shell",
-
-#     # Heavy Head
-#     "Equipment - Chain Helm",
-#     "Equipment - Sturdy Helm",
-#     "Equipment - Copper Helm",
-#     "Equipment - Bronze Helm",
-#     "Equipment - Scale Helm",
-#     "Equipment - Artisan Helm",
-#     "Equipment - Orion Barbut",
-#     # "Equipment - Iron Barbut",
-#     # "Equipment - Cross Helm",
-#     "Equipment - Master Helm",
-
-#     # Heavy Body
-#     "Equipment - Breastplate",
-#     "Equipment - Copper Suit",
-#     "Equipment - Bronze Suit",
-#     "Equipment - Scale Mail",
-#     "Equipment - Artisan Mail",
-#     "Equipment - Orion Armor",
-#     # "Equipment - Plate Mail",
-#     # "Equipment - Dragon Mail",
-#     "Equipment - Master Mail",
-
-#     # Medium Head
-#     "Equipment - Leather Cap",
-#     "Equipment - Beret",
-#     "Equipment - Rugged Hat",
-#     "Equipment - Vikings Hat",
-#     "Equipment - Artisan Cap",
-#     "Equipment - Combat Band",
-#     # "Equipment - Bandana",
-#     # "Equipment - Tall Tall Hat",
-#     "Equipment - Master Cap",
-#     # "Equipment - Red Headgear",
-
-#     # Medium Body
-#     "Equipment - Leather Outfit",
-#     "Equipment - Studded Armor",
-#     "Equipment - Leather Mail",
-#     "Equipment - Chain Vest",
-#     "Equipment - Combat Vest",
-#     "Equipment - Artisan Vest",
-#     "Equipment - Power Vest",
-#     # "Equipment - Drifters Vest",
-#     # "Equipment - Martial Vest",
-#     "Equipment - Master Vest",
-#     # "Equipment - Quintar Pelt",
-
-#     # Light Head
-#     "Equipment - Hemp Hood",
-#     "Equipment - Holy Hat",
-#     "Equipment - Silk Hat",
-#     "Equipment - Holy Miter",
-#     "Equipment - Artisan Crown",
-#     "Equipment - Clerics Hood",
-#     # "Equipment - Wizards Hat",
-#     # "Equipment - Quilted Hat",
-#     # "Equipment - Regen Crown",
-#     "Equipment - Master Crown",
-
-#     # Light Body
-#     "Equipment - Hemp Robe",
-#     "Equipment - Cotton Robe",
-#     "Equipment - Priest Garb",
-#     "Equipment - Silk Shirt",
-#     "Equipment - Artisan Shirt",
-#     "Equipment - Wizards Robe",
-#     # "Equipment - Clerics Robe",
-#     # "Equipment - Sturdy Cape",
-#     # "Equipment - Winter Cape",
-#     "Equipment - Master Cape",
-
-#     #Accessories not progressive so they get their own category
-# )
 
 # shop_accessories: Tuple[str, ...] = (
 #     "Equipment - Prayer Beads",
