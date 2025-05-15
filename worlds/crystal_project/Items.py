@@ -1520,5 +1520,5 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
 
     return categories
 
-def get_random_starting_jobs() -> List[Job]:
-    return random.sample(job_list, 6)
+def get_random_starting_jobs(self) -> List[Job]:
+    return self.random.sample(job_list, 6)
