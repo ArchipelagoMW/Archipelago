@@ -246,16 +246,9 @@ honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.
 
 
 # Bundles that need special Mod Handling:
-# Exhaustion Bundle
-# Clique Bundle
 # Communist Bundle
-# Death Bundle (1 Death)
 
-# Trap Bundle (Start filled with traps, have to take them out)
-# Journalist Bundle (Accept literally anything)
-# Mermaid song bundle (1-5-4-2-3)
 # Commitment Bundle (Need to have doved and divorced)
-# Bundle Bundle
 
 pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemonade_stand_bundle, what_the_rock_is_cooking_bundle, sunmaid_bundle,
                        big_grapes_bundle, eg_bundle, not_the_bees_bundle, speedrunners_bundle, bun_dle_bundle, animal_well_bundle, bad_farmer_bundle]
