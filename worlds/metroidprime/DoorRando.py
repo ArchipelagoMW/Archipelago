@@ -42,9 +42,7 @@ BEAM_TO_LOCK_MAPPING = {
     SuitUpgrade.Plasma_Beam: DoorLockType.Plasma,
 }
 
-
-class DoorColorMapping(Dict[str, str]):
-    pass
+DoorColorMapping = Dict[str, str]
 
 
 class AreaDoorColorMapping(AreaMapping[DoorColorMapping]):
@@ -86,12 +84,10 @@ def generate_random_door_color_mapping(
 
     while True:
         world.random.shuffle(shuffled_lock_types)
-        type_mapping = DoorColorMapping(
-            {
-                original.value: new.value
-                for original, new in zip(COLOR_LOCK_TYPES, shuffled_lock_types)
-            }
-        )
+        type_mapping = {
+            original.value: new.value
+            for original, new in zip(COLOR_LOCK_TYPES, shuffled_lock_types)
+        }
 
         # Verify that no color matches its original color
         if validate_func(type_mapping):

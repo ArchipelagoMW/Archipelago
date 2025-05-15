@@ -92,7 +92,7 @@ def disable_item_if_owned(ctx: "MetroidPrimeContext", item_data: InventoryItemDa
 async def handle_cosmetic_suit(
     ctx: "MetroidPrimeContext", current_items: Dict[str, InventoryItemData]
 ):
-    if ctx.cosmetic_suit == None:
+    if ctx.cosmetic_suit is None:
         return
     ctx.game_interface.set_current_suit(ctx.cosmetic_suit)
 
@@ -151,7 +151,7 @@ async def handle_receive_missiles(
         ctx.game_interface.give_item_to_player(
             missile_item.id, new_amount, new_capacity
         )
-        if missile_sender != ctx.slot and diff > 0 and missile_sender != None:
+        if missile_sender != ctx.slot and diff > 0 and missile_sender is not None:
             message = (
                 f"Missile capacity increased by {diff}"
                 if diff > 5
@@ -208,7 +208,7 @@ async def handle_receive_power_bombs(
         new_amount = min(current_amount + diff, new_capacity)
 
         ctx.game_interface.give_item_to_player(pb_item.id, new_amount, new_capacity)
-        if pb_sender != ctx.slot and diff > 0 and pb_sender != None:
+        if pb_sender != ctx.slot and diff > 0 and pb_sender is not None:
             message = (
                 f"Power Bomb capacity increased by {diff}"
                 if diff > 5

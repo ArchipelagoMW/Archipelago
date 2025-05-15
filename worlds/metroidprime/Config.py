@@ -126,21 +126,6 @@ def get_strg(world: "MetroidPrimeWorld") -> Dict[str, List[str]]:
 
     strg[DEFAULT_OBJECTIVE_STRG_KEY][2] = objective_text
 
-    # Show suit colors in pause menu
-    strg = {**strg, **PAUSE_STRG}
-    pause_menu_overrides = {
-        "Power Suit": world.options.power_suit_color.value,
-        "Varia Suit": world.options.varia_suit_color.value,
-        "Gravity Suit": world.options.gravity_suit_color.value,
-        "Phazon Suit": world.options.phazon_suit_color.value,
-    }
-    # Update the name to include the color index if it is set
-    for item in strg[PAUSE_MENU_STRG_KEY]:
-        if item in pause_menu_overrides and pause_menu_overrides[item] != 0:
-            index = strg[PAUSE_MENU_STRG_KEY].index(item)
-            strg[PAUSE_MENU_STRG_KEY][
-                index
-            ] = f"{item} (Color: {pause_menu_overrides[item]})"
     return strg
 
 
@@ -157,13 +142,6 @@ def make_version_specific_changes(
         del config_json["strg"][DEFAULT_OBJECTIVE_STRG_KEY]
         config_json["strg"][get_objective_strg_key(version)] = value
 
-    # Pause Menu does not have correct id for non US versions right now
-    if PAUSE_MENU_STRG_KEY in config_json["strg"] and version not in [
-        "0-00",
-        "0-01",
-        "0-02",
-    ]:
-        del config_json["strg"][PAUSE_MENU_STRG_KEY]
     return config_json
 
 
@@ -212,7 +190,6 @@ def make_config(world: "MetroidPrimeWorld") -> Dict[str, Any]:
             "autoEnabledElevators": bool(options.pre_scan_elevators.value),
             "skipRidley": skip_ridley(options.final_bosses.value),
             "removeHiveMecha": bool(options.remove_hive_mecha.value),
-            "multiworldDolPatches": False,
             "startingItems": {
                 "combatVisor": True,
                 "powerSuit": True,
@@ -395,109 +372,4 @@ def get_objective_strg_key(version: str) -> str:
 DEFAULT_OBJECTIVE_STRG_KEY = "3012146902"
 OBJECTIVE_STRG = {
     DEFAULT_OBJECTIVE_STRG_KEY: ["Objective data decoded\n", "Mission Objectives", ""]
-}
-PAUSE_MENU_STRG_KEY = "1343145632"
-PAUSE_STRG = {
-    PAUSE_MENU_STRG_KEY: [
-        "[ Log Book ]",
-        "Pirate Data",
-        "Chozo Lore",
-        "Creatures",
-        "Research",
-        "Artifacts",
-        "LOG BOOK",
-        "OPTIONS",
-        "INVENTORY",
-        "[ Inventory ]",
-        "Arm Cannon",
-        "Morph Ball",
-        "Suits",
-        "Visors",
-        "Secondary Items",
-        "[ Options ]",
-        "Visor",
-        "Display",
-        "Sound",
-        "Controller",
-        "Quit Game",
-        "Visor Opacity",
-        "Helmet Opacity",
-        "HUD Lag",
-        "Hint System",
-        "Screen Brightness",
-        "Screen Offset X",
-        "Screen Offset Y",
-        "Screen Stretch",
-        "SFX Volume",
-        "Music Volume",
-        "Sound Mode",
-        "Reverse Y-Axis",
-        "Rumble",
-        "Swap Beam Controls",
-        "Restore Defaults",
-        "Power Beam",
-        "Ice Beam",
-        "Wave Beam",
-        "Plasma Beam",
-        "Phazon Beam",
-        "Super Missile",
-        "Ice Spreader",
-        "Wavebuster",
-        "Flamethrower",
-        "Phazon Combo",
-        "Morph Ball",
-        "Boost Ball",
-        "Spider Ball",
-        "Morph Ball Bomb",
-        "Power Bomb",
-        "Power Suit",
-        "Varia Suit",
-        "Gravity Suit",
-        "Phazon Suit",
-        "Energy Tank",
-        "Combat Visor",
-        "Scan Visor",
-        "X-Ray Visor",
-        "Thermal Visor",
-        "Space Jump Boots",
-        "Grapple Beam",
-        "Missile Launcher",
-        "Charge Beam",
-        "Beam Combo",
-        "[??????]\n\n",
-        "The &main-color=#89D6FF;Combat Visor&main-color=#FF6705B3; is your default Visor. It provides you with a Heads-Up Display (HUD) containing radar, mini-map, lock-on reticules, threat assessment, energy gauge, and Missile count.\n\nPress &image=SA,3.0,0.6,0.85,F13452F8,C042EC91; to select the Combat Visor.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nIcons for the Arm Cannons you possess are shown in the lower-right corner of the Combat Visor.\n\nIcons for the Visors you possess are shown in the lower-left corner of the Combat Visor.\n\n",
-        "The &main-color=#89D6FF;Scan Visor&main-color=#FF6705B3; is used to collect data. Some devices will activate when scanned.\n\nPress &image=SA,3.0,0.6,0.85,F13452F8,B306E26F; to select the Scan Visor. Move the Visor over targets with this symbol &image=SI,0.70,0.68,FD41E145;, then press and hold &image=SA,3.0,1.0,1.0,46434ED3,34E79314; to scan. \n\nUse &image=SI,0.6,0.85,F13452F8; to select another available Visor or press &image=SI,0.70,0.68,05AF9CAA; to turn the Visor off.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nMission-critical scan targets &image=SI,0.70,0.68,BCE843F2; will be red in color. \n\nScanning enemies with this Visor can reveal their vulnerabilities.\n\nYou will be unable to fire any weapons while the Scan Visor is active.\n\nScanned data vital to the success of the mission is downloaded and stored in the &main-color=#89D6FF;Log Book&main-color=#FF6705B3; section of the Pause Screen. \n\nPress &image=A,3.0,08A2E4B9,F2425B21; on this screen to access the Log Book.\n",
-        "The &main-color=#89D6FF;X-Ray Visor&main-color=#FF6705B3; can see through certain types of materials. \n\nPress &image=SA,3.0,0.6,0.85,F13452F8,8ADA8184; to select the X-Ray Visor.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe X-Ray Visor can reveal invisible items, areas, and enemies.\n\nRobotic enemies jam the X-Ray Visor's frequency. Eliminate them to restore function to the Visor.\n",
-        "The &main-color=#89D6FF;Thermal Visor&main-color=#FF6705B3; allows you to see in the infrared spectrum. Hot objects are bright in the Visor, while colder ones are dim.\n\nPress &image=SA,3.0,0.6,0.85,F13452F8,5F556002; to select the Thermal Visor.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Thermal Visor will show the weak points of certain foes.\n\nUse the Thermal Visor to see in total darkness and poor weather conditions. \n\nBrightly lit areas, explosions, and intense heat can impair the Thermal Visor.\n\nEnemies with temperatures close to their surroundings will be tough to spot with this Visor.\n",
-        "The &main-color=#89D6FF;Power Beam&main-color=#FF6705B3; is the default Arm Cannon. It has the best rate of fire.\n\nPress &image=SA,3.0,0.6,0.85,2A13C23E,A91A7703; to select the Power Beam as your active weapon.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Power Beam can be used to open Blue Doors.\n\nIf you see your shots ricochet, cease fire. The Power Beam is not working against that target.\n\nYou can use the Power Beam to quickly clear an area of weak foes.\n",
-        "\nThe &main-color=#89D6FF;Super Missile&main-color=#FF6705B3; is the &main-color=#89D6FF;Power&main-color=#FF6705B3; Charge Combo.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nSuper Missile is a Single Shot Charge Combo. Each shot costs 5 Missiles.\n\nSuper Missiles can destroy objects made of &main-color=#89D6FF;Cordite&main-color=#FF6705B3;.\n",
-        "The &main-color=#89D6FF;Ice Beam&main-color=#FF6705B3; can freeze enemies solid. Hits from the Ice Beam may also slow foes down.  \n\nPress &image=SA,3.0,0.6,0.85,2A13C23E,12A12131; to select the Ice Beam as your active weapon.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nUse the Ice Beam to open White Doors.\n\nThe Ice Beam is quite effective against fire-based creatures.\n\nCharge the Ice Beam to increase the time an enemy will stay frozen when hit.\n\nSome frozen enemies can be shattered by Missile hits.\n",
-        "\nThe &main-color=#89D6FF;Ice Spreader&main-color=#FF6705B3; is the &main-color=#89D6FF;Ice&main-color=#FF6705B3; Charge Combo. It can freeze targets in a wide area.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nIce Spreader is a Single Shot Charge Combo. Each shot costs 10 Missiles.\n\nIce Spreader is limited against aerial targets.\n",
-        "The&main-color=#89D6FF; Wave Beam&main-color=#FF6705B3; fires powerful electric bolts. This weapon has a limited homing capability as well.\n\nPress &image=SA,3.0,0.6,0.85,2A13C23E,CD7B1ACA; to select the Wave Beam as your active weapon.\n  \n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nFire the Wave Beam to open Purple Doors.\n\nThe Wave Beam won't home in on targets without a lock-on. Press and hold &image=SA,3.0,1.0,1.0,46434ED3,34E79314; to lock on.\n\nCharge the Wave Beam to fire a fierce electric blast. Enemies struck by this blast will be enveloped in electrical energy for a few moments.\n",
-        "\nThe &main-color=#89D6FF;Wavebuster&main-color=#FF6705B3; is the &main-color=#89D6FF;Wave&main-color=#FF6705B3; Charge Combo. This potent blast auto-seeks targets in the area.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Wavebuster is a Sustained Fire Charge Combo. It costs 10 Missiles to activate, then 5 Missiles per second afterward.\n\nThe Wavebuster will seek enemies without a lock-on.\n\n\n\n\n\n\n\n\n\n\n",
-        "The&main-color=#89D6FF; Plasma Beam&main-color=#FF6705B3; fires streams of molten energy. This Beam can ignite flammable objects and enemies.\n\nPress &image=SA,3.0,0.6,0.85,A9798329,2A13C23E; to select the Plasma Beam as your active weapon.\n  \n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nFire the Plasma Beam to open Red Doors.\n\nThe Plasma Beam is very effective against cold-based enemies.\n\nCharge the Plasma Beam to fire a sphere of plasma. Enemies struck by this blast will be engulfed in flames for a few moments.\n",
-        "\nThe &main-color=#89D6FF;Flamethrower&main-color=#FF6705B3; is the &main-color=#89D6FF;Plasma&main-color=#FF6705B3; Charge Combo. You can sweep its stream of flame across multiple targets.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nFlamethrower is a Sustained Fire Charge Combo. It costs 10 Missiles to activate, then 5 Missiles per second afterward.\n\nThe Flamethrower is most effective against multiple targets in an area.\n",
-        "The viral corruption of the Power Suit has altered the Arm Cannon as well. It is now capable of firing the powerful&main-color=#89D6FF; Phazon Beam&main-color=#FF6705B3;.\n \n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Phazon Beam appears to trigger in the presence of high concentrations of Phazon.\n\nRegular Arm Cannon functions return when Phazon is not present.\n\nThe Charge Beam does not function when the Phazon Beam is active.\n",
-        "The &main-color=#89D6FF;Space Jump Boots&main-color=#FF6705B3; increase the leaping capability of the Power Suit through the use of boot-mounted thrusters.  \n\nPress &image=SI,0.70,0.68,833BEE04; to jump, then press &image=SI,0.70,0.68,833BEE04; again during the jump to use the Space Jump Boots.\n\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nTiming is important when using the Space Jump Boots. \n\nExperiment to discover ways to increase the height and length of your jumps.\n",
-        "The &main-color=#89D6FF;Grapple Beam&main-color=#FF6705B3; allows you to swing back and forth from special points in the environment.  \n\nGrapple Points appear in your Visor as a &image=SI,0.70,0.68,2702E5E0; icon. \n\nPress and hold &image=SA,3.0,1.0,1.0,46434ED3,34E79314; to fire the Grapple Beam. \n\nHold &image=SA,3.0,1.0,1.0,46434ED3,34E79314; down to stay connected; let go to release.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Grapple Beam can be used to cross large gaps.\n\nUse the &image=SA,7.0,0.6,1.0,C6C483AC,4050F102,8B0C22A7,4050F102,3A446C61,BCD01ECF,778CCD6A,BCD01ECF; while grappling to swing in different directions.\n",
-        "The &main-color=#89D6FF;Missile Launcher&main-color=#FF6705B3; adds ballistic weapon capability to the Arm Cannon.\n\nPress &image=SI,1.0,0.68,EA2A1C5C; to fire the Missile Launcher. Press &image=SI,0.70,0.68,05AF9CAA; to return to Beam mode.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nMissiles fired with a lock-on will seek their targets.\n\nMissiles can destroy objects made from &main-color=#89D6FF;Radion&main-color=#FF6705B3; or &main-color=#89D6FF;Brinstone&main-color=#FF6705B3;.\n\nThere are Charge Combo enhancements scattered throughout the environment. They use the Missile Launcher and the Charge Beam in tandem to fire more effective blasts.\n\nEach Missile Expansion you find will increase the number of Missiles you can carry by 5.\n",
-        "The &main-color=#89D6FF;Power Suit&main-color=#FF6705B3; is an advanced Chozo exoskeleton modified for use by Samus Aran.  \n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Power Suit provides life-support functions and is well shielded from attack.  \n  \nThe modular nature of the Power Suit allows for the addition of weapons, Visors, and other gear as needed.\n\nThe Power Suit's shielding loses energy with each hit; collect energy when possible to keep the shielding charged.\n",
-        "The &main-color=#89D6FF;Varia Suit&main-color=#FF6705B3; adds increased heat resistance to the Power Suit.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThis modification increases your defensive shielding.\n\nWhile the Varia Suit can handle higher temperatures than normal, extreme heat sources and heat-based attacks will still cause damage.",
-        "The &main-color=#89D6FF;Gravity Suit&main-color=#FF6705B3; eliminates the effects of liquid on movement.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThis modification improves your defensive shielding.\n\nThe Gravity Suit allows for improved movement in liquid environments, but does not reduce damage delivered when exposed to hazardous fluids.\n\nVisor modifications in the Gravity Suit make it easier to see underwater.",
-        "The Power Suit has been corrupted by viral exposure, turning it into the &main-color=#89D6FF;Phazon Suit&main-color=#FF6705B3;. \n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe viral corruption of the Power Suit has some beneficial side effects. \n\nThe suit is now resistant to the effects of Blue Phazon. The suit is not invulnerable to the effects of all Phazon, however.\n\nIn addition to Phazon resistance, the corruption has dramatically increased defensive shielding levels.",
-        "The &main-color=#89D6FF;Energy Tanks&main-color=#FF6705B3; increase the power level available to your Suit's defense screens.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nEach Energy Tank increases your Suit's energy by 100 units. The more energy your Suit has, the longer you can stay alive.\n\nYou can fully recharge your Energy Tanks at Save Stations. Your gunship has this capability as well.",
-        "The &main-color=#89D6FF;Morph Ball&main-color=#FF6705B3; changes your Suit into a compact, mobile sphere.  \n\nPress &image=SI,0.70,1.0,2176CFF9; to enter Morph Ball mode.\n\nPress &image=SI,0.70,1.0,2176CFF9; again to leave Morph Ball mode.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nLike the Power Suit, the Morph Ball is modular. There are several modifications that can be added to improve performance.",
-        "The &main-color=#89D6FF;Boost Ball&main-color=#FF6705B3; can be used to increase the Morph Ball's speed for short periods.\n\nPress and hold &image=SI,0.70,0.68,833BEE04; to charge, then release &image=SI,0.70,0.68,833BEE04; to trigger a quick boost of speed.\n \n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nWhen charging, the longer you hold &image=SI,0.70,0.68,833BEE04;, the longer (and faster) the Boost Charge will be.\n\nThroughout the environment you will encounter U-shaped channels known as half-pipes. Using the Boost Ball in these areas will let you reach higher places. \n\nBuild a charge as you descend in the half-pipe, then trigger the Boost as you ascend the other side. This will give you the speed and momentum you need to reach new heights.\n",
-        "The &main-color=#89D6FF;Spider Ball&main-color=#FF6705B3; allows you to move the Morph Ball along magnetic rails.\n\nPress and hold &image=A,3.0,08A2E4B9,F2425B21; to activate the Spider Ball ability.\n \n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nFollow the magnetic rails to explore new areas.\n\nThe Morph Ball Bomb can be used to trigger a Bomb Jump while attached to a rail.\n\n\n",
-        "The &main-color=#89D6FF;Morph Ball Bomb&main-color=#FF6705B3; is the default weapon for the Morph Ball.\n\nPress &image=SI,0.70,0.68,05AF9CAA; when in Morph Ball mode to drop a Morph Ball Bomb. \n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Morph Ball Bomb can be used to break cracked walls and activate certain devices.\n\nIf the Morph Ball is near a Morph Ball Bomb when it explodes, it will be popped a short distance into the air. This is called a&main-color=#89D6FF; Bomb Jump&main-color=#FF6705B3;. \n\nWhen a Morph Ball Bomb explodes, it must be close to the enemy to be effective.\n\nThe Morph Ball Bomb can easily break items made of&main-color=#89D6FF; Sandstone&main-color=#FF6705B3; or&main-color=#89D6FF; Talloric Alloy&main-color=#FF6705B3;.\n",
-        "The &main-color=#89D6FF;Power Bomb&main-color=#FF6705B3; is the strongest Morph Ball weapon.\n\nPress &image=SI,1.0,0.68,EA2A1C5C; when in Morph Ball mode to drop a Power Bomb.  \n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nPower Bombs do not have unlimited ammo. Use them wisely.\n\nThe Power Bomb can destroy many materials, including &main-color=#89D6FF;Bendezium&main-color=#FF6705B3;.\n\nEach Power Bomb Expansion you find will increase the number of Power Bombs you can carry by 1.\n",
-        "The &main-color=#89D6FF;Charge Beam&main-color=#FF6705B3; allows you to increase the damage and effectiveness of the Arm Cannon.\n\nPress and hold &image=SI,0.70,0.68,05AF9CAA; to charge the Arm Cannon, then release &image=SI,0.70,0.68,05AF9CAA; to fire.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe Charge Beam has a limited 'tractor beam' capacity.  Use it to pull small objects to you.\n\nThere are Charge Combo enhancements scattered through the environment.  They use the Charge Beam and the Missile Launcher in tandem to fire more effective blasts.\n\nThe Charge Beam increases the performance of each Arm Cannon mode.\n",
-        "The &main-color=#89D6FF;Charge Combos&main-color=#FF6705B3; allow you to fire the Missile Launcher and Arm Cannon together. The combined attacks are stronger than normal blasts.\n\nThe Arm Cannon must be charged to use a Charge Combo.\n\nWhen your Arm Cannon is charged, press &image=SI,1.0,0.68,EA2A1C5C; to fire the Charge Combo.\n\n&main-color=#89D6FF;Samus's Notes:&main-color=#FF6705B3;\nThe &main-color=#89D6FF;Single Shot&main-color=#FF6705B3; Charge Combos fire one blast at a time. Each shot uses a number of Missiles.\n\n&main-color=#89D6FF;Sustained Fire&main-color=#FF6705B3; Charge Combos will fire as long as you have Missiles. Hold &image=SI,0.70,0.68,05AF9CAA; down after you fire. It takes ten Missiles to trigger these Charge Combos, then five Missiles per second afterward.\n\nPage down for information on the individual Charge Combos. \n\nThis data will download to the Log Book after each Charge Combo is acquired. \n\n\n\n\n\n\n\n\n\n",
-        "On",
-        "Off",
-        "Mono",
-        "Stereo",
-        "Dolby",
-        "Zoom",
-    ]
 }

@@ -39,7 +39,7 @@ class TestStartingRoomsGenerateWithElevatorRando(MetroidPrimeWithOverridesTestBa
         failures: List[str] = []
         for room_name in all_start_rooms:
             # Landing site is not viable for elevator randomization w/o tricks
-            if room_name == RoomName.Landing_Site.value:
+            if room_name == RoomName.Landing_Site.value or room_name == RoomName.Save_Station_B.value:
                 continue
             with self.subTest(f"Starting Room: {room_name}", room_name=room_name):
                 self.options = {

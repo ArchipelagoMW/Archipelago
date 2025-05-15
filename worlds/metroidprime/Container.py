@@ -254,36 +254,19 @@ def construct_progressive_beam_patch(
     from .MetroidPrimeInterface import GAMES
     from ppc_asm.assembler.ppc import (
         addi,
-        bl,
         b,
         li,
         lwz,
-        r1,
-        r3,
-        r4,
         r5,
         r6,
         r8,
         r10,
-        r31,
         stw,
         cmpwi,
         bgt,
-        mtspr,
-        blr,
-        lmw,
-        r0,
-        LR,
-        stwu,
-        mfspr,
-        or_,
-        stmw,
         stw,
-        lis,
         r7,
         r9,
-        nop,
-        ori,
         GeneralRegister,
         Instruction,
     )
@@ -309,7 +292,6 @@ def construct_progressive_beam_patch(
 
     if not progressive_beams:
         return []
-    cstate_manager_global = GAMES[game_version]["cstate_manager_global"]
     charge_beam_offset = 0x7C
     instructions: List = [
         # Step 0: Get the player state address

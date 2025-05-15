@@ -1,6 +1,5 @@
 from collections import defaultdict
 import typing
-import os
 from Options import NumericOption
 from typing import Any, Dict, List, Optional, TextIO, Union, cast
 from logging import info

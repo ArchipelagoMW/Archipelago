@@ -89,7 +89,7 @@ class MetroidPrimeUniversalTrackerTestBase(MetroidPrimeWithOverridesTestBase):
         super().pre_steps()
         setattr(self.multiworld, "generation_is_fake", True)
 
-    def world_setup(self, *args, **kwargs):  # type: ignore
+    def world_setup(self, *args: Any, **kwargs: Any) -> None:
         super().world_setup(seed=self.seed)
         if self.constructed:
             self.tracker_multiworld = cast(MultiworldWithPassthrough, self.multiworld)

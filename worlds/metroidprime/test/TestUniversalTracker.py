@@ -112,11 +112,14 @@ slot_data: Dict[str, Any] = {
 
 class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
     auto_construct = False
-    run_default_tests = False  # type: ignore
+
+    @property
+    def run_default_tests(self) -> bool:
+        return False
     options = slot_data
 
     def test_door_randomization_is_preserved(self):
-        self.world_setup()  # type: ignore
+        self.world_setup()
         world: "MetroidPrimeWorld" = self.world
         self.init_passhthrough(slot_data)
         self.world.generate_early()
@@ -128,7 +131,7 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
             )
 
     def test_starting_room_info_is_preserved(self):
-        self.world_setup()  # type: ignore
+        self.world_setup()
         self.init_passhthrough(slot_data)
         world: "MetroidPrimeWorld" = self.world
         self.world.generate_early()
@@ -141,7 +144,7 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
 
     def test_starting_room_info_is_preserved_with_progressive_beams(self):
         self.options["progressive_beam_upgrades"] = 1
-        self.world_setup()  # type: ignore
+        self.world_setup()
         self.init_passhthrough(slot_data)
         world: "MetroidPrimeWorld" = self.world
         self.world.generate_early()
@@ -153,14 +156,14 @@ class TestUniversalTracker(MetroidPrimeUniversalTrackerTestBase):
         )
 
     def test_elevator_mapping_is_preserved(self):
-        self.world_setup()  # type: ignore
+        self.world_setup()
         world: "MetroidPrimeWorld" = self.world
         self.init_passhthrough(slot_data)
         self.world.generate_early()
         self.assertEqual(world.elevator_mapping, slot_data["elevator_mapping"])
 
     def test_blast_shield_mapping_is_preserved(self):
-        self.world_setup()  # type: ignore
+        self.world_setup()
         world: "MetroidPrimeWorld" = self.world
         self.init_passhthrough(slot_data)
         self.world.generate_early()
