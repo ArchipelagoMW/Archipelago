@@ -34,7 +34,7 @@ class KH2Context(CommonContext):
         self.growthlevel = None
         self.kh2connected = False
         self.kh2_finished_game = False
-        self.serverconneced = False
+        self.serverconnected = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_data_package = {}
@@ -47,6 +47,7 @@ class KH2Context(CommonContext):
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
         self.sending = []
+        self.slot_name = None
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
             "itemIndex":  -1,
@@ -185,11 +186,16 @@ class KH2Context(CommonContext):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
         await self.get_username()
-        await self.send_connect()
+        if self.slot_name not in {None, self.auth}:
+            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot {self.slot_name}")
+            self.serverconnected = False
+            await asyncio.create_task(super(KH2Context, self).shutdown())
+        else:
+            await self.send_connect()
 
     async def connection_closed(self):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -197,7 +203,7 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -338,7 +344,7 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
+            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item, item.location))
@@ -375,7 +381,8 @@ class KH2Context(CommonContext):
             if self.kh2connected:
                 self.kh2connected = False
             logger.info("Game is not open.")
-        self.serverconneced = True
+        self.serverconnected = True
+        self.slot_name = self.auth
 
     def data_package_kh2_cache(self, loc_to_id, item_to_id):
         self.kh2_loc_name_to_id = loc_to_id
@@ -930,7 +937,7 @@ def finishedGame(ctx: KH2Context):
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
         try:
-            if ctx.kh2connected and ctx.serverconneced:
+            if ctx.kh2connected and ctx.serverconnected:
                 ctx.sending = []
                 await asyncio.create_task(ctx.checkWorldLocations())
                 await asyncio.create_task(ctx.checkLevels())
@@ -944,10 +951,10 @@ async def kh2_watcher(ctx: KH2Context):
                 if ctx.sending:
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
-            elif not ctx.kh2connected and ctx.serverconneced:
+            elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
-                while not ctx.kh2connected and ctx.serverconneced:
+                while not ctx.kh2connected and ctx.serverconnected:
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                     ctx.get_addresses()
