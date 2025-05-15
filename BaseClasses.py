@@ -1215,13 +1215,13 @@ class Region:
             self.locations.append(location_type(self.player, location, address, self))
 
     def add_event(
-            self,
-            location_name: str,
-            item_name: str | None = None,
-            rule: Callable[[CollectionState], bool] | None = None,
-            location_type: type[Location] | None = None,
-            item_type: type[Item] | None = None,
-            show_in_spoiler: bool = True,
+        self,
+        location_name: str,
+        item_name: str | None = None,
+        rule: Callable[[CollectionState], bool] | None = None,
+        location_type: type[Location] | None = None,
+        item_type: type[Item] | None = None,
+        show_in_spoiler: bool = True,
     ) -> Item:
         """
         Adds an event location/item pair to the region.
@@ -1343,13 +1343,13 @@ class Location:
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((
-                        self.always_allow(state, item)
-                        and item.name not in state.multiworld.worlds[item.player].options.non_local_items
-                ) or (
-                        (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
-                        and self.item_rule(item)
-                        and (not check_access or self.can_reach(state))
-                ))
+                self.always_allow(state, item)
+                and item.name not in state.multiworld.worlds[item.player].options.non_local_items
+        ) or (
+                (self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+                and self.item_rule(item)
+                and (not check_access or self.can_reach(state))
+        ))
 
     def can_reach(self, state: CollectionState) -> bool:
         # Region.can_reach is just a cache lookup, so placing it first for faster abort on average

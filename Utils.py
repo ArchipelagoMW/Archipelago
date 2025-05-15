@@ -15,9 +15,9 @@ import subprocess
 import sys
 import warnings
 from argparse import Namespace
-from collections.abc import Coroutine, Callable, Mapping, Iterable, Sequence, Collection, Set
+from collections.abc import Coroutine, Callable, Mapping, Iterable, Sequence, Collection
 from time import sleep
-from typing import BinaryIO, Deque, Any, TypeGuard, TYPE_CHECKING, NamedTuple, TypeVar, cast, TextIO
+from typing import BinaryIO, Deque, Any, TypeGuard, TYPE_CHECKING, NamedTuple, TypeVar, cast, TextIO, AbstractSet
 
 from yaml import load, load_all, dump
 
@@ -103,7 +103,7 @@ def cache_self1(function: Callable[[S, T], RetType]) -> Callable[[S, T], RetType
 
     @functools.wraps(function)
     def wrap(self: S, arg: T) -> RetType:
-        cache: dict[T, RetType] = getattr(self, cache_name, None)
+        cache: dict[T, RetType] | None = getattr(self, cache_name, None)
         if cache is None:
             res = function(self, arg)
             setattr(self, cache_name, {arg: res})
@@ -524,7 +524,7 @@ def init_logging(name: str, loglevel: str | int = logging.INFO,
     file_handler.setFormatter(logging.Formatter(log_format))
 
     class Filter(logging.Filter):
-        def __init__(self, filter_name: str, condition: Callable[logging.LogRecord | bool]) -> None:
+        def __init__(self, filter_name: str, condition: Callable[[logging.LogRecord], bool]) -> None:
             super().__init__(filter_name)
             self.condition = condition
 
@@ -837,7 +837,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
     return None
 
 
-def title_sorted(data: Iterable, key=None, ignore: Set[str] = frozenset(("a", "the"))):
+def title_sorted(data: Iterable, key=None, ignore: AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
     def sorter(element: str | dict[str, Any]) -> str:
         if not isinstance(element, str):
