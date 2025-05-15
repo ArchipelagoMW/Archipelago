@@ -26,4 +26,4 @@ class TestBase(unittest.TestCase):
                 for step in self.test_steps:
                     with self.subTest("Step", step=step):
                         call_all(multiworld, step)
-                        self.assertTrue(multiworld.get_all_state(False, True))
+                        self.assertTrue(multiworld.get_all_state(False, allow_partial_entrances=True))

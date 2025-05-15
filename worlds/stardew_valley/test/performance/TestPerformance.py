@@ -8,7 +8,7 @@ from typing import List
 from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
-from .. import SVTestCase, setup_multiworld
+from ..bases import SVTestCase, setup_multiworld
 from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, minimal_locations_maximal_items
 
 assert default_6_x_x
