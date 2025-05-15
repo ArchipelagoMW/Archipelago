@@ -298,7 +298,7 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Scarlette": ItemData("Equipment", 206 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Fish Skewer": ItemData("Equipment", 175 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 2, Sara Sara Bazaar, Advanced Zones
     #"Equipment - Silver Rapier": ItemData("Equipment", 114 + equipment_index_offset, ItemClassification.useful),
-    "Equipment - Artisan Rapier": ItemData("Equipment", 73 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
+    "Equipment - Artisan Rapier": ItemData("Equipment", 160 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Dueller": ItemData("Equipment", 10 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Poko Poko Desert, Advanced Zones
     "Equipment - Vulture": ItemData("Equipment", 402 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     #"Equipment - Falcon Dance": ItemData("Equipment", 408 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
@@ -781,7 +781,7 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Progressive Dagger": ItemData("Equipment", 604 + equipment_index_offset, ItemClassification.useful, 3, 3, 2, 1, 3, 4, 2, 0), # Dagger IDs [3], 63, [77], 40, [60], 95, [202], 184, [204], [159], 198, 305, [526], 393, [394], 72, [269], 306
     "Equipment - Progressive Ninja Dagger": ItemData("Equipment", 605 + equipment_index_offset, ItemClassification.useful, 0, 3, 1, 1, 0, 1, 2, 0), # Ninja Dagger IDs 192, 203, 397, [392], [396], [400], 317, 318
     "Equipment - Progressive Rapier": ItemData("Equipment", 606 + equipment_index_offset, ItemClassification.useful, 2, 3, 3, 1, 2, 5, 2, 0), # Rapier IDs [73], [1], 42, 96, [207], [206], 175, [160], 10, [402], [408], 404, [405], 407, [252], 401, 403, 406
-    "Equipment - Progressive Katana": ItemData("Equipment", 607 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 0, 0, 3, 4, 0), # Katana IDs 97, 399, [161], [363], [22], 364], [23], [366], [253], 367
+    "Equipment - Progressive Katana": ItemData("Equipment", 607 + equipment_index_offset, ItemClassification.useful, 1, 1, 1, 0, 0, 3, 4, 0), # Katana IDs 97, 399, [161], [363], [22], [364], [23], [366], [253], 367
     "Equipment - Progressive Spear": ItemData("Equipment", 608 + equipment_index_offset, ItemClassification.useful, 1, 3, 3, 1, 0, 5, 1, 0), # Spear IDs [4], 98, [205], 190, 183, [162], 409, [410], 418, [419], 417, 416, [254], 275
     "Equipment - Progressive Scythe": ItemData("Equipment", 609 + equipment_index_offset, ItemClassification.useful, 1, 2, 3, 0, 0, 4, 1, 0), # Scythe IDs 6, 99, [208], [163], [294], 293, [295], 414, 415, 590, [255]
     "Equipment - Progressive Bow": ItemData("Equipment", 610 + equipment_index_offset, ItemClassification.useful, 1, 1, 2, 1, 0, 5, 4), # Bow IDs 105, [7], 181, [209], [164], [297], [296], [298], [300], 301, 299, [256], [281], 420
