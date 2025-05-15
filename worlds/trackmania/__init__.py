@@ -105,6 +105,9 @@ class TrackmaniaWorld(World):
             if "max_length" not in search_criteria:
                 search_criteria["max_length"] = 5*60*1000  # Enforce a default 5 minute upper limit
 
+            if "has_award" not in search_criteria:
+                search_criteria["has_award"] = self.options.has_award.value
+
             values : dict = {"MedalTotal": medals,
                              "MapCount": map_count,
                              "SearchCriteria": search_criteria}
@@ -114,6 +117,10 @@ class TrackmaniaWorld(World):
         return {
             "TargetTimeSetting": (float(self.options.target_time.value) / 100.0),
             "SeriesNumber": self.options.series_number.value,
+            "DisableBronze": self.options.disable_bronze.value,
+            "DisableSilver": self.options.disable_silver.value,
+            "DisableGold": self.options.disable_gold.value,
+            "DisableAuthor": self.options.disable_author.value,
             "SeriesData": self.series_data
         }
 

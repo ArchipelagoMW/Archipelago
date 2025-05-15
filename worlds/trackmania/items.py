@@ -56,7 +56,7 @@ def get_progression_medal(world: "TrackmaniaWorld") -> str:
 def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     itempool: list[Item] = []
 
-    total_map_count: int = 0#world.options.series_number * world.options.series_map_number
+    total_map_count: int = 0
     for series in world.series_data:
         total_map_count += series["MapCount"]
 
@@ -66,11 +66,17 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     itempool += create_medals(world, "Silver Medal", 100, total_map_count)
     itempool += create_medals(world, "Bronze Medal", 0, total_map_count)
 
+    spots_remaining: int = (total_map_count * get_locations_per_map(world)) - len(itempool)
+    if spots_remaining < 0:
+        spots_remaining = 0 # just in case
+
+    print (get_locations_per_map(world),total_map_count * get_locations_per_map(world), len(itempool), spots_remaining)
+
     #each map has one additional check for reaching the target time we can fill with skips and filler
-    skip_count = round(float(total_map_count) * (world.options.skip_percentage / 100.0))
+    skip_count = round(float(spots_remaining) * (world.options.skip_percentage / 100.0))
     itempool += create_items(world, "Map Skip", skip_count)
 
-    filler_count = total_map_count - skip_count
+    filler_count = spots_remaining - skip_count
     for x in range(filler_count):
         filler_name = get_filler_item_name()
         itempool += create_items(world,filler_name, 1)
@@ -78,10 +84,11 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     return itempool
 
 def create_medals(world: "TrackmaniaWorld", medal: str, minimum_target_time:int, map_count: int) -> list[Item]:
+    if get_progression_medal(world) != medal and not get_medal_enabled(world, medal):
+        return []
     if world.options.target_time >= minimum_target_time:
         return create_items(world, medal, map_count)
-    else:
-        return []
+    return []
 
 def create_item(world: "TrackmaniaWorld", name: str) -> Item:
     item_id = world.item_name_to_id[name]
@@ -99,6 +106,32 @@ def create_items(world: "TrackmaniaWorld", name: str, count: int) -> list[Item]:
 
 def get_filler_item_name() -> str:
     return filler_item_names[random.randint(0, len(filler_item_names)-1)]
+
+def get_medal_enabled(world: "TrackmaniaWorld", medal: str) -> bool:
+    match medal:
+        case "Bronze Medal":
+            return world.options.disable_bronze <= 0
+        case "Silver Medal":
+            return world.options.disable_silver <= 0
+        case "Gold Medal":
+            return world.options.disable_gold <= 0
+        case "Author Medal":
+            return world.options.disable_author <= 0
+        case _:
+            return True
+
+def get_locations_per_map(world: "TrackmaniaWorld") -> int:
+    checks: int = 1
+    if world.options.disable_bronze <= 0:
+        checks += 1
+    if world.options.target_time >=100 and world.options.disable_silver <= 0:
+        checks += 1
+    if world.options.target_time >=200 and world.options.disable_gold <= 0:
+        checks += 1
+    if world.options.target_time >=300 and world.options.disable_author <= 0:
+        checks += 1
+    return checks
+    
 
 def build_items() -> dict[str,int]:
     # hardcoded items

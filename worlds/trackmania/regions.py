@@ -27,15 +27,16 @@ def create_track_checks(world: "TrackmaniaWorld", series: Region, map_index : in
     map_name = f"{series.name} {get_map_name(map_index)}"
     reg = series
 
-    create_check(world, reg, map_name, MapCheckTypes.Bronze)
+    if world.options.disable_bronze <= 0:
+        create_check(world, reg, map_name, MapCheckTypes.Bronze)
 
-    if world.options.target_time >=100:
+    if world.options.target_time >=100 and world.options.disable_silver <= 0:
         create_check(world, reg, map_name, MapCheckTypes.Silver)
 
-    if world.options.target_time >=200:
+    if world.options.target_time >=200 and world.options.disable_gold <= 0:
         create_check(world, reg, map_name, MapCheckTypes.Gold)
 
-    if world.options.target_time >=300:
+    if world.options.target_time >=300 and world.options.disable_author <= 0:
         create_check(world, reg, map_name, MapCheckTypes.Author)
 
     create_check(world, reg, map_name, MapCheckTypes.Target)
