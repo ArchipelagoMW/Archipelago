@@ -1,8 +1,6 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List
 from BaseClasses import ItemClassification
 
-import random
-
 class ItemData(NamedTuple):
     category: str
     code: Optional[int]
@@ -1520,5 +1518,5 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
 
     return categories
 
-def get_random_starting_jobs(self) -> List[Job]:
-    return self.random.sample(job_list, 6)
+def get_random_starting_jobs(self, count:int) -> List[Job]:
+    return self.random.sample(job_list, count)
