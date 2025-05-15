@@ -374,9 +374,9 @@ class CrystalProjectWorld(World):
                         amount = amount + data.expertShops
                 elif self.options.includedRegions == self.options.includedRegions.option_all:
                     amount = amount + data.advancedAmount + data.expertAmount + data.endGameAmount
-                    # atm there are no end-game specific shopsanity items
-                    # if self.options.shopsanity == self.options.shopsanity.option_true:
-                    #     amount = amount + data.endGameShops
+                    #atm there are no end-game specific shopsanity items
+                    if self.options.shopsanity == self.options.shopsanity.option_true:
+                        amount = amount + data.endGameShops
                 for _ in range(amount):
                     item = self.set_classifications(name)
                     pool.append(item)
