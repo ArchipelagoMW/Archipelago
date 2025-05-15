@@ -181,7 +181,7 @@ def set_rules(kh1world):
                         or
                         (
                             state.has("High Jump", player)
-                            and state.has("Air Combo Plus", player) 
+                            and state.has("Air Combo Plus", player, 2) 
                             #or state.has("Yellow Trinity", player)
                         )
                     )
@@ -1177,26 +1177,56 @@ def set_rules(kh1world):
         lambda state: (
             state.has("Footprints", player)
             or state.has("Progressive Glide", player)
+            or
+            (
+                difficulty > 10 
+                and state.has("Combo Master", player) 
+                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+            )
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Pink Chair"),
         lambda state: (
             state.has("Footprints", player)
             or state.has("Progressive Glide", player)
+            or
+            (
+                difficulty > 10 
+                and state.has("Combo Master", player) 
+                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+            )
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Right Yellow Chair"),
         lambda state: (
             state.has("Footprints", player)
             or state.has("Progressive Glide", player)
+            or
+            (
+                difficulty > 10 
+                and state.has("Combo Master", player) 
+                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+            )
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Left Gray Chair"),
         lambda state: (
             state.has("Footprints", player)
             or state.has("Progressive Glide", player)
+            or
+            (
+                difficulty > 10 
+                and state.has("Combo Master", player) 
+                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+            )
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Right Brown Chair"),
         lambda state: (
             state.has("Footprints", player)
             or state.has("Progressive Glide", player)
+            or
+            (
+                difficulty > 10 
+                and state.has("Combo Master", player) 
+                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+            )
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop from Waterway Examine Node"),
         lambda state: (
@@ -1666,17 +1696,7 @@ def set_rules(kh1world):
             and has_defensive_tools(state, player, difficulty)
         ))
     if difficulty == 0:
-        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Dodge Roll Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Fire Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Blue Trinity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Leon Secret Waterway Earthshine Event"),
-            lambda state: has_basic_tools(state, player))
         add_rule(kh1world.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Defeat Guard Armor Brave Warrior Event"),
             lambda state: has_basic_tools(state, player))
         add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
             lambda state: has_basic_tools(state, player))
@@ -1685,8 +1705,6 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Jungle King Event"),
             lambda state: has_basic_tools(state, player))
         add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Red Trinity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Clear Phil's Training Thunder Event"),
             lambda state: has_basic_tools(state, player))
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"),
             lambda state: has_basic_tools(state, player))
