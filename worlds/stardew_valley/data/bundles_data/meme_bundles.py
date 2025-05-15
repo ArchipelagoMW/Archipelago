@@ -218,21 +218,20 @@ joetg_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.joet
 bad_farmer_bundle = CurrencyBundleTemplate(CCRoom.pantry, MemeBundleName.bad_farmer, BundleItem(MemeCurrency.dead_crops, 100))
 bad_fisherman_bundle = CurrencyBundleTemplate(CCRoom.fish_tank, MemeBundleName.bad_fisherman, BundleItem(MemeCurrency.missed_fish, 20))
 honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.honeywell, BundleItem(MemeCurrency.honeywell, 1))
+gacha_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.gacha, BundleItem.money_bundle(10000))
+hibernation_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.hibernation, BundleItem(MemeCurrency.sleep_days, 60))
+crowdfunding_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.crowdfunding, BundleItem(MemeCurrency.bank_money, 10000))
+clickbait_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clickbait, BundleItem.money_bundle(100))
 
 # Stopped at 49 responses on the form
 
 # Todo Bundles
 #   ASMR Bundle         (Relaxing Bundle, it plays ASMR noise)
 #   Acrostic Bundle     (Asks for a specific word, you need to donate an item for each letter)
-#   Bad Farmer Bundle   (Dead Crops)
-#   Bad Fisherman Bundle(Uncaught Fish)
 #   Cipher Bundle       (Some sort of code?)
-#   Clickbait Bundle    (Scouts a super critical progression item, but actually contains garbage)
 #   Cooperation Bundle  (Asks for normal items but can only be donated through gifting)
-#   Crowdfunding Bundle (Purchase with Bank Money)
 #   Deathlink Bundle    (Completes after N deathlinks are sent across the multiworld)
-#   FrazzleDuck Bundle  (Duck and eggplant)
-#   Gacha Bundle        (Open lootboxes until you get a T5 reward)
+#   Friendship Bundle   (Show some NPCs, gotta donate a loved gift for each of them)
 #   Humble Bundle       (Pay what you want, 3 rewards (useful, filler, trap). Other two are auto-checked when finishing the CC)
 #   Investment Bundle   (Give anything you want, you get it back double in a month)
 #   Leaf Blower Bundle  (Leaf Blower Minigame, similar to the cookie clicker one)
@@ -241,8 +240,12 @@ honeywell_bundle = CurrencyBundleTemplate(CCRoom.bulletin_board, MemeBundleName.
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
 #   Sticky Bundle       (But it sticks, somehow?)
-#   Coma Bundle         (Very Long Multisleep)
 #   Puzzle Bundle       (Some sort of sliding puzzle)
+#   FrazzleDuck Bundle  (Duck and eggplant)
+#   ArgonMatrix Bundle  (Cactus Fruit or the plan for the vault)
+#   Loser Club Bundle   (Trash Tuna)
+#   Ministry of Madness Bundle (Lots of trash)
+#   SakuraTsubasa Bundle (TBD)
 
 
 # Bundles that need special Mod Handling:
@@ -271,9 +274,10 @@ bulletin_board_bundles_meme = [burger_king_bundle, romance_bundle, burger_king_r
                                celeste_bundle, cap_bundle, emmalution_bundle, joetg_bundle, honeywell_bundle]
 bulletin_board_meme = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_board_bundles_meme, 5)
 
-vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle, tick_tock_bundle, archipela_go_bundle,
-                      clique_bundle, cookie_clicker_bundle, communism_bundle, flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle,
-                      restraint_bundle, fast_bundle, floor_is_lava_bundle]
+vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampire_bundle, exhaustion_bundle,
+                      tick_tock_bundle, archipela_go_bundle, clique_bundle, cookie_clicker_bundle, communism_bundle,
+                      flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle, restraint_bundle, fast_bundle,
+                      floor_is_lava_bundle, gacha_bundle, hibernation_bundle, crowdfunding_bundle, clickbait_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,

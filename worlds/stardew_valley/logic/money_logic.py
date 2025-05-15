@@ -83,7 +83,7 @@ class MoneyLogic(BaseLogic):
     def can_trade(self, currency: str, amount: int) -> StardewRule:
         if amount == 0:
             return True_()
-        if currency == Currency.money:
+        if currency == Currency.money or currency == MemeCurrency.bank_money:
             return self.can_spend(amount)
         if currency == Currency.star_token:
             return self.logic.region.can_reach(LogicRegion.fair)
@@ -117,6 +117,12 @@ class MoneyLogic(BaseLogic):
             return self.logic.fishing.can_catch_many_fish(amount)
         if currency == MemeCurrency.honeywell:
             return self.logic.has(ArtisanGood.honey) & self.logic.building.has_building(Building.well)
+        if currency == MemeCurrency.sleep_days:
+            if not self.options.multiple_day_sleep_enabled.value:
+                return self.logic.false_
+            if amount > 200:
+                return self.logic.region.can_reach(Region.farm_house) & self.logic.season.has(Season.winter)
+            return self.logic.region.can_reach(Region.farm_house)
         if currency == MemeCurrency.time_elapsed:
             if amount <= 1000:
                 return self.logic.true_

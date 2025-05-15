@@ -4,7 +4,8 @@ from typing import Dict, Optional
 from .bases import SVTestBase, SVTestCase
 from .. import BundleRandomization, location_table
 from ..bundles.bundle import Bundle
-from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, quality_foraging_items, quality_fish_items
+from ..data.bundles_data.bundle_data import all_bundle_items_except_money, quality_crops_items_thematic, \
+    quality_foraging_items, quality_fish_items
 from ..data.bundles_data.meme_bundles import all_cc_meme_bundles
 from ..locations import LocationTags
 from ..options import BundlePlando, BundlePrice
@@ -111,7 +112,7 @@ class TestMemeBundles(SVTestBase):
         all_bundles = [bundle for bundle_room in self.world.modified_bundles for bundle in bundle_room.bundles]
         bundles_by_name = {bundle.name: bundle for bundle in all_bundles}
         self.check_price(bundles_by_name, MemeBundleName.death, 1, 1, 1)
-        self.check_price(bundles_by_name, MemeBundleName.communist, 1, 1, 1)
+        self.check_price(bundles_by_name, MemeBundleName.communism, 1, 1, 1)
         self.check_price(bundles_by_name, MemeBundleName.amons_fall, 7, 7, 1)
         self.check_price(bundles_by_name, MemeBundleName.rick, 1, 1, 1)
         self.check_price(bundles_by_name, MemeBundleName.obelisks, 8, 8)

@@ -18,6 +18,8 @@ class Currency:
 
 
 class MemeCurrency:
+    bank_money = "Bank Money"
+    sleep_days = "Sleep Days"
     blood = "Blood"
     child = "Child"
     clic = "Clic"
