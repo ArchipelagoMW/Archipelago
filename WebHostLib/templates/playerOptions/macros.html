@@ -111,10 +111,19 @@
     </div>
 {% endmacro %}
 
-{% macro ItemDict(option_name, option) %}
+{% macro OptionCounter(option_name, option) %}
+    {% set relevant_keys = option.valid_keys %}
+    {% if not relevant_keys %}
+        {% if option.verify_item_name %}
+            {% set relevant_keys = world.item_names %}
+        {% elif option.verify_location_name %}
+            {% set relevant_keys = world.location_names %}
+        {% endif %}
+    {% endif %}
+
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
-        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
+        {% for item_name in (relevant_keys if relevant_keys is ordered else relevant_keys|sort) %}
             <div class="option-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}||{{ item_name }}||qty" value="{{ option.default[item_name]|default("0") }}" data-option-name="{{ option_name }}" data-item-name="{{ item_name }}" />
@@ -213,7 +222,7 @@
 {% endmacro %}
 
 {% macro RandomizeButton(option_name, option) %}
-    <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
+    <div class="randomize-button" data-tooltip="Pick a random value for this option.">
         <label for="random-{{ option_name }}">
             <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" data-option-name="{{ option_name }}" {{ "checked" if option.default == "random" }} />
             🎲
