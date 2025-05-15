@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime  # for custom_series: uploaded_before and uploaded_after
 from schema import Schema, And, Or, Optional  # for custom series validation
 from typing import List, Dict, Any
-from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility
+from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility, PlandoItems
 from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
@@ -117,19 +117,19 @@ class HasAward(Toggle):
     display_name = "Must Be Awarded"
 
 class DisableBronzeLocations(Toggle):
-    """Disable Bronze Medal times from counting as locations, and removes all Bronze Medals from the Item Pool (unless is is the progression medal)."""
+    """Disable Bronze Medal times from counting as locations, and remove all Bronze Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Bronze Medals"
 
 class DisableSilverLocations(Toggle):
-    """Disable Silver Medal times from counting as locations, and removes all Silver Medals from the Item Pool (unless is is the progression medal)."""
+    """Disable Silver Medal times from counting as locations, and remove all Silver Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Silver Medals"
 
 class DisableGoldLocations(Toggle):
-    """Disable Gold Medal times from counting as locations, and removes all Gold Medals from the Item Pool (unless is is the progression medal)."""
+    """Disable Gold Medal times from counting as locations, and remove all Gold Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Gold Medals"
 
 class DisableAuthorLocations(Toggle):
-    """Disable Author Medal times from counting as locations, and removes all Author Medals from the Item Pool (unless is is the progression medal)."""
+    """Disable Author Medal times from counting as locations, and remove all Author Medals from the Item Pool (unless it is the progression medal)."""
     display_name = "Remove Author Medals"
 
 
@@ -236,7 +236,7 @@ option_groups: Dict[str, List[Any]] = {
     "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
     "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags],
-    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries]
+    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries, PlandoItems]
 }
 
 def create_option_groups() -> List[OptionGroup]:
