@@ -46,12 +46,14 @@ class CrystalProjectWorld(World):
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
     location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
-    startingJobs = get_random_starting_jobs()
+    startingJobs = []
     web = CrystalProjectWeb()
 
     logger = logging.getLogger()
 
     def generate_early(self):
+        self.startingJobs = get_random_starting_jobs(self, 6)
+
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
         if self.options.randomizeStartingJobs:
