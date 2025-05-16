@@ -759,40 +759,40 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, logic.has_vertical_movement), #Money chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, logic.has_vertical_movement), #Bone Mail chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, logic.has_vertical_movement), #Cutlass chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Hidden in a house by the elevator 1", 3505 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Near sky fishing 1", 3507 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Reservoir above the water", 3508 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement), #Fleuret chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Among crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Its in a room and there is a bed", 3515 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Fleuret chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Among crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Its in a room and there is a bed", 3515 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 1", 2717 + treasure_index_offset, logic.has_vertical_movement), #Ether chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, logic.has_vertical_movement), #Ether Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Ether Pouch chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement), #Knicked Knackers chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement), #Looters Pin chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, logic.has_vertical_movement), #Muggers Glove chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Knicked Knackers chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Looters Pin chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Muggers Glove chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Weaponsmith", 1505 + treasure_index_offset), #Plague Mask chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch
-        LocationData("Shoudu Province", "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch
-        LocationData("Shoudu Province", "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, logic.has_vertical_movement), #Suitor Hat chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
+        LocationData("Shoudu Province", "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
+        LocationData("Shoudu Province", "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Suitor Hat chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 2", 2716 + treasure_index_offset, logic.has_vertical_movement), #Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam east of save point", 3040 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam on the way to Sky Arena", 2754 + treasure_index_offset, logic.has_vertical_movement), #Acrobat Shoes chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Atop the roofs near the grates", 1369 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - In the flower room", 2789 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - In the flower room", 2789 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Hidden in a house by the elevator 2", 2790 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Near sky fishing 2", 2986 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Under the dry kid pit", 1365 + treasure_index_offset, logic.has_vertical_movement), #The Immovable chest
@@ -806,7 +806,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement), #Malifice chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement), #Wizards Wall chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Fall through broken grate below Sky Arena building", 2951 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset, logic.has_vertical_movement), #(753, 105, -176) Tincture Pouch chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset), #(753, 105, -176) Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(753, 134, -263) Yasha chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(754, 134, -264) Muramasa chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(755, 134, -263) Shadow Gi chest
