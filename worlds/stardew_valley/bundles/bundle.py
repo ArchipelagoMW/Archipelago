@@ -65,6 +65,8 @@ class BundleTemplate:
     def can_appear(self, options: StardewValleyOptions) -> bool:
         if self.name == MemeBundleName.trap and options.trap_items.value == TrapDifficulty.option_no_traps:
             return False
+        if self.name == MemeBundleName.hibernation and not self.options.multiple_day_sleep_enabled.value:
+            return False
         return True
 
 
