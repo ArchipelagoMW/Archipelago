@@ -62,6 +62,9 @@ class AutoWorldRegister(type):
         dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
 
+        dct["dynamic_item_name_to_id"] = {}
+        dct["dynamic_location_name_to_id"] = {}
+
         # move away from get_required_client_version function
         if "game" in dct:
             assert "get_required_client_version" not in dct, f"{name}: required_client_version is an attribute now"
@@ -288,6 +291,12 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
+    dynamic_item_name_to_id: ClassVar[Dict[str, int]] = {}
+    """maps item names to their IDs, allowed to change between generations"""
+
+    dynamic_location_name_to_id: ClassVar[Dict[str, int]] = {}
+    """maps location names to their IDs, allowed to change between generations"""
+
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
@@ -365,6 +374,14 @@ class World(metaclass=AutoWorldRegister):
         """
         Checks that a game is capable of generating, such as checking for some base file like a ROM.
         This gets called once per present world type. Not run for unittests since they don't produce output.
+        """
+        pass
+
+    @classmethod
+    def create_dynamic_datapackage(cls, game_weights: Dict[str, Any]) -> None:
+        """
+        Method for defining any dynamic item and location names for this generation.
+        This gets called once per player during YAML parsing.
         """
         pass
 
@@ -586,6 +603,20 @@ class World(metaclass=AutoWorldRegister):
             "item_name_to_id": cls.item_name_to_id,
             "location_name_groups": sorted_location_name_groups,
             "location_name_to_id": cls.location_name_to_id,
+        }
+        res["checksum"] = data_package_checksum(res)
+        return res
+
+    @classmethod
+    def get_dynamic_data_package_data(cls):
+        if not cls.dynamic_location_name_to_id and not cls.dynamic_item_name_to_id:
+            return None
+        res: "GamesPackage" = {
+            # sorted alphabetically
+            "item_name_groups": {},
+            "item_name_to_id": cls.dynamic_item_name_to_id if cls.dynamic_item_name_to_id else {},
+            "location_name_groups": {},
+            "location_name_to_id": cls.dynamic_location_name_to_id if cls.dynamic_location_name_to_id else {},
         }
         res["checksum"] = data_package_checksum(res)
         return res
