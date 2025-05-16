@@ -159,9 +159,9 @@ item_table: Dict[str, ItemData] = {
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
     "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
     "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
-    "Item - Ancient Tablet A": ItemData("Item", 161 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
-    "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
-    "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.filler, 0, 0, 0, 1),
+    "Item - Ancient Tablet A": ItemData("Item", 161 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
     "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
     "Item - Progressive Level Cap": ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 0),
 
