@@ -196,8 +196,9 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
         {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
-    multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"], 
-        {"Salmon Pass": logic.has_rental_quintar or logic.has_vertical_movement,
+    multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"],
+        # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
+        {"Salmon Pass": lambda state: (logic.has_rental_quintar and logic.has_jobs(state, 5)) or logic.has_vertical_movement,
         "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
         {"Greenshire Reprise": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
