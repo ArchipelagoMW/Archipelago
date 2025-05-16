@@ -2,7 +2,7 @@ from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
 from .Options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
-from .Constants import *
+from .Keys import *
 
 class LocationData(NamedTuple):
     region: str

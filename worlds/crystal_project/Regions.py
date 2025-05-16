@@ -3,7 +3,7 @@ from BaseClasses import Region, Location, MultiWorld
 from .Options import CrystalProjectOptions
 from .Locations import LocationData
 from .rules import CrystalProjectLogic
-from .Constants import *
+from .Keys import *
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
