@@ -1691,9 +1691,62 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 13", 121604 + shop_index_offset),
 
         #Zones (Expert)
+        #Shoudu Province
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 1", 951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 2", 1951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 3", 2951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 4", 3951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 5", 4951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 6", 5951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 7", 6951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 8", 7951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 9", 8951 + shop_index_offset),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - No Shoudu Stew for you 1", 1199 + shop_index_offset),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 1", 1614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 2", 11614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 3", 21614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 4", 31614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 5", 41614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 6", 51614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 1", 1535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 2", 11535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 3", 21535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 4", 31535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 5", 41535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 6", 51535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 7", 61535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 8", 71535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 9", 81535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 10", 91535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 1", 1544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 2", 11544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 3", 21544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 4", 31544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 5", 41544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 6", 51544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 7", 61544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 8", 71544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 9", 81544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 10", 91544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 11", 101544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 12", 111544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 13", 121544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 14", 131544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 15", 141544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 16", 151544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
         #Tall Tall Heights
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 1", 1165 + shop_index_offset),
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 2", 11165 + shop_index_offset),
+
+        #Jidamba Tangle
+        LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 1", 1163 + shop_index_offset),
+        LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 2", 11163 + shop_index_offset),
+
     ]
 
     return location_table
