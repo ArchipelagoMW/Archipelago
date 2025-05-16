@@ -1644,8 +1644,8 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
 
         #Salmon River
         LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 1", 631 + shop_index_offset),
-        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 2", 1631 + shop_index_offset),
-        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 3", 2631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 2", 10631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 3", 20631 + shop_index_offset),
 
         #Sara Sara Bazaar
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Old Nans Stew Subsidiary", 957 + shop_index_offset),
@@ -1667,7 +1667,7 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 8", 71193 + shop_index_offset),
 
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 1", 942 + shop_index_offset),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 1942 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 10942 + shop_index_offset),
 
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 1", 1603 + shop_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 2", 11603 + shop_index_offset),
@@ -1694,14 +1694,14 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         #Zones (Expert)
         #Shoudu Province
         LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 1", 951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 2", 1951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 3", 2951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 4", 3951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 5", 4951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 6", 5951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 7", 6951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 8", 7951 + shop_index_offset),
-        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 9", 8951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 2", 10951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 3", 20951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 4", 30951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 5", 40951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 6", 50951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 7", 60951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 8", 70951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 9", 80951 + shop_index_offset),
 
         LocationData("Shoudu Province", "Shoudu Province Shop - No Shoudu Stew for you 1", 1199 + shop_index_offset),
 
@@ -1740,14 +1740,76 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 15", 141544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
         LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 16", 151544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
 
+        #Ganymede Shrine
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 1", 1574 + shop_index_offset),
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 2", 11574 + shop_index_offset),
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 3", 21574 + shop_index_offset),
+
+        #Quintar Reserve
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 1", 470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 2", 10470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 3", 20470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 4", 30470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 5", 40470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+
+        #Dione Shrine
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 1", 2253 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 2", 12253 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 1", 2227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 2", 12227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 3", 22227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 4", 32227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 5", 42227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 6", 52227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 7", 62227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 8", 72227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 9", 82227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+
         #Tall Tall Heights
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 1", 1165 + shop_index_offset),
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 2", 11165 + shop_index_offset),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 1", 2746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 2", 12746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 3", 22746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 4", 32746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 5", 42746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 6", 52746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 7", 62746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 8", 72746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 9", 82746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 10", 92746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 1", 540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 2", 10540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 3", 20540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 4", 30540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 5", 40540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 6", 50540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 7", 60540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 8", 70540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 9", 80540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 10", 90540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 1", 2918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 2", 12918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 3", 22918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 4", 32918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
 
         #Jidamba Tangle
         LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 1", 1163 + shop_index_offset),
         LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 2", 11163 + shop_index_offset),
 
+        #The Deep Sea
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 1", 3164 + shop_index_offset),
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 2", 13164 + shop_index_offset),
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 3", 23164 + shop_index_offset),
+
+        #Zones (End-Game)
+        #The New World
+        LocationData("The New World", "New World Shrine Shop - Attendant 1", 1877 + shop_index_offset),
+        LocationData("The New World", "New World Shrine Shop - Attendant 2", 11877 + shop_index_offset),
     ]
 
     return location_table
