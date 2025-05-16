@@ -113,7 +113,7 @@ components.extend([
 def handle_uri(path: str) -> tuple[list[Component], Component]:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
-    client_component = []
+    client_components = []
     text_client_component = None
     if "game" in queries:
         game = queries["game"][0]
@@ -121,10 +121,10 @@ def handle_uri(path: str) -> tuple[list[Component], Component]:
         game = "Archipelago"
     for component in components:
         if component.supports_uri and component.game_name == game:
-            client_component.append(component)
+            client_components.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
-    return client_component, text_client_component
+    return client_components, text_client_component
 
 
 def build_uri_popup(component_list: list[Component], launch_args: tuple[str, ...]) -> None:
