@@ -266,38 +266,64 @@ class CommonContext:
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
     # remaining type info
-    slot_info: typing.Dict[int, NetworkSlot]
-    server_address: typing.Optional[str]
-    password: typing.Optional[str]
-    hint_cost: typing.Optional[int]
-    hint_points: typing.Optional[int]
-    player_names: typing.Dict[int, str]
+    slot_info: dict[int, NetworkSlot]
+    """Slot Info from the server for the current connection"""
+    server_address: str | None
+    """Autoconnect address provided by the ctx constructor"""
+    password: str | None
+    """Password used for Connecting, expected by server_auth"""
+    hint_cost: int | None
+    """Current Hint Cost per Hint from the server"""
+    hint_points: int | None
+    """Current avaliable Hint Points from the server"""
+    player_names: dict[int, str]
+    """Current lookup of slot number to player display name from server (includes aliases)"""
 
     finished_game: bool
+    """
+    bool to signal that status should be updated to Goal after reconnectin
+    to be used to ensure that a statusupdate does not get lose when disconnected
+    """
     ready: bool
-    team: typing.Optional[int]
-    slot: typing.Optional[int]
-    auth: typing.Optional[str]
-    seed_name: typing.Optional[str]
+    """bool to keep track of state for the /ready command"""
+    team: int | None
+    """team number of currently connected slot"""
+    slot: int | None
+    """slot number of currently connected slot"""
+    auth: str | None
+    """name used in Connect packet"""
+    seed_name: str | None
+    """seed name that will be validated on opening a socket if present"""
 
     # locations
-    locations_checked: typing.Set[int]  # local state
-    locations_scouted: typing.Set[int]
-    items_received: typing.List[NetworkItem]
-    missing_locations: typing.Set[int]  # server state
-    checked_locations: typing.Set[int]  # server state
-    server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
+    locations_checked: set[int]
+    """Local state of Locations Checked ... actual use tbd because it seems super volotile lol"""
+    locations_scouted: set[int]
+    """Local container of Locations Scouted ... actual use tbd because it seems super volotile lol"""
+    items_received: list[NetworkItem]
+    """List of NetworkItems recieved from the server"""
+    missing_locations: set[int]
+    """Container of Locations that are unchecked per server state"""
+    checked_locations: set[int]
+    """Container of Locations that are checked per server state"""
+    server_locations: set[int]
+    """Container of Locations that exist per server state; a combination between missing and checked locations"""
     locations_info: typing.Dict[int, NetworkItem]
 
     # data storage
-    stored_data: typing.Dict[str, typing.Any]
-    stored_data_notification_keys: typing.Set[str]
+    stored_data: dict[str, typing.Any]
+    """
+    Data Storage values by key that were retrieved from the server
+    any keys subscribed to with SetNotify will be kept up to date
+    """
+    stored_data_notification_keys: set[str]
+    """Current container of watched Data Storage keys, managed by ctx.set_notify"""
 
     # internals
-    # current message box through kvui
     _messagebox: typing.Optional["kvui.MessageBox"] = None
-    # message box reporting a loss of connection
+    """current message box through kvui"""
     _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
+    """message box reporting a loss of connection"""
 
     def __init__(self, server_address: typing.Optional[str] = None, password: typing.Optional[str] = None) -> None:
         # server state
