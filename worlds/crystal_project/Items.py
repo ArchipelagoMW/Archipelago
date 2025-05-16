@@ -153,7 +153,7 @@ item_table: Dict[str, ItemData] = {
     "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.useful), #I don't know if we'll be adding any checks that require you to speak Quintar tbh
+    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression), #Quintar shop!
     #"Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 0), #12
     "Item - Crag Demon Horn": ItemData("Item", 197 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Jojo Sewers, Advanced Regions
     "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
