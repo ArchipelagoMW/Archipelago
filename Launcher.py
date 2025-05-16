@@ -16,9 +16,10 @@ import subprocess
 import sys
 import urllib.parse
 import webbrowser
+from collections.abc import Callable, Sequence
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union, Any
+from typing import Any
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -84,12 +85,16 @@ def browse_files():
 def open_folder(folder_path):
     if is_linux:
         exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, folder_path])
     else:
         webbrowser.open(folder_path)
+        return
+
+    if exe:
+        subprocess.Popen([exe, folder_path])
+    else:
+        logging.warning(f"No file browser available to open {folder_path}")
 
 
 def update_settings():
@@ -156,7 +161,7 @@ def build_uri_popup(component_list: list[Component], launch_args: tuple[str, ...
     ).open()
 
 
-def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
+def identify(path: None | str) -> tuple[None | str, None | Component]:
     if path is None:
         return None, None
     for component in components:
@@ -167,7 +172,7 @@ def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Comp
     return None, None
 
 
-def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
+def get_exe(component: str | Component) -> Sequence[str] | None:
     if isinstance(component, str):
         name = component
         component = None
@@ -220,7 +225,7 @@ def create_shortcut(button: Any, component: Component) -> None:
     button.menu.dismiss()
 
 
-refresh_components: Optional[Callable[[], None]] = None
+refresh_components: Callable[[], None] | None = None
 
 
 def run_gui(launch_components: list[Component], args: Any) -> None:
@@ -445,7 +450,7 @@ def run_component(component: Component, *args):
         logging.warning(f"Component {component} does not appear to be executable.")
 
 
-def main(args: Optional[Union[argparse.Namespace, dict]] = None):
+def main(args: argparse.Namespace | dict | None = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
     elif not args:
