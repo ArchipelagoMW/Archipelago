@@ -201,7 +201,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Salmon Pass": lambda state: (logic.has_rental_quintar and logic.has_jobs(state, 5)) or logic.has_vertical_movement,
         "Tall Tall Heights": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Salmon Pass", player).add_exits(["Greenshire Reprise", "Salmon River", "Delende"], 
-        {"Greenshire Reprise": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
+        {"Greenshire Reprise": lambda state: (logic.has_horizontal_movement or logic.has_swimming) and logic.is_area_in_level_range(state, 2),
         "Salmon River": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
         "Delende": logic.has_swimming})
     multiworld.get_region("Salmon River", player).add_exits(["Salmon Bay", "Tall Tall Heights"], 
@@ -213,7 +213,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
         "Ancient Labyrinth": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
-        {"Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
+        {"Poko Poko Desert": lambda state: logic.is_area_in_level_range(state, 2),
         "Sara Sara Beach": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),
         "Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player) and logic.is_area_in_level_range(state, 3),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
