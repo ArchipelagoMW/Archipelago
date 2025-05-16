@@ -165,6 +165,9 @@ class StardewValleyWorld(World):
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
 
+        for bundle_room in self.modified_bundles:
+            bundle_room.special_behavior(self)
+
         def add_location(name: str, code: Optional[int], region: str):
             assert region in world_regions, f"Location {name} cannot be created in region {region}, because the region does not exist in this slot"
             region: Region = world_regions[region]

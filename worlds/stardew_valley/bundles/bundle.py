@@ -21,6 +21,10 @@ class Bundle:
     def __repr__(self):
         return f"{self.name} -> {self.number_required} from {repr(self.items)}"
 
+    def special_behavior(self, world):
+        if self.name == MemeBundleName.clickbait:
+            world.multiworld.exclude_locations[world.player].value.add(MemeBundleName.clickbait)
+
 
 @dataclass
 class BundleTemplate:

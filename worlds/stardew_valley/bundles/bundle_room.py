@@ -12,6 +12,10 @@ class BundleRoom:
     name: str
     bundles: List[Bundle]
 
+    def special_behavior(self, world):
+        for bundle in self.bundles:
+            bundle.special_behavior(world)
+
 
 def simplify_name(name: str) -> str:
     return name.lower().replace(" ", "").replace("-", "").replace("_", "").replace(".", "")
