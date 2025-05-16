@@ -1641,6 +1641,55 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
 
         LocationData("Capital Sequoia", "Capital Sequoia Shop - Old Nans Stew", 423 + shop_index_offset),
 
+        #Salmon River
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 1", 631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 2", 1631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 3", 2631 + shop_index_offset),
+
+        #Sara Sara Bazaar
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Old Nans Stew Subsidiary", 957 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 1", 1386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 2", 11386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 3", 21386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 4", 31386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 5", 41386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 6", 51386 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 1", 1193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 2", 11193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 3", 21193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 4", 31193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 5", 41193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 6", 51193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 7", 61193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 8", 71193 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 1", 942 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 1942 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 1", 1603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 2", 11603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 3", 21603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 4", 31603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 5", 41603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 6", 51603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 7", 61603 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 1", 1604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 2", 11604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 3", 21604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 4", 31604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 5", 41604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 6", 51604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 7", 61604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 8", 71604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 9", 81604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 10", 91604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 11", 101604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 12", 111604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 13", 121604 + shop_index_offset),
+
         #Zones (Expert)
         #Tall Tall Heights
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 1", 1165 + shop_index_offset),
