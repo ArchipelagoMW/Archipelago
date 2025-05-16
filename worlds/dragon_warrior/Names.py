@@ -30,13 +30,36 @@ stones_of_sunlight = "Stones of Sunlight"
 rainbow_drop = "Rainbow Drop"
 
 ######################
+#    REGION NAMES    #
+######################
+
+tantegel_throne_room = "Tantegel Throne Room Region"
+tantegel_castle = "Tantegel Castle Region"
+tantegel_basement = "Tantegel Basement Region"
+breconnary = "Brecconary Region"
+garinham = "Garinham Region"
+kol = "Kol Region"
+rimuldar = "Rimuldar Region"
+hauksness = "Hauksness Region"
+cantlin = "Cantlin Region"
+erdricks_cave = "Erdrick's Cave Region"
+mountain_cave = "Mountain Cave Region"
+swamp_cave = "Swamp Cave Region"
+garins_grave = "Garin's Grave Region"
+staff_of_rain_shrine = "Staff of Rain Shrine Region"
+erdricks_token_tile = "Erdrick's Token Tile Region"
+rainbow_drop_shrine = "Rainbow Drop Shrine Region"
+charlock_castle = "Charlock Castle Region"
+
+
+######################
 #   LOCATION NAMES   #
 ######################
 
 # Tantegel Throne Room
-throne_room_gold_chest = "Tantegel Castle Throne Room - Gold Chest"
-throne_room_torch_chest = "Tantegel Castle Throne Room - Torch Chest"
-throne_room_key_chest = "Tantegel Castle Throne Room - Key Chest"
+tantegel_throne_room_gold_chest = "Tantegel Castle Throne Room - Gold Chest"
+tantegel_throne_room_torch_chest = "Tantegel Castle Throne Room - Torch Chest"
+tantegel_throne_room_key_chest = "Tantegel Castle Throne Room - Key Chest"
 
 # Tantegel Castle
 tantegel_castle_gold_chest_1 = "Tantegel Castle - Gold Chest 1"
