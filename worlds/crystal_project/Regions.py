@@ -211,7 +211,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Ancient Reservoir": lambda state: logic.has_key(state, PYRAMID_KEY) and logic.is_area_in_level_range(state, 3),
         "Lake Delende": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
-        "Ancient Labyrinth": lambda state: lambda state: state.has(player, ANCIENT_TABLET_A) and logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
+        "Ancient Labyrinth": lambda state: state.has(ANCIENT_TABLET_A, player) and logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
         {"Poko Poko Desert": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
         "Sara Sara Beach": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),

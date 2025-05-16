@@ -1248,10 +1248,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dungeon East sneaky hole in wall", 1274 + treasure_index_offset), #(-186, 125, -316) F2 Money chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dungeon West sneaky hole in wall", 2412 + treasure_index_offset), #(-190, 125, -316) F2 Archmage Vest chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B1 Searching for greener pastures", 1738 + treasure_index_offset), #(-209, 87, -311) F3 Vita Crown chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(player, ANCIENT_TABLET_B)), #(-185, 63, -363) F4 Judgement chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(player, ANCIENT_TABLET_B)), #(-162, 63, -336) F4 Zether Pouch chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: state.has(player, ANCIENT_TABLET_B) and state.has(player, ANCIENT_TABLET_C)), #(-185, 38, -301) F6 Ancient Labyrinth map chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: state.has(player, ANCIENT_TABLET_B) and state.has(player, ANCIENT_TABLET_C)), #(-219, 27, -350) F7 Mirror Shield chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-185, 63, -363) F4 Judgement chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-162, 63, -336) F4 Zether Pouch chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-185, 38, -301) F6 Ancient Labyrinth map chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-219, 27, -350) F7 Mirror Shield chest
 
         #NPCs
         LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot
@@ -1746,25 +1746,25 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 3", 21574 + shop_index_offset),
 
         #Quintar Reserve
-        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 1", 470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 2", 10470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 3", 20470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 4", 30470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 5", 40470 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 1", 470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 2", 10470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 3", 20470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 4", 30470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 5", 40470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
 
         #Dione Shrine
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 1", 2253 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 2", 12253 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 1", 2253 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 2", 12253 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
 
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 1", 2227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 2", 12227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 3", 22227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 4", 32227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 5", 42227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 6", 52227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 7", 62227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 8", 72227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
-        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 9", 82227 + shop_index_offset, lambda state: state.has(player, BABEL_QUINTAR)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 1", 2227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 2", 12227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 3", 22227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 4", 32227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 5", 42227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 6", 52227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 7", 62227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 8", 72227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 9", 82227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
 
         #Tall Tall Heights
         LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 1", 1165 + shop_index_offset),
