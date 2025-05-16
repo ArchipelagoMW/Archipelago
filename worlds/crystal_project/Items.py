@@ -209,7 +209,7 @@ item_table: Dict[str, ItemData] = {
     "Equipment - War Sword": ItemData("Equipment", 376 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Advanced Zones
     "Equipment - Bloodbind": ItemData("Equipment", 197 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3 2H, Salmon River, Advanced Zones
     "Equipment - Temporal Blade": ItemData("Equipment", 525 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3 2H, Beaurior Volcano, Expert Zones
-    #"Equipment - Highland Blade": ItemData("Equipment", 370 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Expert Zones
+    "Equipment - Highland Blade": ItemData("Equipment", 370 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Expert Zones
     #"Equipment - Hydra Edge": ItemData("Equipment", 371 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Defender": ItemData("Equipment", 380 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4 1H, Lands End, Expert Zones
     "Equipment - Crystal Sword": ItemData("Equipment", 374 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 1H, Shop, Expert Zones
@@ -242,10 +242,10 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Axe of Light": ItemData("Equipment", 387 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Gold Axe": ItemData("Equipment", 139 + equipment_index_offset, ItemClassification.useful),
     "Equipment - War Axe": ItemData("Equipment", 384 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Advanced Zones
-    #"Equipment - Berserker Axe": ItemData("Equipment", 390 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Expert Zones
+    "Equipment - Berserker Axe": ItemData("Equipment", 390 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 2H, Shop, Expert Zones
     "Equipment - Gaia Axe": ItemData("Equipment", 385 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3 2H, Shoudu Province, Expert Zones
     "Equipment - Master Axe": ItemData("Equipment", 251 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4 1H, Shop, Advanced Zones
-    #"Equipment - Ancient Axe": ItemData("Equipment", 391 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 2H, Shop, Expert Zones
+    "Equipment - Ancient Axe": ItemData("Equipment", 391 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 2H, Shop, Expert Zones
     "Equipment - Master Bigaxe": ItemData("Equipment", 250 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4 2H, Shop, Advanced Zones
     "Equipment - Aphotic Edge": ItemData("Equipment", 388 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 1), #Tier 5 1H, The Sequoia, End-Game Zones
     #"Equipment - Diamond Axe": ItemData("Equipment", 136 + equipment_index_offset, ItemClassification.useful),
@@ -268,17 +268,17 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Dagger": ItemData("Equipment", 159 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2 Regular, Shop, Advanced Zones
     "Equipment - Parry Knife": ItemData("Equipment", 397 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3 Ninja, Salmon River, Advanced Zones
     "Equipment - Janbiya": ItemData("Equipment", 392 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3 Ninja, Shop, Advanced Zones
-    #"Equipment - Sai": ItemData("Equipment", 396 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Ninja, Shop, Expert Zones
-    #"Equipment - Kodachi": ItemData("Equipment", 400 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Ninja, Shop, Expert Zones
+    "Equipment - Sai": ItemData("Equipment", 396 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Ninja, Shop, Expert Zones
+    "Equipment - Kodachi": ItemData("Equipment", 400 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Ninja, Shop, Expert Zones
     "Equipment - Butter Cutter": ItemData("Equipment", 198 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3 Regular, Poko Poko Desert, Advanced Zones
     "Equipment - Soul Kris": ItemData("Equipment", 305 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3 Regular, Shoudu Province, Expert Zones
     #"Equipment - Gouger": ItemData("Equipment", 61 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Fanged Knife": ItemData("Equipment", 526 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Regular, Shop, Expert Zones
+    "Equipment - Fanged Knife": ItemData("Equipment", 526 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Regular, Shop, Expert Zones
     "Equipment - Cinquedea": ItemData("Equipment", 393 + equipment_index_offset, ItemClassification.useful), #from Delende fisher; Tier 3 Regular, Delende, Beginner Zones
     #"Equipment - Gold Dagger": ItemData("Equipment", 140 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Kowakizashi": ItemData("Equipment", 398 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Bone Knife": ItemData("Equipment", 395 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Poignard": ItemData("Equipment", 394 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 Regular, Shop, Expert Zones
+    "Equipment - Poignard": ItemData("Equipment", 394 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 Regular, Shop, Expert Zones
     "Equipment - Flamespike": ItemData("Equipment", 72 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4 Regular, Jidamba Tangle, Expert Zones
     "Equipment - Master Dagger": ItemData("Equipment", 269 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4 Regular, Shop, Advanced Zones
     "Equipment - Sange": ItemData("Equipment", 317 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 1), #Tier 5 Ninja, The Sequoia, End-Game Zones
@@ -301,10 +301,10 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Rapier": ItemData("Equipment", 160 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Dueller": ItemData("Equipment", 10 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Poko Poko Desert, Advanced Zones
     "Equipment - Vulture": ItemData("Equipment", 402 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Falcon Dance": ItemData("Equipment", 408 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Falcon Dance": ItemData("Equipment", 408 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Fleuret": ItemData("Equipment", 404 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Rapier": ItemData("Equipment", 141 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Epee": ItemData("Equipment", 405 + equipment_index_offset, ItemClassification.useful),
+    "Equipment - Epee": ItemData("Equipment", 405 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Windsong": ItemData("Equipment", 407 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, The Chalice of Tar, Expert Zones
     "Equipment - Master Rapier": ItemData("Equipment", 252 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     "Equipment - Nightingale": ItemData("Equipment", 401 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 1), #Tier 5, Castle Sequoia, End-Game Zones
@@ -318,12 +318,12 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Silver Katana": ItemData("Equipment", 115 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Artisan Katana": ItemData("Equipment", 161 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Nansen": ItemData("Equipment", 363 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Mitsutada": ItemData("Equipment", 22 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
-    #"Equipment - Hitofuri": ItemData("Equipment", 364 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
-    #"Equipment - Kokaiji": ItemData("Equipment", 23 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Mitsutada": ItemData("Equipment", 22 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Hitofuri": ItemData("Equipment", 364 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Kokaiji": ItemData("Equipment", 23 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Gold Katana": ItemData("Equipment", 143 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Hokuken": ItemData("Equipment", 588 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Tomokirimaru": ItemData("Equipment", 366 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Tomokirimaru": ItemData("Equipment", 366 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     #"Equipment - Ichimonji": ItemData("Equipment", 362 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Master Katana": ItemData("Equipment", 253 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     "Equipment - Muramasa": ItemData("Equipment", 367 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 5, Shoudu Province, Expert Zones
@@ -341,7 +341,7 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Wind Lance": ItemData("Equipment", 410 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Halberd": ItemData("Equipment", 418 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Beaurior Rock, Expert Zones
     #"Equipment - Gold Spear": ItemData("Equipment", 145 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Voulge": ItemData("Equipment", 419 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Voulge": ItemData("Equipment", 419 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Radiance": ItemData("Equipment", 417 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Northern Cave, Expert Zones
     "Equipment - Partizan": ItemData("Equipment", 416 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Master Spear": ItemData("Equipment", 254 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
@@ -359,7 +359,7 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Scythe": ItemData("Equipment", 163 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Thresher": ItemData("Equipment", 294 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Grim Scythe": ItemData("Equipment", 293 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Ancient Reservoir, Advanced Zones
-    #"Equipment - Great Thresher": ItemData("Equipment", 295 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Great Thresher": ItemData("Equipment", 295 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Frost Reaper": ItemData("Equipment", 414 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Tall Tall Heights, Expert Zones
     #"Equipment - Gold Scythe": ItemData("Equipment", 147 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Ember Scythe": ItemData("Equipment", 589 + equipment_index_offset, ItemClassification.useful),
@@ -381,16 +381,16 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Battle Bow": ItemData("Equipment", 297 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     #"Equipment - Composite Bow": ItemData("Equipment", 296 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Habins Bow": ItemData("Equipment", 222 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Razor Bow": ItemData("Equipment", 298 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Razor Bow": ItemData("Equipment", 298 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Elven Bow": ItemData("Equipment", 421 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Gold Bow": ItemData("Equipment", 149 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Spore Shooter": ItemData("Equipment", 180 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - War Bow": ItemData("Equipment", 300 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - War Bow": ItemData("Equipment", 300 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Siege Bow": ItemData("Equipment", 301 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Rune Bow": ItemData("Equipment", 299 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Master Bow": ItemData("Equipment", 256 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     #"Equipment - Panakeia": ItemData("Equipment", 530 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Artemis": ItemData("Equipment", 281 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
+    "Equipment - Artemis": ItemData("Equipment", 281 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
     "Equipment - Dream Hunter": ItemData("Equipment", 420 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 1), #Tier 5, Castle Sequoia, End-Game Zones
     #"Equipment - Diamond Bow": ItemData("Equipment", 150 + equipment_index_offset, ItemClassification.useful),
 
@@ -409,12 +409,12 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Knockout Stick": ItemData("Equipment", 335 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3 Beating, Sara Sara Bazaar, Advanced Zones
     "Equipment - Skullbasher": ItemData("Equipment", 427 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3 Beating, Shop, Advanced Zones
     #"Equipment - Future Sight": ItemData("Equipment", 561 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Battle Staff": ItemData("Equipment", 67 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Beating, Shop, Expert Zones
+    "Equipment - Battle Staff": ItemData("Equipment", 67 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3 Beating, Shop, Expert Zones
     #"Equipment - Digested Staff": ItemData("Equipment", 228 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Natures Gift": ItemData("Equipment", 423 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3 Regular, Shop, Advanced Zones
     "Equipment - Life Jewel": ItemData("Equipment", 422 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3 Regular, Overpass (Dione Shrine), Advanced (Expert) Zones
     #"Equipment - Gold Staff": ItemData("Equipment", 151 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - War Staff": ItemData("Equipment", 428 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 Beating, Shop, Expert Zones
+    "Equipment - War Staff": ItemData("Equipment", 428 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4 Beating, Shop, Expert Zones
     "Equipment - Apprentice": ItemData("Equipment", 424 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4 Regular, Northern Cave, Expert Zones
     "Equipment - Sages Walker": ItemData("Equipment", 425 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4 Regular, Slip Glide Ride, Expert Zones
     "Equipment - Master Staff": ItemData("Equipment", 257 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4 Regular, Shop, Advanced Zones
@@ -438,10 +438,10 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Storm Rod": ItemData("Equipment", 267 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Sara Sara Bazaar, Advanced Zones
     "Equipment - Baton": ItemData("Equipment", 434 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Cursegiver": ItemData("Equipment", 432 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, The Undercity, Expert Zones
-    #"Equipment - Effigy": ItemData("Equipment", 433 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Effigy": ItemData("Equipment", 433 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Gold Wand": ItemData("Equipment", 153 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Rune Wand": ItemData("Equipment", 435 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Lands End, Expert Zones
-    #"Equipment - Sentinel Rod": ItemData("Equipment", 431 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Sentinel Rod": ItemData("Equipment", 431 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Stardust Wand": ItemData("Equipment", 430 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Eaclaneya, Expert Zones
     "Equipment - Master Wand": ItemData("Equipment", 258 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     #"Equipment - Aura Focus": ItemData("Equipment", 278 + equipment_index_offset, ItemClassification.useful),
@@ -463,10 +463,10 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Grimoire": ItemData("Equipment", 438 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Blank Pages": ItemData("Equipment", 437 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Sara Sara Beach, Advanced Zones
     "Equipment - Tome of Light": ItemData("Equipment", 439 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Beaurior Volcano, Expert Zones
-    #"Equipment - Hydrology": ItemData("Equipment", 441 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Hydrology": ItemData("Equipment", 441 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Gold Pages": ItemData("Equipment", 155 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Dark Gospel": ItemData("Equipment", 440 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Beaurior Volcano, Expert Zones
-    #"Equipment - Divination": ItemData("Equipment", 442 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Divination": ItemData("Equipment", 442 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Malifice": ItemData("Equipment", 443 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Shoudu Province, Expert Zones
     "Equipment - Master Pages": ItemData("Equipment", 259 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     #"Equipment - Codex": ItemData("Equipment", 436 + equipment_index_offset, ItemClassification.useful),
@@ -486,17 +486,17 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Silver Shield": ItemData("Equipment", 507 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Artisan Shield": ItemData("Equipment", 168 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Cross Shield": ItemData("Equipment", 444 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Brass Cross": ItemData("Equipment", 448 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Brass Cross": ItemData("Equipment", 448 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Blood Shield": ItemData("Equipment", 560 + equipment_index_offset, ItemClassification.useful),
     "Equipment - The Immovable": ItemData("Equipment", 451 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
-    #"Equipment - Cross Guard": ItemData("Equipment", 446 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Cross Guard": ItemData("Equipment", 446 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Mages Platter": ItemData("Equipment", 452 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Salmon River, Advanced Zones
     #"Equipment - Gold Shield": ItemData("Equipment", 447 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Bulkwark": ItemData("Equipment", 449 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Bulkwark": ItemData("Equipment", 449 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Flame Guard": ItemData("Equipment", 450 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Wizards Wall": ItemData("Equipment", 453 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Shoudu Province, Expert Zones
     "Equipment - Master Shield": ItemData("Equipment", 260 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
-    #"Equipment - Turtle Shell": ItemData("Equipment", 445 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
+    "Equipment - Turtle Shell": ItemData("Equipment", 445 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
     "Equipment - Tower Shield": ItemData("Equipment", 344 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 5, Jidamba Tangle, Expert Zones
     "Equipment - Nomads Guard": ItemData("Equipment", 288 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 5, Continental Tram, Expert Zones
     #"Equipment - Ether Shield": ItemData("Equipment", 277 + equipment_index_offset, ItemClassification.useful),
@@ -516,10 +516,10 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Silver Helm": ItemData("Equipment", 509 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Artisan Helm": ItemData("Equipment", 169 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Orion Barbut": ItemData("Equipment", 465 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Iron Barbut": ItemData("Equipment", 468 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Iron Barbut": ItemData("Equipment", 468 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Horned Helm": ItemData("Equipment", 464 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Helm": ItemData("Equipment", 469 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Cross Helm": ItemData("Equipment", 466 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Cross Helm": ItemData("Equipment", 466 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Insignia Helm": ItemData("Equipment", 470 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Tall Tall Heights, Expert Zones
     "Equipment - Demon Helm": ItemData("Equipment", 467 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Master Helm": ItemData("Equipment", 261 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
@@ -542,13 +542,13 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Mail": ItemData("Equipment", 170 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Orion Armor": ItemData("Equipment", 455 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     #"Equipment - Plate of Tiger": ItemData("Equipment", 129 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Plate Mail": ItemData("Equipment", 460 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Plate Mail": ItemData("Equipment", 460 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Knights Plate": ItemData("Equipment", 456 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, The Undercity, Expert Zones
     "Equipment - Bone Mail": ItemData("Equipment", 462 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Mail": ItemData("Equipment", 459 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Sky Armor": ItemData("Equipment", 461 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Shoudu Province, Expert Zones
     "Equipment - Plate of Lion": ItemData("Equipment", 130 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Slip Glide Ride, Expert Zones
-    #"Equipment - Dragon Mail": ItemData("Equipment", 457 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Dragon Mail": ItemData("Equipment", 457 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Demon Plate": ItemData("Equipment", 458 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Master Mail": ItemData("Equipment", 262 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     #"Equipment - Construct Mail": ItemData("Equipment", 272 + equipment_index_offset, ItemClassification.useful),
@@ -578,16 +578,16 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Cap": ItemData("Equipment", 171 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Combat Band": ItemData("Equipment", 483 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Red Cap": ItemData("Equipment", 233 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Ancient Reservoir, Advanced Zones
-    #"Equipment - Bandana": ItemData("Equipment", 484 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Bandana": ItemData("Equipment", 484 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Suitor Hat": ItemData("Equipment", 485 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     #"Equipment - Gold Cap": ItemData("Equipment", 520 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Red Hat": ItemData("Equipment", 480 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Pirate Hat": ItemData("Equipment", 481 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Ice fisher in Tall Tall Heights; Tier 4, Tall Tall Heights, Expert Zones
-    #"Equipment - Tall Tall Hat": ItemData("Equipment", 486 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Tall Tall Hat": ItemData("Equipment", 486 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Master Cap": ItemData("Equipment", 263 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
     "Equipment - Battle Band": ItemData("Equipment", 345 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 1), #Tier 5, The Sequoia, End-Game Zones
     "Equipment - Captains Hat": ItemData("Equipment", 482 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 5, Sara Sara Bazaar, Advanced Zones
-    #"Equipment - Red Headgear": ItemData("Equipment", 487 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
+    "Equipment - Red Headgear": ItemData("Equipment", 487 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
     #"Equipment - Diamond Cap": ItemData("Equipment", 238 + equipment_index_offset, ItemClassification.useful),
 
     #Medium Body
@@ -604,16 +604,16 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Artisan Vest": ItemData("Equipment", 172 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Power Vest": ItemData("Equipment", 472 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
     "Equipment - Red Coat": ItemData("Equipment", 57 + equipment_index_offset, ItemClassification.useful, 0, 1), #Tier 3, Ancient Reservoir, Advanced Zones
-    #"Equipment - Drifters Vest": ItemData("Equipment", 474 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Drifters Vest": ItemData("Equipment", 474 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Bandage Wrap": ItemData("Equipment", 558 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Gaia Vest": ItemData("Equipment", 473 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     "Equipment - Brigandine": ItemData("Equipment", 477 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, The Undercity, Expert Zones
     #"Equipment - Gold Vest": ItemData("Equipment", 521 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Onion Gi": ItemData("Equipment", 475 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Martial Vest": ItemData("Equipment", 478 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Martial Vest": ItemData("Equipment", 478 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Judo Gi": ItemData("Equipment", 479 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Tall Tall Heights, Expert Zones
     "Equipment - Master Vest": ItemData("Equipment", 264 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
-    #"Equipment - Quintar Pelt": ItemData("Equipment", 493 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
+    "Equipment - Quintar Pelt": ItemData("Equipment", 493 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 5, Shop, Expert Zones
     "Equipment - Shadow Gi": ItemData("Equipment", 347 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 5, Shoudu Province, Expert Zones
     #"Equipment - Rex Vest": ItemData("Equipment", 476 + equipment_index_offset, ItemClassification.useful),
     #"Equipment - Slime Coat": ItemData("Equipment", 524 + equipment_index_offset, ItemClassification.useful),
@@ -640,15 +640,15 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Silver Crown": ItemData("Equipment", 517 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Artisan Crown": ItemData("Equipment", 173 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Clerics Hood": ItemData("Equipment", 341 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Wizards Hat": ItemData("Equipment", 340 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Wizards Hat": ItemData("Equipment", 340 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Fairys Crown": ItemData("Equipment", 352 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Quilted Hat": ItemData("Equipment", 353 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Quilted Hat": ItemData("Equipment", 353 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Blood Hat": ItemData("Equipment", 559 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Plague Mask": ItemData("Equipment", 342 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Shoudu Province, Expert Zones
     "Equipment - Guard Crown": ItemData("Equipment", 356 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Beaurior Rock, Expert Zones
     #"Equipment - Gold Crown": ItemData("Equipment", 522 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Bronze Hairpin": ItemData("Equipment", 34 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tall Tall Heights fisher; Tier 4, Tall Tall Heights, Expert Zones
-    #"Equipment - Regen Crown": ItemData("Equipment", 343 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Regen Crown": ItemData("Equipment", 343 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Ravens Hood": ItemData("Equipment", 348 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
     "Equipment - Celestial Crown": ItemData("Equipment", 52 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Eaclaneya, Expert Zones
     "Equipment - Master Crown": ItemData("Equipment", 265 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Advanced Zones
@@ -671,12 +671,12 @@ item_table: Dict[str, ItemData] = {
     #"Equipment - Silver Cape": ItemData("Equipment", 519 + equipment_index_offset, ItemClassification.useful),
     "Equipment - Artisan Shirt": ItemData("Equipment", 174 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 2, Shop, Advanced Zones
     "Equipment - Wizards Robe": ItemData("Equipment", 124 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Advanced Zones
-    #"Equipment - Clerics Robe": ItemData("Equipment", 123 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Clerics Robe": ItemData("Equipment", 123 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     #"Equipment - Cosplay Garb": ItemData("Equipment", 336 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Sturdy Cape": ItemData("Equipment", 359 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
+    "Equipment - Sturdy Cape": ItemData("Equipment", 359 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 3, Shop, Expert Zones
     "Equipment - Shelter Dress": ItemData("Equipment", 357 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 3, Beaurior Rock, Expert Zones
     #"Equipment - Gold Robe": ItemData("Equipment", 523 + equipment_index_offset, ItemClassification.useful),
-    #"Equipment - Winter Cape": ItemData("Equipment", 325 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
+    "Equipment - Winter Cape": ItemData("Equipment", 325 + equipment_index_offset, ItemClassification.useful, 0, 0, 0, 0, 0, 0, 1), #Tier 4, Shop, Expert Zones
     "Equipment - Blue Cape": ItemData("Equipment", 360 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Lands End, Expert Zones
     "Equipment - Seekers Garb": ItemData("Equipment", 324 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Slip Glide Ride, Expert Zones
     "Equipment - Ravens Cloak": ItemData("Equipment", 349 + equipment_index_offset, ItemClassification.useful, 0, 0, 1), #Tier 4, Jidamba Tangle, Expert Zones
@@ -1289,8 +1289,8 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Longsword",
     "Equipment - Scimitar",
     "Equipment - War Sword",
-    # "Equipment - Highland Blade",
-    # "Equipment - Crystal Sword",
+    "Equipment - Highland Blade",
+    "Equipment - Crystal Sword",
     "Equipment - Master Sword",
     "Equipment - Master Bigsword",
 
@@ -1301,9 +1301,9 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Broadaxe",
     "Equipment - Artisan Axe",
     "Equipment - War Axe",
-    # "Equipment - Berserker Axe",
+    "Equipment - Berserker Axe",
     "Equipment - Master Axe",
-    # "Equipment - Ancient Axe",
+    "Equipment - Ancient Axe",
     "Equipment - Master Bigaxe",
 
     # Daggers
@@ -1314,10 +1314,10 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Rondel",
     "Equipment - Artisan Dagger",
     "Equipment - Janbiya",
-    # "Equipment - Sai",
-    # "Equipment - Kodachi",
-    # "Equipment - Fanged Knife",
-    # "Equipment - Poignard",
+    "Equipment - Sai",
+    "Equipment - Kodachi",
+    "Equipment - Fanged Knife",
+    "Equipment - Poignard",
     "Equipment - Master Dagger",
 
     # Rapiers
@@ -1327,17 +1327,17 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Scarlette",
     "Equipment - Artisan Rapier",
     "Equipment - Vulture",
-    # "Equipment - Falcon Dance",
-    # "Equipment - Epee",
+    "Equipment - Falcon Dance",
+    "Equipment - Epee",
     "Equipment - Master Rapier",
 
     # Katanas
     "Equipment - Artisan Katana",
     "Equipment - Nansen",
-    # "Equipment - Mitsutada",
-    # "Equipment - Hitofuri",
-    # "Equipment - Kokaiji",
-    # "Equipment - Tomokirimaru",
+    "Equipment - Mitsutada",
+    "Equipment - Hitofuri",
+    "Equipment - Kokaiji",
+    "Equipment - Tomokirimaru",
     "Equipment - Master Katana",
 
     # Spears
@@ -1345,14 +1345,14 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Javelin",
     "Equipment - Artisan Spear",
     "Equipment - Wind Lance",
-    # "Equipment - Voulge",
+    "Equipment - Voulge",
     "Equipment - Master Spear",
 
     # Scythes
     "Equipment - War Scythe",
     "Equipment - Artisan Scythe",
     "Equipment - Thresher",
-    # "Equipment - Great Thresher",
+    "Equipment - Great Thresher",
     "Equipment - Master Scythe",
 
     # Bows
@@ -1361,10 +1361,10 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Artisan Bow",
     "Equipment - Battle Bow",
     "Equipment - Composite Bow",
-    # "Equipment - Razor Bow",
-    # "Equipment - War Bow",
+    "Equipment - Razor Bow",
+    "Equipment - War Bow",
     "Equipment - Master Bow",
-    # "Equipment - Artemis",
+    "Equipment - Artemis",
 
     # Staves
     "Equipment - Short Staff",
@@ -1373,9 +1373,9 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Maplewood",
     "Equipment - Artisan Staff",
     "Equipment - Skullbasher",
-    # "Equipment - Battle Staff",
+    "Equipment - Battle Staff",
     "Equipment - Natures Gift",
-    # "Equipment - War Staff",
+    "Equipment - War Staff",
     "Equipment - Master Staff",
 
     # Wands
@@ -1385,8 +1385,8 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Maple Wand",
     "Equipment - Artisan Wand",
     "Equipment - Baton",
-    # "Equipment - Effigy",
-    # "Equipment - Sentinel Rod",
+    "Equipment - Effigy",
+    "Equipment - Sentinel Rod",
     "Equipment - Master Wand",
 
     # Books
@@ -1395,8 +1395,8 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Encyclopedia",
     "Equipment - Artisan Pages",
     "Equipment - Grimoire",
-    # "Equipment - Hydrology",
-    # "Equipment - Divination",
+    "Equipment - Hydrology",
+    "Equipment - Divination",
     "Equipment - Master Pages",
 
     # Armor
@@ -1406,11 +1406,11 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Duelling Shield",
     "Equipment - Artisan Shield",
     "Equipment - Cross Shield",
-    # "Equipment - Brass Cross",
-    # "Equipment - Cross Guard",
-    # "Equipment - Bulkwark",
+    "Equipment - Brass Cross",
+    "Equipment - Cross Guard",
+    "Equipment - Bulkwark",
     "Equipment - Master Shield",
-    # "Equipment - Turtle Shell",
+    "Equipment - Turtle Shell",
 
     # Heavy Head
     "Equipment - Chain Helm",
@@ -1420,8 +1420,8 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Scale Helm",
     "Equipment - Artisan Helm",
     "Equipment - Orion Barbut",
-    # "Equipment - Iron Barbut",
-    # "Equipment - Cross Helm",
+    "Equipment - Iron Barbut",
+    "Equipment - Cross Helm",
     "Equipment - Master Helm",
 
     # Heavy Body
@@ -1431,8 +1431,8 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Scale Mail",
     "Equipment - Artisan Mail",
     "Equipment - Orion Armor",
-    # "Equipment - Plate Mail",
-    # "Equipment - Dragon Mail",
+    "Equipment - Plate Mail",
+    "Equipment - Dragon Mail",
     "Equipment - Master Mail",
 
     # Medium Head
@@ -1442,10 +1442,10 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Vikings Hat",
     "Equipment - Artisan Cap",
     "Equipment - Combat Band",
-    # "Equipment - Bandana",
-    # "Equipment - Tall Tall Hat",
+    "Equipment - Bandana",
+    "Equipment - Tall Tall Hat",
     "Equipment - Master Cap",
-    # "Equipment - Red Headgear",
+    "Equipment - Red Headgear",
 
     # Medium Body
     "Equipment - Leather Outfit",
@@ -1455,10 +1455,10 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Combat Vest",
     "Equipment - Artisan Vest",
     "Equipment - Power Vest",
-    # "Equipment - Drifters Vest",
-    # "Equipment - Martial Vest",
+    "Equipment - Drifters Vest",
+    "Equipment - Martial Vest",
     "Equipment - Master Vest",
-    # "Equipment - Quintar Pelt",
+    "Equipment - Quintar Pelt",
 
     # Light Head
     "Equipment - Hemp Hood",
@@ -1467,9 +1467,9 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Holy Miter",
     "Equipment - Artisan Crown",
     "Equipment - Clerics Hood",
-    # "Equipment - Wizards Hat",
-    # "Equipment - Quilted Hat",
-    # "Equipment - Regen Crown",
+    "Equipment - Wizards Hat",
+    "Equipment - Quilted Hat",
+    "Equipment - Regen Crown",
     "Equipment - Master Crown",
 
     # Light Body
@@ -1479,9 +1479,9 @@ non_progressive_equipment: Tuple[str, ...] = (
     "Equipment - Silk Shirt",
     "Equipment - Artisan Shirt",
     "Equipment - Wizards Robe",
-    # "Equipment - Clerics Robe",
-    # "Equipment - Sturdy Cape",
-    # "Equipment - Winter Cape",
+    "Equipment - Clerics Robe",
+    "Equipment - Sturdy Cape",
+    "Equipment - Winter Cape",
     "Equipment - Master Cape",
 
     #Accessories aren't replaced by progressive items
