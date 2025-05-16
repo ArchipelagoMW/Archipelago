@@ -119,9 +119,9 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # AP Container
         elif handler:
             data = zfile.open(file, "r").read()
-            patch = handler(BytesIO(data))
-            patch.read()
-            files[patch.player] = data
+            with zipfile.ZipFile(BytesIO(data)) as container:
+                player = json.loads(container.open("archipelago.json").read())["player"]
+            files[player] = data
 
         # Spoiler
         elif file.filename.endswith(".txt"):
