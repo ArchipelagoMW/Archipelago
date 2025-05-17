@@ -121,46 +121,28 @@ def handle_uri(path: str, launch_args: tuple[str, ...]) -> None:
     launch_args = (path, *launch_args)
     client_component = []
     text_client_component = None
-    if "game" in queries:
-        game = queries["game"][0]
-    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
-        game = "Archipelago"
+    game = queries["game"][0]
     for component in components:
         if component.supports_uri and component.game_name == game:
             client_component.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import MDButton, MDButtonText
-    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
-    from kivymd.uix.divider import MDDivider
 
     if not client_component:
         run_component(text_client_component, *launch_args)
         return
     else:
-        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
-        component_buttons = [MDDivider()]
-        for component in [text_client_component, *client_component]:
-            component_buttons.append(MDButton(
-                MDButtonText(text=component.display_name),
-                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
-                style="text"
-            ))
-        component_buttons.append(MDDivider())
-
-    MDDialog(
-        # Headline
-        MDDialogHeadlineText(text="Connect to Multiworld"),
-        # Text
-        popup_text,
-        # Content
-        MDDialogContentContainer(
-            *component_buttons,
-            orientation="vertical"
-        ),
-
-    ).open()
+        from kvui import ButtonsPrompt
+        component_options = {
+            text_client_component.display_name: text_client_component,
+            **{component.display_name: component for component in client_component}
+        }
+        popup = ButtonsPrompt("Connect to Multiworld",
+                              "Select client to open and connect with.",
+                              lambda component_name: run_component(component_options[component_name], *launch_args),
+                              *component_options.keys())
+        popup.open()
 
 
 def identify(path: None | str) -> tuple[None | str, None | Component]:
