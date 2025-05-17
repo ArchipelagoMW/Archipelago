@@ -137,7 +137,7 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        game_options = settings.get_settings().wargroove_options
+        game_options = WargrooveWorld.settings
 
         # Validate the AppData directory with Wargroove save data.
         # By default, Windows sets an environment variable we can leverage.
@@ -165,7 +165,7 @@ class WargrooveContext(CommonContext):
 
         # Check for the Wargroove game executable path.
         # This should always be set regardless of the OS.
-        root_directory = os.path.join(game_options["root_directory"])
+        root_directory = game_options["root_directory"]
         if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
             print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
                                   f"\"{root_directory}/win64_bin/\".\n"
@@ -196,7 +196,7 @@ class WargrooveContext(CommonContext):
                       os.path.join(mods_directory, "modAssets.dat"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
-        for i in range(0, len(resources)):
+        for resource, destination in zip(resources, file_paths):
             file_data = pkgutil.get_data("worlds.wargroove", resources[i])
             if file_data is None:
                 print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
@@ -262,9 +262,8 @@ class WargrooveContext(CommonContext):
                     pass
 
             self.player_stored_units_key = f"wargroove_player_units_{self.team}"
-            self.set_notify(self.player_stored_units_key)
             self.ai_stored_units_key = f"wargroove_ai_units_{self.team}"
-            self.set_notify(self.ai_stored_units_key)
+            self.set_notify(self.player_stored_units_key, self.ai_stored_units_key)
 
             self.update_commander_data()
             self.ui.update_tracker()
