@@ -2,12 +2,6 @@ from typing import Union, Iterable, Tuple
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from ..mods.logic.magic_logic import MagicLogicMixin
 from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region, LogicRegion
@@ -40,7 +34,7 @@ class ToolLogicMixin(BaseLogicMixin):
         self.tool = ToolLogic(*args, **kwargs)
 
 
-class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, MagicLogicMixin]]):
+class ToolLogic(BaseLogic):
 
     def has_all_tools(self, tools: Iterable[Tuple[str, str]]):
         return self.logic.and_(*(self.logic.tool.has_tool(tool, material) for tool, material in tools))
