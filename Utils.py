@@ -1079,7 +1079,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
         return False
     return isinstance(obj, typing.Iterable)
 
-def data_to_bps_patch(data, source):
+def data_to_bps_patch(data):
     """
     Accepts data of type:
     {
@@ -1089,6 +1089,7 @@ def data_to_bps_patch(data, source):
                 "address": number
                 "length": number
                 "data": bytearray
+            }
         ]
     }"""
 
@@ -1104,5 +1105,4 @@ def data_to_bps_patch(data, source):
         current_ptr += len(block["data"])
     if current_ptr < data["length"]:
         patch.append(SourceRead(data["length"] - current_ptr))
-    patch.append(SourceCRC32(zlib.crc32(source)))
     return patch

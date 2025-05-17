@@ -1,4 +1,4 @@
-ORIGINAL_ROM_CRC32 = 0x1F1C08FB
+ORIGINAL_EMERALD_CRC32 = 0x1F1C08FB
 
 POKEMON_NAME_TO_ID = { 
     'Bulbasaur': 1,
@@ -201,7 +201,7 @@ POKEMON_NAME_TO_ID = {
     'Murkrow': 198,
     'Slowking': 199,
     'Misdreavus': 200,
-    'Unown': 201,
+    'Unown A': 201,
     'Wobbuffet': 202,
     'Girafarig': 203,
     'Pineco': 204,
@@ -386,7 +386,34 @@ POKEMON_NAME_TO_ID = {
     'Groudon': 383,
     'Rayquaza': 384,
     'Jirachi': 385,
-    'Deoxys': 386
+    'Deoxys': 386,
+    'Unown B': 387,
+    'Unown C': 388,
+    'Unown D': 389,
+    'Unown E': 390,
+    'Unown F': 391,
+    'Unown G': 392,
+    'Unown H': 393,
+    'Unown I': 394,
+    'Unown J': 395,
+    'Unown K': 396,
+    'Unown L': 397,
+    'Unown M': 398,
+    'Unown N': 399,
+    'Unown O': 400,
+    'Unown P': 401,
+    'Unown Q': 402,
+    'Unown R': 403,
+    'Unown S': 404,
+    'Unown T': 405,
+    'Unown U': 406,
+    'Unown V': 407,
+    'Unown W': 408,
+    'Unown X': 409,
+    'Unown Y': 410,
+    'Unown Z': 411,
+    'Unown Exclamation Mark': 412,
+    'Unown Question Mark': 413
 }
 POKEMON_ID_TO_INTERNAL_ID = {
     252: 277,
@@ -523,7 +550,34 @@ POKEMON_ID_TO_INTERNAL_ID = {
     383: 405,
     384: 406,
     385: 409,
-    386: 410
+    386: 410,
+    387: 413,
+    388: 414,
+    389: 415,
+    390: 416,
+    391: 417,
+    392: 418,
+    393: 419,
+    394: 420,
+    395: 421,
+    396: 422,
+    397: 423,
+    398: 424,
+    399: 425,
+    400: 426,
+    401: 427,
+    402: 428,
+    403: 429,
+    404: 430,
+    405: 431,
+    406: 432,
+    407: 433,
+    408: 434,
+    409: 435,
+    410: 436,
+    411: 437,
+    412: 438,
+    413: 439
 }
 POKEMON_TYPES = [
     'Normal',
@@ -1304,6 +1358,32 @@ VALID_OVERWORLD_PALETTE = [
     0, 0, 0
 ]
 
+VALID_UNOWN_PALETTE = [
+    205, 205, 172,
+    -1,  -1,  -1,
+    -1,  -1,  -1,
+    -1,  -1,  -1,
+    222, 222, 222,
+    255, 255, 255,
+    16,  16,  16,
+    164, 164, 164,
+    115, 115, 115,
+    82,  82,  82
+]
+
+VALID_UNOWN_SHINY_PALETTE = [
+    205, 205, 172,
+    -1,  -1,  -1,
+    -1,  -1,  -1,
+    -1,  -1,  -1,
+    98,  205, 255,
+    255, 255, 255,
+    16,  16,  16,
+    41,  115, 255,
+    32,  65,  156,
+    49,  57,  106
+]
+
 SPRITES_REQUIREMENTS = {
     'pokemon_front_anim':        { 'frames': 2,  'width': 64, 'height': 64 },
     'pokemon_back':              { 'frames': 1,  'width': 64, 'height': 64 },
@@ -1331,5 +1411,11 @@ SPRITES_REQUIREMENTS_EXCEPTIONS = {
     'Deoxys': {
         'pokemon_back':       { 'frames': 2 },
         'pokemon_icon':       { 'frames': 4 },
+    },
+    'Unown A': {
+        'pokemon_front_anim':  { 'palette': VALID_UNOWN_PALETTE },
+        'pokemon_back':        { 'palette': VALID_UNOWN_PALETTE },
+        'pokemon_sfront_anim': { 'palette': VALID_UNOWN_SHINY_PALETTE },
+        'pokemon_sback':       { 'palette': VALID_UNOWN_SHINY_PALETTE },
     }
 }
