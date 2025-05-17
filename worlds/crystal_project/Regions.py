@@ -195,8 +195,9 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Shoudu Waterfront": logic.has_horizontal_movement,
         "Okimoto N.S.": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "Flyers Crag"],
-        {"Flyers Crag": logic.has_glide and logic.has_vertical_movement})
+    multiworld.get_region("Okimoto N.S.", player).add_exits(["Cobblestone Crag", "The Open Sea", "Flyers Crag"],
+        {"The Open Sea": logic.has_swimming,
+        "Flyers Crag": (logic.has_glide and logic.has_vertical_movement) or logic.has_swimming})
     multiworld.get_region("Greenshire Reprise", player).add_exits(["Capital Sequoia", "Salmon Pass", "Tall Tall Heights"],
         # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
         {"Salmon Pass": lambda state: (logic.has_rental_quintar and logic.has_jobs(state, 5)) or logic.has_vertical_movement,
@@ -229,18 +230,22 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
     multiworld.get_region("Salmon Bay", player).add_exits(["The Open Sea", "Salmon River"],
         {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Salmon River": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2)})
-    multiworld.get_region("The Open Sea", player).add_exits(["Jidamba Tangle", "The Deep Sea", "Shoudu Province", "Proving Meadows", "Seaside Cliffs", "Beaurior Volcano", "Sara Sara Beach", "Sara Sara Bazaar", "Salmon Bay"],
-        {"Jidamba Tangle": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
-        "The Deep Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
-        "Shoudu Province": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+    multiworld.get_region("The Open Sea", player).add_exits(["Seaside Cliffs", "Proving Meadows", "Okimoto N.S.", "Shoudu Waterfront", "Sara Sara Bazaar", "Sara Sara Beach","Salmon Bay", "Shoudu Province", "The Undercity", "Beaurior Volcano", "Jidamba Tangle", "The Deep Sea"],
+        {"Seaside Cliffs": logic.has_swimming,
         "Proving Meadows": logic.has_swimming,
-        "Seaside Cliffs": logic.has_swimming,
-        "Beaurior Volcano": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
-        "Sara Sara Beach": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+        "Okimoto N.S.": logic.has_swimming,
+        "Shoudu Waterfront": logic.has_swimming,
+        "The Undercity": logic.has_swimming,
         "Sara Sara Bazaar": logic.has_swimming,
-        "Salmon Bay": logic.has_swimming})
-    multiworld.get_region("Shoudu Waterfront", player).add_exits(["Shoudu Province", "Cobblestone Crag"],
-        {"Shoudu Province": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "Sara Sara Beach": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+        "Salmon Bay": logic.has_swimming,
+        "Shoudu Province": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+        "Beaurior Volcano": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
+        "Jidamba Tangle": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "The Deep Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
+    multiworld.get_region("Shoudu Waterfront", player).add_exits(["The Open Sea", "Shoudu Province", "Cobblestone Crag"],
+        {"The Open Sea": logic.has_swimming,
+        "Shoudu Province": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Cobblestone Crag": logic.has_horizontal_movement})
     multiworld.get_region("Shoudu Province", player).add_exits(["Sara Sara Bazaar", "Shoudu Waterfront", "Ganymede Shrine", "The Undercity", "Quintar Reserve"],
         {"Sara Sara Bazaar": lambda state: state.has("Item - Ferry Pass", world.player),
@@ -300,7 +305,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Tall Tall Heights": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
         "Quintar Reserve": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4)})
     multiworld.get_region("Flyers Crag", player).add_exits(["Okimoto N.S.","Jidamba Tangle"],
-        {"Okimoto N.S.": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 2),
+        {"Okimoto N.S.": lambda state: logic.is_area_in_level_range(state, 2),
         "Jidamba Tangle": lambda state: logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jidamba Tangle", player).add_exits(["The Open Sea", "Jidamba Eaclaneya"],
         {"Jidamba Eaclaneya": lambda state: logic.has_jidamba_keys and logic.is_area_in_level_range(state, 5),
