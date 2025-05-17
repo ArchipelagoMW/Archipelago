@@ -2,9 +2,10 @@ import itertools
 import logging
 import os
 import threading
+import typing
 import unittest
+from collections.abc import Iterable
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Optional, List, Union, Any, cast
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, Region
 from test.bases import WorldTestBase
@@ -37,9 +38,9 @@ class SVTestCase(unittest.TestCase):
     """Set False to run tests that take long"""
 
     @contextmanager
-    def solo_world_sub_test(self, msg: Optional[str] = None,
+    def solo_world_sub_test(self, msg: str | None = None,
                             /,
-                            world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
+                            world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
                             *,
                             seed=DEFAULT_TEST_SEED,
                             world_caching=True,
@@ -58,7 +59,6 @@ class SVTestCase(unittest.TestCase):
 class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     game = "Stardew Valley"
     world: StardewValleyWorld
-    player: ClassVar[int] = 1
 
     seed = DEFAULT_TEST_SEED
 
@@ -122,13 +122,13 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
             if item.name != item_to_not_collect:
                 self.multiworld.state.collect(item)
 
-    def get_real_locations(self) -> List[Location]:
+    def get_real_locations(self) -> list[Location]:
         return [location for location in self.multiworld.get_locations(self.player) if location.address is not None]
 
-    def get_real_location_names(self) -> List[str]:
+    def get_real_location_names(self) -> list[str]:
         return [location.name for location in self.get_real_locations()]
 
-    def collect(self, item: Union[str, Item, Iterable[Item]], count: int = 1) -> Union[None, Item, List[Item]]:
+    def collect(self, item: str | Item | Iterable[Item], count: int = 1) -> Item | list[Item] | None:
         assert count > 0
 
         if not isinstance(item, str):
@@ -195,13 +195,13 @@ pre_generated_worlds = {}
 
 
 @contextmanager
-def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
+def solo_multiworld(world_options: dict[str | type[StardewValleyOption], typing.Any] | None = None,
                     *,
                     seed=DEFAULT_TEST_SEED,
                     world_caching=True) -> Iterable[tuple[MultiWorld, StardewValleyWorld]]:
     if not world_caching:
         multiworld = setup_solo_multiworld(world_options, seed, _cache={})
-        yield multiworld, cast(StardewValleyWorld, multiworld.worlds[1])
+        yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])
     else:
         multiworld = setup_solo_multiworld(world_options, seed)
         try:
@@ -210,7 +210,7 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
             original_itempool = multiworld.itempool.copy()
             unfilled_locations = multiworld.get_unfilled_locations(1)
 
-            yield multiworld, cast(StardewValleyWorld, multiworld.worlds[1])
+            yield multiworld, typing.cast(StardewValleyWorld, multiworld.worlds[1])
 
             multiworld.state = original_state
             multiworld.itempool = original_itempool
@@ -221,9 +221,9 @@ def solo_multiworld(world_options: Optional[Dict[Union[str, StardewValleyOption]
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOption], str]] = None,
+def setup_solo_multiworld(test_options: dict[str | type[StardewValleyOption], str] | None = None,
                           seed=DEFAULT_TEST_SEED,
-                          _cache: Dict[frozenset, MultiWorld] = {},  # noqa
+                          _cache: dict[frozenset, MultiWorld] = {},  # noqa
                           _steps=gen_steps) -> MultiWorld:
     test_options = parse_class_option_keys(test_options)
 
@@ -280,7 +280,7 @@ def make_hashable(test_options, seed):
     return frozenset(test_options.items()).union({("seed", seed)})
 
 
-def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset) -> Optional[MultiWorld]:
+def search_world_cache(cache: dict[frozenset, MultiWorld], frozen_options: frozenset) -> MultiWorld | None:
     try:
         return cache[frozen_options]
     except KeyError:
@@ -290,12 +290,12 @@ def search_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: froze
         return None
 
 
-def add_to_world_cache(cache: Dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
+def add_to_world_cache(cache: dict[frozenset, MultiWorld], frozen_options: frozenset, multi_world: MultiWorld) -> None:
     # We could complete the key with all the default options, but that does not seem to improve performances.
     cache[frozen_options] = multi_world
 
 
-def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -> MultiWorld:  # noqa
+def setup_multiworld(test_options: Iterable[dict[str, int]] | None = None, seed=None) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = []
 
