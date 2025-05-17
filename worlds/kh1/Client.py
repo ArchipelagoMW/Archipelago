@@ -53,8 +53,8 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     
     def _cmd_eotw_unlock(self):
         """Prints End of the World Unlock setting"""
-        if "required_reports_door" in self.ctx.slot_data.keys():
-            if self.ctx.slot_data["required_reports_door"] > 13:
+        if "required_reports_eotw" in self.ctx.slot_data.keys():
+            if self.ctx.slot_data["required_reports_eotw"] > 13:
                 self.output("Item")
             else:
                 self.output(str(self.ctx.slot_data["required_reports_eotw"]) + " reports")
@@ -77,6 +77,31 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
             self.output(str(self.ctx.slot_data["advanced_logic"]))
         else:
             self.output("Unknown")
+    
+    def _cmd_required_postcards(self):
+        """Prints the number of postcards required if goal is set to postcards"""
+        if "required_postcards" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["required_postcards"]))
+        else:
+            self.output("Unknown")
+    
+    def _cmd_required_puppies(self):
+        """Prints the number of puppies required if goal is set to puppies"""
+        if "required_puppies" in self.ctx.slot_data.keys():
+            self.output(str(self.ctx.slot_data["required_puppies"]))
+        else:
+            self.output("Unknown")
+
+    def _cmd_communication_path(self):
+        """Opens a file browser to allow Linux users to manually set their %LOCALAPPDATA% path"""
+        directory = Utils.open_directory("Select %LOCALAPPDATA% dir", "~/.local/share/Steam/steamapps/compatdata/2552430/pfx/drive_c/users/steamuser/AppData/Local")
+        if directory:
+            directory += "/KH1FM"
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            self.ctx.game_communication_path = directory
+        else:
+            self.output(self.ctx.game_communication_path)
 
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
@@ -103,6 +128,10 @@ class KH1Context(CommonContext):
                     os.remove(root+"/"+file)
 
     async def server_auth(self, password_requested: bool = False):
+        for root, dirs, files in os.walk(self.game_communication_path):
+            for file in files:
+                if file.find("obtain") <= -1:
+                    os.remove(root+"/"+file)
         if password_requested and not self.password:
             await super(KH1Context, self).server_auth(password_requested)
         await self.get_username()
