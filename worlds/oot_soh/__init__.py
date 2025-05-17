@@ -41,16 +41,16 @@ class SohWorld(World):
     def create_items(self) -> None:
         item_pool: List[SohItem] = []
 
-        location_count: int = 4
+        location_count: int = 0
 
-        # Count total locations.
+        # Count Total Locations.
         for location_name, location_data in location_data_table.items():
-            # Ignore locations we never created.
+            # Ignore locations excluded due to options selected
             if not location_data.can_create(self):
                 continue
-                
             location_count += 1
 
+        # Add Base Progression Items
         item_pool.append(self.create_item("Progressive Bomb Bag"))
         item_pool.append(self.create_item("Progressive Bomb Bag"))
 

@@ -14,14 +14,10 @@ soh_base_id = int = 0xFF0000
 class SohItemData(NamedTuple):
     code: Optional[int] = None
     type: ItemClassification = ItemClassification.filler
-    can_create: Callable[["SohWorld"], bool] = lambda world: True
-
 
 item_data_table: Dict[str, SohItemData] = {
     "Green Rupee": SohItemData(
         code=soh_base_id + 0,
-        type=ItemClassification.progression,
-        # can_create=lambda world: world.options.death_link,
     ),
     "Blue Rupee": SohItemData(
         code=soh_base_id + 1,
@@ -31,6 +27,7 @@ item_data_table: Dict[str, SohItemData] = {
     ),
     "Progressive Bomb Bag": SohItemData(
         code=soh_base_id + 3,
+        type=ItemClassification.progression,
     ),
 }
 
