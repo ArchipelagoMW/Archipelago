@@ -51,6 +51,7 @@ class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
         """Toggles deathlink On/Off"""
         if isinstance(self.ctx, Wargroove2Context):
             self.ctx.has_death_link = not self.ctx.has_death_link
+            self.ctx.update_death_link(self.ctx.has_death_link)
             if self.ctx.has_death_link:
                 death_link_send_file = os.path.join(self.ctx.game_communication_path, "deathLinkSend")
                 if os.path.exists(death_link_send_file):
@@ -734,7 +735,6 @@ async def game_watcher(ctx: Wargroove2Context):
             ctx.syncing = False
         sending: set = set()
         victory = False
-        await ctx.update_death_link(ctx.has_death_link)
         for _root, _dirs, files in os.walk(ctx.game_communication_path):
             for file in files:
                 if file.find("send") > -1:
