@@ -3,7 +3,7 @@
 ## Required Files
 
 - Wargroove with the Double Trouble DLC installed through Steam on Windows and Linux
-  - Only the Steam version on Windows and Linux is supported. MAC, Switch, Xbox, and Playstation are not supported.
+  - Only the Steam versions on Windows and Linux are supported. MAC, Switch, Xbox, and Playstation are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Backup playerProgress files
