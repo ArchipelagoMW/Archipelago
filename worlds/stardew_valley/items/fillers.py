@@ -1,5 +1,4 @@
 from random import Random
-from typing import List
 
 from BaseClasses import Item, ItemClassification
 from .filters import remove_excluded, remove_limited_amount_resource_packs, remove_already_included_maximum_one
@@ -10,14 +9,14 @@ from ..strings.ap_names.buff_names import Buff
 
 
 def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
-    available_filler = get_all_filler_items(options)
+    available_filler = get_all_resource_packs_and_traps(options)
     available_filler = remove_excluded(available_filler, options)
     available_filler = remove_limited_amount_resource_packs(available_filler)
 
     return [item.name for item in available_filler]
 
 
-def get_all_filler_items(options: StardewValleyOptions) -> list[ItemData]:
+def get_all_resource_packs_and_traps(options: StardewValleyOptions) -> list[ItemData]:
     all_filler_items = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
     all_filler_items.extend(items_by_group[Group.TRASH])
     all_filler_items.extend(get_traps(options))
@@ -29,10 +28,9 @@ def get_filler_weights(options: StardewValleyOptions, all_filler_packs: list[Ite
     weights = []
     for filler in all_filler_packs:
         if filler.name in options.trap_distribution:
-            num = options.trap_distribution[filler.name]
+            weights.append(options.trap_distribution[filler.name])
         else:
-            num = options.trap_distribution.default_weight
-        weights.append(num)
+            weights.append(options.trap_distribution.default_weight)
     return weights
 
 
@@ -61,7 +59,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
                                       random: Random,
                                       already_added_items: list[Item],
                                       available_item_slots: int) -> list[Item]:
-    def filler_factory(item: ItemData):
+    def filler_factory(item: ItemData) -> Item:
         # Yes some fillers are progression. We add multiple fruit tree saplings for instance.
         if ItemClassification.progression in item.classification:
             return item_factory(item,
@@ -71,7 +69,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
 
     already_added_items_names = {item.name for item in already_added_items}
 
-    priority_fillers = get_priority_fillers(options)
+    priority_fillers = get_priority_resource_packs_buffs_and_traps(options)
     priority_fillers = remove_excluded(priority_fillers, options)
     priority_fillers = remove_already_included_maximum_one(priority_fillers, already_added_items_names)
 
@@ -83,7 +81,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     available_item_slots -= len(priority_fillers)
     already_added_items_names |= {priority_item.name for priority_item in priority_fillers}
 
-    all_fillers = get_all_filler_items(options)
+    all_fillers = get_all_resource_packs_and_traps(options)
     all_fillers.extend(get_player_buffs(options))
     all_fillers = remove_excluded(all_fillers, options)
     all_fillers = remove_already_included_maximum_one(all_fillers, already_added_items_names)
@@ -113,7 +111,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     return chosen_fillers
 
 
-def get_priority_fillers(options: StardewValleyOptions) -> list[ItemData]:
+def get_priority_resource_packs_buffs_and_traps(options: StardewValleyOptions) -> list[ItemData]:
     useful_resource_packs = items_by_group[Group.RESOURCE_PACK_USEFUL]
     buffs = get_player_buffs(options)
     traps = get_traps(options)
@@ -121,7 +119,7 @@ def get_priority_fillers(options: StardewValleyOptions) -> list[ItemData]:
     return useful_resource_packs + buffs + traps
 
 
-def get_player_buffs(options: StardewValleyOptions) -> List[ItemData]:
+def get_player_buffs(options: StardewValleyOptions) -> list[ItemData]:
     buff_option = options.enabled_filler_buffs
     allowed_buffs = []
     if BuffOptionName.luck in buff_option:
