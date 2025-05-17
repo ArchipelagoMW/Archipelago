@@ -2,7 +2,7 @@ from random import Random
 from typing import List
 
 from BaseClasses import Item, ItemClassification
-from .filters import remove_excluded, remove_limited_amount_resource_packs, remove_already_included
+from .filters import remove_excluded, remove_limited_amount_resource_packs, remove_already_included_maximum_one
 from .item_data import items_by_group, Group, ItemData, StardewItemFactory, item_table
 from ..options import StardewValleyOptions, FestivalLocations
 from ..strings.ap_names.ap_option_names import BuffOptionName
@@ -69,11 +69,11 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
                                 classification_post_fill=ItemClassification.progression_skip_balancing)
         return item_factory(item)
 
-    pre_fillers_already_added_items_names = {item.name for item in already_added_items}
+    already_added_items_names = {item.name for item in already_added_items}
 
     priority_fillers = get_priority_fillers(options)
     priority_fillers = remove_excluded(priority_fillers, options)
-    priority_fillers = remove_already_included(priority_fillers, pre_fillers_already_added_items_names)
+    priority_fillers = remove_already_included_maximum_one(priority_fillers, already_added_items_names)
 
     if available_item_slots < len(priority_fillers):
         return [filler_factory(priority_filler) for priority_filler in random.sample(priority_fillers, available_item_slots)]
@@ -81,12 +81,12 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     chosen_fillers = []
     chosen_fillers.extend([filler_factory(priority_filler) for priority_filler in priority_fillers])
     available_item_slots -= len(priority_fillers)
+    already_added_items_names |= {priority_item.name for priority_item in priority_fillers}
 
     all_fillers = get_all_filler_items(options)
     all_fillers.extend(get_player_buffs(options))
     all_fillers = remove_excluded(all_fillers, options)
-    priority_fillers_names = {item.name for item in priority_fillers}
-    all_fillers = remove_already_included(all_fillers, pre_fillers_already_added_items_names.intersection(priority_fillers_names))
+    all_fillers = remove_already_included_maximum_one(all_fillers, already_added_items_names)
 
     filler_weights = get_filler_weights(options, all_fillers)
 

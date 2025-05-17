@@ -22,10 +22,9 @@ def remove_limited_amount_resource_packs(packs: Iterable[ItemData]) -> list[Item
     ]
 
 
-def remove_already_included(items: Iterable[ItemData], already_added_items: set[str]) -> list[ItemData]:
+def remove_already_included_maximum_one(items: Iterable[ItemData], already_added_items: set[str]) -> list[ItemData]:
     return [
         item
         for item in items
-        if item.name not in already_added_items
-           or (item.has_any_group(Group.RESOURCE_PACK, Group.TRAP) and Group.MAXIMUM_ONE not in item.groups)
+        if item.name not in already_added_items or Group.MAXIMUM_ONE not in item.groups
     ]
