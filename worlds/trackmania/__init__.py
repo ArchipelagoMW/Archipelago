@@ -1,5 +1,4 @@
 import os
-import random
 
 from .options import TrackmaniaOptions, create_option_groups
 from .items import build_items, trackmania_item_groups, create_itempool, create_item, get_filler_item_name
@@ -10,7 +9,6 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
 from BaseClasses import Item, Tutorial
-from NetUtils import encode
 
 def launch_client():
     from .client import launch
@@ -73,8 +71,13 @@ class TrackmaniaWorld(World):
         medal_percent: float = float(self.options.medal_requirement.value) / 100.0
         base_search_criteria: dict = self.options.custom_series.value.get("all", {})
 
+        if self.options.series_minimum_map_number.value > self.options.series_maximum_map_number.value:
+            temp: int = self.options.series_minimum_map_number.value
+            self.options.series_minimum_map_number.value = self.options.series_maximum_map_number.value
+            self.options.series_maximum_map_number.value = temp
+
         for series in range(1, self.options.series_number.value + 1):
-            map_count: int = random.randint(self.options.series_minimum_map_number.value,
+            map_count: int = self.random.randint(self.options.series_minimum_map_number.value,
                                             self.options.series_maximum_map_number.value)
             if series == 1 and self.options.first_series_size.value > 0:
                 map_count = self.options.first_series_size.value
@@ -89,7 +92,7 @@ class TrackmaniaWorld(World):
             if "map_tags" not in search_criteria:
                 tags: list = list(self.options.map_tags.value)
                 if self.options.random_series_tags > 0 and len(tags) > 1:
-                    search_criteria["map_tags"] = [random.choice(tags)]
+                    search_criteria["map_tags"] = [self.random.choice(tags)]
                 else:
                     search_criteria["map_tags"] = tags
 
@@ -125,4 +128,4 @@ class TrackmaniaWorld(World):
         }
 
     def get_filler_item_name(self) -> str:
-        return get_filler_item_name()
+        return get_filler_item_name(self)

@@ -1,4 +1,3 @@
-import random
 from BaseClasses import Item, ItemClassification
 from .data import base_id, base_filler_id, filler_item_names
 from typing import TYPE_CHECKING
@@ -78,7 +77,7 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
 
     filler_count = spots_remaining - skip_count
     for x in range(filler_count):
-        filler_name = get_filler_item_name()
+        filler_name = get_filler_item_name(world)
         itempool += create_items(world,filler_name, 1)
 
     return itempool
@@ -104,8 +103,8 @@ def create_items(world: "TrackmaniaWorld", name: str, count: int) -> list[Item]:
 
     return itemlist
 
-def get_filler_item_name() -> str:
-    return filler_item_names[random.randint(0, len(filler_item_names)-1)]
+def get_filler_item_name(world: "TrackmaniaWorld") -> str:
+    return filler_item_names[world.random.randint(0, len(filler_item_names)-1)]
 
 def get_medal_enabled(world: "TrackmaniaWorld", medal: str) -> bool:
     match medal:

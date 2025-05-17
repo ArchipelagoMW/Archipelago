@@ -1,4 +1,3 @@
-import random
 from typing import TYPE_CHECKING
 from .items import TrackmaniaItem
 from .locations import TrackmaniaLocation, MapCheckTypes, get_map_name, get_check_type_name, get_series_name
@@ -13,7 +12,7 @@ def create_check(world: "TrackmaniaWorld", reg: Region, map_name: str, check_typ
     location = TrackmaniaLocation(world.player, check_name, world.location_name_to_id[check_name], reg)
 
     if check_type == MapCheckTypes.Target:
-        r = random.randint(0,100)
+        r = world.random.randint(0,100)
         if r <= world.options.target_progression_chance.value:
             location.progress_type = LocationProgressType.PRIORITY
         else:
