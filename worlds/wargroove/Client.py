@@ -18,7 +18,6 @@ ModuleUpdate.update()
 import Utils
 import json
 import logging
-import settings
 
 if __name__ == "__main__":
     Utils.init_logging("WargrooveClient", exception_logger="Client")
