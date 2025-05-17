@@ -262,9 +262,8 @@ class WargrooveContext(CommonContext):
                     pass
 
             self.player_stored_units_key = f"wargroove_player_units_{self.team}"
-            self.set_notify(self.player_stored_units_key)
             self.ai_stored_units_key = f"wargroove_ai_units_{self.team}"
-            self.set_notify(self.ai_stored_units_key)
+            self.set_notify(self.player_stored_units_key, self.ai_stored_units_key)
 
             self.update_commander_data()
             self.ui.update_tracker()
