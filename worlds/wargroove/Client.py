@@ -165,7 +165,7 @@ class WargrooveContext(CommonContext):
 
         # Check for the Wargroove game executable path.
         # This should always be set regardless of the OS.
-        root_directory = os.path.join(game_options["root_directory"])
+        root_directory = game_options["root_directory"]
         if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
             print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
                                   f"\"{root_directory}/win64_bin/\".\n"
