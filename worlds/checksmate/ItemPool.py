@@ -47,7 +47,7 @@ class CMItemPool:
             self._removal = ItemRemoval(self.world, self.piece_model)
         return self._removal
 
-    def create_items(self) -> None:
+    def create_items(self) -> list[Item]:
         super_sized = self.world.options.goal.value != self.world.options.goal.option_single
         self.initialize_item_tracking()
 
