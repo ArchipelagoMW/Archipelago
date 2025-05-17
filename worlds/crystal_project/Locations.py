@@ -645,17 +645,22 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Twinsies the 2nd at west waterfall base", 1145 + treasure_index_offset), #Money chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Salmon swim up", 2701 + treasure_index_offset, logic.has_swimming), #Grim Scythe chest
         LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Goat snack for later", 2915 + treasure_index_offset), #Ancient Reservoir map chest
-        LocationData("Ancient Reservoir", "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, logic.has_vertical_movement), #Fenix Juice Pouch chest
         LocationData("Ancient Reservoir", "Underpass Chest - Waterway nook between Gran & Ancient Reservoir", 3541 + treasure_index_offset, logic.has_swimming), #(64, 98, -111) 1st Underpass Scrap on main map
 
         #NPCs
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver in odd flooded room 1", 2695 + npc_index_offset), #Ingot
         LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver in odd flooded room 2", 1675 + npc_index_offset), #Ore
-        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset), #Z30_PostBossEvent;
-        LocationData("Ancient Reservoir", "Ancient Reservoir NPC - Silver in the goat digs", 2696 + npc_index_offset, logic.has_vertical_movement), #Dust
 
         #Crystals
         LocationData("Ancient Reservoir", "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
+
+        #Ibek Cave
+        #Treasure chests
+        LocationData("Ibek Cave", "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, logic.has_vertical_movement),  # Fenix Juice Pouch chest
+
+        #NPCs
+        LocationData("Ibek Cave", "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
+        LocationData("Ibek Cave", "Ancient Reservoir NPC - Silver in the goat digs", 2696 + npc_index_offset, logic.has_vertical_movement),  # Dust
 
         #Salmon Bay
         #Treasure chests

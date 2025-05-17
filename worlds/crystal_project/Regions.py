@@ -67,6 +67,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Sara Sara Bazaar", excluded),
         create_region(world, player, locations_per_region, "Sara Sara Beach", excluded),
         create_region(world, player, locations_per_region, "Ancient Reservoir", excluded),
+        create_region(world, player, locations_per_region, "Ibek Cave", excluded),
         create_region(world, player, locations_per_region, "Salmon Bay", excluded),
     ]
 
@@ -221,12 +222,15 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Continental Tram": lambda state: logic.has_swimming or logic.has_key(state, TRAM_KEY)})
     multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano"],
-        {"Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
-        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region("Ancient Reservoir", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Delende"],
+        {"Ibek Cave": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
+        "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
+    multiworld.get_region("Ancient Reservoir", player).add_exits(["Poko Poko Desert", "Ibek Cave", "Sara Sara Beach", "Delende"],
         {"Delende": logic.has_swimming,
         "Poko Poko Desert": lambda state: logic.is_area_in_level_range(state, 2),
-        "Sara Sara Beach": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
+        "Ibek Cave": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
+    multiworld.get_region("Ibek Cave", player).add_exits(["Sara Sara Beach"],
+        {"Sara Sara Beach": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
     multiworld.get_region("Salmon Bay", player).add_exits(["The Open Sea", "Salmon River"],
         {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Salmon River": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2)})
