@@ -434,4 +434,5 @@ class CrystalProjectWorld(World):
             "easyLeveling": bool(self.options.easyLeveling.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
+            "shopsanity": bool(self.options.shopsanity.value),
         }
