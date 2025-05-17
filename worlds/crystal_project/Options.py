@@ -90,6 +90,7 @@ class KillBossesMode(Toggle):
     """
     display_name = "Kill Bosses Mode"
 
+    When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
 
 class IncludedRegions(Choice):
     """

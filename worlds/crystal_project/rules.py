@@ -4,7 +4,7 @@ from BaseClasses import CollectionState
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
-from .Constants import *
+from .Keys import *
 
 class CrystalProjectLogic:
     player: int

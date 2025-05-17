@@ -2,7 +2,8 @@ from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
 from .Options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
-from .Constants import *
+from .Keys import *
+from .KeyItems import *
 
 class LocationData(NamedTuple):
     region: str
@@ -758,40 +759,40 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, logic.has_vertical_movement), #Money chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, logic.has_vertical_movement), #Bone Mail chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, logic.has_vertical_movement), #Cutlass chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Hidden in a house by the elevator 1", 3505 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Near sky fishing 1", 3507 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Reservoir above the water", 3508 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement), #Fleuret chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Among crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Its in a room and there is a bed", 3515 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Fleuret chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Samurai Lounge", 3512 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Assassin Lounge", 3513 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Among crates across from Assassin Lounge", 3514 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Its in a room and there is a bed", 3515 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 1", 2717 + treasure_index_offset, logic.has_vertical_movement), #Ether chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, logic.has_vertical_movement), #Ether Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Ether Pouch chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement), #Knicked Knackers chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement), #Looters Pin chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, logic.has_vertical_movement), #Muggers Glove chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Knicked Knackers chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Looters Pin chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Muggers Glove chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Weaponsmith", 1505 + treasure_index_offset), #Plague Mask chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch
-        LocationData("Shoudu Province", "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch
-        LocationData("Shoudu Province", "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, logic.has_vertical_movement), #Suitor Hat chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
+        LocationData("Shoudu Province", "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
+        LocationData("Shoudu Province", "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Suitor Hat chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 2", 2716 + treasure_index_offset, logic.has_vertical_movement), #Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam east of save point", 3040 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam on the way to Sky Arena", 2754 + treasure_index_offset, logic.has_vertical_movement), #Acrobat Shoes chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Atop the roofs near the grates", 1369 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - In the flower room", 2789 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - In the flower room", 2789 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Hidden in a house by the elevator 2", 2790 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Near sky fishing 2", 2986 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Under the dry kid pit", 1365 + treasure_index_offset, logic.has_vertical_movement), #The Immovable chest
@@ -805,7 +806,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement), #Malifice chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement), #Wizards Wall chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Fall through broken grate below Sky Arena building", 2951 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset, logic.has_vertical_movement), #(753, 105, -176) Tincture Pouch chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset), #(753, 105, -176) Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(753, 134, -263) Yasha chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(754, 134, -264) Muramasa chest
         LocationData("Shoudu Province", "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement), #(755, 134, -263) Shadow Gi chest
@@ -1246,10 +1247,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dungeon East sneaky hole in wall", 1274 + treasure_index_offset), #(-186, 125, -316) F2 Money chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dungeon West sneaky hole in wall", 2412 + treasure_index_offset), #(-190, 125, -316) F2 Archmage Vest chest
         LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B1 Searching for greener pastures", 1738 + treasure_index_offset), #(-209, 87, -311) F3 Vita Crown chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset), #(-185, 63, -363) F4 Judgement chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset), #(-162, 63, -336) F4 Zether Pouch chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset), #(-185, 38, -301) F6 Ancient Labyrinth map chest
-        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset), #(-219, 27, -350) F7 Mirror Shield chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-185, 63, -363) F4 Judgement chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-162, 63, -336) F4 Zether Pouch chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-185, 38, -301) F6 Ancient Labyrinth map chest
+        LocationData("Ancient Labyrinth", "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-219, 27, -350) F7 Mirror Shield chest
 
         #NPCs
         LocationData("Ancient Labyrinth", "Ancient Labyrinth NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot
@@ -1367,6 +1368,442 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("The Depths", "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset),
         LocationData("The Old World", "The Old World Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
 
+        #Zones (Beginner)
+        #Spawning Meadows
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 1", 13 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 2", 10013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 3", 20013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 4", 30013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 5", 40013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 6", 50013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 7", 60013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 8", 70013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 9", 80013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 10", 90013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 11", 100013 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 12", 110013 + shop_index_offset),
+
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 1", 14 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 2", 10014 + shop_index_offset),
+
+        #Delende
+        LocationData("Delende", "Delende Shop - Fish Hatchery Weapon Merchant 1", 52 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Weapon Merchant 2", 10052 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Weapon Merchant 3", 20052 + shop_index_offset),
+
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 1", 63 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 2", 10063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 3", 20063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 4", 30063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 5", 40063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 6", 50063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 7", 60063 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Armor Merchant 8", 70063 + shop_index_offset),
+
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 1", 199 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 2", 10199 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 3", 20199 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 4", 30199 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 5", 40199 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Fish Hatchery Fish Merchant 6", 50199 + shop_index_offset),
+
+        LocationData("Delende", "Delende Shop - Weapons Merchant camped in front of Pale Grotto 1", 115 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Weapons Merchant camped in front of Pale Grotto 2", 10115 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Weapons Merchant camped in front of Pale Grotto 3", 20115 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Weapons Merchant camped in front of Pale Grotto 4", 30115 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Weapons Merchant camped in front of Pale Grotto 5", 40115 + shop_index_offset),
+
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 1", 446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 2", 10446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 3", 20446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 4", 30446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 5", 40446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 6", 50446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 7", 60446 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Armor Merchant camped in front of Pale Grotto 8", 70446 + shop_index_offset),
+
+        LocationData("Delende", "Delende Shop - Item Merchant camped in front of Pale Grotto 1", 266 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Item Merchant camped in front of Pale Grotto 2", 10266 + shop_index_offset),
+        LocationData("Delende", "Delende Shop - Item Merchant camped in front of Pale Grotto 3", 20266 + shop_index_offset),
+
+        #Seaside Cliffs
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 1", 116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 2", 10116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 3", 20116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 4", 30116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 5", 40116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 6", 50116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 7", 60116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 8", 70116 + shop_index_offset),
+        LocationData("Seaside Cliffs", "Seaside Cliffs Shop - Camp Merchant 9", 80116 + shop_index_offset),
+
+        #Mercury Shrine
+        LocationData("Mercury Shrine", "Mercury Shrine Shop - Attendant 1", 132 + shop_index_offset),
+        LocationData("Mercury Shrine", "Mercury Shrine Shop - Attendant 2", 10132 + shop_index_offset),
+        LocationData("Mercury Shrine", "Mercury Shrine Shop - Attendant 3", 20132 + shop_index_offset),
+
+        #Proving Meadows
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 1", 253 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 2", 10253 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 3", 20253 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 4", 30253 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 5", 40253 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Item Merchant 6", 50253 + shop_index_offset),
+
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 1", 133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 2", 10133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 3", 20133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 4", 30133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 5", 40133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 6", 50133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 7", 60133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 8", 70133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 9", 80133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 10", 90133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 11", 100133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 12", 110133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 13", 120133 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Armor Merchant 14", 130133 + shop_index_offset),
+
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 1", 117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 2", 10117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 3", 20117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 4", 30117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 5", 40117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 6", 50117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 7", 60117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 8", 70117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 9", 80117 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Weapon Merchant 10", 90117 + shop_index_offset),
+
+        LocationData("Proving Meadows", "Proving Meadows Shop - Accessories Merchant 1", 134 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Accessories Merchant 2", 10134 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Accessories Merchant 3", 20134 + shop_index_offset),
+        LocationData("Proving Meadows", "Proving Meadows Shop - Accessories Merchant 4", 30134 + shop_index_offset),
+
+        #Zones (Advanced)
+        #Capital Sequoia
+        LocationData("Capital Sequoia", "Gaea Shrine Shop - Attendant 1", 379 + shop_index_offset),
+        LocationData("Capital Sequoia", "Gaea Shrine Shop - Attendant 2", 10379 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Candy Merchant 1", 575 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Candy Merchant 2", 10575 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 1", 1158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 2", 11158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 3", 21158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 4", 31158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 5", 41158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 6", 51158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 7", 61158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 8", 71158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 9", 81158 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Map Seller 10", 91158 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Martial Weapons 1", 599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Martial Weapons 2", 10599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Martial Weapons 3", 20599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Martial Weapons 4", 30599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 1", 40599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 2", 50599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 3", 60599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 4", 70599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 5", 80599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 6", 90599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Exotic Weapons 1", 600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Exotic Weapons 2", 10600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Exotic Weapons 3", 20600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Exotic Weapons 4", 30600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 1", 40600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 2", 50600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 3", 60600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 4", 70600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Heavy Armor 1", 601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Heavy Armor 2", 10601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Heavy Armor 3", 20601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 1", 30601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 2", 40601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 3", 50601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Medium Armor 1", 602 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Medium Armor 2", 10602 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 1", 20602 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 2", 30602 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Magic Weapons 1", 603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Magic Weapons 2", 10603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Magic Weapons 3", 20603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 1", 30603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 2", 40603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 3", 50603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Light Armor 1", 604 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Luxury Shop Light Armor 2", 10604 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 1", 20604 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 2", 30604 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 1", 500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 2", 10500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 3", 20500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 4", 30500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 5", 40500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 6", 50500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 7", 60500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 8", 70500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 9", 80500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 10", 90500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 11", 100500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 12", 110500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 13", 120500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 14", 130500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 15", 140500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 16", 150500 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Martial Weapons R Us 17", 160500 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 1", 501 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 2", 10501 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 3", 20501 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 4", 30501 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 5", 40501 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Exotic Weapons R Us 6", 50501 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Milk Man", 579 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 1", 416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 2", 10416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 3", 20416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 4", 30416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 5", 40416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 6", 50416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 7", 60416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 8", 70416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 9", 80416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 10", 90416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 11", 100416 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Heavy Armor 4 All 12", 110416 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 1", 417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 2", 10417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 3", 20417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 4", 30417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 5", 40417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 6", 50417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 7", 60417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 8", 70417 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Medium Armor 4 All 9", 80417 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 1", 455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 2", 10455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 3", 20455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 4", 30455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 5", 40455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 6", 50455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 7", 60455 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Light Armor 8", 70455 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 1", 499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 2", 10499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 3", 20499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 4", 30499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 5", 40499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 6", 50499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 7", 60499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 8", 70499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 9", 80499 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Magic and Magic Things Weapons 10", 90499 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 1", 398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 2", 10398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 3", 20398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 4", 30398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 5", 40398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 6", 50398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 7", 60398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 8", 70398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 9", 80398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 10", 90398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 11", 100398 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Accessory Merchant 12", 110398 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 1", 456 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 2", 10456 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 3", 20456 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 4", 30456 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 5", 40456 + shop_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Item Merchant 6", 50456 + shop_index_offset),
+
+        LocationData("Capital Sequoia", "Capital Sequoia Shop - Old Nans Stew", 423 + shop_index_offset),
+
+        #Salmon River
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 1", 631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 2", 10631 + shop_index_offset),
+        LocationData("Salmon River", "Poseidon Shrine Shop - Attendant 3", 20631 + shop_index_offset),
+
+        #Sara Sara Bazaar
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Old Nans Stew Subsidiary", 957 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 1", 1386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 2", 11386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 3", 21386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 4", 31386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 5", 41386 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Accessory Merchant 6", 51386 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 1", 1193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 2", 11193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 3", 21193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 4", 31193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 5", 41193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 6", 51193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 7", 61193 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 8", 71193 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 1", 942 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 10942 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 1", 1603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 2", 11603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 3", 21603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 4", 31603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 5", 41603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 6", 51603 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 7", 61603 + shop_index_offset),
+
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 1", 1604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 2", 11604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 3", 21604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 4", 31604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 5", 41604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 6", 51604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 7", 61604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 8", 71604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 9", 81604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 10", 91604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 11", 101604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 12", 111604 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Weapon Merchant 13", 121604 + shop_index_offset),
+
+        #Zones (Expert)
+        #Shoudu Province
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 1", 951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 2", 10951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 3", 20951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 4", 30951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 5", 40951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 6", 50951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 7", 60951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 8", 70951 + shop_index_offset),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Item Merchant 9", 80951 + shop_index_offset),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - No Shoudu Stew for you 1", 1199 + shop_index_offset),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 1", 1614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 2", 11614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 3", 21614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 4", 31614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 5", 41614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Accessory Merchant 6", 51614 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 1", 1535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 2", 11535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 3", 21535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 4", 31535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 5", 41535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 6", 51535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 7", 61535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 8", 71535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 9", 81535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Armor Merchant 10", 91535 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 1", 1544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 2", 11544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 3", 21544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 4", 31544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 5", 41544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 6", 51544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 7", 61544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 8", 71544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 9", 81544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 10", 91544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 11", 101544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 12", 111544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 13", 121544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 14", 131544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 15", 141544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+        LocationData("Shoudu Province", "Shoudu Province Shop - Weapon Merchant 16", 151544 + shop_index_offset, logic.has_vertical_movement or logic.has_glide),
+
+        #Ganymede Shrine
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 1", 1574 + shop_index_offset),
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 2", 11574 + shop_index_offset),
+        LocationData("Ganymede Shrine", "Ganymede Shrine Shop - Attendant 3", 21574 + shop_index_offset),
+
+        #Quintar Reserve
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 1", 470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 2", 10470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 3", 20470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 4", 30470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Quintar Reserve", "Quintar Reserve Shop - Babel to this Quintar 5", 40470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+
+        #Dione Shrine
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 1", 2253 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Attendant 2", 12253 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 1", 2227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 2", 12227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 3", 22227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 4", 32227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 5", 42227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 6", 52227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 7", 62227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 8", 72227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData("Dione Shrine", "Dione Shrine Shop - Quintar Raising Supplies 9", 82227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+
+        #Tall Tall Heights
+        LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 1", 1165 + shop_index_offset),
+        LocationData("Tall Tall Heights", "Triton Shrine Shop - Attendant 2", 11165 + shop_index_offset),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 1", 2746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 2", 12746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 3", 22746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 4", 32746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 5", 42746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 6", 52746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 7", 62746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 8", 72746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 9", 82746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Armor Merchant 10", 92746 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 1", 540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 2", 10540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 3", 20540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 4", 30540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 5", 40540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 6", 50540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 7", 60540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 8", 70540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 9", 80540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Weapon Merchant 10", 90540 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 1", 2918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 2", 12918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 3", 22918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+        LocationData("Tall Tall Heights", "Tall Tall Heights Shop - Souvenir Merchant 4", 32918 + shop_index_offset, logic.has_vertical_movement and logic.has_glide),
+
+        #Jidamba Tangle
+        LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 1", 1163 + shop_index_offset),
+        LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 2", 11163 + shop_index_offset),
+
+        #The Deep Sea
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 1", 3164 + shop_index_offset),
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 2", 13164 + shop_index_offset),
+        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 3", 23164 + shop_index_offset),
+
+        #Zones (End-Game)
+        #The New World
+        LocationData("The New World", "New World Shrine Shop - Attendant 1", 1877 + shop_index_offset),
+        LocationData("The New World", "New World Shrine Shop - Attendant 2", 11877 + shop_index_offset),
     ]
 
     return location_table

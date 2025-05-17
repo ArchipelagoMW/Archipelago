@@ -3,7 +3,8 @@ from BaseClasses import Region, Location, MultiWorld
 from .Options import CrystalProjectOptions
 from .Locations import LocationData
 from .rules import CrystalProjectLogic
-from .Constants import *
+from .Keys import *
+from .KeyItems import *
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
@@ -61,6 +62,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         create_region(world, player, locations_per_region, "Greenshire Reprise", excluded),
         create_region(world, player, locations_per_region, "Salmon Pass", excluded),
         create_region(world, player, locations_per_region, "Salmon River", excluded),
+        create_region(world, player, locations_per_region, "Shoudu Waterfront", excluded), #moved Shoudu Waterfront from Expert to Advanced
         create_region(world, player, locations_per_region, "Poko Poko Desert", excluded),
         create_region(world, player, locations_per_region, "Sara Sara Bazaar", excluded),
         create_region(world, player, locations_per_region, "Sara Sara Beach", excluded),
@@ -76,7 +78,6 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
 
     expert_regions = [
         create_region(world, player, locations_per_region, "The Open Sea", excluded),
-        create_region(world, player, locations_per_region, "Shoudu Waterfront", excluded),
         create_region(world, player, locations_per_region, "Shoudu Province", excluded),
         create_region(world, player, locations_per_region, "The Undercity", excluded),
         create_region(world, player, locations_per_region, "Ganymede Shrine", excluded),
@@ -211,7 +212,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         {"Ancient Reservoir": lambda state: logic.has_key(state, PYRAMID_KEY) and logic.is_area_in_level_range(state, 3),
         "Lake Delende": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "Salmon Bay": logic.has_horizontal_movement and logic.has_vertical_movement,
-        "Ancient Labyrinth": lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
+        "Ancient Labyrinth": lambda state: state.has(ANCIENT_TABLET_A, player) and logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Sara Sara Bazaar", player).add_exits(["Poko Poko Desert", "Sara Sara Beach", "Shoudu Province", "The Open Sea", "Continental Tram"],
         {"Poko Poko Desert": lambda state: logic.is_area_in_level_range(state, 2),
         "Sara Sara Beach": lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 3),
