@@ -196,7 +196,7 @@ class WargrooveContext(CommonContext):
                       os.path.join(mods_directory, "modAssets.dat"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
-        for i in range(0, len(resources)):
+        for resource, destination in zip(resources, file_paths):
             file_data = pkgutil.get_data("worlds.wargroove", resources[i])
             if file_data is None:
                 print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
