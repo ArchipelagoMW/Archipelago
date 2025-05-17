@@ -83,7 +83,7 @@ class BigBossesToBeat(Range):
     """
     The number of big bosses to beat before having access to the creator (the final boss). The big bosses are
     "Fallen God", "Mithalan God", "Drunian God", "Lumerean God" and "The Golem".
-    Have no effect if the objective is killing the four gods or Gods and Creator.
+    Has no effect if the objective is killing the four gods or Gods and Creator.
     """
     display_name = "Big bosses to beat"
     range_start = 0
