@@ -221,7 +221,7 @@ def init_areas(world: MultiWorld, locations: List[LocationData], options: Crysta
         "Shoudu Province": lambda state: state.has("Item - Ferry Pass", world.player) and logic.is_area_in_level_range(state, 3),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Continental Tram": lambda state: logic.has_swimming or logic.has_key(state, TRAM_KEY)})
-    multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano"],
+    multiworld.get_region("Sara Sara Beach", player).add_exits(["Sara Sara Bazaar", "The Open Sea", "Beaurior Volcano", "Ibek Cave"],
         {"Ibek Cave": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "Beaurior Volcano": lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
