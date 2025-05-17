@@ -5,7 +5,7 @@ import threading
 import requests
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
-from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
+from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
     non_dead_end_crest_warps
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
@@ -67,7 +67,6 @@ class FFMQWorld(World):
     create_items = create_items
     create_regions = create_regions
     set_rules = set_rules
-    stage_set_rules = stage_set_rules
     
     web = FFMQWebWorld()
     # settings: FFMQSettings
@@ -76,11 +75,11 @@ class FFMQWorld(World):
         self.rom_name_available_event = threading.Event()
         self.rom_name = None
         self.rooms = None
+        self.hint_data = []
+        self.finished_hint_data_collection = threading.Event()
         super().__init__(world, player)
 
     def generate_early(self):
-        if self.options.sky_coin_mode == "shattered_sky_coin":
-            self.options.brown_boxes.value = 1
         if self.options.enemies_scaling_lower.value > self.options.enemies_scaling_upper.value:
             self.options.enemies_scaling_lower.value, self.options.enemies_scaling_upper.value = \
                 self.options.enemies_scaling_upper.value, self.options.enemies_scaling_lower.value
@@ -101,7 +100,7 @@ class FFMQWorld(World):
 
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
             if (world.options.map_shuffle or world.options.crest_shuffle or world.options.shuffle_battlefield_rewards
-                    or world.options.companions_locations):
+                    or world.options.companions_locations or world.options.overworld_shuffle):
                 if world.options.map_shuffle_seed.value.isdigit():
                     multiworld.random.seed(int(world.options.map_shuffle_seed.value))
                 elif world.options.map_shuffle_seed.value != "random":
@@ -114,8 +113,9 @@ class FFMQWorld(World):
                 battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
                 companion_shuffle = world.options.companions_locations.value
                 kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
+                overworld_shuffle = world.options.overworld_shuffle.current_key
 
-                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}"
+                query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}&os={overworld_shuffle}"
 
                 if query in rooms_data:
                     world.rooms = rooms_data[query]
@@ -170,6 +170,18 @@ class FFMQWorld(World):
             return self.item_id_to_name[i]
         return item.name
 
+    @classmethod
+    def stage_generate_output(cls, multiworld, output_directory):
+        for location in multiworld.get_filled_locations():
+            # The externalplacements.yaml file is only supposed to contain items placed outside the player's game,
+            # and checking that items are non-local takes care of filtering out events.
+            if (location.item.game == "Final Fantasy Mystic Quest"
+                    and location.player != location.item.player and location.item.name not in fillers):
+                multiworld.worlds[location.item.player].hint_data.append(location)
+
+        for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
+            world.finished_hint_data_collection.set()
+
     def modify_multidata(self, multidata):
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
@@ -197,7 +209,7 @@ class FFMQWorld(World):
                               "Subregion Doom Castle"]:
                 region = self.multiworld.get_region(subregion, self.player)
                 for location in region.locations:
-                    if location.address and self.options.map_shuffle != "dungeons":
+                    if location.address and self.options.overworld_shuffle:
                         hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
                                                                     + (" Region" if subregion not in
                                                                        single_location_regions else ""))
@@ -217,10 +229,10 @@ class FFMQWorld(World):
                             for location in exit_check.connected_region.locations:
                                 if location.address:
                                     hint = []
-                                    if self.options.map_shuffle != "dungeons":
+                                    if self.options.overworld_shuffle:
                                         hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
                                                     in single_location_regions else "")))
-                                    if self.options.map_shuffle != "overworld":
+                                    if self.options.map_shuffle:
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
                                             "Pazuzu's"))
                                     hint = " - ".join(hint).replace(" - Mac Ship", "")
