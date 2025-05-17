@@ -1,10 +1,20 @@
+import typing
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict
+from worlds.yugioh06.card_data import get_all_valid_cards_set
 
 
 class StructureDeck(Choice):
-    """Which Structure Deck you start with"""
+    """
+    Which Structure Deck you start with.
+    The first 6 are regular Structure Decks
+    Worst: Start you of with basically nothing
+    Random Deck: Chooses one of the Regular SDs at random.
+    Random Singles: Your deck contains 40 completely random cards with no duplicates.
+    Random Playsets: Your deck contains 14 completely random playsets of 3.
+    Custom: Create your own starting deck see Custom Structure Deck for more details.
+    """
 
     display_name = "Structure Deck"
     option_dragons_roar = 0
@@ -13,9 +23,73 @@ class StructureDeck(Choice):
     option_fury_from_the_deep = 3
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
-    option_none = 6
+    option_worst = 6
     option_random_deck = 7
+    option_random_singles = 8
+    option_random_playsets = 9
+    option_custom = 10
     default = 7
+
+
+class CustomStructureDeck(OptionDict):
+    """
+    Create your own Structure Deck to start with
+    Only works if structure deck is set to custom
+    Has to be below 80 cards in total.
+    Fusion monsters don't work properly you have to add them to your Trunk and then back into the deck.
+    """
+    display_name = "Custom Structure Deck"
+    valid_keys = get_all_valid_cards_set()
+
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(amount is None for amount in value.values()):
+            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
+        if any(amount < 1 for amount in value.values()):
+            raise Exception("Cannot have non-positive card amounts.")
+        if any(amount > 3 for amount in value.values()):
+            raise Exception("Cannot have more than 3 of the same card.")
+        if sum(value.values()) > 80:
+            raise Exception("The Structure Deck cannot have more than 80 cards.")
+        super(CustomStructureDeck, self).__init__(value)
+
+
+class StarterDeck(Choice):
+    """
+    What are the cards you start with in the Trunk
+    Vanilla: Default starting cards.
+    Remove: Start with no cards in Trunk.
+    Random Singles: Start with 40 random cards with no duplicates.
+    Random Playsets: Start with 13 random playsets of 3.
+    Custom: Choose your own cards. For more details see Custom Starter Deck.
+    """
+    display_name = "Starter Deck"
+    option_vanilla = 0
+    option_remove = 1
+    option_random_singles = 2
+    option_random_playsets = 3
+    option_custom = 4
+    default = 0
+
+
+class CustomStarterDeck(OptionDict):
+    """
+    Choose the cards that you have in your trunk at the start of the game
+    Only works if starter deck is set to custom.
+    Must be below 40 cards in total.
+    """
+    display_name = "Custom Starter Deck"
+    valid_keys = get_all_valid_cards_set()
+
+    def __init__(self, value: typing.Dict[str, int]):
+        if any(amount is None for amount in value.values()):
+            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
+        if any(amount < 1 for amount in value.values()):
+            raise Exception("Cannot have non-positive card amounts.")
+        if any(amount > 3 for amount in value.values()):
+            raise Exception("Cannot have more than 3 of the same card.")
+        if sum(value.values()) > 40:
+            raise Exception("The Starter Deck cannot have more than 40 cards.")
+        super(CustomStarterDeck, self).__init__(value)
 
 
 class Banlist(Choice):
@@ -31,37 +105,13 @@ class Banlist(Choice):
     default = option_september_2005
 
 
-class FinalCampaignBossUnlockCondition(Choice):
-    """How to unlock the final campaign boss and goal for the world"""
-
-    display_name = "Final Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
-class FourthTier5UnlockCondition(Choice):
-    """How to unlock the fourth campaign boss"""
-
-    display_name = "Fourth Tier 5 Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
-class ThirdTier5UnlockCondition(Choice):
-    """How to unlock the third campaign boss"""
-
-    display_name = "Third Tier 5 Campaign Boss unlock Condition"
-    option_campaign_opponents = 0
-    option_challenges = 1
-
-
 class FinalCampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Final Campaign Boss to appear"""
 
     display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
-    default = 10
+    default = 3
 
 
 class FourthTier5CampaignBossChallenges(Range):
@@ -70,7 +120,7 @@ class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 5
+    default = 2
 
 
 class ThirdTier5CampaignBossChallenges(Range):
@@ -79,7 +129,7 @@ class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 2
+    default = 1
 
 
 class FinalCampaignBossCampaignOpponents(Range):
@@ -136,10 +186,10 @@ class MoneyRewardMultiplier(Range):
     default = 20
 
 
-class NormalizeBoostersPacks(DefaultOnToggle):
-    """If enabled every booster pack costs the same otherwise vanilla cost is used"""
+class NormalizeBoosterPackPrices(DefaultOnToggle):
+    """If enabled every booster pack costs the same and has 5 cards per pack otherwise vanilla cost is used"""
 
-    display_name = "Normalize Booster Packs"
+    display_name = "Normalize Booster Pack Prices"
 
 
 class BoosterPackPrices(Range):
@@ -152,6 +202,19 @@ class BoosterPackPrices(Range):
     range_start = 1
     range_end = 3000
     default = 100
+
+
+class NormalizeBoosterPackRarities(Toggle):
+    """All cards in packs are commons"""
+    display_name = "Normalize Booster Pack Rarities"
+
+
+class RandomizePackContents(Choice):
+    """Randomize the contents of the Booster Packs"""
+    display_name = "Randomize Pack Contents"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_chaos = 2
 
 
 class AddEmptyBanList(Toggle):
@@ -175,10 +238,8 @@ class OCGArts(Toggle):
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):
     structure_deck: StructureDeck
+    starter_deck: StarterDeck
     banlist: Banlist
-    final_campaign_boss_unlock_condition: FinalCampaignBossUnlockCondition
-    fourth_tier_5_campaign_boss_unlock_condition: FourthTier5UnlockCondition
-    third_tier_5_campaign_boss_unlock_condition: ThirdTier5UnlockCondition
     final_campaign_boss_challenges: FinalCampaignBossChallenges
     fourth_tier_5_campaign_boss_challenges: FourthTier5CampaignBossChallenges
     third_tier_5_campaign_boss_challenges: ThirdTier5CampaignBossChallenges
@@ -188,8 +249,12 @@ class Yugioh06Options(PerGameCommonOptions):
     number_of_challenges: NumberOfChallenges
     starting_money: StartingMoney
     money_reward_multiplier: MoneyRewardMultiplier
-    normalize_boosters_packs: NormalizeBoostersPacks
+    normalize_booster_pack_prices: NormalizeBoosterPackPrices
     booster_pack_prices: BoosterPackPrices
+    normalize_booster_pack_rarities: NormalizeBoosterPackRarities
+    randomize_pack_contents: RandomizePackContents
     add_empty_banlist: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle
     ocg_arts: OCGArts
+    custom_structure_deck: CustomStructureDeck
+    custom_starter_deck: CustomStarterDeck
