@@ -281,25 +281,31 @@ class CommonContext:
 
     finished_game: bool
     """
-    bool to signal that status should be updated to Goal after reconnectin
-    to be used to ensure that a statusupdate does not get lose when disconnected
+    Bool to signal that status should be updated to Goal after reconnecting
+    to be used to ensure that a StatusUpdate packet does not get lost when disconnected
     """
     ready: bool
-    """bool to keep track of state for the /ready command"""
+    """Bool to keep track of state for the /ready command"""
     team: int | None
-    """team number of currently connected slot"""
+    """Team number of currently connected slot"""
     slot: int | None
-    """slot number of currently connected slot"""
+    """Slot number of currently connected slot"""
     auth: str | None
-    """name used in Connect packet"""
+    """Name used in Connect packet"""
     seed_name: str | None
-    """seed name that will be validated on opening a socket if present"""
+    """Seed name that will be validated on opening a socket if present"""
 
     # locations
     locations_checked: set[int]
-    """Local state of Locations Checked ... actual use tbd because it seems super volotile lol"""
+    """
+    Local container of location ids checked to signal that LocationChecks should be resent after reconnecting
+    to be used to ensure that a LocationChecks packet does not get lost when disconnected
+    """
     locations_scouted: set[int]
-    """Local container of Locations Scouted ... actual use tbd because it seems super volotile lol"""
+    """
+    Local container of location ids scouted to signal that LocationScouts should be resent after reconnecting
+    to be used to ensure that a LocationScouts packet does not get lost when disconnected
+    """
     items_received: list[NetworkItem]
     """List of NetworkItems recieved from the server"""
     missing_locations: set[int]
@@ -308,7 +314,8 @@ class CommonContext:
     """Container of Locations that are checked per server state"""
     server_locations: set[int]
     """Container of Locations that exist per server state; a combination between missing and checked locations"""
-    locations_info: typing.Dict[int, NetworkItem]
+    locations_info: dict[int, NetworkItem]
+    """Dict of location id: NetworkItem info from LocationScouts request"""
 
     # data storage
     stored_data: dict[str, typing.Any]
