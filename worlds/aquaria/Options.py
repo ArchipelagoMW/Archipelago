@@ -248,7 +248,7 @@ class NoProgressionSimonSays(Toggle):
 class NoProgressionKelpForest(Toggle):
     """
     Make sure that there are no progression items in Kelp Forest (excluding Simon says area).
-    Can be usefull to get smaller runs.
+    Can be useful to get smaller runs.
     """
     display_name = "No progression in Kelp Forest"
 
