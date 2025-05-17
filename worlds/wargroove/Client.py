@@ -591,7 +591,6 @@ def launch(*launch_args: str):
 
     parser = get_base_parser(description="Wargroove Client, for text interfacing.")
 
-    args, rest = parser.parse_known_args()
     colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
