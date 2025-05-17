@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Choice, Range, PerGameCommonOptions, DeathLink, StartInventoryPool, OptionDict, OptionGroup
+from Options import Choice, Range, PerGameCommonOptions, StartInventoryPool, OptionDict, OptionGroup, \
+    DeathLinkMixin
 
 
 class IncomeBoost(Range):
@@ -83,7 +84,7 @@ wargroove_option_groups = [
 ]
 
 @dataclass
-class WargrooveOptions(PerGameCommonOptions):
+class WargrooveOptions(DeathLinkMixin, PerGameCommonOptions):
     income_boost: IncomeBoost
     commander_defense_boost: CommanderDefenseBoost
     commander_choice: CommanderChoice
@@ -91,5 +92,4 @@ class WargrooveOptions(PerGameCommonOptions):
     player_summon_limit: PlayerSummonLimit
     ai_sacrifice_limit: AISacrificeLimit
     ai_summon_limit: AISummonLimit
-    death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool

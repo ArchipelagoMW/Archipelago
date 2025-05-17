@@ -186,21 +186,21 @@ class WargrooveContext(CommonContext):
         # Wargroove doesn't always create the mods directory, so we have to do it
         if not os.path.isdir(mods_directory):
             os.makedirs(mods_directory)
-        resources = [os.path.join("data", "mods", "ArchipelagoMod", "maps.dat"),
-                     os.path.join("data", "mods", "ArchipelagoMod", "mod.dat"),
-                     os.path.join("data", "mods", "ArchipelagoMod", "modAssets.dat"),
-                     os.path.join("data", "save", "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
-                     os.path.join("data", "save", "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
+        resources = ["data/mods/ArchipelagoMod/maps.dat",
+                     "data/mods/ArchipelagoMod/mod.dat",
+                     "data/mods/ArchipelagoMod/modAssets.dat",
+                     "data/save/campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp",
+                     "data/save/campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak"]
         file_paths = [os.path.join(mods_directory, "maps.dat"),
                       os.path.join(mods_directory, "mod.dat"),
                       os.path.join(mods_directory, "modAssets.dat"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp"),
                       os.path.join(save_directory, "campaign-c40a6e5b0cdf86ddac03b276691c483d.cmp.bak")]
         for resource, destination in zip(resources, file_paths):
-            file_data = pkgutil.get_data("worlds.wargroove", resources[i])
+            file_data = pkgutil.get_data("worlds.wargroove", resource)
             if file_data is None:
                 print_error_and_close("WargrooveClient couldn't find Wargoove mod and save files in install!")
-            with open(file_paths[i], 'wb') as f:
+            with open(destination, 'wb') as f:
                 f.write(file_data)
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
@@ -569,8 +569,9 @@ def print_error_and_close(msg):
     Utils.messagebox("Error", msg, error=True)
     sys.exit(1)
 
-def launch():
-    async def main(args):
+def launch(*launch_args: str):
+    async def main():
+        args = parser.parse_args(launch_args)
         ctx = WargrooveContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
@@ -592,5 +593,5 @@ def launch():
 
     args, rest = parser.parse_known_args()
     colorama.just_fix_windows_console()
-    asyncio.run(main(args))
+    asyncio.run(main())
     colorama.deinit()
