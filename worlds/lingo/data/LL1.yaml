@@ -7124,6 +7124,8 @@
     entrances:
       Orange Tower Third Floor:
         warp: True
+      Art Gallery (First Floor):
+        warp: True
       Art Gallery (Second Floor):
         warp: True
       Art Gallery (Third Floor):
@@ -7141,22 +7143,6 @@
         required_door:
           room: Number Hunt
           door: Eights
-      EON:
-        id: Painting Room/Panel_eon_one
-        colors: yellow
-        tag: midyellow
-      TRUSTWORTHY:
-        id: Painting Room/Panel_to_two
-        colors: red
-        tag: midred
-      FREE:
-        id: Painting Room/Panel_free_three
-        colors: purple
-        tag: midpurp
-      OUR:
-        id: Painting Room/Panel_our_four
-        colors: blue
-        tag: midblue
       ORDER:
         id: Painting Room/Panel_order_onepathmanyturns
         tag: forbid
@@ -7175,15 +7161,8 @@
           - scenery_painting_2c
         skip_location: True
         panels:
-          - EON
-      First Floor Puzzles:
-        skip_item: True
-        location_name: Art Gallery - First Floor Puzzles
-        panels:
-          - EON
-          - TRUSTWORTHY
-          - FREE
-          - OUR
+          - room: Art Gallery (First Floor)
+            panel: EON
       Third Floor:
         painting_id:
           - scenery_painting_3b
@@ -7243,11 +7222,42 @@
           - Third Floor
           - Fourth Floor
           - Fifth Floor
+  Art Gallery (First Floor):
+    entrances:
+      Art Gallery:
+        static_painting: True
+    panels:
+      EON:
+        id: Painting Room/Panel_eon_one
+        colors: yellow
+        tag: midyellow
+      TRUSTWORTHY:
+        id: Painting Room/Panel_to_two
+        colors: red
+        tag: midred
+      FREE:
+        id: Painting Room/Panel_free_three
+        colors: purple
+        tag: midpurp
+      OUR:
+        id: Painting Room/Panel_our_four
+        colors: blue
+        tag: midblue
+    doors:
+      Puzzles:
+        skip_item: True
+        location_name: Art Gallery - First Floor Puzzles
+        panels:
+          - EON
+          - TRUSTWORTHY
+          - FREE
+          - OUR
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
         room: Art Gallery
         door: Second Floor
+        static_painting: True
     panels:
       HOUSE:
         id: Painting Room/Panel_house_neighborhood
@@ -7279,6 +7289,7 @@
       Art Gallery:
         room: Art Gallery
         door: Third Floor
+        static_painting: True
     panels:
       AN:
         id: Painting Room/Panel_an_many
@@ -7310,6 +7321,7 @@
       Art Gallery:
         room: Art Gallery
         door: Fourth Floor
+        static_painting: True
     panels:
       URNS:
         id: Painting Room/Panel_urns_turns
