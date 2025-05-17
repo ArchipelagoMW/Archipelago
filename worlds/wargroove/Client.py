@@ -137,7 +137,7 @@ class WargrooveContext(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        game_options = settings.get_settings().wargroove_options
+        game_options = WargrooveWorld.settings
 
         # Validate the AppData directory with Wargroove save data.
         # By default, Windows sets an environment variable we can leverage.
