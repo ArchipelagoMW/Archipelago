@@ -98,7 +98,7 @@ class MiniBossesToBeat(Range):
     "Mantis Shrimp Prime" and "King Jellyfish God Prime".
     Note that the Energy Statue and Simon Says are not minibosses.
     Also note that if the objective is killing the four enemy gods, it might be needed to go in the abyss and
-    buuble cave to kill "King Jellyfish God Prime" and "Mantis Shrimp Prime".
+    bubble cave to kill "King Jellyfish God Prime" and "Mantis Shrimp Prime".
     """
     display_name = "Minibosses to beat"
     range_start = 0
