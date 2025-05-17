@@ -114,11 +114,23 @@ class CMItemPool:
             items.extend(filler_items)
             logging.debug(f"Created {len(filler_items)} filler items")
 
+        # Add locked items
         for item in locked_items:
             if item not in self.items_used[self.world.player]:
                 self.items_used[self.world.player][item] = 0
             self.items_used[self.world.player][item] += locked_items[item]
             items.extend([self.world.create_item(item) for _ in range(locked_items[item])])
+
+        # # Ensure we don't exceed max_items + event_count
+        # event_count = 2  # Play as White and Victory
+        # if super_sized:
+        #     event_count += 1  # Super-Size Me for non-single modes
+        # max_total = max_items + event_count
+        # if len(items) > max_total:
+        #     # Remove excess items, prioritizing filler items
+        #     excess = len(items) - max_total
+        #     items = [item for item in items if item.name not in filler_items] + \
+        #            [item for item in items if item.name in filler_items][:-excess]
 
         return items
 
@@ -134,6 +146,10 @@ class CMItemPool:
         # Add Super-Size Me for progressive mode
         if self.world.options.goal.value == self.world.options.goal.option_progressive:
             items.append(self.world.create_item("Super-Size Me"))
+        #     self.items_used[self.world.player]["Super-Size Me"] = 1
+        # # In super mode, Super-Size Me is precollected
+        # elif self.world.options.goal.value == self.world.options.goal.option_super:
+        #     self.items_used[self.world.player]["Super-Size Me"] = 1
             
         # Add Play as White
         items.append(self.world.create_item("Play as White"))
@@ -149,6 +165,7 @@ class CMItemPool:
         if self.world.options.goal.value == self.world.options.goal.option_super:
             item = self.world.create_item("Super-Size Me")
             self.world.multiworld.push_precollected(item)
+            # excluded_items["Super-Size Me"] = 1
 
         # Track precollected items
         for item in self.world.multiworld.precollected_items[self.world.player]:
@@ -174,6 +191,7 @@ class CMItemPool:
             self.world.multiworld.get_location("Checkmate Minima", self.world.player).place_locked_item(item)
             locked_locations.append("Checkmate Minima")
             user_items.append(item)
+            # excluded_items["Super-Size Me"] = 1
 
         # Handle early material option
         early_material_option = self.world.options.early_material.value
@@ -217,7 +235,7 @@ class CMItemPool:
         return starter_items
 
     def handle_option_limits(self) -> None:
-        """Apply limits based on world options."""
+        """Apply world options that limit the maximum copies of some items."""
         self.items_used[self.world.player]["Progressive Consul"] = (
             self.items_used[self.world.player].get("Progressive Consul", 0) +
             (3 - self.world.options.max_kings.value))
@@ -230,7 +248,6 @@ class CMItemPool:
         self.items_used[self.world.player]["Progressive Pocket"] = (
             self.items_used[self.world.player].get("Progressive Pocket", 0) +
             (12 - min(self.world.options.max_pocket.value, 3 * self.world.options.pocket_limit_by_pocket.value)))
-        self.items_used[self.world.player]["Super-Size Me"] = 1
 
     def handle_locked_items(self) -> Dict[str, int]:
         """Process locked items from options and ensure prerequisites are met."""

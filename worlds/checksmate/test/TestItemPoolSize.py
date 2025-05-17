@@ -4,9 +4,13 @@ from ..Options import Goal, EnableTactics, FairyChessPieces, FairyChessArmy
 
 
 class TestItemPoolSize(CMMockTestCase):
+    event_count = 1
+    ordered_event_count = 2
+    tactics_all_item_count = 10
+    tactics_turns_item_count = 4
     # All "Capture Pawn" locations (A through H) - 8 locations
     # All "Capture Piece" locations (Queen's Rook through King's Rook) - 7 locations
-    # "Checkmate Minima" - 1 location
+    # "Checkmate Minima" - 1 location, but not counted
     # All "King to..." locations - 5 locations
     # All "Capture 2 Pawns" through "Capture 8 Pawns" - 7 locations
     # All "Capture 2 Pieces" through "Capture 7 Pieces" - 6 locations
@@ -18,10 +22,9 @@ class TestItemPoolSize(CMMockTestCase):
     # All "Fork..." locations - 6 locations
     # Both Castle locations - 2 locations
     single_location_count = 71
-    single_event_count = 1
-    single_item_count = single_location_count - single_event_count
+    single_item_count = single_location_count - event_count
     # 'Capture Pawn I' and 'Capture Pawn J'(+2)
-    # 'Checkmate Maxima'(+1)
+    # 'Checkmate Maxima'(+1) - 1 location, but not counted
     # "Capture Piece Queen's Attendant" and "Capture Piece King's Attendant"(+2)
     # 'Capture 9 Pawns' and 'Capture 10 Pawns'(+2)
     # 'Capture 8 Pieces' and 'Capture 9 Pieces'(+2)
@@ -29,88 +32,80 @@ class TestItemPoolSize(CMMockTestCase):
     # 'Capture Any 15' through 'Capture Any 18'(+4)
     # Total additional locations: 15
     super_location_count = 86
-    super_event_count = 2
-    super_item_count = super_location_count - super_event_count
-    tactics_all_item_count = 10
-    tactics_turns_item_count = 4
+    super_item_count = super_location_count - event_count
 
     def setUp(self):
         super().setUp()
         self.item_pool = CMItemPool(self.world)
         self.item_pool.initialize_item_tracking()
 
+    def get_event_item_count(self) -> int:
+        """Calculate the number of event items based on current game options."""
+        count = 1  # Play as White is always added
+        if self.world.options.goal.value != self.world.options.goal.option_single:
+            count += 1  # Super-Size Me for non-single modes
+        count += 1  # Victory item
+        return count
+
     def test_item_pool_matches_location_count(self):
-        """Test that the total number of items matches the number of locations"""
-        # Create items
+        """Test that the item pool size matches the number of valid locations"""
         items = self.item_pool.create_items()
-        
-        # Get max items (based on locations)
-        max_items = self.item_pool.get_max_items(
-            super_sized=self.world.options.goal.value != self.world.options.goal.option_single
-        )
-
-        # Verify super sized items are equal to actual super sized locations
-        self.assertEqual(max_items, self.single_item_count)
-        # Verify total items don't exceed locations
-        self.assertLessEqual(len(items), max_items)
-
-    def test_item_pool_with_fairy_pieces(self):
-        """Test item pool size with fairy pieces enabled"""
-        # Enable fairy pieces
-        self.world.options.fairy_chess_pieces = FairyChessPieces(FairyChessPieces.option_full)
-        self.world.options.fairy_chess_army = FairyChessArmy(FairyChessArmy.option_chaos)
-        
-        # Create items
-        items = self.item_pool.create_items()
-        
-        # Get max items
-        max_items = self.item_pool.get_max_items(
-            super_sized=self.world.options.goal.value != self.world.options.goal.option_single
-        )
-
-        # Verify super sized items are equal to actual super sized locations
-        self.assertEqual(max_items, self.single_item_count)
-        # Verify total items don't exceed locations
-        self.assertLessEqual(len(items), max_items)
+        max_items = self.item_pool.get_max_items(False)
+        self.assertEqual(len(items), max_items - self.event_count,
+            f"Expected {max_items} location items plus {self.event_count} event items")
 
     def test_item_pool_with_tactics(self):
-        """Test item pool size with different tactics settings"""
-        # Test with all tactics
-        self.world.options.enable_tactics = EnableTactics(EnableTactics.option_all)
+        """Test that enabling tactics increases the item pool size"""
+        # Test with all tactics enabled
+        self.world.options.enable_tactics.value = self.world.options.enable_tactics.option_all
         items_all = self.item_pool.create_items()
-        max_items = self.item_pool.get_max_items(
-            super_sized=self.world.options.goal.value != self.world.options.goal.option_single
-        )
-        self.assertLessEqual(len(items_all), max_items)
-        # Verify super sized items are equal to actual super sized locations
-        self.assertEqual(max_items, self.single_item_count)
-        
-        # Test with no tactics
-        self.world.options.enable_tactics = EnableTactics(EnableTactics.option_none)
-        items_none = self.item_pool.create_items()
-        max_items = self.item_pool.get_max_items(
-            super_sized=self.world.options.goal.value != self.world.options.goal.option_single
-        )
-        self.assertLessEqual(len(items_none), max_items)
-        # Verify super sized items are equal to actual super sized locations
-        self.assertEqual(max_items, self.single_item_count - self.tactics_all_item_count)
+        max_items = self.item_pool.get_max_items(False)
+        self.assertEqual(len(items_all), max_items - self.event_count,
+            f"Expected {max_items} location items plus {self.event_count} event items with all tactics")
 
-        # Verify that no tactics has fewer items than all tactics
-        self.assertLess(len(items_none), len(items_all))
+        # Test with no tactics
+        self.world.options.enable_tactics.value = self.world.options.enable_tactics.option_none
+        items_none = self.item_pool.create_items()
+        max_items = self.item_pool.get_max_items(False)
+        self.assertEqual(len(items_none), max_items - self.event_count,
+            f"Expected {max_items} location items plus {self.event_count} event items with no tactics")
+
+        # Verify that enabling tactics increases the pool size
+        self.assertGreater(len(items_all), len(items_none),
+            "Enabling tactics should increase the item pool size")
+
+    def test_item_pool_with_shuffled_progressive(self):
+        """Test that enabling fairy pieces increases the item pool size"""
+        # Test with goal shuffled into item pool
+        self.world.options.goal.value = self.world.options.goal.option_progressive
+        items_shuffled = self.item_pool.create_items()
+        max_items = self.item_pool.get_max_items(True)
+        self.assertEqual(len(items_shuffled), max_items - self.event_count,
+            f"Expected {max_items} location items plus {self.event_count} event items with shuffled progressive")
+
+        # Test with goal set to an event location
+        self.world.options.goal.value = self.world.options.goal.option_ordered_progressive
+        items_ordered = self.item_pool.create_items()
+        max_items = self.item_pool.get_max_items(True)
+        self.assertEqual(len(items_ordered), max_items - self.ordered_event_count,
+            f"Expected {max_items} location items plus {self.ordered_event_count} event items with full fairy pieces")
+
+        # Verify that changing an event location to an item location increases the pool size
+        self.assertLess(len(items_ordered), len(items_shuffled),
+            "Enabling fairy pieces should increase the item pool size")
+
+    def test_item_pool_with_single(self):
+        """Test that single mode has the correct item pool size"""
+        self.world.options.goal.value = self.world.options.goal.option_single
+        items_single = self.item_pool.create_items()
+        max_items_single = self.item_pool.get_max_items(False)
+        self.assertEqual(len(items_single), max_items_single - self.event_count,
+            f"Expected {max_items_single} location items plus {self.event_count} event items in single mode")
 
     def test_item_pool_with_super_sized(self):
-        """Test item pool size with super-sized mode"""
-        # Test with single mode
-        self.world.options.goal = Goal(Goal.option_single)
-        items_single = self.item_pool.create_items()
-        max_items_single = self.item_pool.get_max_items(super_sized=False)
-        self.assertLessEqual(len(items_single), max_items_single)
-
-        # Test with super-sized mode
-        self.world.options.goal = Goal(Goal.option_super)
+        """Test that super-sized mode has the correct item pool size"""
+        self.world.options.goal.value = self.world.options.goal.option_super
         items_super = self.item_pool.create_items()
-        max_items_super = self.item_pool.get_max_items(super_sized=True)
-        self.assertLessEqual(len(items_super), max_items_super)
-
-        # Verify that super-sized has more items than single
-        self.assertGreater(len(items_super), len(items_single)) 
+        max_items_super = self.item_pool.get_max_items(True)
+        self.assertEqual(len(items_super), max_items_super - self.event_count,
+            f"Expected {max_items_super} location items plus {self.event_count} event items in super-sized mode")

@@ -62,7 +62,11 @@ class CMMockTestCase(unittest.TestCase):
                 # Add multiworld attribute with proper push_precollected method
                 self.multiworld = type('MultiWorld', (), {
                     'precollected_items': {1: []},
-                    'push_precollected': lambda self, item: None
+                    'push_precollected': lambda self, item: None,
+                    'get_location': lambda self, name, player: type('Location', (), {
+                        'name': name,
+                        'place_locked_item': lambda self, item: None
+                    })()
                 })()
 
             def create_item(self, name):
