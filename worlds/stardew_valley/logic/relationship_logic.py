@@ -49,9 +49,9 @@ class RelationshipLogic(BaseLogic):
         if not self.content.features.friendsanity.is_enabled:
             return self.logic.relationship.can_reproduce(number_children)
 
-        return self.logic.received_n(*possible_kids, count=number_children) &\
-               self.logic.building.has_building(Building.kids_room) &\
-               self.logic.relationship.can_reproduce(number_children)
+        return self.logic.received_n(*possible_kids, count=number_children) & \
+            self.logic.building.has_building(Building.kids_room) & \
+            self.logic.relationship.can_reproduce(number_children)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."
@@ -123,7 +123,7 @@ class RelationshipLogic(BaseLogic):
         if villager is None:
             return false_
 
-        rules = [self.logic.region.can_reach_any(villager.locations)]
+        rules = [self.logic.region.can_reach_any(*villager.locations)]
 
         if npc == NPC.kent:
             rules.append(self.logic.time.has_year_two)
@@ -148,7 +148,7 @@ class RelationshipLogic(BaseLogic):
             rules.append(self.logic.received(SVEQuestItem.morgan_schooling))
 
         elif npc == ModNPC.goblin:
-            rules.append(self.logic.region.can_reach_all((Region.witch_hut, Region.wizard_tower)))
+            rules.append(self.logic.region.can_reach_all(Region.witch_hut, Region.wizard_tower))
 
         return self.logic.and_(*rules)
 

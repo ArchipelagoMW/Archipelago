@@ -37,4 +37,4 @@ class ActionLogic(BaseLogic):
         return blacksmith_access & self.logic.has(geode)
 
     def can_speak_junimo(self) -> StardewRule:
-        return self.logic.region.can_reach_all((Region.community_center, Region.wizard_tower))
+        return self.logic.region.can_reach_all(Region.community_center, Region.wizard_tower)

@@ -447,7 +447,7 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
     set_location_rule(multiworld, player, "Walnutsanity: Leo's Tree", logic.tool.has_tool(Tool.axe))
     set_location_rule(multiworld, player, "Walnutsanity: Gem Birds Shrine",
                       logic.has_all(Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
-                      & logic.region.can_reach_all((Region.island_north, Region.island_west, Region.island_east, Region.island_south)))
+                      & logic.region.can_reach_all(Region.island_north, Region.island_west, Region.island_east, Region.island_south))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Melon", logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Wheat",
                       logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location(
@@ -878,7 +878,7 @@ def set_movie_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, wo
                 rule = logic.movie.can_watch_movie_with_loving_npc(movie_name)
             else:
                 rule = logic.movie.can_watch_movie_with_loving_npc_and_snack(movie_name)
-            add_rule(multiworld, player, movie_location.name, rule)
+            set_location_rule(multiworld, player, movie_location.name, rule)
     if moviesanity >= Moviesanity.option_all_movies_and_all_snacks:
         snack_prefix = "Share "
         for snack_location in locations.locations_by_tag[LocationTags.MOVIE_SNACK]:
@@ -887,7 +887,7 @@ def set_movie_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, wo
                 rule = logic.movie.can_buy_snack_for_someone_who_loves_it(snack_name)
             else:
                 rule = logic.movie.can_buy_snack(snack_name)
-            add_rule(multiworld, player, snack_location.name, rule)
+            set_location_rule(multiworld, player, snack_location.name, rule)
 
 
 def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
@@ -943,10 +943,10 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "Free The Forsaken Souls", logic.action.can_watch(Channel.sinister_signal))
         set_location_rule(multiworld, player, "Thank the Devs", logic.received("Stardrop") & logic.money.can_spend_at(Region.wizard_basement, 500))
         set_location_rule(multiworld, player, "Annoy the Moon Man", logic.shipping.can_use_shipping_bin & logic.time.has_lived_months(6))
-        set_location_rule(multiworld, player, "Strange Sighting", logic.region.can_reach_all((Region.bus_stop, Region.town)) & logic.time.has_lived_months(6))
+        set_location_rule(multiworld, player, "Strange Sighting", logic.region.can_reach_all(Region.bus_stop, Region.town) & logic.time.has_lived_months(6))
         set_location_rule(multiworld, player, "Sea Monster Sighting", logic.region.can_reach(Region.beach) & logic.time.has_lived_months(2))
         set_location_rule(multiworld, player, "...Bigfoot?",
-                          logic.region.can_reach_all((Region.forest, Region.town, Region.secret_woods)) & logic.time.has_lived_months(4))
+                          logic.region.can_reach_all(Region.forest, Region.town, Region.secret_woods) & logic.time.has_lived_months(4))
         set_location_rule(multiworld, player, "'Me me me me me me me me me me me me me me me me'",
                           logic.region.can_reach(Region.railroad) & logic.tool.has_scythe())
         set_location_rule(multiworld, player, "Secret Iridium Stackmaster Trophy", logic.grind.can_grind_item(10000, Material.wood))
@@ -977,11 +977,11 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, SecretNote.note_22, logic.registry.quest_rules[Quest.the_mysterious_qi])
         set_location_rule(multiworld, player, SecretNote.note_23, logic.registry.quest_rules[Quest.strange_note])
         set_location_rule(multiworld, player, SecretNote.note_24,
-                 logic.building.has_building(Building.junimo_hut) & logic.has(Mineral.any_gem) & logic.season.has_any_not_winter())
+                          logic.building.has_building(Building.junimo_hut) & logic.has(Mineral.any_gem) & logic.season.has_any_not_winter())
         set_location_rule(multiworld, player, SecretNote.note_25, logic.season.has_any_not_winter() & logic.fishing.can_fish_at(Region.railroad)
                           & logic.relationship.can_meet_any(NPC.abigail, NPC.caroline, ))
         set_location_rule(multiworld, player, SecretNote.note_26,
-                 logic.building.has_building(Building.junimo_hut) & logic.has(ArtisanGood.raisins) & logic.season.has_any_not_winter())
+                          logic.building.has_building(Building.junimo_hut) & logic.has(ArtisanGood.raisins) & logic.season.has_any_not_winter())
         set_location_rule(multiworld, player, SecretNote.note_27, logic.region.can_reach(Region.mastery_cave))
 
 
@@ -1050,7 +1050,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     set_location_rule(multiworld, player, "Analyze: Lucksteal", logic.region.can_reach(Region.witch_hut))
     set_location_rule(multiworld, player, "Analyze: Bloodmana", logic.region.can_reach(Region.mines_floor_100))
     set_location_rule(multiworld, player, "Analyze All Eldritch School Locations",
-                      logic.region.can_reach_all((Region.witch_hut, Region.mines_floor_100, Region.farm)) & logic.time.has_lived_months(12))
+                      logic.region.can_reach_all(Region.witch_hut, Region.mines_floor_100, Region.farm) & logic.time.has_lived_months(12))
     set_location_rule(multiworld, player, "Analyze Every Magic School Location",
                       logic.tool.has_tool(Tool.watering_can)
                       & logic.tool.has_tool(Tool.hoe)
@@ -1058,7 +1058,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
                       & logic.has_all("Coffee", "Life Elixir", "Earth Crystal", "Fire Quartz")
                       & logic.ability.can_mine_perfectly()
                       & logic.fishing.can_fish(85)
-                      & logic.region.can_reach_all((Region.witch_hut, Region.mines_floor_100, Region.farm))
+                      & logic.region.can_reach_all(Region.witch_hut, Region.mines_floor_100, Region.farm)
                       & logic.time.has_lived_months(12))
 
 

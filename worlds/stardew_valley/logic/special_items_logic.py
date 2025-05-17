@@ -28,7 +28,7 @@ class SpecialItemsLogic(BaseLogic):
         # has_repeatable_shorts = can_reach_bedroom & self.logic.has(Craftable.staircase)
 
     def has_far_away_stone(self) -> StardewRule:
-        sacrifice_rule = self.logic.has(Artifact.ancient_doll) & self.logic.region.can_reach_any((Region.mines_floor_100, Region.volcano_floor_10))
+        sacrifice_rule = self.logic.has(Artifact.ancient_doll) & self.logic.region.can_reach_any(Region.mines_floor_100, Region.volcano_floor_10)
         if SecretsanityOptionName.easy in self.options.secretsanity:
             return sacrifice_rule & self.logic.received(SpecialItem.far_away_stone)
         return sacrifice_rule

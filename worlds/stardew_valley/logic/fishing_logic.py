@@ -15,8 +15,6 @@ from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 from ..strings.tool_names import FishingRod
 
-fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
-
 
 class FishingLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -25,12 +23,17 @@ class FishingLogicMixin(BaseLogicMixin):
 
 
 class FishingLogic(BaseLogic):
+
+    @cached_property
+    def can_reach_any_fishing_regions(self) -> StardewRule:
+        return self.logic.region.can_reach_any(Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
+
     @cache_self1
     def can_fish_anywhere(self, difficulty: int = 0) -> StardewRule:
-        return self.logic.fishing.can_fish(difficulty) & self.logic.region.can_reach_any(fishing_regions)
+        return self.logic.fishing.can_fish(difficulty) & self.logic.fishing.can_reach_any_fishing_regions
 
     def can_fish_in_freshwater(self) -> StardewRule:
-        return self.logic.fishing.can_fish() & self.logic.region.can_reach_any((Region.forest, Region.town, Region.mountain))
+        return self.logic.fishing.can_fish() & self.logic.region.can_reach_any(Region.forest, Region.town, Region.mountain)
 
     @cached_property
     def has_max_fishing(self) -> StardewRule:
@@ -66,7 +69,7 @@ class FishingLogic(BaseLogic):
         quest_rule = True_()
         if fish.extended_family:
             quest_rule = self.logic.fishing.can_start_extended_family_quest()
-        region_rule = self.logic.region.can_reach_any(fish.locations)
+        region_rule = self.logic.region.can_reach_any(*fish.locations)
         season_rule = self.logic.season.has_any(fish.seasons)
 
         if fish.difficulty == -1:
@@ -132,7 +135,7 @@ class FishingLogic(BaseLogic):
 
     @cached_property
     def can_crab_pot_anywhere(self) -> StardewRule:
-        return self.logic.fishing.can_crab_pot & self.logic.region.can_reach_any(fishing_regions)
+        return self.logic.fishing.can_crab_pot & self.can_reach_any_fishing_regions
 
     @cache_self1
     def can_crab_pot_at(self, region: str) -> StardewRule:

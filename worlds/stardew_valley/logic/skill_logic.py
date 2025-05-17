@@ -125,13 +125,13 @@ class SkillLogic(BaseLogic):
     @cached_property
     def can_get_mining_xp(self) -> StardewRule:
         tool_rule = self.logic.tool.has_tool(Tool.pickaxe)
-        stone_rule = self.logic.region.can_reach_any((Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5))
+        stone_rule = self.logic.region.can_reach_any(Region.mines_floor_5, Region.quarry, Region.skull_cavern_25, Region.volcano_floor_5)
         return tool_rule & stone_rule
 
     @cached_property
     def can_get_combat_xp(self) -> StardewRule:
         tool_rule = self.logic.combat.has_any_weapon()
-        enemy_rule = self.logic.region.can_reach_any((Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5))
+        enemy_rule = self.logic.region.can_reach_any(Region.mines_floor_5, Region.skull_cavern_25, Region.volcano_floor_5)
         return tool_rule & enemy_rule
 
     @cached_property

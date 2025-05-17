@@ -30,9 +30,10 @@ class HatLogic(BaseLogic):
             Hat.golden_helmet: self.logic.region.can_reach(Region.blacksmith) & self.logic.has(Geode.golden_coconut),
             Hat.tiger_hat: self.logic.monster.can_kill_max(Monster.tiger_slime),
             Hat.living_hat: self.logic.grind.can_grind_weeds(100000),
-            Hat.deluxe_pirate_hat: self.logic.region.can_reach_all((Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10)),
+            Hat.deluxe_pirate_hat: self.logic.region.can_reach_all(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10),
             Hat.spotted_headscarf: self.logic.tailoring.can_tailor(Mushroom.red),
-            Hat.fishing_hat: self.logic.tailoring.can_tailor(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish, Fish.midnight_squid, Fish.void_salmon, Fish.slimejack),
+            Hat.fishing_hat: self.logic.tailoring.can_tailor(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish, Fish.midnight_squid,
+                                                             Fish.void_salmon, Fish.slimejack),
             Hat.bucket_hat: self.has_bucket_hat,
         })
 

@@ -47,6 +47,6 @@ class SVELogic(BaseLogic):
     def can_buy_bear_recipe(self):
         access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe) &
                        self.logic.tool.has_tool(Tool.pickaxe))
-        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods, Region.mountain))
+        forage_rule = self.logic.region.can_reach_any(Region.forest, Region.backwoods, Region.mountain)
         knowledge_rule = self.has_bear_knowledge()
         return access_rule & forage_rule & knowledge_rule

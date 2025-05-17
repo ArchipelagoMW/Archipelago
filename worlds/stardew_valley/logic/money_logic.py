@@ -28,10 +28,10 @@ class MoneyLogic(BaseLogic):
         if amount <= 1000:
             return self.logic.true_
 
-        pierre_rule = self.logic.region.can_reach_all((Region.pierre_store, Region.forest))
-        willy_rule = self.logic.region.can_reach_all((Region.fish_shop, LogicRegion.fishing))
-        clint_rule = self.logic.region.can_reach_all((Region.blacksmith, Region.mines_floor_5))
-        robin_rule = self.logic.region.can_reach_all((Region.carpenter, Region.secret_woods))
+        pierre_rule = self.logic.region.can_reach_all(Region.pierre_store, Region.forest)
+        willy_rule = self.logic.region.can_reach_all(Region.fish_shop, LogicRegion.fishing)
+        clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5)
+        robin_rule = self.logic.region.can_reach_all(Region.carpenter, Region.secret_woods)
         shipping_rule = self.logic.shipping.can_use_shipping_bin
 
         if amount <= 2500:
@@ -111,8 +111,8 @@ class MoneyLogic(BaseLogic):
         if currency == MemeCurrency.dead_crops:
             return self.logic.season.has_all() & self.logic.skill.can_get_farming_xp & self.logic.money.can_spend(amount * 100)
         if currency == MemeCurrency.dead_pumpkins:
-            return self.logic.season.has(Season.fall) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter]) &\
-                   self.logic.has(Vegetable.pumpkin) & self.logic.money.can_spend(amount * 100)
+            return self.logic.season.has(Season.fall) & self.logic.season.has_any([Season.spring, Season.summer, Season.winter]) & \
+                self.logic.has(Vegetable.pumpkin) & self.logic.money.can_spend(amount * 100)
         if currency == MemeCurrency.missed_fish:
             return self.logic.fishing.can_catch_many_fish(amount)
         if currency == MemeCurrency.honeywell:

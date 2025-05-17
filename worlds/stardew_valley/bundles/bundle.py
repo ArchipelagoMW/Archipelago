@@ -5,8 +5,7 @@ from typing import List, Tuple
 
 from .bundle_item import BundleItem
 from ..content import StardewContent
-from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, TrapDifficulty
-from ..options import EntranceRandomization
+from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations, TrapDifficulty, EntranceRandomization
 from ..strings.bundle_names import MemeBundleName
 from ..strings.currency_names import Currency, MemeCurrency
 
@@ -23,7 +22,7 @@ class Bundle:
 
     def special_behavior(self, world):
         if self.name == MemeBundleName.clickbait:
-            world.multiworld.exclude_locations[world.player].value.add(MemeBundleName.clickbait)
+            world.options.exclude_locations.value.add(MemeBundleName.clickbait)
 
 
 @dataclass

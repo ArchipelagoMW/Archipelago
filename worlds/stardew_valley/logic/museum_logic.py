@@ -27,7 +27,7 @@ class MuseumLogic(BaseLogic):
     @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         if item.locations:
-            region_rule = self.logic.region.can_reach_all_except_one(item.locations)
+            region_rule = self.logic.region.can_reach_all_except_one(*item.locations)
         else:
             region_rule = False_()
         if item.geodes:

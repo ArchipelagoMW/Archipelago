@@ -37,7 +37,7 @@ class SourceLogic(BaseLogic):
 
     @has_access_to.register
     def _(self, source: GenericSource):
-        return self.logic.region.can_reach_any(source.regions) if source.regions else self.logic.true_
+        return self.logic.region.can_reach_any(*source.regions) if source.regions else self.logic.true_
 
     @has_access_to.register
     def _(self, source: CustomRuleSource):

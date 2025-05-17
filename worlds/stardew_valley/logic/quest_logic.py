@@ -41,7 +41,7 @@ class QuestLogic(BaseLogic):
             Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
-            Quest.rat_problem: self.logic.region.can_reach_all((Region.town, Region.community_center)),
+            Quest.rat_problem: self.logic.region.can_reach_all(Region.town, Region.community_center),
             Quest.meet_the_wizard: self.logic.quest.can_complete_quest(Quest.rat_problem),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
             Quest.smelting: self.logic.has(MetalBar.copper),
@@ -61,7 +61,7 @@ class QuestLogic(BaseLogic):
             Quest.knee_therapy: self.logic.season.has(Season.summer) & self.logic.has(Fruit.hot_pepper) & self.logic.relationship.can_meet(NPC.george),
             Quest.robins_request: self.logic.season.has(Season.winter) & self.logic.has(Material.hardwood) & self.logic.relationship.can_meet(NPC.robin),
             Quest.qis_challenge: True_(),  # The skull cavern floor 25 already has rules
-            Quest.the_mysterious_qi: (self.logic.region.can_reach_all((Region.bus_tunnel, Region.railroad, Region.mayor_house)) &
+            Quest.the_mysterious_qi: (self.logic.region.can_reach_all(Region.bus_tunnel, Region.railroad, Region.mayor_house) &
                                       self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
             Quest.a_winter_mystery: self.logic.season.has(Season.winter),

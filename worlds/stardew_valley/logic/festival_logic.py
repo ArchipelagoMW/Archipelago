@@ -157,7 +157,7 @@ class FestivalLogic(BaseLogic):
         fish_rule = self.logic.fishing.can_fish_anywhere(50)
 
         # Hazelnut always available since the grange display is in fall
-        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))
+        forage_rule = self.logic.region.can_reach_any(Region.forest, Region.backwoods)
 
         # More than half the minerals are good enough
         mineral_rule = self.logic.action.can_open_geode(Generic.any)

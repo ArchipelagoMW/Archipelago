@@ -27,7 +27,7 @@ class HarvestingLogic(BaseLogic):
     @cache_self1
     def can_forage_from(self, source: ForagingSource) -> StardewRule:
         seasons_rule = self.logic.season.has_any(source.seasons)
-        regions_rule = self.logic.region.can_reach_any(source.regions)
+        regions_rule = self.logic.region.can_reach_any(*source.regions)
         return seasons_rule & regions_rule
 
     @cache_self1

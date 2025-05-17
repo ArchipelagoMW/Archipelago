@@ -37,7 +37,7 @@ class MonsterLogic(BaseLogic):
                 return self.logic.monster.can_kill_any(self.all_monsters_by_name.values()) & time_rule
 
             monster = self.all_monsters_by_name[monster]
-        region_rule = self.logic.region.can_reach_any(monster.locations)
+        region_rule = self.logic.region.can_reach_any(*monster.locations)
         combat_rule = self.logic.combat.can_fight_at_level(monster.difficulty)
 
         return region_rule & combat_rule & time_rule

@@ -63,9 +63,9 @@ class GrindLogic(BaseLogic):
 
     def can_grind_weeds(self, quantity: int) -> StardewRule:
         return self.logic.and_(self.logic.tool.has_scythe(),
-                               self.logic.region.can_reach_all((Region.farm, Region.town, Region.forest, Region.secret_woods,
-                                                                Region.backwoods, Region.mountain, Region.railroad, Region.mutant_bug_lair,
-                                                                Region.island_east, Region.island_west)),
+                               self.logic.region.can_reach_all(Region.farm, Region.town, Region.forest, Region.secret_woods,
+                                                               Region.backwoods, Region.mountain, Region.railroad, Region.mutant_bug_lair,
+                                                               Region.island_east, Region.island_west),
                                # Assuming 1000 per month if the player does not grind it
                                self.logic.time.has_lived_months(quantity // 1000))
 

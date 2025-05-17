@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..options import EntranceRandomization
@@ -41,20 +39,16 @@ class RegionLogic(BaseLogic):
 
         return Reach(region_name, "Region", self.player)
 
-    @cache_self1
-    def can_reach_any(self, region_names: Tuple[str, ...]) -> StardewRule:
+    def can_reach_any(self, *region_names: str) -> StardewRule:
         if any(r in always_regions_by_setting[self.options.entrance_randomization] for r in region_names):
             return true_
 
         return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
-    @cache_self1
-    def can_reach_all(self, region_names: Tuple[str, ...]) -> StardewRule:
+    def can_reach_all(self, *region_names: str) -> StardewRule:
         return self.logic.and_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
-    @cache_self1
-    def can_reach_all_except_one(self, region_names: Tuple[str, ...]) -> StardewRule:
-        region_names = list(region_names)
+    def can_reach_all_except_one(self, *region_names: str) -> StardewRule:
         num_required = len(region_names) - 1
         if num_required <= 0:
             num_required = len(region_names)
