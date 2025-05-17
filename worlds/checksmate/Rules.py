@@ -143,7 +143,6 @@ def set_rules(world: World):
                 continue
 
         location = world.multiworld.get_location(name, world.player)
-        rule_set = []
 
         # Material expectations rule
         material_cost = item.material_expectations if not super_sized else (
