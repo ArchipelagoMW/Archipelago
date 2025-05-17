@@ -133,7 +133,7 @@ class TestItemPool(CMMockTestCase):
         items_with_pocket = self.item_pool.create_filler_items(
             has_pocket=True,
             max_items=max_items,
-            user_location_count=user_location_count,
+            user_event_count=user_location_count,
             locked_items=locked_items
         )
         total_count = len(items_with_pocket) + user_location_count + sum(locked_items.values())
@@ -148,7 +148,7 @@ class TestItemPool(CMMockTestCase):
         # Test without pocket
         items_no_pocket = self.item_pool.create_filler_items(
             has_pocket=False, max_items=max_items,
-            user_location_count=user_location_count,
+            user_event_count=user_location_count,
             locked_items=locked_items
         )
         total_count = len(items_no_pocket) + user_location_count + sum(locked_items.values())

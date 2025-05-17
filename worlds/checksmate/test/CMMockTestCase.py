@@ -38,7 +38,9 @@ class CMMockTestCase(unittest.TestCase):
                     'major_piece_limit_by_type': type('MajorPieceLimitByType', (), {'value': 2})(),
                     'queen_piece_limit_by_type': type('QueenPieceLimitByType', (), {'value': 1})(),
                     'queen_piece_limit': type('QueenPieceLimit', (), {'value': 2})(),
-                    'asymmetric_trades': AsymmetricTrades(AsymmetricTrades.option_jacks)
+                    'asymmetric_trades': AsymmetricTrades(AsymmetricTrades.option_jacks),
+                    'early_material': type('EarlyMaterial', (), {'value': 0})(),  # Default to off
+                    'locked_items': type('LockedItems', (), {'value': {}})()  # Empty dict for locked items
                 })()
                 # The above limits to 2 of all except queens, which means:
                 # 2 * 2 = 4 minors
@@ -53,6 +55,15 @@ class CMMockTestCase(unittest.TestCase):
                 }}
                 # Set up army configuration
                 self.armies = {1: [0]}  # Player 1 has access to army 0
+                
+                # Add locked_locations
+                self.locked_locations = []
+                
+                # Add multiworld attribute with proper push_precollected method
+                self.multiworld = type('MultiWorld', (), {
+                    'precollected_items': {1: []},
+                    'push_precollected': lambda self, item: None
+                })()
 
             def create_item(self, name):
                 """Create a mock item with the given name."""

@@ -12,6 +12,8 @@ class TestLocationLogic(CMTestBase):
         super().setUp()
         self.collection_state = CollectionState(self.multiworld)
         self.difficulty = determine_difficulty(self.world.options)
+        # Initialize locked_items to empty dict
+        self.world.locked_items = {}
         
     def create_test_item(self, name: str) -> Item:
         """Helper to create a test item with the given name"""
@@ -53,7 +55,9 @@ class TestLocationLogic(CMTestBase):
             "Fork, Sacrificial", "Fork, True", "Fork, Sacrificial Triple",
             "Fork, True Triple", "Fork, Sacrificial Royal", "Fork, True Royal",
             # Threat locations require pin mechanics
-            "Threaten Minor", "Threaten Major", "Threaten Queen", "Threaten King"
+            "Threaten Minor", "Threaten Major", "Threaten Queen", "Threaten King",
+            # Capture Everything adjusts its material requirements based on the goal
+            "Capture Everything"
         }
         
         for loc_name, loc_data in location_table.items():
@@ -162,3 +166,45 @@ class TestLocationLogic(CMTestBase):
         # Should now be accessible
         self.assertTrue("King to Center" in self.get_accessible_locations(),
             "King to Center should be accessible with a pawn") 
+
+    def test_capture_everything_access(self):
+        """Test that Capture Everything has correct accessibility rules"""
+        # Initially unreachable
+        self.assertFalse("Capture Everything" in self.get_accessible_locations(),
+            "Capture Everything should be unreachable initially")
+        
+        # Get base material requirement
+        base_material = location_table["Capture Everything"].material_expectations
+        grand_material = location_table["Capture Everything"].material_expectations_grand
+        
+        # In super-sized mode, it requires Super-Size Me and grand material
+        if self.world.options.goal.value != self.world.options.goal.option_single:
+            # Should still be unreachable without Super-Size Me
+            self.assertFalse("Capture Everything" in self.get_accessible_locations(),
+                "Capture Everything should be unreachable without Super-Size Me in super-sized mode")
+            
+            # Add Super-Size Me
+            super_size = self.create_test_item("Super-Size Me")
+            self.world.collect(self.collection_state, super_size)
+            
+            # Should still be unreachable without enough material
+            self.assertFalse("Capture Everything" in self.get_accessible_locations(),
+                "Capture Everything should be unreachable without enough material in super-sized mode")
+            
+            # Add enough material for grand requirement
+            while self.collection_state.prog_items[self.player].get("Material", 0) < grand_material * self.difficulty:
+                self.collect_item_and_get_material("Progressive Pawn")
+                self.collect_item_and_get_material("Progressive Major Piece")
+            
+            # Should now be accessible
+            self.assertTrue("Capture Everything" in self.get_accessible_locations(),
+                "Capture Everything should be accessible with Super-Size Me and enough material in super-sized mode")
+        else:
+            # In single mode, it just needs base material
+            while self.collection_state.prog_items[self.player].get("Material", 0) < base_material * self.difficulty:
+                self.collect_item_and_get_material("Progressive Pawn")
+                self.collect_item_and_get_material("Progressive Major Piece")
+            
+            # Should now be accessible
+            self.assertTrue("Capture Everything" in self.get_accessible_locations(),
+                "Capture Everything should be accessible with enough material in single mode") 
