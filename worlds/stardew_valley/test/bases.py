@@ -7,12 +7,12 @@ import unittest
 from collections.abc import Iterable
 from contextlib import contextmanager
 
-from BaseClasses import MultiWorld, CollectionState, get_seed, Location, Item, Region
+from BaseClasses import get_seed, MultiWorld, Location, Item, Region, CollectionState
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
-from .options.utils import fill_namespace_with_default, parse_class_option_keys
+from .options.utils import parse_class_option_keys, fill_namespace_with_default
 from .. import StardewValleyWorld, StardewItem, StardewRule
 from ..logic.time_logic import MONTH_COEFFICIENT
 from ..options import StardewValleyOption, options
