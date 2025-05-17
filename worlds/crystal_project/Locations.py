@@ -30,7 +30,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Jump on Nan", 41 + treasure_index_offset), #Burglars Glove chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Above waterfall", 17 + treasure_index_offset), #Cedar Staff chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Behind Nan house", 61 + treasure_index_offset), #Cedar Wand chest
-        LocationData("Spawning Meadows", "Spawning Meadows Chest - Island", 54 + treasure_index_offset), #Cleaver chest
+        LocationData("Spawning Meadows", "Spawning Meadows Chest - Promontory south of waterfall", 54 + treasure_index_offset), #Cleaver chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Jump on secret tunnel chest", 5 + treasure_index_offset), #Fenix Juice chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - On path to Delende", 49 + treasure_index_offset), #Fenix Juice chest
         LocationData("Spawning Meadows", "Spawning Meadows Chest - Secret tunnel", 47 + treasure_index_offset), #Stabbers chest
@@ -42,7 +42,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Pouch Nan", 53 + npc_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb near Shaku", 627 + npc_index_offset), #Secret Herb 0
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb near Shaku", 627 + npc_index_offset), #Secret Herb 0 Fixed Missable
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Promontory south of waterfall Secret Herb", 297 + npc_index_offset), #(48, 112, -36) Secret Herb 1 Fixed Missable
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb past mountain summit chest", 545 + npc_index_offset), #(79, 112, -30) Secret Herb 2 Fixed Missable
+        LocationData("Spawning Meadows", "Spawning Meadows NPC - Cross trees and jump down for Secret Herb", 546 + npc_index_offset), #(43, 104, -8) Secret Herb 3 Fixed Missable
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Map Nan", 84 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Nan Stew", 14 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has("Item - Black Squirrel", player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
@@ -50,10 +53,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
-        #Todo Secret Herb locations that don"t seem to be used?
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 1", 297 + npc_index_offset), #(48, 112, -36)
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 2", 545 + npc_index_offset), #(79, 112, -30)
-        #LocationData("Spawning Meadows", "Spawning Meadows NPC - Secret Herb 3", 546 + npc_index_offset), #(43, 104, -8)
 
         #Summons Todo: descriptivize and implement
         #LocationData("Spawning Meadows", "Spawning Meadows Summon - Shaku from SFire_Summon", 477 + summon_index_offset), #(118, 109, 10)
@@ -93,8 +92,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Delende", "Delende NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
         #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
         #Todo NPCs Player Options: do we want a filter option to add the guy who fishes things up for you (Z2_FisherOnDock ID 121 (166, 133, -208))
-        #Todo NPCs CheckOrNot: guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74))
-        #LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset),
+        LocationData("Delende", "Delende NPC - Cartographer", 1153 + npc_index_offset), #guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
         #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
 
         #Grans House (Delende)
@@ -280,8 +278,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gardeners Shed 3", 2664 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
 
         #NPCs 
-        #Todo NPCs Missable: Courtyard Chloe (Z37_ChloeFishing ID 1661 (399, 155, -219)) gives you Fly Lure (and later she disappears and it"s on the ground here)
-        #Todo NPCs Missable: Courtyard Reid (Z28_Reid ID 2410 (113, 172, -372)) gives you a Courtyard Key or if you miss it it"s on the ground (Z37_Courtyard Key ID 2486 (424, 150, -222))
         #Todo NPCs Job Masters: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Cleric ID 3568 (363, 166, -266); gives you Cleric Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Monk ID 3567 (394, 179, -295); gives you Monk Seal in exchange for job mastery
@@ -289,13 +285,13 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
-        #Todo NPCs CheckOrNot: Z14_Duck_HomePointStone ID 560 (403, 161, -265) gives you a Home Point Stone if you don"t have one
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
         #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
-        #Todo NPCs Blocker Missable and Multichecks: luxury store guard; gives you 1st check at 6 crystals and the 2nd at 15; won't give you check 1 if you already have Luxury Pass or check 2 if you have V2
-        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 1", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289)
-        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Artisan Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
-        #Todo NPCs Missable: requires Z14_LuxuryStolen variable key, which is set when Z14_StoreRoomProxFlag ID 1530 (425, 175, -295) is triggered by PlayerProximity; if you already have Luxury Key, he won't give you anything
-        #LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset), #(417, 171, -299)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Shop Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Shop Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset), #(417, 171, -299) Fixed Missable
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset), #Fly Lure (399, 155, -219) Fixed Missable
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sparkling in the fountain", 2584 + npc_index_offset), #Plug Lure
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
@@ -365,11 +361,9 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
-        #Todo NPCs CheckOrNot: Crystal Checker guy gives you Quintar Pass for having enough crystals; doesn't if you already have the Quintar Pass
-        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Stable Owner by Capital Sequoias eastern gate", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass, Fixed Missable
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset), #Dust
-        #Todo NPCs Multichecks: 2 checks on Quintar Enthusiast
-        #LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset),
+        LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset), #Fixed Missable
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Ore
 
@@ -536,7 +530,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Salmon River", "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
-        #Todo NPCs Missable: figure out Courtyard Key Reid (see Capital Sequoia)
+        LocationData("Salmon River", "Salmon River NPC - Reid chilling by the Fish Hatchery", 2410 + npc_index_offset), #(113, 172, -372) Courtyard Key; Fixed Missable
         LocationData("Salmon River", "Salmon River NPC - Salmon Race Participation Prize", 50639 + npc_index_offset),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 14th place price", 50640 + npc_index_offset, logic.has_swimming),
         LocationData("Salmon River", "Salmon River NPC - Salmon Race 12th place price", 50641 + npc_index_offset, logic.has_swimming),
@@ -577,8 +571,6 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, logic.has_horizontal_movement), #Dust
-        #Todo NPCs Blocker: this son unlocks a check in Sara Sara Bazaar, he's commented out because he have an AddInventory so any item placed on him is not obtainable
-        #LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Circle the western desert wall for Lost Son", 1198 + npc_index_offset), #29b1d681
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, logic.has_vertical_movement), #Ingot
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Dust
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
@@ -594,14 +586,11 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Chest - Spilled booty", 2936 + treasure_index_offset, logic.has_swimming), #Captains Hat chest
 
         #NPCs
-        #Todo NPCs CheckOrNot: East and West Stable Owners are Crystal Checker guys who give you a Quintar Pass for having enough crystals; don't if you already have the Quintar Pass
-        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar West Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
-        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar East Stable Owner crystal checker for Quintar Pass if you refuse to touch an eyeball", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)),
-        #Todo NPCs CheckOrNot: Crystal Checker guy gives you Ferry Pass for having 15 crystals Z27_FerryCrystalChecker ID 940 (-166,93,56)
-        #LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry crystal checker grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar West Stable Owner", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Quintar East Stable Owner", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(-166,93,56) Fixed Missable
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
-        #Todo NPCs Blocker: gotta find the Lost Son first (the mom before you find the son is a different NPC)
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Circle the western desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player) and state.has("Item - Fresh Salmon", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Shoudu Stew", player)),
@@ -746,7 +735,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #Todo NPCs Player Options: (-139, 91, 123) do we want a filter option to add the guy who fishes things up for you
         #LocationData("The Open Sea", "The Open Sea NPC - Z27_FisherOnRaft", 2804 + npc_index_offset),
-        #Todo NPCs CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol
+        #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
         #LocationData("The Open Sea", "The Open Sea NPC - Z34_SinisterSailor", 2520 + npc_index_offset),
 
         #Shoudu Waterfront
@@ -817,8 +806,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
-        #Todo NPCs Missable: Z38_ChloesLure ID 2737 (781, 131, -278) gives you a Jigging Lure
-        #Todo NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
+        LocationData("Shoudu Province", "Shoudu Province NPC - Chloe and Talon sky fishing", 3700 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248) Fixed Missable; removed post-sparkle
+        #NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData("Shoudu Province", "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
@@ -928,7 +917,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #NPCs
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
-        #Todo NPCs CheckOrNot: MiscQuintar ID 427 gives you The Sequoia map if you don't have it (and you can speak Quintar aka have Babel Quintar item from Mausoleum) (789, 191, -338)
+        LocationData("Quintar Reserve", "Quintar Reserve NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 1 down in the Quintar nest 1", 2255 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 1
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding 2 down in the Quintar nest 2", 2256 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Shedding 2
         LocationData("Quintar Reserve", "Quintar Reserve NPC - Shedding in sneaky Quintar nest north of Mausoleum", 2257 + npc_index_offset), #Shedding 3
@@ -1136,8 +1125,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Jidamba Tangle", "Jidamba Tangle Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Jidamba Tangle map chest
 
         #NPCs
-        #Todo NPCs Missable: Z54_ChloeFishing ID 2775 gives you the Super Rod (828, 119, 99)
         #Todo NPCs Job Masters: Jidamba Tangle (Outpost) has Master Weaver ID 3579 (627, 140, 77); gives you Weaver Seal in exchange for job mastery
+        LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Chloe Queen of the Canopy", 2775 + npc_index_offset), #Super Rod (828, 119, 99); Fixed Missable
         LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Splish splash Diamond", 2871 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
         LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset), #Dust
         LocationData("Jidamba Tangle", "Jidamba Tangle NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ingot
@@ -1319,8 +1308,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Castle Sequoia", "Castle Sequoia Chest - Throne snacks", 2505 + treasure_index_offset), #(401, 250, -478) (Throne) New World Stone chest
 
         #NPCs
-        #Todo NPCs CheckOrNot: this gives you a Gaea Shard if you're stuck
-        #LocationData("Castle Sequoia", "Castle Sequoia NPC - Z58_StrandedShard", 3785 + npc_index_offset), #(401, 183, -382)
+        #NPCs CheckOrNot: Z58_StrandedShard ID 3785 (401, 183, -382); this gives you a Gaea Shard if you're stuck: no
         #Todo NPCs Blocker: i think this guy might only show up in the vanilla game's randomizer? checks if Z58_EleOn (Z58 is Castle Sequoia); Z58Progression_Gate ID 3824 (400, 250, -478)
 
         #The New World
