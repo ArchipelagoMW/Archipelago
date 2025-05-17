@@ -288,8 +288,8 @@ class JakAndDaxterReplClient:
     # And don't replace any chars with "?" for good measure.
     @staticmethod
     def sanitize_file_text(text: str) -> str:
-        allowed_chars_no_space = ALLOWED_CHARACTERS - {" ", "'"}
-        result = "".join([c if c in allowed_chars_no_space else "" for c in text[:16]]).upper()
+        allowed_chars_no_extras = ALLOWED_CHARACTERS - {" ", "'", "(", ")", "\""}
+        result = "".join([c if c in allowed_chars_no_extras else "" for c in text[:16]]).upper()
         return f"\"{result}\""
 
     # Pushes a JsonMessageData object to the json message queue to be processed during the repl main_tick
