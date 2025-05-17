@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression, SkillProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
 from ..strings.ap_names.transport_names import Transportation

@@ -864,7 +864,7 @@ def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: 
     if not content.features.friendsanity.is_enabled:
         return
     set_rule(multiworld.get_location("Spouse Stardrop", player),
-             logic.relationship.has_hearts_with_any_bachelor(13))
+             logic.relationship.has_hearts_with_any_bachelor(13) & logic.relationship.can_get_married())
     set_rule(multiworld.get_location("Have a Baby", player),
              logic.relationship.can_reproduce(1))
     set_rule(multiworld.get_location("Have Another Baby", player),

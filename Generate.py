@@ -10,8 +10,8 @@ import sys
 import urllib.parse
 import urllib.request
 from collections import Counter
-from typing import Any, Dict, Tuple, Union
 from itertools import chain
+from typing import Any
 
 import ModuleUpdate
 
@@ -77,7 +77,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None) -> Tuple[argparse.Namespace, int]:
+def main(args=None) -> tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
@@ -95,7 +95,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         logging.info("Race mode enabled. Using non-deterministic random source.")
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, Tuple[Any, ...]] = {}
+    weights_cache: dict[str, tuple[Any, ...]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
@@ -180,7 +180,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
-    settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
+    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
@@ -212,7 +212,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         path = player_path_cache[player]
         if path:
             try:
-                settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
                     tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
                 for settingsObject in settings:
                     for k, v in vars(settingsObject).items():
@@ -242,7 +242,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     return erargs, seed
 
 
-def read_weights_yamls(path) -> Tuple[Any, ...]:
+def read_weights_yamls(path) -> tuple[Any, ...]:
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
@@ -378,7 +378,7 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     return weights
 
 
-def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
     from worlds import AutoWorldRegister
 
     if not game:
