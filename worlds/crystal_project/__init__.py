@@ -1,24 +1,19 @@
-import ast
 import logging
-import settings
-import os
-import typing
-import threading
-import pkgutil
 
 from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
-    get_item_names_per_category, progressive_equipment, non_progressive_equipment
-from .Locations import get_locations, get_bosses, get_shops
+    get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
+    set_jobs_at_default_locations, job_count_in_pool, default_starting_job_list, job_list
+from .Locations import get_locations, get_bosses
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
 
-from typing import List, Set, Dict, TextIO, Any
+from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
+from BaseClasses import Item, Tutorial
 
 class CrystalProjectWeb(WebWorld):
-    #theme = "partyTime" #pick a theme!
+    theme = "jungle"
     bug_report_page = "https://github.com/Emerassi/CrystalProjectAPWorld/issues"
     setup_en = Tutorial(
         "Mod Setup and Use Guide",
@@ -44,11 +39,10 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
-    shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, None)}
-    location_name_to_id.update(boss_name_to_id)
-    location_name_to_id.update(shop_name_to_id)
+    location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
-    startingJobs = get_random_starting_jobs()
+    starting_jobs = []
+    statically_placed_jobs:int = 0
     web = CrystalProjectWeb()
 
     logger = logging.getLogger()
@@ -56,16 +50,9 @@ class CrystalProjectWorld(World):
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
 
-        if self.options.randomizeStartingJobs:
-            for job in self.startingJobs:
-                self.multiworld.push_precollected(self.create_item(job.name))
-        else:
-            self.multiworld.push_precollected(self.create_item("Job - Warrior"))
-            self.multiworld.push_precollected(self.create_item("Job - Monk"))
-            self.multiworld.push_precollected(self.create_item("Job - Rogue"))
-            self.multiworld.push_precollected(self.create_item("Job - Cleric"))
-            self.multiworld.push_precollected(self.create_item("Job - Wizard"))
-            self.multiworld.push_precollected(self.create_item("Job - Warlock"))
+        self.starting_jobs = get_starting_jobs(self)
+        for job in self.starting_jobs:
+            self.multiworld.push_precollected(self.create_item(job.name))
 
         if self.options.startWithTreasureFinder:
             self.multiworld.push_precollected(self.create_item("Item - Treasure Finder"))
@@ -147,11 +134,18 @@ class CrystalProjectWorld(World):
             bosses = get_bosses(self.player, self.options)
             locations.extend(bosses)
 
-        if self.options.shopsanity:
-            shops = get_shops(self.player, self.options)
-            locations.extend(shops)
-
         init_areas(self, locations, self.options)
+
+        jobs_earnable:int = 0
+        if self.options.jobRando.value == self.options.jobRando.option_none:
+            jobs_earnable = set_jobs_at_default_locations(self)
+        else:
+            jobs_earnable = len(job_list) - len(self.starting_jobs)
+
+        if self.options.goal.value == self.options.goal.option_astley and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
+            message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
+            self.logger.info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
+            self.options.newWorldStoneJobQuantity.value = jobs_earnable
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -181,16 +175,8 @@ class CrystalProjectWorld(World):
         excluded_items: Set[str] = set()
         excluded_items.add("Item - Home Point Stone")
 
-        if self.options.randomizeStartingJobs:
-            for job in self.startingJobs:
-                excluded_items.add(job.name)
-        else:
-            excluded_items.add("Job - Warrior")
-            excluded_items.add("Job - Monk")
-            excluded_items.add("Job - Rogue")
-            excluded_items.add("Job - Cleric")
-            excluded_items.add("Job - Wizard")
-            excluded_items.add("Job - Warlock")
+        for job in self.starting_jobs:
+            excluded_items.add(job.name)
 
         if not self.options.levelGating:
             excluded_items.add("Item - Progressive Level Cap")
@@ -333,7 +319,7 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Canopy Key")
             excluded_items.add("Item - Ice Cell Key")
 
-        if self.options.randomizeJobs == self.options.randomizeJobs.option_false:
+        if self.options.jobRando == self.options.jobRando.option_none:
             excluded_items.add("Job - Fencer")
             excluded_items.add("Job - Shaman")
             excluded_items.add("Job - Scholar")
@@ -419,7 +405,7 @@ class CrystalProjectWorld(World):
             win_condition_item = "Item - Clamshell"
         
         if self.options.goal == 0:
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity)
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
         if self.options.goal == 1:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
         if self.options.goal == 2:
@@ -427,7 +413,7 @@ class CrystalProjectWorld(World):
 
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
-        for job in self.startingJobs:
+        for job in self.starting_jobs:
             job_ids.append(job.id)
 
         return job_ids
@@ -437,17 +423,15 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "goal": self.options.goal.value,
-            "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
-            "randomizeJobs": bool(self.options.randomizeJobs.value),
-            "randomizeStartingJobs": bool(self.options.randomizeStartingJobs),
+            "randomizeJobs": bool(self.options.jobRando.value == self.options.jobRando.option_crystal),
+            "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
+            "startWithMaps": bool(self.options.startWithMaps.value),
+            "includedRegions": self.options.includedRegions.value,
+            "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
             "startingJobs": self.get_job_id_list(),
             "killBossesMode" : bool(self.options.killBossesMode.value),
-            "shopsanity" : bool(self.options.shopsanity.value),
-            "includedRegions": self.options.includedRegions.value,
-            "levelGating": bool(self.options.levelGating.value),
             "easyLeveling": bool(self.options.easyLeveling.value),
-            # "keyMode": bool(self.options.keyMode.value),
-            "startWithMaps": bool(self.options.startWithMaps.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
+            "levelGating": bool(self.options.levelGating.value),
         }

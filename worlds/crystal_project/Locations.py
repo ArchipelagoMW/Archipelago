@@ -15,7 +15,6 @@ treasure_index_offset = 1
 npc_index_offset = 10000
 crystal_index_offset = 100000
 boss_index_offset = 1000000
-shop_index_offset = 10000000
 #summon_index_offset = 1000000 Summons Todo
 
 def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
@@ -1368,12 +1367,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("The Depths", "The Depths Boss - The Enforcer", 1128 + boss_index_offset),
         LocationData("The Depths", "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset),
         LocationData("The Old World", "The Old World Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
-    ]
-    return location_table
 
-def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
-    location_table: List[LocationData] = [
         #Zones (Beginner)
         #Spawning Meadows
         LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 1", 13 + shop_index_offset),

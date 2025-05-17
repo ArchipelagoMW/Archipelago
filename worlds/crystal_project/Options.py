@@ -27,11 +27,17 @@ class NewWorldStoneJobQuantity(Range):
     """
     If your goal is Astley, select how many Jobs you need to find before being sent the New World Stone for the final fight.
 
-    (NOTE: Starting Jobs do not count towards this number).
+    We will validate this option at generation time and if it is higher than the number of jobs you can obtain, we will reduce it.
+
+    The maximum you can obtain is 24 minus the number of starting jobs you've selected, which is 18 if your jobRando is not set to full.
+
+    If you choose None for jobRando and you have selected beginner or advanced for includedRegions this will also reduce the number of crystals available.
+
+    The maximum number for jobRando None and beginner is 4, and jobRando None and advanced is 11.
     """
     display_name = "Job count that locks the new world stone"
     range_start = 1
-    range_end = 18
+    range_end = 23
     default = 18
 
 class ClamshellsQuantity(Range):
@@ -53,17 +59,30 @@ class ClamshellsInPool(Range):
     default = 19
 
 #"""Location Options"""
-class RandomizeJobs(DefaultOnToggle):
+class JobRando(Choice):
     """
-    When enabled, Jobs can be found anywhere; when disabled, they are always on crystals.
-    """
-    display_name = "Randomize Jobs"
+    Full means your starting jobs are randomized and the rest of the vanilla jobs are added to the item pool.
 
-class RandomizeStartingJobs(DefaultOnToggle):
+    Adjust the Starting Job Quantity setting below for how many random jobs you start with.
+
+    Crystal means all vanilla jobs normally received from crystals are chucked into the item pool.
+
+    None means all jobs are where they normally are in the vanilla game.
     """
-    When enabled, you will start with 6 random jobs.
+    display_name = "Job Rando"
+    option_none = 0
+    option_crystal = 1
+    option_full = 2
+    default = 2
+
+class StartingJobQuantity(Range):
     """
-    display_name = "Randomize starting Jobs"
+    Select how many starting jobs you'll get.  Only does anything if you're randomizing starting jobs.
+    """
+    display_name = "Starting Job Quantity"
+    range_start = 1
+    range_end = 6
+    default = 6
 
 class KillBossesMode(Toggle):
     """
@@ -71,11 +90,7 @@ class KillBossesMode(Toggle):
     """
     display_name = "Kill Bosses Mode"
 
-class Shopsanity(Toggle):
-    """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
-    """
-    display_name = "Shopsanity"
 
 class IncludedRegions(Choice):
     """
@@ -192,10 +207,9 @@ class CrystalProjectOptions(PerGameCommonOptions):
     newWorldStoneJobQuantity: NewWorldStoneJobQuantity
     clamshellsQuantity: ClamshellsQuantity
     clamshellsInPool: ClamshellsInPool
-    randomizeJobs: RandomizeJobs
-    randomizeStartingJobs: RandomizeStartingJobs
+    jobRando: JobRando
+    startingJobQuantity: StartingJobQuantity
     killBossesMode: KillBossesMode
-    shopsanity: Shopsanity
     includedRegions: IncludedRegions
     levelGating: LevelGating
     levelUpsInPool: LevelUpsInPool

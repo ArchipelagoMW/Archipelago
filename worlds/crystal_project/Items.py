@@ -1,7 +1,5 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List
-from BaseClasses import ItemClassification
-
-import random
+from BaseClasses import ItemClassification, Item
 
 class ItemData(NamedTuple):
     category: str
@@ -1527,7 +1525,16 @@ optional_scholar_abilities: Tuple[str, ...] = (
     "Scholar - Lifegiver"
 )
 
-job_list: Tuple[Job, ...] = (
+default_starting_job_list: List[Job] = [
+    Job("Job - Warrior", 0),
+    Job("Job - Monk", 5),
+    Job("Job - Rogue", 2),
+    Job("Job - Cleric", 4),
+    Job("Job - Wizard", 3),
+    Job("Job - Warlock", 14),
+]
+
+job_list: List[Job] = [
     Job("Job - Warrior", 0),
     Job("Job - Monk", 5),
     Job("Job - Rogue", 2),
@@ -1552,7 +1559,34 @@ job_list: Tuple[Job, ...] = (
     Job("Job - Beastmaster", 23),
     Job("Job - Weaver", 16),
     Job("Job - Mimic", 22),
-)
+]
+
+job_crystal_beginner_dictionary: Dict[str, str] = {
+    "Job - Fencer": "Pale Grotto Crystal - Fencer",
+    "Job - Shaman": "Draft Shaft Conduit Crystal - Shaman",
+    "Job - Scholar": "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar",
+    "Job - Aegis": "Skumparadise Crystal - Aegis",
+}
+
+job_crystal_advanced_dictionary: Dict[str, str] = {
+    "Job - Hunter": "Quintar Nest Crystal - Hunter",
+    "Job - Chemist": "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)",
+    "Job - Reaper": "Capital Jail Crystal - Reaper, above hell pool",
+    "Job - Ninja": "Okimoto N.S. Crystal - Ninja",
+    "Job - Nomad": "River Cats Ego Crystal - Appease the QuizFish Nomad",
+    "Job - Dervish": "Ancient Reservoir Crystal - Dervish",
+    "Job - Beatsmith": "Capital Sequoia Crystal - Beatsmith",
+}
+
+job_crystal_expert_dictionary: Dict[str, str] = {
+    "Job - Samurai": "Shoudu Province Crystal - Samurai for 3 Sky Arena wins",
+    "Job - Assassin": "The Undercity Crystal - Assassin",
+    "Job - Valkyrie": "Beaurior Volcano Crystal - Valkyrie",
+    "Job - Summoner": "Slip Glide Ride Crystal - Summoner",
+    "Job - Beastmaster": "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
+    "Job - Weaver": "Jidamba Eaclaneya Crystal - Weaver",
+    "Job - Mimic": "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
+}
 
 filler_items: Tuple[str, ...] = (
     "Item - Tonic",
@@ -1586,5 +1620,39 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
 
     return categories
 
-def get_random_starting_jobs() -> List[Job]:
-    return random.sample(job_list, 6)
+def get_starting_jobs(world: "CrystalProjectWorld") -> List[Job]:
+    if world.options.jobRando.value == world.options.jobRando.option_full:
+        return get_random_starting_jobs(world, world.options.startingJobQuantity.value)
+    else:
+        return default_starting_job_list
+
+def get_random_starting_jobs(self, count:int) -> List[Job]:
+    return self.random.sample(job_list, count)
+
+def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
+    job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too
+
+    if world.options.includedRegions.value == world.options.includedRegions.option_advanced:
+        job_crystal_dictionary.update(job_crystal_advanced_dictionary)
+
+    if (world.options.includedRegions.value == world.options.includedRegions.option_expert
+        or world.options.includedRegions.value == world.options.includedRegions.option_all):
+        job_crystal_dictionary.update(job_crystal_advanced_dictionary)
+        job_crystal_dictionary.update(job_crystal_expert_dictionary)
+
+    for job_name in job_crystal_dictionary:
+        world.get_location(job_crystal_dictionary[job_name]).place_locked_item(world.create_item(job_name))
+        #message = "Placing" + job_name + " at " + job_crystal_dictionary[job_name]
+        #world.logger.info(message)
+
+    return len(job_crystal_dictionary)
+
+def job_count_in_pool(world: "CrystalProjectWorld", pool:list[Item]):
+    job_count:int = 0
+    for item in pool:
+        for job in job_list:
+            if job.name == item.name:
+                job_count += 1
+
+    return job_count
+

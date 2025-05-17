@@ -17,15 +17,23 @@ Install .Net 8.0 x64 if you don't already have it.
 Go to [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases).
 Download the installer file, extract it, and run the executable. When prompted, choose your Crystal Project installation location.
 
-## Switching Between Saves on Different Versions
+## Switching Between Different Versions of Archipelago
 
-You can switch between your Archipelago and non-Archipelago save files, as well as ones on different versions of the AP World.
+Your save files for the unmodified game will not be visible inside the Archipelago version of the game and vice versa.
+ The unmodified game and the AP version of the game store saves in different folders to prevent you from loading incompatible saves and getting errors.
 
-If you want to switch back to your non-Archipelago save files: in your Steam library, right-click Crystal Project in the list and select "Properties...".
-Go to the Installed Files section and select "Verify integrity of game files". Then in the Betas menu, select the branch that matches the save file you want to switch to (likely the release branch, a.k.a. None in the Beta Participation dropdown).
-When you want to switch back to your Archipelago save files, change back to the archipelago branch in Steam's Beta Participation menu, and run the installer for the version you want.
+If you want to switch back to unmodded Crystal Project:
+ 1. In your Steam library, right-click Crystal Project in the list and select "Properties...".
+ 1. In the Betas menu, select the branch that matches the save file you want to switch to (likely the release branch, a.k.a. None in the Beta Participation dropdown).
 
-If you want to switch to a different AP World version, run Steam's file verification as above, and run the installer for the version of Crystal Project APWorld you want to switch to.
+When you want to switch back to the Archipelago version of Crystal Project:
+ 1. Change back to the archipelago branch in Steam's Beta Participation menu.
+ 1. Run the installer for the version you want.
+
+If you want to switch to a different version of Archipelago Crystal Project:
+ 1. In your Steam library, right-click Crystal Project in the list and select "Properties...".
+ 1. Go to the Installed Files section and select "Verify integrity of game files".
+ 1. Run the installer for the version of Crystal Project Archipelago you want to switch to.
 
 ## Configuring your YAML file
 
