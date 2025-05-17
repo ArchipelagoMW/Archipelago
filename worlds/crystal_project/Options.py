@@ -90,7 +90,11 @@ class KillBossesMode(Toggle):
     """
     display_name = "Kill Bosses Mode"
 
+class Shopsanity(Toggle):
+    """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
+    """
+    display_name = "Shopsanity"
 
 class IncludedRegions(Choice):
     """
@@ -210,6 +214,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     jobRando: JobRando
     startingJobQuantity: StartingJobQuantity
     killBossesMode: KillBossesMode
+    shopsanity: Shopsanity
     includedRegions: IncludedRegions
     levelGating: LevelGating
     levelUpsInPool: LevelUpsInPool
