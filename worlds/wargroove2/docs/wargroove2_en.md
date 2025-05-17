@@ -3,7 +3,7 @@
 ## Required Files
 
 - Wargroove 2 installed through Steam on Windows or Linux.
-  - Only the Steam version on  Windows and Linux is supported. MAC, Switch and Xbox are not supported.
+  - Only the Steam versions on Windows and Linux are supported. MAC, Switch and Xbox are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 
 ## Installing the Archipelago Wargroove 2 Mod and Campaign files

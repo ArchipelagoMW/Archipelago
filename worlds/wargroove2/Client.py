@@ -126,7 +126,7 @@ class Wargroove2Context(CommonContext):
 
         options = get_settings()
         # self.game_communication_path: files go in this path to pass data between us and the actual game
-        game_options = options.wargroove2_options
+        game_options = Wargroove2World.settings
 
         # Validate the AppData directory with Wargroove save data.
         # By default, Windows sets an environment variable we can leverage.
@@ -153,7 +153,7 @@ class Wargroove2Context(CommonContext):
                                   f"\"save_directory\" value in your local options file "
                                   f"to the AppData folder containing your Wargroove 2 saves.")
 
-        root_directory = os.path.join(game_options.root_directory)
+        root_directory = game_options["root_directory"]
         if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
             print_error_and_close(f"WargrooveClient couldn't find wargroove64.exe in "
                                   f"\"{root_directory}/win64_bin/\".\n"
@@ -172,21 +172,21 @@ class Wargroove2Context(CommonContext):
         # Wargroove 2 doesn't always create the mods directory, so we have to do it
         if not os.path.isdir(mods_directory):
             os.makedirs(mods_directory)
-        resources = [os.path.join("data", "mods", "ArchipelagoMod", "maps.dat"),
-                     os.path.join("data", "mods", "ArchipelagoMod", "mod.dat"),
-                     os.path.join("data", "mods", "ArchipelagoMod", "modAssets.dat"),
-                     os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
-                     os.path.join("data", "save", "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
+        resources = ["data/mods/ArchipelagoMod/maps.dat",
+                     "data/mods/ArchipelagoMod/mod.dat",
+                     "data/mods/ArchipelagoMod/modAssets.dat",
+                     "data/save/campaign-45747c660b6a2f09601327a18d662a7d.cmp",
+                     "data/save/campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak"]
         file_paths = [os.path.join(mods_directory, "maps.dat"),
                       os.path.join(mods_directory, "mod.dat"),
                       os.path.join(mods_directory, "modAssets.dat"),
                       os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp"),
                       os.path.join(save_directory, "campaign-45747c660b6a2f09601327a18d662a7d.cmp.bak")]
-        for i in range(0, len(resources)):
-            file_data = pkgutil.get_data("worlds.wargroove2", resources[i])
+        for resource, destination in zip(resources, file_paths):
+            file_data = pkgutil.get_data("worlds.wargroove2", resource)
             if file_data is None:
                 print_error_and_close("Wargroove2Client couldn't find Wargoove 2 mod and save files in install!")
-            with open(file_paths[i], 'wb') as f:
+            with open(destination, 'wb') as f:
                 f.write(file_data)
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
@@ -253,9 +253,8 @@ class Wargroove2Context(CommonContext):
             self.stored_finale_key = f"wargroove_2_{self.slot}_{self.team}"
             self.set_notify(self.stored_finale_key)
             self.player_stored_units_key = f"wargroove_player_units_{self.team}"
-            self.set_notify(self.player_stored_units_key)
             self.ai_stored_units_key = f"wargroove_ai_units_{self.team}"
-            self.set_notify(self.ai_stored_units_key)
+            self.set_notify(self.player_stored_units_key, self.ai_stored_units_key)
 
             self.update_commander_data()
             self.ui.update_ui()
@@ -829,8 +828,9 @@ def print_error_and_close(msg):
     sys.exit(1)
 
 
-def launch():
-    async def main(args):
+def launch(*launch_args: str):
+    async def main():
+        args = parser.parse_args(launch_args)
         ctx = Wargroove2Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
@@ -850,7 +850,6 @@ def launch():
 
     parser = get_base_parser(description="Wargroove 2 Client, for text interfacing.")
 
-    args, rest = parser.parse_known_args()
     colorama.just_fix_windows_console()
-    asyncio.run(main(args))
+    asyncio.run(main())
     colorama.deinit()

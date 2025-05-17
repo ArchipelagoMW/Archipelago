@@ -16,12 +16,12 @@ from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
 from .Options import Wargroove2Options, wargroove2_option_groups
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import launch
-    launch_subprocess(launch, name="Wargroove2Client")
+    launch_component(launch, name="Wargroove2Client", args=args)
 
 
 components.append(Component("Wargroove 2 Client", game_name="Wargroove 2", func=launch_client, component_type=Type.CLIENT))

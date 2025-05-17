@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup, OptionSet
+from Options import Choice, Range, DeathLink, PerGameCommonOptions, StartInventoryPool, OptionGroup, OptionSet, \
+    DeathLinkMixin
 from .Levels import low_victory_checks_levels, high_victory_checks_levels, final_levels
 
 early_level_names = {level.name for level in low_victory_checks_levels}
@@ -187,7 +188,7 @@ wargroove2_option_groups = [
 ]
 
 @dataclass
-class Wargroove2Options(PerGameCommonOptions):
+class Wargroove2Options(DeathLinkMixin, PerGameCommonOptions):
     victory_locations: VictoryLocations
     objective_locations: ObjectiveLocations
     income_boost: IncomeBoost
@@ -203,5 +204,4 @@ class Wargroove2Options(PerGameCommonOptions):
     custom_early_level_playlist: CustomEarlyLevelPlaylist
     custom_main_level_playlist: CustomMainLevelPlaylist
     custom_final_level_playlist: CustomFinalLevelPlaylist
-    death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool
