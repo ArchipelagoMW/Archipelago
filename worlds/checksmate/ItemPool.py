@@ -60,8 +60,8 @@ class CMItemPool:
         for item in starter_items:
             self.consume_item(item.name, {})
         self.handle_excluded_items(excluded_items)
-        user_location_count = len(starter_items)
-        user_location_count += 1  # Victory item is counted as part of the pool, but you don't start with it
+        user_event_count = len(starter_items)
+        user_event_count += 1  # Victory item is counted as part of the pool, but you don't start with it
 
         # Calculate material requirements
         min_material, max_material = self.material_model.calculate_material_requirements()
@@ -83,7 +83,7 @@ class CMItemPool:
             min_material=min_material,
             max_material=max_material,
             locked_items=locked_items,
-            user_location_count=user_location_count
+            user_event_count=user_event_count
         )
         items.extend(progression_items)
         logging.debug(f"Created {len(progression_items)} progression items")
@@ -94,7 +94,7 @@ class CMItemPool:
             useful_items = self.create_useful_items(
                 max_items=remaining_items,
                 locked_items=locked_items,
-                user_location_count=user_location_count
+                user_event_count=user_event_count
             )
             items.extend(useful_items)
             logging.debug(f"Created {len(useful_items)} useful items")
@@ -109,7 +109,7 @@ class CMItemPool:
                 has_pocket=has_pocket,
                 max_items=remaining_items,
                 locked_items=locked_items,
-                user_location_count=user_location_count
+                user_event_count=user_event_count
             )
             items.extend(filler_items)
             logging.debug(f"Created {len(filler_items)} filler items")
@@ -279,7 +279,7 @@ class CMItemPool:
                                min_material: float = 4100,
                                max_material: float = 4600,
                                locked_items: Dict[str, int] = {},
-                               user_location_count: int = 0) -> List[Item]:
+                               user_event_count: int = 0) -> List[Item]:
         """Create progression items up to material limits."""
         items = []
         material = self.calculate_current_material(items)
@@ -287,13 +287,13 @@ class CMItemPool:
         self.items_remaining[self.world.player] = {
             name: progression_items[name].quantity - self.items_used[self.world.player].get(name, 0) for name in my_progression_items}
         
-        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
+        while ((len(items) + user_event_count + sum(locked_items.values())) < max_items and
                len(my_progression_items) > 0):
             chosen_item = self.world.random.choice(my_progression_items)
             
             # Check if we should remove this item from consideration (limits, material, accessibility)
             if self.should_remove_item(chosen_item, material, min_material, max_material,
-                                     items, my_progression_items, locked_items, user_location_count):
+                                     items, my_progression_items, locked_items, user_event_count):
                 my_progression_items.remove(chosen_item)
                 continue
             
@@ -328,12 +328,12 @@ class CMItemPool:
         items.append("Progressive Minor Piece")  # Extra minor piece
         return items
 
-    def create_useful_items(self, max_items: int, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
+    def create_useful_items(self, max_items: int, locked_items: Dict[str, int] = {}, user_event_count: int = 0) -> List[Item]:
         """Create useful items."""
         items = []
         my_useful_items = list(useful_items.keys())
 
-        while ((len(items) + user_location_count + sum(locked_items.values())) < max_items and
+        while ((len(items) + user_event_count + sum(locked_items.values())) < max_items and
                len(my_useful_items) > 0):
             chosen_item = self.world.random.choice(my_useful_items)
             if not self.piece_model.has_prereqs(chosen_item):
@@ -346,7 +346,7 @@ class CMItemPool:
                 my_useful_items.remove(chosen_item)
         return items
 
-    def create_filler_items(self, has_pocket: bool, max_items: int, locked_items: Dict[str, int] = {}, user_location_count: int = 0) -> List[Item]:
+    def create_filler_items(self, has_pocket: bool, max_items: int, locked_items: Dict[str, int] = {}, user_event_count: int = 0) -> List[Item]:
         """Create filler items up to max_items limit."""
         items = []
         my_filler_items = list(filler_items.keys())
@@ -355,11 +355,11 @@ class CMItemPool:
         if not has_pocket:
             my_filler_items = [item for item in my_filler_items if "Pocket" not in item]
         
-        while (len(items) + user_location_count + sum(locked_items.values())) < max_items:
+        while (len(items) + user_event_count + sum(locked_items.values())) < max_items:
             # If we have no valid filler items, use pocket gems as fallback
             if not my_filler_items:
                 # Fill all remaining slots with Progressive Pocket Gems
-                remaining_slots = max_items - (len(items) + user_location_count + sum(locked_items.values()))
+                remaining_slots = max_items - (len(items) + user_event_count + sum(locked_items.values()))
                 for _ in range(remaining_slots):
                     self.consume_item("Progressive Pocket Gems", locked_items)
                     try_item = self.world.create_item("Progressive Pocket Gems")
@@ -385,7 +385,9 @@ class CMItemPool:
         was_locked = item_name in locked_items
         if was_locked:
             locked_items[item_name] -= 1
-            if locked_items[item_name] == 0:
+            # should only ever == 0, but easier to test this way
+            # TODO(chesslogic): copy this to check before and after if this impacts a decrementor property method or something wild
+            if locked_items[item_name] <= 0:
                 del locked_items[item_name]
             
         if item_name not in self.items_used[self.world.player]:
@@ -443,12 +445,12 @@ class CMItemPool:
         return self.items_used[self.world.player].get("Progressive Major To Queen", 0)
 
     def should_remove_item(self, chosen_item: str, material: int, min_material: float,
-                         max_material: float, items: List[Item], my_progression_items: List[str],
-                         locked_items: Dict[str, int], user_location_count: int) -> bool:
+                           max_material: float, items: List[Item], my_progression_items: List[str],
+                           locked_items: Dict[str, int], user_event_count: int) -> bool:
         """Delegate item removal decision to ItemRemovalRules."""
         return self.removal_rules.should_remove_item(
             chosen_item, material, min_material, max_material,
-            items, my_progression_items, locked_items, user_location_count)
+            items, my_progression_items, locked_items, user_event_count)
 
     def chessmen_count(self, items: List[CMItem], pocket_limit: int) -> int:
         """Count the number of chessmen in the item pool."""
