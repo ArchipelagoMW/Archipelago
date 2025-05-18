@@ -37,7 +37,7 @@ class BundleRoomTemplate:
     bundles: List[BundleTemplate]
     number_bundles: int
 
-    def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str = ""):
+    def create_bundle_room(self, random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str = "", is_entire_cc: bool = False):
         filtered_bundles = [bundle for bundle in self.bundles if bundle.can_appear(options)]
 
         priority_bundles = []
@@ -48,11 +48,17 @@ class BundleRoomTemplate:
             else:
                 unpriority_bundles.append(bundle)
 
-        if self.number_bundles <= len(priority_bundles):
-            chosen_bundles = random.sample(priority_bundles, self.number_bundles)
+        modifier = options.bundle_per_room.value
+        if is_entire_cc:
+            modifier *= 6
+        number_bundles = self.number_bundles + modifier
+        bundles_cap = max(len(filtered_bundles), self.number_bundles)
+        number_bundles = max(1, min(bundles_cap, number_bundles))
+        if number_bundles <= len(priority_bundles):
+            chosen_bundles = random.sample(priority_bundles, number_bundles)
         else:
             chosen_bundles = priority_bundles
-            num_remaining_bundles = self.number_bundles - len(priority_bundles)
+            num_remaining_bundles = number_bundles - len(priority_bundles)
             if num_remaining_bundles > len(unpriority_bundles):
                 chosen_bundles.extend(random.choices(unpriority_bundles, k=num_remaining_bundles))
             else:

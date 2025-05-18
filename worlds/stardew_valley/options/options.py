@@ -3,7 +3,8 @@ import typing
 from dataclasses import dataclass
 from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, Visibility, Removed, OptionCounter
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
+    Visibility, Removed, OptionCounter
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names
@@ -158,6 +159,26 @@ class BundlePrice(Choice):
     option_expensive = 1
     option_very_expensive = 2
     option_maximum = 8
+
+
+class BundlePerRoom(Choice):
+    """How many bundles are in each room of the community center?
+    Rooms that already have the max cannot increase further
+    2 Fewer: Every room will have two fewer bundles
+    1 Fewer: Every room will have one fewer bundle
+    Normal: Every room will have its usual number of bundles
+    1 Extra: Every room will have one extra bundle
+    2 Extra: Every room will have two extra bundles"""
+    internal_name = "bundle_per_room"
+    display_name = "Bundle Per Room"
+    default = 0
+    # option_minimum = -8  # I don't think users need this, keeping my options open
+    option_two_fewer = -2
+    option_one_fewer = -1
+    option_normal = 0
+    option_one_extra = 1
+    option_two_extra = 2
+    # option_maximum = 8  # I don't think users need this, keeping my options open
 
 
 class EntranceRandomization(Choice):
@@ -941,6 +962,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     farm_type: FarmType
     bundle_randomization: BundleRandomization
     bundle_price: BundlePrice
+    bundle_per_room: BundlePerRoom
     entrance_randomization: EntranceRandomization
     season_randomization: SeasonRandomization
     cropsanity: Cropsanity

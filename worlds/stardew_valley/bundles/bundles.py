@@ -5,10 +5,12 @@ from .bundle import Bundle
 from .bundle_room import BundleRoom, BundleRoomTemplate
 from ..content import StardewContent
 from ..data.bundles_data.bundle_data import pantry_remixed, \
-    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, all_bundle_items_except_money, \
+    crafts_room_remixed, fish_tank_remixed, boiler_room_remixed, bulletin_board_remixed, vault_remixed, \
+    all_bundle_items_except_money, \
     abandoned_joja_mart_remixed, giant_stump_remixed
 from ..data.bundles_data.bundle_set import vanilla_bundles, remixed_bundles, thematic_bundles
-from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pantry_meme, crafts_room_meme, fish_tank_meme, bulletin_board_meme, \
+from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pantry_meme, crafts_room_meme, \
+    fish_tank_meme, bulletin_board_meme, \
     boiler_room_meme, vault_meme
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
 from ..logic.logic import StardewLogic
@@ -58,12 +60,12 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
 
     end_index = 0
 
-    pantry, end_index = create_room_from_bundles(pantry_remixed, all_chosen_bundles, end_index)
-    crafts_room, end_index = create_room_from_bundles(crafts_room_remixed, all_chosen_bundles, end_index)
-    fish_tank, end_index = create_room_from_bundles(fish_tank_remixed, all_chosen_bundles, end_index)
-    boiler_room, end_index = create_room_from_bundles(boiler_room_remixed, all_chosen_bundles, end_index)
-    bulletin_board, end_index = create_room_from_bundles(bulletin_board_remixed, all_chosen_bundles, end_index)
-    vault, end_index = create_room_from_bundles(vault_remixed, all_chosen_bundles, end_index)
+    pantry, end_index = create_room_from_bundles(pantry_remixed, all_chosen_bundles, options, end_index)
+    crafts_room, end_index = create_room_from_bundles(crafts_room_remixed, all_chosen_bundles, options, end_index)
+    fish_tank, end_index = create_room_from_bundles(fish_tank_remixed, all_chosen_bundles, options, end_index)
+    boiler_room, end_index = create_room_from_bundles(boiler_room_remixed, all_chosen_bundles, options, end_index)
+    bulletin_board, end_index = create_room_from_bundles(bulletin_board_remixed, all_chosen_bundles, options, end_index)
+    vault, end_index = create_room_from_bundles(vault_remixed, all_chosen_bundles, options, end_index)
 
     abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
     raccoon = giant_stump_remixed.create_bundle_room(random, content, options)
@@ -78,12 +80,12 @@ def get_meme_bundles(random: Random, content: StardewContent, options: StardewVa
 
     end_index = 0
 
-    pantry, end_index = create_room_from_bundles(pantry_meme, all_chosen_bundles, end_index)
-    crafts_room, end_index = create_room_from_bundles(crafts_room_meme, all_chosen_bundles, end_index)
-    fish_tank, end_index = create_room_from_bundles(fish_tank_meme, all_chosen_bundles, end_index)
-    boiler_room, end_index = create_room_from_bundles(boiler_room_meme, all_chosen_bundles, end_index)
-    bulletin_board, end_index = create_room_from_bundles(bulletin_board_meme, all_chosen_bundles, end_index)
-    vault, end_index = create_room_from_bundles(vault_meme, all_chosen_bundles, end_index)
+    pantry, end_index = create_room_from_bundles(pantry_meme, all_chosen_bundles, options, end_index)
+    crafts_room, end_index = create_room_from_bundles(crafts_room_meme, all_chosen_bundles, options, end_index)
+    fish_tank, end_index = create_room_from_bundles(fish_tank_meme, all_chosen_bundles, options, end_index)
+    boiler_room, end_index = create_room_from_bundles(boiler_room_meme, all_chosen_bundles, options, end_index)
+    bulletin_board, end_index = create_room_from_bundles(bulletin_board_meme, all_chosen_bundles, options, end_index)
+    vault, end_index = create_room_from_bundles(vault_meme, all_chosen_bundles, options, end_index)
 
     abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(random, content, options)
     raccoon = giant_stump_remixed.create_bundle_room(random, content, options)
@@ -91,9 +93,9 @@ def get_meme_bundles(random: Random, content: StardewContent, options: StardewVa
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart, raccoon]
 
 
-def create_room_from_bundles(template: BundleRoomTemplate, all_bundles: List[Bundle], end_index: int) -> Tuple[BundleRoom, int]:
+def create_room_from_bundles(template: BundleRoomTemplate, all_bundles: List[Bundle], options: StardewValleyOptions, end_index: int) -> Tuple[BundleRoom, int]:
     start_index = end_index
-    end_index += template.number_bundles
+    end_index += template.number_bundles + options.bundle_per_room.value
     return BundleRoom(template.name, all_bundles[start_index:end_index]), end_index
 
 
