@@ -71,7 +71,7 @@ tilesanity_items = [wood_floor.as_amount(100), rustic_plank_floor.as_amount(100)
                     crystal_path.as_amount(100)]
 tilesanity_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.tilesanity, tilesanity_items, 4, 4)
 
-cap_items = [wood.as_amount(999), sap.as_amount(999), pine_cone.as_amount(100), acorn.as_amount(100), maple_seed.as_amount(100), moss.as_amount(500)]
+cap_items = [vacation_shirt, wood.as_amount(999), sap.as_amount(999), pine_cone.as_amount(100), acorn.as_amount(100), maple_seed.as_amount(100), moss.as_amount(500)]
 cap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cap, cap_items, 6, 4)
 
 big_grapes_items = [coconut]
@@ -246,6 +246,7 @@ clickbait_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.clickbait
 #   Loser Club Bundle   (Trash Tuna)
 #   Ministry of Madness Bundle (Lots of trash)
 #   SakuraTsubasa Bundle (TBD)
+#   Pool Bundle         (Stick and Balls, but Black ball must be last)
 
 
 # Bundles that need special Mod Handling:

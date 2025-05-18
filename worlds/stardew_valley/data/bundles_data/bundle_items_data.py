@@ -1,3 +1,4 @@
+from worlds.stardew_valley.data.shirt_data import Shirts
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
@@ -473,6 +474,8 @@ tiger_hat = BundleItem(Hat.tiger_hat)
 mystery_hat = BundleItem(Hat.mystery_hat)
 dark_ballcap = BundleItem(Hat.dark_ballcap)
 goblin_mask = BundleItem(Hat.goblin_mask, source=BundleItem.Sources.island)
+
+vacation_shirt = BundleItem(Shirts.vacation.name)
 
 mermaid_boots = BundleItem(Boots.mermaid_boots)
 

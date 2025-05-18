@@ -40,6 +40,7 @@ from .relationship_logic import RelationshipLogicMixin
 from .requirement_logic import RequirementLogicMixin
 from .season_logic import SeasonLogicMixin
 from .shipping_logic import ShippingLogicMixin
+from .shirts_logic import ShirtLogicMixin
 from .skill_logic import SkillLogicMixin
 from .source_logic import SourceLogicMixin
 from .special_items_logic import SpecialItemsLogicMixin
@@ -103,7 +104,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, TailoringLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, TailoringLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -381,6 +382,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
         self.hat.initialize_rules()
         self.registry.item_rules.update(self.registry.hat_rules)
+
+        self.shirt.initialize_rules()
+        self.registry.item_rules.update(self.registry.shirt_rules)
 
         for catalogue in items_by_catalogue:
             for item in items_by_catalogue[catalogue]:
