@@ -313,7 +313,7 @@ class NoProgressionBody(Toggle):
     """
     Make sure that there are no progression items in the Body (including the before boss transturtle room.
     and the boss location. Can be useful to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
+    Has no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Body"
 
