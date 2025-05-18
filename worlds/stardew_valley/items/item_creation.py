@@ -132,6 +132,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
 def create_raccoons(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
     number_progressive_raccoons = 9
+    if options.bundle_per_room.value < 0:
+        number_progressive_raccoons -= options.bundle_per_room.value
     if options.quest_locations.has_no_story_quests():
         number_progressive_raccoons = number_progressive_raccoons - 1
 
