@@ -14,13 +14,14 @@ pineapple_wines = {ArtisanQuality.basic: 1260, ArtisanQuality.silver: 1575, Arti
 starfruits = {ArtisanQuality.silver: 1030, ArtisanQuality.gold: 1237, ArtisanQuality.iridium: 1650}
 sweet_gem_berries = {ArtisanQuality.basic: 3000, ArtisanQuality.silver: 3750, ArtisanQuality.gold: 4500, ArtisanQuality.iridium: 6000}
 
-cherry_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
-banana_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
-mango_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
-orange_saplings = {ArtisanQuality.silver: 1250, ArtisanQuality.gold: 1500, ArtisanQuality.iridium: 2000}
-peach_saplings = {ArtisanQuality.basic: 1500, ArtisanQuality.silver: 1875, ArtisanQuality.gold: 2250, ArtisanQuality.iridium: 3000}
-apple_saplings = {ArtisanQuality.silver: 1250, ArtisanQuality.gold: 1500, ArtisanQuality.iridium: 2000}
-pomegranate_saplings = {ArtisanQuality.basic: 1500, ArtisanQuality.silver: 1875, ArtisanQuality.gold: 2250, ArtisanQuality.iridium: 3000}
+# These are just too rude I think
+# cherry_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
+# banana_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
+# mango_saplings = {ArtisanQuality.silver: 1062, ArtisanQuality.gold: 1275, ArtisanQuality.iridium: 1700}
+# orange_saplings = {ArtisanQuality.silver: 1250, ArtisanQuality.gold: 1500, ArtisanQuality.iridium: 2000}
+# peach_saplings = {ArtisanQuality.basic: 1500, ArtisanQuality.silver: 1875, ArtisanQuality.gold: 2250, ArtisanQuality.iridium: 3000}
+# apple_saplings = {ArtisanQuality.silver: 1250, ArtisanQuality.gold: 1500, ArtisanQuality.iridium: 2000}
+# pomegranate_saplings = {ArtisanQuality.basic: 1500, ArtisanQuality.silver: 1875, ArtisanQuality.gold: 2250, ArtisanQuality.iridium: 3000}
 
 
 def get_capitalist_item(item: BundleItem, quality: str, value: int) -> BundleItem:
@@ -77,13 +78,13 @@ capitalist_items = [
 
     get_capitalist_item(mystic_syrup, ArtisanQuality.basic, 1250),
 
-    *get_capitalist_items(cherry_sapling, cherry_saplings),
-    *get_capitalist_items(banana_sapling, banana_saplings),
-    *get_capitalist_items(mango_sapling, mango_saplings),
-    *get_capitalist_items(orange_sapling, orange_saplings),
-    *get_capitalist_items(peach_sapling, peach_saplings),
-    *get_capitalist_items(apple_sapling, apple_saplings),
-    *get_capitalist_items(pomegranate_sapling, pomegranate_saplings),
+    # *get_capitalist_items(cherry_sapling, cherry_saplings),
+    # *get_capitalist_items(banana_sapling, banana_saplings),
+    # *get_capitalist_items(mango_sapling, mango_saplings),
+    # *get_capitalist_items(orange_sapling, orange_saplings),
+    # *get_capitalist_items(peach_sapling, peach_saplings),
+    # *get_capitalist_items(apple_sapling, apple_saplings),
+    # *get_capitalist_items(pomegranate_sapling, pomegranate_saplings),
 
     bowler_hat,
     sombrero,
