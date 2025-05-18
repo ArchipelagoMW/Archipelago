@@ -2,13 +2,11 @@ import math
 import os
 import zlib
 
-from pygbagfx import _gbagfx # from package
 from PIL import Image
 from .data import data
 from .adjuster_constants import *
 
 address_label_to_resource_path_list = { }
-files_to_clean_up = []
 sprite_pack_data = { }
 resource_address_to_insert_to = 0x00
 current_rom = None
@@ -29,17 +27,7 @@ def get_patch_from_sprite_pack(_sprite_pack_path):
     # Handle existing Trainer & Pokemon folders
     add_sprite_pack_object_collection(_sprite_pack_path, TRAINER_FOLDERS, TRAINER_SPRITES, TRAINER_PALETTES, False)
     add_sprite_pack_object_collection(_sprite_pack_path, POKEMON_FOLDERS, POKEMON_SPRITES, POKEMON_PALETTES, True)
-
-    # Remove temporary files
-    clean_up()
     return sprite_pack_data
-
-def clean_up():
-    # Remove all temporary files after processing
-    for file in files_to_clean_up:
-        if os.path.isfile(file):
-            os.remove(file)
-    files_to_clean_up.clear()
 
 #########################
 ## Patch Data Building ##
@@ -100,7 +88,7 @@ def add_sprite(_is_pokemon, _object_name, _sprite_name, _extra_data, _path):
         data_address = replace_complex_sprite(data_address, sprite_key, _object_name, _extra_data)
 
     if sprite_key != 'trainer_battle_back':
-        add_resource(False, sprite_key, _sprite_name, data_address, _path)
+        add_resource(False, sprite_key, data_address, _path)
     else:
         # In case of Trainer battle back sprite, rerun this function to fill in the ball throwing animation table
         address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
@@ -113,9 +101,9 @@ def add_palette(_is_pokemon, _object_name, _palette_name, _path):
     if _object_name.startswith('Unown '):
         _object_name = 'Unown A'
     data_address = get_address_from_address_collection(_object_name, palette_key, _palette_name)
-    add_resource(True, palette_key, _palette_name, data_address, _path)
+    add_resource(True, palette_key, data_address, _path)
 
-def add_resource(_is_palette, _key, _name, _data_address, _path):
+def add_resource(_is_palette, _key, _data_address, _path):
     # Adds a resource (sprite or palette) to the patch
     global resource_address_to_insert_to
     address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
@@ -123,15 +111,12 @@ def add_resource(_is_palette, _key, _name, _data_address, _path):
     
     needs_compression = OBJECT_NEEDS_COMPRESSION.get(_key, False)
     if _is_palette:
-        _path = handle_sprite_to_palette(_path, _name, needs_compression)
+        resource_data = handle_sprite_to_palette(_path, needs_compression)
     else:
-        _path = handle_sprite_to_gba_sprite(_path, needs_compression)
-    
-    file = open(_path, 'rb')
-    file_data = file.read()
+        resource_data = handle_sprite_to_gba_sprite(_path, needs_compression)
 
-    add_data_to_patch({ 'address': resource_address_to_insert_to, 'length': len(file_data), 'data': file_data })
-    resource_address_to_insert_to = resource_address_to_insert_to + len(file_data)
+    add_data_to_patch({ 'address': resource_address_to_insert_to, 'length': len(resource_data), 'data': resource_data })
+    resource_address_to_insert_to = resource_address_to_insert_to + len(resource_data)
     if resource_address_to_insert_to > 0xFFFFFF:
         # Out of bounds: Too much data to add
         raise Exception('Too much data to add to the ROM! Please remove some resources.')
@@ -177,12 +162,6 @@ def add_data_to_patch(_data):
             break
     sprite_pack_data['data'].insert(index, _data)
 
-def call_gbagfx(_input, _output, _delete_input = False):
-    # Calls the sprite processing C app
-    _gbagfx.main(_input, _output)
-    if _delete_input:
-        os.remove(_input)
-
 #############################
 ## Complex Sprite Handling ##
 #############################
@@ -210,11 +189,11 @@ def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data
     sprite_width = sprite_size_data.get('width') if sprite_size_data else sprite_requirements.get('width', 0)
     sprite_height = sprite_size_data.get('height') if sprite_size_data else sprite_requirements.get('height', 0)
     sprite_palette_size = sprite_requirements.get('palette_size', 16)
-    sprite_bytes_per_pixel, _ = get_pixel_size_and_extension_from_palette_size(sprite_palette_size)
+    bits_per_pixel = get_bits_per_pixel_from_palette_size(sprite_palette_size)
     if is_overworld_sprite(_sprite_key) and not sprite_size_data:
         sprite_width = get_overworld_sprite_data(info_object_address, 'sprite_width')
         sprite_height = get_overworld_sprite_data(info_object_address, 'sprite_height')
-    sprite_size = round(sprite_bytes_per_pixel * sprite_width * sprite_height)
+    sprite_size = round(sprite_width * sprite_height * bits_per_pixel / 8)
     
     # Build a new complex sprite table and insert it
     output_data = bytearray(0)
@@ -316,7 +295,7 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_nam
     needs_compression = OBJECT_NEEDS_COMPRESSION.get(_sprite_key, False)
     sprite_requirements = get_sprite_requirements(_sprite_key, _object_name)
     sprite_palette_size = sprite_requirements.get('palette_size', 16)
-    pixel_byte_size, _ = get_pixel_size_and_extension_from_palette_size(sprite_palette_size)
+    bits_per_pixel = get_bits_per_pixel_from_palette_size(sprite_palette_size)
     # Retrieve the sprite's size
     if _preset_size:
         sprite_width = _preset_size[0]
@@ -326,13 +305,13 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_nam
         sprite_height = sprite_requirements['height'] * sprite_requirements['frames']
     
     # Extract the sprite's pixel data
-    sprite_size = round(sprite_width * sprite_height * pixel_byte_size)
+    sprite_size = round(sprite_width * sprite_height * bits_per_pixel / 8)
     end_address = _data_address + sprite_size + ((4 + math.ceil(sprite_size / 8)) if needs_compression else 0)
     sprite_pixel_data = current_rom[_data_address:end_address]
     if needs_compression:
         sprite_pixel_data = truncate_lz_compressed_data(sprite_pixel_data, sprite_size)
         sprite_pixel_data = decompress_lz_data(sprite_pixel_data)
-    sprite_pixel_data = decompress_sprite(sprite_pixel_data, round(8 * pixel_byte_size))
+    sprite_pixel_data = decompress_sprite(sprite_pixel_data, bits_per_pixel)
     sprite_pixel_data = dechunk_sprite(sprite_pixel_data, sprite_width, sprite_height)
     if sprite_requirements.get('palette_per_frame', False):
         sprite_pixel_data = spread_palettes_to_sprite_frames(sprite_pixel_data, sprite_width, sprite_height, sprite_requirements.get('palettes', 1))
@@ -387,53 +366,42 @@ def extract_palette(_object_name, _sprite_name, _is_pokemon):
 ## Data Conversion ##
 #####################
 
-def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression) -> str:
+def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression):
     # Transforms indexed/grayscale PNG sprites into GBA sprites
-    sprite_path_with_no_extension = str(os.path.splitext(_sprite_path)[0])
-    file_format = '.1bpp' if sprite_path_with_no_extension.endswith('footprint') else '.4bpp'
-    gba_sprite_path = sprite_path_with_no_extension + file_format
-    call_gbagfx(_sprite_path, gba_sprite_path, False)
-    if not _needs_compression:
-        files_to_clean_up.append(gba_sprite_path)
-        return gba_sprite_path
-    else:
-        # Compresses sprite if needed
-        compressed_gba_sprite_path = gba_sprite_path + '.lz'
-        call_gbagfx(gba_sprite_path, compressed_gba_sprite_path, True)
-        files_to_clean_up.append(compressed_gba_sprite_path)
-        return compressed_gba_sprite_path
+    sprite_image = Image.open(_sprite_path)
+    sprite_palette_size = round(len(sprite_image.getpalette()) / 3)
+    bits_per_pixel = get_bits_per_pixel_from_palette_size(sprite_palette_size)
 
-def handle_gba_sprite_to_sprite(_gba_sprite_path, _needs_compression) -> str:
-    # Transforms GBA sprite into indexed/grayscale PNG sprites
-    sprite_image = Image.open(_gba_sprite_path)
-    sprite_palette_size = round(len(sprite_image.getpalette() / 3))
-    _, file_format = get_pixel_size_and_extension_from_palette_size(sprite_palette_size)
-    _gba_sprite_path_with_no_extension = str(os.path.splitext(_gba_sprite_path)[0])
-    decompressed_gba_sprite_path = _gba_sprite_path_with_no_extension + file_format
-    sprite_path = _gba_sprite_path_with_no_extension + '.png'
+    # Chunk the data then compress it
+    sprite_data = compress_sprite(chunk_sprite(bytes(sprite_image.getdata()), sprite_image.width, sprite_image.height), bits_per_pixel)
     if _needs_compression:
-        # Decompresses sprite if needed
-        call_gbagfx(_gba_sprite_path, decompressed_gba_sprite_path, True)
-    call_gbagfx(decompressed_gba_sprite_path, sprite_path, True)
-    return sprite_path
+        # Compresses sprite if needed
+        sprite_data = compress_lz_data(sprite_data)
+    return bytes(sprite_data)
 
-def handle_sprite_to_palette(_sprite_path, _palette_name, _needs_compression) -> str:
+def handle_sprite_to_palette(_sprite_path, _needs_compression):
     # Transforms indexed/grayscale PNG sprites into GBA palettes
-    sprite_path_with_no_extension = str(os.path.splitext(_sprite_path)[0])
-    palette_path_with_no_extension = os.path.join(os.path.dirname(sprite_path_with_no_extension), _palette_name)
-    palette_path = sprite_path_with_no_extension + '.pal'
-    gba_palette_path = palette_path_with_no_extension + '.gbapal'
-    call_gbagfx(_sprite_path, palette_path, False)
-    call_gbagfx(palette_path, gba_palette_path, True)
-    if not _needs_compression:
-        files_to_clean_up.append(gba_palette_path)
-        return gba_palette_path
-    else:
-        # Compress palette if needed
-        compressed_gba_palette_path = gba_palette_path + '.lz'
-        call_gbagfx(gba_palette_path, compressed_gba_palette_path, True)
-        files_to_clean_up.append(compressed_gba_palette_path)
-        return str(compressed_gba_palette_path)
+    sprite_image = Image.open(_sprite_path)
+    palette_data = sprite_image.getpalette()
+    palette_size = round(len(palette_data) / 3)
+
+    # Transforms normal palette data into a GBA palette (8 bit colors to 5 bit colors)
+    palette = [0 for _ in range(palette_size * 2)]
+    for i in range(palette_size):
+        palette_color_eight_bits = palette_data[i*3:(i+1)*3]
+        palette_color_five_bits = 0
+        for j in range(2, -1, -1):
+            color_five_bits = eight_to_five_bits_palette(palette_color_eight_bits[j])
+            palette_color_five_bits |= color_five_bits
+            if j > 0:
+                palette_color_five_bits <<= 5
+        palette[i*2] = palette_color_five_bits & 0xFF
+        palette[i*2+1] = palette_color_five_bits >> 8
+
+    if _needs_compression:
+        # Compresses palette if needed
+        palette = compress_lz_data(bytes(palette))
+    return bytes(palette)
 
 ###################
 ## Data Checking ##
@@ -506,6 +474,7 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
                 add_error('File {} in folder {}: Duplicate internal sprite entry with sprite {}.'.format(resource_name, object_name, found_sprites.get(matching_sprite_name)), True)
                 continue
             found_sprites[matching_sprite_name] = resource_name
+            add_to_folder_list(object_name)
             add_error(*validate_sprite(object_name, matching_sprite_name, extra_sprite_data, sprite_path), True)
     return errors, has_error
 
@@ -711,8 +680,8 @@ def truncate_lz_compressed_data(_data, _data_size):
         for i in range(8):
             if shift >= data_length:
                 return _data
-            is_compressed = control_byte >= 128
-            control_byte = (control_byte << 1) % 256
+            is_compressed = control_byte & 0x80
+            control_byte <<= 1
             if not is_compressed:
                 _data_size -= 1
                 shift += 1
@@ -722,6 +691,64 @@ def truncate_lz_compressed_data(_data, _data_size):
                 _data_size -= diff
             if _data_size <= 0:
                 return _data[:shift]
+
+def compress_lz_data(_src:bytes, _min_distance = 2):
+    # Performs an LZ compression of the given data
+    src_size = len(_src)
+
+    worst_case_dest_size = 4 + src_size + math.ceil((src_size + 7) / 8)
+    worst_case_dest_size = ((worst_case_dest_size >> 2) + 1) << 2
+
+    dest = [0 for _ in range(worst_case_dest_size)]
+    dest[0] = 0x10
+    dest[1] = src_size & 0xFF
+    dest[2] = (src_size >> 8) & 0xFF
+    dest[3] = (src_size >> 16) & 0xFF
+
+    src_pos = 0
+    dest_pos = 4
+
+    while True:
+        flags_index = dest_pos
+        dest_pos += 1
+
+        for i in range(8):
+            best_block_distance = 0
+            best_block_size = -3
+            block_distance = _min_distance
+
+            # Smaller lookback for better speed and less compression
+            while block_distance <= src_pos and block_distance <= 0x40:
+                block_start = src_pos - block_distance
+                block_size = 0
+
+                while block_size < 18 and src_pos + block_size < src_size and _src[block_start + block_size] == _src[src_pos + block_size]:
+                    block_size += 1
+                
+                if block_size > best_block_size:
+                    best_block_distance = block_distance
+                    best_block_size = block_size
+                    if block_size == 18:
+                        break
+                
+                block_distance += 1
+            
+            if best_block_size >= 3:
+                dest[flags_index] |= 0x80 >> i
+                src_pos += best_block_size
+                best_block_size -= 3
+                best_block_distance -= 1
+                dest[dest_pos:dest_pos+2] = [(best_block_size << 4) | ((best_block_distance >> 8) & 0xF), best_block_distance & 0xFF]
+                dest_pos += 2
+            else:
+                dest[dest_pos] = _src[src_pos]
+                src_pos += 1
+                dest_pos += 1
+            
+            if src_pos >= src_size:
+                # Pad to multiple of 4 bytes
+                dest_pos = ((dest_pos >> 2) + 1) << 2
+                return bytes(dest[:dest_pos])
 
 def decompress_lz_data(_src:bytes):
     # Performs an LZ decompression of the given data
@@ -746,7 +773,7 @@ def decompress_lz_data(_src:bytes):
         src_pos += 1
 
         for i in range(8):
-            if control_byte >= 128:
+            if control_byte & 0x80:
                 # Compressed data: references data previously added to the output file and the number of repetitions
                 if src_pos + 1 >= src_size:
                     raise Exception('Fatal error while decompressing LZ file: {}/{}'.format(src_pos, src_size))
@@ -780,66 +807,105 @@ def decompress_lz_data(_src:bytes):
             if dest_pos == dest_size:
                 return bytes(dest)
             
-            control_byte = (control_byte << 1) % 256
+            control_byte <<= 1
 
 ###########################
 ## Sprite Transformation ##
 ###########################
 
-def decompress_sprite(_data, _bits_per_pixel):
-    # Returns sprite data with each pixel taking one full byte of space
-    # Useful for making sprites on-the-fly using Pillow
+def compress_sprite(_src, _bits_per_pixel):
+    # Returns sprite data with each pixel taking as little space as possible
+    # Useful for turning Pillow sprite data into GBA sprite data
+    if _bits_per_pixel == 8:
+        return _src
+
     pixels_per_bytes = round(8 / _bits_per_pixel)
-    data_per_pixel = int(math.pow(2, _bits_per_pixel))
-
-    data_size = len(_data)
-    dest_size = data_size * pixels_per_bytes
-    dest = [0 for _ in range(dest_size)]
-
-    data_shift = 0
-    for byte_index in range(data_size):
-        bits = 8
-        byte = int(_data[byte_index])
-        while bits > 0:
-            pixel = byte & (data_per_pixel - 1)
-            byte >>= _bits_per_pixel
-            bits -= _bits_per_pixel
-            dest[data_shift] = pixel
-            data_shift += 1
+    dest = []
+    for src_bytes in [_src[i:i+pixels_per_bytes] for i in range(0, len(_src), pixels_per_bytes)]:
+        dest_byte = 0
+        bits = 0
+        for src_byte in src_bytes:
+            dest_byte |= src_byte << bits
+            bits += _bits_per_pixel
+        dest.append(dest_byte)
     return bytes(dest)
 
-def dechunk_sprite(_data, _width, _height):
+def decompress_sprite(_src, _bits_per_pixel):
+    # Returns sprite data with each pixel taking one full byte of space
+    # Useful for turning GBA sprite data into Pillow sprite data
+    if _bits_per_pixel == 8:
+        return _src
+
+    pixels_per_bytes = round(8 / _bits_per_pixel)
+    data_per_pixel = int(math.pow(2, _bits_per_pixel)) - 1
+
+    dest = []
+    for byte in _src:
+        for _ in range(pixels_per_bytes):
+            pixel = byte & data_per_pixel
+            byte >>= _bits_per_pixel
+            dest.append(pixel)
+    return bytes(dest)
+
+def chunk_sprite(_src, _width, _height):
+    # Sprites stored in ROMs are bundled in 8x8 pixel chunks
+    # This function applies this behavior, turning simple sprites into chunked pixel data
+    # Only allows for sprites having both dimensions as a multiple of 8 for speed's sake
+    if _width % 8 or _height % 8:
+        raise Exception('Sprites must have both of their dimensions as multiples of 8 to be chunkable!')
+
+    src_size = _width * _height
+    dest = [0 for _ in range(src_size)]
+
+    blocks_per_line = math.ceil(_width / 8)
+    block_x_shift = 64
+    block_y_shift = block_x_shift * blocks_per_line
+    src_shift = 0
+    while src_shift < src_size:
+        block_x = math.floor((src_shift % _width) / 8)
+        temp_src_shift = math.floor(src_shift / _width)
+        y = temp_src_shift % 8
+        block_y = math.floor(temp_src_shift / 8)
+        dest_pos = (block_y * block_y_shift) + (block_x * block_x_shift) + (y * 8)
+        dest[dest_pos:dest_pos+8] = [int(byte) for byte in _src[src_shift:src_shift+8]]
+        src_shift += 8
+    return bytes(dest)
+
+def dechunk_sprite(_src, _width, _height):
     # Sprites stored in ROMs are bundled in 8x8 pixel chunks
     # This function reverts this behavior, returning raw, non-chunked pixel data
-    data_size = _width * _height
-    dest = [0 for _ in range(data_size)]
+    # Only allows for sprites having both dimensions as a multiple of 8 for speed's sake
+    if _width % 8 or _height % 8:
+        raise Exception('Sprites must have both of their dimensions as multiples of 8 to be chunkable!')
 
-    shift = 0
+    src_size = _width * _height
+    dest = [0 for _ in range(src_size)]
+
+    src_shift = 0
     block_x = 0
     block_y = 0
-    while shift < data_size:
+    while src_shift < src_size:
         for y in range(min(_height - (block_y * 8), 8)):
-            for x in range(min(_width - (block_x * 8), 8)):
-                new_pos = (block_y * 8 + y) * _width + block_x * 8 + x
-                dest[new_pos] = int(_data[shift])
-                shift += 1
+            dest_pos = (block_y * 8 + y) * _width + block_x * 8
+            dest[dest_pos:dest_pos+8] = [int(byte) for byte in _src[src_shift:src_shift+8]]
+            src_shift += 8
         block_x += 1
         if block_x * 8 >= _width:
             block_x = 0
             block_y += 1
     return bytes(dest)
 
-def spread_palettes_to_sprite_frames(_data, _width, _height, _frames):
+def spread_palettes_to_sprite_frames(_src, _width, _height, _frames):
     # Adds values to the pixels in the sheet to match values in an extended palette
     # Assumes all palettes have exactly 16 colors
-    _data = bytearray(_data)
-    data_size = _width * _height
-    data_size_per_frame = round(data_size / _frames)
+    _src = bytearray(_src)
+    src_size = _width * _height
+    data_size_per_frame = round(src_size / _frames)
     for frame in range(1, _frames):
         shift = frame * data_size_per_frame
         for pixel in range(data_size_per_frame):
-            _data[shift + pixel] |= frame << 4
-    return bytes(_data)
+            _src[shift + pixel] |= frame << 4
+    return bytes(_src)
 
 ###############################
 ## Pokemon Data Manipulation ##
@@ -1012,12 +1078,11 @@ def are_move_pools_equal(_move_pool_1, _move_pool_2):
 ## Utility Functions ##
 #######################
 
-def get_pixel_size_and_extension_from_palette_size(_palette_size):
-    # Returns the matching byte size of a pixel and file extension for a palette of a given size
-    if _palette_size <= 2:   return 1/8, '.1bpp'
-    if _palette_size <= 4:   return 1/4, '.2bpp'
-    if _palette_size <= 16:  return 1/2, '.4bpp'
-    if _palette_size <= 256: return 1,   '.8bpp'
+def get_bits_per_pixel_from_palette_size(_palette_size):
+    # Returns how many bits are needed to store a pixel for a palette of a given size
+    if _palette_size <= 2:   return 1
+    if _palette_size <= 16:  return 4
+    if _palette_size <= 256: return 8
     raise Exception('A sprite with a palette with more than 256 colors cannot be handled by the ROM.')
 
 def get_address_from_address_collection(_object_name, _resource_key, _resource_name):
@@ -1108,7 +1173,11 @@ def handle_address_collection(_rom, _forced_is_ap = None):
 
 def five_to_eight_bits_palette(value):
     # Transforms a 5-bit long palette color into an 8-bit long palette color
-    return value * 8 + math.floor(value / 4.4)
+    return (value << 3) + math.floor(value / 31 * 7)
+
+def eight_to_five_bits_palette(value):
+    # Transforms a 8-bit long palette color into an 5-bit long palette color
+    return value >> 3
 
 def flatten_2d(input_list):
    # Flattens a list containing lists into a single unidimensional list
