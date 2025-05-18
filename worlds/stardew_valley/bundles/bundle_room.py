@@ -43,7 +43,7 @@ class BundleRoomTemplate:
         priority_bundles = []
         unpriority_bundles = []
         for bundle in filtered_bundles:
-            if bundle.name in options.bundle_plando or is_bundle_related_to_player(bundle, player_name):
+            if options.bundle_plando.prioritizes(bundle.name) or is_bundle_related_to_player(bundle, player_name):
                 priority_bundles.append(bundle)
             else:
                 unpriority_bundles.append(bundle)

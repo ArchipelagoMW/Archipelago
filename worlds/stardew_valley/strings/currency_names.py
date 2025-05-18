@@ -14,10 +14,11 @@ class Currency:
         return item in [Currency.qi_coin, Currency.golden_walnut, Currency.qi_gem, Currency.star_token, Currency.money,
                         MemeCurrency.code, MemeCurrency.clic, MemeCurrency.steps, MemeCurrency.time, MemeCurrency.energy, MemeCurrency.blood,
                         MemeCurrency.cookies, MemeCurrency.child, MemeCurrency.dead_crops, MemeCurrency.dead_pumpkins, MemeCurrency.missed_fish,
-                        MemeCurrency.time_elapsed, MemeCurrency.honeywell, MemeCurrency.sleep_days, MemeCurrency.bank_money]
+                        MemeCurrency.time_elapsed, MemeCurrency.honeywell, MemeCurrency.sleep_days, MemeCurrency.bank_money, MemeCurrency.deathlinks]
 
 
 class MemeCurrency:
+    deathlinks = "DeathLinks"
     bank_money = "Bank Money"
     sleep_days = "Sleep Days"
     blood = "Blood"

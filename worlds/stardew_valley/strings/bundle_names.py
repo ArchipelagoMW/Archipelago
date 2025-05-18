@@ -128,6 +128,20 @@ class BundleName:
 
 
 class MemeBundleName:
+    investment = meme_bundle("Investment")
+    scam = meme_bundle("Scam")
+    blossom_garden = meme_bundle("Blossom Garden")
+    deathlink = meme_bundle("DeathLink")
+    humble = meme_bundle("Humble")
+    asmr = meme_bundle("ASMR")
+    puzzle = meme_bundle("Puzzle")
+    cooperation = meme_bundle("Cooperation")
+    pomnut = meme_bundle("Pomnut")
+    ministry_of_madness = meme_bundle("Ministry of Madness")
+    loser_club = meme_bundle("Loser Club")
+    frazzleduck = meme_bundle("Frazzleduck")
+    argonmatrix = meme_bundle("ArgonMatrix")
+    pool = meme_bundle("Pool")
     AAAA = meme_bundle("AAAA")
     amons_fall = meme_bundle("Amon's Fall")
     animal_well = meme_bundle("ANIMAL WELL")

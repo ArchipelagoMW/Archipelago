@@ -1,5 +1,6 @@
 from typing import List
 
+from worlds.stardew_valley.strings.animal_product_names import AnimalProduct
 from worlds.stardew_valley.strings.artisan_good_names import ArtisanGood
 from worlds.stardew_valley.strings.forageable_names import Forageable
 
@@ -38,3 +39,4 @@ def shirt(name: str, items: str | List[str], requires_cloth: bool = True, consid
 
 class Shirts:
     vacation = shirt("Vacation Shirt", Forageable.coconut)
+    green_jacket = shirt("Green Jacket Shirt", AnimalProduct.duck_egg)

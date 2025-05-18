@@ -10,6 +10,7 @@ from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
+from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
 from ...strings.currency_names import Currency
 from ...strings.fish_names import WaterItem
@@ -351,6 +352,9 @@ pelican_town = ContentPack(
         # Catalogues
         Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer),),
         Catalogue.furniture: (ShopSource(price=200000, shop_region=Region.carpenter, other_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
+
+        # Furniture
+        Furniture.single_bed: (ShopSource(price=500, shop_region=Region.carpenter),),
     },
     fishes=(
         fish_data.albacore,

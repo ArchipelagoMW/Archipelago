@@ -127,6 +127,7 @@ class Furniture:
     wicked_statue = "Wicked Statue"
     flute_block = "Flute Block"
     drum_block = "Drum Block"
+    single_bed = "Single Bed"
 
 
 class Storage:

@@ -1,3 +1,4 @@
+from Options import DeathLink
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
@@ -131,6 +132,10 @@ class MoneyLogic(BaseLogic):
             if amount <= 1800:
                 return self.logic.building.has_building(Building.stable)
             return self.logic.has(Beverage.coffee) & self.logic.building.has_building(Building.stable)
+        if currency == MemeCurrency.deathlinks:
+            if self.options.death_link == DeathLink.option_true:
+                return self.logic.time.has_lived_months(amount)
+            return self.logic.false_
 
         return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
 

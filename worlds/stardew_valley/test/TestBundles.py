@@ -141,5 +141,37 @@ class TestMemeBundleContent(SVTestCase):
     def test_all_meme_bundles_are_included(self):
         all_meme_bundles_in_cc = {bundle.name for bundle in all_cc_meme_bundles}
         for meme_bundle_name in all_meme_bundle_names:
+            if meme_bundle_name == MemeBundleName.investment:
+                continue
             with self.subTest(meme_bundle_name):
                 self.assertIn(meme_bundle_name, all_meme_bundles_in_cc)
+
+
+class TestScamBundlePlando(SVTestBase):
+    options = {
+        BundleRandomization: BundleRandomization.option_meme,
+        BundlePlando: frozenset({MemeBundleName.scam})
+    }
+
+    def test_scam_bundle_is_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertIn(MemeBundleName.scam, location_names)
+
+    def test_investment_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.investment, location_names)
+
+
+class TestInvestmentBundlePlando(SVTestBase):
+    options = {
+        BundleRandomization: BundleRandomization.option_meme,
+        BundlePlando: frozenset({MemeBundleName.scam})
+    }
+
+    def test_scam_bundle_is_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertIn(MemeBundleName.scam, location_names)
+
+    def test_investment_bundle_is_not_there(self):
+        location_names = {location.name for location in self.multiworld.get_locations()}
+        self.assertNotIn(MemeBundleName.investment, location_names)
