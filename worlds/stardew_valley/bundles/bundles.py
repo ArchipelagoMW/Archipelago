@@ -54,7 +54,7 @@ def get_remixed_bundles(random: Random, content: StardewContent, options: Starde
 
 
 def get_remixed_bundles_anywhere(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    big_room = community_center_remixed_anywhere.create_bundle_room(random, content, options)
+    big_room = community_center_remixed_anywhere.create_bundle_room(random, content, options, is_entire_cc=True)
     all_chosen_bundles = big_room.bundles
     random.shuffle(all_chosen_bundles)
 
@@ -74,7 +74,7 @@ def get_remixed_bundles_anywhere(random: Random, content: StardewContent, option
 
 
 def get_meme_bundles(random: Random, content: StardewContent, options: StardewValleyOptions, player_name: str) -> List[BundleRoom]:
-    big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name)
+    big_room = community_center_meme_bundles.create_bundle_room(random, content, options, player_name, is_entire_cc=True)
     all_chosen_bundles = big_room.bundles
     random.shuffle(all_chosen_bundles)
 
