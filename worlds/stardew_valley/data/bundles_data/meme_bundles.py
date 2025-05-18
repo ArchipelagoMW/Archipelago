@@ -13,7 +13,7 @@ from ...strings.quality_names import AnimalProductQuality, CropQuality
 burger_king_items = [survival_burger, joja_cola, apple_slices, ice_cream, strange_doll, strange_doll_green, hashbrowns, infinity_crown]
 burger_king_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.burger_king, burger_king_items, 6, 3)
 
-capitalist_bundle = FixedPriceBundleTemplate(CCRoom.vault, MemeBundleName.capitalist, capitalist_items, 12, 2)
+capitalist_bundle = BundleTemplate(CCRoom.vault, MemeBundleName.capitalist, capitalist_items, 12, 2)
 
 romance_items = [lucky_purple_shorts, truffle_oil, super_cucumber, good_ol_cap]
 romance_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.romance, romance_items, 4, 4)
