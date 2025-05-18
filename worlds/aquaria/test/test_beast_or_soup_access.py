@@ -6,6 +6,7 @@ Description: Unit test used to test accessibility of locations with and without 
 
 from . import AquariaTestBase
 from ..Locations import AquariaLocationNames
+from ..Items import ItemNames
 
 
 class BeastOrSoupAccessTest(AquariaTestBase):
@@ -30,5 +31,5 @@ class BeastOrSoupAccessTest(AquariaTestBase):
             AquariaLocationNames.BEATING_OCTOPUS_PRIME,
             AquariaLocationNames.SUNKEN_CITY_CLEARED
         ]
-        items = [["Beast Form", "Hot Soup", "Hot Soup x 2"]]
+        items = [[ItemNames.BEAST_FORM, ItemNames.HOT_SOUP, ItemNames.HOT_SOUP_X_2]]
         self.assertAccessDependency(locations, items)

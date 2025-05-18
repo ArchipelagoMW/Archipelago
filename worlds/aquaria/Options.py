@@ -108,12 +108,12 @@ class MiniBossesToBeat(Range):
 
 class Objective(Choice):
     """
-    With the game objective Kill the creator you have to get to the final boss (the Creator) and beat all it's forms
-    With the game objective Obtain secrets and kill the Creator is like the Kill the Creator objective, but you have to
-    find all three secret memories before getting to the Creator.
-    With the game objective Killing the four gods, you have to beat all four enemy gods ("Fallen God", "Mithalan God",
+    With the game objective "Kill the Creator" you have to get to the final boss (the Creator) and beat all it's forms.
+    The game objective "Obtain secrets and kill the Creator" is similar to the "Kill the Creator" objective,
+    but you have to find all three secret memories before getting to the Creator.
+    With the game objective "Killing the four gods", you have to beat all four enemy gods ("Fallen God", "Mithalan God",
     "Drunian God", "Lumerean God").
-    The game objective Gods and Creator is the same as the Killing the four gods objective, but after the four gods
+    The game objective "Gods and Creator" is the same as the "Killing the four gods" objective, but after the four gods
     are beaten, you can get to the Creator via the body transturtle to beat it.
     """
     display_name = "Objective"
@@ -240,7 +240,7 @@ class NoProgressionHardOrHiddenLocation(Toggle):
 
 class NoProgressionSimonSays(Toggle):
     """
-    Make sure that there are no progression items in the says area
+    Make sure that there are no progression items in the says area.
     """
     display_name = "No progression in Simon says area"
 
@@ -255,7 +255,7 @@ class NoProgressionKelpForest(Toggle):
 
 class NoProgressionVeil(Toggle):
     """
-    Make sure that there are no progression items in the Veil. Can be usefull to get smaller runs.
+    Make sure that there are no progression items in the Veil. Can be useful to get smaller runs.
     """
     display_name = "No progression in the Veil"
 
@@ -263,21 +263,21 @@ class NoProgressionVeil(Toggle):
 class NoProgressionMithalas(Toggle):
     """
     Make sure that there are no progression items in the Mithalas (city, castle and cathedral).
-    Can be usefull to get smaller runs.
+    Can be useful to get smaller runs.
     """
     display_name = "No progression in Mithalas"
 
 
 class NoProgressionEnergyTemple(Toggle):
     """
-    Make sure that there are no progression items in the Energy Temple. Can be usefull to get smaller runs.
+    Make sure that there are no progression items in the Energy Temple. Can be useful to get smaller runs.
     """
     display_name = "No progression in the Energy Temple"
 
 
 class NoProgressionArnassiRuins(Toggle):
     """
-    Make sure that there are no progression items in the Arnassi Ruins. Can be usefull to get smaller runs.
+    Make sure that there are no progression items in the Arnassi Ruins. Can be useful to get smaller runs.
     Note that if the Transportation turtle are not randomize, this include Simon Says area.
     """
     display_name = "No progression in Arnassi Ruins"
@@ -285,34 +285,34 @@ class NoProgressionArnassiRuins(Toggle):
 
 class NoProgressionFrozenVeil(Toggle):
     """
-    Make sure that there are no progression items in the Frozen Veil (including Ice Cavern and Bubble Cave)
-    Can be usefull to get smaller runs.
+    Make sure that there are no progression items in the Frozen Veil (including Ice Cavern and Bubble Cave).
+    Can be useful to get smaller runs.
     """
     display_name = "No progression in the Frozen Veil"
 
 
 class NoProgressionAbyss(Toggle):
     """
-    Make sure that there are no progression items in the Abyss
-    Can be usefull to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
+    Make sure that there are no progression items in the Abyss.
+    Can be useful to get smaller runs.
+    Has no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Abyss"
 
 
 class NoProgressionSunkenCity(Toggle):
     """
-    Make sure that there are no progression items in the Sunken City
-    Can be usefull to get smaller runs.
-    Have no effect if the objective is killing the four enemy gods.
+    Make sure that there are no progression items in the Sunken City.
+    Can be useful to get smaller runs.
+    Has no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Sunken City"
 
 
 class NoProgressionBody(Toggle):
     """
-    Make sure that there are no progression items in the Body (including the before boss transturtle room
-    and the boss location. Can be usefull to get smaller runs.
+    Make sure that there are no progression items in the Body (including the before boss transturtle room.
+    and the boss location. Can be useful to get smaller runs.
     Have no effect if the objective is killing the four enemy gods.
     """
     display_name = "No progression in the Body"
