@@ -413,7 +413,8 @@ POKEMON_NAME_TO_ID = {
     'Unown Y': 410,
     'Unown Z': 411,
     'Unown Exclamation Mark': 412,
-    'Unown Question Mark': 413
+    'Unown Question Mark': 413,
+    'Egg': 414
 }
 POKEMON_ID_TO_INTERNAL_ID = {
     252: 277,
@@ -577,7 +578,8 @@ POKEMON_ID_TO_INTERNAL_ID = {
     410: 436,
     411: 437,
     412: 438,
-    413: 439
+    413: 439,
+    414: 412,
 }
 POKEMON_TYPES = [
     'Normal',
@@ -1053,10 +1055,14 @@ POKEMON_FOLDERS = list(POKEMON_NAME_TO_ID.keys())
 POKEMON_SPRITES = ['front_anim', 'back', 'icon', 'footprint']
 POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY = ['front_anim', 'back']
 POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY = ['sfront_anim', 'sback']
+POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY = ['hatch_anim']
 POKEMON_PALETTES = {
     'palette': POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY,
     'palette_shiny': POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY
 }
+
+EGG_SPRITES = [*POKEMON_SPRITES, 'hatch_anim']
+EGG_PALETTES = {**POKEMON_PALETTES, 'palette_hatch': POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY}
 
 TRAINER_FOLDERS = ['Brendan', 'May']
 TRAINER_SPRITES = ['walking_running', 'acro_bike', 'mach_bike', 'surfing', 'field_move', 'underwater', 'fishing', 'watering', 'decorating', 'battle_front', 'battle_back']
@@ -1095,8 +1101,10 @@ INTERNAL_ID_TO_OBJECT_ADDRESS = {
     'pokemon_icon':          lambda c, a : c['gMonIconTable']          + 4 * a,
     'pokemon_icon_index':    lambda c, a : c['gMonIconPaletteIndices'] + a,
     'pokemon_footprint':     lambda c, a : c['gMonFootprintTable']     + 4 * a,
+    'pokemon_hatch_anim':    lambda c, _ : (c['sEggHatchTiles'], True),
     'pokemon_palette':       lambda c, a : c['gMonPaletteTable']       + 8 * a,
     'pokemon_palette_shiny': lambda c, a : c['gMonShinyPaletteTable']  + 8 * a,
+    'pokemon_palette_hatch': lambda c, _ : (c['sEggPalette'], True),
     'pokemon_stats':         lambda c, a : c['gSpeciesInfo']           + 28 * a,
     'pokemon_move_pool':     lambda c, a : c['gLevelUpLearnsets']      + 4 * a,
 
@@ -1223,6 +1231,8 @@ DATA_ADDRESSES_MOCK_AP = {
     'gMonPaletteTable': 0x307fc0,
     'gMonShinyPaletteTable': 0x308d80,
     'gMonIconPaletteIndices': 0x5842cc,
+    'sEggPalette': 0x330674,
+    'sEggHatchTiles': 0x330694,
     'gObjectEventGraphicsInfoPointers': 0x50cb50,
     'sObjectEventSpritePalettes': 0x5130f8,
     'gTrainerFrontPicTable': 0x309f9c,
@@ -1245,6 +1255,8 @@ DATA_ADDRESSES_ORIGINAL = {
     'gMonPaletteTable': 0x303678,
     'gMonShinyPaletteTable': 0x304438,
     'gMonIconPaletteIndices': 0x57c388,
+    'sEggPalette': 0x32b70c,
+    'sEggHatchTiles': 0x32b72c,
     'gObjectEventGraphicsInfoPointers': 0x505620,
     'sObjectEventSpritePalettes': 0x50bbc8,
     'gTrainerFrontPicTable': 0x305654,
@@ -1389,6 +1401,7 @@ SPRITES_REQUIREMENTS = {
     'pokemon_back':              { 'frames': 1,  'width': 64, 'height': 64 },
     'pokemon_icon':              { 'frames': 2,  'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES },
     'pokemon_footprint':         { 'frames': 1,  'width': 16, 'height': 16, 'palette_size': 2, 'palette': VALID_FOOTPRINT_PALETTE },
+    'pokemon_hatch_anim':        { 'frames': 1,  'width': 32, 'height': 136 },
     'trainer_walking_running':   { 'frames': 18, 'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
     'trainer_mach_bike':         { 'frames': 9,  'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
     'trainer_acro_bike':         { 'frames': 27, 'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },

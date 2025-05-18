@@ -294,7 +294,7 @@ def adjustGUI():
 
         switchSprite(_sprite)
         
-        if not _folder in POKEMON_FOLDERS:
+        if not _folder in POKEMON_FOLDERS or _folder == 'Egg':
             # Trainer folder, do not show the Pokemon data edition frame
             spritePreviewFrame.grid_columnconfigure(2, weight=0)
             dataEditionLabelFrame.grid_forget()
