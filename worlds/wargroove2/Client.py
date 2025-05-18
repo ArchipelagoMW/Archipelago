@@ -51,7 +51,7 @@ class Wargroove2ClientCommandProcessor(ClientCommandProcessor):
         """Toggles deathlink On/Off"""
         if isinstance(self.ctx, Wargroove2Context):
             self.ctx.has_death_link = not self.ctx.has_death_link
-            self.ctx.update_death_link(self.ctx.has_death_link)
+            Utils.async_start(self.ctx.update_death_link(self.ctx.has_death_link), name="Update Deathlink")
             if self.ctx.has_death_link:
                 death_link_send_file = os.path.join(self.ctx.game_communication_path, "deathLinkSend")
                 if os.path.exists(death_link_send_file):
