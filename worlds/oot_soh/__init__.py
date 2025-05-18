@@ -1,4 +1,5 @@
 from typing import List, Dict, Any
+import random
 
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -50,12 +51,15 @@ class SohWorld(World):
                 continue
             location_count += 1
 
+        # Filler item list
+        filler_items = ["Recovery Heart", "Blue Rupee", "Red Rupee", "Purple Rupee", "Huge Rupee", "Bombs 5", "Bombs 10", "Arrows 5", "Arrows 10", "Deku Nuts 5", "Deku Nuts 10", "Deku Stick 1"]
+
         # Add Base Progression Items
         item_pool.append(self.create_item("Progressive Bomb Bag"))
         item_pool.append(self.create_item("Progressive Bomb Bag"))
 
         filler_item_count: int = location_count - len(item_pool)
-        item_pool += [self.create_item("Blue Rupee") for _ in range(filler_item_count)]
+        item_pool += [self.create_item(filler_items[random.randint(0, 11)]) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool
 
