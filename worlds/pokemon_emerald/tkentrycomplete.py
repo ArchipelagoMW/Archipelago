@@ -87,7 +87,7 @@ class AutocompleteCombobox(ttk.Combobox):
                 self._hit_index = 0
                 self.position = 0
                 self['values'] = self._completion_list  # Setup our popup menu
-        
+
         def _tk(self, cls, parent):
                 """Helper function, to map the internal Toplevel and Listbox to a tkinter object."""
                 obj = cls(parent)
@@ -97,7 +97,7 @@ class AutocompleteCombobox(ttk.Combobox):
                 else:
                         obj._w = '{}.{}'.format(parent._w, 'f.l')
                 return obj
-        
+
         def __init__(self, parent, **kwargs):
                 """Initalize the object, get the internal references and bind to Key-press events."""
                 super().__init__(parent, **kwargs)
@@ -154,7 +154,7 @@ class AutocompleteCombobox(ttk.Combobox):
                                 return
                         if len(event.keysym) == 1 or event.keysym.startswith('KP_'):
                                 self.autocomplete()
-                        
+
                         state = self.popdown.state()
 
                         if state == 'withdrawn' and event.keysym not in ['BackSpace', 'Right', 'Return', 'Up']:

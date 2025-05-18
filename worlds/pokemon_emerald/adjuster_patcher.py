@@ -118,7 +118,7 @@ def add_resource(_is_palette, _key, _data_address, _path):
     global resource_address_to_insert_to
     address_bytes = resource_address_to_insert_to.to_bytes(3, 'little')
     add_data_to_patch({ 'address': _data_address, 'length': 3, 'data': address_bytes })
-    
+
     data_length = add_raw_resource(_is_palette, _key, resource_address_to_insert_to, _path)
     resource_address_to_insert_to = resource_address_to_insert_to + data_length
     if resource_address_to_insert_to > 0xFFFFFF:
@@ -208,7 +208,7 @@ def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data
         sprite_width = get_overworld_sprite_data(info_object_address, 'sprite_width')
         sprite_height = get_overworld_sprite_data(info_object_address, 'sprite_height')
     sprite_size = round(sprite_width * sprite_height * bits_per_pixel / 8)
-    
+
     # Build a new complex sprite table and insert it
     output_data = bytearray(0)
     for i in range(0, sprite_requirements.get('frames')):
@@ -218,7 +218,7 @@ def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data
         output_data.extend(b'\x00\x00')
         temp_address += sprite_size
     add_data_to_patch({'address': _data_address, 'length': len(output_data), 'data': bytes(output_data)})
-    
+
     if is_overworld_sprite(_sprite_key) and sprite_size_data:
         # If custom size given, update overworld sprite data
         for current_overworld_info_object_pointer in get_overworld_sprite_addresses(_object_name, _sprite_key[8:]):
@@ -227,11 +227,11 @@ def replace_complex_sprite(_data_address, _sprite_key, _object_name, _extra_data
             set_overworld_sprite_data(current_overworld_info_object, 'sprite_width', sprite_width)
             set_overworld_sprite_data(current_overworld_info_object, 'sprite_height', sprite_height)
             set_overworld_sprite_data(current_overworld_info_object, 'size_draw_ptr', data_addresses[sprite_size_data.get('data')])
-    
+
     return _data_address
 
 def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name, _palette_sprite_name):
-    # Extracts a complex sprite from the ROM as a Pillow sprite ready to be saved 
+    # Extracts a complex sprite from the ROM as a Pillow sprite ready to be saved
     start_sprite_pointer = get_overworld_sprite_data(_overworld_struct_address, 'sprites_ptr')
     sprite_width = get_overworld_sprite_data(_overworld_struct_address, 'sprite_width')
     sprite_height = get_overworld_sprite_data(_overworld_struct_address, 'sprite_height')
@@ -250,7 +250,7 @@ def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name,
             sprite_palette = sprite.getpalette()
             extra_sprite_name = current_extra_sprite_name
         start_sprite_pointer += 8
-    
+
     final_image = Image.new('P', (sprite_width, sprite_height * sprite_requirements['frames']))
     final_image.putdata(sprites_pixel_data)
     final_image.putpalette(sprite_palette)
@@ -318,7 +318,7 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_nam
     else:
         sprite_width = sprite_requirements['width']
         sprite_height = sprite_requirements['height'] * sprite_requirements['frames']
-    
+
     # Extract the sprite's pixel data
     sprite_size = round(sprite_width * sprite_height * bits_per_pixel / 8)
     end_address = _data_address + sprite_size + ((4 + math.ceil(sprite_size / 8)) if needs_compression else 0)
@@ -330,7 +330,7 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_nam
     sprite_pixel_data = dechunk_sprite(sprite_pixel_data, sprite_width, sprite_height)
     if sprite_requirements.get('palette_per_frame', False):
         sprite_pixel_data = spread_palettes_to_sprite_frames(sprite_pixel_data, sprite_width, sprite_height, sprite_requirements.get('palettes', 1))
-    
+
     # Extract the sprite's palette(s)
     if _palette_sprite_name == 'icon':
         # Retrieve the icon's palette index and add it at the end of the file's name
@@ -432,10 +432,10 @@ def validate_sprite_pack(_sprite_pack_path):
         if _error:
             has_error = has_error or _is_error
             errors += ('\n' if errors else '') + _error
-    
+
     add_error(*validate_object_collection(_sprite_pack_path, TRAINER_FOLDERS, TRAINER_SPRITES, TRAINER_PALETTES))
     add_error(*validate_object_collection(_sprite_pack_path, POKEMON_FOLDERS, POKEMON_SPRITES, POKEMON_PALETTES))
-    
+
     if not sprite_pack_folder_list:
         add_error('Error: The current sprite pack contains no resource to apply.', True)
 
@@ -446,7 +446,7 @@ def validate_object_collection(_sprite_pack_path, _folders_list, _sprites_list, 
     # Validates all pokemon or all trainers if a folder including their name can be found
     global sprite_pack_folder_list
     sprite_pack_folder_list = []
-    
+
     errors = ''
     has_error = False
     def add_error(_error, _is_error = False, _processed = False):
@@ -564,7 +564,7 @@ def validate_sprite(_object_name, _sprite_name, _extra_data, _path):
             allowed_sizes = ['{}x{}'.format(size['width'], size['height']) for size in sprite_valid_dimensions]
             current_size = '{}x{}'.format(sprite_image.width, sprite_image.height)
             add_error('File {} in folder {}: Invalid size {}. The expected size{}: {}.'.format(_sprite_name, _object_name, current_size, ' is' if len(allowed_sizes) == 1 else 's are', allowed_sizes[0] if len(allowed_sizes) == 1 else allowed_sizes), True)
-    
+
     return errors, has_error
 
 def is_palette_valid(_palette, _palette_model):
@@ -583,7 +583,7 @@ def validate_pokemon_data_string(_pokemon_name, _data_string):
         if _error:
             has_error = has_error or _is_error
             errors += ('\n' if errors else '') + ('' if _processed else 'Error: ' if _is_error else 'Warning: ') + _error
-    
+
     if _pokemon_name.startswith('Unown '):
         _pokemon_name = 'Unown A'
 
@@ -661,7 +661,7 @@ def validate_move_pool_string(_pokemon_name, _move_pool):
         if _error:
             has_error = has_error or _is_error
             errors += ('\n' if errors else '') + ('Error: ' if _is_error else 'Warning: ') + _error
-    
+
     if not _move_pool:
         add_error('{}\'s move pool is empty.'.format(_pokemon_name), True)
 
@@ -745,15 +745,15 @@ def compress_lz_data(_src:bytes, _min_distance = 2):
 
                 while block_size < 18 and src_pos + block_size < src_size and _src[block_start + block_size] == _src[src_pos + block_size]:
                     block_size += 1
-                
+
                 if block_size > best_block_size:
                     best_block_distance = block_distance
                     best_block_size = block_size
                     if block_size == 18:
                         break
-                
+
                 block_distance += 1
-            
+
             if best_block_size >= 3:
                 dest[flags_index] |= 0x80 >> i
                 src_pos += best_block_size
@@ -765,7 +765,7 @@ def compress_lz_data(_src:bytes, _min_distance = 2):
                 dest[dest_pos] = _src[src_pos]
                 src_pos += 1
                 dest_pos += 1
-            
+
             if src_pos >= src_size:
                 # Pad to multiple of 4 bytes
                 dest_pos = ((dest_pos >> 2) + 1) << 2
@@ -776,7 +776,7 @@ def decompress_lz_data(_src:bytes):
     src_size = len(_src)
     if src_size < 4:
         raise Exception('Fatal error while decompressing LZ file: size of file is {}'.format(src_size))
-    
+
     dest_size = int.from_bytes(bytes(_src[1:4]), 'little')
     dest = [0 for _ in range(dest_size)]
 
@@ -787,7 +787,7 @@ def decompress_lz_data(_src:bytes):
     while True:
         if src_pos >= src_size:
             raise Exception('Fatal error while decompressing LZ file: {}/{}'.format(src_pos, src_size))
-        
+
         # A control byte exists to give info about the 8 following data points
         # Each bit tells whether the next data point is compressed (1) or raw (0) data
         control_byte = int(_src[src_pos])
@@ -798,7 +798,7 @@ def decompress_lz_data(_src:bytes):
                 # Compressed data: references data previously added to the output file and the number of repetitions
                 if src_pos + 1 >= src_size:
                     raise Exception('Fatal error while decompressing LZ file: {}/{}'.format(src_pos, src_size))
-                
+
                 compressed_byte_count += 1
                 block = int.from_bytes(bytes(_src[src_pos:src_pos+2]), 'big')
                 block_size = (block >> 12) + 3
@@ -824,10 +824,10 @@ def decompress_lz_data(_src:bytes):
                 dest[dest_pos] = _src[src_pos]
                 dest_pos += 1
                 src_pos += 1
-            
+
             if dest_pos == dest_size:
                 return bytes(dest)
-            
+
             control_byte <<= 1
 
 ###########################
@@ -1184,13 +1184,13 @@ def is_overworld_sprite(_sprite_key:str):
 def handle_address_collection(_rom, _forced_is_ap = None):
     # Picks and stores the right address collection for the given ROM
     is_ap = _forced_is_ap if _forced_is_ap != None else zlib.crc32(_rom) != ORIGINAL_EMERALD_CRC32
-    
+
     global data_addresses
     if is_ap:
         data_addresses = DATA_ADDRESSES_MOCK_AP
     else:
         data_addresses = DATA_ADDRESSES_ORIGINAL
-    
+
     global current_rom
     current_rom = _rom
     return is_ap

@@ -30,7 +30,7 @@ async def main():
     # Main function of the adjuster
     parser = getArgparser()
     args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_EMERALD))
-    
+
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
     global objectFolders
@@ -141,7 +141,7 @@ def adjustGUI():
             bottomFrame.pack_forget()
             spritePreviewFrame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottomFrame.pack(side=TOP, pady=5)
-        
+
             # Detect existing object folders and list them
             existingFolders = []
             for dir in os.listdir(spritePack):
@@ -176,7 +176,7 @@ def adjustGUI():
     # Balloon object used for displaying tooltips in the app, if some elements are hovered over
     mainWindowTooltip = Balloon(mainWindowFrame)
     mainWindowTooltip.bind_widget(patchIsAPCheckbox, balloonmsg='Override this value if your ROM is badly detected as an AP one.\nIf enabled, the adjuster will use data addresses from\nthe Archipelago patch for the game to inject the various data it needs to.')
-    
+
     patchDialogFrame.pack(side=TOP, expand=True, fill=X)
     patchLabel.pack(side=LEFT)
     patchEntry.pack(side=LEFT, expand=True, fill=X)
@@ -185,7 +185,7 @@ def adjustGUI():
     spritePackLabel.pack(side=LEFT)
     spritePackEntry.pack(side=LEFT, expand=True, fill=X)
     spritePackSelectButton.pack(side=LEFT)
-    
+
     ####################
     # Sprite Extractor #
     ####################
@@ -209,11 +209,11 @@ def adjustGUI():
             return
         if not os.path.isdir(outputFolder):
             os.makedirs(outputFolder)
-        
+
         handle_address_collection(apRom, isRomAp.get())
         extract_sprites(spriteExtractorFolder.get(), outputFolder)
         messagebox.showinfo(title='Success', message=f'All sprites for {spriteExtractorFolder.get()} have successfully been extracted!')
-        
+
     def extractAllSprites():
         # Run when the Extract All button is pressed
         # Extract all the sprites from all Pokemons and Trainers into the given folder
@@ -252,7 +252,7 @@ def adjustGUI():
     spriteExtractorButton.grid(row=3, column=0, sticky=E, padx=5, pady=2)
     spriteExtractorButtonAll = Button(spriteExtractorFrame, text='Extract All (takes a long time)', command=extractAllSprites)
     spriteExtractorButtonAll.grid(row=3, column=1, sticky=W, padx=5, pady=2)
-    
+
     #############################
     # Sprite and Palette Viewer #
     #############################
@@ -293,7 +293,7 @@ def adjustGUI():
         spriteSelector.set_completion_list(sprites)
 
         switchSprite(_sprite)
-        
+
         if not _folder in POKEMON_FOLDERS or _folder == 'Egg':
             # Trainer folder, do not show the Pokemon data edition frame
             spritePreviewFrame.grid_columnconfigure(2, weight=0)
@@ -332,7 +332,7 @@ def adjustGUI():
                             pokemonData[field] = pokemonSavedData[field] = (pokemonSavedData[field] << 7) + (pokemonData[field] % 0x80)
                         else:
                             pokemonData[field] = pokemonSavedData[field]
-            
+
             # Fill in the fields in the data editor and check their validity
             pokemonHP.set(pokemonData['hp'])
             pokemonSPD.set(pokemonData['spd'])
@@ -389,7 +389,7 @@ def adjustGUI():
         palette = extract_palette_from_file(_sprite)
         for i in range(16):
             palettePreviews[i]['bg'] = '#' + (palette[i] if i < len(palette) else '000000')
-    
+
     def checkCurrentSpriteFolder(_):
         # Run when the current sprite folder's value is changed
         # This only switches the current sprite folder is it's recognized
@@ -398,11 +398,11 @@ def adjustGUI():
             if not os.path.isdir(folderPath):
                 os.makedirs(folderPath)
             updateCurrentSpriteFolder('')
-    
+
     def updateCurrentSpriteFolder(_):
         # Updates the current sprite folder, it must be considered valid
         switchSpriteFolder(currentSpriteFolder.get().title())
-    
+
     def checkCurrentSprite(_):
         # Run when the current sprite's value is changed
         # This only switches the current sprite is it's recognized
@@ -458,7 +458,7 @@ def adjustGUI():
         palettePreview = Frame(palettePreviewFrame, width=32, height=32, bg='#000000')
         palettePreview.grid(row=1+math.floor(i/4), column=i%4)
         palettePreviews.append(palettePreview)
-    
+
     #########################
     ## Pokemon Data Editor ##
     #########################
@@ -503,7 +503,7 @@ def adjustGUI():
         if pokemonSavedDataString:
             with open(dataPath, 'w') as dataFile:
                 dataFile.write(pokemonSavedDataString)
-        
+
         tryValidateSpritePack(opts.sprite_pack.get())
         messagebox.showinfo(title='Success', message=f'Data for the Pokemon {pokemonName} has been successfully saved!')
 
@@ -558,7 +558,7 @@ def adjustGUI():
     def checkValue(entry, label, field, balloonMessage):
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
-        # Red if invalid, blue if different from the ROM, bold if different from the saved data 
+        # Red if invalid, blue if different from the ROM, bold if different from the saved data
         fieldValue = str('[ {} ]'.format(entry.get('1.0', END)).replace('\n', ', ') if type(entry) is ScrolledText else entry.get()).strip()
         blueBalloonMessage = '\nThis label is blue because this value is different from the one within the ROM.'
         boldBalloonMessage = '\nThis label is in bold because this value has been changed and hasn\'t been saved.'
@@ -584,7 +584,7 @@ def adjustGUI():
         mainWindowTooltip.bind_widget(label, balloonmsg=balloonMessage + ('\n' + errors if hasError else blueBalloonMessage if isDifferentFromROM else '') + (boldBalloonMessage if isDifferentFromData else ''))
         updateFieldValidity(field, not hasError)
         updateFieldChange(field, isDifferentFromData)
-    
+
     def checkAllFields():
         # Checks all Pokemon data values, and updates their labels
         checkValue(pokemonHP, statHPLabel, 'hp', statHPBalloonMessage)
@@ -754,7 +754,7 @@ def adjustGUI():
         dataEditionNotebook.add(movePoolFrame, text='Move Pool')
 
         nonlocal movePoolInput, movePoolLabel
-        
+
         movePoolLabel = Label(movePoolFrame, text='Move Pool')
         movePoolInput = ScrolledText(movePoolFrame, undo=True, width=24, height=10)
 
@@ -809,7 +809,7 @@ def adjustGUI():
     saveButton.pack(side=LEFT, padx=(5,5))
 
     bottomFrame.pack(side=TOP, pady=(5,5))
-    
+
     def tryValidateSpritePack(_spritePack, _patchChanged = False):
         # Validates the sprite pack if both the ROM/patch file and the sprite packs are valid
         hasError = False
@@ -828,7 +828,7 @@ def adjustGUI():
             errors, hasError = validate_sprite_pack(_spritePack)
             adjustButton['state'] = DISABLED if hasError else NORMAL
             spritePreviewErrorLabel['text'] = errors or 'No anomaly detected! The sprite pack is valid.'
-        else: 
+        else:
             adjustButton['state'] = DISABLED
             spritePreviewErrorLabel['text'] = 'Both a sprite pack and a patch/ROM must be selected to validate the sprite pack.'
         return hasError
@@ -853,7 +853,7 @@ def adjust(args):
 
     if not args.sprite_pack:
         raise Exception('Cannot adjust the ROM, a sprite pack is required!')
-    
+
     # Build sprite pack patch & apply patch
     try:
         spritePackBpsPatch = buildSpritePackPatch(args.sprite_pack)
@@ -897,7 +897,7 @@ def buildSpritePackPatch(_spritePack):
     errors, hasError = validate_sprite_pack(_spritePack)
     if hasError:
         raise Exception(f'Cannot adjust the ROM as the sprite pack contains errors:\n{errors}')
-    
+
     spritePackPath = _spritePack
     spritePackData = get_patch_from_sprite_pack(spritePackPath)
     spritePackBpsPatch = data_to_bps_patch(spritePackData)

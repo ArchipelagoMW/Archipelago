@@ -1,6 +1,6 @@
 ORIGINAL_EMERALD_CRC32 = 0x1F1C08FB
 
-POKEMON_NAME_TO_ID = { 
+POKEMON_NAME_TO_ID = {
     'Bulbasaur': 1,
     'Ivysaur': 2,
     'Venusaur': 3,
@@ -1351,7 +1351,7 @@ VALID_OVERWORLD_UNDERWATER_PALETTE = [
     131, 164, 197
 ]
 
-VALID_OVERWORLD_PALETTE = [ 
+VALID_OVERWORLD_PALETTE = [
     -1, -1, -1,
     -1, -1, -1,
     -1, -1, -1,
