@@ -2667,7 +2667,6 @@ all_region_connections: dict[str, RegionConnection] = {
     "1a_6c_south-west---1a_6c_north-west": RegionConnection("1a_6c_south-west", "1a_6c_north-west", [[ItemName.springs, ], ]),
     "1a_6c_south-west---1a_6c_north-east": RegionConnection("1a_6c_south-west", "1a_6c_north-east", [[ItemName.springs, ], ]),
     "1a_6c_north-west---1a_6c_south-west": RegionConnection("1a_6c_north-west", "1a_6c_south-west", []),
-    "1a_6c_north-west---1a_6c_north-east": RegionConnection("1a_6c_north-west", "1a_6c_north-east", [[ItemName.dash_refills, ], ]),
     "1a_6c_north-east---1a_6c_south-west": RegionConnection("1a_6c_north-east", "1a_6c_south-west", []),
 
     "1a_7_west---1a_7_east": RegionConnection("1a_7_west", "1a_7_east", []),
@@ -3765,7 +3764,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "5a_d-01_north-west---5a_d-01_center": RegionConnection("5a_d-01_north-west", "5a_d-01_center", []),
     "5a_d-01_north-east---5a_d-01_center": RegionConnection("5a_d-01_north-east", "5a_d-01_center", []),
 
-    "5a_d-09_east---5a_d-09_west": RegionConnection("5a_d-09_east", "5a_d-09_west", [[ItemName.red_boosters, ItemName.dash_refills, ], ]),
+    "5a_d-09_east---5a_d-09_west": RegionConnection("5a_d-09_east", "5a_d-09_west", [[ItemName.red_boosters, ItemName.dash_refills, ItemName.swap_blocks, ], ]),
 
     "5a_d-04_east---5a_d-04_west": RegionConnection("5a_d-04_east", "5a_d-04_west", [[ItemName.red_boosters, "Mirror Temple A - Search Key 1", "Mirror Temple A - Search Key 2", ], ]),
     "5a_d-04_east---5a_d-04_south-east": RegionConnection("5a_d-04_east", "5a_d-04_south-east", []),
@@ -4189,7 +4188,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "7a_b-00_bottom---7a_b-00_top": RegionConnection("7a_b-00_bottom", "7a_b-00_top", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
     "7a_b-00_top---7a_b-00_bottom": RegionConnection("7a_b-00_top", "7a_b-00_bottom", []),
 
-    "7a_b-01_west---7a_b-01_east": RegionConnection("7a_b-01_west", "7a_b-01_east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
+    "7a_b-01_west---7a_b-01_east": RegionConnection("7a_b-01_west", "7a_b-01_east", [[ItemName.traffic_blocks, ItemName.springs, ], ]),
 
     "7a_b-02_south---7a_b-02_north-west": RegionConnection("7a_b-02_south", "7a_b-02_north-west", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
     "7a_b-02_south---7a_b-02_north-east": RegionConnection("7a_b-02_south", "7a_b-02_north-east", [[ItemName.traffic_blocks, ItemName.dash_refills, ], ]),
@@ -4498,7 +4497,7 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "7b_b-03_bottom---7b_b-03_top": RegionConnection("7b_b-03_bottom", "7b_b-03_top", [[ItemName.traffic_blocks, ItemName.badeline_boosters, ], ]),
 
-    "7b_c-01_west---7b_c-01_east": RegionConnection("7b_c-01_west", "7b_c-01_east", [[ItemName.dream_blocks, ], ]),
+    "7b_c-01_west---7b_c-01_east": RegionConnection("7b_c-01_west", "7b_c-01_east", [[ItemName.dream_blocks, ItemName.springs, ], ]),
 
     "7b_c-00_west---7b_c-00_east": RegionConnection("7b_c-00_west", "7b_c-00_east", [[ItemName.dream_blocks, ], ]),
 
@@ -4508,7 +4507,7 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "7b_d-00_west---7b_d-00_east": RegionConnection("7b_d-00_west", "7b_d-00_east", [[ItemName.springs, ], ]),
 
-    "7b_d-01_west---7b_d-01_east": RegionConnection("7b_d-01_west", "7b_d-01_east", []),
+    "7b_d-01_west---7b_d-01_east": RegionConnection("7b_d-01_west", "7b_d-01_east", [[ItemName.dash_refills, ], ]),
 
     "7b_d-02_west---7b_d-02_east": RegionConnection("7b_d-02_west", "7b_d-02_east", [[ItemName.springs, ItemName.moving_platforms, ItemName.coins, ], ]),
 
@@ -4981,7 +4980,7 @@ all_locations: dict[str, LevelLocation] = {
     "1a_5_strawberry": LevelLocation("1a_5_strawberry", "Forsaken City A - Room 5 Strawberry", "1a_5_north-west", LocationType.strawberry, []),
     "1a_5z_strawberry": LevelLocation("1a_5z_strawberry", "Forsaken City A - Room 5z Strawberry", "1a_5z_east", LocationType.strawberry, [[ItemName.springs, ], ]),
     "1a_5a_strawberry": LevelLocation("1a_5a_strawberry", "Forsaken City A - Room 5a Strawberry", "1a_5a_west", LocationType.strawberry, [[ItemName.traffic_blocks, ], ]),
-    "1a_6_strawberry": LevelLocation("1a_6_strawberry", "Forsaken City A - Room 6 Strawberry", "1a_6_east", LocationType.strawberry, [[ItemName.traffic_blocks, ], ]),
+    "1a_6_strawberry": LevelLocation("1a_6_strawberry", "Forsaken City A - Room 6 Strawberry", "1a_6_east", LocationType.strawberry, []),
     "1a_7zb_strawberry": LevelLocation("1a_7zb_strawberry", "Forsaken City A - Room 7zb Strawberry", "1a_7zb_west", LocationType.strawberry, []),
     "1a_s1_strawberry": LevelLocation("1a_s1_strawberry", "Forsaken City A - Room s1 Strawberry", "1a_s1_east", LocationType.strawberry, []),
     "1a_s1_crystal_heart": LevelLocation("1a_s1_crystal_heart", "Forsaken City A - Crystal Heart", "1a_s1_east", LocationType.crystal_heart, []),

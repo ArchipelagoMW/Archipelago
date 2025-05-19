@@ -785,7 +785,7 @@
                                     "name": "strawberry",
                                     "display_name": "Strawberry",
                                     "type": "strawberry",
-                                    "rule": [ [ "traffic_blocks" ] ]
+                                    "rule": []
                                 }
                             ]
                         }
@@ -1161,10 +1161,6 @@
                                 {
                                     "dest": "south-west",
                                     "rule": []
-                                },
-                                {
-                                    "dest": "north-east",
-                                    "rule": [ [ "dash_refills" ] ]
                                 }
                             ]
                         },
@@ -18825,7 +18821,7 @@
                             "connections": [
                                 {
                                     "dest": "west",
-                                    "rule": [ [ "red_boosters", "dash_refills" ] ]
+                                    "rule": [ [ "red_boosters", "dash_refills", "swap_blocks" ] ]
                                 }
                             ]
                         },
@@ -26738,7 +26734,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "traffic_blocks", "dash_refills" ] ]
+                                    "rule": [ [ "traffic_blocks", "springs" ] ]
                                 }
                             ],
                             "locations": [
@@ -32076,7 +32072,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "dream_blocks" ] ]
+                                    "rule": [ [ "dream_blocks", "springs" ] ]
                                 }
                             ]
                         },
@@ -32246,7 +32242,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": []
+                                    "rule": [ [ "dash_refills" ] ]
                                 }
                             ]
                         },
