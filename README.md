@@ -9,7 +9,6 @@ Currently, the following games are supported:
 * Factorio
 * Minecraft
 * Subnautica
-* Slay the Spire
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
 * Timespinner
