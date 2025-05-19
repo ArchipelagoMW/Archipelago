@@ -252,6 +252,13 @@ def generate_item_groups() -> dict[str, list[str]]:
         "Cassettes":      list(cassette_item_data_table.keys()),
         "Crystal Hearts": list(crystal_heart_item_data_table.keys()),
         "Interactables":  list(interactable_item_data_table.keys()),
+
+        # Commonly mistaken names
+        "Green Boosters": [ItemName.blue_boosters],
+        "Green Bubbles":  [ItemName.blue_boosters],
+        "Blue Bubbles":   [ItemName.blue_boosters],
+        "Red Bubbles":    [ItemName.red_boosters],
+        "Touch Switches": [ItemName.coins],
     }
 
     return item_groups
