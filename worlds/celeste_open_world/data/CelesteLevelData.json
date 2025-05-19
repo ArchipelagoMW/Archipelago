@@ -36117,7 +36117,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "badeline_boosters" ] ]
+                                    "rule": [ [ "badeline_boosters", "blue_clouds" ] ]
                                 }
                             ]
                         },

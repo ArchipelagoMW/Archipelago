@@ -4710,7 +4710,7 @@ all_region_connections: dict[str, RegionConnection] = {
     "10a_intro-00-past_west---10a_intro-00-past_east": RegionConnection("10a_intro-00-past_west", "10a_intro-00-past_east", []),
     "10a_intro-00-past_east---10a_intro-00-past_west": RegionConnection("10a_intro-00-past_east", "10a_intro-00-past_west", []),
 
-    "10a_intro-01-future_west---10a_intro-01-future_east": RegionConnection("10a_intro-01-future_west", "10a_intro-01-future_east", [[ItemName.badeline_boosters, ], ]),
+    "10a_intro-01-future_west---10a_intro-01-future_east": RegionConnection("10a_intro-01-future_west", "10a_intro-01-future_east", [[ItemName.badeline_boosters, ItemName.blue_clouds, ], ]),
 
     "10a_intro-02-launch_bottom---10a_intro-02-launch_top": RegionConnection("10a_intro-02-launch_bottom", "10a_intro-02-launch_top", [[ItemName.badeline_boosters, ItemName.blue_clouds, ], ]),
     "10a_intro-02-launch_top---10a_intro-02-launch_bottom": RegionConnection("10a_intro-02-launch_top", "10a_intro-02-launch_bottom", []),
