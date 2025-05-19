@@ -17,7 +17,7 @@ from hashlib import sha3_512
 from pathlib import Path
 
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.0.0'
+requirement = 'cx-Freeze==8.2.0'
 try:
     import pkg_resources
     try:
@@ -57,28 +57,13 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
-    "A Link to the Past",
-    "Adventure",
-    "ArchipIDLE",
-    "Archipelago",
-    "Clique",
-    "Final Fantasy",
-    "Lufia II Ancient Cave",
-    "Meritous",
-    "Ocarina of Time",
-    "Overcooked! 2",
-    "Raft",
-    "Sudoku",
-    "Super Mario 64",
-    "VVVVVV",
-    "Wargroove",
+    "Archipelago",  # needs a way to specify load order
+    "Final Fantasy",  # loads json files badly
+    "Ocarina of Time",  # has executables in folder
+    "Raft",  # loads json files badly
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
