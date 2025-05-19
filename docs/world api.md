@@ -314,30 +314,54 @@ avoiding the need for indirect conditions at the expense of performance.
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
 reject the placement of an item there.
 
-### Events
+### Events (or "generation-only items/locations")
 
-An Event is a special combination of a Location and an Item, with both having an `id` of `None`. These can be used to
-track certain logic interactions, with the Event Item being required for access in other locations or regions, but not
-being "real". Since the item and location have no ID, they get dropped at the end of generation and so the server is
-never made aware of them and these locations can never be checked, nor can the items be received during play.
-They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
-is required to finish the game. This makes it very clear when the player finishes, rather than only seeing their last
-relevant Item. Events function just like any other Location, and can still have their own access rules, etc.
-By convention, the Event "pair" of Location and Item typically have the same name, though this is not a requirement.
-They must not exist in the `name_to_id` lookups, as they have no ID.
+An event item or location is one that only exists during multiworld generation. The server is never made aware of them,
+event locations can never be checked, nor can event items be received during play. Events are used to represent in-game
+actions (that aren't regular Archipelago locations) when either:
 
-The most common way to create an Event pair is to create and place the Item on the Location as soon as it's created:
+* we want to show in the spoiler log when the player is expected to perform the in-game action, or
+* it's the cleanest way to represent how that in-game action impacts logic
+
+Typical examples include completing the goal, defeating a boss, or flipping a switch that changes several areas.
+
+To be precise: the term "event" on its own refers to the special combination of an "event item" placed on an "event
+location". Event items and locations are created the same way as normal items and locations, except that they have an
+`id` of `None`, they must not exist in the `name_to_id` lookups, and an event item must be placed on an event location
+(and vice versa). By convention, the event location and item typically have the same name, though this is not a
+requirement. Finally, although events are often described as "fake" items and locations, it's important to understand
+that they are perfectly real during generation.
+
+The most common way to create an event is to create the event item and the event location, then immediately call
+`.place_locked_item()`:
 
 ```python
-from worlds.AutoWorld import World
-from BaseClasses import ItemClassification
-from .subclasses import MyGameLocation, MyGameItem
-
-
-class MyGameWorld(World):
-    victory_loc = MyGameLocation(self.player, "Victory", None)
-    victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
+victory_loc = MyGameLocation(self.player, "Victory", None)
+victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
+self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+set_rule(victory_loc, lambda state: state.can_reach_region("Final Boss Arena", self.player))
 ```
+
+Having a `"Victory"` event item that's required to finish the game makes it very clear in the spoiler log when the
+player finishes, rather than only seeing their last relevant item. But events aren't just about the spoiler log;
+a more substantial example of using events to structure your logic might be:
+
+```python
+water_loc = MyGameLocation(self.player, "Lowered Water Level", None)
+water_loc.place_locked_item(MyGameItem("Lowered Water Level", ItemClassification.progression, None, self.player))
+set_rule(water_loc, lambda state: state.can_reach_region("Water Pump Switch", self.player))
+...
+basement_loc = MyGameLocation(self.player, "Flooded House - Basement Chest", None)
+flooded_house_region.add_locations([upstairs_loc, ground_floor_loc, basement_loc], MyGameLocation)
+...
+set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.player))
+```
+
+To be clear, this example could also be modeled with a second Region (perhaps "Un-Flooded House"). Or you could modify
+the game so flipping that switch checks a regular AP location in addition to lowering the water level.
+Events are never required, but it may be cleaner to use an event if e.g. flipping that switch affects the logic in
+dozens of half-flooded areas that would all otherwise need additional Regions, and you don't want it to be a regular
+location. It depends on the game.
 
 ## Implementation
 
