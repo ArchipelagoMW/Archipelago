@@ -3,7 +3,7 @@
 ## Required Software
 - The latest version of Celeste (1.4) from any official PC game distributor
 - Olympus (Celeste Mod Manager) from: [Olympus Download Page](https://everestapi.github.io/)
-- The latest version of the Archipelago Open World mod for Celeste from: [GitHub Release]()
+- The latest version of the Archipelago Open World mod for Celeste from: [GitHub Release](https://github.com/PoryGoneDev/Celeste-Archipelago-Open-World/releases)
 
 ## Installation Procedures (Windows)
 
