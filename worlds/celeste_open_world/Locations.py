@@ -1,10 +1,15 @@
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Location, Region
 from worlds.generic.Rules import set_rule
 
 from .Levels import Level, LocationType
 from .Names import ItemName
+
+if TYPE_CHECKING:
+    from . import CelesteOpenWorld
+else:
+    CelesteOpenWorld = object
 
 
 celeste_base_id: int = 0xCA10000
@@ -91,7 +96,7 @@ def generate_location_table() -> dict[str, int]:
     return location_table
 
 
-def create_regions_and_locations(world):
+def create_regions_and_locations(world: CelesteOpenWorld):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
