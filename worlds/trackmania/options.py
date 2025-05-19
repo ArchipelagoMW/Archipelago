@@ -81,7 +81,17 @@ class SkipPercentage(Range):
     display_name = "Map Skip Item Percentage"
     range_start = 0
     range_end = 100
-    default = 10
+    default = 5
+
+class DiscountPercentage(Range):
+    """The number of target time discounts in the item pool, calculated as a percentage of the total number of maps.
+    
+    This item increases the target time on a map by 1.5%. That might not sounds like a lot, but it helps!
+    """
+    display_name = "Map Skip Item Percentage"
+    range_start = 0
+    range_end = 100
+    default = 20
 
 class ProgressiveTargetTimeChance(Range):
     """Percentage chance that the item received for beating the target time is guaranteed to be a progression item"""
@@ -218,6 +228,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
     first_series_size: FirstSeriesSize
     medal_requirement: MedalRequirement
     skip_percentage: SkipPercentage
+    discount_percentage: DiscountPercentage
     target_progression_chance : ProgressiveTargetTimeChance
     map_tags: MapTags
     map_tags_inclusive: MapTagsInclusive
@@ -233,7 +244,7 @@ class TrackmaniaOptions(PerGameCommonOptions):
 
 option_groups: Dict[str, List[Any]] = {
     "Generation":[ProgressionBalancing, Accessibility],
-    "Difficulty":[TargetTime, SkipPercentage, MapDifficulties],
+    "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
     "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags],
     "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries, PlandoItems]
