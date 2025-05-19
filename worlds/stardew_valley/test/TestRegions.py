@@ -3,7 +3,7 @@ import unittest
 from typing import Set
 
 from BaseClasses import get_seed
-from . import SVTestCase
+from .bases import SVTestCase
 from .options.utils import fill_dataclass_with_default
 from .. import create_content
 from ..options import EntranceRandomization, ExcludeGingerIsland, SkillProgression
