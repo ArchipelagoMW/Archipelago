@@ -1,4 +1,4 @@
-from . import L2ACTestBase
+from .bases import L2ACTestBase
 
 
 class TestDefault(L2ACTestBase):
