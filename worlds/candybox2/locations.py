@@ -1,9 +1,16 @@
 from enum import StrEnum
+from typing import NamedTuple, Callable, TYPE_CHECKING
 
 from BaseClasses import Location
 
+if TYPE_CHECKING:
+    from worlds.candybox2 import CandyBox2World
 
-# a location is a check
+
+class CandyBox2LocationData(NamedTuple):
+    id: int | None = None
+    is_included: Callable[["CandyBox2World"], bool] = lambda _: True
+
 
 class CandyBox2Location(Location):
     game: str = "Candy Box 2"
@@ -37,6 +44,11 @@ class CandyBox2LocationName(StrEnum):
     SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES = "Sorceress' Hut: Inconspicuous Lollipop"
     SORCERESS_HUT_BEGINNERS_GRIMOIRE = "Sorceress' Hut: Beginner's Grimoire"
     SORCERESS_HUT_ADVANCED_GRIMOIRE = "Sorceress' Hut: Advanced Grimoire"
+    SORCERESS_HUT_BEGINNERS_GRIMOIRE_FIREBALL = "Sorceress' Hut: Beginner's Grimoire - Fireball"
+    SORCERESS_HUT_BEGINNERS_GRIMOIRE_ACID_RAIN = "Sorceress' Hut: Beginner's Grimoire - Acid Rain"
+    SORCERESS_HUT_BEGINNERS_GRIMOIRE_TELEPORT = "Sorceress' Hut: Beginner's Grimoire - Teleport"
+    SORCERESS_HUT_ADVANCED_GRIMOIRE_ERASE_MAGIC = "Sorceress' Hut: Advanced Grimoire - Erase Magic"
+    SORCERESS_HUT_ADVANCED_GRIMOIRE_THORNS_SHIELD = "Sorceress' Hut: Advanced Grimoire - Thorns Shield"
     SORCERESS_HUT_CAULDRON = "Sorceress' Hut: Cauldron"
     SORCERESS_HUT_HAT = "Sorceress' Hut: Sorceress' Hat"
     OCTOPUS_KING_DEFEATED = "Octopus King Quest: Octopus King Defeated"
@@ -63,6 +75,8 @@ class CandyBox2LocationName(StrEnum):
     THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED = "Hole: Right Chest Opened"
     THE_HOLE_HEART_PENDANT_ACQUIRED = "Hole: Top Chest Opened"
     THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED = "Hole: Left Chest Opened"
+    THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_OBSIDIAN_WALL = "Hole: Left Chest Opened - Obsidian Wall"
+    THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_BLACK_DEMONS = "Hole: Left Chest Opened - Black Demons"
     THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED = "Hole: Bottom Chest Opened"
     TEAPOT_DEFEATED = "Teapot Quest: Teapot Defeated"
     XINOPHERYDON_DEFEATED = "Xinopherydon Quest: Xinopherydon Defeated"
@@ -94,271 +108,104 @@ location_descriptions = {
     CandyBox2LocationName.HP_BAR_UNLOCK: ""
 }
 
-candy_box_locations = {
-    CandyBox2LocationName.HP_BAR_UNLOCK: 1,
-    CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR: 2
+locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
+    CandyBox2LocationName.HP_BAR_UNLOCK: CandyBox2LocationData(1),
+    CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR: CandyBox2LocationData(2),
+    CandyBox2LocationName.VILLAGE_SHOP_TOP_LOLLIPOP: CandyBox2LocationData(100),
+    CandyBox2LocationName.VILLAGE_SHOP_CENTRE_LOLLIPOP: CandyBox2LocationData(101),
+    CandyBox2LocationName.VILLAGE_SHOP_BOTTOM_LOLLIPOP: CandyBox2LocationData(102),
+    CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR: CandyBox2LocationData(103),
+    CandyBox2LocationName.VILLAGE_SHOP_TIME_RING: CandyBox2LocationData(104),
+    CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT: CandyBox2LocationData(105),
+    CandyBox2LocationName.VILLAGE_SHOP_LEATHER_GLOVES: CandyBox2LocationData(106),
+    CandyBox2LocationName.VILLAGE_SHOP_LEATHER_BOOTS: CandyBox2LocationData(107),
+    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF: CandyBox2LocationData(200),
+    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF: CandyBox2LocationData(201),
+    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG: CandyBox2LocationData(202),
+    CandyBox2LocationName.CELLAR_QUEST_CLEARED: CandyBox2LocationData(300),
+    CandyBox2LocationName.DESERT_QUEST_CLEARED: CandyBox2LocationData(1100),
+    CandyBox2LocationName.DESERT_BIRD_FEATHER_ACQUIRED: CandyBox2LocationData(1101),
+    CandyBox2LocationName.TROLL_DEFEATED: CandyBox2LocationData(1200),
+    CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED: CandyBox2LocationData(1201),
+    CandyBox2LocationName.CAVE_EXIT: CandyBox2LocationData(1300),
+    CandyBox2LocationName.CAVE_CHOCOLATE_BAR: CandyBox2LocationData(1301),
+    CandyBox2LocationName.CAVE_HEART_PLUG: CandyBox2LocationData(1302),
+    CandyBox2LocationName.FOREST_QUEST_CLEARED: CandyBox2LocationData(1400),
+    CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED: CandyBox2LocationData(1500),
+    CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED: CandyBox2LocationData(1501),
+    CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED: CandyBox2LocationData(1600),
+    CandyBox2LocationName.SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES: CandyBox2LocationData(1800),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE: CandyBox2LocationData(1801, lambda world: grimoire_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE: CandyBox2LocationData(1802, lambda world: grimoire_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_CAULDRON: CandyBox2LocationData(1803),
+    CandyBox2LocationName.SORCERESS_HUT_HAT: CandyBox2LocationData(1804),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_ACID_RAIN: CandyBox2LocationData(1805, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_FIREBALL: CandyBox2LocationData(1806, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_TELEPORT: CandyBox2LocationData(1807, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_ERASE_MAGIC: CandyBox2LocationData(1808, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_THORNS_SHIELD: CandyBox2LocationData(1809, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.OCTOPUS_KING_DEFEATED: CandyBox2LocationData(1900),
+    CandyBox2LocationName.MONKEY_WIZARD_DEFEATED: CandyBox2LocationData(2000),
+    CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED: CandyBox2LocationData(2100),
+    CandyBox2LocationName.DEVIL_DEFEATED: CandyBox2LocationData(2300),
+    CandyBox2LocationName.THE_DEVELOPER_DEFEATED: CandyBox2LocationData(2400),
+    CandyBox2LocationName.SOLVE_CYCLOPS_PUZZLE: CandyBox2LocationData(2500),
+    CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE: CandyBox2LocationData(2600),
+    CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD: CandyBox2LocationData(2601),
+    CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE: CandyBox2LocationData(2700),
+    CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD: CandyBox2LocationData(2800),
+    CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR: CandyBox2LocationData(2900),
+    CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE: CandyBox2LocationData(3000),
+    CandyBox2LocationName.ENCHANT_RED_ENCHANTED_GLOVES: CandyBox2LocationData(3100),
+    CandyBox2LocationName.ENCHANT_PINK_ENCHANTED_GLOVES: CandyBox2LocationData(3101),
+    CandyBox2LocationName.ENCHANT_SUMMONING_TRIBAL_SPEAR: CandyBox2LocationData(3200),
+    CandyBox2LocationName.ENCHANT_ENCHANTED_MONKEY_WIZARD_STAFF: CandyBox2LocationData(3300),
+    CandyBox2LocationName.ENCHANT_ENCHANTED_KNIGHT_BODY_ARMOUR: CandyBox2LocationData(3400),
+    CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_JASPERS: CandyBox2LocationData(3500),
+    CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_OBSIDIAN: CandyBox2LocationData(3501),
+    CandyBox2LocationName.ENCHANT_GIANT_SPOON_OF_DOOM: CandyBox2LocationData(3600),
+    CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED: CandyBox2LocationData(3700),
+    CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED: CandyBox2LocationData(3701),
+    CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED: CandyBox2LocationData(3702),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED: CandyBox2LocationData(3703, lambda world: grimoire_location_count(world)),
+    CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED: CandyBox2LocationData(3704),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_OBSIDIAN_WALL: CandyBox2LocationData(3705, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_BLACK_DEMONS: CandyBox2LocationData(3706, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.TEAPOT_DEFEATED: CandyBox2LocationData(3900),
+    CandyBox2LocationName.XINOPHERYDON_DEFEATED: CandyBox2LocationData(4000),
+    CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED: CandyBox2LocationData(4001),
+    CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED: CandyBox2LocationData(4100),
+    CandyBox2LocationName.PITCHFORK_ACQUIRED: CandyBox2LocationData(4300),
+    CandyBox2LocationName.THE_SQUIRRELS_FIRST_QUESTION: CandyBox2LocationData(4400),
+    CandyBox2LocationName.THE_SQUIRRELS_SECOND_QUESTION: CandyBox2LocationData(4401),
+    CandyBox2LocationName.THE_SQUIRRELS_THIRD_QUESTION: CandyBox2LocationData(4402),
+    CandyBox2LocationName.THE_SQUIRRELS_FOURTH_QUESTION: CandyBox2LocationData(4403),
+    CandyBox2LocationName.THE_SQUIRRELS_FIFTH_QUESTION: CandyBox2LocationData(4404),
+    CandyBox2LocationName.THE_SQUIRRELS_PUZZLE: CandyBox2LocationData(4405),
+    CandyBox2LocationName.THE_SPONGE_ACQUIRED: CandyBox2LocationData(4500),
+    CandyBox2LocationName.THE_SHELL_POWDER_ACQUIRED: CandyBox2LocationData(4501),
+    CandyBox2LocationName.THE_RED_FIN_ACQUIRED: CandyBox2LocationData(4502),
+    CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED: CandyBox2LocationData(4503),
+    CandyBox2LocationName.THE_PURPLE_FIN_ACQUIRED: CandyBox2LocationData(4504),
+    CandyBox2LocationName.X_MARKS_THE_SPOT: CandyBox2LocationData(4600),
+    CandyBox2LocationName.LOCKED_CANDY_BOX_ACQUIRED: CandyBox2LocationData(4700),
+    CandyBox2LocationName.YOURSELF_DEFEATED: CandyBox2LocationData(4800),
+    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_1: CandyBox2LocationData(4900),
+    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_2: CandyBox2LocationData(4901),
+    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_3: CandyBox2LocationData(4902),
+    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4: CandyBox2LocationData(4903),
+    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5: CandyBox2LocationData(4904),
+    CandyBox2LocationName.POGO_STICK: CandyBox2LocationData(500),
 }
 
-village_locations = {}
+def grimoire_location_count(world: "CandyBox2World"):
+    if world.grimoires == 0 or world.grimoires == 1: # Grimoires
+        return True
 
-village_shop_locations = {
-    CandyBox2LocationName.VILLAGE_SHOP_TOP_LOLLIPOP: 100,
-    CandyBox2LocationName.VILLAGE_SHOP_CENTRE_LOLLIPOP: 101,
-    CandyBox2LocationName.VILLAGE_SHOP_BOTTOM_LOLLIPOP: 102,
-    CandyBox2LocationName.VILLAGE_SHOP_CHOCOLATE_BAR: 103,
-    CandyBox2LocationName.VILLAGE_SHOP_TIME_RING: 104,
-    CandyBox2LocationName.VILLAGE_SHOP_CANDY_MERCHANTS_HAT: 105,
-    CandyBox2LocationName.VILLAGE_SHOP_LEATHER_GLOVES: 106,
-    CandyBox2LocationName.VILLAGE_SHOP_LEATHER_BOOTS: 107
-}
+    return False
 
-village_house_1_locations = {
-    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_ON_THE_BOOKSHELF: 200,
-    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_IN_THE_BOOKSHELF: 201,
-    CandyBox2LocationName.VILLAGE_HOUSE_LOLLIPOP_UNDER_THE_RUG: 202
-}
+def spell_location_count(world: "CandyBox2World"):
+    if world.grimoires == 2:
+        return True
 
-village_cellar_locations = {
-    CandyBox2LocationName.CELLAR_QUEST_CLEARED: 300
-}
-
-# Cleared rat quest
-map_stage_1_locations = {}
-
-# Cleared desert quest
-map_stage_2_locations = {}
-
-# Cleared bridge quest
-map_stage_3_locations = {}
-
-# Cleared cave entrance
-map_stage_4_locations = {}
-
-# Cleared forest
-map_stage_5_locations = {}
-
-# Cleared castle entrance
-map_stage_6_locations = {}
-
-# Cleared Giant Nougat Monster
-map_stage_7_locations = {}
-
-desert_locations = {
-    CandyBox2LocationName.DESERT_QUEST_CLEARED: 1100,
-    CandyBox2LocationName.DESERT_BIRD_FEATHER_ACQUIRED: 1101,
-}
-
-bridge_locations = {
-    CandyBox2LocationName.TROLL_DEFEATED: 1200,
-    CandyBox2LocationName.THE_TROLLS_BLUDGEON_ACQUIRED: 1201
-}
-
-cave_locations = {
-    CandyBox2LocationName.CAVE_EXIT: 1300,
-    CandyBox2LocationName.CAVE_CHOCOLATE_BAR: 1301,
-    CandyBox2LocationName.CAVE_HEART_PLUG: 1302,
-}
-
-forest_locations = {
-    CandyBox2LocationName.FOREST_QUEST_CLEARED: 1400
-}
-
-castle_entrance_locations = {
-    CandyBox2LocationName.CASTLE_ENTRANCE_QUEST_CLEARED: 1500,
-    CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED: 1501,
-}
-
-giant_nougat_monster_locations = {
-    CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED: 1600
-}
-
-village_house_2_locations = {}
-
-sorceress_hut_locations = {
-    CandyBox2LocationName.SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES: 1800,
-    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE: 1801,
-    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE: 1802,
-    CandyBox2LocationName.SORCERESS_HUT_CAULDRON: 1803,
-    CandyBox2LocationName.SORCERESS_HUT_HAT: 1804,
-}
-
-octopus_king_locations = {
-    CandyBox2LocationName.OCTOPUS_KING_DEFEATED: 1900
-}
-
-naked_monkey_wizard_locations = {
-    CandyBox2LocationName.MONKEY_WIZARD_DEFEATED: 2000,
-}
-
-castle_egg_room_locations = {
-    CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED: 2100
-}
-
-dragon_locations = {}
-
-hell_locations = {
-    CandyBox2LocationName.DEVIL_DEFEATED: 2300
-}
-
-the_developer_fight_locations = {
-    CandyBox2LocationName.THE_DEVELOPER_DEFEATED: 2400
-}
-
-lighthouse_locations = {
-    CandyBox2LocationName.SOLVE_CYCLOPS_PUZZLE: 2500
-}
-
-forge_locations = {
-    CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE: 2600,
-    CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD: 2601,
-    CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE: 2700,
-    CandyBox2LocationName.VILLAGE_FORGE_BUY_POLISHED_SILVER_SWORD: 2800,
-    CandyBox2LocationName.VILLAGE_FORGE_BUY_LIGHTWEIGHT_BODY_ARMOUR: 2900,
-    CandyBox2LocationName.VILLAGE_FORGE_BUY_SCYTHE: 3000
-}
-
-wishing_well_locations = {
-    CandyBox2LocationName.ENCHANT_RED_ENCHANTED_GLOVES: 3100,
-    CandyBox2LocationName.ENCHANT_PINK_ENCHANTED_GLOVES: 3101,
-    CandyBox2LocationName.ENCHANT_SUMMONING_TRIBAL_SPEAR: 3200,
-    CandyBox2LocationName.ENCHANT_ENCHANTED_MONKEY_WIZARD_STAFF: 3300,
-    CandyBox2LocationName.ENCHANT_ENCHANTED_KNIGHT_BODY_ARMOUR: 3400,
-    CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_JASPERS: 3500,
-    CandyBox2LocationName.ENCHANT_OCTOPUS_KING_CROWN_WITH_OBSIDIAN: 3501,
-    CandyBox2LocationName.ENCHANT_GIANT_SPOON_OF_DOOM: 3600
-}
-
-hole_locations = {
-    CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED: 3700,
-    CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED: 3701,
-    CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED: 3702,
-    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED: 3703,
-    CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED: 3704
-}
-
-desert_fortress_locations = {}
-
-teapot_quest_locations = {
-    CandyBox2LocationName.TEAPOT_DEFEATED: 3900
-}
-
-xinopherydon_quest_locations = {
-    CandyBox2LocationName.XINOPHERYDON_DEFEATED: 4000,
-    CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED: 4001
-}
-
-ledge_room_quest_locations = {
-    CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED: 4100
-}
-
-castle_trap_room_locations = {}
-
-castle_dark_room_locations = {
-    CandyBox2LocationName.PITCHFORK_ACQUIRED: 4300
-}
-
-squirrel_tree_locations = {
-    CandyBox2LocationName.THE_SQUIRRELS_FIRST_QUESTION: 4400,
-    CandyBox2LocationName.THE_SQUIRRELS_SECOND_QUESTION: 4401,
-    CandyBox2LocationName.THE_SQUIRRELS_THIRD_QUESTION: 4402,
-    CandyBox2LocationName.THE_SQUIRRELS_FOURTH_QUESTION: 4403,
-    CandyBox2LocationName.THE_SQUIRRELS_FIFTH_QUESTION: 4404,
-    CandyBox2LocationName.THE_SQUIRRELS_PUZZLE: 4405
-}
-
-the_sea_locations = {
-    CandyBox2LocationName.THE_SPONGE_ACQUIRED: 4500,
-    CandyBox2LocationName.THE_SHELL_POWDER_ACQUIRED: 4501,
-    CandyBox2LocationName.THE_RED_FIN_ACQUIRED: 4502,
-    CandyBox2LocationName.THE_GREEN_FIN_ACQUIRED: 4503,
-    CandyBox2LocationName.THE_PURPLE_FIN_ACQUIRED: 4504,
-}
-
-dig_spot_locations = {
-    CandyBox2LocationName.X_MARKS_THE_SPOT: 4600
-}
-
-lonely_house_locations = {
-    CandyBox2LocationName.LOCKED_CANDY_BOX_ACQUIRED: 4700
-}
-
-yourself_fight_locations = {
-    CandyBox2LocationName.YOURSELF_DEFEATED: 4800
-}
-
-castle_bakehouse_locations = {
-    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_1: 4900,
-    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_2: 4901,
-    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_3: 4902,
-    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4: 4903,
-    CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5: 4904,
-}
-
-pogo_stick_spot_locations = {
-    CandyBox2LocationName.POGO_STICK: 500,
-}
-
-pier_locations = {
-
-}
-
-lollipop_farm_locations = {
-
-}
-
-village_minigame_locations = {
-
-}
-
-hole_entrance_locations = {
-
-}
-
-locations: dict[CandyBox2LocationName, int] = {
-    **candy_box_locations,
-    **village_locations,
-    **village_shop_locations,
-    **village_house_1_locations,
-    **village_cellar_locations,
-    **map_stage_1_locations,
-    **map_stage_2_locations,
-    **map_stage_3_locations,
-    **map_stage_4_locations,
-    **map_stage_5_locations,
-    **map_stage_6_locations,
-    **map_stage_7_locations,
-    **desert_locations,
-    **bridge_locations,
-    **cave_locations,
-    **forest_locations,
-    **castle_entrance_locations,
-    **giant_nougat_monster_locations,
-    **village_house_2_locations,
-    **sorceress_hut_locations,
-    **octopus_king_locations,
-    **naked_monkey_wizard_locations,
-    **castle_egg_room_locations,
-    **dragon_locations,
-    **hell_locations,
-    **the_developer_fight_locations,
-    **lighthouse_locations,
-    **forge_locations,
-    **wishing_well_locations,
-    **hole_locations,
-    **desert_fortress_locations,
-    **teapot_quest_locations,
-    **xinopherydon_quest_locations,
-    **ledge_room_quest_locations,
-    **castle_trap_room_locations,
-    **castle_dark_room_locations,
-    **squirrel_tree_locations,
-    **the_sea_locations,
-    **dig_spot_locations,
-    **lonely_house_locations,
-    **yourself_fight_locations,
-    **castle_bakehouse_locations,
-    **pogo_stick_spot_locations,
-    **pier_locations,
-    **lollipop_farm_locations,
-    **village_minigame_locations
-}
+    return False

@@ -88,6 +88,13 @@ class CandyBox2ItemName(StrEnum):
     PROGRESSIVE_JUMP = "Progressive Jump"
     PROGRESSIVE_GRIMOIRE = "Progressive Grimoire"
     TWO_PAINS_AU_CHOCOLAT = "2 Pains au Chocolat"
+    ACID_RAIN_SPELL = "Acid Rain Spell"
+    FIREBALL_SPELL = "Fireball Spell"
+    TELEPORT_SPELL = "Teleport Spell"
+    ERASE_MAGIC_SPELL = "Erase Magic Spell"
+    THORNS_SHIELD_SPELL = "Thorns Shield Spell"
+    OBSIDIAN_WALL_SPELL = "Obsidian Wall Spell"
+    BLACK_DEMONS_SPELL = "Black Demons Spell"
 
 
 items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
@@ -157,6 +164,13 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.PROGRESSIVE_JUMP: CandyBox2ItemData(candy_box_2_base_id + 63, lambda world: progressive_jump_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.PROGRESSIVE_GRIMOIRE: CandyBox2ItemData(candy_box_2_base_id + 64, lambda world: progressive_grimoire_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.TWO_PAINS_AU_CHOCOLAT: CandyBox2ItemData(candy_box_2_base_id + 65, lambda world: pain_au_chocolat_count(world, 2), ItemClassification.useful),
+    CandyBox2ItemName.ACID_RAIN_SPELL: CandyBox2ItemData(candy_box_2_base_id + 66, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.FIREBALL_SPELL: CandyBox2ItemData(candy_box_2_base_id + 67, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.TELEPORT_SPELL: CandyBox2ItemData(candy_box_2_base_id + 68, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.ERASE_MAGIC_SPELL: CandyBox2ItemData(candy_box_2_base_id + 69, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.THORNS_SHIELD_SPELL: CandyBox2ItemData(candy_box_2_base_id + 70, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.OBSIDIAN_WALL_SPELL: CandyBox2ItemData(candy_box_2_base_id + 71, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.BLACK_DEMONS_SPELL: CandyBox2ItemData(candy_box_2_base_id + 72, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
 }
 
 filler_items: list[str] = [
@@ -183,14 +197,20 @@ def progressive_weapon_count(world: "CandyBox2World"):
     return 0
 
 def progressive_grimoire_count(world: "CandyBox2World"):
-    if world.grimoires == 1:
+    if world.grimoires == 1: # Progressive Grimoires
         return 3
 
     # Progressive Grimoires are disabled
     return 0
 
 def grimoire_item_count(world: "CandyBox2World"):
-    if world.grimoires == 0:
+    if world.grimoires == 0: # Individual Grimoires
+        return 1
+
+    return 0
+
+def spell_item_count(world: "CandyBox2World"):
+    if world.grimoires == 2: # Individual Spells
         return 1
 
     return 0

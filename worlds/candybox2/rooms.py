@@ -90,7 +90,11 @@ entrance_friendly_names: Dict[CandyBox2Room, str] = {
     CandyBox2Room.CASTLE_DARK_ROOM: "The Castle: The Dark Room",
     CandyBox2Room.DRAGON: "World Map: The Dragon",
     CandyBox2Room.TOWER: "The Castle: The Tower",
-    CandyBox2Room.LOLLIPOP_FARM: "World Map: The Lollipop Farm"
+    CandyBox2Room.LOLLIPOP_FARM: "World Map: The Lollipop Farm",
+
+    # Not required, just here to make logic easier
+    CandyBox2Room.VILLAGE: "The Village",
+    CandyBox2Room.WORLD_MAP: "The World Map"
 }
 quests: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_CELLAR,

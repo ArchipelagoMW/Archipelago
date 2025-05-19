@@ -1,10 +1,12 @@
 from abc import abstractmethod, ABC
 from enum import IntEnum
 from json import JSONEncoder
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
+import worlds
 from BaseClasses import CollectionState
-from .locations import locations, CandyBox2LocationName
+from .locations import locations, CandyBox2LocationName, CandyBox2Location, CandyBox2LocationData
+from .regions import CandyBox2Region, CandyBox2RoomRegion
 from .rooms import CandyBox2Room, entrance_friendly_names
 from .items import CandyBox2ItemName, items, candy_box_2_base_id
 from worlds.generic.Rules import add_rule
@@ -12,6 +14,86 @@ from .expected_client_version import EXPECTED_CLIENT_VERSION
 
 if TYPE_CHECKING:
     from . import CandyBox2World
+
+
+weapons = [
+    CandyBox2ItemName.NOTHING_WEAPON,
+    CandyBox2ItemName.WOODEN_SWORD,
+    CandyBox2ItemName.IRON_AXE,
+    CandyBox2ItemName.POLISHED_SILVER_SWORD,
+    CandyBox2ItemName.TROLLS_BLUDGEON,
+    CandyBox2ItemName.MONKEY_WIZARD_STAFF,
+    CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF,
+    CandyBox2ItemName.TRIBAL_SPEAR,
+    CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR,
+    CandyBox2ItemName.GIANT_SPOON,
+    CandyBox2ItemName.SCYTHE,
+    CandyBox2ItemName.GIANT_SPOON_OF_DOOM,
+]
+
+weapon_strength = [
+    CandyBox2ItemName.NOTHING_WEAPON,
+    CandyBox2ItemName.WOODEN_SWORD,
+    CandyBox2ItemName.IRON_AXE,
+    CandyBox2ItemName.TRIBAL_SPEAR,
+    CandyBox2ItemName.MONKEY_WIZARD_STAFF,
+    CandyBox2ItemName.POLISHED_SILVER_SWORD,
+    CandyBox2ItemName.TROLLS_BLUDGEON,
+    CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR,
+    CandyBox2ItemName.GIANT_SPOON,
+    CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF,
+    CandyBox2ItemName.GIANT_SPOON_OF_DOOM,
+    CandyBox2ItemName.SCYTHE,
+]
+
+armors = [
+    CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR,
+    CandyBox2ItemName.KNIGHT_BODY_ARMOUR,
+    CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR,
+]
+
+room_parents = {
+    CandyBox2Room.CASTLE: "MENU",
+    CandyBox2Room.TOWER: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.VILLAGE_SHOP: "MENU",
+    CandyBox2Room.VILLAGE_FURNISHED_HOUSE: "MENU",
+    CandyBox2Room.VILLAGE_QUEST_HOUSE: "MENU",
+    CandyBox2Room.QUEST_THE_CELLAR: CandyBox2Room.VILLAGE_QUEST_HOUSE.value,
+    CandyBox2Room.VILLAGE_FORGE: "MENU",
+    CandyBox2Room.VILLAGE_MINIGAME: "MENU",
+    CandyBox2Room.SQUIRREL_TREE: "MENU",
+    CandyBox2Room.LONELY_HOUSE: "MENU",
+    CandyBox2Room.QUEST_THE_DESERT: "MENU",
+    CandyBox2Room.POGO_STICK_SPOT: "MENU",
+    CandyBox2Room.LOLLIPOP_FARM: "MENU",
+    CandyBox2Room.WISHING_WELL: "MENU",
+    CandyBox2Room.CAVE: "MENU",
+    CandyBox2Room.QUEST_THE_OCTOPUS_KING: CandyBox2Room.CAVE.value,
+    CandyBox2Room.QUEST_THE_NAKED_MONKEY_WIZARD: CandyBox2Room.CAVE.value,
+    CandyBox2Room.DIG_SPOT: "MENU",
+    CandyBox2Room.QUEST_THE_BRIDGE: "MENU",
+    CandyBox2Room.SORCERESS_HUT: "MENU",
+    CandyBox2Room.PIER: "MENU",
+    CandyBox2Room.QUEST_THE_SEA: CandyBox2Room.PIER.value,
+    CandyBox2Room.LIGHTHOUSE: CandyBox2Room.PIER.value,
+    CandyBox2Room.QUEST_THE_FOREST: "MENU",
+    CandyBox2Room.HOLE: "MENU",
+    CandyBox2Room.QUEST_THE_HOLE: CandyBox2Room.HOLE.value,
+    CandyBox2Room.QUEST_THE_CASTLE_ENTRANCE: "MENU",
+    CandyBox2Room.QUEST_THE_GIANT_NOUGAT_MONSTER: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.QUEST_THE_CASTLE_TRAP_ROOM: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.CASTLE_DARK_ROOM: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.CASTLE_BAKEHOUSE: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.QUEST_THE_CASTLE_EGG_ROOM: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.DRAGON: CandyBox2Room.CASTLE.value,
+    CandyBox2Room.QUEST_HELL: CandyBox2Room.DRAGON.value,
+    CandyBox2Room.QUEST_THE_DEVELOPER: CandyBox2Room.DRAGON.value,
+    CandyBox2Room.DESERT_FORTRESS: "MENU",
+    CandyBox2Room.QUEST_THE_XINOPHERYDON: CandyBox2Room.DESERT_FORTRESS.value,
+    CandyBox2Room.QUEST_THE_TEAPOT: CandyBox2Room.DESERT_FORTRESS.value,
+    CandyBox2Room.QUEST_THE_LEDGE_ROOM: CandyBox2Room.DESERT_FORTRESS.value,
+    CandyBox2Room.QUEST_THE_X_POTION: "MENU"
+}
 
 
 class CandyBox2RulesPackageRuleExpression(ABC):
@@ -22,8 +104,8 @@ class CandyBox2RulesPackageRuleExpression(ABC):
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         pass
 
-    def indirection_required(self):
-        return False
+    def indirection_required(self) -> set["CandyBox2Room"]:
+        return set()
 
     def __and__(self, other):
         return CandyBox2RulesPackageRuleBooleanExpression("and", self, other)
@@ -79,7 +161,7 @@ class CandyBox2RulesPackageRuleRoomExpression(CandyBox2RulesPackageRuleExpressio
         return state.can_reach_region(entrance_friendly_names[self.room], player)
 
     def indirection_required(self):
-        return True
+        return [self.room]
 
     def default(self):
         return ["room", self.room.value]
@@ -160,7 +242,7 @@ class CandyBox2RulesPackageRuleBooleanExpression(CandyBox2RulesPackageRuleExpres
         return [self.expr, self.op1.default(), self.op2.default()]
 
     def indirection_required(self):
-        self.op1.indirection_required() or self.op2.indirection_required()
+        return {*self.op1.indirection_required(), *self.op2.indirection_required()}
 
 class CandyBox2RulesPackageRuleUnaryExpression(CandyBox2RulesPackageRuleExpression):
     op: CandyBox2RulesPackageRuleExpression
@@ -183,7 +265,7 @@ class CandyBox2RulesPackageRuleUnaryExpression(CandyBox2RulesPackageRuleExpressi
 
 class CandyBox2RulesPackage(JSONEncoder):
     expected_client_version: str
-    locations: dict[int, str]
+    locations: dict["CandyBox2LocationName", "CandyBox2LocationData"]
     location_rules: dict["CandyBox2LocationName", CandyBox2RulesPackageRuleExpression]
     room_rules: dict["CandyBox2Room", CandyBox2RulesPackageRuleExpression]
     location_parents: dict["CandyBox2LocationName", CandyBox2Room]
@@ -195,7 +277,7 @@ class CandyBox2RulesPackage(JSONEncoder):
                          allow_nan=allow_nan, sort_keys=sort_keys, indent=indent, separators=separators,
                          default=default)
         self.expected_client_version = expected_client_version
-        self.locations = {location: name for name, location in locations.items()}
+        self.locations = locations
         self.location_rules = {}
         self.room_rules = {}
         self.location_parents = {}
@@ -204,8 +286,7 @@ class CandyBox2RulesPackage(JSONEncoder):
     def add_location_rule(self, location: "CandyBox2LocationName", rule: CandyBox2RulesPackageRuleExpression | None, parent: CandyBox2Room | None):
         if rule is not None:
             self.location_rules[location] = rule
-        if parent is not None:
-            self.location_parents[location] = parent
+        self.location_parents[location] = parent
 
     def add_room_rule(self, room: "CandyBox2Room", rule: CandyBox2RulesPackageRuleExpression):
         self.room_rules[room] = rule
@@ -216,54 +297,41 @@ class CandyBox2RulesPackage(JSONEncoder):
     def default(self, o):
         return {
             "expectedClientVersion": o.expected_client_version,
-            "locations": o.locations,
-            "locationParents": {locations[location]: room.value for location, room in o.location_parents.items()},
+            "locations": {location.id: name for name, location in o.locations.items()},
+            "locationParents": {o.locations[location].id: room.value for location, room in o.location_parents.items() if room is not None},
             "roomExits": {room.value: [exit.value for exit in exits] for room, exits in o.room_exits.items()},
             "rules": {
-                "locations": {locations[location]: rule.default() for location, rule in o.location_rules.items()},
+                "locations": {o.locations[location].id: rule.default() for location, rule in o.location_rules.items()},
                 "rooms": {room: rule.default() for room, rule in o.room_rules.items()}
             }
         }
 
-    def apply_rules(self, world: "CandyBox2World", player: int):
+    def apply_location_rules(self, world: "CandyBox2World", player: int):
         for target, rule in self.location_rules.items():
-            add_rule(world.get_location(target), lambda state: True if rule is None else rule.evaluate(world, state, player))
+            try:
+                add_rule(world.get_location(target), lambda state: True if rule is None else rule.evaluate(world, state, player))
+            except KeyError:
+                pass
 
-weapons = [
-    CandyBox2ItemName.NOTHING_WEAPON,
-    CandyBox2ItemName.WOODEN_SWORD,
-    CandyBox2ItemName.IRON_AXE,
-    CandyBox2ItemName.POLISHED_SILVER_SWORD,
-    CandyBox2ItemName.TROLLS_BLUDGEON,
-    CandyBox2ItemName.MONKEY_WIZARD_STAFF,
-    CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF,
-    CandyBox2ItemName.TRIBAL_SPEAR,
-    CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR,
-    CandyBox2ItemName.GIANT_SPOON,
-    CandyBox2ItemName.SCYTHE,
-    CandyBox2ItemName.GIANT_SPOON_OF_DOOM,
-]
+    def apply_room_rules(self, rooms: Dict[str, CandyBox2Region], world: "CandyBox2World", player: int):
+        generated_entrances = []
 
-weapon_strength = [
-    CandyBox2ItemName.NOTHING_WEAPON,
-    CandyBox2ItemName.WOODEN_SWORD,
-    CandyBox2ItemName.IRON_AXE,
-    CandyBox2ItemName.TRIBAL_SPEAR,
-    CandyBox2ItemName.MONKEY_WIZARD_STAFF,
-    CandyBox2ItemName.POLISHED_SILVER_SWORD,
-    CandyBox2ItemName.TROLLS_BLUDGEON,
-    CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR,
-    CandyBox2ItemName.GIANT_SPOON,
-    CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF,
-    CandyBox2ItemName.GIANT_SPOON_OF_DOOM,
-    CandyBox2ItemName.SCYTHE,
-]
+        for target, region in rooms.items():
+            rule = self.room_rules.get(target)
+            region.locations += [CandyBox2Location(player, location_name.value, self.locations[location_name].id, region)
+                                 for location_name in [location for location, room in self.location_parents.items() if room == (None if target == "MENU" else target)]
+                                 if self.locations[location_name].is_included(world)]
 
-armors = [
-    CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR,
-    CandyBox2ItemName.KNIGHT_BODY_ARMOUR,
-    CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR,
-]
+            parent = room_parents.get("MENU" if target is None else target)
+            if parent is not None:
+                entrance = rooms[parent].connect(region, None, lambda state: True if rule is None else rule.evaluate(world, state, player))
+                if type(region) is CandyBox2RoomRegion:
+                    generated_entrances.append(entrance)
+                if rule is not None:
+                    for indirect_region in rule.indirection_required():
+                        world.multiworld.register_indirect_condition(indirect_region, entrance)
+
+        return generated_entrances
 
 class CandyBox2Castable(IntEnum):
     ACID_RAIN = 0
@@ -302,21 +370,23 @@ def armor_is_at_least(minimum_armor: CandyBox2ItemName):
 def can_cast(castable: CandyBox2Castable):
     match castable:
         case CandyBox2Castable.ACID_RAIN:
-            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1)
+            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1) | rule_item(CandyBox2ItemName.ACID_RAIN_SPELL)
         case CandyBox2Castable.FIREBALL:
-            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1)
+            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1) | rule_item(CandyBox2ItemName.FIREBALL_SPELL)
         case CandyBox2Castable.TELEPORT:
-            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1)
+            return rule_item(CandyBox2ItemName.BEGINNERS_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 1) | rule_item(CandyBox2ItemName.TELEPORT_SPELL)
         case CandyBox2Castable.ERASE_MAGIC:
-            return rule_item(CandyBox2ItemName.ADVANCED_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 2)
+            return rule_item(CandyBox2ItemName.ADVANCED_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 2) | rule_item(CandyBox2ItemName.ERASE_MAGIC_SPELL)
         case CandyBox2Castable.THORNS_SHIELD:
-            return rule_item(CandyBox2ItemName.ADVANCED_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 2)
+            return rule_item(CandyBox2ItemName.ADVANCED_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 2) | rule_item(CandyBox2ItemName.THORNS_SHIELD_SPELL)
         case CandyBox2Castable.OBSIDIAN_WALL:
-            return rule_item(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 3)
+            return rule_item(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 3) | rule_item(CandyBox2ItemName.OBSIDIAN_WALL_SPELL)
         case CandyBox2Castable.BLACK_DEMONS:
-            return rule_item(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 3)
+            return rule_item(CandyBox2ItemName.BLACK_MAGIC_GRIMOIRE) | rule_item(CandyBox2ItemName.PROGRESSIVE_GRIMOIRE, 3) | rule_item(CandyBox2ItemName.BLACK_DEMONS_SPELL)
         case CandyBox2Castable.BLACK_HOLE:
             return rule_item(CandyBox2ItemName.PURPLE_FIN)
+    return None
+
 
 def has_at_least_chocolates(chocolates: int):
     return CandyBox2RulesPackageRuleCountExpression("chocolate", CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.GREATER_THAN_OR_EQUAL_TO, chocolates)
@@ -375,6 +445,7 @@ def generate_rules_package():
 
 def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.DISAPPOINTED_EMOTE_CHOCOLATE_BAR, can_farm_candies(), None)
+    rules_package.add_location_rule(CandyBox2LocationName.HP_BAR_UNLOCK, can_farm_candies(), None)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_LOLLIPOP_ON_EXHAUST_CHUTE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_WOODEN_SWORD, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
     rules_package.add_location_rule(CandyBox2LocationName.VILLAGE_FORGE_BUY_IRON_AXE, no_conditions(), CandyBox2Room.VILLAGE_FORGE)
@@ -430,6 +501,8 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     # The Hole rules
     rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED, can_jump(), CandyBox2Room.QUEST_THE_HOLE)
     rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE), CandyBox2Room.QUEST_THE_HOLE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_OBSIDIAN_WALL, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE), CandyBox2Room.QUEST_THE_HOLE)
+    rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_BLACK_DEMONS, can_escape_hole() & rule_item(CandyBox2ItemName.SPONGE), CandyBox2Room.QUEST_THE_HOLE)
     rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED, can_escape_hole() & ((rule_item(CandyBox2ItemName.SPONGE) & can_jump()) | (can_brew(False))), CandyBox2Room.QUEST_THE_HOLE)
     rules_package.add_location_rule(CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED, can_escape_hole() & weapon_is_at_least(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_JASPERS) & armor_is_at_least(CandyBox2ItemName.LIGHTWEIGHT_BODY_ARMOUR), CandyBox2Room.QUEST_THE_HOLE)
 
@@ -484,7 +557,12 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
 
     # Sorceress items
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_ACID_RAIN, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_FIREBALL, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_TELEPORT, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_THORNS_SHIELD, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
+    rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_ERASE_MAGIC, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_HAT, can_farm_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_CAULDRON, can_grow_lollipops(), CandyBox2Room.SORCERESS_HUT)
     rules_package.add_location_rule(CandyBox2LocationName.SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES, no_conditions(), CandyBox2Room.SORCERESS_HUT)

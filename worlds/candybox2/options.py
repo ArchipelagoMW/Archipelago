@@ -101,11 +101,14 @@ class Grimoire(Choice):
     Individual Grimoires - The item pool will be filled with Beginner's Grimoire, Advanced Grimoire and Black Magic Grimoire
 
     Progressive Grimoires - The item pool will have three Progressive Grimoires
+
+    Individual Spells - The item pool will contain each spell individually. Buying the Beginner's Grimoire will send three checks. Obtaining the other grimoires will send two checks.
     """
     display_name = "Spells"
 
     option_individual_grimoires = 0
     option_progressive_grimoires = 1
+    option_individual_spells = 2
 
 
 class PainAuChocolatCount(Range):

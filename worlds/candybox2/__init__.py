@@ -33,7 +33,7 @@ class CandyBox2World(World):
     game = "Candy Box 2"
     web = CandyBox2WebWorld()
     base_id = 1
-    location_name_to_id = {name.value: location for name, location in locations.items()}
+    location_name_to_id = {name.value: location.id for name, location in locations.items()}
     item_name_to_id = {name.value: data.code for name, data in items.items() if data.code is not None}
     options_dataclass = CandyBox2Options
     options: CandyBox2Options
@@ -139,7 +139,7 @@ class CandyBox2World(World):
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: self.completion_rule(state)
         self.multiworld.early_items[self.player][CandyBox2ItemName.PROGRESSIVE_WORLD_MAP.value] = 1
-        self.rules_package.apply_rules(self, self.player)
+        self.rules_package.apply_location_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
         return can_reach_room(state, CandyBox2Room.TOWER, self.player) and \
