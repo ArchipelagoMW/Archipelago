@@ -39,7 +39,7 @@ class QuestLogic(BaseLogic):
             Quest.raising_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.coop),
             Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
-            Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.skill.can_fish(),
+            Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
             Quest.rat_problem: self.logic.region.can_reach_all((Region.town, Region.community_center)),
             Quest.meet_the_wizard: self.logic.quest.can_complete_quest(Quest.rat_problem),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
@@ -86,7 +86,9 @@ class QuestLogic(BaseLogic):
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
             Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
                 NPC.krobus),
-            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp),
+            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp)
+                                  # Void mayo can be fished at 5% chance in the witch swamp while the quest is active. It drops a lot after the quest.
+                                  & (self.logic.has(ArtisanGood.void_mayonnaise) | self.logic.fishing.can_fish()),
             Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
