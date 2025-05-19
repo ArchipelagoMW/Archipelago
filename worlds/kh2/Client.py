@@ -191,7 +191,7 @@ class KH2Context(CommonContext):
         # and seed name is none or saved seed name
         if not self.slot_name and not self.kh2seedname:
             await self.send_connect()
-        elif self.slot_name == self.auth and self.kh2seedname != self.seed_name:
+        elif self.slot_name == self.auth and self.kh2seedname:
             await self.send_connect()
         else:
             logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot: {self.slot_name}")
