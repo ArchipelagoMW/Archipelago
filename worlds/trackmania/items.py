@@ -9,15 +9,17 @@ class TrackmaniaItem(Item):
     game = "Trackmania"
 
 trackmania_items: dict[str,int] = {
-    "Bronze Medal" : base_id,
-    "Silver Medal" : base_id + 1,
-    "Gold Medal"   : base_id + 2,
-    "Author Medal" : base_id + 3,
-    "Map Skip"     : base_id + 4,
+    "Bronze Medal"         : base_id,
+    "Silver Medal"         : base_id + 1,
+    "Gold Medal"           : base_id + 2,
+    "Author Medal"         : base_id + 3,
+    "Map Skip"             : base_id + 4,
+    "Target Time Discount" : base_id + 5,
 }
 
 trackmania_item_groups = {
     "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"},
+    "Useful Items": {"Map Skip", "Target Time Discount"},
     "Filler Items": set(filler_item_names)
 }
 
@@ -34,6 +36,8 @@ def determine_item_classification(world:"TrackmaniaWorld", name: str) -> ItemCla
         case "Author Medal":
             return ItemClassification.progression if 300 <= target_time else ItemClassification.filler
         case "Map Skip":
+            return ItemClassification.useful
+        case "Target Time Discount":
             return ItemClassification.useful
         case _:
             return ItemClassification.filler
@@ -69,13 +73,13 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     if spots_remaining < 0:
         spots_remaining = 0 # just in case
 
-    print (get_locations_per_map(world),total_map_count * get_locations_per_map(world), len(itempool), spots_remaining)
-
-    #each map has one additional check for reaching the target time we can fill with skips and filler
-    skip_count = round(float(spots_remaining) * (world.options.skip_percentage / 100.0))
+    skip_count = min(round(float(spots_remaining) * (world.options.skip_percentage / 100.0)),spots_remaining)
     itempool += create_items(world, "Map Skip", skip_count)
 
-    filler_count = spots_remaining - skip_count
+    discount_count = min(round(float(spots_remaining) * (world.options.discount_percentage / 100.0)),spots_remaining-skip_count)
+    itempool += create_items(world, "Target Time Discount", discount_count)
+
+    filler_count = spots_remaining - skip_count - discount_count
     for x in range(filler_count):
         filler_name = get_filler_item_name(world)
         itempool += create_items(world,filler_name, 1)
