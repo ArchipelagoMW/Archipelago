@@ -6,7 +6,7 @@ import math
 from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
-    tkinter_center_window, data_to_bps_patch
+    tkinter_center_window, data_to_bps_patch, open_image_secure
 from worlds.pokemon_emerald.adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
     extract_sprites, validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
@@ -285,9 +285,15 @@ def adjustGUI():
         spritesInFolder = []
         if isSpritePackValid and _folder and os.path.isdir(dir):
             for sprite in os.listdir(dir):
-                fullDir = os.path.join(dir, sprite)
-                if not os.path.isdir(fullDir) and sprite.endswith('.png'):
-                    spritesInFolder.append(sprite[:-4])
+                fullPath = os.path.join(dir, sprite)
+                if os.path.isdir(fullPath) or not sprite.endswith('.png'):
+                    continue
+                try:
+                    open_image_secure(fullPath)
+                except:
+                    # If the image is invalid, don't add it to the sprite list
+                    continue
+                spritesInFolder.append(sprite[:-4])
         nonlocal sprites
         sprites = ['', *spritesInFolder]
         spriteSelector.set_completion_list(sprites)

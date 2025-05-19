@@ -2,7 +2,8 @@ import math
 import os
 import zlib
 
-from PIL import Image
+from PIL.Image import new as PIL_new
+from Utils import open_image_secure
 from .data import data
 from .adjuster_constants import *
 
@@ -251,7 +252,7 @@ def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name,
             extra_sprite_name = current_extra_sprite_name
         start_sprite_pointer += 8
 
-    final_image = Image.new('P', (sprite_width, sprite_height * sprite_requirements['frames']))
+    final_image = PIL_new('P', (sprite_width, sprite_height * sprite_requirements['frames']))
     final_image.putdata(sprites_pixel_data)
     final_image.putpalette(sprite_palette)
     return final_image, extra_sprite_name
@@ -262,7 +263,7 @@ def extract_complex_sprite(_overworld_struct_address, _sprite_key, _object_name,
 
 def extract_palette_from_file(_path):
     # Extracts a palette from an existing sprite file
-    sprite_image = Image.open(_path)
+    sprite_image = open_image_secure(_path)
     sprite_palette = sprite_image.getpalette() or []
     sprite_palette_colors = []
     for i in range(round(len(sprite_palette) / 3)):
@@ -344,7 +345,7 @@ def extract_sprite(_data_address, _sprite_key, _object_name, _palette_sprite_nam
         sprite_palette = extract_palette(_object_name, _palette_sprite_name, _sprite_key.startswith('pokemon_'))
 
     # Assemble the sprite
-    extracted_image = Image.new('P', (sprite_width, sprite_height))
+    extracted_image = PIL_new('P', (sprite_width, sprite_height))
     extracted_image.putdata(sprite_pixel_data)
     extracted_image.putpalette(sprite_palette)
     return extracted_image, extra_sprite_name
@@ -384,7 +385,7 @@ def extract_palette(_object_name, _sprite_name, _is_pokemon):
 
 def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression):
     # Transforms indexed/grayscale PNG sprites into GBA sprites
-    sprite_image = Image.open(_sprite_path)
+    sprite_image = open_image_secure(_sprite_path)
     sprite_palette_size = round(len(sprite_image.getpalette()) / 3)
     bits_per_pixel = get_bits_per_pixel_from_palette_size(sprite_palette_size)
 
@@ -397,7 +398,7 @@ def handle_sprite_to_gba_sprite(_sprite_path, _needs_compression):
 
 def handle_sprite_to_palette(_sprite_path, _needs_compression):
     # Transforms indexed/grayscale PNG sprites into GBA palettes
-    sprite_image = Image.open(_sprite_path)
+    sprite_image = open_image_secure(_sprite_path)
     palette_data = sprite_image.getpalette()
     palette_size = round(len(palette_data) / 3)
 
@@ -513,7 +514,11 @@ def validate_sprite(_object_name, _sprite_name, _extra_data, _path):
     sprite_key = ('pokemon_' if is_pokemon else 'trainer_') + _sprite_name
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
-    sprite_image = Image.open(_path)
+    try:
+        sprite_image = open_image_secure(_path)
+    except:
+        add_error('File {} in folder {}: The sprite is not a valid PNG file.'.format(_sprite_name, _object_name), True)
+        return errors, has_error
 
     # Palette checks
     if not sprite_image.palette:

@@ -22,6 +22,7 @@ from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
+from PIL.Image import open as PIL_open
 from bps.operations import Header, SourceRead, TargetRead, SourceCopy, TargetCopy, SourceCRC32, TargetCRC32
 
 try:
@@ -1118,3 +1119,11 @@ def data_to_bps_patch(data):
     if current_ptr < data["length"]:
         patch.append(SourceRead(data["length"] - current_ptr))
     return patch
+
+def open_image_secure(path):
+    """Used to open PNG files using Pillow with extra security checks instead of PIL.Image.open"""
+    with open(path, 'rb') as image_file:
+        image_data = image_file.read(8)
+        if image_data != b'\x89PNG\x0d\x0a\x1a\x0a':
+            raise Exception('The given image is not a valid PNG file!')
+    return PIL_open(path, formats=['PNG'])
