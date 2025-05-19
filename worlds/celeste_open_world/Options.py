@@ -301,10 +301,10 @@ class MadelineHairLength(Choice):
 
 
 class ColorChoice(TextChoice):
-    option_strawberry = 0xDB2C00
-    option_empty = 0x6EC0FF
-    option_double = 0xFA91FF
-    option_golden = 0xF2D450
+    option_strawberry = 0xAC3232
+    option_empty = 0x44B7FF
+    option_double = 0xFF6DEF
+    option_golden = 0xF2EB6D
     option_baddy = 0x9B3FB5
     option_fire_red = 0xFF0000
     option_maroon = 0x800000
