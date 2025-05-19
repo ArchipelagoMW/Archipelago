@@ -357,6 +357,11 @@ flooded_house_region.add_locations([upstairs_loc, ground_floor_loc, basement_loc
 set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.player))
 ```
 
+This creates a "Lowered Water Level" event with an access rule, and a regular location whose access rule depends on that
+event being reachable. If you made several more locations the same way, this would ensure all of those locations can
+only become reachable when the event location is reachable (i.e. when the water level can be lowered), without
+copy-pasting the event location's access rule and then repeatedly re-evaluating it.
+
 To be clear, this example could also be modeled with a second Region (perhaps "Un-Flooded House"). Or you could modify
 the game so flipping that switch checks a regular AP location in addition to lowering the water level.
 Events are never required, but it may be cleaner to use an event if e.g. flipping that switch affects the logic in
