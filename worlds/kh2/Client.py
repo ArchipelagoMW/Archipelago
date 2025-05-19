@@ -48,6 +48,7 @@ class KH2Context(CommonContext):
 
         self.sending = []
         self.slot_name = None
+        self.disconnect_from_server = False
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
             "itemIndex":  -1,
@@ -186,12 +187,16 @@ class KH2Context(CommonContext):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
         await self.get_username()
-        if self.slot_name not in {None, self.auth}:
-            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot {self.slot_name}")
-            self.serverconnected = False
-            await asyncio.create_task(super(KH2Context, self).shutdown())
-        else:
+        # if slot name != first time login or previous name
+        # and seed name is none or saved seed name
+        if not self.slot_name and not self.kh2seedname:
             await self.send_connect()
+        elif self.slot_name == self.auth and self.kh2seedname != self.seed_name:
+            await self.send_connect()
+        else:
+            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot: {self.slot_name}")
+            self.serverconnected = False
+            self.disconnect_from_server = True
 
     async def connection_closed(self):
         self.kh2connected = False
@@ -245,7 +250,14 @@ class KH2Context(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "RoomInfo":
-            self.kh2seedname = args['seed_name']
+            if not self.kh2seedname:
+                self.kh2seedname = args['seed_name']
+            elif self.kh2seedname != args['seed_name']:
+                self.disconnect_from_server = True
+                self.serverconnected = False
+                self.kh2connected = False
+                return
+
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, self.kh2_seed_save_path)
 
@@ -376,11 +388,12 @@ class KH2Context(CommonContext):
             if not self.kh2:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 self.get_addresses()
-
+#
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
             logger.info("Game is not open.")
+
         self.serverconnected = True
         self.slot_name = self.auth
 
@@ -952,12 +965,18 @@ async def kh2_watcher(ctx: KH2Context):
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
             elif not ctx.kh2connected and ctx.serverconnected:
-                logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
+                logger.info("Game Connection lost. trying to reconnect.")
                 ctx.kh2 = None
                 while not ctx.kh2connected and ctx.serverconnected:
-                    await asyncio.sleep(15)
-                    ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                    ctx.get_addresses()
+                    try:
+                        ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                        ctx.get_addresses()
+                        logger.info("Game Connection Established.")
+                    except Exception as e:
+                        await asyncio.sleep(5)
+            if ctx.disconnect_from_server:
+                ctx.disconnect_from_server = False
+                await ctx.disconnect()
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
