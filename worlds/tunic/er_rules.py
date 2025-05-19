@@ -1205,11 +1205,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Cathedral Main"].connect(
         connecting_region=regions["Cathedral Entry"])
 
-    cath_elev_to_main = regions["Cathedral to Gauntlet"].connect(
-        connecting_region=regions["Cathedral Main"])
-    regions["Cathedral Main"].connect(
-        connecting_region=regions["Cathedral to Gauntlet"])
-
     regions["Cathedral Gauntlet Checkpoint"].connect(
         connecting_region=regions["Cathedral Gauntlet"])
 
@@ -1515,8 +1510,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                      else (has_ability(prayer, state, world) and has_combat_reqs("Swamp", state, player))))
 
         set_rule(cath_entry_to_main,
-                 lambda state: has_combat_reqs("Swamp", state, player))
-        set_rule(cath_elev_to_main,
                  lambda state: has_combat_reqs("Swamp", state, player))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
