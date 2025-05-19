@@ -258,31 +258,6 @@ another flag like "progression", it means "an especially useful progression item
 * `progression_skip_balancing`: the combination of `progression` and `skip_balancing`, i.e., a progression item that
   will not be moved around by progression balancing; used, e.g., for currency or tokens, to not flood early spheres
 
-### Events
-
-An Event is a special combination of a Location and an Item, with both having an `id` of `None`. These can be used to
-track certain logic interactions, with the Event Item being required for access in other locations or regions, but not
-being "real". Since the item and location have no ID, they get dropped at the end of generation and so the server is
-never made aware of them and these locations can never be checked, nor can the items be received during play.
-They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
-is required to finish the game. This makes it very clear when the player finishes, rather than only seeing their last
-relevant Item. Events function just like any other Location, and can still have their own access rules, etc.
-By convention, the Event "pair" of Location and Item typically have the same name, though this is not a requirement.
-They must not exist in the `name_to_id` lookups, as they have no ID.
-
-The most common way to create an Event pair is to create and place the Item on the Location as soon as it's created:
-
-```python
-from worlds.AutoWorld import World
-from BaseClasses import ItemClassification
-from .subclasses import MyGameLocation, MyGameItem
-
-
-class MyGameWorld(World):
-    victory_loc = MyGameLocation(self.player, "Victory", None)
-    victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
-```
-
 ### Regions
 
 Regions are logical containers that typically hold locations that share some common access rules. If location logic is
@@ -338,6 +313,31 @@ avoiding the need for indirect conditions at the expense of performance.
 
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
 reject the placement of an item there.
+
+### Events
+
+An Event is a special combination of a Location and an Item, with both having an `id` of `None`. These can be used to
+track certain logic interactions, with the Event Item being required for access in other locations or regions, but not
+being "real". Since the item and location have no ID, they get dropped at the end of generation and so the server is
+never made aware of them and these locations can never be checked, nor can the items be received during play.
+They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
+is required to finish the game. This makes it very clear when the player finishes, rather than only seeing their last
+relevant Item. Events function just like any other Location, and can still have their own access rules, etc.
+By convention, the Event "pair" of Location and Item typically have the same name, though this is not a requirement.
+They must not exist in the `name_to_id` lookups, as they have no ID.
+
+The most common way to create an Event pair is to create and place the Item on the Location as soon as it's created:
+
+```python
+from worlds.AutoWorld import World
+from BaseClasses import ItemClassification
+from .subclasses import MyGameLocation, MyGameItem
+
+
+class MyGameWorld(World):
+    victory_loc = MyGameLocation(self.player, "Victory", None)
+    victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
+```
 
 ## Implementation
 
