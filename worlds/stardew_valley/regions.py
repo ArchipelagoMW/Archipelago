@@ -24,7 +24,8 @@ vanilla_regions = [
     RegionData(RegionName.farm,
                [Entrance.farm_to_backwoods, Entrance.farm_to_bus_stop, Entrance.farm_to_forest, Entrance.farm_to_farmcave, Entrance.enter_greenhouse,
                 Entrance.enter_coop, Entrance.enter_barn, Entrance.enter_shed, Entrance.enter_slime_hutch, LogicEntrance.grow_spring_crops,
-                LogicEntrance.grow_summer_crops, LogicEntrance.grow_fall_crops, LogicEntrance.grow_winter_crops, LogicEntrance.shipping]),
+                LogicEntrance.grow_summer_crops, LogicEntrance.grow_fall_crops, LogicEntrance.grow_winter_crops, LogicEntrance.shipping,
+                LogicEntrance.fishing, ]),
     RegionData(RegionName.backwoods, [Entrance.backwoods_to_mountain]),
     RegionData(RegionName.bus_stop,
                [Entrance.bus_stop_to_town, Entrance.take_bus_to_desert, Entrance.bus_stop_to_tunnel_entrance]),
@@ -54,7 +55,7 @@ vanilla_regions = [
                 Entrance.purchase_movie_ticket, LogicEntrance.buy_experience_books, LogicEntrance.attend_egg_festival, LogicEntrance.attend_fair,
                 LogicEntrance.attend_spirit_eve, LogicEntrance.attend_winter_star]),
     RegionData(RegionName.beach,
-               [Entrance.beach_to_willy_fish_shop, Entrance.enter_elliott_house, Entrance.enter_tide_pools, LogicEntrance.fishing, LogicEntrance.attend_luau,
+               [Entrance.beach_to_willy_fish_shop, Entrance.enter_elliott_house, Entrance.enter_tide_pools, LogicEntrance.attend_luau,
                 LogicEntrance.attend_moonlight_jellies, LogicEntrance.attend_night_market, LogicEntrance.attend_squidfest]),
     RegionData(RegionName.railroad, [Entrance.enter_bathhouse_entrance, Entrance.enter_witch_warp_cave]),
     RegionData(RegionName.ranch),
@@ -521,7 +522,7 @@ def create_final_regions(world_options) -> List[RegionData]:
     final_regions.extend(vanilla_regions)
     if world_options.mods is None:
         return final_regions
-    for mod in world_options.mods.value:
+    for mod in sorted(world_options.mods.value):
         if mod not in ModDataList:
             continue
         for mod_region in ModDataList[mod].regions:
@@ -747,8 +748,7 @@ def swap_one_random_connection(regions_by_name, connections_by_name, randomized_
     randomized_connections_already_shuffled = {connection: randomized_connections[connection]
                                                for connection in randomized_connections
                                                if connection != randomized_connections[connection]}
-    unreachable_regions_names_leading_somewhere = tuple([region for region in unreachable_regions
-                                                         if len(regions_by_name[region].exits) > 0])
+    unreachable_regions_names_leading_somewhere = [region for region in sorted(unreachable_regions) if len(regions_by_name[region].exits) > 0]
     unreachable_regions_leading_somewhere = [regions_by_name[region_name] for region_name in unreachable_regions_names_leading_somewhere]
     unreachable_regions_exits_names = [exit_name for region in unreachable_regions_leading_somewhere for exit_name in region.exits]
     unreachable_connections = [connections_by_name[exit_name] for exit_name in unreachable_regions_exits_names]
