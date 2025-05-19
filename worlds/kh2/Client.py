@@ -209,6 +209,7 @@ class KH2Context(CommonContext):
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
         self.serverconnected = False
+        self.locations_checked = []
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -256,6 +257,7 @@ class KH2Context(CommonContext):
                 self.disconnect_from_server = True
                 self.serverconnected = False
                 self.kh2connected = False
+                logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
                 return
 
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
