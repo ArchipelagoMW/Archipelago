@@ -1987,9 +1987,9 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
 
     accessible_rules: typing.Set[int] = set()
     mission_order_objects: typing.List[MissionOrderObjectSlotData] = []
-    for _, campaign in enumerate(ctx.custom_mission_order):
+    for campaign in ctx.custom_mission_order:
         mission_order_objects.append(campaign)
-        for _, layout in enumerate(campaign.layouts):
+        for layout in campaign.layouts:
             mission_order_objects.append(layout)
             for column in layout.missions:
                 for mission in column:
