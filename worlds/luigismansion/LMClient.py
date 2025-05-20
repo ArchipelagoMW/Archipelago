@@ -359,9 +359,8 @@ class LMContext(CommonContext):
         if tracker_loaded:
             ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
-        ui.base_title += " | Archipelago" 
         # AP version is added behind this automatically
-        
+        ui.base_title += " | Archipelago"
         return ui
 
     async def update_boo_count_label(self):
