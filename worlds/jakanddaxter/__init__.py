@@ -15,7 +15,7 @@ from BaseClasses import (Item,
 from Options import OptionGroup
 
 # Jak imports
-from .Options import *
+from . import Options
 from .GameID import jak1_id, jak1_name, jak1_max
 from .Items import (JakAndDaxterItem,
                     OrbAssoc,
@@ -265,7 +265,7 @@ class JakAndDaxterWorld(World):
         # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
         # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
         # We would have done this earlier, but we needed to sort the power cell thresholds first.
-        enforce_friendly_options = self.settings.enforce_friendly_options
+        enforce_friendly_options = settings.get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
         if enforce_friendly_options:
             if self.multiworld.players > 1:
                 enforce_multiplayer_limits(self)

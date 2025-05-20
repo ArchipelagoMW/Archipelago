@@ -1,7 +1,11 @@
 from dataclasses import dataclass
 from functools import cached_property
 from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionCounter
+from settings import get_settings
 from .Items import trap_item_table
+
+
+enforce_friendly_options: bool = get_settings()["jakanddaxter_options"]["enforce_friendly_options"]
 
 
 class EnableMoveRandomizer(Toggle):
@@ -83,10 +87,10 @@ class FireCanyonCellCount(Range):
     Multiplayer Maximum: 30
     Singleplayer Maximum: 34"""
     display_name = "Fire Canyon Cell Count"
-    range_start = 0
-    range_end = 100
     multiplayer_maximum = 30
     singleplayer_maximum = 34
+    range_start = 0
+    range_end = multiplayer_maximum if enforce_friendly_options else 100
     default = 20
 
 
@@ -96,10 +100,10 @@ class MountainPassCellCount(Range):
     Multiplayer Maximum: 60
     Singleplayer Maximum: 63"""
     display_name = "Mountain Pass Cell Count"
-    range_start = 0
-    range_end = 100
     multiplayer_maximum = 60
     singleplayer_maximum = 63
+    range_start = 0
+    range_end = multiplayer_maximum if enforce_friendly_options else 100
     default = 45
 
 
@@ -109,10 +113,10 @@ class LavaTubeCellCount(Range):
     Multiplayer Maximum: 90
     Singleplayer Maximum: 99"""
     display_name = "Lava Tube Cell Count"
-    range_start = 0
-    range_end = 100
     multiplayer_maximum = 90
     singleplayer_maximum = 99
+    range_start = 0
+    range_end = multiplayer_maximum if enforce_friendly_options else 100
     default = 72
 
 
@@ -139,9 +143,9 @@ class CitizenOrbTradeAmount(Range):
 
     Multiplayer Maximum: 120"""
     display_name = "Citizen Orb Trade Amount"
-    range_start = 0
-    range_end = 222
     multiplayer_maximum = 120
+    range_start = 0
+    range_end = multiplayer_maximum if enforce_friendly_options else 222
     default = 90
 
 
@@ -154,9 +158,9 @@ class OracleOrbTradeAmount(Range):
 
     Multiplayer Maximum: 150"""
     display_name = "Oracle Orb Trade Amount"
-    range_start = 0
-    range_end = 333
     multiplayer_maximum = 150
+    range_start = 0
+    range_end = multiplayer_maximum if enforce_friendly_options else 333
     default = 120
 
 
