@@ -1,13 +1,13 @@
+<FLAGON>(120)
+<MENUOFF>
 <CHECKFLAG>(8)"8ON""8OFF"
 -------------------------
 <CASE>"8ON"
-<MENUOFF>
 <LUIGISTOP2>
 <CHOICE>"BlackoutOFF"(4)"Close"(3)<LISTEND>
 <ANYKEY>
 -------------------------
 <CASE>"8OFF"
-<MENUOFF>
 <LUIGISTOP2>
 <CHOICE>"BlackoutON"(1)"Save"(2)"Close"(3)<LISTEND>
 <ANYKEY>
@@ -89,4 +89,5 @@
 <BGM>(7)
 <LUIGIFREE2>
 <MENUON>
+<FLAGOFF>(120)
 <END>
