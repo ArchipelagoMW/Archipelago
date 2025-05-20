@@ -1975,17 +1975,12 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
     return mission_id_to_check in available_missions
 
 def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typing.Dict[int, typing.List[int]], typing.List[int]]:
-    available_missions: typing.List[int] = []
-    available_layouts: typing.Dict[int, typing.List[int]] = {}
-    available_campaigns: typing.List[int] = []
-
     beaten_missions: typing.Set[int] = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
     received_items: typing.Dict[int, int] = {}
     for network_item in ctx.items_received:
         received_items.setdefault(network_item.item, 0)
         received_items[network_item.item] += 1
 
-    accessible_rules: typing.Set[int] = set()
     mission_order_objects: typing.List[MissionOrderObjectSlotData] = []
     for campaign in ctx.custom_mission_order:
         mission_order_objects.append(campaign)
@@ -2021,7 +2016,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         else:
             break
 
-    available_missions = [
+    available_missions: typing.List[int] = [
         mission_order_object.mission_id for mission_order_object in accessible_objects
         if isinstance(mission_order_object, MissionSlotData)
     ]
@@ -2029,7 +2024,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         mission_order_object for mission_order_object in accessible_objects
         if isinstance(mission_order_object, CampaignSlotData)
     ]
-    available_campaigns = [
+    available_campaigns: typing.List[int] = [
         campaign_idx for campaign_idx, campaign in enumerate(ctx.custom_mission_order)
         if campaign in available_campaign_objects
     ]
@@ -2037,7 +2032,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         mission_order_object for mission_order_object in accessible_objects
         if isinstance(mission_order_object, LayoutSlotData)
     ]
-    available_layouts = {
+    available_layouts: typing.Dict[int, typing.List[int]] = {
         campaign_idx: [
             layout_idx for layout_idx, layout in enumerate(campaign.layouts) if layout in available_layout_objects
         ]
