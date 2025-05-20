@@ -158,13 +158,11 @@ class KeyMode(Choice):
 
     Skeleton Key: Only the Skeleton Key, which can open any locked door, will be in your item pool.
 
-    Key Ring: One check will give all keys needed to complete one dungeon. The Skeleton Key will still be in the pool. NOT IMPLEMENTED
-
     Vanilla: All vanilla keys will be in the item pool.
     """
     display_name = "Key Mode"
     option_skeleton = 0
-    option_key_ring = 1
+    #option_key_ring = 1 Key Ring: One check will give all keys needed to complete one dungeon. The Skeleton Key will still be in the pool.
     option_vanilla = 2
     default = 2
 
