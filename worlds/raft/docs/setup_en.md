@@ -45,7 +45,7 @@
 ## Multiplayer Raft
 
 You're able to have multiple Raft players on a single Raftipelago world. This will work, with a few notes:
-- Every player that joins the Raft world must have the Raftipelago mod loaded
+- Every player that joins the Raft world must have the Raftipelago mod loaded.
 - Only the player that creates/loads the world can connect to Archipelago (this is the "host" of the Raft world). Other players do not need to run */connect*; everything will be routed through the the host.
 - Players other than the host will be labeled as a "Raft Player (Steam name)" when using ingame chat, which will be routed through Archipelago chat.
 - Ingame chat will only work when the host is connected to the Archipelago server.
