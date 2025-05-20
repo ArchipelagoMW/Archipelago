@@ -2,7 +2,7 @@ from argparse import Namespace
 
 from BaseClasses import PlandoOptions
 from Generate import handle_option
-from . import L2ACTestBase
+from .bases import L2ACTestBase
 from ..Options import CustomItemPool
 
 

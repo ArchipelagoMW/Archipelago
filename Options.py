@@ -24,6 +24,12 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+def roll_percentage(percentage: int | float) -> bool:
+    """Roll a percentage chance.
+    percentage is expected to be in range [0, 100]"""
+    return random.random() < (float(percentage) / 100)
+
+
 class OptionError(ValueError):
     pass
 
@@ -1019,7 +1025,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
         if isinstance(data, typing.Iterable):
             for text in data:
                 if isinstance(text, typing.Mapping):
-                    if random.random() < float(text.get("percentage", 100)/100):
+                    if roll_percentage(text.get("percentage", 100)):
                         at = text.get("at", None)
                         if at is not None:
                             if isinstance(at, dict):
@@ -1045,7 +1051,7 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
                         else:
                             raise OptionError("\"at\" must be a valid string or weighted list of strings!")
                 elif isinstance(text, PlandoText):
-                    if random.random() < float(text.percentage/100):
+                    if roll_percentage(text.percentage):
                         texts.append(text)
                 else:
                     raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
@@ -1169,7 +1175,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
         for connection in data:
             if isinstance(connection, typing.Mapping):
                 percentage = connection.get("percentage", 100)
-                if random.random() < float(percentage / 100):
+                if roll_percentage(percentage):
                     entrance = connection.get("entrance", None)
                     if is_iterable_except_str(entrance):
                         entrance = random.choice(sorted(entrance))
@@ -1187,7 +1193,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                         percentage
                     ))
             elif isinstance(connection, PlandoConnection):
-                if random.random() < float(connection.percentage / 100):
+                if roll_percentage(connection.percentage):
                     value.append(connection)
             else:
                 raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
@@ -1292,42 +1298,47 @@ class CommonOptions(metaclass=OptionsMetaProperty):
     progression_balancing: ProgressionBalancing
     accessibility: Accessibility
 
-    def as_dict(self,
-                *option_names: str,
-                casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
-                toggles_as_bools: bool = False) -> typing.Dict[str, typing.Any]:
+    def as_dict(
+            self,
+            *option_names: str,
+            casing: typing.Literal["snake", "camel", "pascal", "kebab"] = "snake",
+            toggles_as_bools: bool = False,
+    ) -> dict[str, typing.Any]:
         """
         Returns a dictionary of [str, Option.value]
 
-        :param option_names: names of the options to return
-        :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
-        :param toggles_as_bools: whether toggle options should be output as bools instead of strings
+        :param option_names: Names of the options to get the values of.
+        :param casing: Casing of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`.
+        :param toggles_as_bools: Whether toggle options should be returned as bools instead of ints.
+
+        :return: A dictionary of each option name to the value of its Option. If the option is an OptionSet, the value
+        will be returned as a sorted list.
         """
         assert option_names, "options.as_dict() was used without any option names."
         option_results = {}
         for option_name in option_names:
-            if option_name in type(self).type_hints:
-                if casing == "snake":
-                    display_name = option_name
-                elif casing == "camel":
-                    split_name = [name.title() for name in option_name.split("_")]
-                    split_name[0] = split_name[0].lower()
-                    display_name = "".join(split_name)
-                elif casing == "pascal":
-                    display_name = "".join([name.title() for name in option_name.split("_")])
-                elif casing == "kebab":
-                    display_name = option_name.replace("_", "-")
-                else:
-                    raise ValueError(f"{casing} is invalid casing for as_dict. "
-                                     "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
-                value = getattr(self, option_name).value
-                if isinstance(value, set):
-                    value = sorted(value)
-                elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
-                    value = bool(value)
-                option_results[display_name] = value
-            else:
+            if option_name not in type(self).type_hints:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
+
+            if casing == "snake":
+                display_name = option_name
+            elif casing == "camel":
+                split_name = [name.title() for name in option_name.split("_")]
+                split_name[0] = split_name[0].lower()
+                display_name = "".join(split_name)
+            elif casing == "pascal":
+                display_name = "".join([name.title() for name in option_name.split("_")])
+            elif casing == "kebab":
+                display_name = option_name.replace("_", "-")
+            else:
+                raise ValueError(f"{casing} is invalid casing for as_dict. "
+                                 "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
+            value = getattr(self, option_name).value
+            if isinstance(value, set):
+                value = sorted(value)
+            elif toggles_as_bools and issubclass(type(self).type_hints[option_name], Toggle):
+                value = bool(value)
+            option_results[display_name] = value
         return option_results
 
 
@@ -1348,6 +1359,7 @@ class StartInventory(ItemDict):
     verify_item_name = True
     display_name = "Start Inventory"
     rich_text_doc = True
+    max = 10000
 
 
 class StartInventoryPool(StartInventory):
@@ -1463,6 +1475,131 @@ class ItemLinks(OptionList):
             link["item_pool"] = list(pool)
 
 
+@dataclass(frozen=True)
+class PlandoItem:
+    items: list[str] | dict[str, typing.Any]
+    locations: list[str]
+    world: int | str | bool | None | typing.Iterable[str] | set[int] = False
+    from_pool: bool = True
+    force: bool | typing.Literal["silent"] = "silent"
+    count: int | bool | dict[str, int] = False
+    percentage: int = 100
+
+
+class PlandoItems(Option[typing.List[PlandoItem]]):
+    """Generic items plando."""
+    default = ()
+    supports_weighting = False
+    display_name = "Plando Items"
+
+    def __init__(self, value: typing.Iterable[PlandoItem]) -> None:
+        self.value = list(deepcopy(value))
+        super().__init__()
+
+    @classmethod
+    def from_any(cls, data: typing.Any) -> Option[typing.List[PlandoItem]]:
+        if not isinstance(data, typing.Iterable):
+            raise OptionError(f"Cannot create plando items from non-Iterable type, got {type(data)}")
+
+        value: typing.List[PlandoItem] = []
+        for item in data:
+            if isinstance(item, typing.Mapping):
+                percentage = item.get("percentage", 100)
+                if not isinstance(percentage, int):
+                    raise OptionError(f"Plando `percentage` has to be int, not {type(percentage)}.")
+                if not (0 <= percentage <= 100):
+                    raise OptionError(f"Plando `percentage` has to be between 0 and 100 (inclusive) not {percentage}.")
+                if roll_percentage(percentage):
+                    count = item.get("count", False)
+                    items = item.get("items", [])
+                    if not items:
+                        items = item.get("item", None)  # explicitly throw an error here if not present
+                        if not items:
+                            raise OptionError("You must specify at least one item to place items with plando.")
+                        count = 1
+                    if isinstance(items, str):
+                        items = [items]
+                    elif not isinstance(items, (dict, list)):
+                        raise OptionError(f"Plando 'items' has to be string, list, or "
+                                          f"dictionary, not {type(items)}")
+                    locations = item.get("locations", [])
+                    if not locations:
+                        locations = item.get("location", ["Everywhere"])
+                        if locations:
+                            count = 1
+                        if isinstance(locations, str):
+                            locations = [locations]
+                        if not isinstance(locations, list):
+                            raise OptionError(f"Plando `location` has to be string or list, not {type(locations)}")
+                    world = item.get("world", False)
+                    from_pool = item.get("from_pool", True)
+                    force = item.get("force", "silent")
+                    if not isinstance(from_pool, bool):
+                        raise OptionError(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
+                    if not (isinstance(force, bool) or force == "silent"):
+                        raise OptionError(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
+                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
+            elif isinstance(item, PlandoItem):
+                if roll_percentage(item.percentage):
+                    value.append(item)
+            else:
+                raise OptionError(f"Cannot create plando item from non-Dict type, got {type(item)}.")
+        return cls(value)
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        if not self.value:
+            return
+        from BaseClasses import PlandoOptions
+        if not (PlandoOptions.items & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando items module is turned off, "
+                            f"so items for {player_name} will be ignored.")
+        else:
+            # filter down item groups
+            for plando in self.value:
+                # confirm a valid count
+                if isinstance(plando.count, dict):
+                    if "min" in plando.count and "max" in plando.count:
+                        if plando.count["min"] > plando.count["max"]:
+                            raise OptionError("Plando cannot have count `min` greater than `max`.")
+                items_copy = plando.items.copy()
+                if isinstance(plando.items, dict):
+                    for item in items_copy:
+                        if item in world.item_name_groups:
+                            value = plando.items.pop(item)
+                            group = world.item_name_groups[item]
+                            filtered_items = sorted(group.difference(list(plando.items.keys())))
+                            if not filtered_items:
+                                raise OptionError(f"Plando `items` contains the group \"{item}\" "
+                                                  f"and every item in it. This is not allowed.")
+                            if value is True:
+                                for key in filtered_items:
+                                    plando.items[key] = True
+                            else:
+                                for key in random.choices(filtered_items, k=value):
+                                    plando.items[key] = plando.items.get(key, 0) + 1
+                else:
+                    assert isinstance(plando.items, list)  # pycharm can't figure out the hinting without the hint
+                    for item in items_copy:
+                        if item in world.item_name_groups:
+                            plando.items.remove(item)
+                            plando.items.extend(sorted(world.item_name_groups[item]))
+
+    @classmethod
+    def get_option_name(cls, value: list[PlandoItem]) -> str:
+        return ", ".join(["(%s: %s)" % (item.items, item.locations) for item in value])  #TODO: see what a better way to display would be
+
+    def __getitem__(self, index: typing.SupportsIndex) -> PlandoItem:
+        return self.value.__getitem__(index)
+
+    def __iter__(self) -> typing.Iterator[PlandoItem]:
+        yield from self.value
+
+    def __len__(self) -> int:
+        return len(self.value)
+
+        
 class Removed(FreeText):
     """This Option has been Removed."""
     rich_text_doc = True
@@ -1485,6 +1622,7 @@ class PerGameCommonOptions(CommonOptions):
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
+    plando_items: PlandoItems
 
 
 @dataclass

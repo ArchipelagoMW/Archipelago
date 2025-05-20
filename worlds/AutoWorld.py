@@ -485,7 +485,7 @@ class World(metaclass=AutoWorldRegister):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:

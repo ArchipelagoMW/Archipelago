@@ -1,7 +1,7 @@
+from ..bases import SVTestBase
 from ... import options
 from ...data.craftable_data import all_crafting_recipes_by_name
 from ...options import BuildingProgression, ExcludeGingerIsland, Craftsanity, SeasonRandomization
-from ...test import SVTestBase
 
 
 class TestCraftsanityLogic(SVTestBase):

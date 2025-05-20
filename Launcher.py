@@ -16,9 +16,10 @@ import subprocess
 import sys
 import urllib.parse
 import webbrowser
+from collections.abc import Callable, Sequence
 from os.path import isfile
 from shutil import which
-from typing import Callable, Optional, Sequence, Tuple, Union, Any
+from typing import Any
 
 if __name__ == "__main__":
     import ModuleUpdate
@@ -84,12 +85,16 @@ def browse_files():
 def open_folder(folder_path):
     if is_linux:
         exe = which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, folder_path])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, folder_path])
     else:
         webbrowser.open(folder_path)
+        return
+
+    if exe:
+        subprocess.Popen([exe, folder_path])
+    else:
+        logging.warning(f"No file browser available to open {folder_path}")
 
 
 def update_settings():
@@ -110,55 +115,37 @@ components.extend([
 ])
 
 
-def handle_uri(path: str, launch_args: Tuple[str, ...]) -> None:
+def handle_uri(path: str, launch_args: tuple[str, ...]) -> None:
     url = urllib.parse.urlparse(path)
     queries = urllib.parse.parse_qs(url.query)
     launch_args = (path, *launch_args)
     client_component = []
     text_client_component = None
-    if "game" in queries:
-        game = queries["game"][0]
-    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
-        game = "Archipelago"
+    game = queries["game"][0]
     for component in components:
         if component.supports_uri and component.game_name == game:
             client_component.append(component)
         elif component.display_name == "Text Client":
             text_client_component = component
 
-    from kvui import MDButton, MDButtonText
-    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
-    from kivymd.uix.divider import MDDivider
 
     if not client_component:
         run_component(text_client_component, *launch_args)
         return
     else:
-        popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
-        component_buttons = [MDDivider()]
-        for component in [text_client_component, *client_component]:
-            component_buttons.append(MDButton(
-                MDButtonText(text=component.display_name),
-                on_release=lambda *args, comp=component: run_component(comp, *launch_args),
-                style="text"
-            ))
-        component_buttons.append(MDDivider())
-
-    MDDialog(
-        # Headline
-        MDDialogHeadlineText(text="Connect to Multiworld"),
-        # Text
-        popup_text,
-        # Content
-        MDDialogContentContainer(
-            *component_buttons,
-            orientation="vertical"
-        ),
-
-    ).open()
+        from kvui import ButtonsPrompt
+        component_options = {
+            text_client_component.display_name: text_client_component,
+            **{component.display_name: component for component in client_component}
+        }
+        popup = ButtonsPrompt("Connect to Multiworld",
+                              "Select client to open and connect with.",
+                              lambda component_name: run_component(component_options[component_name], *launch_args),
+                              *component_options.keys())
+        popup.open()
 
 
-def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
+def identify(path: None | str) -> tuple[None | str, None | Component]:
     if path is None:
         return None, None
     for component in components:
@@ -169,7 +156,7 @@ def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Comp
     return None, None
 
 
-def get_exe(component: Union[str, Component]) -> Optional[Sequence[str]]:
+def get_exe(component: str | Component) -> Sequence[str] | None:
     if isinstance(component, str):
         name = component
         component = None
@@ -222,7 +209,7 @@ def create_shortcut(button: Any, component: Component) -> None:
     button.menu.dismiss()
 
 
-refresh_components: Optional[Callable[[], None]] = None
+refresh_components: Callable[[], None] | None = None
 
 
 def run_gui(path: str, args: Any) -> None:
@@ -447,7 +434,7 @@ def run_component(component: Component, *args):
         logging.warning(f"Component {component} does not appear to be executable.")
 
 
-def main(args: Optional[Union[argparse.Namespace, dict]] = None):
+def main(args: argparse.Namespace | dict | None = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
     elif not args:
