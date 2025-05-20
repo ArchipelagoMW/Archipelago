@@ -683,8 +683,8 @@ def get_rules(world):
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
             "Snow Worries - Underwater":
                 lambda state:
-                   state.has("Swim", world.player)
-                   or world.options.logic_difficulty == 1 and state.has("Dive", world.player),
+                   has_rang(world, state, Ty1Rang.SWIM)
+                   or (world.options.logic_difficulty == 1 and has_rang(world, state, Ty1Rang.DIVE)),
             "Lyre, Lyre Pants on Fire - PF":
                 lambda state:
                     not world.options.frames_require_infra or state.has("Infrarang", world.player),
