@@ -1,11 +1,11 @@
 import logging
 
-from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
+from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, job_count_in_pool, default_starting_job_list, job_list
-from .Locations import get_locations, get_bosses
-from .Regions import init_areas
-from .Options import CrystalProjectOptions, IncludedRegions
+from .locations import get_locations, get_bosses
+from .regions import init_areas
+from .options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
 
 from typing import List, Set, Dict, Any

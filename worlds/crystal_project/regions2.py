@@ -1,10 +1,10 @@
 from typing import List, Dict
 from BaseClasses import Region, Location, MultiWorld
-from .Options import CrystalProjectOptions
-from .Locations import LocationData
+from .options import CrystalProjectOptions
+from .locations import LocationData
 from .rules import CrystalProjectLogic
-from .Keys import *
-from .KeyItems import *
+from .constants.keys import *
+from .constants.key_items import *
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"

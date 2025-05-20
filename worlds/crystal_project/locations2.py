@@ -1,9 +1,9 @@
 from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
-from .Options import CrystalProjectOptions
+from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
-from .Keys import *
-from .KeyItems import *
+from .constants.keys import *
+from .constants.key_items import *
 
 class LocationData(NamedTuple):
     region: str

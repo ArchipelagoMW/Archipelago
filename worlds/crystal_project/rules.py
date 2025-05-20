@@ -1,10 +1,10 @@
-from .Options import CrystalProjectOptions
+from .options import CrystalProjectOptions
+from .constants.keys import *
 from worlds.generic.Rules import set_rule, forbid_items_for_player, add_rule
 from BaseClasses import CollectionState
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
-from .Keys import *
 
 class CrystalProjectLogic:
     player: int
@@ -78,7 +78,7 @@ class CrystalProjectLogic:
             return 6
 
     def has_enough_clamshells(self, state: CollectionState):
-        return state.has("Item - Clamshell", self.player, self.options.clamshellsQuantity)
+        return state.has("Item - Clamshell", self.player, self.options.clamshellsQuantity.value)
 
     def has_rental_quintar(self, state: CollectionState) -> bool:
         return state.has_any({"Item - Progressive Quintar Flute"}, self.player) or state.has("Item - Owl Drum", self.player)
