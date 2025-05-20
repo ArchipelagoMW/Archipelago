@@ -4,6 +4,21 @@ from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Ra
 from .items import trap_item_table
 
 
+class StaticGetter:
+    def __init__(self, func):
+        self.fget = func
+
+    def __get__(self, instance, owner):
+        return self.fget(owner)
+
+
+@StaticGetter
+def determine_range_end(cls) -> int:
+    from . import JakAndDaxterWorld
+    enforce_friendly_options = JakAndDaxterWorld.settings.enforce_friendly_options
+    return cls.friendly_maximum if enforce_friendly_options else cls.absolute_maximum
+
+
 class EnableMoveRandomizer(Toggle):
     """Include movement options as items in the randomizer. Until you find his other moves, Jak is limited to
     running, swimming, single-jumping, and shooting yellow eco through his goggles.
@@ -56,8 +71,8 @@ class GlobalOrbsanityBundleSize(Choice):
     option_500_orbs = 500
     option_1000_orbs = 1000
     option_2000_orbs = 2000
-    multiplayer_minimum = 10
-    multiplayer_maximum = 200
+    friendly_minimum = 10
+    friendly_maximum = 200
     default = 20
 
 
@@ -73,46 +88,43 @@ class PerLevelOrbsanityBundleSize(Choice):
     option_10_orbs = 10
     option_25_orbs = 25
     option_50_orbs = 50
-    multiplayer_minimum = 10
+    friendly_minimum = 10
     default = 25
 
 
 class FireCanyonCellCount(Range):
-    """The number of power cells you need to cross Fire Canyon.
-
-    Multiplayer Maximum: 30
-    Singleplayer Maximum: 34"""
+    """The number of power cells you need to cross Fire Canyon. This value is restricted to a safe maximum value to
+    ensure valid singleplayer games and non-disruptive multiplayer games, but the host can remove this restriction by
+    turning off enforce_friendly_options in host.yaml."""
     display_name = "Fire Canyon Cell Count"
+    friendly_maximum = 30
+    absolute_maximum = 100
     range_start = 0
-    range_end = 100
-    multiplayer_maximum = 30
-    singleplayer_maximum = 34
+    range_end = determine_range_end
     default = 20
 
 
 class MountainPassCellCount(Range):
-    """The number of power cells you need to reach Klaww and cross Mountain Pass.
-
-    Multiplayer Maximum: 60
-    Singleplayer Maximum: 63"""
+    """The number of power cells you need to reach Klaww and cross Mountain Pass. This value is restricted to a safe
+    maximum value to ensure valid singleplayer games and non-disruptive multiplayer games, but the host can
+    remove this restriction by turning off enforce_friendly_options in host.yaml."""
     display_name = "Mountain Pass Cell Count"
+    friendly_maximum = 60
+    absolute_maximum = 100
     range_start = 0
-    range_end = 100
-    multiplayer_maximum = 60
-    singleplayer_maximum = 63
+    range_end = determine_range_end
     default = 45
 
 
 class LavaTubeCellCount(Range):
-    """The number of power cells you need to cross Lava Tube.
-
-    Multiplayer Maximum: 90
-    Singleplayer Maximum: 99"""
+    """The number of power cells you need to cross Lava Tube. This value is restricted to a safe maximum value to
+    ensure valid singleplayer games and non-disruptive multiplayer games, but the host can remove this restriction by
+    turning off enforce_friendly_options in host.yaml."""
     display_name = "Lava Tube Cell Count"
+    friendly_maximum = 90
+    absolute_maximum = 100
     range_start = 0
-    range_end = 100
-    multiplayer_maximum = 90
-    singleplayer_maximum = 99
+    range_end = determine_range_end
     default = 72
 
 
@@ -137,11 +149,13 @@ class CitizenOrbTradeAmount(Range):
     Along with Oracle Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
     The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
 
-    Multiplayer Maximum: 120"""
+    This value is restricted to a safe maximum value to ensure valid singleplayer games and non-disruptive
+    multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options in host.yaml."""
     display_name = "Citizen Orb Trade Amount"
+    friendly_maximum = 120
+    absolute_maximum = 222
     range_start = 0
-    range_end = 222
-    multiplayer_maximum = 120
+    range_end = determine_range_end
     default = 90
 
 
@@ -152,11 +166,13 @@ class OracleOrbTradeAmount(Range):
     Along with Citizen Orb Trade Amount, this setting cannot exceed the total number of orbs in the game (2000).
     The equation to determine the total number of trade orbs is (9 * Citizen Trades) + (6 * Oracle Trades).
 
-    Multiplayer Maximum: 150"""
+    This value is restricted to a safe maximum value to ensure valid singleplayer games and non-disruptive
+    multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options in host.yaml."""
     display_name = "Oracle Orb Trade Amount"
+    friendly_maximum = 150
+    absolute_maximum = 333
     range_start = 0
-    range_end = 333
-    multiplayer_maximum = 150
+    range_end = determine_range_end
     default = 120
 
 

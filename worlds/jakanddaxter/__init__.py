@@ -14,7 +14,7 @@ from BaseClasses import (Item,
 from Options import OptionGroup
 
 # Jak imports
-from .options import *
+from . import options
 from .game_id import jak1_id, jak1_name, jak1_max
 from .items import (JakAndDaxterItem,
                     OrbAssoc,
