@@ -309,7 +309,7 @@ class CandyBox2RulesPackage(JSONEncoder):
     def apply_location_rules(self, world: "CandyBox2World", player: int):
         for target, rule in self.location_rules.items():
             try:
-                add_rule(world.get_location(target), lambda state: True if rule is None else rule.evaluate(world, state, player))
+                add_rule(world.get_location(target), lambda state, r=rule, w=world, p=player: True if r is None else r.evaluate(w, state, p))
             except KeyError:
                 pass
 
@@ -324,7 +324,7 @@ class CandyBox2RulesPackage(JSONEncoder):
 
             parent = room_parents.get("MENU" if target is None else target)
             if parent is not None:
-                entrance = rooms[parent].connect(region, None, lambda state: True if rule is None else rule.evaluate(world, state, player))
+                entrance = rooms[parent].connect(region, None, lambda state, r=rule, w=world, p=player: True if r is None else r.evaluate(w, state, p))
                 if type(region) is CandyBox2RoomRegion:
                     generated_entrances.append(entrance)
                 if rule is not None:
