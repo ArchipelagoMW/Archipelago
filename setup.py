@@ -58,9 +58,21 @@ from Cython.Build import cythonize
 
 
 non_apworlds: set[str] = {
-    "Archipelago",  # needs a way to specify load order
-    "Final Fantasy",  # loads json files badly
-    "Raft",  # loads json files badly
+    "A Link to the Past",
+    "Adventure",
+    "ArchipIDLE",
+    "Archipelago",
+    "Clique",
+    "Final Fantasy",
+    "Lufia II Ancient Cave",
+    "Meritous",
+    "Ocarina of Time",
+    "Overcooked! 2",
+    "Raft",
+    "Sudoku",
+    "Super Mario 64",
+    "VVVVVV",
+    "Wargroove",
 }
 
 
