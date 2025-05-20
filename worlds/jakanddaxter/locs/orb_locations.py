@@ -1,5 +1,5 @@
-from ..GameID import jak1_id
-from ..Levels import level_table_with_global
+from ..game_id import jak1_id
+from ..levels import level_table_with_global
 
 # Precursor Orbs are not necessarily given ID's by the game.
 

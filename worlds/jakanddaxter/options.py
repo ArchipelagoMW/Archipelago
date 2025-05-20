@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from functools import cached_property
 from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionCounter
-from .Items import trap_item_table
+from .items import trap_item_table
 
 
 class EnableMoveRandomizer(Toggle):

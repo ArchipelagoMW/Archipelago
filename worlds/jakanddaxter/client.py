@@ -25,10 +25,10 @@ from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui
 from NetUtils import ClientStatus
 
 # Jak imports
-from .GameID import jak1_name
-from .Options import EnableOrbsanity
-from .client.MemoryReader import JakAndDaxterMemoryReader
-from .client.ReplClient import JakAndDaxterReplClient
+from .game_id import jak1_name
+from .options import EnableOrbsanity
+from .client.memory_reader import JakAndDaxterMemoryReader
+from .client.repl_client import JakAndDaxterReplClient
 from . import JakAndDaxterWorld
 
 

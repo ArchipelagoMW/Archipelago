@@ -1,10 +1,10 @@
 from BaseClasses import CollectionState
-from .RegionBase import JakAndDaxterRegion
-from ..Options import EnableOrbsanity, CompletionCondition
+from .region_base import JakAndDaxterRegion
+from ..options import EnableOrbsanity, CompletionCondition
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .. import JakAndDaxterWorld
-from ..Rules import can_free_scout_flies, can_fight, can_reach_orbs_level
+from ..rules import can_free_scout_flies, can_fight, can_reach_orbs_level
 
 
 # God help me... here we go.

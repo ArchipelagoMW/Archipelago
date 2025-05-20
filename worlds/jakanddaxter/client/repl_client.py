@@ -15,14 +15,14 @@ import asyncio
 from asyncio import StreamReader, StreamWriter, Lock
 
 from NetUtils import NetworkItem
-from ..GameID import jak1_id, jak1_max
-from ..Items import item_table, trap_item_table
+from ..game_id import jak1_id, jak1_max
+from ..items import item_table, trap_item_table
 from ..locs import (
-    OrbLocations as Orbs,
-    CellLocations as Cells,
-    ScoutLocations as Flies,
-    SpecialLocations as Specials,
-    OrbCacheLocations as Caches)
+    orb_locations as orbs,
+    cell_locations as cells,
+    scout_locations as flies,
+    special_locations as specials,
+    orb_cache_locations as caches)
 
 
 logger = logging.getLogger("ReplClient")
@@ -314,16 +314,16 @@ class JakAndDaxterReplClient:
         ap_id = getattr(self.item_inbox[self.inbox_index], "item")
 
         # Determine the type of item to receive.
-        if ap_id in range(jak1_id, jak1_id + Flies.fly_offset):
+        if ap_id in range(jak1_id, jak1_id + flies.fly_offset):
             await self.receive_power_cell(ap_id)
-        elif ap_id in range(jak1_id + Flies.fly_offset, jak1_id + Specials.special_offset):
+        elif ap_id in range(jak1_id + flies.fly_offset, jak1_id + specials.special_offset):
             await self.receive_scout_fly(ap_id)
-        elif ap_id in range(jak1_id + Specials.special_offset, jak1_id + Caches.orb_cache_offset):
+        elif ap_id in range(jak1_id + specials.special_offset, jak1_id + caches.orb_cache_offset):
             await self.receive_special(ap_id)
-        elif ap_id in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
+        elif ap_id in range(jak1_id + caches.orb_cache_offset, jak1_id + orbs.orb_offset):
             await self.receive_move(ap_id)
-        elif ap_id in range(jak1_id + Orbs.orb_offset, jak1_max - max(trap_item_table)):
-            await self.receive_precursor_orb(ap_id)  # Ponder the Orbs.
+        elif ap_id in range(jak1_id + orbs.orb_offset, jak1_max - max(trap_item_table)):
+            await self.receive_precursor_orb(ap_id)  # Ponder the orbs.
         elif ap_id in range(jak1_max - max(trap_item_table), jak1_max):
             await self.receive_trap(ap_id)
         elif ap_id == jak1_max:
@@ -332,7 +332,7 @@ class JakAndDaxterReplClient:
             self.log_error(logger, f"Tried to receive item with unknown AP ID {ap_id}!")
 
     async def receive_power_cell(self, ap_id: int) -> bool:
-        cell_id = Cells.to_game_id(ap_id)
+        cell_id = cells.to_game_id(ap_id)
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type fuel-cell) "
@@ -344,7 +344,7 @@ class JakAndDaxterReplClient:
         return ok
 
     async def receive_scout_fly(self, ap_id: int) -> bool:
-        fly_id = Flies.to_game_id(ap_id)
+        fly_id = flies.to_game_id(ap_id)
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type buzzer) "
@@ -356,7 +356,7 @@ class JakAndDaxterReplClient:
         return ok
 
     async def receive_special(self, ap_id: int) -> bool:
-        special_id = Specials.to_game_id(ap_id)
+        special_id = specials.to_game_id(ap_id)
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type ap-special) "
@@ -368,7 +368,7 @@ class JakAndDaxterReplClient:
         return ok
 
     async def receive_move(self, ap_id: int) -> bool:
-        move_id = Caches.to_game_id(ap_id)
+        move_id = caches.to_game_id(ap_id)
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type ap-move) "
@@ -380,15 +380,15 @@ class JakAndDaxterReplClient:
         return ok
 
     async def receive_precursor_orb(self, ap_id: int) -> bool:
-        orb_amount = Orbs.to_game_id(ap_id)
+        orb_amount = orbs.to_game_id(ap_id)
         ok = await self.send_form("(send-event "
                                   "*target* \'get-archipelago "
                                   "(pickup-type money) "
                                   "(the float " + str(orb_amount) + "))")
         if ok:
-            logger.debug(f"Received {orb_amount} Precursor Orbs!")
+            logger.debug(f"Received {orb_amount} Precursor orbs!")
         else:
-            self.log_error(logger, f"Unable to receive {orb_amount} Precursor Orbs!")
+            self.log_error(logger, f"Unable to receive {orb_amount} Precursor orbs!")
         return ok
 
     async def receive_trap(self, ap_id: int) -> bool:
@@ -475,7 +475,7 @@ class JakAndDaxterReplClient:
                                   f":slot-name {sanitized_name} "
                                   f":slot-seed {sanitized_seed} ))")
         message = (f"Setting options: \n"
-                   f"   Orbsanity Option {os_option}, Orbsanity Bundle {os_bundle}, \n"
+                   f"   orbsanity Option {os_option}, orbsanity Bundle {os_bundle}, \n"
                    f"   FC Cell Count {fc_count}, MP Cell Count {mp_count}, \n"
                    f"   LT Cell Count {lt_count}, Citizen Orb Amt {ct_amount}, \n"
                    f"   Oracle Orb Amt {ot_amount}, Trap Duration {trap_time}, \n"

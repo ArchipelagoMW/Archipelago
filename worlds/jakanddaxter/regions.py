@@ -1,26 +1,26 @@
 import typing
 from Options import OptionError
-from .Items import item_table
-from .Options import EnableOrbsanity, CompletionCondition
-from .Rules import can_reach_orbs_global
-from .locs import CellLocations as Cells, ScoutLocations as Scouts
-from .regs import (GeyserRockRegions as GeyserRock,
-                   SandoverVillageRegions as SandoverVillage,
-                   ForbiddenJungleRegions as ForbiddenJungle,
-                   SentinelBeachRegions as SentinelBeach,
-                   MistyIslandRegions as MistyIsland,
-                   FireCanyonRegions as FireCanyon,
-                   RockVillageRegions as RockVillage,
-                   PrecursorBasinRegions as PrecursorBasin,
-                   LostPrecursorCityRegions as LostPrecursorCity,
-                   BoggySwampRegions as BoggySwamp,
-                   MountainPassRegions as MountainPass,
-                   VolcanicCraterRegions as VolcanicCrater,
-                   SpiderCaveRegions as SpiderCave,
-                   SnowyMountainRegions as SnowyMountain,
-                   LavaTubeRegions as LavaTube,
-                   GolAndMaiasCitadelRegions as GolAndMaiasCitadel)
-from .regs.RegionBase import JakAndDaxterRegion
+from .items import item_table
+from .options import EnableOrbsanity, CompletionCondition
+from .rules import can_reach_orbs_global
+from .locs import cell_locations as cells, scout_locations as scouts
+from .regs import (geyser_rock_regions as geyser_rock,
+                   sandover_village_regions as sandover_village,
+                   forbidden_jungle_regions as forbidden_jungle,
+                   sentinel_beach_regions as sentinel_beach,
+                   misty_island_regions as misty_island,
+                   fire_canyon_regions as fire_canyon,
+                   rock_village_regions as rock_village,
+                   precursor_basin_regions as precursor_basin,
+                   lost_precursor_city_regions as lost_precursor_city,
+                   boggy_swamp_regions as boggy_swamp,
+                   mountain_pass_regions as mountain_pass,
+                   volcanic_crater_regions as volcanic_crater,
+                   spider_cave_regions as spider_cave,
+                   snowy_mountain_regions as snowy_mountain,
+                   lava_tube_regions as lava_tube,
+                   gol_and_maias_citadel_regions as gol_and_maias_citadel)
+from .regs.region_base import JakAndDaxterRegion
 
 if typing.TYPE_CHECKING:
     from . import JakAndDaxterWorld
@@ -38,11 +38,11 @@ def create_regions(world: "JakAndDaxterWorld"):
     # Build the special "Free 7 Scout Flies" Region. This is a virtual region always accessible to Menu.
     # The Locations within are automatically checked when you receive the 7th scout fly for the corresponding cell.
     free7 = JakAndDaxterRegion("'Free 7 Scout Flies' Power Cells", player, multiworld)
-    free7.add_cell_locations(Cells.loc7SF_cellTable.keys())
+    free7.add_cell_locations(cells.loc7SF_cellTable.keys())
     for scout_fly_cell in free7.locations:
 
         # Translate from Cell AP ID to Scout AP ID using game ID as an intermediary.
-        scout_fly_id = Scouts.to_ap_id(Cells.to_game_id(typing.cast(int, scout_fly_cell.address)))
+        scout_fly_id = scouts.to_ap_id(cells.to_game_id(typing.cast(int, scout_fly_cell.address)))
         scout_fly_cell.access_rule = lambda state, flies=scout_fly_id: state.has(item_table[flies], player, 7)
     multiworld.regions.append(free7)
     menu.connect(free7)
@@ -65,22 +65,22 @@ def create_regions(world: "JakAndDaxterWorld"):
         menu.connect(orbs)
 
     # Build all regions. Include their intra-connecting Rules, their Locations, and their Location access rules.
-    gr = GeyserRock.build_regions("Geyser Rock", world)
-    sv = SandoverVillage.build_regions("Sandover Village", world)
-    fj, fjp = ForbiddenJungle.build_regions("Forbidden Jungle", world)
-    sb = SentinelBeach.build_regions("Sentinel Beach", world)
-    mi = MistyIsland.build_regions("Misty Island", world)
-    fc = FireCanyon.build_regions("Fire Canyon", world)
-    rv, rvp, rvc = RockVillage.build_regions("Rock Village", world)
-    pb = PrecursorBasin.build_regions("Precursor Basin", world)
-    lpc = LostPrecursorCity.build_regions("Lost Precursor City", world)
-    bs = BoggySwamp.build_regions("Boggy Swamp", world)
-    mp, mpr = MountainPass.build_regions("Mountain Pass", world)
-    vc = VolcanicCrater.build_regions("Volcanic Crater", world)
-    sc = SpiderCave.build_regions("Spider Cave", world)
-    sm = SnowyMountain.build_regions("Snowy Mountain", world)
-    lt = LavaTube.build_regions("Lava Tube", world)
-    gmc, fb, fd = GolAndMaiasCitadel.build_regions("Gol and Maia's Citadel", world)
+    gr = geyser_rock.build_regions("Geyser Rock", world)
+    sv = sandover_village.build_regions("Sandover Village", world)
+    fj, fjp = forbidden_jungle.build_regions("Forbidden Jungle", world)
+    sb = sentinel_beach.build_regions("Sentinel Beach", world)
+    mi = misty_island.build_regions("Misty Island", world)
+    fc = fire_canyon.build_regions("Fire Canyon", world)
+    rv, rvp, rvc = rock_village.build_regions("Rock Village", world)
+    pb = precursor_basin.build_regions("Precursor Basin", world)
+    lpc = lost_precursor_city.build_regions("Lost Precursor City", world)
+    bs = boggy_swamp.build_regions("Boggy Swamp", world)
+    mp, mpr = mountain_pass.build_regions("Mountain Pass", world)
+    vc = volcanic_crater.build_regions("Volcanic Crater", world)
+    sc = spider_cave.build_regions("Spider Cave", world)
+    sm = snowy_mountain.build_regions("Snowy Mountain", world)
+    lt = lava_tube.build_regions("Lava Tube", world)
+    gmc, fb, fd = gol_and_maias_citadel.build_regions("Gol and Maia's Citadel", world)
 
     # Configurable counts of cells for connector levels.
     fc_count = options.fire_canyon_cell_count.value

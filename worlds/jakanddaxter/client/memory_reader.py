@@ -8,11 +8,11 @@ from pymem import pattern
 from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
 from dataclasses import dataclass
 
-from ..locs import (OrbLocations as Orbs,
-                    CellLocations as Cells,
-                    ScoutLocations as Flies,
-                    SpecialLocations as Specials,
-                    OrbCacheLocations as Caches)
+from ..locs import (orb_locations as orbs,
+                    cell_locations as cells,
+                    scout_locations as flies,
+                    special_locations as specials,
+                    orb_cache_locations as caches)
 
 
 logger = logging.getLogger("MemoryReader")
@@ -354,7 +354,7 @@ class JakAndDaxterMemoryReader:
             next_cell_index = self.read_goal_address(next_cell_index_offset, sizeof_uint64)
             for k in range(0, next_cell_index):
                 next_cell = self.read_goal_address(cells_checked_offset + (k * sizeof_uint32), sizeof_uint32)
-                cell_ap_id = Cells.to_ap_id(next_cell)
+                cell_ap_id = cells.to_ap_id(next_cell)
                 if cell_ap_id not in self.location_outbox:
                     self.location_outbox.append(cell_ap_id)
                     logger.debug("Checked power cell: " + str(next_cell))
@@ -374,7 +374,7 @@ class JakAndDaxterMemoryReader:
             next_buzzer_index = self.read_goal_address(next_buzzer_index_offset, sizeof_uint64)
             for k in range(0, next_buzzer_index):
                 next_buzzer = self.read_goal_address(buzzers_checked_offset + (k * sizeof_uint32), sizeof_uint32)
-                buzzer_ap_id = Flies.to_ap_id(next_buzzer)
+                buzzer_ap_id = flies.to_ap_id(next_buzzer)
                 if buzzer_ap_id not in self.location_outbox:
                     self.location_outbox.append(buzzer_ap_id)
                     logger.debug("Checked scout fly: " + str(next_buzzer))
@@ -382,7 +382,7 @@ class JakAndDaxterMemoryReader:
             next_special_index = self.read_goal_address(next_special_index_offset, sizeof_uint64)
             for k in range(0, next_special_index):
                 next_special = self.read_goal_address(specials_checked_offset + (k * sizeof_uint32), sizeof_uint32)
-                special_ap_id = Specials.to_ap_id(next_special)
+                special_ap_id = specials.to_ap_id(next_special)
                 if special_ap_id not in self.location_outbox:
                     self.location_outbox.append(special_ap_id)
                     logger.debug("Checked special: " + str(next_special))
@@ -401,7 +401,7 @@ class JakAndDaxterMemoryReader:
             next_cache_index = self.read_goal_address(next_orb_cache_index_offset, sizeof_uint64)
             for k in range(0, next_cache_index):
                 next_cache = self.read_goal_address(orb_caches_checked_offset + (k * sizeof_uint32), sizeof_uint32)
-                cache_ap_id = Caches.to_ap_id(next_cache)
+                cache_ap_id = caches.to_ap_id(next_cache)
                 if cache_ap_id not in self.location_outbox:
                     self.location_outbox.append(cache_ap_id)
                     logger.debug("Checked orb cache: " + str(next_cache))
@@ -427,7 +427,7 @@ class JakAndDaxterMemoryReader:
                                             bundle_size + collected_bundles,  # Range max is non-inclusive.
                                             bundle_size):
 
-                            bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(level, bundle, bundle_size))
+                            bundle_ap_id = orbs.to_ap_id(orbs.find_address(level, bundle, bundle_size))
                             if bundle_ap_id not in self.location_outbox:
                                 self.location_outbox.append(bundle_ap_id)
                                 logger.debug(f"Checked orb bundle: L{level} {bundle}")
@@ -441,7 +441,7 @@ class JakAndDaxterMemoryReader:
                                         bundle_size + collected_bundles,  # Range max is non-inclusive.
                                         bundle_size):
 
-                        bundle_ap_id = Orbs.to_ap_id(Orbs.find_address(16, bundle, bundle_size))
+                        bundle_ap_id = orbs.to_ap_id(orbs.find_address(16, bundle, bundle_size))
                         if bundle_ap_id not in self.location_outbox:
                             self.location_outbox.append(bundle_ap_id)
                             logger.debug(f"Checked orb bundle: G {bundle}")

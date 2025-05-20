@@ -1,5 +1,5 @@
 from .bases import JakAndDaxterTestBase
-from ..Items import move_item_table
+from ..items import move_item_table
 
 
 class MoveRandoTest(JakAndDaxterTestBase):

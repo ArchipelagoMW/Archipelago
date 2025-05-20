@@ -1,10 +1,10 @@
-from .RegionBase import JakAndDaxterRegion
-from ..Options import EnableOrbsanity
+from .region_base import JakAndDaxterRegion
+from ..options import EnableOrbsanity
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .. import JakAndDaxterWorld
-from ..Rules import can_reach_orbs_level
-from ..locs import ScoutLocations as Scouts
+from ..rules import can_reach_orbs_level
+from ..locs import cell_locations as cells, scout_locations as scouts
 
 
 def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRegion:
@@ -12,23 +12,13 @@ def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRe
     options = world.options
     player = world.player
 
-    main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 48)
-    main_area.add_cell_locations([92, 93])
-    main_area.add_fly_locations(Scouts.locGR_scoutTable.keys())  # All Flies here are accessible with blue eco.
+    main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 50)
 
-    # The last 2 orbs are barely gettable with the blue eco vent, but it's pushing accessibility. So I moved them here.
-    cliff = JakAndDaxterRegion("Cliff", player, multiworld, level_name, 2)
-    cliff.add_cell_locations([94])
-
-    main_area.connect(cliff, rule=lambda state:
-                      state.has("Double Jump", player)
-                      or state.has_all(("Crouch", "Crouch Jump"), player)
-                      or state.has_all(("Crouch", "Crouch Uppercut"), player))
-
-    cliff.connect(main_area)  # Jump down or ride blue eco elevator.
+    # Everything is accessible by making contact with the zoomer.
+    main_area.add_cell_locations(cells.locLT_cellTable.keys())
+    main_area.add_fly_locations(scouts.locLT_scoutTable.keys())
 
     world.level_to_regions[level_name].append(main_area)
-    world.level_to_regions[level_name].append(cliff)
 
     # If Per-Level Orbsanity is enabled, build the special Orbsanity Region. This is a virtual region always
     # accessible to Main Area. The Locations within are automatically checked when you collect enough orbs.
@@ -38,7 +28,7 @@ def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRe
         bundle_count = 50 // world.orb_bundle_size
         for bundle_index in range(bundle_count):
             amount = world.orb_bundle_size * (bundle_index + 1)
-            orbs.add_orb_locations(0,
+            orbs.add_orb_locations(14,
                                    bundle_index,
                                    access_rule=lambda state, level=level_name, orb_amount=amount:
                                    can_reach_orbs_level(state, player, world, level, orb_amount))

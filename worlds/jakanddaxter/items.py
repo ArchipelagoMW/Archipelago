@@ -1,11 +1,11 @@
 from enum import IntEnum
 from BaseClasses import Item, ItemClassification
-from .GameID import jak1_name, jak1_max
-from .locs import (OrbLocations as Orbs,
-                   CellLocations as Cells,
-                   ScoutLocations as Scouts,
-                   SpecialLocations as Specials,
-                   OrbCacheLocations as Caches)
+from .game_id import jak1_name, jak1_max
+from .locs import (orb_locations as orbs,
+                   cell_locations as cells,
+                   scout_locations as scouts,
+                   special_locations as specials,
+                   orb_cache_locations as caches)
 
 
 class OrbAssoc(IntEnum):
@@ -146,11 +146,11 @@ trap_item_table = {
 # All Items
 # While we're here, do all the ID conversions needed.
 item_table = {
-    **{Cells.to_ap_id(k): name for k, name in cell_item_table.items()},
-    **{Scouts.to_ap_id(k): name for k, name in scout_item_table.items()},
-    **{Specials.to_ap_id(k): name for k, name in special_item_table.items()},
-    **{Caches.to_ap_id(k): name for k, name in move_item_table.items()},
-    **{Orbs.to_ap_id(k): name for k, name in orb_item_table.items()},
+    **{cells.to_ap_id(k): name for k, name in cell_item_table.items()},
+    **{scouts.to_ap_id(k): name for k, name in scout_item_table.items()},
+    **{specials.to_ap_id(k): name for k, name in special_item_table.items()},
+    **{caches.to_ap_id(k): name for k, name in move_item_table.items()},
+    **{orbs.to_ap_id(k): name for k, name in orb_item_table.items()},
     **{jak1_max - k: name for k, name in trap_item_table.items()},
     jak1_max: "Green Eco Pill"  # Filler item.
 }

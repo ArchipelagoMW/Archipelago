@@ -1,4 +1,4 @@
-from ..GameID import jak1_id
+from ..game_id import jak1_id
 
 # These are the locations of Orb Caches throughout the game, unlockable only with blue eco.
 # They are not game collectables and thus don't have the same kinds of game ID's. They do, however, have actor ID's.

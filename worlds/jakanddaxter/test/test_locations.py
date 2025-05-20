@@ -1,12 +1,12 @@
 import typing
 
 from .bases import JakAndDaxterTestBase
-from ..GameID import jak1_id
-from ..regs.RegionBase import JakAndDaxterRegion
-from ..locs import (ScoutLocations as Scouts,
-                    SpecialLocations as Specials,
-                    OrbCacheLocations as Caches,
-                    OrbLocations as Orbs)
+from ..game_id import jak1_id
+from ..regs.region_base import JakAndDaxterRegion
+from ..locs import (scout_locations as scouts,
+                    special_locations as specials,
+                    orb_cache_locations as caches,
+                    orb_locations as orbs)
 
 
 class LocationsTest(JakAndDaxterTestBase):
@@ -21,7 +21,7 @@ class LocationsTest(JakAndDaxterTestBase):
             sublevels = [reg for reg in self.get_regions() if reg.level_name == level]
             for sl in sublevels:
                 for loc in sl.locations:
-                    if loc.address in range(jak1_id, jak1_id + Scouts.fly_offset):
+                    if loc.address in range(jak1_id, jak1_id + scouts.fly_offset):
                         cell_count += 1
             self.assertEqual(self.level_info[level]["cells"] - 1, cell_count, level)  # Don't count the Free 7 Cells.
 
@@ -31,7 +31,7 @@ class LocationsTest(JakAndDaxterTestBase):
             sublevels = [reg for reg in self.get_regions() if reg.level_name == level]
             for sl in sublevels:
                 for loc in sl.locations:
-                    if loc.address in range(jak1_id + Scouts.fly_offset, jak1_id + Specials.special_offset):
+                    if loc.address in range(jak1_id + scouts.fly_offset, jak1_id + specials.special_offset):
                         fly_count += 1
             self.assertEqual(self.level_info[level]["flies"], fly_count, level)
 
@@ -47,6 +47,6 @@ class LocationsTest(JakAndDaxterTestBase):
             sublevels = [reg for reg in self.get_regions() if reg.level_name == level]
             for sl in sublevels:
                 for loc in sl.locations:
-                    if loc.address in range(jak1_id + Caches.orb_cache_offset, jak1_id + Orbs.orb_offset):
+                    if loc.address in range(jak1_id + caches.orb_cache_offset, jak1_id + orbs.orb_offset):
                         cache_count += 1
             self.assertEqual(self.level_info[level]["caches"], cache_count, level)

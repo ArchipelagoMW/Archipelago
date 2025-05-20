@@ -1,4 +1,4 @@
-from ..GameID import jak1_id
+from ..game_id import jak1_id
 
 # These are special checks that the game normally does not track. They are not game entities and thus
 # don't have game ID's.

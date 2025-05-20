@@ -1,7 +1,7 @@
 import typing
 from BaseClasses import CollectionState
 from Options import OptionError
-from .Options import (EnableOrbsanity,
+from .options import (EnableOrbsanity,
                       GlobalOrbsanityBundleSize,
                       PerLevelOrbsanityBundleSize,
                       FireCanyonCellCount,
@@ -9,9 +9,9 @@ from .Options import (EnableOrbsanity,
                       LavaTubeCellCount,
                       CitizenOrbTradeAmount,
                       OracleOrbTradeAmount)
-from .locs import CellLocations as Cells
-from .Locations import location_table
-from .Levels import level_table
+from .locs import cell_locations as cells
+from .locations import location_table
+from .levels import level_table
 
 if typing.TYPE_CHECKING:
     from . import JakAndDaxterWorld
@@ -100,7 +100,7 @@ def can_trade_vanilla(state: CollectionState,
         recalculate_reachable_orbs(state, player, world)
 
     if required_previous_trade:
-        name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
+        name_of_previous_trade = location_table[cells.to_ap_id(required_previous_trade)]
         return (state.has("Reachable Orbs", player, required_orbs)
                 and state.can_reach_location(name_of_previous_trade, player=player))
     return state.has("Reachable Orbs", player, required_orbs)
@@ -117,7 +117,7 @@ def can_trade_orbsanity(state: CollectionState,
         recalculate_reachable_orbs(state, player, world)
 
     if required_previous_trade:
-        name_of_previous_trade = location_table[Cells.to_ap_id(required_previous_trade)]
+        name_of_previous_trade = location_table[cells.to_ap_id(required_previous_trade)]
         return (state.has("Tradeable Orbs", player, required_orbs)
                 and state.can_reach_location(name_of_previous_trade, player=player))
     return state.has("Tradeable Orbs", player, required_orbs)

@@ -1,10 +1,10 @@
-from .RegionBase import JakAndDaxterRegion
-from ..Options import EnableOrbsanity
+from .region_base import JakAndDaxterRegion
+from ..options import EnableOrbsanity
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .. import JakAndDaxterWorld
-from ..Rules import can_free_scout_flies, can_reach_orbs_level
-from ..locs import ScoutLocations as Scouts
+from ..rules import can_free_scout_flies, can_reach_orbs_level
+from ..locs import scout_locations as scouts
 
 
 def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRegion:
@@ -26,7 +26,7 @@ def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRe
     main_area.add_cell_locations([74])
 
     # No blue eco sources in this area, all boxes must be broken by hand (yellow eco can't be carried far enough).
-    main_area.add_fly_locations(Scouts.locVC_scoutTable.keys(), access_rule=lambda state:
+    main_area.add_fly_locations(scouts.locVC_scoutTable.keys(), access_rule=lambda state:
                                 can_free_scout_flies(state, player))
 
     # Approach the gondola to get this check.

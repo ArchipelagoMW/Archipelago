@@ -1,4 +1,4 @@
-from ..GameID import jak1_id
+from ..game_id import jak1_id
 
 # Scout Flies are given ID's between 0 and 393311 by the game, explanation below.
 

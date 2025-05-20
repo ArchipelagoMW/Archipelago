@@ -1,4 +1,4 @@
-from ..GameID import jak1_id
+from ..game_id import jak1_id
 
 # Power Cells are given ID's between 0 and 116 by the game.
 

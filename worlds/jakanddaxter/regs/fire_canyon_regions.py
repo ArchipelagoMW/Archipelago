@@ -1,10 +1,10 @@
-from .RegionBase import JakAndDaxterRegion
-from ..Options import EnableOrbsanity
+from .region_base import JakAndDaxterRegion
+from ..options import EnableOrbsanity
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .. import JakAndDaxterWorld
-from ..Rules import can_reach_orbs_level
-from ..locs import CellLocations as Cells, ScoutLocations as Scouts
+from ..rules import can_reach_orbs_level
+from ..locs import cell_locations as cells, scout_locations as scouts
 
 
 def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRegion:
@@ -15,8 +15,8 @@ def build_regions(level_name: str, world: "JakAndDaxterWorld") -> JakAndDaxterRe
     main_area = JakAndDaxterRegion("Main Area", player, multiworld, level_name, 50)
 
     # Everything is accessible by making contact with the zoomer.
-    main_area.add_cell_locations(Cells.locFC_cellTable.keys())
-    main_area.add_fly_locations(Scouts.locFC_scoutTable.keys())
+    main_area.add_cell_locations(cells.locFC_cellTable.keys())
+    main_area.add_fly_locations(scouts.locFC_scoutTable.keys())
 
     world.level_to_regions[level_name].append(main_area)
 
