@@ -213,7 +213,7 @@ class CountMissionsRuleData(RuleData):
         mission_id_to_entry_rules: Dict[int, MissionEntryRules],
         accessible_rules: Set[int], seen_rules: List[int], ignore_recursive_rules: bool = False
     ) -> bool:
-        # Count rules are accessible if enough of their missions is beaten and accessible
+        # Count rules are accessible if enough of their missions are beaten and accessible
         accessible_count = 0
         success = accessible_count >= self.amount
         if self.amount > 0:
