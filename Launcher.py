@@ -120,10 +120,7 @@ def handle_uri(path: str) -> tuple[list[Component], Component]:
     queries = urllib.parse.parse_qs(url.query)
     client_components = []
     text_client_component = None
-    if "game" in queries:
-        game = queries["game"][0]
-    else:  # TODO around 0.6.0 - this is for pre this change webhost uri's
-        game = "Archipelago"
+    game = queries["game"][0]
     for component in components:
         if component.supports_uri and component.game_name == game:
             client_components.append(component)
@@ -133,32 +130,15 @@ def handle_uri(path: str) -> tuple[list[Component], Component]:
 
 
 def build_uri_popup(component_list: list[Component], launch_args: tuple[str, ...]) -> None:
-    from kvui import MDButton, MDButtonText
-    from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogContentContainer, MDDialogSupportingText
-    from kivymd.uix.divider import MDDivider
-
-    popup_text = MDDialogSupportingText(text="Select client to open and connect with.")
-    component_buttons = [MDDivider()]
-    for component in component_list:
-        component_buttons.append(MDButton(
-            MDButtonText(text=component.display_name),
-            on_release=lambda *args, comp=component: run_component(comp, *launch_args),
-            style="text"
-        ))
-    component_buttons.append(MDDivider())
-
-    MDDialog(
-        # Headline
-        MDDialogHeadlineText(text="Connect to Multiworld"),
-        # Text
-        popup_text,
-        # Content
-        MDDialogContentContainer(
-            *component_buttons,
-            orientation="vertical"
-        ),
-
-    ).open()
+    from kvui import ButtonsPrompt
+    component_options = {
+        component.display_name: component for component in component_list
+    }
+    popup = ButtonsPrompt("Connect to Multiworld",
+                          "Select client to open and connect with.",
+                          lambda component_name: run_component(component_options[component_name], *launch_args),
+                          *component_options.keys())
+    popup.open()
 
 
 def identify(path: None | str) -> tuple[None | str, None | Component]:
