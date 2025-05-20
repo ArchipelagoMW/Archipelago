@@ -100,13 +100,13 @@ spawn_locations = {
                               "door_ids": [3, 34, 33]}, # Foyer
     "Rec Room":              {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203,
                               "key": ["North Rec Room Key", "South Rec Room Key", "Lower 2F Stairwell Key", "Upper 2F Stairwell Key"],
-                              "door_keys": ["North Rec Room Key", "South Rec Room Key"]
+                              "door_keys": ["North Rec Room Key", "South Rec Room Key"],
                               "door_ids": [24, 25]}, # Rec Room
     "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
                               "key": ["Laundry Key", "Butler's Rom Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
                               "door_ids": [1, 7]},  # Laundry
     "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
-                              "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"]
+                              "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"],
                               "door_ids": [53, 52]}, # Telephone
     "Butler's Room":         {"room_no": 0, "pos_x": -3391.8396, "pos_y": 0, "pos_z": 114.336197,
                               "key": ["Heart Key", "Butler's Room Key"], "door_keys": [],
@@ -115,7 +115,7 @@ spawn_locations = {
                               "key": ["Conservatory Key", "Heart Key"], "door_keys": ["Conservatory Key"],
                               "door_ids": [21]}, # Conservatory
     "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
-                              "key": ["Heart Key", "Billiards Room Key"], "door_keys": ["Billiards Room Key", "Projection Room Key"]
+                              "key": ["Heart Key", "Billiards Room Key"], "door_keys": ["Billiards Room Key", "Projection Room Key"],
                               "door_ids": [17, 18]}, # Billiards
     "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
                               "key": ["Twins' Room Key", "Family Hallway Key"], "door_keys": ["Twins' Room Key"],
