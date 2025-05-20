@@ -329,26 +329,26 @@ Typical examples include completing the goal, defeating a boss, or flipping a sw
 To be precise: the term "event" on its own refers to the special combination of an "event item" placed on an "event
 location". Event items and locations are created the same way as normal items and locations, except that they have an
 `id` of `None`, they must not exist in the `name_to_id` lookups, and an event item must be placed on an event location
-(and vice versa). By convention, the event location and item typically have the same name, though this is not a
-requirement. Finally, although events are often described as "fake" items and locations, it's important to understand
-that they are perfectly real during generation.
+(and vice versa). Finally, although events are often described as "fake" items and locations, it's important to
+understand that they are perfectly real during generation.
 
 The most common way to create an event is to create the event item and the event location, then immediately call
 `.place_locked_item()`:
 
 ```python
-victory_loc = MyGameLocation(self.player, "Victory", None)
+victory_loc = MyGameLocation(self.player, "Defeat the Final Boss", None)
 victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
 self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 set_rule(victory_loc, lambda state: state.can_reach_region("Final Boss Arena", self.player))
 ```
 
-Having a `"Victory"` event item that's required to finish the game makes it very clear in the spoiler log when the
-player is expected to finish, rather than only seeing their last relevant item. But events aren't just about the spoiler
-log; a more substantial example of using events to structure your logic might be:
+Requiring an event to finish the game will make the spoiler log display an additional
+`Defeat the Final Boss: Victory` line when the player is expected to finish, rather than only showing their last
+relevant item. But events aren't just about the spoiler log; a more substantial example of using events to structure
+your logic might be:
 
 ```python
-water_loc = MyGameLocation(self.player, "Lowered Water Level", None)
+water_loc = MyGameLocation(self.player, "Water Level Switch", None)
 water_loc.place_locked_item(MyGameItem("Lowered Water Level", ItemClassification.progression, None, self.player))
 pump_station_region.add_locations([water_loc], MyGameLocation)
 set_rule(water_loc, lambda state: state.has("Double Jump", self.player))  # the switch is really high up
@@ -362,7 +362,8 @@ set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.playe
 This creates a "Lowered Water Level" event and a regular location whose access rule depends on that
 event being reachable. If you made several more locations the same way, this would ensure all of those locations can
 only become reachable when the event location is reachable (i.e. when the water level can be lowered), without
-copy-pasting the event location's access rule and then repeatedly re-evaluating it.
+copy-pasting the event location's access rule and then repeatedly re-evaluating it. Also, the spoiler log will show
+`Water Level Switch: Lowered Water Level` when the player is expected to do this.
 
 To be clear, this example could also be modeled with a second Region (perhaps "Un-Flooded House"). Or you could modify
 the game so flipping that switch checks a regular AP location in addition to lowering the water level.
