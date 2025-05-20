@@ -317,13 +317,14 @@ reject the placement of an item there.
 ### Events (or "generation-only items/locations")
 
 An event item or location is one that only exists during multiworld generation. The server is never made aware of them,
-event locations can never be checked, nor can event items be received during play. Events are used to represent in-game
-actions (that aren't regular Archipelago locations) when either:
+event locations can never be checked, nor can event items be received during play.
 
-* we want to show in the spoiler log when the player is expected to perform the in-game action, or
-* it's the cleanest way to represent how that in-game action impacts logic
+Events are used to represent in-game actions (that aren't regular Archipelago locations) when either:
 
-Typical examples include completing the goal, defeating a boss, or flipping a switch that changes several areas.
+* We want to show in the spoiler log when the player is expected to perform the in-game action.
+* It's the cleanest way to represent how that in-game action impacts logic.
+
+Typical examples include completing the goal, defeating a boss, or flipping a switch that affects multiple areas.
 
 To be precise: the term "event" on its own refers to the special combination of an "event item" placed on an "event
 location". Event items and locations are created the same way as normal items and locations, except that they have an
@@ -343,13 +344,14 @@ set_rule(victory_loc, lambda state: state.can_reach_region("Final Boss Arena", s
 ```
 
 Having a `"Victory"` event item that's required to finish the game makes it very clear in the spoiler log when the
-player finishes, rather than only seeing their last relevant item. But events aren't just about the spoiler log;
-a more substantial example of using events to structure your logic might be:
+player is expected to finish, rather than only seeing their last relevant item. But events aren't just about the spoiler
+log; a more substantial example of using events to structure your logic might be:
 
 ```python
 water_loc = MyGameLocation(self.player, "Lowered Water Level", None)
 water_loc.place_locked_item(MyGameItem("Lowered Water Level", ItemClassification.progression, None, self.player))
-set_rule(water_loc, lambda state: state.can_reach_region("Water Pump Switch", self.player))
+pump_station_region.add_locations([water_loc], MyGameLocation)
+set_rule(water_loc, lambda state: state.has("Double Jump", self.player))  # the switch is really high up
 ...
 basement_loc = MyGameLocation(self.player, "Flooded House - Basement Chest", None)
 flooded_house_region.add_locations([upstairs_loc, ground_floor_loc, basement_loc], MyGameLocation)
@@ -357,7 +359,7 @@ flooded_house_region.add_locations([upstairs_loc, ground_floor_loc, basement_loc
 set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.player))
 ```
 
-This creates a "Lowered Water Level" event with an access rule, and a regular location whose access rule depends on that
+This creates a "Lowered Water Level" event and a regular location whose access rule depends on that
 event being reachable. If you made several more locations the same way, this would ensure all of those locations can
 only become reachable when the event location is reachable (i.e. when the water level can be lowered), without
 copy-pasting the event location's access rule and then repeatedly re-evaluating it.
@@ -517,8 +519,8 @@ In addition, the following methods can be implemented and are called in this ord
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
 * `create_items(self)`
   called to place player's items into the MultiWorld's itempool. By the end of this step all regions, locations and
-  items have to be in the MultiWorld's regions and itempool (including events). You cannot add or remove items,
-  locations, or regions after this step. Locations cannot be moved to different regions after this step.
+  items have to be in the MultiWorld's regions and itempool. You cannot add or remove items, locations, or regions after
+  this step. Locations cannot be moved to different regions after this step. This includes event items and locations.
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
 * `connect_entrances(self)`
