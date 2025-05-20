@@ -1991,6 +1991,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
                     if mission.mission_id == -1:
                         continue
                     mission_order_objects.append(mission)
+
     candidate_accessible_objects: typing.List[MissionOrderObjectSlotData] = [
         mission_order_object for mission_order_object in mission_order_objects
         if mission_order_object.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
