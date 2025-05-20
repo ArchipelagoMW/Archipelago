@@ -12,6 +12,7 @@ from .entry_rules import SubRuleRuleData
 class MissionOrderObjectSlotData(Protocol):
     entry_rule: SubRuleRuleData
 
+
 @dataclass
 class CampaignSlotData:
     name: str
