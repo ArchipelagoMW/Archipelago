@@ -424,7 +424,6 @@ class CrystalProjectWorld(World):
         return {
             "goal": self.options.goal.value,
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
-            "randomizeJobs": bool(self.options.jobRando.value == self.options.jobRando.option_crystal),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
             "includedRegions": self.options.includedRegions.value,
