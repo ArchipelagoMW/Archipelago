@@ -89,37 +89,52 @@ GHOST_TO_ROOM = {
 
 spawn_locations = {
     "Hidden Room":           {"room_no": 1, "pos_x": -1803.157350, "pos_y": 0.000000, "pos_z": 153.575714,
-                              "key": ["Heart Key", "Butler's Room Key"], "door_keys": []}, # Hidden
+                              "key": ["Heart Key", "Butler's Room Key"], "door_keys": [], "door_ids": []}, # Hidden
     "Courtyard":             {"room_no": 23, "pos_x": 1613.042970, "pos_y": 9.000000, "pos_z": -5663.574710,
-                              "key": ["Club Key", "Heart Key", "North Rec Room Key"], "door_keys": ["Club Key", "North Rec Room Key"]}, # Courtyard
+                              "key": ["Club Key", "Heart Key", "North Rec Room Key"], "door_keys": ["Club Key", "North Rec Room Key"],
+                              "door_ids": [42, 25]}, # Courtyard
     "Clockwork Room":        {"room_no": 56, "pos_x": 10.759588, "pos_y": 1100.000000, "pos_z": -1649.743900,
-                              "key": ["Heart Key", "Clockwork Room Key"], "door_keys": []}, # Clockwork
+                              "key": ["Heart Key", "Clockwork Room Key"], "door_keys": [], "door_ids": []}, # Clockwork
     "Foyer":                 {"room_no": 2, "pos_x": -7.640748, "pos_y": 0.000000, "pos_z": 145.174300,
-                              "key": ["Heart Key", "Family Hallway Key", "Parlor Key"], "door_keys": []}, # Foyer
+                              "key": ["Heart Key", "Family Hallway Key", "Parlor Key"], "door_keys": [],
+                              "door_ids": [3, 34, 33]}, # Foyer
     "Rec Room":              {"room_no": 22, "pos_x": 3517.026860, "pos_y": 0.000000, "pos_z": -4646.33203,
-                              "key": ["North Rec Room Key", "South Rec Room Key", "Lower 2F Stairwell Key", "Upper 2F Stairwell Key"], "door_keys": ["North Rec Room Key", "South Rec Room Key"]}, # Rec Room
+                              "key": ["North Rec Room Key", "South Rec Room Key", "Lower 2F Stairwell Key", "Upper 2F Stairwell Key"],
+                              "door_keys": ["North Rec Room Key", "South Rec Room Key"]
+                              "door_ids": [24, 25]}, # Rec Room
     "Laundry Room":          {"room_no": 5, "pos_x": -3165.112550, "pos_y": 0, "pos_z": -804.770508,
-                              "key": ["Laundry Key", "Butler's Rom Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"]},  # Laundry
+                              "key": ["Laundry Key", "Butler's Rom Key"], "door_keys": ["Laundry Key", "Butler's Rom Key"],
+                              "door_ids": [1, 7]},  # Laundry
     "Telephone Room":        {"room_no": 50, "pos_x": -9.812825, "pos_y": 1100, "pos_z": 118.738243,
-                              "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"]}, # Telephone
+                              "key": ["Telephone Room Key", "Clockwork Room Key"], "door_keys": ["Telephone Room Key", "Clockwork Room Key"]
+                              "door_ids": [53, 52]}, # Telephone
     "Butler's Room":         {"room_no": 0, "pos_x": -3391.8396, "pos_y": 0, "pos_z": 114.336197,
-                              "key": ["Heart Key", "Butler's Room Key"], "door_keys": []}, # Butler
+                              "key": ["Heart Key", "Butler's Room Key"], "door_keys": [],
+                              "door_ids": []}, # Butler
     "Conservatory":          {"room_no": 21, "pos_x": 780.405884, "pos_y": 0, "pos_z": -4662.089840,
-                              "key": ["Conservatory Key", "Heart Key"], "door_keys": ["Conservatory Key"]}, # Conservatory
+                              "key": ["Conservatory Key", "Heart Key"], "door_keys": ["Conservatory Key"],
+                              "door_ids": [21]}, # Conservatory
     "Billiards Room":        {"room_no": 12, "pos_x": -963.755737, "pos_y": 0, "pos_z": -3055.808110,
-                              "key": ["Heart Key", "Billiards Room Key"], "door_keys": ["Billiards Room Key", "Projection Room Key"]}, # Billiards
+                              "key": ["Heart Key", "Billiards Room Key"], "door_keys": ["Billiards Room Key", "Projection Room Key"]
+                              "door_ids": [17, 18]}, # Billiards
     "Twins' Room":           {"room_no": 25, "pos_x": -1729.586790, "pos_y": 550, "pos_z": 116.055779,
-                              "key": ["Twins' Room Key", "Family Hallway Key"], "door_keys": ["Twins' Room Key"]}, # Twins
+                              "key": ["Twins' Room Key", "Family Hallway Key"], "door_keys": ["Twins' Room Key"],
+                              "door_ids": [28]}, # Twins
     "Nursery":               {"room_no": 24, "pos_x": -3331.658690, "pos_y": 550, "pos_z": -198.970337,
-                              "key": ["Nursery Key", "Family Hallway Key"], "door_keys": ["Nursery Key"]}, # Nursery
+                              "key": ["Nursery Key", "Family Hallway Key"], "door_keys": ["Nursery Key"],
+                              "door_ids": [27]}, # Nursery
     "Master Bedroom":        {"room_no": 33, "pos_x": -3365.857670, "pos_y": 550, "pos_z": -1513.529660,
-                              "key": ["Heart Key", "Master Bedroom Key"], "door_keys": ["Master Bedroom Key"]}, # Master bed
+                              "key": ["Heart Key", "Master Bedroom Key"], "door_keys": ["Master Bedroom Key"],
+                              "door_ids": [31]}, # Master bed
     #"Study":                 {"room_no": 34, "pos_x": -1696.352290, "pos_y": 550, "pos_z": -1605.182980,
-    #                          "key": ["Study Key", "Family Hallway Key"], "door_keys": ["Study Key"]}, # Study Errors and neville's Chair doesn't spawn?
+    #                          "key": ["Study Key", "Family Hallway Key"], "door_keys": ["Study Key"]
+    #                          "door_ids": [32]}, # Study Errors and neville's Chair doesn't spawn?
     "Parlor":                {"room_no": 35, "pos_x": -43.294357, "pos_y": 550, "pos_z": -1775.288450,
-                             "key": ["Parlor Key", "Heart Key", "Anteroom Key"], "door_keys": ["Parlor Key", "Anteroom Key"]}, # Parlor
+                             "key": ["Parlor Key", "Heart Key", "Anteroom Key"], "door_keys": ["Parlor Key", "Anteroom Key"],
+                              "door_ids": [34, 38]}, # Parlor
     "Nana's Room":           {"room_no": 46, "pos_x": 173.368210, "pos_y": 550, "pos_z": -4615.553220,
-                              "key": ["Nana's Room Key", "Upper 2F Stairwell Key"], "door_keys": ["Nana's Room Key"]}, # Nana
+                              "key": ["Nana's Room Key", "Upper 2F Stairwell Key"], "door_keys": ["Nana's Room Key"],
+                              "door_ids": [49]}, # Nana
 }
 
 exp_spawns: dict[str,dict[str, int]] = {
