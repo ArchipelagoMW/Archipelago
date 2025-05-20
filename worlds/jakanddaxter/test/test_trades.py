@@ -23,8 +23,8 @@ class TradesCostEverythingTest(JakAndDaxterTestBase):
     options = {
         "enable_orbsanity": 2,
         "global_orbsanity_bundle_size": 5,
-        "citizen_orb_trade_amount": 222,
-        "oracle_orb_trade_amount": 0
+        "citizen_orb_trade_amount": 120,
+        "oracle_orb_trade_amount": 150
     }
 
     def test_orb_items_are_progression(self):
