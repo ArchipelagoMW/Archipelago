@@ -13,7 +13,7 @@ class MissionOrderObjectSlotData(Protocol):
     entry_rule: SubRuleRuleData
 
 @dataclass
-class CampaignSlotData(MissionOrderObjectSlotData):
+class CampaignSlotData:
     name: str
     entry_rule: SubRuleRuleData
     exits: List[int]
@@ -25,7 +25,7 @@ class CampaignSlotData(MissionOrderObjectSlotData):
 
 
 @dataclass
-class LayoutSlotData(MissionOrderObjectSlotData):
+class LayoutSlotData:
     name: str
     entry_rule: SubRuleRuleData
     exits: List[int]
@@ -37,7 +37,7 @@ class LayoutSlotData(MissionOrderObjectSlotData):
 
 
 @dataclass
-class MissionSlotData(MissionOrderObjectSlotData):
+class MissionSlotData:
     mission_id: int
     prev_mission_ids: List[int]
     entry_rule: SubRuleRuleData
