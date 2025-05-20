@@ -274,7 +274,6 @@ class WargrooveContext(CommonContext):
                 filename = f"seed{i}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(str(random.randint(0, 4294967295)))
-                    pass
 
         if cmd in {"RoomInfo"}:
             self.seed_name = args["seed_name"]
