@@ -1,16 +1,8 @@
 import functools
-from typing import Union, Any, Iterable
+from typing import Any, Iterable
 
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .grind_logic import GrindLogicMixin
-from .harvesting_logic import HarvestingLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .requirement_logic import RequirementLogicMixin
-from .tool_logic import ToolLogicMixin
+from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
@@ -24,8 +16,7 @@ class SourceLogicMixin(BaseLogicMixin):
         self.source = SourceLogic(*args, **kwargs)
 
 
-class SourceLogic(BaseLogic[Union[SourceLogicMixin, HasLogicMixin, ReceivedLogicMixin, HarvestingLogicMixin, MoneyLogicMixin, RegionLogicMixin,
-ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
+class SourceLogic(BaseLogic):
 
     def has_access_to_item(self, item: GameItem):
         rules = []
@@ -80,6 +71,14 @@ ArtisanLogicMixin, ToolLogicMixin, RequirementLogicMixin, GrindLogicMixin]]):
     @has_access_to.register
     def _(self, source: HarvestCropSource):
         return self.logic.harvesting.can_harvest_crop_from(source)
+
+    @has_access_to.register
+    def _(self, source: IncubatorSource):
+        return self.logic.animal.can_incubate(source.egg_item)
+
+    @has_access_to.register
+    def _(self, source: OstrichIncubatorSource):
+        return self.logic.animal.can_ostrich_incubate(source.egg_item)
 
     @has_access_to.register
     def _(self, source: MachineSource):

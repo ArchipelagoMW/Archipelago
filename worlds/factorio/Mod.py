@@ -63,7 +63,7 @@ recipe_time_ranges = {
 }
 
 
-class FactorioModFile(worlds.Files.APContainer):
+class FactorioModFile(worlds.Files.APPlayerContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
     writing_tasks: List[Callable[[], Tuple[str, Union[str, bytes]]]]
