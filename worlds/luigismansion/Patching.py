@@ -1765,7 +1765,7 @@ def update_boo_table(telesa_info, output_data):
         if output_data["Options"]["boo_health_option"] == 0:
             x["str_hp"] = output_data["Options"]["boo_health_value"]
         elif output_data["Options"]["boo_health_option"] == 1:
-            x["str_hp"] = randint(1,999)
+            x["str_hp"] = randint(1,output_data["Options"]["boo_health_value"])
         elif output_data["Options"]["boo_health_option"] == 2:
             for loc_name, loc_info in output_data["Locations"].items():
                 if loc_info["room_no"] != x["init_room"] or loc_info["type"] != "Boo":
