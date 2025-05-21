@@ -1998,7 +1998,7 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
 
     candidate_accessible_objects: typing.List[MissionOrderObjectSlotData] = [
         mission_order_object for mission_order_object in mission_order_objects
-        if mission_order_object.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
+        if mission_order_object.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules)
     ]
 
     accessible_objects: typing.List[MissionOrderObjectSlotData] = []
@@ -2011,9 +2011,9 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         accessible_objects_to_add: typing.List[MissionOrderObjectSlotData] = []
         for mission_order_object in candidate_accessible_objects:
             if (
-                    mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
+                    mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules)
                     and all([
-                        parent_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
+                        parent_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules)
                         for parent_object in parent_objects[mission_order_objects.index(mission_order_object)]
                     ])
             ):
