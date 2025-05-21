@@ -48,8 +48,9 @@ class GlobalOrbsanityBundleSize(Choice):
     """The orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
     There are 2000 orbs in the game, so your bundle size must be a factor of 2000.
 
-    Multiplayer Minimum: 10
-    Multiplayer Maximum: 200"""
+    This value is restricted to safe minimum and maximum values to ensure valid singleplayer games and
+    non-disruptive multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options
+    in host.yaml."""
     display_name = "Global Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
@@ -80,7 +81,9 @@ class PerLevelOrbsanityBundleSize(Choice):
     """The orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
     There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50.
 
-    Multiplayer Minimum: 10"""
+    This value is restricted to safe minimum and maximum values to ensure valid singleplayer games and
+    non-disruptive multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options
+    in host.yaml."""
     display_name = "Per Level Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
