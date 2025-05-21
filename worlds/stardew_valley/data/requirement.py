@@ -47,8 +47,14 @@ class QuestRequirement(Requirement):
 
 
 @dataclass(frozen=True)
-class RelationshipRequirement(Requirement):
+class SpecificFriendRequirement(Requirement):
     npc: str
+    hearts: int
+
+
+@dataclass(frozen=True)
+class NumberOfFriendsRequirement(Requirement):
+    friends: int
     hearts: int
 
 
@@ -78,6 +84,21 @@ class EggHuntRequirement(Requirement):
 
 
 @dataclass(frozen=True)
+class FishingCompetitionRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
+class LuauDelightRequirementRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
+class MovieRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
 class ForgeInfinityWeaponRequirement(Requirement):
     pass
 
@@ -85,6 +106,7 @@ class ForgeInfinityWeaponRequirement(Requirement):
 @dataclass(frozen=True)
 class CaughtFishRequirement(Requirement):
     number_fish: int
+    unique_fish: bool
 
 
 @dataclass(frozen=True)
@@ -96,6 +118,62 @@ class MuseumCompletionRequirement(Requirement):
 class FullShipmentRequirement(Requirement):
     pass
 
+
 @dataclass(frozen=True)
 class BuildingRequirement(Requirement):
     building: str
+
+
+@dataclass(frozen=True)
+class CookedRecipesRequirement(Requirement):
+    number_of_recipes: int
+
+
+@dataclass(frozen=True)
+class CraftedItemsRequirement(Requirement):
+    number_of_recipes: int
+
+
+@dataclass(frozen=True)
+class HelpWantedRequirement(Requirement):
+    number_of_quests: int
+
+
+@dataclass(frozen=True)
+class ShipOneCropRequirement(Requirement):
+    number: int
+
+
+@dataclass(frozen=True)
+class FinishedRaccoonsRequirement(Requirement):
+    number_of_requests: int
+
+
+@dataclass(frozen=True)
+class PrizeMachineRequirement(Requirement):
+    number_of_tickets: int
+
+
+@dataclass(frozen=True)
+class AllAchievementsRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
+class PerfectionPercentRequirement(Requirement):
+    percent: int
+
+
+@dataclass(frozen=True)
+class ReadAllBooksRequirement(Requirement):
+    pass
+
+
+@dataclass(frozen=True)
+class MinesRequirement(Requirement):
+    floor: int
+
+
+@dataclass(frozen=True)
+class DangerousMinesRequirement(Requirement):
+    floor: int

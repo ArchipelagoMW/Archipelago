@@ -5,7 +5,7 @@ from ..vanilla.ginger_island import ginger_island_content_pack as ginger_island_
 from ...data import villagers_data, fish_data
 from ...data.game_item import ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.requirement import YearRequirement, CombatRequirement, RelationshipRequirement, ToolRequirement, SkillRequirement, FishingRequirement
+from ...data.requirement import YearRequirement, CombatRequirement, SpecificFriendRequirement, ToolRequirement, SkillRequirement, FishingRequirement
 from ...data.shop import ShopSource
 from ...mods.mod_data import ModNames
 from ...strings.craftable_names import ModEdible
@@ -89,7 +89,7 @@ register_mod_content_pack(SVEContentPack(
         ModEdible.gravity_elixir: (ShopSource(price=4000, shop_region=SVERegion.galmoran_outpost),),
         SVEMeal.grampleton_orange_chicken: (ShopSource(price=650,
                                                        shop_region=Region.saloon,
-                                                       other_requirements=(RelationshipRequirement(ModNPC.sophia, 6),)),),
+                                                       other_requirements=(SpecificFriendRequirement(ModNPC.sophia, 6),)),),
         ModEdible.hero_elixir: (ShopSource(price=8000, shop_region=SVERegion.isaac_shop),),
         ModEdible.aegis_elixir: (ShopSource(price=28000, shop_region=SVERegion.galmoran_outpost),),
         SVEBeverage.sports_drink: (ShopSource(price=750, shop_region=Region.hospital),),

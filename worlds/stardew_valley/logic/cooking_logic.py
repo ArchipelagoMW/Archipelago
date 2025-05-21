@@ -3,7 +3,7 @@ from functools import cached_property
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
-    QueenOfSauceSource, CookingRecipe, ShopFriendshipSource
+    QueenOfSauceSource, CookingRecipe, ShopFriendshipSource, all_cooking_recipes
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..options import Chefsanity
 from ..stardew_rule import StardewRule, True_, False_
@@ -79,3 +79,13 @@ class CookingLogic(BaseLogic):
     @cache_self1
     def received_recipe(self, meal_name: str):
         return self.logic.received(f"{meal_name} Recipe")
+
+    def can_have_cooked_recipes(self, number: int) -> StardewRule:
+        if number <= 0:
+            return self.logic.true_
+        recipe_rules = []
+        for recipe in all_cooking_recipes:
+            recipe_rules.append(self.can_cook(recipe))
+        number = min(len(recipe_rules), number)
+        return self.logic.count(number, *recipe_rules)
+

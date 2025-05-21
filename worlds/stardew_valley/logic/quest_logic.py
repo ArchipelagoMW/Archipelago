@@ -125,3 +125,8 @@ class QuestLogic(BaseLogic):
             # 3 - Raccoon's wife opens the shop
             return self.logic.received(CommunityUpgrade.raccoon, 3)
         return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)
+
+    def can_complete_help_wanteds(self, number: int) -> StardewRule:
+        number_per_month = 7
+        number_monts = number // number_per_month
+        return self.logic.time.has_lived_months(number_monts)

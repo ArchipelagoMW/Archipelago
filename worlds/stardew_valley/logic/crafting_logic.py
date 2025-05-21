@@ -1,7 +1,7 @@
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .. import options
-from ..data.craftable_data import CraftingRecipe
+from ..data.craftable_data import CraftingRecipe, all_crafting_recipes
 from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSource, LogicSource, SpecialOrderSource, \
     FestivalShopSource, QuestSource, StarterSource, ShopSource, SkillSource, MasterySource, FriendshipSource, SkillCraftsanitySource
 from ..options import Craftsanity, SpecialOrderLocations
@@ -83,3 +83,12 @@ class CraftingLogic(BaseLogic):
     @cache_self1
     def received_recipe(self, item_name: str):
         return self.logic.received(f"{item_name} Recipe")
+
+    def can_have_crafted_recipes(self, number: int) -> StardewRule:
+        if number <= 0:
+            return self.logic.true_
+        recipe_rules = []
+        for recipe in all_crafting_recipes:
+            recipe_rules.append(self.can_craft(recipe))
+        number = min(len(recipe_rules), number)
+        return self.logic.count(number, *recipe_rules)

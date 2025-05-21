@@ -2,11 +2,18 @@ import functools
 from typing import Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from ..data.game_item import Requirement
-from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, CombatRequirement, QuestRequirement, \
-    RelationshipRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement, GrangeDisplayRequirement, \
-    ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, FullShipmentRequirement
-from ..strings.region_names import Region
+from ..data.game_item import Requirement, ItemTag
+from ..data.requirement import ToolRequirement, BookRequirement, SkillRequirement, SeasonRequirement, YearRequirement, \
+    CombatRequirement, QuestRequirement, \
+    SpecificFriendRequirement, FishingRequirement, WalnutRequirement, RegionRequirement, TotalEarningsRequirement, \
+    GrangeDisplayRequirement, \
+    ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, \
+    BuildingRequirement, FullShipmentRequirement, NumberOfFriendsRequirement, FishingCompetitionRequirement, \
+    LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
+    HelpWantedRequirement, ShipOneCropRequirement, FinishedRaccoonsRequirement, PrizeMachineRequirement, \
+    AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
+    DangerousMinesRequirement
+from ..strings.region_names import Region, LogicRegion
 
 
 class RequirementLogicMixin(BaseLogicMixin):
@@ -63,8 +70,12 @@ class RequirementLogic(BaseLogic):
         return self.logic.quest.can_complete_quest(requirement.quest)
 
     @meet_requirement.register
-    def _(self, requirement: RelationshipRequirement):
+    def _(self, requirement: SpecificFriendRequirement):
         return self.logic.relationship.has_hearts(requirement.npc, requirement.hearts)
+
+    @meet_requirement.register
+    def _(self, requirement: NumberOfFriendsRequirement):
+        return self.logic.relationship.has_hearts_with_n(requirement.friends, requirement.hearts)
 
     @meet_requirement.register
     def _(self, requirement: FishingRequirement):
@@ -76,11 +87,19 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: GrangeDisplayRequirement):
-        return self.logic.festival.can_succeed_grange_display()
+        return self.logic.region.can_reach(LogicRegion.fair) & self.logic.festival.can_get_grange_display_max_score()
 
     @meet_requirement.register
     def _(self, requirement: EggHuntRequirement):
-        return self.logic.festival.can_win_egg_hunt()
+        return self.logic.region.can_reach(LogicRegion.egg_festival) & self.logic.festival.can_win_egg_hunt()
+
+    @meet_requirement.register
+    def _(self, requirement: FishingCompetitionRequirement):
+        return self.logic.region.can_reach(LogicRegion.festival_of_ice) & self.logic.festival.can_win_fishing_competition()
+
+    @meet_requirement.register
+    def _(self, requirement: LuauDelightRequirementRequirement):
+        return self.logic.region.can_reach(LogicRegion.luau) & self.logic.festival.can_get_luau_soup_delight()
 
     @meet_requirement.register
     def _(self, requirement: ForgeInfinityWeaponRequirement):
@@ -88,7 +107,9 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: CaughtFishRequirement):
-        return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
+        if requirement.unique_fish:
+            return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
+        return self.logic.fishing.can_catch_many_fish(requirement.number_fish / 10) & self.logic.time.has_lived_months(requirement.number_fish / 20)
 
     @meet_requirement.register
     def _(self, requirement: MuseumCompletionRequirement):
@@ -101,3 +122,55 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: BuildingRequirement):
         return self.logic.building.has_building(requirement.building)
+
+    @meet_requirement.register
+    def _(self, requirement: MovieRequirement):
+        return self.logic.region.can_reach(Region.movie_theater)
+
+    @meet_requirement.register
+    def _(self, requirement: CookedRecipesRequirement):
+        return self.logic.cooking.can_have_cooked_recipes(requirement.number_of_recipes)
+
+    @meet_requirement.register
+    def _(self, requirement: CraftedItemsRequirement):
+        return self.logic.crafting.can_have_crafted_recipes(requirement.number_of_recipes)
+
+    @meet_requirement.register
+    def _(self, requirement: HelpWantedRequirement):
+        return self.logic.quest.can_complete_help_wanteds(requirement.number_of_quests)
+
+    @meet_requirement.register
+    def _(self, requirement: ShipOneCropRequirement):
+        crops = self.content.find_tagged_items(ItemTag.CROPSANITY)
+        crop_rules = [self.logic.shipping.can_ship(crop.name) for crop in crops]
+        return self.logic.and_(*crop_rules)
+
+    @meet_requirement.register
+    def _(self, requirement: FinishedRaccoonsRequirement):
+        return self.logic.region.can_reach_location(f"Raccoon Request {requirement.number_of_requests}")
+
+    @meet_requirement.register
+    def _(self, requirement: PrizeMachineRequirement):
+        return self.logic.grind.can_grind_prize_tickets(requirement.number_of_tickets)
+
+    @meet_requirement.register
+    def _(self, requirement: AllAchievementsRequirement):
+        return self.logic.goal.can_complete_perfection() & self.logic.has_progress_percent(100)
+
+    @meet_requirement.register
+    def _(self, requirement: PerfectionPercentRequirement):
+        return self.logic.goal.can_complete_perfection()
+
+    @meet_requirement.register
+    def _(self, requirement: ReadAllBooksRequirement):
+        books = self.content.find_tagged_items(ItemTag.BOOK_POWER)
+        book_rules = [self.logic.book.has_book_power(book.name) for book in books]
+        return self.logic.and_(*book_rules)
+
+    @meet_requirement.register
+    def _(self, requirement: MinesRequirement):
+        return self.logic.mine.can_progress_in_the_mines_from_floor(requirement.floor)
+
+    @meet_requirement.register
+    def _(self, requirement: DangerousMinesRequirement):
+        return self.logic.region.can_reach(Region.dangerous_mines_100) & self.logic.mine.has_mine_elevator_to_floor(requirement.floor)

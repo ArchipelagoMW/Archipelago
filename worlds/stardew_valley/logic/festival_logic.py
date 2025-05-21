@@ -122,6 +122,9 @@ class FestivalLogic(BaseLogic):
     def can_succeed_luau_soup(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
+        return self.can_get_luau_soup_delight()
+
+    def can_get_luau_soup_delight(self) -> StardewRule:
         eligible_fish = (Fish.blobfish, Fish.crimsonfish, Fish.ice_pip, Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish,
                          Fish.mutant_carp, Fish.spookfish, Fish.stingray, Fish.sturgeon, Fish.super_cucumber)
         fish_rule = self.logic.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
@@ -137,7 +140,9 @@ class FestivalLogic(BaseLogic):
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
+        return self.can_get_grange_display_max_score()
 
+    def can_get_grange_display_max_score(self) -> StardewRule:
         # Other animal products are not counted in the animal product category
         good_animal_products = [
             AnimalProduct.duck_egg, AnimalProduct.duck_feather, AnimalProduct.egg, AnimalProduct.goat_milk, AnimalProduct.golden_egg, AnimalProduct.large_egg,
