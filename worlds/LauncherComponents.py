@@ -232,8 +232,6 @@ components: List[Component] = [
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
