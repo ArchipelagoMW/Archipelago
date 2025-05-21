@@ -2002,8 +2002,6 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     ]
 
     accessible_objects: typing.List[MissionOrderObjectSlotData] = []
-    for mission_order_object in mission_order_objects:
-        mission_order_object.entry_rule.buffer_accessible = False
 
     while len(candidate_accessible_objects) > 0:
         accessible_missions: typing.List[MissionSlotData] = [mission_order_object for mission_order_object in accessible_objects if isinstance(mission_order_object, MissionSlotData)]
