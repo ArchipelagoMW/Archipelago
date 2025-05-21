@@ -78,7 +78,7 @@ entrance_friendly_names: Dict[CandyBox2Room, str] = {
     CandyBox2Room.LONELY_HOUSE: "World Map: The Lonely House",
     CandyBox2Room.DIG_SPOT: "World Map: The Secret Dig Spot",
     CandyBox2Room.DESERT_FORTRESS: "World Map: The Desert Fortress",
-    CandyBox2Room.POGO_STICK_SPOT: "World Map: Finding the Pogo Stick",
+    CandyBox2Room.POGO_STICK_SPOT: "World Map: The Mountains",
     CandyBox2Room.SORCERESS_HUT: "World Map: The Sorceress' Hut",
     CandyBox2Room.WISHING_WELL: "World Map: The Wishing Well",
     CandyBox2Room.CAVE: "World Map: The Cave",
