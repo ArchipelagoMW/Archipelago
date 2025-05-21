@@ -1417,7 +1417,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                         emerald_amount = item_amt
                     elif "Ruby" in item_data["name"]:
                         ruby_amount = item_amt
-                    elif "Diamond" in item_data["name"]:
+                    elif item_data["name"] == "Diamond":
                         diamond_amount = item_amt
                     elif "Gold Diamond" in item_data["name"]:
                         rdiamond_amount = item_amt
