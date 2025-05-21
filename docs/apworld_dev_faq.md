@@ -140,3 +140,43 @@ So when the game itself does not follow this assumption, the options are:
   - For connections, any logical regions will still need to be reachable through other, *repeatable* connections
   - For locations, this may require game changes to remove the vanilla item if it affects logic
 - Decide that resetting the save file is part of the game's logic, and warn players about that
+
+---
+
+### What are "local" vs "remote items", and what are the pros and cons of each?
+
+This topic often gets confusing because these terms refer to multiple things:
+
+- Whether an item happens to get placed in the same slot it originates from, or a different slot. To avoid confusion 
+below, I'll call these "locally placed" and "remotely placed" items.
+- Whether an AP client implements location checking for locally placed items by skipping the usual AP server roundtrip
+and immediately/directly giving those items to the player, or does the AP server roundtrip either way. I'll call these
+"locally implemented" items and "remotely implemented" items.
+  - Locally implementing items requires the AP client to know what the locally placed items were without asking an AP
+    server. Typically, it gets that information from a patch file, which is one reason why games that already need a
+    patch file are more likely to choose local items.
+- [The `items_handling` bitflags in the Connect packet](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#items_handling-flags).
+Typically, AP clients with locally implemented items will set only the "from other worlds" flag, while clients with
+remotely implemented items will also set the "from your own world" flag.
+
+When people talk about "local vs remote items" as a choice that world devs have to make, they mean deciding whether
+your client will locally or remotely implement the locally placed items in its slot.
+
+There's also a common misconception we have to prevent: Many games would like to display an item using its in-game
+sprite/model/name/etc. if it happens to be locally placed. It's often incorrectly assumed that features like this
+require locally implemented items, but they can also be done with [location scouts](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#LocationScouts).
+
+With that out of the way, the major pros and cons of local(ly implemented) vs remote(ly implemented) items are:
+
+- Remote items are simpler. Since the whole point of a multi-game multiworld randomizer is that some items are going to
+  be remotely placed, the choice isn't "local vs remote" but rather "mixed local/remote vs all remote". Naturally,
+  handling every item/location the same way will usually be simpler.
+- Remote items allow for "same slot co-op". That's when two players on two different machines connect to the same slot and
+  play together. This only works if both players receive all the items in that slot, which requires those items to go
+  through an AP server.
+- Local items allow a solo (single slot) multiworld to be played entirely offline, with no AP server. This is similar to
+  a "standalone"/non-AP randomizer, except that you still get AP's player options, generation, etc. for free.
+
+Also keep in mind that not every slot you generate has to choose the same strategy. You can even let the player choose
+in their yaml options which strategy they prefer, especially if you want to support both same slot co-op and offline
+solo play.
