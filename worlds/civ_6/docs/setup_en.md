@@ -14,22 +14,17 @@ The following are required in order to play Civ VI in Archipelago:
 
 ## Enabling the tuner
 
-Depending on how you installed Civ 6 you will have to navigate to one of the following:
-
-- `YOUR_USER/Documents/My Games/Sid Meier's Civilization VI/AppOptions.txt`
-- `YOUR_USER/AppData/Local/Firaxis Games/Sid Meier's Civilization VI/AppOptions.txt`
-
-Once you have located your `AppOptions.txt`, do a search for `Enable FireTuner`. Set `EnableTuner` to `1` instead of `0`. **NOTE**: While this is active, achievements will be disabled.
+In the main menu, navigate to the "Game Options" page. On the "Game" menu, make sure that "Tuner (disables achievements)" is enabled.
 
 ## Mod Installation
 
 1. Download and unzip the latest release of the mod from [GitHub](https://github.com/hesto2/civilization_archipelago_mod/releases/latest).
 
-2. Copy the folder containing the mod files to your Civ VI mods folder. On Windows, this is usually located at `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods`.
+2. Copy the folder containing the mod files to your Civ VI mods folder. On Windows, this is usually located at `C:\Users\YOUR_USER\Documents\My Games\Sid Meier's Civilization VI\Mods`. If you use OneDrive, check if the folder is instead located in your OneDrive file structure.
 
 3. After the Archipelago host generates a game, you should be given a `.apcivvi` file. Associate the file with the Archipelago Launcher and double click it.
 
-4. Copy the contents of the new folder it generates (it will have the same name as the `.apcivvi` file) into your Civilization VI Archipelago Mod folder.
+4. Copy the contents of the new folder it generates (it will have the same name as the `.apcivvi` file) into your Civilization VI Archipelago Mod folder. If double clicking the `.apcivvi` file doesn't generate a folder, you can just rename it to a file ending with `.zip` and extract its contents to a new folder. To do this, right click the `.apcivvi` file and click "Rename", make sure it ends in `.zip`, then right click it again and select "Extract All".
 
 5. Your finished mod folder should look something like this:
 
