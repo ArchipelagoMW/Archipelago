@@ -13,13 +13,11 @@ class Goal(Choice):
     
     Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs.
     
-    True Astley: Defeat Astley but more somehow.
-
     Clamshells: Collect enough clamshells for the clam lover.
     """
     display_name = "Goal"
     option_astley = 0
-    option_true_astley = 1
+    #option_true_astley = 1 True Astley: Defeat Astley but more somehow.
     option_clamshells = 2
     default = 0
 
@@ -120,7 +118,7 @@ class IncludedRegions(Choice):
     default = 3
 
 #"""Progression Options"""
-class LevelGating(Toggle):
+class LevelGating(DefaultOnToggle):
     """
     When enabled, the parties maximum level will be capped, with items in the pool increasing that cap.
     Areas in the game will be considered out of logic (but still accessible) if the party level cap is below the area level.

@@ -399,16 +399,16 @@ class CrystalProjectWorld(World):
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
             win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
-        elif self.options.goal == self.options.goal.option_true_astley:
-            win_condition_item = "Item - Old World Stone"
+        #elif self.options.goal == self.options.goal.option_true_astley:
+        #    win_condition_item = "Item - Old World Stone"
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
         
         if self.options.goal == 0:
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-        if self.options.goal == 1:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
-        if self.options.goal == 2:
+        #elif self.options.goal == 1:
+        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
+        elif self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
