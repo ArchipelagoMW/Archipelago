@@ -27,8 +27,8 @@ from NetUtils import ClientStatus
 # Jak imports
 from .game_id import jak1_name
 from .options import EnableOrbsanity
-from .client.memory_reader import JakAndDaxterMemoryReader
-from .client.repl_client import JakAndDaxterReplClient
+from .agents.memory_reader import JakAndDaxterMemoryReader
+from .agents.repl_client import JakAndDaxterReplClient
 from . import JakAndDaxterWorld
 
 
