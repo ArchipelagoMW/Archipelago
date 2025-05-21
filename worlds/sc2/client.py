@@ -1982,15 +1982,19 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         received_items[network_item.item] += 1
 
     mission_order_objects: typing.List[MissionOrderObjectSlotData] = []
+    parent_objects: typing.List[typing.List[MissionOrderObjectSlotData]] = []
     for campaign in ctx.custom_mission_order:
         mission_order_objects.append(campaign)
+        parent_objects.append([])
         for layout in campaign.layouts:
             mission_order_objects.append(layout)
+            parent_objects.append([campaign])
             for column in layout.missions:
                 for mission in column:
                     if mission.mission_id == -1:
                         continue
                     mission_order_objects.append(mission)
+                    parent_objects.append([campaign, layout])
 
     candidate_accessible_objects: typing.List[MissionOrderObjectSlotData] = [
         mission_order_object for mission_order_object in mission_order_objects
@@ -2006,7 +2010,13 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
         beaten_accessible_missions: typing.Set[int] = {mission.mission_id for mission in accessible_missions if mission.mission_id in beaten_missions}
         accessible_objects_to_add: typing.List[MissionOrderObjectSlotData] = []
         for mission_order_object in candidate_accessible_objects:
-            if mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True):
+            if (
+                    mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
+                    and all([
+                        parent_object.entry_rule.is_accessible(beaten_accessible_missions, received_items, ctx.mission_id_to_entry_rules, set(), [], True)
+                        for parent_object in parent_objects[mission_order_objects.index(mission_order_object)]
+                    ])
+            ):
                 accessible_objects_to_add.append(mission_order_object)
         if len(accessible_objects_to_add) > 0:
             accessible_objects.extend(accessible_objects_to_add)
