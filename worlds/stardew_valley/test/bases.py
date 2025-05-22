@@ -293,12 +293,12 @@ def setup_multiworld(test_options: Iterable[Dict[str, int]] = None, seed=None) -
     multiworld = MultiWorld(len(test_options))
     multiworld.player_name = {}
     multiworld.set_seed(seed)
-    multiworld.state = CollectionState(multiworld)
     for i in range(1, len(test_options) + 1):
         multiworld.game[i] = StardewValleyWorld.game
         multiworld.player_name.update({i: f"Tester{i}"})
     args = fill_namespace_with_default(test_options)
     multiworld.set_options(args)
+    multiworld.state = CollectionState(multiworld)
 
     for step in gen_steps:
         call_all(multiworld, step)
