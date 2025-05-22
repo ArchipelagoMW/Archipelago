@@ -25,7 +25,7 @@ components.append(Component("Trackmania Client", "TrackmaniaClient", func=launch
                             component_type=Type.CLIENT, icon=icon))
 
 class Webmania(WebWorld):
-    theme = "ice"
+    theme = "grassFlowers"
     option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",

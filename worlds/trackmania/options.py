@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime  # for custom_series: uploaded_before and uploaded_after
 from schema import Schema, And, Or, Optional  # for custom series validation
 from typing import List, Dict, Any
-from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility, PlandoItems
+from Options import Toggle, Range, OptionSet, OptionDict, PerGameCommonOptions, OptionGroup, ProgressionBalancing, Accessibility, Visibility#, PlandoItems
 from .data import get_all_map_tags, get_excluded_map_tags, get_all_map_difficulties, get_default_map_difficulties
 
 #https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/options%20api.md
@@ -247,7 +247,7 @@ option_groups: Dict[str, List[Any]] = {
     "Difficulty":[TargetTime, SkipPercentage, DiscountPercentage, MapDifficulties],
     "Campaign Configuration":[MedalRequirement, ProgressiveTargetTimeChance, SeriesNumber, SeriesMinimumMapNumber, SeriesMaximumMapNumber],
     "Map Search Settings":[MapTagsInclusive, RandomSeriesTags, HasAward, MapTags, MapETags],
-    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries, PlandoItems]
+    "Advanced":[FirstSeriesSize, DisableBronzeLocations, DisableSilverLocations, DisableGoldLocations, DisableAuthorLocations, CustomSeries]#, PlandoItems]
 }
 
 def create_option_groups() -> List[OptionGroup]:
