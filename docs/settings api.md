@@ -133,11 +133,11 @@ Checks the file against [md5s](#md5s) by default.
 
 Resolves to an executable (varying file extension based on platform)
 
-#### description: str \| None
+#### description: str | None
 
 Human-readable name to use in file browser
 
-#### copy_to: str \| None
+#### copy_to: str | None
 
 Instead of storing the path, copy the file.
 
