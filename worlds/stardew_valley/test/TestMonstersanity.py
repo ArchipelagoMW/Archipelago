@@ -1,7 +1,7 @@
 import unittest
 from typing import ClassVar
 
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import options
 from ..locations import LocationTags, location_table
 from ..mods.mod_data import ModNames
