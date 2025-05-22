@@ -1,7 +1,7 @@
 from collections import Counter
 
-from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestBase
 from .. import options
 
 
@@ -13,7 +13,7 @@ class TestStartInventoryStandardFarm(WorldAssertMixin, SVTestBase):
     def test_start_inventory_progressive_coops(self):
         start_items = Counter((i.name for i in self.multiworld.precollected_items[self.player]))
         items = Counter((i.name for i in self.multiworld.itempool))
-        
+
         self.assertIn("Progressive Coop", items)
         self.assertEqual(items["Progressive Coop"], 3)
         self.assertNotIn("Progressive Coop", start_items)
