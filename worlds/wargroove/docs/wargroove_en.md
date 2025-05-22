@@ -2,8 +2,8 @@
 
 ## Required Files
 
-- Wargroove with the Double Trouble DLC installed through Steam on Windows
-  - Only the Steam Windows version is supported. MAC, Switch, Xbox, and Playstation are not supported.
+- Wargroove with the Double Trouble DLC installed through Steam on Windows and Linux
+  - Only the Steam versions on Windows and Linux are supported. MAC, Switch, Xbox, and Playstation are not supported.
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ## Backup playerProgress files
@@ -22,6 +22,16 @@ is strongly recommended in case they become corrupted.
    - Paste the path in between the quotes next to `root_directory:` in the `host.yaml`.
    - You may have to replace all single \\ with \\\\.
 4. Start the Wargroove client.
+
+## Linux Only: Select AppData equivalent when starting the client
+1. Shut down Wargroove if it is open.
+2. Start the ArchipelagoWargrooveClient from the Archipelago installation.
+3. A file select dialogue will appear, claiming it cannot detect a path to the AppData folder.
+4. Navigate to your Steam install directory and select .
+`/steamapps/compatdata/607050/pfx/drive_c/users/steamuser/AppData/Roaming` as the save directory.
+5. Using a default Steam install path, the full AppData path is
+`~/.steam/steam/steamapps/compatdata/607050/pfx/drive_c/users/steamuser/AppData/Roaming`.
+6. The client should start.
 
 ## Installing the Archipelago Wargroove Mod and Campaign files
 
