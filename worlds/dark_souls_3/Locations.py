@@ -732,8 +732,9 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         missable=True),  # requires projectile
         DS3LocationData("US: Flame Stoneplate Ring - hanging corpse by Mound-Maker transport",
                         "Flame Stoneplate Ring"),
-        DS3LocationData("US: Red and White Shield - chasm, hanging corpse", "Red and White Shield",
-                        static="02,0:53100740::", missable=True),  # requires projectile
+        DS3LocationData("US: Red and White Round Shield - chasm, hanging corpse",
+                        "Red and White Round Shield", static="02,0:53100740::",
+                        missable=True),  # requires projectile
         DS3LocationData("US: Small Leather Shield - first building, hanging corpse by entrance",
                         "Small Leather Shield"),
         DS3LocationData("US: Pale Tongue - tower village, hanging corpse", "Pale Tongue"),
