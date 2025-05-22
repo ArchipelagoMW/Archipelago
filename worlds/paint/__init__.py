@@ -68,8 +68,8 @@ class PaintWorld(World):
         pre_filled = len(items_to_create)
         to_fill = len(self.get_region("Canvas").locations)
         if pre_filled > to_fill:
-            raise OptionError(f"{self.player_name}'s Paint world has too few locations for its required items."
-                              f"Consider adding more locations by raising logic percent or adding fractional checks."
+            raise OptionError(f"{self.player_name}'s Paint world has too few locations for its required items. "
+                              f"Consider adding more locations by raising logic percent or adding fractional checks. "
                               f"Alternatively, increasing the canvas size increment will require fewer items.")
         while len(items_to_create) < (to_fill - pre_filled) * (self.options.trap_count / 100) + pre_filled:
             if self.options.death_link:
