@@ -38,7 +38,7 @@ from .options import (
     SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
     DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders
 )
-from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData
+from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
 from .mission_tables import MissionFlag
 from .transfer_data import normalized_unit_types
@@ -1975,30 +1975,78 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
     return mission_id_to_check in available_missions
 
 def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typing.Dict[int, typing.List[int]], typing.List[int]]:
-    available_missions: typing.List[int] = []
-    available_layouts: typing.Dict[int, typing.List[int]] = {}
-    available_campaigns: typing.List[int] = []
-
-    beaten_missions = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
+    beaten_missions: typing.Set[int] = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
     received_items: typing.Dict[int, int] = {}
     for network_item in ctx.items_received:
         received_items.setdefault(network_item.item, 0)
         received_items[network_item.item] += 1
 
-    accessible_rules: typing.Set[int] = set()
-    for campaign_idx, campaign in enumerate(ctx.custom_mission_order):
-        available_layouts[campaign_idx] = []
-        if campaign.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
-            available_campaigns.append(campaign_idx)
-            for layout_idx, layout in enumerate(campaign.layouts):
-                if layout.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
-                    available_layouts[campaign_idx].append(layout_idx)
-                    for column in layout.missions:
-                        for mission in column:
-                            if mission.mission_id == -1:
-                                continue
-                            if mission.entry_rule.is_accessible(beaten_missions, received_items, ctx.mission_id_to_entry_rules, accessible_rules, []):
-                                available_missions.append(mission.mission_id)
+    mission_order_objects: typing.List[MissionOrderObjectSlotData] = []
+    parent_objects: typing.List[typing.List[MissionOrderObjectSlotData]] = []
+    for campaign in ctx.custom_mission_order:
+        mission_order_objects.append(campaign)
+        parent_objects.append([])
+        for layout in campaign.layouts:
+            mission_order_objects.append(layout)
+            parent_objects.append([campaign])
+            for column in layout.missions:
+                for mission in column:
+                    if mission.mission_id == -1:
+                        continue
+                    mission_order_objects.append(mission)
+                    parent_objects.append([campaign, layout])
+
+    candidate_accessible_objects: typing.List[MissionOrderObjectSlotData] = [
+        mission_order_object for mission_order_object in mission_order_objects
+        if mission_order_object.entry_rule.is_accessible(beaten_missions, received_items)
+    ]
+
+    accessible_objects: typing.List[MissionOrderObjectSlotData] = []
+
+    while len(candidate_accessible_objects) > 0:
+        accessible_missions: typing.List[MissionSlotData] = [mission_order_object for mission_order_object in accessible_objects if isinstance(mission_order_object, MissionSlotData)]
+        beaten_accessible_missions: typing.Set[int] = {mission.mission_id for mission in accessible_missions if mission.mission_id in beaten_missions}
+        accessible_objects_to_add: typing.List[MissionOrderObjectSlotData] = []
+        for mission_order_object in candidate_accessible_objects:
+            if (
+                    mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items)
+                    and all([
+                        parent_object.entry_rule.is_accessible(beaten_accessible_missions, received_items)
+                        for parent_object in parent_objects[mission_order_objects.index(mission_order_object)]
+                    ])
+            ):
+                accessible_objects_to_add.append(mission_order_object)
+        if len(accessible_objects_to_add) > 0:
+            accessible_objects.extend(accessible_objects_to_add)
+            candidate_accessible_objects = [
+                mission_order_object for mission_order_object in candidate_accessible_objects
+                if mission_order_object not in accessible_objects_to_add
+            ]
+        else:
+            break
+
+    available_missions: typing.List[int] = [
+        mission_order_object.mission_id for mission_order_object in accessible_objects
+        if isinstance(mission_order_object, MissionSlotData)
+    ]
+    available_campaign_objects: typing.List[CampaignSlotData] = [
+        mission_order_object for mission_order_object in accessible_objects
+        if isinstance(mission_order_object, CampaignSlotData)
+    ]
+    available_campaigns: typing.List[int] = [
+        campaign_idx for campaign_idx, campaign in enumerate(ctx.custom_mission_order)
+        if campaign in available_campaign_objects
+    ]
+    available_layout_objects: typing.List[LayoutSlotData] = [
+        mission_order_object for mission_order_object in accessible_objects
+        if isinstance(mission_order_object, LayoutSlotData)
+    ]
+    available_layouts: typing.Dict[int, typing.List[int]] = {
+        campaign_idx: [
+            layout_idx for layout_idx, layout in enumerate(campaign.layouts) if layout in available_layout_objects
+        ]
+        for campaign_idx, campaign in enumerate(ctx.custom_mission_order)
+    }
 
     return available_missions, available_layouts, available_campaigns
 

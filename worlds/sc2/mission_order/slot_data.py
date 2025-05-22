@@ -4,10 +4,14 @@ Creating these is handled by the nodes they represent in .nodes.py.
 """
 
 from __future__ import annotations
-from typing import List
+from typing import List, Protocol
 from dataclasses import dataclass
 
 from .entry_rules import SubRuleRuleData
+
+class MissionOrderObjectSlotData(Protocol):
+    entry_rule: SubRuleRuleData
+
 
 @dataclass
 class CampaignSlotData:
