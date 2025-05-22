@@ -37,7 +37,9 @@ class PaintWorld(World):
 
     def generate_early(self) -> None:
         if self.options.canvas_size_increment < 50 and self.options.logic_percent <= 55:
-            self.multiworld.local_early_items[self.player]["Pick Color"] = 1
+            if self.multiworld.players == 1:
+                raise OptionError(f"Logic Percent must be greater than 55 when generating a single-player world with "
+                                  f"Canvas Size Increment below 50.")
 
     def get_filler_item_name(self) -> str:
         if self.random.randint(0, 99) >= self.options.trap_count:
