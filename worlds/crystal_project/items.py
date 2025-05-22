@@ -1,5 +1,8 @@
-from typing import Dict, Set, Tuple, NamedTuple, Optional, List
+from typing import Dict, Set, Tuple, NamedTuple, Optional, List, TYPE_CHECKING
 from BaseClasses import ItemClassification, Item
+
+if TYPE_CHECKING:
+    from . import CrystalProjectWorld
 
 class ItemData(NamedTuple):
     category: str
@@ -1646,13 +1649,3 @@ def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
         #world.logger.info(message)
 
     return len(job_crystal_dictionary)
-
-def job_count_in_pool(world: "CrystalProjectWorld", pool:list[Item]):
-    job_count:int = 0
-    for item in pool:
-        for job in job_list:
-            if job.name == item.name:
-                job_count += 1
-
-    return job_count
-
