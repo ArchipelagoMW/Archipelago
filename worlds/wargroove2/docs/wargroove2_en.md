@@ -9,7 +9,7 @@
 ## Installing the Archipelago Wargroove 2 Mod and Campaign files
 
 1. Shut down Wargroove 2 if it is open.
-2. Start the ArchipelagoWargroove2Client.exe from the Archipelago installation. 
+2. Start the Archipelago Wargroove 2 Client from the Archipelago Launcher. 
 This should install the mod and campaign for you.
 3. Start Wargroove 2.
 
@@ -26,7 +26,7 @@ This should install the mod and campaign for you.
 
 ## Linux Only: Select AppData equivalent when starting the client
 1. Shut down Wargroove 2 if it is open.
-2. Start the Wargroove 2 Client from the Archipelago Launcher.
+2. Start the Archipelago Wargroove 2 Client from the Archipelago Launcher.
 3. A file select dialogue will appear, claiming it cannot detect a path to the AppData folder.
 4. Navigate to your Steam install directory and select .
 `/steamapps/compatdata/1346020/pfx/drive_c/users/steamuser/AppData/Roaming` as the save directory.
