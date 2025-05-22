@@ -392,7 +392,7 @@ def run_gui(path: str, args: Any) -> None:
             if file and component:
                 run_component(component, file)
             else:
-                logging.warning(f"unable to identify component for {file}")
+                logging.warning(f"unable to identify component for {filename}")
 
         def _on_keyboard(self, window: Window, key: int, scancode: int, codepoint: str, modifier: list[str]):
             # Activate search as soon as we start typing, no matter if we are focused on the search box or not.
