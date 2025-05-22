@@ -80,10 +80,8 @@ def register():
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     # has automatic patch integration
-    import worlds.AutoWorld
     import worlds.Files
-    app.jinja_env.filters['is_applayercontainer'] = lambda game, data, player: \
-        worlds.Files.is_ap_player_container(data, game, player)
+    app.jinja_env.filters['is_applayercontainer'] = worlds.Files.is_ap_player_container
 
     from WebHostLib.customserver import run_server_process
     # to trigger app routing picking up on it
