@@ -328,9 +328,9 @@ class CommonContext:
 
     # internals
     _messagebox: typing.Optional["kvui.MessageBox"] = None
-    """current message box through kvui"""
+    """Current message box through kvui"""
     _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
-    """message box reporting a loss of connection"""
+    """Message box reporting a loss of connection"""
 
     def __init__(self, server_address: typing.Optional[str] = None, password: typing.Optional[str] = None) -> None:
         # server state
