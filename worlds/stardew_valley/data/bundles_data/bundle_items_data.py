@@ -460,7 +460,7 @@ rotten_plant = BundleItem(Decoration.rotten_plant)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
 
-infinity_crown = BundleItem(Hat.infinity_crown)
+infinity_crown = BundleItem(Hat.infinity_crown, source=BundleItem.Sources.content)
 bowler_hat = BundleItem(Hat.bowler)
 sombrero = BundleItem(Hat.sombrero)
 good_ol_cap = BundleItem(Hat.good_ol_cap)
