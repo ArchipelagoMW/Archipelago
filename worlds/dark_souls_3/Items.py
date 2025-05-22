@@ -511,7 +511,7 @@ _vanilla_items = [
     DS3ItemData("Elkhorn Round Shield",                0x0133C510, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Warrior's Round Shield",              0x0133EC20, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Caduceus Round Shield",               0x01341330, DS3ItemCategory.SHIELD_INFUSIBLE),
-    DS3ItemData("Red and White Shield",                0x01343A40, DS3ItemCategory.SHIELD_INFUSIBLE),
+    DS3ItemData("Red and White Round Shield",          0x01343A40, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Blessed Red and White Shield+1",      0x01343FB9, DS3ItemCategory.SHIELD),
     DS3ItemData("Plank Shield",                        0x01346150, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Leather Shield",                      0x01348860, DS3ItemCategory.SHIELD_INFUSIBLE),

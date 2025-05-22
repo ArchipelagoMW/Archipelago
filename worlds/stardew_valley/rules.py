@@ -284,7 +284,7 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
-def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
+def set_skill_entrance_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_fall_crops, logic.farming.has_farming_tools & logic.season.has_fall)
@@ -299,7 +299,7 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_summer, true_)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
-    set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
+    set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.fishing.can_fish_anywhere())
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
@@ -864,7 +864,7 @@ def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: 
     if not content.features.friendsanity.is_enabled:
         return
     set_rule(multiworld.get_location("Spouse Stardrop", player),
-             logic.relationship.has_hearts_with_any_bachelor(13))
+             logic.relationship.has_hearts_with_any_bachelor(13) & logic.relationship.can_get_married())
     set_rule(multiworld.get_location("Have a Baby", player),
              logic.relationship.can_reproduce(1))
     set_rule(multiworld.get_location("Have Another Baby", player),
