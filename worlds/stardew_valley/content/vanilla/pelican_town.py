@@ -3,12 +3,14 @@ from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
+from ...data.hats import Hats
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, CookedRecipesRequirement, CraftedItemsRequirement, HelpWantedRequirement, ShipOneCropRequirement, \
     FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, FinishedRaccoonsRequirement, \
     PrizeMachineRequirement
-from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
+from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
+    FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
@@ -21,7 +23,6 @@ from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
-from ...strings.hat_names import Hat
 from ...strings.material_names import Material
 from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region, LogicRegion
@@ -303,72 +304,72 @@ pelican_town = ContentPack(
             ShopSource(price=5000, shop_region=LogicRegion.bookseller_1),),
 
         # Other Hats
-        Hat.top_hat: (ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
+        Hats.top_hat.name: (ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
 
         # Hats from the Hat Mouse
-        Hat.good_ol_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.good_ol_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(TotalEarningsRequirement(15000),)),),
-        Hat.lucky_bow: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.lucky_bow.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(TotalEarningsRequirement(50000),)),),
-        Hat.cool_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.cool_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                   other_requirements=(TotalEarningsRequirement(250000),)),),
-        Hat.bowler: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.bowler.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                 other_requirements=(TotalEarningsRequirement(1000000),)),),
-        Hat.sombrero: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.sombrero.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                   other_requirements=(TotalEarningsRequirement(10000000),)),),
-        Hat.blue_ribbon: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.blue_ribbon.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(GrangeDisplayRequirement(),)),),
-        Hat.blue_bonnet: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.blue_bonnet.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(MuseumCompletionRequirement(40),)),),
-        Hat.cowboy: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.cowboy.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                 other_requirements=(MuseumCompletionRequirement(),)),),
-        Hat.butterfly_bow: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.butterfly_bow.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                        other_requirements=(NumberOfFriendsRequirement(1, 5),)),),
-        Hat.mouse_ears: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.mouse_ears.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(NumberOfFriendsRequirement(1, 10),)),),
-        Hat.cat_ears: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.cat_ears.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                   other_requirements=(NumberOfFriendsRequirement(8, 10),)),),
-        Hat.tiara: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.tiara.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                other_requirements=(NumberOfFriendsRequirement(4, 5),)),),
-        Hat.santa_hat: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.santa_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(NumberOfFriendsRequirement(10, 5),)),),
-        Hat.earmuffs: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.earmuffs.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                   other_requirements=(NumberOfFriendsRequirement(20, 5),)),),
-        Hat.delicate_bow: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.delicate_bow.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                       other_requirements=(CookedRecipesRequirement(10),)),),
-        Hat.plum_chapeau: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.plum_chapeau.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                       other_requirements=(CookedRecipesRequirement(25),)),),
-        Hat.tropiclip: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.tropiclip.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
-        Hat.hunters_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.hunters_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(BuildingRequirement(BuildingNames.cellar),)),),
-        Hat.daisy: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.daisy.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                other_requirements=(CraftedItemsRequirement(15),)),),
-        Hat.trucker_hat: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.trucker_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(CraftedItemsRequirement(30),)),),
-        Hat.souwester: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.souwester.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(CaughtFishRequirement(10, True),)),),
-        Hat.official_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.official_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                       other_requirements=(CaughtFishRequirement(24, True),)),),
-        Hat.watermelon_band: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.watermelon_band.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                          other_requirements=(CaughtFishRequirement(100, False),)),),
-        Hat.polka_bow: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.polka_bow.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(HelpWantedRequirement(10),)),),
-        Hat.chicken_mask: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.chicken_mask.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                       other_requirements=(HelpWantedRequirement(40),)),),
-        Hat.cowgal_hat: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.cowgal_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(ShipOneCropRequirement(300),)),),
-        Hat.straw: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.straw.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                other_requirements=(EggHuntRequirement(),)),),
-        Hat.sailors_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.sailors_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(FishingCompetitionRequirement(),)),),
-        Hat.jester_hat: (ShopSource(price=25000, shop_region=LogicRegion.hat_mouse,
+        Hats.jester_hat.name: (ShopSource(price=25000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(MovieRequirement(),)),),
-        Hat.governors_hat: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
+        Hats.governors_hat.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                        other_requirements=(LuauDelightRequirementRequirement(),)),),
-        Hat.white_bow: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
+        Hats.white_bow.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(FinishedRaccoonsRequirement(8),)),),
-        Hat.sports_cap: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
+        Hats.sports_cap.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(PrizeMachineRequirement(11),)),),
 
         # Catalogues

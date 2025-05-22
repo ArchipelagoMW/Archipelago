@@ -4,6 +4,7 @@ from ...data import villagers_data, fish_data
 from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
+from ...data.hats import Hats
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement
@@ -16,7 +17,6 @@ from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
-from ...strings.hat_names import Hat
 from ...strings.metal_names import Fossil, Mineral
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -82,27 +82,27 @@ ginger_island_content_pack = GingerIslandContentPack(
             ShopSource(price=50000, shop_region=LogicRegion.bookseller_2, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
 
         # Hats
-        Hat.infinity_crown: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.infinity_crown.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                         other_requirements=(ForgeInfinityWeaponRequirement(),)),),
-        Hat.archers_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.archers_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(CookedRecipesRequirement(9999),)),),
-        Hat.chef_hat: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.chef_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                   other_requirements=(CookedRecipesRequirement(9999),)),),
-        Hat.gnomes_cap: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.gnomes_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(CraftedItemsRequirement(9999),)),),
-        Hat.eye_patch: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.eye_patch.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(CaughtFishRequirement(9999, True),)),),
-        Hat.cowpoke_hat: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
+        Hats.cowpoke_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(FullShipmentRequirement(),)),),
-        Hat.goblin_mask: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
+        Hats.goblin_mask.name: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(FullShipmentRequirement(),)),),
-        Hat.elegant_turban: (ShopSource(price=50000, shop_region=LogicRegion.hat_mouse,
+        Hats.elegant_turban.name: (ShopSource(price=50000, shop_region=LogicRegion.hat_mouse,
                                         other_requirements=(AllAchievementsRequirement(),)),),
-        Hat.junimo_hat: (ShopSource(price=25000, shop_region=LogicRegion.hat_mouse,
+        Hats.junimo_hat.name: (ShopSource(price=25000, shop_region=LogicRegion.hat_mouse,
                                     other_requirements=(PerfectionPercentRequirement(100),)),),
-        Hat.paper_hat: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
+        Hats.paper_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
                                    other_requirements=(RegionRequirement(Region.island_south),)),),
-        Hat.pageboy_cap: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
+        Hats.pageboy_cap.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                      other_requirements=(ReadAllBooksRequirement(),)),),
     },
     fishes=(

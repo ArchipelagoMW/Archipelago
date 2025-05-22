@@ -1,4 +1,5 @@
-from worlds.stardew_valley.data.shirt_data import Shirts
+from ..hats import Hats
+from ..shirt_data import Shirts
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
@@ -16,7 +17,6 @@ from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.geode_names import Geode
 from ...strings.gift_names import Gift
-from ...strings.hat_names import Hat
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
 from ...strings.meme_item_names import MemeItem
@@ -460,21 +460,21 @@ rotten_plant = BundleItem(Decoration.rotten_plant)
 
 apple_slices = BundleItem(ArtisanGood.specific_dried_fruit(Fruit.apple))
 
-infinity_crown = BundleItem(Hat.infinity_crown, source=BundleItem.Sources.content)
-bowler_hat = BundleItem(Hat.bowler)
-sombrero = BundleItem(Hat.sombrero)
-good_ol_cap = BundleItem(Hat.good_ol_cap)
-living_hat = BundleItem(Hat.living_hat)
-garbage_hat = BundleItem(Hat.garbage_hat)
-golden_helmet = BundleItem(Hat.golden_helmet)
-laurel_wreath_crown = BundleItem(Hat.laurel_wreath_crown)
-joja_cap = BundleItem(Hat.joja_cap)
-deluxe_pirate_hat = BundleItem(Hat.deluxe_pirate_hat)
-dark_cowboy_hat = BundleItem(Hat.dark_cowboy_hat)
-tiger_hat = BundleItem(Hat.tiger_hat)
-mystery_hat = BundleItem(Hat.mystery_hat)
-dark_ballcap = BundleItem(Hat.dark_ballcap)
-goblin_mask = BundleItem(Hat.goblin_mask, source=BundleItem.Sources.island)
+infinity_crown = BundleItem(Hats.infinity_crown.name, source=BundleItem.Sources.content)
+bowler_hat = BundleItem(Hats.bowler.name)
+sombrero = BundleItem(Hats.sombrero.name)
+good_ol_cap = BundleItem(Hats.good_ol_cap.name)
+living_hat = BundleItem(Hats.living_hat.name)
+garbage_hat = BundleItem(Hats.garbage_hat.name)
+golden_helmet = BundleItem(Hats.golden_helmet.name)
+laurel_wreath_crown = BundleItem(Hats.laurel_wreath_crown.name)
+joja_cap = BundleItem(Hats.joja_cap.name)
+deluxe_pirate_hat = BundleItem(Hats.deluxe_pirate_hat.name)
+dark_cowboy_hat = BundleItem(Hats.dark_cowboy_hat.name)
+tiger_hat = BundleItem(Hats.tiger_hat.name)
+mystery_hat = BundleItem(Hats.mystery_hat.name)
+dark_ballcap = BundleItem(Hats.dark_ballcap.name)
+goblin_mask = BundleItem(Hats.goblin_mask.name, source=BundleItem.Sources.island)
 
 vacation_shirt = BundleItem(Shirts.vacation.name)
 green_jacket_shirt = BundleItem(Shirts.green_jacket.name)

@@ -1,6 +1,6 @@
 from .base_logic import BaseLogicMixin, BaseLogic
+from ..data.hats import all_considered_hats
 from ..strings.ap_names.ap_weapon_names import APWeapon
-from ..strings.hat_names import all_considered_hat_names
 from ..strings.meme_item_names import MemeItem
 from ..strings.ring_names import all_ring_names
 from ..strings.special_item_names import NotReallyAnItem
@@ -48,7 +48,7 @@ class MemeItemsLogic(BaseLogic):
         return self.logic.true_
 
     def has_any_hat(self):
-        return self.logic.has_any(*all_considered_hat_names)
+        return self.logic.has_any(*all_considered_hats)
 
     def has_any_ring(self):
         return self.logic.received_any(*all_ring_names)
