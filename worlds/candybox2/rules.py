@@ -595,7 +595,7 @@ def generate_rules_package_room_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_room_rule(CandyBox2Room.CASTLE, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 6))
     rules_package.add_room_rule(CandyBox2Room.TOWER, rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 7))
     rules_package.add_room_rule(CandyBox2Room.VILLAGE_MINIGAME, rule_item(CandyBox2ItemName.THIRD_HOUSE_KEY))
-    rules_package.add_room_rule(CandyBox2Room.DESERT_FORTRESS, rule_item(CandyBox2ItemName.DESERT_FORTRESS_KEY))
+    rules_package.add_room_rule(CandyBox2Room.DESERT_FORTRESS, rule_item(CandyBox2ItemName.DESERT_FORTRESS_KEY) & rule_item(CandyBox2ItemName.PROGRESSIVE_WORLD_MAP, 1))
     rules_package.add_room_rule(CandyBox2Room.QUEST_THE_CELLAR, weapon_is_at_least(CandyBox2ItemName.WOODEN_SWORD))
     rules_package.add_room_rule(CandyBox2Room.QUEST_THE_X_POTION, can_brew(True))
 
