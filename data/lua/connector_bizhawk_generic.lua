@@ -139,7 +139,7 @@ Response:
 
     Additional Fields:
     - `address` (`int`): The address of the memory to check
-    - `expected_data` (string): A base64 string of contiguous data
+    - `expected_data` (`string`): A base64 string of contiguous data
     - `domain` (`string`): The name of the memory domain the address
     corresponds to
 
