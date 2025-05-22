@@ -1013,6 +1013,17 @@ class CollectionState():
 
         return changed
 
+    def add_item(self, item: str, player: int, count: int = 1) -> None:
+        """
+        Adds the item to state.
+
+        :param item: The item to be added.
+        :param player: The player the item is for.
+        :param count: How many of the item to add.
+        """
+        assert count > 0
+        self.prog_items[player][item] += count
+
     def remove(self, item: Item):
         changed = self.multiworld.worlds[item.player].remove(self, item)
         if changed:
@@ -1020,6 +1031,33 @@ class CollectionState():
             self.reachable_regions[item.player] = set()
             self.blocked_connections[item.player] = set()
             self.stale[item.player] = True
+
+    def remove_item(self, item: str, player: int, count: int = 1) -> None:
+        """
+        Removes the item from state.
+
+        :param item: The item to be removed.
+        :param player: The player the item is for.
+        :param count: How many of the item to remove.
+        """
+        assert count > 0
+        self.prog_items[player][item] -= count
+        if self.prog_items[player][item] < 1:
+            del (self.prog_items[player][item])
+
+    def set_item(self, item: str, player: int, count: int) -> None:
+        """
+        Sets the item in state equal to the provided count.
+
+        :param item: The item to modify.
+        :param player: The player the item is for.
+        :param count: How many of the item to now have.
+        """
+        assert count >= 0
+        if count == 0:
+            del (self.prog_items[player][item])
+        else:
+            self.prog_items[player][item] = count
 
 
 class EntranceType(IntEnum):
