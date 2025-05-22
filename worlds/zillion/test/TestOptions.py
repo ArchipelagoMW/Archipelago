@@ -18,7 +18,7 @@ class OptionsTest(ZillionTestBase):
         """ all of the valid values for the AP options map to valid values for ZZ options """
         for option_name, vblr_class in (
             ("jump_levels", ZillionJumpLevels),
-            ("gun_levels", ZillionGunLevels)
+            ("gun_levels", ZillionGunLevels),
         ):
             for value in vblr_class.name_lookup.values():
                 self.options = {option_name: value}
