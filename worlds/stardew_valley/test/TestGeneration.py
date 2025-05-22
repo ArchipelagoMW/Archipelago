@@ -1,7 +1,7 @@
 from typing import List
 
 from BaseClasses import ItemClassification, Item
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import location_table, options, items
 from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
