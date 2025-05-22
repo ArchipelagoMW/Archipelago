@@ -234,7 +234,7 @@ def update_character_info(character_info, output_data):
         if x["name"] == "fat" and x["room_no"] == 45:
             x["disappear_flag"] = 0
 
-        # Make Shivers not disappear by doing a different appear flag.
+        # Make Shivers / Butler not disappear by doing a different appear flag.
         if x["name"] == "situji":
             x["appear_flag"] = 7
 
@@ -350,7 +350,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # This one enables the Conservatory 1F hallway after catching Shivers
+    # This one enables the Conservatory 1F hallway after catching Shivers / Butler
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
@@ -380,7 +380,7 @@ def update_observer_info(observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # Check that Shivers is caught to turn on Conservatory Hallway Light
+    # Check that Shivers / Butler is caught to turn on Conservatory Hallway Light
     observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
