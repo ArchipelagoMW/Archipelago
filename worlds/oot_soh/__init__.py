@@ -150,7 +150,7 @@ class SohWorld(World):
         item_pool.append(self.create_item("Shadow Medallion"))
         item_pool.append(self.create_item("Light Medallion"))
         item_pool.append(self.create_item("Greg Rupee"))
-        for i in range(35): item_pool.append(self.create_item("Piece Of Heart"))
+        for i in range(35): item_pool.append(self.create_item("Piece of Heart"))
         item_pool.append(self.create_item("Treasure Game Heart"))
         for i in range(8): item_pool.append(self.create_item("Heart Container"))
         for i in range(6): item_pool.append(self.create_item("Ice Trap"))

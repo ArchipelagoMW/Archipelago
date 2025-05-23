@@ -157,7 +157,7 @@ item_data_table: Dict[str, SohItemData] = {
     "Red Rupee": SohItemData( code=soh_base_id + 137, ),
     "Purple Rupee": SohItemData( code=soh_base_id + 138, ),
     "Huge Rupee": SohItemData( code=soh_base_id + 139, ),
-    "Piece Of Heart": SohItemData( code=soh_base_id + 140, type=ItemClassification.progression ),
+    "Piece of Heart": SohItemData( code=soh_base_id + 140, type=ItemClassification.progression ),
     "Heart Container": SohItemData( code=soh_base_id + 141, type=ItemClassification.progression ),
     "Ice Trap": SohItemData( code=soh_base_id + 142, type=ItemClassification.progression ),
     #"Milk": SohItemData( code=soh_base_id + 143, ),
