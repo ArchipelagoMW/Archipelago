@@ -270,21 +270,18 @@ class MessengerWorld(World):
             disconnect_entrances(self)
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
-        attempts = 10
+        attempts = 20
         if self.options.shuffle_portals:
             self.portal_mapping = []
             self.spoiler_portal_mapping = {}
-            while attempts:
+            for _ in range(attempts):
                 disconnect_portals(self)
                 shuffle_portals(self)
                 if validate_portals(self):
                     break
-                if self.options.portal_plando:
-                    attempts -= 1
             # failsafe mostly for invalid plandoed portals with no transition shuffle
             else:
-                if not attempts:
-                    raise RuntimeError("Unable to generate valid portal output.")
+                raise RuntimeError("Unable to generate valid portal output.")
 
         if self.options.shuffle_transitions:
             shuffle_transitions(self)
