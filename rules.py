@@ -1,12 +1,14 @@
 import dataclasses
 import itertools
 import operator
+from collections import defaultdict
 from typing import TYPE_CHECKING, Any, ClassVar
 
+from worlds.AutoWorld import World
+
 if TYPE_CHECKING:
-    from BaseClasses import CollectionState
+    from BaseClasses import CollectionState, Entrance, Item, MultiWorld
     from Options import CommonOptions, Option
-    from worlds.AutoWorld import World
 
 OPERATORS = {
     "eq": operator.eq,
@@ -21,70 +23,98 @@ OPERATORS = {
 
 @dataclasses.dataclass()
 class Rule:
+    """Base class for a static rule used to generate a"""
+
     options: dict[str, Any] = dataclasses.field(default_factory=dict, kw_only=True)
-    """A mapping of option_name to value"""
+    """A mapping of option_name to value to restrict what options are required for this rule to be active.
+    An operator can be specified with a double underscore and the operator after the option name, eg `name__le`
+    """
 
     def _passes_options(self, options: "CommonOptions") -> bool:
+        """Tests if the given world options pass the requirements for this rule"""
         for key, value in self.options:
             parts = key.split("__", maxsplit=1)
             option_name = parts[0]
             operator = parts[1] if len(parts) > 1 else "eq"
-            opt: Option = getattr(options, option_name)
+            opt: Option[Any] = getattr(options, option_name)
             if not OPERATORS[operator](opt.value, value):
                 return False
         return True
 
-    def _instantiate(self, world: "World") -> "Instance":
-        return self.Instance(player=world.player)
+    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+        """Create a new resolved rule for this world"""
+        return self.Resolved(player=world.player)
 
-    def resolve(self, world: "World") -> "Instance":
+    def resolve(self, world: "RuleWorldMixin") -> "Resolved":
+        """Resolve a rule with the given world"""
         if not self._passes_options(world.options):
-            return False_.Instance(player=world.player)
+            return False_.Resolved(player=world.player)
 
         instance = self._instantiate(world)
         rule_hash = hash(instance)
-        if rule_hash not in world.rule_cache:
-            world.rule_cache[rule_hash] = instance
-        return world.rule_cache[rule_hash]
+        if rule_hash not in world.rule_ids:
+            world.rule_ids[rule_hash] = instance
+        return world.rule_ids[rule_hash]
+
+    def to_json(self) -> dict[str, Any]:
+        """Returns a JSON-serializable definition of this rule"""
+        return {
+            "type": self.__class__.__name__,
+            "args": {field.name: getattr(self, field.name, None) for field in dataclasses.fields(self)},
+        }
 
     @dataclasses.dataclass(kw_only=True, frozen=True)
-    class Instance:
+    class Resolved:
+        """A resolved rule for a given world that can be used as an access rule"""
+
         player: int
+        """The player this rule is for"""
+
         cacheable: bool = dataclasses.field(repr=False, default=True)
+        """If this rule should be cached in the state"""
 
         always_true: ClassVar = False
+        """Whether this rule always evaluates to True, used to short-circuit logic"""
+
         always_false: ClassVar = False
+        """Whether this rule always evaluates to True, used to short-circuit logic"""
 
         def __hash__(self) -> int:
             return hash((self.__class__.__name__, *[getattr(self, f.name) for f in dataclasses.fields(self)]))
 
-        def _evaluate(self, state: "CollectionState") -> bool: ...
+        def _evaluate(self, state: "CollectionState") -> bool:
+            """Calculate this rule's result with the given state"""
+            ...
 
         def evaluate(self, state: "CollectionState") -> bool:
+            """Evaluate this rule's result with the given state and cache the result if applicable"""
             result = self._evaluate(state)
             if self.cacheable:
-                state._astalon_rule_results[self.player][id(self)] = result  # type: ignore
+                state.rule_cache[self.player][id(self)] = result
             return result
 
         def test(self, state: "CollectionState") -> bool:
+            """Evaluate this rule's result with the given state, using the cached value if possible"""
             cached_result = None
             if self.cacheable:
-                cached_result = state._astalon_rule_results[self.player].get(id(self))  # type: ignore
+                cached_result = state.rule_cache[self.player].get(id(self))
             if cached_result is not None:
                 return cached_result
             return self.evaluate(state)
 
         def item_dependencies(self) -> dict[str, set[int]]:
+            """Returns a mapping of item name to set of object ids to be used for cache invalidation"""
             return {}
 
         def indirect_regions(self) -> tuple[str, ...]:
+            """Returns a tuple of region names this rule is indirectly connected to"""
             return ()
 
 
 @dataclasses.dataclass()
 class True_(Rule):
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
+    class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_true = True
 
@@ -95,7 +125,7 @@ class True_(Rule):
 @dataclasses.dataclass()
 class False_(Rule):
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
+    class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_false = True
 
@@ -111,13 +141,13 @@ class NestedRule(Rule):
         super().__init__(options=options or {})
         self.children = children
 
-    def _instantiate(self, world: "World") -> "Instance":
+    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
         children = [c.resolve(world) for c in self.children]
-        return self.Instance(tuple(children), player=world.player).simplify()  # type: ignore
+        return self.Resolved(tuple(children), player=world.player).simplify()
 
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
-        children: "tuple[Rule.Instance, ...]"
+    class Resolved(Rule.Resolved):
+        children: "tuple[Rule.Resolved, ...]"
 
         def item_dependencies(self) -> dict[str, set[int]]:
             combined_deps: dict[str, set[int]] = {}
@@ -132,25 +162,25 @@ class NestedRule(Rule):
         def indirect_regions(self) -> tuple[str, ...]:
             return tuple(itertools.chain.from_iterable(child.indirect_regions() for child in self.children))
 
-        def simplify(self) -> "Rule.Instance":
+        def simplify(self) -> "Rule.Resolved":
             return self
 
 
 @dataclasses.dataclass(init=False)
 class And(NestedRule):
     @dataclasses.dataclass(frozen=True)
-    class Instance(NestedRule.Instance):
+    class Resolved(NestedRule.Resolved):
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
                 if not rule.test(state):
                     return False
             return True
 
-        def simplify(self) -> "Rule.Instance":
+        def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
-            clauses: list[Rule.Instance] = []
+            clauses: list[Rule.Resolved] = []
             items: list[str] = []
-            true_rule: Rule.Instance | None = None
+            true_rule: Rule.Resolved | None = None
 
             while children_to_process:
                 child = children_to_process.pop(0)
@@ -161,31 +191,31 @@ class And(NestedRule):
                     # dedupe trues
                     true_rule = child
                     continue
-                if isinstance(child, And.Instance):
+                if isinstance(child, And.Resolved):
                     children_to_process.extend(child.children)
                     continue
 
-                if isinstance(child, Has.Instance) and child.count == 1:
+                if isinstance(child, Has.Resolved) and child.count == 1:
                     items.append(child.item)
-                elif isinstance(child, HasAll.Instance):
+                elif isinstance(child, HasAll.Resolved):
                     items.extend(child.items)
                 else:
                     clauses.append(child)
 
             if not clauses and not items:
-                return true_rule or False_.Instance(player=self.player)
+                return true_rule or False_.Resolved(player=self.player)
             if items:
                 if len(items) == 1:
-                    item_rule = Has.Instance(items[0], player=self.player)
+                    item_rule = Has.Resolved(items[0], player=self.player)
                 else:
-                    item_rule = HasAll.Instance(tuple(items), player=self.player)
+                    item_rule = HasAll.Resolved(tuple(items), player=self.player)
                 if not clauses:
                     return item_rule
                 clauses.append(item_rule)
 
             if len(clauses) == 1:
                 return clauses[0]
-            return And.Instance(
+            return And.Resolved(
                 tuple(clauses),
                 player=self.player,
                 cacheable=self.cacheable and all(c.cacheable for c in clauses),
@@ -195,16 +225,16 @@ class And(NestedRule):
 @dataclasses.dataclass(init=False)
 class Or(NestedRule):
     @dataclasses.dataclass(frozen=True)
-    class Instance(NestedRule.Instance):
+    class Resolved(NestedRule.Resolved):
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
                 if rule.test(state):
                     return True
             return False
 
-        def simplify(self) -> "Rule.Instance":
+        def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
-            clauses: list[Rule.Instance] = []
+            clauses: list[Rule.Resolved] = []
             items: list[str] = []
 
             while children_to_process:
@@ -215,31 +245,31 @@ class Or(NestedRule):
                 if child.always_false:
                     # falses can be ignored
                     continue
-                if isinstance(child, Or.Instance):
+                if isinstance(child, Or.Resolved):
                     children_to_process.extend(child.children)
                     continue
 
-                if isinstance(child, Has.Instance) and child.count == 1:
+                if isinstance(child, Has.Resolved) and child.count == 1:
                     items.append(child.item)
-                elif isinstance(child, HasAny.Instance):
+                elif isinstance(child, HasAny.Resolved):
                     items.extend(child.items)
                 else:
                     clauses.append(child)
 
             if not clauses and not items:
-                return False_.Instance(player=self.player)
+                return False_.Resolved(player=self.player)
             if items:
                 if len(items) == 1:
-                    item_rule = Has.Instance(items[0], player=self.player)
+                    item_rule = Has.Resolved(items[0], player=self.player)
                 else:
-                    item_rule = HasAny.Instance(tuple(items), player=self.player)
+                    item_rule = HasAny.Resolved(tuple(items), player=self.player)
                 if not clauses:
                     return item_rule
                 clauses.append(item_rule)
 
             if len(clauses) == 1:
                 return clauses[0]
-            return Or.Instance(
+            return Or.Resolved(
                 tuple(clauses),
                 player=self.player,
                 cacheable=self.cacheable and all(c.cacheable for c in clauses),
@@ -252,7 +282,7 @@ class Has(Rule):
     count: int = 1
 
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
+    class Resolved(Rule.Resolved):
         item: str
         count: int = 1
 
@@ -265,10 +295,13 @@ class Has(Rule):
 
 @dataclasses.dataclass()
 class HasAll(Rule):
+    """A rule that checks if the player has all of the given items"""
+
     items: tuple[str, ...]
+    """A tuple of item names to check for"""
 
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
+    class Resolved(Rule.Resolved):
         items: tuple[str, ...]
 
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -280,10 +313,13 @@ class HasAll(Rule):
 
 @dataclasses.dataclass()
 class HasAny(Rule):
+    """A rule that checks if the player has at least one of the given items"""
+
     items: tuple[str, ...]
+    """A tuple of item names to check for"""
 
     @dataclasses.dataclass(frozen=True)
-    class Instance(Rule.Instance):
+    class Resolved(Rule.Resolved):
         items: tuple[str, ...]
 
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -291,3 +327,98 @@ class HasAny(Rule):
 
         def item_dependencies(self) -> dict[str, set[int]]:
             return {item: {id(self)} for item in self.items}
+
+
+@dataclasses.dataclass()
+class CanReachLocation(Rule):
+    location_name: str
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+        location = world.get_location(self.location_name)
+        if not location.parent_region:
+            raise ValueError(f"Location {location.name} has no parent region")
+        return self.Resolved(self.location_name, location.parent_region.name, player=world.player)
+
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        location_name: str
+        parent_region_name: str
+        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
+
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.can_reach_location(self.location_name, self.player)
+
+        def indirect_regions(self) -> tuple[str, ...]:
+            return (self.parent_region_name,)
+
+
+@dataclasses.dataclass()
+class CanReachRegion(Rule):
+    region_name: str
+
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        region_name: str
+        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
+
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.can_reach_region(self.region_name, self.player)
+
+        def indirect_regions(self) -> tuple[str, ...]:
+            return (self.region_name,)
+
+
+@dataclasses.dataclass()
+class CanReachEntrance(Rule):
+    entrance_name: str
+
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        entrance_name: str
+        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
+
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.can_reach_entrance(self.entrance_name, self.player)
+
+
+class RuleWorldMixin(World if TYPE_CHECKING else object):
+    rule_ids: dict[int, Rule.Resolved]
+    rule_dependencies: dict[str, set[int]]
+    rule_classes: dict[str, type[Rule]]
+
+    def __init__(self, multiworld: "MultiWorld", player: int) -> None:
+        super().__init__(multiworld, player)
+        self.rule_ids = {}
+        self.rule_dependencies = defaultdict(set)
+
+    def register_rule_class(self, rule_class: type[Rule]) -> None:
+        self.rule_classes[rule_class.__name__] = rule_class
+
+    def rule_from_json(self, rule_data: Any) -> "Rule":
+        pass
+
+    def resolve_rule(self, rule: "Rule") -> "Rule.Resolved":
+        resolved_rule = rule.resolve(self)
+        for item_name, rule_ids in resolved_rule.item_dependencies().items():
+            self.rule_dependencies[item_name] |= rule_ids
+        return resolved_rule
+
+    def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
+        for indirect_region in resolved_rule.indirect_regions():
+            self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        changed = super().collect(state, item)
+        if changed and getattr(self, "rule_dependencies", None):
+            player_results: dict[int, bool] = state.rule_cache[self.player]
+            for rule_id in self.rule_dependencies[item.name]:
+                player_results.pop(rule_id, None)
+        return changed
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        changed = super().remove(state, item)
+        if changed and getattr(self, "rule_dependencies", None):
+            player_results: dict[int, bool] = state.rule_cache[self.player]
+            for rule_id in self.rule_dependencies[item.name]:
+                player_results.pop(rule_id, None)
+        return changed
