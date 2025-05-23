@@ -10,17 +10,23 @@ from Utils import local_path, persistent_store, get_adjuster_settings, get_adjus
 from worlds.pokemon_emerald.adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
     extract_sprites, validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
-    handle_address_collection
-from worlds.pokemon_emerald.adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, TRAINER_FOLDERS, \
-    POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS
+    handle_address_collection, find_folder_object_info, load_constants
+from worlds.pokemon_emerald.adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, \
+    POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS
 from argparse import Namespace
-from tkinter import messagebox
-from tkinter import IntVar
+from tkinter import messagebox, IntVar
+
+try:
+    from worlds.pokemon_frlg.adjuster import *
+    frlgSupport = True
+except:
+    frlgSupport = False
 
 logger = logging.getLogger('EmeraldAdjuster')
 isSpritePackValid = False
 isPatchValid = False
-objectFolders = []
+romVersion = 'Emerald'
+objectFolders = None
 apRom = None
 isRomAp = None
 
@@ -33,9 +39,6 @@ async def main():
 
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
-    global objectFolders
-    objectFolders = TRAINER_FOLDERS + POKEMON_FOLDERS
-
     args = parser.parse_args()
     if not os.path.isfile(args.patch):
         adjustGUI()
@@ -47,6 +50,25 @@ def getArgparser():
     parser.add_argument('--patch', default='', help='Path to a Pokemon Emerald AP-randomized ROM to adjust or path to a .apemerald patch file.')
     parser.add_argument('--sprite-pack', default='', help='Path to the Emerald sprite pack folder to use.')
     return parser
+
+def fetchPatch(_opts):
+    # Asks for a ROM or patch file then validates it
+    from tkinter import filedialog
+    oldPatchFolder = os.path.dirname(_opts.patch.get()) if isPatchValid else None
+    oldPatchFile = _opts.patch.get() if isPatchValid else None
+    patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, title='Choose a Pokemon Emerald ROM or an .apemerald patch file.', filetypes=[('Rom & Patch Files', ['.gba', '.apemerald'])])
+    if patch and os.path.exists(patch):
+        if os.path.splitext(patch)[-1] == '.gba':
+            # If .gba, verify ROM integrity by checking for its internal name at addresses #0000A0-#0000AB (must be POKEMON EMER)
+            with open(patch, 'rb') as stream:
+                patchData = bytearray(stream.read())
+                internalName = patchData[0xA0:0xAC].decode('utf-8')
+                if internalName == 'POKEMON EMER':
+                    return patch, 'Emerald'
+        elif os.path.splitext(patch)[-1] == '.apemerald':
+            return patch, 'Emerald'
+    messagebox.showerror(title='Error while loading a ROM', message=f'The ROM at path {patch} isn\'t a valid Pokemon Emerald ROM!')
+    return patch, 'Unknown'
 
 def adjustGUI():
     adjusterSettings = get_adjuster_settings(GAME_EMERALD)
@@ -61,7 +83,7 @@ def adjustGUI():
     from Utils import __version__ as MWVersion
 
     window = Tk()
-    window.wm_title(f'Archipelago {MWVersion} Emerald Adjuster')
+    window.wm_title(f'Archipelago {MWVersion} {'Pokemon Gen 3' if frlgSupport else 'Emerald'} Adjuster')
     setIcon(window)
 
     mainWindowFrame = Frame(window, padx=8, pady=8)
@@ -77,25 +99,26 @@ def adjustGUI():
         # Run when we ask for the user to select a ROM or patch file,
         # or when the ROM or patch file needs to be reloaded
         global isPatchValid
+        global romVersion
 
         if not _forcedPatch is None:
             patch = _forcedPatch
+        elif frlgSupport:
+            patch, romVersion = frlgFetchPatch(opts, isPatchValid)
         else:
-            oldPatchFolder = os.path.dirname(opts.patch.get()) if isPatchValid else None
-            oldPatchFile = opts.patch.get() if isPatchValid else None
-            patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, title='Choose a Pokemon Emerald ROM or an .apemerald patch file.', filetypes=[('Rom & Patch Files', ['.gba', '.apemerald'])])
-            # If .gba, verify ROM integrity by checking for its internal name at addresses #0000A0-#0000AB (must be POKEMON EMER)
-            if patch and patch.endswith('.gba') and os.path.exists(patch):
-                with open(patch, 'rb') as stream:
-                    patchData = bytearray(stream.read())
-                    internalName = patchData[0xA0:0xAC].decode('utf-8')
-                    if internalName != 'POKEMON EMER':
-                        messagebox.showerror(title='Error while loading a ROM', message=f'The ROM at path {patch} isn\'t a valid Pokemon Emerald ROM!')
-                        patch = ''
+            patch, romVersion = fetchPatch(opts)
         opts.patch.set(patch)
+
+        load_constants(romVersion)
 
         isPatchValid = len(patch) > 0 and os.path.exists(patch)
         tryValidateSpritePack(opts.sprite_pack.get(), True)
+
+        global objectFolders
+        strainrFolderObjectInfo = find_folder_object_info('strainr')
+        trainerFolderObjectInfo = find_folder_object_info('trainer')
+        pokemonFolderObjectInfo = find_folder_object_info('pokemon')
+        objectFolders = strainrFolderObjectInfo['folders'] + trainerFolderObjectInfo['folders'] + pokemonFolderObjectInfo['folders']
 
         if not isPatchValid:
             # If the patch is invalid, hide the isAP checkbox, the Sprite Extractor
@@ -114,6 +137,7 @@ def adjustGUI():
             spritePreviewFrame.pack_forget()
             bottomFrame.pack_forget()
             spriteExtractorFrame.pack(side=TOP, expand=True, fill=X, pady=5)
+            spriteExtractorComboBox.set_completion_list(objectFolders)
             if isSpritePackValid:
                 spritePreviewFrame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottomFrame.pack(side=TOP, pady=5)
@@ -210,7 +234,7 @@ def adjustGUI():
         if not os.path.isdir(outputFolder):
             os.makedirs(outputFolder)
 
-        handle_address_collection(apRom, isRomAp.get())
+        handle_address_collection(apRom, romVersion, isRomAp.get())
         extract_sprites(spriteExtractorFolder.get(), outputFolder)
         messagebox.showinfo(title='Success', message=f'All sprites for {spriteExtractorFolder.get()} have successfully been extracted!')
 
@@ -226,7 +250,7 @@ def adjustGUI():
         if not os.path.isdir(outputFolder):
             os.makedirs(outputFolder)
 
-        handle_address_collection(apRom, isRomAp.get())
+        handle_address_collection(apRom, romVersion, isRomAp.get())
         for object in objectFolders:
             # Extract each Pokemon and Trainer into subfolders
             currentOutput = os.path.join(outputFolder, object)
@@ -246,7 +270,7 @@ def adjustGUI():
     spriteExtractorInfo.grid(row=0, column=0, columnspan=2, pady=2)
     spriteExtractorComboBox = AutocompleteCombobox(spriteExtractorFrame, textvariable=spriteExtractorFolder, width=14)
     spriteExtractorComboBox.bind('<KeyRelease>', checkSpriteExtraction, add='+')
-    spriteExtractorComboBox.set_completion_list(objectFolders)
+    spriteExtractorComboBox.set_completion_list([''])
     spriteExtractorComboBox.grid(row=1, column=0, columnspan=2, pady=2)
     spriteExtractorButton = Button(spriteExtractorFrame, text='Extract', command=extractSprites)
     spriteExtractorButton.grid(row=3, column=0, sticky=E, padx=5, pady=2)
@@ -349,7 +373,7 @@ def adjustGUI():
             pokemonType1.set(POKEMON_TYPES[pokemonData['type1']])
             pokemonType2.set(POKEMON_TYPES[pokemonData['type2']])
             pokemonAbility1.set(POKEMON_ABILITIES[pokemonData['ability1']].title())
-            pokemonAbility2.set(POKEMON_ABILITIES[pokemonData['ability2']].title())
+            pokemonAbility2.set(POKEMON_ABILITIES[pokemonData['ability2']].title() if pokemonData['ability2'] else POKEMON_ABILITIES[pokemonData['ability1']].title())
             pokemonGenderRatio.set(POKEMON_GENDER_RATIOS[pokemonData['gender_ratio']])
             pokemonForbidFlip.set(pokemonData['dex'] >> 7)
 
@@ -490,7 +514,7 @@ def adjustGUI():
             'type1': POKEMON_TYPES.index(pokemonType1.get()),
             'type2': POKEMON_TYPES.index(pokemonType2.get()),
             'ability1': POKEMON_ABILITIES.index(pokemonAbility1.get().upper()),
-            'ability2': POKEMON_ABILITIES.index(pokemonAbility2.get().upper()),
+            'ability2': POKEMON_ABILITIES.index(pokemonAbility2.get().upper()) or POKEMON_ABILITIES.index(pokemonAbility1.get().upper()),
             'gender_ratio': REVERSE_POKEMON_GENDER_RATIOS[pokemonGenderRatio.get()],
             'dex': (int(pokemonForbidFlip.get()) << 7) + int(pokemonROMData['dex']) % 0x80,
             'move_pool': destringify_move_pool(movePoolInput.get('1.0', END))
@@ -681,7 +705,7 @@ def adjustGUI():
     type1BalloonMessage = 'This value changes the Pokemon\'s first type.'
     type2BalloonMessage = 'This value changes the Pokemon\'s second type.\nMake it match the first type if you want the Pokemon to only have one type.'
     ability1BalloonMessage = 'This value changes the Pokemon\'s first ability.'
-    ability2BalloonMessage = 'This value changes the Pokemon\'s second ability.\nMake it ------ or the same ability as the first if you want the Pokemon to only have one ability.'
+    ability2BalloonMessage = 'This value changes the Pokemon\'s second ability.\nMake it the same ability as the first if you want the Pokemon to only have one ability.'
     genderRatioBalloonMessage = 'This value changes the Pokemon\'s gender ratio.'
     forbidFlipBalloonMessage = 'This value dictates whether the Pokemon\'s sprite can be flipped or not.\nThe sprite is flipped when looking at a Pokemon\'s status screen in your team.'
 
@@ -721,7 +745,7 @@ def adjustGUI():
         ability2Label = Label(ability2Frame, text='Ability 2')
         mainWindowTooltip.bind_widget(ability2Label, balloonmsg=ability2BalloonMessage)
         ability2Input = AutocompleteCombobox(ability2Frame, textvariable=pokemonAbility2, width=12)
-        ability2Input.set_completion_list([ability.title() for ability in POKEMON_ABILITIES])
+        ability2Input.set_completion_list([ability.title() for ability in POKEMON_ABILITIES][1:])
         genderRatioFrame = Frame(extraDataFrame, padx=2, pady=2)
         genderRatioFrame.grid(row=2, column=0)
         genderRatioLabel = Label(genderRatioFrame, text='Gender')
@@ -822,7 +846,7 @@ def adjustGUI():
         if isPatchValid:
             global apRom
             apRom = apRom if not _patchChanged else buildApRom(opts.patch.get())
-            isRomApState = handle_address_collection(apRom, None if _patchChanged else isRomAp.get())
+            isRomApState = handle_address_collection(apRom, romVersion, None if _patchChanged else isRomAp.get())
             if _patchChanged:
                 # Change the state of the isAP button automatically when a new patch is loaded
                 if isRomApState:
@@ -886,26 +910,31 @@ def buildApRom(_patch):
     if os.path.splitext(_patch)[-1] == '.gba':
         # Load up the ROM directly
         with open(_patch, 'rb') as stream:
-            return bytearray(stream.read())
+            romData = bytearray(stream.read())
     elif os.path.splitext(_patch)[-1] == '.apemerald':
         # Patch the registered ROM as an AP ROM
         import Patch
         _, apRomPath = Patch.create_rom_file(_patch)
         with open(apRomPath, 'rb') as stream:
-            return bytearray(stream.read())
+            romData = bytearray(stream.read())
+    elif frlgSupport:
+        # Extend check to .apfirered and .apleafgreen if FR/LG is supported
+        romData = frlgBuildApRom(_patch)
+        if not romData:
+            return
     else:
         messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: invalid file extension: requires .gba or .apemerald')
         return
 
+    return romData
+
 def buildSpritePackPatch(_spritePack):
     # Builds the BPS patch including all of the sprite pack's data
-    handle_address_collection(apRom, isRomAp.get())
     errors, hasError = validate_sprite_pack(_spritePack)
     if hasError:
         raise Exception(f'Cannot adjust the ROM as the sprite pack contains errors:\n{errors}')
 
-    spritePackPath = _spritePack
-    spritePackData = get_patch_from_sprite_pack(spritePackPath)
+    spritePackData = get_patch_from_sprite_pack(_spritePack, romVersion)
     spritePackBpsPatch = data_to_bps_patch(spritePackData)
     return spritePackBpsPatch
 

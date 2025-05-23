@@ -1,5 +1,3 @@
-ORIGINAL_EMERALD_CRC32 = 0x1F1C08FB
-
 POKEMON_NAME_TO_ID = {
     'Bulbasaur': 1,
     'Ivysaur': 2,
@@ -532,8 +530,8 @@ POKEMON_ID_TO_INTERNAL_ID = {
     364: 342,
     365: 343,
     366: 373,
-    367: 375,
-    368: 376,
+    367: 374,
+    368: 375,
     369: 381,
     370: 325,
     371: 395,
@@ -1052,50 +1050,97 @@ POKEMON_GENDER_RATIOS = {
 REVERSE_POKEMON_GENDER_RATIOS = { v: k for k, v in POKEMON_GENDER_RATIOS.items() }
 
 POKEMON_FOLDERS = list(POKEMON_NAME_TO_ID.keys())
-POKEMON_SPRITES = ['front_anim', 'back', 'icon', 'footprint']
-POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY = ['front_anim', 'back']
-POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY = ['sfront_anim', 'sback']
+EMERALD_POKEMON_SPRITES = ['front_anim', 'back', 'icon', 'footprint']
+EMERALD_POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY = ['front_anim', 'back']
+EMERALD_POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY = ['sfront_anim', 'sback']
 POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY = ['hatch_anim']
-POKEMON_PALETTES = {
-    'palette': POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY,
-    'palette_shiny': POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY
+EMERALD_POKEMON_PALETTES = {
+    'palette': EMERALD_POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY,
+    'palette_shiny': EMERALD_POKEMON_SHINY_PALETTE_EXTRACTION_PRIORITY
 }
 
-EGG_SPRITES = [*POKEMON_SPRITES, 'hatch_anim']
-EGG_PALETTES = {**POKEMON_PALETTES, 'palette_hatch': POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY}
+EMERALD_EGG_SPRITES = [*EMERALD_POKEMON_SPRITES, 'hatch_anim']
+EMERALD_EGG_PALETTES = {**EMERALD_POKEMON_PALETTES, 'palette_hatch': POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY}
 
-TRAINER_FOLDERS = ['Brendan', 'May']
-TRAINER_SPRITES = ['walking_running', 'acro_bike', 'mach_bike', 'surfing', 'field_move', 'underwater', 'fishing', 'watering', 'decorating', 'battle_front', 'battle_back']
-TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ['walking_running', 'acro_bike', 'mach_bike', 'surfing', 'field_move', 'fishing', 'watering', 'decorating']
+EMERALD_TRAINER_FOLDERS = ['Brendan', 'May']
+EMERALD_TRAINER_SPRITES = ['walking_running', 'acro_bike', 'mach_bike', 'surfing', 'field_move', 'underwater', 'fishing', 'watering', 'decorating', 'battle_front', 'battle_back']
+EMERALD_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ['walking_running', 'acro_bike', 'mach_bike', 'surfing', 'field_move', 'fishing', 'watering', 'decorating']
 TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY = ['reflection']
 TRAINER_UNDERWATER_PALETTE_EXTRACTION_PRIORITY = ['underwater']
 TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY = ['battle_back']
 TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY = ['battle_front']
-TRAINER_PALETTES = {
-    'palette': TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY,
+EMERALD_TRAINER_PALETTES = {
+    'palette': EMERALD_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY,
     'palette_reflection': TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY,
     'palette_underwater': TRAINER_UNDERWATER_PALETTE_EXTRACTION_PRIORITY,
     'palette_battle_back': TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY,
     'palette_battle_front': TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
 }
 
+EMERALD_SIMPLE_TRAINER_FOLDERS = []
+SIMPLE_TRAINER_SPRITES = ['walking', 'battle_front']
+SIMPLE_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ['walking']
+SIMPLE_TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY = ['battle_front']
+SIMPLE_TRAINER_PALETTES = {
+    'palette': SIMPLE_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY,
+    'palette_battle_front': SIMPLE_TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
+}
+
+EMERALD_FOLDER_OBJECT_INFOS = [
+    {
+        'name': 'Egg',
+        'key': 'pokemon',
+        'folders': POKEMON_FOLDERS,
+        'sprites': EMERALD_EGG_SPRITES,
+        'palettes': EMERALD_EGG_PALETTES
+    },
+    {
+        'key': 'pokemon',
+        'folders': POKEMON_FOLDERS,
+        'sprites': EMERALD_POKEMON_SPRITES,
+        'palettes': EMERALD_POKEMON_PALETTES
+    },
+    {
+        'key': 'trainer',
+        'folders': EMERALD_TRAINER_FOLDERS,
+        'sprites': EMERALD_TRAINER_SPRITES,
+        'palettes': EMERALD_TRAINER_PALETTES
+    },
+    {
+        'key': 'strainr',
+        'folders': EMERALD_SIMPLE_TRAINER_FOLDERS,
+        'sprites': SIMPLE_TRAINER_SPRITES,
+        'palettes': SIMPLE_TRAINER_PALETTES
+    }
+]
+
 SPRITE_PIXEL_REFERENCE = {
     'sfront_anim': 'front_anim',
+    'sfront':      'front',
     'sback':       'back',
     'reflection':  'walking_running'
 }
 
 OBJECT_NEEDS_COMPRESSION = {
-    'pokemon_front_anim':           True,
-    'pokemon_back':                 True,
-    'trainer_battle_front':         True,
-    'pokemon_palette':              True,
-    'pokemon_palette_shiny':        True,
-    'trainer_palette_battle_back':  True,
-    'trainer_palette_battle_front': True,
+    'pokemon_front_anim':             True,
+    'pokemon_front':                  True,
+    'pokemon_back':                   True,
+    'trainer_battle_front':           True,
+    'strainr_battle_front':           True,
+    'strainr_battle_front_1':         True,
+    'strainr_battle_front_2':         True,
+    'strainr_battle_front_3':         True,
+    'pokemon_palette':                True,
+    'pokemon_palette_shiny':          True,
+    'trainer_palette_battle_back':    True,
+    'trainer_palette_battle_front':   True,
+    'strainr_palette_battle_front':   True,
+    'strainr_palette_battle_front_1': True,
+    'strainr_palette_battle_front_2': True,
+    'strainr_palette_battle_front_3': True,
 }
 
-INTERNAL_ID_TO_OBJECT_ADDRESS = {
+EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS = {
     'pokemon_front_anim':    lambda c, a : c['gMonFrontPicTable']      + 8 * a,
     'pokemon_back':          lambda c, a : c['gMonBackPicTable']       + 8 * a,
     'pokemon_icon':          lambda c, a : c['gMonIconTable']          + 4 * a,
@@ -1145,7 +1190,7 @@ INTERNAL_ID_TO_OBJECT_ADDRESS = {
     'may_palette_battle_front': lambda c : c['gTrainerFrontPicPaletteTable'] + 576,
 }
 
-OVERWORLD_SPRITE_ADDRESSES = {
+EMERALD_OVERWORLD_SPRITE_ADDRESSES = {
     'brendan_walking_running': lambda c : [ c['gObjectEventGraphicsInfoPointers'],       c['gObjectEventGraphicsInfoPointers'] + 400, c['gObjectEventGraphicsInfoPointers'] + 864 ],
     'brendan_mach_bike':       lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 4,   c['gObjectEventGraphicsInfoPointers'] + 404 ],
     'brendan_acro_bike':       lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 252, c['gObjectEventGraphicsInfoPointers'] + 408 ],
@@ -1166,8 +1211,13 @@ OVERWORLD_SPRITE_ADDRESSES = {
     'may_decorating':          lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 776 ],
 }
 
+POINTER_REFERENCES = {
+    'overworld_palette_table': lambda c: [ c['LoadObjectEventPalette'] + 40, c['PatchObjectPalette'] + 56, c['FindObjectEventPaletteIndexByTag'] + 40 ]
+}
+
 COMPLEX_SPRITES_LIST = [
     'trainer_walking_running',
+    'trainer_bike',
     'trainer_mach_bike',
     'trainer_acro_bike',
     'trainer_surfing',
@@ -1176,8 +1226,22 @@ COMPLEX_SPRITES_LIST = [
     'trainer_fishing',
     'trainer_watering',
     'trainer_decorating',
-    'trainer_battle_back_throw'
+    'trainer_bike_vs_seeker',
+    'trainer_battle_back_throw',
+    'strainr_walking'
 ]
+
+EMERALD_OVERWORLD_PALETTE_IDS = {
+    'Brendan': 0x1100,
+    'May': 0x1110
+}
+
+OVERWORLD_PALETTE_INFO = {
+    'palette_ptr': { 'shift': 0, 'size': 4 },
+    'id':          { 'shift': 4, 'size': 2 },
+    'padding':     { 'shift': 6, 'size': 2 },
+    'length':      8,
+}
 
 OVERWORLD_SPRITE_OBJECT_INFO = {
     'starter_bytes':  { 'shift': 0,  'size': 2 },
@@ -1192,7 +1256,7 @@ OVERWORLD_SPRITE_OBJECT_INFO = {
     'size_draw_ptr':  { 'shift': 20, 'size': 3 },
     'animation_ptr':  { 'shift': 24, 'size': 3 },
     'sprites_ptr':    { 'shift': 28, 'size': 3 },
-    'ram_store_ptr':  { 'shift': 32, 'size': 3 },
+    'ram_store_ptr':  { 'shift': 32, 'size': 3 }
 }
 
 POKEMON_DATA_INFO = {
@@ -1221,7 +1285,10 @@ POKEMON_DATA_INFO = {
     'dex':            { 'shift': 25, 'size': 1 },
 }
 
-DATA_ADDRESSES_MOCK_AP = {
+EMERALD_DATA_ADDRESSES_MOCK_AP = {
+    'LoadObjectEventPalette': 0x08f184,
+    'PatchObjectPalette': 0x08f204,
+    'FindObjectEventPaletteIndexByTag': 0x08f268,
     'gSpeciesInfo': 0x324de8,
     'gLevelUpLearnsets': 0x32e2e4,
     'gMonFrontPicTable': 0x30ead4,
@@ -1237,6 +1304,7 @@ DATA_ADDRESSES_MOCK_AP = {
     'sObjectEventSpritePalettes': 0x5130f8,
     'gTrainerFrontPicTable': 0x309f9c,
     'gTrainerFrontPicPaletteTable': 0x30a284,
+    'gTrainerBackAnimsPtrTable': 0x30a654,
     'gTrainerBackPicTable': 0x30a694,
     'gTrainerBackPicPaletteTable': 0x30a6d4,
     'sTrainerBackSpriteTemplates': 0x32ed60,
@@ -1245,7 +1313,10 @@ DATA_ADDRESSES_MOCK_AP = {
     'sOamTables_32x32': 0x510b24,
     'sEmpty6': 0xe3cf51
 }
-DATA_ADDRESSES_ORIGINAL = {
+EMERALD_DATA_ADDRESSES_ORIGINAL = {
+    'LoadObjectEventPalette': 0x08e894,
+    'PatchObjectPalette': 0x08e91c,
+    'FindObjectEventPaletteIndexByTag': 0x08e980,
     'gSpeciesInfo': 0x3203cc,
     'gLevelUpLearnsets': 0x32937c,
     'gMonFrontPicTable': 0x30a18c,
@@ -1261,6 +1332,7 @@ DATA_ADDRESSES_ORIGINAL = {
     'sObjectEventSpritePalettes': 0x50bbc8,
     'gTrainerFrontPicTable': 0x305654,
     'gTrainerFrontPicPaletteTable': 0x30593c,
+    'gTrainerBackAnimsPtrTable': 0x305d0c,
     'gTrainerBackPicTable': 0x305d4c,
     'gTrainerBackPicPaletteTable': 0x305d8c,
     'sTrainerBackSpriteTemplates': 0x329df8,
@@ -1270,7 +1342,20 @@ DATA_ADDRESSES_ORIGINAL = {
     'sEmpty6': 0xe3cf31
 }
 
-VALID_OVERWORLD_SPRITE_SIZES = [
+EMERALD_DATA_ADDRESS_BEGINNING = 0x00
+EMERALD_DATA_ADDRESS_END = 0xFFFFFF
+
+EMERALD_DATA_ADDRESS_INFOS = {
+    'Emerald': {
+        'crc32': 0x1f1c08fb,
+        'original_addresses': EMERALD_DATA_ADDRESSES_ORIGINAL,
+        'ap_addresses': EMERALD_DATA_ADDRESSES_MOCK_AP,
+        'data_address_beginning': EMERALD_DATA_ADDRESS_BEGINNING,
+        'data_address_end': EMERALD_DATA_ADDRESS_END
+    }
+}
+
+EMERALD_VALID_OVERWORLD_SPRITE_SIZES = [
     { 'width': 16, 'height': 16, 'data': 'sOamTables_16x16' },
     { 'width': 16, 'height': 32, 'data': 'sOamTables_16x32' },
     { 'width': 32, 'height': 32, 'data': 'sOamTables_32x32' },
@@ -1370,6 +1455,25 @@ VALID_OVERWORLD_PALETTE = [
     0, 0, 0
 ]
 
+VALID_WEAK_OVERWORLD_PALETTE = [
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    -1, -1, -1,
+    0, 0, 0
+]
+
 VALID_UNOWN_PALETTE = [
     205, 205, 172,
     -1,  -1,  -1,
@@ -1396,27 +1500,30 @@ VALID_UNOWN_SHINY_PALETTE = [
     49,  57,  106
 ]
 
-SPRITES_REQUIREMENTS = {
-    'pokemon_front_anim':        { 'frames': 2,  'width': 64, 'height': 64 },
-    'pokemon_back':              { 'frames': 1,  'width': 64, 'height': 64 },
-    'pokemon_icon':              { 'frames': 2,  'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES },
-    'pokemon_footprint':         { 'frames': 1,  'width': 16, 'height': 16, 'palette_size': 2, 'palette': VALID_FOOTPRINT_PALETTE },
-    'pokemon_hatch_anim':        { 'frames': 1,  'width': 32, 'height': 136 },
-    'trainer_walking_running':   { 'frames': 18, 'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_mach_bike':         { 'frames': 9,  'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_acro_bike':         { 'frames': 27, 'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_surfing':           { 'frames': 12, 'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_field_move':        { 'frames': 5,  'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_underwater':        { 'frames': 9,  'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_UNDERWATER_PALETTE },
-    'trainer_fishing':           { 'frames': 12, 'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_watering':          { 'frames': 9,  'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_decorating':        { 'frames': 1,  'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_battle_front':      { 'frames': 1,  'width': 64, 'height': 64 },
-    'trainer_battle_back':       { 'frames': 4,  'width': 64, 'height': 64 },
-    'trainer_battle_back_throw': { 'frames': 4,  'width': 64, 'height': 64 }
+EMERALD_SPRITES_REQUIREMENTS = {
+    'pokemon_front_anim':        { 'frames': 2,      'width': 64, 'height': 64 },
+    'pokemon_back':              { 'frames': 1,      'width': 64, 'height': 64 },
+    'pokemon_icon':              { 'frames': 2,      'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES },
+    'pokemon_footprint':         { 'frames': 1,      'width': 16, 'height': 16, 'palette_size': 2, 'palette': VALID_FOOTPRINT_PALETTE },
+    'pokemon_hatch_anim':        { 'frames': 1,      'width': 32, 'height': 136 },
+    'trainer_walking_running':   { 'frames': 18,     'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_mach_bike':         { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_acro_bike':         { 'frames': 27,     'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_surfing':           { 'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_field_move':        { 'frames': 5,      'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_underwater':        { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_UNDERWATER_PALETTE },
+    'trainer_fishing':           { 'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_watering':          { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_decorating':        { 'frames': 1,      'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
+    'trainer_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
+    'trainer_battle_back':       { 'frames': [4, 5], 'width': 64, 'height': 64 },
+    'trainer_battle_back_throw': { 'frames': [4, 5], 'width': 64, 'height': 64 },
+    'strainr_walking':           { 'frames': 9,      'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'strainr_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
 }
 
-SPRITES_REQUIREMENTS_EXCEPTIONS = {
+
+EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS = {
     'Castform': {
         'pokemon_front_anim': { 'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True },
         'pokemon_back':       { 'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True },
