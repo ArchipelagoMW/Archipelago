@@ -58,7 +58,7 @@ from worlds._sc2common.bot.main import run_game
 from worlds._sc2common.bot.player import Bot
 from .item.item_tables import (
     lookup_id_to_name, get_full_item_list, ItemData,
-    ZergItemType, ProtossItemType, upgrade_bundles,
+    ZergItemType, upgrade_bundles,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
 from .locations import SC2WOL_LOC_ID_OFFSET, LocationType, LocationFlag, SC2HOTS_LOC_ID_OFFSET, VICTORY_CACHE_OFFSET
@@ -377,7 +377,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
         """Sets a Starcraft game option that can be changed after generation. Use "/option list" to see all options."""
 
-        LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
+        LOGIC_WARNING = "  *Note changing this may result in logically unbeatable games*\n"
 
         configurable_options = (
             ConfigurableOptionInfo('speed', 'game_speed', options.GameSpeed),
@@ -550,7 +550,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if tempzip:
             try:
                 zipfile.ZipFile(tempzip).extractall(path=os.environ["SC2PATH"])
-                sc2_logger.info(f"Download complete. Package installed.")
+                sc2_logger.info("Download complete. Package installed.")
                 if metadata is not None:
                     with open(get_metadata_file(), "w") as f:
                         f.write(metadata)
@@ -2147,10 +2147,10 @@ def is_mod_installed_correctly() -> bool:
 
     # Final verdict.
     if needs_files:
-        sc2_logger.warning(f"Required files are missing. Run /download_data to acquire them.")
+        sc2_logger.warning("Required files are missing. Run /download_data to acquire them.")
         return False
     else:
-        sc2_logger.debug(f"All map/mod files are properly installed.")
+        sc2_logger.debug("All map/mod files are properly installed.")
         return True
 
 
@@ -2212,7 +2212,7 @@ def download_latest_release_zip(
             # sc2_logger.info(f"Latest version: {latest_metadata}.")
         else:
             sc2_logger.warning(f"Status code: {r1.status_code}")
-            sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+            sc2_logger.warning("Failed to reach GitHub. Could not find download link.")
             sc2_logger.warning(f"text: {r1.text}")
             return "", metadata
 
@@ -2237,7 +2237,7 @@ def download_latest_release_zip(
             sc2_logger.warning(f"text: {r2.text}")
             return "", metadata
     except requests.ConnectionError:
-        sc2_logger.warning(f"Failed to reach GitHub. Could not find download link.")
+        sc2_logger.warning("Failed to reach GitHub. Could not find download link.")
         return "", metadata
 
 
@@ -2264,12 +2264,12 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
                 return False
 
         else:
-            sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+            sc2_logger.warning("Failed to reach GitHub while checking for updates.")
             sc2_logger.warning(f"Status code: {r1.status_code}")
             sc2_logger.warning(f"text: {r1.text}")
             return False
     except requests.ConnectionError:
-        sc2_logger.warning(f"Failed to reach GitHub while checking for updates.")
+        sc2_logger.warning("Failed to reach GitHub while checking for updates.")
         return False
 
 

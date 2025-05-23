@@ -133,7 +133,6 @@ class SC2Manager(GameManager):
     def on_start(self) -> None:
         from . import gui_config
         warnings, window_width, window_height = gui_config.get_window_defaults()
-        from kivy.core.window import Window
         original_size_x, original_size_y = Window.size
         Window.size = window_width, window_height
         Window.left -= max((window_width - original_size_x) // 2, 0)
@@ -415,7 +414,7 @@ class SC2Manager(GameManager):
                 if scoutable:
                     tooltip += self.handle_scout_display(location_name)
             if len(plando_locations) > 0:
-                tooltip += f"\n[b]Plando:[/b]\n- "
+                tooltip += "\n[b]Plando:[/b]\n- "
                 tooltip += "\n- ".join(plando_locations)
 
         tooltip = f"[b]{text}[/b]\n" + tooltip

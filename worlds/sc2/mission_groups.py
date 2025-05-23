@@ -1,6 +1,7 @@
 """
 Mission group aliases for use in yaml options.
 """
+
 from typing import Dict, List, Set
 from .mission_tables import SC2Mission, MissionFlag, SC2Campaign
 
@@ -70,9 +71,9 @@ class MissionGroupNames:
     @classmethod
     def get_all_group_names(cls) -> Set[str]:
         return {
-            name for identifier, name in cls.__dict__.items()
-            if not identifier.startswith('_')
-            and not identifier.startswith('get_')
+            name
+            for identifier, name in cls.__dict__.items()
+            if not identifier.startswith("_") and not identifier.startswith("get_")
         }
 
 
@@ -128,7 +129,11 @@ for group_name, campaign, chain_name in (
     (MissionGroupNames.HOTS_CHAR_MISSIONS, SC2Campaign.HOTS, "Char"),
     (MissionGroupNames.HOTS_ZERUS_MISSIONS, SC2Campaign.HOTS, "Zerus"),
     (MissionGroupNames.HOTS_SKYGEIRR_MISSIONS, SC2Campaign.HOTS, "Skygeirr Station"),
-    (MissionGroupNames.HOTS_DOMINION_SPACE_MISSIONS, SC2Campaign.HOTS, "Dominion Space"),
+    (
+        MissionGroupNames.HOTS_DOMINION_SPACE_MISSIONS,
+        SC2Campaign.HOTS,
+        "Dominion Space",
+    ),
     (MissionGroupNames.HOTS_KORHAL_MISSIONS, SC2Campaign.HOTS, "Korhal"),
     (MissionGroupNames.LOTV_AIUR_MISSIONS, SC2Campaign.LOTV, "Aiur"),
     (MissionGroupNames.LOTV_KORHAL_MISSIONS, SC2Campaign.LOTV, "Korhal"),
@@ -137,12 +142,16 @@ for group_name, campaign, chain_name in (
     (MissionGroupNames.LOTV_PURIFIER_MISSIONS, SC2Campaign.LOTV, "Purifier"),
     (MissionGroupNames.LOTV_TALDARIM_MISSIONS, SC2Campaign.LOTV, "Tal'darim"),
     (MissionGroupNames.LOTV_MOEBIUS_MISSIONS, SC2Campaign.LOTV, "Moebius"),
-    (MissionGroupNames.LOTV_RETURN_TO_AIUR_MISSIONS, SC2Campaign.LOTV, "Return to Aiur"),
+    (
+        MissionGroupNames.LOTV_RETURN_TO_AIUR_MISSIONS,
+        SC2Campaign.LOTV,
+        "Return to Aiur",
+    ),
 ):
     mission_groups[group_name] = [
-        mission.mission_name for mission in SC2Mission
-        if mission.campaign == campaign
-        and mission.area == chain_name
+        mission.mission_name
+        for mission in SC2Mission
+        if mission.campaign == campaign and mission.area == chain_name
     ]
 
 mission_groups[MissionGroupNames.NCO_MISSION_PACK_1] = [
@@ -196,5 +205,8 @@ mission_groups[MissionGroupNames.PLANET_AIUR_MISSIONS] = [
 for mission in SC2Mission:
     if mission.flags & MissionFlag.HasRaceSwap:
         short_name = mission.get_short_name()
-        mission_groups[short_name] = [mission_var.mission_name for mission_var in SC2Mission
-                                      if short_name in mission_var.mission_name]
+        mission_groups[short_name] = [
+            mission_var.mission_name
+            for mission_var in SC2Mission
+            if short_name in mission_var.mission_name
+        ]

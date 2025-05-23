@@ -1,8 +1,8 @@
 import unittest
-from typing import Set, Dict, List
+from typing import Dict
 
 from .. import options
-from ..item import item_tables, item_parents
+from ..item import item_parents
 
 
 class TestOptions(unittest.TestCase):

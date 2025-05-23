@@ -6,7 +6,7 @@ from .mission_tables import (
     campaign_final_mission_locations, campaign_alt_final_mission_locations
 )
 from .options import (
-    ShuffleNoBuild, RequiredTactics, ExtraLocations, ShuffleCampaigns,
+    ShuffleNoBuild, RequiredTactics, ShuffleCampaigns,
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns,
     static_mission_orders,
     TwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants, NovaGhostOfAChanceVariant,
@@ -336,7 +336,7 @@ def force_final_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, A
 
     # Remove goal status from lower priority campaigns
     for campaign in enabled_campaigns:
-        if not campaign in candidate_campaigns:
+        if campaign not in candidate_campaigns:
             mission_order[campaign.campaign_name]["goal"] = False
 
 def remove_missions(world: 'SC2World', mission_order: Dict[str, Dict[str, Any]], mission_pools: SC2MOGenMissionPools):
