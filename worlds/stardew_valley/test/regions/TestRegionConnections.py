@@ -1,7 +1,8 @@
 import unittest
 
-from .. import fill_dataclass_with_default
-from ... import options, create_content
+from ..options.utils import fill_dataclass_with_default
+from ... import options
+from ...content import create_content
 from ...mods.region_data import region_data_by_content_pack
 from ...regions import vanilla_data
 from ...regions.model import MergeFlag

@@ -1,4 +1,4 @@
-from .. import SVTestBase
+from ..bases import SVTestBase
 from ... import options
 from ...regions.model import RandomizationFlag
 from ...regions.regions import create_all_connections

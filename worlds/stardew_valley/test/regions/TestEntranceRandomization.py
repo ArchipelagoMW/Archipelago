@@ -3,8 +3,8 @@ from collections.abc import Collection
 from unittest.mock import patch, Mock
 
 from BaseClasses import get_seed, MultiWorld, Entrance
-from .. import SVTestCase, solo_multiworld
 from ..assertion import WorldAssertMixin
+from ..bases import SVTestCase, solo_multiworld
 from ... import options
 from ...mods.mod_data import ModNames
 from ...options import EntranceRandomization, ExcludeGingerIsland, SkillProgression

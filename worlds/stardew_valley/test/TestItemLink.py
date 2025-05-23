@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import options, item_table, Group
 
 max_iterations = 2000
