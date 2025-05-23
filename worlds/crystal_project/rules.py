@@ -112,12 +112,50 @@ class CrystalProjectLogic:
     #has_key is for: Luxury Key, Gardeners Key, All Wing Keys, Cell Keys, Room One Key, Small Keys, Boss Key, Red Door Keys,
     #Ice Puzzle Keys, Rampart Key, Forgotten Key, Tram Key, Courtyard Key, Pyramid Key
     def has_key(self, state: CollectionState, key_name: str, count: int = 1) -> bool:
-        return state.has(key_name, self.player, count) or state.has(SKELETON_KEY, self.player)
-
-    def has_jidamba_keys(self, state: CollectionState) -> bool:
         if state.has(SKELETON_KEY, self.player):
             return True
-        elif state.has(FOLIAGE_KEY, self.player) and state.has(CAVE_KEY, self.player) and state.has(CANOPY_KEY, self.player):
+        if self.options.keyMode.value == self.options.keyMode.option_key_ring:
+            return self.has_key_ring(state, key_name)
+        return state.has(key_name, self.player, count)
+
+    def has_key_ring(self, state: CollectionState, key_name: str) -> bool:
+        if (key_name == GARDENERS_KEY
+                or key_name == COURTYARD_KEY
+                or key_name == LUXURY_KEY
+                or key_name == ROOM_ONE_KEY
+                or key_name == PYRAMID_KEY
+                or key_name == TRAM_KEY
+                or key_name == ICE_CELL_KEY
+                or key_name == RAMPART_KEY
+                or key_name == FORGOTTEN_KEY):
+            return state.has(key_name, self.player)
+
+        if (key_name == CELL_KEY
+                or key_name == SOUTH_WING_KEY
+                or key_name == EAST_WING_KEY
+                or key_name == WEST_WING_KEY
+                or key_name == DARK_WING_KEY):
+            return state.has(PRISON_KEY_RING, self.player)
+
+        if (key_name == BEAURIOR_BOSS_KEY
+                or key_name == SMALL_KEY):
+            return state.has(BEAURIOR_KEY_RING, self.player)
+
+        if key_name == RED_DOOR_KEY:
+            return state.has(SLIP_GLIDE_RIDE_KEY_RING, self.player)
+
+        if key_name == ICE_PUZZLE_KEY:
+            return state.has(ICE_PUZZLE_KEY_RING, self.player)
+
+        if (key_name == FOLIAGE_KEY
+                or key_name == CANOPY_KEY
+                or key_name == CAVE_KEY):
+            return state.has(JIDAMBA_KEY_RING, self.player)
+
+        return False
+
+    def has_jidamba_keys(self, state: CollectionState) -> bool:
+        if self.has_key(state, FOLIAGE_KEY, 1) and self.has_key(state, CAVE_KEY, 1) and self.has_key(state, CANOPY_KEY,1):
             return True
         else:
             return False

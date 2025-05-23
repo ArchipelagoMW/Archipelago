@@ -1591,6 +1591,13 @@ job_crystal_expert_dictionary: Dict[str, str] = {
     "Job - Mimic": "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
 }
 
+key_rings: Dict[str, ItemData] = {
+    "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Slip Glide Ride Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jidamba Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+}
+
 filler_items: Tuple[str, ...] = (
     "Item - Tonic",
     "Item - Potion",

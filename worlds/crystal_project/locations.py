@@ -246,14 +246,14 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Beyond the courtyard wall", 2671 + treasure_index_offset), #Tonic Pouch chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn room", 1388 + treasure_index_offset), #Craftwork Staff chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Second story by Master Rogue", 158 + treasure_index_offset), #Craftwork Dagger chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic shop attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Magic store attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Training ground parkour", 1390 + treasure_index_offset), #Craftwork Katana chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Behind Luxury Shop", 2651 + treasure_index_offset), #Craftwork Cap chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Fenix Syrup Pouch chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Briefs chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Shop storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Socks chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Behind Luxury store", 2651 + treasure_index_offset), #Craftwork Cap chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Store storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Fenix Syrup Pouch chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Store storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Briefs chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - Locked in Luxury Store storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has_any({"Item - Progressive Luxury Pass"}, player)), #Lucky Socks chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Inn attic by Master Monk", 2656 + treasure_index_offset), #Craftwork Vest chest
-        LocationData("Capital Sequoia", "Capital Sequoia Chest - By Master Warrior atop the Luxury Shop", 2655 + treasure_index_offset), #Craftwork Shield chest
+        LocationData("Capital Sequoia", "Capital Sequoia Chest - By Master Warrior atop the Luxury Store", 2655 + treasure_index_offset), #Craftwork Shield chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Atop library bookcases", 1392 + treasure_index_offset), #Craftwork Sword chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Penguin sanctuary", 2654 + treasure_index_offset), #Craftwork Robe chest
         LocationData("Capital Sequoia", "Capital Sequoia Chest - Gaea Shrine 1", 137 + treasure_index_offset), #Gaea Shard chest
@@ -287,8 +287,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
         #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Shop Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Shop Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Store Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Store Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset), #(417, 171, -299) Fixed Missable
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
@@ -296,7 +296,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Speedy Lost Penguin on patrol", 584 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin kiosk keeper", 508 + npc_index_offset),
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin skulking in shop alley", 565 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin skulking in store alley", 565 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
@@ -308,7 +308,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement or logic.has_horizontal_movement or state.has("Item - Gaea Stone", player)),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Shop rooftop garden", 573 + npc_index_offset),
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin wandering Magic Store rooftop garden", 573 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
         LocationData("Capital Sequoia", "Capital Sequoia NPC - How did you climb that tree, Lost Penguin?", 422 + npc_index_offset),
@@ -760,7 +760,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Near sky fishing 1", 3507 + treasure_index_offset, logic.has_vertical_movement), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Reservoir above the water", 3508 + treasure_index_offset, logic.has_vertical_movement and logic.has_swimming), #Elevator Part chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory shop", 3509 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above accessory store", 3509 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 1", 3511 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Elevator Part chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Above Samurai Lounge 2", 1541 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Fleuret chest
@@ -782,7 +782,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Shoudu Province", "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
         LocationData("Shoudu Province", "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch
         LocationData("Shoudu Province", "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Suitor Hat chest
-        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor shop", 1517 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch chest
+        LocationData("Shoudu Province", "Shoudu Province Chest - Above the armor store", 1517 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Balance above the undercity 2", 2716 + treasure_index_offset, logic.has_vertical_movement), #Tincture Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam east of save point", 3040 + treasure_index_offset, logic.has_vertical_movement), #Potion Pouch chest
         LocationData("Shoudu Province", "Shoudu Province Chest - Cross the balance beam on the way to Sky Arena", 2754 + treasure_index_offset, logic.has_vertical_movement), #Acrobat Shoes chest
@@ -976,7 +976,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance Northern Cave
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, logic.has_glide), #Judo Gi chest
-        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the souvenir shop", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Money chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the souvenir store", 2993 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Money chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Insignia Helm chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Z-Potion chest
