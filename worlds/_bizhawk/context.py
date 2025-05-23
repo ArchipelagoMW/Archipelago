@@ -6,6 +6,7 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
+import time
 from typing import Any
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
@@ -25,6 +26,12 @@ class AuthStatus(enum.IntEnum):
     NEED_INFO = 1
     PENDING = 2
     AUTHENTICATED = 3
+
+
+class DeathState(enum.IntEnum):
+    killing_player = 1
+    alive = 2
+    dead = 3
 
 
 class BizHawkClientCommandProcessor(ClientCommandProcessor):
@@ -48,6 +55,8 @@ class BizHawkClientContext(CommonContext):
     slot_data: dict[str, Any] | None = None
     rom_hash: str | None = None
     bizhawk_ctx: BizHawkContext
+    death_state: DeathState
+    killing_player_task: asyncio.Task[None] | None
 
     watcher_timeout: float
     """The maximum amount of time the game watcher loop will wait for an update from the server before executing"""
@@ -59,6 +68,8 @@ class BizHawkClientContext(CommonContext):
         self.client_handler = None
         self.bizhawk_ctx = BizHawkContext()
         self.watcher_timeout = 0.5
+        self.death_state = DeathState.alive
+        self.killing_player_task = None
 
     def make_gui(self):
         ui = super().make_gui()
@@ -74,6 +85,26 @@ class BizHawkClientContext(CommonContext):
 
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
+
+    def on_deathlink(self, data: dict[str, Any]) -> None:
+        if not self.killing_player_task or self.killing_player_task.done():
+            self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
+        super(BizHawkClientContext, self).on_deathlink(data)
+
+    async def handle_deathlink_state(self, currently_dead: bool, death_text: str = "") -> None:
+        # in this state we only care about triggering a death send
+        if self.death_state == DeathState.alive:
+            if currently_dead:
+                self.death_state = DeathState.dead
+                await self.send_death(death_text)
+        # in this state we care about confirming a kill, to move state to dead
+        elif self.death_state == DeathState.killing_player:
+            # this is being handled in deathlink_kill_player(ctx) already
+            pass
+        # in this state we wait until the player is alive again
+        elif self.death_state == DeathState.dead:
+            if not currently_dead:
+                self.death_state = DeathState.alive
 
     async def server_auth(self, password_requested: bool=False):
         self.password_requested = password_requested
@@ -105,6 +136,19 @@ class BizHawkClientContext(CommonContext):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
         self.server_seed_name = None
         await super().disconnect(allow_autoreconnect)
+
+
+async def deathlink_kill_player(ctx: BizHawkClientContext) -> None:
+    ctx.death_state = DeathState.killing_player
+    while ctx.death_state == DeathState.killing_player and \
+            ctx.bizhawk_ctx.connection_status == ConnectionStatus.CONNECTED:
+
+        if ctx.client_handler is None:
+            continue
+
+        await ctx.client_handler.deathlink_kill_player(ctx)
+
+        ctx.last_death_link = time.time()
 
 
 async def _game_watcher(ctx: BizHawkClientContext):
