@@ -6,7 +6,7 @@ from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components
+from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
@@ -20,8 +20,17 @@ from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
 
 components.append(
-    Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
+    Component(
+        "The Messenger",
+        component_type=Type.CLIENT,
+        func=launch_game,
+        game_name="The Messenger",
+        supports_uri=True,
+        icon="The Messenger",
+        description="Launch The Messenger.\nInstalls and checks for updates for the randomizer.")
 )
+
+icon_paths["The Messenger"] = f"ap:{__name__}/assets/component_icon.png"
 
 
 class MessengerSettings(Group):
