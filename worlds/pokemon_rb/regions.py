@@ -2422,9 +2422,11 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             loop_out_interiors = []
             world.random.shuffle(entrances)
             for entrance in reversed(entrances):
+                if loop_out_interiors and entrance in loop_out_interiors[0]:
+                    continue
                 if not outdoor_map(entrance.parent_region.name):
                     found_exit = search_for_exit(entrance, entrance.parent_region, set())
-                    if found_exit is None:
+                    if found_exit is None or (loop_out_interiors and found_exit in loop_out_interiors[0]):
                         continue
                     loop_out_interiors.append([found_exit, entrance])
                     entrances.remove(entrance)
