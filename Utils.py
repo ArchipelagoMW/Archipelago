@@ -540,6 +540,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         if add_timestamp:
             stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
