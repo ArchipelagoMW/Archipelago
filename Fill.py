@@ -138,32 +138,21 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         # to clean that up later, so there is a chance generation fails.
                         if (not single_player_placement or location.player == item_to_place.player) \
                                 and location.can_fill(swap_state, item_to_place, perform_access_check):
+                            # Add this item to the existing placement, and
+                            # add the old item to the back of the queue
+                            spot_to_fill = placements.pop(i)
 
-                            # Verify placing this item won't reduce available locations, which would be a useless swap.
-                            prev_state = swap_state.copy()
-                            prev_loc_count = len(
-                                multiworld.get_reachable_locations(prev_state))
+                            swap_count += 1
+                            swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
 
-                            swap_state.collect(item_to_place, True)
-                            new_loc_count = len(
-                                multiworld.get_reachable_locations(swap_state))
+                            reachable_items[placed_item.player].appendleft(
+                                placed_item)
+                            item_pool.append(placed_item)
 
-                            if new_loc_count >= prev_loc_count:
-                                # Add this item to the existing placement, and
-                                # add the old item to the back of the queue
-                                spot_to_fill = placements.pop(i)
+                            # cleanup at the end to hopefully get better errors
+                            cleanup_required = True
 
-                                swap_count += 1
-                                swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
-
-                                reachable_items[placed_item.player].appendleft(
-                                    placed_item)
-                                item_pool.append(placed_item)
-
-                                # cleanup at the end to hopefully get better errors
-                                cleanup_required = True
-
-                                break
+                            break
 
                         # Item can't be placed here, restore original item
                         location.item = placed_item

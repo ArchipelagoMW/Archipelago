@@ -3,8 +3,8 @@ from typing import ClassVar
 
 from BaseClasses import ItemClassification
 from test.param import classvar_matrix
-from . import SVTestCase, solo_multiworld, SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestCase, SVTestBase, solo_multiworld
 from .options.option_names import all_option_choices
 from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group
