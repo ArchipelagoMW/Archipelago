@@ -139,8 +139,11 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+        if globals().get("__file__") and os.path.isfile(__file__):
             # we are running in a normal Python environment
+            local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
+        elif hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+            # we are running in a normal Python environment, but AP was imported weirdly
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
             # pray
@@ -537,6 +540,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         if add_timestamp:
             stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
