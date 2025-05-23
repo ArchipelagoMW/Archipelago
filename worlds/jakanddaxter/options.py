@@ -324,7 +324,7 @@ class CompletionCondition(Choice):
     option_cross_fire_canyon = 69
     option_cross_mountain_pass = 87
     option_cross_lava_tube = 89
-    option_defeat_dark_eco_plant = 6
+    # option_defeat_dark_eco_plant = 6
     option_defeat_klaww = 86
     option_defeat_gol_and_maia = 112
     option_open_100_cell_door = 116
