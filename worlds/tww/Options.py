@@ -19,6 +19,8 @@ from .Locations import DUNGEON_NAMES
 class Dungeons(DefaultOnToggle):
     """
     This controls whether dungeon locations are randomized.
+
+    This means the items found in dungeons will be randomized, not that the entrances to dungeons will be randomized.
     """
 
     display_name = "Dungeons"
