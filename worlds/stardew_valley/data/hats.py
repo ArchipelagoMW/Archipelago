@@ -28,6 +28,9 @@ class Hat:
         self.difficulty = difficulty
         self.consider_in_logic = consider_in_logic
 
+    def __repr__(self) -> str:
+        return f"{self.name} (Difficulty: {self.difficulty})"
+
 
 def hat(name: str, difficulty: int, consider_in_logic: bool = True) -> Hat:
     hat = Hat(name, difficulty, consider_in_logic)
@@ -159,3 +162,7 @@ class Hats:
     white_bow = hat("White Bow", HatDifficulty.difficult_or_rng)
     white_turban = hat("White Turban", HatDifficulty.tailoring, False)
     witch_hat = hat("Witch Hat", HatDifficulty.tailoring, False)
+
+
+all_hat_names = [hat.name for hat in all_hats]
+all_considered_hat_names = [hat.name for hat in all_considered_hats]
