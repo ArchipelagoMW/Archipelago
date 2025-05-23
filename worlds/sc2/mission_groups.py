@@ -79,9 +79,7 @@ class MissionGroupNames:
 
 mission_groups: Dict[str, List[str]] = {}
 
-mission_groups[MissionGroupNames.ALL_MISSIONS] = [
-    mission.mission_name for mission in SC2Mission
-]
+mission_groups[MissionGroupNames.ALL_MISSIONS] = [mission.mission_name for mission in SC2Mission]
 for group_name, campaign in (
     (MissionGroupNames.WOL_MISSIONS, SC2Campaign.WOL),
     (MissionGroupNames.HOTS_MISSIONS, SC2Campaign.HOTS),
@@ -91,9 +89,7 @@ for group_name, campaign in (
     (MissionGroupNames.PROLOGUE_MISSIONS, SC2Campaign.PROLOGUE),
     (MissionGroupNames.EPILOGUE_MISSIONS, SC2Campaign.EPILOGUE),
 ):
-    mission_groups[group_name] = [
-        mission.mission_name for mission in SC2Mission if mission.campaign == campaign
-    ]
+    mission_groups[group_name] = [mission.mission_name for mission in SC2Mission if mission.campaign == campaign]
 
 for group_name, flags in (
     (MissionGroupNames.TERRAN_MISSIONS, MissionFlag.Terran),
@@ -113,9 +109,7 @@ for group_name, flags in (
     (MissionGroupNames.VS_PROTOSS_MISSIONS, MissionFlag.VsProtoss),
     (MissionGroupNames.RACESWAP_MISSIONS, MissionFlag.RaceSwap),
 ):
-    mission_groups[group_name] = [
-        mission.mission_name for mission in SC2Mission if flags in mission.flags
-    ]
+    mission_groups[group_name] = [mission.mission_name for mission in SC2Mission if flags in mission.flags]
 
 for group_name, campaign, chain_name in (
     (MissionGroupNames.WOL_MAR_SARA_MISSIONS, SC2Campaign.WOL, "Mar Sara"),
@@ -129,11 +123,7 @@ for group_name, campaign, chain_name in (
     (MissionGroupNames.HOTS_CHAR_MISSIONS, SC2Campaign.HOTS, "Char"),
     (MissionGroupNames.HOTS_ZERUS_MISSIONS, SC2Campaign.HOTS, "Zerus"),
     (MissionGroupNames.HOTS_SKYGEIRR_MISSIONS, SC2Campaign.HOTS, "Skygeirr Station"),
-    (
-        MissionGroupNames.HOTS_DOMINION_SPACE_MISSIONS,
-        SC2Campaign.HOTS,
-        "Dominion Space",
-    ),
+    (MissionGroupNames.HOTS_DOMINION_SPACE_MISSIONS, SC2Campaign.HOTS, "Dominion Space"),
     (MissionGroupNames.HOTS_KORHAL_MISSIONS, SC2Campaign.HOTS, "Korhal"),
     (MissionGroupNames.LOTV_AIUR_MISSIONS, SC2Campaign.LOTV, "Aiur"),
     (MissionGroupNames.LOTV_KORHAL_MISSIONS, SC2Campaign.LOTV, "Korhal"),
@@ -142,16 +132,10 @@ for group_name, campaign, chain_name in (
     (MissionGroupNames.LOTV_PURIFIER_MISSIONS, SC2Campaign.LOTV, "Purifier"),
     (MissionGroupNames.LOTV_TALDARIM_MISSIONS, SC2Campaign.LOTV, "Tal'darim"),
     (MissionGroupNames.LOTV_MOEBIUS_MISSIONS, SC2Campaign.LOTV, "Moebius"),
-    (
-        MissionGroupNames.LOTV_RETURN_TO_AIUR_MISSIONS,
-        SC2Campaign.LOTV,
-        "Return to Aiur",
-    ),
+    (MissionGroupNames.LOTV_RETURN_TO_AIUR_MISSIONS, SC2Campaign.LOTV, "Return to Aiur"),
 ):
     mission_groups[group_name] = [
-        mission.mission_name
-        for mission in SC2Mission
-        if mission.campaign == campaign and mission.area == chain_name
+        mission.mission_name for mission in SC2Mission if mission.campaign == campaign and mission.area == chain_name
     ]
 
 mission_groups[MissionGroupNames.NCO_MISSION_PACK_1] = [
@@ -206,7 +190,5 @@ for mission in SC2Mission:
     if mission.flags & MissionFlag.HasRaceSwap:
         short_name = mission.get_short_name()
         mission_groups[short_name] = [
-            mission_var.mission_name
-            for mission_var in SC2Mission
-            if short_name in mission_var.mission_name
+            mission_var.mission_name for mission_var in SC2Mission if short_name in mission_var.mission_name
         ]

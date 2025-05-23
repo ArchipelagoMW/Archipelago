@@ -46,6 +46,4 @@ class Starcraft2Settings(settings.Group):
     game_speed: GameSpeed = GameSpeed("default")
     terran_button_color: TerranButtonColor = TerranButtonColor([0.0838, 0.2898, 0.2346])
     zerg_button_color: ZergButtonColor = ZergButtonColor([0.345, 0.22425, 0.12765])
-    protoss_button_color: ProtossButtonColor = ProtossButtonColor(
-        [0.18975, 0.2415, 0.345]
-    )
+    protoss_button_color: ProtossButtonColor = ProtossButtonColor([0.18975, 0.2415, 0.345])
