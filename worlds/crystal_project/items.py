@@ -1,5 +1,5 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List, TYPE_CHECKING
-from BaseClasses import ItemClassification, Item
+from BaseClasses import ItemClassification
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
