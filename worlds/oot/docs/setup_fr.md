@@ -12,7 +12,7 @@ Comme nous utilisons BizHawk, ce guide s'applique uniquement aux systèmes Windo
    - Les utilisateurs Windows doivent d'abord exécuter le programme d'installation des prérequis, qui peut également être trouvé sur le lien ci-dessus.
 - Le client Archipelago intégré, qui peut être installé [ici](https://github.com/ArchipelagoMW/Archipelago/releases)
    (sélectionnez « Ocarina of Time Client » lors de l'installation).
-- Un fichier ROM de la v1.0 US d'Ocarina of Time.
+- Un fichier ROM v1.0 US d'Ocarina of Time.
 
 ## Configuration de BizHawk
 
