@@ -584,13 +584,6 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
                             self.hint["finding_player"],
                             data)
 
-        for status in (HintStatus.HINT_PRIORITY_NO_PRIORITY, HintStatus.HINT_PRIORITY_PRIORITY, HintStatus.HINT_PRIORITY_AVOID):
-            name = status_names[status]
-            status_button = Button(text=name, size_hint_y=None, height=dp(50))
-            status_button.status = status
-            status_button.bind(on_release=set_value)
-            self.dropdown.add_widget(status_button)
-
         self.dropdown.bind(on_release=self.dropdown.dismiss)
 
     def set_height(self, instance, value):
