@@ -542,9 +542,9 @@ class AutocompleteHintInput(ResizableTextField):
 
 
 status_icons = {
-    HintStatus.HINT_NO_PRIORITY: "information",
-    HintStatus.HINT_PRIORITY: "exclamation-thick",
-    HintStatus.HINT_AVOID: "alert"
+    HintStatus.HINT_PRIORITY_NO_PRIORITY: "information",
+    HintStatus.HINT_PRIORITY_PRIORITY: "exclamation-thick",
+    HintStatus.HINT_PRIORITY_AVOID: "alert"
 }
 
 
@@ -567,7 +567,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
         ctx = MDApp.get_running_app().ctx
         menu_items = []
 
-        for status in (HintStatus.HINT_NO_PRIORITY, HintStatus.HINT_PRIORITY, HintStatus.HINT_AVOID):
+        for status in (HintStatus.HINT_PRIORITY_NO_PRIORITY, HintStatus.HINT_PRIORITY_PRIORITY, HintStatus.HINT_PRIORITY_AVOID):
             name = status_names[status]
             status_button = MDDropDownItem(MDDropDownItemText(text=name), size_hint_y=None, height=dp(50))
             status_button.status = status
