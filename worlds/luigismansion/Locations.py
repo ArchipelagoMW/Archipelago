@@ -261,7 +261,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Balcony Plant Center R": LMLocationData("Balcony", 84, "Plant", 613, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant Directly in NE Corner": LMLocationData("Balcony", 79, "Plant", 608, ["Water Element Medal"],
-        update_ram_addr=[LMRamData(in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(in_game_room_id=62)]), # TODO spawns the Red Diamond
     "Balcony Plant SE Corner": LMLocationData("Balcony", 80, "Plant", 609, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant Second from Right Plant near NW Bench": LMLocationData("Balcony", 86, "Plant", 615,
