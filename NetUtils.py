@@ -20,10 +20,10 @@ class HintStatus(ByValue, enum.IntFlag):
     PRIORITY_MASK = 0b11111
 
     # Bits 6+: Technical status
-    HINT_FOUND = 0b10000000
+    HINT_FOUND = 1 << 7
 
     # For "compatibility", only used in CommonClient, thus should not affect memory for MultiServer
-    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 0b1000000000000000
+    HINT_UNFOUND_LEGACY = OLD_HINT_FORMAT = 1 << 15
 
     @property
     def priority(self):
