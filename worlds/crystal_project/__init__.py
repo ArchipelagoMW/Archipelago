@@ -29,11 +29,11 @@ class CrystalProjectWeb(WebWorld):
     #option_groups = md_option_groups
 
 class CrystalProjectWorld(World):
-    """Insert description of the world/game here."""
-    game = "Crystal Project"  # name of the game/world
+    """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
+
+    game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
-    #settings: typing.ClassVar[CrystalProjectSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
