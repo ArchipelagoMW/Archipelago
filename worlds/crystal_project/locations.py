@@ -357,7 +357,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - West of and above sneaky chest", 338 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Money chest
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Tincture Pouch chest
         LocationData("Rolling Quintar Fields", "Rolling Quintar Fields Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #Spore Blocker chest
-        LocationData("Rolling Quintar Fields", "Overpass Chest - Climb the mountain east of Quintar Sanctum", 3532 + treasure_index_offset, logic.has_rental_quintar or logic.has_horizontal_movement), #1st Overpass Scrap chest on main Overpass map
+        LocationData("Rolling Quintar Fields", "Overpass Chest - Climb the mountain west of Quintar Sanctum entrance", 3532 + treasure_index_offset, logic.has_horizontal_movement), #1st Overpass Scrap chest on main Overpass map
 
         #NPCs
         #Todo NPCs CheckOrNot: two Quintar Eggs
