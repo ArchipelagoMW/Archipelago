@@ -1,6 +1,6 @@
 import logging
 
-from .items import item_table, key_rings, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
+from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, job_list
 from .locations import get_locations, get_bosses
@@ -37,9 +37,6 @@ class CrystalProjectWorld(World):
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    key_ring_name_to_id = {item: key_rings[item].code for item in key_rings}
-    item_name_to_id.update(key_ring_name_to_id)
-
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
     location_name_to_id.update(boss_name_to_id)  
@@ -298,7 +295,13 @@ class CrystalProjectWorld(World):
         else:
             [excluded_items.add(equipment_piece) for equipment_piece in non_progressive_equipment]
 
-        if self.options.keyMode == self.options.keyMode.option_key_ring:
+        if self.options.keyMode == self.options.keyMode.option_vanilla:
+            excluded_items.add("Item - Prison Key Ring")
+            excluded_items.add("Item - Beaurior Key Ring")
+            excluded_items.add("Item - Slip Glide Ride Key Ring")
+            excluded_items.add("Item - Ice Puzzle Key Ring")
+            excluded_items.add("IItem - Jidamba Key Ring")
+        elif self.options.keyMode == self.options.keyMode.option_key_ring:
             excluded_items.add("Item - South Wing Key")
             excluded_items.add("Item - East Wing Key")
             excluded_items.add("Item - West Wing Key")
@@ -333,6 +336,11 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Cave Key")
             excluded_items.add("Item - Canopy Key")
             excluded_items.add("Item - Ice Cell Key")
+            excluded_items.add("Item - Prison Key Ring")
+            excluded_items.add("Item - Beaurior Key Ring")
+            excluded_items.add("Item - Slip Glide Ride Key Ring")
+            excluded_items.add("Item - Ice Puzzle Key Ring")
+            excluded_items.add("IItem - Jidamba Key Ring")
 
         if self.options.jobRando == self.options.jobRando.option_none:
             excluded_items.add("Job - Fencer")
@@ -397,21 +405,6 @@ class CrystalProjectWorld(World):
                 item = self.create_item(scholar_ability)
                 pool.append(item)
 
-        if self.options.keyMode == self.options.keyMode.option_key_ring:
-            for name, data in key_rings.items():
-                if name not in excluded_items:
-                    # Check region and add the region amounts; then check Shopsanity and add the shop amounts
-                    amount: int = data.beginnerAmount
-                    if self.options.includedRegions == self.options.includedRegions.option_advanced:
-                        amount = amount + data.advancedAmount
-                    elif self.options.includedRegions == self.options.includedRegions.option_expert:
-                        amount = amount + data.advancedAmount + data.expertAmount
-                    elif self.options.includedRegions == self.options.includedRegions.option_all:
-                        amount = amount + data.advancedAmount + data.expertAmount + data.endGameAmount
-                    for _ in range(amount):
-                        item = self.set_key_ring_classifications(name)
-                        pool.append(item)
-
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
@@ -420,12 +413,6 @@ class CrystalProjectWorld(World):
 
     def set_classifications(self, name: str) -> Item:
         data = item_table[name]
-        item = Item(name, data.classification, data.code, self.player)
-
-        return item
-
-    def set_key_ring_classifications(self, name: str) -> Item:
-        data = key_rings[name]
         item = Item(name, data.classification, data.code, self.player)
 
         return item
