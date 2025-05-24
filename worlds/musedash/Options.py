@@ -176,12 +176,23 @@ class ExcludeSongs(SongSet):
     display_name = "Exclude Songs"
 
 
+class GoalSongPool(SongSet):
+    """
+    Songs listed here will randomly chosen to be the final song.
+    
+    If empty, the goal song will be chosen randomly from all included songs.
+    """
+    verify_item_name = True
+    display_name = "Goal Song Pool"
+
+
 md_option_groups = [
     OptionGroup("Song Choice", [
         DLCMusicPacks,
         StreamerModeEnabled,
         IncludeSongs,
         ExcludeSongs,
+        GoalSongPool,
     ]),
     OptionGroup("Difficulty", [
         GradeNeeded,
@@ -214,6 +225,7 @@ class MuseDashOptions(PerGameCommonOptions):
     death_link: DeathLink
     include_songs: IncludeSongs
     exclude_songs: ExcludeSongs
+    goal_song_pool: GoalSongPool
 
     # Removed
     allow_just_as_planned_dlc_songs: Removed
