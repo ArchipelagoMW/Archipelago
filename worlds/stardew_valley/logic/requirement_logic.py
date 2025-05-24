@@ -107,7 +107,7 @@ class RequirementLogic(BaseLogic):
 
     @meet_requirement.register
     def _(self, requirement: CaughtFishRequirement):
-        if requirement.unique_fish:
+        if requirement.unique:
             return self.logic.fishing.can_catch_many_fish(requirement.number_fish)
         return self.logic.fishing.can_catch_many_fish(requirement.number_fish / 10) & self.logic.time.has_lived_months(requirement.number_fish / 20)
 

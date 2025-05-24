@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .game_item import Requirement
 from ..strings.tool_names import ToolMaterial
@@ -106,7 +106,7 @@ class ForgeInfinityWeaponRequirement(Requirement):
 @dataclass(frozen=True)
 class CaughtFishRequirement(Requirement):
     number_fish: int
-    unique_fish: bool
+    unique: bool = field(kw_only=True)
 
 
 @dataclass(frozen=True)
