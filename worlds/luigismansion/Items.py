@@ -284,7 +284,7 @@ ALL_ITEMS_TABLE = {**ITEM_TABLE,
 
 BOO_AP_ID_LIST: list[int] = [LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()]
 
-# Mario items + Elemental Medals + Traps + Boo Radar + Super Vac + Progressive Flower
+# Mario items + Elemental Medals + Traps + Boo Radar + Super Vac + Progressive Flower + Certain Traps
 RECV_OWN_GAME_ITEMS: list[int] = [
     list(LMItem.get_apid(value.code) for value in BOO_ITEM_TABLE.values()), 8055, 8056, 8057, 8058, 8059, 8060,
     8061, 8062, 8063, 8064, 8126, 8140, 8141, 8142]
