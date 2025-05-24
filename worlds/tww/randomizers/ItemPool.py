@@ -117,7 +117,8 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
     world.filler_pool = filler_pool
 
     # Add filler items to place into excluded locations.
-    pool.extend([world.get_filler_item_name() for _ in world.options.exclude_locations])
+    excluded_locations = world.progress_locations.intersection(world.options.exclude_locations)
+    pool.extend([world.get_filler_item_name() for _ in excluded_locations])
 
     # The remaining of items left to place should be the same as the number of non-excluded locations in the world.
     nonexcluded_locations = [
