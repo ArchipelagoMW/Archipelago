@@ -1145,6 +1145,12 @@ class HintLayout(MDBoxLayout):
         boxlayout.add_widget(AutocompleteHintInput())
         self.add_widget(boxlayout)
 
+    def fix_heights(self):
+        for child in self.children:
+            fix_func = getattr(child, "fix_heights", None)
+            if fix_func:
+                fix_func()
+
 
 class HintLog(MDRecycleView):
     header = {
