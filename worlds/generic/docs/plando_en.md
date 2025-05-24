@@ -82,7 +82,7 @@ This option is the target world to place the item in. It gets ignored if only on
 * `null`: Locations will be in a random world in the multiworld.
 
 ### `force` 
-This option determines whether the generator will fail if the item can't be placed in the location. 
+This option determines whether the generator will fail if the plando block cannot be fulfilled. 
 * `true`: The generator will throw an error if it is unable to place an item.
 * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
 * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
