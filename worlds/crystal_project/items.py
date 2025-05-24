@@ -71,14 +71,14 @@ item_table: Dict[str, ItemData] = {
     "Item - Nans Cocoa": ItemData("Item", 8 + item_index_offset, ItemClassification.filler, 0),
     "Item - Nans Secret Recipe": ItemData("Item", 54 + item_index_offset, ItemClassification.filler, 0),
     "Item - Nuts": ItemData("Item", 14 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Milk": ItemData("Item", 20 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Thirsty Lad, Poko Poko Desert, Advanced Regions
-    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Foreign Foodie, Sara Sara Bazaar, Advanced Regions
+    "Item - Milk": ItemData("Item", 20 + item_index_offset, ItemClassification.filler, 0), #Turn-in: Thirsty Lad, Poko Poko Desert, Advanced Regions
+    "Item - Shoudu Stew": ItemData("Item", 132 + item_index_offset, ItemClassification.filler, 0), #Turn-in: Foreign Foodie, Sara Sara Bazaar, Advanced Regions
     "Item - Sweet Pop Candy": ItemData("Item", 34 + item_index_offset, ItemClassification.filler, 0),
     "Item - Sour Pop Candy": ItemData("Item", 35 + item_index_offset, ItemClassification.filler, 0),
     "Item - Bitter Pop Candy": ItemData("Item", 171 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
+    "Item - Rotten Salmon": ItemData("Item", 11 + item_index_offset, ItemClassification.filler, 0), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
     "Item - Decent Cod": ItemData("Item", 38 + item_index_offset, ItemClassification.filler, 0),
-    "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
+    "Item - Fresh Salmon": ItemData("Item", 10 + item_index_offset, ItemClassification.filler, 0), #Turn-in: Fish Merchant, Sara Sara Bazaar, Advanced Regions
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
 
     #Bag upgrades
@@ -170,6 +170,10 @@ item_table: Dict[str, ItemData] = {
     "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
     "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
     "Item - Progressive Level Cap": ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 0),
+    "Item - Special Shoudu Stew": ItemData("Item", 229 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Special Milk": ItemData("Item", 230 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Fresh Salmon": ItemData("Item", 231 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Rotten Salmon": ItemData("Item", 232 + item_index_offset, ItemClassification.progression, 0, 1),
 
     #Animal mount summons
     "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
