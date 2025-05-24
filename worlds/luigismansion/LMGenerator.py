@@ -4,6 +4,7 @@ import yaml
 
 from collections import Counter
 from CommonClient import logger
+from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
 
 def counter_constructor(loader, node):
     args = loader.construct_sequence(node)
@@ -250,6 +251,7 @@ class LuigisMansionRandomizer:
         if bool_boo_checks:
             logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
             boo_list_events = ["16", "47", "96"]
+            str_move_type = None
             for event_no in boo_list_events:
                 if event_no == "16":
                     required_boo_count = final_boo_count
@@ -257,12 +259,15 @@ class LuigisMansionRandomizer:
                     required_boo_count = washroom_boo_count
                 else:
                     required_boo_count = balcony_boo_count
+                    str_move_type = "MOVEOUTSIDE" if str(self.output_data["Options"]["spawn"]) in \
+                        FLIP_BALCONY_BOO_EVENT_LIST else "MOVEINSIDE"
 
                 if required_boo_count == 0:
                     self.jmp_event_info_table.info_file_field_entries = list(filter(lambda info_entry: not (
                         info_entry["EventNo"] == int(event_no)), self.jmp_event_info_table.info_file_field_entries))
                     continue
-                self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count, bool_boo_rando_enabled)
+                self.gcm = update_boo_gates(self.gcm, event_no, required_boo_count,
+                    bool_boo_rando_enabled, str_move_type)
 
         logger.info("Updating the blackout event with the customized version.")
         self.gcm = update_blackout_event(self.gcm)

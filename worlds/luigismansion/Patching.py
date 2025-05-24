@@ -4,6 +4,7 @@ from random import choice, randint
 
 from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
+from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
 
 #TODO remove this in favor of JMP entries?
 speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
@@ -194,11 +195,17 @@ def update_event_info(event_info, boo_checks: bool, output_data):
 
         # Update the Balcony Boo event trigger to be area entry based
         if boo_checks and x["EventNo"] == 96:
-            x["pos_x"] = 1800.000000
-            x["pos_y"] = 1200.000000
-            x["pos_z"] = -2600.000000
+            if str(output_data["Options"]["spawn"]) in FLIP_BALCONY_BOO_EVENT_LIST:
+                x["pos_x"] = 1800.000000
+                x["pos_y"] = 1200.000000
+                x["pos_z"] = -2950.000000
+                x["EventArea"] = 350
+            else:
+                x["pos_x"] = 1800.000000
+                x["pos_y"] = 1200.000000
+                x["pos_z"] = -2600.000000
+                x["EventArea"] = 200
             x["EventIf"] = 5
-            x["EventArea"] = 200
             x["EventLock"] = 1
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
@@ -1383,7 +1390,7 @@ def update_treasure_table(treasure_info, character_info, output_data):
                 else:
                     chest_size = __get_chest_size_from_key(item_data["door_id"])
 
-            treasure_item_name = __get_item_name(item_data, slot_num)
+            treasure_item_name = __get_item_name(item_data, slot_num) #nothing
             coin_amount = 0
             bill_amount = 0
             gold_bar_amount = 0
@@ -1628,8 +1635,7 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         # Replace the furnitureinfo entry to spawn an item from the "itemappeartable".
         # If the entry is supposed to be money, then generate a random amount of coins and/or bills from it.
         filtered_item_appear = list(item_appear_entry for item_appear_entry in
-                                    item_appear_info.info_file_field_entries if
-                                    item_appear_entry["item0"] == actor_item_name)
+            item_appear_info.info_file_field_entries if  item_appear_entry["item0"] == actor_item_name)
         item_appear_entry_idx = filtered_item_appear[len(filtered_item_appear) - 1]
 
         # Adjust move types for WDYM furniture items. Trees require water, obviously

@@ -2120,3 +2120,5 @@ SELF_LOCATIONS_TO_RECV: list[int] = [
     LMLocation.get_apid(value.code) for value in ALL_LOCATION_TABLE.values() if value.remote_only]
 
 BOOLOSSUS_AP_ID_LIST = [LMLocation.get_apid(value.code) for value in BOOLOSSUS_LOCATION_TABLE.values()]
+
+FLIP_BALCONY_BOO_EVENT_LIST = ["Clockwork Room", "Telephone Room"]

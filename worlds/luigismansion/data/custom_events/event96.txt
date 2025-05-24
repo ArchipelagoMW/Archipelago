@@ -14,6 +14,13 @@
 <SAY><COLOR>(3)You require {Count4} boo(s) before\nyou can open this door...
 <ANYKEY>
 <CLOSEWINDOW>(0)
+<RAMDOMJMP>"{MoveType}"
+------------------------------------
+<CASE>"MOVEOUTSIDE"
+<FORCEMOVE>(1750.000000)(1200.000000)(-3900.000000)(20)
+<RAMDOMJMP>"EventEnd"
+------------------------------------
+<CASE>"MOVEINSIDE"
 <FORCEMOVE>(1800.000000)(1200.000000)(-2100.000000)(20)
 <RAMDOMJMP>"EventEnd"
 ------------------------------------
