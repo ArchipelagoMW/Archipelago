@@ -1,0 +1,257 @@
+code,const,name,spoilername,category,subtype,j,flag,tier,shopoverride,price,throw,metal,longrange,twohanded,equip
+0x00,#item.NoWeapon,,,,,,D,,,,,,,,
+0x01,#item.FireClaw,[claw]FireClaw,Fire Claw,weapon,claw,,,2,,350,,,,,"yang,edge"
+0x02,#item.IceClaw,[claw]IceClaw,Ice Claw,weapon,claw,,,2,,450,,,,,"yang,edge"
+0x03,#item.ThunderClaw,[claw]Thunder,Thunder Claw,weapon,claw,,,3,,5000,,,,,"yang,edge"
+0x04,#item.CharmClaw,[claw]Charm,Charm Claw,weapon,claw,,,2,,1000,,,,,"yang,edge"
+0x05,#item.PoisonClaw,[claw]Poison,Poison Claw,weapon,claw,,,3,,3000,,,,,"yang,edge"
+0x06,#item.CatClaw,[claw]CatClaw,Cat Claw,weapon,claw,,,4,,10000,,,,,"yang,edge"
+0x07,#item.Rod,[rod]Rod,Rod,weapon,rod,,,1,,100,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x08,#item.IceRod,[rod]IceRod,Ice Rod,weapon,rod,,,1,,220,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x09,#item.FlameRod,[rod]FlameRod,Flame Rod,weapon,rod,,,2,,380,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0A,#item.ThunderRod,[rod]Thunder,Thunder Rod,weapon,rod,,,2,,700,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0B,#item.Change,[rod]Change,Change Rod,weapon,rod,,,3,,8000,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0C,#item.CharmRod,[rod]Charm,Charm Rod,weapon,rod,,,5,,20000,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0D,#item.StardustRod,[rod]Stardust,Stardust Rod,weapon,rod,,,6,,60000,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0E,#item.Lilith,[rod]Lilith,Lilith Rod,weapon,rod,,,3,,8000,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x0F,#item.Staff,[staff]Staff,Staff,weapon,staff,,,1,,160,,,,,"crydia,tellah,rosa,porom,pcecil,fusoya"
+0x10,#item.Cure,[staff]Cure,Cure Staff,weapon,staff,,,1,,480,,,,,"crydia,tellah,rosa,porom,pcecil,fusoya"
+0x11,#item.SilverStaff,[staff]Silver,Silver Staff,weapon,staff,,,2,,4000,,yes,,,"crydia,tellah,rosa,porom,pcecil,fusoya"
+0x12,#item.PowerStaff,[staff]Power,Power Staff,weapon,staff,,,3,,2000,,,,,"crydia,tellah,rosa,porom,fusoya"
+0x13,#item.Lunar,[staff]Lunar,Lunar Staff,weapon,staff,,,5,,30000,,,,,"crydia,tellah,rosa,porom,fusoya"
+0x14,#item.LifeStaff,[staff]Life,Life Staff,weapon,staff,,,6,,50000,,,,,"crydia,tellah,rosa,porom,fusoya"
+0x15,#item.Silence,[staff]Silence,Silence Staff,weapon,staff,,,5,,30000,,,,,"crydia,tellah,rosa,porom,fusoya"
+0x16,#item.ShadowSword,[darksword]Shadow,Shadow Sword,weapon,darksword,,,1,,700,,yes,,,dkcecil
+0x17,#item.DarknessSword,[darksword]Darkness,Darkness Sword,weapon,darksword,,,1,,1200,,yes,,,dkcecil
+0x18,#item.BlackSword,[darksword]Black,Black Sword,weapon,darksword,,,3,,3000,,yes,,,dkcecil
+0x19,#item.Legend,[lightsword]Legend,Legend Sword,weapon,lightsword,,K,,,,,yes,,,pcecil
+0x1A,#item.Light,[lightsword]Light,Light Sword,weapon,lightsword,,,5,,66000,yes,yes,,,pcecil
+0x1B,#item.Excalibur,[lightsword]Excalbur,Excalibur,weapon,lightsword,,,8,,190000,yes,yes,,,pcecil
+0x1C,#item.FireBrand,[sword]Fire,Fire Sword,weapon,sword,,,3,,14000,,yes,,,"kain,pcecil"
+0x1D,#item.IceBrand,[sword]IceBrand,Ice Brand,weapon,sword,,,4,,26000,,yes,,,"kain,pcecil"
+0x1E,#item.Defense,[sword]Defense,Defense Sword,weapon,sword,,,6,,98000,yes,yes,,,"kain,pcecil"
+0x1F,#item.DrainSword,[sword]Drain,Drain Sword,weapon,sword,,,3,,5000,yes,yes,,,"kain,pcecil"
+0x20,#item.Ancient,[sword]Ancient,Ancient Sword,weapon,sword,,,1,,3000,yes,yes,,,"kain,pcecil"
+0x21,#item.Sleep,[sword]Slumber,Slumber Sword,weapon,sword,,,3,,6000,yes,yes,,,"kain,pcecil"
+0x22,#item.MedusaSword,[sword]Medusa,Medusa Sword,weapon,sword,,D,,,18000,yes,yes,,,"kain,pcecil"
+0x23,#item.Spear,[spear]Spear,Spear,weapon,spear,,,1,,60,,yes,,,kain
+0x24,#item.Wind,[spear]Wind,Wind Spear,weapon,spear,,,2,,7000,,yes,,,kain
+0x25,#item.FlameSpear,[spear]Flame,Flame Spear,weapon,spear,,,3,,11000,,yes,,,kain
+0x26,#item.BlizzardSpear,[spear]Blizzard,Blizzard Spear,weapon,spear,,,4,,21000,,yes,,,kain
+0x27,#item.DragoonSpear,[spear]Dragoon,Dragoon Spear,weapon,spear,,,7,,110000,yes,yes,,,kain
+0x28,#item.WhiteSpear,[spear]White,White Spear,weapon,spear,,,6,,130000,yes,yes,,,kain
+0x29,#item.DrainSpear,[spear]Drain,Drain Spear,weapon,spear,,,5,,12000,yes,yes,,,kain
+0x2A,#item.Gungnir,[spear]Gungnir,Gungnir,weapon,spear,,,5,,66000,yes,yes,,,kain
+0x2B,#item.Short,[katana]Short,Short Katana,weapon,ninjasword,,,2,,4000,yes,yes,,,edge
+0x2C,#item.Middle,[katana]Middle,Middle Katana,weapon,ninjasword,,,3,,7000,,yes,,,edge
+0x2D,#item.Long,[katana]Long,Long Katana,weapon,ninjasword,,,4,,22000,,yes,,,edge
+0x2E,#item.NinjaSword,[katana]Ninja,Ninja Sword,weapon,ninjasword,,,5,,44000,yes,yes,,,edge
+0x2F,#item.Murasame,[katana]Murasame,Murasame,weapon,ninjasword,,,6,,66000,yes,yes,,,edge
+0x30,#item.Masamune,[katana]Masamune,Masamune,weapon,ninjasword,,,7,,88000,yes,yes,,,edge
+0x31,#item.Assassin,[knife]Assassin,Assassin Dagger,weapon,dagger,,,5,,20000,yes,yes,,,"kain,crydia,edward,palom,pcecil,arydia,edge"
+0x32,#item.MuteDagger,[knife]Mute,Mute Dagger,weapon,dagger,,,4,,15000,yes,yes,,,"kain,crydia,edward,palom,pcecil,arydia,edge"
+0x33,#item.Whip,[whip]Whip,Whip,weapon,whip,,,1,,3000,,,yes,,"crydia,arydia"
+0x34,#item.Chain,[whip]Chain,Chain Whip,weapon,whip,,,1,,6000,,,yes,,"crydia,arydia"
+0x35,#item.Blitz,[whip]Blitz,Blitz Whip,weapon,whip,,,3,,10000,,,yes,,"crydia,arydia"
+0x36,#item.FlameWhip,[whip]Flame,Flame Whip,weapon,whip,,,4,,16000,,,yes,,"crydia,arydia"
+0x37,#item.DragonWhip,[whip]Dragon,Dragon Whip,weapon,whip,,,5,,31000,,,yes,,"crydia,arydia"
+0x38,#item.HandAxe,[axe]HandAxe,Hand Axe,weapon,axe,,,1,,3000,yes,yes,,,"kain,pcecil,cid"
+0x39,#item.Dwarf,[axe]Dwarf,Dwarf Axe,weapon,axe,,,4,,15000,,yes,yes,,"kain,pcecil,cid"
+0x3A,#item.Ogre,[axe]Ogre,Ogre Axe,weapon,axe,,,4,,45000,,yes,,,"kain,pcecil,cid"
+0x3B,#item.SilverDagger,[knife]Silver,Silver Dagger,weapon,dagger,,,2,,3000,yes,yes,,,"kain,crydia,edward,palom,pcecil,arydia,edge"
+0x3C,#item.Dancing,[knife]Dancing,Dancing Dagger,weapon,dagger,,,3,,5000,yes,yes,,,"kain,crydia,edward,palom,pcecil,arydia,edge"
+0x3D,#item.SilverSword,[sword]Silver,Silver Sword,weapon,sword,,,2,,6000,,yes,,,"kain,pcecil"
+0x3E,#item.Spoon,[knife]Spoon,Spoon,weapon,dagger,,K,,,10000,yes,yes,,,
+0x3F,#item.CrystalSword,[lightsword]Crystal,Crystal Sword,weapon,lightsword,,,8,,215000,,yes,,,pcecil
+0x40,#item.Shuriken,[shuriken]Shuriken,Shuriken,weapon,star,,,3,,5000,yes,yes,yes,,
+0x41,#item.NinjaStar,[shuriken]Ninja,Ninja Star,weapon,star,,,5,,10000,yes,yes,yes,,
+0x42,#item.Boomrang,[boomerang]Boomrang,Boomerang,weapon,boomerang,,,2,,3000,,,yes,,edge
+0x43,#item.FullMoon,[boomerang]FullMoon,Full Moon,weapon,boomerang,,,5,,24000,,,yes,,edge
+0x44,#item.Dreamer,[harp]Dreamer,Dreamer Harp,weapon,harp,,,1,,480,,,yes,yes,edward
+0x45,#item.CharmHarp,[harp]Charm,Charm Harp,weapon,harp,,,2,,1200,,,yes,yes,edward
+0x46,#item.fe_CustomWeapon,,,,,,D,,,,,yes,,yes,
+0x47,#item.PoisonAxe,[axe]Poison,Poison Axe,weapon,axe,,,4,,25000,,yes,,yes,"kain,pcecil,cid"
+0x48,#item.RuneAxe,[axe]RuneAxe,Rune Axe,weapon,axe,,,5,,45000,,yes,,yes,"kain,pcecil,cid"
+0x49,#item.SilverHammer,[wrench]Silver,Silver Hammer,weapon,hammer,,,2,,8000,,yes,,yes,cid
+0x4A,#item.EarthHammer,[wrench]Earth,Earth Hammer,weapon,hammer,,,4,,30000,,yes,,yes,cid
+0x4B,#item.Wooden,[wrench]Wooden,Wooden Hammer,weapon,hammer,,,1,,80,,,,yes,cid
+0x4C,#item.Avenger,[sword]Avenger,Avenger,weapon,sword,,,7,,150000,yes,yes,,yes,"kain,pcecil"
+0x4D,#item.ShortBow,[bow]ShortBow,Short Bow,weapon,bow,,,1,,220,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x4E,#item.CrossBow,[bow]CrossBow,Cross Bow,weapon,bow,,,1,,700,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x4F,#item.GreatBow,[bow]GreatBow,Great Bow,weapon,bow,,,2,,2000,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x50,#item.Archer,[bow]Archer,Archer Bow,weapon,bow,,,3,,3000,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x51,#item.ElvenBow,[bow]ElvenBow,Elven Bow,weapon,bow,,,4,,10000,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x52,#item.SamuraiBow,[bow]Samurai,Samurai Bow,weapon,bow,,,5,,17000,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x53,#item.ArtemisBow,[bow]Artemis,Artemis Bow,weapon,bow,,,6,,80000,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x54,#item.IronArrow,[arrow]Iron,Iron Arrows,weapon,arrow,,,1,,10,,yes,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x55,#item.WhiteArrow,[arrow]White,White Arrows,weapon,arrow,,,2,,20,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x56,#item.FireArrow,[arrow]Fire,Fire Arrows,weapon,arrow,,,2,,30,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x57,#item.IceArrow,[arrow]Ice,Ice Arrows,weapon,arrow,,,2,,30,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x58,#item.LitArrow,[arrow]Lit,Lit Arrows,weapon,arrow,,,2,,30,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x59,#item.DarknessArrow,[arrow]Darkness,Darkness Arrows,weapon,arrow,,,2,,40,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5A,#item.PoisonArrow,[arrow]Poison,Poison Arrows,weapon,arrow,,,3,,70,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5B,#item.MuteArrow,[arrow]Mute,Mute Arrows,weapon,arrow,,,3,,100,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5C,#item.CharmArrow,[arrow]Charm,Charm Arrows,weapon,arrow,,,3,,110,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5D,#item.SamuraiArrow,[arrow]Samurai,Samurai Arrows,weapon,arrow,,,5,,140,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5E,#item.MedusaArrow,[arrow]Medusa,Medusa Arrows,weapon,arrow,,,3,,1250,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x5F,#item.ArtemisArrow,[arrow]Artemis,Artemis Arrows,weapon,arrow,,,7,,500,,,yes,,"crydia,edward,rosa,palom,porom,pcecil,cid,arydia,fusoya"
+0x60,#item.NoArmor,,,,,,D,,,,,,,,
+0x61,#item.IronShield,[shield]Iron,Iron Shield,armor,shield,,,1,,100,,yes,,,"kain,pcecil,cid"
+0x62,#item.ShadowShield,[shield]Shadow,Shadow Shield,armor,shield,,,1,,200,,yes,,,dkcecil
+0x63,#item.BlackShield,[shield]Black,Black Shield,armor,shield,,,1,,400,,yes,,,dkcecil
+0x64,#item.PaladinShield,[shield]Paladin,Paladin Shield,armor,shield,,,1,,700,,yes,,,pcecil
+0x65,#item.SilverShield,[shield]Silver,Silver Shield,armor,shield,,,1,,1000,,yes,,,"kain,pcecil,cid"
+0x66,#item.FireShield,[shield]Fire,Fire Shield,armor,shield,,,2,,1250,,yes,,,"kain,pcecil,cid"
+0x67,#item.IceShield,[shield]Ice,Ice Shield,armor,shield,,,2,,10000,,yes,,,"kain,pcecil,cid"
+0x68,#item.DiamondShield,[shield]Diamond,Diamond Shield,armor,shield,,,3,,15000,,,,,"kain,pcecil,cid"
+0x69,#item.Aegis,[shield]Aegis,Aegis Shield,armor,shield,,,4,,20000,,yes,,,"kain,pcecil,cid"
+0x6A,#item.SamuraiShield,[shield]Samurai,Samurai Shield,armor,shield,,,4,,20000,,yes,,,"kain,pcecil,cid"
+0x6B,#item.DragoonShield,[shield]Dragoon,Dragoon Shield,armor,shield,,,4,,25000,,,,,"kain,pcecil,cid"
+0x6C,#item.CrystalShield,[shield]Crystal,Crystal Shield,armor,shield,,,5,,35000,,,,,pcecil
+0x6D,#item.IronHelm,[helmet]Iron,Iron Helm,armor,helmet,,,1,,150,,yes,,,"kain,pcecil,cid"
+0x6E,#item.ShadowHelm,[helmet]Shadow,Shadow Helm,armor,helmet,,,1,,360,,yes,,,dkcecil
+0x6F,#item.DarknessHelm,[helmet]Darkness,Darkness Helm,armor,helmet,,,1,,640,,yes,,,dkcecil
+0x70,#item.BlackHelm,[helmet]Black,Black Helm,armor,helmet,,,1,,980,,yes,,,dkcecil
+0x71,#item.PaladinHelm,[helmet]Paladin,Paladin Helm,armor,helmet,,,1,,4000,,yes,,,pcecil
+0x72,#item.SilverHelm,[helmet]Silver,Silver Helm,armor,helmet,,,2,,3000,,yes,,,"kain,pcecil,cid"
+0x73,#item.DiamondHelm,[helmet]Diamond,Diamond Helm,armor,helmet,,,3,,10000,,,,,"kain,pcecil,cid"
+0x74,#item.SamuraiHelm,[helmet]Samurai,Samurai Helm,armor,helmet,,,4,,15000,,,,,"kain,pcecil,cid,edge"
+0x75,#item.DragoonHelm,[helmet]Dragoon,Dragoon Helm,armor,helmet,,,5,,20000,,,,,"kain,pcecil,cid"
+0x76,#item.CrystalHelm,[helmet]Crystal,Crystal Helm,armor,helmet,,,5,,30000,,,,,pcecil
+0x77,#item.Cap,[helmet]Cap,Cap,armor,hat,,,1,,100,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x78,#item.LeatherHat,[helmet]Leather,Leather Hat,armor,hat,,,1,,330,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x79,#item.GaeaHat,[helmet]Gaea,Gaea Hat,armor,hat,,,3,,4000,,,,,"crydia,tellah,rosa,palom,porom,pcecil,arydia,fusoya"
+0x7A,#item.WizardHat,[helmet]Wizard,Wizard Hat,armor,hat,,,4,,9000,,,,,"crydia,tellah,rosa,palom,porom,pcecil,arydia,fusoya"
+0x7B,#item.Tiara,[helmet]Tiara,Tiara,armor,hat,,,5,,20000,,yes,,,"crydia,rosa,porom,arydia"
+0x7C,#item.Ribbon,[helmet]Ribbon,Ribbon,armor,hat,,,6,,65000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x7D,#item.Headband,[helmet]Headband,Headband,armor,hat,,,3,,10000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x7E,#item.Bandanna,[helmet]Bandanna,Bandanna,armor,hat,,,4,,12000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x7F,#item.NinjaHelm,[helmet]Ninja,Ninja Mask,armor,hat,,,5,,25000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x80,#item.Glass,[helmet]Glass,Glass Mask,armor,hat,,,6,,45000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x81,#item.IronArmor,[armor]Iron,Iron Armor,armor,armor,,,1,,600,,yes,,,"kain,pcecil,cid"
+0x82,#item.ShadowArmor,[armor]Shadow,Shadow Armor,armor,armor,,,1,,1100,,yes,,,dkcecil
+0x83,#item.DarknessArmor,[armor]Darkness,Darkness Armor,armor,armor,,,1,,2000,,yes,,,dkcecil
+0x84,#item.BlackArmor,[armor]Black,Black Armor,armor,armor,,,2,,3000,,yes,,,dkcecil
+0x85,#item.PaladinArmor,[armor]Paladin,Paladin Armor,armor,armor,,,1,,8000,,yes,,,pcecil
+0x86,#item.SilverArmor,[armor]Silver,Silver Armor,armor,armor,,,2,,17000,,yes,,,"kain,pcecil,cid"
+0x87,#item.FireArmor,[armor]Fire,Fire Armor,armor,armor,,,3,,15000,,yes,,,"kain,pcecil,cid"
+0x88,#item.IceArmor,[armor]Ice,Ice Armor,armor,armor,,,3,,18000,,yes,,,"kain,pcecil,cid"
+0x89,#item.DiamondArmor,[armor]Diamond,Diamond Armor,armor,armor,,,4,,20000,,,,,"kain,pcecil,cid"
+0x8A,#item.Genji,[armor]Samurai,Samurai Armor,armor,armor,,,4,,20000,,,,,"kain,pcecil,cid,edge"
+0x8B,#item.DragonArmor,[armor]Dragoon,Dragoon Armor,armor,armor,,,5,,30000,,,,,"kain,pcecil,cid"
+0x8C,#item.CrystalArmor,[armor]Crystal,Crystal Armor,armor,armor,,,5,,65000,,,,,pcecil
+0x8D,#item.Cloth,[shirt]Cloth,Cloth Armor,armor,robe,,,1,,50,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x8E,#item.LeatherArmor,[shirt]Leather,Leather Armor,armor,robe,,,1,,200,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x8F,#item.GaeaArmor,[shirt]Gaea,Gaea Robe,armor,robe,,,2,,2000,,,,,"crydia,tellah,rosa,palom,porom,pcecil,arydia,fusoya"
+0x90,#item.WizardArmor,[shirt]Wizard,Wizard Robe,armor,robe,,,4,,11000,,,,,"crydia,tellah,rosa,palom,porom,pcecil,arydia,fusoya"
+0x91,#item.BlackRobe,[shirt]Black,Black Shirt,armor,robe,,,5,,20000,,,,,"crydia,tellah,palom,arydia,fusoya"
+0x92,#item.Sorcerer,[shirt]Sorcerer,Sorcerer Robe,armor,robe,,,5,,30000,,,,,"crydia,tellah,rosa,palom,porom,pcecil,arydia,fusoya"
+0x93,#item.WhiteRobe,[shirt]White,White Shirt,armor,robe,,,7,,85000,,,,,"crydia,tellah,rosa,porom,pcecil,fusoya"
+0x94,#item.PowerRobe,[shirt]Power,Power Shirt,armor,robe,,,6,,70000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x95,#item.Heroine,[shirt]Heroine,Heroine Armor,armor,robe,,,5,,40000,,,,,"crydia,rosa,porom,arydia"
+0x96,#item.Prisoner,[shirt]Prisoner,Prisoner Clothes,armor,robe,,,1,,70,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x97,#item.Bard,[shirt]Bard,Bard Tunic,armor,robe,,,1,,70,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x98,#item.Karate,[shirt]Karate,Karate Gi,armor,robe,,,3,,7000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x99,#item.BlBelt,[shirt]Bl.Belt,Black Belt,armor,robe,,,4,,20000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x9A,#item.AdamantArmor,[armor]Adamant,Adamant Armor,armor,armor,,,8,,500000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0x9B,#item.NinjaArmor,[shirt]Ninja,Ninja Shirt,armor,robe,,,5,,50000,,,,,edge
+0x9C,#item.IronGauntlet,[gauntlet]Iron,Iron Gauntlet,armor,gauntlet,,,1,,130,,yes,,,"kain,pcecil,cid,edge"
+0x9D,#item.ShadowGauntlet,[gauntlet]Shadow,Shadow Gauntlet,armor,gauntlet,,,1,,260,,yes,,,dkcecil
+0x9E,#item.DarknessGauntlet,[gauntlet]Darkness,Darkness Gauntlet,armor,gauntlet,,,1,,520,,yes,,,dkcecil
+0x9F,#item.BlackGauntlet,[gauntlet]Black,Black Gauntlet,armor,gauntlet,,,1,,800,,yes,,,dkcecil
+0xA0,#item.PaladinGauntlet,[gauntlet]Paladin,Paladin Gauntlet,armor,gauntlet,,,1,,3000,,yes,,,pcecil
+0xA1,#item.SilverGauntlet,[gauntlet]Silver,Silver Gauntlet,armor,gauntlet,,,1,,2000,,yes,,,"kain,pcecil,cid,edge"
+0xA2,#item.DiamondGauntlet,[gauntlet]Diamond,Diamond Gauntlet,armor,gauntlet,,,2,,5000,,,,,"kain,pcecil,cid"
+0xA3,#item.Zeus,[gauntlet]Zeus,Zeus Gauntlet,armor,gauntlet,,,6,,65000,,,,,"kain,yang,pcecil,cid,arydia,edge"
+0xA4,#item.SamuraiGauntlet,[gauntlet]Samurai,Samurai Gauntlet,armor,gauntlet,,,3,,10000,,,,,"kain,pcecil,cid,edge"
+0xA5,#item.DragoonGauntlet,[gauntlet]Dragoon,Dragoon Gauntlet,armor,gauntlet,,,4,,20000,,,,,"kain,pcecil,cid"
+0xA6,#item.CrystalGauntlet,[gauntlet]Crystal,Crystal Gauntlet,armor,gauntlet,,,5,,20000,,,,,pcecil
+0xA7,#item.IronRing,[ring]IronRing,Iron Ring,armor,ring,,,1,,100,,yes,,,"crydia,tellah,edward,rosa,yang,palom,porom,arydia,edge,fusoya"
+0xA8,#item.RubyRing,[ring]RubyRing,Ruby Ring,armor,ring,,,1,,500,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0xA9,#item.SilverRing,[ring]Silver,Silver Ring,armor,ring,,,2,,2000,,yes,,,"crydia,tellah,edward,rosa,yang,palom,porom,arydia,edge,fusoya"
+0xAA,#item.Strength,[ring]Strength,Strength Ring,armor,ring,,,5,,15000,,yes,,,"kain,yang,pcecil,cid,arydia,edge"
+0xAB,#item.Rune,[ring]Rune,Rune Ring,armor,ring,,,4,,20000,,,,,"crydia,tellah,edward,rosa,yang,palom,porom,arydia,edge,fusoya"
+0xAC,#item.CrystalRing,[ring]Crystal,Crystal Ring,armor,ring,,,6,,50000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0xAD,#item.DiamondRing,[ring]Diamond,Diamond Ring,armor,ring,,,3,,4000,,,,,"crydia,tellah,edward,rosa,yang,palom,porom,arydia,edge,fusoya"
+0xAE,#item.Protect,[ring]Protect,Protect Ring,armor,ring,,,6,,30000,,,,,"kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0xAF,#item.Cursed,[ring]Cursed,Cursed Ring,armor,ring,,,4,,66000,,,,,"dkcecil,kain,crydia,tellah,edward,rosa,yang,palom,porom,pcecil,cid,arydia,edge,fusoya"
+0xB0,#item.Bomb,[$15]Bomb,Bomb,item,attack,J,,1,,200,,,,,
+0xB1,#item.BigBomb,[$15]BigBomb,BigBomb,item,attack,J,,4,wild,7000,,,,,
+0xB2,#item.Notus,[$15]Notus,Notus,item,attack,J,,1,,200,,,,,
+0xB3,#item.Boreas,[$15]Boreas,Boreas,item,attack,J,,4,wild,7000,,,,,
+0xB4,#item.ThorRage,[$15]ThorRage,ThorRage,item,attack,J,,2,,200,,,,,
+0xB5,#item.ZeusRage,[$15]ZeusRage,ZeusRage,item,attack,J,,4,wild,7000,,,,,
+0xB6,#item.Stardust,[$15]Stardust,Stardust,item,attack,J,,4,wild,8000,,,,,
+0xB7,#item.Succubus,[$15]Succubus,Succubus,item,support,J,,3,,350,,,,,
+0xB8,#item.Vampire,[$15]Vampire,Vampire,item,support,J,,4,,4000,,,,,
+0xB9,#item.Bacchus,[$15]Bacchus,Bacchus,item,support,J,,5,,5000,,,,,
+0xBA,#item.Hermes,[$15]Hermes,Hermes,item,support,J,,2,,2000,,,,,
+0xBB,#item.HrGlass1,[$15]HrGlass1,HrGlass1,item,attack,J,,99,wild,6000,,,,,
+0xBC,#item.HrGlass2,[$15]HrGlass2,HrGlass2,item,attack,J,,5,,6000,,,,,
+0xBD,#item.HrGlass3,[$15]HrGlass3,HrGlass3,item,attack,J,,99,wild,6000,,,,,
+0xBE,#item.SilkWeb,[$15]SilkWeb,SilkWeb,item,attack,J,,3,,3000,,,,,
+0xBF,#item.Illusion,[$15]Illusion,Illusion,item,support,J,,4,,4000,,,,,
+0xC0,#item.FireBomb,[$15]FireBomb,FireBomb,item,attack,J,,4,wild,3000,,,,,
+0xC1,#item.Blizzard,[$15]Blizzard,Blizzard,item,attack,J,,4,wild,3000,,,,,
+0xC2,#item.LitBolt,[$15]Lit-Bolt,Lit-Bolt,item,attack,J,,4,wild,3000,,,,,
+0xC3,#item.StarVeil,[$15]StarVeil,StarVeil,item,support,J,,2,,3000,,,,,
+0xC4,#item.Kamikaze,[$15]Kamikaze,Kamikaze,item,attack,J,,3,,2000,,,,,
+0xC5,#item.MoonVeil,[$15]MoonVeil,MoonVeil,item,support,J,,7,,20000,,,,,
+0xC6,#item.MuteBell,[$15]MuteBell,MuteBell,item,attack,J,,2,,500,,,,,
+0xC7,#item.GaiaDrum,[$15]GaiaDrum,GaiaDrum,item,attack,J,,4,wild,8000,,,,,
+0xC8,#item.Crystal,[crystal]Crystal,Crystal,item,key,,K,,,,,,,,
+0xC9,#item.Coffin,[$15]Coffin,Coffin,item,attack,J,,5,,5000,,,,,
+0xCA,#item.Grimoire,[$15]Grimoire,Grimoire,item,attack,J,,4,wild,6000,,,,,
+0xCB,#item.Bestiary,[$15]Bestiary,Bestiary,item,support,J,,1,,300,,,,,
+0xCC,#item.Alarm,[$15]Alarm,Alarm,item,support,J,,1,,200,,,,,
+0xCD,#item.Unihorn,[$15]Unihorn,Unihorn,item,support,J,,2,,500,,,,,
+0xCE,#item.Cure1,[potion]Cure1,Cure1,item,potion,,,1,,30,,,,,
+0xCF,#item.Cure2,[potion]Cure2,Cure2,item,potion,,,3,,300,,,,,
+0xD0,#item.Cure3,[potion]Cure3,Cure3,item,potion,,,4,,3000,,,,,
+0xD1,#item.Ether1,[potion]Ether1,Ether1,item,potion,,,3,,1000,,,,,
+0xD2,#item.Ether2,[potion]Ether2,Ether2,item,potion,,,4,,5000,,,,,
+0xD3,#item.Elixir,[potion]Elixir,Elixir,item,potion,,,5,,30000,,,,,
+0xD4,#item.Life,[potion]Life,Life,item,potion,,,2,,1000,,,,,
+0xD5,#item.Soft,[$15]Soft,Soft,item,potion,J,,1,,400,,,,,
+0xD6,#item.MaidKiss,[$15]MaidKiss,MaidKiss,item,potion,J,,1,,60,,,,,
+0xD7,#item.Mallet,[$15]Mallet,Mallet,item,potion,J,,1,,80,,,,,
+0xD8,#item.DietFood,[$15]DietFood,DietFood,item,potion,J,,1,,100,,,,,
+0xD9,#item.EchoNote,[$15]EchoNote,EchoNote,item,potion,J,,1,,50,,,,,
+0xDA,#item.EyeDrops,[$15]Eyedrops,Eyedrops,item,potion,J,,1,,30,,,,,
+0xDB,#item.Antidote,[$15]Antidote,Antidote,item,potion,J,,1,,40,,,,,
+0xDC,#item.Cross,[$15]Cross,Cross,item,potion,J,,1,,100,,,,,
+0xDD,#item.Heal,[potion]Heal,Heal,item,potion,,,3,,100,,,,,
+0xDE,#item.Siren,[$15]Siren,Siren,item,siren,J,,5,,4000,,,,,
+0xDF,#item.AuApple,[$15]AuApple,AuApple,item,apple,J,,6,,40000,,,,,
+0xE0,#item.AgApple,[$15]AgApple,AgApple,item,apple,J,,6,,25000,,,,,
+0xE1,#item.SomaDrop,[$15]SomaDrop,SomaDrop,item,apple,J,,4,,20000,,,,,
+0xE2,#item.Tent,[tent]Tent,Tent,item,tent,,,2,,200,,,,,
+0xE3,#item.Cabin,[tent]Cabin,Cabin,item,tent,,,4,,1000,,,,,
+0xE4,#item.fe_EagleEye,[$15]EagleEye,EagleEye,item,map,J,,1,,100,,,,,
+0xE5,#item.Exit,[$15]Exit,Exit,item,map,J,,2,,2000,,,,,
+0xE6,#item.Sylph,[callmagic]Sylph,Sylph Summon,item,summon,,,4,,30000,,,,,
+0xE7,#item.Odin,[callmagic]Odin,Odin Summon,item,summon,,,4,,20000,,,,,
+0xE8,#item.Levia,[callmagic]Levia,Levia Summon,item,summon,,,5,,40000,,,,,
+0xE9,#item.Asura,[callmagic]Asura,Asura Summon,item,summon,,,4,,20000,,,,,
+0xEA,#item.Baham,[callmagic]Baham,Baham Summon,item,summon,,,6,,60000,,,,,
+0xEB,#item.Carrot,[$15]Carrot,Carrot,item,map,,,1,,50,,,,,
+0xEC,#item.Pass,[$15]Pass,Pass,item,key,,K,,,10000,,,,,
+0xED,#item.Whistle,[$15]Whistle,Whistle,item,map,,,2,,20000,,,,,
+0xEE,#item.Package,[$15]Package,Package,item,key,,K,,,,,,,,
+0xEF,#item.Baron,[key]Baron,Baron Key,item,key,,K,,,,,,,,
+0xF0,#item.SandRuby,[$15]SandRuby,SandRuby,item,key,,K,,,,,,,,
+0xF1,#item.EarthCrystal,[crystal]Earth,Earth Crystal,item,key,,K,,,,,,,,
+0xF2,#item.Magma,[key]Magma,Magma Key,item,key,,K,,,,,,,,
+0xF3,#item.Luca,[key]Luca,Luca Key,item,key,,K,,,,,,,,
+0xF4,#item.TwinHarp,[harp]TwinHarp,TwinHarp,item,key,,K,,,,,,,,
+0xF5,#item.DarkCrystal,[crystal]Darkness,Darkness Crystal,item,key,,K,,,,,,,,
+0xF6,#item.Rat,[tail]Rat,Rat Tail,item,key,,K,,,,,,,,
+0xF7,#item.Adamant,[$15]Adamant,Adamant,item,key,,K,,,,,,,,
+0xF8,#item.Pan,[$15]Pan,Pan,item,key,,K,,,,,,,,
+0xF9,#item.Pink,[tail]Pink,Pink Tail,item,key,,K,,,,,,,,
+0xFA,#item.Tower,[key]Tower,Tower Key,item,key,,K,,,,,,,,
+0xFB,#item.DkMatter,[$15]DkMatter,DkMatter,item,key,J,K,,,,,,,,
+0xFC,#item.fe_Hook,Hook,Hook,item,key,,K,,,,,,,,
+0xFD,#item.fe_RatTailChestItem,,,,,,D,,,,,,,,
+0xFE,#item.Sort,,,,,,D,,,,,,,,
+0xFF,#item.TrashCan,,,,,,D,,,,,,,,
