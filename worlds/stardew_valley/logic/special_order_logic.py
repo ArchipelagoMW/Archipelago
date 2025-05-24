@@ -55,7 +55,7 @@ class SpecialOrderLogic(BaseLogic):
 
         })
 
-        if ginger_island_content_pack.name in self.content.registered_packs:
+        if self.content.is_enabled(ginger_island_content_pack):
             self.update_rules({
                 SpecialOrder.island_ingredients: self.logic.relationship.can_meet(NPC.caroline) & self.logic.special_order.has_island_transport() &
                                                  self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_ship(Vegetable.taro_root) &
