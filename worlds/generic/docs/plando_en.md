@@ -94,10 +94,10 @@ This option is the percentage chance for the relevant list element to trigger. T
 ### `count` 
 This option sets the number of items placed from the list. 
 * **Default: 1 if using `item` or `location`, and `false` otherwise.**
-* **A number:** It will try to place this number of items.
-* `false`: It will try to place as many items from the list as it can.
-* **If `min` is defined,** it will try to place a random number of items higher than `min` (can be combined with `max`).
-* **If `max` is defined,** it will try to place a random number of items lower than `max` (can be combined with `min`).
+* **A number:** It will place this number of items.
+* `false`: It will place as many items from the list as it can.
+* **If `min` is defined,** it will place at least `min` many items (can be combined with `max`).
+* **If `max` is defined,** it will place at most `max` many items (can be combined with `min`).
 
 ### Available Items and Locations
 
