@@ -126,6 +126,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Adds all the chests that are spawned after clearing a room of ghosts.
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
+    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal", "Shivers Spawn"],
+        update_ram_addr=[LMRamData(0x803CDF50, bit_position=2, in_game_room_id=0, ram_byte_size=2)]),
     "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"],
         update_ram_addr = [LMRamData(0x803CDF88, bit_position=2, in_game_room_id=29, ram_byte_size=2)]),
     "Parlor Clear Chest": LMLocationData("Parlor", 47, "Chest", 20, [],
@@ -134,7 +136,7 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDFCA, bit_position=2, in_game_room_id=64, ram_byte_size=2)]),
     "Breaker Room Clear Chest": LMLocationData("Breaker Room", 49, "Chest", 36, ["Blackout"],
         update_ram_addr=[LMRamData(0x803CDFD6, bit_position=2, in_game_room_id=69, ram_byte_size=2)]),
-    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 25, [],
+    "Twins' Room Clear Chest": LMLocationData("Twins' Room", 25, "Chest", 16, [],
         update_ram_addr=[LMRamData(0x803CDF82, bit_position=2, in_game_room_id=27, ram_byte_size=2)]),
     "Billiards Room Clear Chest": LMLocationData("Billiards Room", 26, "Chest", 9, [],
         update_ram_addr=[LMRamData(0x803CDF68, bit_position=2, in_game_room_id=12, ram_byte_size=2)]),
@@ -154,8 +156,6 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDF7A, bit_position=2, in_game_room_id=22, ram_byte_size=2)]),
     "Dining Room Clear Chest": LMLocationData("Dining Room", 17, "Chest", 6, ["Fire Element Medal"],
         update_ram_addr=[LMRamData(0x803CDF62, bit_position=2, in_game_room_id=8, ram_byte_size=2)]),
-    "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal", "Shivers Spawn"],
-        update_ram_addr=[LMRamData(0x803CDF50, bit_position=2, in_game_room_id=0, ram_byte_size=2)]),
     "Fortune Teller Clear Chest": LMLocationData("Fortune-Teller's Room", 5, "Chest", 2, [],
         update_ram_addr=[LMRamData(0x803CDF56, bit_position=2, in_game_room_id=3, ram_byte_size=2)]),
     "Wardrobe Clear Chest": LMLocationData("Wardrobe", 0, "Chest", 22, ["Blackout"],
