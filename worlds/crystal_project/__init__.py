@@ -45,6 +45,7 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
     starting_jobs = []
+    included_regions: List[str] = []
     statically_placed_jobs:int = 0
     web = CrystalProjectWeb()
 
@@ -435,16 +436,14 @@ class CrystalProjectWorld(World):
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
             win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
+            self.included_regions.append("The New World")
         #elif self.options.goal == self.options.goal.option_true_astley:
         #    win_condition_item = "Item - Old World Stone"
+        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
+        #    self.included_regions.append("The Old World")
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
-        
-        if self.options.goal == 0:
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-        #elif self.options.goal == 1:
-        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
-        elif self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
@@ -462,12 +461,12 @@ class CrystalProjectWorld(World):
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
-            "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
-            "startingJobs": self.get_job_id_list(),
             "killBossesMode" : bool(self.options.killBossesMode.value),
             "easyLeveling": bool(self.options.easyLeveling.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
             "shopsanity": bool(self.options.shopsanity.value),
+            "startingJobs": self.get_job_id_list(),
+            "includedRegions": self.included_regions,
         }

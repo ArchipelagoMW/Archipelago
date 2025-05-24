@@ -1,10 +1,13 @@
-from typing import List, Dict
-from BaseClasses import Region, Location, MultiWorld
+from typing import List, Dict, TYPE_CHECKING
+from BaseClasses import Region, Location
 from .options import CrystalProjectOptions
 from .locations import LocationData
 from .rules import CrystalProjectLogic
 from .constants.keys import *
 from .constants.key_items import *
+
+if TYPE_CHECKING:
+    from . import CrystalProjectWorld
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
@@ -12,7 +15,7 @@ class CrystalProjectLocation(Location):
     def __init__(self, player: int, name: str = " ", address: int = None, parent=None):
         super().__init__(player, name, address, parent)
 
-def init_areas(world: MultiWorld, locations: List[LocationData], options: CrystalProjectOptions) -> None:
+def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
@@ -341,12 +344,13 @@ def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[Lo
 
     return per_region
 
-def create_region(world: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
+def create_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
     region = Region(name, player, world.multiworld)
 
     #if the region isn't part of the multiworld, we still make the region so that all the exits still work,
         #but we also don't fill it with locations
-    if not excluded: 
+    if not excluded:
+        world.included_regions.append(region.name)
         if name in locations_per_region:
             for location_data in locations_per_region[name]:
                 location = create_location(player, location_data, region)
@@ -363,7 +367,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 
     return location
 
-def connect_menu_region(world: MultiWorld, options: CrystalProjectOptions) -> None:
+def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     starting_region_list = {
         0: "Spawning Meadows"
     }
