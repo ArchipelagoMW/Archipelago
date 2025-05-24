@@ -59,13 +59,13 @@ def run_locations_benchmark():
                     multiworld.game[1] = game
                     multiworld.player_name = {1: "Tester"}
                     multiworld.set_seed(0)
-                    multiworld.state = CollectionState(multiworld)
                     args = argparse.Namespace()
                     for name, option in AutoWorld.AutoWorldRegister.world_types[game].options_dataclass.type_hints.items():
                         setattr(args, name, {
                             1: option.from_any(getattr(option, "default"))
                         })
                     multiworld.set_options(args)
+                    multiworld.state = CollectionState(multiworld)
 
                     gc.collect()
                     for step in self.gen_steps:
