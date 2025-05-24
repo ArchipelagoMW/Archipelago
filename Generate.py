@@ -57,6 +57,8 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--confirm_exit", action="store_true",
+                        help="Prevents program from exiting after successful generation until enter is pressed.")
     args = parser.parse_args()
 
     if args.skip_output and args.spoiler_only:
@@ -179,6 +181,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     erargs.spoiler_only = args.spoiler_only
     erargs.name = {}
     erargs.csv_output = args.csv_output
+    erargs.confirm_exit = args.confirm_exit
 
     settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
@@ -595,5 +598,7 @@ if __name__ == '__main__':
         gc.collect()  # need to collect to deref all hard references
         assert not weak(), f"MultiWorld object was not de-allocated, it's referenced {sys.getrefcount(weak())} times." \
                            " This would be a memory leak."
-    # in case of error-free exit should not need confirmation
-    atexit.unregister(confirmation)
+
+    # in case of error-free exit should not need confirmation (and not passed --confirm_exit flag)
+    if not erargs.confirm_exit:
+        atexit.unregister(confirmation)
