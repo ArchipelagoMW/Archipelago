@@ -1619,6 +1619,12 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         if x["move"] == 16 and x["dmd_name"] != "o_tuku1":
             x["move"] = 0
 
+        # Removes the red diamond from furniture as this will break our custom code fix we have for king boo.
+        if x["generate"] == 8:
+            x["item_table"] = 0
+            x["generate"] = 0
+            x["generate_num"] = 0
+
         # If one of Vincent's painting, update the flag to disable zoom instead.
         # if furniture_info_entry.info_file_field_entries.index(x) in {692, 693, 694, 695, 696, 697}:
         # x["move"] = 0
@@ -1627,7 +1633,8 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
         if not (item_data["type"] == "Furniture" or item_data["type"] == "Plant"):
             continue
 
-        if (item_data["type"] == "Furniture" and item_name != "Kitchen Oven") and output_data["Options"]["extra_boo_spots"] == 1:
+        if ((item_data["type"] == "Furniture" and item_name != "Kitchen Oven") and
+            output_data["Options"]["extra_boo_spots"] == 1):
                 furniture_info.info_file_field_entries[item_data["loc_enum"]]["telesa_hide"] = 10
 
         actor_item_name = __get_item_name(item_data, int(output_data["Slot"]))
