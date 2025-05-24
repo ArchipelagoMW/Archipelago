@@ -1,5 +1,3 @@
-import logging
-
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, job_list
@@ -7,10 +5,9 @@ from .locations import get_locations, get_bosses
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
-
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, Tutorial, MultiWorld
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -41,12 +38,13 @@ class CrystalProjectWorld(World):
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
     location_name_to_id.update(boss_name_to_id)  
     item_name_groups = get_item_names_per_category()
-    starting_jobs = []
-    included_regions: List[str] = []
-    statically_placed_jobs:int = 0
     web = CrystalProjectWeb()
 
-    logger = logging.getLogger()
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.starting_jobs = []
+        self.included_regions: List[str] = []
+        self.statically_placed_jobs:int = 0
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
