@@ -1394,7 +1394,8 @@ def update_treasure_table(treasure_info, character_info, output_data):
             rdiamond_amount = 0
 
             # Define the actor name to use from the Location in the generation output. Act differently if it's a key.
-            if item_data["name"] in ALL_ITEMS_TABLE.keys():
+            # Don't give any items that are not from our game, leave those 0 / blank.
+            if int(item_data["player"]) == slot_num and item_data["name"] in ALL_ITEMS_TABLE.keys():
                 lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
                 if lm_item_data.update_ram_addr and any(update_addr.item_count for update_addr in
                         lm_item_data.update_ram_addr if update_addr.item_count and update_addr.item_count > 0):
