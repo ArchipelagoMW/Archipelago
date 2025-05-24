@@ -37,7 +37,7 @@ class CMWorld(World):
     game: ClassVar[str] = "ChecksMate"
     data_version = 0
     web = CMWeb()
-    required_client_version = (0, 2, 14)
+    required_client_version = (0, 3, 0)
     options_dataclass: ClassVar[Type[PerGameCommonOptions]] = CMOptions
     options: CMOptions
 
