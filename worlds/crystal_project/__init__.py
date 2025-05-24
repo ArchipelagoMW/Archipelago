@@ -296,13 +296,13 @@ class CrystalProjectWorld(World):
         else:
             [excluded_items.add(equipment_piece) for equipment_piece in non_progressive_equipment]
 
-        if self.options.keyMode == self.options.keyMode.option_vanilla:
+        if self.options.keyMode == self.options.keyMode.option_vanilla or self.options.keyMode == self.options.keyMode.option_skeleton:
             excluded_items.add("Item - Prison Key Ring")
             excluded_items.add("Item - Beaurior Key Ring")
             excluded_items.add("Item - Slip Glide Ride Key Ring")
             excluded_items.add("Item - Ice Puzzle Key Ring")
-            excluded_items.add("IItem - Jidamba Key Ring")
-        elif self.options.keyMode == self.options.keyMode.option_key_ring:
+            excluded_items.add("Item - Jidamba Key Ring")
+        elif self.options.keyMode == self.options.keyMode.option_key_ring or self.options.keyMode == self.options.keyMode.option_skeleton:
             excluded_items.add("Item - South Wing Key")
             excluded_items.add("Item - East Wing Key")
             excluded_items.add("Item - West Wing Key")
@@ -315,33 +315,6 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - Foliage Key")
             excluded_items.add("Item - Cave Key")
             excluded_items.add("Item - Canopy Key")
-        elif self.options.keyMode == self.options.keyMode.option_skeleton:
-            excluded_items.add("Item - Luxury Key")
-            excluded_items.add("Item - Gardeners Key")
-            excluded_items.add("Item - South Wing Key")
-            excluded_items.add("Item - East Wing Key")
-            excluded_items.add("Item - West Wing Key")
-            excluded_items.add("Item - Dark Wing Key")
-            excluded_items.add("Item - Cell Key")
-            excluded_items.add("Item - Room 1 Key")
-            excluded_items.add("Item - Small Key")
-            excluded_items.add("Item - Boss Key")
-            excluded_items.add("Item - Red Door Key")
-            excluded_items.add("Item - Ice Puzzle Key")
-            excluded_items.add("Item - Rampart Key")
-            excluded_items.add("Item - Forgotten Key")
-            excluded_items.add("Item - Tram Key")
-            excluded_items.add("Item - Courtyard Key")
-            excluded_items.add("Item - Pyramid Key")
-            excluded_items.add("Item - Foliage Key")
-            excluded_items.add("Item - Cave Key")
-            excluded_items.add("Item - Canopy Key")
-            excluded_items.add("Item - Ice Cell Key")
-            excluded_items.add("Item - Prison Key Ring")
-            excluded_items.add("Item - Beaurior Key Ring")
-            excluded_items.add("Item - Slip Glide Ride Key Ring")
-            excluded_items.add("Item - Ice Puzzle Key Ring")
-            excluded_items.add("IItem - Jidamba Key Ring")
 
         if self.options.jobRando == self.options.jobRando.option_none:
             excluded_items.add("Job - Fencer")
