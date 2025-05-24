@@ -76,6 +76,7 @@ class FF4FEWorld(World):
         self.rom_name_available_event = threading.Event()
         self.chosen_character = "None"
         self.objective_count = -1
+        self.dark_matters: list[FF4FEItem] = list()
 
     def is_vanilla_game(self):
         return self.get_objective_count() == 0
@@ -223,6 +224,9 @@ class FF4FEWorld(World):
                     (self.get_location("Objective Reward")
                      .place_locked_item(self.create_item("Crystal")))
                     continue
+            if item.name == "DkMatter":
+                self.dark_matters.append(item)
+                continue
             if item.name.startswith("Objective"): # Objectives get manually placed later.
                 continue
             self.multiworld.itempool.append(item)
@@ -409,11 +413,11 @@ class FF4FEWorld(World):
         location_set = set(self.multiworld.get_unfilled_locations()) - {self.get_location(location) for location in major_locations}
         location_set = sorted(location_set)
         self.random.shuffle(location_set)
-        itempool = [item for item in self.multiworld.itempool
-                    if (item.name == "DkMatter" and item.player == self.player)]
-        for item in itempool:
-            self.multiworld.itempool.remove(item)
+        itempool = self.dark_matters
         remaining_fill(self.multiworld, location_set, itempool, check_location_can_fill=True)
+
+    def get_pre_fill_items(self) -> list["Item"]:
+        return self.dark_matters
 
     def post_fill(self) -> None:
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
