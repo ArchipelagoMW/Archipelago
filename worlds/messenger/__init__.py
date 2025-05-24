@@ -1,26 +1,36 @@
 import logging
 from typing import Any, ClassVar, TextIO
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components
+from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
+from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
+from .transitions import disconnect_entrances, shuffle_transitions
 
 components.append(
-    Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
+    Component(
+        "The Messenger",
+        component_type=Type.CLIENT,
+        func=launch_game,
+        game_name="The Messenger",
+        supports_uri=True,
+        icon="The Messenger",
+        description="Launch The Messenger.\nInstalls and checks for updates for the randomizer.")
 )
+
+icon_paths["The Messenger"] = f"ap:{__name__}/assets/component_icon.png"
 
 
 class MessengerSettings(Group):
@@ -34,6 +44,7 @@ class MessengerSettings(Group):
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
+    rich_text_options_doc = True
 
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
@@ -45,8 +56,17 @@ class MessengerWeb(WebWorld):
         "setup/en",
         ["alwaysintreble"],
     )
+    plando_en = Tutorial(
+        "The Messenger Plando Guide",
+        "A guide detailing The Messenger's various supported plando options.",
+        "English",
+        "plando_en.md",
+        "plando/en",
+        ["alwaysintreble"],
+    )
 
-    tutorials = [tut_en]
+    tutorials = [tut_en, plando_en]
+    option_groups = option_groups
 
 
 class MessengerWorld(World):
@@ -128,7 +148,7 @@ class MessengerWorld(World):
     spoiler_portal_mapping: dict[str, str]
     portal_mapping: list[int]
     transitions: list[Entrance]
-    reachable_locs: int = 0
+    reachable_locs: bool = False
     filler: dict[str, int]
 
     def generate_early(self) -> None:
@@ -145,13 +165,13 @@ class MessengerWorld(World):
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
-        starting_portals = ["Autumn Hills", "Howling Grotto", "Glacial Peak", "Riviere Turquoise", "Sunken Shrine", "Searing Crags"]
+        starting_portals = ["Autumn Hills", "Howling Grotto", "Glacial Peak", "Riviere Turquoise", "Sunken Shrine",
+                            "Searing Crags"]
         self.starting_portals = [f"{portal} Portal"
                                  for portal in starting_portals[:3] +
                                  self.random.sample(starting_portals[3:], k=self.options.available_portals - 3)]
 
         # super complicated method for adding searing crags to starting portals if it wasn't chosen
-        # TODO add a check for transition shuffle when that gets added back in
         if not self.options.shuffle_portals and "Searing Crags Portal" not in self.starting_portals:
             self.starting_portals.append("Searing Crags Portal")
             portals_to_strip = [portal for portal in ["Riviere Turquoise Portal", "Sunken Shrine Portal"]
@@ -181,7 +201,7 @@ class MessengerWorld(World):
             region_name = region.name.removeprefix(f"{region.parent} - ")
             connection_data = CONNECTIONS[region.parent][region_name]
             for exit_region in connection_data:
-                region.connect(self.multiworld.get_region(exit_region, self.player))
+                region.connect(self.get_region(exit_region))
 
         # all regions need to be created before i can do these connections so we create and connect the complex first
         for region in [level for level in simple_regions if level.name in REGION_CONNECTIONS]:
@@ -228,7 +248,7 @@ class MessengerWorld(World):
                     f"({self.options.total_seals}). Adjusting to {total_seals}"
                 )
                 self.total_seals = total_seals
-            self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
+            self.required_seals = max(1, int(self.options.percent_seals_required.value / 100 * self.total_seals))
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
             itempool += seals
@@ -256,9 +276,12 @@ class MessengerWorld(World):
                              f" {logic} for {self.multiworld.get_player_name(self.player)}")
         #     MessengerOOBRules(self).set_messenger_rules()
 
+    def connect_entrances(self) -> None:
+        if self.options.shuffle_transitions:
+            disconnect_entrances(self)
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
-        attempts = 5
+        attempts = 20
         if self.options.shuffle_portals:
             self.portal_mapping = []
             self.spoiler_portal_mapping = {}
@@ -270,6 +293,9 @@ class MessengerWorld(World):
             # failsafe mostly for invalid plandoed portals with no transition shuffle
             else:
                 raise RuntimeError("Unable to generate valid portal output.")
+
+        if self.options.shuffle_transitions:
+            shuffle_transitions(self)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -286,9 +312,54 @@ class MessengerWorld(World):
                 key=lambda portal:
                 ["Autumn Hills", "Riviere Turquoise",
                  "Howling Grotto", "Sunken Shrine",
-                 "Searing Crags", "Glacial Peak"].index(portal[0]))
+                 "Searing Crags", "Glacial Peak"].index(portal[0])
+            )
             for portal, output in portal_info:
-                spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here lmao", self.player)
+                spoiler.set_entrance(f"{portal} Portal", output, "", self.player)
+
+        if self.options.shuffle_transitions:
+            for transition in self.transitions:
+                if (transition.randomization_type == EntranceType.TWO_WAY
+                        and (transition.connected_region.name, "both", self.player) in spoiler.entrances):
+                    continue
+                spoiler.set_entrance(
+                    transition.name if "->" not in transition.name else transition.parent_region.name,
+                    transition.connected_region.name,
+                    "both" if transition.randomization_type == EntranceType.TWO_WAY
+                              and self.options.shuffle_transitions == ShuffleTransitions.option_coupled else "",
+                    self.player
+                )
+
+    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
+        if not self.options.shuffle_transitions:
+            return
+
+        hint_data.update({self.player: {}})
+
+        all_state = self.multiworld.get_all_state(True)
+        # sometimes some of my regions aren't in path for some reason?
+        all_state.update_reachable_regions(self.player)
+        paths = all_state.path
+        start = self.get_region("Tower HQ")
+        start_connections = [entrance.name for entrance in start.exits if entrance not in {"Home", "Shrink Down"}]
+        transition_names = [transition.name for transition in self.transitions] + start_connections
+        for loc in self.get_locations():
+            if (loc.parent_region.name in {"Tower HQ", "The Shop", "Music Box", "The Craftsman's Corner"}
+                    or loc.address is None):
+                continue
+            path_to_loc: list[str] = []
+            name, connection = paths.get(loc.parent_region, (None, None))
+            while connection != ("Menu", None) and name is not None:
+                name, connection = connection
+                if name in transition_names:
+                    if name in start_connections:
+                        name = f"{name} -> {self.get_entrance(name).connected_region.name}"
+                    path_to_loc.append(name)
+
+            text = " => ".join(reversed(path_to_loc))
+            if not text:
+                continue
+            hint_data[self.player][loc.address] = text
 
     def fill_slot_data(self) -> dict[str, Any]:
         slot_data = {
@@ -308,11 +379,13 @@ class MessengerWorld(World):
 
     def get_filler_item_name(self) -> str:
         if not getattr(self, "_filler_items", None):
-            self._filler_items = [name for name in self.random.choices(
-                list(self.filler),
-                weights=list(self.filler.values()),
-                k=20
-            )]
+            self._filler_items = [
+                name for name in self.random.choices(
+                    list(self.filler),
+                    weights=list(self.filler.values()),
+                    k=20
+                )
+            ]
         return self._filler_items.pop(0)
 
     def create_item(self, name: str) -> MessengerItem:
@@ -331,7 +404,7 @@ class MessengerWorld(World):
             self.total_shards += count
             return ItemClassification.progression_skip_balancing if count else ItemClassification.filler
 
-        if name == "Windmill Shuriken" and getattr(self, "multiworld", None) is not None:
+        if name == "Windmill Shuriken":
             return ItemClassification.progression if self.options.logic_level else ItemClassification.filler
 
         if name == "Power Seal":
@@ -344,7 +417,7 @@ class MessengerWorld(World):
 
         if name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
             return ItemClassification.useful
-        
+
         if name in TRAPS:
             return ItemClassification.trap
 
@@ -354,7 +427,7 @@ class MessengerWorld(World):
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: set[int]) -> World:
         group = super().create_group(multiworld, new_player_id, players)
         assert isinstance(group, MessengerWorld)
-        
+
         group.filler = FILLER.copy()
         group.options.traps.value = all(multiworld.worlds[player].options.traps for player in players)
         if group.options.traps:
@@ -364,13 +437,13 @@ class MessengerWorld(World):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+            state.add_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+            state.remove_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     @classmethod

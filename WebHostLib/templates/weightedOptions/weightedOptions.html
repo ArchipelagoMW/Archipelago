@@ -83,8 +83,10 @@
                                 {% elif issubclass(option, Options.FreeText) %}
                                     {{ inputs.FreeText(option_name, option) }}
 
-                                {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                    {{ inputs.ItemDict(option_name, option, world) }}
+                                {% elif issubclass(option, Options.OptionCounter) and (
+                                    option.valid_keys or option.verify_item_name or option.verify_location_name
+                                ) %}
+                                    {{ inputs.OptionCounter(option_name, option, world) }}
 
                                 {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                     {{ inputs.OptionList(option_name, option) }}
@@ -100,7 +102,7 @@
 
                                 {% else %}
                                     <div class="unsupported-option">
-                                        This option is not supported. Please edit your .yaml file manually.
+                                        This option cannot be modified here. Please edit your .yaml file manually.
                                     </div>
 
                                 {% endif %}
