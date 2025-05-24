@@ -1152,9 +1152,9 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
 
             is_pure_trap = (
-                ItemClassification.trap in item_flags
-                and not ItemClassification.useful in item_flags
-                and not ItemClassification.progression in item_flags
+                ItemClassification.trap & item_flags
+                and not ItemClassification.useful & item_flags
+                and not ItemClassification.progression & item_flags
             )
             if is_pure_trap:
                 auto_priority = HintStatus.HINT_PRIORITY_AVOID
@@ -1183,9 +1183,9 @@ def collect_hint_location_id(ctx: Context, team: int, slot: int, seeked_location
         entrance = ctx.er_hint_data.get(slot, {}).get(seeked_location, "")
 
         is_pure_trap = (
-            ItemClassification.trap in item_flags
-            and not ItemClassification.useful in item_flags
-            and not ItemClassification.progression in item_flags
+            ItemClassification.trap & item_flags
+            and not ItemClassification.useful & item_flags
+            and not ItemClassification.progression & item_flags
         )
         if is_pure_trap:
             auto_priority = HintStatus.HINT_PRIORITY_AVOID
