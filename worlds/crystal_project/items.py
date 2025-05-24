@@ -172,8 +172,8 @@ item_table: Dict[str, ItemData] = {
     "Item - Progressive Level Cap": ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 0),
     "Item - Special Shoudu Stew": ItemData("Item", 229 + item_index_offset, ItemClassification.progression, 0, 1),
     "Item - Special Milk": ItemData("Item", 230 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Fresh Salmon": ItemData("Item", 231 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Rotten Salmon": ItemData("Item", 232 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Special Fresh Salmon": ItemData("Item", 231 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Special Rotten Salmon": ItemData("Item", 232 + item_index_offset, ItemClassification.progression, 0, 1),
 
     #Animal mount summons
     "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
