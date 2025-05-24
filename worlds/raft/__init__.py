@@ -131,10 +131,12 @@ class RaftWorld(World):
         create_regions(self.multiworld, self.player)
 
     def replace_item_name_as_necessary(self, name: str) -> str:
+        if name not in progressive_table:
+            return name
         if "Frequency" in name:
             if self.options.island_frequency_locations == self.options.island_frequency_locations.option_progressive:
                 return progressive_table[name]
-        elif self.options.progressive_items and name in progressive_table:
+        elif self.options.progressive_items:
             return progressive_table[name]
         return name
 
