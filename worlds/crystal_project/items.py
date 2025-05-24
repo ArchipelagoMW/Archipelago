@@ -136,6 +136,11 @@ item_table: Dict[str, ItemData] = {
     "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
     "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression), #Everyone's best friend
+    "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
+    "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Ice Puzzle Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Slip Glide Ride Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jidamba Key Ring": ItemData("Item", 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
@@ -1589,13 +1594,6 @@ job_crystal_expert_dictionary: Dict[str, str] = {
     "Job - Beastmaster": "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
     "Job - Weaver": "Jidamba Eaclaneya Crystal - Weaver",
     "Job - Mimic": "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
-}
-
-key_rings: Dict[str, ItemData] = {
-    "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Slip Glide Ride Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Jidamba Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 }
 
 filler_items: Tuple[str, ...] = (
