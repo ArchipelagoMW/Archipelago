@@ -329,7 +329,7 @@ class CandyBox2RulesPackage(JSONEncoder):
                     generated_entrances.append(entrance)
                 if rule is not None:
                     for indirect_region in rule.indirection_required():
-                        world.multiworld.register_indirect_condition(indirect_region, entrance)
+                        world.multiworld.register_indirect_condition(rooms[indirect_region], entrance)
 
         return generated_entrances
 

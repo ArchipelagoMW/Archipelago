@@ -92,10 +92,10 @@ def create_regions(world: "CandyBox2World"):
         "MENU": CandyBox2Region("Menu", player, multiworld, "The Candy Box"),
     }
 
-    for room in CandyBox2Room:
+    for room in [room for room in CandyBox2Room if room != CandyBox2Room.VILLAGE and room != CandyBox2Room.WORLD_MAP]:
         room_regions[room.value] = CandyBox2RoomRegion(room, player, multiworld)
 
-    for region in room_regions.values():
+    for region in  room_regions.values():
         world.multiworld.regions.append(region)
 
     generated_entrances = world.rules_package.apply_room_rules(room_regions, world, player)
