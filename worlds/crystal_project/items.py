@@ -139,8 +139,8 @@ item_table: Dict[str, ItemData] = {
     "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
     "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
     "Item - Ice Puzzle Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Slip Glide Ride Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Jidamba Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Slip Glide Ride Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    "Item - Jidamba Key Ring": ItemData("Item", 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
