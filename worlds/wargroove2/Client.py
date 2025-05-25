@@ -133,8 +133,8 @@ class Wargroove2Context(CommonContext):
         # By default, Windows sets an environment variable we can leverage.
         # However, other OSes don't usually have this value set, so we need to rely on a settings value instead.
         appdata_wargroove = None
+        self.level_directory = "levels"
         if "appdata" in os.environ:
-            self.level_directory = "levels"
             appdata_wargroove = os.environ['appdata']
         else:
             try:
