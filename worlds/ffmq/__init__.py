@@ -151,7 +151,8 @@ class FFMQWorld(World):
                         error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
 
                     if fuzzer:
-                        error_text = "Please set up a local FFMQRWebAPI to fuzz FFMQ so as to not flood the public API with map shuffle requests."
+                        error_text += "\nPlease set up a local FFMQRWebAPI to fuzz FFMQ so as to not flood the public" \
+                                      " API with map shuffle requests."
 
                     raise Exception(error_text)
                 api_urls.append(api_urls.pop(0))
