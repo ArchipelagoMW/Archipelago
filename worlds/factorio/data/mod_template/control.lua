@@ -134,6 +134,9 @@ end
 
 script.on_event(defines.events.on_player_changed_position, on_player_changed_position)
 {% endif %}
+-- Handle the pathfinding result of teleport traps
+script.on_event(defines.events.on_script_path_request_finished, handle_teleport_attempt)
+
 function count_energy_bridges()
     local count = 0
     for i, bridge in pairs(storage.energy_link_bridges) do
@@ -143,9 +146,11 @@ function count_energy_bridges()
     end
     return count
 end
+
 function get_energy_increment(bridge)
     return ENERGY_INCREMENT + (ENERGY_INCREMENT * 0.3 * bridge.quality.level)
 end
+
 function on_check_energy_link(event)
     --- assuming 1 MJ increment and 5MJ battery:
     --- first 2 MJ request fill, last 2 MJ push energy, middle 1 MJ does nothing
@@ -722,12 +727,10 @@ end,
     game.forces["enemy"].set_evolution_factor(new_factor, "nauvis")
     game.print({"", "New evolution factor:", new_factor})
 end,
-["Teleport Trap"] = function ()
+["Teleport Trap"] = function()
     for _, player in ipairs(game.forces["player"].players) do
-        current_character = player.character
-        if current_character ~= nil then
-            current_character.teleport(current_character.surface.find_non_colliding_position(
-                current_character.prototype.name, random_offset_position(current_character.position, 1024), 0, 1))
+        if player.character then
+            attempt_teleport_player(player, 1)
         end
     end
 end,
@@ -748,6 +751,11 @@ end,
 
     if #cliffs > 0 then
         fire_entity_at_entities("atomic-rocket", {cliffs[math.random(#cliffs)]}, 0.1)
+    end
+end,
+["Inventory Spill Trap"] = function ()
+    for _, player in ipairs(game.forces["player"].players) do
+        spill_character_inventory(player.character)
     end
 end,
 }

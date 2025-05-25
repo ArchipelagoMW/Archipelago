@@ -1,8 +1,14 @@
+import logging
 from dataclasses import dataclass
-from typing import Dict, Any
+from typing import Dict, Any, TYPE_CHECKING
+
+from decimal import Decimal, ROUND_HALF_UP
+
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility, NamedRange)
 from .er_data import portal_mapping
+if TYPE_CHECKING:
+    from . import TunicWorld
 
 
 class SwordProgression(DefaultOnToggle):
@@ -24,6 +30,7 @@ class StartWithSword(Toggle):
 class KeysBehindBosses(Toggle):
     """
     Places the three hexagon keys behind their respective boss fight in your world.
+    If playing Hexagon Quest, it will place three gold hexagons at the boss locations.
     """
     internal_name = "keys_behind_bosses"
     display_name = "Keys Behind Bosses"
@@ -32,7 +39,8 @@ class KeysBehindBosses(Toggle):
 class AbilityShuffling(DefaultOnToggle):
     """
     Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
-    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount.
+    If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
+    Hexagon goal amount, unless the option is set to have them unlock via pages instead.
     * Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other player-facing codes.
     """
     internal_name = "ability_shuffling"
@@ -84,14 +92,16 @@ class HexagonGoal(Range):
     """
     internal_name = "hexagon_goal"
     display_name = "Gold Hexagons Required"
-    range_start = 15
-    range_end = 50
+    range_start = 1
+    range_end = 100
     default = 20
 
 
 class ExtraHexagonPercentage(Range):
     """
     How many extra Gold Questagons are shuffled into the item pool, taken as a percentage of the goal amount.
+    The max number of Gold Questagons that can be in the item pool is 100, so this option may be overridden and/or
+    reduced if the Hexagon Goal amount is greater than 50.
     """
     internal_name = "extra_hexagon_percentage"
     display_name = "Percentage of Extra Gold Hexagons"
@@ -100,11 +110,27 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
+class HexagonQuestAbilityUnlockType(Choice):
+    """
+    Determines how abilities are unlocked when playing Hexagon Quest with Shuffled Abilities enabled.
+
+    Hexagons: A new ability is randomly unlocked after obtaining 25%, 50%, and 75% of the required Hexagon goal amount. Requires at least 3 Gold Hexagons in the item pool, or 15 if Keys Behind Bosses is enabled.
+    Pages: Abilities are unlocked by finding specific pages in the manual.
+
+    This option does nothing if Shuffled Abilities is not enabled.
+    """
+    internal_name = "hexagon_quest_ability_type"
+    display_name = "Hexagon Quest Ability Unlocks"
+    option_hexagons = 0
+    option_pages = 1
+    default = 0
+
+
 class EntranceRando(TextChoice):
     """
     Randomize the connections between scenes.
     A small, very lost fox on a big adventure.
-    
+
     If you set this option's value to a string, it will be used as a custom seed.
     Every player who uses the same custom seed will have the same entrances, choosing the most restrictive settings among these players for the purpose of pairing entrances.
     """
@@ -121,12 +147,40 @@ class EntranceRando(TextChoice):
 
 class FixedShop(Toggle):
     """
-    Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
-    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
-    Has no effect if Entrance Rando is not enabled.
+    This option has been superseded by the Entrance Layout option.
+    If enabled, it will override the Entrance Layout option.
+    This is kept to keep older yamls working, and will be removed at a later date.
     """
+    visibility = Visibility.none
     internal_name = "fixed_shop"
     display_name = "Fewer Shops in Entrance Rando"
+
+
+class EntranceLayout(Choice):
+    """
+    Decide how the Entrance Randomizer chooses how to pair the entrances.
+    Standard: Entrances are randomly connected. There are 6 shops in the pool with this option.
+    Fixed Shop: Forces the Windmill entrance to lead to a shop, and removes the other shops from the pool.
+    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
+    Direction Pairs: Entrances facing opposite directions are paired together. There are 8 shops in the pool with this option.
+    Note: For seed groups, if one player in a group chooses Fixed Shop and another chooses Direction Pairs, it will error out.
+    Either of these options will override Standard within a seed group.
+    """
+    internal_name = "entrance_layout"
+    display_name = "Entrance Layout"
+    option_standard = 0
+    option_fixed_shop = 1
+    option_direction_pairs = 2
+    default = 0
+
+
+class Decoupled(Toggle):
+    """
+    Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
+    Note: For seed groups, all players in the group must have this option enabled or disabled.
+    """
+    internal_name = "decoupled"
+    display_name = "Decoupled Entrances"
 
 
 class LaurelsLocation(Choice):
@@ -184,13 +238,22 @@ class LocalFill(NamedRange):
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
-    - entrance: "Entrance Name"
-      exit: "Exit Name"
+    - entrance: Entrance Name
+      exit: Exit Name
+      direction: Direction
       percentage: 100
+    Direction must be one of entrance, exit, or both, and defaults to both if omitted.
+    Direction entrance means the entrance leads to the exit. Direction exit means the exit leads to the entrance.
+    If you do not have Decoupled enabled, you do not need the direction line, as it will only use both.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
+    If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
+    Shop Portal 1-6 are South portals, and Shop Portal 7-8 are West portals.
+    This option does nothing if Entrance Rando is disabled.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    shops = {f"Shop Portal {i + 1}" for i in range(500)}
+    entrances = {portal.name for portal in portal_mapping}.union(shops)
+    exits = {portal.name for portal in portal_mapping}.union(shops)
 
     duplicate_exits = True
 
@@ -269,6 +332,16 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 class LogicRules(Choice):
     """
     This option has been superseded by the individual trick options.
@@ -287,6 +360,14 @@ class LogicRules(Choice):
     default = 0
 
 
+class BreakableShuffle(Toggle):
+    """
+    Turns approximately 250 breakable objects in the game into checks.
+    """
+    internal_name = "breakable_shuffle"
+    display_name = "Breakable Shuffle"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -295,19 +376,24 @@ class TunicOptions(PerGameCommonOptions):
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
+
     fool_traps: FoolTraps
     laurels_location: LaurelsLocation
 
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
     extra_hexagon_percentage: ExtraHexagonPercentage
+    hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
 
     shuffle_ladders: ShuffleLadders
     grass_randomizer: GrassRandomizer
+    breakable_shuffle: BreakableShuffle
     local_fill: LocalFill
 
     entrance_rando: EntranceRando
-    fixed_shop: FixedShop
+    entrance_layout: EntranceLayout
+    decoupled: Decoupled
+    plando_connections: TunicPlandoConnections
 
     combat_logic: CombatLogic
     lanternless: Lanternless
@@ -316,13 +402,20 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+      
+    all_random: HiddenAllRandom
 
-    plando_connections: TunicPlandoConnections
-
-    logic_rules: LogicRules
+    fixed_shop: FixedShop  # will be removed at a later date
+    logic_rules: Removed  # fully removed in the direction pairs update
 
 
 tunic_option_groups = [
+    OptionGroup("Hexagon Quest Options", [
+        HexagonQuest,
+        HexagonGoal,
+        ExtraHexagonPercentage,
+        HexagonQuestAbilityUnlockType
+    ]),
     OptionGroup("Logic Options", [
         CombatLogic,
         Lanternless,
@@ -330,8 +423,14 @@ tunic_option_groups = [
         LaurelsZips,
         IceGrappling,
         LadderStorage,
-        LadderStorageWithoutItems
-    ])
+        LadderStorageWithoutItems,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        EntranceRando,
+        EntranceLayout,
+        Decoupled,
+        TunicPlandoConnections,
+    ]),
 ]
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {
@@ -357,3 +456,23 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
         "lanternless": True,
     },
 }
+
+
+def check_options(world: "TunicWorld"):
+    options = world.options
+    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
+        total_hexes = get_hexagons_in_pool(world)
+        min_hexes = 3
+
+        if options.keys_behind_bosses:
+            min_hexes = 15
+        if total_hexes < min_hexes:
+            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
+            options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
+
+
+def get_hexagons_in_pool(world: "TunicWorld"):
+    # Calculate number of hexagons in item pool
+    options = world.options
+    return min(int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
+                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)

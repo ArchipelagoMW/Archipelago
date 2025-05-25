@@ -1,22 +1,25 @@
-from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set
+from dataclasses import fields
+from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
-from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations, sphere_one
+from .locations import location_table, location_name_groups, standard_location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
 from .regions import tunic_regions
-from .er_scripts import create_er_regions
+from .er_scripts import create_er_regions, verify_plando_directions
 from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .options import (TunicOptions, EntranceRando, tunic_option_groups, tunic_option_presets, TunicPlandoConnections,
-                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage)
+                      LaurelsLocation, LogicRules, LaurelsZips, IceGrappling, LadderStorage, check_options,
+                      get_hexagons_in_pool, HexagonQuestAbilityUnlockType, EntranceLayout)
+from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
+from . import ut_stuff
 from worlds.AutoWorld import WebWorld, World
-from Options import PlandoConnection, OptionError
-from decimal import Decimal, ROUND_HALF_UP
-from settings import Group, Bool
+from Options import PlandoConnection, OptionError, PerGameCommonOptions, Removed, Range
+from settings import Group, Bool, FilePath
 
 
 class TunicSettings(Group):
@@ -25,9 +28,15 @@ class TunicSettings(Group):
 
     class LimitGrassRando(Bool):
         """Limits the impact of Grass Randomizer on the multiworld by disallowing local_fill percentages below 95."""
+    
+    class UTPoptrackerPath(FilePath):
+        """Path to the user's TUNIC Poptracker Pack."""
+        description = "TUNIC Poptracker Pack zip file"
+        required = False
 
     disable_local_spoiler: Union[DisableLocalSpoiler, bool] = False
     limit_grass_rando: Union[LimitGrassRando, bool] = True
+    ut_poptracker_path: Union[UTPoptrackerPath, str] = UTPoptrackerPath()
 
 
 class TunicWeb(WebWorld):
@@ -60,8 +69,9 @@ class SeedGroup(TypedDict):
     ice_grappling: int  # ice_grappling value
     ladder_storage: int  # ls value
     laurels_at_10_fairies: bool  # laurels location value
-    fixed_shop: bool  # fixed shop value
-    plando: TunicPlandoConnections  # consolidated plando connections for the seed group
+    entrance_layout: int  # entrance layout value
+    has_decoupled_enabled: bool  # for checking that players don't have conflicting options
+    plando: List[PlandoConnection]  # consolidated plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -80,10 +90,13 @@ class TunicWorld(World):
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
+    for group_name, members in breakable_location_groups.items():
+        location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
+    location_name_to_id.update(breakable_location_name_to_id)
 
     player_location_table: Dict[str, int]
     ability_unlocks: Dict[str, int]
@@ -91,7 +104,7 @@ class TunicWorld(World):
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
     seed_groups: Dict[str, SeedGroup] = {}
-    shop_num: int = 1  # need to make it so that you can walk out of shops, but also that they aren't all connected
+    used_shop_numbers: Set[int]
     er_regions: Dict[str, RegionInfo]  # absolutely needed so outlet regions work
 
     # for the local_fill option
@@ -107,59 +120,74 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+    tracker_world: ClassVar = ut_stuff.tracker_world
 
     def generate_early(self) -> None:
-        if self.options.logic_rules >= LogicRules.option_no_major_glitches:
-            self.options.laurels_zips.value = LaurelsZips.option_true
-            self.options.ice_grappling.value = IceGrappling.option_medium
-            if self.options.logic_rules.value == LogicRules.option_unrestricted:
-                self.options.ladder_storage.value = LadderStorage.option_medium
+        try:
+            int(self.settings.disable_local_spoiler)
+        except AttributeError:
+            raise Exception("You have a TUNIC APWorld in your lib/worlds folder and custom_worlds folder.\n"
+                            "This would cause an error at the end of generation.\n"
+                            "Please remove one of them, most likely the one in lib/worlds.")
+        
+        if self.options.all_random:
+            for option_name in (attr.name for attr in fields(TunicOptions)
+                                if attr not in fields(PerGameCommonOptions)):
+                option = getattr(self.options, option_name)
+                if option_name == "all_random":
+                    continue
+                if isinstance(option, Removed):
+                    continue
+                if option.supports_weighting:
+                    if isinstance(option, Range):
+                        option.value = self.random.randint(option.range_start, option.range_end)
+                    else:
+                        option.value = self.random.choice(list(option.name_lookup))
+
+        check_options(self)
 
         self.er_regions = tunic_er_regions.copy()
+        if self.options.plando_connections and not self.options.entrance_rando:
+            self.options.plando_connections.value = ()
         if self.options.plando_connections:
-            for index, cxn in enumerate(self.options.plando_connections):
-                # making shops second to simplify other things later
-                if cxn.entrance.startswith("Shop"):
-                    replacement = PlandoConnection(cxn.exit, "Shop Portal", "both")
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
-                elif cxn.exit.startswith("Shop"):
-                    replacement = PlandoConnection(cxn.entrance, "Shop Portal", "both")
-                    self.options.plando_connections.value.remove(cxn)
-                    self.options.plando_connections.value.insert(index, replacement)
+            def replace_connection(old_cxn: PlandoConnection, new_cxn: PlandoConnection, index: int) -> None:
+                self.options.plando_connections.value.remove(old_cxn)
+                self.options.plando_connections.value.insert(index, new_cxn)
 
-        # Universal tracker stuff, shouldn't do anything in standard gen
-        if hasattr(self.multiworld, "re_gen_passthrough"):
-            if "TUNIC" in self.multiworld.re_gen_passthrough:
-                self.using_ut = True
-                self.passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.options.start_with_sword.value = self.passthrough["start_with_sword"]
-                self.options.keys_behind_bosses.value = self.passthrough["keys_behind_bosses"]
-                self.options.sword_progression.value = self.passthrough["sword_progression"]
-                self.options.ability_shuffling.value = self.passthrough["ability_shuffling"]
-                self.options.laurels_zips.value = self.passthrough["laurels_zips"]
-                self.options.ice_grappling.value = self.passthrough["ice_grappling"]
-                self.options.ladder_storage.value = self.passthrough["ladder_storage"]
-                self.options.ladder_storage_without_items = self.passthrough["ladder_storage_without_items"]
-                self.options.lanternless.value = self.passthrough["lanternless"]
-                self.options.maskless.value = self.passthrough["maskless"]
-                self.options.hexagon_quest.value = self.passthrough["hexagon_quest"]
-                self.options.entrance_rando.value = self.passthrough["entrance_rando"]
-                self.options.shuffle_ladders.value = self.passthrough["shuffle_ladders"]
-                self.options.grass_randomizer.value = self.passthrough.get("grass_randomizer", 0)
-                self.options.fixed_shop.value = self.options.fixed_shop.option_false
-                self.options.laurels_location.value = self.options.laurels_location.option_anywhere
-                self.options.combat_logic.value = self.passthrough["combat_logic"]
-            else:
-                self.using_ut = False
-        else:
-            self.using_ut = False
+            for index, cxn in enumerate(self.options.plando_connections):
+                replacement = None
+                if self.options.decoupled:
+                    # flip any that are pointing to exit to point to entrance so that I don't have to deal with it
+                    if cxn.direction == "exit":
+                        replacement = PlandoConnection(cxn.exit, cxn.entrance, "entrance", cxn.percentage)
+                    # if decoupled is on and you plando'd an entrance to itself but left the direction as both
+                    if cxn.direction == "both" and cxn.entrance == cxn.exit:
+                        replacement = PlandoConnection(cxn.entrance, cxn.exit, "entrance")
+                # if decoupled is off, just convert these to both
+                elif cxn.direction != "both":
+                    replacement = PlandoConnection(cxn.entrance, cxn.exit, "both", cxn.percentage)
+
+                if replacement:
+                    replace_connection(cxn, replacement, index)
+
+                if (self.options.entrance_layout == EntranceLayout.option_direction_pairs
+                        and not verify_plando_directions(cxn)):
+                    raise OptionError(f"TUNIC: Player {self.player_name} has invalid plando connections. "
+                                      f"They have Direction Pairs enabled and the connection "
+                                      f"{cxn.entrance} --> {cxn.exit} does not abide by this option.")
+
+        ut_stuff.setup_options_from_slot_data(self)
 
         self.player_location_table = standard_location_name_to_id.copy()
 
         if self.options.local_fill == -1:
             if self.options.grass_randomizer:
-                self.options.local_fill.value = 95
+                if self.options.breakable_shuffle:
+                    self.options.local_fill.value = 96
+                else:
+                    self.options.local_fill.value = 95
+            elif self.options.breakable_shuffle:
+                self.options.local_fill.value = 40
             else:
                 self.options.local_fill.value = 0
 
@@ -170,6 +198,13 @@ class TunicWorld(World):
                                   f"in their host.yaml settings")
 
             self.player_location_table.update(grass_location_name_to_id)
+
+        if self.options.breakable_shuffle:
+            if self.options.entrance_rando:
+                self.player_location_table.update(breakable_location_name_to_id)
+            else:
+                self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
+                                                   if not name.startswith("Purgatory")})
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -195,10 +230,14 @@ class TunicWorld(World):
                               ice_grappling=tunic.options.ice_grappling.value,
                               ladder_storage=tunic.options.ladder_storage.value,
                               laurels_at_10_fairies=tunic.options.laurels_location == LaurelsLocation.option_10_fairies,
-                              fixed_shop=bool(tunic.options.fixed_shop),
-                              plando=tunic.options.plando_connections)
+                              entrance_layout=tunic.options.entrance_layout.value,
+                              has_decoupled_enabled=bool(tunic.options.decoupled),
+                              plando=tunic.options.plando_connections.value.copy())
                 continue
-
+            # I feel that syncing this one is worse than erroring out
+            if bool(tunic.options.decoupled) != cls.seed_groups[group]["has_decoupled_enabled"]:
+                raise OptionError(f"TUNIC: All players in the seed group {group} must "
+                                  f"have Decoupled either enabled or disabled.")
             # off is more restrictive
             if not tunic.options.laurels_zips:
                 cls.seed_groups[group]["laurels_zips"] = False
@@ -211,41 +250,68 @@ class TunicWorld(World):
             # laurels at 10 fairies changes logic for secret gathering place placement
             if tunic.options.laurels_location == 3:
                 cls.seed_groups[group]["laurels_at_10_fairies"] = True
-            # more restrictive, overrides the option for others in the same group, which is better than failing imo
-            if tunic.options.fixed_shop:
-                cls.seed_groups[group]["fixed_shop"] = True
-
+            # fixed shop and direction pairs override standard, but conflict with each other
+            if tunic.options.entrance_layout:
+                if cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_standard:
+                    cls.seed_groups[group]["entrance_layout"] = tunic.options.entrance_layout.value
+                elif cls.seed_groups[group]["entrance_layout"] != tunic.options.entrance_layout.value:
+                    raise OptionError(f"TUNIC: Conflict between seed group {group}'s Entrance Layout options. "
+                                      f"Seed group cannot have both Fixed Shop and Direction Pairs enabled.")
             if tunic.options.plando_connections:
                 # loop through the connections in the player's yaml
-                for cxn in tunic.options.plando_connections:
+                for index, player_cxn in enumerate(tunic.options.plando_connections):
                     new_cxn = True
                     for group_cxn in cls.seed_groups[group]["plando"]:
-                        # if neither entrance nor exit match anything in the group, add to group
-                        if ((cxn.entrance == group_cxn.entrance and cxn.exit == group_cxn.exit)
-                                or (cxn.exit == group_cxn.entrance and cxn.entrance == group_cxn.exit)):
-                            new_cxn = False
-                            break
-                                   
+                        # verify that it abides by direction pairs if enabled
+                        if (cls.seed_groups[group]["entrance_layout"] == EntranceLayout.option_direction_pairs
+                                and not verify_plando_directions(player_cxn)):
+                            player_dir = "<->" if player_cxn.direction == "both" else "-->"
+                            raise Exception(f"TUNIC: Conflict between Entrance Layout option and Plando Connection: "
+                                            f"{player_cxn.entrance} {player_dir} {player_cxn.exit}")
                         # check if this pair is the same as a pair in the group already
+                        if ((player_cxn.entrance == group_cxn.entrance and player_cxn.exit == group_cxn.exit)
+                            or (player_cxn.entrance == group_cxn.exit and player_cxn.exit == group_cxn.entrance
+                                and "both" in [player_cxn.direction, group_cxn.direction])):
+                            new_cxn = False
+                            # if the group's was one-way and the player's was two-way, we replace the group's now
+                            if player_cxn.direction == "both" and group_cxn.direction == "entrance":
+                                cls.seed_groups[group]["plando"].remove(group_cxn)
+                                cls.seed_groups[group]["plando"].insert(index, player_cxn)
+                            break
                         is_mismatched = (
-                            cxn.entrance == group_cxn.entrance and cxn.exit != group_cxn.exit
-                            or cxn.entrance == group_cxn.exit and cxn.exit != group_cxn.entrance
-                            or cxn.exit == group_cxn.entrance and cxn.entrance != group_cxn.exit
-                            or cxn.exit == group_cxn.exit and cxn.entrance != group_cxn.entrance
+                            player_cxn.entrance == group_cxn.entrance and player_cxn.exit != group_cxn.exit
+                            or player_cxn.exit == group_cxn.exit and player_cxn.entrance != group_cxn.entrance
                         )
+                        if not tunic.options.decoupled:
+                            is_mismatched = is_mismatched or (
+                                player_cxn.entrance == group_cxn.exit and player_cxn.exit != group_cxn.entrance
+                                or player_cxn.exit == group_cxn.entrance and player_cxn.entrance != group_cxn.exit
+                            )
                         if is_mismatched:
-                            raise Exception(f"TUNIC: Conflict between seed group {group}'s plando "
-                                            f"connection {group_cxn.entrance} <-> {group_cxn.exit} and "
-                                            f"{tunic.player_name}'s plando connection {cxn.entrance} <-> {cxn.exit}")
+                            group_dir = "<->" if group_cxn.direction == "both" else "-->"
+                            player_dir = "<->" if player_cxn.direction == "both" else "-->"
+                            raise OptionError(f"TUNIC: Conflict between seed group {group}'s plando "
+                                              f"connection {group_cxn.entrance} {group_dir} {group_cxn.exit} and "
+                                              f"{tunic.player_name}'s plando connection "
+                                              f"{player_cxn.entrance} {player_dir} {player_cxn.exit}")
                     if new_cxn:
-                        cls.seed_groups[group]["plando"].value.append(cxn)
+                        cls.seed_groups[group]["plando"].append(player_cxn)
 
     def create_item(self, name: str, classification: ItemClassification = None) -> TunicItem:
         item_data = item_table[name]
-        # if item_data.combat_ic is None, it'll take item_data.classification instead
-        itemclass: ItemClassification = ((item_data.combat_ic if self.options.combat_logic else None)
+        # evaluate alternate classifications based on options
+        # it'll choose whichever classification isn't None first in this if else tree
+        itemclass: ItemClassification = (classification
+                                         or (item_data.combat_ic if self.options.combat_logic else None)
+                                         or (ItemClassification.progression | ItemClassification.useful
+                                             if name == "Glass Cannon"
+                                             and (self.options.grass_randomizer or self.options.breakable_shuffle)
+                                             and not self.options.start_with_sword else None)
+                                         or (ItemClassification.progression | ItemClassification.useful
+                                             if name == "Shield" and self.options.ladder_storage
+                                             and not self.options.ladder_storage_without_items else None)
                                          or item_data.classification)
-        return TunicItem(name, classification or itemclass, self.item_name_to_id[name], self.player)
+        return TunicItem(name, itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:
         tunic_items: List[TunicItem] = []
@@ -253,9 +319,20 @@ class TunicWorld(World):
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
 
+        # Calculate number of hexagons in item pool
+        if self.options.hexagon_quest:
+            items_to_create[gold_hexagon] = get_hexagons_in_pool(self)
+
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        # creating these after the fool traps are made mostly so we don't have to mess with it
+        if self.options.breakable_shuffle:
+            for loc_data in breakable_location_table.values():
+                if not self.options.entrance_rando and loc_data.er_region == "Purgatory":
+                    continue
+                items_to_create[f"Money x{self.random.randint(1, 5)}"] += 1
 
         if self.options.start_with_sword:
             self.multiworld.push_precollected(self.create_item("Sword"))
@@ -278,18 +355,26 @@ class TunicWorld(World):
 
         if self.options.grass_randomizer:
             items_to_create["Grass"] = len(grass_location_table)
-            tunic_items.append(self.create_item("Glass Cannon", ItemClassification.progression))
-            items_to_create["Glass Cannon"] = 0
             for grass_location in excluded_grass_locations:
                 self.get_location(grass_location).place_locked_item(self.create_item("Grass"))
             items_to_create["Grass"] -= len(excluded_grass_locations)
 
         if self.options.keys_behind_bosses:
-            for rgb_hexagon, location in hexagon_locations.items():
-                hex_item = self.create_item(gold_hexagon if self.options.hexagon_quest else rgb_hexagon)
-                self.get_location(location).place_locked_item(hex_item)
-                items_to_create[rgb_hexagon] = 0
-            items_to_create[gold_hexagon] -= 3
+            rgb_hexagons = list(hexagon_locations.keys())
+            # shuffle these in case not all are placed in hex quest
+            self.random.shuffle(rgb_hexagons)
+            for rgb_hexagon in rgb_hexagons:
+                location = hexagon_locations[rgb_hexagon]
+                if self.options.hexagon_quest:
+                    if items_to_create[gold_hexagon] > 0:
+                        hex_item = self.create_item(gold_hexagon)
+                        items_to_create[gold_hexagon] -= 1
+                        items_to_create[rgb_hexagon] = 0
+                        self.get_location(location).place_locked_item(hex_item)
+                else:
+                    hex_item = self.create_item(rgb_hexagon)
+                    self.get_location(location).place_locked_item(hex_item)
+                    items_to_create[rgb_hexagon] = 0
 
         # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
@@ -317,13 +402,11 @@ class TunicWorld(World):
             remove_filler(ladder_count)
 
         if self.options.hexagon_quest:
-            # Calculate number of hexagons in item pool
-            hexagon_goal = self.options.hexagon_goal
-            extra_hexagons = self.options.extra_hexagon_percentage
-            items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
+                if replaced_item in item_name_groups["Abilities"] and self.options.ability_shuffling \
+                        and self.options.hexagon_quest_ability_type == "pages":
+                    continue
                 filler_name = self.get_filler_item_name()
                 items_to_create[filler_name] += items_to_create[replaced_item]
                 if items_to_create[filler_name] >= 1 and filler_name not in available_filler:
@@ -350,11 +433,6 @@ class TunicWorld(World):
             if items_to_create[page] > 0:
                 tunic_items.append(self.create_item(page, ItemClassification.progression | ItemClassification.useful))
                 items_to_create[page] = 0
-
-        # logically relevant if you have ladder storage enabled
-        if self.options.ladder_storage and not self.options.ladder_storage_without_items:
-            tunic_items.append(self.create_item("Shield", ItemClassification.progression))
-            items_to_create["Shield"] = 0
 
         if self.options.maskless:
             tunic_items.append(self.create_item("Scavenger Mask", ItemClassification.useful))
@@ -398,9 +476,10 @@ class TunicWorld(World):
     def pre_fill(self) -> None:
         if self.options.local_fill > 0 and self.multiworld.players > 1:
             # we need to reserve a couple locations so that we don't fill up every sphere 1 location
-            reserved_locations: Set[str] = set(self.random.sample(sphere_one, 2))
+            sphere_one_locs = self.multiworld.get_reachable_locations(CollectionState(self.multiworld), self.player)
+            reserved_locations: Set[Location] = set(self.random.sample(sphere_one_locs, 2))
             viable_locations = [loc for loc in self.multiworld.get_unfilled_locations(self.player)
-                                if loc.name not in reserved_locations
+                                if loc not in reserved_locations
                                 and loc.name not in self.options.priority_locations.value]
 
             if len(viable_locations) < self.amount_to_local_fill:
@@ -432,15 +511,15 @@ class TunicWorld(World):
             multiworld.random.shuffle(non_grass_fill_locations)
 
             for filler_item in grass_fill:
-                multiworld.push_item(grass_fill_locations.pop(), filler_item, collect=False)
+                grass_fill_locations.pop().place_locked_item(filler_item)
 
             for filler_item in non_grass_fill:
-                multiworld.push_item(non_grass_fill_locations.pop(), filler_item, collect=False)
+                non_grass_fill_locations.pop().place_locked_item(filler_item)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
-        self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        self.ability_unlocks = randomize_ability_unlocks(self)
 
         # stuff for universal tracker support, can be ignored for standard gen
         if self.using_ut:
@@ -448,9 +527,9 @@ class TunicWorld(World):
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = self.passthrough["Hexagon Quest Holy Cross"]
             self.ability_unlocks["Pages 52-53 (Icebolt)"] = self.passthrough["Hexagon Quest Icebolt"]
 
-        # Ladders and Combat Logic uses ER rules with vanilla connections for easier maintenance
+        # Most non-standard options use ER regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.breakable_shuffle):
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
                 # these get interpreted by the game to tell it which entrances to connect
@@ -478,9 +557,9 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        # same reason as in create_regions, could probably be put into create_regions
+        # same reason as in create_regions
         if (self.options.entrance_rando or self.options.shuffle_ladders or self.options.combat_logic
-                or self.options.grass_randomizer):
+                or self.options.grass_randomizer or self.options.breakable_shuffle):
             set_er_location_rules(self)
         else:
             set_region_rules(self)
@@ -502,6 +581,14 @@ class TunicWorld(World):
             state.tunic_need_to_reset_combat_from_remove[self.player] = True
         return change
 
+    def write_spoiler_header(self, spoiler_handle: TextIO):
+        if self.options.hexagon_quest and self.options.ability_shuffling\
+                and self.options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
+            spoiler_handle.write("\nAbility Unlocks (Hexagon Quest):\n")
+            for ability in self.ability_unlocks:
+                # Remove parentheses for better readability
+                spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')
+
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
         if self.options.entrance_rando:
             hint_data.update({self.player: {}})
@@ -509,7 +596,7 @@ class TunicWorld(World):
             all_state = self.multiworld.get_all_state(True)
             all_state.update_reachable_regions(self.player)
             paths = all_state.path
-            portal_names = [portal.name for portal in portal_mapping]
+            portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
             for location in self.multiworld.get_locations(self.player):
                 # skipping event locations
                 if not location.address:
@@ -559,6 +646,7 @@ class TunicWorld(World):
             "sword_progression": self.options.sword_progression.value,
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
+            "hexagon_quest_ability_type": self.options.hexagon_quest_ability_type.value,
             "fool_traps": self.options.fool_traps.value,
             "laurels_zips": self.options.laurels_zips.value,
             "ice_grappling": self.options.ice_grappling.value,
@@ -567,6 +655,7 @@ class TunicWorld(World):
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
+            "decoupled": self.options.decoupled.value if self.options.entrance_rando else 0,
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "grass_randomizer": self.options.grass_randomizer.value,
             "combat_logic": self.options.combat_logic.value,
@@ -576,6 +665,7 @@ class TunicWorld(World):
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs,
             "disable_local_spoiler": int(self.settings.disable_local_spoiler or self.multiworld.is_race),
+            "breakable_shuffle": self.options.breakable_shuffle.value,
         }
 
         # this would be in a stage if there was an appropriate stage for it
@@ -614,18 +704,6 @@ class TunicWorld(World):
                     slot_data[start_item] = []
                 for _ in range(self.options.start_inventory_from_pool[start_item]):
                     slot_data[start_item].extend(["Your Pocket", self.player])
-
-        for plando_item in self.multiworld.plando_items[self.player]:
-            if plando_item["from_pool"]:
-                items_to_find = set()
-                for item_type in [key for key in ["item", "items"] if key in plando_item]:
-                    for item in plando_item[item_type]:
-                        items_to_find.add(item)
-                for item in items_to_find:
-                    if item in slot_data_item_names:
-                        slot_data[item] = []
-                        for item_location in self.multiworld.find_item_locations(item, self.player):
-                            slot_data[item].extend(self.get_real_location(item_location))
 
         return slot_data
 
