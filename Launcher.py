@@ -78,6 +78,10 @@ def generate_yamls():
     open_folder(target)
 
 
+def generate_game(*args):
+    launch([*get_exe("Generate"), "--confirm_exit", *args], True)
+
+
 def browse_files():
     open_folder(user_path())
 
@@ -107,6 +111,7 @@ components.extend([
     Component("Open host.yaml", func=open_host_yaml),
     Component("Open Patch", func=open_patch),
     Component("Generate Template Options", func=generate_yamls),
+    Component("Generate Multiworld", "Generate", func=generate_game),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/")),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2")),
     Component("Unrated/18+ Discord Server", icon="discord",
