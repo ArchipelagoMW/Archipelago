@@ -3,6 +3,7 @@ import settings
 import base64
 import threading
 import requests
+import inspect
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, rooms, non_dead_end_crest_rooms,\
@@ -95,6 +96,11 @@ class FFMQWorld(World):
             "https://api.ffmqrando.net/",
             "http://ffmqr.jalchavware.com:5271/"
         ]
+        fuzzer = False
+        for frame_info in inspect.stack():
+            if "fuzz.py" in frame_info.filename:
+                fuzzer = True
+                api_urls = ["http://127.0.0.1:5271/"]
 
         rooms_data = {}
 
@@ -143,6 +149,10 @@ class FFMQWorld(World):
                     error_text = f"Failed to fetch map shuffle data for FFMQ player {world.player}"
                     for error in errors:
                         error_text += f"\n{error[0]} - got error {error[1].status_code} {error[1].reason} {error[1].text}"
+
+                    if fuzzer:
+                        error_text = "Please set up a local FFMQRWebAPI to fuzz FFMQ so as to not flood the public API with map shuffle requests."
+
                     raise Exception(error_text)
                 api_urls.append(api_urls.pop(0))
             else:
