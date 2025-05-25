@@ -1593,15 +1593,12 @@ def update_furniture_info(furniture_info, item_appear_info, output_data):
     # Adjust the item spawn height based on if the item spawns from the ceiling or high up on the wall.
     # Otherwise items are sent into the floor above or out of bounds, which makes it almost impossible to get.
     ceiling_furniture_list = [4, 38, 43, 62, 63, 76, 77, 81, 84, 85, 91, 92, 101, 110, 111, 137, 156, 158, 159, 163,
-                              173, 174, 189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 352, 354, 355, 356, 357, 358,
-                              359, 373, 374,
-                              378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596,
-                              631, 632, 636,
-                              657, 671, 672]
-    medium_height_furniture_list = [0, 1, 104, 112, 113, 114, 124, 125, 135, 136, 204, 206, 210, 232, 234, 235, 264, 265,
-                                    270, 315, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 376, 388, 397, 398,
-                                    411, 418, 431, 438, 444, 520,
-                                    526, 544, 552, 553, 554, 555, 557, 602, 603, 634, 635]
+        173, 174, 189, 190, 195, 199, 200, 228, 240, 266, 310, 342, 352, 354, 355, 356, 357, 358, 359, 373, 374,
+        378, 379, 380, 381, 399, 423, 426, 445, 446, 454, 459, 460, 463, 467, 485, 547, 595, 596, 631, 632, 636,
+        657, 671, 672]
+    medium_height_furniture_list = [0, 1, 104, 112, 113, 114, 124, 125, 135, 136, 204, 206, 210, 232, 234, 235,
+        264, 265, 270, 315, 343, 344, 345, 346, 347, 353, 361, 362, 363, 368, 369, 370, 376, 388, 397, 398,
+        411, 418, 431, 438, 444, 520, 526, 544, 552, 553, 554, 555, 557, 602, 603, 634, 635]
     for furniture_jmp_id in (ceiling_furniture_list + medium_height_furniture_list):
         current_y_offset = furniture_info.info_file_field_entries[furniture_jmp_id]["item_offset_y"]
         adjust_y_offset = 125.0
