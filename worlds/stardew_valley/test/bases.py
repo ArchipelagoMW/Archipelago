@@ -7,7 +7,7 @@ import unittest
 from collections.abc import Iterable
 from contextlib import contextmanager
 
-from BaseClasses import get_seed, MultiWorld, Location, Item, Region, CollectionState
+from BaseClasses import get_seed, MultiWorld, Location, Item, Region, CollectionState, Entrance
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
 from worlds.AutoWorld import call_all
@@ -189,6 +189,11 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         if state is None:
             state = self.multiworld.state
         super().assert_cannot_reach_region(region, state)
+
+    def assert_can_reach_entrance(self, entrance: Entrance | str, state: CollectionState | None = None) -> None:
+        if state is None:
+            state = self.multiworld.state
+        super().assert_can_reach_entrance(entrance, state)
 
 
 pre_generated_worlds = {}
