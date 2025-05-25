@@ -438,6 +438,8 @@ class BooHealthValue(Range):
     Choose the health value all Boos will have it the Boo Health Option is Choice. Range between 1 and 999
 
     Values over 150 may not be catchable within the current room and logic cannot account for where they move
+
+    If you have a boo go into an area you cannot access yet, you may need to save and quit to main menu to reload them.
     """
     display_name = "Boo Health Value"
     internal_name = "boo_health_value"
