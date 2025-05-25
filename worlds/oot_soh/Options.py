@@ -21,13 +21,13 @@ class ShuffleTokens(Choice):
 
 class ShuffleShops(Toggle):
     """
-    Shuffle the 4 left items in every shop. Randomized items will cost 10 rupees.
+    Shuffle the 4 left items in every shop. Randomized items are free.
     """
     display_name = "Shuffle Shops"
 
 class ShuffleScrubs(Toggle):
     """
-    Shuffles all Deku Scrub merchants in the game. Randomized items will cost 10 rupees.
+    Shuffles all Deku Scrub merchants in the game. Randomized items are free.
     """
     display_name = "Shuffle Scrubs"
 
