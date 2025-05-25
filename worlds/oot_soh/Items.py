@@ -20,7 +20,7 @@ item_data_table: Dict[str, SohItemData] = {
 
     "Kokiri Sword": SohItemData( code=soh_base_id + 1, type=ItemClassification.progression ),
     "Master Sword": SohItemData( code=soh_base_id + 2, type=ItemClassification.progression ),
-    #"Giant's Knife": SohItemData( code=soh_base_id + 3, type=ItemClassification.progression ),
+    "Giant's Knife": SohItemData( code=soh_base_id + 3, type=ItemClassification.progression ),
     "Biggoron's Sword": SohItemData( code=soh_base_id + 4, type=ItemClassification.progression ),
     "Deku Shield": SohItemData( code=soh_base_id + 5, type=ItemClassification.useful ),
     "Hylian Shield": SohItemData( code=soh_base_id + 6, type=ItemClassification.useful ),

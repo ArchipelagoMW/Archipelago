@@ -4,8 +4,28 @@ import random
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table
-from .Locations import SohLocation, base_location_table, cows_location_table,\
-                                          location_table
+from .Locations import SohLocation, base_location_table, \
+    gold_skulltula_overworld_location_table, \
+    gold_skulltula_dungeon_location_table, \
+    shops_location_table, \
+    scrubs_location_table, \
+    trade_items_location_table, \
+    merchants_items_location_table, \
+    cows_location_table, \
+    frogs_location_table, \
+    beehives_location_table, \
+    pots_overworld_location_table, \
+    pots_dungeon_location_table, \
+    crates_overworld_location_table, \
+    crates_dungeon_location_table, \
+    freestanding_overworld_location_table, \
+    freestanding_dungeon_location_table, \
+    fairies_location_table, \
+    grass_overworld_location_table, \
+    grass_dungeon_location_table, \
+    fish_pond_location_table, \
+    fish_overworld_location_table, \
+    location_table
 from .Options import SohOptions
 from .Regions import region_data_table
 from .Rules import get_soh_rule
@@ -74,7 +94,6 @@ class SohWorld(World):
         item_pool.append(self.create_item("Gerudo Membership Card"))
         item_pool.append(self.create_item("Double Defense"))
         item_pool.append(self.create_item("Claim Check"))
-        for i in range(100): item_pool.append(self.create_item("Gold Skulltula Token"))
         for i in range(2): item_pool.append(self.create_item("Progressive Hookshot"))
         for i in range(3): item_pool.append(self.create_item("Strength Upgrade"))
         for i in range(3): item_pool.append(self.create_item("Progressive Bomb Bag"))
@@ -152,6 +171,29 @@ class SohWorld(World):
         for i in range(8): item_pool.append(self.create_item("Heart Container"))
         for i in range(6): item_pool.append(self.create_item("Ice Trap"))
 
+        # Add overworld tokens when shuffled
+        if self.options.shuffle_tokens == "overworld" or self.options.shuffle_tokens == "all":
+            for i in range(56): item_pool.append(self.create_item("Gold Skulltula Token"))
+
+        # Add dungeon tokens when shuffled
+        if self.options.shuffle_tokens == "dungeon" or self.options.shuffle_tokens == "all":
+            for i in range(44): item_pool.append(self.create_item("Gold Skulltula Token"))
+
+        if self.options.shuffle_trade_items:
+            item_pool.append(self.create_item("Pocket Egg"))
+            item_pool.append(self.create_item("Cojiro"))
+            item_pool.append(self.create_item("Odd Mushroom"))
+            item_pool.append(self.create_item("Odd Potion"))
+            item_pool.append(self.create_item("Poacher's Saw"))
+            item_pool.append(self.create_item("Broken Goron's Sword"))
+            item_pool.append(self.create_item("Prescription"))
+            item_pool.append(self.create_item("Eyeball Frog"))
+            item_pool.append(self.create_item("World's Finest Eyedrops"))
+
+        if self.options.shuffle_merchants:
+            item_pool.append(self.create_item("Giant's Knife"))
+            item_pool.append(self.create_item("Magic Bean Pack"))
+
         filler_item_count: int = location_count - len(item_pool)
         item_pool += [self.create_item(filler_items[random.randint(0, 11)]) for _ in range(filler_item_count)]
 
@@ -166,18 +208,163 @@ class SohWorld(World):
         # Create locations.
         for region_name, region_data in region_data_table.items():
             region = self.multiworld.get_region(region_name, self.player)
+
+            # Base locations
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in base_location_table.items()
                 if location_data.region == region_name
             }, SohLocation)
 
+            # Gold Skulltulas (Overworld)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in gold_skulltula_overworld_location_table.items()
+                if location_data.region == region_name
+            }, SohLocation)
+
+            # Gold Skulltulas (Dungeon)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in gold_skulltula_dungeon_location_table.items()
+                if location_data.region == region_name
+            }, SohLocation)
+
+            # Shops
+            if self.options.shuffle_shops:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in shops_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Scrubs
+            if self.options.shuffle_scrubs:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in scrubs_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Trade Items
+            if self.options.shuffle_trade_items:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in trade_items_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Merchants
+            if self.options.shuffle_merchants:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in merchants_items_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Cows
             if self.options.shuffle_cows:
                 region.add_locations({
                     location_name: location_data.address for location_name, location_data in cows_location_table.items()
                     if location_data.region == region_name
                 }, SohLocation)
+
+            # Frogs
+            if self.options.shuffle_frogs:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in frogs_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Beehives
+            if self.options.shuffle_beehives:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in beehives_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Pots (Overworld)
+            if self.options.shuffle_pots == "overworld" or self.options.shuffle_pots == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in pots_overworld_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Pots (Dungeon)
+            if self.options.shuffle_pots == "dungeon" or self.options.shuffle_pots == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in pots_dungeon_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Crates (Overworld)
+            if self.options.shuffle_crates == "overworld" or self.options.shuffle_crates == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in crates_overworld_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Crates (Dungeon)
+            if self.options.shuffle_crates == "dungeon" or self.options.shuffle_crates == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in crates_dungeon_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Freestanding (Overworld)
+            if self.options.shuffle_freestanding == "overworld" or self.options.shuffle_freestanding == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in freestanding_overworld_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Freestanding (Dungeon)
+            if self.options.shuffle_freestanding == "dungeon" or self.options.shuffle_freestanding == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in freestanding_dungeon_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Fairies
+            if self.options.shuffle_fairies:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in fairies_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Grass (Overworld)
+            if self.options.shuffle_grass == "overworld" or self.options.shuffle_grass == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in grass_overworld_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Grass (Dungeon)
+            if self.options.shuffle_grass == "dungeon" or self.options.shuffle_grass == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in grass_dungeon_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Fish (Pond)
+            if self.options.shuffle_fish == "pond" or self.options.shuffle_fish == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in fish_pond_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+
+            # Fish (Overworld)
+            if self.options.shuffle_fish == "overworld" or self.options.shuffle_fish == "all":
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in fish_overworld_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
                 
             region.add_exits(region_data_table[region_name].connecting_regions)
+
+        # Preplace tokens based on settings.
+        if self.options.shuffle_tokens == "off" or self.options.shuffle_tokens == "dungeon":
+            token_item = self.create_item("Gold Skulltula Token")
+            for location_name, location_data in gold_skulltula_overworld_location_table.items():
+                self.get_location(location_name).place_locked_item(token_item)
+
+        if self.options.shuffle_tokens == "off" or self.options.shuffle_tokens == "overworld":
+            token_item = self.create_item("Gold Skulltula Token")
+            for location_name, location_data in gold_skulltula_dungeon_location_table.items():
+                self.get_location(location_name).place_locked_item(token_item)
 
     def get_filler_item_name(self) -> str:
         return "Blue Rupee"
@@ -189,4 +376,18 @@ class SohWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
+            "shuffle_tokens": self.options.shuffle_tokens.value,
+            "shuffle_shops": self.options.shuffle_shops.value,
+            "shuffle_scrubs": self.options.shuffle_scrubs.value,
+            "shuffle_trade_items": self.options.shuffle_trade_items.value,
+            "shuffle_merchants": self.options.shuffle_merchants.value,
+            "shuffle_cows": self.options.shuffle_cows.value,
+            "shuffle_frogs": self.options.shuffle_frogs.value,
+            "shuffle_beehives": self.options.shuffle_beehives.value,
+            "shuffle_pots": self.options.shuffle_pots.value,
+            "shuffle_crates": self.options.shuffle_crates.value,
+            "shuffle_freestanding": self.options.shuffle_freestanding.value,
+            "shuffle_fairies": self.options.shuffle_fairies.value,
+            "shuffle_grass": self.options.shuffle_grass.value,
+            "shuffle_fish": self.options.shuffle_fish.value,
         }
