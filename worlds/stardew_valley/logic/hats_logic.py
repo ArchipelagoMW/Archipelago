@@ -6,7 +6,6 @@ from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.fish_names import Fish
 from ..strings.forageable_names import Mushroom
-from ..strings.geode_names import Geode
 from ..strings.monster_names import Monster
 from ..strings.region_names import LogicRegion, Region
 
@@ -27,7 +26,6 @@ class HatLogic(BaseLogic):
             Hats.dark_cowboy_hat.name: self.logic.region.can_reach(Region.skull_cavern_100),
             Hats.garbage_hat.name: self.logic.region.can_reach(Region.town) & self.logic.time.has_lived_months(12),
             Hats.mystery_hat.name: self.logic.region.can_reach(Region.blacksmith) & self.logic.grind.can_grind_mystery_boxes(100),
-            Hats.golden_helmet.name: self.logic.region.can_reach(Region.blacksmith) & self.logic.has(Geode.golden_coconut),
             Hats.tiger_hat.name: self.logic.monster.can_kill_max(Monster.tiger_slime),
             Hats.living_hat.name: self.logic.grind.can_grind_weeds(100000),
             Hats.deluxe_pirate_hat.name: self.logic.region.can_reach_all(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10),

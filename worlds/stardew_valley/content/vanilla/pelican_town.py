@@ -8,7 +8,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     GrangeDisplayRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, CookedRecipesRequirement, CraftedItemsRequirement, HelpWantedRequirement, ShipOneCropRequirement, \
     FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, FinishedRaccoonsRequirement, \
-    PrizeMachineRequirement
+    PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
@@ -30,6 +30,7 @@ from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
+from ...strings.villager_names import NPC
 
 pelican_town = ContentPack(
     "Pelican Town (Vanilla)",
@@ -371,6 +372,9 @@ pelican_town = ContentPack(
                                          other_requirements=(FinishedRaccoonsRequirement(8),)),),
         Hats.sports_cap.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                           other_requirements=(PrizeMachineRequirement(11),)),),
+
+        Hats.emilys_magic_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                                other_requirements=(SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
 
         # Catalogues
         Catalogue.wizard: (ShopSource(price=150000, shop_region=Region.sewer),),

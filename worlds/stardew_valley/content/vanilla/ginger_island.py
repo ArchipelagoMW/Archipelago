@@ -7,7 +7,7 @@ from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropS
 from ...data.hats import Hats
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
-    AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement
+    AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement
 from ...data.shop import ShopSource
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
@@ -17,6 +17,7 @@ from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
+from ...strings.geode_names import Geode
 from ...strings.metal_names import Fossil, Mineral
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -107,6 +108,8 @@ ginger_island_content_pack = GingerIslandContentPack(
 
         Hats.concerned_ape_mask.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                   other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
+        Hats.golden_helmet.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                             other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
     },
     fishes=(
         # TODO override region so no need to add inaccessible regions in logic

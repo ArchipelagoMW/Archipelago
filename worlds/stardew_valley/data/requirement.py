@@ -5,6 +5,11 @@ from ..strings.tool_names import ToolMaterial
 
 
 @dataclass(frozen=True)
+class HasItemRequirement(Requirement):
+    item: str
+
+
+@dataclass(frozen=True)
 class BookRequirement(Requirement):
     book: str
 

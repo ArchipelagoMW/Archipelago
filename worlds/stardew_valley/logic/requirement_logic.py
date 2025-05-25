@@ -12,7 +12,7 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
     HelpWantedRequirement, ShipOneCropRequirement, FinishedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
-    DangerousMinesRequirement
+    DangerousMinesRequirement, HasItemRequirement
 from ..strings.region_names import Region, LogicRegion
 
 
@@ -32,6 +32,10 @@ class RequirementLogic(BaseLogic):
     @functools.singledispatchmethod
     def meet_requirement(self, requirement: Requirement):
         raise ValueError(f"Requirements of type{type(requirement)} have no rule registered.")
+
+    @meet_requirement.register
+    def _(self, requirement: HasItemRequirement):
+        return self.logic.has(requirement.item)
 
     @meet_requirement.register
     def _(self, requirement: ToolRequirement):
