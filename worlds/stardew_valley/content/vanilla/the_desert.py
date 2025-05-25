@@ -46,7 +46,7 @@ the_desert = ContentPack(
         Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
                                             other_requirements=(MeetRequirement(NPC.abigail),)),),
         Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
-                                          other_requirements=(MonsterKillRequirement(Monster.mummy, 100),)),),
+                                          other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
     },
     fishes=(
         fish_data.sandfish,
