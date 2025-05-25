@@ -1,9 +1,9 @@
 from typing import List
 
 from BaseClasses import ItemClassification, Item
-from . import SVTestBase
-from .. import items, location_table, options
-from ..items import Group, ItemData
+from .bases import SVTestBase
+from .. import location_table, options, items
+from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
     Booksanity, Walnutsanity
@@ -15,10 +15,10 @@ def get_all_permanent_progression_items() -> List[ItemData]:
     """
     return [
         item
-        for item in items.all_items
+        for item in item_data.all_items
         if ItemClassification.progression in item.classification
         if item.mod_name is None
-        if item.name not in {event.name for event in items.events}
+        if item.name not in {event.name for event in item_data.events}
         if item.name not in {deprecated.name for deprecated in items.items_by_group[Group.DEPRECATED]}
         if item.name not in {season.name for season in items.items_by_group[Group.SEASON]}
         if item.name not in {weapon.name for weapon in items.items_by_group[Group.WEAPON]}
@@ -54,19 +54,19 @@ class TestBaseItemGeneration(SVTestBase):
 
     def test_does_not_create_deprecated_items(self):
         all_created_items = set(self.get_all_created_items())
-        for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
+        for deprecated_item in item_data.items_by_group[item_data.Group.DEPRECATED]:
             with self.subTest(f"{deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
         all_created_items = self.get_all_created_items()
-        for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
+        for maximum_one_item in item_data.items_by_group[item_data.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
     def test_does_not_create_or_create_two_of_exactly_two_items(self):
         all_created_items = self.get_all_created_items()
-        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+        for exactly_two_item in item_data.items_by_group[item_data.Group.AT_LEAST_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
                 self.assertTrue(count == 0 or count == 2)
@@ -102,181 +102,22 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
     def test_does_not_create_deprecated_items(self):
         all_created_items = self.get_all_created_items()
-        for deprecated_item in items.items_by_group[items.Group.DEPRECATED]:
+        for deprecated_item in item_data.items_by_group[item_data.Group.DEPRECATED]:
             with self.subTest(f"Deprecated item: {deprecated_item.name}"):
                 self.assertNotIn(deprecated_item.name, all_created_items)
 
     def test_does_not_create_more_than_one_maximum_one_items(self):
         all_created_items = self.get_all_created_items()
-        for maximum_one_item in items.items_by_group[items.Group.MAXIMUM_ONE]:
+        for maximum_one_item in item_data.items_by_group[item_data.Group.MAXIMUM_ONE]:
             with self.subTest(f"{maximum_one_item.name}"):
                 self.assertLessEqual(all_created_items.count(maximum_one_item.name), 1)
 
     def test_does_not_create_exactly_two_items(self):
         all_created_items = self.get_all_created_items()
-        for exactly_two_item in items.items_by_group[items.Group.EXACTLY_TWO]:
+        for exactly_two_item in item_data.items_by_group[item_data.Group.AT_LEAST_TWO]:
             with self.subTest(f"{exactly_two_item.name}"):
                 count = all_created_items.count(exactly_two_item.name)
                 self.assertTrue(count == 0 or count == 2)
-
-
-class TestMonstersanityNone(SVTestBase):
-    options = {
-        options.Monstersanity.internal_name: options.Monstersanity.option_none,
-        # Not really necessary, but it adds more locations, so we don't have to remove useful items.
-        options.Fishsanity.internal_name: options.Fishsanity.option_all
-    }
-
-    @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
-    def test_when_generate_world_then_5_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 5)
-
-    def test_when_generate_world_then_zero_specific_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 0)
-        self.assertEqual(item_pool.count("Progressive Club"), 0)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 0)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_3_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 3)
-
-
-class TestMonstersanityGoals(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanityOnePerCategory(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_one_per_category}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanityProgressive(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_many_rings_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertIn("Hot Java Ring", item_pool)
-        self.assertIn("Wedding Ring", item_pool)
-        self.assertIn("Slime Charmer Ring", item_pool)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
-
-
-class TestMonstersanitySplit(SVTestBase):
-    options = {options.Monstersanity.internal_name: options.Monstersanity.option_split_goals}
-
-    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
-
-    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Sword"), 5)
-        self.assertEqual(item_pool.count("Progressive Club"), 5)
-        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
-
-    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
-
-    def test_when_generate_world_then_4_shoes_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
-
-    def test_when_generate_world_then_many_rings_in_the_pool(self):
-        item_pool = [item.name for item in self.multiworld.itempool]
-        self.assertIn("Hot Java Ring", item_pool)
-        self.assertIn("Wedding Ring", item_pool)
-        self.assertIn("Slime Charmer Ring", item_pool)
-
-    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in self.get_real_locations():
-            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
-                continue
-            with self.subTest(location.name):
-                self.assertFalse(location.can_reach(self.multiworld.state))
 
 
 class TestProgressiveElevator(SVTestBase):
