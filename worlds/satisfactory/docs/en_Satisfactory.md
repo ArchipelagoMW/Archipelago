@@ -67,6 +67,9 @@ The player settings page gives full control over which traps are enabled,
 how many traps replace filler items,
 as well as some pre-selected groups of themed traps.
 
+A complete list of traps and their effects is intentionally ommitted to keep some surprise and mystery.
+In the current implementation, the most severe traps could temporarily lock you out of a small area until you have gas/radiation protection.
+
 ## What does another world's item look like in Satisfactory?
 
 In Satisfactory, items which need to be sent to other worlds appear in the HUB and MAM as info cards
@@ -107,7 +110,7 @@ You can find a list of Energy Link compatible games on the
 The Archipelago Portal is a building that serves multiple purposes:
 
 - Collecting received "Resource Bundle"-type items.
-- Transfering items within your Satisfactory world
+- Transfering items within your Satisfactory world to other Portals
 - Transfering items between multiple Satisfactory worlds
 - Gifting items to other games that support the **Archipelago Gifting** system.
 
