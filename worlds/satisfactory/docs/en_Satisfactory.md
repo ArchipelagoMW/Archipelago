@@ -23,8 +23,10 @@ There are also a few new purchases in the AWESOME Shop.
 
 The player can choose from a number of goals using their YAML settings:
 
-- Complete a certain [Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) tier
+- Complete a certain [Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) tier.
+  - Expect 1 package to take ~3 hours to finish, 2 packages to take ~8 hours, 3 packages to take ~2 days, and 4 packages to take ~1 week on default settings.
 - Supply items to the [AWESOME Sink](https://satisfactory.wiki.gg/wiki/AWESOME_Sink) totalling a configurable amount of points to finish.
+  - Time to finish this goal varies significantly depending on your goal level and Free Sample settings, and can technically be reached by AFKing at any point after you unlock the Sink.
 
 You can select whether completing your slot requires one or all goals to be met.
 
@@ -185,8 +187,12 @@ The following mods are known to work with Archipelago:
 
 <!-- Nog's Chat currently broken -->
 <!-- - [Nog's Chat](https://ficsit.app/mod/NogsChat) - Easily repeat past chat messages, improving the user experience of running Archipelago commands in the game's chat window. -->
-- [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Points goal.
+- [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Sink goals.
 - [Faster Manual Crafting Redux](https://ficsit.app/mod/FasterManualCraftingRedux) - Reduce the early game manual crafting grind with a manual crafting speed that ramps up as you craft larger batches at once.
 <!-- TODO Test these  -->
 <!-- - [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.  -->
 <!-- - [Nog's Research](https://ficsit.app/mod/NogsResearch/) - Queue Milestones and MAM Nodes for automatic research in the style of Factorio's research queue. Queue type might need to be changed to soft class reference to save CL schematics. -->
+
+The following mods have been used successfully by other players but have not been thorughly tested with Archipelago:
+
+- [Resource Roulette](https://ficsit.app/mod/ResourceRoulette) - Randomize the location of resource nodes
