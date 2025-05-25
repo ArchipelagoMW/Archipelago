@@ -566,7 +566,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, logic.has_horizontal_movement), #Dust
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
-        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset),
+        LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has("Item - Special Milk", player)),
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver atop ruins", 2677 + npc_index_offset), #Ore
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
         LocationData("Poko Poko Desert", "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
@@ -592,8 +592,8 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Circle the western desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Rotten Salmon", player) and state.has("Item - Fresh Salmon", player)),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Shoudu Stew", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Special Rotten Salmon", player) and state.has("Item - Special Fresh Salmon", player)),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Special Shoudu Stew", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver", 2905 + npc_index_offset, logic.has_swimming), #Dust
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silverer", 2906 + npc_index_offset, logic.has_swimming), #Dust
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silvererer", 2903 + npc_index_offset, logic.has_swimming), #Ingot
