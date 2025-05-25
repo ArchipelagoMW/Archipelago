@@ -11,6 +11,7 @@ from ...data.requirement import ToolRequirement, BookRequirement, SkillRequireme
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource
+from ...logic.tailoring_logic import TailoringSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
 from ...strings.building_names import Building as BuildingNames
@@ -18,7 +19,7 @@ from ...strings.catalogue_names import Catalogue
 from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
 from ...strings.currency_names import Currency
-from ...strings.fish_names import WaterItem
+from ...strings.fish_names import WaterItem, Fish
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
@@ -678,5 +679,14 @@ pelican_town = ContentPack(
 
         Hats.emilys_magic_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                 other_requirements=(SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
+
+        Hats.garbage_hat: (ForagingSource(regions=(Region.town,), grind_months=12),),
+        Hats.mystery_hat: (MysteryBoxSource(amount=100),),
+
+        Hats.living_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
+        Hats.spotted_headscarf.name: (TailoringSource(tailoring_items=(Mushroom.red,)),),
+        Hats.fishing_hat.name: (TailoringSource(tailoring_items=(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish,
+                                                                 Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
+        Hats.bucket_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
     }
 )

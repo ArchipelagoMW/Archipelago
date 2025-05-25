@@ -380,9 +380,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.special_order.initialize_rules()
         self.special_order.update_rules(self.mod.special_order.get_modded_special_orders_rules())
 
-        self.hat.initialize_rules()
-        self.registry.item_rules.update(self.registry.hat_rules)
-
         self.shirt.initialize_rules()
         self.registry.item_rules.update(self.registry.shirt_rules)
 

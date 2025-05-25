@@ -2,6 +2,7 @@ import functools
 from typing import Any, Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
+from .tailoring_logic import TailoringSource
 from ..data.animal import IncubatorSource, OstrichIncubatorSource
 from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
@@ -108,3 +109,7 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: MonsterSource):
         return self.logic.monster.can_kill_any(source.monsters, source.amount_tier)
+
+    @has_access_to.register
+    def _(self, source: TailoringSource):
+        return self.logic.tailoring.can_tailor(*source.tailoring_items)

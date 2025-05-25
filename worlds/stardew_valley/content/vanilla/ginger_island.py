@@ -5,10 +5,12 @@ from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
+from ...data.monster_data import MonsterSource
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement
 from ...data.shop import ShopSource
+from ...logic.time_logic import MAX_MONTHS
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
 from ...strings.building_names import Building
@@ -19,6 +21,7 @@ from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.geode_names import Geode
 from ...strings.metal_names import Fossil, Mineral
+from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
@@ -131,5 +134,8 @@ ginger_island_content_pack = GingerIslandContentPack(
                                                   other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                              other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
+
+        Hats.tiger_hat: (MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS),),
+        Hats.deluxe_pirate_hat: (ForagingSource(regions=(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10,), require_all_regions=True),),
     },
 )

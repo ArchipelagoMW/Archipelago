@@ -1,6 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
+from ...data.game_item import CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
@@ -55,5 +56,10 @@ the_desert = ContentPack(
                                             other_requirements=(MeetRequirement(NPC.abigail),)),),
         Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
                                           other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
+
+        Hats.laurel_wreath_crown: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.joja_cap: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_ballcap: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_cowboy_hat: (ForagingSource(regions=Region.skull_cavern_100),),
     }
 )
