@@ -103,7 +103,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.quarry, (Entrance.enter_quarry_mine_entrance,)),
     RegionData(RegionName.quarry_mine_entrance, (Entrance.enter_quarry_mine,)),
     RegionData(RegionName.quarry_mine),
-    RegionData(RegionName.secret_woods),
+    RegionData(RegionName.secret_woods, (LogicEntrance.buy_from_lost_items_shop,)),
     RegionData(RegionName.desert, (Entrance.enter_skull_cavern_entrance, Entrance.enter_oasis, LogicEntrance.attend_desert_festival)),
     RegionData(RegionName.oasis, (Entrance.enter_casino,)),
     RegionData(RegionName.casino),
@@ -200,6 +200,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.bookseller_2, (LogicEntrance.buy_year3_books,)),
     RegionData(LogicRegion.bookseller_3),
     RegionData(LogicRegion.hat_mouse),
+    RegionData(LogicRegion.lost_items_shop),
 )
 ginger_island_regions = (
     # This overrides the regions from vanilla... When regions are moved to content packs, overriding existing entrances should no longer be necessary.
@@ -449,6 +450,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.attend_spirit_eve, LogicRegion.spirit_eve),
     ConnectionData(LogicEntrance.attend_festival_of_ice, LogicRegion.festival_of_ice),
     ConnectionData(LogicEntrance.buy_from_hat_mouse, LogicRegion.hat_mouse),
+    ConnectionData(LogicEntrance.buy_from_lost_items_shop, LogicRegion.lost_items_shop),
     ConnectionData(LogicEntrance.attend_night_market, LogicRegion.night_market),
     ConnectionData(LogicEntrance.attend_winter_star, LogicRegion.winter_star),
     ConnectionData(LogicEntrance.attend_squidfest, LogicRegion.squidfest),

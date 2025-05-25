@@ -233,6 +233,7 @@ class LogicEntrance:
     attend_spirit_eve = "Attend Spirit's Eve"
     attend_festival_of_ice = "Attend Festival of Ice"
     buy_from_hat_mouse = "Buy From Hat Mouse"
+    buy_from_lost_items_shop = "Buy From Lost Items Shop"
     attend_night_market = "Attend Night Market"
     attend_winter_star = "Attend Feast of the Winter Star"
     attend_squidfest = "Attend SquidFest"

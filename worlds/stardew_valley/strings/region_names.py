@@ -201,6 +201,8 @@ class LogicRegion:
     forest_waterfall = "Waterfall"
     secret_notes = "Secret Notes"
     hat_mouse = "Hat Mouse"
+    lost_items_shop = "Lost Items Shop"
+
 
 
 class DeepWoodsRegion:

@@ -104,6 +104,9 @@ ginger_island_content_pack = GingerIslandContentPack(
                                          other_requirements=(RegionRequirement(Region.island_south),)),),
         Hats.pageboy_cap.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
                                            other_requirements=(ReadAllBooksRequirement(),)),),
+
+        Hats.concerned_ape_mask.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                                  other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
     },
     fishes=(
         # TODO override region so no need to add inaccessible regions in logic
