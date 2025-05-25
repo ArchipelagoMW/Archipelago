@@ -215,7 +215,7 @@ components: List[Component] = [
     Component('Generate', 'Generate', cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
-              description="Install an APWorld to play games not included with Archipelago\nby default."),
+              description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
               description="Connect to a multiworld using the text client."),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',

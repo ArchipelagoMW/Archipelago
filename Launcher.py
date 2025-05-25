@@ -100,15 +100,15 @@ def update_settings():
 components.extend([
     # Functions
     Component("Open host.yaml", func=open_host_yaml,
-              description="Open the host.yaml file to change settings for generation,\ngames, and more."),
+              description="Open the host.yaml file to change settings for generation, games, and more."),
     Component("Open Patch", func=open_patch,
-              description="Open a patch file, downloaded from the room page or\nprovided by the host."),
+              description="Open a patch file, downloaded from the room page or provided by the host."),
     Component("Generate Template Options", func=generate_yamls,
               description="Generate template YAMLs for currently installed games."),
     Component("Archipelago Website", func=lambda: webbrowser.open("https://archipelago.gg/"),
               description="Open archipelago.gg in your browser."),
     Component("Discord Server", icon="discord", func=lambda: webbrowser.open("https://discord.gg/8Z65BR2"),
-              description="Join the Discord server to play public multiworlds,\nreport issues, or just chat!"),
+              description="Join the Discord server to play public multiworlds, report issues, or just chat!"),
     Component("Unrated/18+ Discord Server", icon="discord",
               func=lambda: webbrowser.open("https://discord.gg/fqvNCCRsu4"),
               description="Find unrated and 18+ games in the After Dark Discord server."),
