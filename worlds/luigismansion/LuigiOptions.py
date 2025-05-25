@@ -490,6 +490,8 @@ class TrapLink(Toggle):
 class GoldMice(Toggle):
     """
     Adds Gold Mice as locations to be checked.
+
+    Logic requires these to be obtained after blackout so they can't be missed. They can be acquired without black out, out of logic.
     """
     display_name = " Gold Mice"
     internal_name = "gold_mice"
