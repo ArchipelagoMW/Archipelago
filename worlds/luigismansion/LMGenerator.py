@@ -4,7 +4,7 @@ import yaml
 
 from collections import Counter
 from CommonClient import logger
-from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
+
 
 def counter_constructor(loader, node):
     args = loader.construct_sequence(node)
