@@ -585,8 +585,8 @@ class LMContext(CommonContext):
                         self.already_mentioned_rank_diff = True
 
         if not self.finished_game and self.game_clear:
-            logger.info("You completed " + str((len(self.checked_locations) / len(self.server_locations)) * 100)+"%"+
-                " of the total checks")
+            logger.info("Congratulations on completing LM Rando! You completed " + "{:.2f}".format(
+                (len(self.checked_locations) / len(self.server_locations)) * 100)+"% of the total checks")
             self.finished_game = True
             await self.send_msgs([{
                 "cmd": "StatusUpdate",
