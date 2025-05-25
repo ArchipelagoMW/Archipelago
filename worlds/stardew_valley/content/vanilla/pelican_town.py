@@ -680,8 +680,8 @@ pelican_town = ContentPack(
         Hats.emilys_magic_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                 other_requirements=(SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
 
-        Hats.garbage_hat: (ForagingSource(regions=(Region.town,), grind_months=12),),
-        Hats.mystery_hat: (MysteryBoxSource(amount=100),),
+        Hats.garbage_hat.name: (ForagingSource(regions=(Region.town,), grind_months=12),),
+        Hats.mystery_hat.name: (MysteryBoxSource(amount=100),),
 
         Hats.living_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
         Hats.spotted_headscarf.name: (TailoringSource(tailoring_items=(Mushroom.red,)),),

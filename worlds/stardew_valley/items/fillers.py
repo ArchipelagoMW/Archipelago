@@ -53,7 +53,7 @@ def create_filler_festival_rewards(item_factory: StardewItemFactory, options: St
     return [
         item_factory(item)
         for item in items_by_group[Group.FESTIVAL]
-        if item.classification == ItemClassification.filler
+        if item.classification == ItemClassification.filler and Group.DEPRECATED not in item.groups
     ]
 
 

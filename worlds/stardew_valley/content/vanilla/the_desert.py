@@ -57,9 +57,9 @@ the_desert = ContentPack(
         Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
                                           other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
 
-        Hats.laurel_wreath_crown: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.joja_cap: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.dark_ballcap: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.dark_cowboy_hat: (ForagingSource(regions=Region.skull_cavern_100),),
+        Hats.laurel_wreath_crown.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.joja_cap.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_ballcap.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_cowboy_hat.name: (ForagingSource(regions=(Region.skull_cavern_100,)),),
     }
 )

@@ -135,7 +135,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.golden_helmet.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                              other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
 
-        Hats.tiger_hat: (MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS),),
-        Hats.deluxe_pirate_hat: (ForagingSource(regions=(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10,), require_all_regions=True),),
+        Hats.tiger_hat.name: (MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS),),
+        Hats.deluxe_pirate_hat.name: (ForagingSource(regions=(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10,), require_all_regions=True),),
     },
 )
