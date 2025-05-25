@@ -1,4 +1,4 @@
-from ..hats import Hats
+from ..hats_data import Hats
 from ..shirt_data import Shirts
 from ...bundles.bundle_item import BundleItem
 from ...strings.animal_product_names import AnimalProduct

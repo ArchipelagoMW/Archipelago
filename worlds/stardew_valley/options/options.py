@@ -719,6 +719,26 @@ class Secretsanity(OptionSet):
             return typing.cast(bool, self.value == other)
 
 
+class Hatsanity(Choice):
+    """Add checks for wearing hats?
+    None: No hat locations
+    Easy: Locations for wearing the easily obtainable hats
+    Medium: Locations for wearing the harder to obtain hats
+    Difficult: Locations for wearing hats that are very difficult to obtain or require some unlikely RNG
+    Near Perfection: Locations for wearing hats that are late game and generally obtained by doing the equivalent of a perfection task
+    Post Perfection: Locations for wearing all hats, including the hyper-late game ones that require more work than perfection itself
+    """
+    internal_name = "hatsanity"
+    display_name = "Hatsanity"
+    default = 0
+    option_none = 0
+    option_easy = 1
+    option_medium = 2
+    option_difficult = 3
+    option_near_perfection = 4
+    option_post_perfection = 5
+
+
 class NumberOfMovementBuffs(Range):
     """Number of movement speed buffs to the player that exist as items in the pool.
     Each movement speed buff is a +25% multiplier that stacks additively"""
@@ -1003,6 +1023,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     walnutsanity: Walnutsanity
     moviesanity: Moviesanity
     secretsanity: Secretsanity
+    hatsanity: Hatsanity
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
     starting_money: StartingMoney

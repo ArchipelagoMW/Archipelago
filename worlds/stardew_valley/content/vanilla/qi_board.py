@@ -4,7 +4,7 @@ from ..game_content import ContentPack, StardewContent
 from ...data import fish_data
 from ...data.game_item import GenericSource, ItemTag
 from ...data.harvest import HarvestCropSource
-from ...data.hats import Hats
+from ...data.hats_data import Hats
 from ...data.requirement import DangerousMinesRequirement
 from ...data.shop import ShopSource
 from ...strings.crop_names import Fruit
@@ -35,8 +35,8 @@ qi_board_content_pack = QiBoardContentPack(
         fish_data.legend_ii,
         fish_data.radioactive_carp,
     ),
-    shop_sources={
+    hat_sources={
         Hats.space_helmet.name: (ShopSource(price=20000, shop_region=LogicRegion.hat_mouse,
-                                      other_requirements=(DangerousMinesRequirement(120),)), ),
+                                            other_requirements=(DangerousMinesRequirement(120),)),),
     },
 )

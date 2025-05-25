@@ -4,7 +4,7 @@ from ...data import villagers_data, fish_data
 from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
-from ...data.hats import Hats
+from ...data.hats_data import Hats
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement
@@ -81,8 +81,29 @@ ginger_island_content_pack = GingerIslandContentPack(
         Book.queen_of_sauce_cookbook: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_SKILL),
             ShopSource(price=50000, shop_region=LogicRegion.bookseller_2, other_requirements=(WalnutRequirement(100),)),),  # Worst book ever
-
-        # Hats
+    },
+    fishes=(
+        # TODO override region so no need to add inaccessible regions in logic
+        fish_data.blue_discus,
+        fish_data.lionfish,
+        fish_data.midnight_carp,
+        fish_data.pufferfish,
+        fish_data.stingray,
+        fish_data.super_cucumber,
+        fish_data.tilapia,
+        fish_data.tuna
+    ),
+    villagers=(
+        villagers_data.leo,
+    ),
+    animals=(
+        Animal(AnimalName.ostrich,
+               required_building=Building.barn,
+               sources=(
+                   OstrichIncubatorSource(AnimalProduct.ostrich_egg_starter),
+               )),
+    ),
+    hat_sources={
         Hats.infinity_crown.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                               other_requirements=(ForgeInfinityWeaponRequirement(),)),),
         Hats.archers_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
@@ -111,25 +132,4 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.golden_helmet.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                              other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
     },
-    fishes=(
-        # TODO override region so no need to add inaccessible regions in logic
-        fish_data.blue_discus,
-        fish_data.lionfish,
-        fish_data.midnight_carp,
-        fish_data.pufferfish,
-        fish_data.stingray,
-        fish_data.super_cucumber,
-        fish_data.tilapia,
-        fish_data.tuna
-    ),
-    villagers=(
-        villagers_data.leo,
-    ),
-    animals=(
-        Animal(AnimalName.ostrich,
-               required_building=Building.barn,
-               sources=(
-                   OstrichIncubatorSource(AnimalProduct.ostrich_egg_starter),
-               )),
-    )
 )

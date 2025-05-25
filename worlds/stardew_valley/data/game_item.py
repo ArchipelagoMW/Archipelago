@@ -24,6 +24,7 @@ class ItemTag(enum.Enum):
     BOOK = enum.auto()
     BOOK_POWER = enum.auto()
     BOOK_SKILL = enum.auto()
+    HAT = enum.auto()
 
 
 @dataclass(frozen=True)

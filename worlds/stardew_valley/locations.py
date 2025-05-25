@@ -552,6 +552,13 @@ def extend_secrets_locations(randomized_locations: List[LocationData], options: 
     randomized_locations.extend(filtered_locations)
 
 
+def extend_hats_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    locations = []
+    locations.extend(locations_by_tag[LocationTags.HATSANITY])
+    filtered_locations = filter_disabled_locations(options, content, locations)
+    randomized_locations.extend(filtered_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
@@ -602,6 +609,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_walnutsanity_locations(randomized_locations, options)
     extend_movies_locations(randomized_locations, options, content)
     extend_secrets_locations(randomized_locations, options, content)
+    extend_hats_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)

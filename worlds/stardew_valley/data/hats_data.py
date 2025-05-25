@@ -1,43 +1,36 @@
-all_hats = []
-all_considered_hats = []
+from dataclasses import dataclass
 
 
 class HatDifficulty:
     easy = 0
-    easy_island = 1
+    easy_island = 0
     tailoring = 2
-    tailoring_island = 3
+    tailoring_island = 2
     medium = 4
-    medium_island = 5
+    medium_island = 4
     difficult_or_rng = 6
-    difficult_or_rng_island = 7
+    difficult_or_rng_island = 6
     near_perfection = 8
-    post_perfection = 9
+    post_perfection = 10
     impossible = 999  # For that one chinese-version only hat
 
 
-class Hat:
+@dataclass(frozen=True)
+class HatItem:
     name: str
     difficulty: int
-    consider_in_logic: bool = True
-    # consider_in_logic exists as a temporary measure because I don't feel like writing out the logic for every single hat at this stage,
-    # and I only need some of them for the meme bundle
-
-    def __init__(self, name: str, difficulty: int, consider_in_logic: bool = True):
-        self.name = name
-        self.difficulty = difficulty
-        self.consider_in_logic = consider_in_logic
 
     def __repr__(self) -> str:
         return f"{self.name} (Difficulty: {self.difficulty})"
 
 
-def hat(name: str, difficulty: int, consider_in_logic: bool = True) -> Hat:
-    hat = Hat(name, difficulty, consider_in_logic)
-    all_hats.append(hat)
-    if consider_in_logic:
-        all_considered_hats.append(hat)
-    return hat
+all_hats: list[HatItem] = []
+
+
+def hat(name: str, difficulty: int, consider: bool = True) -> HatItem:
+    hat_item = HatItem(name, difficulty)
+    all_hats.append(hat_item)
+    return hat_item
 
 
 class Hats:
@@ -163,6 +156,3 @@ class Hats:
     white_turban = hat("White Turban", HatDifficulty.tailoring, False)
     witch_hat = hat("Witch Hat", HatDifficulty.tailoring, False)
 
-
-all_hat_names = [hat.name for hat in all_hats]
-all_considered_hat_names = [hat.name for hat in all_considered_hats]

@@ -251,10 +251,13 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
 
             # If the queue is None, it means we have not start simplifying. Otherwise, we will continue simplification where we left.
             if local_state.rules_to_simplify is None:
-                rules_to_simplify = frozenset(local_state.original_simplifiable_rules)
-                if self.complement in rules_to_simplify:
-                    return self.short_circuit_simplification()
-                local_state.rules_to_simplify = deque(rules_to_simplify)
+                try:
+                    rules_to_simplify = frozenset(local_state.original_simplifiable_rules)
+                    if self.complement in rules_to_simplify:
+                        return self.short_circuit_simplification()
+                    local_state.rules_to_simplify = deque(rules_to_simplify)
+                except Exception:
+                    assert False
 
             # Start simplification where we left.
             while local_state.rules_to_simplify:

@@ -69,6 +69,7 @@ class StardewFeatures:
     friendsanity: friendsanity.FriendsanityFeature
     skill_progression: skill_progression.SkillProgressionFeature
     tool_progression: tool_progression.ToolProgressionFeature
+    hatsanity: hatsanity.HatsanityFeature
 
 
 @dataclass(frozen=True)
@@ -133,6 +134,12 @@ class ContentPack:
     quests: Iterable[Any] = ()
 
     def quest_hook(self, content: StardewContent):
+        ...
+        ...
+
+    hat_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
+
+    def hat_source_hook(self, content: StardewContent):
         ...
 
     def finalize_hook(self, content: StardewContent):

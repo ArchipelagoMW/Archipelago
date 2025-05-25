@@ -1,7 +1,7 @@
 from functools import cached_property
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from ..data.hats import Hats
+from ..data.hats_data import Hats
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
 from ..strings.fish_names import Fish

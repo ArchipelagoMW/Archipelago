@@ -2,6 +2,7 @@ from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
 from ...data.game_item import ItemTag, CustomRuleSource, GameItem
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
+from ...data.hats_data import all_hats
 from ...data.requirement import ToolRequirement
 from ...data.skill import Skill
 from ...strings.artisan_good_names import ArtisanGood
@@ -55,6 +56,10 @@ class BaseGameContentPack(ContentPack):
                 continue
 
             content.tag_item(edible_mushroom, ItemTag.EDIBLE_MUSHROOM)
+
+    def hat_source_hook(self, content: StardewContent):
+        for hat in all_hats:
+            content.tag_item(hat.name, ItemTag.HAT)
 
     def finalize_hook(self, content: StardewContent):
         # FIXME I hate this design. A listener design pattern would be more appropriate so artisan good are register at the exact moment a FRUIT tag is added.

@@ -103,6 +103,7 @@ def set_rules(world):
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
+    set_hatsanity_rules(logic, multiworld, player, world_options, world_content)
 
     set_deepwoods_rules(logic, multiworld, player, world_content)
     set_magic_spell_rules(logic, multiworld, player, world_content)
@@ -987,6 +988,11 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
 
 def set_secret_note_gift_rule(logic: StardewLogic, multiworld: MultiWorld, player: int, secret_note_location: str) -> None:
     set_location_rule(multiworld, player, secret_note_location, logic.gifts.can_fulfill(gift_requirements[secret_note_location]))
+
+
+def set_hatsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
+    pass
+    # for hatsanity_location in
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):

@@ -1,5 +1,5 @@
 from . import content_packs
-from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression
+from .feature import cropsanity, friendsanity, fishsanity, booksanity, building_progression, skill_progression, tool_progression, hatsanity
 from .game_content import ContentPack, StardewContent, StardewFeatures
 from .unpacking import unpack_content
 from .. import options
@@ -36,6 +36,7 @@ def choose_features(player_options: options.StardewValleyOptions) -> StardewFeat
         choose_friendsanity(player_options.friendsanity, player_options.friendsanity_heart_size),
         choose_skill_progression(player_options.skill_progression),
         choose_tool_progression(player_options.tool_progression, player_options.skill_progression),
+        choose_hatsanity(player_options.hatsanity),
     )
 
 
@@ -168,3 +169,25 @@ def choose_tool_progression(tool_option: options.ToolProgression, skill_option: 
         return tool_progression.ToolProgressionProgressive(starting_tools, tools_distribution)
 
     raise ValueError(f"No tool progression feature mapped to {str(tool_option.value)}")
+
+
+def choose_hatsanity(hat_option: options.Hatsanity) -> hatsanity.HatsanityFeature:
+    if hat_option == options.Hatsanity.option_none:
+        return hatsanity.HatsanityNone()
+
+    if hat_option == options.Hatsanity.option_easy:
+        return hatsanity.HatsanityEasy()
+
+    if hat_option == options.Hatsanity.option_medium:
+        return hatsanity.HatsanityMedium()
+
+    if hat_option == options.Hatsanity.option_difficult:
+        return hatsanity.HatsanityDifficult()
+
+    if hat_option == options.Hatsanity.option_near_perfection:
+        return hatsanity.HatsanityNearPerfection()
+
+    if hat_option == options.Hatsanity.option_post_perfection:
+        return hatsanity.HatsanityPostPerfection()
+
+    raise ValueError(f"No hatsanity feature mapped to {str(hat_option.value)}")

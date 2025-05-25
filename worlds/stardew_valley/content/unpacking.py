@@ -52,6 +52,7 @@ def register_pack(content: StardewContent, pack: ContentPack):
     register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
     register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
     register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
+    register_sources_and_call_hook(content, pack.hat_sources, pack.hat_source_hook)
 
     for fish in pack.fishes:
         content.fishes[fish.name] = fish

@@ -2,7 +2,7 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
 from ...data.harvest import ForagingSource, HarvestCropSource
-from ...data.hats import Hats
+from ...data.hats_data import Hats
 from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
 from ...data.shop import ShopSource
 from ...strings.crop_names import Fruit, Vegetable
@@ -40,13 +40,6 @@ the_desert = ContentPack(
         Seed.rhubarb: (ShopSource(price=100, shop_region=Region.oasis, seasons=(Season.spring,)),),
         Seed.starfruit: (ShopSource(price=400, shop_region=Region.oasis, seasons=(Season.summer,)),),
         Seed.beet: (ShopSource(price=20, shop_region=Region.oasis, seasons=(Season.fall,)),),
-
-        Hats.gils_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
-                                        other_requirements=(RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
-        Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
-                                            other_requirements=(MeetRequirement(NPC.abigail),)),),
-        Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
-                                          other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
     },
     fishes=(
         fish_data.sandfish,
@@ -55,4 +48,12 @@ the_desert = ContentPack(
     villagers=(
         villagers_data.sandy,
     ),
+    hat_sources={
+        Hats.gils_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                        other_requirements=(RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
+        Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
+                                            other_requirements=(MeetRequirement(NPC.abigail),)),),
+        Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
+                                          other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
+    }
 )
