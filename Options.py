@@ -1676,6 +1676,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
     import os
+    from inspect import cleandoc
 
     import yaml
     from jinja2 import Template
@@ -1714,18 +1715,20 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         # yaml dump may add end of document marker and newlines.
         return yaml.dump(scalar).replace("...\n", "").strip()
 
+    with open(local_path("data", "options.yaml")) as f:
+        file_data = f.read()
+    template = Template(file_data)
+
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
             option_groups = get_option_groups(world)
-            with open(local_path("data", "options.yaml")) as f:
-                file_data = f.read()
-            res = Template(file_data).render(
+
+            res = template.render(
                 option_groups=option_groups,
                 __version__=__version__, game=game_name, yaml_dump=yaml_dump_scalar,
                 dictify_range=dictify_range,
+                cleandoc=cleandoc,
             )
-
-            del file_data
 
             with open(os.path.join(target_folder, get_file_safe_name(game_name) + ".yaml"), "w", encoding="utf-8-sig") as f:
                 f.write(res)

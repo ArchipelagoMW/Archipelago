@@ -1,16 +1,13 @@
-import logging
-
-from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
+from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, job_count_in_pool, default_starting_job_list, job_list
-from .Locations import get_locations, get_bosses, get_shops
-from .Regions import init_areas
-from .Options import CrystalProjectOptions, IncludedRegions
+    set_jobs_at_default_locations, default_starting_job_list, job_list
+from .locations import get_locations, get_bosses, get_shops
+from .regions import init_areas
+from .options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
-
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, Tutorial, MultiWorld
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -29,11 +26,11 @@ class CrystalProjectWeb(WebWorld):
     #option_groups = md_option_groups
 
 class CrystalProjectWorld(World):
-    """Insert description of the world/game here."""
-    game = "Crystal Project"  # name of the game/world
+    """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
+
+    game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
-    #settings: typing.ClassVar[CrystalProjectSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
@@ -43,11 +40,13 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
-    starting_jobs = []
-    statically_placed_jobs:int = 0
     web = CrystalProjectWeb()
 
-    logger = logging.getLogger()
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super().__init__(multiworld, player)
+        self.starting_jobs = []
+        self.included_regions: List[str] = []
+        self.statically_placed_jobs:int = 0
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
@@ -142,7 +141,6 @@ class CrystalProjectWorld(World):
 
         init_areas(self, locations, self.options)
 
-        jobs_earnable:int = 0
         if self.options.jobRando.value == self.options.jobRando.option_none:
             jobs_earnable = set_jobs_at_default_locations(self)
         else:
@@ -302,28 +300,25 @@ class CrystalProjectWorld(World):
         else:
             [excluded_items.add(equipment_piece) for equipment_piece in non_progressive_equipment]
 
-        if self.options.keyMode == self.options.keyMode.option_skeleton:
-            excluded_items.add("Item - Luxury Key")
-            excluded_items.add("Item - Gardeners Key")
+        if self.options.keyMode == self.options.keyMode.option_vanilla or self.options.keyMode == self.options.keyMode.option_skeleton:
+            excluded_items.add("Item - Prison Key Ring")
+            excluded_items.add("Item - Beaurior Key Ring")
+            excluded_items.add("Item - Slip Glide Ride Key Ring")
+            excluded_items.add("Item - Ice Puzzle Key Ring")
+            excluded_items.add("Item - Jidamba Key Ring")
+        elif self.options.keyMode == self.options.keyMode.option_key_ring or self.options.keyMode == self.options.keyMode.option_skeleton:
             excluded_items.add("Item - South Wing Key")
             excluded_items.add("Item - East Wing Key")
             excluded_items.add("Item - West Wing Key")
             excluded_items.add("Item - Dark Wing Key")
             excluded_items.add("Item - Cell Key")
-            excluded_items.add("Item - Room 1 Key")
             excluded_items.add("Item - Small Key")
             excluded_items.add("Item - Boss Key")
             excluded_items.add("Item - Red Door Key")
-            excluded_items.add("Item - Ice Puzzle Key")
-            excluded_items.add("Item - Rampart Key")
-            excluded_items.add("Item - Forgotten Key")
-            excluded_items.add("Item - Tram Key")
-            excluded_items.add("Item - Courtyard Key")
-            excluded_items.add("Item - Pyramid Key")
+            excluded_items.add("Item - Ice Cell Key")
             excluded_items.add("Item - Foliage Key")
             excluded_items.add("Item - Cave Key")
             excluded_items.add("Item - Canopy Key")
-            excluded_items.add("Item - Ice Cell Key")
 
         if self.options.jobRando == self.options.jobRando.option_none:
             excluded_items.add("Job - Fencer")
@@ -405,16 +400,14 @@ class CrystalProjectWorld(World):
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
             win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
+            self.included_regions.append("The New World")
         #elif self.options.goal == self.options.goal.option_true_astley:
         #    win_condition_item = "Item - Old World Stone"
+        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
+        #    self.included_regions.append("The Old World")
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
-        
-        if self.options.goal == 0:
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-        #elif self.options.goal == 1:
-        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
-        elif self.options.goal == 2:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
@@ -432,12 +425,12 @@ class CrystalProjectWorld(World):
             "clamshellsQuantity": self.options.clamshellsQuantity.value,
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
-            "includedRegions": self.options.includedRegions.value,
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
-            "startingJobs": self.get_job_id_list(),
             "killBossesMode" : bool(self.options.killBossesMode.value),
             "easyLeveling": bool(self.options.easyLeveling.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
             "shopsanity": bool(self.options.shopsanity.value),
+            "startingJobs": self.get_job_id_list(),
+            "includedRegions": self.included_regions,
         }
