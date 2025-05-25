@@ -136,7 +136,7 @@ class StartHiddenMansion(Toggle):
 
 
 class SpeedySpirits(Toggle):
-    """Adds Blue Ghosts to location pool. These have moved to be only available during blackout"""
+    """Adds Blue Ghosts to location pool. These have moved to be only available during blackout so they cannot be missed"""
     display_name = "Speedy Spirits"
     internal_name = "speedy_spirits"
 
