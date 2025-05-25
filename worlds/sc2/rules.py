@@ -749,7 +749,7 @@ class SC2Logic:
                 item_names.INFESTED_MARINE, item_names.INFESTED_LIBERATOR,
                 item_names.SPORE_CRAWLER, item_names.INFESTED_MISSILE_TURRET,
                 item_names.INFESTED_BUNKER,
-                item_names.HUNTER_KILLERS, item_names.THORNSHELLS,
+                item_names.HUNTER_KILLERS, item_names.CAUSTIC_HORRORS,
             ), self.player)
             or state.has_all((item_names.SWARM_HOST, item_names.SWARM_HOST_PRESSURIZED_GLANDS), self.player)
             or state.has_all((item_names.ABERRATION, item_names.ABERRATION_PROGRESSIVE_BANELING_LAUNCH), self.player)
@@ -766,7 +766,7 @@ class SC2Logic:
     def zerg_basic_kerriganless_anti_air(self, state: CollectionState) -> bool:
         return (
             self.zerg_moderate_anti_air(state)
-            or state.has_any((item_names.HUNTER_KILLERS, item_names.THORNSHELLS), self.player)
+            or state.has_any((item_names.HUNTER_KILLERS, item_names.CAUSTIC_HORRORS), self.player)
             or (self.advanced_tactics and state.has_any({item_names.SPORE_CRAWLER, item_names.INFESTED_MISSILE_TURRET}, self.player))
         )
 
@@ -3417,7 +3417,7 @@ class SC2Logic:
                     item_names.INFESTED_BANSHEE,
                     # Mercs with <= 300s first drop time
                     item_names.DEVOURING_ONES, item_names.HUNTER_KILLERS,
-                    item_names.THORNSHELLS, item_names.HUNTERLING,
+                    item_names.CAUSTIC_HORRORS, item_names.HUNTERLING,
                 ), self.player)
                 or state.has_all((item_names.INFESTOR, item_names.INFESTOR_INFESTED_TERRAN), self.player)
                 or self.morph_baneling(state)
