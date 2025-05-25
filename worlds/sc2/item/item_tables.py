@@ -1419,7 +1419,7 @@ item_table = {
     item_names.NYDUS_WORM_ECHIDNA_WORM_RESOURCE_EFFICIENCY:
         ItemData(356 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 14, SC2Race.ZERG, parent=parent_names.ANY_NYDUS_WORM),
     item_names.ECHIDNA_WORM_OUROBOROS_STRAIN:
-        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent=item_names.ECHIDNA_WORM),
+        ItemData(357 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 15, SC2Race.ZERG, parent=parent_names.ZERG_OUROBOUROS_CONDITION),
     item_names.NYDUS_WORM_RAVENOUS_APPETITE:
         ItemData(358 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_4, 16, SC2Race.ZERG, parent=item_names.NYDUS_WORM),
     item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:
