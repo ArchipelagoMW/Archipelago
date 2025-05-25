@@ -43,19 +43,19 @@ class MonsterLogic(BaseLogic):
         return region_rule & combat_rule & time_rule
 
     @cache_self1
-    def can_kill_many(self, monster: monster_data.StardewMonster) -> StardewRule:
+    def can_kill_many(self, monster: Union[str, monster_data.StardewMonster]) -> StardewRule:
         return self.logic.monster.can_kill(monster, MAX_MONTHS / 3)
 
     @cache_self1
-    def can_kill_max(self, monster: monster_data.StardewMonster) -> StardewRule:
+    def can_kill_max(self, monster: Union[str, monster_data.StardewMonster]) -> StardewRule:
         return self.logic.monster.can_kill(monster, MAX_MONTHS)
 
     # Should be cached
-    def can_kill_any(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
+    def can_kill_any(self, monsters: (Iterable[Union[str, monster_data.StardewMonster]], Hashable), amount_tier: int = 0) -> StardewRule:
         return self.logic.or_(*(self.logic.monster.can_kill(monster, amount_tier) for monster in monsters))
 
     # Should be cached
-    def can_kill_all(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
+    def can_kill_all(self, monsters: (Iterable[Union[str, monster_data.StardewMonster]], Hashable), amount_tier: int = 0) -> StardewRule:
         return self.logic.and_(*(self.logic.monster.can_kill(monster, amount_tier) for monster in monsters))
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:

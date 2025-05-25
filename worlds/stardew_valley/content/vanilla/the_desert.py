@@ -3,13 +3,16 @@ from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats import Hats
-from ...data.requirement import RegionRequirement
+from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
 from ...data.shop import ShopSource
 from ...strings.crop_names import Fruit, Vegetable
+from ...strings.currency_names import Currency
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed
+from ...strings.villager_names import NPC
 
 the_desert = ContentPack(
     "The Desert (Vanilla)",
@@ -40,6 +43,10 @@ the_desert = ContentPack(
 
         Hats.gils_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                         other_requirements=(RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
+        Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
+                                            other_requirements=(MeetRequirement(NPC.abigail),)),),
+        Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
+                                          other_requirements=(MonsterKillRequirement(Monster.mummy, 100),)),),
     },
     fishes=(
         fish_data.sandfish,

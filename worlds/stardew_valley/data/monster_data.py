@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, Callable
 
+from .game_item import Source
 from ..mods.mod_data import ModNames
 from ..mods.mod_monster_locations import modded_monsters_locations
 from ..strings.monster_names import Monster, MonsterCategory
@@ -18,6 +19,12 @@ class StardewMonster:
     def __repr__(self):
         return f"{self.name} [{self.category}] (Locations: {self.locations} |" \
                f" Difficulty: {self.difficulty}) |"
+
+
+@dataclass(frozen=True, kw_only=True)
+class MonsterSource(Source):
+    monsters: Tuple[StardewMonster, ...]
+    amount_tier: int = 0
 
 
 slime_hutch = (Region.slime_hutch,)

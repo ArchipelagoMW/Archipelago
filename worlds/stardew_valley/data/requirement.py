@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 from .game_item import Requirement
 from ..strings.tool_names import ToolMaterial
@@ -49,6 +50,11 @@ class CombatRequirement(Requirement):
 @dataclass(frozen=True)
 class QuestRequirement(Requirement):
     quest: str
+
+
+@dataclass(frozen=True)
+class MeetRequirement(Requirement):
+    npc: str
 
 
 @dataclass(frozen=True)
@@ -182,3 +188,9 @@ class MinesRequirement(Requirement):
 @dataclass(frozen=True)
 class DangerousMinesRequirement(Requirement):
     floor: int
+
+
+@dataclass(frozen=True)
+class MonsterKillRequirement(Requirement):
+    monsters: Tuple[str, ...]
+    amount: int = 1

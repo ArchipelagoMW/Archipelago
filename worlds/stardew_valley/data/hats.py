@@ -42,9 +42,9 @@ def hat(name: str, difficulty: int, consider_in_logic: bool = True) -> Hat:
 
 class Hats:
     concerned_ape_mask = hat("???", HatDifficulty.post_perfection)
-    abigails_bow = hat("Abigail's Bow", HatDifficulty.medium, False)
-    arcane_hat = hat("Arcane Hat", HatDifficulty.difficult_or_rng, False)
-    archers_cap = hat("Archer's Cap", HatDifficulty.near_perfection, False)
+    abigails_bow = hat("Abigail's Bow", HatDifficulty.medium)
+    arcane_hat = hat("Arcane Hat", HatDifficulty.difficult_or_rng)
+    archers_cap = hat("Archer's Cap", HatDifficulty.near_perfection)
     beanie = hat("Beanie", HatDifficulty.tailoring, False)
     blobfish_mask = hat("Blobfish Mask", HatDifficulty.tailoring, False)
     blue_bonnet = hat("Blue Bonnet", HatDifficulty.medium)

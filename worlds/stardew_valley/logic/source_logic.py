@@ -7,6 +7,7 @@ from ..data.artisan import MachineSource
 from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
+from ..data.monster_data import MonsterSource
 from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 
 
@@ -103,3 +104,7 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: ArtifactSpotSource):
         return self.logic.grind.can_grind_artifact_spots(source.amount)
+
+    @has_access_to.register
+    def _(self, source: MonsterSource):
+        return self.logic.monster.can_kill_any(source.monsters, source.amount_tier)

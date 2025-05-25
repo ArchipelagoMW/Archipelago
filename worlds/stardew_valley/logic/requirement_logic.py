@@ -1,4 +1,5 @@
 import functools
+import math
 from typing import Iterable
 
 from .base_logic import BaseLogicMixin, BaseLogic
@@ -12,7 +13,7 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
     HelpWantedRequirement, ShipOneCropRequirement, FinishedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
-    DangerousMinesRequirement, HasItemRequirement
+    DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement
 from ..strings.region_names import Region, LogicRegion
 
 
@@ -72,6 +73,10 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: QuestRequirement):
         return self.logic.quest.can_complete_quest(requirement.quest)
+
+    @meet_requirement.register
+    def _(self, requirement: MeetRequirement):
+        return self.logic.relationship.can_meet(requirement.npc)
 
     @meet_requirement.register
     def _(self, requirement: SpecificFriendRequirement):
@@ -178,3 +183,7 @@ class RequirementLogic(BaseLogic):
     @meet_requirement.register
     def _(self, requirement: DangerousMinesRequirement):
         return self.logic.region.can_reach(Region.dangerous_mines_100) & self.logic.mine.has_mine_elevator_to_floor(requirement.floor)
+
+    @meet_requirement.register
+    def _(self, requirement: MonsterKillRequirement):
+        return self.logic.monster.can_kill_any(requirement.monsters, math.log10(requirement.amount) // 1)
