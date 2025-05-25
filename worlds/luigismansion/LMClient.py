@@ -585,6 +585,8 @@ class LMContext(CommonContext):
                         self.already_mentioned_rank_diff = True
 
         if not self.finished_game and self.game_clear:
+            logger.info("You completed " + str((len(self.checked_locations) / len(self.server_locations)) * 100)+"%"+
+                " of the total checks")
             self.finished_game = True
             await self.send_msgs([{
                 "cmd": "StatusUpdate",
@@ -738,17 +740,6 @@ async def give_player_items(ctx: LMContext):
             lm_item_name = ctx.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
-            if "TrapLink" in ctx.tags and item.item in trap_id_list:
-                await ctx.send_trap_link(lm_item_name)
-
-            # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
-            # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
-            if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
-            (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
-                last_recv_idx += 1
-                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
-                continue
-
             item_name_display = lm_item_name[0:min(len(lm_item_name), RECV_MAX_STRING_LENGTH)].replace("&", "")
             dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
 
@@ -767,6 +758,17 @@ async def give_player_items(ctx: LMContext):
             await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16)/FRAME_AVG_COUNT)
             while dme.read_byte(RECV_ITEM_DISPLAY_VIZ_ADDR) > 0:
                 await wait_for_next_loop(0.1)
+
+            if "TrapLink" in ctx.tags and item.item in trap_id_list:
+                await ctx.send_trap_link(lm_item_name)
+
+            # Filter for only items where we have not received yet. If same slot, only receive locations from pre-set
+            # list of locations, otherwise accept other slots. Additionally accept only items from a pre-approved list.
+            if item.item in RECV_ITEMS_IGNORE or (item.player == ctx.slot and not
+            (item.location in SELF_LOCATIONS_TO_RECV or item.item in RECV_OWN_GAME_ITEMS or item.location < 0)):
+                last_recv_idx += 1
+                dme.write_word(LAST_RECV_ITEM_ADDR, last_recv_idx)
+                continue
 
             for addr_to_update in lm_item.update_ram_addr:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
