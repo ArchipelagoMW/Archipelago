@@ -3,7 +3,7 @@ import logging
 from .Items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, job_count_in_pool, default_starting_job_list, job_list
-from .Locations import get_locations, get_bosses
+from .Locations import get_locations, get_bosses, get_shops
 from .Regions import init_areas
 from .Options import CrystalProjectOptions, IncludedRegions
 from .rules import CrystalProjectLogic
@@ -39,7 +39,9 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
-    location_name_to_id.update(boss_name_to_id)  
+    shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, None)}
+    location_name_to_id.update(boss_name_to_id)
+    location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
     starting_jobs = []
     statically_placed_jobs:int = 0
@@ -133,6 +135,10 @@ class CrystalProjectWorld(World):
         if self.options.killBossesMode:
             bosses = get_bosses(self.player, self.options)
             locations.extend(bosses)
+
+        if self.options.shopsanity:
+            shops = get_shops(self.player, self.options)
+            locations.extend(shops)
 
         init_areas(self, locations, self.options)
 
