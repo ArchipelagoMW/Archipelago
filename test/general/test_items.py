@@ -87,11 +87,12 @@ class TestBase(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
-    
+
     def test_item_links(self) -> None:
         """
         Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
         """
+
         def setup_link_multiworld(world: Type[World], link_replace: bool) -> None:
             multiworld = MultiWorld(2)
             multiworld.game = {1: world.game, 2: world.game}

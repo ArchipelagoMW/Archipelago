@@ -132,6 +132,7 @@ class StardewValleyWorld(World):
         group_options = typing.cast(StardewValleyOptions, world_group.options)
         worlds_options = [typing.cast(StardewValleyOptions, multiworld.worlds[player].options) for player in players]
         apply_most_restrictive_options(group_options, worlds_options)
+        world_group.content = create_content(group_options)
 
         return world_group
 
