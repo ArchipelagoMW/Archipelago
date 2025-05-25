@@ -119,6 +119,7 @@ class LocationTags(enum.Enum):
     ANY_MOVIE = enum.auto()
     MOVIE = enum.auto()
     MOVIE_SNACK = enum.auto()
+    HATSANITY = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
