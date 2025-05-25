@@ -45,6 +45,7 @@ else:
             options.Walnutsanity,
             options.Moviesanity,
             options.Secretsanity,
+            options.Hatsanity,
         ]),
         OptionGroup("Multipliers, Buffs and extra customization", [
             options.StartingMoney,
