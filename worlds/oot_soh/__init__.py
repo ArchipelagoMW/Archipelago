@@ -4,7 +4,8 @@ import random
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table
-from .Locations import SohLocation, location_data_table, location_table, locked_locations
+from .Locations import SohLocation, base_location_table, cows_location_table,\
+                                          location_table
 from .Options import SohOptions
 from .Regions import region_data_table
 from .Rules import get_soh_rule
@@ -43,12 +44,8 @@ class SohWorld(World):
         item_pool: List[SohItem] = []
 
         location_count: int = 0
-
         # Count Total Locations.
-        for location_name, location_data in location_data_table.items():
-            # Ignore locations excluded due to options selected
-            if not location_data.can_create(self):
-                continue
+        for location_name, location_data in location_table.items():
             location_count += 1
 
         # Filler item list
@@ -168,21 +165,19 @@ class SohWorld(World):
 
         # Create locations.
         for region_name, region_data in region_data_table.items():
-            region = self.get_region(region_name)
+            region = self.multiworld.get_region(region_name, self.player)
             region.add_locations({
-                location_name: location_data.address for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.can_create(self)
+                location_name: location_data.address for location_name, location_data in base_location_table.items()
+                if location_data.region == region_name
             }, SohLocation)
+
+            if self.options.shuffle_cows:
+                region.add_locations({
+                    location_name: location_data.address for location_name, location_data in cows_location_table.items()
+                    if location_data.region == region_name
+                }, SohLocation)
+                
             region.add_exits(region_data_table[region_name].connecting_regions)
-
-        # Place locked locations.
-        for location_name, location_data in locked_locations.items():
-            # Ignore locations we never created.
-            if not location_data.can_create(self):
-                continue
-
-            locked_item = self.create_item(location_data_table[location_name].locked_item)
-            self.get_location(location_name).place_locked_item(locked_item)
 
     def get_filler_item_name(self) -> str:
         return "Blue Rupee"

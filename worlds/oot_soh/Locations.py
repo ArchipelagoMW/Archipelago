@@ -14,17 +14,12 @@ soh_base_id = int = 0xFF0000
 class SohLocationData(NamedTuple):
     region: str
     address: Optional[int] = None
-    can_create: Callable[["SohWorld"], bool] = lambda world: True
-    locked_item: Optional[str] = None
 
-
-location_data_table: Dict[str, SohLocationData] = {
+base_location_table: Dict[str, SohLocationData] = {
     # Example
     # "KF Mido Top Left Chest": SohLocationData(
         # region="Hyrule",
         # address=soh_base_id + 0,
-        # can_create=lambda world: world.options.death_link,
-        # locked_item="Green Rupee",
     # ),
     
     # Commented out locations that need a shuffle enabled to be shuffled. Need to be added
@@ -60,7 +55,6 @@ location_data_table: Dict[str, SohLocationData] = {
     "KF Mido Bottom Right Chest": SohLocationData(region="Hyrule", address=soh_base_id + 27, ),
     "KF Kokiri Sword Chest": SohLocationData(region="Hyrule", address=soh_base_id + 28, ),
     "KF Storms Grotto Chest": SohLocationData(region="Hyrule", address=soh_base_id + 29, ),
-    #"KF Links House Cow": SohLocationData(region="Hyrule", address=soh_base_id + 30, ),
     "KF GS Know It All House": SohLocationData(region="Hyrule", address=soh_base_id + 31, ),
     "KF GS Bean Patch": SohLocationData(region="Hyrule", address=soh_base_id + 32, ),
     "KF GS House of Twins": SohLocationData(region="Hyrule", address=soh_base_id + 33, ),
@@ -99,7 +93,6 @@ location_data_table: Dict[str, SohLocationData] = {
     "HF Southeast Grotto Chest": SohLocationData(region="Hyrule", address=soh_base_id + 66, ),
     "HF Open Grotto Chest": SohLocationData(region="Hyrule", address=soh_base_id + 67, ),
     #"HF Deku Scrub Grotto": SohLocationData(region="Hyrule", address=soh_base_id + 68, ),
-    #"HF Cow Grotto Cow": SohLocationData(region="Hyrule", address=soh_base_id + 69, ),
     "HF GS Cow Grotto": SohLocationData(region="Hyrule", address=soh_base_id + 70, ),
     "HF GS Stone Bridge Tree Grotto": SohLocationData(region="Hyrule", address=soh_base_id + 71, ),
     "Market Shooting Gallery": SohLocationData(region="Hyrule", address=soh_base_id + 72, ),
@@ -155,10 +148,6 @@ location_data_table: Dict[str, SohLocationData] = {
     #"LLR Deku Scrub Grotto Left": SohLocationData(region="Hyrule", address=soh_base_id + 122, ),
     #"LLR Deku Scrub Grotto Center": SohLocationData(region="Hyrule", address=soh_base_id + 123, ),
     #"LLR Deku Scrub Grotto Right": SohLocationData(region="Hyrule", address=soh_base_id + 124, ),
-    #"LLR Stables Left Cow": SohLocationData(region="Hyrule", address=soh_base_id + 125, ),
-    #"LLR Stables Right Cow": SohLocationData(region="Hyrule", address=soh_base_id + 126, ),
-    #"LLR Tower Left Cow": SohLocationData(region="Hyrule", address=soh_base_id + 127, ),
-    #"LLR Tower Right Cow": SohLocationData(region="Hyrule", address=soh_base_id + 128, ),
     "LLR GS House Window": SohLocationData(region="Hyrule", address=soh_base_id + 129, ),
     "LLR GS Tree": SohLocationData(region="Hyrule", address=soh_base_id + 130, ),
     "LLR GS Rain Shed": SohLocationData(region="Hyrule", address=soh_base_id + 131, ),
@@ -180,7 +169,6 @@ location_data_table: Dict[str, SohLocationData] = {
     "Kak 40 Gold Skulltula Reward": SohLocationData(region="Hyrule", address=soh_base_id + 147, ),
     "Kak 50 Gold Skulltula Reward": SohLocationData(region="Hyrule", address=soh_base_id + 148, ),
     "Kak 100 Gold Skulltula Reward": SohLocationData(region="Hyrule", address=soh_base_id + 149, ),
-    #"Kak Impas House Cow": SohLocationData(region="Hyrule", address=soh_base_id + 150, ),
     "Kak GS Tree": SohLocationData(region="Hyrule", address=soh_base_id + 151, ),
     "Kak GS Guards House": SohLocationData(region="Hyrule", address=soh_base_id + 152, ),
     "Kak GS Watchtower": SohLocationData(region="Hyrule", address=soh_base_id + 153, ),
@@ -219,7 +207,6 @@ location_data_table: Dict[str, SohLocationData] = {
     #"DMT Trade Eyedrops": SohLocationData(region="Hyrule", address=soh_base_id + 186, ),
     "DMT Trade Claim Check": SohLocationData(region="Hyrule", address=soh_base_id + 187, ),
     "DMT Great Fairy Reward": SohLocationData(region="Hyrule", address=soh_base_id + 188, ),
-    #"DMT Cow Grotto Cow": SohLocationData(region="Hyrule", address=soh_base_id + 189, ),
     "DMT GS Near Kak": SohLocationData(region="Hyrule", address=soh_base_id + 190, ),
     "DMT GS Bean Patch": SohLocationData(region="Hyrule", address=soh_base_id + 191, ),
     "DMT GS Above Dodongos Cavern": SohLocationData(region="Hyrule", address=soh_base_id + 192, ),
@@ -346,7 +333,6 @@ location_data_table: Dict[str, SohLocationData] = {
     #"GV Trade Saw": SohLocationData(region="Hyrule", address=soh_base_id + 313, ),
     #"GV Deku Scrub Grotto Front": SohLocationData(region="Hyrule", address=soh_base_id + 314, ),
     #"GV Deku Scrub Grotto Rear": SohLocationData(region="Hyrule", address=soh_base_id + 315, ),
-    #"GV Cow": SohLocationData(region="Hyrule", address=soh_base_id + 316, ),
     "GV GS Small Bridge": SohLocationData(region="Hyrule", address=soh_base_id + 317, ),
     "GV GS Bean Patch": SohLocationData(region="Hyrule", address=soh_base_id + 318, ),
     "GV GS Behind Tent": SohLocationData(region="Hyrule", address=soh_base_id + 319, ),
@@ -2425,5 +2411,19 @@ location_data_table: Dict[str, SohLocationData] = {
     #"Deku Tree Queen Gohma Grass 8": SohLocationData(region="Hyrule", address=soh_base_id + 2392, ),
 }
 
+cows_location_table: Dict[str, SohLocationData] = {
+    "KF Links House Cow": SohLocationData(region="Hyrule", address=soh_base_id + 30, ),
+    "HF Cow Grotto Cow": SohLocationData(region="Hyrule", address=soh_base_id + 69, ),
+    "LLR Stables Left Cow": SohLocationData(region="Hyrule", address=soh_base_id + 125, ),
+    "LLR Stables Right Cow": SohLocationData(region="Hyrule", address=soh_base_id + 126, ),
+    "LLR Tower Left Cow": SohLocationData(region="Hyrule", address=soh_base_id + 127, ),
+    "LLR Tower Right Cow": SohLocationData(region="Hyrule", address=soh_base_id + 128, ),
+    "Kak Impas House Cow": SohLocationData(region="Hyrule", address=soh_base_id + 150, ),
+    "DMT Cow Grotto Cow": SohLocationData(region="Hyrule", address=soh_base_id + 189, ),
+    "GV Cow": SohLocationData(region="Hyrule", address=soh_base_id + 316, ),
+}
+
+location_data_table: Dict[str, SohLocationData] = {**base_location_table,
+                                                   **cows_location_table}
+
 location_table = {name: data.address for name, data in location_data_table.items() if data.address is not None}
-locked_locations = {name: data for name, data in location_data_table.items() if data.locked_item}
