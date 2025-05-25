@@ -169,7 +169,7 @@ def set_rules(self) -> None:
             process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
                           ["Bomb", "Claw"])
             process_rules(self.multiworld.get_entrance("Overworld - Mine", self.player),
-                          ["MegaGrenade", "Claw", "Reuben1"])
+                          ["MegaGrenade", "Claw"])
             process_rules(self.multiworld.get_entrance("Overworld - Lava Dome", self.player),
                           ["MegaGrenade"])
             process_rules(self.multiworld.get_entrance("Overworld - Giant Tree", self.player),
