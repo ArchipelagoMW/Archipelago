@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import collections
 import copy
 import ctypes
 import enum
@@ -1976,10 +1977,7 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
 
 def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typing.Dict[int, typing.List[int]], typing.List[int]]:
     beaten_missions: typing.Set[int] = {mission_id for mission_id in ctx.mission_id_to_entry_rules if ctx.is_mission_completed(mission_id)}
-    received_items: typing.Dict[int, int] = {}
-    for network_item in ctx.items_received:
-        received_items.setdefault(network_item.item, 0)
-        received_items[network_item.item] += 1
+    received_items = compute_received_items(ctx)
 
     mission_order_objects: typing.List[MissionOrderObjectSlotData] = []
     parent_objects: typing.List[typing.List[MissionOrderObjectSlotData]] = []
@@ -2049,6 +2047,12 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     }
 
     return available_missions, available_layouts, available_campaigns
+
+def compute_received_items(ctx: SC2Context) -> typing.Counter[int]:
+    received_items: typing.Counter[int] = collections.Counter()
+    for network_item in ctx.items_received:
+        received_items[network_item.item] += 1
+    return received_items
 
 def check_game_install_path() -> bool:
     # First thing: go to the default location for ExecuteInfo.
