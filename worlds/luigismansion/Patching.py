@@ -257,20 +257,21 @@ def update_character_info(character_info, output_data):
             x["pos_z"] = spawn_region["pos_z"]
 
 
-def update_teiden_observer_info(observer_info, teiden_observer_info):
-    for entry_no in speedy_observer_index:
-        x = observer_info.info_file_field_entries[entry_no]
-        teiden_observer_info.info_file_field_entries.append(x)
-        observer_info.info_file_field_entries.remove(x)
+def update_teiden_observer_info(observer_info, teiden_observer_info, update_speedy_spirits: bool):
+    if update_speedy_spirits:
+        for entry_no in speedy_observer_index:
+            x = observer_info.info_file_field_entries[entry_no]
+            teiden_observer_info.info_file_field_entries.append(x)
+            observer_info.info_file_field_entries.remove(x)
 
     # Adds an observer in Blackout Breaker room (event44) to turn on spikes on the doors when room flag 115 is on.
-    observer_info.info_file_field_entries.append({
+    teiden_observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
         "string_arg0": "(null)",
         "cond_string_arg0": "(null)",
         "pos_x": 3250.000000,
-        "pos_y": -290.000000,
+        "pos_y": -500.000000,
         "pos_z": -1480.000000,
         "dir_x": 0.000000,
         "dir_y": 0.000000,
@@ -293,14 +294,14 @@ def update_teiden_observer_info(observer_info, teiden_observer_info):
         "invisible": 1,
         "(Undocumented)": 0,
     })
-    # Adds a teiden observer in Blackout Breaker room (event44) to turn off spikes on the doors when room flag 120 on.
+    # Adds a teiden observer in Blackout Breaker room (event44) to turn off spikes on the doors when room flag 123 on.
     teiden_observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
         "string_arg0": "(null)",
         "cond_string_arg0": "(null)",
         "pos_x": 3250.000000,
-        "pos_y": -290.000000,
+        "pos_y": -500.000000,
         "pos_z": -1480.000000,
         "dir_x": 0.000000,
         "dir_y": 0.000000,
@@ -1177,7 +1178,7 @@ def update_observer_info(observer_info):
         "string_arg0": "(null)",
         "cond_string_arg0": "(null)",
         "pos_x": 3250.000000,
-        "pos_y": -290.000000,
+        "pos_y": -500.000000,
         "pos_z": -1480.000000,
         "dir_x": 0.000000,
         "dir_y": 0.000000,
@@ -1207,7 +1208,7 @@ def update_observer_info(observer_info):
         "string_arg0": "(null)",
         "cond_string_arg0": "(null)",
         "pos_x": 3250.000000,
-        "pos_y": -290.000000,
+        "pos_y": -500.000000,
         "pos_z": -1480.000000,
         "dir_x": 0.000000,
         "dir_y": 0.000000,

@@ -1,4 +1,5 @@
 <MENUOFF>
+<FLAGOFF>(120)
 <CHECKFLAG>(8)"8ON""8OFF"
 -------------------------
 <CASE>"8ON"
