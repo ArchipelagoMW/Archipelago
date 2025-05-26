@@ -530,6 +530,9 @@ class HKWorld(World):
             for player, grub_player_count in per_player_grubs_per_player.items():
                 if player in all_grub_players:
                     multiworld.worlds[player].grub_player_count = grub_player_count
+                    # `player` can now have logic depending on items belonging to other worlds (groups), so this
+                    # cross-world logical dependency must be registered.
+                    multiworld.register_logic_dependency(player, grub_count_per_player.keys())
 
         for world in worlds:
             if world.player not in all_grub_players:
