@@ -2,7 +2,8 @@ import dataclasses
 import itertools
 import operator
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, ClassVar
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, Any, ClassVar, Self
 
 from worlds.AutoWorld import World
 
@@ -27,7 +28,7 @@ class Rule:
 
     options: dict[str, Any] = dataclasses.field(default_factory=dict, kw_only=True)
     """A mapping of option_name to value to restrict what options are required for this rule to be active.
-    An operator can be specified with a double underscore and the operator after the option name, eg `name__le`
+    An operator can be specified with a double underscore and the operator after the option name, eg `opt__le`
     """
 
     def _passes_options(self, options: "CommonOptions") -> bool:
@@ -56,12 +57,18 @@ class Rule:
             world.rule_ids[rule_hash] = instance
         return world.rule_ids[rule_hash]
 
-    def to_json(self) -> dict[str, Any]:
+    def to_json(self) -> Any:
         """Returns a JSON-serializable definition of this rule"""
         return {
-            "type": self.__class__.__name__,
+            "rule": self.__class__.__name__,
             "args": {field.name: getattr(self, field.name, None) for field in dataclasses.fields(self)},
         }
+
+    @classmethod
+    def from_json(cls, data: Any) -> Self:
+        if not isinstance(data, Mapping):
+            raise ValueError("Invalid data format for parsed json")
+        return cls(**data.get("args", {}))
 
     @dataclasses.dataclass(kw_only=True, frozen=True)
     class Resolved:
@@ -144,6 +151,18 @@ class NestedRule(Rule):
     def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
         children = [c.resolve(world) for c in self.children]
         return self.Resolved(tuple(children), player=world.player).simplify()
+
+    def to_json(self) -> Any:
+        return {
+            "rule": self.__class__.__name__,
+            "children": [c.to_json() for c in self.children],
+        }
+
+    @classmethod
+    def from_json(cls, data: Any) -> Self:
+        if not isinstance(data, Mapping):
+            raise ValueError("Invalid data format for parsed json")
+        return cls(*data.get("children", []))
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -384,18 +403,27 @@ class CanReachEntrance(Rule):
 class RuleWorldMixin(World if TYPE_CHECKING else object):
     rule_ids: dict[int, Rule.Resolved]
     rule_dependencies: dict[str, set[int]]
-    rule_classes: dict[str, type[Rule]]
+
+    custom_rule_classes: ClassVar[dict[str, type[Rule]]]
 
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
         self.rule_ids = {}
         self.rule_dependencies = defaultdict(set)
 
-    def register_rule_class(self, rule_class: type[Rule]) -> None:
-        self.rule_classes[rule_class.__name__] = rule_class
-
-    def rule_from_json(self, rule_data: Any) -> "Rule":
-        pass
+    @classmethod
+    def rule_from_json(cls, data: Any) -> "Rule":
+        if not isinstance(data, Mapping):
+            raise ValueError("Invalid data format for parsed json")
+        name = data.get("rule", "")
+        if name not in DEFAULT_RULES and (
+            not getattr(cls, "custom_rule_classes", None) or name not in cls.custom_rule_classes
+        ):
+            raise ValueError("Rule not found")
+        rule_class = DEFAULT_RULES.get(name) or cls.custom_rule_classes[name]
+        if not issubclass(rule_class, Rule):
+            raise ValueError("Invalid rule")
+        return rule_class.from_json(data)
 
     def resolve_rule(self, rule: "Rule") -> "Rule.Resolved":
         resolved_rule = rule.resolve(self)
@@ -422,3 +450,10 @@ class RuleWorldMixin(World if TYPE_CHECKING else object):
             for rule_id in self.rule_dependencies[item.name]:
                 player_results.pop(rule_id, None)
         return changed
+
+
+DEFAULT_RULES = {
+    rule_name: rule_class
+    for rule_name, rule_class in locals().items()
+    if isinstance(rule_class, type) and issubclass(rule_class, Rule) and rule_class is not Rule
+}
