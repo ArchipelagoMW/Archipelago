@@ -18,7 +18,6 @@ from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
 from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
-from ...strings.currency_names import Currency
 from ...strings.fish_names import WaterItem, Fish
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
@@ -608,9 +607,6 @@ pelican_town = ContentPack(
         ),
     ),
     hat_sources={
-        # Other Hats
-        Hats.top_hat.name: (ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
-
         # Hats from the Hat Mouse
         Hats.good_ol_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
                                            other_requirements=(TotalEarningsRequirement(15000),)),),

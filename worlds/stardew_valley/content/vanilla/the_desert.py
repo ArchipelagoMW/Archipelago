@@ -50,6 +50,7 @@ the_desert = ContentPack(
         villagers_data.sandy,
     ),
     hat_sources={
+        Hats.top_hat.name: (ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
         Hats.gils_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                         other_requirements=(RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
         Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
