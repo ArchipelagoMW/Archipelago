@@ -56,7 +56,6 @@ class SohWorld(World):
     options_dataclass = SohOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
-    origin_region_name = "Root" # Sets the starting region to "Root" instead of menu
 
     def create_item(self, name: str) -> SohItem:
         return SohItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
