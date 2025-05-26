@@ -13,7 +13,7 @@ from ..strings.region_names import Region
 class StardewMonster:
     name: str
     category: str
-    locations: Tuple[str]
+    locations: Tuple[str, ...]
     difficulty: str
 
     def __repr__(self):

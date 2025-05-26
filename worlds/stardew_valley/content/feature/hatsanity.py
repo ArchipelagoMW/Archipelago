@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import ClassVar, Optional
 
-from worlds.stardew_valley.data.hats_data import HatItem, HatDifficulty
+from ...data.hats_data import HatItem, HatDifficulty
 
 location_prefix = "Wear "
 
