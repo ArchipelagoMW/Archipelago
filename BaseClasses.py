@@ -960,19 +960,50 @@ class CollectionState():
         return self.sweep_for_advancements(locations)
 
     def sweep_for_advancements(self, locations: Optional[Iterable[Location]] = None) -> None:
-        if locations is None:
-            locations = self.multiworld.get_filled_locations()
-        reachable_advancements = True
+        locations_per_player: dict[int, set[Location]]
         # since the loop has a good chance to run more than once, only filter the advancements once
-        locations = {location for location in locations if location.advancement and location not in self.advancements}
+        if locations is None:
+            locations_per_player = {}
+            for player, locations_dict in self.multiworld.regions.location_cache.items():
+                player_locations = {loc for loc in locations_dict.values()
+                                    if loc.advancement and loc not in self.advancements}
+                if player_locations:
+                    locations_per_player[player] = player_locations
+        else:
+            locations_per_player = collections.defaultdict(set)
+            for loc in locations:
+                if loc.advancement and loc not in self.advancements:
+                    locations_per_player[loc.player].add(loc)
 
-        while reachable_advancements:
-            reachable_advancements = {location for location in locations if location.can_reach(self)}
-            locations -= reachable_advancements
-            for advancement in reachable_advancements:
-                self.advancements.add(advancement)
-                assert isinstance(advancement.item, Item), "tried to collect Event with no Item"
-                self.collect(advancement.item, True, advancement)
+        players_to_check: AbstractSet[int] = set(locations_per_player.keys())
+        while locations_per_player:
+            reachable_advancements_list: List[List[Location]] = []
+
+            for player in players_to_check:
+                if player not in locations_per_player:
+                    continue
+                player_locations = locations_per_player[player]
+                reachable_player_locations = [loc for loc in player_locations if loc.can_reach(self)]
+                if reachable_player_locations:
+                    reachable_advancements_list.append(reachable_player_locations)
+                    player_locations.difference_update(reachable_player_locations)
+                    if not player_locations:
+                        del locations_per_player[player]
+
+            if not reachable_advancements_list:
+                break
+
+            state_changed_players: set[int] = set()
+            for reachable_advancements in reachable_advancements_list:
+                for advancement in reachable_advancements:
+                    self.advancements.add(advancement)
+                    item = advancement.item
+                    assert isinstance(item, Item), "tried to collect Event with no Item"
+                    if self.collect(item, True, advancement):
+                        # State changed, so there may be players that can reach additional locations in the next sphere.
+                        state_changed_players.add(item.player)
+
+            players_to_check = self.multiworld.get_players_logically_dependent_on_players(state_changed_players)
 
     # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
