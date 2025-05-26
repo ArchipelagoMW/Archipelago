@@ -3,7 +3,7 @@
 This document describes the API provided for the rule builder. Using this API prvoides you with with a simple interface to define rules and the following advantages:
 
 - Automatic result caching
-- Branch pruning based on selected options
+- Logic optimization
 - Serialize/deserialize to JSON
 - Human-readable logic explanations
 
@@ -101,4 +101,50 @@ class MyWorld(RuleWorldMixin, World):
     custom_rule_classes = {
         "CanGoal": CanGoal,
     }
+```
+
+## JSON serialization
+
+The rule builder is intended to be written first in Python for optimization and type safety. To export the rules to a client or tracker, there is a default JSON serializer implementation for all rules. By default the rules will export with the following format:
+
+```json
+{
+    "rule": "<name of rule>",
+    "args": {
+        "options": {...},
+        "<field>": <value> // for each field the rule defines
+    }
+}
+```
+
+The `And` and `Or` rules have a slightly different format:
+
+```json
+{
+    "rule": "And",
+    "options": {...},
+    "children": [
+        {<each serialized rule>}
+    ]
+}
+```
+
+To define a custom format, override the `to_json` function:
+
+```python
+class MyRule(Rule):
+    def to_json(self) -> Any:
+        return {
+            "rule": "my_rule",
+            "custom_logic": [...]
+        }
+```
+
+If your logic has been done in custom JSON first, you can define a `from_json` class method on your rules to parse it correctly:
+
+```python
+class MyRule(Rule):
+    @classmethod
+    def from_json(cls, data: Any) -> Self:
+        return cls(data.get("custom_logic"))
 ```

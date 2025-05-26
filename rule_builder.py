@@ -165,6 +165,7 @@ class NestedRule(Rule):
     def to_json(self) -> Any:
         return {
             "rule": self.__class__.__name__,
+            "options": self.options,
             "children": [c.to_json() for c in self.children],
         }
 
@@ -172,7 +173,7 @@ class NestedRule(Rule):
     def from_json(cls, data: Any) -> Self:
         if not isinstance(data, Mapping):
             raise ValueError("Invalid data format for parsed json")
-        return cls(*data.get("children", []))
+        return cls(*data.get("children", []), options=data.get("options"))
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -217,7 +218,7 @@ class And(NestedRule):
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
-            items: list[str] = []
+            items: set[str] = set()
             true_rule: Rule.Resolved | None = None
 
             while children_to_process:
@@ -234,9 +235,9 @@ class And(NestedRule):
                     continue
 
                 if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.append(child.item_name)
+                    items.add(child.item_name)
                 elif isinstance(child, HasAll.Resolved):
-                    items.extend(child.item_names)
+                    items.update(child.item_names)
                 else:
                     clauses.append(child)
 
@@ -244,7 +245,7 @@ class And(NestedRule):
                 return true_rule or False_.Resolved(player=self.player)
             if items:
                 if len(items) == 1:
-                    item_rule = Has.Resolved(items[0], player=self.player)
+                    item_rule = Has.Resolved(items.pop(), player=self.player)
                 else:
                     item_rule = HasAll.Resolved(tuple(items), player=self.player)
                 if not clauses:
@@ -282,7 +283,7 @@ class Or(NestedRule):
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
-            items: list[str] = []
+            items: set[str] = set()
 
             while children_to_process:
                 child = children_to_process.pop(0)
@@ -297,9 +298,9 @@ class Or(NestedRule):
                     continue
 
                 if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.append(child.item_name)
+                    items.add(child.item_name)
                 elif isinstance(child, HasAny.Resolved):
-                    items.extend(child.item_names)
+                    items.update(child.item_names)
                 else:
                     clauses.append(child)
 
@@ -307,7 +308,7 @@ class Or(NestedRule):
                 return False_.Resolved(player=self.player)
             if items:
                 if len(items) == 1:
-                    item_rule = Has.Resolved(items[0], player=self.player)
+                    item_rule = Has.Resolved(items.pop(), player=self.player)
                 else:
                     item_rule = HasAny.Resolved(tuple(items), player=self.player)
                 if not clauses:
