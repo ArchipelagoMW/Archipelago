@@ -92,6 +92,9 @@ class MultiWorld():
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
+    _recursive_logic_dependents: dict[int, frozenset[int]]
+    _recursive_logic_dependencies: dict[int, set[int]]
+    _direct_logic_dependencies: dict[int, set[int]]
 
     plando_item_blocks: Dict[int, List[PlandoItemBlock]]
 
@@ -173,6 +176,10 @@ class MultiWorld():
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
         self.plando_item_blocks = {}
+        # Each player's logic depends only on their own world to begin with.
+        self._recursive_logic_dependents = {player: frozenset({player}) for player in self.player_ids}
+        self._recursive_logic_dependencies = {player: {player} for player in self.player_ids}
+        self._direct_logic_dependencies = {player: {player} for player in self.player_ids}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
@@ -202,6 +209,11 @@ class MultiWorld():
         self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
+        # The group ID is added to the logic dependency sets before creating the group world to avoid crashing if the
+        # group world tries to register a logic dependency during its __init__().
+        self._recursive_logic_dependents[new_id] = frozenset({new_id})
+        self._recursive_logic_dependencies[new_id] = {new_id}
+        self._direct_logic_dependencies[new_id] = {new_id}
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
         self.worlds[new_id] = world_type.create_group(self, new_id, players)
         self.worlds[new_id].collect_item = AutoWorld.World.collect_item.__get__(self.worlds[new_id])
@@ -723,6 +735,84 @@ class MultiWorld():
 
         return False
 
+    # Rather than one method with a `*players: int` argument, separate methods are used for 1 player/many players for
+    # better performance.
+    def get_players_logically_dependent_on_players(self, players: Iterable[int]) -> AbstractSet[int]:
+        """
+        Get a set of all player IDs whose logic depends on any worlds belonging to a player in `players`
+
+        :param players: Players IDs to get the logical dependents of.
+        :return: A set of all player IDs logically dependent on any of the player IDs in `players`.
+        """
+        # This function is optimised for the typical case of each world only logically depending on themselves.
+        recursive_logic_dependencies = self._recursive_logic_dependencies
+        return {dependent_player for player in players
+                for dependent_player in recursive_logic_dependencies[player]}
+
+    def get_players_logically_dependent_on(self, player: int) -> AbstractSet[int]:
+        """
+        Get the set of player IDs whose logic depends on `player`'s World.
+
+        :param: The player ID to get the logical dependents of.
+        :return: The set of all player IDs logically dependent on `player`.
+        """
+        return self._recursive_logic_dependents[player]
+
+    def register_logic_dependency(self, player: int, dependent_on_players: int | Iterable[int]) -> None:
+        """
+        Register that `player`'s world has access rules and/or completion condition that are logically dependent on
+        `dependent_on_players`' worlds.
+
+        If an access rule belonging to `player`, or `player`'s completion condition, checks for being able to reach a
+        Location/Entrance/Region belonging to a different player, or checks for CollectionState having items belonging
+        to a different player, that different player must be registered as a logic dependency of `player`.
+
+        Entrance access rules belonging to `player` cannot check for being able to reach a Location/Entrance/Region
+        belonging to a different player because indirect conditions do not work across worlds.
+
+        Any required logic dependencies should be registered before the end of `set_rules()`/`stage_set_rules()`.
+
+        :param player: The player ID that is registering their logical dependency
+        :param dependent_on_players: The player IDs to register that `player` logically depends on.
+        """
+        if player not in self._direct_logic_dependencies:
+            raise KeyError(f"No world found for player {player}")
+
+        if isinstance(dependent_on_players, int):
+            dependent_on_players = [dependent_on_players]
+
+        for dependent_on_player in dependent_on_players:
+            if dependent_on_player == player:
+                # All players are logically dependent on themselves from the start.
+                continue
+
+            # Protect against putting invalid IDs into the dictionaries.
+            # `self._direct_logic_dependencies` starts with every player ID being directly logically dependent on
+            # itself, so if `dependent_on_player` is not present in `self._direct_logic_dependencies`, then
+            # `dependent_on_player` is not a valid player ID.
+            if dependent_on_player not in self._direct_logic_dependencies:
+                raise KeyError(f"No world found for dependent on player ID {dependent_on_player}")
+
+            direct_dependencies = self._direct_logic_dependencies[player]
+            if dependent_on_player in direct_dependencies:
+                # The world has already been registered, so there's nothing to do.
+                return
+
+            direct_dependencies.add(dependent_on_player)
+
+            self._recursive_logic_dependencies[player].add(dependent_on_player)
+
+            # Get all players dependent on `player`. These players are now also dependent on dependent_on_player.
+            recursive_dependents_of_player = self._recursive_logic_dependents[player]
+
+            recursive_logic_dependents_to_add = {player}
+            for logic_dependent in recursive_dependents_of_player:
+                if logic_dependent != player:
+                    self._recursive_logic_dependencies[logic_dependent].add(dependent_on_player)
+                recursive_logic_dependents_to_add.add(logic_dependent)
+
+            self._recursive_logic_dependents[dependent_on_player] |= recursive_logic_dependents_to_add
+
 
 PathValue = Tuple[str, Optional["PathValue"]]
 
@@ -1011,7 +1101,8 @@ class CollectionState():
 
         changed = self.multiworld.worlds[item.player].collect(self, item)
 
-        self.stale[item.player] = True
+        for dependent_player in self.multiworld.get_players_logically_dependent_on(item.player):
+            self.stale[dependent_player] = True
 
         if changed and not prevent_sweep:
             self.sweep_for_advancements()
@@ -1032,10 +1123,11 @@ class CollectionState():
     def remove(self, item: Item):
         changed = self.multiworld.worlds[item.player].remove(self, item)
         if changed:
-            # invalidate caches, nothing can be trusted anymore now
-            self.reachable_regions[item.player] = set()
-            self.blocked_connections[item.player] = set()
-            self.stale[item.player] = True
+            for dependent_player in self.multiworld.get_players_logically_dependent_on(item.player):
+                # invalidate caches, nothing can be trusted anymore now
+                self.reachable_regions[dependent_player] = set()
+                self.blocked_connections[dependent_player] = set()
+                self.stale[dependent_player] = True
 
     def remove_item(self, item: str, player: int, count: int = 1) -> None:
         """
