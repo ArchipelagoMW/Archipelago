@@ -106,10 +106,10 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #Treasure chests
         LocationData("Delende", "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData("Delende", "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(126, 115, -102) Basement map chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
-        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
+        LocationData("Delende", "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming), #(126, 115, -102) Basement map chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming), #(128, 98, -111) Plate of Wolf chest
+        LocationData("Delende", "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
@@ -1330,7 +1330,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         LocationData("Delende", "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
-        LocationData("Delende", "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 2)),
+        LocationData("Delende", "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2)),
         LocationData("Soiled Den", "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
         LocationData("Pale Grotto", "Pale Grotto Boss - Guardian", 143 + boss_index_offset),
         LocationData("Draft Shaft Conduit", "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
