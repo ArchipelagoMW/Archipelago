@@ -1794,10 +1794,10 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 1", 1163 + shop_index_offset),
         LocationData("Jidamba Tangle", "Europa Shrine Shop - Attendant 2", 11163 + shop_index_offset),
 
-        #The Deep Sea
-        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 1", 3164 + shop_index_offset),
-        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 2", 13164 + shop_index_offset),
-        LocationData("The Deep Sea", "Neptune Shrine Shop - Attendant 3", 23164 + shop_index_offset),
+        #Neptune Shrine
+        LocationData("Neptune Shrine", "Neptune Shrine Shop - Attendant 1", 3164 + shop_index_offset),
+        LocationData("Neptune Shrine", "Neptune Shrine Shop - Attendant 2", 13164 + shop_index_offset),
+        LocationData("Neptune Shrine", "Neptune Shrine Shop - Attendant 3", 23164 + shop_index_offset),
 
         #Zones (End-Game)
         #The New World

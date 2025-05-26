@@ -104,6 +104,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, "Jidamba Tangle", excluded),
         create_region(world, player, locations_per_region, "Jidamba Eaclaneya", excluded),
         create_region(world, player, locations_per_region, "The Deep Sea", excluded),
+        create_region(world, player, locations_per_region, "Neptune Shrine", excluded),
         create_region(world, player, locations_per_region, "Jade Cavern", excluded),
         create_region(world, player, locations_per_region, "Continental Tram", excluded),
     ]
@@ -319,10 +320,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         "The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jidamba Eaclaneya", player).add_exits(["Jidamba Tangle", "The Open Sea"],
         {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region("The Deep Sea", player).add_exits(["The Open Sea", "The Depths", "The Sequoia"],
+    multiworld.get_region("The Deep Sea", player).add_exits(["The Open Sea", "Neptune Shrine", "The Depths", "The Sequoia"],
         {"The Open Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
+         "Neptune Shrine": lambda state: logic.has_swimming,
         "The Depths": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         "The Sequoia": lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5)})
+    multiworld.get_region("Neptune Shrine", player).add_exits(["The Deep Sea"],
+        {"The Deep Sea": lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region("Jade Cavern", player).add_exits(["Soiled Den", "Delende"],
         {"Soiled Den": logic.has_swimming,
         "Delende": logic.has_swimming})
@@ -385,6 +389,6 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
         "Tall Tall Heights": lambda state: state.has_any({"Item - Triton Stone"}, world.player) and logic.is_area_in_level_range(state, 4),
         "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player) and logic.is_area_in_level_range(state, 4),
         "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
-        "The Deep Sea": lambda state: state.has_any({"Item - Neptune Stone"}, world.player) and logic.has_swimming and logic.is_area_in_level_range(state, 5),
+        "Neptune Shrine": lambda state: state.has_any({"Item - Neptune Stone"}, world.player),
         "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
         "The New World": logic.new_world_requirements})
