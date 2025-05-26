@@ -574,38 +574,67 @@ class MultiWorld():
     def can_beat_game(self,
                       starting_state: Optional[CollectionState] = None,
                       locations: Optional[Iterable[Location]] = None) -> bool:
+        unbeaten_game_players: list[int]
         if starting_state:
-            if self.has_beaten_game(starting_state):
+            unbeaten_game_players = [player for player in self.player_ids
+                                     if not self.has_beaten_game(starting_state, player)]
+            if not unbeaten_game_players:
                 return True
             state = starting_state.copy()
         else:
             state = CollectionState(self)
-            if self.has_beaten_game(state):
+            unbeaten_game_players = [player for player in self.player_ids
+                                     if not self.has_beaten_game(state, player)]
+            if not unbeaten_game_players:
                 return True
 
         base_locations = self.get_locations() if locations is None else locations
-        prog_locations = {location for location in base_locations if location.item
-                          and location.item.advancement and location not in state.locations_checked}
 
-        while prog_locations:
-            sphere: Set[Location] = set()
+        checked_locations = state.locations_checked
+        prog_locations_per_player: dict[int, set[Location]] = collections.defaultdict(set)
+        for location in base_locations:
+            if location not in checked_locations and location.item is not None and location.item.advancement:
+                prog_locations_per_player[location.player].add(location)
+
+        # All players must be checked to start with.
+        players_to_check: AbstractSet[int] = set(prog_locations_per_player.keys())
+        while prog_locations_per_player:
+            sphere: list[list[Location]] = []
             # build up spheres of collection radius.
             # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
-            for location in prog_locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+            for player in players_to_check:
+                if player not in prog_locations_per_player:
+                    continue
+                player_locations = prog_locations_per_player[player]
+                reachable_player_locations = [location for location in player_locations if location.can_reach(state)]
+                if reachable_player_locations:
+                    sphere.append(reachable_player_locations)
+                    player_locations.difference_update(reachable_player_locations)
+                    if not player_locations:
+                        del prog_locations_per_player[player]
 
             if not sphere:
                 # ran out of places and did not finish yet, quit
                 return False
 
-            for location in sphere:
-                state.collect(location.item, True, location)
-            prog_locations -= sphere
+            state_changed_players = set()
+            for reachable_locations in sphere:
+                for location in reachable_locations:
+                    item = location.item
+                    if state.collect(item, True, location):
+                        # State changed, so there may be players that can reach additional locations in the next sphere.
+                        state_changed_players.add(item.player)
 
-            if self.has_beaten_game(state):
+            players_to_check = self.get_players_logically_dependent_on_players(state_changed_players)
+
+            # Update the list of players that have yet to beat their game.
+            unbeaten_game_players = [player for player in unbeaten_game_players
+                                     if not (player in players_to_check and self.has_beaten_game(state, player))]
+            if not unbeaten_game_players:
+                # All players have beaten their games.
                 return True
 
+        # Ran out of locations before the game was beaten.
         return False
 
     def get_spheres(self) -> Iterator[Set[Location]]:
