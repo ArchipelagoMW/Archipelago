@@ -617,23 +617,40 @@ class MultiWorld():
         unreachable locations.
         """
         state = CollectionState(self)
-        locations = set(self.get_filled_locations())
+        locations_per_player: dict[int, set[Location]] = {}
+        for player in self.get_all_ids():
+            player_locations = set(self.get_filled_locations(player))
+            if player_locations:
+                locations_per_player[player] = player_locations
 
-        while locations:
-            sphere: Set[Location] = set()
+        players_to_check: AbstractSet[int] = set(locations_per_player.keys())
+        while locations_per_player:
+            sphere: set[Location] = set()
 
-            for location in locations:
-                if location.can_reach(state):
-                    sphere.add(location)
+            for player in players_to_check:
+                if player not in locations_per_player:
+                    continue
+                player_locations = locations_per_player[player]
+                reachable_player_locations = [location for location in player_locations if location.can_reach(state)]
+                sphere.update(reachable_player_locations)
+                player_locations.difference_update(reachable_player_locations)
+                if not player_locations:
+                    del locations_per_player[player]
             yield sphere
             if not sphere:
-                if locations:
-                    yield locations  # unreachable locations
+                if locations_per_player:
+                    # unreachable locations
+                    yield {loc for locations in locations_per_player.values() for loc in locations}
                 break
 
+            state_changed_players: set[int] = set()
             for location in sphere:
-                state.collect(location.item, True, location)
-            locations -= sphere
+                item = location.item
+                if state.collect(location.item, True, location):
+                    # State changed, so there may be players that can reach additional locations in the next sphere.
+                    state_changed_players.add(item.player)
+
+            players_to_check = self.get_players_logically_dependent_on_players(state_changed_players)
 
     def get_sendable_spheres(self) -> Iterator[Set[Location]]:
         """
