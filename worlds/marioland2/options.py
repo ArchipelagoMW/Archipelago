@@ -1,5 +1,7 @@
-from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions, ItemsAccessibility
+from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions, ItemsAccessibility, OptionSet
 from dataclasses import dataclass
+
+from worlds.marioland2.rom_data import overworld_music_data
 
 
 class ShuffleGoldenCoins(Choice):
@@ -166,6 +168,15 @@ class RandomizeMusic(Toggle):
     display_name = "Randomize Music"
 
 
+class RandomizeMusicOverworld(OptionSet):
+    """
+    Overworld areas included to have their music randomized.
+    """
+    display_name = "Overworld Areas for Music Rando"
+    valid_keys = [track for track in overworld_music_data]
+    default = valid_keys
+
+
 class EnergyLink(Toggle):
     """
     All extra lives beyond 1 are transferred into the server's shared EnergyLink storage. If you drop to 0,
@@ -195,4 +206,5 @@ class SML2Options(PerGameCommonOptions):
     randomize_enemies: RandomizeEnemies
     randomize_platforms: RandomizePlatforms
     randomize_music: RandomizeMusic
+    randomize_music_overworld: RandomizeMusicOverworld
     energy_link: EnergyLink

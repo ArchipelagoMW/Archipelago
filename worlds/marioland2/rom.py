@@ -8,19 +8,24 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from settings import get_settings
 
 from .rom_addresses import rom_addresses
+from .rom_data import overworld_music_data
 from .sprites import sprite_name_to_id
 
 
-def randomize_music(patch, random):
+def randomize_music(patch, random, overworld):
     # overworld
-    overworld_music_tracks = [0x05, 0x06, 0x0D, 0x0E, 0x10, 0x12, 0x1B, 0x1C, 0x1E]
-    random.shuffle(overworld_music_tracks)
-    for i, track in zip([0x3004F, 0x3EA9B, 0x3D186, 0x3D52B, 0x3D401, 0x3D297, 0x3D840, 0x3D694, 0x3D758],
-                        overworld_music_tracks):
-        patch.write_bytes(i, track)
+    overworld_music_data_addresses = {v.address: v.track for k, v in overworld_music_data.items() if k in overworld}
+    randomized_overworld_music_tracks = list(overworld_music_data_addresses.values())
+    random.shuffle(randomized_overworld_music_tracks)
+    randomized_overworld_music_data = dict(zip(overworld_music_data_addresses, randomized_overworld_music_tracks))
+    for i in randomized_overworld_music_data:
+        patch.write_bytes(i, randomized_overworld_music_data[i])
+        #print(f"{hex(randomized_overworld_music_data[i])} at {hex(i)}")
     # levels
     for i in range(0x5619, 0x5899, 0x14):
-        patch.write_bytes(i, random.choice([0x01, 0x0B, 0x11, 0x13, 0x14, 0x17, 0x1D, 0x1F, 0x28]))
+        level_music = random.choice([0x01, 0x0B, 0x11, 0x13, 0x14, 0x17, 0x1D, 0x1F, 0x28])
+        patch.write_bytes(i, level_music)
+        #print(f"{hex(level_music)} at {hex(i)}")
 
 
 def generate_output(self, output_directory: str):
@@ -60,7 +65,7 @@ def generate_output(self, output_directory: str):
         i += 1
 
     if self.options.randomize_music:
-        randomize_music(patch, random)
+        randomize_music(patch, random, self.options.randomize_music_overworld)
 
     if self.options.shuffle_golden_coins:
         patch.write_bytes(rom_addresses["Coin_Shuffle"], 0x40)
