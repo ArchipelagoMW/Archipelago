@@ -9,6 +9,7 @@ from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState, Entrance, Item, MultiWorld
+    from NetUtils import JSONMessagePart
     from Options import CommonOptions, Option
 
 OPERATORS = {
@@ -117,6 +118,9 @@ class Rule:
             """Returns a tuple of region names this rule is indirectly connected to"""
             return ()
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [{"type": "text", "text": self.__class__.__name__}]
+
 
 @dataclasses.dataclass()
 class True_(Rule):
@@ -128,6 +132,9 @@ class True_(Rule):
         def _evaluate(self, state: "CollectionState") -> bool:
             return True
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [{"type": "color", "color": "green", "text": "True"}]
+
 
 @dataclasses.dataclass()
 class False_(Rule):
@@ -138,6 +145,9 @@ class False_(Rule):
 
         def _evaluate(self, state: "CollectionState") -> bool:
             return False
+
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [{"type": "color", "color": "salmon", "text": "False"}]
 
 
 @dataclasses.dataclass(init=False)
@@ -195,6 +205,15 @@ class And(NestedRule):
                     return False
             return True
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
+            for i, child in enumerate(self.children):
+                if i > 0:
+                    messages.append({"type": "text", "text": " & "})
+                messages.extend(child.explain(state))
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
@@ -215,9 +234,9 @@ class And(NestedRule):
                     continue
 
                 if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.append(child.item)
+                    items.append(child.item_name)
                 elif isinstance(child, HasAll.Resolved):
-                    items.extend(child.items)
+                    items.extend(child.item_names)
                 else:
                     clauses.append(child)
 
@@ -251,6 +270,15 @@ class Or(NestedRule):
                     return True
             return False
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
+            for i, child in enumerate(self.children):
+                if i > 0:
+                    messages.append({"type": "text", "text": " | "})
+                messages.extend(child.explain(state))
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
@@ -269,9 +297,9 @@ class Or(NestedRule):
                     continue
 
                 if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.append(child.item)
+                    items.append(child.item_name)
                 elif isinstance(child, HasAny.Resolved):
-                    items.extend(child.items)
+                    items.extend(child.item_names)
                 else:
                     clauses.append(child)
 
@@ -297,55 +325,116 @@ class Or(NestedRule):
 
 @dataclasses.dataclass()
 class Has(Rule):
-    item: str
+    item_name: str
     count: int = 1
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+        return self.Resolved(self.item_name, self.count, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
-        item: str
+        item_name: str
         count: int = 1
 
         def _evaluate(self, state: "CollectionState") -> bool:
-            return state.has(self.item, self.player, count=self.count)
+            return state.has(self.item_name, self.player, count=self.count)
 
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {self.item: {id(self)}}
+            return {self.item_name: {id(self)}}
+
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
+            if self.count > 1:
+                messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
+                messages.append({"type": "text", "text": "x "})
+            messages.append(
+                {"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player}
+            )
+            return messages
 
 
-@dataclasses.dataclass()
+@dataclasses.dataclass(init=False)
 class HasAll(Rule):
     """A rule that checks if the player has all of the given items"""
 
-    items: tuple[str, ...]
+    item_names: tuple[str, ...]
     """A tuple of item names to check for"""
+
+    def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
+        super().__init__(options=options or {})
+        self.item_names = item_names
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
+        if len(self.item_names) == 0:
+            return True_().resolve(world)
+        if len(self.item_names) == 1:
+            return Has(self.item_names[0]).resolve(world)
+        return self.Resolved(self.item_names, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
-        items: tuple[str, ...]
+        item_names: tuple[str, ...]
 
         def _evaluate(self, state: "CollectionState") -> bool:
-            return state.has_all(self.items, self.player)
+            return state.has_all(self.item_names, self.player)
 
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {item: {id(self)} for item in self.items}
+            return {item: {id(self)} for item in self.item_names}
+
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [
+                {"type": "text", "text": "Has "},
+                {"type": "color", "color": "cyan", "text": "all"},
+                {"type": "text", "text": " of ("},
+            ]
+            for i, item in enumerate(self.item_names):
+                if i > 0:
+                    messages.append({"type": "text", "text": ", "})
+                messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+            messages.append({"type": "text", "text": ")"})
+            return messages
 
 
 @dataclasses.dataclass()
 class HasAny(Rule):
     """A rule that checks if the player has at least one of the given items"""
 
-    items: tuple[str, ...]
+    item_names: tuple[str, ...]
     """A tuple of item names to check for"""
+
+    def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
+        super().__init__(options=options or {})
+        self.item_names = item_names
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
+        if len(self.item_names) == 0:
+            return True_().resolve(world)
+        if len(self.item_names) == 1:
+            return Has(self.item_names[0]).resolve(world)
+        return self.Resolved(self.item_names, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
-        items: tuple[str, ...]
+        item_names: tuple[str, ...]
 
         def _evaluate(self, state: "CollectionState") -> bool:
-            return state.has_any(self.items, self.player)
+            return state.has_any(self.item_names, self.player)
 
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {item: {id(self)} for item in self.items}
+            return {item: {id(self)} for item in self.item_names}
+
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [
+                {"type": "text", "text": "Has "},
+                {"type": "color", "color": "cyan", "text": "any"},
+                {"type": "text", "text": " of ("},
+            ]
+            for i, item in enumerate(self.item_names):
+                if i > 0:
+                    messages.append({"type": "text", "text": ", "})
+                messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+            messages.append({"type": "text", "text": ")"})
+            return messages
 
 
 @dataclasses.dataclass()
@@ -370,10 +459,19 @@ class CanReachLocation(Rule):
         def indirect_regions(self) -> tuple[str, ...]:
             return (self.parent_region_name,)
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [
+                {"type": "text", "text": "Reached Location "},
+                {"type": "location_name", "text": self.location_name, "player": self.player},
+            ]
+
 
 @dataclasses.dataclass()
 class CanReachRegion(Rule):
     region_name: str
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+        return self.Resolved(self.region_name, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -386,10 +484,19 @@ class CanReachRegion(Rule):
         def indirect_regions(self) -> tuple[str, ...]:
             return (self.region_name,)
 
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [
+                {"type": "text", "text": "Reached Region "},
+                {"type": "color", "color": "yellow", "text": self.region_name},
+            ]
+
 
 @dataclasses.dataclass()
 class CanReachEntrance(Rule):
     entrance_name: str
+
+    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+        return self.Resolved(self.entrance_name, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -398,6 +505,12 @@ class CanReachEntrance(Rule):
 
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_entrance(self.entrance_name, self.player)
+
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [
+                {"type": "text", "text": "Reached Entrance "},
+                {"type": "entrance_name", "text": self.entrance_name, "player": self.player},
+            ]
 
 
 class RuleWorldMixin(World if TYPE_CHECKING else object):
