@@ -27,13 +27,52 @@ class RivalName(TextChoice):
     default = -1
 
 
-class Goal(Choice):
-    """If Professor Oak is selected, your victory condition will require challenging and defeating Oak after becoming
-    Champion and defeating or capturing the Pokemon at the end of Cerulean Cave."""
-    display_name = "Goal"
-    option_pokemon_league = 0
-    option_professor_oak = 1
+class AutoRun(Choice):
+    """Whether Auto Run is enabled by default. Can be changed in the in-game Options menu.
+    When off, you can hold B to run. When on, you can hold B to slow down."""
+    display_name = "Auto Run"
+    default = 1
+    option_on = 0
+    option_off = 1
+
+
+class BattleAnimations(Choice):
+    """Whether Battle Animations is enabled by default. Can be changed in the in-game Options menu."""
+    display_name = "Battle Animations"
     default = 0
+    option_on = 0
+    option_off = 1
+
+
+class ArchipelagoItemText(Choice):
+    """Whether a text popup will display when receiving items from the multiworld.
+    Can be changed in the in-game Options menu."""
+    display_name = "Archipelago Item Text"
+    default = 0
+    option_on = 0
+    option_off = 1
+
+
+class BattleStyle(Choice):
+    """Choose battle style. CANNOT be changed in-game!"""
+    display_name = "Battle Style"
+    option_set = 1
+    option_shift = 0
+    default = 1
+
+
+class TextSpeed(NamedRange):
+    """Choose text speed. CANNOT be changed in-game!"""
+    display_name = "Text Speed"
+    default = 3
+    range_start = 0
+    range_end = 15
+    special_range_names = {
+        "instant": 0,
+        "fast": 1,
+        "medium": 3,
+        "slow": 5
+    }
 
 
 class EliteFourBadgesCondition(Range):
@@ -272,10 +311,10 @@ class TrainerSanity(NamedRange):
     display_name = "Trainersanity"
     default = 0
     range_start = 0
-    range_end = 317
+    range_end = 331
     special_range_names = {
         "disabled": 0,
-        "full": 317
+        "full": 331
     }
 
 
@@ -883,7 +922,11 @@ class PokemonRBOptions(PerGameCommonOptions):
     game_version: GameVersion
     trainer_name: TrainerName
     rival_name: RivalName
-    # goal: Goal
+    battle_style: BattleStyle
+    text_speed: TextSpeed
+    auto_run: AutoRun
+    battle_animations: BattleAnimations
+    archipelago_item_text: ArchipelagoItemText
     elite_four_badges_condition: EliteFourBadgesCondition
     elite_four_key_items_condition: EliteFourKeyItemsCondition
     elite_four_pokedex_condition: EliteFourPokedexCondition

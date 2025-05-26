@@ -92,6 +92,7 @@ def set_rules(multiworld, world, player):
         "Vermilion Trade House - Dux Trade": lambda state: state.can_reach("Route 3 - Wild Pokemon - 2", "Location", player),
         "Cerulean Trade House - Lola Trade": lambda state: state.can_reach("Route 10/Celadon Fishing - Super Rod Pokemon - 1", "Location", player),
 
+        "Route 22 - Rival 1": lambda state: state.has("Oak's Parcel", player),
         "Route 22 - Trainer Parties": lambda state: state.has("Oak's Parcel", player),
 
         "Victory Road 1F - Top Item": lambda state: logic.can_strength(state, world, player),
