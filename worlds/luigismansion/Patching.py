@@ -264,7 +264,7 @@ def update_teiden_observer_info(observer_info, teiden_observer_info):
         observer_info.info_file_field_entries.remove(x)
 
     # Adds an observer in Blackout Breaker room (event44) to turn on spikes on the doors when room flag 115 is on.
-    observer_info.info_file_field_entries.append({
+    teiden_observer_info.info_file_field_entries.append({
         "name": "observer",
         "code_name": "(null)",
         "string_arg0": "(null)",
