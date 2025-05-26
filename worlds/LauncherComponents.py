@@ -210,10 +210,14 @@ components: List[Component] = [
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
-              file_identifier=SuffixIdentifier('.archipelago', '.zip')),
-    Component('Generate', 'Generate', cli=True),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
+              file_identifier=SuffixIdentifier('.archipelago', '.zip'),
+              description="Host a generated multiworld on your computer."),
+    Component('Generate', 'Generate', cli=True,
+              description="Generate a multiworld with the YAMLs in the players folder."),
+    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+              description="Install an APWorld to play games not included with Archipelago by default."),
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
+              description="Connect to a multiworld using the text client."),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
@@ -224,16 +228,12 @@ components: List[Component] = [
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
     Component('OoT Adjuster', 'OoTAdjuster'),
-    # FF1
-    Component('FF1 Client', 'FF1Client'),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
     # Starcraft 2
     Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
