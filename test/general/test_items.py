@@ -163,3 +163,55 @@ class TestBase(unittest.TestCase):
                                          f"{game_name} modified local_items during {step}")
                         self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
                                          f"{game_name} modified non_local_items during {step}")
+
+    def test_collect_remove_location_accessibility(self):
+        """
+        Test that worlds' .remove() implements the reverse of .collect() by checking location accessibility.
+
+        test_create_item only tests that .collect()/.remove() correctly update CollectionState.prog_items, but worlds
+        can implement their own data structures on CollectionState objects. These custom data structures being updated
+        correctly by .collect()/.remove() are tested by comparing location accessibility before and after
+        .collect() + .remove().
+        """
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            multiworld = setup_solo_multiworld(world_type)
+            with self.subTest(game=game_name, seed=multiworld.seed):
+                # Get all the advancement items in the multiworld.
+                items = [item for item in multiworld.get_items() if item.advancement]
+
+                # Shuffle the items into a deterministically random order because otherwise, the order of all items
+                # should always be the same, limiting what can be tested.
+                multiworld.random.shuffle(items)
+
+                # Checking accessibility of all locations for each individual item collected/removed is expensive, so
+                # the items are split into smaller sublists where all items in a sublist are collected/removed instead
+                # of one item at a time.
+                # When debugging a world that is failing this test, the number of items per sublist can be reduced to 1
+                # to provide more useful results.
+                items_per_sublist = max(1, len(items) // 10)  # Collect/remove 1/10th of the items at a time.
+                item_sublists = [items[i:i+items_per_sublist] for i in range(0, len(items), items_per_sublist)]
+
+                # Store the reachable items before each sublist is collected.
+                reachable_before_each_collect = []
+                state = CollectionState(multiworld)
+                for sublist in item_sublists:
+                    reachable_locations_before_collect = {loc for loc in multiworld.get_locations()
+                                                          if loc.can_reach(state)}
+                    reachable_before_each_collect.append(reachable_locations_before_collect)
+                    for item in sublist:
+                        state.collect(item, prevent_sweep=True)
+
+                # Remove the items in each sublist and check that the reachable locations are the same as before the
+                # items were collected.
+                reversed_zip = zip(reversed(item_sublists), reversed(reachable_before_each_collect))
+                for sublist, expected_reachable_after_remove in reversed_zip:
+                    # Note: The items within each sublist are removed in reverse order compared to the order they were
+                    # collected, but this order should not matter because the items within each sublist are considered
+                    # to be collected/removed simultaneously.
+                    for item in sublist:
+                        state.remove(item)
+                    reachable_locations_after_remove = {loc for loc in multiworld.get_locations()
+                                                        if loc.can_reach(state)}
+                    # The reachable locations before the items in `sublist` where collected should be the same as after
+                    # the items in `sublist` were both collected and removed.
+                    self.assertSetEqual(reachable_locations_after_remove, expected_reachable_after_remove, sublist)
