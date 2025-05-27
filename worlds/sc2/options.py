@@ -15,17 +15,13 @@ from Options import (
     StartInventory,
     is_iterable_except_str,
     OptionGroup,
+    Visibility,
     ItemDict,
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .item import item_names, item_tables
-from .item.item_groups import (
-    kerrigan_active_abilities,
-    kerrigan_passives,
-    nova_weapons,
-    nova_gadgets,
-)
+from .item.item_groups import kerrigan_active_abilities, kerrigan_passives, nova_weapons, nova_gadgets
 from .mission_tables import (
     SC2Campaign,
     SC2Mission,
@@ -55,33 +51,24 @@ class Sc2MissionSet(OptionSet):
             return cls(data)
         return cls.from_text(str(data))
 
-    def verify(
-        self, world: Type["World"], player_name: str, plando_options: PlandoOptions
-    ) -> None:
+    def verify(self, world: Type["World"], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: set[str] = set()
         case_insensitive_group_mapping = {
-            group_name.casefold(): group_value
-            for group_name, group_value in mission_groups.items()
+            group_name.casefold(): group_value for group_name, group_value in mission_groups.items()
         }
         case_insensitive_group_mapping.update(
-            {
-                mission.mission_name.casefold(): [mission.mission_name]
-                for mission in SC2Mission
-            }
+            {mission.mission_name.casefold(): [mission.mission_name] for mission in SC2Mission}
         )
         for group_name in self.value:
-            item_names = case_insensitive_group_mapping.get(
-                group_name.casefold(), {group_name}
-            )
+            item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             new_value.update(item_names)
         self.value = new_value
         for item_name in self.value:
             if item_name not in self.valid_keys:
                 picks = get_fuzzy_results(
                     item_name,
-                    list(self.valid_keys)
-                    + list(MissionGroupNames.get_all_group_names()),
+                    list(self.valid_keys) + list(MissionGroupNames.get_all_group_names()),
                     limit=1,
                 )
                 raise Exception(
@@ -304,11 +291,7 @@ class EnabledCampaigns(OptionSet):
     """Determines which campaign's missions will be used"""
 
     display_name = "Enabled Campaigns"
-    valid_keys = {
-        campaign.campaign_name
-        for campaign in SC2Campaign
-        if campaign != SC2Campaign.GLOBAL
-    }
+    valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
     default = valid_keys
 
 
@@ -1046,30 +1029,19 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
                     )
             return cls(data)
         else:
-            raise NotImplementedError(
-                f"Cannot Convert from non-dictionary, got {type(data)}"
-            )
+            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def verify(
-        self, world: Type["World"], player_name: str, plando_options: PlandoOptions
-    ) -> None:
+    def verify(self, world: Type["World"], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
         case_insensitive_group_mapping = {
-            group_name.casefold(): group_value
-            for group_name, group_value in world.item_name_groups.items()
+            group_name.casefold(): group_value for group_name, group_value in world.item_name_groups.items()
         }
-        case_insensitive_group_mapping.update(
-            {item.casefold(): {item} for item in world.item_names}
-        )
+        case_insensitive_group_mapping.update({item.casefold(): {item} for item in world.item_names})
         for group_name in self.value:
-            item_names = case_insensitive_group_mapping.get(
-                group_name.casefold(), {group_name}
-            )
+            item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             for item_name in item_names:
-                new_value[item_name] = (
-                    new_value.get(item_name, 0) + self.value[group_name]
-                )
+                new_value[item_name] = new_value.get(item_name, 0) + self.value[group_name]
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
@@ -1077,8 +1049,7 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
                 picks = get_fuzzy_results(
                     item_name,
-                    list(world.item_names)
-                    + list(item_groups.ItemGroupNames.get_all_group_names()),
+                    list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
                 raise Exception(
@@ -1716,11 +1687,7 @@ def get_option_value(world: Union["SC2World", None], name: str) -> int:
     Use `world.options.<option_name>.value` instead for better typing, autocomplete, and error messages.
     """
     if world is None:
-        field: Field = [
-            class_field
-            for class_field in fields(Starcraft2Options)
-            if class_field.name == name
-        ][0]
+        field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
         if isinstance(field.type, str):
             if field.type in globals():
                 return globals()[field.type].default
@@ -1741,15 +1708,9 @@ def get_enabled_races(world: Optional["SC2World"]) -> Set[SC2Race]:
 
 def get_enabled_campaigns(world: Optional["SC2World"]) -> Set[SC2Campaign]:
     if world is None:
-        return {
-            campaign
-            for campaign in SC2Campaign
-            if campaign.campaign_name in EnabledCampaigns.default
-        }
+        return {campaign for campaign in SC2Campaign if campaign.campaign_name in EnabledCampaigns.default}
     campaign_names = world.options.enabled_campaigns
-    campaigns = {
-        campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names
-    }
+    campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
     if (
         world.options.mission_order.value == MissionOrder.option_vanilla
         and world.options.selected_races.value != SelectRaces.valid_keys
@@ -1771,11 +1732,8 @@ def get_disabled_campaigns(world: "SC2World") -> Set[SC2Campaign]:
 
 
 def get_disabled_flags(world: "SC2World") -> MissionFlag:
-    excluded = (
-        MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss
-    ) ^ functools.reduce(
-        lambda a, b: a | b,
-        [race.get_mission_flag() for race in get_enabled_races(world)],
+    excluded = (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss) ^ functools.reduce(
+        lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)]
     )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
@@ -1798,21 +1756,15 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
     disabled_campaigns = get_disabled_campaigns(world)
     disabled_flags = get_disabled_flags(world)
 
-    excluded_missions: Set[SC2Mission] = set(
-        [lookup_name_to_mission[name] for name in excluded_mission_names]
-    )
+    excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
     if mission_order_type != MissionOrder.option_vanilla and (
         world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true
         or (
-            world.options.exclude_very_hard_missions
-            == ExcludeVeryHardMissions.option_default
+            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
             and (
-                (
-                    mission_order_type in dynamic_mission_orders
-                    and world.options.maximum_campaign_size < 20
-                )
+                (mission_order_type in dynamic_mission_orders and world.options.maximum_campaign_size < 20)
                 or mission_order_type == MissionOrder.option_mini_campaign
             )
         )
@@ -1821,15 +1773,12 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
             [
                 mission
                 for mission in SC2Mission
-                if mission.pool == MissionPools.VERY_HARD
-                and mission.campaign != SC2Campaign.EPILOGUE
+                if mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE
             ]
         )
     # Omitting missions with flags we don't want
     if disabled_flags:
-        excluded_missions = excluded_missions.union(
-            get_missions_with_any_flags_in_list(disabled_flags)
-        )
+        excluded_missions = excluded_missions.union(get_missions_with_any_flags_in_list(disabled_flags))
     # Omitting missions not in enabled campaigns
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
@@ -1841,14 +1790,11 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
         swaps = [
             mission
             for mission in SC2Mission
-            if mission not in excluded_missions
-            and mission.flags & (MissionFlag.HasRaceSwap | MissionFlag.RaceSwap)
+            if mission not in excluded_missions and mission.flags & (MissionFlag.HasRaceSwap | MissionFlag.RaceSwap)
         ]
         while len(swaps) > 0:
             curr = swaps[0]
-            variants = [
-                mission for mission in swaps if mission.map_file == curr.map_file
-            ]
+            variants = [mission for mission in swaps if mission.map_file == curr.map_file]
             variants.sort(key=lambda mission: mission.id)
             swaps = [mission for mission in swaps if mission not in variants]
             if len(variants) > 1:
@@ -1924,10 +1870,8 @@ upgrade_included_names: Dict[int, Set[str]] = {
 
 # Mapping trade age limit options to their millisecond equivalents
 void_trade_age_limits_ms: Dict[int, int] = {
-    VoidTradeAgeLimit.option_5_minutes: 1000
-    * int(timedelta(minutes=5).total_seconds()),
-    VoidTradeAgeLimit.option_30_minutes: 1000
-    * int(timedelta(minutes=30).total_seconds()),
+    VoidTradeAgeLimit.option_5_minutes: 1000 * int(timedelta(minutes=5).total_seconds()),
+    VoidTradeAgeLimit.option_30_minutes: 1000 * int(timedelta(minutes=30).total_seconds()),
     VoidTradeAgeLimit.option_1_hour: 1000 * int(timedelta(hours=1).total_seconds()),
     VoidTradeAgeLimit.option_2_hours: 1000 * int(timedelta(hours=2).total_seconds()),
     VoidTradeAgeLimit.option_4_hours: 1000 * int(timedelta(hours=4).total_seconds()),
