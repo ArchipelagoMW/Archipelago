@@ -1,6 +1,6 @@
+from ..bases import SVTestBase
 from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
 from ...strings.fish_names import Fish
-from ...test import SVTestBase
 
 
 class TestNeedRegionToCatchFish(SVTestBase):
