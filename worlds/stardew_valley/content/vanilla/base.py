@@ -1,8 +1,8 @@
 from ..game_content import ContentPack, StardewContent
 from ...data.artisan import MachineSource
-from ...data.game_item import ItemTag, CustomRuleSource, GameItem
+from ...data.game_item import ItemTag, CustomRuleSource, GameItem, Tag
 from ...data.harvest import HarvestFruitTreeSource, HarvestCropSource
-from ...data.hats_data import all_hats, Hats
+from ...data.hats_data import Hats
 from ...data.requirement import ToolRequirement, TotalEarningsRequirement, ShipOneCropRequirement, CraftedItemsRequirement, CookedRecipesRequirement, \
     CaughtFishRequirement
 from ...data.shop import HatMouseSource
@@ -59,10 +59,6 @@ class BaseGameContentPack(ContentPack):
                 continue
 
             content.tag_item(edible_mushroom, ItemTag.EDIBLE_MUSHROOM)
-
-    def hat_source_hook(self, content: StardewContent):
-        for hat in all_hats:
-            content.tag_item(hat.name, ItemTag.HAT)
 
     def finalize_hook(self, content: StardewContent):
         # FIXME I hate this design. A listener design pattern would be more appropriate so artisan good are register at the exact moment a FRUIT tag is added.
@@ -185,20 +181,20 @@ base_game = BaseGameContentPack(
         Skill(SkillName.combat, has_mastery=True),
     ),
     hat_sources={
-        Hats.good_ol_cap.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(15000),)),),
-        Hats.lucky_bow.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(50000),)),),
-        Hats.cool_cap.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(250000),)),),
-        Hats.bowler.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(1000000),)),),
-        Hats.sombrero.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(10000000),)),),
-        Hats.delicate_bow.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(10),)),),
-        Hats.plum_chapeau.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(25),)),),
-        Hats.daisy.name: (HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(15),)),),
-        Hats.trucker_hat.name: (HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(30),)),),
-        Hats.souwester.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(10, unique=True),)),),
-        Hats.official_cap.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(24, unique=True),)),),
-        Hats.watermelon_band.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(100, unique=False),)),),
-        Hats.cowgal_hat.name: (HatMouseSource(price=1000, unlock_requirements=(ShipOneCropRequirement(300),)),),
-        Hats.living_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
-        Hats.spotted_headscarf.name: (TailoringSource(tailoring_items=(Mushroom.red,)),),
+        Hats.good_ol_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(15000),)),),
+        Hats.lucky_bow.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(50000),)),),
+        Hats.cool_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(250000),)),),
+        Hats.bowler.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(1000000),)),),
+        Hats.sombrero.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(10000000),)),),
+        Hats.delicate_bow.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(10),)),),
+        Hats.plum_chapeau.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(25),)),),
+        Hats.daisy.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(15),)),),
+        Hats.trucker_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(30),)),),
+        Hats.souwester.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(10, unique=True),)),),
+        Hats.official_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(24, unique=True),)),),
+        Hats.watermelon_band.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(100, unique=False),)),),
+        Hats.cowgal_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(ShipOneCropRequirement(300),)),),
+        Hats.living_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
+        Hats.spotted_headscarf.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Mushroom.red,)),),
     },
 )

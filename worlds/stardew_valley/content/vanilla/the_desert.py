@@ -1,7 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data import fish_data, villagers_data
-from ...data.game_item import CustomRuleSource
+from ...data.game_item import CustomRuleSource, ItemTag, Tag
 from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
@@ -50,17 +50,18 @@ the_desert = ContentPack(
         villagers_data.sandy,
     ),
     hat_sources={
-        Hats.top_hat.name: (ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
-        Hats.gils_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
-                                        other_requirements=(RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
-        Hats.abigails_bow.name: (ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
-                                            other_requirements=(MeetRequirement(NPC.abigail),)),),
-        Hats.arcane_hat.name: (ShopSource(price=20000, shop_region=Region.adventurer_guild,
-                                          other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
+        Hats.top_hat.name: (Tag(ItemTag.HAT), ShopSource(price=8000, shop_region=Region.casino, currency=Currency.qi_coin),),
+        Hats.gils_hat.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                                          other_requirements=(
+                                                              RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
+        Hats.abigails_bow.name: (Tag(ItemTag.HAT), ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
+                                                              other_requirements=(MeetRequirement(NPC.abigail),)),),
+        Hats.arcane_hat.name: (Tag(ItemTag.HAT), ShopSource(price=20000, shop_region=Region.adventurer_guild,
+                                                            other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
 
-        Hats.laurel_wreath_crown.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.joja_cap.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.dark_ballcap.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
-        Hats.dark_cowboy_hat.name: (ForagingSource(regions=(Region.skull_cavern_100,)),),
+        Hats.laurel_wreath_crown.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.joja_cap.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_ballcap.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
+        Hats.dark_cowboy_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.skull_cavern_100,)),),
     }
 )

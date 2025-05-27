@@ -6,7 +6,8 @@ from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpot
 from ...data.hats_data import Hats
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
-    NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, FinishedRaccoonsRequirement, \
+    NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
+    FinishedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
@@ -607,34 +608,35 @@ pelican_town = ContentPack(
     ),
     hat_sources={
         # Hats from the Hat Mouse
-        Hats.blue_ribbon.name: (HatMouseSource(price=1000, unlock_requirements=(GrangeDisplayRequirement(),)),),
-        Hats.blue_bonnet.name: (HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(40),)),),
-        Hats.cowboy.name: (HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(),)),),
-        Hats.butterfly_bow.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(1, 5),)),),
-        Hats.mouse_ears.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(1, 10),)),),
-        Hats.cat_ears.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(8, 10),)),),
-        Hats.tiara.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(4, 5),)),),
-        Hats.santa_hat.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(10, 5),)),),
-        Hats.earmuffs.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(20, 5),)),),
-        Hats.tropiclip.name: (HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
-        Hats.hunters_cap.name: (HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.cellar),)),),
-        Hats.polka_bow.name: (HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(10),)),),
-        Hats.chicken_mask.name: (HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(40),)),),
-        Hats.straw.name: (HatMouseSource(price=1000, unlock_requirements=(EggHuntRequirement(),)),),
-        Hats.sailors_cap.name: (HatMouseSource(price=1000, unlock_requirements=(FishingCompetitionRequirement(),)),),
-        Hats.jester_hat.name: (HatMouseSource(price=25000, unlock_requirements=(MovieRequirement(),)),),
-        Hats.governors_hat.name: (HatMouseSource(price=5000, unlock_requirements=(LuauDelightRequirementRequirement(),)),),
-        Hats.white_bow.name: (HatMouseSource(price=5000, unlock_requirements=(FinishedRaccoonsRequirement(8),)),),
-        Hats.sports_cap.name: (HatMouseSource(price=5000, unlock_requirements=(PrizeMachineRequirement(11),)),),
+        Hats.blue_ribbon.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(GrangeDisplayRequirement(),)),),
+        Hats.blue_bonnet.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(40),)),),
+        Hats.cowboy.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(),)),),
+        Hats.butterfly_bow.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(1, 5),)),),
+        Hats.mouse_ears.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(1, 10),)),),
+        Hats.cat_ears.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(8, 10),)),),
+        Hats.tiara.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(4, 5),)),),
+        Hats.santa_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(10, 5),)),),
+        Hats.earmuffs.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(20, 5),)),),
+        Hats.tropiclip.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
+        Hats.hunters_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.cellar),)),),
+        Hats.polka_bow.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(10),)),),
+        Hats.chicken_mask.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(40),)),),
+        Hats.straw.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(EggHuntRequirement(),)),),
+        Hats.sailors_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(FishingCompetitionRequirement(),)),),
+        Hats.jester_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=25000, unlock_requirements=(MovieRequirement(),)),),
+        Hats.governors_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(LuauDelightRequirementRequirement(),)),),
+        Hats.white_bow.name: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(FinishedRaccoonsRequirement(8),)),),
+        Hats.sports_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(PrizeMachineRequirement(11),)),),
 
-        Hats.emilys_magic_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
-                                                other_requirements=(SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
+        Hats.emilys_magic_hat.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
+                                                                  other_requirements=(
+                                                                      SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
 
-        Hats.garbage_hat.name: (ForagingSource(regions=(Region.town,), grind_months=12),),
-        Hats.mystery_hat.name: (MysteryBoxSource(amount=100),),
+        Hats.garbage_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.town,), grind_months=12),),
+        Hats.mystery_hat.name: (Tag(ItemTag.HAT), MysteryBoxSource(amount=100),),
 
-        Hats.fishing_hat.name: (TailoringSource(tailoring_items=(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish,
-                                                                 Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
-        Hats.bucket_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
+        Hats.fishing_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish,
+                                                                                   Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
+        Hats.bucket_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
     }
 )
