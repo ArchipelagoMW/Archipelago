@@ -4,33 +4,17 @@ from typing import *
 from datetime import timedelta
 
 from Options import (
-    Choice,
-    Toggle,
-    DefaultOnToggle,
-    OptionSet,
-    Range,
-    PerGameCommonOptions,
-    Option,
-    VerifyKeys,
-    StartInventory,
-    is_iterable_except_str,
-    OptionGroup,
-    Visibility,
-    ItemDict,
+    Choice, Toggle, DefaultOnToggle, OptionSet, Range,
+    PerGameCommonOptions, Option, VerifyKeys, StartInventory,
+    is_iterable_except_str, OptionGroup, Visibility, ItemDict
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
 from .item import item_names, item_tables
 from .item.item_groups import kerrigan_active_abilities, kerrigan_passives, nova_weapons, nova_gadgets
 from .mission_tables import (
-    SC2Campaign,
-    SC2Mission,
-    lookup_name_to_mission,
-    MissionPools,
-    get_missions_with_any_flags_in_list,
-    campaign_mission_table,
-    SC2Race,
-    MissionFlag,
+    SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list,
+    campaign_mission_table, SC2Race, MissionFlag
 )
 from .mission_groups import mission_groups, MissionGroupNames
 from .mission_order.options import CustomMissionOrder
@@ -42,7 +26,6 @@ if TYPE_CHECKING:
 
 class Sc2MissionSet(OptionSet):
     """Option set made for handling missions and expanding mission groups"""
-
     valid_keys: Iterable[str] = [x.mission_name for x in SC2Mission]
 
     @classmethod
@@ -51,15 +34,13 @@ class Sc2MissionSet(OptionSet):
             return cls(data)
         return cls.from_text(str(data))
 
-    def verify(self, world: Type["World"], player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: set[str] = set()
         case_insensitive_group_mapping = {
             group_name.casefold(): group_value for group_name, group_value in mission_groups.items()
         }
-        case_insensitive_group_mapping.update(
-            {mission.mission_name.casefold(): [mission.mission_name] for mission in SC2Mission}
-        )
+        case_insensitive_group_mapping.update({mission.mission_name.casefold(): [mission.mission_name] for mission in SC2Mission})
         for group_name in self.value:
             item_names = case_insensitive_group_mapping.get(group_name.casefold(), {group_name})
             new_value.update(item_names)
@@ -71,11 +52,9 @@ class Sc2MissionSet(OptionSet):
                     list(self.valid_keys) + list(MissionGroupNames.get_all_group_names()),
                     limit=1,
                 )
-                raise Exception(
-                    f"Mission {item_name} from option {self} "
-                    f"is not a valid mission name from {world.game}. "
-                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)"
-                )
+                raise Exception(f"Mission {item_name} from option {self} "
+                                f"is not a valid mission name from {world.game}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
     def __iter__(self) -> Iterator[str]:
         return self.value.__iter__()
@@ -88,7 +67,6 @@ class SelectRaces(OptionSet):
     """
     Pick which factions' missions and items can be shuffled into the world.
     """
-
     display_name = "Select Playable Races"
     valid_keys = {race.get_title() for race in SC2Race if race != SC2Race.ANY}
     default = valid_keys
@@ -101,7 +79,6 @@ class GameDifficulty(Choice):
     For those unfamiliar with the Archipelago randomizer, the recommended settings are one difficulty level
     lower than the vanilla game
     """
-
     display_name = "Game Difficulty"
     option_casual = 0
     option_normal = 1
@@ -115,13 +92,11 @@ class DifficultyDamageModifier(DefaultOnToggle):
     Enables or disables vanilla difficulty-based damage received modifier
     Handles the 1.25 Brutal damage modifier in HotS and Prologue and 0.5 Casual damage modifier outside WoL and Prophecy
     """
-
     display_name = "Difficulty Damage Modifier"
 
 
 class GameSpeed(Choice):
     """Optional setting to override difficulty-based game speed."""
-
     display_name = "Game Speed"
     option_default = 0
     option_slower = 1
@@ -136,7 +111,6 @@ class DisableForcedCamera(DefaultOnToggle):
     """
     Prevents the game from moving or locking the camera without the player's consent.
     """
-
     display_name = "Disable Forced Camera Movement"
 
 
@@ -144,17 +118,15 @@ class SkipCutscenes(Toggle):
     """
     Skips all cutscenes and prevents dialog from blocking progress.
     """
-
     display_name = "Skip Cutscenes"
 
 
 class AllInMap(Choice):
     """Determines what version of All-In (WoL final map) that will be generated for the campaign."""
-
     display_name = "All In Map"
     option_ground = 0
     option_air = 1
-    default = "random"
+    default = 'random'
 
 
 class MissionOrder(Choice):
@@ -170,7 +142,6 @@ class MissionOrder(Choice):
     Hopscotch: Missions alternate between mandatory missions and pairs of optional missions.
     Custom: Uses the YAML's custom mission order option. See documentation for usage.
     """
-
     display_name = "Mission Order"
     option_vanilla = 0
     option_vanilla_shuffled = 1
@@ -188,7 +159,6 @@ class MaximumCampaignSize(Range):
     Sets an upper bound on how many missions to include when a variable-size mission order is selected.
     If a set-size mission order is selected, does nothing.
     """
-
     display_name = "Maximum Campaign Size"
     range_start = 1
     range_end = len(SC2Mission)
@@ -200,7 +170,6 @@ class TwoStartPositions(Toggle):
     If turned on and 'grid', 'hopscotch', or 'golden_path' mission orders are selected,
     removes the first mission and allows both of the next two missions to be played from the start.
     """
-
     display_name = "Start with two unlocked missions on grid"
     default = Toggle.option_false
 
@@ -219,7 +188,6 @@ class KeyMode(Choice):
     Progressive Missions: Create one type of progressive key for all missions, "Progressive Mission Key".
     Progressive Per Questline: All questlines besides the starter ones get a unique progressive key for their missions, eg. "Progressive Key #1".
     """
-
     display_name = "Key Mode"
     option_disabled = 0
     option_questlines = 1
@@ -259,37 +227,31 @@ class ColorChoice(Choice):
 
 class PlayerColorTerranRaynor(ColorChoice):
     """Determines in-game player team color in Wings of Liberty missions."""
-
     display_name = "Terran Player Color (Raynor)"
 
 
 class PlayerColorProtoss(ColorChoice):
     """Determines in-game player team color in Legacy of the Void missions."""
-
     display_name = "Protoss Player Color"
 
 
 class PlayerColorZerg(ColorChoice):
     """Determines in-game player team color in Heart of the Swarm missions before unlocking Primal Kerrigan."""
-
     display_name = "Zerg Player Color"
 
 
 class PlayerColorZergPrimal(ColorChoice):
     """Determines in-game player team color in Heart of the Swarm after unlocking Primal Kerrigan."""
-
     display_name = "Zerg Player Color (Primal)"
 
 
 class PlayerColorNova(ColorChoice):
     """Determines in-game player team color in Nova Covert Ops missions."""
-
     display_name = "Terran Player Color (Nova)"
 
 
 class EnabledCampaigns(OptionSet):
     """Determines which campaign's missions will be used"""
-
     display_name = "Enabled Campaigns"
     valid_keys = {campaign.campaign_name for campaign in SC2Campaign if campaign != SC2Campaign.GLOBAL}
     default = valid_keys
@@ -306,7 +268,6 @@ class EnableRaceSwapVariants(Choice):
     Shuffle All: Each version of a map can appear in the same pool (so a map can appear up to 3 times as different races)
     Shuffle All Non-Vanilla: Each version of a map besides the original can appear in the same pool (so a map can appear up to 2 times as different races)
     """
-
     display_name = "Enable Race-Swapped Mission Variants"
     option_disabled = 0
     option_pick_one = 1
@@ -325,7 +286,6 @@ class EnableMissionRaceBalancing(Choice):
     Semi Balanced: Use a weighting system to pick missions in a random, but roughly equal ratio.
     Fully Balanced: Pick missions to preserve equal race counts whenever possible.
     """
-
     display_name = "Enable Mission Race Balancing"
     option_disabled = 0
     option_semi_balanced = 1
@@ -338,7 +298,6 @@ class ShuffleCampaigns(DefaultOnToggle):
     Shuffles the missions between campaigns if enabled.
     Only available for Vanilla Shuffled and Mini Campaign mission order
     """
-
     display_name = "Shuffle Campaigns"
 
 
@@ -347,7 +306,6 @@ class ShuffleNoBuild(DefaultOnToggle):
     Determines if the no-build missions are included in the shuffle.
     If turned off, the no-build missions will not appear. Has no effect for Vanilla mission order.
     """
-
     display_name = "Shuffle No-Build Missions"
 
 
@@ -359,7 +317,6 @@ class StarterUnit(Choice):
     Balanced: A unit that doesn't give the player too much power early on is given
     Any Starter Unit: Any starter unit can be given
     """
-
     display_name = "Starter Unit"
     option_off = 0
     option_balanced = 1
@@ -380,7 +337,6 @@ class RequiredTactics(Choice):
     No Logic:  Units and upgrades may be placed anywhere. LIKELY TO RENDER THE RUN IMPOSSIBLE ON HARDER DIFFICULTIES!
                Locks Grant Story Tech option to true.
     """
-
     display_name = "Required Tactics"
     option_standard = 0
     option_advanced = 1
@@ -390,12 +346,11 @@ class RequiredTactics(Choice):
 
 class EnableVoidTrade(Toggle):
     """
-    Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.
-    This structure allows sending units to the Archipelago server, as well as buying random units from the server.
-
+    Enables the Void Trade Wormhole to be built from the Advanced Construction tab of SCVs, Drones and Probes.  
+    This structure allows sending units to the Archipelago server, as well as buying random units from the server.  
+    
     Note: Always disabled if there is no other Starcraft II world with Void Trade enabled in the multiworld.  You cannot receive units that you send.
     """
-
     display_name = "Enable Void Trade"
 
 
@@ -406,7 +361,6 @@ class VoidTradeAgeLimit(Choice):
 
     This does not put a time limit on units you send to other players. Your own units are only affected by other players' choices for this option.
     """
-
     display_name = "Void Trade Age Limit"
     option_disabled = 0
     option_1_week = 1
@@ -421,7 +375,6 @@ class VoidTradeAgeLimit(Choice):
 
 class MaxUpgradeLevel(Range):
     """Controls the maximum number of weapon/armor upgrades that can be found or unlocked."""
-
     display_name = "Maximum Upgrade Level"
     range_start = 3
     range_end = 5
@@ -438,10 +391,9 @@ class GenericUpgradeMissions(Range):
     If the mission order is unable to be beaten by this value (if above 0), the generator will place additional
     weapon / armor upgrades into start inventory
     """
-
     display_name = "Generic Upgrade Missions"
     range_start = 0
-    range_end = 100  # Higher values lead to fails often
+    range_end = 100 # Higher values lead to fails often
     default = 0
 
 
@@ -454,7 +406,6 @@ class GenericUpgradeResearch(Choice):
     Auto In Build:  In No-Build missions, upgrades are unavailable as normal.
     In all other missions, upgrades are automatically researched.
     Always Auto:  Upgrades are automatically researched in all missions."""
-
     display_name = "Generic Upgrade Research"
     option_vanilla = 0
     option_auto_in_no_build = 1
@@ -473,7 +424,6 @@ class GenericUpgradeResearchSpeedup(Toggle):
     Has no effect if Maximum Upgrade Level is set to 3
     or Generic Upgrade Research doesn't require you to research upgrades in build missions.
     """
-
     display_name = "Generic Upgrade Research Speedup"
 
 
@@ -498,7 +448,6 @@ class GenericUpgradeItems(Choice):
     resulting in 21 total items.
     Bundle All:  All weapon and armor upgrades are one item per race,
     resulting in 9 total items."""
-
     display_name = "Generic Upgrade Items"
     option_individual_items = 0
     option_bundle_weapon_and_armor = 1
@@ -510,7 +459,6 @@ class VanillaItemsOnly(Toggle):
     """If turned on, the item pool is limited only to items that appear in the main 3 vanilla campaigns.
     Weapon/Armor upgrades are unaffected; use max_upgrade_level to control maximum level.
     Locked Items may override these exclusions."""
-
     display_name = "Vanilla Items Only"
 
 
@@ -518,9 +466,7 @@ class ExcludeOverpoweredItems(Toggle):
     """
     If turned on, the most powerful items are disabled. Locked Items may override these exclusions.
     """
-
     display_name = "Exclude Overpowered Items"
-
 
 class ExcludeLegacyItems(DefaultOnToggle):
     """
@@ -529,9 +475,7 @@ class ExcludeLegacyItems(DefaultOnToggle):
     Doesn't affect anything present in the vanilla campaigns.
     Locked Items may override these exclusions.
     """
-
     display_name = "Exclude Legacy Items"
-
 
 # Current maximum number of upgrades for a unit
 MAX_UPGRADES_OPTION = 13
@@ -545,7 +489,6 @@ class EnsureGenericItems(Range):
     Mercenaries, Kerrigan levels and abilities, and Spear of Adun abilities
     Increasing this percentage will make units less common.
     """
-
     display_name = "Ensure Generic Items"
     range_start = 0
     range_end = 100
@@ -560,7 +503,6 @@ class MinNumberOfUpgrades(Range):
 
     Doesn't affect shared unit upgrades.
     """
-
     display_name = "Minimum number of upgrades per unit/structure"
     range_start = 0
     range_end = MAX_UPGRADES_OPTION
@@ -575,7 +517,6 @@ class MaxNumberOfUpgrades(Range):
 
     Doesn't affect shared unit upgrades.
     """
-
     display_name = "Maximum number of upgrades per unit/structure"
     range_start = -1
     range_end = MAX_UPGRADES_OPTION
@@ -589,7 +530,6 @@ class MercenaryHighlanders(DefaultOnToggle):
 
     Affected mercenaries: Jackson's Revenge (Battlecruiser), Wise Old Torrasque (Ultralisk)
     """
-
     display_name = "Mercenary Highlanders"
 
 
@@ -606,7 +546,6 @@ class KerriganPresence(Choice):
 
     Note: Always set to "Not Present" if Heart of the Swarm campaign is disabled.
     """
-
     display_name = "Kerrigan Presence"
     option_vanilla = 0
     option_not_present = 1
@@ -618,7 +557,6 @@ class KerriganLevelsPerMissionCompleted(Range):
 
     NOTE: Setting this too low can result in generation failures if The Infinite Cycle or Supreme are in the mission pool.
     """
-
     display_name = "Levels Per Mission Beaten"
     range_start = 0
     range_end = 20
@@ -627,7 +565,7 @@ class KerriganLevelsPerMissionCompleted(Range):
 
 class KerriganLevelsPerMissionCompletedCap(Range):
     """
-    Limits how many total levels Kerrigan can gain from beating missions.  This does not affect levels gained from items.
+    Limits how many total levels Kerrigan can gain from beating missions.  This does not affect levels gained from items.  
     Set to -1 to disable this limit.
 
     NOTE: The following missions have these level requirements:
@@ -635,7 +573,6 @@ class KerriganLevelsPerMissionCompletedCap(Range):
     The Infinite Cycle: 70
     See Grant Story Levels for more details.
     """
-
     display_name = "Levels Per Mission Beaten Cap"
     range_start = -1
     range_end = 140
@@ -651,7 +588,6 @@ class KerriganLevelItemSum(Range):
     The Infinite Cycle: 70
     See Grant Story Levels for more details.
     """
-
     display_name = "Kerrigan Level Item Sum"
     range_start = 0
     range_end = 140
@@ -676,7 +612,6 @@ class KerriganLevelItemDistribution(Choice):
     Size 2:  Uses items worth 2 level eachs.
     Size 1:  Uses individual levels.  As there are not enough locations in the game for this distribution,
     this will result in a greatly reduced total level, and is likely to remove many other items."""
-
     display_name = "Kerrigan Level Item Distribution"
     option_vanilla = 0
     option_smooth = 1
@@ -703,7 +638,6 @@ class KerriganTotalLevelCap(Range):
     The Infinite Cycle: 70
     See Grant Story Levels for more details.
     """
-
     display_name = "Total Level Cap"
     range_start = -1
     range_end = 140
@@ -713,7 +647,6 @@ class KerriganTotalLevelCap(Range):
 class StartPrimaryAbilities(Range):
     """Number of Primary Abilities (Kerrigan Tier 1, 2, and 4) to start the game with.
     If set to 4, a Tier 7 ability is also included."""
-
     display_name = "Starting Primary Abilities"
     range_start = 0
     range_end = 4
@@ -732,7 +665,6 @@ class KerriganPrimalStatus(Choice):
     Half Completion:  Kerrigan is human until half of the missions in the world are completed,
     and zerg thereafter.
     Item:  Kerrigan's Primal Form is an item. She is human until it is found, and zerg thereafter."""
-
     display_name = "Kerrigan Primal Status"
     option_vanilla = 0
     option_always_zerg = 1
@@ -747,7 +679,6 @@ class KerriganMaxActiveAbilities(Range):
     Determines the maximum number of Kerrigan active abilities that can be present in the game
     Additional abilities may spawn if those are required to beat the game.
     """
-
     display_name = "Kerrigan Maximum Active Abilities"
     range_start = 0
     range_end = len(kerrigan_active_abilities)
@@ -759,7 +690,6 @@ class KerriganMaxPassiveAbilities(Range):
     Determines the maximum number of Kerrigan passive abilities that can be present in the game
     Additional abilities may spawn if those are required to beat the game.
     """
-
     display_name = "Kerrigan Maximum Passive Abilities"
     range_start = 0
     range_end = len(kerrigan_passives)
@@ -771,7 +701,6 @@ class EnableMorphling(Toggle):
     Determines whether the player can build Morphlings, which allow for inefficient morphing of advanced units
     like Ravagers and Lurkers without requiring the base unit to be unlocked first.
     """
-
     display_name = "Enable Morphling"
 
 
@@ -780,7 +709,6 @@ class NerfUnitBaselines(Toggle):
     Controls whether some units can initially be found in a nerfed state, with upgrades restoring their stronger power level.
     For example, nerfed Zealots will lack the whirlwind upgrade until it is found as an item.
     """
-
     display_name = "Allow Unit Nerfs"
 
 
@@ -794,7 +722,6 @@ class SpearOfAdunPresence(Choice):
     Protoss: Spear of Adun calldowns are available in any Protoss mission
     Everywhere: Spear of Adun calldowns are available in any mission of any race
     """
-
     display_name = "Spear of Adun Presence"
     option_not_present = 0
     option_lotv_protoss = 1
@@ -818,7 +745,6 @@ class SpearOfAdunPresentInNoBuild(Toggle):
     If turned on, Spear of Adun calldown powers are available in missions specified under "Spear of Adun Presence".
     If turned off, Spear of Adun calldown powers are unavailable in all no-build missions
     """
-
     display_name = "Spear of Adun Present in No-Build"
 
 
@@ -833,7 +759,6 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
     """
-
     display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
     option_lotv_protoss = 1
@@ -857,7 +782,6 @@ class SpearOfAdunPassivesPresentInNoBuild(Toggle):
     If turned on, Spear of Adun autocasts are available in missions specified under "Spear of Adun Passive Ability Presence".
     If turned off, Spear of Adun autocasts are unavailable in all no-build missions
     """
-
     display_name = "Spear of Adun Passive Abilities Present in No-Build"
 
 
@@ -868,16 +792,9 @@ class SpearOfAdunMaxActiveAbilities(Range):
 
     Note: Warp in Reinforcements is treated as a second level of Warp in Pylon
     """
-
     display_name = "Spear of Adun Maximum Active Abilities"
     range_start = 0
-    range_end = sum(
-        [
-            item.quantity
-            for item_name, item in item_tables.get_full_item_list().items()
-            if item_name in item_tables.spear_of_adun_calldowns
-        ]
-    )
+    range_end = sum([item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_calldowns])
     default = range_end
 
 
@@ -887,14 +804,9 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     Additional abilities may spawn if those are required to beat the game.
     Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
     """
-
     display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
-    range_end = sum(
-        item.quantity
-        for item_name, item in item_tables.get_full_item_list().items()
-        if item_name in item_tables.spear_of_adun_castable_passives
-    )
+    range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
     default = range_end
 
 
@@ -906,7 +818,6 @@ class GrantStoryTech(Toggle):
 
     Locked to true if Required Tactics is set to no logic.
     """
-
     display_name = "Grant Story Tech"
 
 
@@ -928,7 +839,6 @@ class GrantStoryLevels(Choice):
     Minimum: Kerrigan is either at her real level, or at the mission's required level,
              depending on which is higher.
     """
-
     display_name = "Grant Story Levels"
     option_disabled = 0
     option_additive = 1
@@ -943,7 +853,6 @@ class NovaMaxWeapons(Range):
 
     Note: Nova can swap between unlocked weapons anytime during the gameplay.
     """
-
     display_name = "Nova Maximum Weapons"
     range_start = 0
     range_end = len(nova_weapons)
@@ -958,7 +867,6 @@ class NovaMaxGadgets(Range):
 
     Note: Nova can use any unlocked ability anytime during gameplay.
     """
-
     display_name = "Nova Maximum Gadgets"
     range_start = 0
     range_end = len(nova_gadgets)
@@ -973,7 +881,6 @@ class NovaGhostOfAChanceVariant(Choice):
     NCO: Uses Nova from Nova Covert Ops campaign
     Auto: Uses NCO if a mission from Nova Covert Ops is actually shuffled, if not uses WoL
     """
-
     display_name = "Nova Ghost of Chance Variant"
     option_wol = 0
     option_nco = 1
@@ -994,25 +901,23 @@ class TakeOverAIAllies(Toggle):
     """
     On maps supporting this feature allows you to take control over an AI Ally.
     """
-
     display_name = "Take Over AI Allies"
 
 
 class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
     """A branch of ItemDict that supports item counts of 0"""
-
     default = {}
     supports_weighting = False
     verify_item_name = True
     # convert_name_groups = True
-    display_name = "Unnamed dictionary"
+    display_name = 'Unnamed dictionary'
     minimum_value: int = 0
 
     def __init__(self, value: Dict[str, int]):
         self.value = {key: val for key, val in value.items()}
 
     @classmethod
-    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> "Sc2ItemDict":
+    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'Sc2ItemDict':
         if isinstance(data, list):
             # This is a little default that gets us backwards compatibility with lists.
             # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
@@ -1020,18 +925,14 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         if isinstance(data, dict):
             for key, value in data.items():
                 if not isinstance(value, int):
-                    raise ValueError(
-                        f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer"
-                    )
+                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
                 if value < cls.minimum_value:
-                    raise ValueError(
-                        f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})"
-                    )
+                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
             return cls(data)
         else:
             raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
 
-    def verify(self, world: Type["World"], player_name: str, plando_options: PlandoOptions) -> None:
+    def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
         new_value: dict[str, int] = {}
         case_insensitive_group_mapping = {
@@ -1046,17 +947,14 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         for item_name in self.value:
             if item_name not in world.item_names:
                 from .item import item_groups
-
                 picks = get_fuzzy_results(
                     item_name,
                     list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
-                raise Exception(
-                    f"Item {item_name} from option {self} "
-                    f"is not a valid item name from {world.game}. "
-                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)"
-                )
+                raise Exception(f"Item {item_name} from option {self} "
+                                f"is not a valid item name from {world.game}. "
+                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
 
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
@@ -1073,28 +971,24 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
 class Sc2StartInventory(Sc2ItemDict):
     """Start with these items."""
-
     display_name = StartInventory.display_name
 
 
 class LockedItems(Sc2ItemDict):
     """Guarantees that these items will be unlockable, in the amount specified.
     Specify an amount of 0 to lock all copies of an item."""
-
     display_name = "Locked Items"
 
 
 class ExcludedItems(Sc2ItemDict):
     """Guarantees that these items will not be unlockable, in the amount specified.
     Specify an amount of 0 to exclude all copies of an item."""
-
     display_name = "Excluded Items"
 
 
 class UnexcludedItems(Sc2ItemDict):
     """Undoes an item exclusion; useful for whitelisting or fine-tuning a category.
     Specify an amount of 0 to unexclude all copies of an item."""
-
     display_name = "Unexcluded Items"
 
 
@@ -1102,7 +996,6 @@ class ExcludedMissions(Sc2MissionSet):
     """Guarantees that these missions will not appear in the campaign
     Doesn't apply to vanilla mission order.
     It may be impossible to build a valid campaign if too many missions are excluded."""
-
     display_name = "Excluded Missions"
     valid_keys = {mission.mission_name for mission in SC2Mission}
 
@@ -1113,7 +1006,6 @@ class DifficultyCurve(Choice):
     Standard: The campaign will start with easy missions and end with challenging missions.  Short campaigns will be more difficult.
     Uneven: The campaign will start with easy missions, but easy missions can still appear later in the campaign.  Short campaigns will be easier.
     """
-
     display_name = "Difficulty Curve"
     option_standard = 0
     option_uneven = 1
@@ -1131,7 +1023,6 @@ class ExcludeVeryHardMissions(Choice):
 
     See also: Excluded Missions, Enable Epilogue Missions, Maximum Campaign Size
     """
-
     display_name = "Exclude Very Hard Missions"
     option_default = 0
     option_true = 1
@@ -1147,7 +1038,6 @@ class VictoryCache(Range):
     Controls how many additional checks are awarded for completing a mission.
     Goal missions are unaffected by this option.
     """
-
     display_name = "Victory Checks"
     range_start = 0
     range_end = 10
@@ -1176,7 +1066,6 @@ class VanillaLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Vanilla Locations"
 
 
@@ -1196,7 +1085,6 @@ class ExtraLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Extra Locations"
 
 
@@ -1215,7 +1103,6 @@ class ChallengeLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Challenge Locations"
 
 
@@ -1233,7 +1120,6 @@ class MasteryLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Mastery Locations"
 
 
@@ -1252,7 +1138,6 @@ class BasebustLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Base-Bust Locations"
 
 
@@ -1271,7 +1156,6 @@ class SpeedrunLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Speedrun Locations"
 
 
@@ -1291,7 +1175,6 @@ class PreventativeLocations(LocationInclusion):
     Note: Individual locations subject to plando are always enabled, so the plando can be placed properly.
     See also: Excluded Locations, Item Plando (https://archipelago.gg/tutorial/Archipelago/plando/en#item-plando)
     """
-
     display_name = "Preventative Locations"
 
 
@@ -1308,7 +1191,6 @@ class MissionOrderScouting(Choice):
     Campaign: Only for missions that are in an accessible campaign (e.g. WoL, HotS, etc.)
     All: All missions
     """
-
     display_name = "Mission Order Scouting"
     option_none = 0
     option_completed = 1
@@ -1325,7 +1207,6 @@ class FillerPercentage(Range):
     Percentage of the item pool filled with filler items.
     If the world has more locations than items, additional filler items may be generated.
     """
-
     display_name = "Filler Percentage"
     range_start = 0
     range_end = 70
@@ -1336,7 +1217,6 @@ class MineralsPerItem(Range):
     """
     Configures how many minerals are given per resource item.
     """
-
     display_name = "Minerals Per Item"
     range_start = 0
     range_end = 200
@@ -1347,7 +1227,6 @@ class VespenePerItem(Range):
     """
     Configures how much vespene gas is given per resource item.
     """
-
     display_name = "Vespene Per Item"
     range_start = 0
     range_end = 200
@@ -1358,7 +1237,6 @@ class StartingSupplyPerItem(Range):
     """
     Configures how much starting supply per is given per item.
     """
-
     display_name = "Starting Supply Per Item"
     range_start = 0
     range_end = 16
@@ -1369,7 +1247,6 @@ class MaximumSupplyPerItem(Range):
     """
     Configures how much the maximum supply limit increases per item.
     """
-
     display_name = "Maximum Supply Per Item"
     range_start = 0
     range_end = 10
@@ -1380,7 +1257,6 @@ class MaximumSupplyReductionPerItem(Range):
     """
     Configures how much maximum supply is reduced per trap item.
     """
-
     display_name = "Maximum Supply Reduction Per Item"
     range_start = 1
     range_end = 10
@@ -1389,19 +1265,16 @@ class MaximumSupplyReductionPerItem(Range):
 
 class LowestMaximumSupply(Range):
     """Controls how far max supply reduction traps can reduce maximum supply."""
-
     display_name = "Lowest Maximum Supply"
     range_start = 100
     range_end = 200
     default = 180
-
 
 class ResearchCostReductionPerItem(Range):
     """
     Controls how much weapon/armor research cost is cut per research cost filler item.
     Affects both minerals and vespene.
     """
-
     display_name = "Upgrade Cost Discount Per Item"
     range_start = 0
     range_end = 10
@@ -1414,7 +1287,6 @@ class FillerItemsDistribution(ItemDict):
     Items that are bound to specific race or option are automatically eliminated.
     Kerrigan levels generated this way don't go against Kerrigan level item sum
     """
-
     default = {
         item_names.STARTING_MINERALS: 1,
         item_names.STARTING_VESPENE: 1,
@@ -1528,160 +1400,119 @@ class Starcraft2Options(PerGameCommonOptions):
 
     custom_mission_order: CustomMissionOrder
 
-
 option_groups = [
-    OptionGroup(
-        "Difficulty Settings",
-        [
-            GameDifficulty,
-            GameSpeed,
-            StarterUnit,
-            RequiredTactics,
-            NerfUnitBaselines,
-            DifficultyCurve,
-        ],
-    ),
-    OptionGroup(
-        "Primary Campaign Settings",
-        [
-            MissionOrder,
-            MaximumCampaignSize,
-            EnabledCampaigns,
-            EnableRaceSwapVariants,
-            ShuffleNoBuild,
-        ],
-    ),
-    OptionGroup(
-        "Optional Campaign Settings",
-        [
-            KeyMode,
-            ShuffleCampaigns,
-            AllInMap,
-            TwoStartPositions,
-            SelectRaces,
-            ExcludeVeryHardMissions,
-            EnableMissionRaceBalancing,
-        ],
-    ),
-    OptionGroup(
-        "Unit Upgrades",
-        [
-            EnsureGenericItems,
-            MinNumberOfUpgrades,
-            MaxNumberOfUpgrades,
-            MaxUpgradeLevel,
-            GenericUpgradeMissions,
-            GenericUpgradeResearch,
-            GenericUpgradeResearchSpeedup,
-            GenericUpgradeItems,
-        ],
-    ),
-    OptionGroup(
-        "Kerrigan",
-        [
-            KerriganPresence,
-            GrantStoryLevels,
-            KerriganLevelsPerMissionCompleted,
-            KerriganLevelsPerMissionCompletedCap,
-            KerriganLevelItemSum,
-            KerriganLevelItemDistribution,
-            KerriganTotalLevelCap,
-            StartPrimaryAbilities,
-            KerriganPrimalStatus,
-            KerriganMaxActiveAbilities,
-            KerriganMaxPassiveAbilities,
-        ],
-    ),
-    OptionGroup(
-        "Spear of Adun",
-        [
-            SpearOfAdunPresence,
-            SpearOfAdunPresentInNoBuild,
-            SpearOfAdunPassiveAbilityPresence,
-            SpearOfAdunPassivesPresentInNoBuild,
-            SpearOfAdunMaxActiveAbilities,
-            SpearOfAdunMaxAutocastAbilities,
-        ],
-    ),
-    OptionGroup(
-        "Nova",
-        [
-            NovaMaxWeapons,
-            NovaMaxGadgets,
-            NovaGhostOfAChanceVariant,
-        ],
-    ),
-    OptionGroup(
-        "Race Specific Options",
-        [
-            EnableMorphling,
-            MercenaryHighlanders,
-        ],
-    ),
-    OptionGroup(
-        "Check Locations",
-        [
-            VictoryCache,
-            VanillaLocations,
-            ExtraLocations,
-            ChallengeLocations,
-            MasteryLocations,
-            BasebustLocations,
-            SpeedrunLocations,
-            PreventativeLocations,
-        ],
-    ),
-    OptionGroup(
-        "Filler Options",
-        [
-            FillerPercentage,
-            MineralsPerItem,
-            VespenePerItem,
-            StartingSupplyPerItem,
-            MaximumSupplyPerItem,
-            MaximumSupplyReductionPerItem,
-            LowestMaximumSupply,
-            ResearchCostReductionPerItem,
-            FillerItemsDistribution,
-        ],
-    ),
-    OptionGroup(
-        "Inclusions & Exclusions",
-        [
-            LockedItems,
-            ExcludedItems,
-            UnexcludedItems,
-            VanillaItemsOnly,
-            ExcludeOverpoweredItems,
-            ExcludeLegacyItems,
-            ExcludedMissions,
-        ],
-    ),
-    OptionGroup(
-        "Advanced Gameplay",
-        [
-            MissionOrderScouting,
-            DifficultyDamageModifier,
-            TakeOverAIAllies,
-            EnableVoidTrade,
-            VoidTradeAgeLimit,
-            GrantStoryTech,
-        ],
-    ),
-    OptionGroup(
-        "Cosmetics",
-        [
-            PlayerColorTerranRaynor,
-            PlayerColorProtoss,
-            PlayerColorZerg,
-            PlayerColorZergPrimal,
-            PlayerColorNova,
-        ],
-    ),
+    OptionGroup("Difficulty Settings", [
+        GameDifficulty,
+        GameSpeed,
+        StarterUnit,
+        RequiredTactics,
+        NerfUnitBaselines,
+        DifficultyCurve,
+    ]),
+    OptionGroup("Primary Campaign Settings", [
+        MissionOrder,
+        MaximumCampaignSize,
+        EnabledCampaigns,
+        EnableRaceSwapVariants,
+        ShuffleNoBuild,
+    ]),
+    OptionGroup("Optional Campaign Settings", [
+        KeyMode,
+        ShuffleCampaigns,
+        AllInMap,
+        TwoStartPositions,
+        SelectRaces,
+        ExcludeVeryHardMissions,
+        EnableMissionRaceBalancing,
+    ]),
+    OptionGroup("Unit Upgrades", [
+        EnsureGenericItems,
+        MinNumberOfUpgrades,
+        MaxNumberOfUpgrades,
+        MaxUpgradeLevel,
+        GenericUpgradeMissions,
+        GenericUpgradeResearch,
+        GenericUpgradeResearchSpeedup,
+        GenericUpgradeItems,
+    ]),
+    OptionGroup("Kerrigan", [
+        KerriganPresence,
+        GrantStoryLevels,
+        KerriganLevelsPerMissionCompleted,
+        KerriganLevelsPerMissionCompletedCap,
+        KerriganLevelItemSum,
+        KerriganLevelItemDistribution,
+        KerriganTotalLevelCap,
+        StartPrimaryAbilities,
+        KerriganPrimalStatus,
+        KerriganMaxActiveAbilities,
+        KerriganMaxPassiveAbilities,
+    ]),
+    OptionGroup("Spear of Adun", [
+        SpearOfAdunPresence,
+        SpearOfAdunPresentInNoBuild,
+        SpearOfAdunPassiveAbilityPresence,
+        SpearOfAdunPassivesPresentInNoBuild,
+        SpearOfAdunMaxActiveAbilities,
+        SpearOfAdunMaxAutocastAbilities,
+    ]),
+    OptionGroup("Nova", [
+        NovaMaxWeapons,
+        NovaMaxGadgets,
+        NovaGhostOfAChanceVariant,
+    ]),
+    OptionGroup("Race Specific Options", [
+        EnableMorphling,
+        MercenaryHighlanders,
+    ]),
+    OptionGroup("Check Locations", [
+        VictoryCache,
+        VanillaLocations,
+        ExtraLocations,
+        ChallengeLocations,
+        MasteryLocations,
+        BasebustLocations,
+        SpeedrunLocations,
+        PreventativeLocations,
+    ]),
+    OptionGroup("Filler Options", [
+        FillerPercentage,
+        MineralsPerItem,
+        VespenePerItem,
+        StartingSupplyPerItem,
+        MaximumSupplyPerItem,
+        MaximumSupplyReductionPerItem,
+        LowestMaximumSupply,
+        ResearchCostReductionPerItem,
+        FillerItemsDistribution,
+    ]),
+    OptionGroup("Inclusions & Exclusions", [
+        LockedItems,
+        ExcludedItems,
+        UnexcludedItems,
+        VanillaItemsOnly,
+        ExcludeOverpoweredItems,
+        ExcludeLegacyItems,
+        ExcludedMissions,
+    ]),
+    OptionGroup("Advanced Gameplay", [
+        MissionOrderScouting,
+        DifficultyDamageModifier,
+        TakeOverAIAllies,
+        EnableVoidTrade,
+        VoidTradeAgeLimit,
+        GrantStoryTech,
+    ]),
+    OptionGroup("Cosmetics", [
+        PlayerColorTerranRaynor,
+        PlayerColorProtoss,
+        PlayerColorZerg,
+        PlayerColorZergPrimal,
+        PlayerColorNova,
+    ])
 ]
 
-
-def get_option_value(world: Union["SC2World", None], name: str) -> int:
+def get_option_value(world: Union['SC2World', None], name: str) -> int:
     """
     You should basically never use this unless `world` can be `None`.
     Use `world.options.<option_name>.value` instead for better typing, autocomplete, and error messages.
@@ -1692,7 +1523,6 @@ def get_option_value(world: Union["SC2World", None], name: str) -> int:
             if field.type in globals():
                 return globals()[field.type].default
             import Options
-
             return Options.__dict__[field.type].default
         return field.type.default
 
@@ -1701,18 +1531,17 @@ def get_option_value(world: Union["SC2World", None], name: str) -> int:
     return player_option.value
 
 
-def get_enabled_races(world: Optional["SC2World"]) -> Set[SC2Race]:
+def get_enabled_races(world: Optional['SC2World']) -> Set[SC2Race]:
     race_names = world.options.selected_races.value if world else SelectRaces.default
     return {race for race in SC2Race if race.get_title() in race_names}
 
 
-def get_enabled_campaigns(world: Optional["SC2World"]) -> Set[SC2Campaign]:
+def get_enabled_campaigns(world: Optional['SC2World']) -> Set[SC2Campaign]:
     if world is None:
         return {campaign for campaign in SC2Campaign if campaign.campaign_name in EnabledCampaigns.default}
     campaign_names = world.options.enabled_campaigns
     campaigns = {campaign for campaign in SC2Campaign if campaign.campaign_name in campaign_names}
-    if (
-        world.options.mission_order.value == MissionOrder.option_vanilla
+    if (world.options.mission_order.value == MissionOrder.option_vanilla
         and world.options.selected_races.value != SelectRaces.valid_keys
         and SC2Campaign.EPILOGUE in campaigns
     ):
@@ -1723,7 +1552,7 @@ def get_enabled_campaigns(world: Optional["SC2World"]) -> Set[SC2Campaign]:
     return campaigns
 
 
-def get_disabled_campaigns(world: "SC2World") -> Set[SC2Campaign]:
+def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
     all_campaigns = set(SC2Campaign)
     enabled_campaigns = get_enabled_campaigns(world)
     disabled_campaigns = all_campaigns.difference(enabled_campaigns)
@@ -1731,9 +1560,10 @@ def get_disabled_campaigns(world: "SC2World") -> Set[SC2Campaign]:
     return disabled_campaigns
 
 
-def get_disabled_flags(world: "SC2World") -> MissionFlag:
-    excluded = (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss) ^ functools.reduce(
-        lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)]
+def get_disabled_flags(world: 'SC2World') -> MissionFlag:
+    excluded = (
+            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
     )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:
@@ -1741,16 +1571,13 @@ def get_disabled_flags(world: "SC2World") -> MissionFlag:
     raceswap_option = world.options.enable_race_swap.value
     if raceswap_option == EnableRaceSwapVariants.option_disabled:
         excluded |= MissionFlag.RaceSwap
-    elif raceswap_option in [
-        EnableRaceSwapVariants.option_pick_one_non_vanilla,
-        EnableRaceSwapVariants.option_shuffle_all_non_vanilla,
-    ]:
+    elif raceswap_option in [EnableRaceSwapVariants.option_pick_one_non_vanilla, EnableRaceSwapVariants.option_shuffle_all_non_vanilla]:
         excluded |= MissionFlag.HasRaceSwap
     # TODO: add more flags to potentially exclude once we have a way to get that from the player
     return MissionFlag(excluded)
 
 
-def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
+def get_excluded_missions(world: 'SC2World') -> Set[SC2Mission]:
     mission_order_type = world.options.mission_order.value
     excluded_mission_names = world.options.excluded_missions.value
     disabled_campaigns = get_disabled_campaigns(world)
@@ -1759,22 +1586,24 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
-    if mission_order_type != MissionOrder.option_vanilla and (
-        world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true
-        or (
-            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
-            and (
-                (mission_order_type in dynamic_mission_orders and world.options.maximum_campaign_size < 20)
-                or mission_order_type == MissionOrder.option_mini_campaign
+    if (mission_order_type != MissionOrder.option_vanilla and
+            (
+                    world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_true
+                    or (
+                            world.options.exclude_very_hard_missions == ExcludeVeryHardMissions.option_default
+                            and (
+                                    (
+                                            mission_order_type in dynamic_mission_orders
+                                            and world.options.maximum_campaign_size < 20
+                                    )
+                                    or mission_order_type == MissionOrder.option_mini_campaign
+                            )
+                    )
             )
-        )
     ):
         excluded_missions = excluded_missions.union(
-            [
-                mission
-                for mission in SC2Mission
-                if mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE
-            ]
+            [mission for mission in SC2Mission if
+             mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
         )
     # Omitting missions with flags we don't want
     if disabled_flags:
@@ -1783,14 +1612,11 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
     for campaign in disabled_campaigns:
         excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
     # Omitting unwanted mission variants
-    if world.options.enable_race_swap.value in [
-        EnableRaceSwapVariants.option_pick_one,
-        EnableRaceSwapVariants.option_pick_one_non_vanilla,
-    ]:
+    if world.options.enable_race_swap.value in [EnableRaceSwapVariants.option_pick_one, EnableRaceSwapVariants.option_pick_one_non_vanilla]:
         swaps = [
-            mission
-            for mission in SC2Mission
-            if mission not in excluded_missions and mission.flags & (MissionFlag.HasRaceSwap | MissionFlag.RaceSwap)
+            mission for mission in SC2Mission
+            if mission not in excluded_missions
+            and mission.flags & (MissionFlag.HasRaceSwap|MissionFlag.RaceSwap)
         ]
         while len(swaps) > 0:
             curr = swaps[0]
@@ -1798,7 +1624,7 @@ def get_excluded_missions(world: "SC2World") -> Set[SC2Mission]:
             variants.sort(key=lambda mission: mission.id)
             swaps = [mission for mission in swaps if mission not in variants]
             if len(variants) > 1:
-                variants.pop(world.random.randint(0, len(variants) - 1))
+                variants.pop(world.random.randint(0, len(variants)-1))
                 excluded_missions = excluded_missions.union(variants)
 
     return excluded_missions
@@ -1865,16 +1691,16 @@ upgrade_included_names: Dict[int, Set[str]] = {
         item_names.PROGRESSIVE_TERRAN_WEAPON_ARMOR_UPGRADE,
         item_names.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE,
         item_names.PROGRESSIVE_PROTOSS_WEAPON_ARMOR_UPGRADE,
-    },
+    }
 }
 
 # Mapping trade age limit options to their millisecond equivalents
 void_trade_age_limits_ms: Dict[int, int] = {
-    VoidTradeAgeLimit.option_5_minutes: 1000 * int(timedelta(minutes=5).total_seconds()),
-    VoidTradeAgeLimit.option_30_minutes: 1000 * int(timedelta(minutes=30).total_seconds()),
-    VoidTradeAgeLimit.option_1_hour: 1000 * int(timedelta(hours=1).total_seconds()),
-    VoidTradeAgeLimit.option_2_hours: 1000 * int(timedelta(hours=2).total_seconds()),
-    VoidTradeAgeLimit.option_4_hours: 1000 * int(timedelta(hours=4).total_seconds()),
-    VoidTradeAgeLimit.option_1_day: 1000 * int(timedelta(days=1).total_seconds()),
-    VoidTradeAgeLimit.option_1_week: 1000 * int(timedelta(weeks=1).total_seconds()),
+    VoidTradeAgeLimit.option_5_minutes: 1000 * int(timedelta(minutes = 5).total_seconds()),
+    VoidTradeAgeLimit.option_30_minutes: 1000 * int(timedelta(minutes = 30).total_seconds()),
+    VoidTradeAgeLimit.option_1_hour: 1000 * int(timedelta(hours = 1).total_seconds()),
+    VoidTradeAgeLimit.option_2_hours: 1000 * int(timedelta(hours = 2).total_seconds()),
+    VoidTradeAgeLimit.option_4_hours: 1000 * int(timedelta(hours = 4).total_seconds()),
+    VoidTradeAgeLimit.option_1_day: 1000 * int(timedelta(days = 1).total_seconds()),
+    VoidTradeAgeLimit.option_1_week: 1000 * int(timedelta(weeks = 1).total_seconds()),
 }
