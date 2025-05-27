@@ -12,7 +12,7 @@ from ..strings.ap_names.buff_names import Buff
 
 def generate_filler_choice_pool(options: StardewValleyOptions, content: StardewContent) -> list[str]:
     available_filler = get_all_filler_items(options)
-    available_filler = remove_excluded(available_filler, content)
+    available_filler = remove_excluded(available_filler, content, options)
     available_filler = remove_limited_amount_resource_packs(available_filler)
 
     return [item.name for item in available_filler]
@@ -37,24 +37,21 @@ def get_filler_weights(options: StardewValleyOptions, all_filler_packs: list[Ite
     return weights
 
 
-def generate_unique_filler_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random,
+def generate_unique_filler_items(item_factory: StardewItemFactory, content: StardewContent, options: StardewValleyOptions, random: Random,
                                  available_item_slots: int) -> list[Item]:
-    items = create_filler_festival_rewards(item_factory, options)
+    items = create_filler_festival_rewards(item_factory, content, options)
 
     if len(items) > available_item_slots:
         items = random.sample(items, available_item_slots)
     return items
 
 
-def create_filler_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions) -> list[Item]:
+def create_filler_festival_rewards(item_factory: StardewItemFactory, content: StardewContent, options: StardewValleyOptions) -> list[Item]:
     if options.festival_locations == FestivalLocations.option_disabled:
         return []
-
-    return [
-        item_factory(item)
-        for item in items_by_group[Group.FESTIVAL]
-        if item.classification == ItemClassification.filler and Group.DEPRECATED not in item.groups
-    ]
+    filler_rewards = [item for item in items_by_group[Group.FESTIVAL] if item.classification == ItemClassification.filler]
+    filler_rewards = remove_excluded(filler_rewards, content, options)
+    return [item_factory(item) for item in filler_rewards]
 
 
 def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
@@ -74,7 +71,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     already_added_items_names = {item.name for item in already_added_items}
 
     priority_fillers = get_priority_fillers(options)
-    priority_fillers = remove_excluded(priority_fillers, content)
+    priority_fillers = remove_excluded(priority_fillers, content, options)
     priority_fillers = remove_already_included(priority_fillers, already_added_items_names)
 
     if available_item_slots < len(priority_fillers):
@@ -88,7 +85,7 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
 
     all_fillers = get_all_filler_items(options)
     all_fillers.extend(get_player_buffs(options))
-    all_fillers = remove_excluded(all_fillers, content)
+    all_fillers = remove_excluded(all_fillers, content, options)
     all_fillers = remove_already_included(all_fillers, already_added_items_names)
 
     filler_weights = get_filler_weights(options, all_fillers)

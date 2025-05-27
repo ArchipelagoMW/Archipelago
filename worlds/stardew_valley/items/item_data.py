@@ -31,7 +31,7 @@ class Group(enum.Enum):
     COMMUNITY_REWARD = enum.auto()
     TRASH = enum.auto()
     FOOTWEAR = enum.auto()
-    HATS = enum.auto()
+    HAT = enum.auto()
     RING = enum.auto()
     WEAPON = enum.auto()
     WEAPON_GENERIC = enum.auto()

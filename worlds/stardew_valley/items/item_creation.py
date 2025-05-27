@@ -41,7 +41,7 @@ def create_items(item_factory: StardewItemFactory, locations_count: int, items_t
     items += unique_items
     logger.debug(f"Created {len(unique_items)} unique items")
 
-    unique_filler_items = generate_unique_filler_items(item_factory, options, random, locations_count - len(items))
+    unique_filler_items = generate_unique_filler_items(item_factory, content, options, random, locations_count - len(items))
     items += unique_filler_items
     logger.debug(f"Created {len(unique_filler_items)} unique filler items")
 
@@ -476,7 +476,7 @@ def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewVa
     crafting_recipes.extend([recipe for recipe in items_by_group[Group.QI_CRAFTING_RECIPE]])
     if has_craftsanity:
         crafting_recipes.extend([recipe for recipe in items_by_group[Group.CRAFTSANITY]])
-    crafting_recipes = remove_excluded(crafting_recipes, content)
+    crafting_recipes = remove_excluded(crafting_recipes, content, options)
     items.extend([item_factory(item) for item in crafting_recipes])
 
 
@@ -496,7 +496,7 @@ def create_cooking_recipes(item_factory: StardewItemFactory, options: StardewVal
     if chefsanity & Chefsanity.option_skills:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_SKILL]})
 
-    filtered_chefsanity_recipes = remove_excluded(list(chefsanity_recipes_by_name.values()), content)
+    filtered_chefsanity_recipes = remove_excluded(list(chefsanity_recipes_by_name.values()), content, options)
     items.extend([item_factory(item) for item in filtered_chefsanity_recipes])
 
 
