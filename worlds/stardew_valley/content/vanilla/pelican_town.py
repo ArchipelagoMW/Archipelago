@@ -4,10 +4,9 @@ from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
 from ...data.hats_data import Hats
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, TotalEarningsRequirement, YearRequirement, \
-    GrangeDisplayRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, BuildingRequirement, \
-    NumberOfFriendsRequirement, CookedRecipesRequirement, CraftedItemsRequirement, HelpWantedRequirement, ShipOneCropRequirement, \
-    FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, FinishedRaccoonsRequirement, \
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
+    GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
+    NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, FinishedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
@@ -608,11 +607,6 @@ pelican_town = ContentPack(
     ),
     hat_sources={
         # Hats from the Hat Mouse
-        Hats.good_ol_cap.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(15000),)),),
-        Hats.lucky_bow.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(50000),)),),
-        Hats.cool_cap.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(250000),)),),
-        Hats.bowler.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(1000000),)),),
-        Hats.sombrero.name: (HatMouseSource(price=1000, unlock_requirements=(TotalEarningsRequirement(10000000),)),),
         Hats.blue_ribbon.name: (HatMouseSource(price=1000, unlock_requirements=(GrangeDisplayRequirement(),)),),
         Hats.blue_bonnet.name: (HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(40),)),),
         Hats.cowboy.name: (HatMouseSource(price=1000, unlock_requirements=(MuseumCompletionRequirement(),)),),
@@ -622,18 +616,10 @@ pelican_town = ContentPack(
         Hats.tiara.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(4, 5),)),),
         Hats.santa_hat.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(10, 5),)),),
         Hats.earmuffs.name: (HatMouseSource(price=1000, unlock_requirements=(NumberOfFriendsRequirement(20, 5),)),),
-        Hats.delicate_bow.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(10),)),),
-        Hats.plum_chapeau.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(25),)),),
         Hats.tropiclip.name: (HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.kitchen),)),),
         Hats.hunters_cap.name: (HatMouseSource(price=1000, unlock_requirements=(BuildingRequirement(BuildingNames.cellar),)),),
-        Hats.daisy.name: (HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(15),)),),
-        Hats.trucker_hat.name: (HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(30),)),),
-        Hats.souwester.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(10, unique=True),)),),
-        Hats.official_cap.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(24, unique=True),)),),
-        Hats.watermelon_band.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(100, unique=False),)),),
         Hats.polka_bow.name: (HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(10),)),),
         Hats.chicken_mask.name: (HatMouseSource(price=1000, unlock_requirements=(HelpWantedRequirement(40),)),),
-        Hats.cowgal_hat.name: (HatMouseSource(price=1000, unlock_requirements=(ShipOneCropRequirement(300),)),),
         Hats.straw.name: (HatMouseSource(price=1000, unlock_requirements=(EggHuntRequirement(),)),),
         Hats.sailors_cap.name: (HatMouseSource(price=1000, unlock_requirements=(FishingCompetitionRequirement(),)),),
         Hats.jester_hat.name: (HatMouseSource(price=25000, unlock_requirements=(MovieRequirement(),)),),
@@ -647,8 +633,6 @@ pelican_town = ContentPack(
         Hats.garbage_hat.name: (ForagingSource(regions=(Region.town,), grind_months=12),),
         Hats.mystery_hat.name: (MysteryBoxSource(amount=100),),
 
-        Hats.living_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.grind.can_grind_weeds(100000)),),
-        Hats.spotted_headscarf.name: (TailoringSource(tailoring_items=(Mushroom.red,)),),
         Hats.fishing_hat.name: (TailoringSource(tailoring_items=(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish,
                                                                  Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
         Hats.bucket_hat.name: (CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
