@@ -50,14 +50,9 @@ class TestNames(unittest.TestCase):
 
                 multiworld = setup_solo_multiworld(world_type)
 
-                with self.subTest("non-event locations"):
+                with self.subTest("locations"):
                     for location in multiworld.get_locations():
-                        if not location.is_event:
-                            self.assertIsStr(location.name)
-                with self.subTest("event locations"):
-                    for location in multiworld.get_locations():
-                        if location.is_event:
-                            self.assertIsStr(location.name)
+                        self.assertIsStr(location.name, f"location.is_event: {location.is_event}")
                 with self.subTest("regions"):
                     for region in multiworld.get_regions():
                         self.assertIsStr(region.name)
@@ -70,18 +65,11 @@ class TestNames(unittest.TestCase):
                 with self.subTest("precollected_items items"):
                     for item in multiworld.precollected_items[1]:
                         self.assertIsStr(item.name)
-                with self.subTest("non-event items placed in pre_fill and earlier"):
+                with self.subTest("items placed in pre_fill and earlier"):
                     for loc in multiworld.get_filled_locations():
                         item = loc.item
                         assert item is not None
-                        if not item.is_event:
-                            self.assertIsStr(item.name)
-                with self.subTest("event items placed in pre_fill and earlier"):
-                    for loc in multiworld.get_filled_locations():
-                        item = loc.item
-                        assert item is not None
-                        if item.is_event:
-                            self.assertIsStr(item.name)
+                        self.assertIsStr(item.name, f"item.is_event: {item.is_event}")
 
     def test_location_name_format(self) -> None:
         """Location names must not be all numeric in order to differentiate between ID and name in !hint_location"""
