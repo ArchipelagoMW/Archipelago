@@ -121,8 +121,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.paper_hat.name: (Tag(ItemTag.HAT), HatMouseSource(price=10000, unlock_requirements=(RegionRequirement(Region.island_south),)),),
         Hats.pageboy_cap.name: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(ReadAllBooksRequirement(),)),),
 
-        Hats.concerned_ape_mask.name: (Tag(ItemTag.HAT), ShopSource(price=10000,
-                                                                    shop_region=LogicRegion.lost_items_shop,
+        Hats.concerned_ape_mask.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                                     other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                                other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
@@ -136,5 +135,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.sunglasses.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Material.cinder_shard,)),),
         Hats.swashbuckler_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
+
+        Hats.bluebird_mask.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
     },
 )
