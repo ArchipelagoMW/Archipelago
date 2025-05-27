@@ -613,6 +613,13 @@ class MoveBalancing(Toggle):
     default = 0
 
 
+class NoTrappingMoves(Toggle):
+    """All trapping moves are changed to instead immediately deal damage 2 to 5 times, as with moves like Fury Attack
+    and Doubleslap."""
+    display_name = "No Trapping Moves"
+    default = 0
+
+
 class FixCombatBugs(Toggle):
     """Fixes a variety of combat-related bugs. Note that this fixes the Focus Energy bug. The Focus Energy bug causes
     critical strike chances to be doubled when Focus Energy has not been used and halved when it is used.
@@ -983,6 +990,7 @@ class PokemonRBOptions(PerGameCommonOptions):
     randomize_trainer_parties: RandomizeTrainerParties
     trainer_legendaries: TrainerLegendaries
     move_balancing: MoveBalancing
+    no_trapping_moves: NoTrappingMoves
     fix_combat_bugs: FixCombatBugs
     randomize_pokemon_movesets: RandomizePokemonMovesets
     confine_transform_to_ditto: ConfineTranstormToDitto
