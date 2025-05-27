@@ -19,7 +19,7 @@ base_location_table: Dict[str, SohLocationData] = {
     # Commented out locations that aren't added as shuffle options yet, or are MQ locations.
     # Some are disabled because they're not real locations (ex Ganon and hint locations).
 
-    #"Link's Pocket": SohLocationData(region="Hyrule", address=soh_base_id + 1, ),
+    "Link's Pocket": SohLocationData(region="Hyrule", address=soh_base_id + 1, ),
     "Queen Gohma": SohLocationData(region="Hyrule", address=soh_base_id + 2, ),
     "King Dodongo": SohLocationData(region="Hyrule", address=soh_base_id + 3, ),
     "Barinade": SohLocationData(region="Hyrule", address=soh_base_id + 4, ),

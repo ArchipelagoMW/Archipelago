@@ -147,7 +147,6 @@ class SohWorld(World):
         item_pool.append(self.create_item("Water Temple Boss Key"))
         item_pool.append(self.create_item("Spirit Temple Boss Key"))
         item_pool.append(self.create_item("Shadow Temple Boss Key"))
-        item_pool.append(self.create_item("Ganon's Castle Boss Key"))
         for i in range(5): item_pool.append(self.create_item("Forest Temple Small Key"))
         for i in range(8): item_pool.append(self.create_item("Fire Temple Small Key"))
         for i in range(6): item_pool.append(self.create_item("Water Temple Small Key"))
@@ -156,20 +155,27 @@ class SohWorld(World):
         for i in range(3): item_pool.append(self.create_item("Bottom of the Well Small Key"))
         for i in range(9): item_pool.append(self.create_item("Training Ground Small Key"))
         for i in range(2): item_pool.append(self.create_item("Ganon's Castle Small Key"))
-        item_pool.append(self.create_item("Kokiri's Emerald"))
-        item_pool.append(self.create_item("Goron's Ruby"))
-        item_pool.append(self.create_item("Zora's Sapphire"))
-        item_pool.append(self.create_item("Forest Medallion"))
-        item_pool.append(self.create_item("Fire Medallion"))
-        item_pool.append(self.create_item("Water Medallion"))
-        item_pool.append(self.create_item("Spirit Medallion"))
-        item_pool.append(self.create_item("Shadow Medallion"))
-        item_pool.append(self.create_item("Light Medallion"))
         item_pool.append(self.create_item("Greg the Green Rupee"))
         for i in range(35): item_pool.append(self.create_item("Piece of Heart"))
         item_pool.append(self.create_item("Piece of Heart (WINNER)"))
         for i in range(8): item_pool.append(self.create_item("Heart Container"))
         for i in range(6): item_pool.append(self.create_item("Ice Trap"))
+
+        # Add Ganon's Castle Boss Key when shuffled anywhere.
+        if self.options.gcbk_setting == "anywhere":
+            item_pool.append(self.create_item("Ganon's Castle Boss Key"))
+
+        # Add dungeon rewards when shuffled
+        if self.options.shuffle_dungeon_rewards:
+            item_pool.append(self.create_item("Kokiri's Emerald"))
+            item_pool.append(self.create_item("Goron's Ruby"))
+            item_pool.append(self.create_item("Zora's Sapphire"))
+            item_pool.append(self.create_item("Forest Medallion"))
+            item_pool.append(self.create_item("Fire Medallion"))
+            item_pool.append(self.create_item("Water Medallion"))
+            item_pool.append(self.create_item("Spirit Medallion"))
+            item_pool.append(self.create_item("Shadow Medallion"))
+            item_pool.append(self.create_item("Light Medallion"))
 
         # Add overworld tokens when shuffled
         if self.options.shuffle_tokens == "overworld" or self.options.shuffle_tokens == "all":
@@ -355,6 +361,26 @@ class SohWorld(World):
                 
             region.add_exits(region_data_table[region_name].connecting_regions)
 
+        # Keep Weird Egg and Zelda's Letter in their vanilla location until we add shuffles for them
+        self.get_location("HC Malon Egg").place_locked_item(self.create_item("Weird Egg"))
+        self.get_location("HC Zeldas Letter").place_locked_item(self.create_item("Zelda's Letter"))
+
+        # Preplace dungeon rewards in vanilla locations when not shuffled
+        if not self.options.shuffle_dungeon_rewards:
+            self.get_location("Queen Gohma").place_locked_item(self.create_item("Kokiri's Emerald"))
+            self.get_location("King Dodongo").place_locked_item(self.create_item("Goron's Ruby"))
+            self.get_location("Barinade").place_locked_item(self.create_item("Zora's Sapphire"))
+            self.get_location("Phantom Ganon").place_locked_item(self.create_item("Forest Medallion"))
+            self.get_location("Volvagia").place_locked_item(self.create_item("Fire Medallion"))
+            self.get_location("Morpha").place_locked_item(self.create_item("Water Medallion"))
+            self.get_location("Bongo Bongo").place_locked_item(self.create_item("Spirit Medallion"))
+            self.get_location("Twinrova").place_locked_item(self.create_item("Shadow Medallion"))
+            self.get_location("Link's Pocket").place_locked_item(self.create_item("Light Medallion"))
+
+        # Place Ganons Boss Key to the Light Arrow Cutscene when set to needing specific requirements
+        if self.options.gcbk_setting == "dungeon_rewards":
+            self.get_location("Market ToT Light Arrow Cutscene").place_locked_item(self.create_item("Ganon's Castle Boss Key"))
+
         # Preplace tokens based on settings.
         if self.options.shuffle_tokens == "off" or self.options.shuffle_tokens == "dungeon":
             token_item = self.create_item("Gold Skulltula Token")
@@ -376,6 +402,9 @@ class SohWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "death_link": self.options.death_link.value,
+            "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
+            "gcbk_setting": self.options.gcbk_setting.value,
+            "gcbk_rewards_required": self.options.gcbk_rewards_required.value,
             "shuffle_tokens": self.options.shuffle_tokens.value,
             "shuffle_shops": self.options.shuffle_shops.value,
             "shuffle_scrubs": self.options.shuffle_scrubs.value,

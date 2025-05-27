@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, Toggle, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool
 
 
 class DeathLink(Toggle):
@@ -7,6 +7,30 @@ class DeathLink(Toggle):
     You die, others die. Others die, you die!
     """
     display_name = "Death Link"
+
+class ShuffleDungeonRewards(Toggle):
+    """
+    Shuffle dungeon rewards to be anywhere. If not turned on, dungeon rewards will be on their vanilla location.
+    """
+    display_name = "Shuffle Dungeon Rewards"
+
+class GanonsCastleBossKeySetting(Choice):
+    """
+    Choose wether Ganon's Castle Boss key is placed anywhere, or upon reaching a requirement. Once the requirements are reached, it'll be granted in the Temple of Time.
+    """
+    display_name = "Ganons Castle Boss Key Setting"
+    option_dungeon_rewards = 0
+    option_anywhere = 1
+    default = 0
+
+class GanonsCastleBossKeyRewardsRequired(Range):
+    """
+    Choose how many dungeon rewards are required to receive GCBK when set to require dungeon rewards.
+    """
+    display_name = "Ganons Castle Boss Key Dungeons Required"
+    range_start = 1
+    range_end = 9
+    default = 6
 
 class ShuffleTokens(Choice):
     """
@@ -21,7 +45,7 @@ class ShuffleTokens(Choice):
 
 class ShuffleShops(Toggle):
     """
-    Shuffle the 4 left items in every shop. Randomized items are free.
+    Shuffle the 4 left items in every shop. Randomized items are free. The other 4 shop items stay vanilla.
     """
     display_name = "Shuffle Shops"
 
@@ -125,6 +149,9 @@ class ShuffleFish(Choice):
 @dataclass
 class SohOptions(PerGameCommonOptions):
     death_link: DeathLink
+    shuffle_dungeon_rewards: ShuffleDungeonRewards
+    gcbk_setting: GanonsCastleBossKeySetting
+    gcbk_rewards_required: GanonsCastleBossKeyRewardsRequired
     shuffle_tokens: ShuffleTokens
     shuffle_shops: ShuffleShops
     shuffle_scrubs: ShuffleScrubs
