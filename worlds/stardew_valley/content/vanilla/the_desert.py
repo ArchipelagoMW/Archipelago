@@ -59,6 +59,7 @@ the_desert = ContentPack(
         Hats.abigails_bow.name: (Tag(ItemTag.HAT), ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
                                                               other_requirements=(MeetRequirement(NPC.abigail),)),),
         Hats.blue_bow.name: (Tag(ItemTag.HAT), ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
+        Hats.dark_velvet_bow.name: (Tag(ItemTag.HAT), ShopSource(price=75, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
         Hats.arcane_hat.name: (Tag(ItemTag.HAT), ShopSource(price=20000, shop_region=Region.adventurer_guild,
                                                             other_requirements=(MonsterKillRequirement((Monster.mummy,), 100),)),),
 

@@ -638,5 +638,8 @@ pelican_town = ContentPack(
         Hats.fishing_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.stonefish, Fish.ice_pip, Fish.scorpion_carp, Fish.spook_fish,
                                                                                    Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
         Hats.bucket_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
+
+        Hats.cone_hat.name: (Tag(ItemTag.HAT), ShopSource(price=5000, shop_region=LogicRegion.night_market),),
+
     }
 )

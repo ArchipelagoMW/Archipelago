@@ -24,7 +24,7 @@ from ...strings.monster_names import Monster
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
 from ...strings.skill_names import Skill as SkillName
-from ...strings.tool_names import Tool
+from ...strings.tool_names import Tool, ToolMaterial
 
 all_fruits = (
     Fruit.ancient_fruit, Fruit.apple, Fruit.apricot, Fruit.banana, Forageable.blackberry, Fruit.blueberry, Forageable.cactus_fruit, Fruit.cherry,
@@ -219,5 +219,10 @@ base_game = BaseGameContentPack(
         Hats.wearable_dwarf_helm.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Artifact.dwarf_gadget, Artifact.dwarvish_helm,)),),
         Hats.white_turban.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.sweet_gem_berry,)),),
         Hats.witch_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.golden_pumpkin,)),),
+
+        Hats.copper_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.copper)),),
+        Hats.steel_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iron)),),
+        Hats.gold_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.gold)),),
+        Hats.iridium_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iridium)),),
     },
 )
