@@ -183,35 +183,24 @@ class TestBase(unittest.TestCase):
                 # should always be the same, limiting what can be tested.
                 multiworld.random.shuffle(items)
 
-                # Checking accessibility of all locations for each individual item collected/removed is expensive, so
-                # the items are split into smaller sublists where all items in a sublist are collected/removed instead
-                # of one item at a time.
-                # When debugging a world that is failing this test, the number of items per sublist can be reduced to 1
-                # to provide more useful results.
-                items_per_sublist = max(1, len(items) // 10)  # Collect/remove 1/10th of the items at a time.
-                item_sublists = [items[i:i+items_per_sublist] for i in range(0, len(items), items_per_sublist)]
-
-                # Store the reachable items before each sublist is collected.
+                # Store the reachable locations before each item is collected.
                 reachable_before_each_collect = []
                 state = CollectionState(multiworld)
-                for sublist in item_sublists:
+                for item in items:
                     reachable_locations_before_collect = {loc for loc in multiworld.get_locations()
                                                           if loc.can_reach(state)}
                     reachable_before_each_collect.append(reachable_locations_before_collect)
-                    for item in sublist:
-                        state.collect(item, prevent_sweep=True)
+                    state.collect(item, prevent_sweep=True)
 
-                # Remove the items in each sublist and check that the reachable locations are the same as before the
-                # items were collected.
-                reversed_zip = zip(reversed(item_sublists), reversed(reachable_before_each_collect))
-                for sublist, expected_reachable_after_remove in reversed_zip:
-                    # Note: The items within each sublist are removed in reverse order compared to the order they were
-                    # collected, but this order should not matter because the items within each sublist are considered
-                    # to be collected/removed simultaneously.
-                    for item in sublist:
-                        state.remove(item)
+                # Remove each item in reverse and check that the reachable locations are the same as before the item was
+                # collected.
+                reversed_zip = zip(reversed(items), reversed(reachable_before_each_collect))
+                for item, expected_reachable_after_remove in reversed_zip:
+                    state.remove(item)
                     reachable_locations_after_remove = {loc for loc in multiworld.get_locations()
                                                         if loc.can_reach(state)}
-                    # The reachable locations before the items in `sublist` where collected should be the same as after
-                    # the items in `sublist` were both collected and removed.
-                    self.assertSetEqual(reachable_locations_after_remove, expected_reachable_after_remove, sublist)
+                    # The reachable locations before the item was collected should be the same as after the item was
+                    # both collected and removed.
+                    self.assertSetEqual(reachable_locations_after_remove, expected_reachable_after_remove,
+                                        f"Location accessibility was not the same before and after collecting and"
+                                        f" removing '{item}'")
