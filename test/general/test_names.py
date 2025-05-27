@@ -71,6 +71,17 @@ class TestNames(unittest.TestCase):
                         assert placed_item is not None
                         self.assertIsStr(placed_item.name, f"item.is_event: {placed_item.is_event}")
 
+                # Some worlds do not have any items in their datapackage, so the default create_filler() will fail, so
+                # only check worlds with items in their datapackage.
+                world = multiworld.worlds[1]
+                if len(world.item_name_to_id) >= 1:
+                    with self.subTest("create_filler() items"):
+                        # There is no way to guarantee creation of all possible filler items, so multiple filler items
+                        # are created to try to cover creation of most possible filler items.
+                        for _ in range(20):
+                            filler_item = world.create_filler()
+                            self.assertIsStr(filler_item.name)
+
     def test_location_name_format(self) -> None:
         """Location names must not be all numeric in order to differentiate between ID and name in !hint_location"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
