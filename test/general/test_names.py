@@ -64,12 +64,16 @@ class TestNames(unittest.TestCase):
                         self.assertIsStr(item.name)
                 with self.subTest("non-event items placed in pre_fill and earlier"):
                     for loc in multiworld.get_filled_locations():
-                        if not loc.item.is_event:
-                            self.assertIsStr(loc.item.name)
+                        item = loc.item
+                        assert item is not None
+                        if not item.is_event:
+                            self.assertIsStr(item.name)
                 with self.subTest("event items placed in pre_fill and earlier"):
                     for loc in multiworld.get_filled_locations():
-                        if loc.item.is_event:
-                            self.assertIsStr(loc.item.name)
+                        item = loc.item
+                        assert item is not None
+                        if item.is_event:
+                            self.assertIsStr(item.name)
 
     def test_location_name_format(self) -> None:
         """Location names must not be all numeric in order to differentiate between ID and name in !hint_location"""
