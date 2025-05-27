@@ -378,7 +378,7 @@ class OSRSWorld(World):
             # Checks to make sure the task is actually in the list before trying to create its rules
             if qp_loc and q_loc:
                 # Create the QP Event Item
-                item_name = getattr(ItemNames, f"QP_{quest_attr_name}")
+                item_name = getattr(ItemNames, f"QP_{quest_attr_name}").value
                 qp_loc.place_locked_item(self.create_event(item_name))
 
                 # If a quest is excluded, don't actually consider it for quest point progression
