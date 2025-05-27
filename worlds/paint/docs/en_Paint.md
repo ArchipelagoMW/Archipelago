@@ -22,9 +22,12 @@ work similarly to this version but some features have also been removed. Most no
 completely removed to prevent cheating.
 
 With the addition of a second canvas to display the target image, there are some additional features that may not be
-intuitive. There is a feature in Extras->Difference Mode (shortcut Ctrl+M) that visualizes the differences between
-what has been drawn and the target image. Additionally, once unlocked, the Pick Color tool can be used on both the main
-and target canvases.
+intuitive. There are two special functions in the Extras menu to help visualize how to improve your score. Similarity
+Mode (shortcut Ctrl+Shift+M) shows the similarity of each portion of the image in grayscale, with white representing
+perfect similarity and black representing no similarity. Conversely, Difference Mode (shortcut Ctrl+M) visualizes the
+differences between what has been drawn and the target image in full color, showing the direction both hue and
+lightness need to shift to match the target. Additionally, once unlocked, the Pick Color tool can be used on both the
+main and target canvases.
 
 Custom colors have been streamlined for Archipelago play. The only starting palette options are black and white, but
 additional palette slots can be unlocked as Archipelago items. Double-clicking on any palette slot will allow you to
