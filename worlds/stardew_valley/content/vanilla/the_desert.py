@@ -6,9 +6,11 @@ from ...data.harvest import ForagingSource, HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.requirement import RegionRequirement, MeetRequirement, MonsterKillRequirement
 from ...data.shop import ShopSource
+from ...logic.tailoring_logic import TailoringSource
 from ...strings.crop_names import Fruit, Vegetable
 from ...strings.currency_names import Currency
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.metal_names import Artifact
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
@@ -63,5 +65,6 @@ the_desert = ContentPack(
         Hats.joja_cap.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
         Hats.dark_ballcap.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.can_get_unlikely_hat_at_outfit_services),),
         Hats.dark_cowboy_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.skull_cavern_100,)),),
+        Hats.golden_mask.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Artifact.golden_mask,)),),
     }
 )

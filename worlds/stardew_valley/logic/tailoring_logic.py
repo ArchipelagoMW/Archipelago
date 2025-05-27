@@ -25,7 +25,7 @@ class TailoringLogicMixin(BaseLogicMixin):
 class TailoringLogic(BaseLogic):
 
     def can_tailor_shirt(self, shirt: Shirt) -> StardewRule:
-        return self.has_tailoring() & self.logic.has_all(*shirt.get_all_required_items())
+        return self.can_tailor(*shirt.required_items)
 
     def can_tailor(self, *items: str) -> StardewRule:
         return self.has_tailoring() & self.logic.has(ArtisanGood.cloth) & self.logic.has_any(*items)
