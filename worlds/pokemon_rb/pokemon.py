@@ -132,7 +132,7 @@ def process_move_data(world):
         world.local_move_data["Blizzard"]["accuracy"] = 70
 
     if world.options.no_trapping_moves:
-        for move in world.local_move_data:
+        for move in world.local_move_data.values():
             if move["effect"] == 42:
                 move["effect"] = 29
 
