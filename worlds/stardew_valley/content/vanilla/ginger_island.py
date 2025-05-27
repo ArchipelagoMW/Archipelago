@@ -9,7 +9,7 @@ from ...data.monster_data import MonsterSource
 from ...data.requirement import WalnutRequirement, ForgeInfinityWeaponRequirement, CookedRecipesRequirement, \
     CraftedItemsRequirement, CaughtFishRequirement, FullShipmentRequirement, RegionRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, HasItemRequirement
-from ...data.shop import ShopSource
+from ...data.shop import ShopSource, HatMouseSource
 from ...logic.time_logic import MAX_MONTHS
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
@@ -107,28 +107,17 @@ ginger_island_content_pack = GingerIslandContentPack(
                )),
     ),
     hat_sources={
-        Hats.infinity_crown.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                              other_requirements=(ForgeInfinityWeaponRequirement(),)),),
-        Hats.archers_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                           other_requirements=(CookedRecipesRequirement(9999),)),),
-        Hats.chef_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                        other_requirements=(CookedRecipesRequirement(9999),)),),
-        Hats.gnomes_cap.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                          other_requirements=(CraftedItemsRequirement(9999),)),),
-        Hats.eye_patch.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                         other_requirements=(CaughtFishRequirement(9999, unique=True),)),),
-        Hats.cowpoke_hat.name: (ShopSource(price=1000, shop_region=LogicRegion.hat_mouse,
-                                           other_requirements=(FullShipmentRequirement(),)),),
-        Hats.goblin_mask.name: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
-                                           other_requirements=(FullShipmentRequirement(),)),),
-        Hats.elegant_turban.name: (ShopSource(price=50000, shop_region=LogicRegion.hat_mouse,
-                                              other_requirements=(AllAchievementsRequirement(),)),),
-        Hats.junimo_hat.name: (ShopSource(price=25000, shop_region=LogicRegion.hat_mouse,
-                                          other_requirements=(PerfectionPercentRequirement(100),)),),
-        Hats.paper_hat.name: (ShopSource(price=10000, shop_region=LogicRegion.hat_mouse,
-                                         other_requirements=(RegionRequirement(Region.island_south),)),),
-        Hats.pageboy_cap.name: (ShopSource(price=5000, shop_region=LogicRegion.hat_mouse,
-                                           other_requirements=(ReadAllBooksRequirement(),)),),
+        Hats.infinity_crown.name: (HatMouseSource(price=1000, unlock_requirements=(ForgeInfinityWeaponRequirement(),)),),
+        Hats.archers_cap.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
+        Hats.chef_hat.name: (HatMouseSource(price=1000, unlock_requirements=(CookedRecipesRequirement(9999),)),),
+        Hats.gnomes_cap.name: (HatMouseSource(price=1000, unlock_requirements=(CraftedItemsRequirement(9999),)),),
+        Hats.eye_patch.name: (HatMouseSource(price=1000, unlock_requirements=(CaughtFishRequirement(9999, unique=True),)),),
+        Hats.cowpoke_hat.name: (HatMouseSource(price=1000, unlock_requirements=(FullShipmentRequirement(),)),),
+        Hats.goblin_mask.name: (HatMouseSource(price=10000, unlock_requirements=(FullShipmentRequirement(),)),),
+        Hats.elegant_turban.name: (HatMouseSource(price=50000, unlock_requirements=(AllAchievementsRequirement(),)),),
+        Hats.junimo_hat.name: (HatMouseSource(price=25000, unlock_requirements=(PerfectionPercentRequirement(100),)),),
+        Hats.paper_hat.name: (HatMouseSource(price=10000, unlock_requirements=(RegionRequirement(Region.island_south),)),),
+        Hats.pageboy_cap.name: (HatMouseSource(price=5000, unlock_requirements=(ReadAllBooksRequirement(),)),),
 
         Hats.concerned_ape_mask.name: (ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                   other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),

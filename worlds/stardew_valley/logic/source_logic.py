@@ -9,7 +9,7 @@ from ..data.game_item import GenericSource, Source, GameItem, CustomRuleSource
 from ..data.harvest import ForagingSource, FruitBatsSource, MushroomCaveSource, SeasonalForagingSource, \
     HarvestCropSource, HarvestFruitTreeSource, ArtifactSpotSource
 from ..data.monster_data import MonsterSource
-from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
+from ..data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource, HatMouseSource
 
 
 class SourceLogicMixin(BaseLogicMixin):
@@ -65,6 +65,10 @@ class SourceLogic(BaseLogic):
     @has_access_to.register
     def _(self, source: ShopSource):
         return self.logic.money.can_shop_from(source)
+
+    @has_access_to.register
+    def _(self, source: HatMouseSource):
+        return self.logic.money.can_shop_from_hat_mouse(source)
 
     @has_access_to.register
     def _(self, source: HarvestFruitTreeSource):

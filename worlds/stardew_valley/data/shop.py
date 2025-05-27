@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Tuple, Optional
 
-from .game_item import Source
+from .game_item import Source, Requirement
 from ..strings.currency_names import Currency
 from ..strings.season_names import Season
 
@@ -39,3 +39,9 @@ class PrizeMachineSource(Source):
 @dataclass(frozen=True, kw_only=True)
 class FishingTreasureChestSource(Source):
     amount: int
+
+
+@dataclass(frozen=True, kw_only=True)
+class HatMouseSource(Source):
+    price: Optional[int] = None
+    unlock_requirements: Optional[Tuple[Requirement, ...]] = None

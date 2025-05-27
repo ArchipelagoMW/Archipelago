@@ -6,9 +6,9 @@ from ...data.game_item import GenericSource, ItemTag
 from ...data.harvest import HarvestCropSource
 from ...data.hats_data import Hats
 from ...data.requirement import DangerousMinesRequirement
-from ...data.shop import ShopSource
+from ...data.shop import HatMouseSource
 from ...strings.crop_names import Fruit
-from ...strings.region_names import Region, LogicRegion
+from ...strings.region_names import Region
 from ...strings.seed_names import Seed
 
 
@@ -36,7 +36,6 @@ qi_board_content_pack = QiBoardContentPack(
         fish_data.radioactive_carp,
     ),
     hat_sources={
-        Hats.space_helmet.name: (ShopSource(price=20000, shop_region=LogicRegion.hat_mouse,
-                                            other_requirements=(DangerousMinesRequirement(120),)),),
+        Hats.space_helmet.name: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
     },
 )

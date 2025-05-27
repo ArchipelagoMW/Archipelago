@@ -2,7 +2,7 @@ from Options import DeathLink
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
-from ..data.shop import ShopSource
+from ..data.shop import ShopSource, HatMouseSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
@@ -62,6 +62,12 @@ class MoneyLogic(BaseLogic):
     # Should be cached
     def can_spend_at(self, region: str, amount: int) -> StardewRule:
         return self.logic.region.can_reach(region) & self.logic.money.can_spend(amount)
+
+    def can_shop_from_hat_mouse(self, source: HatMouseSource) -> StardewRule:
+        money_rule = self.logic.money.can_spend(source.price) if source.price is not None else true_
+        region_rule = self.logic.region.can_reach(LogicRegion.hat_mouse)
+        requirements_rule = self.logic.requirement.meet_all_requirements(source.unlock_requirements) if source.unlock_requirements is not None else true_
+        return money_rule & region_rule & requirements_rule
 
     @cache_self1
     def can_shop_from(self, source: ShopSource) -> StardewRule:
