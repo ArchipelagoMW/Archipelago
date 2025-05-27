@@ -723,13 +723,20 @@ class LMWorld(World):
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
         n_other_filler = n_filler_items-n_trap_items
+        filler_trap_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
+                          self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
+                          self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
+                          self.options.ghost_weight.value]
 
-        # Add filler items to the item pool.
-        for _ in range(n_trap_items):
-            self.itempool.append(self.create_item(self.get_trap_item_name()))
+        if sum(filler_trap_weights) > 0:# Add filler items to the item pool.
+            for _ in range(n_trap_items):
+                self.itempool.append(self.create_item(self.get_trap_item_name()))
 
-        for _ in range(n_other_filler):
-            self.itempool.append(self.create_item((self.get_other_filler_item())))
+            for _ in range(n_other_filler):
+                self.itempool.append(self.create_item((self.get_other_filler_item())))
+        else:
+            for _ in range(n_filler_items):
+                self.itempool.append(self.create_item((self.get_other_filler_item())))
 
         self.multiworld.itempool += self.itempool
 
@@ -738,7 +745,7 @@ class LMWorld(World):
         filler_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
-                          self.options.ghost_weight]
+                          self.options.ghost_weight.value]
         return self.random.choices(filler, weights=filler_weights, k=1)[0]
 
 
