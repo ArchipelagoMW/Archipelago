@@ -11,7 +11,7 @@ from BaseClasses import ItemClassification as IC
 from BaseClasses import MultiWorld, Region, Tutorial
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
-from worlds.Files import APContainer, AutoPatchRegister
+from worlds.Files import APPlayerContainer, AutoPatchRegister
 from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
 
@@ -51,7 +51,7 @@ components.append(
 icon_paths["The Wind Waker"] = "ap:worlds.tww/assets/icon.png"
 
 
-class TWWContainer(APContainer, metaclass=AutoPatchRegister):
+class TWWContainer(APPlayerContainer, metaclass=AutoPatchRegister):
     """
     This class defines the container file for The Wind Waker.
     """
