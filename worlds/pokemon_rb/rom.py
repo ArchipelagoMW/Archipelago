@@ -448,7 +448,12 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
     write_bytes(rom_addresses["Trainer_Screen_Total_Key_Items"], encode_text(str(world.total_key_items), length=2))
 
     write_bytes(rom_addresses["Option_Viridian_Gym_Badges"], world.options.viridian_gym_condition.value)
+
     write_bytes(rom_addresses["Option_EXP_Modifier"], world.options.exp_modifier.value)
+    if not world.options.split_exp:
+        write_bytes(rom_addresses["Option_No_Split_EXP_A"], [0, 0, 20])  # nop, nop, jr nz
+        write_bytes(rom_addresses["Option_No_Split_EXP_B"], [0, 0, 0 ])  # nop, nop, nop
+
     if not world.options.require_item_finder:
         write_bytes(rom_addresses["Option_Itemfinder"], 0)  # nop
     if world.options.extra_strength_boulders:

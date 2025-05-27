@@ -479,6 +479,13 @@ class ExpModifier(NamedRange):
     }
 
 
+class SplitEXP(Toggle):
+    """Divide experience between Pokemon receiving experience, as in vanilla. If disabled, all Pokemon that fought,
+    or all Pokemon in your party if you have Exp. All, will receive the full amount of experience awarded."""
+    default = 1
+    display_name = "Split EXP"
+
+
 class RandomizeWildPokemon(Choice):
     """Randomize all wild Pokemon and game corner prize Pokemon. match_types will select a Pokemon with at least one
     type matching the original type of the original Pokemon. match_base_stats will prefer Pokemon with closer base stat
@@ -978,6 +985,7 @@ class PokemonRBOptions(PerGameCommonOptions):
     minimum_steps_between_encounters: MinimumStepsBetweenEncounters
     level_scaling: LevelScaling
     exp_modifier: ExpModifier
+    split_exp: SplitEXP
     randomize_wild_pokemon: RandomizeWildPokemon
     area_1_to_1_mapping: Area1To1Mapping
     randomize_starter_pokemon: RandomizeStarterPokemon
