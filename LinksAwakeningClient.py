@@ -32,7 +32,7 @@ from worlds.ladx.GpsTracker import GpsTracker
 from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.Locations import links_awakening_location_meta_to_id
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
 
 links_awakening_location_id_to_meta = {v:k for k,v in links_awakening_location_meta_to_id.items()}
 
@@ -734,6 +734,11 @@ class LinksAwakeningContext(CommonContext):
             if self.slot_data.get("death_link"):
                 Utils.async_start(self.update_death_link(True))
 
+            # We can process linked items on already-checked checks now that we have slot_data
+            if self.client.tracker:
+                checked_checks = set(self.client.tracker.all_checks) - set(self.client.tracker.remaining_checks)
+                self.add_linked_items(checked_checks)
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
@@ -749,16 +754,19 @@ class LinksAwakeningContext(CommonContext):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
 
+    def add_linked_items(self, checks: typing.List[Check]):
+        for check in checks:
+            if check.value and check.linkedItem:
+                linkedItem = check.linkedItem
+                if 'condition' not in linkedItem or (self.slot_data and linkedItem['condition'](self.slot_data)):
+                    self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+
     async def run_game_loop(self):
         def on_item_get(ladxr_checks):
             checks = [links_awakening_location_meta_to_id[check.id] for check in ladxr_checks]
             self.new_checks(checks, [check.id for check in ladxr_checks])
 
-            for check in ladxr_checks:
-                if check.value and check.linkedItem:
-                    linkedItem = check.linkedItem
-                    if 'condition' not in linkedItem or linkedItem['condition'](self.slot_data):
-                        self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
+            self.add_linked_items(ladxr_checks)
 
         async def victory():
             await self.send_victory()
