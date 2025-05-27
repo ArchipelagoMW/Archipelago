@@ -2000,10 +2000,11 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
     ]
 
     accessible_objects: typing.List[MissionOrderObjectSlotData] = []
+    beaten_accessible_missions: typing.Set[int] = set()
 
     while len(candidate_accessible_objects) > 0:
         accessible_missions: typing.List[MissionSlotData] = [mission_order_object for mission_order_object in accessible_objects if isinstance(mission_order_object, MissionSlotData)]
-        beaten_accessible_missions: typing.Set[int] = {mission.mission_id for mission in accessible_missions if mission.mission_id in beaten_missions}
+        beaten_accessible_missions = {mission.mission_id for mission in accessible_missions if mission.mission_id in beaten_missions}
         accessible_objects_to_add: typing.List[MissionOrderObjectSlotData] = []
         for mission_order_object in candidate_accessible_objects:
             if (
@@ -2022,6 +2023,14 @@ def calc_available_nodes(ctx: SC2Context) -> typing.Tuple[typing.List[int], typi
             ]
         else:
             break
+
+    accessible_missions: typing.List[MissionSlotData] = [mission_order_object for mission_order_object in accessible_objects if isinstance(mission_order_object, MissionSlotData)]
+    beaten_accessible_missions = {mission.mission_id for mission in accessible_missions if mission.mission_id in beaten_missions}
+    for mission_order_object in mission_order_objects:
+        # re-generate tooltip accessibility
+        for sub_rule in mission_order_object.entry_rule.sub_rules:
+            sub_rule.was_accessible = False
+        mission_order_object.entry_rule.is_accessible(beaten_accessible_missions, received_items)
 
     available_missions: typing.List[int] = [
         mission_order_object.mission_id for mission_order_object in accessible_objects
