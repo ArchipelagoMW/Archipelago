@@ -50,6 +50,10 @@ requires:
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
+    {%- set option_val = option.default %}
+    {%- if option_key in preset %}
+      {%- set option_val = preset[option_key] %}
+    {%- endif -%}
     {%- if option.__doc__ %}
     # {{ cleandoc(option.__doc__)
         | trim
@@ -67,21 +71,21 @@ requires:
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option.default %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val %}50{% else %}0{% endif %}
     {%- endfor -%}
 
     {%- if option.name_lookup[option.default] not in option.options %}
-    {{ yaml_dump(option.default) }}: 50
+    {{ yaml_dump(option_val) }}: 50
     {%- endif -%}
 
     {%- elif option.default is string %}
-    {{ yaml_dump(option.default) }}: 50
+    {{ yaml_dump(option_val) }}: 50
 
     {%- elif option.default is iterable and option.default is not mapping %}
-    {{ option.default | list }}
+    {{ option_val | list }}
 
     {%- else %}
-    {{ yaml_dump(option.default) | indent(4, first=false) }}
+    {{ yaml_dump(option_val) | indent(4, first=false) }}
     {%- endif -%}
     {{ "\n" }}
   {%- endfor %}
