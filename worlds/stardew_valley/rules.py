@@ -214,7 +214,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
 
     set_entrance_rule(multiworld, player, Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
-    set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
+    set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
                       (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
                           NPC.krobus)) | logic.mod.magic.can_blink())
@@ -284,7 +284,7 @@ def set_skull_cavern_floor_entrance_rules(logic, multiworld, player):
         set_entrance_rule(multiworld, player, dig_to_skull_floor(floor), rule)
 
 
-def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewValleyOptions):
+def set_skill_entrance_rules(logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     set_entrance_rule(multiworld, player, LogicEntrance.grow_spring_crops, logic.farming.has_farming_tools & logic.season.has_spring)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_crops, logic.farming.has_farming_tools & logic.season.has_summer)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_fall_crops, logic.farming.has_farming_tools & logic.season.has_fall)
@@ -299,7 +299,7 @@ def set_skill_entrance_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_summer, true_)
     set_entrance_rule(multiworld, player, LogicEntrance.grow_summer_fall_crops_in_fall, true_)
 
-    set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.skill.can_get_fishing_xp)
+    set_entrance_rule(multiworld, player, LogicEntrance.fishing, logic.fishing.can_fish_anywhere())
 
 
 def set_blacksmith_entrance_rules(logic, multiworld, player):
@@ -864,7 +864,7 @@ def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: 
     if not content.features.friendsanity.is_enabled:
         return
     set_rule(multiworld.get_location("Spouse Stardrop", player),
-             logic.relationship.has_hearts_with_any_bachelor(13))
+             logic.relationship.has_hearts_with_any_bachelor(13) & logic.relationship.can_get_married())
     set_rule(multiworld.get_location("Have a Baby", player),
              logic.relationship.can_reproduce(1))
     set_rule(multiworld.get_location("Have Another Baby", player),
@@ -923,9 +923,9 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     set_rule(multiworld.get_location("Analyze: Fireball", player),
              logic.has("Fire Quartz"))
     set_rule(multiworld.get_location("Analyze: Frostbolt", player),
-             logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
+             logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
     set_rule(multiworld.get_location("Analyze All Elemental School Locations", player),
-             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.skill.can_fish(difficulty=85))
+             logic.has("Fire Quartz") & logic.region.can_reach(Region.mines_floor_60) & logic.fishing.can_fish(85))
     # set_rule(multiworld.get_location("Analyze: Lantern", player),)
     set_rule(multiworld.get_location("Analyze: Tendrils", player),
              logic.region.can_reach(Region.farm))
@@ -948,7 +948,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
               logic.has("Coffee") & logic.has("Life Elixir")
               & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-              logic.has("Fire Quartz") & logic.skill.can_fish(difficulty=85) &
+              logic.has("Fire Quartz") & logic.fishing.can_fish(85) &
               logic.region.can_reach(Region.witch_hut) &
               logic.region.can_reach(Region.mines_floor_100) &
               logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))
