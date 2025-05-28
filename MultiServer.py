@@ -62,7 +62,7 @@ def remove_from_list(container, value):
 def pop_from_container(container, value):
     try:
         container.pop(value)
-    except ValueError:
+    except (ValueError, KeyError, IndexError):
         pass
     return container
 
