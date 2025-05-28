@@ -109,7 +109,7 @@ def has_phantom(state: CollectionState, player: int, logic_difficulty: int, keyb
             (
                 has_all_magic_lvx(state, player, 3)
                 or (logic_difficulty > 0 and has_all_magic_lvx(state, player, 2))
-                or (logic_difficulty > 5 and state.has_all_counts({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1,"Progressive Cure": 1}, player))
+                or (logic_difficulty > 5 and state.has_all({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Cure"}, player))
                 #or (logic_difficulty > 10 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1}, player) and state.has_any_count({"Progressive Fire": 1,"Progressive Thunder": 1}, player) and state.has_any_count({"Progressive Thunder": 1,"Progressive Blizzard": 1}, player))
                 #or (logic_difficulty > 12 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player))
                 or logic_difficulty > 14
@@ -175,13 +175,15 @@ def set_rules(kh1world):
                 or
                 (
                     difficulty > 5
-                    and state.has("Combo Master", player)
+                    and
+                    state.has("Combo Master", player)
+                    and
                     (
                         state.has("High Jump", player, 2)
                         or
                         (
                             state.has("High Jump", player)
-                            and state.has("Air Combo Plus", player, 2) 
+                            and state.has("Air Combo Plus", player, 2)
                             #or state.has("Yellow Trinity", player)
                         )
                     )
@@ -192,7 +194,7 @@ def set_rules(kh1world):
                     and
                     (
                         state.has("Mermaid Kick", player)
-                        or state.has_all({"High Jump", "Combo Master"}, player) 
+                        or state.has_all({"High Jump", "Combo Master"}, player)
                     )
                 )
             )
@@ -859,8 +861,8 @@ def set_rules(kh1world):
             (
                 difficulty > 5
                 and can_dumbo_skip(state, player)
-                and (difficulty > 10 or state.has("Progressive Glide", player))
-            )
+                and state.has("Progressive Glide", player)
+            ) #difficulty > 10 and (can_dumbo_skip(state, player) or state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Monstro Chamber 6 White Trinity Chest"),
         lambda state: state.has("White Trinity", player))
