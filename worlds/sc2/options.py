@@ -1502,6 +1502,7 @@ option_groups = [
         EnableVoidTrade,
         VoidTradeAgeLimit,
         GrantStoryTech,
+        CustomMissionOrder,
     ]),
     OptionGroup("Cosmetics", [
         PlayerColorTerranRaynor,
