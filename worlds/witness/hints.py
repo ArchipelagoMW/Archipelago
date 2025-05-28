@@ -464,7 +464,7 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
 
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
-    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.keys())
+    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.values())
 
     locations_per_area = {}
     items_per_area = {}
@@ -472,14 +472,14 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
     for area in potential_areas:
         regions = [
             world.get_region(region)
-            for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
+            for region in area.regions
             if region in world.player_regions.created_region_names
         ]
         locations = [location for region in regions for location in region.get_locations() if not location.is_event]
 
         if locations:
-            locations_per_area[area] = locations
-            items_per_area[area] = [location.item for location in locations]
+            locations_per_area[area.name] = locations
+            items_per_area[area.name] = [location.item for location in locations]
 
     return locations_per_area, items_per_area
 
@@ -516,7 +516,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
     hunt_panels = None
     if world.options.victory_condition == "panel_hunt" and hinted_area != "Easter Eggs":
         hunt_panels = sum(
-            static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"]["name"] == hinted_area
+            static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"].name == hinted_area
             for hunt_entity in world.player_logic.HUNT_ENTITIES
         )
 
@@ -620,7 +620,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
-        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
+        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"].name == "Tutorial (Inside)"
     }
 
     intended_location_hints = hint_amount - area_hints
