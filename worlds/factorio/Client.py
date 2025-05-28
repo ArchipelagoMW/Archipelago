@@ -364,7 +364,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
                     ctx.toggle_filter_item_sends()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-connection-change-filter$", msg):
                     factorio_server_logger.debug(msg)
-                    ctx.toggle_connection_changes()
+                    ctx.toggle_filter_connection_changes()
                 elif re.match(r"^[0-9.]+ Script @[^ ]+\.lua:\d+: Player command toggle-ap-chat$", msg):
                     factorio_server_logger.debug(msg)
                     ctx.toggle_bridge_chat_out()
