@@ -4,7 +4,7 @@
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings)
+The [player settings page for this game](../player-options)
 contains all the options you need to configure and export a config file.
 
 > ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
