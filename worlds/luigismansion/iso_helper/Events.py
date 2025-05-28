@@ -192,8 +192,8 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                         item_color = "2"
                     case _:
                         item_color = "6"
-                hintfo = ("'"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")"+portrait_hint["Item"]+
-                          "<COLOR>(0)is somewhere in<COLOR>(3)"+portrait_hint["Send Player"]+"'s"+portrait_hint["Game"])
+                hintfo = ("'"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+") "+portrait_hint["Item"]+
+                          "<COLOR>(0) is somewhere in <COLOR>(3)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Game"])
                 csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
@@ -207,8 +207,8 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                         item_color = "2"
                     case _:
                         item_color = "6"
-                hintfo = (portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+")"+portrait_hint["Item"]+
-                          "<COLOR>(0)can be found at<COLOR>(1)"+portrait_hint["Send Player"]+"'s"+portrait_hint["Location"])
+                hintfo = (portrait_hint["Rec Player"]+"'s <COLOR>("+item_color+")"+portrait_hint["Item"]+
+                          "<COLOR>(0) can be found at <COLOR>(1)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Location"])
                 csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
 
     return __update_custom_event(gcm, "78", True, None, csv_lines)
