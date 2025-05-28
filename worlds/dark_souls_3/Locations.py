@@ -706,7 +706,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("US: Whip - back alley, behind wooden wall", "Whip", hidden=True),
         DS3LocationData("US: Great Scythe - building by white tree, balcony", "Great Scythe"),
         DS3LocationData("US: Homeward Bone - foot, drop overlook", "Homeward Bone",
-                        static='02,0:53100540::'),
+                        static='02,0:53100950::'),
         DS3LocationData("US: Large Soul of a Deserted Corpse - around corner by Cliff Underside",
                         "Large Soul of a Deserted Corpse", hidden=True),  # Hidden corner
         DS3LocationData("US: Ember - behind burning tree", "Ember"),
@@ -732,8 +732,9 @@ location_tables: Dict[str, List[DS3LocationData]] = {
                         missable=True),  # requires projectile
         DS3LocationData("US: Flame Stoneplate Ring - hanging corpse by Mound-Maker transport",
                         "Flame Stoneplate Ring"),
-        DS3LocationData("US: Red and White Shield - chasm, hanging corpse", "Red and White Shield",
-                        static="02,0:53100740::", missable=True),  # requires projectile
+        DS3LocationData("US: Red and White Round Shield - chasm, hanging corpse",
+                        "Red and White Round Shield", static="02,0:53100740::",
+                        missable=True),  # requires projectile
         DS3LocationData("US: Small Leather Shield - first building, hanging corpse by entrance",
                         "Small Leather Shield"),
         DS3LocationData("US: Pale Tongue - tower village, hanging corpse", "Pale Tongue"),

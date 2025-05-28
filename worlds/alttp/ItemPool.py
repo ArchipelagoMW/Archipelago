@@ -490,12 +490,16 @@ def generate_itempool(world):
         # Otherwise, logic has some branches where having 4 hearts is one possible requirement (of several alternatives)
         # rather than making all hearts/heart pieces progression items (which slows down generation considerably)
         # We mark one random heart container as an advancement item (or 4 heart pieces in expert mode)
-        if world.options.item_pool in ['easy', 'normal', 'hard'] and not (multiworld.custom and multiworld.customitemarray[30] == 0):
-            next(item for item in items if item.name == 'Boss Heart Container').classification = ItemClassification.progression
-        elif world.options.item_pool in ['expert'] and not (multiworld.custom and multiworld.customitemarray[29] < 4):
+        try:
+            next(item for item in items if item.name == 'Boss Heart Container').classification \
+                |= ItemClassification.progression
+        except StopIteration:
             adv_heart_pieces = (item for item in items if item.name == 'Piece of Heart')
             for i in range(4):
-                next(adv_heart_pieces).classification = ItemClassification.progression
+                try:
+                    next(adv_heart_pieces).classification |= ItemClassification.progression
+                except StopIteration:
+                    break  # logically health tanking is an option, so rules should still resolve to something beatable
 
     world.required_medallions = (world.options.misery_mire_medallion.current_key.title(),
                                  world.options.turtle_rock_medallion.current_key.title())
@@ -707,13 +711,20 @@ def get_pool_core(world, player: int):
         else:
             break
 
-    if goal == 'pedestal':
-        place_item('Master Sword Pedestal', 'Triforce')
-        pool.remove("Rupees (20)")
-
     if retro_bow:
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (70)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
+
+    if goal == 'pedestal':
+        place_item('Master Sword Pedestal', 'Triforce')
+        for rupee_name in ("Rupees (5)", "Rupees (20)", "Rupees (50)", "Rupees (100)", "Rupees (300)"):
+            try:
+                pool.remove(rupee_name)
+            except ValueError:
+                pass
+            else:
+                break
+
     if world.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
         pool.extend(diff.universal_keys)
         if mode == 'standard':

@@ -12,6 +12,7 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Ma
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
+from Utils import deprecate
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
@@ -75,19 +76,20 @@ class AutoWorldRegister(type):
         # TODO - remove this once all worlds use options dataclasses
         if "options_dataclass" not in dct and "option_definitions" in dct:
             # TODO - switch to deprecate after a version
-            if __debug__:
-                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
-                                "Please use options_dataclass instead.")
+            deprecate(f"{name} Assigned options through option_definitions which is now deprecated. "
+                      "Please use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered.""")
+                raise RuntimeError(f"""Game {dct["game"]} already registered in 
+                {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
+                {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
-        new_class.__file__ = sys.modules[new_class.__module__].__file__
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
         if "settings_key" not in dct:
@@ -483,7 +485,7 @@ class World(metaclass=AutoWorldRegister):
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
-        return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
+        return self.random.choice(tuple(self.item_name_to_id.keys()))
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
@@ -526,7 +528,7 @@ class World(metaclass=AutoWorldRegister):
         """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[self.player][name] += 1
+            state.add_item(name, self.player)
             return True
         return False
 
@@ -534,9 +536,7 @@ class World(metaclass=AutoWorldRegister):
         """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[self.player][name] -= 1
-            if state.prog_items[self.player][name] < 1:
-                del (state.prog_items[self.player][name])
+            state.remove_item(name, self.player)
             return True
         return False
 
