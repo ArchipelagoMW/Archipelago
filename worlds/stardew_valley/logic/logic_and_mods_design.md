@@ -12,7 +12,7 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin]]):
+class TimeLogic(BaseLogic):
 
     def has_lived_months(self, number: int) -> StardewRule:
         return self.logic.received(Event.month_end, number)
