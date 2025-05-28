@@ -52,7 +52,7 @@ class CandyBox2LocationName(StrEnum):
     SORCERESS_HUT_CAULDRON = "Sorceress' Hut: Cauldron"
     SORCERESS_HUT_HAT = "Sorceress' Hut: Sorceress' Hat"
     OCTOPUS_KING_DEFEATED = "Octopus King Quest: Octopus King Defeated"
-    MONKEY_WIZARD_DEFEATED = "Monkey Wizard Quest: Money Wizard Defeated"
+    MONKEY_WIZARD_DEFEATED = "Monkey Wizard Quest: Monkey Wizard Defeated"
     EGG_ROOM_QUEST_CLEARED = "Egg Room Quest: Chest Opened"
     DEVIL_DEFEATED = "Hell Quest: Devil Defeated"
     THE_DEVELOPER_DEFEATED = "Developer Quest: The Developer Defeated"
