@@ -212,7 +212,7 @@ components: List[Component] = [
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
-    Component('Generate (UI)', 'GeneratorUI'),
+    Component("Generate (UI)", "GeneratorUI", description="Open the interactive seed generator."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
