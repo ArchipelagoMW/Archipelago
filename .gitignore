@@ -55,7 +55,7 @@ mystery_result_*.yaml
 success.txt
 output/
 Output Logs/
-/factorio/
+factorio
 /Minecraft Forge Server/
 /WebHostLib/static/generated
 /freeze_requirements.txt
