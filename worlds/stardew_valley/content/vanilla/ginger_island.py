@@ -137,5 +137,6 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.warrior_helmet.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
 
         Hats.bluebird_mask.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.deluxe_cowboy_hat.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
     },
 )

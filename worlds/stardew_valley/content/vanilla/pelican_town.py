@@ -18,6 +18,7 @@ from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
 from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
+from ...strings.currency_names import Currency
 from ...strings.fish_names import WaterItem, Fish
 from ...strings.food_names import Beverage, Meal
 from ...strings.forageable_names import Forageable, Mushroom
@@ -640,6 +641,7 @@ pelican_town = ContentPack(
         Hats.bucket_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
 
         Hats.cone_hat.name: (Tag(ItemTag.HAT), ShopSource(price=5000, shop_region=LogicRegion.night_market),),
+        Hats.fedora.name: (Tag(ItemTag.HAT), ShopSource(price=500, currency=Currency.star_token, shop_region=LogicRegion.fair),),
 
     }
 )
