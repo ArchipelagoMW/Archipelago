@@ -79,7 +79,7 @@ class Hats:
     frog_hat = hat("Frog Hat", HatDifficulty.medium_island)
     garbage_hat = hat("Garbage Hat", HatDifficulty.difficult_or_rng)
     gils_hat = hat("Gil's Hat", HatDifficulty.difficult_or_rng)
-    gnomes_cap = hat("Gnome's Cap", HatDifficulty.near_perfection, False)
+    gnomes_cap = hat("Gnome's Cap", HatDifficulty.near_perfection)
     goblin_mask = hat("Goblin Mask", HatDifficulty.near_perfection)
     goggles = hat("Goggles", HatDifficulty.tailoring)
     gold_pan_hat = hat("Gold Pan (Hat)", HatDifficulty.medium)
