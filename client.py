@@ -287,7 +287,7 @@ class WL4Client(BizHawkClient):
                 read32(collected_items_address),
             ],
             [
-                guard16(main_game_mode_address, main),
+                guard16(main_game_mode_address, GAMEMODE_INGAME),
                 guard8(multiworld_send_address, SEND_IMMEDIATELY),
             ]
         )
