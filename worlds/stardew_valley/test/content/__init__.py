@@ -2,9 +2,11 @@ import unittest
 from typing import ClassVar, Tuple
 
 from ...content import content_packs, ContentPack, StardewContent, unpack_content, StardewFeatures, feature
+from ...strings.building_names import Building
 
 default_features = StardewFeatures(
     feature.booksanity.BooksanityDisabled(),
+    feature.building_progression.BuildingProgressionVanilla(starting_buildings={Building.farm_house}),
     feature.cropsanity.CropsanityDisabled(),
     feature.fishsanity.FishsanityNone(),
     feature.friendsanity.FriendsanityNone(),
