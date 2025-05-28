@@ -159,6 +159,7 @@ VANILLA_ABILITY_AP_COSTS = [
     {"Ability Name": "Sandstorm",       "AP Cost": 2, "Randomize": False},
     {"Ability Name": "Applause!",       "AP Cost": 1, "Randomize": False},
     {"Ability Name": "Blazing Fury",    "AP Cost": 2, "Randomize": False},
+
     {"Ability Name": "Icy Terror",      "AP Cost": 2, "Randomize": False},
     {"Ability Name": "Bolts of Sorrow", "AP Cost": 3, "Randomize": False},
     {"Ability Name": "Ghostly Scream",  "AP Cost": 3, "Randomize": False},
