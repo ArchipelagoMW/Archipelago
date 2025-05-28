@@ -76,7 +76,7 @@ class Hats:
     flat_topped_hat = hat("Flat Topped Hat", HatDifficulty.tailoring)
     floppy_beanie = hat("Floppy Beanie", HatDifficulty.tailoring)
     foragers_hat = hat("Forager's Hat", HatDifficulty.tailoring_island)
-    frog_hat = hat("Frog Hat", HatDifficulty.medium_island, False)
+    frog_hat = hat("Frog Hat", HatDifficulty.medium_island)
     garbage_hat = hat("Garbage Hat", HatDifficulty.difficult_or_rng)
     gils_hat = hat("Gil's Hat", HatDifficulty.difficult_or_rng)
     gnomes_cap = hat("Gnome's Cap", HatDifficulty.near_perfection, False)

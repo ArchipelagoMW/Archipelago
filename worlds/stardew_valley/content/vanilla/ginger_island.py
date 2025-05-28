@@ -2,6 +2,7 @@ from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack, StardewContent
 from ...data import villagers_data, fish_data
 from ...data.animal import Animal, AnimalName, OstrichIncubatorSource
+from ...data.fish_data import FishingSource
 from ...data.game_item import ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, HarvestFruitTreeSource, HarvestCropSource
 from ...data.hats_data import Hats
@@ -138,5 +139,6 @@ ginger_island_content_pack = GingerIslandContentPack(
 
         Hats.bluebird_mask.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
         Hats.deluxe_cowboy_hat.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.frog_hat.name: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave,),),
     },
 )
