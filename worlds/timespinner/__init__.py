@@ -3,7 +3,7 @@ from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import get_item_names_per_category
 from .Items import item_table, starter_melee_weapons, starter_spells, filler_items, starter_progression_items, pyramid_start_starter_progression_items
 from .Locations import get_location_datas, EventId
-from .Options import BackwardsCompatiableTimespinnerOptions, Toggle
+from .Options import BackwardsCompatiableTimespinnerOptions, Toggle, BossRandoType
 from .PreCalculatedWeights import PreCalculatedWeights
 from .Regions import create_regions_and_locations
 from worlds.AutoWorld import World, WebWorld
@@ -239,7 +239,10 @@ class TimespinnerWorld(World):
                 spoiler_handle.write(f'Mysterious Warp Beacon unlock:   {self.precalculated_weights.time_key_unlock}\n')
         else:
             spoiler_handle.write(f'Twin Pyramid Keys unlock:        {self.precalculated_weights.pyramid_keys_unlock}\n')
-       
+
+        if self.options.boss_rando.value and self.options.boss_rando_type.value == BossRandoType.option_manual:
+            spoiler_handle.write(f'Selected bosses:                 {self.precalculated_weights.boss_rando_overrides}\n')
+
         if self.options.rising_tides:
             flooded_areas: List[str] = []
 
