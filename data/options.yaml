@@ -74,14 +74,14 @@ requires:
     {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val %}50{% else %}0{% endif %}
     {%- endfor -%}
 
-    {%- if option.name_lookup[option.default] not in option.options %}
+    {%- if option.name_lookup[option_val] not in option.options %}
     {{ yaml_dump(option_val) }}: 50
     {%- endif -%}
 
-    {%- elif option.default is string %}
+    {%- elif option_val is string %}
     {{ yaml_dump(option_val) }}: 50
 
-    {%- elif option.default is iterable and option.default is not mapping %}
+    {%- elif option_val is iterable and option_val is not mapping %}
     {{ option_val | list }}
 
     {%- else %}
