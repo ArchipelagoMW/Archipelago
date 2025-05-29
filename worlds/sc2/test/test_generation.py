@@ -45,7 +45,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_unexcludes_cancel_out_excludes(self):
         world_options = {
-            'grant_story_tech': True,
+            'grant_story_tech': options.GrantStoryTech.option_grant,
             'excluded_items': {
                 item_groups.ItemGroupNames.NOVA_EQUIPMENT: 15,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
@@ -379,7 +379,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': options.MissionOrder.option_grid,
             'maximum_campaign_size': options.MaximumCampaignSize.range_end,
             'accessibility': 'locations',
-            'grant_story_tech': options.GrantStoryTech.option_true,
+            'grant_story_tech': options.GrantStoryTech.option_grant,
         }
         self.generate_world(world_options)
         missions = get_all_missions(self.world.custom_mission_order)

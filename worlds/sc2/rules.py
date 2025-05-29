@@ -40,7 +40,7 @@ class SC2Logic:
         self.kerrigan_levels_per_mission_completed_cap = -1 if world is None else world.options.kerrigan_levels_per_mission_completed_cap.value
         self.kerrigan_total_level_cap = -1 if world is None else world.options.kerrigan_total_level_cap.value
         self.morphling_enabled = False if world is None else (world.options.enable_morphling.value == EnableMorphling.option_true)
-        self.story_tech_granted = False if world is None else (world.options.grant_story_tech.value == GrantStoryTech.option_true)
+        self.grant_story_tech = GrantStoryTech.option_no_grant if world is None else (world.options.grant_story_tech.value)
         self.story_levels_granted = False if world is None else (world.options.grant_story_levels.value != GrantStoryLevels.option_disabled)
         self.basic_terran_units = get_basic_units(self.logic_level, SC2Race.TERRAN)
         self.basic_zerg_units = get_basic_units(self.logic_level, SC2Race.ZERG)
@@ -1447,7 +1447,7 @@ class SC2Logic:
     # Mission-specific rules
     def ghost_in_a_chance_requirement(self, state: CollectionState) -> bool:
         return (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or not self.nova_used
                 or (
                         self.nova_ranged_weapon(state)
@@ -2182,18 +2182,34 @@ class SC2Logic:
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
         return (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or state.has_any({item_names.ZERGLING, item_names.HYDRALISK, item_names.ROACH}, self.player)
                 or (self.advanced_tactics and state.has(item_names.INFESTOR, self.player))
         )
 
     def supreme_requirement(self, state: CollectionState) -> bool:
         return (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or not self.kerrigan_unit_available
+                or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
+                    and state.has_any((
+                        item_names.KERRIGAN_LEAPING_STRIKE,
+                        item_names.OVERLORD_VENTRAL_SACS,
+                        item_names.YGGDRASIL,
+                        item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+                        item_names.NYDUS_WORM,
+                        item_names.BULLFROG,
+                    ), self.player)
+                    and state.has_any((
+                        item_names.KERRIGAN_MEND,
+                        item_names.SWARM_QUEEN,
+                        item_names.INFESTED_MEDICS,
+                    ), self.player)
+                    and self.kerrigan_levels(state, 35)
+                )
                 or (
-                        state.has_all({item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND}, self.player)
-                        and self.kerrigan_levels(state, 35)
+                    state.has_all((item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND), self.player)
+                    and self.kerrigan_levels(state, 35)
                 )
         )
 
@@ -2304,18 +2320,18 @@ class SC2Logic:
 
     def the_infinite_cycle_requirement(self, state: CollectionState) -> bool:
         return (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or not self.kerrigan_unit_available
                 or (
-                        state.has_any((item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_SPAWN_LEVIATHAN), self.player)
-                        and self.basic_kerrigan(state)
-                        and self.kerrigan_levels(state, 70)
+                    state.has_any((item_names.KERRIGAN_KINETIC_BLAST, item_names.KERRIGAN_SPAWN_BANELINGS, item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_SPAWN_LEVIATHAN), self.player)
+                    and self.basic_kerrigan(state)
+                    and self.kerrigan_levels(state, 70)
                 )
         )
 
     def templars_return_phase_2_requirement(self, state: CollectionState) -> bool:
         return (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or self.advanced_tactics
                 or (
                     state.has_any((
@@ -2329,33 +2345,35 @@ class SC2Logic:
 
     def templars_return_phase_3_reach_colossus_requirement(self, state: CollectionState) -> bool:
         return (
-                self.templars_return_phase_2_requirement(state)
-                and (
-                        self.story_tech_granted
-                        or self.advanced_tactics and state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.VANGUARD_RAPIDFIRE_CANNON},
-                                          self.player)
-                        or state.has_all({item_names.ZEALOT_WHIRLWIND, item_names.VANGUARD_RAPIDFIRE_CANNON},
-                                                                    self.player)
-                )
+            self.templars_return_phase_2_requirement(state)
+            and (
+                self.grant_story_tech == GrantStoryTech.option_grant
+                or self.advanced_tactics and state.has_any({item_names.ZEALOT_WHIRLWIND, item_names.VANGUARD_RAPIDFIRE_CANNON},
+                                    self.player)
+                or state.has_all((
+                    item_names.ZEALOT_WHIRLWIND, item_names.VANGUARD_RAPIDFIRE_CANNON
+                ), self.player)
+            )
         )
 
     def templars_return_phase_3_reach_dts_requirement(self, state: CollectionState) -> bool:
         return (
-                self.templars_return_phase_3_reach_colossus_requirement(state)
-                and (
-                        self.story_tech_granted
+            self.templars_return_phase_3_reach_colossus_requirement(state)
+            and (
+                self.grant_story_tech == GrantStoryTech.option_grant
+                or (
+                    (self.advanced_tactics or state.has(item_names.ENERGIZER_MOBILE_CHRONO_BEAM, self.player))
+                    and (
+                        state.has(item_names.COLOSSUS_FIRE_LANCE, self.player)
                         or (
-                                (self.advanced_tactics or state.has(item_names.ENERGIZER_MOBILE_CHRONO_BEAM,
-                                                                    self.player))
-                                and state.has(item_names.COLOSSUS_FIRE_LANCE, self.player)
-                                or (
-                                    state.has_all({
-                                        item_names.COLOSSUS_PACIFICATION_PROTOCOL,
-                                        item_names.ENERGIZER_MOBILE_CHRONO_BEAM,
-                                    }, self.player)
-                                )
+                            state.has_all({
+                                item_names.COLOSSUS_PACIFICATION_PROTOCOL,
+                                item_names.ENERGIZER_MOBILE_CHRONO_BEAM,
+                            }, self.player)
                         )
+                    )
                 )
+            )
         )
 
     def terran_spear_of_adun_requirement(self, state: CollectionState) -> bool:
@@ -3070,7 +3088,7 @@ class SC2Logic:
         :return:
         """
         return (
-            self.story_tech_granted
+            self.grant_story_tech == GrantStoryTech.option_grant
             or (self.mission_order == MissionOrder.option_vanilla and self.enabled_campaigns == {SC2Campaign.NCO})
         )
 
@@ -3151,7 +3169,7 @@ class SC2Logic:
             self.enemy_intelligence_first_stage_requirement(state)
             and self.enemy_intelligence_cliff_garrison(state)
             and (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or (
                     self.nova_any_weapon(state)
                     and (
@@ -3169,7 +3187,7 @@ class SC2Logic:
         return (
             self.enemy_intelligence_second_stage_requirement(state)
             and (
-                self.story_tech_granted
+                self.grant_story_tech == GrantStoryTech.option_grant
                 or (
                     state.has(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE, self.player)
                     and self.nova_dash(state)
@@ -3268,7 +3286,7 @@ class SC2Logic:
 
     def enemy_shadow_domination(self, state: CollectionState) -> bool:
         return (
-            self.story_tech_granted
+            self.grant_story_tech == GrantStoryTech.option_grant
             or (self.nova_ranged_weapon(state)
                 and (self.nova_full_stealth(state)
                     or state.has(item_names.NOVA_JUMP_SUIT_MODULE, self.player)
@@ -3280,7 +3298,7 @@ class SC2Logic:
     def enemy_shadow_first_stage(self, state: CollectionState) -> bool:
         return (
             self.enemy_shadow_domination(state)
-            and (self.story_tech_granted
+            and (self.grant_story_tech == GrantStoryTech.option_grant
                  or ((self.nova_full_stealth(state) and self.enemy_shadow_tripwires_tool(state))
                     or (self.nova_heal(state) and self.nova_splash(state))
                 )
@@ -3291,7 +3309,7 @@ class SC2Logic:
         return (
                 self.enemy_shadow_first_stage(state)
                 and (
-                        self.story_tech_granted
+                        self.grant_story_tech == GrantStoryTech.option_grant
                         or (
                                 self.nova_splash(state)
                                 or self.nova_heal(state)
@@ -3305,13 +3323,13 @@ class SC2Logic:
     def enemy_shadow_door_controls(self, state: CollectionState) -> bool:
         return (
             self.enemy_shadow_second_stage(state)
-            and (self.story_tech_granted or self.enemy_shadow_door_unlocks_tool(state))
+            and (self.grant_story_tech == GrantStoryTech.option_grant or self.enemy_shadow_door_unlocks_tool(state))
         )
 
     def enemy_shadow_victory(self, state: CollectionState) -> bool:
         return (
             self.enemy_shadow_door_controls(state)
-            and (self.story_tech_granted or self.nova_heal(state))
+            and (self.grant_story_tech == GrantStoryTech.option_grant or self.nova_heal(state))
         )
 
     def dark_skies_requirement(self, state: CollectionState) -> bool:

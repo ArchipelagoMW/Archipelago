@@ -479,7 +479,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             and item.data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Evolution_Pit)
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
-                or world.options.grant_story_tech.value == GrantStoryTech.option_true
+                or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.INFESTOR)
             ):
                 item.flags |= ItemFilterFlags.FilterExcluded
@@ -493,7 +493,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
             # because that item type is mixed in with e.g. Reconstruction Beam and Overwatch
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
-                or world.options.grant_story_tech.value == GrantStoryTech.option_true
+                or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (
                             item_names.IMMORTAL, item_names.ANNIHILATOR,
                             item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,

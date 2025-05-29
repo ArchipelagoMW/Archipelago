@@ -862,7 +862,7 @@ class SC2Context(CommonContext):
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech/Levels if no logic
-                self.grant_story_tech = GrantStoryTech.option_true
+                self.grant_story_tech = GrantStoryTech.option_grant
                 self.grant_story_levels = GrantStoryLevels.option_minimum
 
             self.location_inclusions = {
