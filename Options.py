@@ -1673,6 +1673,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
         for group, group_options in ordered_groups.items()
     }
 
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True) -> None:
     import os
     from inspect import cleandoc
