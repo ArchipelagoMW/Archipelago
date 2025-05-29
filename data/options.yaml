@@ -71,10 +71,10 @@ requires:
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}
-    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val %}50{% else %}0{% endif %}
+    {{ yaml_dump(sub_option_name) }}: {% if suboption_option_id == option_val or sub_option_name == option_val %}50{% else %}0{% endif %}
     {%- endfor -%}
-
-    {%- if option.name_lookup[option_val] not in option.options %}
+  
+    {%- if option.name_lookup[option_val] not in option.options and option_val not in option.options %}
     {{ yaml_dump(option_val) }}: 50
     {%- endif -%}
 

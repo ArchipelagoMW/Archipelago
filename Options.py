@@ -1706,6 +1706,8 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
             if number in data:
                 data[name] = data[number]
                 del data[number]
+            elif name in data:
+                pass
             else:
                 data[name] = 0
 
