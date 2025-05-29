@@ -529,6 +529,13 @@ def generate_rules_package_location_rules(rules_package: CandyBox2RulesPackage):
     rules_package.add_location_rule(CandyBox2LocationName.TEAPOT_DEFEATED, weapon_is_at_least(CandyBox2ItemName.SCYTHE) & rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) & rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & rule_item(CandyBox2ItemName.XINOPHERYDON_CLAW), CandyBox2Room.QUEST_THE_TEAPOT)
     rules_package.add_location_rule(CandyBox2LocationName.ROCKET_BOOTS_ACQUIRED, can_fly() | (rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & can_jump() & can_cast(CandyBox2Castable.TELEPORT) & (rule_item(CandyBox2ItemName.OCTOPUS_KING_CROWN_WITH_OBSIDIAN) | has_weapon(CandyBox2ItemName.SUMMONING_TRIBAL_SPEAR))), CandyBox2Room.QUEST_THE_LEDGE_ROOM)
 
+    # Lollipop Farm rules
+    rules_package.add_location_rule(CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_1, can_farm_lollipops(), CandyBox2Room.LOLLIPOP_FARM)
+    rules_package.add_location_rule(CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_2, can_farm_lollipops(), CandyBox2Room.LOLLIPOP_FARM)
+    rules_package.add_location_rule(CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_3, can_farm_lollipops(), CandyBox2Room.LOLLIPOP_FARM)
+    rules_package.add_location_rule(CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_4, can_farm_lollipops(), CandyBox2Room.LOLLIPOP_FARM)
+    rules_package.add_location_rule(CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_5, can_farm_lollipops(), CandyBox2Room.LOLLIPOP_FARM)
+
     # Hell rules
     rules_package.add_location_rule(CandyBox2LocationName.DEVIL_DEFEATED, can_cast(CandyBox2Castable.BLACK_DEMONS) & rule_item(CandyBox2ItemName.UNICORN_HORN) & rule_item(CandyBox2ItemName.BOOTS_OF_INTROSPECTION) & armor_is_at_least(CandyBox2ItemName.ENCHANTED_KNIGHT_BODY_ARMOUR) & rule_item(CandyBox2ItemName.PINK_ENCHANTED_GLOVES) & has_weapon(CandyBox2ItemName.ENCHANTED_MONKEY_WIZARD_STAFF), CandyBox2Room.QUEST_HELL)
 

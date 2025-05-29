@@ -95,6 +95,7 @@ class CandyBox2ItemName(StrEnum):
     THORNS_SHIELD_SPELL = "Thorns Shield Spell"
     OBSIDIAN_WALL_SPELL = "Obsidian Wall Spell"
     BLACK_DEMONS_SPELL = "Black Demons Spell"
+    FONT_TRAP = "Font Trap"
 
 
 items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
@@ -171,6 +172,7 @@ items: dict[CandyBox2ItemName, CandyBox2ItemData] = {
     CandyBox2ItemName.THORNS_SHIELD_SPELL: CandyBox2ItemData(candy_box_2_base_id + 70, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.OBSIDIAN_WALL_SPELL: CandyBox2ItemData(candy_box_2_base_id + 71, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
     CandyBox2ItemName.BLACK_DEMONS_SPELL: CandyBox2ItemData(candy_box_2_base_id + 72, lambda world: spell_item_count(world), ItemClassification.progression | ItemClassification.useful),
+    CandyBox2ItemName.FONT_TRAP: CandyBox2ItemData(candy_box_2_base_id + 73, lambda world: font_trap_count(world), ItemClassification.trap),
 }
 
 filler_items: list[str] = [
@@ -242,3 +244,6 @@ def pain_au_chocolat_count(world: "CandyBox2World", value: int):
         return world.pains_au_chocolat - 5
 
     return 0
+
+def font_trap_count(world: "CandyBox2World"):
+    return world.font_traps

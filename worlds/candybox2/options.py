@@ -156,6 +156,13 @@ class CreateHints(DefaultOnToggle):
     """Do you want to create hints when you first enter a shop?"""
     display_name = "Create Hints"
 
+class FontTrap(Range):
+    """The number of font traps made available in the item pool"""
+    display_name = "Font Traps"
+    range_start = 0
+    range_end = 5
+    default = 0
+
 candy_box_2_options_groups = [
     OptionGroup("Inventory Customisation", [
         StartingWeapon,
@@ -200,3 +207,4 @@ class CandyBox2Options(PerGameCommonOptions):
     energy_link: EnergyLink
     gifting: Gifting
     scouting: CreateHints
+    font_traps: FontTrap

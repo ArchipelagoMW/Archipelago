@@ -103,6 +103,11 @@ class CandyBox2LocationName(StrEnum):
     BAKE_PAIN_AU_CHOCOLAT_4 = "Castle Bakehouse: Bake Pain au Chocolat 4"
     BAKE_PAIN_AU_CHOCOLAT_5 = "Castle Bakehouse: Bake Pain au Chocolat 5"
     POGO_STICK = "The Mountains: Pogo Stick"
+    LOLLIPOP_FARM_EXTRA_1 = "Lollipop Farm: Planted 30000 Lollipops"
+    LOLLIPOP_FARM_EXTRA_2 = "Lollipop Farm: Planted 40000 Lollipops"
+    LOLLIPOP_FARM_EXTRA_3 = "Lollipop Farm: Planted 50000 Lollipops"
+    LOLLIPOP_FARM_EXTRA_4 = "Lollipop Farm: Planted 60000 Lollipops"
+    LOLLIPOP_FARM_EXTRA_5 = "Lollipop Farm: Planted 70000 Lollipops"
 
 location_descriptions = {
     CandyBox2LocationName.HP_BAR_UNLOCK: ""
@@ -196,6 +201,11 @@ locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
     CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4: CandyBox2LocationData(4903),
     CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5: CandyBox2LocationData(4904),
     CandyBox2LocationName.POGO_STICK: CandyBox2LocationData(500),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_1: CandyBox2LocationData(5000, lambda world: extra_location_count(world, 1)),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_2: CandyBox2LocationData(5001, lambda world: extra_location_count(world, 2)),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_3: CandyBox2LocationData(5002, lambda world: extra_location_count(world, 3)),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_4: CandyBox2LocationData(5003, lambda world: extra_location_count(world, 4)),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_5: CandyBox2LocationData(5004, lambda world: extra_location_count(world, 5)),
 }
 
 def grimoire_location_count(world: "CandyBox2World"):
@@ -209,3 +219,6 @@ def spell_location_count(world: "CandyBox2World"):
         return True
 
     return False
+
+def extra_location_count(world: "CandyBox2World", required: int):
+    return world.font_traps >= required
