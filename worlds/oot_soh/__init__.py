@@ -192,7 +192,7 @@ class SohWorld(World):
             item_pool.append(self.create_item("Magic Bean Pack"))
 
         filler_item_count: int = len(self.get_unfilled_locations()) - len(item_pool)
-        item_pool += [self.create_item(self.random.choice(filler_items) for _ in range(filler_item_count)]
+        item_pool += [self.create_item(self.random.choice(filler_items)) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool
 
