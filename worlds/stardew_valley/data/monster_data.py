@@ -104,6 +104,8 @@ armored_bug = create_monster(Monster.armored_bug, MonsterCategory.cave_insects, 
 armored_bug_dangerous = create_monster(Monster.armored_bug_dangerous, MonsterCategory.cave_insects, skull_cavern,
                                        Performance.good)  # Requires 'Bug Killer' enchantment
 
+metal_head = create_monster(Monster.metal_head, MonsterCategory.metal_heads, mines_floor_100, Performance.good)
+
 duggy = create_monster(Monster.duggy, MonsterCategory.duggies, mines_floor_20, Performance.basic)
 duggy_dangerous = create_monster(Monster.duggy_dangerous, MonsterCategory.duggies, dangerous_mines_20, Performance.great)
 magma_duggy = create_monster(Monster.magma_duggy, MonsterCategory.duggies, volcano, Performance.galaxy)

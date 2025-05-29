@@ -65,4 +65,6 @@ class MonsterCategory:
     pepper_rex = "Pepper Rex"
     serpents = "Serpents"
     magma_sprites = "Magma Sprites"
+    metal_heads = "Metal Heads"
+
 
