@@ -1,5 +1,6 @@
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
+from ..options import ExcludeGingerIsland
 from ..stardew_rule import StardewRule, HasProgressionPercent
 from ..strings.book_names import Book
 from ..strings.craftable_names import Consumable
@@ -62,10 +63,11 @@ class GrindLogic(BaseLogic):
                                self.logic.time.has_lived_months(quantity // 12))
 
     def can_grind_weeds(self, quantity: int) -> StardewRule:
+        regions = [Region.farm, Region.town, Region.forest, Region.secret_woods, Region.backwoods, Region.mountain, Region.railroad, Region.mutant_bug_lair]
+        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_false:
+            regions.extend([Region.island_east, Region.island_west])
         return self.logic.and_(self.logic.tool.has_scythe(),
-                               self.logic.region.can_reach_all(Region.farm, Region.town, Region.forest, Region.secret_woods,
-                                                               Region.backwoods, Region.mountain, Region.railroad, Region.mutant_bug_lair,
-                                                               Region.island_east, Region.island_west),
+                               self.logic.region.can_reach_all(*regions),
                                # Assuming 1000 per month if the player does not grind it
                                self.logic.time.has_lived_months(quantity // 1000))
 

@@ -13,6 +13,7 @@ from .content.vanilla.qi_board import qi_board_content_pack
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.game_item import ItemTag
 from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
+from .data.hats_data import wear_prefix, hat_clarifier
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
 from .data.recipe_data import all_cooking_recipes_by_name
@@ -103,7 +104,7 @@ def set_rules(world):
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
-    set_hatsanity_rules(logic, multiworld, player, world_options, world_content)
+    set_hatsanity_rules(all_location_names, logic, multiworld, player, world_options, world_content)
 
     set_deepwoods_rules(logic, multiworld, player, world_content)
     set_magic_spell_rules(logic, multiworld, player, world_content)
@@ -990,9 +991,16 @@ def set_secret_note_gift_rule(logic: StardewLogic, multiworld: MultiWorld, playe
     set_location_rule(multiworld, player, secret_note_location, logic.gifts.can_fulfill(gift_requirements[secret_note_location]))
 
 
-def set_hatsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
-    pass
-    # for hatsanity_location in
+def set_hatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
+    for hat_location in locations.locations_by_tag[LocationTags.HATSANITY]:
+        if hat_location.name not in all_location_names:
+            continue
+        hat_name = hat_location.name[len(wear_prefix):]
+        if hat_name not in content.hats:
+            hat_name = f"{hat_name}{hat_clarifier}"
+        if hat_name not in content.hats:
+            continue
+        set_rule(multiworld.get_location(hat_location.name, player), logic.hat.can_wear(hat_name))
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):

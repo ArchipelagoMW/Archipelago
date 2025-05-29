@@ -28,7 +28,7 @@ from ...strings.metal_names import Fossil, Mineral, MetalBar
 from ...strings.monster_names import Monster
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
-from ...strings.seed_names import Seed
+from ...strings.seed_names import Seed, TreeSeed
 
 
 class GingerIslandContentPack(ContentPack):
@@ -144,6 +144,7 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.sunglasses: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Material.cinder_shard,)),),
         Hats.swashbuckler_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
+        Hats.star_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(TreeSeed.mushroom,)),),
 
         Hats.frog_hat: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave,),),
     },

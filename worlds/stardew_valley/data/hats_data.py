@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+wear_prefix = "Wear "
+hat_clarifier = " (Hat)"
 
 class HatDifficulty:
     easy = 0
@@ -24,10 +26,9 @@ class HatItem:
         return f"{self.name} (Difficulty: {self.difficulty})"
 
     def to_location_name(self) -> str:
-        hat_clarifier = " (Hat)"
         if self.name.endswith(hat_clarifier):
-            return f"Wear {self.name[:-len(hat_clarifier)]}"
-        return f"Wear {self.name}"
+            return f"{wear_prefix}{self.name[:-len(hat_clarifier)]}"
+        return f"{wear_prefix}{self.name}"
 
 
 all_hats: list[HatItem] = []
@@ -144,7 +145,7 @@ class Hats:
     spotted_headscarf = hat("Spotted Headscarf", HatDifficulty.tailoring)
     squid_hat = hat("Squid Hat", HatDifficulty.easy)
     squires_helmet = hat("Squire's Helmet", HatDifficulty.medium)
-    star_helmet = hat("Star Helmet", HatDifficulty.tailoring)
+    star_helmet = hat("Star Helmet", HatDifficulty.tailoring_island)
     steel_pan_hat = hat("Steel Pan (Hat)", HatDifficulty.medium)
     straw = hat("Straw Hat", HatDifficulty.easy)
     sunglasses = hat("Sunglasses", HatDifficulty.tailoring_island)

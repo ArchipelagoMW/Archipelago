@@ -22,3 +22,6 @@ class HatLogic(BaseLogic):
     def has_bucket_hat(self) -> StardewRule:
         trout_derby_rule = self.logic.region.can_reach(LogicRegion.trout_derby) & self.logic.fishing.can_catch_fish(self.content.fishes[Fish.rainbow_trout])
         return trout_derby_rule
+
+    def can_wear(self, hat: str) -> StardewRule:
+        return self.logic.has(hat)

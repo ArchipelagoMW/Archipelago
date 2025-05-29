@@ -215,7 +215,6 @@ base_game = BaseGameContentPack(
         Hats.pirate_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(WaterChest.treasure,)),),
         Hats.propeller_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Meal.miners_treat,)),),
         Hats.pumpkin_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Lighting.jack_o_lantern,)),),
-        Hats.star_helmet: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(TreeSeed.mushroom,)),),
         Hats.wearable_dwarf_helm: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Artifact.dwarf_gadget, Artifact.dwarvish_helm,)),),
         Hats.white_turban: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.sweet_gem_berry,)),),
         Hats.witch_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.golden_pumpkin,)),),
