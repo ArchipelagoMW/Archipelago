@@ -297,7 +297,7 @@ all_items: list[ItemData] = [
     ItemData("Walker's Pillar: Rope (Co-Climb)", 1, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Great Gaol: Rope (Encounter)", 2, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("St Haelga: Rope (Encounter)", 3, ItemClassification.useful, POYItemLocationType.ROPE),
-    ItemData("Old Man Of Sjór: Rope: Rope", 4, ItemClassification.useful, POYItemLocationType.ROPE),
+    ItemData("Old Man Of Sjór: Rope", 4, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Hangman's Leap: Rope", 5, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Ugsome Storr: Rope", 6, ItemClassification.useful, POYItemLocationType.ROPE),
     ItemData("Eldenhorn: Rope", 7, ItemClassification.useful, POYItemLocationType.ROPE),

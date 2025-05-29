@@ -56,7 +56,8 @@ def recursive_create_region(region_data: POYRegion, parent_region: Region, world
             result.time_attack_in_pool.append(location)
 
     if parent_region is not None:
-        if (region_data.is_peak and opts.game_mode == 0) or (region_data.is_book and opts.game_mode == 1):
+        if ((region_data.is_peak and opts.game_mode == 0) or (region_data.is_book and opts.game_mode == 1))\
+                and len(region_data.entry_requirements) != 0:
             region_data.entry_requirements.popitem()
 
         parent_region.connect(region, region_data.name + " Connection", lambda state: state.has_all_counts(
