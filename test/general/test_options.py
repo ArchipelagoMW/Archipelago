@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import MultiWorld, PlandoOptions
-from Options import ItemLinks
+from Options import ItemLinks, Removed
 from worlds.AutoWorld import AutoWorldRegister
 
 
@@ -88,3 +88,6 @@ class TestOptions(unittest.TestCase):
                     for option_name in preset:
                         self.assertIn(option_name, world_type.options_dataclass.type_hints,
                                       f"{option_name} is not a valid option name for {game_name}.")
+                        if issubclass(world_type.options_dataclass.type_hints[option_name], Removed):
+                            self.fail(f"{option_name} in game {game_name} has been removed, but is still present"
+                                      f"in preset \"{preset_name}\".")
