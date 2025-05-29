@@ -2,8 +2,10 @@ import enum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, TYPE_CHECKING
 from .item import item_names
 from .item.item_groups import kerrigan_logic_ultimates
-from .options import (get_option_value, RequiredTactics,
-    LocationInclusion, KerriganPresence, get_enabled_campaigns
+from .options import (
+    get_option_value, RequiredTactics,
+    LocationInclusion, KerriganPresence, get_enabled_campaigns,
+    GrantStoryTech,
 )
 from .mission_tables import SC2Mission, SC2Campaign
 
@@ -1053,16 +1055,16 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
             flags=LocationFlag.SPEEDRUN
         ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
-            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech == GrantStoryTech.option_grant
         ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.EXTRA,
-            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech == GrantStoryTech.option_grant
         ),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202, LocationType.VANILLA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203, LocationType.VANILLA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204, LocationType.EXTRA),
         make_location_data(SC2Mission.BACK_IN_THE_SADDLE.mission_name, "Door Section Cleared", SC2HOTS_LOC_ID_OFFSET + 205, LocationType.EXTRA,
-            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech
+            lambda state: logic.basic_kerrigan(state) or kerriganless or logic.grant_story_tech == GrantStoryTech.option_grant
         ),
         make_location_data(SC2Mission.RENDEZVOUS.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 300, LocationType.VICTORY,
             lambda state: (
@@ -1196,7 +1198,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.ENEMY_WITHIN.mission_name, "Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
             lambda state: (
                 logic.zerg_pass_vents(state)
-                and (logic.grant_story_tech
+                and (logic.grant_story_tech == GrantStoryTech.option_grant
                     or state.has_any({
                         item_names.ZERGLING_RAPTOR_STRAIN,
                         item_names.ROACH,
@@ -1599,7 +1601,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.grant_story_tech)
+                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
                     and logic.kerrigan_levels(state, 25)
                 ))
         ),
@@ -1611,7 +1613,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.grant_story_tech)
+                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
                     and logic.kerrigan_levels(state, 25)
                 ))
         ),
@@ -2532,7 +2534,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name, "Facility: Blazefire Gunblade", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
             lambda state: (
                 logic.enemy_shadow_second_stage(state)
-                and (logic.grant_story_tech
+                and (logic.grant_story_tech == GrantStoryTech.option_grant
                     or state.has(item_names.NOVA_BLINK, player)
                     or (adv_tactics
                         and state.has_all({item_names.NOVA_DOMINATION, item_names.NOVA_HOLO_DECOY, item_names.NOVA_JUMP_SUIT_MODULE}, player)
