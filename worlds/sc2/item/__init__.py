@@ -118,11 +118,11 @@ class ProtossItemType(ItemTypeEnum):
     """General Protoss unit upgrades"""
     Forge_4 = "Forge", 10
     """General Protoss unit upgrades"""
-    War_Council = "War Council", 11
-    War_Council_2 = "War Council", 12
-    ShieldRegeneration = "Shield Regeneration Group", 13
-    Forge_5 = "Forge", 14
+    Forge_5 = "Forge", 11
     """General Protoss unit upgrades"""
+    War_Council = "War Council", 12
+    War_Council_2 = "War Council", 13
+    ShieldRegeneration = "Shield Regeneration Group", 14
 
 
 class FactionlessItemType(ItemTypeEnum):
