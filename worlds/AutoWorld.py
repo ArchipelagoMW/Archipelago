@@ -22,6 +22,10 @@ if TYPE_CHECKING:
 perf_logger = logging.getLogger("performance")
 
 
+class InvalidItemError(KeyError):
+    pass
+
+
 class AutoWorldRegister(type):
     world_types: Dict[str, Type[World]] = {}
     __file__: str
