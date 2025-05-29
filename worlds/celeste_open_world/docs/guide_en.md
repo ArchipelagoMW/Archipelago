@@ -5,7 +5,7 @@
 - Olympus (Celeste Mod Manager) from: [Olympus Download Page](https://everestapi.github.io/)
 - The latest version of the Archipelago Open World mod for Celeste from: [GitHub Release](https://github.com/PoryGoneDev/Celeste-Archipelago-Open-World/releases)
 
-## Installation Procedures (Windows)
+## Installation Procedures (Windows/Linux)
 
 1. Install the latest version of Celeste (v1.4) on PC
 2. Install `Olympus` (mod manager/launcher) and `Everest` (mod loader) per its instructions: https://everestapi.github.io/
