@@ -178,6 +178,12 @@ def choose_hatsanity(hat_option: options.Hatsanity) -> hatsanity.HatsanityFeatur
     if hat_option == options.Hatsanity.option_easy:
         return hatsanity.HatsanityEasy()
 
+    if hat_option == options.Hatsanity.option_tailoring:
+        return hatsanity.HatsanityTailoring()
+
+    if hat_option == options.Hatsanity.option_easy_tailoring:
+        return hatsanity.HatsanityEasyTailoring()
+
     if hat_option == options.Hatsanity.option_medium:
         return hatsanity.HatsanityMedium()
 
