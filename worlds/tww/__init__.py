@@ -586,7 +586,7 @@ class TWWWorld(World):
 
         :return: A dictionary to be sent to the client when it connects to the server.
         """
-        slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
+        slot_data = self.options.get_slot_data_dict()
 
         # Add entrances to `slot_data`. This is the same data that is written to the .aptww file.
         entrances = {
