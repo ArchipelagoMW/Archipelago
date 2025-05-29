@@ -1,7 +1,6 @@
 from typing import NamedTuple
 
 from BaseClasses import Region, Location
-from .options import PeaksOfYoreOptions
 from worlds.AutoWorld import World
 from .data import *
 
@@ -16,92 +15,56 @@ class RegionLocationInfo(NamedTuple):
     time_attack_in_pool: list[str]
 
 
-def create_poy_regions(world: World, options: PeaksOfYoreOptions) -> RegionLocationInfo:
+# IDE was yelling at me and not happy that I called a parameter "options", so have "opts"
+def create_poy_regions(world: World, opts: PeaksOfYoreOptions) -> RegionLocationInfo:
+    result = RegionLocationInfo([], [], [])
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
     cabin_region = Region("Cabin", world.player, world.multiworld)
     world.multiworld.regions.append(cabin_region)
-    menu_region.connect(cabin_region)
+    menu_region.connect(cabin_region, "main connection")
 
-    result = RegionLocationInfo([], [], [])
-
-    if options.enable_fundamental:
-        r = create_region("Fundamental Peaks", PeaksOfYoreRegion.FUNDAMENTALS, {"Fundamentals Book": 1},
-                          cabin_region, world, options)
-        result.peaks_in_pool.extend(r.peaks_in_pool)
-        result.artefacts_in_pool.extend(r.artefacts_in_pool)
-
-    if options.enable_intermediate:
-        r = create_region("Intermediate Peaks", PeaksOfYoreRegion.INTERMEDIATE, {"Intermediate Book": 1},
-                          cabin_region, world, options)
-        result.peaks_in_pool.extend(r.peaks_in_pool)
-        result.artefacts_in_pool.extend(r.artefacts_in_pool)
-
-    if options.enable_advanced:
-        r = create_region("Advanced Peaks", PeaksOfYoreRegion.ADVANCED, {"Advanced Book": 1},
-                          cabin_region, world, options)
-        result.peaks_in_pool.extend(r.peaks_in_pool)
-        result.artefacts_in_pool.extend(r.artefacts_in_pool)
-
-    if options.enable_expert:
-        r = create_region("Expert Peaks", PeaksOfYoreRegion.EXPERT, {"Expert Book": 1, "Progressive Crampons": 1},
-                          cabin_region, world, options)
-        result.peaks_in_pool.extend(r.peaks_in_pool)
-        result.artefacts_in_pool.extend(r.artefacts_in_pool)
+    for r in poy_regions.subregions:
+        tempres = recursive_create_region(r, menu_region, world, opts)
+        result.peaks_in_pool.extend(tempres.peaks_in_pool)
+        result.artefacts_in_pool.extend(tempres.artefacts_in_pool)
+        result.time_attack_in_pool.extend(tempres.time_attack_in_pool)
     return result
 
 
-def create_region(name: str, region_enum: PeaksOfYoreRegion, item_requirements: dict[str, int],
-                  cabin_region: Region, world: World, options: PeaksOfYoreOptions) -> RegionLocationInfo:
-    peaks_region = Region(name, world.player, world.multiworld)
+def recursive_create_region(region_data: POYRegion, parent_region: Region, world: World, opts: PeaksOfYoreOptions) -> \
+        RegionLocationInfo:
+    """
+    Takes a POYRegion, and creates it and its subregions as a subregion of parent_region
+    """
+    result = RegionLocationInfo([], [], [])
+    if not region_data.enable_requirements(opts):
+        return result
+    region = Region(region_data.name, world.player, world.multiworld)
+    world.multiworld.regions.append(region)
 
-    ropes: dict[str: int] = locations_to_dict(ropes_list[region_enum])
-    artefacts: dict[str: int] = locations_to_dict(artefacts_list[region_enum])
-    bird_seeds: dict[str: int] = locations_to_dict(bird_seeds_list[region_enum])
-    # simple things above
-    # shenanigans below
+    locations = region_data.get_locations_dict()
+    region.add_locations(locations, PeaksOfYoreLocation)
 
-    regional_peaks_list: list[ItemOrLocation] = peaks_list[region_enum]
-    removeST: bool = False
-    if region_enum == PeaksOfYoreRegion.EXPERT and options.disable_solemn_tempest:
-        removeST = True
-        for peak in regional_peaks_list:
-            if peak.id == 37:
-                regional_peaks_list.remove(peak)
+    for location, address in locations.items():
+        if address < rope_offset:
+            result.peaks_in_pool.append(location)
+        elif artefact_offset < address < book_offset:
+            result.artefacts_in_pool.append(location)
+        elif time_attack_time_offset < address:
+            result.time_attack_in_pool.append(location)
 
-    peaks: dict[str: int] = locations_to_dict(regional_peaks_list)
+    if parent_region is not None:
+        if (region_data.is_peak and opts.game_mode == 0) or (region_data.is_book and opts.game_mode == 1):
+            region_data.entry_requirements.popitem()
 
-    free_solo_peaks: dict[str: int] = {}
-    if options.include_free_solo and region_enum not in (PeaksOfYoreRegion.FUNDAMENTALS,
-                                                         PeaksOfYoreRegion.INTERMEDIATE):
-        free_solo_peaks = locations_to_dict(free_solo_peak_list[region_enum])
-        if removeST:
-            free_solo_peaks.pop("Solemn Tempest (Free Solo)")
+        parent_region.connect(region, region_data.name + " Connection", lambda state: state.has_all_counts(
+            region_data.entry_requirements, world.player))
 
-    all_locations: dict[str: int] = {**ropes, **artefacts, **bird_seeds, **peaks, **free_solo_peaks}
-
-    peaks_region.add_locations(all_locations, PeaksOfYoreLocation)
-    cabin_region.connect(peaks_region, name + " Connection", lambda state: state.has_all_counts(item_requirements,
-                                                                                                world.player))
-
-    time_attack_checks: list[str] = []
-
-    if options.include_time_attack:
-        time_attack_time: dict[str: int] = locations_to_dict(time_attack_time_list[region_enum])
-        time_attack_ropes: dict[str: int] = locations_to_dict(time_attack_ropes_list[region_enum])
-        time_attack_holds: dict[str: int] = locations_to_dict(time_attack_holds_list[region_enum])
-
-        time_attack_checks = [*time_attack_time.keys(), *time_attack_ropes.keys(), *time_attack_holds.keys()]
-
-        time_attack_region = Region(name + " (Time Attack)", world.player, world.multiworld)
-        time_attack_region.add_locations({**time_attack_time, **time_attack_ropes, **time_attack_holds},
-                                         PeaksOfYoreLocation)
-        peaks_region.connect(time_attack_region, name + " Time Attack Connection",
-                             lambda state: state.has("Pocketwatch", world.player))
-
-    return RegionLocationInfo([*artefacts.keys()], [*peaks.keys()], time_attack_checks)
-
-
-def locations_to_dict(locations: list[ItemOrLocation]) -> dict[str: int]:
-    return {loc.name: loc.id for loc in locations}
+    for r in region_data.subregions:
+        tempres = recursive_create_region(r, region, world, opts)
+        result.peaks_in_pool.extend(tempres.peaks_in_pool)
+        result.artefacts_in_pool.extend(tempres.artefacts_in_pool)
+        result.time_attack_in_pool.extend(tempres.time_attack_in_pool)
+    return result

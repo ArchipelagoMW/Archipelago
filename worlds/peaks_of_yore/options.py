@@ -20,6 +20,17 @@ class Goal(Choice):
     option_all = 4
     default = 0
 
+class GameMode(Choice):
+    """
+    CHose what mode to play
+    - **Book Unlock**: unlock entire books at once, and play the peaks in whatever order you like
+    - **Peak Unlock**: unlock individual peaks instead of entire books, more restrictive, more of a challenge
+    """
+    display_name = "Game Mode"
+    option_book_unlock = 0
+    option_peak_unlock = 1
+    default = 0
+
 class DeathLinkTraps(DefaultOnToggle):
     """
     Instead of killing the player, Death Link triggers traps.
@@ -184,6 +195,7 @@ poy_option_presets: dict[str, dict[str, any]] = {
 @dataclass
 class PeaksOfYoreOptions(PerGameCommonOptions):
     goal: Goal
+    game_mode: GameMode
     death_link: DeathLink
     death_link_traps: DeathLinkTraps
     item_traps: FillerTraps
