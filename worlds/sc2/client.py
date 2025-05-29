@@ -1380,20 +1380,16 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
         for compat_item in API3_TO_API4_COMPAT_ITEMS:
             items.extend(compat_item_to_network_items(compat_item))
         received_item_ids = set(item.item for item in ctx.items_received)
-        if item_list[item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
-            items.append(create_network_item(item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY))
-        if item_list[item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
-            items.append(create_network_item(item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY))
+        if item_list[item_names.GHOST_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.GHOST_BARGAIN_BIN_PRICES))
+        if item_list[item_names.SPECTRE_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.SPECTRE_BARGAIN_BIN_PRICES))
         if item_list[item_names.ROGUE_FORCES].code in received_item_ids:
             items.append(create_network_item(item_names.UNRESTRICTED_MUTATION))
-        if item_list[item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
-            items.append(create_network_item(item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY))
-        if item_list[item_names.SCOUT_ADVANCED_PHOTON_BLASTERS].code in received_item_ids:
-            items.append(create_network_item(item_names.SCOUT_GAMMA_PHOTON_BLASTERS))
-        if item_list[item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY].code in received_item_ids:
-            items.append(create_network_item(item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY))
-        if item_list[item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION].code in received_item_ids:
-            items.append(create_network_item(item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION))
+        if item_list[item_names.SCOUT_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.SCOUT_SUPPLY_EFFICIENCY))
+        if item_list[item_names.REAVER_RESOURCE_EFFICIENCY].code in received_item_ids:
+            items.append(create_network_item(item_names.REAVER_BARGAIN_BIN_PRICES))
 
     # API < 4 Orbital Command Count (Deprecated item)
     orbital_command_count: int = 0
