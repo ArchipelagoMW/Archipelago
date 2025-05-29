@@ -501,7 +501,7 @@ item_descriptions = {
     item_names.DOMINION_TROOPER_B2_HIGH_CAL_LMG: "Allows the Troopers to arm with a more powerful weapon, effective against all unit types.",
     item_names.DOMINION_TROOPER_HAILSTORM_LAUNCHER: "Allows the Troopers to arm with a more powerful weapon, especially effective against armored air units.",
     item_names.DOMINION_TROOPER_CPO7_SALAMANDER_FLAMETHROWER: "Allows the Troopers to arm with a more powerful weapon, especially effective against light ground units.",
-    item_names.DOMINION_TROOPER_ADVANCED_ALLOYS: "Dominion Trooper advanced weapons are dropped on ground on death to be able to be picked up by an another Dominion Trooper.",
+    item_names.DOMINION_TROOPER_ADVANCED_ALLOYS: "Trooper weapons cost 20 fewer gas and now last for 5 minutes when dropped on death.",
     item_names.DOMINION_TROOPER_OPTIMIZED_LOGISTICS: "Increases Dominion Trooper training speed.",
     item_names.BUNKER: "Defensive structure. Able to load infantry units, giving them +1 range to their attacks.",
     item_names.MISSILE_TURRET: "Anti-air defensive structure.",
@@ -749,8 +749,8 @@ item_descriptions = {
     item_names.INFESTED_BUNKER_ENGORGED_BUNKERS: "Infested Bunkers gain +2 cargo slots. Infested Trooper spawn cooldown is reduced by 20%.",
     item_names.INFESTED_MISSILE_TURRET_BIOELECTRIC_PAYLOAD: "Increases anti-mechanical damage of Infested Missile Turrets by +6 per missile.",
     item_names.INFESTED_MISSILE_TURRET_ACID_SPORE_VENTS: "Infested Missile Turrets gain a secondary weapon that applies Devourer Acid Spores in an area around the target.",
-    item_names.TYRANNOZOR_TYRANTS_PROTECTION: "Tyrannozors grant nearby friendly units 2 armor.",
-    item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: _ability_desc("Tyrannozors", "Barrage of Spikes", "deals 100 damage to enemy ground and air units around the Tyrannozor"),
+    item_names.TYRANNOZOR_TYRANTS_PROTECTION: "Tyrannozors grant nearby friendly units 1 armor.",
+    item_names.TYRANNOZOR_BARRAGE_OF_SPIKES: _ability_desc("Tyrannozors", "Barrage of Spikes", "deals 60 damage to enemy ground units around the Tyrannozor"),
     item_names.TYRANNOZOR_IMPALING_STRIKE: "Ultralisk and Tyrannozor melee attacks have a 20% chance to stun for 2 seconds.",
     item_names.TYRANNOZOR_HEALING_ADAPTATION: "Ultralisks and Tyrannozors regenerate life quickly when out of combat.",
     item_names.BILE_LAUNCHER_ARTILLERY_DUCTS: "Increases Bile Launcher range by +8.",
@@ -759,7 +759,7 @@ item_descriptions = {
     item_names.NYDUS_WORM_ECHIDNA_WORM_JORMUNGANDR_STRAIN: f"Removes emerge time for {DISPLAY_NAME_WORMS}, and allows them to be salvaged to return the resources spent on them.", 
     item_names.NYDUS_WORM_RAVENOUS_APPETITE: "Allows Nydus Worms to unload and load units nearly instantly.",
     item_names.NYDUS_WORM_ECHIDNA_WORM_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(DISPLAY_NAME_WORMS),
-    item_names.ECHIDNA_WORM_OUROBOROS_STRAIN: "Allows Echidna Worms to train a limited assortment of combat units (Zerglings, Roachs, Hydralisks, and Aberrations) at a reduced time and cost.",
+    item_names.ECHIDNA_WORM_OUROBOROS_STRAIN: "Allows Echidna Worms to train a limited assortment of combat units (Zerglings, Roaches, Hydralisks, and Aberrations) at a reduced time and cost.",
     item_names.INFESTED_SIEGE_TANK_PROGRESSIVE_AUTOMATED_MITOSIS:  inspect.cleandoc("""
         Level 1: Infested Siege Tanks generate 1 Volatile Biomass every 30 seconds.
         Level 2: Infested Siege Tanks generate 1 Volatile Biomass every 10 seconds.
@@ -858,7 +858,7 @@ item_descriptions = {
     item_names.TORRASQUE_MERC: "Elite Ultralisk strain. Summoned at the Predator Nest.",
     item_names.HUNTERLING: "Elite strain. Can jump up and down cliffs and stun enemies by jumping on them. Summoned at the Predator Nest.",
     item_names.YGGDRASIL: "Elite Overlord strain that has the ability to transport buildings and ground units. Summoned at the Predator Nest.",
-    item_names.THORNSHELLS: "Elite Roach Strain that has the ability to attack air units. Summoned at the Predator Nest.",
+    item_names.CAUSTIC_HORRORS: "Elite Roach Strain that has the ability to attack air units. Summoned at the Predator Nest.",
     item_names.OVERLORD_VENTRAL_SACS: "Overlords gain the ability to transport ground units.",
     item_names.OVERLORD_GENERATE_CREEP: "Overlords gain the ability to generate creep while standing still.",
     item_names.OVERLORD_ANTENNAE: "Increases Overlord sight range.",

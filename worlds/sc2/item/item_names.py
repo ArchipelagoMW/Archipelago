@@ -594,7 +594,7 @@ HUNTER_KILLERS          = "Hunter Killers (Mercenary)"
 TORRASQUE_MERC          = "Wise Old Torrasque (Mercenary)"
 HUNTERLING              = "Hunterling (Mercenary)"
 YGGDRASIL               = "Yggdrasil (Mercenary)"
-THORNSHELLS             = "Thornshells (Mercenary)"
+CAUSTIC_HORRORS         = "Caustic Horrors (Mercenary)"
 
     
 # Kerrigan Upgrades

@@ -33,6 +33,7 @@ ZERG_MISSILE_ATTACKER = "Zerg Missile Attacker"
 ZERG_CARAPACE_UNIT = "Zerg Carapace Unit"
 ZERG_FLYING_UNIT = "Zerg Flying Unit"
 ZERG_MERCENARIES = "Zerg Mercenaries"
+ZERG_OUROBOUROS_CONDITION = "Zerg Ourobouros Condition"
 
 # Protoss
 ARCHON_SOURCE = "Any Archon Source"

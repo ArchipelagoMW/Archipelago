@@ -298,17 +298,13 @@ class SubRuleRuleData(RuleData):
         else:
             amount = str(self.amount)
         tooltip = f"Fulfill {amount} of these conditions:\n{indent}- "
-        color_tooltips = any([getattr(rule, "was_accessible", False) for rule in self.sub_rules])
         subrule_tooltips: List[str] = []
         for rule in self.sub_rules:
             sub_tooltip = rule.tooltip(indents + 4, missions, done_color, not_done_color)
-            if color_tooltips:
-                if getattr(rule, "was_accessible", False):
-                    subrule_tooltips.append(f"[color={done_color}]{sub_tooltip}[/color]")
-                else:
-                    subrule_tooltips.append(f"[color={not_done_color}]{sub_tooltip}[/color]")
+            if getattr(rule, "was_accessible", False):
+                subrule_tooltips.append(f"[color={done_color}]{sub_tooltip}[/color]")
             else:
-                subrule_tooltips.append(sub_tooltip)
+                subrule_tooltips.append(f"[color={not_done_color}]{sub_tooltip}[/color]")
         tooltip += f"\n{indent}- ".join(sub_tooltip for sub_tooltip in subrule_tooltips)
         return tooltip
 

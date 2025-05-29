@@ -467,7 +467,19 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.ENGINE_OF_DESTRUCTION: f'{SC2Mission.ENGINE_OF_DESTRUCTION.mission_name}: Victory',
         SC2Mission.SUPERNOVA: f'{SC2Mission.SUPERNOVA.mission_name}: Victory',
         SC2Mission.GATES_OF_HELL: f'{SC2Mission.GATES_OF_HELL.mission_name}: Victory',
-        SC2Mission.SHATTER_THE_SKY: f'{SC2Mission.SHATTER_THE_SKY.mission_name}: Victory'
+        SC2Mission.SHATTER_THE_SKY: f'{SC2Mission.SHATTER_THE_SKY.mission_name}: Victory',
+
+        SC2Mission.MAW_OF_THE_VOID_Z: f'{SC2Mission.MAW_OF_THE_VOID_Z.mission_name}: Victory',
+        SC2Mission.ENGINE_OF_DESTRUCTION_Z: f'{SC2Mission.ENGINE_OF_DESTRUCTION_Z.mission_name}: Victory',
+        SC2Mission.SUPERNOVA_Z: f'{SC2Mission.SUPERNOVA_Z.mission_name}: Victory',
+        SC2Mission.GATES_OF_HELL_Z: f'{SC2Mission.GATES_OF_HELL_Z.mission_name}: Victory',
+        SC2Mission.SHATTER_THE_SKY_Z: f'{SC2Mission.SHATTER_THE_SKY_Z.mission_name}: Victory',
+
+        SC2Mission.MAW_OF_THE_VOID_P: f'{SC2Mission.MAW_OF_THE_VOID_P.mission_name}: Victory',
+        SC2Mission.ENGINE_OF_DESTRUCTION_P: f'{SC2Mission.ENGINE_OF_DESTRUCTION_P.mission_name}: Victory',
+        SC2Mission.SUPERNOVA_P: f'{SC2Mission.SUPERNOVA_P.mission_name}: Victory',
+        SC2Mission.GATES_OF_HELL_P: f'{SC2Mission.GATES_OF_HELL_P.mission_name}: Victory',
+        SC2Mission.SHATTER_THE_SKY_P: f'{SC2Mission.SHATTER_THE_SKY_P.mission_name}: Victory'
     },
     SC2Campaign.PROPHECY: {},
     SC2Campaign.HOTS: {
@@ -475,14 +487,34 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.HAND_OF_DARKNESS: f'{SC2Mission.HAND_OF_DARKNESS.mission_name}: Victory',
         SC2Mission.PHANTOMS_OF_THE_VOID: f'{SC2Mission.PHANTOMS_OF_THE_VOID.mission_name}: Victory',
         SC2Mission.PLANETFALL: f'{SC2Mission.PLANETFALL.mission_name}: Victory',
-        SC2Mission.DEATH_FROM_ABOVE: f'{SC2Mission.DEATH_FROM_ABOVE.mission_name}: Victory'
+        SC2Mission.DEATH_FROM_ABOVE: f'{SC2Mission.DEATH_FROM_ABOVE.mission_name}: Victory',
+
+        SC2Mission.THE_CRUCIBLE_T: f'{SC2Mission.THE_CRUCIBLE_T.mission_name}: Victory',
+        SC2Mission.HAND_OF_DARKNESS_T: f'{SC2Mission.HAND_OF_DARKNESS_T.mission_name}: Victory',
+        SC2Mission.PHANTOMS_OF_THE_VOID_T: f'{SC2Mission.PHANTOMS_OF_THE_VOID_T.mission_name}: Victory',
+        SC2Mission.PLANETFALL_T: f'{SC2Mission.PLANETFALL_T.mission_name}: Victory',
+        SC2Mission.DEATH_FROM_ABOVE_T: f'{SC2Mission.DEATH_FROM_ABOVE_T.mission_name}: Victory',
+
+        SC2Mission.THE_CRUCIBLE_P: f'{SC2Mission.THE_CRUCIBLE_P.mission_name}: Victory',
+        SC2Mission.HAND_OF_DARKNESS_P: f'{SC2Mission.HAND_OF_DARKNESS_P.mission_name}: Victory',
+        SC2Mission.PHANTOMS_OF_THE_VOID_P: f'{SC2Mission.PHANTOMS_OF_THE_VOID_P.mission_name}: Victory',
+        SC2Mission.PLANETFALL_P: f'{SC2Mission.PLANETFALL_P.mission_name}: Victory',
+        SC2Mission.DEATH_FROM_ABOVE_P: f'{SC2Mission.DEATH_FROM_ABOVE_P.mission_name}: Victory'
     },
     SC2Campaign.PROLOGUE: {
-        SC2Mission.GHOSTS_IN_THE_FOG: f'{SC2Mission.GHOSTS_IN_THE_FOG.mission_name}: Victory'
+        SC2Mission.GHOSTS_IN_THE_FOG: f'{SC2Mission.GHOSTS_IN_THE_FOG.mission_name}: Victory',
+        SC2Mission.GHOSTS_IN_THE_FOG_T: f'{SC2Mission.GHOSTS_IN_THE_FOG_T.mission_name}: Victory',
+        SC2Mission.GHOSTS_IN_THE_FOG_Z: f'{SC2Mission.GHOSTS_IN_THE_FOG_Z.mission_name}: Victory'
     },
     SC2Campaign.LOTV: {
         SC2Mission.THE_HOST: f'{SC2Mission.THE_HOST.mission_name}: Victory',
-        SC2Mission.TEMPLAR_S_CHARGE: f'{SC2Mission.TEMPLAR_S_CHARGE.mission_name}: Victory'
+        SC2Mission.TEMPLAR_S_CHARGE: f'{SC2Mission.TEMPLAR_S_CHARGE.mission_name}: Victory',
+
+        SC2Mission.THE_HOST_T: f'{SC2Mission.THE_HOST_T.mission_name}: Victory',
+        SC2Mission.TEMPLAR_S_CHARGE_T: f'{SC2Mission.TEMPLAR_S_CHARGE_T.mission_name}: Victory',
+
+        SC2Mission.THE_HOST_Z: f'{SC2Mission.THE_HOST_Z.mission_name}: Victory',
+        SC2Mission.TEMPLAR_S_CHARGE_Z: f'{SC2Mission.TEMPLAR_S_CHARGE_Z.mission_name}: Victory'
     },
     SC2Campaign.EPILOGUE: {
         SC2Mission.AMON_S_FALL: f'{SC2Mission.AMON_S_FALL.mission_name}: Victory',

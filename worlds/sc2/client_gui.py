@@ -7,17 +7,20 @@ from NetUtils import JSONMessagePart
 from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser, LogtoUI
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.core.clipboard import Clipboard
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
+from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.tooltip import MDTooltip
 from kivy.uix.scrollview import ScrollView
-from kivy.properties import StringProperty, BooleanProperty
-from kivy.core.window import Window
+from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 
-from .client import SC2Context, calc_unfinished_nodes
+from .client import SC2Context, calc_unfinished_nodes, is_mission_available, compute_received_items
 from .item.item_descriptions import item_descriptions
+from .mission_order.entry_rules import RuleData, SubRuleRuleData, ItemRuleData
 from .mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
 from .locations import LocationType, lookup_location_id_to_type, lookup_location_id_to_flags
@@ -31,6 +34,7 @@ class HoverableButton(HoverBehavior, Button):
 
 class MissionButton(HoverableButton, MDTooltip):
     tooltip_text = StringProperty("Test")
+    mission_id = NumericProperty(-1)
     is_exit = BooleanProperty(False)
     is_goal = BooleanProperty(False)
 
@@ -117,7 +121,7 @@ class SC2Manager(GameManager):
     campaign_scroll_panel: Optional[CampaignScroll] = None
     last_checked_locations: Set[int] = set()
     last_data_out_of_date = False
-    mission_id_to_button: Dict[int, MissionButton] = {}
+    mission_buttons: List[MissionButton] = []
     launching: Union[bool, int] = False  # if int -> mission ID
     refresh_from_launching = True
     first_check = True
@@ -148,7 +152,7 @@ class SC2Manager(GameManager):
                 logging.getLogger("Starcraft2").warning(f"{race.name.title()} button color setting: {error}")
 
     def clear_tooltip(self) -> None:
-        for button in self.mission_id_to_button.values():
+        for button in self.mission_buttons:
             button.remove_tooltip()
 
     def build(self):
@@ -208,7 +212,7 @@ class SC2Manager(GameManager):
         self.last_checked_locations = self.ctx.checked_locations.copy()
         self.first_check = False
 
-        self.mission_id_to_button = {}
+        self.mission_buttons = []
 
         available_missions, available_layouts, available_campaigns, unfinished_missions = calc_unfinished_nodes(self.ctx)
 
@@ -268,6 +272,8 @@ class SC2Manager(GameManager):
 
                         mission_button = MissionButton(text=text, size_hint_y=None, height=MISSION_BUTTON_HEIGHT)
 
+                        mission_button.mission_id = mission_id
+
                         if mission_id in self.ctx.final_mission_ids:
                             mission_button.is_goal = True
                         if is_layout_exit or is_campaign_exit:
@@ -281,7 +287,7 @@ class SC2Manager(GameManager):
                             mission_button.background_color = self.button_colors[race]
                         mission_button.tooltip_text = tooltip
                         mission_button.bind(on_press=self.mission_callback)
-                        self.mission_id_to_button[mission_id] = mission_button
+                        self.mission_buttons.append(mission_button)
                         category_panel.add_widget(mission_button)
 
                     # layout_panel.add_widget(Label(text=""))
@@ -427,11 +433,87 @@ class SC2Manager(GameManager):
         
 
     def mission_callback(self, button: MissionButton) -> None:
+        if button.last_touch.button == 'right':
+            self.open_mission_menu(button)
+            return
         if not self.launching:
-            mission_id: int = next(k for k, v in self.mission_id_to_button.items() if v == button)
+            mission_id: int = button.mission_id
             if self.ctx.play_mission(mission_id):
                 self.launching = mission_id
                 Clock.schedule_once(self.finish_launching, 10)
+
+    def open_mission_menu(self, button: MissionButton) -> None:
+        # Will be assigned later, used to close menu in callbacks
+        menu = None
+        mission_id = button.mission_id
+
+        def copy_mission_name():
+            Clipboard.copy(lookup_id_to_mission[mission_id].mission_name)
+            menu.dismiss()
+
+        menu_items = [
+            {
+                "text": "Copy Mission Name",
+                "on_release": copy_mission_name,
+            }
+        ]
+        width_override = None
+
+        hinted_item_ids = Counter()
+        hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}")
+        if hints:
+            for hint in hints:
+                if hint['receiving_player'] == self.ctx.slot and not hint['found']:
+                    hinted_item_ids[hint['item']] += 1
+
+        if not self.ctx.is_mission_completed(mission_id) and not is_mission_available(self.ctx, mission_id):
+            # Uncompleted and inaccessible missions can have items hinted if they're needed
+            # The inaccessible restriction is to ensure users don't waste hints on missions that they can already access
+            items_needed = self.resolve_items_needed(mission_id)
+            received_items = compute_received_items(self.ctx)
+            for item_id, amount in items_needed.items():
+                # If we have already received or hinted enough of this item, skip it
+                if received_items[item_id] + hinted_item_ids[item_id] >= amount:
+                    continue
+                if width_override is None:
+                    width_override = dp(500)
+                item_name = self.ctx.item_names.lookup_in_game(item_id)
+                label_text = f"Hint Required Item: {item_name}"
+
+                def hint_and_close():
+                    self.ctx.command_processor(self.ctx)(f"!hint {item_name}")
+                    menu.dismiss()
+
+                menu_items.append({
+                    "text": label_text,
+                    "on_release": hint_and_close,
+                })
+
+        menu = MDDropdownMenu(
+            caller=button,
+            items=menu_items,
+            **({"width": width_override} if width_override else {}),
+        )
+        menu.open()
+
+    def resolve_items_needed(self, mission_id: int) -> Counter[int]:
+        def resolve_rule_to_items(rule: RuleData) -> Counter[int]:
+            if isinstance(rule, SubRuleRuleData):
+                all_items = Counter()
+                for sub_rule in rule.sub_rules:
+                    # Take max of each item across all sub-rules
+                    all_items |= resolve_rule_to_items(sub_rule)
+                return all_items
+            elif isinstance(rule, ItemRuleData):
+                return Counter(rule.item_ids)
+            else:
+                return Counter()
+
+        rules = self.ctx.mission_id_to_entry_rules[mission_id]
+        # Take max value of each item across all rules using '|'
+        return (resolve_rule_to_items(rules.mission_rule) |
+                resolve_rule_to_items(rules.layout_rule) |
+                resolve_rule_to_items(rules.campaign_rule))
 
     def finish_launching(self, dt):
         self.launching = False

@@ -142,7 +142,7 @@ parent_present[parent_names.BANELING_SOURCE] = AnyOf(
 parent_present[parent_names.INFESTED_UNITS] = AnyOf(item_groups.infterr_units, display_string='Infested')
 parent_present[parent_names.MORPH_SOURCE_AIR] = MorphlingOrAnyOf((item_names.MUTALISK, item_names.CORRUPTOR), "Mutalisk/Corruptor Morphs")
 parent_present[parent_names.MORPH_SOURCE_ROACH] = MorphlingOrItem(item_names.ROACH)
-parent_present[parent_names.MORPH_SOURCE_ZERGLING] = MorphlingOrAnyOf((item_names.ZERGLING, item_names.ZERGLING_RECONSTITUTION), "Zergling Morphs")
+parent_present[parent_names.MORPH_SOURCE_ZERGLING] = MorphlingOrItem(item_names.ZERGLING)
 parent_present[parent_names.MORPH_SOURCE_HYDRALISK] = MorphlingOrItem(item_names.HYDRALISK)
 parent_present[parent_names.MORPH_SOURCE_ULTRALISK] = MorphlingOrItem(item_names.ULTRALISK)
 parent_present[parent_names.ZERG_UPROOTABLE_BUILDINGS] = AnyOf(
@@ -153,6 +153,10 @@ parent_present[parent_names.ZERG_MISSILE_ATTACKER] = AnyOf(item_groups.zerg_rang
 parent_present[parent_names.ZERG_CARAPACE_UNIT] = AnyOf(item_groups.zerg_ground_units, display_string='Zerg Flyers')
 parent_present[parent_names.ZERG_FLYING_UNIT] = AnyOf(item_groups.zerg_air_units, display_string='Zerg Flyers')
 parent_present[parent_names.ZERG_MERCENARIES] = AnyOf(item_groups.zerg_mercenaries, display_string='Zerg Mercenaries')
+parent_present[parent_names.ZERG_OUROBOUROS_CONDITION] = AnyOfGroupAndOneOtherItem(
+    (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.ABERRATION),
+    item_names.ECHIDNA_WORM
+)
 
 # Protoss
 parent_present[parent_names.ARCHON_SOURCE] = AnyOf(
