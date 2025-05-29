@@ -579,6 +579,17 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     else:
         soa_passive_presence = False
 
+    remove_kerrigan_abils = (
+        # TODO: Kerrigan presence Zerg/Everywhere
+        not kerrigan_is_present
+        or (world.options.grant_story_tech.value == GrantStoryTech.option_grant and not kerrigan_build_missions)
+        or (
+            world.options.grant_story_tech.value == GrantStoryTech.option_allow_substitutes
+            and len(kerrigan_missions) == 1
+            and kerrigan_missions[0] == SC2Mission.SUPREME
+        )
+    )
+
     for item in item_list:
         # Filter Nova equipment if you never get Nova
         if not nova_missions and (item.name in item_groups.nova_equipment):
@@ -592,12 +603,8 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Kerrigan abilities if there's no kerrigan
-        if item.data.type == item_tables.ZergItemType.Ability:
-            if not kerrigan_is_present:
-                # TODO: Kerrigan presence Zerg/Everywhere
-                item.flags |= ItemFilterFlags.FilterExcluded
-            elif world.options.grant_story_tech and not kerrigan_build_missions:
-                item.flags |= ItemFilterFlags.FilterExcluded
+        if item.data.type == item_tables.ZergItemType.Ability and remove_kerrigan_abils:
+            item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Spear of Adun if it's off
         if item.name in item_tables.spear_of_adun_calldowns and not soa_presence:
