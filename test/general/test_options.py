@@ -79,3 +79,12 @@ class TestOptions(unittest.TestCase):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
                         pickle.dumps(option.from_any(option.default))
+
+    def test_option_presets(self):
+        """Test that all options set within an option preset are valid option names for the world"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            for preset_name, preset in world_type.web.options_presets.items():
+                with self.subTest(game=game_name, preset=preset_name):
+                    for option_name in preset:
+                        self.assertIn(option_name, world_type.options_dataclass.type_hints,
+                                      f"{option_name} is not a valid option name for {game_name}.")
