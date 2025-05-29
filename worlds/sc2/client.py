@@ -830,7 +830,7 @@ class SC2Context(CommonContext):
             self.kerrigan_levels_per_mission_completed_cap = args["slot_data"].get("kerrigan_levels_per_mission_completed_cap", -1)
             self.kerrigan_total_level_cap = args["slot_data"].get("kerrigan_total_level_cap", -1)
             self.enable_morphling = args["slot_data"].get("enable_morphling", EnableMorphling.option_false)
-            self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
+            self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_no_grant)
             self.grant_story_levels = args["slot_data"].get("grant_story_levels", GrantStoryLevels.option_additive)
             self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
@@ -1038,12 +1038,17 @@ class SC2Context(CommonContext):
         }
 
         for loc in self.server_locations:
-            offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
+            offset = (
+                SC2WOL_LOC_ID_OFFSET
+                if loc < SC2HOTS_LOC_ID_OFFSET
                 else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
+            )
             mission_id, objective = divmod(loc - offset, VICTORY_MODULO)
             mission_id_to_location_ids[mission_id].add(objective)
-        self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
-                                           mission_id_to_location_ids.items()}
+        self.mission_id_to_location_ids = {
+            mission_id: sorted(objectives)
+            for mission_id, objectives in mission_id_to_location_ids.items()
+        }
 
     def locations_for_mission(self, mission: SC2Mission) -> typing.Iterable[int]:
         mission_id: int = mission.id
