@@ -1,9 +1,8 @@
 from typing import List, Dict, Any
-import random
 
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import SohItem, item_data_table, item_table
+from .Items import SohItem, item_data_table, item_table, filler_items
 from .Locations import SohLocation, base_location_table, \
     gold_skulltula_overworld_location_table, \
     gold_skulltula_dungeon_location_table, \
@@ -62,14 +61,6 @@ class SohWorld(World):
 
     def create_items(self) -> None:
         item_pool: List[SohItem] = []
-
-        location_count: int = 0
-        # Count Total Locations.
-        for location_name, location_data in location_table.items():
-            location_count += 1
-
-        # Filler item list
-        filler_items = ["Recovery Heart", "Blue Rupee", "Red Rupee", "Purple Rupee", "Huge Rupee", "Bombs (5)", "Bombs (10)", "Arrows (5)", "Arrows (10)", "Deku Nuts (5)", "Deku Nuts (10)", "Deku Stick (1)"]
 
         # Add Base Progression Items
         item_pool.append(self.create_item("Kokiri Sword"))
@@ -200,8 +191,8 @@ class SohWorld(World):
             item_pool.append(self.create_item("Giant's Knife"))
             item_pool.append(self.create_item("Magic Bean Pack"))
 
-        filler_item_count: int = location_count - len(item_pool)
-        item_pool += [self.create_item(filler_items[random.randint(0, 11)]) for _ in range(filler_item_count)]
+        filler_item_count: int = len(self.get_unfilled_locations()) - len(item_pool)
+        item_pool += [self.create_item(self.random.choice(filler_items) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool
 
@@ -393,7 +384,7 @@ class SohWorld(World):
                 self.get_location(location_name).place_locked_item(token_item)
 
     def get_filler_item_name(self) -> str:
-        return "Blue Rupee"
+        return self.random.choice(filler_items)
 
     def set_rules(self) -> None:
         # Completion condition.
