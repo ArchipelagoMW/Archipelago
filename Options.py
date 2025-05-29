@@ -1721,10 +1721,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
             presets = world.web.options_presets.copy()
-            if not presets:
-                presets = {"": {}}
-            else:
-                presets.update({"Default": {}})
+            presets.update({"": {}})
             
 
             option_groups = get_option_groups(world)
