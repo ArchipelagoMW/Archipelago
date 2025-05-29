@@ -33,3 +33,4 @@ harder peaks may have to be summited without early-game unlocks.
 ## Notes
 - The Alps DLC currently has no implementation, it is not recommended to go to the alps during an Archipelago session,
 as that may lead to unforeseen consequences.
+- 

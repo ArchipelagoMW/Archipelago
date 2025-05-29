@@ -456,4 +456,3 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
     ], enable_requirements=lambda options: options.enable_expert, is_book=True),
 ])
 all_locations_to_ids: dict[str, int] = poy_regions.get_all_locations_dict()
-

@@ -215,4 +215,3 @@ class PeaksOfYoreOptions(PerGameCommonOptions):
     include_free_solo: IncludeFreeSolo
     include_time_attack: IncludeTimeAttack
     start_inventory_from_pool: StartInventoryPool
-
