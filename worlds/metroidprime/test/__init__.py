@@ -34,28 +34,31 @@ class MetroidPrimeWithOverridesTestBase(MetroidPrimeTestBase):
 
     # Copied from bases.py, overriden at the end to manually set some values before generate_early
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
+        if type(self) is WorldTestBase or \
+              (hasattr(WorldTestBase, self._testMethodName)
+                and not self.run_default_tests and
+                getattr(self, self._testMethodName).__code__ is
+                getattr(WorldTestBase, self._testMethodName, None).__code__): # type: ignore
+          return  # setUp gets called for tests defined in the base class. We skip world_setup here.
+        if not hasattr(self, "game"):
+            raise NotImplementedError("didn't define game name")
         self.multiworld = MultiWorld(1)
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld)
         random.seed(self.multiworld.seed)
-        self.multiworld.seed_name = get_seed_name(
-            random
-        )  # only called to get same RNG progression as Generate.py
+        self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types[
-            self.game
-        ].options_dataclass.type_hints.items():
-            setattr(
-                args,
-                name,
-                {1: option.from_any(self.options.get(name, option.default))},
-            )
+        for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
+            setattr(args, name, {
+                1: option.from_any(self.options.get(name, option.default))
+            })
         self.multiworld.set_options(args)
-        self.world = self.multiworld.worlds[self.player]  # type: ignore
-        self.pre_steps()
+        self.multiworld.state = CollectionState(self.multiworld)
+        self.world = self.multiworld.worlds[self.player] # type: ignore
+        # End of copied code
 
+        self.pre_steps()
         self.world.generate_early()
 
         # A couple tests rely on this being set, it does not happen in the test base for some reason
