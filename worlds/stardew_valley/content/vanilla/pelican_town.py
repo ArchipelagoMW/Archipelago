@@ -649,5 +649,7 @@ pelican_town = ContentPack(
         Hats.raccoon_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.quest.has_raccoon_shop(3) &
                                                                                              logic.region.can_reach(LogicRegion.raccoon_shop)),),
 
+        Hats.squid_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.festival.can_squidfest_day_1_iridium_reward()),),
+
     }
 )

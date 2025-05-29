@@ -49,6 +49,7 @@ class Monster:
     royal_serpent = "Royal Serpent"
     magma_sprite = "Magma Sprite"
     magma_sparker = "Magma Sparker"
+    metal_head = "Metal Head"
 
 
 class MonsterCategory:

@@ -47,5 +47,7 @@ the_mines = ContentPack(
         Hats.skeleton_mask.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.skeleton, Monster.skeleton_mage, Monster.skeleton_dangerous,),
                                                                   amount_tier=MAX_MONTHS,
                                                                   other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
+        Hats.squires_helmet.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.metal_head,),
+                                                                   amount_tier=MAX_MONTHS),),
     },
 )

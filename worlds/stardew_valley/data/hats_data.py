@@ -27,7 +27,7 @@ class HatItem:
 all_hats: list[HatItem] = []
 
 
-def hat(name: str, difficulty: int, consider: bool = True) -> HatItem:
+def hat(name: str, difficulty: int) -> HatItem:
     hat_item = HatItem(name, difficulty)
     all_hats.append(hat_item)
     return hat_item
@@ -133,11 +133,11 @@ class Hats:
     small_cap = hat("Small Cap", HatDifficulty.easy_island)
     sombrero = hat("Sombrero", HatDifficulty.near_perfection)
     souwester = hat("Sou'wester", HatDifficulty.easy)
-    space_helmet = hat("Space Helmet", HatDifficulty.medium_island, False)
+    space_helmet = hat("Space Helmet", HatDifficulty.medium_island)
     sports_cap = hat("Sports Cap", HatDifficulty.medium)
     spotted_headscarf = hat("Spotted Headscarf", HatDifficulty.tailoring)
-    squid_hat = hat("Squid Hat", HatDifficulty.easy, False)
-    squires_helmet = hat("Squire's Helmet", HatDifficulty.medium, False)
+    squid_hat = hat("Squid Hat", HatDifficulty.easy)
+    squires_helmet = hat("Squire's Helmet", HatDifficulty.medium)
     star_helmet = hat("Star Helmet", HatDifficulty.tailoring)
     steel_pan_hat = hat("Steel Pan (Hat)", HatDifficulty.medium)
     straw = hat("Straw Hat", HatDifficulty.easy)
@@ -146,7 +146,7 @@ class Hats:
     tiara = hat("Tiara", HatDifficulty.easy)
     tiger_hat = hat("Tiger Hat", HatDifficulty.difficult_or_rng_island)
     top_hat = hat("Top Hat", HatDifficulty.easy)
-    totem_mask = hat("Totem Mask", HatDifficulty.tailoring, False)
+    totem_mask = hat("Totem Mask", HatDifficulty.tailoring)
     tricorn = hat("Tricorn Hat", HatDifficulty.difficult_or_rng)
     tropiclip = hat("Tropiclip", HatDifficulty.easy)
     trucker_hat = hat("Trucker Hat", HatDifficulty.medium)

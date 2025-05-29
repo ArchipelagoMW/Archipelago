@@ -219,6 +219,10 @@ base_game = BaseGameContentPack(
         Hats.wearable_dwarf_helm.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Artifact.dwarf_gadget, Artifact.dwarvish_helm,)),),
         Hats.white_turban.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fruit.sweet_gem_berry,)),),
         Hats.witch_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.golden_pumpkin,)),),
+        Hats.totem_mask.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Consumable.rain_totem, Consumable.warp_totem_farm,
+                                                                                  Consumable.warp_totem_mountains, Consumable.warp_totem_beach,
+                                                                                  Consumable.warp_totem_desert, Consumable.warp_totem_island,
+                                                                                  Consumable.treasure_totem)),),
 
         Hats.copper_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.copper)),),
         Hats.steel_pan_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iron)),),
