@@ -1,42 +1,46 @@
 import unittest
 from argparse import Namespace
-from typing import Type
+from typing import Type, ClassVar
 
 from BaseClasses import CollectionState, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import ItemLinks
 from worlds.AutoWorld import AutoWorldRegister, World, call_all
 from . import setup_solo_multiworld
+from ..param import classvar_matrix
 
 
-class TestBase(unittest.TestCase):
+@classvar_matrix(game=AutoWorldRegister.world_types.keys())
+class ItemsTest(unittest.TestCase):
+    game: ClassVar[str]
+
     def test_create_item(self):
         """Test that a world can successfully create all items in its datapackage"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            multiworld = setup_solo_multiworld(world_type, steps=("generate_early", "create_regions", "create_items"))
-            proxy_world = multiworld.worlds[1]
-            for item_name in world_type.item_name_to_id:
-                test_state = CollectionState(multiworld)
-                with self.subTest("Create Item", item_name=item_name, game_name=game_name):
-                    item = proxy_world.create_item(item_name)
+        world_type = AutoWorldRegister.world_types[self.game]
+        multiworld = setup_solo_multiworld(world_type, steps=("generate_early", "create_regions", "create_items"))
+        proxy_world = multiworld.worlds[1]
+        for item_name in world_type.item_name_to_id:
+            test_state = CollectionState(multiworld)
+            with self.subTest("Create Item", item_name=item_name, game_name=self.game):
+                item = proxy_world.create_item(item_name)
 
-                with self.subTest("Item Name", item_name=item_name, game_name=game_name):
-                    self.assertEqual(item.name, item_name)
+            with self.subTest("Item Name", item_name=item_name, game_name=self.game):
+                self.assertEqual(item.name, item_name)
 
-                if item.advancement:
-                    with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
-                        test_state.collect(item, True)
+            if item.advancement:
+                with self.subTest("Item State Collect", item_name=item_name, game_name=self.game):
+                    test_state.collect(item, True)
 
-                    with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
-                        test_state.remove(item)
+                with self.subTest("Item State Remove", item_name=item_name, game_name=self.game):
+                    test_state.remove(item)
 
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
-                                         "Item Collect -> Remove should restore empty state.")
-                else:
-                    with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
-                        # Non-Advancement should not modify state.
-                        test_state.collect(item)
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
+                    self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
+                                     "Item Collect -> Remove should restore empty state.")
+            else:
+                with self.subTest("Item State Collect No Change", item_name=item_name, game_name=self.game):
+                    # Non-Advancement should not modify state.
+                    test_state.collect(item)
+                    self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
 
     def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """
@@ -52,41 +56,37 @@ class TestBase(unittest.TestCase):
             "Yu-Gi-Oh! 2006":
                 {"Campaign Boss Beaten"}
         }
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest(game_name, game_name=game_name):
-                exclusions = exclusion_dict.get(game_name, frozenset())
-                for group_name, items in world_type.item_name_groups.items():
-                    if group_name not in exclusions:
-                        with self.subTest(group_name, group_name=group_name):
-                            for item in items:
-                                self.assertIn(item, world_type.item_name_to_id)
+        world_type = AutoWorldRegister.world_types[self.game]
+        exclusions = exclusion_dict.get(self.game, frozenset())
+        for group_name, items in world_type.item_name_groups.items():
+            if group_name not in exclusions:
+                with self.subTest(group_name, group_name=group_name, game_name=self.game):
+                    for item in items:
+                        self.assertIn(item, world_type.item_name_to_id)
 
     def test_item_name_group_conflict(self):
         """Test that all item name groups aren't also item names."""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest(game_name, game_name=game_name):
-                for group_name in world_type.item_name_groups:
-                    with self.subTest(group_name, group_name=group_name):
-                        self.assertNotIn(group_name, world_type.item_name_to_id)
+        world_type = AutoWorldRegister.world_types[self.game]
+        for group_name in world_type.item_name_groups:
+            with self.subTest(group_name, group_name=group_name, game_name=self.game):
+                self.assertNotIn(group_name, world_type.item_name_to_id)
 
     def test_item_count_equal_locations(self):
         """Test that by the pre_fill step under default settings, each game submits items == locations"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game=game_name):
-                multiworld = setup_solo_multiworld(world_type)
-                self.assertEqual(
-                    len(multiworld.itempool),
-                    len(multiworld.get_unfilled_locations()),
-                    f"{game_name} Item count MUST match the number of locations",
-                )
+        world_type = AutoWorldRegister.world_types[self.game]
+        multiworld = setup_solo_multiworld(world_type)
+        self.assertEqual(
+            len(multiworld.itempool),
+            len(multiworld.get_unfilled_locations()),
+            f"{self.game} Item count MUST match the number of locations",
+        )
 
     def test_items_in_datapackage(self):
         """Test that any created items in the itempool are in the datapackage"""
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Game", game=game_name):
-                multiworld = setup_solo_multiworld(world_type)
-                for item in multiworld.itempool:
-                    self.assertIn(item.name, world_type.item_name_to_id)
+        world_type = AutoWorldRegister.world_types[self.game]
+        multiworld = setup_solo_multiworld(world_type)
+        for item in multiworld.itempool:
+            self.assertIn(item.name, world_type.item_name_to_id)
     
     def test_item_links(self) -> None:
         """
@@ -123,43 +123,40 @@ class TestBase(unittest.TestCase):
             call_all(multiworld, "post_fill")
             self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)), f"seed = {multiworld.seed}")
 
-        for game_name, world_type in AutoWorldRegister.world_types.items():
-            with self.subTest("Can generate with link replacement", game=game_name):
-                setup_link_multiworld(world_type, True)
-            with self.subTest("Can generate without link replacement", game=game_name):
-                setup_link_multiworld(world_type, False)
+        world_type = AutoWorldRegister.world_types[self.game]
+        with self.subTest("Can generate with link replacement", game=self.game):
+            setup_link_multiworld(world_type, True)
+        with self.subTest("Can generate without link replacement", game=self.game):
+            setup_link_multiworld(world_type, False)
 
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""
         gen_steps = ("generate_early", "create_regions", "create_items")
         additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
         excluded_games = ("Links Awakening DX", "Ocarina of Time", "SMZ3")
-        worlds_to_test = {game: world
-                          for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
-        for game_name, world_type in worlds_to_test.items():
-            with self.subTest("Game", game=game_name):
-                multiworld = setup_solo_multiworld(world_type, gen_steps)
-                created_items = multiworld.itempool.copy()
-                for step in additional_steps:
-                    with self.subTest("step", step=step):
-                        call_all(multiworld, step)
-                        self.assertEqual(created_items, multiworld.itempool,
-                                         f"{game_name} modified the itempool during {step}")
+        if self.game in excluded_games:
+            self.skipTest("excluded game")
+        world_type = AutoWorldRegister.world_types[self.game]
+        multiworld = setup_solo_multiworld(world_type, gen_steps)
+        created_items = multiworld.itempool.copy()
+        for step in additional_steps:
+            with self.subTest("step", step=step, game=self.game):
+                call_all(multiworld, step)
+                self.assertEqual(created_items, multiworld.itempool,
+                                 f"{self.game} modified the itempool during {step}")
 
     def test_locality_not_modified(self):
         """Test that worlds don't modify the locality of items after duplicates are resolved"""
         gen_steps = ("generate_early", "create_regions", "create_items")
         additional_steps = ("set_rules", "connect_entrances", "generate_basic", "pre_fill")
-        worlds_to_test = {game: world for game, world in AutoWorldRegister.world_types.items()}
-        for game_name, world_type in worlds_to_test.items():
-            with self.subTest("Game", game=game_name):
-                multiworld = setup_solo_multiworld(world_type, gen_steps)
-                local_items = multiworld.worlds[1].options.local_items.value.copy()
-                non_local_items = multiworld.worlds[1].options.non_local_items.value.copy()
-                for step in additional_steps:
-                    with self.subTest("step", step=step):
-                        call_all(multiworld, step)
-                        self.assertEqual(local_items, multiworld.worlds[1].options.local_items.value,
-                                         f"{game_name} modified local_items during {step}")
-                        self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
-                                         f"{game_name} modified non_local_items during {step}")
+        world_type = AutoWorldRegister.world_types[self.game]
+        multiworld = setup_solo_multiworld(world_type, gen_steps)
+        local_items = multiworld.worlds[1].options.local_items.value.copy()
+        non_local_items = multiworld.worlds[1].options.non_local_items.value.copy()
+        for step in additional_steps:
+            with self.subTest("step", step=step, game=self.game):
+                call_all(multiworld, step)
+                self.assertEqual(local_items, multiworld.worlds[1].options.local_items.value,
+                                 f"{self.game} modified local_items during {step}")
+                self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
+                                 f"{self.game} modified non_local_items during {step}")
