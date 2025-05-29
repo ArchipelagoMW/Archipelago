@@ -754,12 +754,6 @@ item_table = {
         ItemData(399 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 3, SC2Race.TERRAN,
                  parent=item_names.MISSILE_TURRET),
     # Note(mm): WoL ID 400 collides with buildings; jump forward to leave buildings room
-    item_names.GHOST_BARGAIN_BIN_PRICES:
-        ItemData(450 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 4, SC2Race.TERRAN,
-                 parent=item_names.GHOST),
-    item_names.SPECTRE_BARGAIN_BIN_PRICES:
-        ItemData(451 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 5, SC2Race.TERRAN,
-                 parent=item_names.SPECTRE),
 
     #Buildings
     item_names.BUNKER:
@@ -955,6 +949,12 @@ item_table = {
     item_names.WARHOUND_DEPLOY_TURRET:
         ItemData(766 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 20, SC2Race.TERRAN,
                  parent=item_names.WARHOUND),
+    item_names.GHOST_BARGAIN_BIN_PRICES:
+        ItemData(767 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 21, SC2Race.TERRAN,
+                 parent=item_names.GHOST),
+    item_names.SPECTRE_BARGAIN_BIN_PRICES:
+        ItemData(768 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_7, 22, SC2Race.TERRAN,
+                 parent=item_names.SPECTRE),
 
     # Filler items to fill remaining spots
     item_names.STARTING_MINERALS:
