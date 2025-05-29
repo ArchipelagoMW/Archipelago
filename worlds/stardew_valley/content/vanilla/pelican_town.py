@@ -632,6 +632,9 @@ pelican_town = ContentPack(
         Hats.emilys_magic_hat.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                                   other_requirements=(
                                                                       SpecificFriendRequirement(NPC.emily, 14), RegionRequirement(Region.farm))),),
+        Hats.fedora.name: (Tag(ItemTag.HAT), ShopSource(price=500, currency=Currency.star_token, shop_region=LogicRegion.fair),),
+        Hats.cone_hat.name: (Tag(ItemTag.HAT), ShopSource(price=5000, shop_region=LogicRegion.night_market),),
+        Hats.red_fez.name: (Tag(ItemTag.HAT), ShopSource(price=8000, shop_region=LogicRegion.traveling_cart),),
 
         Hats.garbage_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.town,), grind_months=12),),
         Hats.mystery_hat.name: (Tag(ItemTag.HAT), MysteryBoxSource(amount=100),),
@@ -640,8 +643,11 @@ pelican_town = ContentPack(
                                                                                    Fish.midnight_squid, Fish.void_salmon, Fish.slimejack,)),),
         Hats.bucket_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
 
-        Hats.cone_hat.name: (Tag(ItemTag.HAT), ShopSource(price=5000, shop_region=LogicRegion.night_market),),
-        Hats.fedora.name: (Tag(ItemTag.HAT), ShopSource(price=500, currency=Currency.star_token, shop_region=LogicRegion.fair),),
+        Hats.leprechaun_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.forest,), seasons=(Season.spring,), ),),
+        Hats.mushroom_cap.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.farm,), seasons=(Season.fall,), ),),
+
+        Hats.raccoon_hat.name: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.quest.has_raccoon_shop(3) &
+                                                                                             logic.region.can_reach(LogicRegion.raccoon_shop)),),
 
     }
 )

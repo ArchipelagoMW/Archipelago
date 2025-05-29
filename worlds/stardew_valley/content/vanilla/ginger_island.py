@@ -17,6 +17,7 @@ from ...strings.animal_product_names import AnimalProduct
 from ...strings.book_names import Book
 from ...strings.building_names import Building
 from ...strings.crop_names import Fruit, Vegetable
+from ...strings.currency_names import Currency
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
@@ -126,7 +127,14 @@ ginger_island_content_pack = GingerIslandContentPack(
                                                                     other_requirements=(PerfectionPercentRequirement(100), RegionRequirement(Region.volcano_floor_10))),),
         Hats.golden_helmet.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,
                                                                other_requirements=(RegionRequirement(Region.blacksmith), HasItemRequirement(Geode.golden_coconut),)),),
-        Hats.tiger_hat.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS),),
+        Hats.bluebird_mask.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.deluxe_cowboy_hat.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.small_cap.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
+        Hats.mr_qis_hat.name: (Tag(ItemTag.HAT), ShopSource(price=5, currency=Currency.qi_gem, shop_region=Region.qi_walnut_room),),
+        Hats.pink_bow.name: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=Region.volcano_dwarf_shop),),
+
+        Hats.tiger_hat.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.tiger_slime,), amount_tier=MAX_MONTHS,
+                                                              other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
         Hats.deluxe_pirate_hat.name: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.volcano, Region.volcano_floor_5, Region.volcano_floor_10,),
                                                                        require_all_regions=True),),
 
@@ -137,8 +145,6 @@ ginger_island_content_pack = GingerIslandContentPack(
         Hats.swashbuckler_hat.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Forageable.dragon_tooth,)),),
         Hats.warrior_helmet.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(AnimalProduct.ostrich_egg,)),),
 
-        Hats.bluebird_mask.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
-        Hats.deluxe_cowboy_hat.name: (Tag(ItemTag.HAT), ShopSource(price=30, currency=Vegetable.taro_root, shop_region=Region.island_trader),),
         Hats.frog_hat.name: (Tag(ItemTag.HAT), FishingSource(region=Region.gourmand_frog_cave,),),
     },
 )

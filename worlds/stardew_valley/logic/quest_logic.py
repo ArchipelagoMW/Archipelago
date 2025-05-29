@@ -118,13 +118,12 @@ class QuestLogic(BaseLogic):
             return self.logic.received(Wallet.dark_talisman)
         return self.logic.quest.can_complete_quest(Quest.dark_talisman)
 
-    def has_raccoon_shop(self) -> StardewRule:
+    def has_raccoon_shop(self, tier: int = 1) -> StardewRule:
+        number_raccoons_required = 1 + tier  # 1 for Mr Raccoon, plus 1 for each shop tier at Mrs Raccoon
         if self.options.quest_locations.has_story_quests():
-            # 1 - Break the tree
-            # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
-            # 3 - Raccoon's wife opens the shop
-            return self.logic.received(CommunityUpgrade.raccoon, 3)
-        return self.logic.received(CommunityUpgrade.raccoon, 2) & self.logic.quest.can_complete_quest(Quest.giant_stump)
+            # Add one for repairing the tree. This one is done manually if quests are turned off
+            return self.logic.received(CommunityUpgrade.raccoon, 1 + number_raccoons_required)
+        return self.logic.received(CommunityUpgrade.raccoon, number_raccoons_required) & self.logic.quest.can_complete_quest(Quest.giant_stump)
 
     def can_complete_help_wanteds(self, number: int) -> StardewRule:
         number_per_month = 7

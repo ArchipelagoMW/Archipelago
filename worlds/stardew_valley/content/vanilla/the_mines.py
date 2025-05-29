@@ -4,10 +4,13 @@ from ...data import fish_data, villagers_data
 from ...data.game_item import Tag, ItemTag
 from ...data.harvest import ForagingSource
 from ...data.hats_data import Hats
-from ...data.requirement import ToolRequirement
+from ...data.monster_data import MonsterSource
+from ...data.requirement import ToolRequirement, RegionRequirement
 from ...logic.tailoring_logic import TailoringSource
+from ...logic.time_logic import MAX_MONTHS
 from ...strings.fish_names import Fish
 from ...strings.forageable_names import Forageable, Mushroom
+from ...strings.monster_names import Monster
 from ...strings.region_names import Region
 from ...strings.tool_names import Tool
 
@@ -38,5 +41,11 @@ the_mines = ContentPack(
     ),
     hat_sources={
         Hats.logo_cap.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.lava_eel,)),),
+        Hats.hard_hat.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.duggy, Monster.duggy_dangerous, Monster.magma_duggy,),
+                                                             amount_tier=3,
+                                                             other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
+        Hats.skeleton_mask.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.skeleton, Monster.skeleton_mage, Monster.skeleton_dangerous,),
+                                                                  amount_tier=MAX_MONTHS,
+                                                                  other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
     },
 )
