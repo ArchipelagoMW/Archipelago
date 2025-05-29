@@ -34,11 +34,11 @@ game: {{ yaml_dump(game) }}
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
 
-{%- macro range_option(option) %}
+{%- macro range_option(option, option_val) %}
     # You can define additional values between the minimum and maximum values.
     # Minimum value is {{ option.range_start }}
     # Maximum value is {{ option.range_end }}
-    {%- set data, notes = dictify_range(option) %}
+    {%- set data, notes = dictify_range(option, option_val) %}
     {%- for entry, default in data.items() %}
     {{ entry }}: {{ default }}{% if notes[entry] %} # {{ notes[entry] }}{% endif %}
     {%- endfor -%}
@@ -67,7 +67,7 @@ requires:
     {%- endif -%}
 
     {%- if option.range_start is defined and option.range_start is number %}
-    {{- range_option(option) -}}
+    {{- range_option(option, option_val) -}}
 
     {%- elif option.options -%}
     {%- for suboption_option_id, sub_option_name in option.name_lookup.items() %}

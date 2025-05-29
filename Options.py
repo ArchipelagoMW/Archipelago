@@ -1694,10 +1694,10 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: Range):
-        data = {option.default: 50}
+    def dictify_range(option: Range, option_val: int | str):
+        data = {option_val: 50}
         for sub_option in ["random", "random-low", "random-high"]:
-            if sub_option != option.default:
+            if sub_option != option_val:
                 data[sub_option] = 0
 
         notes = {}
