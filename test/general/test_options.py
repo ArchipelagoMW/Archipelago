@@ -91,3 +91,4 @@ class TestOptions(unittest.TestCase):
                         if issubclass(world_type.options_dataclass.type_hints[option_name], Removed):
                             self.fail(f"{option_name} in game {game_name} has been removed, but is still present"
                                       f"in preset \"{preset_name}\".")
+                            
