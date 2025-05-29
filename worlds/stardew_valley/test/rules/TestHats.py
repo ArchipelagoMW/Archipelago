@@ -24,7 +24,7 @@ class TestHatsLogic(SVTestBase):
             self.collect("Progressive Pan")
             self.assert_can_reach_location(location)
 
-    def test_reach_frog_hat(self)
+    def test_reach_frog_hat(self):
         required_item_names = ["Progressive Fishing Rod", "Island Obelisk", "Island West Turtle", "Island Farmhouse"]
         required_items = [self.create_item(item_name) for item_name in required_item_names]
         location = Hats.frog_hat.to_location_name()
