@@ -40,14 +40,14 @@ the_mines = ContentPack(
         villagers_data.dwarf,
     ),
     hat_sources={
-        Hats.logo_cap.name: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.lava_eel,)),),
-        Hats.hard_hat.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.duggy, Monster.duggy_dangerous, Monster.magma_duggy,),
+        Hats.logo_cap: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Fish.lava_eel,)),),
+        Hats.hard_hat: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.duggy, Monster.duggy_dangerous, Monster.magma_duggy,),
                                                              amount_tier=3,
                                                              other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
-        Hats.skeleton_mask.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.skeleton, Monster.skeleton_mage, Monster.skeleton_dangerous,),
+        Hats.skeleton_mask: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.skeleton, Monster.skeleton_mage, Monster.skeleton_dangerous,),
                                                                   amount_tier=MAX_MONTHS,
                                                                   other_requirements=(RegionRequirement(region=Region.adventurer_guild),)),),
-        Hats.squires_helmet.name: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.metal_head,),
+        Hats.squires_helmet: (Tag(ItemTag.HAT), MonsterSource(monsters=(Monster.metal_head,),
                                                                    amount_tier=MAX_MONTHS),),
     },
 )

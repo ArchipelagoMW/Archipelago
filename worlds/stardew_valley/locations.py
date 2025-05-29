@@ -553,11 +553,15 @@ def extend_secrets_locations(randomized_locations: List[LocationData], options: 
 
 
 def extend_hats_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
-    return
-    locations = []
-    locations.extend(locations_by_tag[LocationTags.HATSANITY])
-    filtered_locations = filter_disabled_locations(options, content, locations)
-    randomized_locations.extend(filtered_locations)
+    hatsanity = content.features.hatsanity
+    if not hatsanity.is_enabled:
+        return
+
+    for hat_name, hat in content.hats.items():
+        if not hatsanity.is_included(hat):
+            continue
+
+        randomized_locations.append(location_table[hat.to_location_name()])
 
 
 def create_locations(location_collector: StardewLocationCollector,

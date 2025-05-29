@@ -23,6 +23,12 @@ class HatItem:
     def __repr__(self) -> str:
         return f"{self.name} (Difficulty: {self.difficulty})"
 
+    def to_location_name(self) -> str:
+        hat_clarifier = " (Hat)"
+        if self.name.endswith(hat_clarifier):
+            return f"Wear {self.name[:-len(hat_clarifier)]}"
+        return f"Wear {self.name}"
+
 
 all_hats: list[HatItem] = []
 

@@ -41,7 +41,21 @@ class HatsanityEasy(HatsanityFeature):
     is_enabled = True
 
     def is_included(self, hat: HatItem) -> bool:
-        return hat.difficulty <= HatDifficulty.easy
+        return hat.difficulty == HatDifficulty.easy
+
+
+class HatsanityTailoring(HatsanityFeature):
+    is_enabled = True
+
+    def is_included(self, hat: HatItem) -> bool:
+        return hat.difficulty == HatDifficulty.tailoring
+
+
+class HatsanityEasyTailoring(HatsanityFeature):
+    is_enabled = True
+
+    def is_included(self, hat: HatItem) -> bool:
+        return hat.difficulty < HatDifficulty.medium
 
 
 class HatsanityMedium(HatsanityFeature):

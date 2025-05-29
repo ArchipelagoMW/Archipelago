@@ -36,6 +36,6 @@ qi_board_content_pack = QiBoardContentPack(
         fish_data.radioactive_carp,
     ),
     hat_sources={
-        Hats.space_helmet.name: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
+        Hats.space_helmet: (HatMouseSource(price=20000, unlock_requirements=(DangerousMinesRequirement(120),)),),
     },
 )

@@ -8,6 +8,7 @@ from ..data.animal import Animal
 from ..data.building import Building
 from ..data.fish_data import FishItem
 from ..data.game_item import GameItem, Source, ItemTag
+from ..data.hats_data import HatItem
 from ..data.skill import Skill
 from ..data.villagers_data import Villager
 
@@ -26,6 +27,7 @@ class StardewContent:
     animals: dict[str, Animal] = field(default_factory=dict)
     skills: dict[str, Skill] = field(default_factory=dict)
     quests: dict[str, Any] = field(default_factory=dict)
+    hats: dict[str, HatItem] = field(default_factory=dict)
 
     def find_sources_of_type(self, types: Union[Type[Source], Tuple[Type[Source]]]) -> Iterable[Source]:
         for item in self.game_items.values():
@@ -137,7 +139,7 @@ class ContentPack:
         ...
         ...
 
-    hat_sources: Mapping[str, Iterable[Source]] = field(default_factory=dict)
+    hat_sources: Mapping[HatItem, Iterable[Source]] = field(default_factory=dict)
 
     def hat_source_hook(self, content: StardewContent):
         ...
