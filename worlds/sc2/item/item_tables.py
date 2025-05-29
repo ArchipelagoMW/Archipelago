@@ -1861,8 +1861,6 @@ item_table = {
     item_names.SCOUT_SUPPLY_EFFICIENCY: ItemData(419 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 29, SC2Race.PROTOSS, parent=item_names.SCOUT),
     item_names.REAVER_BARGAIN_BIN_PRICES: ItemData(420 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_5, 0, SC2Race.PROTOSS, parent=item_names.SCOUT),
 
-    "Removed item": ItemData(554 + SC2LOTV_ITEM_ID_OFFSET, FactionlessItemType.Deprecated, -1, SC2Race.PROTOSS, quantity=0),
-
 
     # War Council
     item_names.ZEALOT_WHIRLWIND: ItemData(500 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 0, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.ZEALOT),
@@ -1909,13 +1907,15 @@ item_table = {
     item_names.TEMPEST_DISINTEGRATION: ItemData(541 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 11, SC2Race.PROTOSS, parent=item_names.TEMPEST),
     item_names.SCOUT_EXPEDITIONARY_HULL: ItemData(542 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 12, SC2Race.PROTOSS, parent=item_names.SCOUT),
     item_names.ARBITER_VESSEL_OF_THE_CONCLAVE: ItemData(543 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 13, SC2Race.PROTOSS, parent=item_names.ARBITER),
-    item_names.ORACLE_STASIS_CALIBRATION: ItemData(326 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council, 14, SC2Race.PROTOSS, parent=item_names.ORACLE),
+    item_names.ORACLE_STASIS_CALIBRATION: ItemData(326 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 14, SC2Race.PROTOSS, parent=item_names.ORACLE),
     item_names.MOTHERSHIP_INTEGRATED_POWER: ItemData(545 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 15, SC2Race.PROTOSS, parent=item_names.MOTHERSHIP),
     # 546-549 reserved for Mothership
     item_names.OPPRESSOR_VULCAN_BLASTER: ItemData(550 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 20, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.OPPRESSOR),
     item_names.CALADRIUS_CORONA_BEAM: ItemData(551 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 21, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.CALADRIUS),
     item_names.MISTWING_PHANTOM_DASH: ItemData(552 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 22, SC2Race.PROTOSS, parent=item_names.MISTWING),
     item_names.SUPPLICANT_SACRIFICE: ItemData(553 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 23, SC2Race.PROTOSS, parent=item_names.SUPPLICANT),
+
+    "Removed item": ItemData(554 + SC2LOTV_ITEM_ID_OFFSET, FactionlessItemType.Deprecated, -1, SC2Race.PROTOSS, quantity=0),
 
 
     # SoA Calldown powers
