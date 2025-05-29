@@ -74,14 +74,14 @@ class PeaksOfWorld(World):
         start_book: str = self.options.starting_book.get_selected_book()
 
         if not enabled_books:
-            logging.error("Player " + self.player_name + " has not selected any books!")
-            raise OptionError("Player " + self.player_name + " has not selected any books!")
+            logging.error(f"Player {self.player_name} has not selected any books!")
+            raise OptionError(f"Player {self.player_name} has not selected any books!")
 
         if start_book not in enabled_books:
-            logging.warning("Start book " + start_book + " not enabled, selecting random book from following list: ")
+            logging.warning(f"Start book {start_book} not enabled, selecting random book from following list: ")
             logging.warning(enabled_books)
             start_book = self.random.choice(enabled_books)
-            logging.warning("selected book: " + start_book)
+            logging.warning(f"selected book: {start_book}")
 
         self.options.starting_book.value = book_names.index(start_book)
 
@@ -107,7 +107,7 @@ class PeaksOfWorld(World):
                 if i > remaining_items:
                     logging.error("Error, not enough locations to place all progression items")
                     raise OptionError("Error, not enough locations to place progression items")
-                if local_itempool[i].classification == ItemClassification.filler:
+                elif local_itempool[i].classification == ItemClassification.filler:
                     local_itempool.pop(i)  # removing random non-progression items until itempool isn't overflowing
                 else:
                     i += 1
@@ -143,3 +143,4 @@ class PeaksOfWorld(World):
     def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict("death_link", "goal", "rope_unlock_mode", "death_link_traps", "game_mode",
                                     casing="camel")
+
