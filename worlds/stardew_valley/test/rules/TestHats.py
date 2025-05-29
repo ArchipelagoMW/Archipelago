@@ -1,11 +1,13 @@
 from ..bases import SVTestBase
 from ...data.hats_data import Hats
-from ...options import Hatsanity, SeasonRandomization
+from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity
 
 
 class TestHatsLogic(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        FestivalLocations.internal_name: FestivalLocations.option_hard,
+        Shipsanity.internal_name: Shipsanity.option_everything,
         Hatsanity.internal_name: Hatsanity.option_post_perfection,
         "start_inventory": {"Fall": 1}
     }
@@ -36,5 +38,28 @@ class TestHatsLogic(SVTestBase):
                 self.remove(required_item)
                 self.assert_cannot_reach_location(location)
                 self.collect(required_item)
+
+    def test_no_hats_in_item_pool(self):
+        item_pool = self.multiworld.itempool
+        for item in item_pool:
+            self.assertTrue("Hat" not in item.name)
+            self.assertTrue("Mask" not in item.name)
+
+
+class TestNoHatsLogic(SVTestBase):
+    options = {
+        SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
+        FestivalLocations.internal_name: FestivalLocations.option_hard,
+        Shipsanity.internal_name: Shipsanity.option_everything,
+        Hatsanity.internal_name: Hatsanity.option_none,
+        "start_inventory": {"Fall": 1}
+    }
+
+    def test_there_are_hats_in_item_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertTrue("Leprechaun Hat" in item_pool)
+        self.assertTrue("Straw Hat" in item_pool)
+        self.assertTrue("Cone Hat" in item_pool)
+        self.assertTrue("Mummy Mask" in item_pool)
 
 
