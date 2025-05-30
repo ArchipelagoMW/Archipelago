@@ -9,7 +9,8 @@ from .options.option_names import all_option_choices
 from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group
 from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, SpecialOrderLocations, ArcadeMachineLocations, Mods
+from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, \
+    SpecialOrderLocations, ArcadeMachineLocations, Mods
 from ..strings.goal_names import Goal as GoalName
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
@@ -90,13 +91,13 @@ class TestToolProgression(SVTestBase):
         self.assertIn("Purchase Fiberglass Rod", locations)
         self.assertIn("Purchase Iridium Rod", locations)
 
-    def test_given_progressive_when_generate_then_only_3_trash_can_are_progressive(self):
+    def test_given_progressive_when_generate_then_last_trash_can_is_skip_balancing(self):
         trash_cans = self.get_items_by_name(APTool.trash_can)
         progressive_count = sum([1 for item in trash_cans if item.classification == ItemClassification.progression])
-        useful_count = sum([1 for item in trash_cans if item.classification == ItemClassification.useful])
+        skip_balancing_count = sum([1 for item in trash_cans if item.classification == ItemClassification.progression_skip_balancing])
 
-        self.assertEqual(progressive_count, 3)
-        self.assertEqual(useful_count, 1)
+        self.assertEqual(3, progressive_count)
+        self.assertEqual(1, skip_balancing_count)
 
 
 @classvar_matrix(option_and_choice=all_option_choices)
