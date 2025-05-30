@@ -390,5 +390,5 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
         "Lands End": lambda state: state.has_any({"Item - Callisto Stone"}, world.player) and logic.is_area_in_level_range(state, 4),
         "Jidamba Tangle": lambda state: state.has_any({"Item - Europa Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
         "Neptune Shrine": lambda state: state.has_any({"Item - Neptune Stone"}, world.player),
-        "The Old World": lambda state: state.has_any({"Item - Old World Stone"}, world.player) and logic.is_area_in_level_range(state, 5),
+        "The Old World": logic.old_world_requirements,
         "The New World": logic.new_world_requirements})

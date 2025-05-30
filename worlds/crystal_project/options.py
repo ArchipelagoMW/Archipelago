@@ -12,12 +12,14 @@ class Goal(Choice):
     Checking the first sign in the Spawning Meadows will tell you the selected goal.
     
     Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs.
+
+    True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit. Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
     
     Clamshells: Collect enough clamshells for the clam lover.
     """
     display_name = "Goal"
     option_astley = 0
-    #option_true_astley = 1 True Astley: Defeat Astley but more somehow.
+    option_true_astley = 1
     option_clamshells = 2
     default = 0
 

@@ -99,10 +99,16 @@ class CrystalProjectLogic:
         return state.has("Item - Progressive Quintar Flute", self.player, 3)
 
     def new_world_requirements(self, state: CollectionState) -> bool:
-        if self.options.goal.value == self.options.goal.option_astley:
+        if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
             return self.has_jobs(state, self.options.newWorldStoneJobQuantity.value)    
         else:
             return state.has("Item - New World Stone", self.player)
+
+    def old_world_requirements(self, state: CollectionState) -> bool:
+        if self.options.goal.value == self.options.goal.option_true_astley:
+            return self.has_swimming(state) and state.has("Item - Deity Eye", self.player, 4) and state.has("Item - STEM WARD", self.player)
+        else:
+            return state.has("Item - Old World Stone", self.player)
 
     def is_area_in_level_range(self, state: CollectionState, count: int) -> bool:
         if self.options.levelGating:

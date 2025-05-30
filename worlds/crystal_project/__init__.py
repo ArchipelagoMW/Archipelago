@@ -146,7 +146,7 @@ class CrystalProjectWorld(World):
         else:
             jobs_earnable = len(job_list) - len(self.starting_jobs)
 
-        if self.options.goal.value == self.options.goal.option_astley and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
+        if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
             self.logger.info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
             self.options.newWorldStoneJobQuantity.value = jobs_earnable
@@ -260,6 +260,10 @@ class CrystalProjectWorld(World):
 
         if self.options.goal == self.options.goal.option_astley:
             excluded_items.add("Item - New World Stone")
+
+        if self.options.goal == self.options.goal.option_true_astley:
+            excluded_items.add("Item - New World Stone")
+            excluded_items.add("Item - Old World Stone")
 
         if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
             excluded_items.add("Summon - Shaku")
@@ -377,6 +381,13 @@ class CrystalProjectWorld(World):
                 item = self.set_classifications("Item - Progressive Level Cap")
                 pool.append(item)
 
+        if self.options.goal.value == self.options.goal.option_true_astley:
+            for _ in range(4):
+                item = self.set_classifications("Item - Deity Eye")
+                pool.append(item)
+            item = self.set_classifications("Item - STEM WARD")
+            pool.append(item)
+
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
         if self.options.includedRegions == self.options.includedRegions.option_beginner:
             for scholar_ability in self.get_optional_scholar_abilities(7):
@@ -402,10 +413,10 @@ class CrystalProjectWorld(World):
             win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
             self.included_regions.append("The New World")
-        #elif self.options.goal == self.options.goal.option_true_astley:
-        #    win_condition_item = "Item - Old World Stone"
-        #    self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player)
-        #    self.included_regions.append("The Old World")
+        elif self.options.goal == self.options.goal.option_true_astley:
+            win_condition_item = "Item - Old World Stone"
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements
+            self.included_regions.append("The Old World")
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
