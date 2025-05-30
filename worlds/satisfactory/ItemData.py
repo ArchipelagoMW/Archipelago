@@ -31,7 +31,7 @@ class ItemGroups(IntFlag):
     Vehicles = 1 << 26
     Customizer = 1 << 27
     ConveyorMk6 = 1 << 28
-    AlwaysUseful = 1 << 29
+    NeverExclude = 1 << 29
 
 
 class ItemData(NamedTuple):

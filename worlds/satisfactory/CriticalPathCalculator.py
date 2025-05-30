@@ -3,12 +3,12 @@ from typing import Optional
 from collections.abc import Iterable
 from .GameLogic import GameLogic, Recipe
 from .Options import SatisfactoryOptions
-from .Options import SatisfactoryOptions
 
 class CriticalPathCalculator:
     logic: GameLogic
     random: Random
-    options: SatisfactoryOptions
+    final_elevator_package: int
+    randomize_starter_recipes: bool
 
     required_parts: set[str]
     required_buildings: set[str]
@@ -25,11 +25,13 @@ class CriticalPathCalculator:
     handcraftable_parts: dict[str, list[Recipe]]
     tier_0_recipes: set[str]
 
-    def __init__(self, logic: GameLogic, random: Random, options: SatisfactoryOptions):
+    def __init__(self, logic: GameLogic, seed: float, options: SatisfactoryOptions):
         self.logic = logic
-        self.random = random
-        self.options = options
+        self.random = Random(seed)
+        self.final_elevator_package = options.final_elevator_package.value
+        self.randomize_starter_recipes = bool(options.randomize_starter_recipes.value)
 
+    def calculate(self) -> None:
         self.required_parts = set()
         self.required_buildings = set()
         self.required_power_level: int = 1
@@ -38,13 +40,14 @@ class CriticalPathCalculator:
 
         self.configure_implicitly_unlocked_and_handcraftable_parts()
 
-        self.select_minimal_required_parts_for(self.logic.space_elevator_tiers[options.final_elevator_package-1].keys())
+        self.select_minimal_required_parts_for(
+            self.logic.space_elevator_tiers[self.final_elevator_package-1].keys())
 
         for tree in self.logic.man_trees.values():
             self.select_minimal_required_parts_for(tree.access_items)
 
             for node in tree.nodes:
-                if node.minimal_tier > options.final_elevator_package:
+                if node.minimal_tier > self.final_elevator_package:
                     continue
 
                 self.select_minimal_required_parts_for(node.unlock_cost.keys())
@@ -64,15 +67,15 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Pipes Mk.2")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.1")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.2")
-
-        if self.logic.recipes["Uranium"][0].minimal_tier <= options.final_elevator_package:
+        
+        if self.logic.recipes["Uranium"][0].minimal_tier <= self.final_elevator_package:
             self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine-Infused Filter"))
 
         for i in range(1, self.__potential_required_belt_speed + 1):
             self.select_minimal_required_parts_for_building(f"Conveyor Mk.{i}")
 
         for i in range(1, self.required_power_level + 1):
-            power_recipe = random.choice(self.logic.requirement_per_powerlevel[i])
+            power_recipe = self.random.choice(self.logic.requirement_per_powerlevel[i])
             self.select_minimal_required_parts_for(power_recipe.inputs)
             self.select_minimal_required_parts_for_building(power_recipe.building)
 
@@ -80,7 +83,7 @@ class CriticalPathCalculator:
             recipe.name 
             for part in self.required_parts
             for recipe in self.logic.recipes[part]
-            if recipe.minimal_tier <= self.options.final_elevator_package
+            if recipe.minimal_tier <= self.final_elevator_package
         }
         self.required_item_names.update({"Building: "+ building for building in self.required_buildings})
 
@@ -104,7 +107,7 @@ class CriticalPathCalculator:
             self.required_parts.add(part)
 
             for recipe in self.logic.recipes[part]:
-                if recipe.minimal_tier > self.options.final_elevator_package:
+                if recipe.minimal_tier > self.final_elevator_package:
                     continue
 
                 self.__potential_required_belt_speed = \
@@ -129,7 +132,7 @@ class CriticalPathCalculator:
             recipe.name
             for part in self.logic.recipes
             for recipe in self.logic.recipes[part]
-            if recipe.minimal_tier > self.options.final_elevator_package
+            if recipe.minimal_tier > self.final_elevator_package
         }
 
         excluded_count = len(self.recipes_to_exclude)
@@ -191,7 +194,7 @@ class CriticalPathCalculator:
 
     def select_starter_recipes(self) -> None:
         # cable is left unaffected as all its alternative recipes require refinery
-        if not self.options.randomize_starter_recipes:
+        if not self.randomize_starter_recipes:
             self.tier_0_recipes = {
                 "Recipe: Iron Ingot",
                 "Recipe: Iron Plate",
