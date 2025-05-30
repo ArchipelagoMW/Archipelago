@@ -57,7 +57,6 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
@@ -75,9 +74,6 @@ non_apworlds: set[str] = {
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -104,8 +100,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows or windows7 build
-            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+            # prefer first windows build
+            if platform_name == "windows":
                 break
 
     if source_url and source_url.endswith(".zip"):
@@ -414,7 +410,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         if is_windows:
             # Inno setup stuff
             with open("setup.ini", "w") as f:
-                min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+                min_supported_windows = "6.2.9200"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
             with open("installdelete.iss", "w") as f:
                 f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
