@@ -148,9 +148,11 @@ smokeable_fish = [Fish.largemouth_bass, Fish.bream, Fish.bullhead, Fish.chub, Fi
 fish_smoker_items = [BundleItem(ArtisanGood.smoked_fish, flavor=fish) for fish in smokeable_fish]
 fish_smoker_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.fish_smoker, fish_smoker_items, 6, 3)
 
-fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
-                             rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle,
-                             specific_bait_bundle, deep_fishing_bundle, fish_smoker_bundle]
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle,
+                             fall_fish_bundle, winter_fish_bundle, trash_bundle, rain_fish_bundle,
+                             quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle,
+                             tackle_bundle, bait_bundle, specific_bait_bundle, deep_fishing_bundle,
+                             fish_smoker_bundle]
 
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)

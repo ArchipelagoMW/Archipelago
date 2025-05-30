@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld, get_seed, ItemClassification
 from .bases import SVTestCase, solo_multiworld, setup_solo_multiworld
-from .options.presets import allsanity_no_mods_6_x_x, get_minsanity_options
+from .options.presets import allsanity_no_mods_6_x_x, get_minsanity_options, allsanity_no_mods_7_x_x
 from .. import StardewValleyWorld
 from ..items import Group, item_table
 from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
@@ -44,7 +44,7 @@ class TestItems(SVTestCase):
         self.assertEqual(len(baby_permutations), 4)
 
     def test_correct_number_of_stardrops(self):
-        allsanity_options = allsanity_no_mods_6_x_x()
+        allsanity_options = allsanity_no_mods_7_x_x()
         with solo_multiworld(allsanity_options) as (multiworld, _):
             stardrop_items = [item for item in multiworld.get_items() if item.name == "Stardrop"]
             self.assertEqual(len(stardrop_items), 7)

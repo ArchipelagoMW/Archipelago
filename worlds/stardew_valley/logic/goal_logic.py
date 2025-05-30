@@ -5,8 +5,11 @@ from ..locations import LocationTags, locations_by_tag
 from ..mods.mod_data import ModNames
 from ..options import options
 from ..stardew_rule import StardewRule
+from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.building_names import Building
+from ..strings.crop_names import Fruit
 from ..strings.quest_names import Quest
+from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.wallet_item_names import Wallet
 
@@ -127,7 +130,6 @@ class GoalLogic(BaseLogic):
         other_rules = []
         number_of_stardrops_to_receive = 0
         number_of_stardrops_to_receive += 1  # The Mines level 100
-        number_of_stardrops_to_receive += 1  # Old Master Cannoli
         number_of_stardrops_to_receive += 1  # Museum Stardrop
         number_of_stardrops_to_receive += 1  # Krobus Stardrop
 
@@ -147,6 +149,12 @@ class GoalLogic(BaseLogic):
             number_of_stardrops_to_receive += 1
         else:
             other_rules.append(self.logic.relationship.has_hearts_with_any_bachelor(13))
+
+        # Old Master Cannoli
+        if SecretsanityOptionName.easy in self.options.secretsanity:
+            number_of_stardrops_to_receive += 1
+        else:
+            other_rules.append(self.logic.has(Fruit.sweet_gem_berry) & self.logic.region.can_reach(Region.secret_woods))
 
         if self.content.is_enabled(ModNames.deepwoods):  # Petting the Unicorn
             number_of_stardrops_to_receive += 1

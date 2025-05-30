@@ -284,7 +284,6 @@ def create_help_wanted_quest_rewards(item_factory: StardewItemFactory, options: 
 def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     stardrops_classification = get_stardrop_classification(options)
     items.append(item_factory("Stardrop", classification_pre_fill=stardrops_classification))  # The Mines level 100
-    items.append(item_factory("Stardrop", classification_pre_fill=stardrops_classification))  # Old Master Cannoli
     items.append(item_factory("Stardrop", classification_pre_fill=stardrops_classification))  # Krobus Stardrop
     if content.features.fishsanity.is_enabled:
         items.append(item_factory("Stardrop", classification_pre_fill=stardrops_classification))  # Master Angler Stardrop
