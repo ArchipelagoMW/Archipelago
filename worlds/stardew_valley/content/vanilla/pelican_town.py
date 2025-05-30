@@ -7,7 +7,7 @@ from ...data.hats_data import Hats
 from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement, \
     GrangeDisplayRequirement, EggHuntRequirement, MuseumCompletionRequirement, BuildingRequirement, \
     NumberOfFriendsRequirement, HelpWantedRequirement, FishingCompetitionRequirement, MovieRequirement, LuauDelightRequirementRequirement, \
-    FinishedRaccoonsRequirement, \
+    ReceivedRaccoonsRequirement, \
     PrizeMachineRequirement, SpecificFriendRequirement, RegionRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, \
     FishingTreasureChestSource, HatMouseSource
@@ -626,7 +626,7 @@ pelican_town = ContentPack(
         Hats.sailors_cap: (Tag(ItemTag.HAT), HatMouseSource(price=1000, unlock_requirements=(FishingCompetitionRequirement(),)),),
         Hats.jester_hat: (Tag(ItemTag.HAT), HatMouseSource(price=25000, unlock_requirements=(MovieRequirement(),)),),
         Hats.governors_hat: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(LuauDelightRequirementRequirement(),)),),
-        Hats.white_bow: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(FinishedRaccoonsRequirement(8),)),),
+        Hats.white_bow: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(ReceivedRaccoonsRequirement(8),)),),
         Hats.sports_cap: (Tag(ItemTag.HAT), HatMouseSource(price=5000, unlock_requirements=(PrizeMachineRequirement(11),)),),
 
         Hats.emilys_magic_hat: (Tag(ItemTag.HAT), ShopSource(price=10000, shop_region=LogicRegion.lost_items_shop,

@@ -101,7 +101,7 @@ class MoneyLogic(BaseLogic):
                 number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))
                 return self.logic.received_n(*qi_gem_rewards, count=number_rewards)
             number_rewards = 2
-            return self.logic.received_n(*qi_gem_rewards, count=number_rewards) & self.logic.region.can_reach(Region.qi_walnut_room) & \
+            return self.logic.region.can_reach(Region.qi_walnut_room) & \
                 self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)

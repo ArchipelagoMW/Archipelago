@@ -156,8 +156,8 @@ class ShipOneCropRequirement(Requirement):
 
 
 @dataclass(frozen=True)
-class FinishedRaccoonsRequirement(Requirement):
-    number_of_requests: int
+class ReceivedRaccoonsRequirement(Requirement):
+    number_of_raccoons: int
 
 
 @dataclass(frozen=True)

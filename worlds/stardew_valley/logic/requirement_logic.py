@@ -11,9 +11,10 @@ from ..data.requirement import ToolRequirement, BookRequirement, SkillRequiremen
     ForgeInfinityWeaponRequirement, EggHuntRequirement, CaughtFishRequirement, MuseumCompletionRequirement, \
     BuildingRequirement, FullShipmentRequirement, NumberOfFriendsRequirement, FishingCompetitionRequirement, \
     LuauDelightRequirementRequirement, MovieRequirement, CookedRecipesRequirement, CraftedItemsRequirement, \
-    HelpWantedRequirement, ShipOneCropRequirement, FinishedRaccoonsRequirement, PrizeMachineRequirement, \
+    HelpWantedRequirement, ShipOneCropRequirement, ReceivedRaccoonsRequirement, PrizeMachineRequirement, \
     AllAchievementsRequirement, PerfectionPercentRequirement, ReadAllBooksRequirement, MinesRequirement, \
     DangerousMinesRequirement, HasItemRequirement, MeetRequirement, MonsterKillRequirement
+from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.region_names import Region, LogicRegion
 
 
@@ -155,8 +156,11 @@ class RequirementLogic(BaseLogic):
         return self.logic.and_(*crop_rules)
 
     @meet_requirement.register
-    def _(self, requirement: FinishedRaccoonsRequirement):
-        return self.logic.region.can_reach_location(f"Raccoon Request {requirement.number_of_requests}")
+    def _(self, requirement: ReceivedRaccoonsRequirement):
+        amount = min(requirement.number_of_raccoons, 8, 8 + self.options.bundle_per_room)
+        if self.options.quest_locations.has_story_quests():
+            amount += 1
+        return self.logic.received(CommunityUpgrade.raccoon, amount)
 
     @meet_requirement.register
     def _(self, requirement: PrizeMachineRequirement):
