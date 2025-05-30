@@ -18,15 +18,12 @@ class RegionLocationInfo(NamedTuple):
 # IDE was yelling at me and not happy that I called a parameter "options", so have "opts"
 def create_poy_regions(world: World, opts: PeaksOfYoreOptions) -> RegionLocationInfo:
     result = RegionLocationInfo([], [], [])
-    menu_region = Region("Menu", world.player, world.multiworld)
-    world.multiworld.regions.append(menu_region)
 
     cabin_region = Region("Cabin", world.player, world.multiworld)
     world.multiworld.regions.append(cabin_region)
-    menu_region.connect(cabin_region, "main connection")
 
     for r in poy_regions.subregions:
-        tempres = recursive_create_region(r, menu_region, world, opts)
+        tempres = recursive_create_region(r, cabin_region, world, opts)
         result.peaks_in_pool.extend(tempres.peaks_in_pool)
         result.artefacts_in_pool.extend(tempres.artefacts_in_pool)
         result.time_attack_in_pool.extend(tempres.time_attack_in_pool)

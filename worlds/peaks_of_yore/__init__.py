@@ -44,6 +44,7 @@ class PeaksOfWorld(World):
     location_name_to_id = all_locations_to_ids
     topology_present = True
     checks_in_pool: RegionLocationInfo
+    origin_region_name = "Cabin"
 
     def create_item(self, name: str) -> Item:
         id = item_name_to_id[name]
@@ -57,7 +58,6 @@ class PeaksOfWorld(World):
         return self.random.choice(choices)
 
     def generate_early(self) -> None:
-
         if self.options.goal == Goal.option_time_attack and not self.options.include_time_attack:
             raise OptionError("Goal is set as time attack but time attack is not enabled. "
                               "Please choose another goal or enable time attack in the options.")
