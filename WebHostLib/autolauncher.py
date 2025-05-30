@@ -164,9 +164,6 @@ def autogen(config: dict):
     Thread(target=keep_running, name="AP_Autogen").start()
 
 
-multiworlds: typing.Dict[type(Room.id), MultiworldInstance] = {}
-
-
 class MultiworldInstance():
     def __init__(self, config: dict, id: int):
         self.room_ids = set()
