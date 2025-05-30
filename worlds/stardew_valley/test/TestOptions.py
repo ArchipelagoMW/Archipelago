@@ -91,13 +91,16 @@ class TestToolProgression(SVTestBase):
         self.assertIn("Purchase Fiberglass Rod", locations)
         self.assertIn("Purchase Iridium Rod", locations)
 
-    def test_given_progressive_when_generate_then_last_trash_can_is_skip_balancing(self):
+    def test_given_progressive_when_generate_then_last_trash_can_is_classified_differently(self):
         trash_cans = self.get_items_by_name(APTool.trash_can)
+        # If we run fill tests, then it should have the post_fill classification.
+        # If not, it should have the pre-fill classification.
+        expected_classification = ItemClassification.useful if self.skip_default_tests else ItemClassification.progression_skip_balancing
         progressive_count = sum([1 for item in trash_cans if item.classification == ItemClassification.progression])
-        skip_balancing_count = sum([1 for item in trash_cans if item.classification == ItemClassification.progression_skip_balancing])
+        special_count = sum([1 for item in trash_cans if item.classification == expected_classification])
 
         self.assertEqual(3, progressive_count)
-        self.assertEqual(1, skip_balancing_count)
+        self.assertEqual(1, special_count)
 
 
 @classvar_matrix(option_and_choice=all_option_choices)
