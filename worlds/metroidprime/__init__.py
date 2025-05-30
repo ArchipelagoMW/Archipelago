@@ -372,8 +372,7 @@ class MetroidPrimeWorld(World):
         non_cosmetic_options = [
             o
             for o in type(self.options).type_hints.keys()
-            if "suit_color" not in o
-            and o not in exclude_options
+            if "suit_color" not in o and o not in exclude_options
         ]
         slot_data: Dict[str, Any] = self.options.as_dict(*non_cosmetic_options)
         slot_data["elevator_mapping"] = dict(self.elevator_mapping)
@@ -418,10 +417,7 @@ class MetroidPrimeWorld(World):
                         f"    {ELEVATOR_USEFUL_NAMES[source]} -> {ELEVATOR_USEFUL_NAMES[target]}\n"
                     )
 
-        if (
-            self.options.door_color_randomization
-            == DoorColorRandomization.option_regional
-        ):
+        if (self.options.door_color_randomization == DoorColorRandomization.option_regional):
             assert self.door_color_mapping is not None
             spoiler_handle.write(f"\n\nDoor Color Mapping({player_name}):\n")
 
@@ -430,15 +426,10 @@ class MetroidPrimeWorld(World):
                 for door, color in door_color_mapping.type_mapping.items():
                     spoiler_handle.write(f"    {door} -> {color}\n")
 
-        elif (
-            self.options.door_color_randomization
-            == DoorColorRandomization.option_global
-        ):
+        elif (self.options.door_color_randomization == DoorColorRandomization.option_global):
             assert self.door_color_mapping is not None
             spoiler_handle.write(f"\n\nDoor Color Mapping({player_name}):\n")
-            for door, color in self.door_color_mapping[
-                MetroidPrimeArea.Tallon_Overworld.value
-            ].type_mapping.items():
+            for door, color in self.door_color_mapping[MetroidPrimeArea.Tallon_Overworld.value].type_mapping.items():
                 spoiler_handle.write(f"    {door} -> {color}\n")
 
         if (
@@ -457,9 +448,7 @@ class MetroidPrimeWorld(World):
                     continue
                 for room, doors in blast_shield_mapping.type_mapping.items():
                     for door in doors.keys():
-                        source_room = self.game_region_data[
-                            MetroidPrimeArea(area)
-                        ].rooms[RoomName(room)]
+                        source_room = self.game_region_data[MetroidPrimeArea(area)].rooms[RoomName(room)]
                         # Use the door_data blast shield since it may have been overridden by the door on the other side
                         door_data = source_room.doors[door]
 
@@ -472,7 +461,5 @@ class MetroidPrimeWorld(World):
                         if [destination, room] in written_mappings:
                             continue
 
-                        spoiler_handle.write(
-                            f"    {room} <--> {destination}: {door_data.blast_shield.value}\n"
-                        )
+                        spoiler_handle.write(f"    {room} <--> {destination}: {door_data.blast_shield.value}\n")
                         written_mappings.append([room, destination])

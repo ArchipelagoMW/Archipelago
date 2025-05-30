@@ -441,9 +441,7 @@ def init_starting_loadout(world: "MetroidPrimeWorld"):
                     options_item
                     not in world.starting_room_data.selected_loadout.loadout
                 ):
-                    world.multiworld.local_early_items[world.player][
-                        options_item.value
-                    ] = 1
+                    world.multiworld.local_early_items[world.player][options_item.value] = 1
 
     # Generator has a difficult time when elevators are locked behind a shuffled scan visor
     if world.options.shuffle_scan_visor and not world.options.pre_scan_elevators:
@@ -481,9 +479,7 @@ def init_starting_beam(world: "MetroidPrimeWorld"):
         assert world.door_color_mapping
         # Select new beam based off of what the original color is now mapped to
         new_beam = None
-        for original, new in world.door_color_mapping[
-            world.starting_room_data.area.value
-        ].type_mapping.items():
+        for original, new in world.door_color_mapping[world.starting_room_data.area.value].type_mapping.items():
             if original == original_door_color:
                 # Find the beam that corresponds to the new color
                 for beam in BEAM_ITEMS:

@@ -203,9 +203,8 @@ def apply_blast_shield_mapping(world: "MetroidPrimeWorld"):
     for area, area_mapping in mapping.items():
         for room_name, door_mapping in area_mapping.type_mapping.items():
             for door_id, shield_type in door_mapping.items():
-                world.game_region_data[MetroidPrimeArea(area)].rooms[
-                    RoomName(room_name)
-                ].doors[door_id].blast_shield = shield_type
+                world.game_region_data[MetroidPrimeArea(area)].rooms[RoomName(
+                    room_name)].doors[door_id].blast_shield = shield_type
 
 
 def remove_vanilla_blast_shields(world: "MetroidPrimeWorld"):

@@ -80,7 +80,8 @@ def make_artifact_hints(world: "MetroidPrimeWorld") -> Dict[str, str]:
                     if location.player != world.player
                     else "your"
                 )
-                return f"The &push;&main-color=#c300ff;{item}&pop; can be found in &push;&main-color=#d4cc33;{player_string}&pop; &push;&main-color=#89a1ff;{location.name}&pop;."
+                return f"The &push;&main-color=#c300ff;{item} &pop; can be found in &push;&main-color=#d4cc33;{
+                    player_string} &pop; &push;&main-color=#89a1ff;{location.name} &pop;."
             else:
                 return (
                     f"The &push;&main-color=#c300ff;{item}&pop; has not been collected."
@@ -116,7 +117,9 @@ def get_tweaks(world: "MetroidPrimeWorld") -> Dict[str, List[float]]:
 def get_strg(world: "MetroidPrimeWorld") -> Dict[str, List[str]]:
     strg = {**OBJECTIVE_STRG}
     # Set objective text in temple security station
-    objective_text = f"Current Mission: Retrieve {world.options.required_artifacts} Chozo Artifact{'s' if world.options.required_artifacts != 1 else ''}"
+    objective_text = f"Current Mission: Retrieve {
+        world.options.required_artifacts}  Chozo Artifact{
+        's' if world.options.required_artifacts != 1 else ''} "
     if world.options.final_bosses == 0:
         objective_text += "\nDefeat Meta Ridley\nDefeat Metroid Prime"
     elif world.options.final_bosses == 1:
@@ -329,33 +332,23 @@ def make_level_data(world: "MetroidPrimeWorld") -> Dict[str, Any]:
     level_data: Dict[str, Any] = {
         MetroidPrimeArea.Tallon_Overworld.value: {
             "transports": transport_data[MetroidPrimeArea.Tallon_Overworld.value],
-            "rooms": world.game_region_data[
-                MetroidPrimeArea.Tallon_Overworld
-            ].get_config_data(world),
+            "rooms": world.game_region_data[MetroidPrimeArea.Tallon_Overworld].get_config_data(world),
         },
         MetroidPrimeArea.Chozo_Ruins.value: {
             "transports": transport_data[MetroidPrimeArea.Chozo_Ruins.value],
-            "rooms": world.game_region_data[
-                MetroidPrimeArea.Chozo_Ruins
-            ].get_config_data(world),
+            "rooms": world.game_region_data[MetroidPrimeArea.Chozo_Ruins].get_config_data(world),
         },
         MetroidPrimeArea.Magmoor_Caverns.value: {
             "transports": transport_data[MetroidPrimeArea.Magmoor_Caverns.value],
-            "rooms": world.game_region_data[
-                MetroidPrimeArea.Magmoor_Caverns
-            ].get_config_data(world),
+            "rooms": world.game_region_data[MetroidPrimeArea.Magmoor_Caverns].get_config_data(world),
         },
         MetroidPrimeArea.Phendrana_Drifts.value: {
             "transports": transport_data[MetroidPrimeArea.Phendrana_Drifts.value],
-            "rooms": world.game_region_data[
-                MetroidPrimeArea.Phendrana_Drifts
-            ].get_config_data(world),
+            "rooms": world.game_region_data[MetroidPrimeArea.Phendrana_Drifts].get_config_data(world),
         },
         MetroidPrimeArea.Phazon_Mines.value: {
             "transports": transport_data[MetroidPrimeArea.Phazon_Mines.value],
-            "rooms": world.game_region_data[
-                MetroidPrimeArea.Phazon_Mines
-            ].get_config_data(world),
+            "rooms": world.game_region_data[MetroidPrimeArea.Phazon_Mines].get_config_data(world),
         },
     }
 

@@ -161,6 +161,4 @@ def remap_doors_to_power_beam_if_necessary(world: "MetroidPrimeWorld"):
                     continue
                 for original, new in mapping.type_mapping.items():
                     if new == BEAM_TO_LOCK_MAPPING[starting_beam].value:
-                        world.door_color_mapping[area].type_mapping[
-                            original
-                        ] = DoorLockType.Power_Beam.value
+                        world.door_color_mapping[area].type_mapping[original] = DoorLockType.Power_Beam.value

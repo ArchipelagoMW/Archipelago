@@ -25,7 +25,9 @@ SUPER_MISSILE_REQUIREMENTS = [SuitUpgrade.Charge_Beam.value, SuitUpgrade.Super_M
 WAVE_BEAM_REQUIREMENTS = [SuitUpgrade.Wave_Beam.value, ProgressiveUpgrade.Progressive_Wave_Beam.value]
 ICE_BEAM_REQUIREMENTS = [SuitUpgrade.Ice_Beam.value, ProgressiveUpgrade.Progressive_Ice_Beam.value]
 PLASMA_BEAM_REQUIREMENTS = [SuitUpgrade.Plasma_Beam.value, ProgressiveUpgrade.Progressive_Plasma_Beam.value]
-HEAT_PROTECTION_REQUIREMENTS = [SuitUpgrade.Varia_Suit.value, SuitUpgrade.Phazon_Suit.value, SuitUpgrade.Gravity_Suit.value]
+HEAT_PROTECTION_REQUIREMENTS = [SuitUpgrade.Varia_Suit.value,
+                                SuitUpgrade.Phazon_Suit.value, SuitUpgrade.Gravity_Suit.value]
+
 
 class CombatLogicDifficulty(Enum):
     NO_LOGIC = -1
@@ -41,9 +43,7 @@ class Logic:
             else self._can_power_bomb
         )
 
-        self.can_missile: Callable[
-            ["MetroidPrimeWorld", CollectionState, int], bool
-        ] = (
+        self.can_missile: Callable[["MetroidPrimeWorld", CollectionState, int], bool] = (
             self._can_missile_launcher
             if world.options.missile_launcher
             else self._can_missile
