@@ -8,7 +8,7 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 from settings import get_settings
 
 from .rom_addresses import rom_addresses
-from .rom_data import overworld_music_data
+from .music_data import overworld_music_data, level_music_tracks
 from .sprites import sprite_name_to_id
 
 
@@ -20,12 +20,10 @@ def randomize_music(patch, random, overworld):
     randomized_overworld_music_data = dict(zip(overworld_music_data_addresses, randomized_overworld_music_tracks))
     for i in randomized_overworld_music_data:
         patch.write_bytes(i, randomized_overworld_music_data[i])
-        #print(f"{hex(randomized_overworld_music_data[i])} at {hex(i)}")
     # levels
     for i in range(0x5619, 0x5899, 0x14):
-        level_music = random.choice([0x01, 0x0B, 0x11, 0x13, 0x14, 0x17, 0x1D, 0x1F, 0x28])
+        level_music = random.choice(list(level_music_tracks.values()))
         patch.write_bytes(i, level_music)
-        #print(f"{hex(level_music)} at {hex(i)}")
 
 
 def generate_output(self, output_directory: str):

@@ -1,7 +1,7 @@
 from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions, ItemsAccessibility, OptionSet
 from dataclasses import dataclass
 
-from worlds.marioland2.rom_data import overworld_music_data
+from worlds.marioland2.music_data import overworld_music_data
 
 
 class ShuffleGoldenCoins(Choice):
