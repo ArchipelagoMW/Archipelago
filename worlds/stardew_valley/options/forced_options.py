@@ -2,16 +2,29 @@ import logging
 
 import Options as ap_options
 from . import options
+from ..strings.ap_names.ap_option_names import EatsanityOptionName
 
 logger = logging.getLogger(__name__)
 
 
 def force_change_options_if_incompatible(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options, player, player_name)
     force_hatsanity_when_goal_is_mad_hatter(world_options, player, player_name)
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
+
+
+def force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    has_eatsanity_enzymes = EatsanityOptionName.lock_effects in world_options.eatsanity
+    valid_eatsanity_locations_for_enzymes = [EatsanityOptionName.crops, EatsanityOptionName.fish, EatsanityOptionName.cooking]
+    has_enough_eatsanity_locations_for_enzymes = any([option in world_options.eatsanity for option in valid_eatsanity_locations_for_enzymes])
+
+    if has_eatsanity_enzymes and not has_enough_eatsanity_locations_for_enzymes:
+        world_options.eatsanity.value.remove(EatsanityOptionName.lock_effects)
+        logger.warning(f"Eatsanity 'Lock Effects' requires more eatsanity locations to be active. "
+                       f"Eatsanity option forced to '{world_options.eatsanity}' for player {player} ({player_name})")
 
 
 def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:

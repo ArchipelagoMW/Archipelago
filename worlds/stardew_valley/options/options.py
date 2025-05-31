@@ -637,7 +637,7 @@ class Eatsanity(OptionSet):
     Artisan: Includes all edible items produced by machines and animals
     Shop: Includes all edible items purchased primarily in shops
     Poisonous: Includes items that cause negative effects when consumed
-    Lock Effects: Whether each positive effect from edible items is unlocked through an archipelago "Enzyme" item.
+    Lock Effects: Whether each positive effect from edible items is unlocked through an archipelago "Enzyme" item. Requires some eatsanity locations to be enabled.
     """
     internal_name = "eatsanity"
     display_name = "Eatsanity"

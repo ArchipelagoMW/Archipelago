@@ -543,7 +543,24 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
     if EatsanityOptionName.lock_effects not in options.eatsanity:
         return
 
-    items.extend(item_factory(item) for item in items_by_group[Group.EATSANITY_ENZYME])
+    # These items unlock progressively stronger ability to digest food items that give the associated buff
+    # Upon receiving the enzyme, you also get a temporary buff of whatever the effect is
+    # Duplicates exist to make them easier to find, and past the practical max, they only give the temporary buff.
+    items.extend(item_factory(item) for item in ["Energy Enzyme"]*10)
+    items.extend(item_factory(item) for item in ["Health Enzyme"]*10)
+    items.extend(item_factory(item) for item in ["Speed Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Luck Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Farming Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Foraging Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Fishing Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
+    items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
+    items.extend(item_factory(item) for item in ["Max Energy Enzyme"]*3)
+    items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])
+    items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])
+    items.extend(item_factory(item) for item in ["Oil Of Garlic Enzyme"])
+    items.extend(item_factory(item) for item in ["Tipsy Enzyme"])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
