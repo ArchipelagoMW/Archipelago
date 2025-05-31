@@ -116,7 +116,7 @@ def get_tweaks(world: "MetroidPrimeWorld") -> Dict[str, List[float]]:
 def get_strg(world: "MetroidPrimeWorld") -> Dict[str, List[str]]:
     strg = {**OBJECTIVE_STRG}
     # Set objective text in temple security station
-    objective_text = f"Current Mission: Retrieve {world.options.required_artifacts}  Chozo Artifact{'s' if world.options.required_artifacts != 1 else ''} "
+    objective_text = f"Current Mission: Retrieve {world.options.required_artifacts}  Chozo Artifact{'s' if world.options.required_artifacts != 1 else ''}"
     if world.options.final_bosses == 0:
         objective_text += "\nDefeat Meta Ridley\nDefeat Metroid Prime"
     elif world.options.final_bosses == 1:
