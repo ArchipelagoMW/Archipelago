@@ -179,37 +179,38 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
                         seed: str) -> GCM:
     csv_lines = get_data(MAIN_PKG_NAME, "data/custom_csvs/message78.csv").decode('utf-8')
     random.seed(seed)
-
-    for portrait_name, portrait_hint in all_hints.items():
-        if portrait_name not in PORTRAIT_HINTS:
-            continue
-        match hint_distribution_choice:
-            case 4:
-                match portrait_hint["Class"]:
-                    case "Prog":
-                        item_color = "5"
-                    case "Trap":
-                        item_color = "2"
-                    case _:
-                        item_color = "6"
-                hintfo = ("'"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+") "+portrait_hint["Item"]+
-                          "<COLOR>(0) is somewhere in <COLOR>(3)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Game"])
-                csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
-            case 1:
-                jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-                joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", " ")
-                csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
-            case _:
-                match portrait_hint["Class"]:
-                    case "Prog":
-                        item_color = "5"
-                    case "Trap":
-                        item_color = "2"
-                    case _:
-                        item_color = "6"
-                hintfo = (portrait_hint["Rec Player"]+"'s <COLOR>("+item_color+")"+portrait_hint["Item"]+
-                          "<COLOR>(0) can be found at <COLOR>(1)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Location"])
-                csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
+    if hint_distribution_choice == 1:
+        for portrait_name in PORTRAIT_HINTS:
+            jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
+            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", " ")
+            csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
+    else:
+        for portrait_name, portrait_hint in all_hints.items():
+            if portrait_name not in PORTRAIT_HINTS:
+                continue
+            match hint_distribution_choice:
+                case 4:
+                    match portrait_hint["Class"]:
+                        case "Prog":
+                            item_color = "5"
+                        case "Trap":
+                            item_color = "2"
+                        case _:
+                            item_color = "6"
+                    hintfo = ("'"+portrait_hint["Rec Player"]+"'s<COLOR>("+item_color+") "+portrait_hint["Item"]+
+                              "<COLOR>(0) is somewhere in <COLOR>(3)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Game"])
+                    csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
+                case _:
+                    match portrait_hint["Class"]:
+                        case "Prog":
+                            item_color = "5"
+                        case "Trap":
+                            item_color = "2"
+                        case _:
+                            item_color = "6"
+                    hintfo = (portrait_hint["Rec Player"]+"'s <COLOR>("+item_color+")"+portrait_hint["Item"]+
+                              "<COLOR>(0) can be found at <COLOR>(1)"+portrait_hint["Send Player"]+"'s "+portrait_hint["Location"])
+                    csv_lines = csv_lines.replace(f"{portrait_name}", hintfo)
 
     return __update_custom_event(gcm, "78", True, None, csv_lines)
 
