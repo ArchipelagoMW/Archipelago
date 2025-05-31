@@ -4,7 +4,7 @@ import io
 from typing import TYPE_CHECKING, Dict, List, Optional, cast
 import zipfile
 from BaseClasses import Location
-from worlds.Files import APContainer, AutoPatchRegister
+from worlds.Files import APPlayerContainer, AutoPatchRegister
 
 from .Enum import CivVICheckType
 from .Locations import CivVILocation, CivVILocationData
@@ -26,7 +26,7 @@ class CivTreeItem:
     ui_tree_row: int
 
 
-class CivVIContainer(APContainer, metaclass=AutoPatchRegister):
+class CivVIContainer(APPlayerContainer, metaclass=AutoPatchRegister):
     """
     Responsible for generating the dynamic mod files for the Civ VI multiworld
     """
