@@ -737,6 +737,7 @@ class CollectionState():
     locations_checked: Set[Location]
     stale: Dict[int, bool]
     allow_partial_entrances: bool
+    rule_cache: dict[int, dict[int, bool]]
     additional_init_functions: List[Callable[[CollectionState, MultiWorld], None]] = []
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
@@ -746,6 +747,7 @@ class CollectionState():
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
+        self.rule_cache = {player: {} for player in parent.get_all_ids()}
         self.advancements = set()
         self.path = {}
         self.locations_checked = set()
@@ -831,6 +833,8 @@ class CollectionState():
                                  self.reachable_regions.items()}
         ret.blocked_connections = {player: entrance_set.copy() for player, entrance_set in
                                    self.blocked_connections.items()}
+        ret.rule_cache = {player: player_cache.copy() for player, player_cache in
+                          self.rule_cache.items()}
         ret.advancements = self.advancements.copy()
         ret.path = self.path.copy()
         ret.locations_checked = self.locations_checked.copy()
