@@ -11,6 +11,65 @@ from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 
+VANILLA_KEYBLADE_STATS = [
+    "3,0",
+    "1,0",
+    "1,0",
+    "1,0",
+    "0,0",
+    "5,0",
+    "6,0",
+    "6,1",
+    "7,0",
+    "8,1",
+    "5,0",
+    "4,2",
+    "9,-1",
+    "10,0",
+    "10,1",
+    "7,2",
+    "13,0",
+    "9,1",
+    "11,-1",
+    "3,3",
+    "8,-2",
+    "14,2"
+    ]
+VANILLA_PUPPY_LOCATIONS = [
+    "Traverse Town Mystical House Glide Chest",
+    "Traverse Town Alleyway Behind Crates Chest",
+    "Traverse Town Item Workshop Left Chest",
+    "Traverse Town Secret Waterway Near Stairs Chest",
+    "Wonderland Queen's Castle Hedge Right Blue Chest",
+    "Wonderland Lotus Forest Nut Chest",
+    "Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest",
+    "Olympus Coliseum Coliseum Gates Right Blue Trinity Chest",
+    "Deep Jungle Hippo's Lagoon Center Chest",
+    "Deep Jungle Vines 2 Chest",
+    "Deep Jungle Waterfall Cavern Middle Chest",
+    "Deep Jungle Camp Blue Trinity Chest",
+    "Agrabah Cave of Wonders Treasure Room Across Platforms Chest",
+    "Halloween Town Oogie's Manor Hollow Chest",
+    "Neverland Pirate Ship Deck White Trinity Chest",
+    "Agrabah Cave of Wonders Hidden Room Left Chest",
+    "Agrabah Cave of Wonders Entrance Tall Tower Chest",
+    "Agrabah Palace Gates High Opposite Palace Chest",
+    "Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest",
+    "Wonderland Lotus Forest Through the Painting Thunder Plant Chest",
+    "Hollow Bastion Grand Hall Left of Gate Chest",
+    "Halloween Town Cemetery By Cat Shape Chest",
+    "Halloween Town Moonlight Hill White Trinity Chest",
+    "Halloween Town Guillotine Square Pumpkin Structure Right Chest",
+    "Monstro Mouth High Platform Across from Boat Chest",
+    "Monstro Chamber 6 Low Chest",
+    "Monstro Chamber 5 Atop Barrel Chest",
+    "Neverland Hold Flight 1st Chest",
+    "Neverland Hold Yellow Trinity Green Chest",
+    "Neverland Captain's Cabin Chest",
+    "Hollow Bastion Rising Falls Floating Platform Near Save Chest",
+    "Hollow Bastion Castle Gates Gravity Chest",
+    "Hollow Bastion Lift Stop Outside Library Gravity Chest"
+    ]
 
 def launch_client():
     from .Client import launch
@@ -69,6 +128,13 @@ class KH1World(World):
             for starting_world in starting_worlds:
                 self.multiworld.push_precollected(self.create_item(starting_world))
         
+        # Handle starting tools
+        starting_tools = []
+        if self.options.starting_tools:
+            starting_tools = ["Scan", "Dodge Roll"]
+            self.multiworld.push_precollected(self.create_item("Scan"))
+            self.multiworld.push_precollected(self.create_item("Dodge Roll"))
+        
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
@@ -105,7 +171,7 @@ class KH1World(World):
         
         # Calculate prefilled locations and items
         prefilled_items = []
-        if self.options.vanilla_emblem_pieces:
+        if not self.options.randomize_emblem_pieces:
             prefilled_items = prefilled_items + ["Emblem Piece (Flame)", "Emblem Piece (Chest)", "Emblem Piece (Fountain)", "Emblem Piece (Statue)"]
         
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
@@ -117,15 +183,16 @@ class KH1World(World):
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
                 continue
-            if name in starting_worlds:
+            if name in starting_worlds or name in starting_tools:
                 continue
             if data.category == "Puppies":
-                if self.options.puppies == "triplets" and "-" in name:
-                    item_pool += [self.create_item(name) for _ in range(quantity)]
-                if self.options.puppies == "individual" and "Puppy" in name:
-                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
-                if self.options.puppies == "full" and name == "All Puppies":
-                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                if self.options.puppies.current_key != "vanilla":
+                    if self.options.puppies == "triplets" and "-" in name:
+                        item_pool += [self.create_item(name) for _ in range(quantity)]
+                    if self.options.puppies == "individual" and "Puppy" in name:
+                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                    if self.options.puppies == "full" and name == "All Puppies":
+                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "Atlantica":
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -154,6 +221,11 @@ class KH1World(World):
             elif name == "EXP Zero":
                 if self.options.exp_zero_in_pool:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            elif name == "Postcard":
+                if self.options.randomize_postcards.current_key == "chests":
+                    item_pool += [self.create_item(name) for _ in range(0, 3)]
+                if self.options.randomize_postcards.current_key == "all":
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name not in prefilled_items:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
         
@@ -170,20 +242,44 @@ class KH1World(World):
         self.multiworld.itempool += item_pool
 
     def place_predetermined_items(self) -> None:
-        goal_dict = {
-            "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
-            "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
-            "postcards":       "Traverse Town Mail Postcard 10 Event",
-            "final_ansem":     "Final Ansem",
-            "puppies":         "Traverse Town Piano Room Return 99 Puppies Reward 2",
-            "final_rest":      "End of the World Final Rest Chest"
-        }
-        self.get_location(goal_dict[self.options.goal.current_key]).place_locked_item(self.create_item("Victory"))
-        if self.options.vanilla_emblem_pieces:
+        if self.options.goal.current_key not in ["puppies", "postcards"]:
+            goal_dict = {
+                "sephiroth":       "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
+                "unknown":         "Hollow Bastion Defeat Unknown Ansem's Report 13",
+                "final_ansem":     "Final Ansem",
+                "final_rest":      "End of the World Final Rest Chest"
+            }
+            goal_location_name = goal_dict[self.options.goal.current_key]
+        elif self.options.goal.current_key == "postcards":
+            lpad_number = str(self.options.required_postcards).rjust(2, "0")
+            goal_location_name = "Traverse Town Mail Postcard " + lpad_number + " Event"
+        elif self.options.goal.current_key == "puppies":
+            required_puppies = self.options.required_puppies.value
+            goal_location_name = "Traverse Town Piano Room Return " + str(required_puppies) + " Puppies"
+            if required_puppies == 50 or required_puppies == 99:
+                goal_location_name = goal_location_name + " Reward 2"
+        self.get_location(goal_location_name).place_locked_item(self.create_item("Victory"))
+                
+        if not self.options.randomize_emblem_pieces:
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)").place_locked_item(self.create_item("Emblem Piece (Flame)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)").place_locked_item(self.create_item("Emblem Piece (Fountain)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)").place_locked_item(self.create_item("Emblem Piece (Chest)"))
+        if self.options.randomize_postcards.current_key not in ["all"]:
+            self.get_location("Traverse Town Item Shop Postcard").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town 1st District Safe Postcard").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town Gizmo Shop Postcard 1").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town Gizmo Shop Postcard 2").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town Item Workshop Postcard").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town 3rd District Balcony Postcard").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town Geppetto's House Postcard").place_locked_item(self.create_item("Postcard"))
+        if self.options.randomize_postcards.current_key == "vanilla":
+            self.get_location("Traverse Town 1st District Accessory Shop Roof Chest").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town 2nd District Boots and Shoes Awning Chest").place_locked_item(self.create_item("Postcard"))
+            self.get_location("Traverse Town 1st District Blue Trinity Balcony Chest").place_locked_item(self.create_item("Postcard"))
+        if self.options.puppies.current_key == "vanilla":
+            for i, location in enumerate(VANILLA_PUPPY_LOCATIONS):
+                self.get_location(location).place_locked_item(self.create_item("Puppies " + str(1+(i*3)).zfill(2) + "-" + str(3+(i*3)).zfill(2)))
 
     def get_filler_item_name(self) -> str:
         weights = [data.weight for data in self.fillers.values()]
@@ -199,7 +295,13 @@ class KH1World(World):
                     "hundred_acre_wood": bool(self.options.hundred_acre_wood),
                     "atlantica": bool(self.options.atlantica),
                     "goal": str(self.options.goal.current_key)}
-        if self.options.randomize_keyblade_stats:
+        
+        # Handle shuffling keyblade stats
+        if self.options.keyblade_stats != "vanilla":
+            # Create keyblade stat array from vanilla
+            keyblade_stats = VANILLA_KEYBLADE_STATS.copy()
+            
+            # Fix any minimum and max values from settings
             min_str_bonus = min(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             max_str_bonus = max(self.options.keyblade_min_str.value, self.options.keyblade_max_str.value)
             self.options.keyblade_min_str.value = min_str_bonus
@@ -208,15 +310,29 @@ class KH1World(World):
             max_mp_bonus = max(self.options.keyblade_min_mp.value, self.options.keyblade_max_mp.value)
             self.options.keyblade_min_mp.value = min_mp_bonus
             self.options.keyblade_max_mp.value = max_mp_bonus
+            
+            # Create initial slot data string
             slot_data["keyblade_stats"] = ""
-            for i in range(22):
-                if i < 4 and self.options.bad_starting_weapons:
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + "1,0,"
-                else:
+            
+            # Handle bad starting weapons setting
+            if self.options.bad_starting_weapons:
+                keyblade_stats = keyblade_stats[4:]
+                slot_data["keyblade_stats"] = "3,0,1,0,1,0,1,0,"
+            
+            # Handle random keyblade stats
+            if self.options.keyblade_stats == "randomize":
+                for i in range(len(keyblade_stats)):
                     str_bonus = int(self.random.randint(min_str_bonus, max_str_bonus))
                     mp_bonus = int(self.random.randint(min_mp_bonus, max_mp_bonus))
-                    slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + str(str_bonus) + "," + str(mp_bonus) + ","
+                    keyblade_stats[i] = str(str_bonus) + "," + str(mp_bonus)
+            elif self.options.keyblade_stats == "shuffle":
+                self.random.shuffle(keyblade_stats)
+            
+            # Complete slot data string
+            for i in range(len(keyblade_stats)):
+                slot_data["keyblade_stats"] = slot_data["keyblade_stats"] + keyblade_stats[i] + ","
             slot_data["keyblade_stats"] = slot_data["keyblade_stats"][:-1]
+
         if self.options.donald_death_link:
             slot_data["donalddl"] = ""
         if self.options.goofy_death_link:
@@ -227,6 +343,8 @@ class KH1World(World):
             slot_data["chestsunlocked"] = ""
         if self.options.interact_in_battle:
             slot_data["interactinbattle"] = ""
+        slot_data["required_postcards"] = self.options.required_postcards.value
+        slot_data["required_puppies"] = self.options.required_puppies.value
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
