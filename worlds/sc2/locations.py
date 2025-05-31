@@ -648,7 +648,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Middle Base", SC2WOL_LOC_ID_OFFSET + 1404, LocationType.EXTRA,
             logic.terran_welcome_to_the_jungle_requirement
         ),
-        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Main Base", SC2WOL_LOC_ID_OFFSET + 1405, LocationType.MASTERY,
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name, "Protoss Cleared", SC2WOL_LOC_ID_OFFSET + 1405, LocationType.MASTERY,
             lambda state: (
                 logic.terran_welcome_to_the_jungle_requirement(state)
                 and logic.terran_beats_protoss_deathball(state)
@@ -3581,7 +3581,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2704, LocationType.EXTRA,
             logic.zerg_welcome_to_the_jungle_requirement
         ),
-        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 2705, LocationType.MASTERY,
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_Z.mission_name, "Protoss Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2705, LocationType.MASTERY,
             lambda state: (
                 logic.zerg_welcome_to_the_jungle_requirement(state)
                 and logic.zerg_competent_anti_air(state)
@@ -3634,7 +3634,7 @@ def get_locations(world: Optional['SC2World']) -> Tuple[LocationData, ...]:
         make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Middle Base", SC2_RACESWAP_LOC_ID_OFFSET + 2804, LocationType.EXTRA,
             logic.protoss_welcome_to_the_jungle_requirement
         ),
-        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Main Base", SC2_RACESWAP_LOC_ID_OFFSET + 2805, LocationType.MASTERY,
+        make_location_data(SC2Mission.WELCOME_TO_THE_JUNGLE_P.mission_name, "Protoss Cleared", SC2_RACESWAP_LOC_ID_OFFSET + 2805, LocationType.MASTERY,
             lambda state: (
                 logic.protoss_welcome_to_the_jungle_requirement(state)
                 and logic.protoss_competent_comp(state)),
