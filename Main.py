@@ -134,6 +134,8 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     multiworld.plando_item_blocks = parse_planned_blocks(multiworld)
 
     AutoWorld.call_all(multiworld, "connect_entrances")
+    if hasattr(multiworld, "_all_state"):
+        del multiworld._all_state
     AutoWorld.call_all(multiworld, "generate_basic")
 
     # remove starting inventory from pool items.
