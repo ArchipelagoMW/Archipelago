@@ -4,7 +4,7 @@ from .options import (StardewValleyOption, Goal, FarmType, StartingMoney, Profit
                       ElevatorProgression, SkillProgression, BuildingProgression, FestivalLocations,
                       ArcadeMachineLocations, SpecialOrderLocations, QuestLocations, Fishsanity,
                       Museumsanity, Monstersanity, Shipsanity, Cooksanity, Chefsanity, Craftsanity,
-                      Friendsanity, FriendsanityHeartSize, Booksanity, Walnutsanity, Moviesanity,
+                      Friendsanity, FriendsanityHeartSize, Eatsanity, Booksanity, Walnutsanity, Moviesanity,
                       Secretsanity, Hatsanity, NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland,
                       TrapDifficulty, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier,
                       FriendshipMultiplier, DebrisMultiplier, BackpackSize, QuickStart, Gifting, Mods,
