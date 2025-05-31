@@ -12,17 +12,20 @@ from .music_data import overworld_music_data, level_music_tracks
 from .sprites import sprite_name_to_id
 
 
-def randomize_music(patch, random, overworld):
+def randomize_music(patch, random, overworld_areas):
     # overworld
-    overworld_music_data_addresses = {v.address: v.track for k, v in overworld_music_data.items() if k in overworld}
-    randomized_overworld_music_tracks = list(overworld_music_data_addresses.values())
-    random.shuffle(randomized_overworld_music_tracks)
-    randomized_overworld_music_data = dict(zip(overworld_music_data_addresses, randomized_overworld_music_tracks))
+    overworld_music_data_addresses = {
+        v.address: v.track for k, v in overworld_music_data.items() if k in overworld_areas
+    }
+    randomized_overworld_tracks = list(overworld_music_data_addresses.values())
+    random.shuffle(randomized_overworld_tracks)
+    randomized_overworld_music_data = dict(zip(overworld_music_data_addresses, randomized_overworld_tracks))
     for i in randomized_overworld_music_data:
         patch.write_bytes(i, randomized_overworld_music_data[i])
     # levels
+    level_tracks = list(level_music_tracks.values())
     for i in range(0x5619, 0x5899, 0x14):
-        level_music = random.choice(list(level_music_tracks.values()))
+        level_music = random.choice(level_tracks)
         patch.write_bytes(i, level_music)
 
 
