@@ -55,8 +55,8 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
 warps_1f = {
     (7, 1): "Rock Tunnel 1F-NE 1",
     (7, 16): "Rock Tunnel 1F-S 1",
-    (2, 1): "Rock Tunnel 1F-NW 2",
-    (8, 5): "Rock Tunnel 1F-NW 1",
+    (2, 1): "Rock Tunnel 1F-NW 1",
+    (8, 5): "Rock Tunnel 1F-NW 2",
     (18, 1): "Rock Tunnel 1F-NE 2",
     (18, 8): "Rock Tunnel 1F-S 2"
 }
@@ -72,8 +72,8 @@ objects_1f = {
 
 # Definitions for Rock Tunnel B1F
 warps_b1f = {
-    (1, 1): "Rock Tunnel B1F-W 1",
-    (11, 5): "Rock Tunnel B1F-W 2",
+    (11, 5): "Rock Tunnel B1F-W 1",
+    (1, 1): "Rock Tunnel B1F-W 2",
     (13, 1): "Rock Tunnel B1F-E 2",
     (16, 12): "Rock Tunnel B1F-E 1"
 }

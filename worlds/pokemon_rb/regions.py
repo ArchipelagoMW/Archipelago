@@ -1641,7 +1641,6 @@ def create_regions(world):
         int((world.total_key_items / 100) * world.options.elite_four_key_items_condition.value)
 
     regions = [create_region(multiworld, player, region, locations_per_region) for region in warp_data]
-
     multiworld.regions += regions
     if __debug__:
         for region in locations_per_region:
@@ -2033,7 +2032,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     shuffle = True
                 elif sorted([entrance_data['to']['map'], region.name]) == ["Celadon City", "Celadon Game Corner"]:
                     shuffle = False
-            elif (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
+            if (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
                     entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
                 if world.options.warp_tile_shuffle:
                     shuffle = True

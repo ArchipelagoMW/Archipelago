@@ -655,7 +655,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
 
     if world.options.text_speed.value == 0:
         # Otherwise, holding A or B would slow down text
-        write_bytes(rom_addresses["Options_Remove_Text_Delay"], [0, 0, 0])
+        write_bytes(rom_addresses["Option_Remove_Text_Delay"], [0, 0, 0])
 
     write_bytes(0xFF00, 2)  # client compatibility version
     rom_name = bytearray(f"AP{Utils.__version__.replace('.', '')[0:3]}_{world.player}_{world.multiworld.seed:11}\0",

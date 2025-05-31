@@ -58,7 +58,7 @@ class BattleStyle(Choice):
     display_name = "Battle Style"
     option_set = 1
     option_shift = 0
-    default = 1
+    default = 0
 
 
 class TextSpeed(NamedRange):
@@ -365,8 +365,7 @@ class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
     On Simple only, the Town Map will be updated to show the new locations for each dungeon.
-    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
-    named Full.
+    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled.
     Full: Exterior to interior entrances are shuffled, and interior to interior doors are shuffled, separately.
     Insanity: All doors in the game are shuffled.
     Decoupled: Doors may be decoupled from each other, so that leaving through an exit may not return you to the
