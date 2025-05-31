@@ -3,12 +3,17 @@ from . import poke_data
 from .locations import location_data
 
 
-def get_encounter_slots(self):
+def get_encounter_slots(world):
     encounter_slots = deepcopy([location for location in location_data if location.type == "Wild Encounter"])
 
+    i = False
     for location in encounter_slots:
         if isinstance(location.original_item, list):
-            location.original_item = location.original_item[not self.options.game_version.value]
+            if world.options.catch_em_all and not world.options.randomize_wild_pokemon:
+                location.original_item = location.original_item[i]
+                i = not i
+            else:
+                location.original_item = location.original_item[not world.options.game_version.value]
     return encounter_slots
 
 
@@ -169,10 +174,9 @@ def process_pokemon_locations(self):
     encounter_slots_master = get_encounter_slots(self)
     encounter_slots = encounter_slots_master.copy()
 
-    zone_mapping = {}
-    zone_placed_mons = {}
-    
     if self.options.randomize_wild_pokemon:
+        zone_mapping = {}
+        zone_placed_mons = {}
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
                      or self.options.randomize_legendary_pokemon.value == 3]
         self.random.shuffle(encounter_slots)
