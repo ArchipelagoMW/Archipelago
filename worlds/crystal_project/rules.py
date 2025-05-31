@@ -1,6 +1,5 @@
 from .options import CrystalProjectOptions
 from .constants.keys import *
-from worlds.generic.Rules import set_rule, forbid_items_for_player, add_rule
 from BaseClasses import CollectionState
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:

@@ -306,7 +306,7 @@ class CrystalProjectWorld(World):
         else:
             [excluded_items.add(equipment_piece) for equipment_piece in non_progressive_equipment]
 
-        if (self.options.keyMode.value != self.options.keyMode.option_key_ring or 
+        if (self.options.keyMode.value != self.options.keyMode.option_key_ring and
             self.options.keyMode.value != self.options.keyMode.option_key_ring_skelefree):
             excluded_items.add(PRISON_KEY_RING)
             excluded_items.add(BEAURIOR_KEY_RING)
@@ -314,20 +314,31 @@ class CrystalProjectWorld(World):
             excluded_items.add(ICE_PUZZLE_KEY_RING)
             excluded_items.add(JIDAMBA_KEY_RING)
 
-        if (self.options.keyMode.value != self.options.keyMode.option_vanilla or 
+        if (self.options.keyMode.value != self.options.keyMode.option_vanilla and
             self.options.keyMode.value != self.options.keyMode.option_vanilla_skelefree):
+            excluded_items.add(CELL_KEY)
             excluded_items.add(SOUTH_WING_KEY)
             excluded_items.add(EAST_WING_KEY)
             excluded_items.add(WEST_WING_KEY)
             excluded_items.add(DARK_WING_KEY)
-            excluded_items.add(CELL_KEY)
             excluded_items.add(SMALL_KEY)
             excluded_items.add(BEAURIOR_BOSS_KEY)
-            excluded_items.add(RED_DOOR_KEY)
             excluded_items.add(ICE_CELL_KEY)
+            excluded_items.add(RED_DOOR_KEY)
             excluded_items.add(FOLIAGE_KEY)
             excluded_items.add(CAVE_KEY)
             excluded_items.add(CANOPY_KEY)
+
+        if self.options.keyMode.value == self.options.keyMode.option_skeleton:
+            excluded_items.add(GARDENERS_KEY)
+            excluded_items.add(COURTYARD_KEY)
+            excluded_items.add(LUXURY_KEY)
+            excluded_items.add(ROOM_ONE_KEY)
+            excluded_items.add(PYRAMID_KEY)
+            excluded_items.add(TRAM_KEY)
+            excluded_items.add(RAMPART_KEY)
+            excluded_items.add(FORGOTTEN_KEY)
+            excluded_items.add(ICE_PUZZLE_KEY)
 
         if (self.options.keyMode.value == self.options.keyMode.option_vanilla_skelefree or 
             self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
