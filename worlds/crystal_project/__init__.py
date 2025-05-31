@@ -137,7 +137,7 @@ class CrystalProjectWorld(World):
             bosses = get_bosses(self.player, self.options)
             locations.extend(bosses)
 
-        if self.options.shopsanity.value != self.options.shopsanity.option_off:
+        if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
@@ -313,8 +313,9 @@ class CrystalProjectWorld(World):
             excluded_items.add(SLIP_GLIDE_RIDE_KEY_RING)
             excluded_items.add(ICE_PUZZLE_KEY_RING)
             excluded_items.add(JIDAMBA_KEY_RING)
-        elif (self.options.keyMode.value != self.options.keyMode.option_vanilla or 
-              self.options.keyMode.value != self.options.keyMode.option_vanilla_skelefree):
+
+        if (self.options.keyMode.value != self.options.keyMode.option_vanilla or 
+            self.options.keyMode.value != self.options.keyMode.option_vanilla_skelefree):
             excluded_items.add(SOUTH_WING_KEY)
             excluded_items.add(EAST_WING_KEY)
             excluded_items.add(WEST_WING_KEY)
@@ -327,8 +328,9 @@ class CrystalProjectWorld(World):
             excluded_items.add(FOLIAGE_KEY)
             excluded_items.add(CAVE_KEY)
             excluded_items.add(CANOPY_KEY)
-        elif (self.options.keyMode.value == self.options.keyMode.option_vanilla_skelefree or 
-              self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
+
+        if (self.options.keyMode.value == self.options.keyMode.option_vanilla_skelefree or 
+            self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
             excluded_items.add(SKELETON_KEY)
 
         if self.options.jobRando.value == self.options.jobRando.option_none:
@@ -360,20 +362,20 @@ class CrystalProjectWorld(World):
             if name not in excluded_items:
                 #Check region and add the region amounts; then check Shopsanity and add the shop amounts
                 amount:int = data.beginnerAmount
-                if self.options.shopsanity.value != self.options.shopsanity.option_off:
+                if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                     amount = amount + data.beginnerShops
                 if self.options.includedRegions == self.options.includedRegions.option_advanced:
                     amount = amount + data.advancedAmount
-                    if self.options.shopsanity.value != self.options.shopsanity.option_off:
+                    if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                         amount = amount + data.advancedShops
                 elif self.options.includedRegions == self.options.includedRegions.option_expert:
                     amount = amount + data.advancedAmount + data.expertAmount
-                    if self.options.shopsanity.value != self.options.shopsanity.option_off:
+                    if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                         amount = amount + data.expertShops
                 elif self.options.includedRegions == self.options.includedRegions.option_all:
                     amount = amount + data.advancedAmount + data.expertAmount + data.endGameAmount
                     #atm there are no end-game specific shopsanity items
-                    if self.options.shopsanity.value != self.options.shopsanity.option_off:
+                    if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                         amount = amount + data.endGameShops
                 for _ in range(amount):
                     item = self.set_classifications(name)

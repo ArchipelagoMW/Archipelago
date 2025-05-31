@@ -94,13 +94,13 @@ class Shopsanity(Choice):
     """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
 
-    Choosing "on and hint" will automatically create a hint for any item available in your stores after you have visited the store for the first time, 
+    Choosing "enabled and hint" will automatically create a hint for any item available in your stores after you have visited the store for the first time, 
     letting other players in the multiworld know you've seen their item.
     """
     display_name = "Shopsanity"
-    option_off = 0
-    option_on = 1
-    option_on_and_hint = 2
+    option_disabled = 0
+    option_enabled = 1
+    option_enabled_and_hint = 2
     default = 0
 
 class IncludedRegions(Choice):
