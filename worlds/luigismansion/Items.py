@@ -297,7 +297,7 @@ HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
 
 ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap"]
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
-BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap"]
+BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
 GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap"]
 POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom"]
 BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap"]
