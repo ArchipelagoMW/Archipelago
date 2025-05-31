@@ -31,6 +31,7 @@ class Goal(Choice):
     Craft Master: Craft every item
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
+    Mad Hatter: Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring"
     Allsanity: Complete every check in your slot
     Perfection: Attain Perfection
     """
@@ -51,6 +52,7 @@ class Goal(Choice):
     option_craft_master = 11
     option_legend = 12
     option_mystery_of_the_stardrops = 13
+    option_mad_hatter = 20
     # option_junimo_kart =
     # option_prairie_king =
     # option_fector_challenge =

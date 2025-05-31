@@ -11,7 +11,8 @@ from worlds.LauncherComponents import launch_subprocess, components, Component, 
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
-from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, setup_early_items
+from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
+    setup_early_items
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
@@ -310,6 +311,10 @@ class StardewValleyWorld(World):
         elif self.options.goal == Goal.option_mystery_of_the_stardrops:
             self.create_event_location(location_table[GoalName.mystery_of_the_stardrops],
                                        self.logic.goal.can_complete_mystery_of_the_stardrop(),
+                                       Event.victory)
+        elif self.options.goal == Goal.option_mad_hatter:
+            self.create_event_location(location_table[GoalName.mad_hatter],
+                                       self.logic.goal.can_complete_mad_hatter(self.get_all_location_names()),
                                        Event.victory)
         elif self.options.goal == Goal.option_allsanity:
             self.create_event_location(location_table[GoalName.allsanity],
