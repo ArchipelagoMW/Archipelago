@@ -222,6 +222,12 @@ class TestEatsanityShop(SVEatsanityTestBase):
         "Luck Enzyme",
     }
 
+    def test_need_stardrop_to_eat_it(self):
+        location = self.world.get_location(f"Eat Stardrop")
+        self.assert_cannot_reach_location(location)
+        self.collect("Stardrop")
+        self.assert_can_reach_location(location)
+
 
 class TestEatsanityPoisonousFish(SVEatsanityTestBase):
     options = {
@@ -255,6 +261,56 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
         "Mining Enzyme",
         "Luck Enzyme",
     }
+
+
+class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
+    options = {
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Eatsanity: frozenset({EatsanityOptionName.artisan, EatsanityOptionName.poisonous}),
+    }
+    expected_eating_locations = {
+        "Drink Vinegar",
+        "Drink Wine",
+        "Drink Iridium Snake Milk",
+        "Eat Void Egg",
+    }
+    unexpected_eating_locations = {
+        "Eat Parsnip",
+        "Eat Yam",
+        "Eat Summer Spangle",
+        "Eat Apple",
+        "Eat Sweet Pea",
+        "Drink Parsnip",
+        "Eat Vinegar",
+        "Drink Pina Colada",
+        "Eat Pufferfish",
+        "Eat Tortilla",
+        "Eat Pepper Poppers",
+        "Eat Carp",
+        "Eat Bullhead",
+    }
+    unexpected_eating_items = {
+        "Energy Enzyme",
+        "Health Enzyme",
+        "Mining Enzyme",
+        "Luck Enzyme",
+    }
+
+    def test_need_lots_of_things_for_iridium_snake_milk(self):
+        location = self.world.get_location(f"Drink Iridium Snake Milk")
+        required_items = ["Desert Obelisk", "Magnifying Glass", "Skull Key", "Progressive House", *["Progressive Pickaxe"]*2,
+                          *["Progressive Weapon"]*4, *["Mining Level"]*8, *["Combat Level"]*8]
+        unique_items = list(set(required_items))
+        required_items = [self.create_item(item) for item in required_items]
+        self.collect(required_items)
+        self.assert_can_reach_location(location)
+        for item_name in unique_items:
+            with self.subTest(f"Requires {item_name} to Drink Iridium Snake Milk"):
+                item_to_remove = next(item for item in required_items if item.name == item_name)
+                self.assert_can_reach_location(location)
+                self.remove(item_to_remove)
+                self.assert_cannot_reach_location(location)
+                self.collect(item_to_remove)
 
 
 class TestEatsanityEnzymeEffects(SVEatsanityTestBase):
