@@ -9,7 +9,7 @@ from ..strings.region_names import Region
 main_outside_area = {Region.menu, Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
                      Region.bus_stop, Region.backwoods, Region.bus_tunnel, Region.tunnel_entrance}
 always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.mines, Region.hospital, Region.carpenter, Region.alex_house,
-                                                     Region.elliott_house, Region.ranch, Region.farm_cave, Region.wizard_tower, Region.tent,
+                                                     Region.ranch, Region.farm_cave, Region.wizard_tower, Region.tent,
                                                      Region.pierre_store, Region.saloon, Region.blacksmith, Region.trailer, Region.museum, Region.mayor_house,
                                                      Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
 always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er, Region.community_center, Region.pantry, Region.crafts_room,
