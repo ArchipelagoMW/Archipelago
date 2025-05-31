@@ -120,7 +120,8 @@ class CrystalProjectLogic:
     def has_key(self, state: CollectionState, key_name: str, count: int = 1) -> bool:
         if state.has(SKELETON_KEY, self.player):
             return True
-        if self.options.keyMode.value == self.options.keyMode.option_key_ring:
+        if (self.options.keyMode.value == self.options.keyMode.option_key_ring or
+            self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
             return self.has_key_ring(state, key_name)
         return state.has(key_name, self.player, count)
 

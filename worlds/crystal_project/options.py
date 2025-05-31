@@ -90,11 +90,18 @@ class KillBossesMode(Toggle):
     """
     display_name = "Kill Bosses Mode"
 
-class Shopsanity(Toggle):
+class Shopsanity(Choice):
     """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
+
+    Choosing "on and hint" will automatically create a hint for any item available in your stores after you have visited the store for the first time, 
+    letting other players in the multiworld know you've seen their item.
     """
     display_name = "Shopsanity"
+    option_off = 0
+    option_on = 1
+    option_on_and_hint = 2
+    default = 0
 
 class IncludedRegions(Choice):
     """
@@ -161,11 +168,15 @@ class KeyMode(Choice):
     Key Ring: One check will give all keys needed to complete one dungeon. The Skeleton Key will still be in the pool.
 
     Vanilla: All vanilla keys will be in the item pool.
+
+    Skelefree: Same as the named mode but removes the skeleton key.
     """
     display_name = "Key Mode"
     option_skeleton = 0
     option_key_ring = 1
     option_vanilla = 2
+    option_key_ring_skelefree = 3
+    option_vanilla_skelefree = 4
     default = 2
 
 #"""Item Pool Options"""
