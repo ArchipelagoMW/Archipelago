@@ -7,10 +7,22 @@ logger = logging.getLogger(__name__)
 
 
 def force_change_options_if_incompatible(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    force_hatsanity_when_goal_is_mad_hatter(world_options, player, player_name)
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
+
+
+def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    goal_is_mad_hatter = world_options.goal == options.Goal.option_mad_hatter
+    hatsanity_is_disabled = world_options.hatsanity == options.Hatsanity.option_none
+
+    if goal_is_mad_hatter and hatsanity_is_disabled:
+        world_options.hatsanity.value = options.Hatsanity.option_easy_tailoring
+        goal_name = world_options.goal.current_option_name
+        logger.warning(f"Goal '{goal_name}' requires Requires Hatsanity. "
+                       f"Hatsanity option forced to 'Easy+Tailoring' for player {player} ({player_name})")
 
 
 def force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
