@@ -182,7 +182,7 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
     if hint_distribution_choice == 1:
         for portrait_name in PORTRAIT_HINTS:
             jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", " ")
+            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\n")
             csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
     else:
         for portrait_name, portrait_hint in all_hints.items():
