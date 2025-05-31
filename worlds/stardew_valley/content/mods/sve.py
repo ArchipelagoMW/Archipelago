@@ -24,6 +24,9 @@ from ...strings.skill_names import Skill
 from ...strings.tool_names import Tool, ToolMaterial
 from ...strings.villager_names import ModNPC
 
+# Used to adapt content not yet moved to content packs to easily detect when SVE and Ginger Island are both enabled.
+SVE_GINGER_ISLAND_PACK = ModNames.sve + "+" + ginger_island_content_pack.name
+
 
 class SVEContentPack(ContentPack):
 
@@ -66,6 +69,10 @@ class SVEContentPack(ContentPack):
             content.game_items.pop(SVEVegetable.monster_mushroom)
             content.game_items.pop(SVESeed.slime)
             content.game_items.pop(SVEFruit.slime_berry)
+
+    def finalize_hook(self, content: StardewContent):
+        if ginger_island_content_pack.name in content.registered_packs:
+            content.registered_packs.add(SVE_GINGER_ISLAND_PACK)
 
 
 register_mod_content_pack(SVEContentPack(
