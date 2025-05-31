@@ -19,7 +19,7 @@ class TestLocationGroups(unittest.TestCase):
         self.assertIn('Challenge', self.location_groups)
         self.assertIn(f'{SC2Mission.ZERO_HOUR.mission_name}: First Hatchery', self.location_groups['Challenge'])
         self.assertIn('Mastery', self.location_groups)
-        self.assertIn(f'{SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name}: Main Base', self.location_groups['Mastery'])
+        self.assertIn(f'{SC2Mission.WELCOME_TO_THE_JUNGLE.mission_name}: Protoss Cleared', self.location_groups['Mastery'])
 
     def test_missions_have_a_group(self) -> None:
         self.assertIn(SC2Mission.LIBERATION_DAY.mission_name, self.location_groups)
