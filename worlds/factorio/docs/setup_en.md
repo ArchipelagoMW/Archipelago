@@ -179,6 +179,18 @@ factorio_options:
   filter_item_sends: true
 ```
 
+### filter_connection_changes
+
+By default, all player joined and player stopped tracking notifications are displayed in-game. In larger async seeds this may become overly spammy.
+To hide all connection changes, do one of the following:
+- Type `/toggle-ap-connection-change-filter` in-game
+- Type `/toggle_connection_change_filter` in the Achipelago Client
+- In your `host.yaml` set
+```
+factorio_options:
+  filter_connection_changes: true
+```
+
 ### bridge_chat_out
 By default, in-game chat is bridged to Archipelago. If you prefer to be able to speak privately, you can disable this
 feature by doing one of the following:
