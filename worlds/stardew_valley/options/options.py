@@ -634,7 +634,7 @@ class Eatsanity(OptionSet):
     Cooking: Includes all cooked and crafted edible items
     Crops: Includes all crops and forageable edible items
     Fish: Includes all fish and fished edible items
-    Artisan: Includes all edible items produced by machines
+    Artisan: Includes all edible items produced by machines and animals
     Shop: Includes all edible items purchased primarily in shops
     Poisonous: Includes items that cause negative effects when consumed
     Lock Effects: Whether each positive effect from edible items is unlocked through an archipelago item.

@@ -127,6 +127,13 @@ class LocationTags(enum.Enum):
     HAT_NEAR_PERFECTION = enum.auto()
     HAT_POST_PERFECTION = enum.auto()
     HAT_IMPOSSIBLE = enum.auto()
+    EATSANITY = enum.auto()
+    EATSANITY_CROP = enum.auto()
+    EATSANITY_COOKING = enum.auto()
+    EATSANITY_FISH = enum.auto()
+    EATSANITY_ARTISAN = enum.auto()
+    EATSANITY_SHOP = enum.auto()
+    EATSANITY_POISONOUS = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
