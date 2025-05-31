@@ -234,10 +234,10 @@ def generateRom(args, world: "LinksAwakeningWorld"):
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    if world.ladxr_settings.steal == 'never':
+    if world.ladxr_settings.steal == 'disabled':
         rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
-    elif world.ladxr_settings.steal == 'always':
-        rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
+        rom.texts[0x2E] = formatText("Hey!  Welcome!  Did you know that I have eyes on the back of my head?")
+        rom.texts[0x2F] = formatText("Nothing escapes my gaze! Your thieving ways shall never prosper!")
 
     if world.ladxr_settings.hpmode == 'inverted':
         patches.health.setStartHealth(rom, 9)
@@ -378,7 +378,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
             0x1A9, 0x1AA, 0x1AB, 0x1AC, 0x1AD,
 
             # Prices
-            0x02C, 0x02D, 0x030, 0x031, 0x032, 0x033, # Shop items
+            0x02C, 0x02D, 0x02E, 0x02F, 0x030, 0x031, 0x032, 0x033, # Shop items
             0x03B, # Trendy Game
             0x045, # Fisherman
             0x018, 0x019, # Crazy Tracy
