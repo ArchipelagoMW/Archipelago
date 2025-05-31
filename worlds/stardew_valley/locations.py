@@ -15,8 +15,8 @@ from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity
-from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName
+from .options.options import BackpackSize, Moviesanity, Eatsanity
+from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -579,6 +579,44 @@ def extend_hats_locations(randomized_locations: List[LocationData], options: Sta
         randomized_locations.append(location_table[hat.to_location_name()])
 
 
+def eatsanity_item_is_included(location: LocationData, options: StardewValleyOptions, content: StardewContent) -> bool:
+    eat_prefix = "Eat "
+    drink_prefix = "Drink "
+    if location.name.startswith(eat_prefix):
+        item_name = location.name[len(eat_prefix):]
+    elif location.name.startswith(drink_prefix):
+        item_name = location.name[len(drink_prefix):]
+    else:
+        raise Exception(f"Eatsanity Location does not have a recognized prefix: '{location.name}'")
+
+    if not item_name in content.game_items:
+        return False
+    if EatsanityOptionName.poisonous in options.eatsanity.value:
+        return True
+    if location in locations_by_tag[LocationTags.EATSANITY_POISONOUS]:
+        return False
+
+
+def extend_eatsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    if options.eatsanity.value == Eatsanity.preset_none:
+        return
+
+    eatsanity_locations = []
+    if EatsanityOptionName.crops in options.eatsanity:
+        eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_CROP])
+    if EatsanityOptionName.cooking in options.eatsanity:
+        eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_COOKING])
+    if EatsanityOptionName.fish in options.eatsanity:
+        eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_FISH])
+    if EatsanityOptionName.artisan in options.eatsanity:
+        eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_ARTISAN])
+    if EatsanityOptionName.shop in options.eatsanity:
+        eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_SHOP])
+
+    eatsanity_locations = [location for location in eatsanity_locations if eatsanity_item_is_included(location, options, content)]
+    randomized_locations.extend(eatsanity_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
@@ -630,6 +668,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_movies_locations(randomized_locations, options, content)
     extend_secrets_locations(randomized_locations, options, content)
     extend_hats_locations(randomized_locations, options, content)
+    extend_eatsanity_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)
