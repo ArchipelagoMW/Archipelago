@@ -11,7 +11,6 @@ from BaseClasses import Location, Region, Entrance
 from ..mission_tables import SC2Mission, MissionFlag, lookup_name_to_mission, lookup_id_to_mission
 from ..item.item_tables import named_layout_key_item_table, named_campaign_key_item_table
 from ..item import item_names
-from .. import rules
 from .nodes import MissionOrderNode, SC2MOGenMissionOrder, SC2MOGenCampaign, SC2MOGenLayout, SC2MOGenMission
 from .entry_rules import EntryRule, SubRuleEntryRule, ItemEntryRule, CountMissionsEntryRule, BeatMissionsEntryRule
 from .mission_pools import (

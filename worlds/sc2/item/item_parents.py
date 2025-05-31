@@ -5,7 +5,7 @@ Rules have a `parent_items()` method which links rule -> parent items.
 Rules may be more complex than all or any items being present. Call them to determine if they are satisfied.
 """
 
-from typing import Dict, List, Iterable, Sequence, Optional, cast, TYPE_CHECKING
+from typing import Dict, List, Iterable, Sequence, Optional, TYPE_CHECKING
 import abc
 from . import item_names, parent_names, item_tables, item_groups
 

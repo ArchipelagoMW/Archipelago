@@ -92,7 +92,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertIn(item_names.MARINE, itempool)
         self.assertIn(item_names.MARAUDER, itempool)
         self.assertIn(item_names.REAPER, itempool)
-        self.assertEqual(itempool.count(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE), 1, f"Stealth suit occurred the wrong number of times")
+        self.assertEqual(itempool.count(item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE), 1, "Stealth suit occurred the wrong number of times")
         self.assertIn(item_names.HELLION, itempool)
         self.assertEqual(itempool.count(item_names.MARINE_PROGRESSIVE_STIMPACK), 2, f"Marine stimpacks weren't unexcluded  (seed {self.multiworld.seed})")
         self.assertEqual(itempool.count(item_names.MARAUDER_PROGRESSIVE_STIMPACK), 2, f"Marauder stimpacks weren't unexcluded (seed {self.multiworld.seed})")

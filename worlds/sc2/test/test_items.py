@@ -2,7 +2,6 @@ import unittest
 from typing import List, Set
 
 from ..item import item_tables
-from ..item.item_groups import item_name_groups, ItemGroupNames
 
 
 class TestItems(unittest.TestCase):

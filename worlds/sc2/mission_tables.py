@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Callable, Optional
+from typing import NamedTuple, Dict, List, Set, Union, Literal, Iterable, Optional
 from enum import IntEnum, Enum, IntFlag, auto
 
 

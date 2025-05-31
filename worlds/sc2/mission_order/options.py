@@ -189,7 +189,7 @@ class CustomMissionOrder(OptionDict):
                 single_layout = {key: val for (key, val) in yaml_value[campaign].items() if type(val) != dict}
                 yaml_value[campaign] = {campaign: single_layout}
                 # Campaign should inherit certain values from the layout
-                if not "goal" in single_layout or not single_layout["goal"]:
+                if "goal" not in single_layout or not single_layout["goal"]:
                     yaml_value[campaign]["goal"] = False
                 if "unique_progression_track" in single_layout:
                     yaml_value[campaign]["unique_progression_track"] = single_layout["unique_progression_track"]
@@ -319,7 +319,7 @@ def _resolve_special_option(option: str, option_value: Any) -> Any:
 
 def _resolve_string_option_single(option: str, option_value: str) -> Any:
     formatted_value = option_value.lower().replace("_", " ")
-    if not formatted_value in STR_OPTION_VALUES[option]:
+    if formatted_value not in STR_OPTION_VALUES[option]:
         raise ValueError(
             f"Option \"{option}\" received unknown value \"{option_value}\".\n"
             f"Allowed values are: {list(STR_OPTION_VALUES[option].keys())}"
@@ -350,7 +350,7 @@ def _resolve_entry_rule(option_value: Dict[str, Any]) -> Dict[str, Any]:
         mutually_exclusive.append("rules")
         resolved["rules"] = [_resolve_entry_rule(subrule) for subrule in option_value["rules"]]
         # Make sure sub-rule rules have a specified amount
-        if not "amount" in option_value:
+        if "amount" not in option_value:
             resolved["amount"] = -1
     if "items" in option_value:
         mutually_exclusive.append("items")

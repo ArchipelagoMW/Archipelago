@@ -282,7 +282,7 @@ class Canvas(Grid):
         self.jump_distance_orthogonal = max(options.pop("jump_distance_orthogonal", 1), 1)
         self.jump_distance_diagonal = max(options.pop("jump_distance_diagonal", 1), 0)
 
-        if not "canvas" in options:
+        if "canvas" not in options:
             raise KeyError("Canvas layout is missing required canvas option. Either create it or change type to Grid.")
         self.canvas = options.pop("canvas")
         # Pad short lines with spaces
@@ -380,7 +380,7 @@ class Canvas(Grid):
             closest_to_bottom_right[0][1].option_exit = True
 
     def idx_group(self, group: str) -> Union[Set[int], None]:
-        if not group in self.groups:
+        if group not in self.groups:
             return None
         return set(self.groups[group])
 
