@@ -25,7 +25,7 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import FarmType, Moviesanity
+from .options.options import FarmType, Moviesanity, Eatsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -105,6 +105,7 @@ def set_rules(world):
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
     set_hatsanity_rules(all_location_names, logic, multiworld, player, world_options, world_content)
+    set_eatsanity_rules(all_location_names, logic, multiworld, player, world_options)
 
     set_deepwoods_rules(logic, multiworld, player, world_content)
     set_magic_spell_rules(logic, multiworld, player, world_content)
@@ -999,6 +1000,23 @@ def set_hatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multi
         if hat_name not in content.hats:
             continue
         set_rule(multiworld.get_location(hat_location.name, player), logic.hat.can_wear(hat_name))
+
+
+def set_eatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+    if world_options.eatsanity == Eatsanity.preset_none:
+        return
+    for eat_location in locations.locations_by_tag[LocationTags.EATSANITY]:
+        if eat_location.name not in all_location_names:
+            continue
+        eat_prefix = "Eat "
+        drink_prefix = "Drink "
+        if eat_location.name.startswith(eat_prefix):
+            item_name = eat_location.name[len(eat_prefix):]
+        elif eat_location.name.startswith(drink_prefix):
+            item_name = eat_location.name[len(drink_prefix):]
+        else:
+            raise Exception(f"Eatsanity Location does not have a recognized prefix: '{eat_location.name}'")
+        set_rule(multiworld.get_location(eat_location.name, player), logic.has(item_name))
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):

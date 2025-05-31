@@ -88,6 +88,8 @@ class TestEatsanityCrops(SVEatsanityTestBase):
         crops = {"Apple": "Apple Sapling", "Yam": "Yam Seeds", "Parsnip": "Parsnip Seeds"}
         self.collect("Fall")
         self.collect("Spring")
+        self.collect("Shipping Bin")
+        self.collect_months(2)
         for crop in crops:
             location = self.world.get_location(f"Eat {crop}")
             self.assert_cannot_reach_location(location)
