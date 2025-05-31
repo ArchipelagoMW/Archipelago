@@ -6,7 +6,7 @@ from typing import Protocol, ClassVar
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
     Visibility, Removed, OptionCounter
 from ..mods.mod_data import ModNames
-from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName
+from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
 
@@ -629,6 +629,36 @@ class FriendsanityHeartSize(Range):
     # step = 1
 
 
+class Eatsanity(OptionSet):
+    """Locations for eating various items?
+    Cooking: Includes all cooked and crafted edible items
+    Crops: Includes all crops and forageable edible items
+    Fish: Includes all fish and fished edible items
+    Artisan: Includes all edible items produced by machines
+    Shop: Includes all edible items purchased primarily in shops
+    Poisonous: Includes items that cause negative effects when consumed
+    Lock Effects: Whether each positive effect from edible items is unlocked through an archipelago item.
+    """
+    internal_name = "eatsanity"
+    display_name = "Eatsanity"
+    valid_keys = frozenset({
+        EatsanityOptionName.cooking, EatsanityOptionName.crops, EatsanityOptionName.fish,
+        EatsanityOptionName.artisan, EatsanityOptionName.shop,
+        EatsanityOptionName.poisonous, EatsanityOptionName.lock_effects,
+    })
+    preset_none = frozenset()
+    preset_all = valid_keys
+    default = preset_none
+
+    def __eq__(self, other: typing.Any) -> bool:
+        if isinstance(other, OptionSet):
+            return set(self.value) == other.value
+        if isinstance(other, OptionList):
+            return set(self.value) == set(other.value)
+        else:
+            return typing.cast(bool, self.value == other)
+
+
 class Booksanity(Choice):
     """Shuffle Books?
     None: All books behave like vanilla
@@ -1025,6 +1055,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     craftsanity: Craftsanity
     friendsanity: Friendsanity
     friendsanity_heart_size: FriendsanityHeartSize
+    eatsanity: Eatsanity
     booksanity: Booksanity
     walnutsanity: Walnutsanity
     moviesanity: Moviesanity

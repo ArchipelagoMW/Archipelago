@@ -24,3 +24,13 @@ class SecretsanityOptionName:
     difficult = "Difficult"
     fishing = "Fishing"
     secret_notes = "Secret Notes"
+
+
+class EatsanityOptionName:
+    cooking = "Cooking"
+    crops = "Crops"
+    fish = "Fish"
+    artisan = "Artisan"
+    shop = "Shop"
+    poisonous = "Poisonous"
+    lock_effects = "Lock Effects"
