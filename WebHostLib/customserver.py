@@ -24,7 +24,6 @@ from Utils import restricted_loads, cache_argsless
 from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
-
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
 
@@ -100,13 +99,13 @@ class WebHostContext(Context):
             time.sleep(5)
 
     @db_session
-    def load(self, room_id: int):
+    def load(self, room_id: int, room_ports_config: dict):
         self.room_id = room_id
         room = Room.get(id=room_id)
         if room.last_port:
             self.port = room.last_port
         else:
-            self.port = get_random_port()
+            self.port = get_random_port(room_ports_config)
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
@@ -171,8 +170,8 @@ class WebHostContext(Context):
         return d
 
 
-def get_random_port():
-    return random.randint(49152, 65535)
+def get_random_port(room_ports_config: dict):
+    return random.randint(room_ports_config["min"], room_ports_config["max"])
 
 
 @cache_argsless
@@ -224,7 +223,9 @@ def set_up_logging(room_id) -> logging.Logger:
     return logger
 
 
-def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
+def run_server_process(name: str, ponyconfig: dict,
+                       room_ports_config: dict,
+                       static_server_data: dict,
                        cert_file: typing.Optional[str], cert_key_file: typing.Optional[str],
                        host: str, rooms_to_run: multiprocessing.Queue, rooms_shutting_down: multiprocessing.Queue):
     from setproctitle import setproctitle
@@ -271,34 +272,73 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
 
     loop = asyncio.get_event_loop()
 
+    async def start_ws_server(ctx: WebHostContext, port: int) -> int | None:
+        ctx.server = websockets.serve(
+            functools.partial(server, ctx=ctx), ctx.host, port, ssl=get_ssl_context())
+        await ctx.server
+        # Get the port number from the started server instance:
+        port = None
+        for wssocket in ctx.server.ws_server.sockets:
+            socketname = wssocket.getsockname()
+            if wssocket.family == socket.AF_INET6:
+                # Prefer IPv4, as most users seem to not have working IPv6 support
+                if not port:
+                    port = socketname[1]
+            elif wssocket.family == socket.AF_INET:
+                port = socketname[1]
+        return port
+
+    async def start_room_server_rnd(ctx: WebHostContext) -> int | None:
+        attempts = 0
+        port: int | None = None
+
+        allow_fallback: bool = room_ports_config["overflow"]
+        max_attempts: int = room_ports_config["max_attempts"]
+
+        while port is None:
+            attempts += 1
+            if attempts > max_attempts:
+                if not allow_fallback:
+                    if e is None:
+                        return None
+                    else:
+                        raise e
+                else:
+                    port = 0
+            else:
+                port = get_random_port(room_ports_config)
+
+            try:
+                port = await start_ws_server(ctx, port)
+            except OSError as e:
+                if port == 0:
+                    raise
+                port = None
+        return port
+
+    async def start_room_server(ctx: WebHostContext) -> int | None:
+        # Prevent marked-as-broken rooms from trying to obtain another port.
+        if ctx.port < 0:
+            return None
+
+        try:
+            port = await start_ws_server(ctx, ctx.port)
+        except OSError as start_oserr:
+            port = await start_room_server_rnd(ctx)
+        return port
+
     async def start_room(room_id):
         with Locker(f"RoomLocker {room_id}"):
             try:
                 logger = set_up_logging(room_id)
                 ctx = WebHostContext(static_server_data, logger)
-                ctx.load(room_id)
+                ctx.load(room_id, room_ports_config)
                 ctx.init_save()
                 assert ctx.server is None
-                try:
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=get_ssl_context())
 
-                    await ctx.server
-                except OSError:  # likely port in use
-                    ctx.server = websockets.serve(
-                        functools.partial(server, ctx=ctx), ctx.host, 0, ssl=get_ssl_context())
+                port = await start_room_server(ctx)
 
-                    await ctx.server
-                port = 0
-                for wssocket in ctx.server.ws_server.sockets:
-                    socketname = wssocket.getsockname()
-                    if wssocket.family == socket.AF_INET6:
-                        # Prefer IPv4, as most users seem to not have working ipv6 support
-                        if not port:
-                            port = socketname[1]
-                    elif wssocket.family == socket.AF_INET:
-                        port = socketname[1]
-                if port:
+                if port is not None:
                     ctx.logger.info(f'Hosting game at {host}:{port}')
                     with db_session:
                         room = Room.get(id=ctx.room_id)
