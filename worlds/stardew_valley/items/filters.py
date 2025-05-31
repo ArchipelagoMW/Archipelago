@@ -4,7 +4,7 @@ from .item_data import ItemData, Group
 from ..options import StardewValleyOptions, ExcludeGingerIsland
 
 
-def remove_excluded(items: Iterable[ItemData], options: StardewValleyOptions) -> list[ItemData]:
+def filter_excluded(items: Iterable[ItemData], options: StardewValleyOptions) -> list[ItemData]:
     return [
         item
         for item in items
@@ -14,7 +14,7 @@ def remove_excluded(items: Iterable[ItemData], options: StardewValleyOptions) ->
     ]
 
 
-def remove_limited_amount_resource_packs(packs: Iterable[ItemData]) -> list[ItemData]:
+def filter_limited_amount_resource_packs(packs: Iterable[ItemData]) -> list[ItemData]:
     return [
         resource_pack
         for resource_pack in packs
@@ -22,7 +22,7 @@ def remove_limited_amount_resource_packs(packs: Iterable[ItemData]) -> list[Item
     ]
 
 
-def remove_already_included_maximum_one(items: Iterable[ItemData], already_added_items: set[str]) -> list[ItemData]:
+def filter_already_included_maximum_one(items: Iterable[ItemData], already_added_items: set[str]) -> list[ItemData]:
     return [
         item
         for item in items

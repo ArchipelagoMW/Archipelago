@@ -1,7 +1,7 @@
 from random import Random
 
 from BaseClasses import Item, ItemClassification
-from .filters import remove_excluded, remove_limited_amount_resource_packs, remove_already_included_maximum_one
+from .filters import filter_excluded, filter_limited_amount_resource_packs, filter_already_included_maximum_one
 from .item_data import items_by_group, Group, ItemData, StardewItemFactory, item_table
 from ..options import StardewValleyOptions, FestivalLocations
 from ..strings.ap_names.ap_option_names import BuffOptionName
@@ -10,8 +10,8 @@ from ..strings.ap_names.buff_names import Buff
 
 def generate_filler_choice_pool(options: StardewValleyOptions) -> list[str]:
     available_filler = get_all_resource_packs_and_traps(options)
-    available_filler = remove_excluded(available_filler, options)
-    available_filler = remove_limited_amount_resource_packs(available_filler)
+    available_filler = filter_excluded(available_filler, options)
+    available_filler = filter_limited_amount_resource_packs(available_filler)
 
     return [item.name for item in available_filler]
 
@@ -70,8 +70,8 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
     already_added_items_names = {item.name for item in already_added_items}
 
     priority_fillers = get_priority_resource_packs_buffs_and_traps(options)
-    priority_fillers = remove_excluded(priority_fillers, options)
-    priority_fillers = remove_already_included_maximum_one(priority_fillers, already_added_items_names)
+    priority_fillers = filter_excluded(priority_fillers, options)
+    priority_fillers = filter_already_included_maximum_one(priority_fillers, already_added_items_names)
 
     if available_item_slots < len(priority_fillers):
         return [filler_factory(priority_filler) for priority_filler in random.sample(priority_fillers, available_item_slots)]
@@ -83,8 +83,8 @@ def generate_resource_packs_and_traps(item_factory: StardewItemFactory,
 
     all_fillers = get_all_resource_packs_and_traps(options)
     all_fillers.extend(get_player_buffs(options))
-    all_fillers = remove_excluded(all_fillers, options)
-    all_fillers = remove_already_included_maximum_one(all_fillers, already_added_items_names)
+    all_fillers = filter_excluded(all_fillers, options)
+    all_fillers = filter_already_included_maximum_one(all_fillers, already_added_items_names)
 
     filler_weights = get_filler_weights(options, all_fillers)
 

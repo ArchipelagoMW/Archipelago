@@ -691,7 +691,7 @@ class TrapDifficulty(Choice):
     option_nightmare = 5
 
     def include_traps(self) -> bool:
-        return self.value > 0
+        return self.value > TrapDifficulty.option_no_traps
 
 
 trap_default_weight = 100

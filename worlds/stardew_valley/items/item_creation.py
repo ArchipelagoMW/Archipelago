@@ -4,7 +4,7 @@ from typing import List
 
 from BaseClasses import Item, ItemClassification
 from .fillers import generate_resource_packs_and_traps, generate_unique_filler_items
-from .filters import remove_excluded
+from .filters import filter_excluded
 from .item_data import StardewItemFactory, items_by_group, Group, item_table, ItemData
 from ..content.feature import friendsanity
 from ..content.game_content import StardewContent
@@ -452,7 +452,7 @@ def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewVa
     crafting_recipes.extend([recipe for recipe in items_by_group[Group.QI_CRAFTING_RECIPE]])
     if has_craftsanity:
         crafting_recipes.extend([recipe for recipe in items_by_group[Group.CRAFTSANITY]])
-    crafting_recipes = remove_excluded(crafting_recipes, options)
+    crafting_recipes = filter_excluded(crafting_recipes, options)
     items.extend([item_factory(item) for item in crafting_recipes])
 
 
@@ -472,7 +472,7 @@ def create_cooking_recipes(item_factory: StardewItemFactory, options: StardewVal
     if chefsanity & Chefsanity.option_skills:
         chefsanity_recipes_by_name.update({recipe.name: recipe for recipe in items_by_group[Group.CHEFSANITY_SKILL]})
 
-    filtered_chefsanity_recipes = remove_excluded(list(chefsanity_recipes_by_name.values()), options)
+    filtered_chefsanity_recipes = filter_excluded(list(chefsanity_recipes_by_name.values()), options)
     items.extend([item_factory(item) for item in filtered_chefsanity_recipes])
 
 
