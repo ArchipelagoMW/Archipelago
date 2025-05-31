@@ -1,7 +1,8 @@
 import unittest
 
 from .bases import SVTestBase
-from ..options import ExcludeGingerIsland, Eatsanity
+from .. import SeasonRandomization
+from ..options import ExcludeGingerIsland, Eatsanity, Chefsanity
 from ..strings.ap_names.ap_option_names import EatsanityOptionName
 
 
@@ -99,10 +100,14 @@ class TestEatsanityCrops(SVEatsanityTestBase):
 
 class TestEatsanityCooking(SVEatsanityTestBase):
     options = {
+        SeasonRandomization: SeasonRandomization.option_randomized,
+        Chefsanity: Chefsanity.option_all,
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Eatsanity: frozenset({EatsanityOptionName.cooking}),
+        "start_inventory": {"Winter": 1}
     }
     expected_eating_locations = {
+        "Eat Vegetable Medley",
         "Eat Tortilla",
         "Eat Pepper Poppers",
     }
@@ -125,6 +130,21 @@ class TestEatsanityCooking(SVEatsanityTestBase):
         "Mining Enzyme",
         "Luck Enzyme",
     }
+
+    def test_need_recipe_and_ingredients_to_cook(self):
+        location = self.world.get_location(f"Eat Vegetable Medley")
+        required_items = ["Vegetable Medley Recipe", "Progressive House", "Tomato Seeds", "Summer", "Beet Seeds", "Fall", "Desert Obelisk"]
+        unique_items = list(set(required_items))
+        required_items = [self.create_item(item) for item in required_items]
+        self.collect(required_items)
+        self.assert_can_reach_location(location)
+        for item_name in unique_items:
+            with self.subTest(f"Requires {item_name} to {location.name}"):
+                item_to_remove = next(item for item in required_items if item.name == item_name)
+                self.assert_can_reach_location(location)
+                self.remove(item_to_remove)
+                self.assert_cannot_reach_location(location)
+                self.collect(item_to_remove)
 
 
 class TestEatsanityFish(SVEatsanityTestBase):
@@ -305,7 +325,7 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
         self.collect(required_items)
         self.assert_can_reach_location(location)
         for item_name in unique_items:
-            with self.subTest(f"Requires {item_name} to Drink Iridium Snake Milk"):
+            with self.subTest(f"Requires {item_name} to {location.name}"):
                 item_to_remove = next(item for item in required_items if item.name == item_name)
                 self.assert_can_reach_location(location)
                 self.remove(item_to_remove)
