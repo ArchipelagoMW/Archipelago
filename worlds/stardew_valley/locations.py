@@ -189,6 +189,7 @@ events_locations = [
     LocationData(None, Region.farm, Goal.craft_master),
     LocationData(None, LogicRegion.shipping, Goal.legend),
     LocationData(None, Region.farm, Goal.mystery_of_the_stardrops),
+    LocationData(None, Region.farm, Goal.mad_hatter),
     LocationData(None, Region.farm, Goal.allsanity),
     LocationData(None, Region.qi_walnut_room, Goal.perfection),
 ]

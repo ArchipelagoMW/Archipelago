@@ -2725,7 +2725,7 @@ id,region,name,tags,content_packs
 4675,Farm,Wear Mystery Hat,"HATSANITY",
 4676,Farm,Wear Official Cap,"HATSANITY",
 4677,Farm,Wear Pageboy Cap,"HATSANITY",
-4678,Farm,Wear Panda Hat,"HATSANITY",
+4678,Farm,Wear Panda Hat,"HATSANITY,DEPRECATED",
 4679,Farm,Wear Paper Hat,"HATSANITY",
 4680,Farm,Wear Party Hat (Blue),"HATSANITY",
 4681,Farm,Wear Party Hat (Green),"HATSANITY",
