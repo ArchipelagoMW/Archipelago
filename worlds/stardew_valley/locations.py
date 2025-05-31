@@ -589,12 +589,13 @@ def eatsanity_item_is_included(location: LocationData, options: StardewValleyOpt
     else:
         raise Exception(f"Eatsanity Location does not have a recognized prefix: '{location.name}'")
 
-    if not item_name in content.game_items:
-        return False
+    # if not item_name in content.game_items:
+    #     return False
     if EatsanityOptionName.poisonous in options.eatsanity.value:
         return True
     if location in locations_by_tag[LocationTags.EATSANITY_POISONOUS]:
         return False
+    return True
 
 
 def extend_eatsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
@@ -614,6 +615,7 @@ def extend_eatsanity_locations(randomized_locations: List[LocationData], options
         eatsanity_locations.extend(locations_by_tag[LocationTags.EATSANITY_SHOP])
 
     eatsanity_locations = [location for location in eatsanity_locations if eatsanity_item_is_included(location, options, content)]
+    eatsanity_locations = filter_disabled_locations(options, content, eatsanity_locations)
     randomized_locations.extend(eatsanity_locations)
 
 

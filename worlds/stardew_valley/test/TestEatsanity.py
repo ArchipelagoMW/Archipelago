@@ -63,7 +63,7 @@ class TestEatsanityCrops(SVEatsanityTestBase):
     }
     expected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -85,7 +85,7 @@ class TestEatsanityCrops(SVEatsanityTestBase):
     }
 
     def test_need_crop_to_eat_it(self):
-        crops = {"Apple": "Apple Sapling", "Pumpkin": "Pumpkin Seeds", "Parsnip": "Parsnip Seeds"}
+        crops = {"Apple": "Apple Sapling", "Yam": "Yam Seeds", "Parsnip": "Parsnip Seeds"}
         self.collect("Fall")
         self.collect("Spring")
         for crop in crops:
@@ -106,7 +106,7 @@ class TestEatsanityCooking(SVEatsanityTestBase):
     }
     unexpected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -136,7 +136,7 @@ class TestEatsanityFish(SVEatsanityTestBase):
     }
     unexpected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -167,7 +167,7 @@ class TestEatsanityArtisan(SVEatsanityTestBase):
     }
     unexpected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -199,7 +199,7 @@ class TestEatsanityShop(SVEatsanityTestBase):
     }
     unexpected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -228,10 +228,12 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
     }
     expected_eating_locations = {
         "Eat Pufferfish",
+        "Eat Carp",
+        "Eat Bullhead",
     }
     unexpected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
@@ -241,8 +243,6 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
         "Eat Vinegar",
         "Eat Tortilla",
         "Eat Pepper Poppers",
-        "Eat Carp",
-        "Eat Bullhead",
         "Drink Pina Colada",
         "Eat Stardrop",
         "Eat Red Mushroom"
@@ -255,14 +255,14 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
     }
 
 
-class TestEatsanityPoisonousEffects(SVEatsanityTestBase):
+class TestEatsanityEnzymeEffects(SVEatsanityTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Eatsanity: frozenset({EatsanityOptionName.crops, EatsanityOptionName.fish, EatsanityOptionName.lock_effects}),
     }
     expected_eating_locations = {
         "Eat Parsnip",
-        "Eat Pumpkin",
+        "Eat Yam",
         "Eat Summer Spangle",
         "Eat Apple",
         "Eat Sweet Pea",
