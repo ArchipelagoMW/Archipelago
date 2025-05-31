@@ -1,15 +1,21 @@
+import logging
 import os
 import pkgutil
-from typing import Any, ClassVar, Dict, List, Set
+from typing import Any, ClassVar, Dict, List, TextIO
 
 import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 
 import Utils
 from worlds.AutoWorld import WebWorld, World
-
-from .boosterpacks import booster_contents as booster_contents
-from .boosterpacks import get_booster_locations
+from .banlists import banlists
+from .boosterpack_chaos import create_chaos_packs
+from .boosterpack_contents import get_booster_contents
+from .boosterpack_shuffle import create_shuffled_packs
+from .boosterpacks_data import booster_card_id_to_name
+from .card_data import CardData, cards, empty_card_data, collection_id_to_name
+from .card_rules import set_card_rules
+from .groups import item_groups, location_groups
 from .items import (
     Banlist_Items,
     booster_packs,
@@ -19,10 +25,6 @@ from .items import (
     item_to_index,
     useful,
     tier_1_opponents,
-    tier_2_opponents,
-    tier_3_opponents,
-    tier_4_opponents,
-    tier_5_opponents,
 )
 from .items import challenges as challenges
 from .locations import (
@@ -35,8 +37,8 @@ from .locations import (
     get_beat_challenge_events,
     special,
 )
-from .logic import core_booster, yugioh06_difficulty
-from .opponents import OpponentData, get_opponent_condition, get_opponent_locations, get_opponents
+from .logic import yugioh06_difficulty
+from .opponents import OpponentData, get_opponent_locations, get_opponents
 from .opponents import challenge_opponents as challenge_opponents
 from .options import Yugioh06Options
 from .rom import MD5America, MD5Europe, YGO06ProcedurePatch, write_tokens
@@ -45,7 +47,7 @@ from .rom_values import banlist_ids as banlist_ids
 from .rom_values import function_addresses as function_addresses
 from .rom_values import structure_deck_selection as structure_deck_selection
 from .rules import set_rules
-from .structure_deck import get_deck_content_locations
+from .structure_deck import get_deck_content_locations, worst_deck
 from .client_bh import YuGiOh2006Client
 
 
@@ -111,24 +113,20 @@ class Yugioh06World(World):
     for k, v in Required_Cards.items():
         location_name_to_id[k] = v + start_id
 
-    item_name_groups: Dict[str, Set[str]] = {
-        "Core Booster": set(core_booster),
-        "Campaign Boss Beaten": {"Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"},
-        "Challenge": set(challenges),
-        "Tier 1 Opponent": set(tier_1_opponents),
-        "Tier 2 Opponent": set(tier_2_opponents),
-        "Tier 3 Opponent": set(tier_3_opponents),
-        "Tier 4 Opponent": set(tier_4_opponents),
-        "Tier 5 Opponent": set(tier_5_opponents),
-        "Campaign Opponent": set(tier_1_opponents + tier_2_opponents + tier_3_opponents +
-                             tier_4_opponents + tier_5_opponents)
-    }
+    item_name_groups = item_groups
+    location_name_groups = location_groups
 
     removed_challenges: List[str]
     starting_booster: str
     starting_opponent: str
     campaign_opponents: List[OpponentData]
+    starter_deck: Dict[CardData, int]
+    structure_deck: Dict[CardData, int]
     is_draft_mode: bool
+    progression_cards: Dict[str, List[str]]
+    progression_cards_in_booster: List[str]
+    progression_cards_in_start: List[str]
+    booster_pack_contents: Dict[str, Dict[str, str]]
 
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
@@ -137,6 +135,12 @@ class Yugioh06World(World):
         self.starting_opponent = ""
         self.starting_booster = ""
         self.removed_challenges = []
+        self.starter_deck = {}
+        self.structure_deck = {}
+        self.progression_cards = {}
+        self.progression_cards_in_booster = []
+        self.progression_cards_in_start = []
+        self.booster_pack_contents = {}
         # Universal tracker stuff, shouldn't do anything in standard gen
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Yu-Gi-Oh! 2006" in self.multiworld.re_gen_passthrough:
@@ -144,15 +148,6 @@ class Yugioh06World(World):
                 slot_data = self.multiworld.re_gen_passthrough["Yu-Gi-Oh! 2006"]
                 self.options.structure_deck.value = slot_data["structure_deck"]
                 self.options.banlist.value = slot_data["banlist"]
-                self.options.final_campaign_boss_unlock_condition.value = slot_data[
-                    "final_campaign_boss_unlock_condition"
-                ]
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value = slot_data[
-                    "fourth_tier_5_campaign_boss_unlock_condition"
-                ]
-                self.options.third_tier_5_campaign_boss_unlock_condition.value = slot_data[
-                    "third_tier_5_campaign_boss_unlock_condition"
-                ]
                 self.options.final_campaign_boss_challenges.value = slot_data["final_campaign_boss_challenges"]
                 self.options.fourth_tier_5_campaign_boss_challenges.value = slot_data[
                     "fourth_tier_5_campaign_boss_challenges"
@@ -173,10 +168,27 @@ class Yugioh06World(World):
                 self.removed_challenges = slot_data["removed challenges"]
                 self.starting_booster = slot_data["starting_booster"]
                 self.starting_opponent = slot_data["starting_opponent"]
+                if "progression_cards" in slot_data:
+                    self.progression_cards_in_start = [collection_id_to_name[cid] for cid in
+                                                       slot_data["progression_cards_in_start"]]
+                    self.progression_cards_in_booster = [collection_id_to_name[cid] for cid in
+                                                         slot_data["progression_cards_in_booster"]]
+                    for name, v in slot_data["progression_cards"].items():
+                        self.progression_cards[name] = [collection_id_to_name[cid] for cid in
+                                                        slot_data["progression_cards"][name]]
+                    for name, content in slot_data["booster_pack_contents"].items():
+                        con = {}
+                        for cid in slot_data["booster_pack_contents"][name]:
+                            con[collection_id_to_name[cid]] = "Common"
+                        self.booster_pack_contents[name] = con
 
-        if self.options.structure_deck.current_key == "none":
+        # set possible starting booster and opponent. Restrict them if you don't start with a standard booster
+        if self.options.structure_deck.value > 5:
             self.is_draft_mode = True
-            boosters = draft_boosters
+            if self.options.randomize_pack_contents == self.options.randomize_pack_contents.option_vanilla:
+                boosters = draft_boosters
+            else:
+                boosters = booster_packs
             if self.options.campaign_opponents_shuffle.value:
                 opponents = tier_1_opponents
             else:
@@ -186,8 +198,87 @@ class Yugioh06World(World):
             boosters = booster_packs
             opponents = tier_1_opponents
 
+        # clone to prevent duplicates
+        card_list = list(cards.values())
+        # set starter deck
+        if self.options.starter_deck.value == self.options.starter_deck.option_random_singles:
+            for i in range(0, 40):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.starter_deck[card] = 1
+        elif self.options.starter_deck.value == self.options.starter_deck.option_random_playsets:
+            for i in range(0, 13):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.starter_deck[card] = 3
+            self.starter_deck[empty_card_data] = 1
+        elif self.options.starter_deck.value == self.options.starter_deck.option_custom:
+            total_amount = 0
+            for name, amount in self.options.custom_starter_deck.value.items():
+                card = cards[name]
+                if amount > 3:
+                    logging.warning(
+                        f"{self.player} has too many {name} in their "
+                        f"Custom Starter Deck setting. Setting it to 3")
+                    amount = 3
+                total_amount += amount
+                if total_amount > 40:
+                    logging.warning(f"{self.player} Starter Deck cards exceeded the maximum of 40")
+                    break
+                if amount > 0:
+                    self.starter_deck[card] = amount
+            if total_amount < 40:
+                self.starter_deck[empty_card_data] = 40 - total_amount
+        # set structure deck
+        banlist = banlists[self.options.banlist.current_key]
+        # make sure the structure deck is a legal deck
+        card_list = [card for card in card_list if card.card_type != "Fusion" and card.name not in banlist["Forbidden"]]
         if self.options.structure_deck.current_key == "random_deck":
             self.options.structure_deck.value = self.random.randint(0, 5)
+        if self.options.structure_deck.value == self.options.structure_deck.option_random_singles:
+            for i in range(0, 40):
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                self.structure_deck[card] = 1
+        elif self.options.structure_deck.value == self.options.structure_deck.option_random_playsets:
+            amount = 0
+            while amount < 40:
+                card = self.random.choice(card_list)
+                card_list.remove(card)
+                if card.name in banlist["Limited"]:
+                    self.structure_deck[card] = 1
+                    amount += 1
+                elif card.name in banlist["Semi-Limited"]:
+                    self.structure_deck[card] = 2
+                    amount += 2
+                else:
+                    self.structure_deck[card] = 3
+                    amount += 3
+        elif self.options.structure_deck.value == self.options.structure_deck.option_worst:
+            self.structure_deck = {cards[card_name]: amount for card_name, amount in worst_deck.items()}
+        elif self.options.structure_deck.value == self.options.structure_deck.option_custom:
+            total_amount = 0
+            for name, amount in self.options.custom_structure_deck.value.items():
+                card = cards[name]
+                if amount > 3:
+                    logging.warning(
+                        f"{self.player} has too many {name} in their "
+                        f"Custom Structure Deck setting. Setting it to 3")
+                    amount = 3
+                total_amount += amount
+                if total_amount > 80:
+                    logging.warning(f"{self.player} Structure Deck cards exceeded the maximum of 80")
+                    break
+                if amount > 0:
+                    self.structure_deck[card] = amount
+            if total_amount < 40:
+                for card_name, w_amount in worst_deck.items():
+                    card = cards[card_name]
+                    self.structure_deck[card] = w_amount
+                    total_amount += min(w_amount, 40 - total_amount)
+                    if total_amount >= 40:
+                        break
+        # set starting booster and opponent
         for item in self.options.start_inventory:
             if item in opponents:
                 self.starting_opponent = item
@@ -205,15 +296,9 @@ class Yugioh06World(World):
         if not self.removed_challenges:
             challenge = list(({**Limited_Duels, **Theme_Duels}).keys())
             noc = len(challenge) - max(
-                self.options.third_tier_5_campaign_boss_challenges.value
-                if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges"
-                else 0,
-                self.options.fourth_tier_5_campaign_boss_challenges.value
-                if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges"
-                else 0,
-                self.options.final_campaign_boss_challenges.value
-                if self.options.final_campaign_boss_unlock_condition == "challenges"
-                else 0,
+                self.options.third_tier_5_campaign_boss_challenges.value,
+                self.options.fourth_tier_5_campaign_boss_challenges.value,
+                self.options.final_campaign_boss_challenges.value,
                 self.options.number_of_challenges.value,
             )
 
@@ -225,8 +310,20 @@ class Yugioh06World(World):
             self.removed_challenges = total[:noc]
 
         self.campaign_opponents = get_opponents(
-            self.multiworld, self.player, self.options.campaign_opponents_shuffle.value
+            self.multiworld, self.player, bool(self.options.campaign_opponents_shuffle.value)
         )
+
+        if not self.progression_cards:
+            # set progression_cards
+            set_card_rules(self)
+
+        # randomize packs
+        if (not self.booster_pack_contents and
+                self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_shuffle):
+            self.booster_pack_contents = create_shuffled_packs(self)
+        elif (not self.booster_pack_contents and
+                  self.options.randomize_pack_contents.value == self.options.randomize_pack_contents.option_chaos):
+            self.booster_pack_contents = create_chaos_packs(self)
 
     def create_region(self, name: str, locations=None, exits=None):
         region = Region(name, self.player, self.multiworld)
@@ -248,10 +345,10 @@ class Yugioh06World(World):
         structure_deck = self.options.structure_deck.current_key
         self.multiworld.regions += [
             self.create_region("Menu", None, ["to Deck Edit", "to Campaign", "to Challenges", "to Card Shop"]),
-            self.create_region("Campaign", {**Bonuses,  **Campaign_Opponents}),
+            self.create_region("Campaign", {**Bonuses, **Campaign_Opponents}),
             self.create_region("Challenges"),
             self.create_region("Card Shop", {**Required_Cards, **collection_events}),
-            self.create_region("Structure Deck", get_deck_content_locations(structure_deck)),
+            self.create_region("Structure Deck", get_deck_content_locations(self, structure_deck)),
         ]
 
         self.get_entrance("to Campaign").connect(self.get_region("Campaign"))
@@ -266,42 +363,25 @@ class Yugioh06World(World):
             region = self.create_region(opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
-                unlock_amount = 0
-                is_challenge = True
+                campaign_amount = 0
+                challenge_amount = 0
                 if opponent.column == 3:
-                    if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
-                        is_challenge = False
-                if opponent.column == 4:
-                    if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-                        is_challenge = False
-                if opponent.column == 5:
-                    if self.options.final_campaign_boss_unlock_condition.value == 1:
-                        unlock_item = "Challenge Beaten"
-                        unlock_amount = self.options.final_campaign_boss_challenges.value
-                        is_challenge = True
-                    else:
-                        unlock_item = "Campaign Boss Beaten"
-                        unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
-                        is_challenge = False
-                entrance.access_rule = get_opponent_condition(
-                    opponent, unlock_item, unlock_amount, self.player, is_challenge
-                )
+                    challenge_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                    campaign_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
+                elif opponent.column == 4:
+                    challenge_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                    campaign_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
+                elif opponent.column == 5:
+                    challenge_amount = self.options.final_campaign_boss_challenges.value
+                    campaign_amount = self.options.final_campaign_boss_campaign_opponents.value
+                entrance.access_rule = lambda state, chal_a=challenge_amount, cam_a=campaign_amount, opp=opponent: ((
+                    state.has("Challenge Beaten", self.player, chal_a)) and
+                    state.has_group("Campaign Boss Beaten", self.player, cam_a) and
+                    state.has_all(opp.additional_info, self.player))
             else:
-                entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: state.has(
-                    unlock, self.player
-                ) and yugioh06_difficulty(state, self.player, opp.difficulty)
+                entrance.access_rule = lambda state, unlock=unlock_item, opp=opponent: (
+                        state.has(unlock, self.player) and
+                        yugioh06_difficulty(self, state, self.player, opp.difficulty))
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -309,7 +389,7 @@ class Yugioh06World(World):
         card_shop = self.get_region("Card Shop")
         # Booster Contents
         for booster in booster_packs:
-            region = self.create_region(booster, get_booster_locations(booster))
+            region = self.create_region(booster, get_booster_contents(booster, self, self.booster_pack_contents))
             entrance = Entrance(self.player, booster, card_shop)
             entrance.access_rule = lambda state, unlock=booster: state.has(unlock, self.player)
             card_shop.exits.append(entrance)
@@ -379,13 +459,13 @@ class Yugioh06World(World):
                     location.place_locked_item(item)
 
         for booster in booster_packs:
-            for location_name, content in get_booster_locations(booster).items():
+            for location_name, content in get_booster_contents(booster, self, self.booster_pack_contents).items():
                 item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
                 location = self.multiworld.get_location(location_name, self.player)
                 location.place_locked_item(item)
 
         structure_deck = self.options.structure_deck.current_key
-        for location_name, content in get_deck_content_locations(structure_deck).items():
+        for location_name, content in get_deck_content_locations(self, structure_deck).items():
             item = Yugioh2006Item(content, ItemClassification.progression, None, self.player)
             location = self.multiworld.get_location(location_name, self.player)
             location.place_locked_item(item)
@@ -410,9 +490,6 @@ class Yugioh06World(World):
         patch = YGO06ProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         patch.write_file("base_patch.bsdiff4", pkgutil.get_data(__name__, "patch.bsdiff4"))
         procedure = [("apply_bsdiff4", ["base_patch.bsdiff4"]), ("apply_tokens", ["token_data.bin"])]
-        if self.is_draft_mode:
-            procedure.insert(1, ("apply_bsdiff4", ["draft_patch.bsdiff4"]))
-            patch.write_file("draft_patch.bsdiff4", pkgutil.get_data(__name__, "patches/draft.bsdiff4"))
         if self.options.ocg_arts:
             procedure.insert(1, ("apply_bsdiff4", ["ocg_patch.bsdiff4"]))
             patch.write_file("ocg_patch.bsdiff4", pkgutil.get_data(__name__, "patches/ocg.bsdiff4"))
@@ -424,32 +501,38 @@ class Yugioh06World(World):
         patch.write(os.path.join(output_directory, f"{out_file_name}{patch.patch_file_ending}"))
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data: Dict[str, Any] = {
-            "structure_deck": self.options.structure_deck.value,
-            "banlist": self.options.banlist.value,
-            "final_campaign_boss_unlock_condition": self.options.final_campaign_boss_unlock_condition.value,
-            "fourth_tier_5_campaign_boss_unlock_condition":
-                self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
-            "third_tier_5_campaign_boss_unlock_condition":
-                self.options.third_tier_5_campaign_boss_unlock_condition.value,
-            "final_campaign_boss_challenges": self.options.final_campaign_boss_challenges.value,
-            "fourth_tier_5_campaign_boss_challenges":
-                self.options.fourth_tier_5_campaign_boss_challenges.value,
-            "third_tier_5_campaign_boss_challenges":
-                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
-            "final_campaign_boss_campaign_opponents":
-                self.options.final_campaign_boss_campaign_opponents.value,
-            "fourth_tier_5_campaign_boss_campaign_opponents":
-                self.options.fourth_tier_5_campaign_boss_campaign_opponents.value,
-            "third_tier_5_campaign_boss_campaign_opponents":
-                self.options.third_tier_5_campaign_boss_campaign_opponents.value,
-            "number_of_challenges": self.options.number_of_challenges.value,
-        }
-
+        slot_data = self.options.as_dict("structure_deck", "banlist",
+                                         "final_campaign_boss_challenges",
+                                         "fourth_tier_5_campaign_boss_challenges",
+                                         "third_tier_5_campaign_boss_challenges",
+                                         "final_campaign_boss_campaign_opponents",
+                                         "fourth_tier_5_campaign_boss_campaign_opponents",
+                                         "third_tier_5_campaign_boss_campaign_opponents",
+                                         "number_of_challenges")
         slot_data["removed challenges"] = self.removed_challenges
         slot_data["starting_booster"] = self.starting_booster
         slot_data["starting_opponent"] = self.starting_opponent
+        slot_data["progression_cards_in_start"] = [cards[c].id for c in self.progression_cards_in_start]
+        slot_data["progression_cards_in_booster"] = [cards[c].id for c in self.progression_cards_in_booster]
+        slot_data["all_progression_cards"] = [cards[c].id for c in
+                                              self.progression_cards_in_booster + self.progression_cards_in_start]
+        slot_data["progression_cards"] = {}
+        for k, v in self.progression_cards.items():
+            slot_data["progression_cards"][k] = [cards[c].id for c in v]
+
+        slot_data["booster_pack_contents"] = {}
+        for name, content in self.booster_pack_contents.items():
+            slot_data["booster_pack_contents"][name] = [cards[c].id for c in content.keys()]
         return slot_data
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        spoiler_handle.write(f"\n\nProgression cards for {self.multiworld.player_name[self.player]}")
+        for location, p_cards in self.progression_cards.items():
+            spoiler_handle.write(f"\n   {location}: {', '.join(p_cards)}")
+        spoiler_handle.write(f"\n\nProgression cards in start for {self.player_name}\n")
+        spoiler_handle.write(f" {', '.join(self.progression_cards_in_start)} ")
+        spoiler_handle.write(f"\n\nProgression cards in booster for {self.player_name}\n")
+        spoiler_handle.write(f" {', '.join(self.progression_cards_in_booster)}")
 
     # for the universal tracker, doesn't get called in standard gen
     @staticmethod
