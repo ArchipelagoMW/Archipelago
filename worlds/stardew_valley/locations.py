@@ -120,6 +120,13 @@ class LocationTags(enum.Enum):
     MOVIE = enum.auto()
     MOVIE_SNACK = enum.auto()
     HATSANITY = enum.auto()
+    HAT_EASY = enum.auto()
+    HAT_TAILORING = enum.auto()
+    HAT_MEDIUM = enum.auto()
+    HAT_DIFFICULT_OR_RNG = enum.auto()
+    HAT_NEAR_PERFECTION = enum.auto()
+    HAT_POST_PERFECTION = enum.auto()
+    HAT_IMPOSSIBLE = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
