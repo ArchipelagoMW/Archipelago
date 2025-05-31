@@ -161,7 +161,7 @@ class GoalLogic(BaseLogic):
 
         return self.logic.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules, allow_empty=True)
 
-    def can_complete_mad_hatter(self) -> StardewRule:
+    def can_complete_mad_hatter(self, all_location_names_in_slot: list[str]) -> StardewRule:
         if not self.content.features.hatsanity.is_enabled:
             raise Exception("Cannot play Mad Hatter Goal without Hatsanity")
 

@@ -37,6 +37,7 @@ all_hats: list[HatItem] = []
 def hat(name: str, difficulty: int) -> HatItem:
     hat_item = HatItem(name, difficulty)
     all_hats.append(hat_item)
+
     return hat_item
 
 
