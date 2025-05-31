@@ -1019,7 +1019,7 @@ item_descriptions = {
     item_names.HIGH_TEMPLAR_SIGNIFIER_HALLUCINATION: _ability_desc("High Templar and Signifiers", "Hallucination", "creates 2 hallucinated copies of a target unit"),
     item_names.HIGH_TEMPLAR_SIGNIFIER_KHAYDARIN_AMULET: _get_start_and_max_energy_desc("High Templar and Signifiers"),
     item_names.ARCHON_HIGH_ARCHON: "Archons can use High Templar abilities.",
-    item_names.ARCHON_TRANSCENDENCE: "Archons can float in the air. Can traverse cliffs and phase through most units.",
+    item_names.ARCHON_TRANSCENDENCE: "Archons can float in the air. Can traverse cliffs and phase through most units. Increases Archon attack range by 1.",
     item_names.ARCHON_POWER_SIPHON: _ability_desc("Archons", "Power Siphon", "deals damage to a target and replenishes shields over 2 seconds"),
     item_names.ARCHON_ERADICATE: "On death, Archons launch towards nearby enemy ground units, dealing damage on impact.",
     item_names.ARCHON_OBLITERATE: "Archon attacks get increased area of effect, and deal their biological bonus damage to all targets.",
