@@ -544,7 +544,7 @@ class RandomizeLegendaryPokemon(Choice):
 
 class CatchEmAll(Choice):
     """Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
-    Currently only has an effect if wild Pokemon are randomized."""
+    "All Pokemon" only makes a difference when wild Pokemon are randomized."""
     display_name = "Catch 'Em All"
     default = 0
     option_off = 0
