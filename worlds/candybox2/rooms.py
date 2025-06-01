@@ -114,10 +114,9 @@ quests: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_XINOPHERYDON,
     CandyBox2Room.QUEST_THE_TEAPOT,
     CandyBox2Room.QUEST_THE_LEDGE_ROOM,
-]
-x_quest: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_X_POTION
 ]
+
 rooms: list[CandyBox2Room] = [
     CandyBox2Room.VILLAGE_SHOP,
     CandyBox2Room.VILLAGE_MINIGAME,

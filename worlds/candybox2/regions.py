@@ -5,7 +5,7 @@ from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceT
 from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
 from .items import CandyBox2ItemName, items, candy_box_2_base_id
 from .locations import CandyBox2Location, CandyBox2LocationName
-from .rooms import CandyBox2Room, quests, x_quest, rooms, entrance_friendly_names, lollipop_farm
+from .rooms import CandyBox2Room, quests, rooms, entrance_friendly_names, lollipop_farm
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -13,9 +13,8 @@ if TYPE_CHECKING:
 
 class CandyBox2RandomizationGroup(IntEnum):
     QUEST = 1
-    X_QUEST = 2
-    ROOM = 3
-    LOLLIPOP_FARM = 4
+    ROOM = 2
+    LOLLIPOP_FARM = 3
 
 
 class CandyBox2Entrance(Entrance):
@@ -56,8 +55,6 @@ class CandyBox2RoomRegion(CandyBox2Region):
         self.room = str(room)
         if room in quests:
             self.randomization_group = CandyBox2RandomizationGroup.QUEST
-        if room in x_quest:
-            self.randomization_group = CandyBox2RandomizationGroup.X_QUEST
         if room in rooms:
             self.randomization_group = CandyBox2RandomizationGroup.ROOM
         if room in lollipop_farm:
@@ -116,6 +113,14 @@ def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return world.original_entrances
 
+    pairings = []
+
+    if not world.options.randomise_tower.value:
+        pairings = [*pairings, lock_entrance(world, CandyBox2Room.TOWER)]
+
+    if not world.options.randomise_x_potion.value:
+        pairings = [*pairings, lock_entrance(world, CandyBox2Room.QUEST_THE_X_POTION)]
+
     if hasattr(world.multiworld, "re_gen_passthrough"):
         placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, True)
@@ -129,29 +134,21 @@ def connect_entrances(world: "CandyBox2World"):
         for x in placements:
             placement_state.connect(exits[x[0]], er_targets[x[1]])
         world.entrance_randomisation = placement_state
-        return world.entrance_randomisation.pairings
-
-    if world.options.quest_randomisation == "quests_only_except_x_potion_quest":
-        world.entrance_randomisation = randomize_entrances(world, True, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
-        })
-        return world.entrance_randomisation.pairings
+        return [*pairings, world.entrance_randomisation.pairings]
 
     if world.options.quest_randomisation == "quests_only":
         world.entrance_randomisation = randomize_entrances(world, True, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
-            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
         })
-        return world.entrance_randomisation.pairings
+        return [*pairings, world.entrance_randomisation.pairings]
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
         world.entrance_randomisation = randomize_entrances(world, True, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
-            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
             CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
             CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
-        return world.entrance_randomisation.pairings
+        return [*pairings, world.entrance_randomisation.pairings]
 
     if world.options.quest_randomisation == "everything":
         # Place the lollipop farm first to avoid condition where ER places everything but the lollipop farm and X potion
@@ -160,14 +157,18 @@ def connect_entrances(world: "CandyBox2World"):
         entrance_randomisation_entry_lollipop_farm = manual_connect_entrances(lollipop_farm_entrance, lollipop_farm)
 
         world.entrance_randomisation = randomize_entrances(world, True, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-
-            # The lollipop farm can never go behind the X quest because the X quest requires lollipops
-            CandyBox2RandomizationGroup.X_QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.X_QUEST.value, CandyBox2RandomizationGroup.ROOM.value],
+            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
         })
-        return [entrance_randomisation_entry_lollipop_farm, *world.entrance_randomisation.pairings]
+        return [*pairings, entrance_randomisation_entry_lollipop_farm, *world.entrance_randomisation.pairings]
+
+    return None
+
+def lock_entrance(world: "CandyBox2World", room: CandyBox2Room):
+    room_exit = next(entrance for region in world.multiworld.get_regions(world.player) for entrance in region.entrances if entrance.name == room)
+    room_entrance = next(exit for exit in world.get_region(entrance_friendly_names[room]).entrances if exit.name == room)
+    return manual_connect_entrances(room_exit, room_entrance)
 
 def manual_connect_entrances(entrance_from: Entrance, entrance_to: Entrance):
     entrance_to_parent_region = entrance_to.connected_region
@@ -179,14 +180,13 @@ def entrances_to_add_to_pool(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return []
 
-    if world.options.quest_randomisation == "quests_only_except_x_potion_quest":
+    if world.options.quest_randomisation == "quests_only":
         return [CandyBox2RandomizationGroup.QUEST]
 
-    if world.options.quest_randomisation == "quests_only":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST]
-
     if world.options.quest_randomisation == "quests_and_rooms_separate":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
+        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
 
     if world.options.quest_randomisation == "everything":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.X_QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
+        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
+
+    return None

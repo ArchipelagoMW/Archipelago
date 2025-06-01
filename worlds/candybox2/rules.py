@@ -618,7 +618,8 @@ def generate_rules_package_exits(rules_package: CandyBox2RulesPackage):
         CandyBox2Room.VILLAGE_FORGE,
         CandyBox2Room.VILLAGE_MINIGAME,
         CandyBox2Room.VILLAGE_QUEST_HOUSE,
-        CandyBox2Room.VILLAGE_FURNISHED_HOUSE
+        CandyBox2Room.VILLAGE_FURNISHED_HOUSE,
+        CandyBox2Room.QUEST_THE_X_POTION
     ])
     rules_package.assign_room_exits(CandyBox2Room.VILLAGE_QUEST_HOUSE, [
         CandyBox2Room.QUEST_THE_CELLAR
