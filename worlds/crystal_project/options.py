@@ -65,6 +65,29 @@ class ClamshellsInPool(Range):
     default = 19
 
 #"""Location Options"""
+class IncludedRegions(Choice):
+    """
+    Choose which regions to play in! Only locations within your chosen regions will give you checks; the rest will be empty.
+    This can be used to adjust the difficulty and length of your game.
+
+    NOTE: Make sure to include the region that has the finish line of your chosen goal in it!
+    Example: if your goal is Astley, Expert is considered to have that finish line, so you can pick Expert or All.
+
+    Beginner: Only regions up through the end of Skumparadise will have checks. Finish Line: Clamshells
+
+    Advanced: Regions up to Salmon Bay will have checks.
+
+    Expert: Regions up to The Deep Sea will have checks. (Note: The Depths will not be included.) Finish Line: Astley
+
+    All: Every region is included. Finish Line: True Astley
+    """
+    display_name = "Regions to include in game"
+    option_beginner = 0
+    option_advanced = 1
+    option_expert = 2
+    option_all = 3
+    default = 3
+
 class JobRando(Choice):
     """
     Full means your starting jobs are randomized and the rest of the vanilla jobs are added to the item pool.
@@ -108,29 +131,6 @@ class Shopsanity(Choice):
     option_enabled = 1
     option_enabled_and_hint = 2
     default = 0
-
-class IncludedRegions(Choice):
-    """
-    Choose which regions will have locations worth checking in them.
-
-    Any Treasures, NPCs, or Crystals outside of this region will not give you checks when you interact with them.
-
-    This can be used to make your game shorter/easier or longer/harder.
-
-    Beginner: Only regions up through the end of Skumparadise will have checks.
-
-    Advanced: Regions up to Salmon Bay will have checks.
-
-    Expert: Regions up to The Deep Sea will have checks. (Note: The Depths will not be included).
-
-    All: Every region is included.
-    """
-    display_name = "Regions to include in game"
-    option_beginner = 0
-    option_advanced = 1
-    option_expert = 2
-    option_all = 3
-    default = 3
 
 #"""Progression Options"""
 class LevelGating(DefaultOnToggle):
