@@ -2282,7 +2282,7 @@ class SC2Logic:
     def supreme_requirement(self, state: CollectionState) -> bool:
         return (
             self.grant_story_tech == GrantStoryTech.option_grant
-            or not self.kerrigan_unit_availableor (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
+            or not self.kerrigan_unit_available or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
                     and state.has_any((
                         item_names.KERRIGAN_LEAPING_STRIKE,
                         item_names.OVERLORD_VENTRAL_SACS,
