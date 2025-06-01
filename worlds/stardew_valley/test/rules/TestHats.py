@@ -1,6 +1,6 @@
 from ..bases import SVTestBase
 from ...data.hats_data import Hats
-from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity
+from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity, Eatsanity, Cooksanity, Fishsanity, Craftsanity
 
 
 class TestHatsLogic(SVTestBase):
@@ -50,7 +50,11 @@ class TestNoHatsLogic(SVTestBase):
     options = {
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized,
         FestivalLocations.internal_name: FestivalLocations.option_hard,
+        Fishsanity.internal_name: Fishsanity.option_all,
         Shipsanity.internal_name: Shipsanity.option_everything,
+        Cooksanity.internal_name: Cooksanity.option_all,
+        Craftsanity.internal_name: Craftsanity.option_all,
+        Eatsanity.internal_name: Eatsanity.preset_all,
         Hatsanity.internal_name: Hatsanity.option_none,
         "start_inventory": {"Fall": 1}
     }
