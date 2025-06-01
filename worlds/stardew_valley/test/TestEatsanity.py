@@ -50,7 +50,7 @@ class TestEatsanityNone(SVEatsanityTestBase):
         "Eat Tortilla",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -79,7 +79,7 @@ class TestEatsanityCrops(SVEatsanityTestBase):
         "Eat Tortilla",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -125,7 +125,7 @@ class TestEatsanityCooking(SVEatsanityTestBase):
         "Eat Pufferfish",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -171,7 +171,7 @@ class TestEatsanityFish(SVEatsanityTestBase):
         "Eat Pepper Poppers",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -203,7 +203,7 @@ class TestEatsanityArtisan(SVEatsanityTestBase):
         "Eat Bullhead",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -236,7 +236,7 @@ class TestEatsanityShop(SVEatsanityTestBase):
         "Eat Bullhead",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -276,7 +276,7 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
         "Eat Red Mushroom"
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -310,7 +310,7 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
         "Eat Bullhead",
     }
     unexpected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
@@ -360,7 +360,7 @@ class TestEatsanityEnzymeEffects(SVEatsanityTestBase):
         "Eat Pufferfish",
     }
     expected_eating_items = {
-        "Energy Enzyme",
+        "Stamina Enzyme",
         "Health Enzyme",
         "Mining Enzyme",
         "Luck Enzyme",
