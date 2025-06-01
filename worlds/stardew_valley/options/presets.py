@@ -2,8 +2,9 @@ from typing import Any, Dict
 
 import Options as ap_options
 from . import options
-
 # @formatter:off
+from ..strings.ap_names.ap_option_names import EatsanityOptionName
+
 all_random_settings = {
     "progression_balancing":                        "random",
     "accessibility":                                "random",
@@ -82,6 +83,7 @@ easy_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:    4,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_none,
     options.Booksanity.internal_name:               options.Booksanity.option_none,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:              options.Moviesanity.option_none,
@@ -131,6 +133,7 @@ medium_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_starting_npcs,
     options.FriendsanityHeartSize.internal_name:    4,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_none,
     options.Booksanity.internal_name:               options.Booksanity.option_power_skill,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:              options.Moviesanity.option_none,
@@ -180,6 +183,7 @@ hard_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_all,
     options.FriendsanityHeartSize.internal_name:    4,
+    options.Eatsanity.internal_name:                frozenset([EatsanityOptionName.crops, EatsanityOptionName.fish, EatsanityOptionName.artisan]),
     options.Booksanity.internal_name:               options.Booksanity.option_all,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:              options.Moviesanity.option_all_movies,
@@ -229,6 +233,7 @@ nightmare_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_all_with_marriage,
     options.FriendsanityHeartSize.internal_name:    4,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_all,
     options.Booksanity.internal_name:               options.Booksanity.option_all,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:              options.Moviesanity.option_all_movies_and_all_loved_snacks,
@@ -278,6 +283,7 @@ short_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:    4,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_none,
     options.Booksanity.internal_name:               options.Booksanity.option_none,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:              options.Moviesanity.option_none,
@@ -327,6 +333,7 @@ minsanity_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_none,
     options.Friendsanity.internal_name:             options.Friendsanity.option_none,
     options.FriendsanityHeartSize.internal_name:    options.FriendsanityHeartSize.default,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_none,
     options.Booksanity.internal_name:               options.Booksanity.option_none,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_none,
     options.Moviesanity.internal_name:              options.Moviesanity.option_none,
@@ -376,6 +383,7 @@ allsanity_settings = {
     options.Craftsanity.internal_name:              options.Craftsanity.option_all,
     options.Friendsanity.internal_name:             options.Friendsanity.option_all,
     options.FriendsanityHeartSize.internal_name:    1,
+    options.Eatsanity.internal_name:                options.Eatsanity.preset_all,
     options.Booksanity.internal_name:               options.Booksanity.option_all,
     options.Walnutsanity.internal_name:             options.Walnutsanity.preset_all,
     options.Moviesanity.internal_name:              options.Moviesanity.option_all_movies_and_all_loved_snacks,

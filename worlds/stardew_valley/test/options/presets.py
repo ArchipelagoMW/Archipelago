@@ -1,4 +1,5 @@
 from ... import options
+from ...strings.ap_names.ap_option_names import EatsanityOptionName
 
 
 def default_6_x_x():
@@ -21,6 +22,7 @@ def default_6_x_x():
         options.Fishsanity.internal_name: options.Fishsanity.default,
         options.Friendsanity.internal_name: options.Friendsanity.default,
         options.FriendsanityHeartSize.internal_name: options.FriendsanityHeartSize.default,
+        options.Eatsanity.internal_name: options.Eatsanity.preset_none,
         options.Goal.internal_name: options.Goal.default,
         options.Hatsanity.internal_name: options.Hatsanity.option_none,
         options.Mods.internal_name: options.Mods.default,
@@ -60,6 +62,7 @@ def allsanity_no_mods_6_x_x():
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.FriendsanityHeartSize.internal_name: 1,
+        options.Eatsanity.internal_name: options.Eatsanity.preset_none,
         options.Goal.internal_name: options.Goal.option_perfection,
         options.Hatsanity.internal_name: options.Hatsanity.option_none,
         options.Mods.internal_name: frozenset(),
@@ -113,6 +116,7 @@ def default_7_x_x():
         options.Fishsanity.internal_name: options.Fishsanity.default,
         options.Friendsanity.internal_name: options.Friendsanity.default,
         options.FriendsanityHeartSize.internal_name: options.FriendsanityHeartSize.default,
+        options.Eatsanity.internal_name: options.Eatsanity.default,
         options.Goal.internal_name: options.Goal.default,
         options.Mods.internal_name: options.Mods.default,
         options.Monstersanity.internal_name: options.Monstersanity.default,
@@ -154,6 +158,7 @@ def allsanity_no_mods_7_x_x():
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
         options.Friendsanity.internal_name: options.Friendsanity.option_all_with_marriage,
         options.FriendsanityHeartSize.internal_name: 1,
+        options.Eatsanity.internal_name: options.Eatsanity.preset_all,
         options.Hatsanity.internal_name: options.Hatsanity.option_post_perfection,
         options.Goal.internal_name: options.Goal.option_perfection,
         options.Mods.internal_name: frozenset(),
@@ -208,6 +213,7 @@ def get_minsanity_options():
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.FriendsanityHeartSize.internal_name: 8,
+        options.Eatsanity.internal_name: options.Eatsanity.preset_none,
         options.Goal.internal_name: options.Goal.option_bottom_of_the_mines,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_none,
@@ -249,6 +255,7 @@ def minimal_locations_maximal_items():
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.FriendsanityHeartSize.internal_name: 8,
+        options.Eatsanity.internal_name: frozenset(EatsanityOptionName.lock_effects),
         options.Goal.internal_name: options.Goal.option_craft_master,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_none,

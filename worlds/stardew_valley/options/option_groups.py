@@ -41,6 +41,7 @@ else:
             options.Cooksanity,
             options.Chefsanity,
             options.Craftsanity,
+            options.Eatsanity,
             options.Booksanity,
             options.Walnutsanity,
             options.Moviesanity,
