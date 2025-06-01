@@ -196,25 +196,11 @@ class CommonContext:
             self.lookup_type: typing.Literal["item", "location"] = lookup_type
             self._unknown_item: typing.Callable[[int], str] = lambda key: f"Unknown {lookup_type} (ID: {key})"
             self._archipelago_lookup: typing.Dict[int, str] = {}
-            self._flat_store: typing.Dict[int, str] = Utils.KeyedDefaultDict(self._unknown_item)
             self._game_store: typing.Dict[str, typing.ChainMap[int, str]] = collections.defaultdict(
                 lambda: collections.ChainMap(self._archipelago_lookup, Utils.KeyedDefaultDict(self._unknown_item)))
-            self.warned: bool = False
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
-            # TODO: In a future version (0.6.0?) this should be simplified by removing implicit id lookups support.
-            if isinstance(key, int):
-                if not self.warned:
-                    # Use warnings instead of logger to avoid deprecation message from appearing on user side.
-                    self.warned = True
-                    warnings.warn(f"Implicit name lookup by id only is deprecated and only supported to maintain "
-                                  f"backwards compatibility for now. If multiple games share the same id for a "
-                                  f"{self.lookup_type}, name could be incorrect. Please use "
-                                  f"`{self.lookup_type}_names.lookup_in_game()` or "
-                                  f"`{self.lookup_type}_names.lookup_in_slot()` instead.")
-                return self._flat_store[key]  # type: ignore
-
             return self._game_store[key]
 
         def __len__(self) -> int:
@@ -254,7 +240,6 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
-            self._flat_store.update(id_to_name_lookup_table)  # Only needed for legacy lookup method.
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
@@ -281,38 +266,71 @@ class CommonContext:
     last_death_link: float = time.time()  # last send/received death link on AP layer
 
     # remaining type info
-    slot_info: typing.Dict[int, NetworkSlot]
-    server_address: typing.Optional[str]
-    password: typing.Optional[str]
-    hint_cost: typing.Optional[int]
-    hint_points: typing.Optional[int]
-    player_names: typing.Dict[int, str]
+    slot_info: dict[int, NetworkSlot]
+    """Slot Info from the server for the current connection"""
+    server_address: str | None
+    """Autoconnect address provided by the ctx constructor"""
+    password: str | None
+    """Password used for Connecting, expected by server_auth"""
+    hint_cost: int | None
+    """Current Hint Cost per Hint from the server"""
+    hint_points: int | None
+    """Current avaliable Hint Points from the server"""
+    player_names: dict[int, str]
+    """Current lookup of slot number to player display name from server (includes aliases)"""
 
     finished_game: bool
+    """
+    Bool to signal that status should be updated to Goal after reconnecting
+    to be used to ensure that a StatusUpdate packet does not get lost when disconnected
+    """
     ready: bool
-    team: typing.Optional[int]
-    slot: typing.Optional[int]
-    auth: typing.Optional[str]
-    seed_name: typing.Optional[str]
+    """Bool to keep track of state for the /ready command"""
+    team: int | None
+    """Team number of currently connected slot"""
+    slot: int | None
+    """Slot number of currently connected slot"""
+    auth: str | None
+    """Name used in Connect packet"""
+    seed_name: str | None
+    """Seed name that will be validated on opening a socket if present"""
 
     # locations
-    locations_checked: typing.Set[int]  # local state
-    locations_scouted: typing.Set[int]
-    items_received: typing.List[NetworkItem]
-    missing_locations: typing.Set[int]  # server state
-    checked_locations: typing.Set[int]  # server state
-    server_locations: typing.Set[int]  # all locations the server knows of, missing_location | checked_locations
-    locations_info: typing.Dict[int, NetworkItem]
+    locations_checked: set[int]
+    """
+    Local container of location ids checked to signal that LocationChecks should be resent after reconnecting
+    to be used to ensure that a LocationChecks packet does not get lost when disconnected
+    """
+    locations_scouted: set[int]
+    """
+    Local container of location ids scouted to signal that LocationScouts should be resent after reconnecting
+    to be used to ensure that a LocationScouts packet does not get lost when disconnected
+    """
+    items_received: list[NetworkItem]
+    """List of NetworkItems recieved from the server"""
+    missing_locations: set[int]
+    """Container of Locations that are unchecked per server state"""
+    checked_locations: set[int]
+    """Container of Locations that are checked per server state"""
+    server_locations: set[int]
+    """Container of Locations that exist per server state; a combination between missing and checked locations"""
+    locations_info: dict[int, NetworkItem]
+    """Dict of location id: NetworkItem info from LocationScouts request"""
 
     # data storage
-    stored_data: typing.Dict[str, typing.Any]
-    stored_data_notification_keys: typing.Set[str]
+    stored_data: dict[str, typing.Any]
+    """
+    Data Storage values by key that were retrieved from the server
+    any keys subscribed to with SetNotify will be kept up to date
+    """
+    stored_data_notification_keys: set[str]
+    """Current container of watched Data Storage keys, managed by ctx.set_notify"""
 
     # internals
-    # current message box through kvui
     _messagebox: typing.Optional["kvui.MessageBox"] = None
-    # message box reporting a loss of connection
+    """Current message box through kvui"""
     _messagebox_connection_loss: typing.Optional["kvui.MessageBox"] = None
+    """Message box reporting a loss of connection"""
 
     def __init__(self, server_address: typing.Optional[str] = None, password: typing.Optional[str] = None) -> None:
         # server state
@@ -356,7 +374,6 @@ class CommonContext:
 
         self.item_names = self.NameLookupDict(self, "item")
         self.location_names = self.NameLookupDict(self, "location")
-        self.versions = {}
         self.checksums = {}
 
         self.jsontotextparser = JSONtoTextParser(self)
@@ -571,7 +588,6 @@ class CommonContext:
     
     # DataPackage
     async def prepare_data_package(self, relevant_games: typing.Set[str],
-                                   remote_date_package_versions: typing.Dict[str, int],
                                    remote_data_package_checksums: typing.Dict[str, str]):
         """Validate that all data is present for the current multiworld.
         Download, assimilate and cache missing data from the server."""
@@ -580,33 +596,26 @@ class CommonContext:
 
         needed_updates: typing.Set[str] = set()
         for game in relevant_games:
-            if game not in remote_date_package_versions and game not in remote_data_package_checksums:
+            if game not in remote_data_package_checksums:
                 continue
 
-            remote_version: int = remote_date_package_versions.get(game, 0)
             remote_checksum: typing.Optional[str] = remote_data_package_checksums.get(game)
 
-            if remote_version == 0 and not remote_checksum:  # custom data package and no checksum for this game
+            if not remote_checksum:  # custom data package and no checksum for this game
                 needed_updates.add(game)
                 continue
 
-            cached_version: int = self.versions.get(game, 0)
             cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
-            if (not remote_checksum and (remote_version > cached_version or remote_version == 0)) \
-                    or remote_checksum != cached_checksum:
-                local_version: int = network_data_package["games"].get(game, {}).get("version", 0)
+            if remote_checksum != cached_checksum:
                 local_checksum: typing.Optional[str] = network_data_package["games"].get(game, {}).get("checksum")
-                if ((remote_checksum or remote_version <= local_version and remote_version != 0)
-                        and remote_checksum == local_checksum):
+                if remote_checksum == local_checksum:
                     self.update_game(network_data_package["games"][game], game)
                 else:
                     cached_game = Utils.load_data_package_for_checksum(game, remote_checksum)
-                    cache_version: int = cached_game.get("version", 0)
                     cache_checksum: typing.Optional[str] = cached_game.get("checksum")
                     # download remote version if cache is not new enough
-                    if (not remote_checksum and (remote_version > cache_version or remote_version == 0)) \
-                            or remote_checksum != cache_checksum:
+                    if remote_checksum != cache_checksum:
                         needed_updates.add(game)
                     else:
                         self.update_game(cached_game, game)
@@ -616,7 +625,6 @@ class CommonContext:
     def update_game(self, game_package: dict, game: str):
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
-        self.versions[game] = game_package.get("version", 0)
         self.checksums[game] = game_package.get("checksum")
 
     def update_data_package(self, data_package: dict):
@@ -887,9 +895,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
                         logger.info('    %s (Player %d)' % (network_player.alias, network_player.slot))
 
             # update data package
-            data_package_versions = args.get("datapackage_versions", {})
             data_package_checksums = args.get("datapackage_checksums", {})
-            await ctx.prepare_data_package(set(args["games"]), data_package_versions, data_package_checksums)
+            await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
 
             await ctx.server_auth(args['password'])
 
