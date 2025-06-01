@@ -20,6 +20,7 @@ from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 
 from .client import SC2Context, calc_unfinished_nodes, is_mission_available, compute_received_items
 from .item.item_descriptions import item_descriptions
+from .item.item_annotations import ITEM_NAME_ANNOTATIONS
 from .mission_order.entry_rules import RuleData, SubRuleRuleData, ItemRuleData
 from .mission_tables import lookup_id_to_mission, campaign_race_exceptions, \
     SC2Mission, SC2Race
@@ -100,6 +101,9 @@ class SC2JSONtoKivyParser(KivyJSONtoTextParser):
 
         # TODO: Some descriptions are too long and get cut off. Is there a general solution or does someone need to manually check every description?
         desc = item_descriptions[item_name].replace(". \n", ".<br>").replace(". ", ".<br>").replace("\n", "<br>")
+        annotation = ITEM_NAME_ANNOTATIONS.get(item_name)
+        if annotation is not None:
+            desc = f"{annotation}<br>{desc}"
         ref = "Item Class: " + ", ".join(item_types) + "<br><br>" + desc
         node.setdefault("refs", []).append(ref)
         return super(KivyJSONtoTextParser, self)._handle_item_name(node)
