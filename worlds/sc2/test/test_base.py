@@ -32,7 +32,6 @@ class Sc2SetupTestBase(unittest.TestCase):
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(self.seed)
-        self.multiworld.state = CollectionState(self.multiworld)
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
@@ -44,6 +43,7 @@ class Sc2SetupTestBase(unittest.TestCase):
             })
         self.multiworld.set_options(args)
         self.world: SC2World = cast(SC2World, self.multiworld.worlds[self.player])
+        self.multiworld.state = CollectionState(self.multiworld)
         try:
             for step in gen_steps:
                 call_all(self.multiworld, step)
