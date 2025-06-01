@@ -341,19 +341,18 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
                 write_bytes(rom_addresses["Town_Map_Coords"] + (map_coord_entry * 4) + 1, (y << 4) | x)
             write_bytes(rom_addresses["Town_Map_Order"] + map_order_entry, map_ids[map_name])
 
-    if not world.options.key_items_only:
-        for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
-                                        "Vermilion Gym - Lt. Surge TM", "Celadon Gym - Erika TM",
-                                        "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
-                                        "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
-            item_name = world.multiworld.get_location(gym_leader, world.player).item.name
-            if item_name.startswith("TM"):
-                try:
-                    tm = int(item_name[2:4])
-                    move = poke_data.moves[world.local_tms[tm - 1]]["id"]
-                    write_bytes(rom_addresses["Gym_Leader_Moves"] + (2 * i), move)
-                except KeyError:
-                    pass
+    for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
+                                    "Vermilion Gym - Lt. Surge TM", "Celadon Gym - Erika TM",
+                                    "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
+                                    "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
+        item_name = world.multiworld.get_location(gym_leader, world.player).item.name
+        if item_name.startswith("TM"):
+            try:
+                tm = int(item_name[2:4])
+                move = poke_data.moves[world.local_tms[tm - 1]]["id"]
+                write_bytes(rom_addresses["Gym_Leader_Moves"] + (2 * i), move)
+            except KeyError:
+                pass
 
     def set_trade_mon(address, loc):
         mon = world.multiworld.get_location(loc, world.player).item.name

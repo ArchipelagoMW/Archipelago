@@ -234,12 +234,6 @@ class PokemonRedBlueWorld(World):
         if not self.options.badgesanity:
             self.options.non_local_items.value -= self.item_name_groups["Badges"]
 
-        if self.options.key_items_only:
-            self.options.trainersanity.value = 0
-            self.options.dexsanity.value = 0
-            self.options.randomize_hidden_items = \
-                self.options.randomize_hidden_items.from_text("off")
-
         if self.options.badges_needed_for_hm_moves.value >= 2:
             badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
             if self.options.badges_needed_for_hm_moves.value == 3:
@@ -352,9 +346,6 @@ class PokemonRedBlueWorld(World):
                     raise FillError(f"Failed to place badges for player {self.player}")
             verify_hm_moves(self.multiworld, self, self.player)
 
-        if self.options.key_items_only:
-            return
-
         tms = [item for item in usefulitempool + filleritempool if item.name.startswith("TM") and (item.player ==
                self.player or (item.player in self.multiworld.groups and self.player in
                                self.multiworld.groups[item.player]["players"]))]
@@ -418,17 +409,16 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        if not self.options.key_items_only:
-            rule = None
-            if self.options.fossil_check_item_types == "key_items":
-                rule = lambda i: i.advancement
-            elif self.options.fossil_check_item_types == "unique_items":
-                rule = lambda i: i.name in item_groups["Unique"]
-            elif self.options.fossil_check_item_types == "no_key_items":
-                rule = lambda i: not i.advancement
-            if rule:
-                for loc in locs:
-                    add_item_rule(loc, rule)
+        rule = None
+        if self.options.fossil_check_item_types == "key_items":
+            rule = lambda i: i.advancement
+        elif self.options.fossil_check_item_types == "unique_items":
+            rule = lambda i: i.name in item_groups["Unique"]
+        elif self.options.fossil_check_item_types == "no_key_items":
+            rule = lambda i: not i.advancement
+        if rule:
+            for loc in locs:
+                add_item_rule(loc, rule)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -511,13 +501,12 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-        if not self.options.key_items_only:
-            loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
-            # Absolutely cannot have another player's item
-            if loc.item is not None and loc.item.player != self.player:
-                self.multiworld.itempool.append(loc.item)
-                loc.item = None
-            loc.place_locked_item(self.pc_item)
+        loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
+        # Absolutely cannot have another player's item
+        if loc.item is not None and loc.item.player != self.player:
+            self.multiworld.itempool.append(loc.item)
+            loc.item = None
+        loc.place_locked_item(self.pc_item)
 
     @classmethod
     def stage_post_fill(cls, multiworld):
@@ -699,7 +688,6 @@ class PokemonRedBlueWorld(World):
             "trainersanity": self.options.trainersanity.value,
             "death_link": self.options.death_link.value,
             "prizesanity": self.options.prizesanity.value,
-            "key_items_only": self.options.key_items_only.value,
             "poke_doll_skip": self.options.poke_doll_skip.value,
             "bicycle_gate_skips": self.options.bicycle_gate_skips.value,
             "stonesanity": self.options.stonesanity.value,

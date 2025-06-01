@@ -234,14 +234,6 @@ class RandomizePokedex(Choice):
     default = 0
 
 
-class KeyItemsOnly(Toggle):
-    """Shuffle only Key Items. This overrides Randomize Hidden Items, Trainersanity, and Dexsanity.
-    Sets all non-excluded locations in your game to Priority Locations.
-    May have high generation failure rates for solo games or small multiworlds, especially with Door Shuffle."""
-    display_name = "Key Items Only"
-    default = 0
-
-
 class Tea(Toggle):
     """Adds a Tea item to the item pool which the Saffron guards require instead of the vending machine drinks.
     Adds a location check to the Celadon Mansion 1F, where Tea is acquired in FireRed and LeafGreen."""
@@ -937,7 +929,6 @@ class PokemonRBOptions(PerGameCommonOptions):
     old_man: OldMan
     badgesanity: BadgeSanity
     badges_needed_for_hm_moves: BadgesNeededForHMMoves
-    key_items_only: KeyItemsOnly
     tea: Tea
     extra_key_items: ExtraKeyItems
     split_card_key: SplitCardKey

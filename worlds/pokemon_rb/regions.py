@@ -1529,10 +1529,7 @@ def create_regions(world):
 
     for location in location_data:
         # The check for list is so that we don't try to check the item table with a list as a key
-        if location.inclusion(world, player) and (isinstance(location.original_item, list) or
-                                                  not (world.options.key_items_only and item_table[location.original_item].classification
-                                                       not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
-                location.event)):
+        if location.inclusion(world, player) and (isinstance(location.original_item, list)):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
             location_region = location.region
@@ -1577,10 +1574,6 @@ def create_regions(world):
                             <= world.options.trap_percentage.value and combined_traps != 0):
                         item = world.create_item(world.select_trap())
 
-                if (world.options.key_items_only and (location.original_item != "Exp. All")
-                        and not (location.event or item.advancement)):
-                    continue
-
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
                         location.original_item in item_groups["Unique"]:
                     start_inventory[location.original_item] -= 1
@@ -1598,23 +1591,21 @@ def create_regions(world):
                     world.item_pool.append(item)
 
     world.random.shuffle(world.item_pool)
-    if not world.options.key_items_only:
-        def acceptable_item(item):
-            return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
-                    and "Coins" not in item.name and "Progressive" not in item.name
-                    and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
-                    and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
-                         "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+    def acceptable_item(item):
+        return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
+                and "Coins" not in item.name and "Progressive" not in item.name
+                and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
+                and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                     "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+    for i, item in enumerate(world.item_pool):
+        if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
+            world.pc_item = world.item_pool.pop(i)
+            break
+    else:
         for i, item in enumerate(world.item_pool):
-            if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
+            if acceptable_item(item):
                 world.pc_item = world.item_pool.pop(i)
                 break
-        else:
-            for i, item in enumerate(world.item_pool):
-                if acceptable_item(item):
-                    world.pc_item = world.item_pool.pop(i)
-                    break
-
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -2088,8 +2079,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
-            if world.options.key_items_only:
-                usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
         if world.options.door_shuffle in ("full", "insanity", "decoupled"):
             forced_connections.update(full_mandatory_connections)
             r = world.random.randint(0, 3)
@@ -2150,8 +2139,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
             forced_pokemarts = world.random.sample(pokemart_entrances, 8)
-            if world.options.key_items_only:
-                forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
             for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
         else:
@@ -2162,11 +2149,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             for a, b in zip(world.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 one_way_forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if world.options.key_items_only:
-                one_way_forced_connections.add((world.random.choice(initial_doors),
-                                                "Viridian Pokemart to Viridian City"))
-
-            elif "Pokemart" not in pallet_safe_room:
+            if "Pokemart" not in pallet_safe_room:
                 one_way_forced_connections.add((world.random.choice(initial_doors), world.random.choice(
                         [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
