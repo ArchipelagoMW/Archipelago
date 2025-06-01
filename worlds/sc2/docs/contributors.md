@@ -24,6 +24,12 @@ code contributors also reported bugs and participated in beta testing.
 ### Additional Assets
 * Alice Voltaire
 
+### Voice Acting
+* Subsourian (@Subsourian) - Signifier
+* GiantGrantGames (@GiantGrantGames) - Trireme
+* Phaneros (@MatthewMarinets)- Skirmisher
+* Dikhovinka (@AYaroslavskiy91) - Dawnbringer
+
 ## Maintenance of 2024 release
 * Ziktofel (@Ziktofel)
 * Phaneros (@MatthewMarinets)
