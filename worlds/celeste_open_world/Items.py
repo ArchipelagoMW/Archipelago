@@ -5,7 +5,7 @@ from .Names import ItemName
 
 
 level_item_lists: dict[str, set[str]] = {
-    "0a": {},
+    "0a": set(),
 
     "1a": {ItemName.springs, ItemName.traffic_blocks, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
     "1b": {ItemName.springs, ItemName.traffic_blocks, ItemName.dash_refills, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
@@ -36,7 +36,7 @@ level_item_lists: dict[str, set[str]] = {
     "7c": {ItemName.springs, ItemName.dash_refills, ItemName.badeline_boosters, ItemName.coins, ItemName.pink_clouds},
 
     # Epilogue
-    "8a": {},
+    "8a": set(),
 
     # Core
     "9a": {ItemName.springs, ItemName.dash_refills, ItemName.fire_ice_balls, ItemName.bumpers, ItemName.core_toggles, ItemName.core_blocks, ItemName.coins, ItemName.badeline_boosters, ItemName.feathers, ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks},
@@ -226,7 +226,7 @@ def add_key_to_table(id: int, name: str):
 def add_gem_to_table(id: int, name: str):
     gem_item_data_table[name] = CelesteItemData(id, ItemClassification.progression)
 
-def generate_item_data_table() -> dict[int, CelesteItemData]:
+def generate_item_data_table() -> dict[str, CelesteItemData]:
     return {**collectable_item_data_table,
             **goal_item_data_table,
             **trap_item_data_table,
