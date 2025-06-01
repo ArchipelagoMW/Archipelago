@@ -1528,8 +1528,7 @@ def create_regions(world):
          world.rock_tunnel_b1f_data) = randomize_rock_tunnel(world.random)
 
     for location in location_data:
-        # The check for list is so that we don't try to check the item table with a list as a key
-        if location.inclusion(world, player) and (isinstance(location.original_item, list)):
+        if location.inclusion(world, player):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
             location_region = location.region

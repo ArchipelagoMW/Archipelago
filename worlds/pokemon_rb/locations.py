@@ -69,6 +69,9 @@ class LocationData:
         else:
             self.level_address = None
 
+    def __repr__(self):
+        return "LocationData: " + self.name
+
 
 class EventFlag:
     def __init__(self, flag):

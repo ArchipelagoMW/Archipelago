@@ -160,7 +160,9 @@ def process_pokemon_locations(self):
     non_randomized_catch_em_all_mons = ["Bulbasaur", "Charmander", "Squirtle", "Eevee"]
     non_randomized_catch_em_all_slots = []
     if self.options.catch_em_all and not self.options.randomize_pokemon_locations:
-        non_randomized_catch_em_all_slots = self.random.sample(non_randomized_catch_em_all_candidate_slots, 4)
+        non_randomized_catch_em_all_slots = self.random.sample(
+            [mon for mon in non_randomized_catch_em_all_candidate_slots
+             if mon in [slot.name for slot in static_slots]], 4)
 
     for slot in static_slots:
         location = self.multiworld.get_location(slot.name, self.player)
