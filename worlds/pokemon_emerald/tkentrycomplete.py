@@ -95,7 +95,7 @@ class AutocompleteCombobox(ttk.Combobox):
                 if cls is tkinter.Toplevel:
                         obj._w = self.tk.call('ttk::combobox::PopdownWindow', self)
                 else:
-                        obj._w = '{}.{}'.format(parent._w, 'f.l')
+                        obj._w = f'{parent._w}.{'f.l'}'
                 return obj
 
         def __init__(self, parent, **kwargs):

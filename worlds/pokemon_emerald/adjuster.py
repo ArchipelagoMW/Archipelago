@@ -7,8 +7,8 @@ from bps.apply import apply_to_bytearrays as apply_bps_patch
 
 from Utils import local_path, persistent_store, get_adjuster_settings, get_adjuster_settings_no_defaults, \
     tkinter_center_window, data_to_bps_patch, open_image_secure
-from worlds.pokemon_emerald.adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, \
-    extract_sprites, validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
+from .adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_file, extract_sprites, \
+    validate_sprite_pack, get_pokemon_data, stringify_pokemon_data, destringify_pokemon_data, \
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
     handle_address_collection, find_folder_object_info, load_constants
 from worlds.pokemon_emerald.adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, \
@@ -17,7 +17,12 @@ from argparse import Namespace
 from tkinter import messagebox, IntVar
 
 try:
-    from worlds.pokemon_frlg.adjuster import *
+    from worlds.pokemon_emerald.adjuster_constants import EMERALD_PATCH_EXTENSIONS
+    emeraldSupport = True
+except:
+    emeraldSupport = False
+try:
+    from worlds.pokemon_frlg.adjuster_constants import FR_LG_PATCH_EXTENSIONS
     frlgSupport = True
 except:
     frlgSupport = False
@@ -30,17 +35,121 @@ objectFolders = None
 apRom = None
 isRomAp = None
 
-GAME_EMERALD = 'Pokemon Emerald'
+adjusterName = 'Gen 3' if frlgSupport and emeraldSupport else 'Emerald' if emeraldSupport else 'Firered/Leafgreen' if frlgSupport else 'No-Goal'
+adjusterExtensions = ['.gba', *EMERALD_PATCH_EXTENSIONS.split('/'), *FR_LG_PATCH_EXTENSIONS.split('/')]
+GAME_GEN3_ADJUSTER = 'Pokemon Gen 3 Adjuster'
+
+def buildApRom(_patch):
+    # Builds the AP ROM if a patch file was given or opens the AP ROM file that was given
+    if not _patch:
+        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: a patch file or a patched ROM is required!')
+        return
+
+    romData = None
+    if os.path.splitext(_patch)[-1] == '.gba':
+        # Load up the ROM directly
+        with open(_patch, 'rb') as stream:
+            romData = bytearray(stream.read())
+    else:
+        # Patch the registered ROM as an AP ROM
+        if emeraldSupport:
+            romData = emeraldBuildApRom(_patch)
+        if frlgSupport and not romData:
+            romData = frlgBuildApRom(_patch)
+    if not romData:
+        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: invalid file extension: requires .gba or .apemerald')
+        return
+
+    return romData
+
+def emeraldBuildApRom(_patch):
+    # Builds the AP ROM if a patch file was given
+    # Handles Pokemon Emerald patching
+    if os.path.splitext(_patch)[-1] == '.apemerald':
+        import Patch
+        _, apRomPath = Patch.create_rom_file(_patch)
+        with open(apRomPath, 'rb') as stream:
+            return bytearray(stream.read())
+    return None
+
+def frlgBuildApRom(_patch):
+    # Builds the AP ROM if a patch file was given
+    # Handles Pokemon Firered/Leafgreen patching
+    if os.path.splitext(_patch)[-1] in ['.apfirered', '.apleafgreen']:
+        import Patch
+        _, apRomPath = Patch.create_rom_file(_patch)
+        with open(apRomPath, 'rb') as stream:
+            return bytearray(stream.read())
+    return None
+
+def emeraldFetchPatch(_patch):
+    # Asks for a ROM or patch file then validates it
+    # Handles the check for Pokemon Emerald
+    if _patch and os.path.exists(_patch):
+        if os.path.splitext(_patch)[-1] == '.gba':
+            # If .gba, verify ROM integrity by checking for its internal name at addresses #0000A0-#0000AB
+            with open(_patch, 'rb') as stream:
+                patchData = bytearray(stream.read())
+                internalName = patchData[0xA0:0xAC].decode('utf-8')
+                if internalName == 'POKEMON EMER':
+                    return _patch, 'Emerald'
+        elif os.path.splitext(_patch)[-1] == '.apemerald':
+            return _patch, 'Emerald'
+    return _patch, 'Unknown'
+
+def frlgFetchPatch(_patch):
+    # Asks for a ROM or patch file then validates it
+    # Handles the check for Pokemon Firered/Leafgreen
+    if _patch and os.path.exists(_patch):
+        if os.path.splitext(_patch)[-1] == '.gba':
+            # If .gba, verify ROM integrity by checking for its internal name at addresses #0000A0-#0000AB
+            with open(_patch, 'rb') as stream:
+                romData = bytearray(stream.read())
+                return _patch, frlgGetRomVersion(romData)
+        elif os.path.splitext(_patch)[-1] in ['.apfirered', '.apleafgreen']:
+            # If .apfirered or .apleafgreen, patch the ROM to fetch its revision number
+            romData = frlgBuildApRom(_patch)
+            return _patch, frlgGetRomVersion(romData)
+    return _patch, 'Unknown'
+
+def frlgGetRomVersion(_romData):
+    # Retrieves and returns the version of the ROM given
+    allowedInternalNames = {'POKEMON FIRE': 'Firered', 'POKEMON LEAF': 'Leafgreen'}
+    internalName = _romData[0xA0:0xAC].decode('utf-8')
+    internalRevision = int(_romData[0xBC])
+    versionName = allowedInternalNames.get(internalName, '')
+    if not versionName:
+        return 'Unknown'
+    return f'{versionName}{'_rev1' if internalRevision == 1 else ''}'
+
+def buildSpritePackPatch(_spritePack):
+    # Builds the BPS patch including all of the sprite pack's data
+    errors, hasError = validate_sprite_pack(_spritePack)
+    if hasError:
+        raise Exception(f'Cannot adjust the ROM as the sprite pack contains errors:\n{errors}')
+
+    spritePackData = get_patch_from_sprite_pack(_spritePack, romVersion)
+    spritePackBpsPatch = data_to_bps_patch(spritePackData)
+    return spritePackBpsPatch
 
 async def main():
     # Main function of the adjuster
     parser = getArgparser()
-    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_EMERALD))
+    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_GEN3_ADJUSTER))
 
     logging.basicConfig(format='%(message)s', level=logging.INFO)
 
     args = parser.parse_args()
-    if not os.path.isfile(args.patch):
+    isCommandLine = args.patch
+
+    if not emeraldSupport and not frlgSupport:
+        if isCommandLine:
+            raise Exception('This Archipelago installation doesn\'t contain tools for neither Pokemon Emerald or Pokemon Firered/Leafgreen.')
+        else:
+            messagebox.showerror('This Archipelago installation doesn\'t contain tools for neither Pokemon Emerald or Pokemon Firered/Leafgreen.')
+            return
+
+    if not isCommandLine:
         adjustGUI()
     else:
         adjust(args)
@@ -51,27 +160,8 @@ def getArgparser():
     parser.add_argument('--sprite-pack', default='', help='Path to the Emerald sprite pack folder to use.')
     return parser
 
-def fetchPatch(_opts):
-    # Asks for a ROM or patch file then validates it
-    from tkinter import filedialog
-    oldPatchFolder = os.path.dirname(_opts.patch.get()) if isPatchValid else None
-    oldPatchFile = _opts.patch.get() if isPatchValid else None
-    patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, title='Choose a Pokemon Emerald ROM or an .apemerald patch file.', filetypes=[('Rom & Patch Files', ['.gba', '.apemerald'])])
-    if patch and os.path.exists(patch):
-        if os.path.splitext(patch)[-1] == '.gba':
-            # If .gba, verify ROM integrity by checking for its internal name at addresses #0000A0-#0000AB (must be POKEMON EMER)
-            with open(patch, 'rb') as stream:
-                patchData = bytearray(stream.read())
-                internalName = patchData[0xA0:0xAC].decode('utf-8')
-                if internalName == 'POKEMON EMER':
-                    return patch, 'Emerald'
-        elif os.path.splitext(patch)[-1] == '.apemerald':
-            return patch, 'Emerald'
-    messagebox.showerror(title='Error while loading a ROM', message=f'The ROM at path {patch} isn\'t a valid Pokemon Emerald ROM!')
-    return patch, 'Unknown'
-
 def adjustGUI():
-    adjusterSettings = get_adjuster_settings(GAME_EMERALD)
+    adjusterSettings = get_adjuster_settings(GAME_GEN3_ADJUSTER)
 
     from tkinter import LEFT, TOP, X, E, W, END, DISABLED, NORMAL, StringVar, \
         LabelFrame, Frame, Label, Entry, Button, Checkbutton, OptionMenu, \
@@ -83,7 +173,7 @@ def adjustGUI():
     from Utils import __version__ as MWVersion
 
     window = Tk()
-    window.wm_title(f'Archipelago {MWVersion} {'Pokemon Gen 3' if frlgSupport else 'Emerald'} Adjuster')
+    window.wm_title(f'Archipelago {MWVersion} Pokemon {adjusterName} Adjuster')
     setIcon(window)
 
     mainWindowFrame = Frame(window, padx=8, pady=8)
@@ -103,23 +193,26 @@ def adjustGUI():
 
         if not _forcedPatch is None:
             patch = _forcedPatch
-        elif frlgSupport:
-            patch, romVersion = frlgFetchPatch(opts, isPatchValid)
         else:
-            patch, romVersion = fetchPatch(opts)
+            title = f'Choose a Pokemon {adjusterName} ROM ({adjusterExtensions[0]}) or a {'/'.join(adjusterExtensions[1:])} patch file.'
+
+            from tkinter import filedialog
+            oldPatchFolder = os.path.dirname(opts.patch.get()) if isPatchValid else None
+            oldPatchFile = opts.patch.get() if isPatchValid else None
+            patch = filedialog.askopenfilename(initialdir=oldPatchFolder, initialfile=oldPatchFile, title=title, filetypes=[('Rom & Patch Files', adjusterExtensions)])
+
+            if patch:
+                romVersion = 'Unknown'
+                if emeraldSupport:
+                    patch, romVersion = emeraldFetchPatch(patch)
+                if frlgSupport and romVersion == 'Unknown':
+                    patch, romVersion = frlgFetchPatch(patch)
+                if romVersion == 'Unknown':
+                    messagebox.showerror(title='Error while loading a ROM', message=f'The ROM at path {patch} isn\'t a valid Pokemon {adjusterName} ROM!')
+                    return
         opts.patch.set(patch)
 
-        load_constants(romVersion)
-
         isPatchValid = len(patch) > 0 and os.path.exists(patch)
-        tryValidateSpritePack(opts.sprite_pack.get(), True)
-
-        global objectFolders
-        strainrFolderObjectInfo = find_folder_object_info('strainr')
-        trainerFolderObjectInfo = find_folder_object_info('trainer')
-        pokemonFolderObjectInfo = find_folder_object_info('pokemon')
-        objectFolders = strainrFolderObjectInfo['folders'] + trainerFolderObjectInfo['folders'] + pokemonFolderObjectInfo['folders']
-
         if not isPatchValid:
             # If the patch is invalid, hide the isAP checkbox, the Sprite Extractor
             # and the data edition window if it's displayed
@@ -129,6 +222,16 @@ def adjustGUI():
                 dataEditionLabelFrame.grid_forget()
                 dataEditionError.grid(row=0, column=2, rowspan=2)
         else:
+            load_constants(romVersion)
+            tryValidateSpritePack(opts.sprite_pack.get(), True)
+
+            global objectFolders
+            trainerFolderObjectInfo = find_folder_object_info('trainer')
+            playersFolderObjectInfo = find_folder_object_info('players')
+            pokemonFolderObjectInfo = find_folder_object_info('pokemon')
+            objectFolders = trainerFolderObjectInfo['folders'] + playersFolderObjectInfo['folders'] + pokemonFolderObjectInfo['folders']
+            checkSpriteExtraction('')
+
             # If the patch is valid, show the isAP checkbox, the Sprite Extractor
             # and the data edition window if it's displayed
             patchIsAPCheckbox.pack(side=LEFT, padx=(4,0))
@@ -593,7 +696,7 @@ def adjustGUI():
         blueBalloonMessage = '\nThis label is blue because this value is different from the one within the ROM.'
         boldBalloonMessage = '\nThis label is in bold because this value has been changed and hasn\'t been saved.'
         errors, hasError = validate_pokemon_data_string(currentValidSpriteFolder.get(), { field: fieldValue })
-        tempPokemonDataString = '{}: {}'.format(field, fieldValue)
+        tempPokemonDataString = f'{field}: {fieldValue}'
         isDifferentFromROM = True
         isDifferentFromData = False
         internalField = 'dex' if field == 'forbid_flip' else field
@@ -827,7 +930,7 @@ def adjustGUI():
         guiargs = Namespace()
         guiargs.patch = opts.patch.get()
         guiargs.sprite_pack = opts.sprite_pack.get()
-        persistent_store('adjuster', GAME_EMERALD, guiargs)
+        persistent_store('adjuster', GAME_GEN3_ADJUSTER, guiargs)
         messagebox.showinfo(title='Success', message='Settings saved to persistent storage')
 
     bottomFrame = Frame(mainWindowFrame)
@@ -880,6 +983,7 @@ def adjust(args):
     # Building a BPS patch from the given sprite pack, and applying it
     global apRom
     apRom = apRom or buildApRom(args.patch)
+    handle_address_collection(apRom, romVersion, isRomAp.get())
 
     if not args.sprite_pack:
         raise Exception('Cannot adjust the ROM, a sprite pack is required!')
@@ -889,9 +993,9 @@ def adjust(args):
         spritePackBpsPatch = buildSpritePackPatch(args.sprite_pack)
     except Exception as e:
         if hasattr(e, 'message'):
-            raise Exception('Error during patch creation: {}'.format(e.message))
+            raise Exception(f'Error during patch creation: {e.message}')
         else:
-            raise Exception('Error during patch creation: {}'.format(str(e)))
+            raise Exception(f'Error during patch creation: {str(e)}')
 
     adjustedApRom = bytearray(len(apRom))
     apply_bps_patch(spritePackBpsPatch, apRom, adjustedApRom)
@@ -901,42 +1005,6 @@ def adjust(args):
     with open(adjustedRomPath, 'wb') as outfile:
         outfile.write(adjustedApRom)
     return adjustedRomPath
-
-def buildApRom(_patch):
-    # Builds the AP ROM if a patch file was given
-    if not _patch:
-        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: a patch file or a patched ROM is required!')
-        return
-    if os.path.splitext(_patch)[-1] == '.gba':
-        # Load up the ROM directly
-        with open(_patch, 'rb') as stream:
-            romData = bytearray(stream.read())
-    elif os.path.splitext(_patch)[-1] == '.apemerald':
-        # Patch the registered ROM as an AP ROM
-        import Patch
-        _, apRomPath = Patch.create_rom_file(_patch)
-        with open(apRomPath, 'rb') as stream:
-            romData = bytearray(stream.read())
-    elif frlgSupport:
-        # Extend check to .apfirered and .apleafgreen if FR/LG is supported
-        romData = frlgBuildApRom(_patch)
-        if not romData:
-            return
-    else:
-        messagebox.showerror(title='Failure', message=f'Cannot build the AP ROM: invalid file extension: requires .gba or .apemerald')
-        return
-
-    return romData
-
-def buildSpritePackPatch(_spritePack):
-    # Builds the BPS patch including all of the sprite pack's data
-    errors, hasError = validate_sprite_pack(_spritePack)
-    if hasError:
-        raise Exception(f'Cannot adjust the ROM as the sprite pack contains errors:\n{errors}')
-
-    spritePackData = get_patch_from_sprite_pack(_spritePack, romVersion)
-    spritePackBpsPatch = data_to_bps_patch(spritePackData)
-    return spritePackBpsPatch
 
 def launch():
     import colorama, asyncio

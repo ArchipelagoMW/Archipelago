@@ -1,10 +1,12 @@
 from worlds.pokemon_emerald.adjuster_constants import \
-    TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY, TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY, \
-    TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY, VALID_UNOWN_PALETTE, VALID_UNOWN_SHINY_PALETTE, \
+    TRAINER_BATTLE_BACK_PALETTE_EXTRACTION_PRIORITY, TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY, \
+    TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY, VALID_UNOWN_PALETTE, VALID_UNOWN_SHINY_PALETTE, \
     VALID_ICON_PALETTES, VALID_FOOTPRINT_PALETTE, SIMPLE_TRAINER_SPRITES, SIMPLE_TRAINER_PALETTES, \
-    EMERALD_DATA_ADDRESS_INFOS, POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY, POKEMON_FOLDERS, \
+    EMERALD_DATA_ADDRESS_INFOS, POKEMON_FOLDERS, POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY, \
     VALID_OVERWORLD_PALETTE, VALID_WEAK_OVERWORLD_PALETTE
 from .data import data
+
+FR_LG_PATCH_EXTENSIONS = '.apfirered/.apleafgreen'
 
 FR_LG_POKEMON_SPRITES = ['front', 'back', 'icon', 'footprint']
 FR_LG_POKEMON_MAIN_PALETTE_EXTRACTION_PRIORITY = ['front', 'back']
@@ -44,7 +46,7 @@ FR_LG_SIMPLE_TRAINER_FOLDERS = ['Blue']
 FR_LG_FOLDER_OBJECT_INFOS = [
     {
         'name': 'Blue',
-        'key': 'strainr',
+        'key': 'trainer',
         'folders': FR_LG_SIMPLE_TRAINER_FOLDERS,
         'sprites': BLUE_TRAINER_SPRITES,
         'palettes': BLUE_TRAINER_PALETTES
@@ -63,13 +65,13 @@ FR_LG_FOLDER_OBJECT_INFOS = [
         'palettes': FR_LG_POKEMON_PALETTES
     },
     {
-        'key': 'trainer',
+        'key': 'players',
         'folders': FR_LG_TRAINER_FOLDERS,
         'sprites': FR_LG_TRAINER_SPRITES,
         'palettes': FR_LG_TRAINER_PALETTES
     },
     {
-        'key': 'strainr',
+        'key': 'trainer',
         'folders': FR_LG_SIMPLE_TRAINER_FOLDERS,
         'sprites': SIMPLE_TRAINER_SPRITES,
         'palettes': SIMPLE_TRAINER_PALETTES
@@ -77,67 +79,75 @@ FR_LG_FOLDER_OBJECT_INFOS = [
 ]
 
 FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS = {
-    'pokemon_front':         lambda c, a : c['gMonFrontPicTable']      + 8 * a,
-    'pokemon_back':          lambda c, a : c['gMonBackPicTable']       + 8 * a,
-    'pokemon_icon':          lambda c, a : c['gMonIconTable']          + 4 * a,
-    'pokemon_icon_index':    lambda c, a : c['gMonIconPaletteIndices'] + a,
-    'pokemon_footprint':     lambda c, a : c['gMonFootprintTable']     + 4 * a,
-    'pokemon_hatch_anim':    lambda c, _ : (c['sEggHatchTiles'], True),
-    'pokemon_palette':       lambda c, a : c['gMonPaletteTable']       + 8 * a,
-    'pokemon_palette_shiny': lambda c, a : c['gMonShinyPaletteTable']  + 8 * a,
-    'pokemon_palette_hatch': lambda c, _ : (c['sEggPalette'], True),
-    'pokemon_stats':         lambda c, a : c['gSpeciesInfo']           + 28 * a,
-    'pokemon_move_pool':     lambda c, a : c['gLevelUpLearnsets']      + 4 * a,
+    'pokemon_front':         ('gMonFrontPicTable',      8,  False),
+    'pokemon_back':          ('gMonBackPicTable',       8,  False),
+    'pokemon_icon':          ('gMonIconTable',          4,  False),
+    'pokemon_icon_index':    ('gMonIconPaletteIndices', 1,  False),
+    'pokemon_footprint':     ('gMonFootprintTable',     4,  False),
+    'pokemon_hatch_anim':    ('sEggHatchTiles',         0,  True),
+    'pokemon_palette':       ('gMonPaletteTable',       8,  False),
+    'pokemon_palette_shiny': ('gMonShinyPaletteTable',  8,  False),
+    'pokemon_palette_hatch': ('sEggPalette',            0,  True),
+    'pokemon_stats':         ('gSpeciesInfo',           28, False),
+    'pokemon_move_pool':     ('gLevelUpLearnsets',      4,  False),
 
-    'red_walking_running':      lambda c : c['gObjectEventGraphicsInfoPointers'] + 0,
-    'red_bike':                 lambda c : c['gObjectEventGraphicsInfoPointers'] + 4,
-    'red_surfing':              lambda c : c['gObjectEventGraphicsInfoPointers'] + 8,
-    'red_field_move':           lambda c : c['gObjectEventGraphicsInfoPointers'] + 12,
-    'red_fishing':              lambda c : c['gObjectEventGraphicsInfoPointers'] + 16,
-    'red_bike_vs_seeker':       lambda c : c['gObjectEventGraphicsInfoPointers'] + 24,
-    'red_battle_front':         lambda c : c['gTrainerFrontPicTable'] + 1080,
-    'red_battle_back':          lambda c : c['gTrainerBackPicTable'] + 0,
-    'red_battle_back_throw':    lambda c : c['sTrainerBackSpriteTemplates'] + 0,
-    'red_palette':              lambda c : c['sObjectEventSpritePalettes'] + 64,
-    'red_palette_battle_back':  lambda c : c['gTrainerBackPicPaletteTable'] + 0,
-    'red_palette_battle_front': lambda c : c['gTrainerFrontPicPaletteTable'] + 1080,
+    'red_walking_running':      ('gObjectEventGraphicsInfoPointers', 0,    False),
+    'red_bike':                 ('gObjectEventGraphicsInfoPointers', 4,    False),
+    'red_surfing':              ('gObjectEventGraphicsInfoPointers', 8,    False),
+    'red_field_move':           ('gObjectEventGraphicsInfoPointers', 12,   False),
+    'red_fishing':              ('gObjectEventGraphicsInfoPointers', 16,   False),
+    'red_bike_vs_seeker':       ('gObjectEventGraphicsInfoPointers', 24,   False),
+    'red_battle_front':         ('gTrainerFrontPicTable',            1080, False),
+    'red_battle_back':          ('gTrainerBackPicTable',             0,    False),
+    'red_battle_back_throw':    ('sTrainerBackSpriteTemplates',      0,    False),
+    'red_palette':              ('sObjectEventSpritePalettes',       64,   False),
+    'red_palette_reflection':   ('sObjectEventSpritePalettes',       72,   False),
+    'red_palette_battle_back':  ('gTrainerBackPicPaletteTable',      0,    False),
+    'red_palette_battle_front': ('gTrainerFrontPicPaletteTable',     1080, False),
 
-    'leaf_walking_running':      lambda c : c['gObjectEventGraphicsInfoPointers'] + 28,
-    'leaf_bike':                 lambda c : c['gObjectEventGraphicsInfoPointers'] + 32,
-    'leaf_surfing':              lambda c : c['gObjectEventGraphicsInfoPointers'] + 36,
-    'leaf_field_move':           lambda c : c['gObjectEventGraphicsInfoPointers'] + 40,
-    'leaf_fishing':              lambda c : c['gObjectEventGraphicsInfoPointers'] + 44,
-    'leaf_bike_vs_seeker':       lambda c : c['gObjectEventGraphicsInfoPointers'] + 52,
-    'leaf_battle_front':         lambda c : c['gTrainerFrontPicTable'] + 1088,
-    'leaf_battle_back':          lambda c : c['gTrainerBackPicTable'] + 8,
-    'leaf_battle_back_throw':    lambda c : c['sTrainerBackSpriteTemplates'] + 24,
-    'leaf_palette':              lambda c : c['sObjectEventSpritePalettes'] + 104,
-    'leaf_palette_battle_back':  lambda c : c['gTrainerBackPicPaletteTable'] + 8,
-    'leaf_palette_battle_front': lambda c : c['gTrainerFrontPicPaletteTable'] + 1088,
+    'leaf_walking_running':      ('gObjectEventGraphicsInfoPointers', 28,   False),
+    'leaf_bike':                 ('gObjectEventGraphicsInfoPointers', 32,   False),
+    'leaf_surfing':              ('gObjectEventGraphicsInfoPointers', 36,   False),
+    'leaf_field_move':           ('gObjectEventGraphicsInfoPointers', 40,   False),
+    'leaf_fishing':              ('gObjectEventGraphicsInfoPointers', 44,   False),
+    'leaf_bike_vs_seeker':       ('gObjectEventGraphicsInfoPointers', 52,   False),
+    'leaf_battle_front':         ('gTrainerFrontPicTable',            1088, False),
+    'leaf_battle_back':          ('gTrainerBackPicTable',             8,    False),
+    'leaf_battle_back_throw':    ('sTrainerBackSpriteTemplates',      24,   False),
+    'leaf_palette':              ('sObjectEventSpritePalettes',       104,  False),
+    'leaf_palette_reflection':   ('sObjectEventSpritePalettes',       112,  False),
+    'leaf_palette_battle_back':  ('gTrainerBackPicPaletteTable',      8,    False),
+    'leaf_palette_battle_front': ('gTrainerFrontPicPaletteTable',     1088, False),
 
-    'blue_walking':                lambda c : c['gObjectEventGraphicsInfoPointers'] + 288,
-    'blue_battle_front_1':         lambda c : c['gTrainerFrontPicTable'] + 848,
-    'blue_battle_front_2':         lambda c : c['gTrainerFrontPicTable'] + 992,
-    'blue_battle_front_3':         lambda c : c['gTrainerFrontPicTable'] + 1000,
-    'blue_palette':                lambda c : c['sObjectEventSpritePalettes'] + 16,
-    'blue_palette_battle_front_1': lambda c : c['gTrainerFrontPicPaletteTable'] + 848,
-    'blue_palette_battle_front_2': lambda c : c['gTrainerFrontPicPaletteTable'] + 992,
-    'blue_palette_battle_front_3': lambda c : c['gTrainerFrontPicPaletteTable'] + 1000,
+    'blue_walking':                ('gObjectEventGraphicsInfoPointers', 288,  False),
+    'blue_battle_front_1':         ('gTrainerFrontPicTable',            848,  False),
+    'blue_battle_front_2':         ('gTrainerFrontPicTable',            992,  False),
+    'blue_battle_front_3':         ('gTrainerFrontPicTable',            1000, False),
+    'blue_palette':                ('sObjectEventSpritePalettes',       16,   False),
+    'blue_palette_battle_front_1': ('gTrainerFrontPicPaletteTable',     848,  False),
+    'blue_palette_battle_front_2': ('gTrainerFrontPicPaletteTable',     992,  False),
+    'blue_palette_battle_front_3': ('gTrainerFrontPicPaletteTable',     1000, False),
+
+    'red_battle_throw_anim':     ('gTrainerBackAnimsPtrTable', 0, False),
+    'leaf_battle_throw_anim':    ('gTrainerBackAnimsPtrTable', 4, False),
+    'emerald_battle_throw_anim': ('gTrainerBackAnimsPtrTable', 8, False),
+    'frlg_battle_throw_anim':    ('gTrainerBackAnimsPtrTable', 0, False),
 }
 
 FR_LG_OVERWORLD_SPRITE_ADDRESSES = {
-    'red_walking_running':  lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 0 ],
-    'red_bike':             lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 4 ],
-    'red_surfing':          lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 8 ],
-    'red_field_move':       lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 12, c['gObjectEventGraphicsInfoPointers'] + 20 ],
-    'red_fishing':          lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 16 ],
-    'red_bike_vs_seeker':   lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 24 ],
-    'leaf_walking_running': lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 28 ],
-    'leaf_bike':            lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 32 ],
-    'leaf_surfing':         lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 36 ],
-    'leaf_field_move':      lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 40, c['gObjectEventGraphicsInfoPointers'] + 48 ],
-    'leaf_fishing':         lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 44 ],
-    'leaf_bike_vs_seeker':  lambda c : [ c['gObjectEventGraphicsInfoPointers'] + 52 ],
+    'red_walking_running':  [ 0 ],
+    'red_bike':             [ 4 ],
+    'red_surfing':          [ 8 ],
+    'red_field_move':       [ 12, 20 ],
+    'red_fishing':          [ 16 ],
+    'red_bike_vs_seeker':   [ 24 ],
+    'leaf_walking_running': [ 28 ],
+    'leaf_bike':            [ 32 ],
+    'leaf_surfing':         [ 36 ],
+    'leaf_field_move':      [ 40, 48 ],
+    'leaf_fishing':         [ 44 ],
+    'leaf_bike_vs_seeker':  [ 52 ],
+    'blue_walking':         [ 288 ],
 }
 
 FR_LG_OVERWORLD_PALETTE_IDS = {
@@ -168,9 +178,12 @@ FIRERED_DATA_ADDRESSES_ORIGINAL = {
     'gTrainerBackPicTable': 0x239fa4,
     'gTrainerBackPicPaletteTable': 0x239fd4,
     'sTrainerBackSpriteTemplates': 0x25df50,
-    'gObjectEventSpriteOamTables_16x16': 0x50954c,
-    'gObjectEventSpriteOamTables_16x32': 0x5095a0,
-    'gObjectEventSpriteOamTables_32x32': 0x5095f4,
+    'gTrainerBackAnimsPtrTable': 0x239f74,
+    'sBackAnims_Red': 0x239f44,
+    'sBackAnims_RSBrendan': 0x239f64,
+    'gObjectEventSpriteOamTables_16x16': 0x3a3748,
+    'gObjectEventSpriteOamTables_16x32': 0x3a379c,
+    'gObjectEventSpriteOamTables_32x32': 0x3a37f0,
 }
 FIRERED_REV1_DATA_ADDRESSES_ORIGINAL = {
     'LoadObjectEventPalette': 0x05f4c4,
@@ -195,6 +208,9 @@ FIRERED_REV1_DATA_ADDRESSES_ORIGINAL = {
     'gTrainerBackPicTable': 0x23a014,
     'gTrainerBackPicPaletteTable': 0x23a044,
     'sTrainerBackSpriteTemplates': 0x25dfc0,
+    'gTrainerBackAnimsPtrTable': 0x239fe4,
+    'sBackAnims_Red': 0x239fb4,
+    'sBackAnims_RSBrendan': 0x239fd4,
     'gObjectEventSpriteOamTables_16x16': 0x3a37b8,
     'gObjectEventSpriteOamTables_16x32': 0x3a380c,
     'gObjectEventSpriteOamTables_32x32': 0x3a3860,
@@ -222,6 +238,9 @@ LEAFGREEN_DATA_ADDRESSES_ORIGINAL = {
     'gTrainerBackPicTable': 0x239f80,
     'gTrainerBackPicPaletteTable': 0x239fb0,
     'sTrainerBackSpriteTemplates': 0x25df30,
+    'gTrainerBackAnimsPtrTable': 0x239f50,
+    'sBackAnims_Red': 0x239f20,
+    'sBackAnims_RSBrendan': 0x239f40,
     'gObjectEventSpriteOamTables_16x16': 0x3a3728,
     'gObjectEventSpriteOamTables_16x32': 0x3a377c,
     'gObjectEventSpriteOamTables_32x32': 0x3a37d0,
@@ -249,6 +268,9 @@ LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL = {
     'gTrainerBackPicTable': 0x239ff0,
     'gTrainerBackPicPaletteTable': 0x23a020,
     'sTrainerBackSpriteTemplates': 0x25dfa0,
+    'gTrainerBackAnimsPtrTable': 0x239fc0,
+    'sBackAnims_Red': 0x239f90,
+    'sBackAnims_RSBrendan': 0x239fb0,
     'gObjectEventSpriteOamTables_16x16': 0x3a3798,
     'gObjectEventSpriteOamTables_16x32': 0x3a37ec,
     'gObjectEventSpriteOamTables_32x32': 0x3a3840,
@@ -295,23 +317,27 @@ FR_LG_VALID_OVERWORLD_SPRITE_SIZES = [
     { 'width': 32, 'height': 32, 'data': 'gObjectEventSpriteOamTables_32x32' },
 ]
 
+FR_LG_POINTER_REFERENCES = {
+    'overworld_palette_table': [ ('LoadObjectEventPalette', 40), ('PatchObjectPalette', 56), ('FindObjectEventPaletteIndexByTag', 40)]
+}
+
 FR_LG_SPRITES_REQUIREMENTS = {
     'pokemon_front':             { 'frames': [1, 2], 'width': 64, 'height': 64 },
     'pokemon_back':              { 'frames': 1,      'width': 64, 'height': 64 },
     'pokemon_icon':              { 'frames': 2,      'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES },
     'pokemon_footprint':         { 'frames': 1,      'width': 16, 'height': 16, 'palette_size': 2, 'palette': VALID_FOOTPRINT_PALETTE },
     'pokemon_hatch_anim':        { 'frames': 1,      'width': 32, 'height': 136 },
-    'trainer_walking_running':   { 'frames': 20,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'trainer_bike':              { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'trainer_surfing':           { 'frames': 12,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'trainer_field_move':        { 'frames': 9,      'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'trainer_fishing':           { 'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'trainer_bike_vs_seeker':    { 'frames': 6,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_walking_running':   { 'frames': 20,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_bike':              { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_surfing':           { 'frames': 12,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_field_move':        { 'frames': 9,      'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_fishing':           { 'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_bike_vs_seeker':    { 'frames': 6,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
+    'players_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
+    'players_battle_back':       { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
+    'players_battle_back_throw': { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
+    'trainer_walking':           { 'frames': 10,     'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
     'trainer_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
-    'trainer_battle_back':       { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
-    'trainer_battle_back_throw': { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
-    'strainr_walking':           { 'frames': 10,     'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'strainr_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
 }
 
 FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS = {
@@ -331,9 +357,9 @@ FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS = {
         'pokemon_sback':  { 'palette': VALID_UNOWN_SHINY_PALETTE },
     },
     'Blue': {
-        'strainr_walking':        { 'frames': 9 },
-        'strainr_battle_front_1': { 'frames': 1, 'width': 64, 'height': 64 },
-        'strainr_battle_front_2': { 'frames': 1, 'width': 64, 'height': 64 },
-        'strainr_battle_front_3': { 'frames': 1, 'width': 64, 'height': 64 },
+        'trainer_walking':        { 'frames': 9 },
+        'trainer_battle_front_1': { 'frames': 1, 'width': 64, 'height': 64 },
+        'trainer_battle_front_2': { 'frames': 1, 'width': 64, 'height': 64 },
+        'trainer_battle_front_3': { 'frames': 1, 'width': 64, 'height': 64 },
     }
 }
