@@ -393,8 +393,8 @@ SPINE_CRAWLER           = "Spine Crawler"
 BILE_LAUNCHER           = "Bile Launcher"
 INFESTED_BUNKER         = "Infested Bunker"
 INFESTED_MISSILE_TURRET = "Infested Missile Turret"
-NYDUS_WORM              = "Nydus Worm (Nydus Network)"
-ECHIDNA_WORM            = "Echidna Worm (Nydus Network)"
+NYDUS_WORM              = "Nydus Worm"
+ECHIDNA_WORM            = "Echidna Worm"
 
 # Zerg Weapon / Armor Upgrades
 ZERG_UPGRADE_PREFIX = "Progressive Zerg"

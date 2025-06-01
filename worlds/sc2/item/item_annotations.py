@@ -115,6 +115,14 @@ ITEM_NAME_ANNOTATIONS = {
     item_names.YGGDRASIL:                 "(Zerg Mercenary)",
     item_names.CAUSTIC_HORRORS:           "(Zerg Mercenary)",
 
+    item_names.SPORE_CRAWLER:             "(Zerg Building)",
+    item_names.SPINE_CRAWLER:             "(Zerg Building)",
+    item_names.BILE_LAUNCHER:             "(Zerg Building)",
+    item_names.INFESTED_BUNKER:           "(Zerg Building)",
+    item_names.INFESTED_MISSILE_TURRET:   "(Zerg Building)",
+    item_names.NYDUS_WORM:                "(Nydus Network)",
+    item_names.ECHIDNA_WORM:              "(Nydus Network)",
+
     item_names.ZEALOT:       "(Gateway, Aiur)",
     item_names.CENTURION:    "(Gateway, Nerazim)",
     item_names.SENTINEL:     "(Gateway, Purifier)",
@@ -163,4 +171,8 @@ ITEM_NAME_ANNOTATIONS = {
     item_names.MOTHERSHIP:   "(Stargate, Tal'darim)",
     item_names.ARBITER:      "(Stargate, Aiur)",
     item_names.ORACLE:       "(Stargate, Nerazim)",
+
+    item_names.PHOTON_CANNON:      "(Protoss Building)",
+    item_names.KHAYDARIN_MONOLITH: "(Protoss Building)",
+    item_names.SHIELD_BATTERY:     "(Protoss Building)",
 }
