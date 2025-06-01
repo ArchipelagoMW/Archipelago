@@ -523,7 +523,7 @@ class PossTrapWeight(Range):
     internal_name = "poss_trap_weight"
     range_start = 0
     range_end = 100
-    default = 15
+    default = 5
 
 class BonkTrapWeight(Range):
     """
