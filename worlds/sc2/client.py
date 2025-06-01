@@ -27,6 +27,7 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from .item import item_names, item_parents, race_to_item_type
+from .item.item_annotations import ITEM_NAME_ANNOTATIONS
 from .item.item_groups import item_name_groups, unlisted_item_name_groups, ItemGroupNames
 from . import options, VICTORY_MODULO
 from .options import (
@@ -577,6 +578,12 @@ class SC2JSONtoTextParser(JSONtoTextParser):
         codes = node["color"].split(";")
         buffer = "".join(self.color_code(code) for code in codes if code in self.color_codes)
         return buffer + self._handle_text(node) + '</c>'
+    
+    def _handle_item_name(self, node: JSONMessagePart) -> str:
+        annotation = ITEM_NAME_ANNOTATIONS.get(node["text"])
+        if annotation is not None:
+            node["text"] += f" {annotation}"
+        return super()._handle_item_name(node)
 
     def color_code(self, code: str) -> str:
         return '<c val="' + self.color_codes[code] + '">'
