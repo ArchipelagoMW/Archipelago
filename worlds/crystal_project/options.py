@@ -1,9 +1,15 @@
 from dataclasses import dataclass
-from typing import Type, Any
+from typing import Type, Any, List
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option, OptionGroup
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
 
+def create_option_groups() -> List[OptionGroup]:
+    option_group_list: List[OptionGroup] = []
+    for name, options in crystal_project_option_groups.items():
+        option_group_list.append(OptionGroup(name=name, options=options))
+
+    return option_group_list
 #"""Goal Options"""
 class Goal(Choice):
     """
@@ -237,3 +243,11 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
     randomizeMusic: RandomizeMusic
+
+crystal_project_option_groups: Dict[str, List[Any]] = {
+    "Goal Options": [Goal, ClamshellsQuantity, ClamshellsInPool, NewWorldStoneJobQuantity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity],
+    "Progression Options": [LevelGating, LevelUpsInPool, EasyLeveling, ProgressiveEquipmentMode, KeyMode],
+    "Item Pool Options": [StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
+    "Bonus Fun": [RandomizeMusic]
+}
