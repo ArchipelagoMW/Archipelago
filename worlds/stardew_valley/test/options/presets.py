@@ -255,7 +255,7 @@ def minimal_locations_maximal_items():
         options.Fishsanity.internal_name: options.Fishsanity.option_none,
         options.Friendsanity.internal_name: options.Friendsanity.option_none,
         options.FriendsanityHeartSize.internal_name: 8,
-        options.Eatsanity.internal_name: frozenset(EatsanityOptionName.lock_effects),
+        options.Eatsanity.internal_name: frozenset([EatsanityOptionName.lock_effects]),
         options.Goal.internal_name: options.Goal.option_craft_master,
         options.Mods.internal_name: frozenset(),
         options.Monstersanity.internal_name: options.Monstersanity.option_none,
