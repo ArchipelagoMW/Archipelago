@@ -485,8 +485,8 @@ class SplitEXP(Toggle):
     display_name = "Split EXP"
 
 
-class RandomizeWildPokemon(Choice):
-    """Randomize all wild Pokemon and game corner prize Pokemon. match_types will select a Pokemon with at least one
+class RandomizePokemonLocations(Choice):
+    """Randomize all obtainable Pokemon locations. match_types will select a Pokemon with at least one
     type matching the original type of the original Pokemon. match_base_stats will prefer Pokemon with closer base stat
     totals. match_types_and_base_stats will match types and will weight towards similar base stats, but there may not be
     many to choose from."""
@@ -506,33 +506,11 @@ class Area1To1Mapping(Toggle):
     display_name = "Area 1-to-1 Mapping"
 
 
-class RandomizeStarterPokemon(Choice):
-    """Randomize the starter Pokemon choices."""
-    display_name = "Randomize Starter Pokemon"
-    default = 0
-    option_vanilla = 0
-    option_match_types = 1
-    option_match_base_stats = 2
-    option_match_types_and_base_stats = 3
-    option_completely_random = 4
-
-
-class RandomizeStaticPokemon(Choice):
-    """Randomize one-time gift and encountered Pokemon. These will always be first evolution stage Pokemon."""
-    display_name = "Randomize Static Pokemon"
-    default = 0
-    option_vanilla = 0
-    option_match_types = 1
-    option_match_base_stats = 2
-    option_match_types_and_base_stats = 3
-    option_completely_random = 4
-
-
 class RandomizeLegendaryPokemon(Choice):
     """Randomize Legendaries. Mew has been added as an encounter at the Vermilion dock truck.
-    Shuffle will shuffle the legendaries with each other. Static will shuffle them into other static Pokemon locations.
-    'Any' will allow legendaries to appear anywhere based on wild and static randomization options, and their locations
-    will be randomized according to static Pokemon randomization options."""
+    "Shuffle" will shuffle the legendaries with each other.
+    "Static" will shuffle them into any locations besides wild encounters.
+    "Any" will allow legendaries to appear anywhere. Same as Static if Randomize Pokemon Locations is turned off."""
     display_name = "Randomize Legendary Pokemon"
     default = 0
     option_vanilla = 0
@@ -543,7 +521,10 @@ class RandomizeLegendaryPokemon(Choice):
 
 class CatchEmAll(Choice):
     """Guarantee all first evolution stage Pokemon are available, or all Pokemon of all stages.
-    "All Pokemon" only makes a difference when wild Pokemon are randomized."""
+
+    When Pokemon locations are not randomized, "All Pokemon" is treated the same as "First Stage" and version exclusives
+    are available regardless of game, and starters + Eevee are shuffled randomly into Game Corner Prize slots,
+    in-game trades, or for sale at the Route 4 Pokemon Center."""
     display_name = "Catch 'Em All"
     default = 0
     option_off = 0
@@ -985,17 +966,15 @@ class PokemonRBOptions(PerGameCommonOptions):
     level_scaling: LevelScaling
     exp_modifier: ExpModifier
     split_exp: SplitEXP
-    randomize_wild_pokemon: RandomizeWildPokemon
+    randomize_pokemon_locations: RandomizePokemonLocations
     area_1_to_1_mapping: Area1To1Mapping
-    randomize_starter_pokemon: RandomizeStarterPokemon
-    randomize_static_pokemon: RandomizeStaticPokemon
     randomize_legendary_pokemon: RandomizeLegendaryPokemon
     catch_em_all: CatchEmAll
+    randomize_trainer_parties: RandomizeTrainerParties
+    trainer_legendaries: TrainerLegendaries
     randomize_pokemon_stats: RandomizePokemonStats
     randomize_pokemon_catch_rates: RandomizePokemonCatchRates
     minimum_catch_rate: MinimumCatchRate
-    randomize_trainer_parties: RandomizeTrainerParties
-    trainer_legendaries: TrainerLegendaries
     move_balancing: MoveBalancing
     no_trapping_moves: NoTrappingMoves
     fix_combat_bugs: FixCombatBugs

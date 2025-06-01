@@ -75,6 +75,9 @@ def set_rules(multiworld, world, player):
         "Vermilion Dock - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
         "Cerulean Cave B1F - Legendary Pokemon": lambda state: logic.can_surf(state, world, player),
 
+        "Saffron Fighting Dojo - Gift 1": lambda state: state.has("Defeat Sabrina", player),
+        "Saffron Fighting Dojo - Gift 2": lambda state: state.has("Defeat Sabrina", player),
+
         **{f"Pokemon Tower {floor}F - Wild Pokemon - {slot}": lambda state: state.has("Silph Scope", player) for floor in range(3, 8) for slot in range(1, 11)},
         "Pokemon Tower 6F - Restless Soul": lambda state: state.has("Silph Scope", player),  # just for level scaling
 

@@ -362,7 +362,7 @@ def verify_hm_moves(multiworld, world, player):
     def intervene(move, test_state):
         move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
         viable_mons = [mon for mon in world.local_poke_data if world.local_poke_data[mon]["tms"][6] & move_bit]
-        if world.options.randomize_wild_pokemon and viable_mons:
+        if world.options.randomize_pokemon_locations and viable_mons:
             accessible_slots = [loc for loc in multiworld.get_reachable_locations(test_state, player) if
                                 loc.type == "Wild Encounter"]
 

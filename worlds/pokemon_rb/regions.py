@@ -1679,7 +1679,7 @@ def create_regions(world):
     connect(multiworld, player, "Pewter City", "Pewter City-E")
     connect(multiworld, player, "Pewter City-M", "Pewter City", one_way=True)
     connect(multiworld, player, "Pewter City", "Pewter City-M", lambda state: logic.can_cut(state, world, player), one_way=True)
-    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route(state, world, player), one_way=True)
+    connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route3(state, world, player), one_way=True)
     connect(multiworld, player, "Route 3", "Pewter City-E", one_way=True)
     connect(multiworld, player, "Route 4-W", "Route 3")
     connect(multiworld, player, "Route 24", "Cerulean City-Water", lambda state: logic.can_surf(state, world, player))
