@@ -41,7 +41,7 @@ class LADXPatchExtensions(worlds.Files.APPatchExtension):
         return rom
 
 class LADXProcedurePatch(worlds.Files.APProcedurePatch):
-    hash = [LADX_HASH]
+    hash = LADX_HASH
     game = LINKS_AWAKENING
     patch_file_ending: str = ".apladx"
     result_file_ending: str = ".gbc"
