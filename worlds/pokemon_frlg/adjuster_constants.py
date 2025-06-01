@@ -20,8 +20,10 @@ FR_LG_EGG_SPRITES = [*FR_LG_POKEMON_SPRITES, 'hatch_anim']
 FR_LG_EGG_PALETTES = {**FR_LG_POKEMON_PALETTES, 'palette_hatch': POKEMON_HATCH_PALETTE_EXTRACTION_PRIORITY}
 
 FR_LG_TRAINER_FOLDERS = ['Red', 'Leaf']
-FR_LG_TRAINER_SPRITES = ['walking_running', 'bike', 'surfing', 'field_move', 'fishing', 'bike_vs_seeker', 'battle_front', 'battle_back']
-FR_LG_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ['walking_running', 'bike', 'surfing', 'field_move', 'fishing', 'bike_vs_seeker']
+FR_LG_TRAINER_SPRITES = ['walking_running', 'bike', 'surfing', 'field_move', 'fishing', 'bike_vs_seeker',
+                         'battle_front', 'battle_back']
+FR_LG_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ['walking_running', 'bike', 'surfing', 'field_move', 'fishing',
+                                                  'bike_vs_seeker']
 FR_LG_TRAINER_PALETTES = {
     'palette': FR_LG_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY,
     'palette_reflection': TRAINER_REFLECTION_PALETTE_EXTRACTION_PRIORITY,
@@ -135,19 +137,19 @@ FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS = {
 }
 
 FR_LG_OVERWORLD_SPRITE_ADDRESSES = {
-    'red_walking_running':  [ 0 ],
-    'red_bike':             [ 4 ],
-    'red_surfing':          [ 8 ],
-    'red_field_move':       [ 12, 20 ],
-    'red_fishing':          [ 16 ],
-    'red_bike_vs_seeker':   [ 24 ],
-    'leaf_walking_running': [ 28 ],
-    'leaf_bike':            [ 32 ],
-    'leaf_surfing':         [ 36 ],
-    'leaf_field_move':      [ 40, 48 ],
-    'leaf_fishing':         [ 44 ],
-    'leaf_bike_vs_seeker':  [ 52 ],
-    'blue_walking':         [ 288 ],
+    'red_walking_running':  [0],
+    'red_bike':             [4],
+    'red_surfing':          [8],
+    'red_field_move':       [12, 20],
+    'red_fishing':          [16],
+    'red_bike_vs_seeker':   [24],
+    'leaf_walking_running': [28],
+    'leaf_bike':            [32],
+    'leaf_surfing':         [36],
+    'leaf_field_move':      [40, 48],
+    'leaf_fishing':         [44],
+    'leaf_bike_vs_seeker':  [52],
+    'blue_walking':         [288],
 }
 
 FR_LG_OVERWORLD_PALETTE_IDS = {
@@ -312,54 +314,56 @@ FR_LG_DATA_ADDRESS_INFOS = {
 }
 
 FR_LG_VALID_OVERWORLD_SPRITE_SIZES = [
-    { 'width': 16, 'height': 16, 'data': 'gObjectEventSpriteOamTables_16x16' },
-    { 'width': 16, 'height': 32, 'data': 'gObjectEventSpriteOamTables_16x32' },
-    { 'width': 32, 'height': 32, 'data': 'gObjectEventSpriteOamTables_32x32' },
+    {'width': 16, 'height': 16, 'data': 'gObjectEventSpriteOamTables_16x16'},
+    {'width': 16, 'height': 32, 'data': 'gObjectEventSpriteOamTables_16x32'},
+    {'width': 32, 'height': 32, 'data': 'gObjectEventSpriteOamTables_32x32'},
 ]
 
 FR_LG_POINTER_REFERENCES = {
-    'overworld_palette_table': [ ('LoadObjectEventPalette', 40), ('PatchObjectPalette', 56), ('FindObjectEventPaletteIndexByTag', 40)]
+    'overworld_palette_table': [('LoadObjectEventPalette', 40), ('PatchObjectPalette', 56),
+                                ('FindObjectEventPaletteIndexByTag', 40)]
 }
 
 FR_LG_SPRITES_REQUIREMENTS = {
-    'pokemon_front':             { 'frames': [1, 2], 'width': 64, 'height': 64 },
-    'pokemon_back':              { 'frames': 1,      'width': 64, 'height': 64 },
-    'pokemon_icon':              { 'frames': 2,      'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES },
-    'pokemon_footprint':         { 'frames': 1,      'width': 16, 'height': 16, 'palette_size': 2, 'palette': VALID_FOOTPRINT_PALETTE },
-    'pokemon_hatch_anim':        { 'frames': 1,      'width': 32, 'height': 136 },
-    'players_walking_running':   { 'frames': 20,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_bike':              { 'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_surfing':           { 'frames': 12,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_field_move':        { 'frames': 9,      'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_fishing':           { 'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_bike_vs_seeker':    { 'frames': 6,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE },
-    'players_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
-    'players_battle_back':       { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
-    'players_battle_back_throw': { 'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5 },
-    'trainer_walking':           { 'frames': 10,     'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE },
-    'trainer_battle_front':      { 'frames': 1,      'width': 64, 'height': 64 },
+    'pokemon_front':             {'frames': [1, 2], 'width': 64, 'height': 64},
+    'pokemon_back':              {'frames': 1,      'width': 64, 'height': 64},
+    'pokemon_icon':              {'frames': 2,      'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES},
+    'pokemon_footprint':         {'frames': 1,      'width': 16, 'height': 16, 'palette_size': 2,
+                                  'palette': VALID_FOOTPRINT_PALETTE},
+    'pokemon_hatch_anim':        {'frames': 1,      'width': 32, 'height': 136},
+    'players_walking_running':   {'frames': 20,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_bike':              {'frames': 9,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_surfing':           {'frames': 12,     'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_field_move':        {'frames': 9,      'width': 16, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_fishing':           {'frames': 12,     'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_bike_vs_seeker':    {'frames': 6,      'width': 32, 'height': 32, 'palette': VALID_WEAK_OVERWORLD_PALETTE},
+    'players_battle_front':      {'frames': 1,      'width': 64, 'height': 64},
+    'players_battle_back':       {'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5},
+    'players_battle_back_throw': {'frames': [4, 5], 'width': 64, 'height': 64, 'internal_frames': 5},
+    'trainer_walking':           {'frames': 10,     'width': 16, 'height': 32, 'palette': VALID_OVERWORLD_PALETTE},
+    'trainer_battle_front':      {'frames': 1,      'width': 64, 'height': 64},
 }
 
 FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS = {
     'Castform': {
-        'pokemon_front':      { 'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True },
-        'pokemon_back':       { 'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True },
+        'pokemon_front':      {'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True},
+        'pokemon_back':       {'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True},
     },
     'Deoxys': {
-        'pokemon_front':      { 'frames': 2 },
-        'pokemon_back':       { 'frames': 2 },
-        'pokemon_icon':       { 'frames': 4 },
+        'pokemon_front':      {'frames': 2},
+        'pokemon_back':       {'frames': 2},
+        'pokemon_icon':       {'frames': 4},
     },
     'Unown A': {
-        'pokemon_front':  { 'palette': VALID_UNOWN_PALETTE },
-        'pokemon_back':   { 'palette': VALID_UNOWN_PALETTE },
-        'pokemon_sfront': { 'palette': VALID_UNOWN_SHINY_PALETTE },
-        'pokemon_sback':  { 'palette': VALID_UNOWN_SHINY_PALETTE },
+        'pokemon_front':  {'palette': VALID_UNOWN_PALETTE},
+        'pokemon_back':   {'palette': VALID_UNOWN_PALETTE},
+        'pokemon_sfront': {'palette': VALID_UNOWN_SHINY_PALETTE},
+        'pokemon_sback':  {'palette': VALID_UNOWN_SHINY_PALETTE},
     },
     'Blue': {
-        'trainer_walking':        { 'frames': 9 },
-        'trainer_battle_front_1': { 'frames': 1, 'width': 64, 'height': 64 },
-        'trainer_battle_front_2': { 'frames': 1, 'width': 64, 'height': 64 },
-        'trainer_battle_front_3': { 'frames': 1, 'width': 64, 'height': 64 },
+        'trainer_walking':        {'frames': 9},
+        'trainer_battle_front_1': {'frames': 1, 'width': 64, 'height': 64},
+        'trainer_battle_front_2': {'frames': 1, 'width': 64, 'height': 64},
+        'trainer_battle_front_3': {'frames': 1, 'width': 64, 'height': 64},
     }
 }
