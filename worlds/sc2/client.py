@@ -331,7 +331,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             elif isinstance(element, int):
                 items = items_received.get(element, [])
                 if not items:
-                    ColouredMessage(indent_str)("- ").coloured(name, "black")(" - not obtained").send(self.ctx)
+                    ColouredMessage(indent_str)("- ").coloured(name, "red")(" - not obtained").send(self.ctx)
                 for item in items:
                     (ColouredMessage(indent_str)('- ')
                         .item(item.item, self.ctx.slot, flags=item.flags)
