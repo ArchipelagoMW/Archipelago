@@ -1092,21 +1092,21 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
         return False
     return isinstance(obj, typing.Iterable)
 
-def data_to_bps_patch(data):
+def data_to_bps_patch(data: dict[str, int | dict[str, int | bytes]]):
     """
-    Accepts data of type:
+    Accepts data following the archetype:
     {
-        "length": number
+        "length": int
         "data": [
             {
-                "address": number
-                "length": number
-                "data": bytearray
+                "address": int
+                "length": int
+                "data": bytes
             }
         ]
     }"""
 
-    patch = [
+    patch: list[Header | SourceRead | TargetRead] = [
         Header(data["length"], data["length"], "")
     ]
     current_ptr = 0
@@ -1120,7 +1120,7 @@ def data_to_bps_patch(data):
         patch.append(SourceRead(data["length"] - current_ptr))
     return patch
 
-def open_image_secure(path):
+def open_image_secure(path: str):
     """Used to open PNG files using Pillow with extra security checks instead of PIL.Image.open"""
     with open(path, 'rb') as image_file:
         image_data = image_file.read(8)

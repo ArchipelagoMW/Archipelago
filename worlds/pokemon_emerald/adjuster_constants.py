@@ -1083,7 +1083,7 @@ EMERALD_TRAINER_PALETTES = {
     "palette_battle_front": TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
 }
 
-EMERALD_SIMPLE_TRAINER_FOLDERS = []
+EMERALD_SIMPLE_TRAINER_FOLDERS: list[str] = []
 SIMPLE_TRAINER_SPRITES = ["walking", "battle_front"]
 SIMPLE_TRAINER_MAIN_PALETTE_EXTRACTION_PRIORITY = ["walking"]
 SIMPLE_TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY = ["battle_front"]
@@ -1092,7 +1092,7 @@ SIMPLE_TRAINER_PALETTES = {
     "palette_battle_front": SIMPLE_TRAINER_BATTLE_FRONT_PALETTE_EXTRACTION_PRIORITY
 }
 
-EMERALD_FOLDER_OBJECT_INFOS = [
+EMERALD_FOLDER_OBJECT_INFOS: list[dict[str, str | list[str] | dict[str, list[str]]]] = [
     {
         "name": "Egg",
         "key": "pokemon",
@@ -1249,7 +1249,7 @@ EMERALD_OVERWORLD_PALETTE_IDS = {
     "Underwater": 0x1115
 }
 
-OVERWORLD_PALETTE_INFO = {
+OVERWORLD_PALETTE_INFO: dict[str, int | dict[str, int]] = {
     "palette_ptr": {"shift": 0, "size": 4},
     "id":          {"shift": 4, "size": 2},
     "padding":     {"shift": 6, "size": 2},
@@ -1362,7 +1362,7 @@ EMERALD_DATA_ADDRESSES_ORIGINAL = {
 EMERALD_DATA_ADDRESS_BEGINNING = 0x00
 EMERALD_DATA_ADDRESS_END = 0xFFFFFF
 
-EMERALD_DATA_ADDRESS_INFOS = {
+EMERALD_DATA_ADDRESS_INFOS: dict[str, int | dict[str, int]] = {
     "Emerald": {
         "crc32": 0x1f1c08fb,
         "original_addresses": EMERALD_DATA_ADDRESSES_ORIGINAL,
@@ -1372,7 +1372,7 @@ EMERALD_DATA_ADDRESS_INFOS = {
     }
 }
 
-EMERALD_VALID_OVERWORLD_SPRITE_SIZES = [
+EMERALD_VALID_OVERWORLD_SPRITE_SIZES: list[dict[str, int | str]] = [
     {"width": 16, "height": 16, "data": "sOamTables_16x16"},
     {"width": 16, "height": 32, "data": "sOamTables_16x32"},
     {"width": 32, "height": 32, "data": "sOamTables_32x32"},
@@ -1517,7 +1517,7 @@ VALID_UNOWN_SHINY_PALETTE = [
     49,  57,  106
 ]
 
-EMERALD_SPRITES_REQUIREMENTS = {
+EMERALD_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {
     "pokemon_front_anim":        {"frames": 2,      "width": 64, "height": 64},
     "pokemon_back":              {"frames": 1,      "width": 64, "height": 64},
     "pokemon_icon":              {"frames": 2,      "width": 32, "height": 32, "palette": VALID_ICON_PALETTES},
@@ -1540,7 +1540,7 @@ EMERALD_SPRITES_REQUIREMENTS = {
 }
 
 
-EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS = {
+EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {
     "Castform": {
         "pokemon_front_anim": {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},
         "pokemon_back":       {"frames": 4, "palette_size": 16, "palettes": 4, "palette_per_frame": True},

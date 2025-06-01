@@ -15,7 +15,8 @@ from .adjuster_patcher import extract_sprites as extract_sprites_internal
 from worlds.pokemon_emerald.adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, \
     POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS
 from argparse import Namespace
-from tkinter import messagebox, IntVar
+from tkinter import Widget, messagebox, IntVar
+from tkinter.tix import Tk
 
 try:
     from worlds.pokemon_emerald.adjuster_constants import EMERALD_PATCH_EXTENSIONS
@@ -33,8 +34,8 @@ is_sprite_pack_valid = False
 is_patch_valid = False
 rom_version = "Emerald"
 object_folders = None
-ap_rom = None
-is_rom_ap = None
+ap_rom: bytearray = None
+is_rom_ap: IntVar = None
 
 adjuster_name = "Gen 3" if frlg_support and emerald_support \
     else "Emerald" if emerald_support \
@@ -43,14 +44,14 @@ adjuster_name = "Gen 3" if frlg_support and emerald_support \
 adjuster_extensions = [".gba", *EMERALD_PATCH_EXTENSIONS.split("/"), *FR_LG_PATCH_EXTENSIONS.split("/")]
 GAME_GEN3_ADJUSTER = "Pokemon Gen 3 Adjuster"
 
-def build_ap_rom(_patch):
+def build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given or opens the AP ROM file that was given
     if not _patch:
         messagebox.showerror(title="Failure",
                              message=f"Cannot build the AP ROM: a patch file or a patched ROM is required!")
         return
 
-    rom_data = None
+    rom_data: bytearray = None
     if os.path.splitext(_patch)[-1] == ".gba":
         # Load up the ROM directly
         with open(_patch, "rb") as stream:
@@ -63,13 +64,13 @@ def build_ap_rom(_patch):
             rom_data = frlg_build_ap_rom(_patch)
     if not rom_data:
         messagebox.showerror(title="Failure",
-                             message=f"Cannot build the AP ROM: invalid file extension: \
-                                       requires {"/".join(adjuster_extensions[1:])}")
-        return
+                             message=f"Cannot build the AP ROM: invalid file extension: "\
+                                     + f"requires {"/".join(adjuster_extensions[1:])}")
+        return bytearray()
 
     return rom_data
 
-def emerald_build_ap_rom(_patch):
+def emerald_build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given
     # Handles Pokemon Emerald patching
     if os.path.splitext(_patch)[-1] == ".apemerald":
@@ -77,9 +78,9 @@ def emerald_build_ap_rom(_patch):
         _, ap_rom_path = Patch.create_rom_file(_patch)
         with open(ap_rom_path, "rb") as stream:
             return bytearray(stream.read())
-    return None
+    return bytearray()
 
-def frlg_build_ap_rom(_patch):
+def frlg_build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given
     # Handles Pokemon Firered/Leafgreen patching
     if os.path.splitext(_patch)[-1] in [".apfirered", ".apleafgreen"]:
@@ -87,9 +88,9 @@ def frlg_build_ap_rom(_patch):
         _, ap_rom_path = Patch.create_rom_file(_patch)
         with open(ap_rom_path, "rb") as stream:
             return bytearray(stream.read())
-    return None
+    return bytearray()
 
-def emerald_fetch_patch(_patch):
+def emerald_fetch_patch(_patch: str) -> tuple[str, str]:
     # Asks for a ROM or patch file then validates it
     # Handles the check for Pokemon Emerald
     if _patch and os.path.exists(_patch):
@@ -104,7 +105,7 @@ def emerald_fetch_patch(_patch):
             return _patch, "Emerald"
     return _patch, "Unknown"
 
-def frlg_fetch_patch(_patch):
+def frlg_fetch_patch(_patch: str) -> tuple[str, str]:
     # Asks for a ROM or patch file then validates it
     # Handles the check for Pokemon Firered/Leafgreen
     if _patch and os.path.exists(_patch):
@@ -119,7 +120,7 @@ def frlg_fetch_patch(_patch):
             return _patch, frlg_get_rom_version(patch_data)
     return _patch, "Unknown"
 
-def frlg_get_rom_version(_rom_data):
+def frlg_get_rom_version(_rom_data: bytearray):
     # Retrieves and returns the version of the ROM given
     allowed_internal_names = {"POKEMON FIRE": "Firered", "POKEMON LEAF": "Leafgreen"}
     internal_name = _rom_data[0xA0:0xAC].decode("utf-8")
@@ -129,7 +130,7 @@ def frlg_get_rom_version(_rom_data):
         return "Unknown"
     return f"{version_name}{"_rev1" if internal_revision == 1 else ""}"
 
-def build_sprite_pack_patch(_sprite_pack):
+def build_sprite_pack_patch(_sprite_pack: str):
     # Builds the BPS patch including all of the sprite pack's data
     errors, has_error = validate_sprite_pack(_sprite_pack)
     if has_error:
@@ -141,21 +142,19 @@ def build_sprite_pack_patch(_sprite_pack):
 
 async def main():
     # Main function of the adjuster
-    parser = get_argparser()
-    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_GEN3_ADJUSTER))
-
     logging.basicConfig(format="%(message)s", level=logging.INFO)
 
-    args = parser.parse_args()
-    is_command_line = args.patch
+    parser = get_argparser()
+    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_GEN3_ADJUSTER))
+    is_command_line: str = args.patch
 
     if not emerald_support and not frlg_support:
         if is_command_line:
-            raise Exception("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or \
-                             Pokemon Firered/Leafgreen.")
+            raise Exception("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
+                            + "Pokemon Firered/Leafgreen.")
         else:
-            messagebox.showerror("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or \
-                                  Pokemon Firered/Leafgreen.")
+            messagebox.showerror("This Archipelago installation doesn't contain tools for neither Pokemon Emerald or "
+                                 + "Pokemon Firered/Leafgreen.")
             return
 
     if not is_command_line:
@@ -195,7 +194,7 @@ def adjust_gui():
     # ROM/Patch Selection, Sprite Pack Selection #
     ##############################################
 
-    def patch_select(_forced_patch = None):
+    def patch_select(_forced_patch: str = None):
         # Run when we ask for the user to select a ROM or patch file,
         # or when the ROM or patch file needs to be reloaded
         global is_patch_valid
@@ -204,12 +203,12 @@ def adjust_gui():
         if not _forced_patch is None:
             patch = _forced_patch
         else:
-            title = f"Choose a Pokemon {adjuster_name} ROM ({adjuster_extensions[0]}) or a \
-                {"/".join(adjuster_extensions[1:])} patch file."
+            title = f"Choose a Pokemon {adjuster_name} ROM ({adjuster_extensions[0]}) or a "\
+                    + f"{"/".join(adjuster_extensions[1:])} patch file."
 
             from tkinter import filedialog
-            old_patch_folder = os.path.dirname(opts.patch.get()) if is_patch_valid else None
-            old_patch_file = opts.patch.get() if is_patch_valid else None
+            old_patch_folder: str = os.path.dirname(opts.patch.get()) if is_patch_valid else None
+            old_patch_file: str = opts.patch.get() if is_patch_valid else None
             patch = filedialog.askopenfilename(initialdir=old_patch_folder, initialfile=old_patch_file, title=title,
                                                filetypes=[("Rom & Patch Files", adjuster_extensions)])
 
@@ -242,8 +241,8 @@ def adjust_gui():
             trainer_folder_object_info = find_folder_object_info("trainer")
             players_folder_object_info = find_folder_object_info("players")
             pokemon_folder_object_info = find_folder_object_info("pokemon")
-            object_folders = trainer_folder_object_info["folders"] + players_folder_object_info["folders"] + \
-                pokemon_folder_object_info["folders"]
+            object_folders = trainer_folder_object_info["folders"] + players_folder_object_info["folders"] \
+                             + pokemon_folder_object_info["folders"]
             check_sprite_extraction("")
 
             # If the patch is valid, show the isAP checkbox, the Sprite Extractor
@@ -259,7 +258,7 @@ def adjust_gui():
                 sprite_preview_frame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottom_frame.pack(side=TOP, pady=5)
 
-    def sprite_pack_select(_forced_sprite_pack = None, _forced_folder = "", _forced_sprite = ""):
+    def sprite_pack_select(_forced_sprite_pack: str = None, _forced_folder = "", _forced_sprite = ""):
         # Run when we ask for the user to select a sprite pack,
         # or when the sprite pack needs to be reloaded
         global is_sprite_pack_valid
@@ -267,9 +266,9 @@ def adjust_gui():
         if not _forced_sprite_pack is None:
             sprite_pack = _forced_sprite_pack
         else:
-            old_sprite_pack_folder = opts.sprite_pack.get() if is_sprite_pack_valid else None
+            old_sprite_pack_folder: str = opts.sprite_pack.get() if is_sprite_pack_valid else None
             sprite_pack = filedialog.askdirectory(initialdir=old_sprite_pack_folder, title="Choose a sprite pack.",
-                                                 mustexist=True)
+                                                  mustexist=True)
         opts.sprite_pack.set(sprite_pack)
         is_sprite_pack_valid = len(sprite_pack) > 0 and os.path.isdir(sprite_pack)
         try_validate_sprite_pack(opts.sprite_pack.get())
@@ -285,7 +284,7 @@ def adjust_gui():
             bottom_frame.pack(side=TOP, pady=5)
 
             # Detect existing object folders and list them
-            existing_folders = []
+            existing_folders: list[str] = []
             for dir in os.listdir(sprite_pack):
                 if dir in object_folders:
                     existing_folders.append(dir)
@@ -318,10 +317,10 @@ def adjust_gui():
     # Balloon object used for displaying tooltips in the app, if some elements are hovered over
     main_window_tooltip = Balloon(main_window_frame)
     main_window_tooltip.bind_widget(patch_is_ap_checkbox,
-                                    balloonmsg="Override this value if your ROM is badly detected as an AP one.\n\
-                                                If enabled, the adjuster will use data addresses from\n\
-                                                the Archipelago patch for the game to inject the various data \
-                                                it needs to.")
+                                    balloonmsg="Override this value if your ROM is badly detected as an AP one.\n"
+                                               + "If enabled, the adjuster will use data addresses from "
+                                               + "the Archipelago patch for the game to inject the various data "
+                                               + "it needs to.")
 
     patch_dialog_frame.pack(side=TOP, expand=True, fill=X)
     patch_label.pack(side=LEFT)
@@ -338,20 +337,20 @@ def adjust_gui():
 
     def check_sprite_extraction(_):
         # Enables or disables the sprite extraction button if the sprite's name is valid or not
-        extraction_folder_valid = sprite_extractor_folder.get() and sprite_extractor_folder.get() in object_folders
+        extraction_folder_valid = sprite_extractor_folder.get() in object_folders
         sprite_extractor_button["state"] = NORMAL if extraction_folder_valid else DISABLED
 
     def extract_sprites():
         # Run when the Extract button is pressed
         # Extract all the sprites from the given Pokemon or Trainer into the given folder
-        if not sprite_extractor_folder.get() or not sprite_extractor_folder.get() in object_folders:
+        if not sprite_extractor_folder.get() in object_folders:
             return
 
-        base_folder_path = None
+        base_folder_path: str = None
         if is_sprite_pack_valid:
             base_folder_path = opts.sprite_pack.get()
         output_folder = filedialog.askdirectory(initialdir=base_folder_path, mustexist=False,
-                                               title="Select a folder to extract the sprites to.")
+                                                title="Select a folder to extract the sprites to.")
         if len(output_folder) == 0:
             return
         if not os.path.isdir(output_folder):
@@ -359,17 +358,17 @@ def adjust_gui():
 
         handle_address_collection(ap_rom, rom_version, is_rom_ap.get())
         extract_sprites_internal(sprite_extractor_folder.get(), output_folder)
-        messagebox.showinfo(title="Success", message=f"All sprites for {sprite_extractor_folder.get()} \
-                                                       have successfully been extracted!")
+        messagebox.showinfo(title="Success", message=f"All sprites for {sprite_extractor_folder.get()} "\
+                                                     + "have successfully been extracted!")
 
     def extract_all_sprites():
         # Run when the Extract All button is pressed
         # Extract all the sprites from all Pokemons and Trainers into the given folder
-        base_folder_path = None
+        base_folder_path: str = None
         if is_sprite_pack_valid:
             base_folder_path = opts.sprite_pack.get()
         output_folder = filedialog.askdirectory(initialdir=base_folder_path, mustexist=False,
-                                               title="Select a folder to extract all sprites to.")
+                                                title="Select a folder to extract all sprites to.")
         if len(output_folder) == 0:
             return
         if not os.path.isdir(output_folder):
@@ -392,8 +391,8 @@ def adjust_gui():
     sprite_extractor_frame.grid_columnconfigure(0, weight=1)
     sprite_extractor_frame.grid_columnconfigure(1, weight=1)
     sprite_extractor_info = Label(sprite_extractor_frame,
-                                  text="Type the name of the Trainer/Pokemon you want to\n\
-                                        extract then press the button below.")
+                                  text="Type the name of the Trainer/Pokemon you want to\n"
+                                        + "extract then press the button below.")
     sprite_extractor_info.grid(row=0, column=0, columnspan=2, pady=2)
     sprite_extractor_combobox = AutocompleteCombobox(sprite_extractor_frame, textvariable=sprite_extractor_folder,
                                                      width=14)
@@ -410,8 +409,8 @@ def adjust_gui():
     # Sprite and Palette Viewer #
     #############################
 
-    pokemon_rom_data = None
-    pokemon_saved_data = None
+    pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = None
+    pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] = None
 
     def switch_sprite_folder(_folder: str, _sprite: str=""):
         # Run whenever the current sprite folder is changed
@@ -435,7 +434,7 @@ def adjust_gui():
 
         dir: str = os.path.join(opts.sprite_pack.get(), _folder)
         # Retrieve and list valid sprites
-        sprites_in_folder = []
+        sprites_in_folder: list[str] = []
         if is_sprite_pack_valid and _folder and os.path.isdir(dir):
             for sprite in os.listdir(dir):
                 full_path = os.path.join(dir, sprite)
@@ -484,7 +483,6 @@ def adjust_gui():
                     validate_pokemon_data_string(_folder,pokemon_saved_data_string)
                 if pokemon_saved_data_has_error:
                     messagebox.showerror(title="Error while loading Pokemon data", message=pokemon_saved_data_errors)
-                    pokemon_saved_data = None
                 else:
                     pokemon_saved_data = destringify_pokemon_data(data_folder, pokemon_saved_data_string)
                     for field in pokemon_saved_data:
@@ -616,7 +614,7 @@ def adjust_gui():
     palette_preview_frame.grid(row=1, column=1, padx=8)
     palette_label = Label(palette_preview_frame, text="Palette")
     palette_label.grid(row=0, column=0, columnspan=4)
-    palette_previews = []
+    palette_previews: list[Frame] = []
     for i in range(16):
         palette_preview = Frame(palette_preview_frame, width=32, height=32, bg="#000000")
         palette_preview.grid(row=1+math.floor(i/4), column=i%4)
@@ -638,7 +636,7 @@ def adjust_gui():
         if pokemon_name.startswith("Unown "):
             pokemon_name = "Unown A"
         # Build an object with all the registered data
-        new_pokemon_data = {
+        new_pokemon_data: dict[str, int | list[dict[str, str | int]]] = {
             "hp": int(pokemon_hp.get()),
             "atk": int(pokemon_atk.get()),
             "def": int(pokemon_def.get()),
@@ -706,13 +704,13 @@ def adjust_gui():
     pokemon_gender_ratio = StringVar()
     pokemon_forbid_flip = IntVar()
 
-    def update_field_validity(fieldName, value):
+    def update_field_validity(fieldName: str, value: bool):
         # Disables the Pokemon data saving button if any data is erroneous
         valid_field_values[fieldName] = value
         any_value_invalid = list(k for k, v in valid_field_values.items() if not v)
         data_edition_button["state"] = DISABLED if any_value_invalid else NORMAL
 
-    def update_field_change(fieldName, value):
+    def update_field_change(fieldName: str, value: bool):
         # Displays the Pokemon data saving button's text in bold if any data has been changed
         changed_field_values[fieldName] = value
         any_value_changed = list(k for k, v in changed_field_values.items() if v)
@@ -721,7 +719,7 @@ def adjust_gui():
     normal_font = font.nametofont("TkDefaultFont")
     bold_font = normal_font.copy()
     bold_font["weight"] = "bold"
-    def check_value(entry, label, field, balloonMessage):
+    def check_value(entry: Widget | StringVar | IntVar, label: Label, field: str, balloonMessage: str):
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
         # Red if invalid, blue if different from the ROM, bold if different from the saved data
@@ -751,9 +749,9 @@ def adjust_gui():
         main_window_tooltip.unbind_widget(label)
         main_window_tooltip.bind_widget(
             label,
-            balloonmsg=f"{balloonMessage}\
-                         {f"\n{errors}" if has_error else blue_balloon_message if is_different_from_rom else ""}\
-                         {bold_balloon_message if is_different_from_data else ""}"
+            balloonmsg=f"{balloonMessage}"
+                       + f"{f"\n{errors}" if has_error else blue_balloon_message if is_different_from_rom else ""}"
+                       + f"{bold_balloon_message if is_different_from_data else ""}"
         )
         update_field_validity(field, not has_error)
         update_field_change(field, is_different_from_data)
@@ -774,15 +772,20 @@ def adjust_gui():
         check_value(pokemon_forbid_flip, forbid_flip_label, "forbid_flip", forbid_flip_balloon_message)
         check_value(move_pool_input, move_pool_label, "move_pool", move_pool_balloon_message)
 
-    stat_hp_label = stat_spd_label = stat_atk_label = stat_def_label = stat_spatk_label = stat_spdef_label = None
+    stat_hp_label: Label = None
+    stat_spd_label: Label = None
+    stat_atk_label: Label = None
+    stat_def_label: Label = None
+    stat_spatk_label: Label = None
+    stat_spdef_label: Label = None
     stat_hp_balloon_message = "This value changes the Pokemon's base HP.\nAwaits a value between 1 and 255."
     stat_spd_balloon_message = "This value changes the Pokemon's base Speed.\nAwaits a value between 1 and 255."
     stat_atk_balloon_message = "This value changes the Pokemon's base Attack.\nAwaits a value between 1 and 255."
     stat_def_balloon_message = "This value changes the Pokemon's base Defense.\nAwaits a value between 1 and 255."
-    stat_spatk_balloon_message = "This value changes the Pokemon's base Special Attack.\n\
-                                  Awaits a value between 1 and 255."
-    stat_spdef_balloon_message = "This value changes the Pokemon's base Special Defense.\n\
-                                  Awaits a value between 1 and 255."
+    stat_spatk_balloon_message = "This value changes the Pokemon's base Special Attack.\n"\
+                                 + "Awaits a value between 1 and 255."
+    stat_spdef_balloon_message = "This value changes the Pokemon's base Special Defense.\n"\
+                                 + "Awaits a value between 1 and 255."
 
     def build_stat_frame():
         # Tab for changing the Pokemon's base stats
@@ -863,16 +866,21 @@ def adjust_gui():
                             lambda _: check_value(pokemon_spdef, stat_spdef_label, "spdef", stat_spdef_balloon_message),
                             add="+")
 
-    type_1_label = type_2_label = ability_1_label = ability_2_label = gender_ratio_label = forbid_flip_label = None
+    type_1_label: Label = None
+    type_2_label: Label = None
+    ability_1_label: Label = None
+    ability_2_label: Label = None
+    gender_ratio_label: Label = None
+    forbid_flip_label: Label = None
     type_1_balloon_message = "This value changes the Pokemon's first type."
-    type_2_balloon_message = "This value changes the Pokemon's second type.\n\
-                              Make it match the first type if you want the Pokemon to only have one type."
+    type_2_balloon_message = "This value changes the Pokemon's second type.\n"\
+                             + "Make it match the first type if you want the Pokemon to only have one type."
     ability_1_balloon_message = "This value changes the Pokemon's first ability."
-    ability_2_balloon_message = "This value changes the Pokemon's second ability.\n\
-                                 Make it match the first ability if you want the Pokemon to only have one ability."
+    ability_2_balloon_message = "This value changes the Pokemon's second ability.\n"\
+                                + "Make it match the first ability if you want the Pokemon to only have one ability."
     gender_ratio_balloon_message = "This value changes the Pokemon's gender ratio."
-    forbid_flip_balloon_message = "This value dictates whether the Pokemon's sprite can be flipped or not.\n\
-                                   The sprite is flipped when looking at a Pokemon's status screen in your team."
+    forbid_flip_balloon_message = "This value dictates whether the Pokemon's sprite can be flipped or not.\n"\
+                                  + "The sprite is flipped when looking at a Pokemon's status screen in your team."
 
     def build_extra_data_frame():
         # Tab for changing the Pokemon's types, abilities, gender ratio and whether its sprite can be flipped or not
@@ -959,11 +967,12 @@ def adjust_gui():
         forbid_flip_label.pack(side=TOP)
         forbid_flip_input.pack(side=TOP)
 
-    move_pool_input = move_pool_label = None
-    move_pool_balloon_message = "This value contains the Pokemon's levelup learnset.\nEach line must contain a move.\n\
-                                 Each move must be written in the format \"<move>: <level>\".\n\
-                                 With <move> being a known Pokemon move from this generation.\n\
-                                 And with <level> being a number between 1 and 100."
+    move_pool_input: ScrolledText = None
+    move_pool_label: Label = None
+    move_pool_balloon_message = "This value contains the Pokemon's levelup learnset.\nEach line must contain a move.\n"\
+                                + "Each move must be written in the format \"<move>: <level>\".\n"\
+                                + "With <move> being a known Pokemon move from this generation.\n"\
+                                + "And with <level> being a number between 1 and 100."
 
     def build_move_pool_frame():
         # Tab for changing the Pokemon's levelup moveset
@@ -1031,12 +1040,15 @@ def adjust_gui():
 
     bottom_frame.pack(side=TOP, pady=(5,5))
 
-    def try_validate_sprite_pack(_sprite_pack, _patch_changed = False):
+    def try_validate_sprite_pack(_sprite_pack: str, _patch_changed = False):
         # Validates the sprite pack if both the ROM/patch file and the sprite packs are valid
         has_error = False
         if is_patch_valid:
             global ap_rom
             ap_rom = ap_rom if not _patch_changed else build_ap_rom(opts.patch.get())
+            if not ap_rom:
+                sprite_preview_error_label["text"] = "Could not build the AP ROM."
+                return
             is_rom_ap_state = handle_address_collection(ap_rom, rom_version,
                                                         None if _patch_changed else is_rom_ap.get())
             if _patch_changed:
@@ -1052,9 +1064,9 @@ def adjust_gui():
             sprite_preview_error_label["text"] = errors or "No anomaly detected! The sprite pack is valid."
         else:
             adjust_button["state"] = DISABLED
-            sprite_preview_error_label["text"] = "Both a sprite pack and a patch/ROM must be selected to validate the \
-                                                  sprite pack."
-        return has_error
+            sprite_preview_error_label["text"] = "Both a sprite pack and a patch/ROM must be selected to validate the "\
+                                                 + "sprite pack."
+        return
 
     patch_select(adjuster_settings.patch or "")
     sprite_pack_select(adjuster_settings.sprite_pack or "")
@@ -1062,17 +1074,21 @@ def adjust_gui():
     tkinter_center_window(window)
     window.mainloop()
 
-def set_icon(window):
+
+def set_icon(window: Tk):
     # Sets the adjuster's icon
     from tkinter import PhotoImage
     logo = PhotoImage(file=local_path("data", "icon.png"))
     window.tk.call("wm", "iconphoto", window._w, logo)
 
-def adjust(args):
+
+def adjust(args: Namespace):
     # Adjusts the ROM by applying the patch file of one was given,
     # Building a BPS patch from the given sprite pack, and applying it
     global ap_rom
     ap_rom = ap_rom or build_ap_rom(args.patch)
+    if not ap_rom:
+        raise Exception("Could not build the AP ROM.")
     handle_address_collection(ap_rom, rom_version, is_rom_ap.get())
 
     if not args.sprite_pack:
@@ -1090,7 +1106,7 @@ def adjust(args):
     adjusted_ap_rom = bytearray(len(ap_rom))
     apply_bps_patch(sprite_pack_bps_patch, ap_rom, adjusted_ap_rom)
 
-    rom_path_with_no_extension = os.path.splitext(args.patch)
+    rom_path_with_no_extension: tuple[str, str] = os.path.splitext(args.patch)
     adjusted_rom_path = rom_path_with_no_extension[0] + "-adjusted.gba"
     with open(adjusted_rom_path, "wb") as output_file:
         output_file.write(adjusted_ap_rom)

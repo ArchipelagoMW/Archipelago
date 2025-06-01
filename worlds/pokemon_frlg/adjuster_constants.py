@@ -281,7 +281,7 @@ LEAFGREEN_REV1_DATA_ADDRESSES_ORIGINAL = {
 FR_LG_DATA_ADDRESS_BEGINNING = 0xA00000
 FR_LG_DATA_ADDRESS_END = 0xCFFFFF
 
-FR_LG_DATA_ADDRESS_INFOS = {
+FR_LG_DATA_ADDRESS_INFOS: dict[str, int|dict[str, int]] = {
     **EMERALD_DATA_ADDRESS_INFOS,
     'Firered': {
         'crc32': 0xdd88761c,
@@ -324,7 +324,7 @@ FR_LG_POINTER_REFERENCES = {
                                 ('FindObjectEventPaletteIndexByTag', 40)]
 }
 
-FR_LG_SPRITES_REQUIREMENTS = {
+FR_LG_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {
     'pokemon_front':             {'frames': [1, 2], 'width': 64, 'height': 64},
     'pokemon_back':              {'frames': 1,      'width': 64, 'height': 64},
     'pokemon_icon':              {'frames': 2,      'width': 32, 'height': 32, 'palette': VALID_ICON_PALETTES},
@@ -344,7 +344,7 @@ FR_LG_SPRITES_REQUIREMENTS = {
     'trainer_battle_front':      {'frames': 1,      'width': 64, 'height': 64},
 }
 
-FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS = {
+FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = {
     'Castform': {
         'pokemon_front':      {'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True},
         'pokemon_back':       {'frames': 4, 'palette_size': 16, 'palettes': 4, 'palette_per_frame': True},
