@@ -479,7 +479,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             and item.data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Evolution_Pit)
         ):
             if (SC2Mission.ENEMY_WITHIN not in missions
-                or world.options.grant_story_tech.value == GrantStoryTech.option_true
+                or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (item_names.ZERGLING, item_names.ROACH, item_names.HYDRALISK, item_names.INFESTOR)
             ):
                 item.flags |= ItemFilterFlags.FilterExcluded
@@ -493,7 +493,7 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
             # because that item type is mixed in with e.g. Reconstruction Beam and Overwatch
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
-                or world.options.grant_story_tech.value == GrantStoryTech.option_true
+                or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (
                             item_names.IMMORTAL, item_names.ANNIHILATOR,
                             item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
@@ -579,6 +579,17 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
     else:
         soa_passive_presence = False
 
+    remove_kerrigan_abils = (
+        # TODO: Kerrigan presence Zerg/Everywhere
+        not kerrigan_is_present
+        or (world.options.grant_story_tech.value == GrantStoryTech.option_grant and not kerrigan_build_missions)
+        or (
+            world.options.grant_story_tech.value == GrantStoryTech.option_allow_substitutes
+            and len(kerrigan_missions) == 1
+            and kerrigan_missions[0] == SC2Mission.SUPREME
+        )
+    )
+
     for item in item_list:
         # Filter Nova equipment if you never get Nova
         if not nova_missions and (item.name in item_groups.nova_equipment):
@@ -592,12 +603,8 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Kerrigan abilities if there's no kerrigan
-        if item.data.type == item_tables.ZergItemType.Ability:
-            if not kerrigan_is_present:
-                # TODO: Kerrigan presence Zerg/Everywhere
-                item.flags |= ItemFilterFlags.FilterExcluded
-            elif world.options.grant_story_tech and not kerrigan_build_missions:
-                item.flags |= ItemFilterFlags.FilterExcluded
+        if item.data.type == item_tables.ZergItemType.Ability and remove_kerrigan_abils:
+            item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Spear of Adun if it's off
         if item.name in item_tables.spear_of_adun_calldowns and not soa_presence:

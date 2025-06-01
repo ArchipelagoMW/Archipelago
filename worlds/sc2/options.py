@@ -754,7 +754,7 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     Affects abilities like Reconstruction Beam or Overwatch.
     Does not affect building abilities like Orbital Assimilators or Warp Harmonization.
 
-    Not Presents: Autocasts are not available.
+    Not Present: Autocasts are not available.
     LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
@@ -810,15 +810,20 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     default = range_end
 
 
-class GrantStoryTech(Toggle):
+class GrantStoryTech(Choice):
     """
-    If set true, grants special tech required for story mission completion for duration of the mission.
-    Otherwise, you need to find these tech by a normal means as items.
-    Affects story missions like Back in the Saddle and Supreme
+    Controls handling of no-build missions that may require very specific items, such as Kerrigan or Nova abilities.
 
-    Locked to true if Required Tactics is set to no logic.
+    no_grant: don't grant anything special; the player must find items to play the missions
+    grant: grant a minimal inventory that will allow the player to beat the mission, in addition to other items found
+    allow_substitutes: Reworks the most constrained mission - Supreme - to allow other items to substitute for Leaping Strike and Mend
+
+    Locked to "grant" if Required Tactics is set to no logic.
     """
     display_name = "Grant Story Tech"
+    option_no_grant = 0
+    option_grant = 1
+    option_allow_substitutes = 2
 
 
 class GrantStoryLevels(Choice):

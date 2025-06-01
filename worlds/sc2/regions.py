@@ -10,7 +10,7 @@ from .options import (
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns,
     static_mission_orders,
     TwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants, NovaGhostOfAChanceVariant,
-    NerfUnitBaselines
+    NerfUnitBaselines, GrantStoryTech
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order import SC2MissionOrder
@@ -121,7 +121,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     # HotS
     kerriganless = world.options.kerrigan_presence.value not in kerrigan_unit_available \
         or SC2Campaign.HOTS not in enabled_campaigns
-    if grant_story_tech:
+    if grant_story_tech == GrantStoryTech.option_grant:
         # Additional starter mission if player is granted story tech
         pools.move_mission(SC2Mission.ENEMY_WITHIN, Difficulty.EASY, Difficulty.STARTER)
         pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
@@ -129,19 +129,20 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, Difficulty.MEDIUM, Difficulty.STARTER)
     if not nerf_unit_baselines:
         pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
-    if (grant_story_tech and grant_story_levels) or kerriganless:
+    if (grant_story_tech == GrantStoryTech.option_grant and grant_story_levels) or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         pools.move_mission(SC2Mission.SUPREME, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_INFINITE_CYCLE, Difficulty.HARD, Difficulty.STARTER)
         pools.move_mission(SC2Mission.CONVICTION, Difficulty.MEDIUM, Difficulty.STARTER)
-    if \
-            not grant_story_tech \
-                    and (
-                    SC2Campaign.NCO in enabled_campaigns
-                    and world.options.nova_ghost_of_a_chance_variant.value == NovaGhostOfAChanceVariant.option_auto
-            ) or (
-                    world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-            ):
+    if (grant_story_tech != GrantStoryTech.option_grant
+        and (
+            world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+            or (
+                SC2Campaign.NCO in enabled_campaigns
+                and world.options.nova_ghost_of_a_chance_variant.value == NovaGhostOfAChanceVariant.option_auto
+            )
+        )
+    ):
         # Using NCO tech for this mission that must be acquired
         pools.move_mission(SC2Mission.GHOST_OF_A_CHANCE, Difficulty.STARTER, Difficulty.MEDIUM)
     if world.options.take_over_ai_allies.value == TakeOverAIAllies.option_true:

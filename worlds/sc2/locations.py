@@ -7,6 +7,7 @@ from .options import (
     RequiredTactics,
     LocationInclusion,
     KerriganPresence,
+    GrantStoryTech,
     get_enabled_campaigns,
 )
 from .mission_tables import SC2Mission, SC2Campaign
@@ -2348,7 +2349,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.VICTORY,
             lambda state: logic.basic_kerrigan(state)
             or kerriganless
-            or logic.story_tech_granted,
+            or logic.grant_story_tech == GrantStoryTech.option_grant,
         ),
         make_location_data(
             SC2Mission.BACK_IN_THE_SADDLE.mission_name,
@@ -2357,7 +2358,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
             or kerriganless
-            or logic.story_tech_granted,
+            or logic.grant_story_tech == GrantStoryTech.option_grant,
         ),
         make_location_data(
             SC2Mission.BACK_IN_THE_SADDLE.mission_name,
@@ -2384,7 +2385,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             LocationType.EXTRA,
             lambda state: logic.basic_kerrigan(state)
             or kerriganless
-            or logic.story_tech_granted,
+            or logic.grant_story_tech == GrantStoryTech.option_grant,
         ),
         make_location_data(
             SC2Mission.RENDEZVOUS.mission_name,
@@ -2642,7 +2643,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.zerg_pass_vents(state)
                 and (
-                    logic.story_tech_granted
+                    logic.grant_story_tech == GrantStoryTech.option_grant
                     or state.has_any(
                         {
                             item_names.ZERGLING_RAPTOR_STRAIN,
@@ -3533,7 +3534,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.story_tech_granted)
+                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
                     and logic.kerrigan_levels(state, 25)
                 )
             ),
@@ -3557,7 +3558,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
                 kerriganless
                 or (
                     logic.two_kerrigan_actives(state)
-                    and (logic.basic_kerrigan(state) or logic.story_tech_granted)
+                    and (logic.basic_kerrigan(state) or logic.grant_story_tech == GrantStoryTech.option_grant)
                     and logic.kerrigan_levels(state, 25)
                 )
             ),
@@ -5717,7 +5718,7 @@ def get_locations(world: Optional["SC2World"]) -> Tuple[LocationData, ...]:
             lambda state: (
                 logic.enemy_shadow_second_stage(state)
                 and (
-                    logic.story_tech_granted
+                    logic.grant_story_tech == GrantStoryTech.option_grant
                     or state.has(item_names.NOVA_BLINK, player)
                     or (
                         adv_tactics
