@@ -2,38 +2,9 @@
 
 ## Setting up the required mods
 
-BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
-
-1. Install OpenKH and the LUA Backend
-
-    Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
-    
-    Extract the files to a directory of your choosing.
-    
-    Open `OpenKh.Tools.ModsManager.exe` and run first time set up
-    
-    When prompted for game edition, choose `PC Release`, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`
-    
-    When prompted, install Panacea, then click `Next`
-    
-    When prompted, check KH1 plus any other AP game you play and click `Install and configure LUA backend`, then click `Next`
-    
-    Extracting game data for KH1 is unnecessary, but you may want to extract data for KH2 if you plan on playing KH2 AP
-    
-    Click `Finish`
-    
-2. Open `OpenKh.Tools.ModsManager.exe`
-
-3. Click the drop-down menu at the top-right and choose `Kingdom Hearts 1`
-
-4. Click `Mods>Install a New Mod`
-
-5. In `Add a new mod from GitHub` paste `gaithern/KH-1FM-AP-LUA`
-
-6. Click `Install`
-
-7. Navigate to Mod Loader and click `Build and Run`
-
+The KH1 AP Randomizer now requires external software to generate your mod.
+Setting up this software is subject to change.  You can find the most recent instructions for setting up your
+the mods after generation on the [KH1 AP Randomizer website](https://www.kh1fmrando.com/setup_guide.html)
 
 ## Configuring your YAML file
 

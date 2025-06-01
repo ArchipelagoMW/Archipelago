@@ -585,7 +585,7 @@ class ConsistentFinishers(Toggle):
 
 class EarlySkip(Toggle):
     """
-    If on, allows skipping cutscenes without waiting for them.
+    If on, allows skipping cutscenes immediately that normally take time to be able to skip.
     """
     display_name = "Early Skip"
 
@@ -863,6 +863,7 @@ kh1_option_groups = [
         ShortenGoMode,
         OneHP,
         FourByThree,
+        AutoAttack,
         BeepHack,
         ConsistentFinishers,
         EarlySkip,

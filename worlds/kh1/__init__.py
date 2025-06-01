@@ -330,6 +330,9 @@ class KH1World(World):
     def create_regions(self):
         create_regions(self)
     
+    def connect_entrances(self):
+        connect_entrances(self.multiworld, self.player)
+    
     def generate_output(self, output_directory: str):
         """
         Generates the json file for use with mod generator.

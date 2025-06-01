@@ -10,9 +10,9 @@ class KH1RegionData(NamedTuple):
 
 
 def create_regions(kh1world):
-    multiworld                             = kh1world.multiworld
-    player                                 = kh1world.player
-    options                                = kh1world.options
+    multiworld = kh1world.multiworld
+    player     = kh1world.player
+    options    = kh1world.options
     
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData([], ["Awakening", "Levels", "World Map"]),
@@ -567,6 +567,7 @@ def create_regions(kh1world):
     for name, data in regions.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
 
+def connect_entrances(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Awakening", player).connect(multiworld.get_region("Awakening", player))
     multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
     multiworld.get_entrance("Traverse Town", player).connect(multiworld.get_region("Traverse Town", player))
