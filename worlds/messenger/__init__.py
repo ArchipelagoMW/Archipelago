@@ -6,12 +6,12 @@ from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components
+from worlds.LauncherComponents import Component, Type, components, icon_paths
 from .client_setup import launch_game
 from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, TRAPS, \
     USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, option_groups, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
@@ -20,8 +20,17 @@ from .subclasses import MessengerItem, MessengerRegion, MessengerShopLocation
 from .transitions import disconnect_entrances, shuffle_transitions
 
 components.append(
-    Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
+    Component(
+        "The Messenger",
+        component_type=Type.CLIENT,
+        func=launch_game,
+        game_name="The Messenger",
+        supports_uri=True,
+        icon="The Messenger",
+        description="Launch The Messenger.\nInstalls and checks for updates for the randomizer.")
 )
+
+icon_paths["The Messenger"] = f"ap:{__name__}/assets/component_icon.png"
 
 
 class MessengerSettings(Group):
@@ -35,6 +44,7 @@ class MessengerSettings(Group):
 
 class MessengerWeb(WebWorld):
     theme = "ocean"
+    rich_text_options_doc = True
 
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
@@ -56,6 +66,7 @@ class MessengerWeb(WebWorld):
     )
 
     tutorials = [tut_en, plando_en]
+    option_groups = option_groups
 
 
 class MessengerWorld(World):
@@ -270,7 +281,7 @@ class MessengerWorld(World):
             disconnect_entrances(self)
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
-        attempts = 5
+        attempts = 20
         if self.options.shuffle_portals:
             self.portal_mapping = []
             self.spoiler_portal_mapping = {}
@@ -426,13 +437,13 @@ class MessengerWorld(World):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+            state.add_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+            state.remove_item("Shards", self.player, int(item.name.strip("Time Shard ()")))
         return change
 
     @classmethod
