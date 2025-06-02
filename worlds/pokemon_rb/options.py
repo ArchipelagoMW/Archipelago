@@ -903,6 +903,11 @@ class RandomizePokemonPalettes(Choice):
 
 
 class RandomizeMapMusic(Choice):
+    """Randomize the music played in each map.
+    Vanilla: Unchanged.
+    Shuffle: All maps that have the same music in vanilla get shuffled to the same random music tracks.
+    Randomize: All maps have music independently randomized.
+    Chaos: A random music track is chosen every time you enter a new map."""
     display_name = "Randomize Map Music"
     option_vanilla = 0
     option_shuffle = 1
