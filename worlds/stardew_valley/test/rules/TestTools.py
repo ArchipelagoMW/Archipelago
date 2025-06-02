@@ -1,6 +1,6 @@
 from collections import Counter
 
-from .. import SVTestBase
+from ..bases import SVTestBase
 from ... import options
 from ...options import ToolProgression, SeasonRandomization
 from ...strings.entrance_names import Entrance

@@ -2257,7 +2257,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
     add_rule_safe(multiworld, LocationName.weapons_bed_5, player,
                  lambda state: state.has(ItemName.eggman_jet_engine, player))
     add_rule_safe(multiworld, LocationName.security_hall_5, player,
-                  lambda state: state.has(ItemName.rouge_treasure_scope, player))
+                  lambda state: state.has(ItemName.rouge_pick_nails, player))
     add_rule_safe(multiworld, LocationName.cosmic_wall_5, player,
                   lambda state: state.has(ItemName.eggman_jet_engine, player))
 
@@ -2971,7 +2971,7 @@ def set_mission_upgrade_rules_hard(multiworld: MultiWorld, world: World, player:
 
         add_rule(multiworld.get_location(LocationName.mission_street_lifebox_2, player),
                  lambda state: (state.has(ItemName.tails_booster, player) and
--                               state.has(ItemName.tails_mystic_melody, player)))
+                                state.has(ItemName.tails_mystic_melody, player)))
         add_rule(multiworld.get_location(LocationName.eternal_engine_lifebox_2, player),
                  lambda state: state.has(ItemName.tails_booster, player))
 
