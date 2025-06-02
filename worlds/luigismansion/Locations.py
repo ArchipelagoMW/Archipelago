@@ -2029,7 +2029,7 @@ WALK_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDF88, bit_position=0, in_game_room_id=29, ram_byte_size=2)]),
     "Family Hallway Visited": LMLocationData("Family Hallway", 829, "Walk", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDF8A, bit_position=0, in_game_room_id=30, ram_byte_size=2)]),
-    "2F - Attic Stairwell Visited": LMLocationData("2F Rear Hallway", 782, "Walk", 0, [], remote_only=True,
+    "Attic Stairwell Visited": LMLocationData("2F Rear Hallway", 782, "Walk", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDF76, bit_position=0, in_game_room_id=33, ram_byte_size=2)]),
     "Master Bedroom Visited": LMLocationData("Master Bedroom", 796, "Walk", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDF92, bit_position=0, in_game_room_id=34, ram_byte_size=2)]),
