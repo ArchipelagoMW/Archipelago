@@ -902,6 +902,14 @@ class RandomizePokemonPalettes(Choice):
     option_completely_random = 3
 
 
+class RandomizeMapMusic(Choice):
+    display_name = "Randomize Map Music"
+    option_vanilla = 0
+    option_shuffle = 1
+    option_randomize = 2
+    option_chaos = 3
+
+
 @dataclass
 class PokemonRBOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
@@ -1006,4 +1014,5 @@ class PokemonRBOptions(PerGameCommonOptions):
     sleep_trap_weight: SleepTrapWeight
     ice_trap_weight: IceTrapWeight
     randomize_pokemon_palettes: RandomizePokemonPalettes
+    randomize_map_music: RandomizeMapMusic
     death_link: DeathLink

@@ -11,6 +11,7 @@ from .text import encode_text
 from .pokemon import set_mon_palettes
 from .regions import PokemonRBWarp, map_ids, town_map_coords
 from .rom_addresses import rom_addresses
+from .music import randomize_map_music
 
 if typing.TYPE_CHECKING:
     from . import PokemonRedBlueWorld
@@ -596,6 +597,8 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
         write_bytes(rom_addresses["Start_Inventory"] + item - 172000000, min(value, 255))
 
     set_mon_palettes(world, patch)
+
+    randomize_map_music(world, write_bytes)
 
     for move_data in world.local_move_data.values():
         if move_data["id"] == 0:
