@@ -1,3 +1,4 @@
+import copy
 from pkgutil import get_data
 from typing import Dict, Any, List, TYPE_CHECKING
 
@@ -37,7 +38,7 @@ def get_hints_by_option(multiworld: MultiWorld, player_hints: set[int]) -> None:
     for player_int in player_hints:
         world: "LMWorld" = multiworld.worlds[player_int]
         already_hinted_locations: List[Location] = []
-        hint_list = ALWAYS_HINT
+        hint_list = copy.copy(ALWAYS_HINT)
         if world.options.portrait_hints == 1:
             hint_list += PORTRAIT_HINTS
         for name in hint_list:
