@@ -498,7 +498,7 @@ class KH2Context(CommonContext):
                 await asyncio.sleep(0.5)
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
-            if itemdata.ability and location not in self.all_weapon_location_id:
+            if itemdata.ability:
                 if location in self.all_weapon_location_id:
                     return
                 # growth have reserved ability slots because of how the goa handles them
