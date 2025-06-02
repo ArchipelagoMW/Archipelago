@@ -825,7 +825,7 @@ class SC2Context(CommonContext):
                 self.slot_data_version,
                 args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
             )
-            self.mercenary_highlanders = args["slot_data"].get("mercenary_highlanders", MercenaryHighlanders.option_false) == MercenaryHighlanders.option_true
+            self.mercenary_highlanders = args["slot_data"].get("mercenary_highlanders", MercenaryHighlanders.option_false)
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
             self.max_upgrade_level = args["slot_data"].get("max_upgrade_level", MaxUpgradeLevel.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
