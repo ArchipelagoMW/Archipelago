@@ -169,8 +169,8 @@ class LMWorld(World):
         self.itempool: list[LMItem] = []
         self.pre_fill_items: list[LMItem] = []
         super(LMWorld, self).__init__(*args, **kwargs)
-        self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM.copy
-        self.open_doors: dict[int, int] = vanilla_door_state.copy
+        self.ghost_affected_regions: dict[str, str] = GHOST_TO_ROOM.copy()
+        self.open_doors: dict[int, int] = vanilla_door_state.copy()
         self.origin_region_name: str = "Foyer"
         self.finished_hints = threading.Event()
         self.finished_boo_scaling = threading.Event()
