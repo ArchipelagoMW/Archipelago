@@ -5,6 +5,7 @@ from dataclasses import fields
 from typing import ClassVar
 
 import yaml
+from yaml import CDumper as Dumper
 
 import Options
 import settings
@@ -897,7 +898,7 @@ class LMWorld(World):
         # Output the plando details to file
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
-            f.write(yaml.dump(output_data, sort_keys=False))
+            f.write(yaml.dump(output_data, sort_keys=False, Dumper=Dumper))
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
