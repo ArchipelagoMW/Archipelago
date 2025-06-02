@@ -127,7 +127,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData("Continental Tram", "Platform A", 3780),
 
-        LocationData("Neptune Shrine", "Neptune Shrine", 3781)
+        LocationData("Neptune Shrine", "Neptune Shrine", 3781),
     ]
 
     return home_point_table
