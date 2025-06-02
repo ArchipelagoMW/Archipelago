@@ -1321,7 +1321,7 @@ DRAWERS_LOCATION_TABLE = {
     "Guest Room End Table": LMLocationData("Guest Room", 580, "Furniture", 497, ["Water Element Medal"],
                                            update_ram_addr=[LMRamData(in_game_room_id=29)]),
     # "Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], 41), #TODO Prevents Ghost Spawns
-    # "Wardrobe East Dresser": LMLocationData("Wardrobe", 129, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
+    # "Wardrobe East Dresser": LMLocationData("Wardrobe", 871, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
     # "Dining Room L China Hutch": LMLocationData("Dining Room", 294, "Furniture", 278, [], 8), #TODO Prevents Speedy Spirit Spawn
 }
 
@@ -1578,7 +1578,7 @@ TREASURES_LOCATION_TABLE = {
                                                 update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant Center R": LMLocationData("Balcony", 84, "Plant", 613, ["Water Element Medal"],
                                              update_ram_addr=[LMRamData(in_game_room_id=62)]),
-    "Balcony Plant 5": LMLocationData("Balcony", 79, "Plant", 608, ["Water Element Medal"],
+    "Balcony Plant 5": LMLocationData("Balcony", 872, "Plant", 608, ["Water Element Medal"],
                                       update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant SE Corner": LMLocationData("Balcony", 80, "Plant", 609, ["Water Element Medal"],
                                               update_ram_addr=[LMRamData(in_game_room_id=62)]),
