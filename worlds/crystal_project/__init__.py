@@ -162,6 +162,12 @@ class CrystalProjectWorld(World):
 
         self.multiworld.itempool += pool
 
+    def get_total_clamshells(self) -> int:
+        total_clamshell_quantity = 3
+        if self.options.goal.value == self.options.goal.option_clamshells:
+            total_clamshell_quantity = self.options.clamshellGoalQuantity.value + self.options.extraClamshellsInPool.value
+        return total_clamshell_quantity
+
     #making randomized scholar ability pool
     def get_optional_scholar_abilities(self, count: int):
         return self.random.sample(optional_scholar_abilities, count)
@@ -392,7 +398,7 @@ class CrystalProjectWorld(World):
                     item = self.set_classifications(name)
                     pool.append(item)
 
-        for _ in range (self.options.clamshellsInPool):
+        for _ in range (self.get_total_clamshells()):
             item = self.set_classifications("Item - Clamshell")
             pool.append(item)
 
@@ -439,7 +445,7 @@ class CrystalProjectWorld(World):
             self.included_regions.append("The Old World")
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = "Item - Clamshell"
-            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellsQuantity.value)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellGoalQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
@@ -453,7 +459,7 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "goal": self.options.goal.value,
-            "clamshellsQuantity": self.options.clamshellsQuantity.value,
+            "clamshellGoalQuantity": self.get_total_clamshells(),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),

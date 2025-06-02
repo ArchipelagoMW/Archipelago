@@ -77,7 +77,10 @@ class CrystalProjectLogic:
             return 6
 
     def has_enough_clamshells(self, state: CollectionState):
-        return state.has("Item - Clamshell", self.player, self.options.clamshellsQuantity.value)
+        clamshell_quantity = 3
+        if self.options.goal.value == self.options.goal.option_clamshells:
+            clamshell_quantity = self.options.clamshellGoalQuantity.value
+        return state.has("Item - Clamshell", self.player, clamshell_quantity)
 
     def has_rental_quintar(self, state: CollectionState) -> bool:
         return state.has_any({"Item - Progressive Quintar Flute"}, self.player) or state.has("Item - Owl Drum", self.player)

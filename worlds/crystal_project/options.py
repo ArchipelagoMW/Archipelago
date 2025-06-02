@@ -46,23 +46,26 @@ class NewWorldStoneJobQuantity(Range):
     range_end = 23
     default = 18
 
-class ClamshellsQuantity(Range):
+class ClamshellGoalQuantity(Range):
     """
     If your goal is Clamshells, select how many you need to win.
+    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool to give the Manana Man. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
     range_start = 1
     range_end = 100
     default = 13
     
-class ClamshellsInPool(Range):
+class ExtraClamshellsInPool(Range):
     """
-    Select how many total Clamshells are in the item pool.  You probably only care if your goal is set to Clamshells.
+    If your goal is Clamshells, pick how many more Clamshells than your goal value that you want in the item pool.
+    This option makes it so you don't have to find every single Clamshell in your pool to win.
+    (This setting does nothing if your goal is not Clamshells.)
     """
-    display_name = "Clamshells in the pool"
+    display_name = "Extra Clamshells in the pool"
     range_start = 1
     range_end = 100
-    default = 19
+    default = 6
 
 #"""Location Options"""
 class IncludedRegions(Choice):
@@ -226,8 +229,8 @@ class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
     newWorldStoneJobQuantity: NewWorldStoneJobQuantity
-    clamshellsQuantity: ClamshellsQuantity
-    clamshellsInPool: ClamshellsInPool
+    clamshellGoalQuantity: ClamshellGoalQuantity
+    extraClamshellsInPool: ExtraClamshellsInPool
     jobRando: JobRando
     startingJobQuantity: StartingJobQuantity
     killBossesMode: KillBossesMode
@@ -245,7 +248,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     randomizeMusic: RandomizeMusic
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
-    "Goal Options": [Goal, ClamshellsQuantity, ClamshellsInPool, NewWorldStoneJobQuantity],
+    "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity],
     "Progression Options": [LevelGating, LevelUpsInPool, EasyLeveling, ProgressiveEquipmentMode, KeyMode],
     "Item Pool Options": [StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
