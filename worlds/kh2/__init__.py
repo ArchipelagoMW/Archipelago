@@ -399,7 +399,7 @@ class KH2World(World):
             goofy_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in
                                              Goofy_Checks.keys() if Goofy_Checks[location].yml != "Keyblade"]
             if len(goofy_get_bonus_location_pool) > len(self.goofy_get_bonus_abilities):
-                raise Exception(f"Too little abilities to fill goofy get bonus locations for player {self.multiworld.get_file_safe_player_name(self.player)}.")
+                raise Exception(f"Too little abilities to fill goofy get bonus locations for player {self.player_name}.")
             for location in goofy_get_bonus_location_pool:
                 self.random.choice(self.goofy_get_bonus_abilities)
                 random_ability = self.random.choice(self.goofy_get_bonus_abilities)
