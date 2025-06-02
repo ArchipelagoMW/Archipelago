@@ -49,7 +49,7 @@ class NewWorldStoneJobQuantity(Range):
 class ClamshellGoalQuantity(Range):
     """
     If your goal is Clamshells, select how many you need to win.
-    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool to give the Manana Man. Don't worry, he's cool with it.)
+    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool and the Manana Man asks for 2. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
     range_start = 1

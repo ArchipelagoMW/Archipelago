@@ -162,6 +162,12 @@ class CrystalProjectWorld(World):
 
         self.multiworld.itempool += pool
 
+    def get_goal_clamshells(self) -> int:
+        goal_clamshell_quantity = 2
+        if self.options.goal.value == self.options.goal.option_clamshells:
+            goal_clamshell_quantity = self.options.clamshellGoalQuantity.value
+        return goal_clamshell_quantity
+
     def get_total_clamshells(self) -> int:
         total_clamshell_quantity = 3
         if self.options.goal.value == self.options.goal.option_clamshells:
@@ -459,7 +465,7 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "goal": self.options.goal.value,
-            "clamshellGoalQuantity": self.get_total_clamshells(),
+            "clamshellGoalQuantity": self.get_goal_clamshells(),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "startWithMaps": bool(self.options.startWithMaps.value),
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
