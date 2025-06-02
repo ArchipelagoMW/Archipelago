@@ -5,7 +5,7 @@ from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 
-from .music_data import overworld_music_data
+from .music_data import overworld_music_data, misc_music_tracks
 from .rom_addresses import rom_addresses
 
 logger = logging.getLogger("Client")
@@ -231,7 +231,7 @@ class MarioLand2Client(BizHawkClient):
             self.locations_array = locations_checked
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
 
-        if music == 0x18:
+        if music == misc_music_tracks["Ending"]:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 

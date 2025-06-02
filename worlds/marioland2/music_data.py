@@ -19,12 +19,30 @@ overworld_music_data: dict[str, MarioLand2MusicData] = {
 
 level_music_tracks: dict[str, int] = {
     "Athletic": 0x01,
-    "Castle": 0x0B,
+    "Wario's Castle": 0x0B,
     "Graveyard": 0x11,
-    "Moon": 0x13,
+    "The Moon": 0x13,
     "Treetop": 0x14,
     "Seashore": 0x17,
     "Star Maze": 0x1D,
     "Haunted House": 0x1F,
     "Machine": 0x28
+}
+
+misc_music_tracks: dict[str, int] = {
+    "Lose a Life": 0x02,
+    "Level CLear": 0x03,
+    "Invincibility": 0x04,
+    "Game Over": 0x07,
+    "Prize Incoming": 0x08,
+    "World Clear": 0x0C,
+    "Bonus Chance": 0x15,
+    "Prize Win": 0x16,
+    "Ending": 0x18,
+    "Entering Tutle Zone": 0x19,
+    "Golden Coin Get": 0x1A,
+    "Boss Battle": 0x20,
+    "Wario Battle 1": 0x21,
+    "Wario Battle 2": 0x22,
+    "Wario Battle 3": 0x23
 }
