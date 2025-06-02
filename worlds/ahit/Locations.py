@@ -206,7 +206,7 @@ ahit_locations = {
     "Subcon Village - Graveyard Ice Cube": LocData(2000325077, "Subcon Forest Area"),
     "Subcon Village - House Top": LocData(2000325471, "Subcon Forest Area"),
     "Subcon Village - Ice Cube House": LocData(2000325469, "Subcon Forest Area"),
-    "Subcon Village - Snatcher Statue Chest": LocData(2000323730, "Subcon Forest Area", paintings=1),
+    "Subcon Village - Snatcher Statue Chest": LocData(2000323730, "Subcon Forest Behind Boss Firewall"),
     "Subcon Village - Stump Platform Chest": LocData(2000323729, "Subcon Forest Area"),
     "Subcon Forest - Giant Tree Climb": LocData(2000325470, "Subcon Forest Area"),
 
@@ -233,7 +233,7 @@ ahit_locations = {
     "Subcon Forest - Long Tree Climb Chest": LocData(2000323734, "Subcon Forest Area",
                                                      required_hats=[HatType.DWELLER], paintings=2),
 
-    "Subcon Forest - Boss Arena Chest": LocData(2000323735, "Subcon Forest Area"),
+    "Subcon Forest - Boss Arena Chest": LocData(2000323735, "Subcon Forest Boss Arena"),
 
     "Subcon Forest - Manor Rooftop": LocData(2000325466, "Subcon Forest Area",
                                              hit_type=HitType.dweller_bell, paintings=1),
@@ -411,7 +411,7 @@ act_completions = {
     "Act Completion (Mail Delivery Service)": LocData(2000312032, "Mail Delivery Service",
                                                       required_hats=[HatType.SPRINT]),
 
-    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired",
+    "Act Completion (Your Contract has Expired)": LocData(2000311390, "Your Contract has Expired - Post Fight",
                                                           hit_type=HitType.umbrella),
 
     "Act Completion (Time Rift - Pipe)": LocData(2000313069, "Time Rift - Pipe", hookshot=True),
@@ -477,7 +477,7 @@ act_completions = {
     "Act Completion (Rush Hour)": LocData(2000311210, "Rush Hour",
                                           dlc_flags=HatDLC.dlc2,
                                           hookshot=True,
-                                          required_hats=[HatType.ICE, HatType.BREWING]),
+                                          required_hats=[HatType.ICE, HatType.BREWING, HatType.DWELLER]),
 
     "Act Completion (Time Rift - Rumbi Factory)": LocData(2000312736, "Time Rift - Rumbi Factory",
                                                           dlc_flags=HatDLC.dlc2),
@@ -976,7 +976,6 @@ event_locs = {
     **snatcher_coins,
     "HUMT Access": LocData(0, "Heating Up Mafia Town"),
     "TOD Access": LocData(0, "Toilet of Doom"),
-    "YCHE Access": LocData(0, "Your Contract has Expired"),
     "AFR Access": LocData(0, "Alpine Free Roam"),
     "TIHS Access": LocData(0, "The Illness has Spread"),
 
