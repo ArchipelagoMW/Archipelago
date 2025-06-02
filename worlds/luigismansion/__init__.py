@@ -1,3 +1,4 @@
+import copy
 import math
 import os
 import threading
@@ -555,7 +556,7 @@ class LMWorld(World):
             v = list(self.open_doors.values())
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
-            spawn_doors = spawn_locations[self.origin_region_name]["door_ids"]
+            spawn_doors = copy.copy(spawn_locations[self.origin_region_name]["door_ids"])
             if spawn_doors:
                 for door in spawn_locations[self.origin_region_name]["door_ids"]:
                     if self.open_doors[door] == 1:
