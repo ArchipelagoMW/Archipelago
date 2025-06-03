@@ -2239,7 +2239,7 @@ static _Dark Souls III_ randomizer].
 <tr><td>US: Pyromancy Flame - Cornyx</td><td>Given by Cornyx in Firelink Shrine or dropped.</td></tr>
 <tr><td>US: Red Bug Pellet - tower village building, basement</td><td>On the floor of the building after the Fire Demon encounter</td></tr>
 <tr><td>US: Red Hilted Halberd - chasm crypt</td><td>In the skeleton area accessible from Grave Key or dropping down from near Eygon</td></tr>
-<tr><td>US: Red and White Shield - chasm, hanging corpse</td><td>On a hanging corpse in the ravine accessible with the Grave Key or dropping down near Eygon, to the entrance of Irina&#x27;s prison. Must be shot down with an arrow or projective.</td></tr>
+<tr><td>US: Red and White Round Shield - chasm, hanging corpse</td><td>On a hanging corpse in the ravine accessible with the Grave Key or dropping down near Eygon, to the entrance of Irina&#x27;s prison. Must be shot down with an arrow or projective.</td></tr>
 <tr><td>US: Reinforced Club - by white tree</td><td>Near the Birch Tree where giant shoots arrows</td></tr>
 <tr><td>US: Repair Powder - first building, balcony</td><td>On the balcony of the first Undead Settlement building</td></tr>
 <tr><td>US: Rusted Coin - awning above Dilapidated Bridge</td><td>On a wooden ledge near the Dilapidated Bridge bonfire. Must be jumped to from near Cathedral Evangelist enemy</td></tr>
