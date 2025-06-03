@@ -162,7 +162,7 @@ class WebHostContext(Context):
         room.multisave = pickle.dumps(self.get_save())
         # saving only occurs on activity, so we can "abuse" this information to mark this as last_activity
         if not exit_save:  # we don't want to count a shutdown as activity, which would restart the server again
-            room.last_activity = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+            room.last_activity = Utils.utcnow()
         return True
 
     def get_save(self) -> dict:
@@ -335,8 +335,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
-                        room.last_activity = Utils.utcnow() - \
-                                             datetime.timedelta(minutes=1, seconds=room.timeout)
+                        room.last_activity = Utils.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
                     logging.info(f"Shutting down room {room_id} on {name}.")
                 finally:
                     await asyncio.sleep(5)
