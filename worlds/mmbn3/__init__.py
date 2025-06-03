@@ -16,7 +16,7 @@ from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from worlds.generic.Rules import add_item_rule, add_rule
+from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
 
 
 class MMBN3Settings(settings.Group):
@@ -419,18 +419,33 @@ class MMBN3World(World):
                  lambda state: state.has(ItemName.Humor, self.player))
         add_rule(self.multiworld.get_location(LocationName.Villain, self.player),
                  lambda state: state.has(ItemName.BlckMnd, self.player))
-        def not_undernet(item): return item.code != item_table[ItemName.Progressive_Undernet_Rank].code or item.player != self.player
-        self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_2_East_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_2_Northwest_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_3_East_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_3_North_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_4_Northwest_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_4_Central_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_Wall_BMD, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_Control_Room_1_Screen, self.player).item_rule = not_undernet
-        self.multiworld.get_location(LocationName.WWW_Wilys_Desk, self.player).item_rule = not_undernet
+        forbid_item(self.multiworld.get_location(LocationName.WWW_1_Central_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_1_East_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_2_East_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_2_Northwest_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_3_East_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_3_North_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_4_Northwest_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_4_Central_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_Wall_BMD, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_Control_Room_1_Screen, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+        forbid_item(self.multiworld.get_location(LocationName.WWW_Wilys_Desk, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
+
+        # I have no fuckin clue why this specific location shits the bed on a progressive undernet rank.
+        # If you ever figure it out I will buy you a pizza.
+        forbid_item(self.multiworld.get_location(LocationName.Chocolate_Shop_07, self.player),
+                    ItemName.Progressive_Undernet_Rank, self.player)
 
         # place "Victory" at "Final Boss" and set collection as win condition
         self.multiworld.get_location(LocationName.Alpha_Defeated, self.player) \
