@@ -380,7 +380,7 @@ def adjust_gui():
             current_output = os.path.join(output_folder, object)
             if not os.path.isdir(current_output):
                 os.makedirs(current_output)
-            extract_sprites(object, current_output)
+            extract_sprites_internal(object, current_output)
         messagebox.showinfo(title="Success", message=f"All sprites have successfully been extracted!")
 
     sprite_extractor_folder = StringVar()
@@ -723,8 +723,8 @@ def adjust_gui():
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
         # Red if invalid, blue if different from the ROM, bold if different from the saved data
-        field_value = str("[ {} ]".format(entry.get("1.0", END)).replace("\n", ", ") if type(entry) is ScrolledText
-                                                                                     else entry.get()).strip()
+        field_value = str(f"[ {entry.get("1.0", END)} ]".replace("\n", ", ") if type(entry) is ScrolledText
+                                                                             else entry.get()).strip()
         blue_balloon_message = "\nThis label is blue because this value is different from the one within the ROM."
         bold_balloon_message = "\nThis label is in bold because this value has been changed and hasn't been saved."
         errors, has_error = validate_pokemon_data_string(current_valid_sprite_folder.get(), { field: field_value })

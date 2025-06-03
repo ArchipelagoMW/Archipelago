@@ -66,13 +66,13 @@ def add_sprite_pack_object_collection(
     for object_name in folders:
         _folder_object_info = find_folder_object_info(_folder_object_info["key"], object_name)
         is_pokemon = _folder_object_info["key"] == "pokemon" and not "name" in list(_folder_object_info.keys())
+        is_unown_form = object_name.startswith("Unown ") and object_name != "Unown A"
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
         if not os.path.exists(object_folder_path):
             continue
         found_sprites: dict[str, str] = {}
         for resource_name in os.listdir(object_folder_path):
-            if resource_name == "data.txt" and is_pokemon and\
-                    (not object_name.startswith("Unown ") or object_name == "Unown A"):
+            if resource_name == "data.txt" and is_pokemon and not is_unown_form:
                 pokemon_data_added.append(object_name)
                 add_pokemon_data(object_name, os.path.join(object_folder_path, resource_name))
             if not resource_name.endswith(".png"):
@@ -81,6 +81,9 @@ def add_sprite_pack_object_collection(
             matching_sprite_name = next(filter(lambda f: resource_name.split(".")[0].split("-")[0] == f,
                                                _folder_object_info["sprites"]), None)
             if not matching_sprite_name:
+                continue
+            if is_unown_form and matching_sprite_name == 'footprint':
+                # Unown shapes have no footprint data
                 continue
             extra_sprite_data = resource_name[:-4].split("-")[1:] or ""
             sprite_path = os.path.join(object_folder_path, resource_name)
@@ -351,7 +354,7 @@ def replace_complex_sprite(_data_address: int, _sprite_key: str, _object_name: s
     sprite_size = round(sprite_width * sprite_height * bits_per_pixel / 8)
 
     # Build a new complex sprite table and insert it
-    sprite_image: Image = open_image_secure(_path)
+    sprite_image = open_image_secure(_path)
     if sprite_height == 0:
         raise Exception(f"The complex sprite {_sprite_key} doesn't have a required height!")
     sprite_frames: int = round(sprite_image.height / sprite_height)
@@ -486,6 +489,10 @@ def extract_sprites(_object_name: str, _output_path: str):
 
     # Extract all sprites awaited for the given object
     sprite_list: list[str] = folder_object_info["sprites"]
+    is_unown_form = _object_name.startswith("Unown ") and _object_name != "Unown A"
+    if is_unown_form:
+        # Unown shapes have no footprint data
+        sprite_list = [s for s in sprite_list if s != 'footprint']
     for sprite_name in sprite_list:
         handle_sprite_extraction(sprite_name)
         extracted_sprites.append(sprite_name)
@@ -664,13 +671,13 @@ def validate_object_collection(_sprite_pack_path: str,
     for object_name in folders:
         _folder_object_info = find_folder_object_info(_folder_object_info["key"], object_name)
         is_pokemon = _folder_object_info["key"] == "pokemon" and not "name" in list(_folder_object_info.keys())
+        is_unown_form = object_name.startswith("Unown ") and object_name != "Unown A"
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
         if not os.path.exists(object_folder_path):
             continue
         found_sprites: dict[str, str] = {}
         for resource_name in os.listdir(object_folder_path):
-            if resource_name == "data.txt" and is_pokemon\
-                    and (not object_name.startswith("Unown ") or object_name == "Unown A"):
+            if resource_name == "data.txt" and is_pokemon and not is_unown_form:
                 # Text file that holds the Pokemon's modified data
                 with open(os.path.join(object_folder_path, resource_name)) as pokemon_data_file:
                     add_error(*validate_pokemon_data_string(object_name, pokemon_data_file.read()), True)
@@ -690,11 +697,16 @@ def validate_object_collection(_sprite_pack_path: str,
                               + "Cannot be linked to a valid internal sprite or palette.")
                     continue
                 matching_sprite_name = resource_name[:-4]
+            if is_unown_form and matching_sprite_name == 'footprint':
+                # Unown shapes have no footprint data
+                add_error(f"File {resource_name} in folder {object_name}: "
+                          + "Cannot be linked to a valid internal sprite or palette.")
+                continue
             extra_sprite_data = resource_name[:-4].split("-")[1:] or ""
             sprite_path = os.path.join(object_folder_path, resource_name)
             if found_sprites.get(matching_sprite_name):
                 add_error(f"File {resource_name} in folder {object_name}: "
-                          + "Duplicate internal sprite entry with sprite {object_name}.", True)
+                          + f"Duplicate internal sprite entry with sprite {object_name}.", True)
                 continue
             found_sprites[matching_sprite_name] = resource_name
             add_to_folder_list(object_name)
@@ -712,7 +724,6 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
             errors += f"{"\n" if errors else ""}{"Error" if _is_error else "Warning"}: {_error}"
 
     folder_object_info = find_folder_object_info(_name = _object_name)
-    is_pokemon = folder_object_info["key"] == "pokemon" and not "name" in list(folder_object_info.keys())
     sprite_key = f"{folder_object_info["key"]}_{_sprite_name}"
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
@@ -739,7 +750,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
                       + f"but should have {palette_max_size}{"" if palette_set_size > 0 else " or less"}.", True)
         elif palette_model:
             matching_palette_model = True
-            if is_pokemon and _sprite_name == "icon":
+            if _sprite_name == "icon":
                 # Icons can have several palettes, one must be chosen
                 if _extra_data:
                     # Icon palette ID is given in the icon's file name

@@ -1524,6 +1524,7 @@ EMERALD_SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = {
     "pokemon_footprint":         {"frames": 1,      "width": 16, "height": 16, "palette_size": 2, "palette": VALID_FOOTPRINT_PALETTE},
     "pokemon_hatch_anim":        {"frames": 1,      "width": 32, "height": 136},
     "players_walking_running":   {"frames": 18,     "width": 16, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
+    "players_reflection":        {"frames": 18,     "width": 16, "height": 32, "palette": []},
     "players_mach_bike":         {"frames": 9,      "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
     "players_acro_bike":         {"frames": 27,     "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
     "players_surfing":           {"frames": 12,     "width": 32, "height": 32, "palette": VALID_OVERWORLD_PALETTE},
