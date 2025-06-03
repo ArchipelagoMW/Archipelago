@@ -185,7 +185,7 @@ class TextArchive:
             # As far as I know, this should literally not be possible.
             # Every script I've looked at has dozens of unused indices, so finding 9 (8 plus one "ending" script)
             # should be no problem. We re-use these so we don't have to worry about an area getting tons of these
-            raise AssertionError("Error in generation -- not enough room for progressive undernet in archive "+self.startOffset)
+            raise AssertionError(f"Error in generation -- not enough room for progressive undernet in archive {self.startOffset} ({hex(self.startOffset)})")
         for i in range(9):  # There are 8 progressive undernet ranks
             new_script_index = self.unused_indices[i]
             new_script = ArchiveScript(new_script_index, generate_progressive_undernet(i, self.unused_indices[i+1]))
