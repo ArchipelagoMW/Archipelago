@@ -82,7 +82,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal1.name, get_portal_outlet_region(portal2, world)
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not world.options.decoupled:
                 return portal2.name, get_portal_outlet_region(portal1, world)
         raise Exception("No matches found in get_portal_info")
 
@@ -91,7 +91,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal2.name, portal2.region
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not world.options.decoupled:
                 return portal1.name, portal1.region
         raise Exception("no matches found in get_paired_portal")
 
