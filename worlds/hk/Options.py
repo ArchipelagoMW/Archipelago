@@ -333,7 +333,7 @@ class PlandoCharmCosts(OptionDict):
                     continue
             try:
                 self.value[key] = CharmCost.from_any(data).value
-            except ValueError as ex:
+            except ValueError:
                 # will fail schema afterwords
                 self.value[key] = data
 
@@ -450,7 +450,7 @@ class GrubHuntGoal(NamedRange):
     display_name = "Grub Hunt Goal"
     range_start = 1
     range_end = 46
-    special_range_names = {"all": -1}
+    special_range_names = {"all": -1, "forty_six": 46}
     default = 46
 
 

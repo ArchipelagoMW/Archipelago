@@ -26,12 +26,14 @@ import typing
 from CommonClient import (CommonContext, get_base_parser, gui_enabled, logger,
                           server_loop)
 from NetUtils import ClientStatus
+from worlds.ladx import LinksAwakeningWorld
 from worlds.ladx.Common import BASE_ID as LABaseID
 from worlds.ladx.GpsTracker import GpsTracker
+from worlds.ladx.TrackerConsts import storage_key
 from worlds.ladx.ItemTracker import ItemTracker
 from worlds.ladx.LADXR.checkMetadata import checkMetadataTable
 from worlds.ladx.Locations import get_locations_to_id, meta_to_name
-from worlds.ladx.Tracker import LocationTracker, MagpieBridge
+from worlds.ladx.Tracker import LocationTracker, MagpieBridge, Check
 
 
 class GameboyException(Exception):
@@ -48,22 +50,6 @@ class InvalidEmulatorStateError(GameboyException):
 
 class BadRetroArchResponse(GameboyException):
     pass
-
-
-def magpie_logo():
-    from kivy.uix.image import CoreImage
-    binary_data = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAAXN
-SR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA
-7DAcdvqGQAAADGSURBVDhPhVLBEcIwDHOYhjHCBuXHj2OTbAL8+
-MEGZIxOQ1CinOOk0Op0bmo7tlXXeR9FJMYDLOD9mwcLjQK7+hSZ
-wgcWMZJOAGeGKtChNHFL0j+FZD3jSCuo0w7l03wDrWdg00C4/aW
-eDEYNenuzPOfPspBnxf0kssE80vN0L8361j10P03DK4x6FHabuV
-ear8fHme+b17rwSjbAXeUMLb+EVTV2QHm46MWQanmnydA98KsVS
-XkV+qFpGQXrLhT/fqraQeQLuplpNH5g+WkAAAAASUVORK5CYII="""
-    binary_data = base64.b64decode(binary_data)
-    data = io.BytesIO(binary_data)
-    return CoreImage(data, ext="png").texture
 
 
 class LAClientConstants:
@@ -100,19 +86,23 @@ class LAClientConstants:
     WRamCheckSize = 0x4
     WRamSafetyValue = bytearray([0]*WRamCheckSize)
 
+    wRamStart = 0xC000
+    hRamStart = 0xFF80
+    hRamSize = 0x80
+
     MinGameplayValue = 0x06
     MaxGameplayValue = 0x1A
     VictoryGameplayAndSub = 0x0102
 
-
 class RAGameboy():
     cache = []
-    cache_start = 0
-    cache_size = 0
     last_cache_read = None
     socket = None
 
     def __init__(self, address, port) -> None:
+        self.cache_start = LAClientConstants.wRamStart
+        self.cache_size = LAClientConstants.hRamStart + LAClientConstants.hRamSize - LAClientConstants.wRamStart
+
         self.address = address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -131,9 +121,14 @@ class RAGameboy():
     async def get_retroarch_status(self):
         return await self.send_command("GET_STATUS")
 
-    def set_cache_limits(self, cache_start, cache_size):
-        self.cache_start = cache_start
-        self.cache_size = cache_size
+    def set_checks_range(self, checks_start, checks_size):
+        self.checks_start = checks_start
+        self.checks_size = checks_size
+
+    def set_location_range(self, location_start, location_size, critical_addresses):
+        self.location_start = location_start
+        self.location_size = location_size
+        self.critical_location_addresses = critical_addresses
 
     def send(self, b):
         if type(b) is str:
@@ -188,21 +183,57 @@ class RAGameboy():
         if not await self.check_safe_gameplay():
             return
 
-        cache = []
-        remaining_size = self.cache_size
-        while remaining_size:
-            block = await self.async_read_memory(self.cache_start + len(cache), remaining_size)
-            remaining_size -= len(block)
-            cache += block
+        attempts = 0
+        while True:
+            # RA doesn't let us do an atomic read of a large enough block of RAM
+            # Some bytes can't change in between reading location_block and hram_block
+            location_block = await self.read_memory_block(self.location_start, self.location_size)
+            hram_block = await self.read_memory_block(LAClientConstants.hRamStart, LAClientConstants.hRamSize)
+            verification_block = await self.read_memory_block(self.location_start, self.location_size)
+
+            valid = True
+            for address in self.critical_location_addresses:
+                if location_block[address - self.location_start] != verification_block[address - self.location_start]:
+                    valid = False
+
+            if valid:
+                break
+
+            attempts += 1
+
+            # Shouldn't really happen, but keep it from choking
+            if attempts > 5:
+                return
+
+        checks_block = await self.read_memory_block(self.checks_start, self.checks_size)
 
         if not await self.check_safe_gameplay():
             return
 
-        self.cache = cache
+        self.cache = bytearray(self.cache_size)
+
+        start = self.checks_start - self.cache_start
+        self.cache[start:start + len(checks_block)] = checks_block
+
+        start = self.location_start - self.cache_start
+        self.cache[start:start + len(location_block)] = location_block
+
+        start = LAClientConstants.hRamStart - self.cache_start
+        self.cache[start:start + len(hram_block)] = hram_block
+
         self.last_cache_read = time.time()
 
+    async def read_memory_block(self, address: int, size: int):
+        block = bytearray()
+        remaining_size = size
+        while remaining_size:
+            chunk = await self.async_read_memory(address + len(block), remaining_size)
+            remaining_size -= len(chunk)
+            block += chunk
+
+        return block
+
     async def read_memory_cache(self, addresses):
-        # TODO: can we just update once per frame?
         if not self.last_cache_read or self.last_cache_read + 0.1 < time.time():
             await self.update_cache()
         if not self.cache:
@@ -359,11 +390,12 @@ class LinksAwakeningClient():
         auth = binascii.hexlify(await self.gameboy.async_read_memory(0x0134, 12)).decode()
         self.auth = auth
 
-    async def wait_and_init_tracker(self):
+    async def wait_and_init_tracker(self, magpie: MagpieBridge):
         await self.wait_for_game_ready()
         self.tracker = LocationTracker(self.gameboy)
         self.item_tracker = ItemTracker(self.gameboy)
         self.gps_tracker = GpsTracker(self.gameboy)
+        magpie.gps_tracker = self.gps_tracker
 
     async def recved_item_from_ap(self, item_id, from_player, next_index):
         # Don't allow getting an item until you've got your first check
@@ -405,9 +437,11 @@ class LinksAwakeningClient():
         return (await self.gameboy.read_memory_cache([LAClientConstants.wGameplayType]))[LAClientConstants.wGameplayType] == 1
 
     async def main_tick(self, item_get_cb, win_cb, deathlink_cb):
+        await self.gameboy.update_cache()
         await self.tracker.readChecks(item_get_cb)
         await self.item_tracker.readItems()
         await self.gps_tracker.read_location()
+        await self.gps_tracker.read_entrances()
 
         current_health = (await self.gameboy.read_memory_cache([LAClientConstants.wLinkHealth]))[LAClientConstants.wLinkHealth]
         if self.deathlink_debounce and current_health != 0:
@@ -457,13 +491,17 @@ class LinksAwakeningContext(CommonContext):
     la_task = None
     client = None
     # TODO: does this need to re-read on reset?
-    found_checks = []
+    found_checks = set()
     last_resend = time.time()
 
     magpie_enabled = False
     magpie = None
     magpie_task = None
     won = False
+
+    @property
+    def slot_storage_key(self):
+        return f"{self.slot_info[self.slot].name}_{storage_key}"
 
     def __init__(self, server_address: typing.Optional[str], password: typing.Optional[str], magpie: typing.Optional[bool]) -> None:
         self.client = LinksAwakeningClient()
@@ -476,9 +514,9 @@ class LinksAwakeningContext(CommonContext):
 
     def run_gui(self) -> None:
         import webbrowser
-        import kvui
-        from kvui import Button, GameManager
-        from kivy.uix.image import Image
+        from kvui import GameManager
+        from kivy.metrics import dp
+        from kivymd.uix.button import MDButton, MDButtonText
 
         class LADXManager(GameManager):
             logging_pairs = [
@@ -491,23 +529,27 @@ class LinksAwakeningContext(CommonContext):
                 b = super().build()
 
                 if self.ctx.magpie_enabled:
-                    button = Button(text="", size=(30, 30), size_hint_x=None,
-                                    on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
-                    image = Image(size=(16, 16), texture=magpie_logo())
-                    button.add_widget(image)
-
-                    def set_center(_, center):
-                        image.center = center
-                    button.bind(center=set_center)
-
+                    button = MDButton(MDButtonText(text="Open Tracker"), style="filled", size=(dp(100), dp(70)), radius=5,
+                                      size_hint_x=None, size_hint_y=None, pos_hint={"center_y": 0.55},
+                                      on_press=lambda _: webbrowser.open('https://magpietracker.us/?enable_autotracker=1'))
+                    button.height = self.server_connect_bar.height
                     self.connect_layout.add_widget(button)
+
                 return b
 
         self.ui = LADXManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    async def send_checks(self):
-        message = [{"cmd": 'LocationChecks', "locations": self.found_checks}]
+    async def send_new_entrances(self, entrances: typing.Dict[str, str]):
+        # Store the entrances we find on the server for future sessions
+        message = [{
+            "cmd": "Set",
+            "key": self.slot_storage_key,
+            "default": {},
+            "want_reply": False,
+            "operations": [{"operation": "update", "value": entrances}],
+        }]
+
         await self.send_msgs(message)
 
     had_invalid_slot_data = None
@@ -537,13 +579,19 @@ class LinksAwakeningContext(CommonContext):
             await self.send_msgs(message)
             self.won = True
 
+    async def request_found_entrances(self):
+        await self.send_msgs([{"cmd": "Get", "keys": [self.slot_storage_key]}])
+
+        # Ask for updates so that players can co-op entrances in a seed
+        await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
+
     async def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if self.ENABLE_DEATHLINK:
             self.client.pending_deathlink = True
 
     def new_checks(self, item_ids, ladxr_ids):
-        self.found_checks += item_ids
-        create_task_log_exception(self.send_checks())
+        self.found_checks.update(item_ids)
+        create_task_log_exception(self.check_locations(self.found_checks))
         if self.magpie_enabled:
             create_task_log_exception(self.magpie.send_new_checks(ladxr_ids))
 
@@ -571,15 +619,39 @@ class LinksAwakeningContext(CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
             self.slot_data = args.get("slot_data", {})
-            
+            # This is sent to magpie over local websocket to make its own connection
+            self.slot_data.update({
+                "server_address": self.server_address,
+                "slot_name": self.player_names[self.slot],
+                "password": self.password,
+            })
+
+            # We can process linked items on already-checked checks now that we have slot_data
+            if self.client.tracker:
+                checked_checks = set(self.client.tracker.all_checks) - set(self.client.tracker.remaining_checks)
+                self.add_linked_items(checked_checks)
+
         # TODO - use watcher_event
         if cmd == "ReceivedItems":
             for index, item in enumerate(args["items"], start=args["index"]):
                 self.client.recvd_checks[index] = item
 
+        if cmd == "Retrieved" and self.magpie_enabled and self.slot_storage_key in args["keys"]:
+            self.client.gps_tracker.receive_found_entrances(args["keys"][self.slot_storage_key])
+
+        if cmd == "SetReply" and self.magpie_enabled and args["key"] == self.slot_storage_key:
+            self.client.gps_tracker.receive_found_entrances(args["value"])
+
     async def sync(self):
         sync_msg = [{'cmd': 'Sync'}]
         await self.send_msgs(sync_msg)
+
+    def add_linked_items(self, checks: typing.List[Check]):
+        for check in checks:
+            if check.value and check.linkedItem:
+                linkedItem = check.linkedItem
+                if 'condition' not in linkedItem or (self.slot_data and linkedItem['condition'](self.slot_data)):
+                    self.client.item_tracker.setExtraItem(check.linkedItem['item'], check.linkedItem['qty'])
 
     item_id_lookup = get_locations_to_id()
 
@@ -588,6 +660,8 @@ class LinksAwakeningContext(CommonContext):
             checks = [self.item_id_lookup[meta_to_name(
                 checkMetadataTable[check.id])] for check in ladxr_checks]
             self.new_checks(checks, [check.id for check in ladxr_checks])
+
+            self.add_linked_items(ladxr_checks)
 
         async def victory():
             await self.send_victory()
@@ -622,21 +696,38 @@ class LinksAwakeningContext(CommonContext):
                 if not self.client.recvd_checks:
                     await self.sync()
 
-                await self.client.wait_and_init_tracker()
+                await self.client.wait_and_init_tracker(self.magpie)
 
+                min_tick_duration = 0.1
+                last_tick = time.time()
                 while True:
                     await self.client.main_tick(on_item_get, victory, deathlink)
-                    await asyncio.sleep(0.1)
+
                     now = time.time()
+                    tick_duration = now - last_tick
+                    sleep_duration = max(min_tick_duration - tick_duration, 0)
+                    await asyncio.sleep(sleep_duration)
+
+                    last_tick = now
+
                     if self.last_resend + 5.0 < now:
                         self.last_resend = now
-                        await self.send_checks()
+                        await self.check_locations(self.found_checks)
                     if self.magpie_enabled:
                         try:
                             self.magpie.set_checks(self.client.tracker.all_checks)
                             await self.magpie.set_item_tracker(self.client.item_tracker)
-                            await self.magpie.send_gps(self.client.gps_tracker)
-                            self.magpie.slot_data = self.slot_data
+                            if self.slot_data and "slot_data" in self.magpie.features and not self.magpie.has_sent_slot_data:
+                                self.magpie.slot_data = self.slot_data
+                                await self.magpie.send_slot_data()
+
+                            if self.client.gps_tracker.needs_found_entrances:
+                                await self.request_found_entrances()
+                                self.client.gps_tracker.needs_found_entrances = False
+
+                            new_entrances = await self.magpie.send_gps(self.client.gps_tracker)
+                            if new_entrances:
+                                await self.send_new_entrances(new_entrances)
                         except Exception:
                             # Don't let magpie errors take out the client
                             pass
@@ -647,8 +738,8 @@ class LinksAwakeningContext(CommonContext):
                 await asyncio.sleep(1.0)
 
 def run_game(romfile: str) -> None:
-    auto_start = typing.cast(typing.Union[bool, str],
-                            Utils.get_options()["ladx_options"].get("rom_start", True))
+    auto_start = LinksAwakeningWorld.settings.rom_start
+
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
@@ -705,6 +796,6 @@ async def main():
     await ctx.shutdown()
 
 if __name__ == '__main__':
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

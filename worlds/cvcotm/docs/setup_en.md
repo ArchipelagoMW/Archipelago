@@ -4,7 +4,7 @@
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases/latest).
 - A Castlevania: Circle of the Moon ROM of the US version specifically. The Archipelago community cannot provide this.
-The Castlevania Advance Collection ROM can technically be used, but it has no audio. The Wii U Virtual Console ROM is untested.
+The Castlevania Advance Collection ROM can be used, but it has no audio. The Wii U Virtual Console ROM does not work.
 - [BizHawk](https://tasvideos.org/BizHawk/ReleaseHistory) 2.7 or later.
 
 ### Configuring BizHawk
@@ -22,7 +22,7 @@ clear it.
 
 ## Optional Software
 
-- [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest), for use with
+- [Castlevania: Circle of the Moon AP Tracker](https://github.com/BowserCrusher/Circle-of-the-Moon-AP-Tracker/releases/latest), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 
 ## Generating and Patching a Game
@@ -64,7 +64,7 @@ perfectly safe to make progress offline; everything will re-sync when you reconn
 
 Castlevania: Circle of the Moon has a fully functional map tracker that supports auto-tracking.
 
-1. Download [Castlevania: Circle of the Moon AP Tracker](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest) and
+1. Download [Castlevania: Circle of the Moon AP Tracker](https://github.com/BowserCrusher/Circle-of-the-Moon-AP-Tracker/releases/latest) and
 [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Put the tracker pack into `packs/` in your PopTracker install.
 3. Open PopTracker, and load the Castlevania: Circle of the Moon pack.
