@@ -65,5 +65,7 @@
     - Depending on your settings, your options are either finding a specified amount of "Lucky Emblems" or finding the item "End of the World".
 - How do I enter Destiny Islands?
     - After obtaining the item "Destiny Islands", you can land there as an additional option in Traverse Town.
+- How do I progress to Destiny Islands Day 2 and 3?
+    - In order to access Day 2 and 3, you need to collect an amount of "Raft Materials" specified in your settings.  When you start Day 3, you'll be immediately warped to Homecoming.
 - Why can't I use the summon I obtained?
     - You need at least one magic spell before you can use summons.

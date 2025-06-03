@@ -2095,8 +2095,7 @@ def set_rules(kh1world):
                         i.player != player
                         or
                         (
-                            i.player == player 
-                            and i.name in get_items_by_type("Item").keys()
+                            i.name in get_items_by_type("Item").keys()
                             and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
                             and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
                             and
