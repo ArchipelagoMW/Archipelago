@@ -290,8 +290,8 @@ async def gba_sync_task(ctx: MMBN3Context):
 
 
 async def run_game(romfile):
-    from settings import get_settings
-    auto_start = get_settings().mmbn3_options.rom_start
+    from worlds.mmbn3 import MMBN3World
+    auto_start = MMBN3World.settings.rom_start
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
