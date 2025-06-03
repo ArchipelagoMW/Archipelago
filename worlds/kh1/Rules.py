@@ -2096,8 +2096,12 @@ def set_rules(kh1world):
                         or
                         (
                             i.name in get_items_by_type("Item").keys()
-                            and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
-                            and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
+                            and i.name not in ("Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon")
+                            and 
+                            (
+                                i.name not in ("Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring")
+                                or options.randomize_party_member_starting_accessories
+                            )
                             and
                             (
                                 item_table[i.name].max_quantity == 1
