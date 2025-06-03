@@ -11,7 +11,7 @@ from .Options import KH1Options, kh1_option_groups
 from .Regions import connect_entrances, create_regions
 from .Rules import set_rules
 from .Presets import kh1_option_presets
-from worlds.LauncherComponents import Component, components, Type, launch as launch_component
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component, icon_paths
 from .GenerateJSON import generate_json
 from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -23,7 +23,9 @@ def launch_client():
     launch_component(launch, name="KH1 Client")
 
 
-components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT, icon="kh1_heart"))
+
+icon_paths["kh1_heart"] = f"ap:{__name__}/icons/kh1_heart.png"
 
 
 class KH1Web(WebWorld):
