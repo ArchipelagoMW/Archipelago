@@ -311,9 +311,12 @@ class KH2World(World):
         universal_logic = Rules.KH2WorldRules(self)
         form_logic = Rules.KH2FormRules(self)
         fight_rules = Rules.KH2FightRules(self)
+        location_rules = Rules.KH2LocationRules(self)
+
         fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
+        location_rules.set_kh2_location_rules()
 
     def generate_output(self, output_directory: str):
         """
