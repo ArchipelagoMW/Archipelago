@@ -23,5 +23,7 @@ You connect by opening `...\ArchipelagoRandomizer\SaveData\RoomInfo.json` from y
 It should follow the format that the file already has. Then the connection should be established once you start your save. 
 
 You start a new game by picking New Game in your menu. 
+
 If you already beat the game and only have New Game +. choose this, and then pick New Archipelago Game within that menu (Do not play using Mew Game or New Game +). 
+
 You can continue your saved game by clicking Continue like in vanilla Cat Quest. (Do not click continue on an old savefile, it will send checks to the server for everything done in that old file)
