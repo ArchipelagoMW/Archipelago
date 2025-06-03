@@ -12,7 +12,6 @@ from .BN3RomUtils import ArchiveToReferences, read_u16_le, read_u32_le, int16_to
     generate_external_item_message, generate_text_bytes, dictChar
 
 from .Items import ItemType
-from settings import get_settings
 
 CHECKSUM_BLUE = "6fe31df0144759b34ad666badaacc442"
 
@@ -321,7 +320,9 @@ class MMBN3DeltaPatch(APDeltaPatch):
 
 def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
-        bn3_options = get_settings()["mmbn3_options"]
+        from worlds.mmbn3 import MMBN3World
+        bn3_options = MMBN3World.settings
+
         if bn3_options is None:
             file_name = "Mega Man Battle Network 3 - Blue Version (USA).gba"
         else:
