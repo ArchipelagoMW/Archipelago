@@ -94,7 +94,7 @@ def stop_room(app_client: "FlaskClient",
               room_id: str,
               timeout: Optional[float] = None,
               simulate_idle: bool = True) -> None:
-    from datetime import datetime, timedelta
+    from datetime import timedelta
     from time import sleep
 
     from pony.orm import db_session

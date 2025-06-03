@@ -1095,7 +1095,7 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
 def utcnow() -> datetime:
     """
     Implementation of Python's datetime.utcnow() function for use after deprecation.
-    Needed for UTC dates stored in databases with PonyORM.
+    Needed for timezone-naive UTC datetimes stored in databases with PonyORM.
     https://ponyorm.org/ponyorm-list/2014-August/000113.html
     """
     return datetime.now(timezone.utc).replace(tzinfo=None)
