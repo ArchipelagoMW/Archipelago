@@ -2092,17 +2092,21 @@ def set_rules(kh1world):
             if location_table[location].type == "Prize":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (
-                        i.player == player 
-                        and i.name in get_items_by_type("Item").keys()
-                        and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
-                        and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
-                        and
+                        i.player != player
+                        or
                         (
+                            i.player == player 
+                            and i.name in get_items_by_type("Item").keys()
+                            and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
+                            and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
+                            and
                             (
-                                item_table[i.name].max_quantity == 1
-                                and item_table[i.name].classification != ItemClassification.filler
+                                (
+                                    item_table[i.name].max_quantity == 1
+                                    and item_table[i.name].classification != ItemClassification.filler
+                                )
+                                or item_table[i.name].classification == ItemClassification.filler
                             )
-                            or item_table[i.name].classification == ItemClassification.filler
                         )
                     ))
 

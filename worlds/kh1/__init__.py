@@ -331,7 +331,7 @@ class KH1World(World):
         create_regions(self)
     
     def connect_entrances(self):
-        connect_entrances(self.multiworld, self.player)
+        connect_entrances(self)
     
     def generate_output(self, output_directory: str):
         """
