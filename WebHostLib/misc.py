@@ -7,6 +7,7 @@ from flask import request, redirect, url_for, render_template, Response, session
 from pony.orm import count, commit, db_session
 from werkzeug.utils import secure_filename
 
+from Utils import utcnow
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
@@ -184,7 +185,7 @@ def host_room(room: UUID):
     if room is None:
         return abort(404)
 
-    now = datetime.datetime.now(tz=datetime.timezone.utc).replace(tzinfo=None)
+    now = utcnow()
     # indicate that the page should reload to get the assigned port
     should_refresh = (
             (not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))

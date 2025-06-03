@@ -17,6 +17,8 @@ import logging
 import warnings
 
 from argparse import Namespace
+from datetime import datetime, timezone
+
 from settings import Settings, get_settings
 from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
@@ -1088,3 +1090,12 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+def utcnow() -> datetime:
+    """
+    Implementation of Python's datetime.utcnow() function for use after deprecation.
+    Needed for UTC dates stored in databases with PonyORM.
+    https://ponyorm.org/ponyorm-list/2014-August/000113.html
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)

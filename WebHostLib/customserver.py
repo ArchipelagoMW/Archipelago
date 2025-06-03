@@ -335,7 +335,7 @@ def run_server_process(name: str, ponyconfig: dict, static_server_data: dict,
                     with (db_session):
                         # ensure the Room does not spin up again on its own, minute of safety buffer
                         room = Room.get(id=room_id)
-                        room.last_activity = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None) - \
+                        room.last_activity = Utils.utcnow() - \
                                              datetime.timedelta(minutes=1, seconds=room.timeout)
                     logging.info(f"Shutting down room {room_id} on {name}.")
                 finally:

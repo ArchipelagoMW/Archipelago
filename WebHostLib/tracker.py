@@ -10,7 +10,7 @@ from werkzeug.exceptions import abort
 
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, Hint, NetworkItem, NetworkSlot, SlotType
-from Utils import restricted_loads, KeyedDefaultDict
+from Utils import restricted_loads, KeyedDefaultDict, utcnow
 from . import app, cache
 from .models import GameDataPackage, Room
 
@@ -274,9 +274,10 @@ class TrackerData:
         Does not include players who have no activity recorded.
         """
         last_activity: Dict[TeamPlayer, datetime.timedelta] = {}
-        now = datetime.datetime.now(datetime.timezone.utc).replace(tzinfo=None)
+        now = utcnow()
         for (team, player), timestamp in self._multisave.get("client_activity_timers", []):
-            last_activity[team, player] = now - datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).replace(tzinfo=None)
+            from_timestamp = datetime.datetime.fromtimestamp(timestamp, datetime.timezone.utc).replace(tzinfo=None)
+            last_activity[team, player] = now - from_timestamp
 
         return last_activity
 

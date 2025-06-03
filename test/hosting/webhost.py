@@ -2,6 +2,8 @@ import re
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, cast
 
+from Utils import utcnow
+
 if TYPE_CHECKING:
     from flask import Flask
     from werkzeug.test import Client as FlaskClient
@@ -110,7 +112,7 @@ def stop_room(app_client: "FlaskClient",
 
     with db_session:
         room: Room = Room.get(id=room_uuid)
-        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        now = utcnow()
         if simulate_idle:
             new_last_activity = now - timedelta(seconds=room.timeout + 5)
         else:
