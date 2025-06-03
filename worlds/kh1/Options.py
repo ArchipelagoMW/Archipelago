@@ -482,7 +482,7 @@ class RemoteItems(Choice):
     """
     Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
     Off: When your items are placed in your world, they can only be placed in locations that they can be acquired without server connection (stats on levels, items in chests, etc).
-    Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (stats in chests, abilities on static events, etc).
+    Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (abilities on static events, etc).
     Full: All items are remote.  Use this when doing something like a co-op seed.
     """
     display_name = "Remote Items"
