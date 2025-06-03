@@ -230,7 +230,7 @@ class KH1World(World):
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)").place_locked_item(self.create_item("Emblem Piece (Fountain)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)").place_locked_item(self.create_item("Emblem Piece (Chest)"))
-        if self.options.randomize_postcards.current_key not in ["all"]:
+        if self.options.randomize_postcards != "all":
             self.get_location("Traverse Town Item Shop Postcard").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Safe Postcard").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town Gizmo Shop Postcard 1").place_locked_item(self.create_item("Postcard"))
