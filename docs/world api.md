@@ -350,11 +350,11 @@ your logic might be:
 ```python
 water_loc = MyGameLocation(self.player, "Water Level Switch", None)
 water_loc.place_locked_item(MyGameItem("Lowered Water Level", ItemClassification.progression, None, self.player))
-pump_station_region.add_locations([water_loc], MyGameLocation)
+pump_station_region.locations.append(water_loc)
 set_rule(water_loc, lambda state: state.has("Double Jump", self.player))  # the switch is really high up
 ...
 basement_loc = MyGameLocation(self.player, "Flooded House - Basement Chest", None)
-flooded_house_region.add_locations([upstairs_loc, ground_floor_loc, basement_loc], MyGameLocation)
+flooded_house_region.locations += [upstairs_loc, ground_floor_loc, basement_loc]
 ...
 set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.player))
 ```
