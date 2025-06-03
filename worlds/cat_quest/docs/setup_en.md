@@ -14,13 +14,14 @@
 
 2. Start Cat Quest once, so that BepInEx can create its required configuration files.
 
-3. After BepInEx has been installed and configured, download the Cat Quest Randomizer and extact the contents of the archive into the game folder.
+3. After BepInEx has been installed and configured, download the Cat Quest Randomizer zip file, move it to the Cat Quest root folder alongside Cat Quest.exe, right click and select "Extract Here" or the equivalent for your extraction software.
+   After this, you can delete the .zip file
 
 ## Connecting
 
 You connect by opening `...\ArchipelagoRandomizer\SaveData\RoomInfo.json` from your Cat Quest root folder, and adding your player and room information.
 It should follow the format that the file already has. Then the connection should be established once you start your save. 
 
-You start a new game by picking New Game in your menu. If you already beat the game and only have New Game +. choose this, and then pick New Game within that menu
-(Do not play using Mew Game or New Game +)
-You continue your game by clicking Continue like in vanilla Cat Quest.
+You start a new game by picking New Game in your menu. 
+If you already beat the game and only have New Game +. choose this, and then pick New Archipelago Game within that menu (Do not play using Mew Game or New Game +). 
+You can continue your saved game by clicking Continue like in vanilla Cat Quest. (Do not click continue on an old savefile, it will send checks to the server for everything done in that old file)
