@@ -2106,9 +2106,9 @@ def set_rules(kh1world):
                         )
                     ))
 
-    
-    add_rule(kh1world.get_entrance("Destiny Islands"),
-        lambda state: state.has("Destiny Islands", player))
+    if options.destiny_islands:
+        add_rule(kh1world.get_entrance("Destiny Islands"),
+            lambda state: state.has("Destiny Islands", player))
     add_rule(kh1world.get_entrance("Wonderland"),
         lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests))
     add_rule(kh1world.get_entrance("Olympus Coliseum"),
