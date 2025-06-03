@@ -15,7 +15,6 @@ import collections
 import importlib
 import logging
 import warnings
-import zlib
 
 from argparse import Namespace
 from settings import Settings, get_settings
@@ -23,7 +22,7 @@ from time import sleep
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 from PIL.Image import open as PIL_open
-from bps.operations import Header, SourceRead, TargetRead, SourceCopy, TargetCopy, SourceCRC32, TargetCRC32
+from bps.operations import Header, SourceRead, TargetRead
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
@@ -383,12 +382,12 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
-    import LttPAdjuster, worlds.pokemon_emerald.adjuster as EmeraldAdjuster
+    import LttPAdjuster, worlds._pokemon_gen3_adjuster.adjuster as PokemonGen3Adjuster
     adjuster_settings = Namespace()
     if game_name == LttPAdjuster.GAME_ALTTP:
         return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
-    elif game_name == EmeraldAdjuster.GAME_GEN3_ADJUSTER:
-        return EmeraldAdjuster.get_argparser().parse_known_args(args=[])[0]
+    elif game_name == PokemonGen3Adjuster.GAME_GEN3_ADJUSTER:
+        return PokemonGen3Adjuster.get_argparser().parse_known_args(args=[])[0]
 
     return adjuster_settings
 

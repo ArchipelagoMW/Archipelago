@@ -12,24 +12,27 @@ from .adjuster_patcher import get_patch_from_sprite_pack, extract_palette_from_f
     validate_pokemon_data_string, stringify_move_pool, destringify_move_pool, keep_different_pokemon_data, \
     handle_address_collection, find_folder_object_info, load_constants
 from .adjuster_patcher import extract_sprites as extract_sprites_internal
-from worlds.pokemon_emerald.adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, \
-    POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS
+from .adjuster_constants import POKEMON_TYPES, POKEMON_FOLDERS, POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, \
+    REVERSE_POKEMON_GENDER_RATIOS
 from argparse import Namespace
 from tkinter import Widget, messagebox, IntVar
 from tkinter.tix import Tk
 
+# Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
 try:
     from worlds.pokemon_emerald.adjuster_constants import EMERALD_PATCH_EXTENSIONS
     emerald_support = True
 except:
+    from .adjuster_constants_emerald_fallback import EMERALD_PATCH_EXTENSIONS
     emerald_support = False
 try:
     from worlds.pokemon_frlg.adjuster_constants import FR_LG_PATCH_EXTENSIONS
     frlg_support = True
 except:
+    from .adjuster_constants_frlg_fallback import FR_LG_PATCH_EXTENSIONS
     frlg_support = False
 
-logger = logging.getLogger("EmeraldAdjuster")
+logger = logging.getLogger("PokemonGen3Adjuster")
 is_sprite_pack_valid = False
 is_patch_valid = False
 rom_version = "Emerald"

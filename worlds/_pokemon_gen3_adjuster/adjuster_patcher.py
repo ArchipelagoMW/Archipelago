@@ -6,15 +6,19 @@ import zlib
 from PIL import Image
 from Utils import open_image_secure
 
+# Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
+from .adjuster_constants import *
 try:
     from worlds.pokemon_emerald.adjuster_constants import *
     emerald_support = True
 except:
+    from .adjuster_constants_emerald_fallback import *
     emerald_support = False
 try:
     from worlds.pokemon_frlg.adjuster_constants import *
     frlg_support = True
 except:
+    from .adjuster_constants_frlg_fallback import *
     frlg_support = False
 
 sprite_pack_data: dict[str, int | list[dict[str, int | bytes]]] = {}
@@ -1387,7 +1391,7 @@ def load_constants(_rom_version = rom_version):
         SPRITES_REQUIREMENTS = FR_LG_SPRITES_REQUIREMENTS
         SPRITES_REQUIREMENTS_EXCEPTIONS = FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS
         OVERWORLD_PALETTE_IDS = FR_LG_OVERWORLD_PALETTE_IDS
-    data_addresses_infos = FR_LG_DATA_ADDRESS_INFOS if frlg_support else EMERALD_DATA_ADDRESS_INFOS
+    data_addresses_infos = EMERALD_DATA_ADDRESS_INFOS | FR_LG_DATA_ADDRESS_INFOS
     DATA_ADDRESSES_INFO = data_addresses_infos.get(_rom_version, {})
     if not DATA_ADDRESSES_INFO:
         raise Exception(f"Unknown ROM version {_rom_version}.")
@@ -1520,8 +1524,7 @@ def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap:
     global rom_version
     rom_version = _rom_version
 
-    data_address_infos: list[dict[str, int | dict[str, int]]] = FR_LG_DATA_ADDRESS_INFOS if frlg_support\
-                                                                else EMERALD_DATA_ADDRESS_INFOS
+    data_address_infos: list[dict[str, int | dict[str, int]]] = EMERALD_DATA_ADDRESS_INFOS | FR_LG_DATA_ADDRESS_INFOS
     data_address_info: dict[str, int | dict[str, int]] = data_address_infos.get(_rom_version, {})
     if not data_address_info:
         raise Exception(f"Unknown ROM version {_rom_version}")

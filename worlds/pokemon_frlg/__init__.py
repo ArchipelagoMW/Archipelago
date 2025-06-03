@@ -40,6 +40,11 @@ from .rom import PokemonFRLGPatchData, PokemonFireRedProcedurePatch, PokemonLeaf
 from .sanity_check import validate_regions
 from .util import int_to_bool_array, HM_TO_COMPATIBILITY_ID
 
+# Try adding the Pokemon Gen 3 Adjuster
+try:
+    from worlds._pokemon_gen3_adjuster import __init__
+except:
+    pass
 
 class PokemonFRLGWebWorld(WebWorld):
     """
@@ -54,7 +59,16 @@ class PokemonFRLGWebWorld(WebWorld):
         ["Vyneras"]
     )
 
-    tutorials = [setup_en]
+    adjuster_en = Tutorial(
+        "Usage Guide",
+        "A guide to use the Pokemon Gen 3 Adjuster with Pokemon Firered/Leafgreen.",
+        "English",
+        "adjuster_en.md",
+        "adjuster/en",
+        ["RhenaudTheLukark"]
+    )
+
+    tutorials = [setup_en, adjuster_en]
 
 
 class PokemonFRLGSettings(settings.Group):
