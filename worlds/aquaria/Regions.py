@@ -36,10 +36,14 @@ def _has_li(state: CollectionState, player: int) -> bool:
 
 def _has_damaging_item(state: CollectionState, player: int, to_remove:Iterable[str] = []) -> bool:
     """`player` in `state` has the an item that do damage other than the ones in `to_remove`"""
-    damaging_items = [item for item in
-                      {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM, ItemNames.LI_AND_LI_SONG,
+    if to_remove:
+        damaging_items = [item for item in
+                          {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM, ItemNames.LI_AND_LI_SONG,
+                           ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA, ItemNames.BABY_BLASTER}
+                          if item not in to_remove]
+    else:
+        damaging_items = {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM, ItemNames.LI_AND_LI_SONG,
                           ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA, ItemNames.BABY_BLASTER}
-                      if item not in to_remove ]
     return state.has_any(damaging_items, player)
 
 
