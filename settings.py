@@ -14,6 +14,7 @@ from collections.abc import Iterator, Sequence
 from enum import IntEnum
 from threading import Lock
 from typing import cast, Any, BinaryIO, ClassVar, TextIO, TypeVar, Union
+from pathlib import Path
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -353,7 +354,7 @@ class Path(str):
 
 class _UserPath(str):
     def resolve(self) -> str:
-        if os.path.isabs(self):
+        if Path(self).is_absolute():
             return str(self)
         from Utils import user_path
         return user_path(_resolve_exe(self))
