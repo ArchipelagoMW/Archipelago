@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Any
 
 from Options import (
     Choice,
@@ -18,6 +19,8 @@ from .Locations import DUNGEON_NAMES
 class Dungeons(DefaultOnToggle):
     """
     This controls whether dungeon locations are randomized.
+
+    This means the items found in dungeons will be randomized, not that the entrances to dungeons will be randomized.
     """
 
     display_name = "Dungeons"
@@ -751,6 +754,115 @@ class TWWOptions(PerGameCommonOptions):
     skip_rematch_bosses: SkipRematchBosses
     remove_music: RemoveMusic
     death_link: DeathLink
+
+    def get_slot_data_dict(self) -> dict[str, Any]:
+        """
+        Returns a dictionary of option name to value to be placed in
+        the slot data network package.
+
+        :return: Dictionary of option name to value for the slot data.
+        """
+        return self.as_dict(
+            "progression_dungeons",
+            "progression_tingle_chests",
+            "progression_dungeon_secrets",
+            "progression_puzzle_secret_caves",
+            "progression_combat_secret_caves",
+            "progression_savage_labyrinth",
+            "progression_great_fairies",
+            "progression_short_sidequests",
+            "progression_long_sidequests",
+            "progression_spoils_trading",
+            "progression_minigames",
+            "progression_battlesquid",
+            "progression_free_gifts",
+            "progression_mail",
+            "progression_platforms_rafts",
+            "progression_submarines",
+            "progression_eye_reef_chests",
+            "progression_big_octos_gunboats",
+            "progression_triforce_charts",
+            "progression_treasure_charts",
+            "progression_expensive_purchases",
+            "progression_island_puzzles",
+            "progression_misc",
+            "sword_mode",
+            "required_bosses",
+            "logic_obscurity",
+            "logic_precision",
+            "enable_tuner_logic",
+            "randomize_dungeon_entrances",
+            "randomize_secret_cave_entrances",
+            "randomize_miniboss_entrances",
+            "randomize_boss_entrances",
+            "randomize_secret_cave_inner_entrances",
+            "randomize_fairy_fountain_entrances",
+            "swift_sail",
+            "skip_rematch_bosses",
+            "remove_music",
+        )
+
+    def get_output_dict(self) -> dict[str, Any]:
+        """
+        Returns a dictionary of option name to value to be placed in
+        the output APTWW file.
+
+        :return: Dictionary of option name to value for the output file.
+        """
+
+        # Note: these options' values must be able to be passed through
+        # `yaml.safe_dump`.
+        return self.as_dict(
+            "progression_dungeons",
+            "progression_tingle_chests",
+            "progression_dungeon_secrets",
+            "progression_puzzle_secret_caves",
+            "progression_combat_secret_caves",
+            "progression_savage_labyrinth",
+            "progression_great_fairies",
+            "progression_short_sidequests",
+            "progression_long_sidequests",
+            "progression_spoils_trading",
+            "progression_minigames",
+            "progression_battlesquid",
+            "progression_free_gifts",
+            "progression_mail",
+            "progression_platforms_rafts",
+            "progression_submarines",
+            "progression_eye_reef_chests",
+            "progression_big_octos_gunboats",
+            "progression_triforce_charts",
+            "progression_treasure_charts",
+            "progression_expensive_purchases",
+            "progression_island_puzzles",
+            "progression_misc",
+            "randomize_mapcompass",
+            "randomize_smallkeys",
+            "randomize_bigkeys",
+            "sword_mode",
+            "required_bosses",
+            "num_required_bosses",
+            "chest_type_matches_contents",
+            "hero_mode",
+            "logic_obscurity",
+            "logic_precision",
+            "randomize_dungeon_entrances",
+            "randomize_secret_cave_entrances",
+            "randomize_miniboss_entrances",
+            "randomize_boss_entrances",
+            "randomize_secret_cave_inner_entrances",
+            "randomize_fairy_fountain_entrances",
+            "mix_entrances",
+            "randomize_enemies",
+            "randomize_starting_island",
+            "randomize_charts",
+            "swift_sail",
+            "instant_text_boxes",
+            "reveal_full_sea_chart",
+            "add_shortcut_warps_between_dungeons",
+            "skip_rematch_bosses",
+            "remove_music",
+        )
 
 
 tww_option_groups: list[OptionGroup] = [

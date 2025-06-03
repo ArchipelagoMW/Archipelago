@@ -231,11 +231,11 @@ Sent to clients after a client requested this message be sent to them, more info
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
-| original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
-| text | str | A descriptive message of the problem at hand. |
+| Name | Type        | Notes |
+| ---- |-------------| ----- |
+| type | str         | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
+| original_cmd | str \| None | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text | str         | A descriptive message of the problem at hand. |
 
 ##### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
@@ -470,7 +470,7 @@ The following operations can be applied to a datastorage key
 | right_shift | Applies a bitwise right-shift to the current value of the key by `value`. |
 | remove | List only: removes the first instance of `value` found in the list. |
 | pop | List or Dict: for lists it will remove the index of the `value` given. for dicts it removes the element with the specified key of `value`. |
-| update | Dict only: Updates the dictionary with the specified elements given in `value` creating new keys, or updating old ones if they previously existed. |
+| update | List or Dict: Adds the elements of `value` to the container if they weren't already present. In the case of a Dict, already present keys will have their corresponding values updated. |
 
 ### SetNotify
 Used to register your current session for receiving all [SetReply](#SetReply) packages of certain keys to allow your client to keep track of changes.
@@ -551,14 +551,14 @@ In JSON this may look like:
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
 
 ```python
-from typing import TypedDict, Optional
+from typing import TypedDict
 class JSONMessagePart(TypedDict):
-    type: Optional[str]
-    text: Optional[str]
-    color: Optional[str] # only available if type is a color
-    flags: Optional[int] # only available if type is an item_id or item_name
-    player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[HintStatus] # only available if type is hint_status
+    type: str | None
+    text: str | None
+    color: str | None # only available if type is a color
+    flags: int | None # only available if type is an item_id or item_name
+    player: int | None # only available if type is either item or location
+    hint_status: HintStatus | None # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.
@@ -756,8 +756,8 @@ Tags are represented as a list of strings, the common client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name   | Type  | Notes                                                                                                                                                  |
-|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
-| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
-| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |
+| Name   | Type  | Notes                                                                                                                                                                            |
+|--------|-------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                                                |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, if the string is non-empty, it should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                                                    |
