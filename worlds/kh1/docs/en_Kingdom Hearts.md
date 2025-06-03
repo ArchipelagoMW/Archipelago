@@ -41,35 +41,6 @@ When the player receives an item, your client will display a message displaying 
 
 Please reach out to Gicu#7034 on Discord.
 
-## How do I progress in a certain world?
-
-### The evidence boxes aren't spawning in Wonderland.
-
-Find `Footprints` in the multiworld.
-
-### I can't enter any cups in Olympus Coliseum.
-
-Firstly, find `Entry Pass` in the multiworld.  Additionally, `Phil Cup`, `Pegasus Cup`, and `Hercules Cup` are all multiworld items.  Finding all 3 grant you access to the Hades Cup and the Platinum Match.  Clearing all cups lets you challenge Ice Titan.
-
-### The slides aren't spawning in Deep Jungle.
-
-Find `Slides` in the multiworld.
-
-### I can't progress in Atlantica.
-Find `Crystal Trident` in the multiworld.
-
-### I can't progress in Halloween Town.
-
-Find `Forget-Me-Not` and `Jack-in-the-Box` in the multiworld.
-
-### The Hollow Bastion Library is missing a book.
-
-Find `Theon Vol. 6` in the multiworld.
-
-## How do I enter the End of the World?
-
-You can enter End of the World by obtaining a number of Lucky Emblems or by finding `End of the World` in the multiworld, depending on your options.
-
 ## Credits
 This is a collaborative effort from several individuals in the Kingdom Hearts community, but most of all, denhonator.
 
