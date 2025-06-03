@@ -1,40 +1,35 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, LocData, BrushTechniques
+from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
 
-regions ={
-    "r102_1": "Kamiki Village (Stone state)",
-    "r102_2": "Kamiki Village",
-    "r102_3": "Kamiki Village Islands",
-}
 exits = {
-    "r102_1":[ExitData("Kamiki Village (stone) Torii","r122_1"),
-            ExitData("Restore the villagers","r102_2",
-                     has_events=["Kamiki Village - Restoring the villagers"])],
-    "r102_2":[ExitData("Kamiki Village Torii","r122_1"),
-              ExitData("Swim to Kamiki Islands", "r102_3",needs_swim=True)],
-    "r102_3":[ExitData("Swim to Kamiki Village", "r102_2",needs_swim=True)],
+    RegionNames.STONE_KAMIKI: [ExitData("Kamiki Village (stone) Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
+                               ExitData("Restore the villagers", RegionNames.KAMIKI_VILLAGE,
+                                        has_events=["Kamiki Village - Restoring the villagers"])],
+    RegionNames.KAMIKI_VILLAGE: [ExitData("Kamiki Village Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
+                                 ExitData("Swim to Kamiki Islands", RegionNames.KAMIKI_ISLANDS, needs_swim=True)],
+    RegionNames.KAMIKI_ISLANDS: [ExitData("Swim to Kamiki Village", RegionNames.KAMIKI_VILLAGE, needs_swim=True)],
 }
-events={
-    "r102_1":{
-        "Kamiki Village - Restoring the villagers": LocData(0,[BrushTechniques.SUNRISE])
+events = {
+    RegionNames.STONE_KAMIKI: {
+        "Kamiki Village - Restoring the villagers": EventData(required_brush_techniques=[BrushTechniques.SUNRISE])
     },
-    "r102_3":{
-        "End for now" : LocData(0,[BrushTechniques.CRESCENT])
+    RegionNames.KAMIKI_ISLANDS: {
+        "End for now": EventData(required_brush_techniques=[BrushTechniques.CRESCENT,BrushTechniques.REJUVENATION,BrushTechniques.SUNRISE],power_slash_level=1)
     }
 }
-locations={
-    "r102_1":{
+locations = {
+    RegionNames.STONE_KAMIKI: {
         "Kamiki Village - Sunrise": LocData(6),
     },
-    "r102_2":{
+    RegionNames.KAMIKI_VILLAGE: {
         "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(7),
         "Kamiki Village - Buried Chest near Komuso": LocData(8, buried_chest=1),
     },
-    "r102_3":{
+    RegionNames.KAMIKI_ISLANDS: {
         "Kamiki Village - Island Chest 1": LocData(9),
-        "Kamiki Village - Island buried Chest 1": LocData(10,buried_chest=1),
+        "Kamiki Village - Island buried Chest 1": LocData(10, buried_chest=1),
     }
 }

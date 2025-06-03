@@ -17,25 +17,29 @@ def get_location_names():
     return location_names
 
 
-def create_region_locations(region_code: str, reg: Region, world: "OkamiWorld"):
-    if region_code in okami_locations:
-        for (location_name, location_data) in okami_locations[region_code].items():
+def create_region_locations(reg: Region, world: "OkamiWorld"):
+    if reg.name in okami_locations:
+        for (location_name, location_data) in okami_locations[reg.name].items():
             location = OkamiLocation(world.player, location_name, location_data.id, reg)
             apply_event_or_location_rules(location, location_name, location_data, world)
             reg.locations.append(location)
             print("Created Location " + location_name)
 
 
-def create_region_events(region_code: str, reg: Region, world: "OkamiWorld"):
-    if region_code in okami_events:
-        for (event_name, event_data) in okami_events[region_code].items():
-            event_location = create_event(event_name, event_name, reg, event_data, world)
+def create_region_events(reg: Region, world: "OkamiWorld"):
+    if reg.name in okami_events:
+        for (event_name, event_data) in okami_events[reg.name].items():
+            print(event_data)
+            if event_data.override_event_item_name:
+                event_location = create_event(event_name, event_data.override_event_item_name, reg, event_data, world)
+            else:
+                event_location = create_event(event_name, event_name, reg, event_data, world)
             event_location.show_in_spoiler = False
 
 
-def create_event(name: str, item_name: str, region: Region, data: LocData, world: "OkamiWorld") -> Location:
-    event = OkamiLocation(world.player, name, None, region)
-    apply_event_or_location_rules(event, name, data, world)
+def create_event(location_name: str, item_name: str, region: Region, data: LocData, world: "OkamiWorld") -> Location:
+    event = OkamiLocation(world.player, location_name, None, region)
+    apply_event_or_location_rules(event, location_name, data, world)
     region.locations.append(event)
     event.place_locked_item(OkamiItem(item_name, ItemClassification.progression, None, world.player))
     return event

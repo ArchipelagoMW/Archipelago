@@ -1,20 +1,18 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, LocData
+from ..Types import ExitData, RegionNames, EventData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
 
-regions ={
-    "r100": "Cursed Kamiki"
-}
 exits = {
-    "r100":[ExitData("Cursed Kamiki Torii","r122_1"),
-            ExitData("Kamiki Restoration Cutscene","r102_1",has_events=["Cursed Kamiki - Cutting the peach"])]
+    RegionNames.CURSED_KAMIKI: [ExitData("Cursed Kamiki Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
+                                ExitData("Kamiki Restoration Cutscene", RegionNames.STONE_KAMIKI,
+                                         has_events=["Cursed Kamiki - Cutting the peach"])]
 }
-events={
-    "r100":{
-        "Cursed Kamiki - Cutting the peach": LocData(0, power_slash_level=1),
+events = {
+    RegionNames.CURSED_KAMIKI: {
+        "Cursed Kamiki - Cutting the peach": EventData(power_slash_level=1),
     }
 }
-locations={
+locations = {
 }

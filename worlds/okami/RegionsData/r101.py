@@ -1,31 +1,29 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, LocData, BrushTechniques
+from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
 
-regions ={
-    "r101_1": "Cave of Nagi",
-    "r101_2": "Cave of Nagi (Tachigami Cutscene)"
-}
 exits = {
-    "r101_1":[ExitData("Exit to River of the Heavens","r122_2"),
-             ExitData("Repair Nagi's statue","r101_2",has_events=["Cave of Nagi - Repair statue"])],
-    "r101_2":[ExitData("Clear power slash tutorial","r101_1",has_events=["Cave of Nagi - Cut tutorial rock"])]
+    RegionNames.CAVE_OF_NAGI: [ExitData("Exit to River of the Heavens", RegionNames.RIVER_OF_THE_HEAVENS_NAGI),
+                               ExitData("Repair Nagi's statue", RegionNames.CAVE_OF_NAGI_TACHIGAMI,
+                                        has_events=["Cave of Nagi - Repair statue"])],
+    RegionNames.CAVE_OF_NAGI_TACHIGAMI: [ExitData("Clear power slash tutorial", RegionNames.CAVE_OF_NAGI,
+                                                  has_events=["Cave of Nagi - Cut tutorial rock"])]
 }
-events={
-    'r101_1':{
-        "Cave of Nagi - Repair statue": LocData(0, required_brush_techniques=[BrushTechniques.REJUVENATION]),
+events = {
+    RegionNames.CAVE_OF_NAGI: {
+        "Cave of Nagi - Repair statue": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
     },
-    "r101_2":{
-        "Cave of Nagi - Cut tutorial rock": LocData(0, power_slash_level=1)
+    RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
+        "Cave of Nagi - Cut tutorial rock": EventData(power_slash_level=1)
     }
 }
-locations={
-    "r101_1":{
+locations = {
+    RegionNames.CAVE_OF_NAGI: {
         "Cave of Nagi - Stray Bead Chest": LocData(4),
     },
-    "r101_2":{
+    RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
         "Cave of Nagi - Tachigami": LocData(5),
     }
 }

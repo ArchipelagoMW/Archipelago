@@ -62,8 +62,8 @@ okami_items = {
     "Water Tablet": ItemData(0x9c, ItemClassification.progression),
 
     # Other
-    "Astral Pouch": ItemData(0x06, ItemClassification.useful),
-    "Stray Bead": ItemData(0xCC, ItemClassification.skip_balancing),
+    #"Astral Pouch": ItemData(0x06, ItemClassification.useful),
+    #"Stray Bead": ItemData(0xCC, ItemClassification.skip_balancing),
 
     # Filler
     "Holy Bone S": ItemData(0x8F, ItemClassification.filler),
@@ -74,7 +74,7 @@ junk_weights = {
 }
 # For items that need to appear more than once
 item_frequencies = {
-    "Holy Bone S": 1,
+    #"Holy Bone S": 1,
 }
 
 item_table = {
