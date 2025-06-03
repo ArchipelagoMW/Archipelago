@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from uuid import UUID, uuid4
 from pony.orm import Database, PrimaryKey, Required, Set, Optional, buffer, LongStr
 

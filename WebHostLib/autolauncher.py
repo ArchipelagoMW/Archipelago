@@ -4,7 +4,7 @@ import json
 import logging
 import multiprocessing
 import typing
-from datetime import timedelta, datetime, timezone
+from datetime import timedelta, datetime
 from threading import Event, Thread
 from typing import Any
 from uuid import UUID
