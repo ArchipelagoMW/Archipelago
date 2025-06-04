@@ -339,7 +339,7 @@ The most common way to create an event is to create the event item and the event
 victory_loc = MyGameLocation(self.player, "Defeat the Final Boss", None, final_boss_arena_region)
 victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
 self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-set_rule(victory_loc, lambda state: state.can_reach_region("Final Boss Arena", self.player))
+set_rule(victory_loc, lambda state: state.has("Boss Defeating Sword", self.player))
 ```
 
 Requiring an event to finish the game will make the spoiler log display an additional
