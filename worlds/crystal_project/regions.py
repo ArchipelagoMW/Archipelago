@@ -239,7 +239,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(SALMON_BAY, player).add_exits([THE_OPEN_SEA, SALMON_RIVER],
         {THE_OPEN_SEA: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5),
         SALMON_RIVER: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2)})
-    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH,SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, BEAURIOR_VOLCANO, JIDAMBA_TANGLE, THE_DEEP_SEA],
+    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH, SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, BEAURIOR_VOLCANO, JIDAMBA_TANGLE, THE_DEEP_SEA],
         {SEASIDE_CLIFFS: logic.has_swimming,
         PROVING_MEADOWS: logic.has_swimming,
         OKIMOTO_NS: logic.has_swimming,
