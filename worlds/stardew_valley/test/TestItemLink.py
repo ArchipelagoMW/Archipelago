@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import options, item_table, Group
 
 max_iterations = 2000
@@ -6,7 +6,7 @@ max_iterations = 2000
 
 class TestItemLinksEverythingIncluded(SVTestBase):
     options = {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-               options.TrapItems.internal_name: options.TrapItems.option_medium}
+               options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium}
 
     def test_filler_of_all_types_generated(self):
         max_number_filler = 114
@@ -33,7 +33,7 @@ class TestItemLinksEverythingIncluded(SVTestBase):
 
 class TestItemLinksNoIsland(SVTestBase):
     options = {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-               options.TrapItems.internal_name: options.TrapItems.option_medium}
+               options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium}
 
     def test_filler_has_no_island_but_has_traps(self):
         max_number_filler = 109
@@ -57,7 +57,7 @@ class TestItemLinksNoIsland(SVTestBase):
 
 class TestItemLinksNoTraps(SVTestBase):
     options = {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-               options.TrapItems.internal_name: options.TrapItems.option_no_traps}
+               options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps}
 
     def test_filler_has_no_traps_but_has_island(self):
         max_number_filler = 99
@@ -81,7 +81,7 @@ class TestItemLinksNoTraps(SVTestBase):
 
 class TestItemLinksNoTrapsAndIsland(SVTestBase):
     options = {options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
-               options.TrapItems.internal_name: options.TrapItems.option_no_traps}
+               options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps}
 
     def test_filler_generated_without_island_or_traps(self):
         max_number_filler = 94
