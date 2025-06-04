@@ -6,8 +6,6 @@ on:
 permissions:
   contents: read
   pull-requests: write
-env:
-  GH_REPO: ArchipelagoMW/Archipelago
 
 jobs:
   labeler:
@@ -31,6 +29,7 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ArchipelagoMW/Archipelago
   unblock_draft_prs:
     name: 'Remove waiting-on labels'
     needs: labeler
