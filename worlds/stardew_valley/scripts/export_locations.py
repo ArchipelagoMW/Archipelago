@@ -25,8 +25,8 @@ if __name__ == "__main__":
             location.name: {
                 "code": location.code,
                 "region": location.region,
-                "tags": [tag.name for tag in location.tags],
-                "content_packs": [pack for pack in location.content_packs]
+                "tags": sorted([tag.name for tag in location.tags]),
+                "content_packs": sorted([pack for pack in location.content_packs]),
             }
             for location in location_table.values()
             if location.code is not None
