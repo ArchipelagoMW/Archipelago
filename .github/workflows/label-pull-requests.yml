@@ -6,6 +6,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
+env:
+  GH_REPO: ArchipelagoMW/Archipelago
 
 jobs:
   labeler:
