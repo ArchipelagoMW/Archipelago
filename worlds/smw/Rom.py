@@ -3,7 +3,7 @@ from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 from .Aesthetics import generate_shuffled_header_data, generate_shuffled_ow_palettes, generate_curated_level_palette_data, generate_curated_map_palette_data, generate_shuffled_sfx
 from .Levels import level_info_dict, full_bowser_rooms, standard_bowser_rooms, submap_boss_rooms, ow_boss_rooms
-from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box
+from .Names.TextBox import generate_goal_text, title_text_mapping, generate_text_box, generate_credits
 
 USHASH = 'cdd3c8c37322978ca8669b34bc89c804'
 ROM_PLAYER_LIMIT = 65535
@@ -2956,6 +2956,9 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     intro_text = generate_text_box("Bowser has stolen all of Mario's abilities. Can you help Mario travel across Dinosaur land to get them back and save the Princess from him?")
     rom.write_bytes(0x2A5D9, intro_text)
+
+    credits_text = generate_credits()
+    rom.write_bytes(0x615C7, credits_text)
 
     handle_bowser_rooms(rom, world)
     handle_boss_shuffle(rom, world)
