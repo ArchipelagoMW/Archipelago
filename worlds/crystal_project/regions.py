@@ -380,7 +380,8 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
     logic = CrystalProjectLogic(world.player, options)
     world.starting_region = starting_region_list[0]
     menu = world.multiworld.get_region(MENU, world.player)
-    menu.add_exits([SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD], 
+    multiworld = world.multiworld
+    multiworld.get_region(MENU, world.player).add_exits([SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD],
         {CAPITAL_SEQUOIA: lambda state: state.has_any({"Item - Gaea Stone"}, world.player),
         MERCURY_SHRINE: lambda state: state.has_any({"Item - Mercury Stone"}, world.player),
         SALMON_RIVER: lambda state: state.has_any({"Item - Poseidon Stone"}, world.player),
