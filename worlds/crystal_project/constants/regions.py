@@ -1,3 +1,4 @@
+MENU = "Menu"
 SPAWNING_MEADOWS = "Spawning Meadows"
 DELENDE = "Delende"
 SOILED_DEN = "Soiled Den"

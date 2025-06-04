@@ -1,5 +1,6 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List, TYPE_CHECKING
 from BaseClasses import ItemClassification
+from .constants.key_items import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
@@ -145,7 +146,7 @@ item_table: Dict[str, ItemData] = {
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
     "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 0, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Ferry Pass": ItemData("Item", 37 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
+    FERRY_PASS: ItemData("Item", 37 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
 
     #Key Items
     "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Spawning Meadows, Beginner Regions
@@ -154,7 +155,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0), #Turn-in: Seaside Cliffs, Beginner Regions
     "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 0, 3), #Turn-in: Capital Sequoia, Advanced Regions
     "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 0, 12), #Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Elevator Part": ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 0, 0, 10), #Turn-in: Shoudu Province, Expert Regions
+    ELEVATOR_PART: ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 0, 0, 10), #Turn-in: Shoudu Province, Expert Regions
     "Item - Undersea Crab": ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 0, 0, 15), #Turn-in: The Deep Sea, Expert Regions
     "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
