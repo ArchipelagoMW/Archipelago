@@ -25,11 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Add label'
-        run: "gh pr edit \"$PR_URL\" --add-label 'waiting-on: peer-review'"
+        run: "gh pr edit \"$PR_URL\" --add-label 'waiting-on: peer-review' --repo ArchipelagoMW/Archipelago"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ArchipelagoMW/Archipelago
   unblock_draft_prs:
     name: 'Remove waiting-on labels'
     needs: labeler
