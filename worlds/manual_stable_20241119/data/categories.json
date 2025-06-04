@@ -1,0 +1,9 @@
+{
+    "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.categories.schema.json",
+    "Example Logic only category": {
+        "hidden": true
+    },
+    "Example Yaml-option category": {
+        "yaml_option": ["DLC_enabled"]
+    }
+}

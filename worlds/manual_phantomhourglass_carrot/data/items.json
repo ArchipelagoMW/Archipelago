@@ -1,0 +1,1065 @@
+[
+  {
+    "name": "Sword",
+    "category": [
+      "Item",
+      "Damage",
+	  "Sword Category"
+    ],
+    "count": 2,
+    "progression": true
+  },
+  {
+    "name": "SW Sea Chart",
+    "category": [
+      "Sea Chart"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "NW Sea Chart",
+    "category": [
+      "Sea Chart"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "SE Sea Chart",
+    "category": [
+      "Sea Chart"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "NE Sea Chart",
+    "category": [
+      "Sea Chart"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Gold Rupee",
+    "category": [
+      "Filler"
+    ],
+    "normal": true,
+    "count": "3",
+    "filler": true
+  },
+  {
+    "name": "Phantom Hourglass",
+    "category": [
+      "Item"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Boomerang",
+    "category": [
+      "Item",
+      "Range",
+      "Bat"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Shovel",
+    "category": [
+      "Item"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Bombs",
+    "category": [
+      "Item",
+      "Damage",
+      "Boom",
+      "Bat",
+      "Bubble"
+    ],
+    "count": "3",
+    "progression": true
+  },
+  {
+    "name": "Bow",
+    "category": [
+      "Item",
+      "Damage",
+      "Phantom",
+      "Range",
+      "Bat",
+      "Bubble"
+    ],
+    "count": "3",
+    "progression": true
+  },
+  {
+    "name": "Grappling Hook",
+    "category": [
+      "Item",
+      "Damage",
+      "Phantom",
+      "Range",
+      "Bat",
+      "Bubble"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Bombchus",
+    "category": [
+      "Item",
+      "Damage",
+      "Boom",
+      "Bat",
+      "Bubble"
+    ],
+    "count": "3",
+    "progression": true
+  },
+  {
+    "name": "Cannon",
+    "category": [
+      "Ship Item"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Salvage Hook",
+    "category": [
+      "Ship Item"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "Spirit of Power",
+    "category": [
+      "Spirit",
+      "SpiritP"
+    ],
+    "count": "2",
+    "progression": true
+  },
+  {
+    "name": "Spirit of Courage",
+    "category": [
+      "Spirit",
+      "SpiritC"
+    ],
+    "count": "2",
+    "progression": true
+  },
+  {
+    "name": "Spirit of Wisdom",
+    "category": [
+      "Spirit",
+      "SpiritW"
+    ],
+    "count": "2",
+    "progression": true
+  },
+  {
+    "name": "Sands of Time: 1 Minute",
+    "category": [
+      "Upgrade"
+    ],
+    "count": "10",
+    "useful": true
+  },
+  {
+    "name": "Mercay Passage Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "count": 3,
+    "progression": true
+  },
+  {
+    "name": "TotOK Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "count": 6,
+    "progression": true
+  },
+  {
+    "name": "Hammer",
+    "category": [
+      "Item",
+      "Damage",
+      "Phantom",
+      "Bat",
+      "Bubble"
+    ],
+    "count": 1,
+    "progression": true
+  },
+  {
+    "name": "B3 Force Gem",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "count": 3,
+    "progression": true
+  },
+  {
+    "name": "B12 Force Gem",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "count": 3,
+    "progression": true
+  },
+  {
+    "name": "Big Green Rupee",
+    "category": [
+      "Filler"
+    ],
+    "count": "3",
+    "progression": true
+  },
+  {
+    "count": "13",
+    "name": "Heart Containter",
+    "category": [
+      "Upgrade"
+    ],
+    "useful": true
+  },
+  {
+    "count": "3",
+    "name": "ToF Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "progression": true
+  },
+  {
+    "count": "3",
+    "name": "ToI Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "ToF Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "ToI Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Sun Key",
+    "category": [
+      "Key (other)"
+    ],
+    "progression": true
+  },
+  {
+    "count": "3",
+    "name": "ToC Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "ToC Square Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "ToC Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Cyclone Slate",
+    "category": [
+      "Ship Item"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph N",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph A",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph Phi",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph Omega",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph W",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "Glyph Box",
+    "category": [
+      "Warp Glyph",
+	  "Randomize Frogs"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Ghost Key",
+    "category": [
+      "Key (other)"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Ghost Ship Triangle Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Ghost Ship Round Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "useful": true
+  },
+  {
+    "count": 1,
+    "name": "ToW Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "ToW Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Fishing Rod",
+    "category": [
+      "Ship Item"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Swordsman's Scroll",
+    "category": [
+      "Upgrade"
+    ],
+    "useful": true
+  },
+  {
+    "count": "20",
+    "name": "Power Gem",
+    "category": [
+      "Collectable"
+    ],
+    "progression": true
+  },
+  {
+    "count": "20",
+    "name": "Wisdom Gem",
+    "category": [
+      "Collectable"
+    ],
+    "progression": true
+  },
+  {
+    "count": "20",
+    "name": "Courage Gem",
+    "category": [
+      "Collectable"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "King's Key",
+    "category": [
+      "Key (other)"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Big Catch Lure",
+    "category": [
+      "Ship Item"
+    ],
+    "progression": true
+  },
+  {
+    "count": "3",
+    "name": "Shield",
+    "category": [
+      "Upgrade"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "TotOK Square Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "TotOK Round Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "TotOK Triangle Crystal",
+    "category": [
+      "Key (other)",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "Regal Necklace",
+    "category": [
+      "Key (other)"
+    ],
+    "progression": true
+  },
+  {
+    "count": "2",
+    "name": "Mutoh's Small Key",
+    "category": [
+      "Small Key"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "Hero's New Clothes",
+    "category": [
+      "Trade Quest"
+    ],
+    "progression": true
+  },
+  {
+    "count": "1",
+    "name": "Mutoh's Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Aquanine",
+    "category": [
+      "Key (other)",
+      "McGuffin",
+      "Metal"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Azurine",
+    "category": [
+      "Key (other)",
+      "McGuffin",
+      "Metal"
+    ],
+    "progression": true
+  },
+  {
+    "count": 1,
+    "name": "Crimsonine",
+    "category": [
+      "Key (other)",
+      "McGuffin",
+      "Metal"
+    ],
+    "progression": true
+  },
+  {
+    "name": "Spirit of Power (Boss)",
+    "category": [
+      "Spirit",
+      "McGuffin",
+      "SpiritP"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Spirit of Courage (Boss)",
+    "category": [
+      "Spirit",
+      "McGuffin",
+      "SpiritC"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Spirit of Wisdom (Boss)",
+    "category": [
+      "Spirit",
+      "McGuffin",
+      "SpiritW"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Goron Boss Key",
+    "category": [
+      "Boss Key",
+	  "Randomize Throwables"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Kaleidoscope",
+    "category": [
+      "Trade Quest"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Guard Notebook",
+    "category": [
+      "Trade Quest"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Wood Heart",
+    "category": [
+      "Trade Quest"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Prize Postcard",
+    "category": [
+      "Filler"
+    ],
+    "count": "5",
+    "filler": true
+  },
+  {
+    "count": "2",
+    "name": "Green Rupee",
+    "category": [
+      "McGuffin",
+      "Filler"
+    ],
+    "filler": true
+  },
+  {
+    "count": "1",
+    "name": "Courage Crest",
+    "category": [
+      "Key (other)"
+    ],
+    "progression": true
+  },
+  {
+    "name": "Bright Ship (1)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Iron Ship (2)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Stone Ship (3)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Vintage Ship (4)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Demon Ship (5)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Tropical Ship (6)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Dignified Ship (7)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Golden Ship (8)",
+    "category": [
+      "Ship Part Set"
+    ],
+    "count": "1",
+    "useful": true
+  },
+  {
+    "name": "Red Potion",
+    "category": [
+      "Consumable"
+    ],
+    "count": "2",
+    "filler": true
+  },
+  {
+    "name": "Purple Potion",
+    "category": [
+      "Consumable"
+    ],
+    "count": "2",
+    "filler": true
+  },
+  {
+    "name": "Yellow Potion",
+    "category": [
+      "Consumable"
+    ],
+    "count": "1",
+    "filler": true
+  },
+  {
+    "name": "Arrow Refill",
+    "category": [
+      "Consumable"
+    ],
+    "count": "3",
+    "filler": true
+  },
+  {
+    "name": "Bomb Refill",
+    "category": [
+      "Consumable"
+    ],
+    "count": "3",
+    "filler": true
+  },
+  {
+    "name": "Bombchu Refill",
+    "category": [
+      "Consumable"
+    ],
+    "count": "3",
+    "filler": true
+  },
+  {
+    "name": "Salvage Arm Repair Kit",
+    "category": [
+      "Consumable",
+	  "Randomize Salvage"
+    ],
+    "count": "5",
+    "filler": true
+  },
+  {
+    "name": "Jolene's Letter",
+    "category": [
+      "Trade Quest"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #1 Molida SW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #2 Mercay NE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #3 Gusts SW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #4 Bannan SE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #5 Molida N",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #6 Bannan W",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #7 Gusts E",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #8 Mercay SE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #9 Cannon W",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #10 Gusts SE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #11 Gusts N",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #12 Dee Ess N",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #13 Harrow E",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #14 Goron NW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #15 Goron W",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #16 Goron NE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #17 Frost S",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #18 Cannon S",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #19 Gusts NE",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #20 Bannan E",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #21 Molida NW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #22 Harrow S",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #23 Frost NW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #24 Ruins W",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #25 Dead E",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #26 Ruins SW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #27 Maze E",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #28 Ruins NW",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #29 Maze W",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #30 Ruins S",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  },
+  {
+    "name": "Treasure Map #31 Dead S",
+    "category": [
+      "Treasure Map",
+	  "Randomize Salvage"
+    ],
+    "count": "1",
+    "progression": true
+  }
+]

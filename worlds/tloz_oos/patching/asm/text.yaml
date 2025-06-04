@@ -1,0 +1,332 @@
+# "Got Archipelago Item" text, replacing Ring Box L1 vanilla string
+1d/1b01/TX_0057: |
+    db $03,$e8,$04,$42,$05,$ea                          ; You found an
+    db $69,$74,$65,$6d,$20,$04,$91,$61,$6e,$03,$0f,$01  ; item for another
+    db $03,$75,$21,$00                                  ; world!
+
+# "Got Ore Chunks (x25)" text, replacing Ring Box L2 vanilla string
+1d/1b1e/TX_0058: |
+    db $02,$12,$32,$35,$01  ; You got 25
+    db $02,$09,$21,$00      ; Ore Chunks!
+
+# ???
+0a/3b9e/: |
+    ret
+    nop
+    nop
+
+# Handle default seed text which doesn't exist in vanilla game
+1e/2265/TX_1704: |  # 1704, cutscene after d1
+    db $02,$12,$04,$79,$01          ; You got Ember
+    db $02,$53,$21,$20,$05,$a9,$01  ; Seeds! Open
+    db $79,$02,$65                  ; your Seed
+    db $02,$6e,$05,$da,$04,$aa,$01  ; Satchel to use
+    db $74,$68,$65,$6d,$2e,$00      ; them.
+10//useEmberSeedText: |
+    cp $e5
+    jr nz,@done
+    ld bc,$1704
+    @done:
+    jp showText
+10/0ade/: call useEmberSeedText
+
+# Remove the mention of seeds being included with the seed satchel, since Ember was most likely
+# the wrong one in random given seed type
+1d/1730/: db $00
+
+1e/24d7/TX_1716: /include text.horonShop1 # (Cutscene after d8)
+1e/281d/TX_172d: /include text.horonShop2 # (Cutscene after d6)
+1e/2361/TX_1707: /include text.horonShop3 # (Cutscene after d2)
+
+1e/0c05/TX_0c12: /include text.advanceShop1 # (Onox finding Din in linked intro troupe cutscene)
+1e/0c3f/TX_0c13: /include text.advanceShop2 # (Onox taunting Link in linked intro troupe cutscene)
+1e/1497/TX_0e25: /include text.advanceShop3 # (vanilla text)
+
+1e/1052/TX_0d0c: /include text.syrupShop1 # (text shown AFTER buying bombchus in vanilla)
+1e/0f19/TX_0d01: /include text.syrupShop2 # (vanilla text)
+1e/0fac/TX_0d05: /include text.syrupShop3 # (vanilla text)
+
+1e/1364/TX_0e1b: /include text.memberShop1 # (text asking to buy Strange Flute in vanilla)
+1e/23e0/TX_1709: /include text.memberShop2 # (cutscene after d3)
+1e/13a0/TX_0e1e: /include text.memberShop3 # (vanilla text)
+
+20/216e/TX_4509: /include text.spoolSwampScrub # (vanilla text)
+20/21f0/TX_450c: /include text.d4Scrub # (vanilla text)
+20/2071/TX_4502: /include text.d2Scrub # (vanilla is TX_450d, we use 4502 which replaces Moosh scrub greeting, being unreachable in rando)
+
+# Hint for the sequence going to pedestal
+1e/056d/TX_0b50: /include text.lostWoodsPedestalSequence
+# Hint for the sequence going to D6
+20/1fff/TX_4500: |
+    db $04,$59,$03,$b3,$3a,$01  ; Replace "travel west," by "follow this: "
+    /include text.lostWoodsMainSequence
+1f/33f6/TX_3604: |  # This one looks similar to the previous one, but I don't know where it's used. Linked games maybe?
+    db $04,$59,$03,$b3,$3a,$01  ; Replace "travel west," by "follow this: "
+    /include text.lostWoodsMainSequence
+
+# Replace cutscene after d4 is d5 < d4 by a copy of the end text inside textbank 17, which
+# will be used by text injections performed in that textbank
+1e/27ba/TX_172b: |
+    db $04,$fc,$02,$8b,$04,$b7  ; How about it?
+    db $02,$fe,$03,$bf,$00      ; Sure / No
+
+1e/2699/TX_1726: |  # (cutscene after d4 if d4 < d5)
+    /include text.subrosianMarket1 
+    db $07,$2b  # jump to TX_172b (end text copy)
+1e/26f6/TX_1728: |  # (cutscene after d5 if d5 < d4)
+    /include text.subrosianMarket2
+    db $07,$2b  # jump to TX_172b (end text copy)
+1f/0df1/TX_2b05: |  # (vanilla text slot)
+    /include text.subrosianMarket3
+    db $07,$0b  # jump to TX_2b0b (original end text)
+1e/2777/TX_172a: |  # (cutscene after d5 if d4 < d5)
+    /include text.subrosianMarket4
+    db $07,$2b  # jump to TX_172b (end text copy)
+1f/0ed4/TX_2b10: |  # (vanilla text slot)
+    /include text.subrosianMarket5
+    db $07,$0b  # jump to TX_2b0b (original end text)
+
+# Change D8 introduction text to “Sword & Shield Dungeon” from “Sword & Shield Maze”, since every other mention of it
+# was using “Dungeon” naming
+1d/21a1/TX_0208: db $44,$05,$8a,$00 # "Dungeon"
+
+# Shorten initial Maku Tree text script when giving Gnarled Key, replacing lots of instructions by ineffective
+# "disableinput" instructions
+0b/316a/: db $bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd,$bd
+# (TX_1700 & TX_1701 are therefore free to use)
+
+# replace text in script command 9a (showtextnonexitable) using
+# scriptTextReplacements: four-byte entries, first two bytes are old text
+# index, second two bytes are new text index.
+0b//scriptTextReplacements: |
+    db $0e,$04,$17,$16    ; Horon shop 1
+    db $0e,$03,$17,$2d    ; Horon shop 2
+    db $0e,$02,$17,$07    ; Horon shop 3
+    db $0e,$22,$0c,$12    ; Advance shop 1
+    db $0e,$23,$0c,$13    ; Advance shop 2
+    db $0d,$0a,$0d,$0c    ; Syrup shop 1
+    db $0e,$1c,$0e,$1b    ; Member shop 1
+    db $0e,$1d,$17,$09    ; Member shop 2
+    db $2b,$00,$17,$26    ; Market 1
+    db $2b,$01,$17,$28    ; Market 2
+    db $2b,$06,$17,$2a    ; Market 4
+    db $ff
+0b//scriptShowTextNonExitableCustom: |
+    push de
+    ld e,$02
+    ld hl,scriptTextReplacements
+    call searchDoubleKey
+    pop de
+    jr nc,@done
+    ldi a,(hl)
+    ld b,a
+    ld c,(hl)
+    @done:
+    jp showTextNonExitable
+0b/02e8/: call scriptShowTextNonExitableCustom
+
+# In case where dungeon has not been visited, make popup indicate a generic
+# "Unknown Dungeon" instead of the original region where the dungeon is located,
+# which can be a spoiler in runs with shuffled dungeons
+02/20f8/: |
+    ld b,$06
+    ld c,$02
+# Replace TX_0602 (linked story text) by "Unknown Dungeon"
+1d/2735/TX_0602: db $55,$6e,$04,$98,$6e,$20,$44,$05,$8a,$00
+
+# Change the textbox for the girl in the mayor's house to tell how many Gasha Nuts will contain deterministic loot
+1f/2a9e/: |
+    db $0c,$18,$01                                      ; "\stop\n"
+    db $03,$e8,$03,$55,$03,$8c,$01                      ; "You should know\n"
+    db $04,$b5,$02,$80,$04,$81,$01                      ; "only your first\n"
+    db $09,$04                                          ; "\col(4)<NUM> \col(0) nuts can\n"
+    /include text.deterministicGashaCountDigits         ; ^^^
+    db $09,$00,$20,$6e,$75,$74,$73,$20,$63,$61,$6e,$01  ; ^^^
+    db $05,$5c,$05,$db,$04,$b0,$03,$39,$01              ; "contain anything\n"
+    db $75,$73,$65,$66,$75,$6c,$2e,$00                  ; "useful."
+
+# ===================================================================
+#   TRADE ITEMS OBTENTION TEXT
+# ===================================================================
+
+# Vanilla trade items obtention text mention the fact that a trade item was exchanged with another, also adding
+# fancy icons and not so useful descriptions. These patches aim to provide simpler and straightforward text
+# for those items.
+1d/1b8d/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$04,$32,$20,$45,$67,$67,$04,$ef,$00                      ; "Lon Lon Egg!"
+1d/1bc2/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$47,$68,$05,$ad,$79,$20,$44,$6f,$6c,$6c,$04,$ef,$00      ; "Ghastly Doll!"
+1d/1bfb/: |
+    db $02,$1b,$6e,$01                                                  ; "You got an"
+    db $09,$01,$05,$83,$04,$ef,$00                                      ; "Iron Pot!"
+1d/1c26/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$04,$0b,$04,$ef,$00                                      ; "Lava Soup!"
+1d/1c46/: |
+    db $02,$03                                                          ; "You got the"
+    db $09,$01,$03,$7b,$56,$61,$73,$65,$04,$ef,$00                      ; "Goron Vase!"
+1d/1c75/: |
+    db $02,$57,$20,$73,$6f,$6d,$65,$01                                  ; "You got some"
+    db $05,$91,$21,$00                                                  ; "Fish!"
+1d/1c9f/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$03,$63,$04,$ef,$00                                      ; "Megaphone!"
+1d/1cc5/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$4d,$03,$20,$04,$ef,$00                                  ; "Mushroom!"
+1d/1cee/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$03,$77,$04,$ef,$00                                      ; "Wooden Bird!"
+1d/1d15/: |
+    db $02,$57,$20,$73,$6f,$6d,$65,$01                                  ; "You got some"
+    db $09,$01,$04,$29,$04,$ef,$00                                      ; "Engine Grease!"
+1d/1d31/: |
+    db $02,$1b,$01                                                      ; "You got a"
+    db $09,$01,$03,$c8,$04,$ef,$00                                      ; "Phonograph!" 
+
+# ===================================================================
+#   CUSTOM TEXT SYSTEM
+# ===================================================================
+
+# Add portal tooltips for the map
+3f//TX_5600: db $55,$6e,$04,$98,$6e,$20,$50,$6F,$72,$74,$61,$6C,$00     ; "Unknown Portal"
+3f//TX_5601: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $45,$61,$73,$74,$65,$72,$6E,$20,$53,$75,$62,$75,$72,$62,$73,$00  ; "Eastern Suburbs"
+3f//TX_5602: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$21,$00                                                      ; "Spool Swamp"
+3f//TX_5603: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $4D,$74,$2E,$20,$43,$75,$63,$63,$6F,$00                          ; "Mt. Cucco"
+3f//TX_5604: | 
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $45,$04,$33,$20,$4C,$05,$E4,$00                                  ; "Eyeglass Lake"
+3f//TX_5605: | 
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$14,$00                                                      ; "Horon Village"
+3f//TX_5606: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $54,$04,$7d,$20,$52,$04,$d7,$00                                  ; "Temple Remains"
+3f//TX_5607: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $74,$04,$7d,$20,$05,$92,$00                                      ; "temple summit"
+
+3f//TX_5608: |
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$83,$20,$02,$b2,$00                                          ; "Subrosia Village"
+3f//TX_5609: |    
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$19,$20,$4D,$61,$72,$6B,$65,$74,$00                          ; "Subrosian Market"
+3f//TX_560a: |  
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$19,$20,$57,$69,$6C,$64,$73,$00                              ; "Subrosian Wilds"
+3f//TX_560b: |  
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $47,$04,$09,$20,$46,$04,$58,$00                                  ; "Great Furnace"
+3f//TX_560c: |  
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $48,$05,$f5,$03,$e3,$50,$69,$72,$61,$74,$65,$73,$00              ; "House of Pirates"
+3f//TX_560d: |    
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$19,$01,$56,$05,$85,$00                                      ; "Subrosian Volcanoes"
+3f//TX_560e: |  
+    db $50,$6F,$72,$74,$61,$6C,$03,$b2                                  ; "Portal to"
+    db $02,$19,$01,$44,$05,$8a,$00                                      ; "Subrosian Dungeon"
+
+3f//TX_560f: /include text.smallKeyD0
+3f//TX_5610: /include text.smallKeyD1
+3f//TX_5611: /include text.smallKeyD2
+3f//TX_5612: /include text.smallKeyD3
+3f//TX_5613: /include text.smallKeyD4
+3f//TX_5614: /include text.smallKeyD5
+3f//TX_5615: /include text.smallKeyD6
+3f//TX_5616: /include text.smallKeyD7
+3f//TX_5617: /include text.smallKeyD8
+3f//TX_5618: /include text.bossKeyD1
+3f//TX_5619: /include text.bossKeyD2
+3f//TX_561a: /include text.bossKeyD3
+3f//TX_561b: /include text.bossKeyD4
+3f//TX_561c: /include text.bossKeyD5
+3f//TX_561d: /include text.bossKeyD6
+3f//TX_561e: /include text.bossKeyD7
+3f//TX_561f: /include text.bossKeyD8
+3f//TX_5620: /include text.dungeonMapD1
+3f//TX_5621: /include text.dungeonMapD2
+3f//TX_5622: /include text.dungeonMapD3
+3f//TX_5623: /include text.dungeonMapD4
+3f//TX_5624: /include text.dungeonMapD5
+3f//TX_5625: /include text.dungeonMapD6
+3f//TX_5626: /include text.dungeonMapD7
+3f//TX_5627: /include text.dungeonMapD8
+3f//TX_5628: /include text.compassD1
+3f//TX_5629: /include text.compassD2
+3f//TX_562a: /include text.compassD3
+3f//TX_562b: /include text.compassD4
+3f//TX_562c: /include text.compassD5
+3f//TX_562d: /include text.compassD6
+3f//TX_562e: /include text.compassD7
+3f//TX_562f: /include text.compassD8
+3f//TX_5630: /include text.samasaCaveScrub
+
+# Text for generic refill scrubs
+3f//TX_5631: |
+    db $49,$03,$16,$72,$65,$66,$69,$6c,$6c,$01                  ; "I can refill    "
+    db $03,$0b,$62,$61,$67,$02,$e2                              ; "your bag for    "
+    db $09,$04,$0c,$08,$02,$8f,$09,$00,$20,$04,$b5,$2e,$01      ; "XXX Rupees only."
+    db $02,$00,$00                                              ; "  > Yes  > No   "
+
+3f//customTextTable: |
+    dw TX_5600, TX_5601, TX_5602, TX_5603
+    dw TX_5604, TX_5605, TX_5606, TX_5607
+    dw TX_5608, TX_5609, TX_560a, TX_560b
+    dw TX_560c, TX_560d, TX_560e, TX_560f
+    dw TX_5610, TX_5611, TX_5612, TX_5613
+    dw TX_5614, TX_5615, TX_5616, TX_5617
+    dw TX_5618, TX_5619, TX_561a, TX_561b
+    dw TX_561c, TX_561d, TX_561e, TX_561f
+    dw TX_5620, TX_5621, TX_5622, TX_5623
+    dw TX_5624, TX_5625, TX_5626, TX_5627
+    dw TX_5628, TX_5629, TX_562a, TX_562b
+    dw TX_562c, TX_562d, TX_562e, TX_562f
+    dw TX_5630, TX_5631
+
+# Override getTextAddress to have a specific custom bank_id point to text somewhere else
+3f//checkCustomTextOverride: |
+    ld (w7ActiveBank),a
+    ld a,(wTextIndexH)
+    cp $5a      ; 0x56 is the custom text group, and there are 4 dictionaries before them
+    ret nz
+    ld hl,customTextTable
+    ld a,(wTextIndexL)
+    rst 18      ; rst_addDoubleIndex
+    ldi a,(hl)
+    ld h,(hl)
+    ld l,a
+    ld a,$3f    ; 0x3f is the ROM bank where custom text is located
+    ld (w7ActiveBank),a
+    ret
+3f/0fd9/: call checkCustomTextOverride
+
+# "Get item" text is confined to text group $00, which makes it hard to add new
+# entries without rebuilding the whole textbanks. We inject this small function
+# to check for text IDs > 0x80, in which case we unset the 7th bit and redirect
+# to our custom textbank.
+00//checkCustomTreasureTextId: |
+    bit 7,a
+    jr nz,@customText
+    
+    ; Usual behavior: take the specified text_id from text group 0
+    ld c,a
+    ld b,$00
+    ret
+    
+    @customText:
+    ; Custom behavior: take the specified (text_id-0x80) from custom text group
+    sub $80
+    ld c,a
+    ld b,$56  ; CUSTOM_TEXT_GROUP_ID
+    ret
+09/02f6/: call checkCustomTreasureTextId

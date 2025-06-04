@@ -1,0 +1,110 @@
+# allow skipping the capcom screen after one second by pressing start
+03//checkSkipCapcom: |
+    ld hl,$cbb3
+    ld a,$94
+    cp (hl)
+    ret c
+    jp forceEnableIntroInputs
+03/0d68/: call checkSkipCapcom
+
+# make link actionable as soon as he drops into the world.
+05/0d98/: jp setLinkIdOverride
+
+# let link jump down the cliff outside d7, in case of winter sans shovel.
+# also let link jump down the snow cliff added in woods of winter.
+05//cliffLookup: |
+    push af
+    ld a,(wActiveGroup)
+    or a
+    jr nz,@noJumpPopAf
+    ld a,(wActiveRoom)
+    cp $d0
+    jr nz,@notD7Entrance
+    pop af
+    cp $a8
+    jr nz,@noJump
+    ld a,$08
+    scf
+    ret
+    @notD7Entrance:
+    cp $9d
+    jr nz,@noJumpPopAf
+    pop af
+    cp $99
+    jr z,@snowJump
+    cp $9b
+    jr nz,@noJump
+    @snowJump:
+    ld a,$10
+    scf
+    ret
+    @noJumpPopAf:
+    pop af
+    @noJump:
+    jp lookupCollisionTable
+05/1fe8/: call cliffLookup
+
+# custom script command to use on d1 entrance screen: disable warp tiles
+# until bit of cfc0 is set. fixes a vanilla bug where dismounting an animal
+# on that screen allowed you to enter without the key.
+0b//d1EntranceScriptCmd: |
+    pop hl
+    push bc
+    ld bc,$9600
+    call compareRoom
+    pop bc
+    ret nz
+    ld a,$01
+    ld (wDisableWarpTiles),a
+    xor a
+    jp $432d
+# new script command address and id
+0b/006d/: dw d1EntranceScriptCmd
+0b/0dea/: db script_d1Entrance
+
+# make all seeds grow in all seasons.
+0d/28b5/: cp a
+
+# allow harvesting seeds from trees with either slingshot or satchel.
+10//checkCanHarvestSeeds: |
+    call checkTreasureObtained
+    ret c
+    ld a,TREASURE_SLINGSHOT
+    jp checkTreasureObtained
+10/0b1a/: call checkCanHarvestSeeds
+
+# move the hitbox for the bridge lever from holodrum plain to natzu to the
+# top-left corner of the screen, where it can't be hit, and replace the lever
+# tile as well. this prevents the bridge from blocking the waterway.
+11/2737/: db $00,$00    # object
+21/2267/: db $04        # ricky tile
+23/1cb7/: db $04        # moosh tile
+
+# move d8 magnet ball one tile to the left, so you don't get stuck if
+# you go up the stairs without magnet glove.
+15/0f62/: db $38
+
+# use different seed capacity table, so that level zero satchel can still
+# hold 20 seeds.
+3f//seedCapacityTable: |
+    db $20,$20,$50,$99
+3f/060d/: ld hl,seedCapacityTable
+
+# Remove whole Bipin & Blossom child mechanic
+08/2392/: jp interactionDelete
+# 08/2395/ up to 08/26fd/ (included) => FREE SPACE
+
+# Remove Moblin King text when he sees Link to the right of his fort (near Sunken City)
+0b/3705/: db $00
+
+# Stop Rosa date if any Subrosian portal is taken
+05//stopRosaDate: |
+    ld a,$0b  ; GLOBALFLAG_DATING_ROSA
+    call unsetGlobalFlag
+    jp $2099 ; objectCenterOnTile
+05/0c90/: jp stopRosaDate
+
+# Forbid Maple from dropping Heart Piece or Gasha Seed
+# $14 $0e $0e $1e $20
+05/2988/: db $00,$00,$10,$20,$3e    # @rareItems
+05/2996/: db $00,$00,$04,$08,$0c    # @standardItems

@@ -1,0 +1,21 @@
+# Remove stairs on main entrance map
+21/30e1/: db $04
+22/2d19/: db $04
+23/2b27/: db $04
+24/282d/: db $04
+
+# Remove stairs on the map to the right
+21/311f/: db $04
+22/2d57/: db $04
+23/2b65/: db $04
+24/286b/: db $04
+
+# Make inside left stairs point to inside right stairs
+04/3935/: dw $420d
+# Make inside right stairs point to inside left stairs
+04/3939/: dw $420c
+
+# Since both stairs leading outside in vanilla are now connected together,
+# remove D2 alt-entrance introduction textbox.
+15/2a37/: jp interactionDelete
+

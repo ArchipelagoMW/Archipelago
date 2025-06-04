@@ -1,0 +1,41 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ManualForArchipelago/Manual/main/schemas/Manual.meta.schema.json",
+    "_comment": [ "remove the _ before a non-comment/info propertie to enable it",
+    "For more info use json schemas to get a description and allowed value for every properties",
+    "https://github.com/ManualForArchipelago/Manual/blob/main/docs/resources/json-schemas-for-world-devs.md"],
+    "docs": {
+        "_comment": [ "For more info on the possible documentation properties check schema and/or the github",
+            "https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#webworld-class"
+        ],
+        "apworld_description": [
+            "Manual games allow you to set custom check locations and custom item names that will be rolled into a multiworld.",
+            "This allows any variety of game -- PC, console, board games, Microsoft Word memes... really anything -- to be part of a multiworld randomizer.",
+            "The key component to including these games is some level of manual restriction. Since the items are not actually withheld from the player,",
+            "the player must manually refrain from using these gathered items until the tracker shows that they have been acquired or sent."
+        ],
+        "web": {
+            "_comment": "for more info check github https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#webworld-class",
+            "theme": "grass",
+            "bug_report_page": "https://discord.gg/T5bcsVHByx",
+            "tutorials": [
+                {
+                    "name": "Multiworld Setup Guide",
+                    "description": "A guide to setting up manual game integration for Archipelago multiworld games.",
+                    "language": "English",
+                    "file_name": "setup_en.md",
+                    "link": "setup/en",
+                    "_authors": ["Fuzzy"],
+                    "_comment": "if you don't include the authors it will use creator from game.json"
+                }
+            ],
+            "_options_presets": {
+                "Easy":{
+                    "Option1": true,
+                    "Option2": "potato"
+                }
+            }
+        }
+    },
+    "_comment_":"Enable the generation of puml diagram of your apworld region and locations for debug purposes",
+    "enable_region_diagram": false
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://github.com/ManualForArchipelago/Manual/raw/main/schemas/Manual.game.schema.json",
+  "game": "PhantomHourglass",
+  "creator": "Carrot",
+  "filler_item_name": "Red Rupee",
+  "starting_items": [
+    {
+      "items": [
+        "Phantom Hourglass"
+      ]
+    }
+  ]
+}

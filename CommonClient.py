@@ -480,6 +480,7 @@ class CommonContext:
 
     async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
         """Send new location checks to the server. Returns the set of actually new locations that were sent."""
+        print(f"Checking locations: {locations} / {self.missing_locations}")
         locations = set(locations) & self.missing_locations
         if locations:
             await self.send_msgs([{"cmd": 'LocationChecks', "locations": tuple(locations)}])
@@ -846,6 +847,7 @@ async def server_autoreconnect(ctx: CommonContext):
 
 async def process_server_cmd(ctx: CommonContext, args: dict):
     try:
+        print(f"Server Command: {args}")
         cmd = args["cmd"]
     except:
         logger.exception(f"Could not get command from {args}")
@@ -897,7 +899,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             # update data package
             data_package_checksums = args.get("datapackage_checksums", {})
             await ctx.prepare_data_package(set(args["games"]), data_package_checksums)
-
             await ctx.server_auth(args['password'])
 
     elif cmd == 'DataPackage':
@@ -1029,6 +1030,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     else:
         logger.debug(f"unknown command {cmd}")
 
+    print("Survived sending command")
     ctx.on_package(cmd, args)
 
 

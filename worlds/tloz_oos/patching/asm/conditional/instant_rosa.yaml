@@ -1,0 +1,25 @@
+# This part is too long to fit in the vanilla code but is not fully there to save rom space
+15//rosa_full_unlock_end: |
+    ld l,$F9 ; room 4F9 flags
+    set 2,(hl)
+    ld a,$0B
+    jp $30d3 ; unsetGlobalFlag
+
+# Override rosa_startDate to immediately open all 3 locks
+15/197c/: | 
+    ld hl,$c812 ; room 112 flags
+    set 6,(hl)
+    ld l,$35 ; room 135 flags
+    set 6,(hl)
+    ld l,$08 ; room 108 flags
+    set 6,(hl)
+    inc h ; switch to group 4
+    jp rosa_full_unlock_end
+    
+# Change the dialogue after giving the ribbon to
+# Since you're so
+# nice, I unlocked
+# all the doors
+# here for you.
+1f/09E7/: |
+    db $20,$49,$20,$75,$6E,$6C,$04,$BE,$01,$05,$81,$02,$AC,$05,$A7,$73,$01,$02,$F4,$05,$DE,$03,$19,$00
