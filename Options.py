@@ -740,9 +740,9 @@ class Range(NumericOption):
             raise Exception(
                 f"{random_range[0]}-{random_range[1]} is outside allowed range "
                 f"{cls.range_start}-{cls.range_end} for option {cls.__name__}")
-        if {"low", "middle", "high"}.intersection(textsplit):
-            return cls(random_weighted_range(f"{textsplit[0]}-{textsplit[2]}", random_range[0], random_range[1]))
-        return cls(random_weighted_range("random", random_range[0], random_range[1]))
+        if textsplit[2] in ("low", "middle", "high"):
+            return cls(random_weighted_range(f"{textsplit[0]}-{textsplit[2]}", *random_range))
+        return cls(random_weighted_range("random", *random_range))
 
     @classmethod
     def from_any(cls, data: typing.Any) -> Range:
@@ -951,12 +951,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
     default = frozenset()
     supports_weighting = False
-    random_str = None
+    random_str: str | None
 
     def __init__(self, value: typing.Iterable[str], random_str: str | None = None):
         self.value = set(deepcopy(value))
-        if random_str:
-            self.random_str = random_str
+        self.random_str = random_str
         super(OptionSet, self).__init__()
 
     @classmethod
