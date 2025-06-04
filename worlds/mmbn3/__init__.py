@@ -1,7 +1,6 @@
 import os
 import settings
 import typing
-import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
     LocationProgressType
@@ -210,19 +209,19 @@ class MMBN3World(World):
 
         # Set WWW ID requirements
         def has_www_id(state): return state.has(ItemName.WWW_ID, self.player)
-        add_rule(self.get_location(LocationName.ACDC_1_PMD, self.player), has_www_id)
-        add_rule(self.get_location(LocationName.SciLab_1_WWW_BMD, self.player), has_www_id)
-        add_rule(self.get_location(LocationName.Yoka_1_WWW_BMD, self.player), has_www_id)
-        add_rule(self.get_location(LocationName.Undernet_1_WWW_BMD, self.player), has_www_id)
+        add_rule(self.get_location(LocationName.ACDC_1_PMD), has_www_id)
+        add_rule(self.get_location(LocationName.SciLab_1_WWW_BMD), has_www_id)
+        add_rule(self.get_location(LocationName.Yoka_1_WWW_BMD), has_www_id)
+        add_rule(self.get_location(LocationName.Undernet_1_WWW_BMD), has_www_id)
 
         # Set Press Program requirements
         def has_press(state): return state.has(ItemName.Press, self.player)
-        add_rule(self.get_location(LocationName.Yoka_1_PMD, self.player), has_press)
-        add_rule(self.get_location(LocationName.Yoka_2_Upper_BMD, self.player), has_press)
-        add_rule(self.get_location(LocationName.Beach_2_East_BMD, self.player), has_press)
-        add_rule(self.get_location(LocationName.Hades_South_BMD, self.player), has_press)
-        add_rule(self.get_location(LocationName.Secret_3_BugFrag_BMD, self.player), has_press)
-        add_rule(self.get_location(LocationName.Secret_3_Island_BMD, self.player), has_press)
+        add_rule(self.get_location(LocationName.Yoka_1_PMD), has_press)
+        add_rule(self.get_location(LocationName.Yoka_2_Upper_BMD), has_press)
+        add_rule(self.get_location(LocationName.Beach_2_East_BMD), has_press)
+        add_rule(self.get_location(LocationName.Hades_South_BMD), has_press)
+        add_rule(self.get_location(LocationName.Secret_3_BugFrag_BMD), has_press)
+        add_rule(self.get_location(LocationName.Secret_3_Island_BMD), has_press)
 
         # Set Purple Mystery Data Unlocker access
         def can_unlock(state): return state.can_reach_region(RegionName.SciLab_Overworld, self.player) or \
