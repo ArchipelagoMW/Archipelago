@@ -2,9 +2,47 @@ import logging
 
 import Options as ap_options
 from . import options
+from ..mods.mod_data import ModNames
+from ..options.settings import StardewSettings
 from ..strings.ap_names.ap_option_names import EatsanityOptionName
 
 logger = logging.getLogger(__name__)
+
+
+def force_change_options_if_banned(world_options: options.StardewValleyOptions, settings: StardewSettings, player: int, player_name: str) -> None:
+    message_template = f"for Player {player} [{player_name}] disallowed from host.yaml."
+    if not settings.allow_allsanity and world_options.goal == options.Goal.option_allsanity:
+        message = f"Allsanity Goal {message_template} Generation Aborted."
+        logger.error(message)
+        raise ap_options.OptionError(message)
+    if not settings.allow_perfection and world_options.goal == options.Goal.option_perfection:
+        message = f"Perfection Goal {message_template} Generation Aborted."
+        logger.error(message)
+        raise ap_options.OptionError(message)
+    if not settings.allow_max_bundles and world_options.bundle_price == options.BundlePrice.option_maximum:
+        world_options.bundle_price.value = options.BundlePrice.option_very_expensive
+        message = f"Max Bundles Price {message_template} Replaced with 'Very Expensive'"
+        logger.warning(message)
+    if not settings.allow_chaos_er and world_options.entrance_randomization == options.EntranceRandomization.option_chaos:
+        world_options.entrance_randomization.value = options.EntranceRandomization.option_buildings
+        message = f"Chaos Entrance Randomization {message_template} Replaced with 'Buildings'"
+        logger.warning(message)
+    if not settings.allow_shipsanity_everything and world_options.shipsanity == options.Shipsanity.option_everything:
+        world_options.shipsanity.value = options.Shipsanity.option_full_shipment_with_fish
+        message = f"Shipsanity Everything {message_template} Replaced with 'Full Shipment With Fish'"
+        logger.warning(message)
+    if not settings.allow_hatsanity_perfection and world_options.hatsanity >= options.Hatsanity.option_near_perfection:
+        world_options.hatsanity.value = options.Hatsanity.option_difficult
+        message = f"Hatsanity Near or Post Perfection {message_template} Replaced with 'Difficult'"
+        logger.warning(message)
+    # if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_enabled:
+    #     world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
+    #     message = f"Jojapocalypse {message_template} Disabled."
+    #     logger.warning(message)
+    if not settings.allow_sve and ModNames.sve in options.Mods:
+        world_options.mods.value.remove(ModNames.sve)
+        message = f"Stardew Valley Expanded {message_template} Removed from Mods."
+        logger.warning(message)
 
 
 def force_change_options_if_incompatible(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:

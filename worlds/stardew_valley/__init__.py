@@ -1,7 +1,7 @@
 import logging
 import typing
 from random import Random
-from typing import Dict, Any, Optional, List, TextIO
+from typing import Dict, List, Any, ClassVar, TextIO, Optional
 
 import entrance_rando
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
@@ -17,9 +17,10 @@ from .locations import location_table, create_locations, LocationData, locations
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
     NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType
-from .options.forced_options import force_change_options_if_incompatible
+from .options.forced_options import force_change_options_if_incompatible, force_change_options_if_banned
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
+from .options.settings import StardewSettings
 from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
@@ -116,6 +117,7 @@ class StardewValleyWorld(World):
 
     options_dataclass = StardewValleyOptions
     options: StardewValleyOptions
+    settings: ClassVar[StardewSettings]
     content: StardewContent
     logic: StardewLogic
 
@@ -155,6 +157,7 @@ class StardewValleyWorld(World):
         return seed
 
     def generate_early(self):
+        force_change_options_if_banned(self.options, self.settings, self.player, self.player_name)
         force_change_options_if_incompatible(self.options, self.player, self.player_name)
         self.content = create_content(self.options)
 
