@@ -187,7 +187,7 @@ class KDL3SNIClient(SNIClient):
                 # Apply 1-Up
                 self.item_queue.append(0x41)
             elif "Currency" in traits or "Star" in traits:
-                value = gift.get("item_value", 1.0)
+                value = gift.get("item_value", 1)
                 if value >= 50000:
                     self.item_queue.append(0x46)
                 elif value >= 30000:
@@ -248,8 +248,8 @@ class KDL3SNIClient(SNIClient):
         item = {
             **gift_base,
             "id": item_uuid,
-            "sender": ctx.player_names[ctx.slot],
-            "receiver": ctx.player_names[most_applicable_slot],
+            "sender_slot": ctx.slot,
+            "receiver_slot": most_applicable_slot,
             "sender_team": ctx.team,
             "receiver_team": ctx.team,  # for the moment
             "is_refund": False
