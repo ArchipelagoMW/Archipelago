@@ -4,7 +4,7 @@ from typing import List
 from .. import Group
 from ..content.content_packs import all_content_pack_names
 from ..items import load_item_csv
-from ..locations import load_location_csv
+from ..locations import load_location_csv, LocationTags
 from ..strings.trap_names import all_traps
 
 
@@ -72,3 +72,9 @@ class TestCsvIntegrity(unittest.TestCase):
             content_packs = {content_pack for location in locations for content_pack in location.content_packs}
             for content_pack in content_packs:
                 self.assertIn(content_pack, all_content_pack_names)
+
+        with self.subTest("Test all craftsanity locations are either craft or recipe"):
+            for location in locations:
+                if LocationTags.CRAFTSANITY not in location.tags:
+                    continue
+                self.assertTrue(LocationTags.CRAFTSANITY_CRAFT in location.tags or LocationTags.CRAFTSANITY_RECIPE in location.tags)

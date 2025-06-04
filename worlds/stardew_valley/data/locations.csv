@@ -2052,186 +2052,186 @@ id,region,name,tags,content_packs
 3379,The Queen of Sauce,Trout Soup Recipe,"CHEFSANITY,CHEFSANITY_QOS",
 3380,Farm,Vegetable Medley Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",
 3381,Farm,Moss Soup Recipe,"CHEFSANITY,CHEFSANITY_SKILL",
-3401,Farm,Craft Cherry Bomb,CRAFTSANITY,
-3402,Farm,Craft Bomb,CRAFTSANITY,
-3403,Farm,Craft Mega Bomb,CRAFTSANITY,
-3404,Farm,Craft Gate,CRAFTSANITY,
-3405,Farm,Craft Wood Fence,CRAFTSANITY,
-3406,Farm,Craft Stone Fence,CRAFTSANITY,
-3407,Farm,Craft Iron Fence,CRAFTSANITY,
-3408,Farm,Craft Hardwood Fence,CRAFTSANITY,
-3409,Farm,Craft Sprinkler,CRAFTSANITY,
-3410,Farm,Craft Quality Sprinkler,CRAFTSANITY,
-3411,Farm,Craft Iridium Sprinkler,CRAFTSANITY,
-3412,Farm,Craft Bee House,CRAFTSANITY,
-3413,Farm,Craft Cask,CRAFTSANITY,
-3414,Farm,Craft Cheese Press,CRAFTSANITY,
-3415,Farm,Craft Keg,CRAFTSANITY,
-3416,Farm,Craft Loom,CRAFTSANITY,
-3417,Farm,Craft Mayonnaise Machine,CRAFTSANITY,
-3418,Farm,Craft Oil Maker,CRAFTSANITY,
-3419,Farm,Craft Preserves Jar,CRAFTSANITY,
-3420,Farm,Craft Basic Fertilizer,CRAFTSANITY,
-3421,Farm,Craft Quality Fertilizer,CRAFTSANITY,
-3422,Farm,Craft Deluxe Fertilizer,CRAFTSANITY,
-3423,Farm,Craft Speed-Gro,CRAFTSANITY,
-3424,Farm,Craft Deluxe Speed-Gro,CRAFTSANITY,
-3425,Farm,Craft Hyper Speed-Gro,"CRAFTSANITY,GINGER_ISLAND",
-3426,Farm,Craft Basic Retaining Soil,CRAFTSANITY,
-3427,Farm,Craft Quality Retaining Soil,CRAFTSANITY,
-3428,Farm,Craft Deluxe Retaining Soil,"CRAFTSANITY,GINGER_ISLAND",
-3429,Farm,Craft Tree Fertilizer,CRAFTSANITY,
-3430,Farm,Craft Spring Seeds,CRAFTSANITY,
-3431,Farm,Craft Summer Seeds,CRAFTSANITY,
-3432,Farm,Craft Fall Seeds,CRAFTSANITY,
-3433,Farm,Craft Winter Seeds,CRAFTSANITY,
-3434,Farm,Craft Ancient Seeds,CRAFTSANITY,
-3435,Farm,Craft Grass Starter,CRAFTSANITY,
-3436,Farm,Craft Tea Sapling,CRAFTSANITY,
-3437,Farm,Craft Fiber Seeds,CRAFTSANITY,
-3438,Farm,Craft Wood Floor,CRAFTSANITY,
-3439,Farm,Craft Rustic Plank Floor,CRAFTSANITY,
-3440,Farm,Craft Straw Floor,CRAFTSANITY,
-3441,Farm,Craft Weathered Floor,CRAFTSANITY,
-3442,Farm,Craft Crystal Floor,CRAFTSANITY,
-3443,Farm,Craft Stone Floor,CRAFTSANITY,
-3444,Farm,Craft Stone Walkway Floor,CRAFTSANITY,
-3445,Farm,Craft Brick Floor,CRAFTSANITY,
-3446,Farm,Craft Wood Path,CRAFTSANITY,
-3447,Farm,Craft Gravel Path,CRAFTSANITY,
-3448,Farm,Craft Cobblestone Path,CRAFTSANITY,
-3449,Farm,Craft Stepping Stone Path,CRAFTSANITY,
-3450,Farm,Craft Crystal Path,CRAFTSANITY,
-3451,Farm,Craft Spinner,CRAFTSANITY,
-3452,Farm,Craft Trap Bobber,CRAFTSANITY,
-3453,Farm,Craft Cork Bobber,CRAFTSANITY,
-3454,Farm,Craft Quality Bobber,CRAFTSANITY,
-3455,Farm,Craft Treasure Hunter,CRAFTSANITY,
-3456,Farm,Craft Dressed Spinner,CRAFTSANITY,
-3457,Farm,Craft Barbed Hook,CRAFTSANITY,
-3458,Farm,Craft Magnet,CRAFTSANITY,
-3459,Farm,Craft Bait,CRAFTSANITY,
-3460,Farm,Craft Wild Bait,CRAFTSANITY,
-3461,Farm,Craft Magic Bait,"CRAFTSANITY,GINGER_ISLAND",
-3462,Farm,Craft Crab Pot,CRAFTSANITY,
-3463,Farm,Craft Sturdy Ring,CRAFTSANITY,
-3464,Farm,Craft Warrior Ring,CRAFTSANITY,
-3465,Farm,Craft Ring of Yoba,CRAFTSANITY,
-3466,Farm,Craft Thorns Ring,"CRAFTSANITY,GINGER_ISLAND",
-3467,Farm,Craft Glowstone Ring,CRAFTSANITY,
-3468,Farm,Craft Iridium Band,CRAFTSANITY,
-3469,Farm,Craft Wedding Ring,CRAFTSANITY,
-3470,Farm,Craft Field Snack,CRAFTSANITY,
-3471,Farm,Craft Bug Steak,CRAFTSANITY,
-3472,Farm,Craft Life Elixir,CRAFTSANITY,
-3473,Farm,Craft Oil of Garlic,CRAFTSANITY,
-3474,Farm,Craft Monster Musk,CRAFTSANITY,
-3475,Farm,Craft Fairy Dust,"CRAFTSANITY,GINGER_ISLAND",
-3476,Farm,Craft Warp Totem: Beach,CRAFTSANITY,
-3477,Farm,Craft Warp Totem: Mountains,CRAFTSANITY,
-3478,Farm,Craft Warp Totem: Farm,CRAFTSANITY,
-3479,Farm,Craft Warp Totem: Desert,CRAFTSANITY,
-3480,Farm,Craft Warp Totem: Island,"CRAFTSANITY,GINGER_ISLAND",
-3481,Farm,Craft Rain Totem,CRAFTSANITY,
-3482,Farm,Craft Torch,CRAFTSANITY,
-3483,Farm,Craft Campfire,CRAFTSANITY,
-3484,Farm,Craft Wooden Brazier,CRAFTSANITY,
-3485,Farm,Craft Stone Brazier,CRAFTSANITY,
-3486,Farm,Craft Gold Brazier,CRAFTSANITY,
-3487,Farm,Craft Carved Brazier,CRAFTSANITY,
-3488,Farm,Craft Stump Brazier,CRAFTSANITY,
-3489,Farm,Craft Barrel Brazier,CRAFTSANITY,
-3490,Farm,Craft Skull Brazier,CRAFTSANITY,
-3491,Farm,Craft Marble Brazier,CRAFTSANITY,
-3492,Farm,Craft Wood Lamp-post,CRAFTSANITY,
-3493,Farm,Craft Iron Lamp-post,CRAFTSANITY,
-3494,Farm,Craft Jack-O-Lantern,CRAFTSANITY,
-3495,Farm,Craft Bone Mill,CRAFTSANITY,
-3496,Farm,Craft Charcoal Kiln,CRAFTSANITY,
-3497,Farm,Craft Crystalarium,CRAFTSANITY,
-3498,Farm,Craft Furnace,CRAFTSANITY,
-3499,Farm,Craft Geode Crusher,CRAFTSANITY,
-3500,Farm,Craft Heavy Tapper,"CRAFTSANITY,GINGER_ISLAND",
-3501,Farm,Craft Lightning Rod,CRAFTSANITY,
-3502,Farm,Craft Ostrich Incubator,"CRAFTSANITY,GINGER_ISLAND",
-3503,Farm,Craft Recycling Machine,CRAFTSANITY,
-3504,Farm,Craft Seed Maker,CRAFTSANITY,
-3505,Farm,Craft Slime Egg-Press,CRAFTSANITY,
-3506,Farm,Craft Slime Incubator,CRAFTSANITY,
-3507,Farm,Craft Solar Panel,"CRAFTSANITY,GINGER_ISLAND",
-3508,Farm,Craft Tapper,CRAFTSANITY,
-3509,Farm,Craft Worm Bin,CRAFTSANITY,
-3510,Farm,Craft Tub o' Flowers,CRAFTSANITY,
-3511,Farm,Craft Wicked Statue,CRAFTSANITY,
-3512,Farm,Craft Flute Block,CRAFTSANITY,
-3513,Farm,Craft Drum Block,CRAFTSANITY,
-3514,Farm,Craft Chest,CRAFTSANITY,
-3515,Farm,Craft Stone Chest,CRAFTSANITY,
-3516,Farm,Craft Wood Sign,CRAFTSANITY,
-3517,Farm,Craft Stone Sign,CRAFTSANITY,
-3518,Farm,Craft Dark Sign,CRAFTSANITY,
-3519,Farm,Craft Garden Pot,CRAFTSANITY,
-3520,Farm,Craft Scarecrow,CRAFTSANITY,
-3521,Farm,Craft Deluxe Scarecrow,CRAFTSANITY,
-3522,Farm,Craft Staircase,CRAFTSANITY,
-3523,Farm,Craft Explosive Ammo,CRAFTSANITY,
-3524,Farm,Craft Transmute (Fe),CRAFTSANITY,
-3525,Farm,Craft Transmute (Au),CRAFTSANITY,
-3526,Farm,Craft Mini-Jukebox,CRAFTSANITY,
-3527,Farm,Craft Mini-Obelisk,CRAFTSANITY,
-3528,Farm,Craft Farm Computer,CRAFTSANITY,
-3529,Farm,Craft Hopper,"CRAFTSANITY,GINGER_ISLAND",
-3530,Farm,Craft Cookout Kit,CRAFTSANITY,
-3531,Farm,Craft Fish Smoker,"CRAFTSANITY",
-3532,Farm,Craft Dehydrator,"CRAFTSANITY",
-3533,Farm,Craft Blue Grass Starter,"CRAFTSANITY,GINGER_ISLAND",
-3534,Farm,Craft Mystic Tree Seed,"CRAFTSANITY,REQUIRES_MASTERIES",
-3535,Farm,Craft Sonar Bobber,"CRAFTSANITY",
-3536,Farm,Craft Challenge Bait,"CRAFTSANITY,REQUIRES_MASTERIES",
-3537,Farm,Craft Treasure Totem,"CRAFTSANITY,REQUIRES_MASTERIES",
-3538,Farm,Craft Heavy Furnace,"CRAFTSANITY,REQUIRES_MASTERIES",
-3539,Farm,Craft Deluxe Worm Bin,"CRAFTSANITY",
-3540,Farm,Craft Mushroom Log,"CRAFTSANITY",
-3541,Farm,Craft Big Chest,"CRAFTSANITY",
-3542,Farm,Craft Big Stone Chest,"CRAFTSANITY",
-3543,Farm,Craft Text Sign,"CRAFTSANITY",
-3544,Farm,Craft Tent Kit,"CRAFTSANITY",
-3545,Farm,Craft Statue Of The Dwarf King,"CRAFTSANITY,REQUIRES_MASTERIES",
-3546,Farm,Craft Statue Of Blessings,"CRAFTSANITY,REQUIRES_MASTERIES",
-3547,Farm,Craft Anvil,"CRAFTSANITY,REQUIRES_MASTERIES",
-3548,Farm,Craft Mini-Forge,"CRAFTSANITY,GINGER_ISLAND,REQUIRES_MASTERIES",
-3549,Farm,Craft Deluxe Bait,"CRAFTSANITY",
-3550,Farm,Craft Bait Maker,"CRAFTSANITY",
-3551,Pierre's General Store,Grass Starter Recipe,CRAFTSANITY,
-3552,Carpenter Shop,Wood Floor Recipe,CRAFTSANITY,
-3553,Carpenter Shop,Rustic Plank Floor Recipe,CRAFTSANITY,
-3554,Carpenter Shop,Straw Floor Recipe,CRAFTSANITY,
-3555,Mines Dwarf Shop,Weathered Floor Recipe,CRAFTSANITY,
-3556,Sewer,Crystal Floor Recipe,CRAFTSANITY,
-3557,Carpenter Shop,Stone Floor Recipe,CRAFTSANITY,
-3558,Carpenter Shop,Stone Walkway Floor Recipe,CRAFTSANITY,
-3559,Carpenter Shop,Brick Floor Recipe,CRAFTSANITY,
-3560,Carpenter Shop,Stepping Stone Path Recipe,CRAFTSANITY,
-3561,Carpenter Shop,Crystal Path Recipe,CRAFTSANITY,
-3562,Traveling Cart,Wedding Ring Recipe,CRAFTSANITY,
-3563,Volcano Dwarf Shop,Warp Totem: Island Recipe,"CRAFTSANITY,GINGER_ISLAND",
-3564,Carpenter Shop,Wooden Brazier Recipe,CRAFTSANITY,
-3565,Carpenter Shop,Stone Brazier Recipe,CRAFTSANITY,
-3566,Carpenter Shop,Gold Brazier Recipe,CRAFTSANITY,
-3567,Carpenter Shop,Carved Brazier Recipe,CRAFTSANITY,
-3568,Carpenter Shop,Stump Brazier Recipe,CRAFTSANITY,
-3569,Carpenter Shop,Barrel Brazier Recipe,CRAFTSANITY,
-3570,Carpenter Shop,Skull Brazier Recipe,CRAFTSANITY,
-3571,Carpenter Shop,Marble Brazier Recipe,CRAFTSANITY,
-3572,Carpenter Shop,Wood Lamp-post Recipe,CRAFTSANITY,
-3573,Carpenter Shop,Iron Lamp-post Recipe,CRAFTSANITY,
-3574,Sewer,Wicked Statue Recipe,CRAFTSANITY,
-3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY",
-3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,GINGER_ISLAND",
-3577,Willy's Fish Shop,Fish Smoker Recipe,CRAFTSANITY,
-3578,Pierre's General Store,Dehydrator Recipe,CRAFTSANITY,
-3579,Carpenter Shop,Big Chest Recipe,CRAFTSANITY,
-3580,Mines Dwarf Shop,Big Stone Chest Recipe,CRAFTSANITY,
+3401,Farm,Craft Cherry Bomb,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3402,Farm,Craft Bomb,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3403,Farm,Craft Mega Bomb,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3404,Farm,Craft Gate,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3405,Farm,Craft Wood Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3406,Farm,Craft Stone Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3407,Farm,Craft Iron Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3408,Farm,Craft Hardwood Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3409,Farm,Craft Sprinkler,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3410,Farm,Craft Quality Sprinkler,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3411,Farm,Craft Iridium Sprinkler,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3412,Farm,Craft Bee House,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3413,Farm,Craft Cask,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3414,Farm,Craft Cheese Press,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3415,Farm,Craft Keg,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3416,Farm,Craft Loom,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3417,Farm,Craft Mayonnaise Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3418,Farm,Craft Oil Maker,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3419,Farm,Craft Preserves Jar,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3420,Farm,Craft Basic Fertilizer,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3421,Farm,Craft Quality Fertilizer,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3422,Farm,Craft Deluxe Fertilizer,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3423,Farm,Craft Speed-Gro,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3424,Farm,Craft Deluxe Speed-Gro,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3425,Farm,Craft Hyper Speed-Gro,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3426,Farm,Craft Basic Retaining Soil,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3427,Farm,Craft Quality Retaining Soil,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3428,Farm,Craft Deluxe Retaining Soil,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3429,Farm,Craft Tree Fertilizer,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3430,Farm,Craft Spring Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3431,Farm,Craft Summer Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3432,Farm,Craft Fall Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3433,Farm,Craft Winter Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3434,Farm,Craft Ancient Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3435,Farm,Craft Grass Starter,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3436,Farm,Craft Tea Sapling,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3437,Farm,Craft Fiber Seeds,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3438,Farm,Craft Wood Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3439,Farm,Craft Rustic Plank Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3440,Farm,Craft Straw Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3441,Farm,Craft Weathered Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3442,Farm,Craft Crystal Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3443,Farm,Craft Stone Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3444,Farm,Craft Stone Walkway Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3445,Farm,Craft Brick Floor,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3446,Farm,Craft Wood Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3447,Farm,Craft Gravel Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3448,Farm,Craft Cobblestone Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3449,Farm,Craft Stepping Stone Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3450,Farm,Craft Crystal Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3451,Farm,Craft Spinner,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3452,Farm,Craft Trap Bobber,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3453,Farm,Craft Cork Bobber,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3454,Farm,Craft Quality Bobber,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3455,Farm,Craft Treasure Hunter,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3456,Farm,Craft Dressed Spinner,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3457,Farm,Craft Barbed Hook,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3458,Farm,Craft Magnet,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3459,Farm,Craft Bait,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3460,Farm,Craft Wild Bait,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3461,Farm,Craft Magic Bait,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3462,Farm,Craft Crab Pot,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3463,Farm,Craft Sturdy Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3464,Farm,Craft Warrior Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3465,Farm,Craft Ring of Yoba,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3466,Farm,Craft Thorns Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3467,Farm,Craft Glowstone Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3468,Farm,Craft Iridium Band,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3469,Farm,Craft Wedding Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3470,Farm,Craft Field Snack,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3471,Farm,Craft Bug Steak,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3472,Farm,Craft Life Elixir,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3473,Farm,Craft Oil of Garlic,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3474,Farm,Craft Monster Musk,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3475,Farm,Craft Fairy Dust,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3476,Farm,Craft Warp Totem: Beach,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3477,Farm,Craft Warp Totem: Mountains,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3478,Farm,Craft Warp Totem: Farm,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3479,Farm,Craft Warp Totem: Desert,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3480,Farm,Craft Warp Totem: Island,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3481,Farm,Craft Rain Totem,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3482,Farm,Craft Torch,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3483,Farm,Craft Campfire,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3484,Farm,Craft Wooden Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3485,Farm,Craft Stone Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3486,Farm,Craft Gold Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3487,Farm,Craft Carved Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3488,Farm,Craft Stump Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3489,Farm,Craft Barrel Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3490,Farm,Craft Skull Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3491,Farm,Craft Marble Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3492,Farm,Craft Wood Lamp-post,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3493,Farm,Craft Iron Lamp-post,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3494,Farm,Craft Jack-O-Lantern,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3495,Farm,Craft Bone Mill,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3496,Farm,Craft Charcoal Kiln,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3497,Farm,Craft Crystalarium,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3498,Farm,Craft Furnace,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3499,Farm,Craft Geode Crusher,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3500,Farm,Craft Heavy Tapper,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3501,Farm,Craft Lightning Rod,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3502,Farm,Craft Ostrich Incubator,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3503,Farm,Craft Recycling Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3504,Farm,Craft Seed Maker,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3505,Farm,Craft Slime Egg-Press,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3506,Farm,Craft Slime Incubator,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3507,Farm,Craft Solar Panel,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3508,Farm,Craft Tapper,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3509,Farm,Craft Worm Bin,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3510,Farm,Craft Tub o' Flowers,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3511,Farm,Craft Wicked Statue,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3512,Farm,Craft Flute Block,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3513,Farm,Craft Drum Block,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3514,Farm,Craft Chest,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3515,Farm,Craft Stone Chest,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3516,Farm,Craft Wood Sign,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3517,Farm,Craft Stone Sign,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3518,Farm,Craft Dark Sign,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3519,Farm,Craft Garden Pot,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3520,Farm,Craft Scarecrow,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3521,Farm,Craft Deluxe Scarecrow,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3522,Farm,Craft Staircase,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3523,Farm,Craft Explosive Ammo,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3524,Farm,Craft Transmute (Fe),"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3525,Farm,Craft Transmute (Au),"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3526,Farm,Craft Mini-Jukebox,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3527,Farm,Craft Mini-Obelisk,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3528,Farm,Craft Farm Computer,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3529,Farm,Craft Hopper,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3530,Farm,Craft Cookout Kit,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3531,Farm,Craft Fish Smoker,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3532,Farm,Craft Dehydrator,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3533,Farm,Craft Blue Grass Starter,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",
+3534,Farm,Craft Mystic Tree Seed,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3535,Farm,Craft Sonar Bobber,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3536,Farm,Craft Challenge Bait,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3537,Farm,Craft Treasure Totem,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3538,Farm,Craft Heavy Furnace,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3539,Farm,Craft Deluxe Worm Bin,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3540,Farm,Craft Mushroom Log,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3541,Farm,Craft Big Chest,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3542,Farm,Craft Big Stone Chest,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3543,Farm,Craft Text Sign,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3544,Farm,Craft Tent Kit,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3545,Farm,Craft Statue Of The Dwarf King,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3546,Farm,Craft Statue Of Blessings,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3547,Farm,Craft Anvil,"CRAFTSANITY,CRAFTSANITY_CRAFT,REQUIRES_MASTERIES",
+3548,Farm,Craft Mini-Forge,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND,REQUIRES_MASTERIES",
+3549,Farm,Craft Deluxe Bait,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3550,Farm,Craft Bait Maker,"CRAFTSANITY,CRAFTSANITY_CRAFT",
+3551,Pierre's General Store,Grass Starter Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3552,Carpenter Shop,Wood Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3553,Carpenter Shop,Rustic Plank Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3554,Carpenter Shop,Straw Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3555,Mines Dwarf Shop,Weathered Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3556,Sewer,Crystal Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3557,Carpenter Shop,Stone Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3558,Carpenter Shop,Stone Walkway Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3559,Carpenter Shop,Brick Floor Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3560,Carpenter Shop,Stepping Stone Path Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3561,Carpenter Shop,Crystal Path Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3562,Traveling Cart,Wedding Ring Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3563,Volcano Dwarf Shop,Warp Totem: Island Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE,GINGER_ISLAND",
+3564,Carpenter Shop,Wooden Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3565,Carpenter Shop,Stone Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3566,Carpenter Shop,Gold Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3567,Carpenter Shop,Carved Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3568,Carpenter Shop,Stump Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3569,Carpenter Shop,Barrel Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3570,Carpenter Shop,Skull Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3571,Carpenter Shop,Marble Brazier Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3572,Carpenter Shop,Wood Lamp-post Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3573,Carpenter Shop,Iron Lamp-post Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3574,Sewer,Wicked Statue Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE,GINGER_ISLAND",
+3577,Willy's Fish Shop,Fish Smoker Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3578,Pierre's General Store,Dehydrator Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3579,Carpenter Shop,Big Chest Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
+3580,Mines Dwarf Shop,Big Stone Chest Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",
 3701,Raccoon Bundles,Raccoon Request 1,"BUNDLE,RACCOON_BUNDLES",
 3702,Raccoon Bundles,Raccoon Request 2,"BUNDLE,RACCOON_BUNDLES",
 3703,Raccoon Bundles,Raccoon Request 3,"BUNDLE,RACCOON_BUNDLES",
@@ -3543,49 +3543,49 @@ id,region,name,tags,content_packs
 57111,Pierre's General Store,Premium Pack 11,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
 57112,Pierre's General Store,Premium Pack 12,"BACKPACK,SPLIT_BACKPACK",Bigger Backpack
 57401,Farm,Cook Magic Elixir,COOKSANITY,Magic
-57402,Farm,Craft Travel Core,CRAFTSANITY,Magic
-57403,Farm,Craft Haste Elixir,CRAFTSANITY,Stardew Valley Expanded
-57404,Farm,Craft Hero Elixir,CRAFTSANITY,Stardew Valley Expanded
-57405,Farm,Craft Armor Elixir,CRAFTSANITY,Stardew Valley Expanded
-57406,Witch's Swamp,Craft Ginger Tincture,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
-57407,Farm,Craft Glass Path,CRAFTSANITY,Archaeology
-57408,Farm,Craft Glass Brazier,CRAFTSANITY,Archaeology
-57409,Farm,Craft Glass Fence,CRAFTSANITY,Archaeology
-57410,Farm,Craft Bone Path,CRAFTSANITY,Archaeology
-57411,Farm,Craft Water Shifter,CRAFTSANITY,Archaeology
-57412,Farm,Craft Wooden Display,CRAFTSANITY,Archaeology
-57413,Farm,Craft Hardwood Display,CRAFTSANITY,Archaeology
-57414,Farm,Craft Dwarf Gadget: Infinite Volcano Simulation,"CRAFTSANITY,GINGER_ISLAND",Archaeology
-57415,Farm,Craft Grinder,CRAFTSANITY,Archaeology
-57416,Farm,Craft Preservation Chamber,CRAFTSANITY,Archaeology
-57417,Farm,Craft Hardwood Preservation Chamber,CRAFTSANITY,Archaeology
-57418,Farm,Craft Ancient Battery Production Station,CRAFTSANITY,Archaeology
-57419,Farm,Craft Neanderthal Skeleton,CRAFTSANITY,Boarding House and Bus Stop Extension
-57420,Farm,Craft Pterodactyl Skeleton L,CRAFTSANITY,Boarding House and Bus Stop Extension
-57421,Farm,Craft Pterodactyl Skeleton M,CRAFTSANITY,Boarding House and Bus Stop Extension
-57422,Farm,Craft Pterodactyl Skeleton R,CRAFTSANITY,Boarding House and Bus Stop Extension
-57423,Farm,Craft T-Rex Skeleton L,CRAFTSANITY,Boarding House and Bus Stop Extension
-57424,Farm,Craft T-Rex Skeleton M,CRAFTSANITY,Boarding House and Bus Stop Extension
-57425,Farm,Craft T-Rex Skeleton R,CRAFTSANITY,Boarding House and Bus Stop Extension
-57426,Farm,Craft Restoration Table,CRAFTSANITY,Archaeology
-57427,Farm,Craft Rusty Path,CRAFTSANITY,Archaeology
-57428,Farm,Craft Rusty Brazier,CRAFTSANITY,Archaeology
-57429,Farm,Craft Lucky Ring,CRAFTSANITY,Archaeology
-57430,Farm,Craft Bone Fence,CRAFTSANITY,Archaeology
-57431,Farm,Craft Bouquet,CRAFTSANITY,Socializing Skill
-57432,Farm,Craft Trash Bin,CRAFTSANITY,Binning Skill
-57433,Farm,Craft Composter,CRAFTSANITY,Binning Skill
-57434,Farm,Craft Recycling Bin,CRAFTSANITY,Binning Skill
-57435,Farm,Craft Advanced Recycling Machine,CRAFTSANITY,Binning Skill
-57440,Farm,Craft Copper Slot Machine,"CRAFTSANITY",Luck Skill
-57441,Farm,Craft Gold Slot Machine,"CRAFTSANITY",Luck Skill
-57442,Farm,Craft Iridium Slot Machine,"CRAFTSANITY",Luck Skill
-57443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,GINGER_ISLAND",Luck Skill
-57451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
-57452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
-57453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
-57454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
-57455,Alesia Shop,Armor Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
+57402,Farm,Craft Travel Core,"CRAFTSANITY,CRAFTSANITY_CRAFT",Magic
+57403,Farm,Craft Haste Elixir,"CRAFTSANITY,CRAFTSANITY_CRAFT",Stardew Valley Expanded
+57404,Farm,Craft Hero Elixir,"CRAFTSANITY,CRAFTSANITY_CRAFT",Stardew Valley Expanded
+57405,Farm,Craft Armor Elixir,"CRAFTSANITY,CRAFTSANITY_CRAFT",Stardew Valley Expanded
+57406,Witch's Swamp,Craft Ginger Tincture,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+57407,Farm,Craft Glass Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57408,Farm,Craft Glass Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57409,Farm,Craft Glass Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57410,Farm,Craft Bone Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57411,Farm,Craft Water Shifter,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57412,Farm,Craft Wooden Display,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57413,Farm,Craft Hardwood Display,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57414,Farm,Craft Dwarf Gadget: Infinite Volcano Simulation,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",Archaeology
+57415,Farm,Craft Grinder,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57416,Farm,Craft Preservation Chamber,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57417,Farm,Craft Hardwood Preservation Chamber,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57418,Farm,Craft Ancient Battery Production Station,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57419,Farm,Craft Neanderthal Skeleton,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57420,Farm,Craft Pterodactyl Skeleton L,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57421,Farm,Craft Pterodactyl Skeleton M,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57422,Farm,Craft Pterodactyl Skeleton R,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57423,Farm,Craft T-Rex Skeleton L,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57424,Farm,Craft T-Rex Skeleton M,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57425,Farm,Craft T-Rex Skeleton R,"CRAFTSANITY,CRAFTSANITY_CRAFT",Boarding House and Bus Stop Extension
+57426,Farm,Craft Restoration Table,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57427,Farm,Craft Rusty Path,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57428,Farm,Craft Rusty Brazier,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57429,Farm,Craft Lucky Ring,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57430,Farm,Craft Bone Fence,"CRAFTSANITY,CRAFTSANITY_CRAFT",Archaeology
+57431,Farm,Craft Bouquet,"CRAFTSANITY,CRAFTSANITY_CRAFT",Socializing Skill
+57432,Farm,Craft Trash Bin,"CRAFTSANITY,CRAFTSANITY_CRAFT",Binning Skill
+57433,Farm,Craft Composter,"CRAFTSANITY,CRAFTSANITY_CRAFT",Binning Skill
+57434,Farm,Craft Recycling Bin,"CRAFTSANITY,CRAFTSANITY_CRAFT",Binning Skill
+57435,Farm,Craft Advanced Recycling Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Binning Skill
+57440,Farm,Craft Copper Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
+57441,Farm,Craft Gold Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
+57442,Farm,Craft Iridium Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT",Luck Skill
+57443,Farm,Craft Radioactive Slot Machine,"CRAFTSANITY,CRAFTSANITY_CRAFT,GINGER_ISLAND",Luck Skill
+57451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CRAFTSANITY_RECIPE,CHEFSANITY_PURCHASE",Magic
+57452,Adventurer's Guild,Travel Core Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Magic
+57453,Alesia Shop,Haste Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
+57454,Isaac Shop,Hero Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
+57455,Alesia Shop,Armor Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
 57501,Mountain,Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
 57502,Forest,Ayeisha's Lost Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
 57503,Forest,Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
@@ -3644,13 +3644,13 @@ id,region,name,tags,content_packs
 57611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 57613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 57614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-57616,Mines Dwarf Shop,Neanderthal Skeleton Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57617,Mines Dwarf Shop,Pterodactyl Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57618,Mines Dwarf Shop,Pterodactyl Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57619,Mines Dwarf Shop,Pterodactyl Skeleton R Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57620,Mines Dwarf Shop,T-Rex Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57621,Mines Dwarf Shop,T-Rex Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
-57622,Mines Dwarf Shop,T-Rex Skeleton R Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
+57616,Mines Dwarf Shop,Neanderthal Skeleton Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57617,Mines Dwarf Shop,Pterodactyl Skeleton L Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57618,Mines Dwarf Shop,Pterodactyl Skeleton M Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57619,Mines Dwarf Shop,Pterodactyl Skeleton R Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57620,Mines Dwarf Shop,T-Rex Skeleton L Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57621,Mines Dwarf Shop,T-Rex Skeleton M Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
+57622,Mines Dwarf Shop,T-Rex Skeleton R Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Boarding House and Bus Stop Extension
 57623,Farm,Digger's Delight Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 57624,Farm,Rocky Root Coffee Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology
 57625,Farm,Ancient Jello Recipe,"CHEFSANITY,CHEFSANITY_SKILL",Archaeology

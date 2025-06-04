@@ -106,6 +106,8 @@ class LocationTags(enum.Enum):
     CHEFSANITY_SKILL = enum.auto()
     CHEFSANITY_STARTER = enum.auto()
     CRAFTSANITY = enum.auto()
+    CRAFTSANITY_CRAFT = enum.auto()
+    CRAFTSANITY_RECIPE = enum.auto()
     BOOKSANITY = enum.auto()
     BOOKSANITY_POWER = enum.auto()
     BOOKSANITY_SKILL = enum.auto()
