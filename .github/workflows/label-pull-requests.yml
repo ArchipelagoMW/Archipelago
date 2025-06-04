@@ -6,6 +6,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
+env:
+  GH_REPO: ${{ github.repository }}
 
 jobs:
   labeler:
@@ -25,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Add label'
-        run: "gh pr edit \"$PR_URL\" --add-label 'waiting-on: peer-review' --repo ArchipelagoMW/Archipelago"
+        run: "gh pr edit \"$PR_URL\" --add-label 'waiting-on: peer-review'"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,4 +46,3 @@ jobs:
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ArchipelagoMW/Archipelago
