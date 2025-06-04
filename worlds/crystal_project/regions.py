@@ -313,7 +313,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(THE_CHALICE_OF_TAR, player).add_exits([TALL_TALL_HEIGHTS, QUINTAR_RESERVE],
         {TALL_TALL_HEIGHTS: lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
         QUINTAR_RESERVE: lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4)})
-    multiworld.get_region(FLYERS_CRAG, player).add_exits([OKIMOTO_NS,JIDAMBA_TANGLE],
+    multiworld.get_region(FLYERS_CRAG, player).add_exits([OKIMOTO_NS, JIDAMBA_TANGLE],
         {OKIMOTO_NS: lambda state: logic.is_area_in_level_range(state, 2),
         JIDAMBA_TANGLE: lambda state: logic.has_glide and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(JIDAMBA_TANGLE, player).add_exits([THE_OPEN_SEA, JIDAMBA_EACLANEYA],
