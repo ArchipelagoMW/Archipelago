@@ -336,7 +336,7 @@ The most common way to create an event is to create the event item and the event
 `.place_locked_item()`:
 
 ```python
-victory_loc = MyGameLocation(self.player, "Defeat the Final Boss", None)
+victory_loc = MyGameLocation(self.player, "Defeat the Final Boss", None, final_boss_arena_region)
 victory_loc.place_locked_item(MyGameItem("Victory", ItemClassification.progression, None, self.player))
 self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 set_rule(victory_loc, lambda state: state.can_reach_region("Final Boss Arena", self.player))
@@ -348,12 +348,12 @@ relevant item. But events aren't just about the spoiler log; a more substantial 
 your logic might be:
 
 ```python
-water_loc = MyGameLocation(self.player, "Water Level Switch", None)
+water_loc = MyGameLocation(self.player, "Water Level Switch", None, pump_station_region)
 water_loc.place_locked_item(MyGameItem("Lowered Water Level", ItemClassification.progression, None, self.player))
 pump_station_region.locations.append(water_loc)
 set_rule(water_loc, lambda state: state.has("Double Jump", self.player))  # the switch is really high up
 ...
-basement_loc = MyGameLocation(self.player, "Flooded House - Basement Chest", None)
+basement_loc = MyGameLocation(self.player, "Flooded House - Basement Chest", None, flooded_house_region)
 flooded_house_region.locations += [upstairs_loc, ground_floor_loc, basement_loc]
 ...
 set_rule(basement_loc, lambda state: state.has("Lowered Water Level", self.player))
