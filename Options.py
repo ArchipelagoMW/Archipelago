@@ -994,7 +994,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
                     raise Exception(
                         f"{random_range[0]}-{random_range[1]} is outside allowed range "
                         f"0-{len(choice_list)} for option {self.__name__} for player {player_name}")
-                if {"low", "middle", "high"}.intersection(textsplit):
+                if textsplit[2] in ("low", "middle", "high"):
                     choice_count = random_weighted_range(f"{textsplit[0]}-{textsplit[2]}",
                                                          random_range[0], random_range[1])
                 else:
