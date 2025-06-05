@@ -4,8 +4,8 @@
 <FRAMESTART>
 <ACTOR>"dkopabody"<DISPON>
 <ACTOR>"dkopahead"<DISPON>
-<WAIT>(20)
 <FRAMEEND>
+<WAIT>(90)
 
 <FRAMESTART>
 <TIMEACTIVE>

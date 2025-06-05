@@ -3,4 +3,5 @@
 <SAY><COLOR>(2)Waiting for Boolossus\nto spawn in (20 secs)...
 <WAIT>(600)
 <CLOSEWINDOW>(0)
+<FLAGON>(201)
 <END>

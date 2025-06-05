@@ -20,4 +20,5 @@
 <BGM>(16)
 <CANCEL>
 <MENUON>
+<FLAGON>(199)
 <END>
