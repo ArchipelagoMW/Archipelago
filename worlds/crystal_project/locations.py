@@ -664,13 +664,13 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Salmon Bay
         #Treasure chests
-        LocationData("Salmon Bay", "Salmon Bay Chest - Cliff diving", 2975 + treasure_index_offset), #Ether Pouch chest
+        LocationData("Salmon Bay", "Salmon Bay Chest - Cliff diving", 2975 + treasure_index_offset, logic.has_vertical_movement), #Ether Pouch chest
         LocationData("Salmon Bay", "Salmon Bay Chest - Across the bridge", 2974 + treasure_index_offset), #Potion Pouch chest
         LocationData("Salmon Bay", "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
         
         #NPCs
         LocationData("Salmon Bay", "Salmon Bay NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),
-        LocationData("Salmon Bay", "Salmon Bay NPC - West cliff diving Ancient Tablet C", 1271 + npc_index_offset),
+        LocationData("Salmon Bay", "Salmon Bay NPC - West cliff diving Ancient Tablet C", 1271 + npc_index_offset, logic.has_vertical_movement),
         LocationData("Salmon Bay", "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
 
         #Summons Todo: descriptivize and implement
@@ -971,7 +971,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Z-Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
-        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Frost Reaper chest
+        LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or logic.has_glide), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
         LocationData("Tall Tall Heights", "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance Northern Cave
