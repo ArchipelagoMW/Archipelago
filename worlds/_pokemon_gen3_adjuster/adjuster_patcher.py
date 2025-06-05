@@ -242,7 +242,7 @@ def add_data_to_patch(_data: dict[str, int | bytes]):
     if _data["length"] == 0x00:
         raise Exception("Bad length 0!")
     if not type(_data["data"]) is bytes:
-        raise Exception(f"Tried to add data of type {type(_data["data"])} to the patch.")
+        raise Exception(f"Tried to add data of type {type(_data['data'])} to the patch.")
     # Order entries by ascending starting address
     index = 0
     data_begin = _data["address"]
@@ -475,7 +475,7 @@ def extract_sprites(_object_name: str, _output_path: str):
     # Extracts all sprites from a given object from the ROM into the given output folder
     def handle_sprite_extraction(_sprite_name: str):
         reference_sprite_name: str = SPRITE_PIXEL_REFERENCE.get(_sprite_name, _sprite_name)
-        sprite_key = f"{folder_object_info["key"]}_{reference_sprite_name}"
+        sprite_key = f"{folder_object_info['key']}_{reference_sprite_name}"
         data_address, is_raw, _ = get_address_from_address_collection(_object_name, sprite_key, reference_sprite_name)
         if not is_raw:
             data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), "little")
@@ -643,7 +643,7 @@ def validate_sprite_pack(_sprite_pack_path: str) -> tuple[str, bool]:
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{"\n" if errors else ""}{_error}"
+            errors += f"{'\n' if errors else ''}{_error}"
 
     sprite_pack_folder_list.clear()
     for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if not "name" in list(x.keys())]:
@@ -665,7 +665,7 @@ def validate_object_collection(_sprite_pack_path: str,
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{"\n" if errors else ""}{"" if _processed else "Error: " if _is_error else "Warning: "}{_error}"
+            errors += f"{'\n' if errors else ''}{'' if _processed else 'Error: ' if _is_error else 'Warning: '}{_error}"
 
     def add_to_folder_list(_folder):
         if not _folder in sprite_pack_folder_list:
@@ -725,10 +725,10 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{"\n" if errors else ""}{"Error" if _is_error else "Warning"}: {_error}"
+            errors += f"{'\n' if errors else ''}{'Error' if _is_error else 'Warning'}: {_error}"
 
     folder_object_info = find_folder_object_info(_name = _object_name)
-    sprite_key = f"{folder_object_info["key"]}_{_sprite_name}"
+    sprite_key = f"{folder_object_info['key']}_{_sprite_name}"
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
     try:
@@ -751,7 +751,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
         palette_colors = round(len(sprite_palette_colors) / 3)
         if palette_colors > palette_max_size or (palette_set_size > 0 and palette_colors != palette_set_size):
             add_error(f"File {_sprite_name} in folder {_object_name}: The sprite's palette has {palette_colors} colors "
-                      + f"but should have {palette_max_size}{"" if palette_set_size > 0 else " or less"}.", True)
+                      + f"but should have {palette_max_size}{'' if palette_set_size > 0 else ' or less'}.", True)
         elif palette_model:
             matching_palette_model = True
             if _sprite_name == "icon":
@@ -778,7 +778,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
     sprite_valid_dimensions: list[dict[str, int]] = []
     if is_overworld_sprite(sprite_key) and _extra_data:
         # If a custom frame size is given for overworld sprites, check that it is valid
-        allowed_sizes = [f"{size["width"]}x{size["height"]}" for size in VALID_OVERWORLD_SPRITE_SIZES]
+        allowed_sizes = [f"{size['width']}x{size['height']}" for size in VALID_OVERWORLD_SPRITE_SIZES]
         if not _extra_data[0] in allowed_sizes:
             add_error(f"File {_sprite_name} in folder {_object_name}: Invalid custom size {_extra_data[0]}. "
                       + f"The expected sizes are: {allowed_sizes}.", True)
@@ -796,10 +796,10 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
         # Check that the sprite has the awaited size
         if not next(filter(lambda size: size["width"] == sprite_image.width and
                            size["height"] == sprite_image.height, sprite_valid_dimensions), None):
-            allowed_sizes = [f"{size["width"]}x{size["height"]}" for size in sprite_valid_dimensions]
+            allowed_sizes = [f"{size['width']}x{size['height']}" for size in sprite_valid_dimensions]
             current_size = f"{sprite_image.width}x{sprite_image.height}"
             add_error(f"File {_sprite_name} in folder {_object_name}: Invalid size {current_size}. "
-                      + f"The expected size{" is" if len(allowed_sizes) == 1 else "s are"}: "
+                      + f"The expected size{' is' if len(allowed_sizes) == 1 else 's are'}: "
                       + f"{allowed_sizes[0] if len(allowed_sizes) == 1 else allowed_sizes}.", True)
 
     return errors, has_error
@@ -820,7 +820,7 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{"\n" if errors else ""}{"" if _processed else "Error: " if _is_error else "Warning: "}{_error}"
+            errors += f"{'\n' if errors else ''}{'' if _processed else 'Error: ' if _is_error else 'Warning: '}{_error}"
 
     if _pokemon_name.startswith("Unown "):
         _pokemon_name = "Unown A"
@@ -845,40 +845,40 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
             try:
                 field_number_value = int(field_value)
                 if field_number_value < 1 or field_number_value > 255:
-                    add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                    add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
         elif field_name in ["type1", "type2"]:
             # Data must be a number corresponding to a valid type
             try:
                 if not field_value.capitalize() in POKEMON_TYPES:
                     field_number_value = int(field_value)
                     if field_number_value < 0 or field_number_value >= len(POKEMON_TYPES):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
         elif field_name in ["ability1", "ability2"]:
             # Data must be a number corresponding to a valid ability
             try:
                 if not field_value.upper() in POKEMON_ABILITIES:
                     field_number_value = int(field_value)
                     if field_number_value < 1 or field_number_value >= len(POKEMON_ABILITIES):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
         elif field_name == "gender_ratio":
             # Data must be a number corresponding to a valid gender ratio
             try:
                 if not field_value in list(POKEMON_GENDER_RATIOS.values()):
                     field_number_value = int(field_value)
                     if not field_number_value in list(POKEMON_GENDER_RATIOS.keys()):
-                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                        add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
             except Exception:
-                add_error(f"{_pokemon_name}'s {field_name} value is invalid: \"{field_name}\".", True)
+                add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
         elif field_name == "dex":
             # Data must either be a 0 (allowed) or a 1 (forbidden)
             if not field_value in [0, 1, "0", "1", "True", "False"]:
-                add_error(f"{_pokemon_name}'s forbid_flip value is invalid: \"{field_value}\".", True)
+                add_error(f"{_pokemon_name}'s forbid_flip value is invalid: '{field_value}'.", True)
         elif field_name == "move_pool":
             # Data must be a valid move pool table string
             if len(field_value) < 4:
@@ -895,7 +895,7 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{"\n" if errors else ""}{"Error" if _is_error else "Warning"}: {_error}"
+            errors += f"{'\n' if errors else ''}{'Error' if _is_error else 'Warning'}: {_error}"
 
     if not _move_pool_string:
         add_error(f"{_pokemon_name}'s move pool is empty.", True)
@@ -907,11 +907,11 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
             continue
         move_info = move_line.split(":", 1)
         if len(move_info) != 2:
-            add_error(f"{_pokemon_name}'s move #{i + 1} is malformed: \"{i + 1}\"", True)
+            add_error(f"{_pokemon_name}'s move #{i + 1} is malformed: '{move_info}'", True)
             continue
         move_name = move_info[0].strip()
         if not move_name.upper() in POKEMON_MOVES:
-            add_error(f"{_pokemon_name}'s move #{i + 1} \"{i + 1}\" is unknown.", True)
+            add_error(f"{_pokemon_name}'s move #{i + 1} '{move_name}' is unknown.", True)
         move_level = move_info[1].strip()
         try:
             move_level_value = int(move_level)
@@ -919,7 +919,7 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
         except Exception:
             move_level_valid = False
         if not move_level_valid:
-            add_error(f"{_pokemon_name}'s move #{i + 1}'s ({move_name}) level \"{move_level}\" is invalid.", True)
+            add_error(f"{_pokemon_name}'s move #{i + 1}'s ({move_name}) level '{move_level}' is invalid.", True)
     return errors, has_error
 
 ####################
@@ -1305,7 +1305,7 @@ def stringify_move_pool(_move_pool: list[dict[str, str | int]]):
     # Transforms a pokemon"s move pool a string
     result = ""
     for move_info in _move_pool:
-        result += f"{move_info["move"]}: {move_info["level"]}\n"
+        result += f"{move_info['move']}: {move_info['level']}\n"
     return result[:-1]
 
 def destringify_move_pool(_move_pool_string: str):
@@ -1409,7 +1409,7 @@ def find_folder_object_info(_key = "", _name = ""):
             # Name given is not a match
             continue
         return folder_info
-    raise Exception(f"Unknown folder object with key {_key}{f" and name {_name}" if _name else ""}")
+    raise Exception(f"Unknown folder object with key {_key}{f' and name {_name}' if _name else ''}")
 
 #######################
 ## Utility Functions ##

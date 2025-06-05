@@ -68,7 +68,7 @@ def build_ap_rom(_patch: str):
     if not rom_data:
         messagebox.showerror(title="Failure",
                              message=f"Cannot build the AP ROM: invalid file extension: "\
-                                     + f"requires {"/".join(adjuster_extensions[1:])}")
+                                     + f"requires {'/'.join(adjuster_extensions[1:])}")
         return bytearray()
 
     return rom_data
@@ -131,7 +131,7 @@ def frlg_get_rom_version(_rom_data: bytearray):
     version_name = allowed_internal_names.get(internal_name, "")
     if not version_name:
         return "Unknown"
-    return f"{version_name}{"_rev1" if internal_revision == 1 else ""}"
+    return f"{version_name}{'_rev1' if internal_revision == 1 else ''}"
 
 def build_sprite_pack_patch(_sprite_pack: str):
     # Builds the BPS patch including all of the sprite pack's data
@@ -207,7 +207,7 @@ def adjust_gui():
             patch = _forced_patch
         else:
             title = f"Choose a Pokemon {adjuster_name} ROM ({adjuster_extensions[0]}) or a "\
-                    + f"{"/".join(adjuster_extensions[1:])} patch file."
+                    + f"{'/'.join(adjuster_extensions[1:])} patch file."
 
             from tkinter import filedialog
             old_patch_folder: str = os.path.dirname(opts.patch.get()) if is_patch_valid else None
@@ -726,7 +726,7 @@ def adjust_gui():
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
         # Red if invalid, blue if different from the ROM, bold if different from the saved data
-        field_value = str(f"[ {entry.get("1.0", END)} ]".replace("\n", ", ") if type(entry) is ScrolledText
+        field_value = str(f"[ {entry.get('1.0', END)} ]".replace("\n", ", ") if type(entry) is ScrolledText
                                                                              else entry.get()).strip()
         blue_balloon_message = "\nThis label is blue because this value is different from the one within the ROM."
         bold_balloon_message = "\nThis label is in bold because this value has been changed and hasn't been saved."
@@ -753,8 +753,8 @@ def adjust_gui():
         main_window_tooltip.bind_widget(
             label,
             balloonmsg=f"{balloonMessage}"
-                       + f"{f"\n{errors}" if has_error else blue_balloon_message if is_different_from_rom else ""}"
-                       + f"{bold_balloon_message if is_different_from_data else ""}"
+                       + f"{f'\n{errors}' if has_error else blue_balloon_message if is_different_from_rom else ''}"
+                       + f"{bold_balloon_message if is_different_from_data else ''}"
         )
         update_field_validity(field, not has_error)
         update_field_change(field, is_different_from_data)
