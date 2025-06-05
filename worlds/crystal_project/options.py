@@ -63,7 +63,7 @@ class ExtraClamshellsInPool(Range):
     (This setting does nothing if your goal is not Clamshells.)
     """
     display_name = "Extra Clamshells in the pool"
-    range_start = 1
+    range_start = 0
     range_end = 100
     default = 6
 

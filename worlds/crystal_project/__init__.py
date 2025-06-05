@@ -1,3 +1,4 @@
+import logging
 from .constants.keys import *
 from .constants.key_items import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
@@ -150,7 +151,7 @@ class CrystalProjectWorld(World):
 
         if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
-            self.logger.info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
+            logging.getLogger().info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
             self.options.newWorldStoneJobQuantity.value = jobs_earnable
 
     def create_item(self, name: str) -> Item:
@@ -168,10 +169,25 @@ class CrystalProjectWorld(World):
             goal_clamshell_quantity = self.options.clamshellGoalQuantity.value
         return goal_clamshell_quantity
 
-    def get_total_clamshells(self) -> int:
+    def get_total_clamshells(self, max_clamshells: int) -> int:
         total_clamshell_quantity = 3
         if self.options.goal.value == self.options.goal.option_clamshells:
             total_clamshell_quantity = self.options.clamshellGoalQuantity.value + self.options.extraClamshellsInPool.value
+            # If the player's options ask to put more clamshells in the pool than there is room, reduce their options proportionally so they fit
+            if total_clamshell_quantity > max_clamshells:
+                percent_goal_clamshells = self.options.clamshellGoalQuantity.value / total_clamshell_quantity
+                self.options.clamshellGoalQuantity.value = int(percent_goal_clamshells * max_clamshells)
+                if self.options.clamshellGoalQuantity.value < 1:
+                    self.options.clamshellGoalQuantity.value = 1
+                self.options.extraClamshellsInPool.value = int(max_clamshells - self.options.clamshellGoalQuantity.value)
+
+                # Log the change to player settings
+                message = ("For player {2}: total_clamshells was {0} but there was only room for {1} clamshells in the pool. "
+                           "Reduced clamshellGoalQuantity to {3} and extraClamshellsInPool to {4}.")
+                logging.getLogger().info(message.format(total_clamshell_quantity, max_clamshells, self.player_name,
+                                                self.options.clamshellGoalQuantity.value, self.options.extraClamshellsInPool.value))
+
+                total_clamshell_quantity = self.options.clamshellGoalQuantity.value + self.options.extraClamshellsInPool.value
         return total_clamshell_quantity
 
     #making randomized scholar ability pool
@@ -421,6 +437,11 @@ class CrystalProjectWorld(World):
             for scholar_ability in self.get_optional_scholar_abilities(7):
                 item = self.create_item(scholar_ability)
                 pool.append(item)
+
+        max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
+        for _ in range(self.get_total_clamshells(max_clamshells)):
+            item = self.set_classifications("Item - Clamshell")
+            pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
