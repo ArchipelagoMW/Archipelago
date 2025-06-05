@@ -101,7 +101,6 @@ class HundredAcreWood(Toggle):
 class SuperBosses(Toggle):
     """
     Toggle whether to include checks behind Super Bosses.
-    If Final Rest Door is set to Superbosses these locations are also included.
     """
     display_name = "Super Bosses"
 

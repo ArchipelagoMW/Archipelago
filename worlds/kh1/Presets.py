@@ -158,6 +158,7 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "donald_death_link": False,
         "goofy_death_link": False,
         "remote_items": RemoteItems.option_off,
+        "shorten_go_mode": True,
         "one_hp": False,
         "four_by_three": False,
         "beep_hack": False,

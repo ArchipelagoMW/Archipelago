@@ -307,7 +307,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Cheer":                             KH1ItemData("Abilities",        code = 264_3016, classification = ItemClassification.useful,      type = "Ability",                         ),
     "Vortex":                            KH1ItemData("Abilities",        code = 264_3017, classification = ItemClassification.useful,      type = "Ability",                         ),
     "Aerial Sweep":                      KH1ItemData("Abilities",        code = 264_3018, classification = ItemClassification.useful,      type = "Ability",                         ),
-    "Counterattack":                     KH1ItemData("Abilities",        code = 264_3019, classification = ItemClassification.useful,      type = "Ability",                         ),
+    "Counterattack":                     KH1ItemData("Abilities",        code = 264_3019, classification = ItemClassification.progression,      type = "Ability",                     ),
     "Blitz":                             KH1ItemData("Abilities",        code = 264_3020, classification = ItemClassification.useful,      type = "Ability",                         ),
     "Guard":                             KH1ItemData("Abilities",        code = 264_3021, classification = ItemClassification.progression, type = "Ability",                         ),
     "Dodge Roll":                        KH1ItemData("Abilities",        code = 264_3022, classification = ItemClassification.progression, type = "Ability",                         ),

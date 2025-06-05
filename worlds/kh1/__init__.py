@@ -16,71 +16,9 @@ from .GenerateJSON import generate_json
 from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-
-
-VANILLA_KEYBLADE_STATS = [
-    "3,0",
-    "1,0",
-    "1,0",
-    "1,0",
-    "0,0",
-    "5,0",
-    "6,0",
-    "6,1",
-    "7,0",
-    "8,1",
-    "5,0",
-    "4,2",
-    "9,-1",
-    "10,0",
-    "10,1",
-    "7,2",
-    "13,0",
-    "9,1",
-    "11,-1",
-    "3,3",
-    "8,-2",
-    "14,2"
-    ]
-VANILLA_PUPPY_LOCATIONS = [
-    "Traverse Town Mystical House Glide Chest",
-    "Traverse Town Alleyway Behind Crates Chest",
-    "Traverse Town Item Workshop Left Chest",
-    "Traverse Town Secret Waterway Near Stairs Chest",
-    "Wonderland Queen's Castle Hedge Right Blue Chest",
-    "Wonderland Lotus Forest Nut Chest",
-    "Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest",
-    "Olympus Coliseum Coliseum Gates Right Blue Trinity Chest",
-    "Deep Jungle Hippo's Lagoon Center Chest",
-    "Deep Jungle Vines 2 Chest",
-    "Deep Jungle Waterfall Cavern Middle Chest",
-    "Deep Jungle Camp Blue Trinity Chest",
-    "Agrabah Cave of Wonders Treasure Room Across Platforms Chest",
-    "Halloween Town Oogie's Manor Hollow Chest",
-    "Neverland Pirate Ship Deck White Trinity Chest",
-    "Agrabah Cave of Wonders Hidden Room Left Chest",
-    "Agrabah Cave of Wonders Entrance Tall Tower Chest",
-    "Agrabah Palace Gates High Opposite Palace Chest",
-    "Monstro Chamber 3 Platform Above Chamber 2 Entrance Chest",
-    "Wonderland Lotus Forest Through the Painting Thunder Plant Chest",
-    "Hollow Bastion Grand Hall Left of Gate Chest",
-    "Halloween Town Cemetery By Cat Shape Chest",
-    "Halloween Town Moonlight Hill White Trinity Chest",
-    "Halloween Town Guillotine Square Pumpkin Structure Right Chest",
-    "Monstro Mouth High Platform Across from Boat Chest",
-    "Monstro Chamber 6 Low Chest",
-    "Monstro Chamber 5 Atop Barrel Chest",
-    "Neverland Hold Flight 1st Chest",
-    "Neverland Hold Yellow Trinity Green Chest",
-    "Neverland Captain's Cabin Chest",
-    "Hollow Bastion Rising Falls Floating Platform Near Save Chest",
-    "Hollow Bastion Castle Gates Gravity Chest",
-    "Hollow Bastion Lift Stop Outside Library Gravity Chest"
-    ]
-
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="KH1 Client")
+    launch_component(launch, name="KH1 Client")
 
 
 components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT, icon="kh1_heart"))

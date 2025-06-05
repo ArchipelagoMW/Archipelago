@@ -202,32 +202,6 @@ class KH1Context(CommonContext):
                     message = ""
                     if receiverID == self.slot and receiverID != senderID: # Item received from someone else
                         message = "From " + senderName + "\n" + itemName
-                    elif senderID == self.slot and receiverID != senderID: # Item sent to someone else
-                        message = itemName + "\nTo " + receiverName
-                    elif locationID in remote_location_ids: # Found a remote item
-                        message = itemName
-                    filename = "msg"
-                    if message != "":
-                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                            f.write(message)
-                            f.close()
-        if cmd in {"PrintJSON"} and "type" in args:
-            if args["type"] == "ItemSend":
-                item = args["item"]
-                networkItem = NetworkItem(*item)
-                receiverID = args["receiving"]
-                senderID = networkItem.player
-                locationID = networkItem.location
-                if receiverID == self.slot or senderID == self.slot:
-                    itemName = self.item_names.lookup_in_slot(networkItem.item, receiverID)[:20]
-                    itemCategory = networkItem.flags
-                    receiverName = self.player_names[receiverID][:20]
-                    senderName = self.player_names[senderID][:20]
-                    message = ""
-                    if receiverID == self.slot and receiverID != senderID: # Item received from someone else
-                        message = "From " + senderName + "\n" + itemName
-                    elif senderID == self.slot and receiverID != senderID: # Item sent to someone else
-                        message = itemName + "\nto " + receiverName
                     elif locationID in remote_location_ids: # Found a remote item
                         message = itemName
                     filename = "msg"
@@ -245,9 +219,9 @@ class KH1Context(CommonContext):
                     filename = "msg"
                     message = "Received " + itemName + "\nfrom server"
                     if not os.path.exists(self.game_communication_path + "/" + filename):
-                      with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                          f.write(message)
-                          f.close()
+                        with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                            f.write(message)
+                            f.close()
 
 
     def on_deathlink(self, data: dict[str, object]):
@@ -344,6 +318,6 @@ def launch():
     parser = get_base_parser(description="KH1 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main(args))
     colorama.deinit()

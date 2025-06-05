@@ -2226,19 +2226,13 @@ def set_rules(kh1world):
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 6th Chest"),
             lambda state: state.has("Oblivion", player))
+        add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
+        add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
+        add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
+            lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 10th Chest"),
-            lambda state: state.has("Oblivion", player) or difficulty > 0)
-        add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
-            lambda state: state.has("Oblivion", player))
-        add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
-            lambda state: state.has("Oblivion", player) or difficulty > 0)
-        add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
-            lambda state: state.has("Oblivion", player) or difficulty > 0)
-        add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
-            lambda state: state.has("Oblivion", player))
-        add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
-            lambda state: state.has("Oblivion", player) or difficulty > 0)
-        add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
             lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
             lambda state: state.has("Oblivion", player))
