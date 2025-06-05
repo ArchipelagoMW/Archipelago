@@ -977,12 +977,8 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
             choice_list = sorted(self.valid_keys)
             if self.verify_item_name:
                 choice_list.extend(sorted(world.item_names))
-                if self.convert_name_groups:
-                    choice_list.extend(sorted(world.item_name_groups.keys()))
             if self.verify_location_name:
                 choice_list.extend(sorted(world.location_names))
-                if self.convert_name_groups:
-                    choice_list.extend(sorted(world.location_name_groups.keys()))
             if self.random_str.startswith("random-range-"):
                 textsplit = self.random_str.split("-")
                 try:
