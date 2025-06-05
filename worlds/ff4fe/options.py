@@ -1,3 +1,4 @@
+import typing
 from dataclasses import dataclass
 from .items import sellable_item_names
 from Options import (Toggle, Range, Choice, PerGameCommonOptions, DefaultOnToggle, StartInventoryPool, OptionGroup,
@@ -152,14 +153,6 @@ class ItemRandomization(Choice):
     option_pro = 2
     option_wildish = 3
     default = 1
-
-class LocalItemTiering(Choice):
-    """Affects placement of local items"""
-    display_name = "Local Item Tiering"
-    option_wild = 0
-    option_pro = 1
-    option_wildish = 2
-    default = 0
 
 class MinTier(Range):
     """The minimum tier of items that can appear in the item pool."""
@@ -380,7 +373,6 @@ class FF4FEOptions(PerGameCommonOptions):
     CharactersPermajoin: CharactersPermajoin
     CharactersPermadie: CharactersPermadie
     ItemRandomization: ItemRandomization
-    LocalItemTiering: LocalItemTiering
     MinTier: MinTier
     MaxTier: MaxTier
     JunkTier: JunkTier
@@ -420,7 +412,6 @@ ff4fe_option_groups = [
         ItemRandomization,
         PassEnabled,
         PassInShops,
-        LocalItemTiering,
         MinTier,
         MaxTier,
         JunkTier,
@@ -447,7 +438,7 @@ ff4fe_option_groups = [
     ])
 ]
 
-ff4fe_options_presets: dict[str, dict[str, any]] = {
+ff4fe_options_presets: dict[str, dict[str, typing.Any]] = {
     "Remixed": {
         "UnsafeKeyItemPlacement": True,
         "HeroChallenge": "random_character",

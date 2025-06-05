@@ -1,13 +1,14 @@
-from random import shuffle
+import typing
 
 from . import items
 from .items import ItemData
 from .locations import LocationData, free_character_locations, earned_character_locations, \
     minor_locations, major_locations, areas_curves, get_location_data
-from ..AutoWorld import World
 
+if typing.TYPE_CHECKING:
+    from . import FF4FEWorld
 
-def create_itempool(locations: list[LocationData], world: World) -> tuple[list[str], str, str]:
+def create_itempool(locations: list[LocationData], world: "FF4FEWorld") -> tuple[list[str], str, str]:
     character_pool, chosen_character, second_starter = create_character_pool(world)
     key_item_pool = create_key_item_pool(world)
     location_count = len(locations) - len(character_pool) - len(key_item_pool) - 34  # Objective Status locations
@@ -19,7 +20,7 @@ def create_itempool(locations: list[LocationData], world: World) -> tuple[list[s
     result_pool.extend(create_general_pool(world, location_count, len(key_item_pool)))
     return (result_pool, chosen_character, second_starter)
 
-def create_character_pool(world: World) -> tuple[list[str], str, str]:
+def create_character_pool(world: "FF4FEWorld") -> tuple[list[str], str, str]:
     all_allowed_characters = world.options.AllowedCharacters.value
     if len(all_allowed_characters) == 0:
         all_allowed_characters = {"Cecil"}
@@ -73,14 +74,14 @@ def create_character_pool(world: World) -> tuple[list[str], str, str]:
 
 
 
-def create_key_item_pool(world: World) -> list[str]:
+def create_key_item_pool(world: "FF4FEWorld") -> list[str]:
     key_item_pool = [item.name for item in items.key_items]
     if not world.options.PassEnabled:
         key_item_pool.remove("Pass")
     return key_item_pool
 
 
-def create_general_pool(world: World, location_count: int, key_item_count: int):
+def create_general_pool(world: "FF4FEWorld", location_count: int, key_item_count: int):
     if world.options.WackyChallenge.current_key == "kleptomania":
         refined_filler = [item for item in items.filler_items if item.group not in ["weapon", "armor"]]
         refined_useful = [item for item in items.useful_items if item.group not in ["weapon", "armor"]]
@@ -128,7 +129,7 @@ def create_general_pool(world: World, location_count: int, key_item_count: int):
 
 tiers = [0, 1, 2, 3, 4, 5, 6, 7]
 
-def choose_item_by_weight(world: World, location: LocationData, item_set: list[ItemData]) -> ItemData:
+def choose_item_by_weight(world: "FF4FEWorld", location: LocationData, item_set: list[ItemData]) -> ItemData:
     area_curve = areas_curves[location.area]
     if world.options.ItemRandomization.current_key == "pro":
         tier_weights = [

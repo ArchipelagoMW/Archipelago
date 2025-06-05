@@ -6,17 +6,16 @@ from typing import Mapping, Any
 
 import Utils
 import settings
-from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial, Location, Item
+from BaseClasses import Region, ItemClassification, MultiWorld, Tutorial, Item
 from Fill import remaining_fill
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_rule, add_item_rule
 from . import events, items, locations, csvdb
-from . import rules as FERules
+from . import rules
 from .Client import FF4FEClient
 from .itempool import create_itempool
-from .items import FF4FEItem, all_items, ItemData
-from .locations import FF4FELocation, all_locations, LocationData, free_character_locations, earned_character_locations, \
-    major_locations
+from .items import FF4FEItem, ItemData
+from .locations import FF4FELocation
 from .options import FF4FEOptions, ff4fe_option_groups, ff4fe_options_presets
 from . import topology, flags
 from .rom import FF4FEProcedurePatch
@@ -63,9 +62,9 @@ class FF4FEWorld(World):
     web = FF4FEWebWorld()
     base_id = 7191991
     item_name_to_id = {item.name: id for
-                       id, item in enumerate(all_items, base_id)}
+                       id, item in enumerate(items.all_items, base_id)}
     location_name_to_id = {location.name: id for
-                           id, location in enumerate(all_locations, base_id)}
+                           id, location in enumerate(locations.all_locations, base_id)}
     item_name_groups = items.item_name_groups
 
     location_name_groups = locations.area_groups
@@ -75,8 +74,11 @@ class FF4FEWorld(World):
         super().__init__(multiworld, player)
         self.rom_name_available_event = threading.Event()
         self.chosen_character = "None"
+        self.second_character = "None"
         self.objective_count = -1
         self.dark_matters: list[FF4FEItem] = list()
+        self.rom_name = None
+        self.rom_name_text = None
 
     def is_vanilla_game(self):
         return self.get_objective_count() == 0
@@ -136,7 +138,7 @@ class FF4FEWorld(World):
             if area in topology.moon_areas:
                 moon.connect(new_region, "Moon to " + area)
 
-        for location in all_locations:
+        for location in locations.all_locations:
             if location.name.startswith("Objective"): # Objectives aren't "real" locations
                 continue
             if (self.options.ForgeTheCrystal # Forge the Crystal doesn't have a Kokkol location.
@@ -163,7 +165,7 @@ class FF4FEWorld(World):
             overworld.locations.append(new_location)
 
     def create_item(self, item: str) -> FF4FEItem:
-        item_data: ItemData = next((item_data for item_data in all_items if item_data.name == item), None)
+        item_data = next((item_data for item_data in items.all_items if item_data.name == item), None)
         if not item_data:
             raise Exception(f"{item} is not a valid item name for Final Fantasy 4 Free Enterprise")
         return FF4FEItem(item, item_data.classification, self.item_name_to_id[item], self.player)
@@ -288,7 +290,7 @@ class FF4FEWorld(World):
                 add_rule(self.get_location("Objectives Status"),
                          lambda state: state.has("DkMatter", self.player, 30))
 
-        for location in [location for location in all_locations]:
+        for location in locations.all_locations:
             # Hook areas, of course, require Hook.
             if location.area in topology.hook_areas:
                 add_rule(self.get_location(location.name),
@@ -308,9 +310,9 @@ class FF4FEWorld(World):
                 if not self.options.UnsafeKeyItemPlacement:
                     add_rule(self.get_location(location.name),
                              lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
-            # Otherwise, we consult the list of area-specific rules (e.g. Baron Castle requires Baron Key)..
-            if location.area in FERules.area_rules.keys():
-                for requirement in FERules.area_rules[location.area]:
+            # Otherwise, we consult the list of area-specific rules (e.g. Baron Castle requires Baron Key).
+            if location.area in rules.area_rules.keys():
+                for requirement in rules.area_rules[location.area]:
                     add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
             # Major slots are already Priority, but aren't allowed to have DkMatters
@@ -323,18 +325,18 @@ class FF4FEWorld(World):
             # Second of all, it includes characters in the requirements so a lategame FE area isn't equivalent to an early
             # Zelda dungeon for progression balancing.
             # Also it makes the spoiler playthrough nicer.
-            for i in range(len(FERules.location_tiers.keys())):
-                if (location.area in FERules.location_tiers[i]
+            for i in range(len(rules.location_tiers.keys())):
+                if (location.area in rules.location_tiers[i]
                         and self.options.ItemPlacement.current_key == "normal"
                         and location.name not in locations.character_locations
                         and not location.name.startswith("Objective")):
                     add_rule(self.get_location(location.name),
                              lambda state, tier=i: state.has_group("characters",
                                                            self.player,
-                                                           FERules.logical_gating[tier]["characters"]) and
+                                                           rules.logical_gating[tier]["characters"]) and
                                            state.has_group("key_items",
                                                            self.player,
-                                                           FERules.logical_gating[tier]["key_items"]))
+                                                           rules.logical_gating[tier]["key_items"]))
 
         # Boss events follow the same rules, but they're not real locations.
         for location in [event for event in events.boss_events]:
@@ -350,25 +352,25 @@ class FF4FEWorld(World):
                 if self.options.UnsafeKeyItemPlacement:
                     add_rule(self.get_location(location.name),
                              lambda state: state.has("Hook", self.player) or state.has("Magma Key", self.player))
-            if location.name in FERules.boss_rules.keys():
-                for requirement in FERules.boss_rules[location.name]:
+            if location.name in rules.boss_rules.keys():
+                for requirement in rules.boss_rules[location.name]:
                     add_rule(self.get_location(location.name),
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
-            for i in range(len(FERules.location_tiers.keys())):
-                if location.area in FERules.location_tiers[i]:
+            for i in range(len(rules.location_tiers.keys())):
+                if location.area in rules.location_tiers[i]:
                     add_rule(self.get_location(location.name),
                              lambda state, tier=i: state.has_group("characters",
                                                            self.player,
-                                                           FERules.logical_gating[tier]["characters"]) and
+                                                           rules.logical_gating[tier]["characters"]) and
                                            state.has_group("key_items",
                                                            self.player,
-                                                           FERules.logical_gating[tier]["key_items"]))
+                                                           rules.logical_gating[tier]["key_items"]))
 
         # Some locations need bespoke rules. This applies them.
-        for location in FERules.individual_location_rules.keys():
+        for location in rules.individual_location_rules.keys():
             if location in self.multiworld.regions.location_cache[self.player]:
                 ap_location = self.get_location(location)
-                for requirement in FERules.individual_location_rules[location]:
+                for requirement in rules.individual_location_rules[location]:
                     add_rule(ap_location,
                              lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
 
@@ -389,7 +391,7 @@ class FF4FEWorld(World):
         for i in range(self.get_objective_count()):
             (self.get_location(f"Objective {i + 1} Status")
                        .place_locked_item(self.create_item(f"Objective {i + 1} Cleared")))
-            for requirement in FERules.individual_location_rules["Objectives Status"]:
+            for requirement in rules.individual_location_rules["Objectives Status"]:
                 add_rule(self.get_location(f"Objective {i + 1} Status"),
                          lambda state, true_requirement=requirement: state.has(true_requirement, self.player))
 
@@ -413,82 +415,11 @@ class FF4FEWorld(World):
         location_set = set(self.multiworld.get_unfilled_locations()) - {self.get_location(location) for location in major_locations}
         location_set = sorted(location_set)
         self.random.shuffle(location_set)
-        itempool = self.dark_matters
-        remaining_fill(self.multiworld, location_set, itempool, check_location_can_fill=True)
+        item_pool = self.dark_matters
+        remaining_fill(self.multiworld, location_set, item_pool, check_location_can_fill=True)
 
     def get_pre_fill_items(self) -> list["Item"]:
         return self.dark_matters
-
-    def post_fill(self) -> None:
-        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
-        for location in unfilled_locations:
-            location.item = self.create_item(self.get_filler_item_name())
-        if self.options.LocalItemTiering.current_key == "pro" or self.options.LocalItemTiering.current_key == "wildish":
-            # If we're on Tpro or Twildish placement, not every placement is going to fall under their tiering rules
-            # Rather than set item rules doomed to fail, we swap things around here.
-            all_filled_locations = self.multiworld.get_filled_locations(self.player)
-            swappable_locations: list[Location] = []
-            swappable_items: list[Item] = []
-            for location in all_filled_locations:
-                # Get every minor location with local filler that hasn't been plando'd
-                if location.item.player == self.player and not location.item.classification & ItemClassification.progression:
-                    if location.name in locations.minor_location_names and not location.locked:
-                        area = locations.get_location_data(location.name).area
-                        area_curves = locations.areas_curves[area]
-                        item_data = items.get_item_data(location.item.name)
-                        item_tier = item_data.tier
-                        min_tier = self.get_min_tier(area_curves)
-                        max_tier = self.get_max_tier(area_curves)
-                        if self.options.LocalItemTiering.current_key == "wildish":
-                            max_tier += 1
-                        # If the item there isn't allowed by tiering, add the location and item to swap options.
-                        if item_tier < min_tier or item_tier > max_tier:
-                            swappable_locations.append(location)
-                            swappable_items.append(location.item)
-            # Sort both the items and locations by tier, lowest to highest.
-            swappable_locations.sort(key=lambda location: self.get_min_tier(
-                locations.areas_curves[locations.get_location_data(location.name).area]))
-            swappable_items.sort(key=lambda item: items.get_item_data(item.name).tier)
-            # Put the lowest tier item in the lowest tier location.
-            # This isn't perfect: with enough offworld items, we still might not fit the tiering rules.
-            # But we come a lot closer, and this is a fast solution.
-            for location in swappable_locations:
-                location.item = swappable_items.pop()
-
-
-    def get_min_tier(self, curve):
-        if int(curve.tier1) > 0:
-            return 1
-        elif int(curve.tier2) > 0:
-            return 2
-        elif int(curve.tier3) > 0:
-            return 3
-        elif int(curve.tier4) > 0:
-            return 4
-        elif int(curve.tier5) > 0:
-            return 5
-        elif int(curve.tier6) > 0:
-            return 6
-        elif int(curve.tier7) > 0:
-            return 7
-        return 8
-
-    def get_max_tier(self, curve):
-        if int(curve.tier8) > 0:
-            return 8
-        elif int(curve.tier7) > 0:
-            return 7
-        elif int(curve.tier6) > 0:
-            return 6
-        elif int(curve.tier5) > 0:
-            return 5
-        elif int(curve.tier4) > 0:
-            return 4
-        elif int(curve.tier3) > 0:
-            return 3
-        elif int(curve.tier2) > 0:
-            return 2
-        return 1
 
     def generate_output(self, output_directory: str) -> None:
         # Standard rom name stuff.
@@ -536,9 +467,9 @@ class FF4FEWorld(World):
             # Placement dictionary doesn't need AP event logic stuff.
             if location.name in [event.name for event in events.boss_events] or location.name.startswith("Objective"):
                 continue
-            location_data = [loc for loc in all_locations if loc.name == location.name].pop()
+            location_data = [loc for loc in locations.all_locations if loc.name == location.name].pop()
             if location.item.player == self.player:
-                item_data = [item for item in all_items if item.name == location.item.name].pop()
+                item_data = [item for item in items.all_items if item.name == location.item.name].pop()
                 placement_dict[location_data.fe_id] = {
                     "location_data": location_data.to_json(),
                     "item_data": item_data.to_json(),

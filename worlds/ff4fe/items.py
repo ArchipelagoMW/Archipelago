@@ -78,7 +78,7 @@ filler_items = [item for item in all_items if item.classification == ItemClassif
 weapons = [item for item in all_items if item.group == "weapon" and item.classification != ItemClassification.progression]
 armors = [item for item in all_items if item.group == "armor" and item.classification != ItemClassification.progression]
 
-all_items.append(ItemData("Advance Weapon", ItemClassification.useful, 8, 0x46, 100000))
+all_items.append(ItemData("Advance Weapon", ItemClassification.useful, 8, 0x46, "weapon", 100000))
 
 useful_item_names = [item.name for item in [*useful_items]]
 filler_item_names = [item.name for item in [*filler_items]]
