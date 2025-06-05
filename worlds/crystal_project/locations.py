@@ -450,19 +450,20 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
 
         #Capital Pipeline
         #Treasure chests
-        LocationData("Capital Pipeline", "Capital Pipeline Chest - I wanna go home", 2912 + treasure_index_offset, logic.has_vertical_movement), #Capital Pipeline map chest
+        #If you got here from the jail, you'd need vert, or you could get in with swimming, or you could get in with the tram key, TODO, also from jidamba?
+        LocationData("Capital Pipeline", "Capital Pipeline Chest - I wanna go home", 2912 + treasure_index_offset, lambda state: logic.has_vertical_movement or logic.has_swimming or logic.has_key(state, TRAM_KEY)), #Capital Pipeline map chest
         LocationData("Capital Pipeline", "Capital Pipeline Chest - Do not anger the fungus", 1294 + treasure_index_offset), #Lucky Platter chest
 
         #NPCs
         LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
         LocationData("Capital Pipeline", "Capital Pipeline NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
-        LocationData("Capital Pipeline", "Jidamba Eaclaneya NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset, logic.has_vertical_movement), #Dust
+        LocationData("Capital Pipeline", "Jidamba Eaclaneya NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset,lambda state: logic.has_vertical_movement or logic.has_swimming or logic.has_key(state, TRAM_KEY)), #Dust
 
         #Cobblestone Crag
         #Treasure chests
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Behind sluice gate", 479 + treasure_index_offset), #Ether Pouch chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Long jump", 382 + treasure_index_offset, logic.has_horizontal_movement), #Potion chest
-        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tucked in cranny between two tall spikes", 1119 + treasure_index_offset), #Potion Pouch chest
+        LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Tucked in cranny between two tall spikes", 1119 + treasure_index_offset, logic.has_horizontal_movement), #Potion Pouch chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - I totally meant to miss that jump", 2670 + treasure_index_offset), #Skewer chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Upon exiting from Quintar Nest", 478 + treasure_index_offset), #Tonic Pouch chest
         LocationData("Cobblestone Crag", "Cobblestone Crag Chest - Could really use a Walking Stick (chest) right about now...", 2669 + treasure_index_offset),
