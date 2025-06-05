@@ -404,10 +404,6 @@ class CrystalProjectWorld(World):
                     item = self.set_classifications(name)
                     pool.append(item)
 
-        for _ in range (self.get_total_clamshells()):
-            item = self.set_classifications("Item - Clamshell")
-            pool.append(item)
-
         if self.options.levelGating:
             for _ in range (self.options.levelUpsInPool):
                 item = self.set_classifications("Item - Progressive Level Cap")
