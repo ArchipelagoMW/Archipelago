@@ -137,8 +137,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         POKO_POKO_DESERT: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
         BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         YAMAGAWA_MA: lambda state: (logic.has_swimming or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 1)})
-    multiworld.get_region(DELENDE, player).add_exits([SPAWNING_MEADOWS, SOILED_DEN, PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
+    multiworld.get_region(DELENDE, player).add_exits([SPAWNING_MEADOWS, SOILED_DEN, PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
         {JADE_CAVERN: lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
+         ANCIENT_RESERVOIR: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
         SALMON_PASS: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
         GREENSHIRE_REPRISE: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
         PROVING_MEADOWS: logic.has_horizontal_movement,
