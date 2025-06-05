@@ -26,14 +26,9 @@ from .options import (Goal, DarkCavesRequireFlash, HmRequirements, ItemPoolType,
 from .pokemon import (get_random_move, get_species_id_by_label, randomize_abilities, randomize_learnsets,
                       randomize_legendary_encounters, randomize_misc_pokemon, randomize_starters,
                       randomize_tm_hm_compatibility,randomize_types, randomize_wild_encounters)
-from .rom import PokemonEmeraldProcedurePatch, write_tokens
+from .rom import PokemonEmeraldProcedurePatch, write_tokens 
 from .util import get_encounter_type_label
 
-# Try adding the Pokemon Gen 3 Adjuster
-try:
-    from worlds._pokemon_gen3_adjuster import __init__
-except:
-    pass
 
 class PokemonEmeraldWebWorld(WebWorld):
     """
@@ -58,7 +53,7 @@ class PokemonEmeraldWebWorld(WebWorld):
         "setup/es",
         ["nachocua"]
     )
-
+    
     setup_sv = Tutorial(
         "Multivärld Installations Guide",
         "En guide för att kunna spela Pokémon Emerald med Archipelago.",
@@ -68,16 +63,7 @@ class PokemonEmeraldWebWorld(WebWorld):
         ["Tsukino"]
     )
 
-    adjuster_en = Tutorial(
-        "Usage Guide",
-        "A guide to use the Pokemon Gen 3 Adjuster with Pokemon Emerald.",
-        "English",
-        "adjuster_en.md",
-        "adjuster/en",
-        ["RhenaudTheLukark"]
-    )
-
-    tutorials = [setup_en, setup_es, setup_sv, adjuster_en]
+    tutorials = [setup_en, setup_es, setup_sv]
     option_groups = OPTION_GROUPS
 
 
