@@ -209,8 +209,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
     if localized:
         in_dungeon_items = [item for item in get_dungeon_item_pool(multiworld) if (item.player, item.name) in localized]
         if in_dungeon_items:
-            restricted_players = {player for player, restricted in multiworld.restrict_dungeon_item_on_boss.items() if
-                                  restricted}
+            restricted_players = {world.player for world in multiworld.get_game_worlds("A Link to the Past") if
+                                  world.options.restrict_dungeon_item_on_boss}
             locations: typing.List["ALttPLocation"] = [
                 location for location in get_unfilled_dungeon_locations(multiworld)
                 # filter boss
@@ -255,8 +255,9 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
                 if all_state_base.has("Triforce", player):
                     all_state_base.remove(multiworld.worlds[player].create_item("Triforce"))
 
-            for (player, key_drop_shuffle) in multiworld.key_drop_shuffle.items():
-                if not key_drop_shuffle and player not in multiworld.groups:
+            for lttp_world in multiworld.get_game_worlds("A Link to the Past"):
+                if not lttp_world.options.key_drop_shuffle and lttp_world.player not in multiworld.groups:
+                    player = lttp_world.player
                     for key_loc in key_drop_data:
                         key_data = key_drop_data[key_loc]
                         all_state_base.remove(item_factory(key_data[3], multiworld.worlds[player]))
