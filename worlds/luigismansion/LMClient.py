@@ -73,11 +73,11 @@ LAST_RECV_ITEM_ADDR = 0x803CDEBA
 
 # These addresses are related to displaying text in game.
 RECV_DEFAULT_TIMER_IN_HEX = "5A" # 3 Seconds
-RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DD958
-RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DD95C
-RECV_ITEM_NAME_ADDR = 0x804DE08C
-RECV_ITEM_LOC_ADDR = 0x804DE0B0
-RECV_ITEM_SENDER_ADDR = 0x804DE0D0
+RECV_ITEM_DISPLAY_TIMER_ADDR = 0x804DDA68
+RECV_ITEM_DISPLAY_VIZ_ADDR = 0x804DDA6C
+RECV_ITEM_NAME_ADDR = 0x804DE1F8
+RECV_ITEM_LOC_ADDR = 0x804DE220
+RECV_ITEM_SENDER_ADDR = 0x804DE240
 RECV_MAX_STRING_LENGTH = 24
 RECV_LINE_STRING_LENGTH = 27
 FRAME_AVG_COUNT = 30
@@ -618,17 +618,13 @@ class LMContext(CommonContext):
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if self.pickup_anim_off:
             crown_helper_val = "00000001"
-            dme.write_bytes(0x804DE028, bytes.fromhex(crown_helper_val))
+            dme.write_bytes(0x804DE16C, bytes.fromhex(crown_helper_val))
 
         # Make it so the displayed Boo counter always appears even if you dont have boo radar or if you haven't caught
         # a boo in-game yet.
         if self.boosanity:
             # This allows the in-game display to work correctly.
             dme.write_bytes(0x803D5E0B, bytes.fromhex("01"))
-
-            # This allows the player to finish the game as expected in King Boo's fight.
-            if self.pickup_anim_off:
-                dme.write_bytes(0x804DE028, bytes.fromhex("00000001"))
 
             # Update the in-game counter to reflect how many boos you got.
             boo_received_list = [item.item for item in self.items_received if item.item in BOO_AP_ID_LIST]
