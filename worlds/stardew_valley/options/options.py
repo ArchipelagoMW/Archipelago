@@ -5,6 +5,7 @@ from typing import Protocol, ClassVar
 
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
     Visibility, Removed, OptionCounter
+from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
 from ..mods.mod_data import ModNames
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
@@ -1078,6 +1079,14 @@ class StardewValleyOptions(PerGameCommonOptions):
     mods: Mods
     bundle_plando: BundlePlando
     death_link: DeathLink
+
+    # Jojapocalypse
+    jojapocalypse: Jojapocalypse
+    joja_start_price: JojaStartPrice
+    joja_end_price: JojaEndPrice
+    joja_pricing_pattern: JojaPricingPattern
+    joja_purchases_for_membership: JojaPurchasesForMembership
+    joja_are_you_sure: JojaAreYouSure
 
     # removed:
     trap_items: TrapItems
