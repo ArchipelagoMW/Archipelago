@@ -1,7 +1,7 @@
 import unittest
 
 from BaseClasses import MultiWorld, PlandoOptions
-from Options import ItemLinks
+from Options import ItemLinks, OptionSet
 from worlds.AutoWorld import AutoWorldRegister
 
 
@@ -79,3 +79,16 @@ class TestOptions(unittest.TestCase):
                 for option_key, option in world_type.options_dataclass.type_hints.items():
                     with self.subTest(game=gamename, option=option_key):
                         pickle.dumps(option.from_any(option.default))
+
+    def test_option_set_keys_random(self):
+        """Tests that option sets do not contain 'random' and its variants as valid keys"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            if game_name not in ("Archipelago", "Sudoku", "Super Metroid"):
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    if issubclass(option, OptionSet):
+                        with self.subTest(game=game_name, option=option_key):
+                            self.assertFalse(any(random_key in option.valid_keys for random_key in ("random",
+                                                                                                    "random-high",
+                                                                                                    "random-low")))
+                            for key in option.valid_keys:
+                                self.assertFalse("random-range" in key)
