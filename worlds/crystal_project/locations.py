@@ -525,7 +525,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData(SALMON_RIVER, "Salmon River Chest - Hop on chest once you have become frogger", 1264 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Atop river island crown", 1297 + treasure_index_offset), #Bloodbind chest
         LocationData(SALMON_RIVER, "Salmon River Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
-        LocationData(SALMON_RIVER, "Salmon River Chest - In the stands of Salmon race finish line ", 2976 + treasure_index_offset), #Ether Pouch chest
+        LocationData(SALMON_RIVER, "Salmon River Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset), #Ether Pouch chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
         LocationData(SALMON_RIVER, "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, logic.has_vertical_movement), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
         LocationData(SALMON_RIVER, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(60, 225, -435) Overpass (Snow) River Cats Ego map
