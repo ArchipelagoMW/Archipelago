@@ -852,7 +852,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("The Undercity", "The Undercity Chest - Hiding in a building in the north area", 2826 + treasure_index_offset), #Potion chest
         LocationData("The Undercity", "The Undercity Chest - Undercity Inn", 3519 + treasure_index_offset), #Elevator Part
         LocationData("The Undercity", "The Undercity Chest - South of the Undercity Inn", 1695 + treasure_index_offset), #Brigandine chest
-        LocationData("The Undercity", "The Undercity Chest - Hidden in a nook in the wall", 2793 + treasure_index_offset), #Knights Plate chest
+        LocationData("The Undercity", "The Undercity Chest - Hidden in a nook in the wall", 2793 + treasure_index_offset, logic.has_vertical_movement), #Knights Plate chest
         LocationData("The Undercity", "Underpass Chest - Lovely bounce tree W of The Undercity", 3673 + treasure_index_offset, logic.has_swimming), #(608, 91, -215) (Summon Pah) Underpass Scrap chest
         
         #NPCs
@@ -1343,7 +1343,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         LocationData("Cobblestone Crag", "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
         LocationData("Okimoto N.S.", "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset),
         LocationData("Ancient Reservoir", "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset),
-        LocationData("The Undercity", "The Undercity Boss - Blade Master", 1939 + boss_index_offset),
+        LocationData("The Undercity", "The Undercity Boss - Blade Master", 1939 + boss_index_offset, logic.has_vertical_movement),
         LocationData("The Undercity", "The Undercity Boss - Shadow Master", 1940 + boss_index_offset),
         LocationData("The Undercity", "The Undercity Boss - Duel Master", 1941 + boss_index_offset),
         LocationData("Beaurior Rock", "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)),
