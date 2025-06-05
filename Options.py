@@ -987,7 +987,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
                     raise ValueError(f"Invalid random range {self.random_str} for option {self.__name__} "
                                      f"for player {player_name}")
                 random_range.sort()
-                if random_range[0] < 0 or random_range[1] >= len(choice_list):
+                if random_range[0] < 0 or random_range[1] > len(choice_list):
                     raise Exception(
                         f"{random_range[0]}-{random_range[1]} is outside allowed range "
                         f"0-{len(choice_list)} for option {self.__name__} for player {player_name}")
