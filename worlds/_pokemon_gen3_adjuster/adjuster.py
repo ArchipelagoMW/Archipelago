@@ -537,7 +537,7 @@ def adjust_gui():
 
         # Display the Archipelago icon as default
         if not _sprite:
-            _sprite = local_path("data", "default.png")
+            _sprite = local_path("data", "gen3_adjuster_default.png")
         else:
             _sprite = sprite_path[:-4]
         if not _sprite.endswith(".png"):
