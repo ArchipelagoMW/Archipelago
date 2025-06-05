@@ -961,7 +961,8 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
     @classmethod
     def from_text(cls, text: str):
         check_text = text.lower().split(",")
-        if cls.valid_keys and len(check_text) == 1 and check_text[0].startswith("random"):
+        if ((cls.valid_keys or cls.verify_item_name or cls.verify_location_name)
+                and len(check_text) == 1 and check_text[0].startswith("random")):
             return cls((), check_text[0])
         return cls([option.strip() for option in text.split(",")])
 
