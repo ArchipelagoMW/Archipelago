@@ -9,16 +9,28 @@ from Utils import open_image_secure
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
 from .adjuster_constants import *
 try:
-    from worlds.pokemon_emerald.adjuster_constants import *
+    from worlds.pokemon_emerald.adjuster_constants import EMERALD_FOLDER_OBJECT_INFOS, \
+        EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS, EMERALD_OVERWORLD_SPRITE_ADDRESSES, EMERALD_POINTER_REFERENCES, \
+        EMERALD_OVERWORLD_PALETTE_IDS, EMERALD_DATA_ADDRESS_INFOS, EMERALD_VALID_OVERWORLD_SPRITE_SIZES, \
+        EMERALD_SPRITES_REQUIREMENTS, EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS
     emerald_support = True
-except:
-    from .adjuster_constants_emerald_fallback import *
+except Exception:
+    from .adjuster_constants_emerald_fallback import EMERALD_FOLDER_OBJECT_INFOS, \
+        EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS, EMERALD_OVERWORLD_SPRITE_ADDRESSES, EMERALD_POINTER_REFERENCES, \
+        EMERALD_OVERWORLD_PALETTE_IDS, EMERALD_DATA_ADDRESS_INFOS, EMERALD_VALID_OVERWORLD_SPRITE_SIZES, \
+        EMERALD_SPRITES_REQUIREMENTS, EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS
     emerald_support = False
 try:
-    from worlds.pokemon_frlg.adjuster_constants import *
+    from worlds.pokemon_frlg.adjuster_constants import FR_LG_FOLDER_OBJECT_INFOS, \
+        FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS, FR_LG_OVERWORLD_SPRITE_ADDRESSES, FR_LG_POINTER_REFERENCES, \
+        FR_LG_OVERWORLD_PALETTE_IDS, FR_LG_DATA_ADDRESS_INFOS, FR_LG_VALID_OVERWORLD_SPRITE_SIZES, \
+        FR_LG_SPRITES_REQUIREMENTS, FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS
     frlg_support = True
-except:
-    from .adjuster_constants_frlg_fallback import *
+except Exception:
+    from .adjuster_constants_frlg_fallback import FR_LG_FOLDER_OBJECT_INFOS, \
+        FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS, FR_LG_OVERWORLD_SPRITE_ADDRESSES, FR_LG_POINTER_REFERENCES, \
+        FR_LG_OVERWORLD_PALETTE_IDS, FR_LG_DATA_ADDRESS_INFOS, FR_LG_VALID_OVERWORLD_SPRITE_SIZES, \
+        FR_LG_SPRITES_REQUIREMENTS, FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS
     frlg_support = False
 
 sprite_pack_data: dict[str, int | list[dict[str, int | bytes]]] = {}
@@ -1532,7 +1544,7 @@ def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap:
         raise Exception(f"Unknown ROM version {_rom_version}")
 
     global rom_is_ap
-    rom_is_ap = _forced_is_ap if _forced_is_ap != None else zlib.crc32(_rom) != data_address_info["crc32"]
+    rom_is_ap = _forced_is_ap if _forced_is_ap is not None else zlib.crc32(_rom) != data_address_info["crc32"]
 
     global data_addresses
     data_addresses = data_address_info["ap_addresses"] if rom_is_ap else data_address_info["original_addresses"]
@@ -1541,18 +1553,21 @@ def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap:
     current_rom = _rom
     return rom_is_ap
 
+
 def five_to_eight_bits_palette(value: int):
     # Transforms a 5-bit long palette color into an 8-bit long palette color
     return (value << 3) + math.floor(value / 31 * 7)
+
 
 def eight_to_five_bits_palette(value: int):
     # Transforms a 8-bit long palette color into an 5-bit long palette color
     return value >> 3
 
+
 def flatten_2d(input_list: list):
-   # Flattens a list containing lists into a single unidimensional list
-   result = []
-   for sublist in input_list:
-      for item in sublist:
-        result.append(item)
-   return result
+    # Flattens a list containing lists into a single unidimensional list
+    result = []
+    for sublist in input_list:
+        for item in sublist:
+            result.append(item)
+    return result

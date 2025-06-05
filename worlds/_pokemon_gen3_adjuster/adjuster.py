@@ -22,13 +22,13 @@ from tkinter.tix import Tk
 try:
     from worlds.pokemon_emerald.adjuster_constants import EMERALD_PATCH_EXTENSIONS
     emerald_support = True
-except:
+except Exception:
     from .adjuster_constants_emerald_fallback import EMERALD_PATCH_EXTENSIONS
     emerald_support = False
 try:
     from worlds.pokemon_frlg.adjuster_constants import FR_LG_PATCH_EXTENSIONS
     frlg_support = True
-except:
+except Exception:
     from .adjuster_constants_frlg_fallback import FR_LG_PATCH_EXTENSIONS
     frlg_support = False
 
@@ -47,11 +47,12 @@ adjuster_name = "Gen 3" if frlg_support and emerald_support \
 adjuster_extensions = [".gba", *EMERALD_PATCH_EXTENSIONS.split("/"), *FR_LG_PATCH_EXTENSIONS.split("/")]
 GAME_GEN3_ADJUSTER = "Pokemon Gen 3 Adjuster"
 
+
 def build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given or opens the AP ROM file that was given
     if not _patch:
         messagebox.showerror(title="Failure",
-                             message=f"Cannot build the AP ROM: a patch file or a patched ROM is required!")
+                             message="Cannot build the AP ROM: a patch file or a patched ROM is required!")
         return
 
     rom_data: bytearray = None
@@ -67,11 +68,12 @@ def build_ap_rom(_patch: str):
             rom_data = frlg_build_ap_rom(_patch)
     if not rom_data:
         messagebox.showerror(title="Failure",
-                             message=f"Cannot build the AP ROM: invalid file extension: "\
+                             message="Cannot build the AP ROM: invalid file extension: "
                                      + f"requires {'/'.join(adjuster_extensions[1:])}")
         return bytearray()
 
     return rom_data
+
 
 def emerald_build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given
@@ -83,6 +85,7 @@ def emerald_build_ap_rom(_patch: str):
             return bytearray(stream.read())
     return bytearray()
 
+
 def frlg_build_ap_rom(_patch: str):
     # Builds the AP ROM if a patch file was given
     # Handles Pokemon Firered/Leafgreen patching
@@ -92,6 +95,7 @@ def frlg_build_ap_rom(_patch: str):
         with open(ap_rom_path, "rb") as stream:
             return bytearray(stream.read())
     return bytearray()
+
 
 def emerald_fetch_patch(_patch: str) -> tuple[str, str]:
     # Asks for a ROM or patch file then validates it
@@ -108,6 +112,7 @@ def emerald_fetch_patch(_patch: str) -> tuple[str, str]:
             return _patch, "Emerald"
     return _patch, "Unknown"
 
+
 def frlg_fetch_patch(_patch: str) -> tuple[str, str]:
     # Asks for a ROM or patch file then validates it
     # Handles the check for Pokemon Firered/Leafgreen
@@ -123,6 +128,7 @@ def frlg_fetch_patch(_patch: str) -> tuple[str, str]:
             return _patch, frlg_get_rom_version(patch_data)
     return _patch, "Unknown"
 
+
 def frlg_get_rom_version(_rom_data: bytearray):
     # Retrieves and returns the version of the ROM given
     allowed_internal_names = {"POKEMON FIRE": "Firered", "POKEMON LEAF": "Leafgreen"}
@@ -133,6 +139,7 @@ def frlg_get_rom_version(_rom_data: bytearray):
         return "Unknown"
     return f"{version_name}{'_rev1' if internal_revision == 1 else ''}"
 
+
 def build_sprite_pack_patch(_sprite_pack: str):
     # Builds the BPS patch including all of the sprite pack's data
     errors, has_error = validate_sprite_pack(_sprite_pack)
@@ -142,6 +149,7 @@ def build_sprite_pack_patch(_sprite_pack: str):
     sprite_pack_data = get_patch_from_sprite_pack(_sprite_pack, rom_version)
     sprite_pack_bps_patch = data_to_bps_patch(sprite_pack_data)
     return sprite_pack_bps_patch
+
 
 async def main():
     # Main function of the adjuster
@@ -165,12 +173,14 @@ async def main():
     else:
         adjust(args)
 
+
 def get_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument("--patch", default="",
                         help="Path to a Pokemon Gen 3 AP-randomized ROM to adjust or path to a fitting patch file.")
     parser.add_argument("--sprite-pack", default="", help="Path to the Pokemon Gen 3 sprite pack folder to use.")
     return parser
+
 
 def adjust_gui():
     adjuster_settings = get_adjuster_settings(GAME_GEN3_ADJUSTER)
@@ -203,7 +213,7 @@ def adjust_gui():
         global is_patch_valid
         global rom_version
 
-        if not _forced_patch is None:
+        if _forced_patch is not None:
             patch = _forced_patch
         else:
             title = f"Choose a Pokemon {adjuster_name} ROM ({adjuster_extensions[0]}) or a "\
@@ -245,12 +255,12 @@ def adjust_gui():
             players_folder_object_info = find_folder_object_info("players")
             pokemon_folder_object_info = find_folder_object_info("pokemon")
             object_folders = trainer_folder_object_info["folders"] + players_folder_object_info["folders"] \
-                             + pokemon_folder_object_info["folders"]
+                + pokemon_folder_object_info["folders"]
             check_sprite_extraction("")
 
             # If the patch is valid, show the isAP checkbox, the Sprite Extractor
             # and the data edition window if it's displayed
-            patch_is_ap_checkbox.pack(side=LEFT, padx=(4,0))
+            patch_is_ap_checkbox.pack(side=LEFT, padx=(4, 0))
             if data_edition_error.winfo_ismapped():
                 switch_sprite_folder(current_valid_sprite_folder.get().title(), current_valid_sprite.get())
             sprite_preview_frame.pack_forget()
@@ -261,12 +271,12 @@ def adjust_gui():
                 sprite_preview_frame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottom_frame.pack(side=TOP, pady=5)
 
-    def sprite_pack_select(_forced_sprite_pack: str = None, _forced_folder = "", _forced_sprite = ""):
+    def sprite_pack_select(_forced_sprite_pack: str = None, _forced_folder="", _forced_sprite=""):
         # Run when we ask for the user to select a sprite pack,
         # or when the sprite pack needs to be reloaded
         global is_sprite_pack_valid
 
-        if not _forced_sprite_pack is None:
+        if _forced_sprite_pack is not None:
             sprite_pack = _forced_sprite_pack
         else:
             old_sprite_pack_folder: str = opts.sprite_pack.get() if is_sprite_pack_valid else None
@@ -361,8 +371,9 @@ def adjust_gui():
 
         handle_address_collection(ap_rom, rom_version, is_rom_ap.get())
         extract_sprites_internal(sprite_extractor_folder.get(), output_folder)
-        messagebox.showinfo(title="Success", message=f"All sprites for {sprite_extractor_folder.get()} "\
-                                                     + "have successfully been extracted!")
+        messagebox.showinfo(title="Success",
+                            message=f"All sprites for {sprite_extractor_folder.get()} "\
+                            + "have successfully been extracted!")
 
     def extract_all_sprites():
         # Run when the Extract All button is pressed
@@ -384,7 +395,7 @@ def adjust_gui():
             if not os.path.isdir(current_output):
                 os.makedirs(current_output)
             extract_sprites_internal(object, current_output)
-        messagebox.showinfo(title="Success", message=f"All sprites have successfully been extracted!")
+        messagebox.showinfo(title="Success", message="All sprites have successfully been extracted!")
 
     sprite_extractor_folder = StringVar()
 
@@ -395,7 +406,7 @@ def adjust_gui():
     sprite_extractor_frame.grid_columnconfigure(1, weight=1)
     sprite_extractor_info = Label(sprite_extractor_frame,
                                   text="Type the name of the Trainer/Pokemon you want to\n"
-                                        + "extract then press the button below.")
+                                  + "extract then press the button below.")
     sprite_extractor_info.grid(row=0, column=0, columnspan=2, pady=2)
     sprite_extractor_combobox = AutocompleteCombobox(sprite_extractor_frame, textvariable=sprite_extractor_folder,
                                                      width=14)
@@ -415,7 +426,7 @@ def adjust_gui():
     pokemon_rom_data: dict[str, int | list[dict[str, str | int]]] = None
     pokemon_saved_data: dict[str, int | list[dict[str, str | int]]] = None
 
-    def switch_sprite_folder(_folder: str, _sprite: str=""):
+    def switch_sprite_folder(_folder: str, _sprite: str = ""):
         # Run whenever the current sprite folder is changed
         # Loads the various data related to a Pokemon or Trainer, depending on the folder
         folder_path = os.path.join(opts.sprite_pack.get(), current_sprite_folder.get().title())
@@ -425,7 +436,7 @@ def adjust_gui():
             sprite_selector.set("")
             sprite_pack_select(opts.sprite_pack.get())
             return
-        if not _folder in folder_selector._completion_list:
+        if _folder not in folder_selector._completion_list:
             # Folder just created, reload the pack
             sprite_selector.set("")
             sprite_pack_select(opts.sprite_pack.get(), _folder)
@@ -445,7 +456,7 @@ def adjust_gui():
                     continue
                 try:
                     open_image_secure(full_path)
-                except:
+                except Exception:
                     # If the image is invalid, don't add it to the sprite list
                     continue
                 sprites_in_folder.append(sprite[:-4])
@@ -455,7 +466,7 @@ def adjust_gui():
 
         switch_sprite(_sprite)
 
-        if not _folder in POKEMON_FOLDERS or _folder == "Egg":
+        if _folder not in POKEMON_FOLDERS or _folder == "Egg":
             # Trainer folder, do not show the Pokemon data edition frame
             sprite_preview_frame.grid_columnconfigure(2, weight=0)
             data_edition_label_frame.grid_forget()
@@ -483,7 +494,7 @@ def adjust_gui():
                 with open(pokemon_saved_data_path) as pokemonSavedDataFile:
                     pokemon_saved_data_string = pokemonSavedDataFile.read()
                 pokemon_saved_data_errors, pokemon_saved_data_has_error =\
-                    validate_pokemon_data_string(_folder,pokemon_saved_data_string)
+                    validate_pokemon_data_string(_folder, pokemon_saved_data_string)
                 if pokemon_saved_data_has_error:
                     messagebox.showerror(title="Error while loading Pokemon data", message=pokemon_saved_data_errors)
                 else:
@@ -525,7 +536,7 @@ def adjust_gui():
             sprite_selector.set("")
             sprite_pack_select(opts.sprite_pack.get())
             return
-        if not _sprite in sprites:
+        if _sprite not in sprites:
             # Non-existant sprite, reload the pack
             sprite_selector.set("")
             sprite_pack_select(opts.sprite_pack.get())
@@ -620,12 +631,12 @@ def adjust_gui():
     palette_previews: list[Frame] = []
     for i in range(16):
         palette_preview = Frame(palette_preview_frame, width=32, height=32, bg="#000000")
-        palette_preview.grid(row=1+math.floor(i/4), column=i%4)
+        palette_preview.grid(row=1 + math.floor(i / 4), column=i % 4)
         palette_previews.append(palette_preview)
 
-    #########################
-    ## Pokemon Data Editor ##
-    #########################
+    #######################
+    # Pokemon Data Editor #
+    #######################
 
     # Frame that contains the Pokemon data editor
     # And if it's not editable, an error message to display instead
@@ -650,7 +661,7 @@ def adjust_gui():
             "type2": POKEMON_TYPES.index(pokemon_type_2.get()),
             "ability1": POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
             "ability2": POKEMON_ABILITIES.index(pokemon_ability_2.get().upper())
-                        or POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
+                or POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
             "gender_ratio": REVERSE_POKEMON_GENDER_RATIOS[pokemon_gender_ratio.get()],
             "dex": (int(pokemon_forbid_flip.get()) << 7) + int(pokemon_rom_data["dex"]) % 0x80,
             "move_pool": destringify_move_pool(move_pool_input.get("1.0", END))
@@ -691,7 +702,7 @@ def adjust_gui():
         "ability2": True,
         "movePool": True
     }
-    changed_field_values = { k: False for k, _ in valid_field_values.items() }
+    changed_field_values = {k: False for k, _ in valid_field_values.items()}
 
     pokemon_hp = StringVar()
     pokemon_spd = StringVar()
@@ -722,15 +733,16 @@ def adjust_gui():
     normal_font = font.nametofont("TkDefaultFont")
     bold_font = normal_font.copy()
     bold_font["weight"] = "bold"
+
     def check_value(entry: Widget | StringVar | IntVar, label: Label, field: str, balloonMessage: str):
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
         # Red if invalid, blue if different from the ROM, bold if different from the saved data
         field_value = str("[ {} ]".format(entry.get('1.0', END)).replace("\n", ", ") if type(entry) is ScrolledText
-                                                                                     else entry.get()).strip()
+                          else entry.get()).strip()
         blue_balloon_message = "\nThis label is blue because this value is different from the one within the ROM."
         bold_balloon_message = "\nThis label is in bold because this value has been changed and hasn't been saved."
-        errors, has_error = validate_pokemon_data_string(current_valid_sprite_folder.get(), { field: field_value })
+        errors, has_error = validate_pokemon_data_string(current_valid_sprite_folder.get(), {field: field_value})
         temp_pokemon_data_string = f"{field}: {field_value}"
         is_different_from_rom = True
         is_different_from_data = False
@@ -856,18 +868,20 @@ def adjust_gui():
         stat_def_label.pack(side=TOP)
         stat_def_input.pack(side=TOP)
         stat_def_input.bind("<KeyRelease>",
-                          lambda _: check_value(pokemon_def, stat_def_label, "def", stat_def_balloon_message),
-                          add="+")
+                            lambda _: check_value(pokemon_def, stat_def_label, "def", stat_def_balloon_message),
+                            add="+")
         stat_spatk_label.pack(side=TOP)
         stat_spatk_input.pack(side=TOP)
         stat_spatk_input.bind("<KeyRelease>",
-                            lambda _: check_value(pokemon_spatk, stat_spatk_label, "spatk", stat_spatk_balloon_message),
-                            add="+")
+                              lambda _: check_value(pokemon_spatk, stat_spatk_label, "spatk",
+                                                    stat_spatk_balloon_message),
+                              add="+")
         stat_spdef_label.pack(side=TOP)
         stat_spdef_input.pack(side=TOP)
         stat_spdef_input.bind("<KeyRelease>",
-                            lambda _: check_value(pokemon_spdef, stat_spdef_label, "spdef", stat_spdef_balloon_message),
-                            add="+")
+                              lambda _: check_value(pokemon_spdef, stat_spdef_label, "spdef",
+                                                  stat_spdef_balloon_message),
+                              add="+")
 
     type_1_label: Label = None
     type_2_label: Label = None
@@ -1037,13 +1051,13 @@ def adjust_gui():
 
     # Buttons for adjusting the ROM and saving the current adjuster's configuration
     adjust_button = Button(bottom_frame, text="Adjust Rom", command=adjust_rom)
-    adjust_button.pack(side=LEFT, padx=(5,5))
+    adjust_button.pack(side=LEFT, padx=(5, 5))
     save_button = Button(bottom_frame, text="Save Settings", command=save_gui_settings)
-    save_button.pack(side=LEFT, padx=(5,5))
+    save_button.pack(side=LEFT, padx=(5, 5))
 
-    bottom_frame.pack(side=TOP, pady=(5,5))
+    bottom_frame.pack(side=TOP, pady=(5, 5))
 
-    def try_validate_sprite_pack(_sprite_pack: str, _patch_changed = False):
+    def try_validate_sprite_pack(_sprite_pack: str, _patch_changed=False):
         # Validates the sprite pack if both the ROM/patch file and the sprite packs are valid
         has_error = False
         if is_patch_valid:
@@ -1115,11 +1129,14 @@ def adjust(args: Namespace):
         output_file.write(adjusted_ap_rom)
     return adjusted_rom_path
 
+
 def launch():
-    import colorama, asyncio
+    import colorama
+    import asyncio
     colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()
+
 
 if __name__ == "__main__":
     main()
