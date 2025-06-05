@@ -167,7 +167,8 @@ class PhantomHourglassWorld(World):
         return item_name
 
     def fill_slot_data(self) -> dict:
-        slot_data = self.options.as_dict(*options)
+        # options = self.options
+        # slot_data = self.options.as_dict(*options)
         return {}
 
     def write_spoiler(self, spoiler_handle):

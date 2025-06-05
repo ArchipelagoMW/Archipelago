@@ -57,7 +57,8 @@ STARTING_FLAGS = [
     [0x021BA6BC, 0x01],
     [0x021BA6BE, 0x01],
     [0x021BA6C4, 0x01],
-    [0x021BA6C8, 0x01]
+    [0x021BA6C8, 0x01],
+    [0x021BA644, 0x04]
 ]
 
 STAGES = {
@@ -99,7 +100,7 @@ STAGES = {
     35: "Max's Temple",
     36: "Bremeur's Temple",
     37: "Temple of the Ocean King",
-    38: "Temple of teh Ocean King Entrance",
+    38: "Temple of the Ocean King Entrance",
     39: "Mercay Mountain Passage",
     40: "Cannon Island Cave",
     41: "Ghost Ship",
