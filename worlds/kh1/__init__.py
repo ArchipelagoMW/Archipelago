@@ -11,9 +11,11 @@ from .Options import KH1Options, kh1_option_groups
 from .Regions import create_regions
 from .Rules import set_rules
 from .Presets import kh1_option_presets
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component, icon_paths
 from .GenerateJSON import generate_json
 from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+
 
 
 VANILLA_KEYBLADE_STATS = [
@@ -81,7 +83,9 @@ def launch_client():
     launch_subprocess(launch, name="KH1 Client")
 
 
-components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT, icon="kh1_heart"))
+
+icon_paths["kh1_heart"] = f"ap:{__name__}/icons/kh1_heart.png"
 
 
 class KH1Web(WebWorld):
@@ -288,7 +292,7 @@ class KH1World(World):
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Statue)").place_locked_item(self.create_item("Emblem Piece (Statue)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Fountain)").place_locked_item(self.create_item("Emblem Piece (Fountain)"))
             self.get_location("Hollow Bastion Entrance Hall Emblem Piece (Chest)").place_locked_item(self.create_item("Emblem Piece (Chest)"))
-        if self.options.randomize_postcards.current_key not in ["all"]:
+        if self.options.randomize_postcards != "all":
             self.get_location("Traverse Town Item Shop Postcard").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town 1st District Safe Postcard").place_locked_item(self.create_item("Postcard"))
             self.get_location("Traverse Town Gizmo Shop Postcard 1").place_locked_item(self.create_item("Postcard"))
@@ -312,7 +316,6 @@ class KH1World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-                    "logic_difficulty": str(self.options.logic_difficulty),
                     "atlantica": bool(self.options.atlantica),
                     "auto_attack": bool(self.options.auto_attack),
                     "auto_save": bool(self.options.auto_save),
@@ -341,6 +344,7 @@ class KH1World(World):
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
+                    "logic_difficulty": str(self.options.logic_difficulty),
                     "materials_in_pool": int(self.options.materials_in_pool.value),
                     "max_ap_cost": int(self.options.max_ap_cost.value),
                     "min_ap_cost": int(self.options.min_ap_cost.value),
@@ -387,6 +391,9 @@ class KH1World(World):
 
     def create_regions(self):
         create_regions(self)
+    
+    def connect_entrances(self):
+        connect_entrances(self)
     
     def generate_output(self, output_directory: str):
         """

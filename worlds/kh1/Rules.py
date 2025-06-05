@@ -319,8 +319,7 @@ def set_rules(kh1world):
             or
             (
                 difficulty > 10 
-                and state.has("Combo Master", player) 
-                and state.has_all_counts({"High Jump": 3, "Air Combo Plus": 2}, player)
+                and state.has_all_counts({"Combo Master": 1, "High Jump": 3, "Air Combo Plus": 2}, player)
             )
         ))
     add_rule(kh1world.get_location("Wonderland Tea Party Garden Across From Bizarre Room Entrance Chest"),
@@ -412,6 +411,9 @@ def set_rules(kh1world):
             or
             (
                 difficulty > 10
+            or
+            (
+                options.advanced_logic
                 and
                 (
                     state.has("Combo Master", player)
@@ -877,6 +879,12 @@ def set_rules(kh1world):
             has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Hollow Bastion", player)
             and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
+        ))
+    add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
+        lambda state: (
+            has_emblems(state, player, options.keyblades_unlock_chests)
+            and state.has("Hollow Bastion", player)
+            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests)
         ))
     add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
         lambda state: (
@@ -1707,6 +1715,7 @@ def set_rules(kh1world):
             )
             and has_defensive_tools(state, player, difficulty)
         ))
+
     if difficulty == 0:
         add_rule(kh1world.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
             lambda state: has_basic_tools(state, player))
@@ -2235,6 +2244,13 @@ def set_rules(kh1world):
             lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
             lambda state: state.has("Oblivion", player) or difficulty > 0)
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
+            lambda state: state.has("Oblivion", player))
+        add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+        add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
+            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
@@ -2323,23 +2339,27 @@ def set_rules(kh1world):
             if location_table[location].type == "Prize":
                 add_item_rule(kh1world.get_location(location),
                     lambda i: (
-                        i.player == player 
-                        and i.name in get_items_by_type("Item").keys()
-                        and i.name not in ["Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon"]
-                        and (i.name not in ["Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring"] or options.randomize_party_member_starting_accessories)
-                        and
+                        i.player != player
+                        or
                         (
+                            i.name in get_items_by_type("Item").keys()
+                            and i.name not in ("Puppy", "Lucky Emblem", "EXP Necklace", "Ribbon")
+                            and 
+                            (
+                                i.name not in ("Protect Chain", "Fire Ring", "Thunder Ring", "Blizzard Ring")
+                                or options.randomize_party_member_starting_accessories
+                            )
+                            and
                             (
                                 item_table[i.name].max_quantity == 1
-                                and item_table[i.name].classification != ItemClassification.filler
+                                or item_table[i.name].classification == ItemClassification.filler
                             )
-                            or item_table[i.name].classification == ItemClassification.filler
                         )
                     ))
 
-    
-    add_rule(kh1world.get_entrance("Destiny Islands"),
-        lambda state: state.has("Destiny Islands", player))
+    if options.destiny_islands:
+        add_rule(kh1world.get_entrance("Destiny Islands"),
+            lambda state: state.has("Destiny Islands", player))
     add_rule(kh1world.get_entrance("Wonderland"),
         lambda state: state.has("Wonderland", player) and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_entrance("Olympus Coliseum"),

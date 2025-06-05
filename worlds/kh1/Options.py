@@ -197,17 +197,17 @@ class EXPMultiplier(NamedRange):
     Determines the multiplier to apply to EXP gained.
     """
     display_name = "EXP Multiplier"
-    default = 16
-    range_start = default // 4
+    default = 16 * 4
+    range_start = 16 // 4
     range_end = 128
     special_range_names = {
-        "0.25x": int(default // 4),
-        "0.5x": int(default // 2),
-        "1x": default,
-        "2x": default * 2,
-        "3x": default * 3,
-        "4x": default * 4,
-        "8x": default * 8,
+        "0.25x": int(16 // 4),
+        "0.5x": int(16 // 2),
+        "1x": 16,
+        "2x": 16 * 2,
+        "3x": 16 * 3,
+        "4x": 16 * 4,
+        "8x": 16 * 8,
     }
 
 class RequiredLuckyEmblemsEotW(Range):
@@ -412,7 +412,7 @@ class KeybladesUnlockChests(Toggle):
     """
     display_name = "Keyblades Unlock Chests"
 
-class InteractInBattle(Toggle):
+class InteractInBattle(DefaultOnToggle):
     """
     Allow Sora to talk to people, examine objects, and open chests in battle.
     """
@@ -434,7 +434,7 @@ class LogicDifficulty(Choice):
     option_minimal = 15
     default = 5
 
-class ExtraSharedAbilities(Toggle):
+class ExtraSharedAbilities(DefaultOnToggle):
     """
     If on, adds extra shared abilities to the pool.  These can stack, so multiple high jumps make you jump higher and multiple glides make you superglide faster.
     """
@@ -478,7 +478,7 @@ class StartingWorlds(Range):
     These are given by the server, and are received after connection.
     """
     display_name = "Starting Worlds"
-    default = 0
+    default = 4
     range_start = 0
     range_end = 10
     
@@ -493,7 +493,7 @@ class RemoteItems(Choice):
     """
     Determines if items can be placed on locations in your own world in such a way that will force them to be remote items.
     Off: When your items are placed in your world, they can only be placed in locations that they can be acquired without server connection (stats on levels, items in chests, etc).
-    Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (stats in chests, abilities on static events, etc).
+    Allow: When your items are placed in your world, items that normally can't be placed in a location in-game are simply made remote (abilities on static events, etc).
     Full: All items are remote.  Use this when doing something like a co-op seed.
     """
     display_name = "Remote Items"
@@ -512,7 +512,7 @@ class Slot2LevelChecks(Range):
     range_start = 0
     range_end = 33
 
-class ShortenGoMode(Toggle):
+class ShortenGoMode(DefaultOnToggle):
     """
     If on, the player warps to the final cutscene after defeating Ansem 1 > Darkside > Ansem 2, skipping World of Chaos.
     """
@@ -594,9 +594,9 @@ class ConsistentFinishers(Toggle):
     """
     display_name = "Consistent Finishers"
 
-class EarlySkip(Toggle):
+class EarlySkip(DefaultOnToggle):
     """
-    If on, allows skipping cutscenes without waiting for them.
+    If on, allows skipping cutscenes immediately that normally take time to be able to skip.
     """
     display_name = "Early Skip"
 
@@ -606,7 +606,7 @@ class FastCamera(Toggle):
     """
     display_name = "Fast Camera"
 
-class FasterAnimations(Toggle):
+class FasterAnimations(DefaultOnToggle):
     """
     If on, speeds up animations during which you can't play.
     """
@@ -618,13 +618,13 @@ class Unlock0Volume(Toggle):
     """
     display_name = "Unlock 0 Volume"
 
-class Unskippable(Toggle):
+class Unskippable(DefaultOnToggle):
     """
     If on, makes unskippable cutscenes skippable.
     """
     display_name = "Unskippable"
 
-class AutoSave(Toggle):
+class AutoSave(DefaultOnToggle):
     """
     If on, enables auto saving.
     Press L1+L2+R1+R2+D-Pad Left to instantly load continue state.
@@ -682,7 +682,7 @@ class MinAPCost(Range):
     """
     If Randomize AP Costs is set to Randomize or Distribute, this defined the min AP cost an ability can have.
     """
-    display_name = "Max AP Cost"
+    display_name = "Min AP Cost"
     default = 0
     range_start = 0
     range_end = 2
@@ -713,8 +713,6 @@ class MaterialsInPool(Range):
     default = 16
     range_start = 0
     range_end = 20
-    """
-    display_name = "Starting Tools"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
@@ -876,6 +874,7 @@ kh1_option_groups = [
         ShortenGoMode,
         OneHP,
         FourByThree,
+        AutoAttack,
         BeepHack,
         ConsistentFinishers,
         EarlySkip,

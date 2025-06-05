@@ -10,9 +10,9 @@ class KH1RegionData(NamedTuple):
 
 
 def create_regions(kh1world):
-    multiworld                             = kh1world.multiworld
-    player                                 = kh1world.player
-    options                                = kh1world.options
+    multiworld = kh1world.multiworld
+    player     = kh1world.player
+    options    = kh1world.options
     
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData([], ["Awakening", "Levels", "World Map"]),
@@ -38,6 +38,13 @@ def create_regions(kh1world):
                                          "Halloween Town", "Neverland", "Hollow Bastion",
                                          "End of the World", "100 Acre Wood", "Homecoming"])
     }
+    
+    if not options.atlantica:
+        del regions["Atlantica"]
+        regions["World Map"].region_exits.remove("Atlantica")
+    if not options.destiny_islands:
+        del regions["Destiny Islands"]
+        regions["World Map"].region_exits.remove("Destiny Islands")
 
     # Set up locations
     regions["Agrabah"].locations.append("Agrabah Aladdin's House Main Street Entrance Chest")
@@ -567,15 +574,22 @@ def create_regions(kh1world):
     for name, data in regions.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
 
+def connect_entrances(kh1world):
+    multiworld = kh1world.multiworld
+    player     = kh1world.player
+    options    = kh1world.options
+    
     multiworld.get_entrance("Awakening", player).connect(multiworld.get_region("Awakening", player))
-    multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
+    if options.destiny_islands:
+        multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
     multiworld.get_entrance("Traverse Town", player).connect(multiworld.get_region("Traverse Town", player))
     multiworld.get_entrance("Wonderland", player).connect(multiworld.get_region("Wonderland", player))
     multiworld.get_entrance("Olympus Coliseum", player).connect(multiworld.get_region("Olympus Coliseum", player))
     multiworld.get_entrance("Deep Jungle", player).connect(multiworld.get_region("Deep Jungle", player))
     multiworld.get_entrance("Agrabah", player).connect(multiworld.get_region("Agrabah", player))
     multiworld.get_entrance("Monstro", player).connect(multiworld.get_region("Monstro", player))
-    multiworld.get_entrance("Atlantica", player).connect(multiworld.get_region("Atlantica", player))
+    if options.atlantica:
+        multiworld.get_entrance("Atlantica", player).connect(multiworld.get_region("Atlantica", player))
     multiworld.get_entrance("Halloween Town", player).connect(multiworld.get_region("Halloween Town", player))
     multiworld.get_entrance("Neverland", player).connect(multiworld.get_region("Neverland", player))
     multiworld.get_entrance("Hollow Bastion", player).connect(multiworld.get_region("Hollow Bastion", player))
