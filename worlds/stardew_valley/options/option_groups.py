@@ -72,4 +72,12 @@ else:
             ap_options.ProgressionBalancing,
             ap_options.Accessibility,
         ]),
+        OptionGroup("Jojapocalypse", [
+            options.Jojapocalypse,
+            options.JojaStartPrice,
+            options.JojaEndPrice,
+            options.JojaPricingPattern,
+            options.JojaPurchasesForMembership,
+            options.JojaAreYouSure,
+        ]),
     ]

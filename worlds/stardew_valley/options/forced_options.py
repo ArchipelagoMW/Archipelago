@@ -2,6 +2,7 @@ import logging
 
 import Options as ap_options
 from . import options
+from .jojapocalypse_options import Jojapocalypse, JojaAreYouSure
 from ..mods.mod_data import ModNames
 from ..options.settings import StardewSettings
 from ..strings.ap_names.ap_option_names import EatsanityOptionName
@@ -35,10 +36,10 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
         world_options.hatsanity.value = options.Hatsanity.option_difficult
         message = f"Hatsanity Near or Post Perfection {message_template} Replaced with 'Difficult'"
         logger.warning(message)
-    # if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_enabled:
-    #     world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
-    #     message = f"Jojapocalypse {message_template} Disabled."
-    #     logger.warning(message)
+    if not settings.allow_jojapocalypse and world_options.jojapocalypse >= options.Jojapocalypse.option_allowed:
+        world_options.jojapocalypse.value = options.Jojapocalypse.option_disabled
+        message = f"Jojapocalypse {message_template} Disabled."
+        logger.warning(message)
     if not settings.allow_sve and ModNames.sve in options.Mods:
         world_options.mods.value.remove(ModNames.sve)
         message = f"Stardew Valley Expanded {message_template} Removed from Mods."
@@ -46,12 +47,31 @@ def force_change_options_if_banned(world_options: options.StardewValleyOptions, 
 
 
 def force_change_options_if_incompatible(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    force_no_jojapocalypse_without_being_sure(world_options, player, player_name)
     force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options, player, player_name)
     force_hatsanity_when_goal_is_mad_hatter(world_options, player, player_name)
     force_ginger_island_inclusion_when_goal_is_ginger_island_related(world_options, player, player_name)
     force_walnutsanity_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_qi_special_orders_deactivation_when_ginger_island_is_excluded(world_options, player, player_name)
     force_accessibility_to_full_when_goal_requires_all_locations(player, player_name, world_options)
+
+
+def force_no_jojapocalypse_without_being_sure(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
+    has_jojapocalypse = world_options.jojapocalypse.value >= Jojapocalypse.option_allowed
+    is_sure = world_options.joja_are_you_sure == JojaAreYouSure.option_true
+
+    if has_jojapocalypse and not is_sure:
+        world_options.jojapocalypse.value = Jojapocalypse.option_disabled
+        logger.warning(f"Jojapocalypse requires affirmative consent to be enabled."
+                       f"Jojapocalypse option forced to '{world_options.jojapocalypse}' for player {player} ({player_name})")
+
+    start_price = world_options.joja_start_price.value
+    end_price = world_options.joja_end_price.value
+    if end_price <= start_price:
+        end_price = start_price + 1
+        world_options.joja_end_price.value = end_price
+        logger.warning(f"Jojapocalypse End price must be higher than the start price"
+                       f"Jojapocalypse End Price forced to '{world_options.joja_end_price}' for player {player} ({player_name})")
 
 
 def force_eatsanity_no_enzymes_if_no_other_eatsanity(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
