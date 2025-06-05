@@ -32,8 +32,8 @@ class StardewSettings(Group):
     allow_allsanity: Union[AllowAllsanityGoal, bool] = True
     allow_perfection: Union[AllowPerfectionGoal, bool] = True
     allow_max_bundles: Union[AllowMaxPriceBundles, bool] = True
-    allow_chaos_er: Union[AllowChaosER, bool] = True
+    allow_chaos_er: Union[AllowChaosER, bool] = False
     allow_shipsanity_everything: Union[AllowShipsanityEverything, bool] = True
     allow_hatsanity_perfection: Union[AllowHatsanityNearOrPostPerfection, bool] = True
-    allow_jojapocalypse: Union[AllowJojapocalypse, bool] = True
+    allow_jojapocalypse: Union[AllowJojapocalypse, bool] = False
     allow_sve: Union[AllowSVE, bool] = True
