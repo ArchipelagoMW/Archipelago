@@ -1,6 +1,6 @@
-from .bases import SVTestBase
-from .. import BuildingProgression
-from ..options import ToolProgression
+from worlds.stardew_valley import BuildingProgression
+from worlds.stardew_valley.options import ToolProgression
+from worlds.stardew_valley.test.bases import SVTestBase
 
 
 class TestBitFlagsVanilla(SVTestBase):

@@ -92,10 +92,11 @@ class TestEatsanityCrops(SVEatsanityTestBase):
         self.collect("Shipping Bin")
         self.collect_months(2)
         for crop in crops:
-            location = self.world.get_location(f"Eat {crop}")
-            self.assert_cannot_reach_location(location)
-            self.collect(crops[crop])
-            self.assert_can_reach_location(location)
+            with self.subTest(f"Need {crops[crop]} to eat {crop}"):
+                location = self.world.get_location(f"Eat {crop}")
+                self.assert_cannot_reach_location(location)
+                self.collect(crops[crop])
+                self.assert_can_reach_location(location)
 
 
 class TestEatsanityCooking(SVEatsanityTestBase):

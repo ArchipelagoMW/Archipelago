@@ -4,12 +4,15 @@ from unittest import TestCase, SkipTest
 
 from BaseClasses import MultiWorld
 from .assertion import RuleAssertMixin
-from .bases import setup_solo_multiworld
+from .bases import setup_solo_multiworld, skip_long_tests
 from .options.presets import allsanity_mods_6_x_x, minimal_locations_maximal_items
 from .. import StardewValleyWorld
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization
+
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
 
 
 def collect_all(mw):

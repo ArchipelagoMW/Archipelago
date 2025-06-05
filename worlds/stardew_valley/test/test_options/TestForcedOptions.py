@@ -2,9 +2,9 @@ import itertools
 import unittest
 
 import Options as ap_options
-from .utils import fill_dataclass_with_default
-from ... import options
-from ...options.forced_options import force_change_options_if_incompatible
+from worlds.stardew_valley import options
+from worlds.stardew_valley.options.forced_options import force_change_options_if_incompatible
+from worlds.stardew_valley.test.options.utils import fill_dataclass_with_default
 
 
 class TestGoalsRequiringAllLocationsOverrideAccessibility(unittest.TestCase):

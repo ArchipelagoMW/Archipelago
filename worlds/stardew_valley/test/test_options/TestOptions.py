@@ -3,18 +3,18 @@ from typing import ClassVar
 
 from BaseClasses import ItemClassification
 from test.param import classvar_matrix
-from .assertion import WorldAssertMixin
-from .bases import SVTestCase, SVTestBase, solo_multiworld
-from .options.option_names import all_option_choices
-from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
-from .. import items_by_group, Group
-from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, \
+from worlds.stardew_valley import items_by_group, Group
+from worlds.stardew_valley.locations import locations_by_tag, LocationTags, location_table
+from worlds.stardew_valley.options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, \
     SpecialOrderLocations, ArcadeMachineLocations, Mods
-from ..strings.goal_names import Goal as GoalName
-from ..strings.season_names import Season
-from ..strings.special_order_names import SpecialOrder
-from ..strings.tool_names import ToolMaterial, Tool, APTool
+from worlds.stardew_valley.strings.goal_names import Goal as GoalName
+from worlds.stardew_valley.strings.season_names import Season
+from worlds.stardew_valley.strings.special_order_names import SpecialOrder
+from worlds.stardew_valley.strings.tool_names import ToolMaterial, Tool, APTool
+from worlds.stardew_valley.test.assertion import WorldAssertMixin
+from worlds.stardew_valley.test.bases import SVTestCase, SVTestBase, solo_multiworld
+from worlds.stardew_valley.test.options.option_names import all_option_choices
+from worlds.stardew_valley.test.options.presets import allsanity_no_mods_6_x_x, allsanity_mods_7_x_x
 
 SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
@@ -144,7 +144,7 @@ class TestTraps(SVTestCase):
         for value in trap_option.options:
             if value == "no_traps":
                 continue
-            world_options = allsanity_mods_6_x_x()
+            world_options = allsanity_mods_7_x_x()
             world_options.update({TrapDifficulty.internal_name: trap_option.options[value]})
             with solo_multiworld(world_options) as (multi_world, _):
                 trap_items = [item_data.name
