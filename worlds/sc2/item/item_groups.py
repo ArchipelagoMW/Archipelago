@@ -117,6 +117,7 @@ class ItemGroupNames:
 
     ZERG_ITEMS = "Zerg Items"
     ZERG_UNITS = "Zerg Units"
+    ZERG_NONMORPH_UNITS = "Zerg Non-morph Units"
     ZERG_GENERIC_UPGRADES = "Zerg Generic Upgrades"
     """+attack/armour upgrades"""
     HOTS_UNITS = "HotS Units"
@@ -471,13 +472,17 @@ item_name_groups[ItemGroupNames.ZERG_BUILDINGS] = zerg_buildings = [
     item_names.INFESTED_MISSILE_TURRET,
     item_names.NYDUS_WORM,
     item_names.ECHIDNA_WORM]
-item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = [
+item_name_groups[ItemGroupNames.ZERG_NONMORPH_UNITS] = zerg_nonmorph_units = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if item_data.type in (
-        item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Morph
+        item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary
     )
        and item_name not in zerg_buildings
 ]
+item_name_groups[ItemGroupNames.ZERG_MORPHS] = zerg_morphs = [
+    item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ZergItemType.Morph
+]
+item_name_groups[ItemGroupNames.ZERG_UNITS] = zerg_units = zerg_nonmorph_units + zerg_morphs
 # For W/A upgrades
 zerg_ground_units = [
     item_names.ZERGLING, item_names.SWARM_QUEEN, item_names.ROACH, item_names.HYDRALISK, item_names.ABERRATION,
@@ -527,9 +532,6 @@ item_name_groups[ItemGroupNames.HOTS_MORPHS] = hots_morphs = [
     item_names.HYDRALISK_LURKER_ASPECT,
     item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
     item_names.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT,
-]
-item_name_groups[ItemGroupNames.ZERG_MORPHS] = zerg_morphs = [
-    item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ZergItemType.Morph
 ]
 item_name_groups[ItemGroupNames.ZERG_MERCENARIES] = zerg_mercenaries = [
     item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ZergItemType.Mercenary
