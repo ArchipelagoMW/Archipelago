@@ -290,7 +290,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Store Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Store Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset), #(417, 171, -299) Fixed Missable
-        LocationData("Capital Sequoia", "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset), #Fly Lure (399, 155, -219) Fixed Missable
+        LocationData("Capital Sequoia", "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset, logic.has_vertical_movement or logic.has_horizontal_movement), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Sparkling in the fountain", 2584 + npc_index_offset), #Plug Lure
         LocationData("Capital Sequoia", "Capital Sequoia NPC - Lost Penguin on a tent", 605 + npc_index_offset),
