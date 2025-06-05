@@ -40,7 +40,7 @@ class PhantomHourglassWorld(World):
     game = "The Legend of Zelda - Phantom Hourglass"
     options_dataclass = PhantomHourglassOptions
     options: PhantomHourglassOptions
-    required_client_version = (0, 6, 2)
+    required_client_version = (0, 5, 1)
     web = PhantomHourglassWeb()
     topology_present = True
 
@@ -60,7 +60,7 @@ class PhantomHourglassWorld(World):
 
     def create_location(self, region_name: str, location_name: str, local: bool):
         region = self.multiworld.get_region(region_name, self.player)
-        print(location_name, self.location_name_to_id)
+        print(f"Creating Location: {location_name} with id {self.location_name_to_id[location_name]}")
         location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
         region.locations.append(location)
         if local:
@@ -167,7 +167,7 @@ class PhantomHourglassWorld(World):
         return item_name
 
     def fill_slot_data(self) -> dict:
-        print("filled slot data or something")
+        slot_data = self.options.as_dict(*options)
         return {}
 
     def write_spoiler(self, spoiler_handle):

@@ -240,6 +240,10 @@ class CommonContext:
             id_to_name_lookup_table = Utils.KeyedDefaultDict(self._unknown_item)
             id_to_name_lookup_table.update({code: name for name, code in name_to_id_lookup_table.items()})
             self._game_store[game] = collections.ChainMap(self._archipelago_lookup, id_to_name_lookup_table)
+            if game == "The Legend of Zelda - Oracle of Seasons":
+                print(f"updating lookup tables for ph")
+                print(f"{id_to_name_lookup_table}")
+                print(f"game store: {self._game_store[game]}")
             if game == "Archipelago":
                 # Keep track of the Archipelago data package separately so if it gets updated in a custom datapackage,
                 # it updates in all chain maps automatically.
@@ -476,7 +480,9 @@ class CommonContext:
         if kwargs:
             payload.update(kwargs)
         await self.send_msgs([payload])
+        print("Sent Connect")
         await self.send_msgs([{"cmd": "Get", "keys": ["_read_race_mode"]}])
+        print("Sent cmd Get keys")
 
     async def check_locations(self, locations: typing.Collection[int]) -> set[int]:
         """Send new location checks to the server. Returns the set of actually new locations that were sent."""
@@ -606,6 +612,7 @@ class CommonContext:
                 needed_updates.add(game)
                 continue
 
+            print(f"Preparing Data Package for {relevant_games}")
             cached_checksum: typing.Optional[str] = self.checksums.get(game)
             # no action required if cached version is new enough
             if remote_checksum != cached_checksum:
@@ -627,10 +634,13 @@ class CommonContext:
         self.item_names.update_game(game, game_package["item_name_to_id"])
         self.location_names.update_game(game, game_package["location_name_to_id"])
         self.checksums[game] = game_package.get("checksum")
+        if game == "The Legend of Zelda - Phantom Hourglass":
+            print(f"Updating game {game}")
 
     def update_data_package(self, data_package: dict):
         for game, game_data in data_package["games"].items():
             self.update_game(game_data, game)
+            print(f"Updating data packags for {game}")
 
     def consume_network_data_package(self, data_package: dict):
         self.update_data_package(data_package)
@@ -810,6 +820,7 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
         ctx.current_reconnect_delay = ctx.starting_reconnect_delay
         ctx.disconnected_intentionally = False
         async for data in ctx.server.socket:
+            print(f"decode: {data}")
             for msg in decode(data):
                 await process_server_cmd(ctx, msg)
         logger.warning(f"Disconnected from multiworld server{reconnect_hint()}")
@@ -1104,6 +1115,7 @@ def run_as_textclient(*args):
                 await super(TextContext, self).server_auth(password_requested)
             await self.get_username()
             await self.send_connect(game="")
+            print("Finished server_auth")
 
         def on_package(self, cmd: str, args: dict):
             if cmd == "Connected":
