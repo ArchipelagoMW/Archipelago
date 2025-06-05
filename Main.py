@@ -300,6 +300,11 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     game_world.game: worlds.network_data_package["games"][game_world.game]
                     for game_world in multiworld.worlds.values()
                 }
+                dynamic_data_package = {
+                    game_world.game: game_world.get_dynamic_data_package_data()
+                    for game_world in multiworld.worlds.values()
+                    if game_world.get_dynamic_data_package_data() is not None
+                }
                 data_package["Archipelago"] = worlds.network_data_package["games"]["Archipelago"]
 
                 checks_in_area: dict[int, dict[str, int | list[int]]] = {}
@@ -330,6 +335,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "seed_name": multiworld.seed_name,
                     "spheres": spheres,
                     "datapackage": data_package,
+                    "dynamic_datapackage": dynamic_data_package,
                     "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
