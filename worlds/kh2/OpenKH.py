@@ -8,11 +8,12 @@ import zipfile
 from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
 from .XPValues import lvlStats, formExp, soraExp
-from worlds.Files import APContainer
+from worlds.Files import APPlayerContainer
 
 
-class KH2Container(APContainer):
+class KH2Container(APPlayerContainer):
     game: str = 'Kingdom Hearts 2'
+    patch_file_ending = ".zip"
 
     def __init__(self, patch_data: dict, base_path: str, output_directory: str,
         player=None, player_name: str = "", server: str = ""):

@@ -273,9 +273,7 @@ class DarkSouls3World(World):
                     self.player,
                     location,
                     parent = new_region,
-                    event = True,
                 )
-                event_item.code = None
                 new_location.place_locked_item(event_item)
                 if location.name in excluded:
                     excluded.remove(location.name)
@@ -707,7 +705,7 @@ class DarkSouls3World(World):
         if self._is_location_available("US: Young White Branch - by white tree #2"):
             self._add_item_rule(
                 "US: Young White Branch - by white tree #2",
-                lambda item: item.player == self.player and not item.data.unique
+                lambda item: item.player != self.player or not item.data.unique
             )
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant

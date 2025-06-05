@@ -2,10 +2,10 @@
 
 ## Required Software
 
-- The FF1Client
-    - Bundled with Archipelago: [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-- The BizHawk emulator. Versions 2.3.1 and higher are supported. Version 2.7 is recommended
-    - [BizHawk at TASVideos](https://tasvideos.org/BizHawk)
+- BizHawk: [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
+  - Detailed installation instructions for BizHawk can be found at the above link.
+  - Windows users must run the prerequisite installer first, which can also be found at the above link.
+- The built-in BizHawk client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
 - Your legally obtained Final Fantasy (USA Edition) ROM file, probably named `Final Fantasy (USA).nes`. Neither
   Archipelago.gg nor the Final Fantasy Randomizer Community can supply you with this.
 
@@ -13,7 +13,7 @@
 
 1. Download and install the latest version of Archipelago.
     1. On Windows, download Setup.Archipelago.<HighestVersion\>.exe and run it
-2. Assign EmuHawk version 2.3.1 or higher as your default program for launching `.nes` files.
+2. Assign EmuHawk as your default program for launching `.nes` files.
     1. Extract your BizHawk folder to your Desktop, or somewhere you will remember. Below are optional additional steps
        for loading ROMs more conveniently
         1. Right-click on a ROM file and select **Open with...**
@@ -46,7 +46,7 @@ please refer to the [game agnostic setup guide](/tutorial/Archipelago/setup/en).
 
 Once the Archipelago server has been hosted:
 
-1. Navigate to your Archipelago install folder and run `ArchipelagoFF1Client.exe`
+1. Navigate to your Archipelago install folder and run `ArchipelagoBizhawkClient.exe`
 2. Notice the `/connect command` on the server hosting page (It should look like `/connect archipelago.gg:*****`
    where ***** are numbers)
 3. Type the connect command into the client OR add the port to the pre-populated address on the top bar (it should
@@ -54,16 +54,11 @@ Once the Archipelago server has been hosted:
 
 ### Running Your Game and Connecting to the Client Program
 
-1. Open EmuHawk 2.3.1 or higher and load your ROM OR click your ROM file if it is already associated with the
+1. Open EmuHawk and load your ROM OR click your ROM file if it is already associated with the
    extension `*.nes`
-2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_ff1.lua` script onto
-   the main EmuHawk window.
-    1. You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
-       `connector_ff1.lua` with the file picker.
-    2. If it gives a `NLua.Exceptions.LuaScriptException: .\socket.lua:13: module 'socket.core' not found:` exception
-       close your emulator entirely, restart it and re-run these steps
-    3. If it says `Must use a version of BizHawk 2.3.1 or higher`, double-check your BizHawk version by clicking **
-       Help** -> **About**
+2. Navigate to where you installed Archipelago, then to `data/lua`, and drag+drop the `connector_bizhawk_generic.lua` 
+script onto the main EmuHawk window. You can also instead open the Lua Console manually, click `Script` 〉 `Open Script`,
+and navigate to `connector_bizhawk_generic.lua` with the file picker.
 
 ## Play the game
 
