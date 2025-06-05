@@ -446,7 +446,6 @@ ff4fe_options_presets: dict[str, dict[str, typing.Any]] = {
         "RequiredObjectiveCount": 5,
         "ObjectiveReward": "crystal",
         "NoAdamantArmors": True,
-        "LocalItemTiering": "pro",
         "ItemRandomization": "pro",
         "ShopRandomization": "pro",
         "FreeShops": True,
