@@ -1002,7 +1002,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
             else:
                 choice_count = random_weighted_range(self.random_str, 0, len(choice_list))
             self.value = set(random.sample(choice_list, k=choice_count))
-        super().verify(self, world, player_name, plando_options)
+        super(Option, self).verify(world, player_name, plando_options)
 
     def get_option_name(self, value):
         return ", ".join(sorted(value))
