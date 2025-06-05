@@ -592,7 +592,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(-166,93,56) Fixed Missable
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Circle the western desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Special Rotten Salmon", player) and state.has("Item - Special Fresh Salmon", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Special Shoudu Stew", player)),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar NPC - Spilled booty Silver", 2905 + npc_index_offset, logic.has_swimming), #Dust
