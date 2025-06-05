@@ -323,7 +323,8 @@ _skip_tutorial_starting_items = [
     "Bundle: Iron Rod",
     "Bundle: Wire",
     "Bundle: Reinforced Iron Plate",
-    "Bundle: Cable"
+    "Bundle: Cable",
+    "Bundle: Iron Ore"
 ]
 
 _default_starting_items = _skip_tutorial_starting_items + [
