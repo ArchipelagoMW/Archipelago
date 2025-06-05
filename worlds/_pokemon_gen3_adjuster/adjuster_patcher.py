@@ -643,7 +643,7 @@ def validate_sprite_pack(_sprite_pack_path: str) -> tuple[str, bool]:
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{'\n' if errors else ''}{_error}"
+            errors += "{}{}".format('\n' if errors else '', _error)
 
     sprite_pack_folder_list.clear()
     for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if not "name" in list(x.keys())]:
@@ -665,7 +665,8 @@ def validate_object_collection(_sprite_pack_path: str,
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{'\n' if errors else ''}{'' if _processed else 'Error: ' if _is_error else 'Warning: '}{_error}"
+            errors += "{}{}{}".format("\n" if errors else "",
+                                      "" if _processed else "Error: " if _is_error else "Warning: ", _error)
 
     def add_to_folder_list(_folder):
         if not _folder in sprite_pack_folder_list:
@@ -725,7 +726,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{'\n' if errors else ''}{'Error' if _is_error else 'Warning'}: {_error}"
+            errors += "{}{}: {}".format("\n" if errors else "", "Error" if _is_error else "Warning", _error)
 
     folder_object_info = find_folder_object_info(_name = _object_name)
     sprite_key = f"{folder_object_info['key']}_{_sprite_name}"
@@ -820,7 +821,8 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{'\n' if errors else ''}{'' if _processed else 'Error: ' if _is_error else 'Warning: '}{_error}"
+            errors += "{}{}{}".format("\n" if errors else "",
+                                      "" if _processed else "Error: " if _is_error else "Warning: ", _error)
 
     if _pokemon_name.startswith("Unown "):
         _pokemon_name = "Unown A"
@@ -895,7 +897,7 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
-            errors += f"{'\n' if errors else ''}{'Error' if _is_error else 'Warning'}: {_error}"
+            errors += "{}{}: {}".format("\n" if errors else "", "Error" if _is_error else "Warning", _error)
 
     if not _move_pool_string:
         add_error(f"{_pokemon_name}'s move pool is empty.", True)
@@ -1234,7 +1236,7 @@ def stringify_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]):
             new_field_value = "[" + stringify_move_pool(field_value).replace("\n", ", ") + "]"
         else:
             new_field_value = str(field_value)
-        result += f"{field_name}: {new_field_value}\n"
+        result += "{}: {}\n".format(field_name, new_field_value)
     return result[:-1]
 
 def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode = False):
@@ -1305,7 +1307,7 @@ def stringify_move_pool(_move_pool: list[dict[str, str | int]]):
     # Transforms a pokemon"s move pool a string
     result = ""
     for move_info in _move_pool:
-        result += f"{move_info['move']}: {move_info['level']}\n"
+        result += "{}: {}\n".format(move_info['move'], move_info['level'])
     return result[:-1]
 
 def destringify_move_pool(_move_pool_string: str):

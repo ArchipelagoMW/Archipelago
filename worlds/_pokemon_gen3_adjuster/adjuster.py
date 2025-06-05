@@ -137,7 +137,7 @@ def build_sprite_pack_patch(_sprite_pack: str):
     # Builds the BPS patch including all of the sprite pack's data
     errors, has_error = validate_sprite_pack(_sprite_pack)
     if has_error:
-        raise Exception(f"Cannot adjust the ROM as the sprite pack contains errors:\n{errors}")
+        raise Exception("Cannot adjust the ROM as the sprite pack contains errors:\n{}".format(errors))
 
     sprite_pack_data = get_patch_from_sprite_pack(_sprite_pack, rom_version)
     sprite_pack_bps_patch = data_to_bps_patch(sprite_pack_data)
@@ -726,8 +726,8 @@ def adjust_gui():
         # Checks if a given Pokemon data value is valid or if it has been changed
         # And updates its label's color and font in consequence
         # Red if invalid, blue if different from the ROM, bold if different from the saved data
-        field_value = str(f"[ {entry.get('1.0', END)} ]".replace("\n", ", ") if type(entry) is ScrolledText
-                                                                             else entry.get()).strip()
+        field_value = str("[ {} ]".format(entry.get('1.0', END)).replace("\n", ", ") if type(entry) is ScrolledText
+                                                                                     else entry.get()).strip()
         blue_balloon_message = "\nThis label is blue because this value is different from the one within the ROM."
         bold_balloon_message = "\nThis label is in bold because this value has been changed and hasn't been saved."
         errors, has_error = validate_pokemon_data_string(current_valid_sprite_folder.get(), { field: field_value })
@@ -753,7 +753,7 @@ def adjust_gui():
         main_window_tooltip.bind_widget(
             label,
             balloonmsg=f"{balloonMessage}"
-                       + f"{f'\n{errors}' if has_error else blue_balloon_message if is_different_from_rom else ''}"
+                       + {'\n{}'.format(errors) if has_error else blue_balloon_message if is_different_from_rom else ''}
                        + f"{bold_balloon_message if is_different_from_data else ''}"
         )
         update_field_validity(field, not has_error)
