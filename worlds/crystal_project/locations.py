@@ -630,7 +630,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Eastern beach Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, logic.has_vertical_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver on western beach along the cliffside", 2692 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
         LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver chilling in beach cave", 2698 + npc_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Ore
-        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver further along beach", 2877 + npc_index_offset), #Ore
+        LocationData("Sara Sara Beach", "Sara Sara Beach NPC - Silver further along beach", 2877 + npc_index_offset, logic.has_vertical_movement or logic.has_glide), #Ore
 
         #Ancient Reservoir
         #Treasure chests
