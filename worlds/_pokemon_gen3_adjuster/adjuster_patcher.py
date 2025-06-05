@@ -17,7 +17,7 @@ try:
         EMERALD_OVERWORLD_PALETTE_IDS, EMERALD_DATA_ADDRESS_INFOS, EMERALD_VALID_OVERWORLD_SPRITE_SIZES, \
         EMERALD_SPRITES_REQUIREMENTS, EMERALD_SPRITES_REQUIREMENTS_EXCEPTIONS
     emerald_support = True
-except:
+except ModuleNotFoundError:
     from .adjuster_constants_emerald_fallback import EMERALD_FOLDER_OBJECT_INFOS, \
         EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS, EMERALD_OVERWORLD_SPRITE_ADDRESSES, EMERALD_POINTER_REFERENCES, \
         EMERALD_OVERWORLD_PALETTE_IDS, EMERALD_DATA_ADDRESS_INFOS, EMERALD_VALID_OVERWORLD_SPRITE_SIZES, \
@@ -29,7 +29,7 @@ try:
         FR_LG_OVERWORLD_PALETTE_IDS, FR_LG_DATA_ADDRESS_INFOS, FR_LG_VALID_OVERWORLD_SPRITE_SIZES, \
         FR_LG_SPRITES_REQUIREMENTS, FR_LG_SPRITES_REQUIREMENTS_EXCEPTIONS
     frlg_support = True
-except:
+except ModuleNotFoundError:
     from .adjuster_constants_frlg_fallback import FR_LG_FOLDER_OBJECT_INFOS, \
         FR_LG_INTERNAL_ID_TO_OBJECT_ADDRESS, FR_LG_OVERWORLD_SPRITE_ADDRESSES, FR_LG_POINTER_REFERENCES, \
         FR_LG_OVERWORLD_PALETTE_IDS, FR_LG_DATA_ADDRESS_INFOS, FR_LG_VALID_OVERWORLD_SPRITE_SIZES, \
@@ -67,7 +67,7 @@ def get_patch_from_sprite_pack(_sprite_pack_path: str, _rom_version: str):
 
     # Handle existing Trainer & Pokemon folders
     pokemon_data_added.clear()
-    for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if not "name" in x]:
+    for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if "name" not in x]:
         add_sprite_pack_object_collection(_sprite_pack_path, folder_object_info)
 
     add_ability_fix(find_folder_object_info("pokemon"))
@@ -444,7 +444,7 @@ def replace_complex_sprite_palette(_data_address: int, _palette_key: str, _new_i
         if _palette_extended:
             # If a palette has been added, change its palette slot so it doesn"t overlap with other object palettes
             sprite_info = get_overworld_sprite_data(info_object_address, "sprite_info")
-            sprite_info = (sprite_info >> 4 << 4) | 10 # Setting sprite to palette slot 10, expand if needed later
+            sprite_info = (sprite_info >> 4 << 4) | 10  # Setting sprite to palette slot 10, expand if needed later
             set_overworld_sprite_data(info_object_address, "sprite_info", sprite_info)
 
 
@@ -550,6 +550,7 @@ def extract_sprites(_object_name: str, _output_path: str):
                                                         for sprite in flatten_2d(palette_sprites)])
     for sprite_name in palette_sprites:
         handle_sprite_extraction(sprite_name)
+
 
 def extract_sprite(_data_address: int, _sprite_key: str, _object_name: str, _palette_sprite_name: str,
                    _preset_size: tuple[int, int] = ()):
@@ -689,14 +690,15 @@ def validate_sprite_pack(_sprite_pack_path: str) -> tuple[str, bool]:
     # Validates an entire sprite pack to see if it can be applied to the given ROM
     errors = ""
     has_error = False
-    def add_error(_error: str, _is_error = False):
+
+    def add_error(_error: str, _is_error=False):
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
             errors += "{}{}".format('\n' if errors else '', _error)
 
     sprite_pack_folder_list.clear()
-    for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if not "name" in list(x.keys())]:
+    for folder_object_info in [x for x in FOLDER_OBJECT_INFOS if "name" not in list(x.keys())]:
         add_error(*validate_object_collection(_sprite_pack_path, folder_object_info))
 
     if not sprite_pack_folder_list:
@@ -787,7 +789,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
 
     try:
         sprite_image = open_image_secure(_path)
-    except:
+    except Exception:
         add_error(f"File {_sprite_name} in folder {_object_name}: The sprite is not a valid PNG file.", True)
         return errors, has_error
 
@@ -960,7 +962,7 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
     if not _move_pool_string:
         add_error(f"{_pokemon_name}'s move pool is empty.", True)
 
-    move_lines =_move_pool_string.split("\n")
+    move_lines = _move_pool_string.split("\n")
     for i in range(len(move_lines)):
         move_line = move_lines[i]
         if not move_line:
@@ -1238,9 +1240,9 @@ def spread_palettes_to_sprite_frames(_src: bytes, _width: int, _height: int, _fr
     return bytes(_src)
 
 
-###############################
-## Pokemon Data Manipulation ##
-###############################
+#############################
+# Pokemon Data Manipulation #
+#############################
 
 
 def get_pokemon_data(_pokemon_name: str, _field=""):
@@ -1604,7 +1606,7 @@ def get_sprite_requirements(_sprite_key: str, _object_name: str):
     if "frames" in result:
         if type(result["frames"]) is int:
             result["frames"] = [result["frames"]]
-        if not "internal_frames" in result:
+        if "internal_frames" not in result:
             result["internal_frames"] = result["frames"][0]
 
     return result
