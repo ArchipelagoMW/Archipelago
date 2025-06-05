@@ -101,6 +101,7 @@ class HundredAcreWood(Toggle):
 class SuperBosses(Toggle):
     """
     Toggle whether to include checks behind Super Bosses.
+    If Final Rest Door is set to Superbosses these locations are also included.
     """
     display_name = "Super Bosses"
 
@@ -712,6 +713,8 @@ class MaterialsInPool(Range):
     default = 16
     range_start = 0
     range_end = 20
+    """
+    display_name = "Starting Tools"
 
 @dataclass
 class KH1Options(PerGameCommonOptions):

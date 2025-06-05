@@ -1529,13 +1529,17 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
             lambda state: (
                 state.has_all({
+                    "Phil Cup",
+                    "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
-        add_rule(kh1world.get_location("Hercules Cup Yellow Trinity Event"),
+        add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
             lambda state: (
                 state.has_all({
+                    "Phil Cup",
+                    "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
@@ -1571,7 +1575,7 @@ def set_rules(kh1world):
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
-    if options.super_bosses:
+    if options.super_bosses or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
             lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
