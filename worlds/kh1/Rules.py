@@ -76,7 +76,7 @@ def has_defensive_tools(state: CollectionState, player: int, logic_difficulty: i
 def has_basic_tools(state: CollectionState, player: int) -> bool:
     return (
             state.has_all_counts({"Dodge Roll": 1, "Progressive Cure": 1}, player)
-            and state.has_any_count({"Combo Master": 1, "Strike Raid": 1, "Sonic Blade": 1, "Counterattack": 1,}, player)
+            and state.has_any_count({"Combo Master": 1, "Strike Raid": 1, "Sonic Blade": 1, "Counterattack": 1}, player)
             and state.has_any_count({"Leaf Bracer": 1, "Second Chance": 1, "Guard": 1}, player)
             and has_offensive_magic(state, player, 6)
         )
@@ -137,7 +137,7 @@ def set_rules(kh1world):
     final_rest_door_requirement            = kh1world.options.final_rest_door_key.current_key
     day_2_materials                        = kh1world.options.day_2_materials.value
     homecoming_materials                   = kh1world.options.homecoming_materials.value
-    difficulty                             = kh1world.options.logic_difficulty.value
+    difficulty                             = kh1world.options.logic_difficulty.value # difficulty > 0 is Normal or higher; difficulty > 5 is Proud or higher; difficulty > 10 is Minimal and higher; others are for if another difficulty is added
 
     add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
         lambda state: state.has("Progressive Blizzard", player))
@@ -398,28 +398,18 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Agrabah Palace Gates High Close to Palace Chest"),
         lambda state: (
-            state.has_all({
-                "High Jump",
-                "Progressive Glide"}, player)
+            state.has_all({"High Jump", "Progressive Glide"}, player)
             or (difficulty > 0 and state.has("High Jump", player, 3))
             or
             (
                 difficulty > 5
-                or state.has("High Jump", player, 2)
-                or state.has("Progressive Glide", player)
-            )
-            or
-            (
-                difficulty > 10
-            or
-            (
-                options.advanced_logic
                 and
                 (
-                    state.has("Combo Master", player)
-                    or can_dumbo_skip(state, player)
+                    state.has("High Jump", player, 2)
+                    or state.has("Progressive Glide", player)
                 )
             )
+            or (difficulty > 10 and state.has("Combo Master", player)) # can_dumbo_skip(state, player)
         ))
     add_rule(kh1world.get_location("Agrabah Storage Green Trinity Chest"),
         lambda state: state.has("Green Trinity", player))
@@ -2244,13 +2234,12 @@ def set_rules(kh1world):
             lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
             lambda state: state.has("Oblivion", player) or difficulty > 0)
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
         add_rule(kh1world.get_location("End of the World Final Dimension 9th Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Final Dimension 8th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Final Dimension 7th Chest"),
-            lambda state: state.has("Oblivion", player) or options.advanced_logic)
+            lambda state: state.has("Oblivion", player) or difficulty > 0)
         add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
             lambda state: state.has("Oblivion", player))
         add_rule(kh1world.get_location("End of the World Giant Crevasse 5th Chest"),
