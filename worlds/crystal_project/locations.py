@@ -1382,8 +1382,8 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 11", 100013 + shop_index_offset),
         LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Knick Knacks 12", 110013 + shop_index_offset),
 
-        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 1", 14 + shop_index_offset),
-        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 2", 10014 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 1", 10014 + shop_index_offset),
+        LocationData("Spawning Meadows", "Spawning Meadows Shop - Nans Stew 2", 20014 + shop_index_offset),
 
         #Delende
         LocationData("Delende", "Delende Shop - Fish Hatchery Weapon Merchant 1", 52 + shop_index_offset),
@@ -1659,8 +1659,8 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 7", 61193 + shop_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Item Merchant 8", 71193 + shop_index_offset),
 
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 1", 942 + shop_index_offset),
-        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 10942 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 1", 10942 + shop_index_offset),
+        LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Fish Merchant 2", 20942 + shop_index_offset),
 
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 1", 1603 + shop_index_offset),
         LocationData("Sara Sara Bazaar", "Sara Sara Bazaar Shop - Armor Merchant 2", 11603 + shop_index_offset),
