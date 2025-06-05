@@ -7,7 +7,10 @@ from PIL import Image
 from Utils import open_image_secure
 
 # Try to import the Pokemon Emerald and Pokemon Firered/Leafgreen data
-from .adjuster_constants import *
+from .adjuster_constants import POKEMON_NAME_TO_ID, POKEMON_ID_TO_INTERNAL_ID, POKEMON_TYPES, POKEMON_MOVES, \
+    POKEMON_ABILITIES, POKEMON_GENDER_RATIOS, REVERSE_POKEMON_GENDER_RATIOS, SPRITE_PIXEL_REFERENCE, \
+    OBJECT_NEEDS_COMPRESSION, COMPLEX_SPRITES_LIST, OVERWORLD_PALETTE_INFO, OVERWORLD_SPRITE_OBJECT_INFO, \
+    POKEMON_DATA_INFO, VALID_ICON_PALETTES, VALID_FOOTPRINT_PALETTE
 try:
     from worlds.pokemon_emerald.adjuster_constants import EMERALD_FOLDER_OBJECT_INFOS, \
         EMERALD_INTERNAL_ID_TO_OBJECT_ADDRESS, EMERALD_OVERWORLD_SPRITE_ADDRESSES, EMERALD_POINTER_REFERENCES, \
@@ -40,11 +43,13 @@ rom_version = "Emerald"
 rom_is_ap = False
 data_addresses: dict[str, int] = None
 
-####################
-## Main Functions ##
-####################
+##################
+# Main Functions #
+##################
 
 pokemon_data_added: list[str] = []
+
+
 def get_patch_from_sprite_pack(_sprite_pack_path: str, _rom_version: str):
     # Builds a patch from a given sprite pack to apply to the ROM
     global rom_version
@@ -70,9 +75,11 @@ def get_patch_from_sprite_pack(_sprite_pack_path: str, _rom_version: str):
 
     return sprite_pack_data
 
-#########################
-## Patch Data Building ##
-#########################
+
+#######################
+# Patch Data Building #
+#######################
+
 
 def add_sprite_pack_object_collection(
         _sprite_pack_path: str,
@@ -81,7 +88,7 @@ def add_sprite_pack_object_collection(
     folders: list[str] = _folder_object_info["folders"]
     for object_name in folders:
         _folder_object_info = find_folder_object_info(_folder_object_info["key"], object_name)
-        is_pokemon = _folder_object_info["key"] == "pokemon" and not "name" in list(_folder_object_info.keys())
+        is_pokemon = _folder_object_info["key"] == "pokemon" and "name" not in list(_folder_object_info.keys())
         is_unown_form = object_name.startswith("Unown ") and object_name != "Unown A"
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
         if not os.path.exists(object_folder_path):
@@ -124,6 +131,7 @@ def add_sprite_pack_object_collection(
                         add_palette(_folder_object_info["key"], object_name, palette, resource_name, sprite_path)
                         break
 
+
 def add_sprite(_key: str, _object_name: str, _sprite_name: str, _extra_data: list[str], _path: str):
     # Adds a sprite to the patch
     sprite_key = f"{_key}_{_sprite_name}"
@@ -155,6 +163,7 @@ def add_sprite(_key: str, _object_name: str, _sprite_name: str, _extra_data: lis
     if data_length:
         add_data_at_end(_data_length=data_length, _replace_address=False)
 
+
 def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: str, _path: str):
     # Adds a palette to the patch
     palette_key = f"{_key}_{_palette_name}"
@@ -167,8 +176,10 @@ def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: 
         # and it must be assigned to the trainer's overworld sprite
         # If player overworld sprite, the palette needs to be fixed as it may be incorrect
         new_id: int = 0x00
-        if   _palette_name == "palette_underwater": new_id = OVERWORLD_PALETTE_IDS["Underwater"]
-        elif  _key == "players":                    new_id = OVERWORLD_PALETTE_IDS[_object_name]
+        if _palette_name == "palette_underwater":
+            new_id = OVERWORLD_PALETTE_IDS["Underwater"]
+        elif _key == "players":
+            new_id = OVERWORLD_PALETTE_IDS[_object_name]
         if new_id == 0x00:
             data_extended = True
             new_id = extend_data("overworld_palette_table", resource_address_to_insert_to,
@@ -182,10 +193,10 @@ def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: 
     else:
         add_resource(True, palette_key, data_address, _path, data_object, not data_extended)
 
+
 def add_resource(_is_palette: str, _key: str, _data_address: str, _path: str, _data_object: bytearray = None,
-                 _replace_address = True):
+                 _replace_address=True):
     # Adds a resource (sprite or palette) to the patch and replaces its given pointer
-    global resource_address_to_insert_to
     if _replace_address:
         address_bytes = resource_address_to_insert_to.to_bytes(3, "little")
         if _data_object:
@@ -194,7 +205,8 @@ def add_resource(_is_palette: str, _key: str, _data_address: str, _path: str, _d
             add_data_to_patch({"address": _data_address, "length": 3, "data": address_bytes})
     add_raw_resource(_is_palette, _key, resource_address_to_insert_to, _path)
 
-def add_data_at_end(_address = 0x00, _data = b"", _data_length = 0, _replace_address = True):
+
+def add_data_at_end(_address=0x00, _data=b"", _data_length=0, _replace_address=True):
     # Updates the end of the current available data address
     # Also appends data at its value if any is given
     global resource_address_to_insert_to
@@ -208,6 +220,7 @@ def add_data_at_end(_address = 0x00, _data = b"", _data_length = 0, _replace_add
         # Out of bounds: Too much data to add
         raise Exception("Too much data to add to the ROM! Please remove some resources.")
 
+
 def add_raw_resource(_is_palette: bool, _key: str, _data_address: int, _path: str):
     # Adds a raw resource to the patch at the given address
     needs_compression: bool = OBJECT_NEEDS_COMPRESSION.get(_key, False)
@@ -220,10 +233,11 @@ def add_raw_resource(_is_palette: bool, _key: str, _data_address: int, _path: st
     else:
         add_data_to_patch({"address": _data_address, "length": len(resource_data), "data": resource_data})
 
-def add_pokemon_data(_pokemon_name: str, _data_path = "",
+
+def add_pokemon_data(_pokemon_name: str, _data_path="",
                      _forced_data: dict[str, int | list[dict[str, str | int]]] = None):
     # Adds a given pokemon data and move pool to the patch
-    if _forced_data != None:
+    if _forced_data is not None:
         new_pokemon_data = _forced_data
     else:
         with open(_data_path) as data_file:
@@ -247,6 +261,7 @@ def add_pokemon_data(_pokemon_name: str, _data_path = "",
         add_data_at_end(data_pointer_move_pool, pokemon_move_pool_bytes,
                         (((len(pokemon_move_pool_bytes) - 1) >> 4) + 1) << 4)
 
+
 def add_data_to_patch(_data: dict[str, int | bytes]):
     # Adds the given data to the patch
     if _data["address"] == 0x00:
@@ -269,23 +284,28 @@ def add_data_to_patch(_data: dict[str, int | bytes]):
             return
     sprite_pack_data["data"].insert(index, _data)
 
+
 def add_ability_fix(_folder_object_info: dict[str, str | list[str] | dict[str, list[str]]]):
     # Adds data from all pokemon or all trainers to the patch if a folder including their name can be found
-    for object_name in filter(lambda o: not o in pokemon_data_added, _folder_object_info["folders"]):
+    for object_name in filter(lambda o: o not in pokemon_data_added, _folder_object_info["folders"]):
         if (object_name.startswith("Unown ") and object_name != "Unown A")\
                 or find_folder_object_info(_folder_object_info["key"], object_name) != _folder_object_info:
             continue
         add_pokemon_data(object_name, _forced_data={})
 
-####################
-## Data Extension ##
-####################
+
+##################
+# Data Extension #
+##################
 
 extended_data_dict: dict[str, dict[str, int | str | bytearray]] = {}
 extended_data_dict_by_named_address: dict[str, dict[str, int | str | bytearray]] = {}
+
+
 def extract_all_data():
     # Extracts all the data we want to prepare for extension
     extract_data("overworld_palette_table", OVERWORLD_PALETTE_INFO, "sObjectEventSpritePalettes")
+
 
 def extract_data(_key: str, _info_object: dict[str, int | dict[str, int]], _named_address: str):
     # Extracts all the data in a given data table to prepare it for extension
@@ -298,6 +318,7 @@ def extract_data(_key: str, _info_object: dict[str, int | dict[str, int]], _name
         extended_data["next_id"] = data_last_id + 1
     extended_data_dict[_key] = extended_data
     extended_data_dict_by_named_address[_named_address] = extended_data
+
 
 def extend_data(_key: str, _contents: any, _line_fill_func: Callable[[any, int], bytes]):
     # Extends a data table that may be constrained by other data by extracting it
@@ -313,6 +334,7 @@ def extend_data(_key: str, _contents: any, _line_fill_func: Callable[[any, int],
     extended_data["data"].extend(new_line)
     return data_last_id
 
+
 def extend_overworld_palette_table(_contents: int, _new_id: int):
     # Builds a new line for the overworld palette table
     new_line = bytearray()
@@ -322,11 +344,11 @@ def extend_overworld_palette_table(_contents: int, _new_id: int):
     new_line.extend(b"\x00\x00")
     return bytes(new_line)
 
+
 def add_all_extended_data():
     # Adds all extended data tables to the patch
     for key, extended_data in extended_data_dict.items():
         # Replace all references to this data with its new address
-        global resource_address_to_insert_to
         address_bytes = resource_address_to_insert_to.to_bytes(3, "little")
         for address in [data_addresses[ptr] + shift for ptr, shift in POINTER_REFERENCES[key]]:
             add_data_to_patch({"address": address, "length": 3, "data": address_bytes})
@@ -337,9 +359,11 @@ def add_all_extended_data():
             data.extend(b"\x00")
         add_data_at_end(_data=bytes(data), _replace_address=False)
 
-#############################
-## Complex Sprite Handling ##
-#############################
+
+###########################
+# Complex Sprite Handling #
+###########################
+
 
 def replace_complex_sprite(_data_address: int, _sprite_key: str, _object_name: str, _extra_data: list[str], _path: str):
     # Replaces a complex sprite's sprite data and update its other fields if needed
@@ -411,7 +435,8 @@ def replace_complex_sprite(_data_address: int, _sprite_key: str, _object_name: s
 
     return len(output_data)
 
-def replace_complex_sprite_palette(_data_address: int, _palette_key: str, _new_id: int, _palette_extended = False):
+
+def replace_complex_sprite_palette(_data_address: int, _palette_key: str, _new_id: int, _palette_extended=False):
     # Replaces a complex sprite's palette ID, only for overworld sprites
     if is_overworld_sprite(_palette_key):
         info_object_address = int.from_bytes(bytes(current_rom[_data_address:_data_address + 3]), "little")
@@ -421,6 +446,7 @@ def replace_complex_sprite_palette(_data_address: int, _palette_key: str, _new_i
             sprite_info = get_overworld_sprite_data(info_object_address, "sprite_info")
             sprite_info = (sprite_info >> 4 << 4) | 10 # Setting sprite to palette slot 10, expand if needed later
             set_overworld_sprite_data(info_object_address, "sprite_info", sprite_info)
+
 
 def extract_complex_sprite(_overworld_struct_address: int, _sprite_key: str, _object_name: str,
                            _palette_sprite_name: str):
@@ -450,6 +476,7 @@ def extract_complex_sprite(_overworld_struct_address: int, _sprite_key: str, _ob
     final_image.putpalette(sprite_palette)
     return final_image, extra_sprite_name
 
+
 def extract_complex_sprite_data(_data_address: int, _length: int, _data_id_info: dict[str, int] = None):
     result = bytearray()
     data_last_id = 0
@@ -468,9 +495,11 @@ def extract_complex_sprite_data(_data_address: int, _length: int, _data_id_info:
                 data_last_id = line_id
     return result, data_last_id
 
-#####################
-## Data Extraction ##
-#####################
+
+###################
+# Data Extraction #
+###################
+
 
 def extract_palette_from_file(_path: str):
     # Extracts a palette from an existing sprite file
@@ -482,6 +511,7 @@ def extract_palette_from_file(_path: str):
         color = (int(sprite_palette[index]) << 16) + (int(sprite_palette[index+1]) << 8) + int(sprite_palette[index+2])
         sprite_palette_colors.append(hex(color)[2:].zfill(6))
     return sprite_palette_colors
+
 
 def extract_sprites(_object_name: str, _output_path: str):
     # Extracts all sprites from a given object from the ROM into the given output folder
@@ -500,7 +530,7 @@ def extract_sprites(_object_name: str, _output_path: str):
         full_path = os.path.join(_output_path, _sprite_name + extra_sprite_name + ".png")
         sprite_object.save(full_path)
 
-    folder_object_info = find_folder_object_info(_name = _object_name)
+    folder_object_info = find_folder_object_info(_name=_object_name)
     extracted_sprites: list[str] = []
 
     # Extract all sprites awaited for the given object
@@ -516,8 +546,8 @@ def extract_sprites(_object_name: str, _output_path: str):
     # If any extra sprite is awaited for depicting palettes, extract them as well
     palette_lists: dict[str, list[str]] = folder_object_info["palettes"]
     palette_sprites = [palette_lists[palette_list] for palette_list in palette_lists]
-    palette_sprites: filter[str] = filter(lambda s: s, [sprite if not sprite in extracted_sprites else None
-                                           for sprite in flatten_2d(palette_sprites)])
+    palette_sprites: filter[str] = filter(lambda s: s, [sprite if sprite not in extracted_sprites else None
+                                                        for sprite in flatten_2d(palette_sprites)])
     for sprite_name in palette_sprites:
         handle_sprite_extraction(sprite_name)
 
@@ -570,6 +600,7 @@ def extract_sprite(_data_address: int, _sprite_key: str, _object_name: str, _pal
     extracted_image.putpalette(sprite_palette)
     return extracted_image, extra_sprite_name
 
+
 def extract_palette(_object_name: str, _sprite_name: str, _key: str):
     # Extracts a palette as a list of RGB colors with values between 0 and 255
     folder_object_info = find_folder_object_info(_key, _object_name)
@@ -601,9 +632,11 @@ def extract_palette(_object_name: str, _sprite_name: str, _key: str):
             palette_five_bits_color >>= 5
     return palette
 
-#####################
-## Data Conversion ##
-#####################
+
+###################
+# Data Conversion #
+###################
+
 
 def handle_sprite_to_gba_sprite(_sprite_path: str, _needs_compression: bool):
     # Transforms indexed/grayscale PNG sprites into GBA sprites
@@ -618,6 +651,7 @@ def handle_sprite_to_gba_sprite(_sprite_path: str, _needs_compression: bool):
         # Compresses sprite if needed
         sprite_data = compress_lz_data(sprite_data)
     return bytes(sprite_data)
+
 
 def handle_sprite_to_palette(_sprite_path: str, _needs_compression: bool):
     # Transforms indexed/grayscale PNG sprites into GBA palettes
@@ -643,9 +677,13 @@ def handle_sprite_to_palette(_sprite_path: str, _needs_compression: bool):
         palette = compress_lz_data(bytes(palette))
     return bytes(palette)
 
-###################
-## Data Checking ##
-###################
+
+#################
+# Data Checking #
+#################
+
+sprite_pack_folder_list: list[str] = []
+
 
 def validate_sprite_pack(_sprite_pack_path: str) -> tuple[str, bool]:
     # Validates an entire sprite pack to see if it can be applied to the given ROM
@@ -666,14 +704,15 @@ def validate_sprite_pack(_sprite_pack_path: str) -> tuple[str, bool]:
 
     return errors, has_error
 
-sprite_pack_folder_list: list[str] = []
+
 def validate_object_collection(_sprite_pack_path: str,
                                _folder_object_info: dict[str, str | list[str] | dict[str, list[str]]])\
                                -> tuple[str, bool]:
     # Validates all pokemon or all trainers if a folder including their name can be found
     errors = ""
     has_error = False
-    def add_error(_error: str, _is_error = False, _processed = False):
+
+    def add_error(_error: str, _is_error=False, _processed=False):
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
@@ -681,13 +720,13 @@ def validate_object_collection(_sprite_pack_path: str,
                                       "" if _processed else "Error: " if _is_error else "Warning: ", _error)
 
     def add_to_folder_list(_folder):
-        if not _folder in sprite_pack_folder_list:
+        if _folder not in sprite_pack_folder_list:
             sprite_pack_folder_list.append(_folder)
 
     folders: list[str] = _folder_object_info["folders"]
     for object_name in folders:
         _folder_object_info = find_folder_object_info(_folder_object_info["key"], object_name)
-        is_pokemon = _folder_object_info["key"] == "pokemon" and not "name" in list(_folder_object_info.keys())
+        is_pokemon = _folder_object_info["key"] == "pokemon" and "name" not in list(_folder_object_info.keys())
         is_unown_form = object_name.startswith("Unown ") and object_name != "Unown A"
         object_folder_path = os.path.join(_sprite_pack_path, object_name)
         if not os.path.exists(object_folder_path):
@@ -730,17 +769,19 @@ def validate_object_collection(_sprite_pack_path: str,
             add_error(*validate_sprite(object_name, matching_sprite_name, extra_sprite_data, sprite_path), True)
     return errors, has_error
 
+
 def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str], _path: str) -> tuple[str, bool]:
     # Validates a given sprite using metrics registered in the sprite requirements table
     errors = ""
     has_error = False
-    def add_error(_error: str, _is_error = False):
+
+    def add_error(_error: str, _is_error=False):
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
             errors += "{}{}: {}".format("\n" if errors else "", "Error" if _is_error else "Warning", _error)
 
-    folder_object_info = find_folder_object_info(_name = _object_name)
+    folder_object_info = find_folder_object_info(_name=_object_name)
     sprite_key = f"{folder_object_info['key']}_{_sprite_name}"
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
 
@@ -817,6 +858,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
 
     return errors, has_error
 
+
 def is_palette_valid(_palette: list[int], _palette_model: list[int]):
     # Compares a given palette to its model and checks if it is valid or not
     for i in range(min(len(_palette), len(_palette_model))):
@@ -824,12 +866,14 @@ def is_palette_valid(_palette: list[int], _palette_model: list[int]):
             return False
     return True
 
+
 def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int | str | list[tuple[str, int]]])\
                                  -> tuple[str, bool]:
     # Validates given Pokemon data, making sure that all fields are valid
     errors = ""
     has_error = False
-    def add_error(_error: str, _is_error = False, _processed = False):
+
+    def add_error(_error: str, _is_error=False, _processed=False):
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
@@ -865,7 +909,7 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         elif field_name in ["type1", "type2"]:
             # Data must be a number corresponding to a valid type
             try:
-                if not field_value.capitalize() in POKEMON_TYPES:
+                if field_value.capitalize() not in POKEMON_TYPES:
                     field_number_value = int(field_value)
                     if field_number_value < 0 or field_number_value >= len(POKEMON_TYPES):
                         add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
@@ -874,7 +918,7 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         elif field_name in ["ability1", "ability2"]:
             # Data must be a number corresponding to a valid ability
             try:
-                if not field_value.upper() in POKEMON_ABILITIES:
+                if field_value.upper() not in POKEMON_ABILITIES:
                     field_number_value = int(field_value)
                     if field_number_value < 1 or field_number_value >= len(POKEMON_ABILITIES):
                         add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
@@ -883,15 +927,15 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
         elif field_name == "gender_ratio":
             # Data must be a number corresponding to a valid gender ratio
             try:
-                if not field_value in list(POKEMON_GENDER_RATIOS.values()):
+                if field_value not in list(POKEMON_GENDER_RATIOS.values()):
                     field_number_value = int(field_value)
-                    if not field_number_value in list(POKEMON_GENDER_RATIOS.keys()):
+                    if field_number_value not in list(POKEMON_GENDER_RATIOS.keys()):
                         add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
             except Exception:
                 add_error(f"{_pokemon_name}'s {field_name} value is invalid: '{field_name}'.", True)
         elif field_name == "dex":
             # Data must either be a 0 (allowed) or a 1 (forbidden)
-            if not field_value in [0, 1, "0", "1", "True", "False"]:
+            if field_value not in [0, 1, "0", "1", "True", "False"]:
                 add_error(f"{_pokemon_name}'s forbid_flip value is invalid: '{field_value}'.", True)
         elif field_name == "move_pool":
             # Data must be a valid move pool table string
@@ -901,11 +945,13 @@ def validate_pokemon_data_string(_pokemon_name: str, _data: str | dict[str, int 
                 add_error(*validate_move_pool_string(_pokemon_name, field_value.replace(", ", "\n")[2:-2]), True)
     return errors, has_error
 
+
 def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tuple[str, bool]:
     # Validates a move pool given as a string
     errors = ""
     has_error = False
-    def add_error(_error, _is_error = False):
+
+    def add_error(_error, _is_error=False):
         nonlocal errors, has_error
         if _error:
             has_error = has_error or _is_error
@@ -936,9 +982,11 @@ def validate_move_pool_string(_pokemon_name: str, _move_pool_string: str) -> tup
             add_error(f"{_pokemon_name}'s move #{i + 1}'s ({move_name}) level '{move_level}' is invalid.", True)
     return errors, has_error
 
-####################
-## LZ Compression ##
-####################
+
+##################
+# LZ Compression #
+##################
+
 
 def truncate_lz_compressed_data(_data: bytes, _data_size: int):
     # Given data, truncates it so that the output contains only LZ-compressed data and nothing more
@@ -962,7 +1010,8 @@ def truncate_lz_compressed_data(_data: bytes, _data_size: int):
             if _data_size <= 0:
                 return _data[:shift]
 
-def compress_lz_data(_src: bytes, _min_distance = 2):
+
+def compress_lz_data(_src: bytes, _min_distance=2):
     # Performs an LZ compression of the given data
     src_size = len(_src)
 
@@ -1022,6 +1071,7 @@ def compress_lz_data(_src: bytes, _min_distance = 2):
                 dest_pos = ((dest_pos >> 2) + 1) << 2
                 return bytes(dest[:dest_pos])
 
+
 def decompress_lz_data(_src: bytes):
     # Performs an LZ decompression of the given data
     src_size = len(_src)
@@ -1063,7 +1113,7 @@ def decompress_lz_data(_src: bytes):
                     print("LZ decompression: Destination buffer overflow.")
 
                 if block_pos < 0:
-                    raise Exception(f"Fatal error while decompressing LZ file: "
+                    raise Exception("Fatal error while decompressing LZ file: "
                                     + f"Distance is {block_pos} ({dest_pos} - {dest_pos}).")
 
                 for j in range(block_size):
@@ -1072,7 +1122,7 @@ def decompress_lz_data(_src: bytes):
             else:
                 # Raw data: copies the byte as-is to the output
                 if src_pos >= src_size or dest_pos >= dest_size:
-                    raise Exception(f"Fatal error while decompressing LZ file: "
+                    raise Exception("Fatal error while decompressing LZ file: "
                                     + f"{src_pos}/{src_size} and {dest_pos}/{dest_size}.")
                 dest[dest_pos] = _src[src_pos]
                 dest_pos += 1
@@ -1083,9 +1133,11 @@ def decompress_lz_data(_src: bytes):
 
             control_byte <<= 1
 
-###########################
-## Sprite Transformation ##
-###########################
+
+#########################
+# Sprite Transformation #
+#########################
+
 
 def compress_sprite(_src: bytes, _bits_per_pixel: int):
     # Returns sprite data with each pixel taking as little space as possible
@@ -1104,6 +1156,7 @@ def compress_sprite(_src: bytes, _bits_per_pixel: int):
         dest.append(dest_byte)
     return bytes(dest)
 
+
 def decompress_sprite(_src: bytes, _bits_per_pixel: int):
     # Returns sprite data with each pixel taking one full byte of space
     # Useful for turning GBA sprite data into Pillow sprite data
@@ -1120,6 +1173,7 @@ def decompress_sprite(_src: bytes, _bits_per_pixel: int):
             byte >>= _bits_per_pixel
             dest.append(pixel)
     return bytes(dest)
+
 
 def chunk_sprite(_src: bytes, _width: int, _height: int):
     # Sprites stored in ROMs are bundled in 8x8 pixel chunks
@@ -1145,6 +1199,7 @@ def chunk_sprite(_src: bytes, _width: int, _height: int):
         src_shift += 8
     return bytes(dest)
 
+
 def dechunk_sprite(_src: bytes, _width: int, _height: int):
     # Sprites stored in ROMs are bundled in 8x8 pixel chunks
     # This function reverts this behavior, returning raw, non-chunked pixel data
@@ -1169,6 +1224,7 @@ def dechunk_sprite(_src: bytes, _width: int, _height: int):
             block_y += 1
     return bytes(dest)
 
+
 def spread_palettes_to_sprite_frames(_src: bytes, _width: int, _height: int, _frames: int):
     # Adds values to the pixels in the sheet to match values in an extended palette
     # Assumes all palettes have exactly 16 colors
@@ -1181,11 +1237,13 @@ def spread_palettes_to_sprite_frames(_src: bytes, _width: int, _height: int, _fr
             _src[shift + pixel] |= frame << 4
     return bytes(_src)
 
+
 ###############################
 ## Pokemon Data Manipulation ##
 ###############################
 
-def get_pokemon_data(_pokemon_name: str, _field = ""):
+
+def get_pokemon_data(_pokemon_name: str, _field=""):
     # Gets a given field or all data from a given pokemon
     if _pokemon_name.startswith("Unown "):
         _pokemon_name = "Unown A"
@@ -1200,7 +1258,7 @@ def get_pokemon_data(_pokemon_name: str, _field = ""):
     if _field == "move_pool":
         return decode_move_pool(data)
     if not _field:
-        return get_all_pokemon_data(_pokemon_name, data)
+        return get_all_pokemon_data(_pokemon_name)
     field_info = POKEMON_DATA_INFO.get(_field, {})
     if not field_info:
         raise Exception(f"The field {_field} doesn't exist in a Pokemon's data.")
@@ -1208,7 +1266,8 @@ def get_pokemon_data(_pokemon_name: str, _field = ""):
     end_address = data_address + field_info["size"]
     return int.from_bytes(bytes(data[data_address:end_address]), "little")
 
-def get_all_pokemon_data(_pokemon_name: str, _data: bytearray):
+
+def get_all_pokemon_data(_pokemon_name: str):
     # Gets all the data from a given pokemon
     if _pokemon_name.startswith("Unown "):
         _pokemon_name = "Unown A"
@@ -1216,6 +1275,7 @@ def get_all_pokemon_data(_pokemon_name: str, _data: bytearray):
     for field in [*POKEMON_DATA_INFO, "move_pool"]:
         result[field] = get_pokemon_data(_pokemon_name, field)
     return result
+
 
 def encode_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]) -> bytes:
     # Encodes pokemon data into data to add to the ROM
@@ -1227,6 +1287,7 @@ def encode_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]) -> b
         size = POKEMON_DATA_INFO[field_name]["size"]
         output[shift:shift+size] = _data[field_name].to_bytes(size, "little")
     return bytes(output)
+
 
 def stringify_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]):
     # Transforms a pokemon's data into a string
@@ -1251,7 +1312,8 @@ def stringify_pokemon_data(_data: dict[str, int | list[dict[str, str | int]]]):
         result += "{}: {}\n".format(field_name, new_field_value)
     return result[:-1]
 
-def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode = False):
+
+def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode=False):
     # Transforms a pokemon's data given as a string into a dictionary holding said pokemon's data
     if _pokemon_name.startswith("Unown "):
         _pokemon_name = "Unown A"
@@ -1285,9 +1347,10 @@ def destringify_pokemon_data(_pokemon_name: str, _data_string: str, _safe_mode =
         result[field_name] = new_field_value
     return result
 
+
 def merge_pokemon_data(_old_data: dict[str, int | list[dict[str, str | int]]],
                        _new_data: dict[str, int | list[dict[str, str | int]]],
-                       _is_dex_simple = False):
+                       _is_dex_simple=False):
     # Merges two pokemon data objects
     merged_data = _old_data
     for field_name in _new_data:
@@ -1299,11 +1362,12 @@ def merge_pokemon_data(_old_data: dict[str, int | list[dict[str, str | int]]],
         merged_data["ability2"] = merged_data["ability1"]
     return merged_data
 
+
 def keep_different_pokemon_data(_old_data: dict[str, int | list[dict[str, str | int]]],
                                 _new_data: dict[str, int | list[dict[str, str | int]]]):
     # Returns only different fields between the two pokemon data objects given
     different_data = {k: v for k, v in _new_data.items()
-                      if not k in list(_old_data.keys()) or (v != _old_data[k] and k != "move_pool")}
+                      if k not in list(_old_data.keys()) or (v != _old_data[k] and k != "move_pool")}
 
     if "ability2" in different_data and "ability2" in _new_data and "ability2" in _old_data and "ability1" in _old_data:
         # In case of no ability2, validate the check if the value is the same as ability1"s
@@ -1315,12 +1379,14 @@ def keep_different_pokemon_data(_old_data: dict[str, int | list[dict[str, str | 
         different_data["move_pool"] = _new_data["move_pool"]
     return different_data
 
+
 def stringify_move_pool(_move_pool: list[dict[str, str | int]]):
     # Transforms a pokemon"s move pool a string
     result = ""
     for move_info in _move_pool:
         result += "{}: {}\n".format(move_info['move'], move_info['level'])
     return result[:-1]
+
 
 def destringify_move_pool(_move_pool_string: str):
     # Transforms a pokemon's move pool given as a string into a list of dictionaries holding said move pool data
@@ -1333,6 +1399,7 @@ def destringify_move_pool(_move_pool_string: str):
         move_level = int(move_info[1].strip())
         result.append({"move": move_name, "level": move_level})
     return result
+
 
 def decode_move_pool(_data: bytes):
     # Decodes move pool data from a list of bytes into a list of moves
@@ -1347,6 +1414,7 @@ def decode_move_pool(_data: bytes):
         result.append({"move": POKEMON_MOVES[move_id - 1].title(), "level": move_level})
     return result
 
+
 def encode_move_pool(_move_pool: list[dict[str, str | int]]):
     # Encodes move pool data from a list of moves into a list of bytes
     result = bytearray()
@@ -1357,6 +1425,7 @@ def encode_move_pool(_move_pool: list[dict[str, str | int]]):
         result.extend(move_data.to_bytes(2, "little"))
     # Surround the table by FFFF as the move pool functions looks for the beginning and end of the table
     return bytes(result + b"\xff\xff")
+
 
 def are_move_pools_equal(_move_pool_1: list[dict[str, str | int]], _move_pool_2: list[dict[str, str | int]]):
     # Compares two move pool objects
@@ -1369,9 +1438,10 @@ def are_move_pools_equal(_move_pool_1: list[dict[str, str | int]], _move_pool_2:
             return False
     return True
 
-#####################
-## FR/LG Extension ##
-#####################
+
+###################
+# FR/LG Extension #
+###################
 
 FOLDER_OBJECT_INFOS: list[dict[str, str | list[str] | dict[str, list[str]]]] = None
 INTERNAL_ID_TO_OBJECT_ADDRESS: dict[str, tuple[str, int, bool]] = None
@@ -1382,7 +1452,9 @@ SPRITES_REQUIREMENTS: dict[str, dict[str, bool | int | list[int]]] = None
 SPRITES_REQUIREMENTS_EXCEPTIONS: dict[str, dict[str, dict[str, bool | int | list[int]]]] = None
 OVERWORLD_PALETTE_IDS: dict[str, int] = None
 DATA_ADDRESSES_INFO: dict[str, int | dict[str, int]] = None
-def load_constants(_rom_version = rom_version):
+
+
+def load_constants(_rom_version=rom_version):
     # Loads all constants depending on the version of the Pokemon ROM
     global FOLDER_OBJECT_INFOS, INTERNAL_ID_TO_OBJECT_ADDRESS, OVERWORLD_SPRITE_ADDRESSES, POINTER_REFERENCES, \
         VALID_OVERWORLD_SPRITE_SIZES, SPRITES_REQUIREMENTS, SPRITES_REQUIREMENTS_EXCEPTIONS, OVERWORLD_PALETTE_IDS, \
@@ -1410,7 +1482,8 @@ def load_constants(_rom_version = rom_version):
     if not DATA_ADDRESSES_INFO:
         raise Exception(f"Unknown ROM version {_rom_version}.")
 
-def find_folder_object_info(_key = "", _name = ""):
+
+def find_folder_object_info(_key="", _name=""):
     # Returns a folder object info dictionary given a key, name, or both given
     for folder_info in FOLDER_OBJECT_INFOS:
         if _key and not _key.startswith(folder_info["key"]):
@@ -1419,25 +1492,31 @@ def find_folder_object_info(_key = "", _name = ""):
         if "name" in list(folder_info.keys()) and _name != folder_info["name"]:
             # Name restriction is not a match
             continue
-        if _name and not _name in folder_info["folders"]:
+        if _name and _name not in folder_info["folders"]:
             # Name given is not a match
             continue
         return folder_info
     raise Exception(f"Unknown folder object with key {_key}{f' and name {_name}' if _name else ''}")
 
-#######################
-## Utility Functions ##
-#######################
+
+#####################
+# Utility Functions #
+#####################
+
 
 def get_bits_per_pixel_from_palette_size(_palette_size: int) -> int:
     # Returns how many bits are needed to store a pixel for a palette of a given size
-    if _palette_size <= 2:   return 1
-    if _palette_size <= 16:  return 4
-    if _palette_size <= 256: return 8
+    if _palette_size <= 2:
+        return 1
+    if _palette_size <= 16:
+        return 4
+    if _palette_size <= 256:
+        return 8
     raise Exception("A sprite with a palette with more than 256 colors cannot be handled by the ROM.")
 
+
 def get_address_from_address_collection(_object_name: str, _resource_key: str, _resource_name: str,
-                                        _raw_key = False) -> tuple[int, bool, bytearray]:
+                                        _raw_key=False) -> tuple[int, bool, bytearray]:
     # Returns a known address from the ROM's address collection, or if the pointer's data
     # has been extracted for extension, returns the extracted object and its address shift instead
 
@@ -1462,10 +1541,12 @@ def get_address_from_address_collection(_object_name: str, _resource_key: str, _
         address = data_addresses[address_name] + shift
     return address, is_raw, data_object
 
+
 def get_overworld_sprite_addresses(_object_name: str, _resource_name: str):
     named_key = f"{_object_name.lower()}_{_resource_name}"
     return [data_addresses["gObjectEventGraphicsInfoPointers"] + shift
             for shift in OVERWORLD_SPRITE_ADDRESSES[named_key]]
+
 
 def handle_overworld_custom_size(_extra_data: list[str]):
     # Checks if the custom size passed for a given overworld sprite sheet is valid
@@ -1481,7 +1562,8 @@ def handle_overworld_custom_size(_extra_data: list[str]):
         raise Exception(f"Overworld sprites cannot have a custom size of {sizes[0]}x{sizes[1]}")
     return valid_sprite_size
 
-def get_overworld_sprite_data(_data_address: int, _key: str, _get_address = False):
+
+def get_overworld_sprite_data(_data_address: int, _key: str, _get_address=False):
     # Returns the value of given data from an overworld sprite data object
     value_data: dict[str, int] = OVERWORLD_SPRITE_OBJECT_INFO.get(_key, {})
     if not value_data:
@@ -1492,6 +1574,7 @@ def get_overworld_sprite_data(_data_address: int, _key: str, _get_address = Fals
     end_address: int = start_address + value_data.get("size")
     return int.from_bytes(bytes(current_rom[start_address:end_address]), "little")
 
+
 def set_overworld_sprite_data(_data_address: int, _key: str, _value: int):
     # Sets the value of given data from an overworld sprite data object
     value_data: dict[str, int] = OVERWORLD_SPRITE_OBJECT_INFO.get(_key, {})
@@ -1500,6 +1583,7 @@ def set_overworld_sprite_data(_data_address: int, _key: str, _value: int):
     _data_address += value_data.get("shift")
     size: int = value_data.get("size")
     add_data_to_patch({"address": _data_address, "length": size, "data": _value.to_bytes(size, "little")})
+
 
 def get_sprite_requirements(_sprite_key: str, _object_name: str):
     # Returns the requirements of a given sprite for a given pokemon or trainer
@@ -1525,13 +1609,16 @@ def get_sprite_requirements(_sprite_key: str, _object_name: str):
 
     return result
 
+
 def is_complex_sprite(_sprite_key: str):
     # Checks if a sprite is a complex sprite
     return _sprite_key in COMPLEX_SPRITES_LIST
 
+
 def is_overworld_sprite(_sprite_key: str):
     # Checks if a sprite is an overworld sprite
-    return not _sprite_key.startswith("pokemon_") and not "battle" in _sprite_key
+    return not _sprite_key.startswith("pokemon_") and "battle" not in _sprite_key
+
 
 def handle_address_collection(_rom: bytearray, _rom_version: str, _forced_is_ap: bool = None):
     # Picks and stores the right address collection for the given ROM
