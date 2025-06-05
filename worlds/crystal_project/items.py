@@ -83,10 +83,10 @@ item_table: Dict[str, ItemData] = {
     "Item - Scroll": ItemData("Item", 263 + item_index_offset, ItemClassification.filler, 0),
 
     #Bag upgrades
-    "Item - Tonic Pouch": ItemData("Item", 133 + item_index_offset, ItemClassification.useful, 9, 7, 1, 0), #17
+    "Item - Tonic Pouch": ItemData("Item", 133 + item_index_offset, ItemClassification.useful, 7, 9, 1, 0), #17
     "Item - Potion Pouch": ItemData("Item", 134 + item_index_offset, ItemClassification.useful, 0, 5, 8, 0), #13
     "Item - Z-Potion Pouch": ItemData("Item", 143 + item_index_offset, ItemClassification.useful, 1, 0, 2, 1), #5
-    "Item - Tincture Pouch": ItemData("Item", 135 + item_index_offset, ItemClassification.useful, 6, 6, 2, 0), #14
+    "Item - Tincture Pouch": ItemData("Item", 135 + item_index_offset, ItemClassification.useful, 4, 8, 2, 0), #14
     "Item - Ether Pouch": ItemData("Item", 136 + item_index_offset, ItemClassification.useful, 0, 6, 5, 0), #11
     "Item - Zether Pouch": ItemData("Item", 144 + item_index_offset, ItemClassification.useful, 0, 1, 1, 3), #5
     "Item - Fenix Juice Pouch": ItemData("Item", 137 + item_index_offset, ItemClassification.useful, 1, 1, 0, 0), #2
@@ -136,7 +136,7 @@ item_table: Dict[str, ItemData] = {
     "Item - Canopy Key": ItemData("Item", 116 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
     "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
-    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression), #Everyone's best friend
+    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
     "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
     "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
     "Item - Ice Puzzle Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
