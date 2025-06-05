@@ -178,10 +178,10 @@ always trigger, this block only has a 50% chance to trigger.
         electric-energy-accumulators: 1
         progressive-turret: 2
       locations:
-        - military
-        - gun-turret
-        - logistic-science-pack
-        - steel-processing
+        - AP-1-001
+        - AP-1-002
+        - AP-1-003
+        - AP-1-004
       percentage: 80
       force: true
       from_pool: true
@@ -192,6 +192,9 @@ chosen here. This block has an 80% chance of occurring. Because force is `true`,
 place one of the selected items (not including the fifth item). From_pool and World have been set to their default
 values here, but they can be omitted and have the same result: items will be removed from the pool, and the locations
 are in this player's own world.
+
+**NOTE:** Factorio's locations are dynamically generated, so the locations listed above may not exist in your game,
+they are here for demonstration only.
 
 ```yaml
   plando_items:
