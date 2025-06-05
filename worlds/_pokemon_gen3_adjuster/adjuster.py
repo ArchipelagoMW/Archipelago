@@ -22,13 +22,13 @@ from tkinter.tix import Tk
 try:
     from worlds.pokemon_emerald.adjuster_constants import EMERALD_PATCH_EXTENSIONS
     emerald_support = True
-except Exception:
+except:
     from .adjuster_constants_emerald_fallback import EMERALD_PATCH_EXTENSIONS
     emerald_support = False
 try:
     from worlds.pokemon_frlg.adjuster_constants import FR_LG_PATCH_EXTENSIONS
     frlg_support = True
-except Exception:
+except:
     from .adjuster_constants_frlg_fallback import FR_LG_PATCH_EXTENSIONS
     frlg_support = False
 
@@ -456,7 +456,7 @@ def adjust_gui():
                     continue
                 try:
                     open_image_secure(full_path)
-                except Exception:
+                except:
                     # If the image is invalid, don't add it to the sprite list
                     continue
                 sprites_in_folder.append(sprite[:-4])
