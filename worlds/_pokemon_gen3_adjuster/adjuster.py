@@ -372,7 +372,7 @@ def adjust_gui():
         handle_address_collection(ap_rom, rom_version, is_rom_ap.get())
         extract_sprites_internal(sprite_extractor_folder.get(), output_folder)
         messagebox.showinfo(title="Success",
-                            message=f"All sprites for {sprite_extractor_folder.get()} "\
+                            message=f"All sprites for {sprite_extractor_folder.get()} "
                             + "have successfully been extracted!")
 
     def extract_all_sprites():
@@ -661,7 +661,7 @@ def adjust_gui():
             "type2": POKEMON_TYPES.index(pokemon_type_2.get()),
             "ability1": POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
             "ability2": POKEMON_ABILITIES.index(pokemon_ability_2.get().upper())
-                or POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
+            or POKEMON_ABILITIES.index(pokemon_ability_1.get().upper()),
             "gender_ratio": REVERSE_POKEMON_GENDER_RATIOS[pokemon_gender_ratio.get()],
             "dex": (int(pokemon_forbid_flip.get()) << 7) + int(pokemon_rom_data["dex"]) % 0x80,
             "move_pool": destringify_move_pool(move_pool_input.get("1.0", END))
@@ -880,7 +880,7 @@ def adjust_gui():
         stat_spdef_input.pack(side=TOP)
         stat_spdef_input.bind("<KeyRelease>",
                               lambda _: check_value(pokemon_spdef, stat_spdef_label, "spdef",
-                                                  stat_spdef_balloon_message),
+                                                    stat_spdef_balloon_message),
                               add="+")
 
     type_1_label: Label = None
