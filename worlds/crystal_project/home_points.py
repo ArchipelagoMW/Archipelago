@@ -6,6 +6,7 @@ from .rules import CrystalProjectLogic
 def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     home_point_table: List[LocationData] = [
+        LocationData("Spawning Meadows", "AP Spawn Point", 5003),
         LocationData("Spawning Meadows", "Old Nan's Watering Hole", 59),
 
         LocationData("Delende", "The Pale Grotto Entrance", 44),
