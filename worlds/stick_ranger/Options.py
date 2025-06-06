@@ -92,6 +92,106 @@ class HellCastleClassUnlocks(Range):
     range_end = 7
     default = 6
 
+class CastleMinimumStagesUnlocks(Range):
+    """
+    Minimum number of pre-Castle stages you must unlock before entering the Castle stage.
+    Pre-Castle stages are: Grassland 1-7, Lake, Hill Country 1-3, Forest 1&2, Cavern 1-3 and Castle Gate.
+    """
+    display_name = "Minimum number of required pre-Castle stages"
+    range_start = 0
+    range_end = 17
+    default = 6
+
+class CastleMaximumStagesUnlocks(Range):
+    """
+    Maximum number of pre-Castle stages you must unlock before entering the Castle stage.
+    Pre-Castle stages are: Grassland 1-7, Lake, Hill Country 1-3, Forest 1&2, Cavern 1-3 and Castle Gate.
+    """
+    display_name = "Maximum number of required pre-Castle stages"
+    range_start = 0
+    range_end = 17
+    default = 10
+
+class SubmarineShrineMinimumStagesUnlocks(Range):
+    """
+    Minimum number of pre-Submarine Shrine stages you must unlock before entering the Submarine Shrine stage.
+    Pre-Submarine Shrine stages are: Seaside 1-4, Submarine 1-4, Mist Grove 1-3 and ???.
+    """
+    display_name = "Minimum number of required pre-Submarine Shrine stages"
+    range_start = 0
+    range_end = 12
+    default = 4
+
+class SubmarineShrineMaximumStagesUnlocks(Range):
+    """
+    Maximum number of pre-Submarine Shrine stages you must unlock before entering the Submarine Shrine stage.
+    Pre-Submarine Shrine stages are: Seaside 1-4, Submarine 1-4, Mist Grove 1-3 and ???.
+    """
+    display_name = "Maximum number of required pre-Submarine Shrine stages"
+    range_start = 0
+    range_end = 12
+    default = 7
+
+class PyramidMinimumStagesUnlocks(Range):
+    """
+    Minimum number of pre-Pyramid stages you must unlock before entering the Pyramid stage.
+    Pre-Pyramid stages are: Desert 1-8, Oasis and Beach 1-3.
+    """
+    display_name = "Minimum number of required pre-Pyramid stages"
+    range_start = 0
+    range_end = 12
+    default = 4
+
+class PyramidMaximumStagesUnlocks(Range):
+    """
+    Maximum number of pre-Pyramid stages you must unlock before entering the Pyramid stage.
+    Pre-Pyramid stages are: Desert 1-8, Oasis and Beach 1-3.
+    """
+    display_name = "Maximum number of required pre-Pyramid stages"
+    range_start = 0
+    range_end = 12
+    default = 7
+
+class IceCastleMinimumStagesUnlocks(Range):
+    """
+    Minimum number of pre-Ice Castle stages you must unlock before entering the Ice Castle stage.
+    Pre-Ice Castle stages are: Cavern 4-6, Snowfield 1-8, Mountain 1&2 and Frozen Lake.
+    """
+    display_name = "Minimum number of required pre-Ice Castle stages"
+    range_start = 0
+    range_end = 14
+    default = 5
+
+class IceCastleMaximumStagesUnlocks(Range):
+    """
+    Maximum number of pre-Ice Castle stages you must unlock before entering the Ice Castle stage.
+    Pre-Ice Castle stages are: Cavern 4-6, Snowfield 1-8, Mountain 1&2 and Frozen Lake.
+    """
+    display_name = "Maximum number of required pre-Ice Castle stages"
+    range_start = 0
+    range_end = 14
+    default = 8
+
+class HellCastleMinimumStagesUnlocks(Range):
+    """
+    Minimum number of pre-Hell Castle stages you must unlock before entering the Hell Castle stage.
+    Pre-Hell Castle stages are: Snowfield 9, Beach 4, Forest 3-6, !!!, Hell 1-8, Inferno 1-3, Blood Lake, Cavern 7&8 and Hell Gate.
+    """
+    display_name = "Minimum number of required pre-Hell Castle stages"
+    range_start = 0
+    range_end = 22
+    default = 7
+
+class HellCastleMaximumStagesUnlocks(Range):
+    """
+    Maximum number of pre-Hell Castle stages you must unlock before entering the Hell Castle stage.
+    Pre-Hell Castle stages are: Snowfield 9, Beach 4, Forest 3-6, !!!, Hell 1-8, Inferno 1-3, Blood Lake, Cavern 7&8 and Hell Gate.
+    """
+    display_name = "Maximum number of required pre-Hell Castle stages"
+    range_start = 0
+    range_end = 22
+    default = 12
+
 class ShuffleBooks(DefaultOnToggle):
     """
     Controls whether buying Books are checks.
@@ -186,6 +286,16 @@ class SROptions(PerGameCommonOptions):
     classes_req_for_pyramid: PyramidClassUnlocks
     classes_req_for_ice_castle: IceCastleClassUnlocks
     classes_req_for_hell_castle: HellCastleClassUnlocks
+    min_stages_req_for_castle: CastleMinimumStagesUnlocks
+    max_stages_req_for_castle: CastleMaximumStagesUnlocks
+    min_stages_req_for_submarine_shrine: SubmarineShrineMinimumStagesUnlocks
+    max_stages_req_for_submarine_shrine: SubmarineShrineMaximumStagesUnlocks
+    min_stages_req_for_pyramid: PyramidMinimumStagesUnlocks
+    max_stages_req_for_pyramid: PyramidMaximumStagesUnlocks
+    min_stages_req_for_ice_castle: IceCastleMinimumStagesUnlocks
+    max_stages_req_for_ice_castle: IceCastleMaximumStagesUnlocks
+    min_stages_req_for_hell_castle: HellCastleMinimumStagesUnlocks
+    max_stages_req_for_hell_castle: HellCastleMaximumStagesUnlocks
     shuffle_books: ShuffleBooks
     shuffle_enemies: ShuffleEnemies
     gold_multiplier: GoldMultiplier
