@@ -62,33 +62,54 @@ def reached_hell_castle(player, ice_castle_pred, threshold, req_classes) -> Call
         and class_count(state, _pl) >= req_classes
     )
 
-def set_region_rules(player, multiworld, boss_stage_reqs) -> None:
+def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) -> None:
     """
     Sets region rules for every stage, except every stage before the Castle stage.
     This ensures players can beat the levels they unlock and make for a nice progression feeling.
     """
     castle_predicate: Callable[[CollectionState], bool] = reached_castle(
-        player, multiworld.random.randint(6, 10), boss_stage_reqs["Castle"]
+        player,
+        multiworld.random.randint(options.min_stages_req_for_castle,
+                                  max(options.min_stages_req_for_castle, options.max_stages_req_for_castle)),
+        boss_stage_reqs["Castle"]
         )
     set_rule(multiworld.get_entrance("Castle", player), castle_predicate)
 
     submarine_shrine_predicate: Callable[[CollectionState], bool] = reached_submarine_shrine(
-        player, castle_predicate, multiworld.random.randint(4, 7), boss_stage_reqs["Submarine Shrine"]
+        player,
+        castle_predicate,
+        multiworld.random.randint(options.min_stages_req_for_submarine_shrine,
+                                  max(options.min_stages_req_for_submarine_shrine,
+                                      options.max_stages_req_for_submarine_shrine)
+                                 ),
+        boss_stage_reqs["Submarine Shrine"]
         )
     set_rule(multiworld.get_entrance("Submarine Shrine", player), submarine_shrine_predicate)
 
     pyramid_predicate: Callable[[CollectionState], bool] = reached_pyramid(
-        player, submarine_shrine_predicate, multiworld.random.randint(4, 7), boss_stage_reqs["Pyramid"]
+        player,
+        submarine_shrine_predicate,
+        multiworld.random.randint(options.min_stages_req_for_pyramid,
+                                  max(options.min_stages_req_for_pyramid, options.max_stages_req_for_pyramid)),
+        boss_stage_reqs["Pyramid"]
         )
     set_rule(multiworld.get_entrance("Pyramid", player), pyramid_predicate)
 
     ice_castle_predicate: Callable[[CollectionState], bool] = reached_ice_castle(
-        player, pyramid_predicate, multiworld.random.randint(5, 8), boss_stage_reqs["Ice Castle"]
+        player,
+        pyramid_predicate,
+        multiworld.random.randint(options.min_stages_req_for_ice_castle,
+                                  max(options.min_stages_req_for_ice_castle, options.max_stages_req_for_ice_castle)),
+        boss_stage_reqs["Ice Castle"]
         )
     set_rule(multiworld.get_entrance("Ice Castle", player), ice_castle_predicate)
 
     hell_castle_predicate: Callable[[CollectionState], bool] = reached_hell_castle(
-        player, ice_castle_predicate, multiworld.random.randint(6, 10), boss_stage_reqs["Hell Castle"]
+        player,
+        ice_castle_predicate,
+        multiworld.random.randint(options.min_stages_req_for_hell_castle,
+                                  max(options.min_stages_req_for_hell_castle, options.max_stages_req_for_hell_castle)),
+        boss_stage_reqs["Hell Castle"]
         )
     set_rule(multiworld.get_entrance("Hell Castle", player), hell_castle_predicate)
     set_rule(multiworld.get_entrance("Volcano", player), hell_castle_predicate)
@@ -146,4 +167,4 @@ def set_rules(self: "StickRanger") -> None:
     for previous, next in zip(order, order[1:]):
         boss_stage_requirements[next] = max(boss_stage_requirements[previous], boss_stage_requirements[next])
 
-    set_region_rules(self.player, self.multiworld, boss_stage_requirements)
+    set_region_rules(player, multiworld, options, boss_stage_requirements)
