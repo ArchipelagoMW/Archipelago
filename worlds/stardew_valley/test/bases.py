@@ -1,5 +1,6 @@
 import itertools
 import logging
+import math
 import os
 import threading
 import typing
@@ -99,7 +100,7 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def collect_months(self, months: int) -> None:
         real_total_prog_items = self.world.total_progression_items
         percent = months * MONTH_COEFFICIENT
-        number_stardrops = max(1, round(real_total_prog_items * (percent / 100)))
+        number_stardrops = math.ceil(real_total_prog_items * (percent / 100))
         self.collect("Stardrop", number_stardrops)
         self.world.total_progression_items = real_total_prog_items
 
