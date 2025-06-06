@@ -1,13 +1,19 @@
 from typing import ClassVar
 
 from test.param import classvar_matrix
-from ...options import ExcludeGingerIsland
+from ..options.option_names import get_all_option_choices
+from ...options import ExcludeGingerIsland, ArcadeMachineLocations, BackpackProgression, BackpackSize, \
+    BundlePerRoom, BundlePrice, ElevatorProgression, FarmType, SeasonRandomization, FestivalLocations, Moviesanity, Museumsanity, ToolProgression
 from ...test.assertion import WorldAssertMixin
 from ...test.bases import SVTestCase, solo_multiworld
-from ...test.options.option_names import all_option_choices
+
+# These options affect logic, but are unrelated to any ginger island content, so pointless for this specific test class
+extra_options_to_ignore = [ArcadeMachineLocations.internal_name, BackpackProgression.internal_name, BackpackSize.internal_name, BundlePerRoom.internal_name,
+                           BundlePrice.internal_name, ElevatorProgression.internal_name, FarmType.internal_name, SeasonRandomization.internal_name,
+                           FestivalLocations.internal_name, Moviesanity.internal_name, Museumsanity.internal_name, ToolProgression.internal_name]
 
 
-@classvar_matrix(option_and_choice=all_option_choices)
+@classvar_matrix(option_and_choice=get_all_option_choices(extra_options_to_ignore))
 class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase):
     option_and_choice: ClassVar[tuple[str, str]]
 

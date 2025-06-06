@@ -1,4 +1,5 @@
 import random
+from typing import Iterable
 
 from Options import NamedRange, Option, Range
 from ... import StardewValleyWorld
@@ -62,3 +63,9 @@ for option in options_to_include:
                 all_option_choices.append((option.internal_name, choice_name))
 
 assert all_option_choices
+
+
+def get_all_option_choices(extra_ignored: Iterable[str] = None):
+    if extra_ignored is None:
+        return all_option_choices
+    return [option_choice for option_choice in all_option_choices if option_choice[0] not in extra_ignored]

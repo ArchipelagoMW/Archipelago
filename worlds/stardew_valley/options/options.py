@@ -339,7 +339,7 @@ class SkillProgression(Choice):
     With Masteries: Skill levels are unlocked randomly, and earning xp sends checks. Masteries are included"""
     internal_name = "skill_progression"
     display_name = "Skill Progression"
-    default = 2
+    default = 1
     option_vanilla = 0
     option_progressive = 1
     option_progressive_with_masteries = 2
