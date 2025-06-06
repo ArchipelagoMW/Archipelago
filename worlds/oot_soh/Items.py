@@ -300,3 +300,5 @@ item_data_table: Dict[str, SohItemData] = {
 }
 
 item_table = {name: data.code for name, data in item_data_table.items() if data.code is not None}
+
+filler_items = ["Recovery Heart", "Blue Rupee", "Red Rupee", "Purple Rupee", "Huge Rupee", "Bombs (5)", "Bombs (10)", "Arrows (5)", "Arrows (10)", "Deku Nuts (5)", "Deku Nuts (10)", "Deku Stick (1)"]
