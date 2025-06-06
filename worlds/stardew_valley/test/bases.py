@@ -99,7 +99,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     def collect_months(self, months: int) -> None:
         real_total_prog_items = self.world.total_progression_items
         percent = months * MONTH_COEFFICIENT
-        self.collect("Stardrop", real_total_prog_items * 100 // percent)
+        number_stardrops = max(1, round(real_total_prog_items * (percent / 100)))
+        self.collect("Stardrop", number_stardrops)
         self.world.total_progression_items = real_total_prog_items
 
     def collect_lots_of_money(self, percent: float = 0.25):
