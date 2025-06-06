@@ -178,7 +178,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Space time continuum', 'Upper Lake Serene', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneLeft"))
     connect(world, player, 'Space time continuum', 'Left Side forest Caves', lambda state: logic.can_teleport_to(state, "Past", "GateLakeSereneRight"))
     connect(world, player, 'Space time continuum', 'Refugee Camp', lambda state: logic.can_teleport_to(state, "Past", "GateAccessToPast"))
-    connect(world, player, 'Space time continuum', 'Castle Ramparts', lambda state: logic.can_teleport_to(state, "Past", "GateCastleRamparts"))
+    connect(world, player, 'Space time continuum', 'Forest', lambda state: logic.can_teleport_to(state, "Past", "GateCastleRamparts"))
     connect(world, player, 'Space time continuum', 'Castle Keep', lambda state: logic.can_teleport_to(state, "Past", "GateCastleKeep"))
     connect(world, player, 'Space time continuum', 'Royal towers (lower)', lambda state: logic.can_teleport_to(state, "Past", "GateRoyalTowers"))
     connect(world, player, 'Space time continuum', 'Caves of Banishment (Maw)', lambda state: logic.can_teleport_to(state, "Past", "GateMaw"))
