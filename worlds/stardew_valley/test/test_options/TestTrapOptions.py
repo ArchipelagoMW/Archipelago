@@ -1,12 +1,12 @@
 from ...items import items_by_group, Group
 from ...options import TrapDifficulty
 from ...test.bases import SVTestCase, solo_multiworld
-from ...test.options.presets import allsanity_no_mods_6_x_x, allsanity_mods_7_x_x
+from ...test.options.presets import allsanity_mods_7_x_x, allsanity_no_mods_7_x_x
 
 
 class TestTraps(SVTestCase):
     def test_given_no_traps_when_generate_then_no_trap_in_pool(self):
-        world_options = allsanity_no_mods_6_x_x().copy()
+        world_options = allsanity_no_mods_7_x_x().copy()
         world_options[TrapDifficulty.internal_name] = TrapDifficulty.option_no_traps
         with solo_multiworld(world_options) as (multi_world, _):
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP]]

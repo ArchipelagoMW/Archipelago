@@ -9,7 +9,7 @@ from BaseClasses import get_seed
 from Fill import distribute_items_restrictive, balance_multiworld_progression
 from worlds import AutoWorld
 from ..bases import SVTestCase, setup_multiworld
-from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, allsanity_mods_6_x_x, minimal_locations_maximal_items
+from ..options.presets import default_6_x_x, allsanity_no_mods_6_x_x, minimal_locations_maximal_items, allsanity_mods_7_x_x
 
 assert default_6_x_x
 assert allsanity_no_mods_6_x_x
@@ -217,7 +217,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
 
 class TestAllsanityWithMods(SVPerformanceTestCase):
     acceptable_time_per_player = 25
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_7_x_x()
     results = []
 
     @unittest.skip

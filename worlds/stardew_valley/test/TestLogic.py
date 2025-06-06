@@ -5,7 +5,7 @@ from unittest import TestCase, SkipTest
 from BaseClasses import MultiWorld
 from .assertion import RuleAssertMixin
 from .bases import setup_solo_multiworld, skip_long_tests
-from .options.presets import allsanity_mods_6_x_x, minimal_locations_maximal_items
+from .options.presets import minimal_locations_maximal_items, allsanity_mods_7_x_x
 from .. import StardewValleyWorld
 from ..data.bundles_data.bundle_data import all_bundle_items_except_money
 from ..logic.logic import StardewLogic
@@ -101,7 +101,7 @@ class LogicTestBase(RuleAssertMixin, TestCase):
 
 
 class TestAllSanityLogic(LogicTestBase):
-    options = allsanity_mods_6_x_x()
+    options = allsanity_mods_7_x_x()
 
 
 @unittest.skip("This test does not pass because some content is still not in content packs.")

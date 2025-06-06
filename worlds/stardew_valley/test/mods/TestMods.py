@@ -1,7 +1,7 @@
 from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ..bases import SVTestCase, SVTestBase, solo_multiworld
-from ..options.presets import allsanity_mods_6_x_x
+from ..options.presets import allsanity_mods_7_x_x
 from ... import options
 from ...items import Group
 from ...options.options import all_mods
@@ -10,11 +10,11 @@ from ...options.options import all_mods
 class TestCanGenerateAllsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        with solo_multiworld(allsanity_mods_6_x_x()) as (multi_world, _):
+        with solo_multiworld(allsanity_mods_7_x_x()) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
-        world_options = allsanity_mods_6_x_x()
+        world_options = allsanity_mods_7_x_x()
         world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
         with solo_multiworld(world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
@@ -96,7 +96,7 @@ class TestVanillaLogicAlternativeWhenQuestsAreNotRandomized(WorldAssertMixin, SV
     """We often forget to add an alternative rule that works when quests are not randomized. When this happens, some
     Location are not reachable because they depend on items that are only added to the pool when quests are randomized.
     """
-    options = allsanity_mods_6_x_x() | {
+    options = allsanity_mods_7_x_x() | {
         options.QuestLocations.internal_name: options.QuestLocations.special_range_names["none"],
         options.Goal.internal_name: options.Goal.option_perfection,
     }

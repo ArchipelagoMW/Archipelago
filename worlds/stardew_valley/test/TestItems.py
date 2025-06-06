@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld, get_seed, ItemClassification
 from .bases import SVTestCase, solo_multiworld, setup_solo_multiworld
-from .options.presets import allsanity_no_mods_6_x_x, get_minsanity_options, allsanity_no_mods_7_x_x
+from .options.presets import get_minsanity_options, allsanity_no_mods_7_x_x
 from .. import StardewValleyWorld
 from ..items import Group, item_table
 from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
@@ -50,7 +50,7 @@ class TestItems(SVTestCase):
             self.assertEqual(len(stardrop_items), 7)
 
     def test_no_duplicate_rings(self):
-        allsanity_options = allsanity_no_mods_6_x_x()
+        allsanity_options = allsanity_no_mods_7_x_x()
         with solo_multiworld(allsanity_options) as (multiworld, _):
             ring_items = [item.name for item in multiworld.get_items() if Group.RING in item_table[item.name].groups]
             self.assertEqual(len(ring_items), len(set(ring_items)))
