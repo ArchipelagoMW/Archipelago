@@ -1,7 +1,7 @@
 from Options import PerGameCommonOptions, OptionSet, OptionDict
-from worlds.stardew_valley.options import StardewValleyOptions, TrapItems
-from worlds.stardew_valley.options.presets import sv_options_presets
-from worlds.stardew_valley.test.bases import SVTestCase
+from ...options import StardewValleyOptions, TrapItems
+from ...options.presets import sv_options_presets
+from ...test.bases import SVTestCase
 
 
 class TestPresets(SVTestCase):

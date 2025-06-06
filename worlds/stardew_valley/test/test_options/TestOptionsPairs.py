@@ -1,6 +1,6 @@
 from worlds.stardew_valley import options
-from worlds.stardew_valley.test.assertion import WorldAssertMixin
-from worlds.stardew_valley.test.bases import SVTestBase
+from ...test.assertion import WorldAssertMixin
+from ...test.bases import SVTestBase
 
 
 class TestCrypticNoteNoQuests(WorldAssertMixin, SVTestBase):
