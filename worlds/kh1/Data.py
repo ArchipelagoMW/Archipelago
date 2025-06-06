@@ -155,7 +155,7 @@ VANILLA_ABILITY_AP_COSTS = [
     {"Ability Name": "Asp's Bite",      "AP Cost": 2, "Randomize": False},
     {"Ability Name": "Healing Herb",    "AP Cost": 3, "Randomize": False},
     {"Ability Name": "Wind Armor",      "AP Cost": 3, "Randomize": False},
-    {"Ability Name": "Crescent",         "AP Cost": 2, "Randomize": False},
+    {"Ability Name": "Crescent",        "AP Cost": 2, "Randomize": False},
     {"Ability Name": "Sandstorm",       "AP Cost": 2, "Randomize": False},
     {"Ability Name": "Applause!",       "AP Cost": 1, "Randomize": False},
     {"Ability Name": "Blazing Fury",    "AP Cost": 2, "Randomize": False},
