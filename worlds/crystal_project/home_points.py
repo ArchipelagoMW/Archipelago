@@ -20,7 +20,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(MERCURY_SHRINE, "Mercury Shrine", 152),
 
-        LocationData("Pale Grotto", "The Pale Grotto Ruins", 148),
+        LocationData(THE_PALE_GROTTO, "The Pale Grotto Ruins", 148),
 
         LocationData(SEASIDE_CLIFFS, "Seaside Cliffs Camp", 72),
 
