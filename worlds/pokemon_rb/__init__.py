@@ -1,4 +1,3 @@
-import os
 import settings
 import typing
 import threading
@@ -8,12 +7,12 @@ from copy import deepcopy
 from typing import TextIO
 
 from Utils import __version__
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 from .items import item_table, item_groups
-from .locations import location_data, PokemonRBLocation
+from .locations import location_data, PokemonRBLocation, location_groups
 from .regions import create_regions
 from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
@@ -86,6 +85,7 @@ class PokemonRedBlueWorld(World):
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
                            and location.address is not None}
     item_name_groups = item_groups
+    location_name_groups = location_groups
 
     web = PokemonWebWorld()
 
