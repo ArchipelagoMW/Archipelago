@@ -10,10 +10,6 @@ class TestNoGingerIslandCraftingRecipesAreRequired(SVTestBase):
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
-    @property
-    def run_default_tests(self) -> bool:
-        return True
-
 
 class TestNoGingerIslandCookingRecipesAreRequired(SVTestBase):
     options = {
@@ -22,7 +18,3 @@ class TestNoGingerIslandCookingRecipesAreRequired(SVTestBase):
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
-
-    @property
-    def run_default_tests(self) -> bool:
-        return True

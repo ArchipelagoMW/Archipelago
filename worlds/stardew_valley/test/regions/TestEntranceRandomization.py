@@ -1,10 +1,8 @@
 from collections import deque
 from collections.abc import Collection
-from typing import ClassVar
 from unittest.mock import patch, Mock
 
 from BaseClasses import get_seed, MultiWorld, Entrance
-from test.param import classvar_matrix
 from ..assertion import WorldAssertMixin
 from ..bases import SVTestCase, solo_multiworld, setup_solo_multiworld
 from ... import options
@@ -61,21 +59,21 @@ class TestEntranceRando(SVTestCase):
         self.assertEqual({"A to B": "A to C", "C to A": "B to A", "C to D": "C to A", "A to C": "D to C"}, swapped_connections)
 
 
-@classvar_matrix(mod=all_mods.difference([
-    ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic, ModNames.binning_skill, ModNames.big_backpack,
-    ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology, ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
-]))
 class TestCanGenerateEachModWithEntranceRandomizationBuildings(WorldAssertMixin, SVTestCase):
     """The following tests validate that ER still generates winnable and logically-sane games with given mods.
     Mods that do not interact with entrances are skipped
     Not all ER settings are tested, because 'buildings' is, essentially, a superset of all others
     """
-    mod: ClassVar[str]
+    mods = all_mods.difference([
+        ModNames.ginger, ModNames.distant_lands, ModNames.skull_cavern_elevator, ModNames.wellwick, ModNames.magic,
+        ModNames.binning_skill, ModNames.big_backpack, ModNames.luck_skill, ModNames.tractor, ModNames.shiko, ModNames.archaeology,
+        ModNames.delores, ModNames.socializing_skill, ModNames.cooking_skill
+    ])
 
     def test_given_mod_when_generate_then_basic_checks(self) -> None:
         world_options = {
             options.EntranceRandomization: options.EntranceRandomization.option_buildings,
-            options.Mods: self.mod,
+            options.Mods: frozenset(self.mods),
             options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
         }
         with solo_multiworld(world_options, world_caching=False) as (multi_world, _):

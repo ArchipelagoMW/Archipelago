@@ -1,10 +1,14 @@
+import unittest
 from typing import ClassVar
 
 from test.param import classvar_matrix
 from ..options.option_names import get_all_option_choices
 from ...options import BackpackProgression, BackpackSize, BundlePerRoom, BundlePrice, FarmType
 from ...test.assertion import WorldAssertMixin
-from ...test.bases import SVTestCase, solo_multiworld
+from ...test.bases import SVTestCase, solo_multiworld, skip_long_tests
+
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
 
 extra_options_to_ignore = [BackpackProgression.internal_name, BackpackSize.internal_name, BundlePerRoom.internal_name,
                            BundlePrice.internal_name, FarmType.internal_name]

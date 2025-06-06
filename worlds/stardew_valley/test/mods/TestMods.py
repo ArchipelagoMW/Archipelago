@@ -1,6 +1,3 @@
-from typing import ClassVar
-
-from test.param import classvar_matrix
 from ..TestGeneration import get_all_permanent_progression_items
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ..bases import SVTestCase, SVTestBase, solo_multiworld
@@ -23,18 +20,17 @@ class TestCanGenerateAllsanityWithMods(WorldAssertMixin, ModAssertMixin, SVTestC
             self.assert_basic_checks(multi_world)
 
 
-@classvar_matrix(mod=all_mods)
 class TestCanGenerateWithEachMod(WorldAssertMixin, ModAssertMixin, SVTestCase):
-    mod: ClassVar[str]
+    mods = all_mods
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         world_options = {
-            options.Mods: self.mod,
+            options.Mods: frozenset(self.mods),
             options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false
         }
         with solo_multiworld(world_options) as (multi_world, _):
             self.assert_basic_checks(multi_world)
-            self.assert_stray_mod_items(self.mod, multi_world)
+            self.assert_stray_mod_items(self.mods, multi_world)
 
 
 class TestBaseLocationDependencies(SVTestBase):

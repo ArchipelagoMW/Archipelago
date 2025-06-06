@@ -1,3 +1,4 @@
+import unittest
 from typing import ClassVar
 
 from test.param import classvar_matrix
@@ -5,7 +6,10 @@ from ..options.option_names import get_all_option_choices
 from ...options import ExcludeGingerIsland, ArcadeMachineLocations, BackpackProgression, BackpackSize, \
     BundlePerRoom, BundlePrice, ElevatorProgression, FarmType, SeasonRandomization, FestivalLocations, Moviesanity, Museumsanity, ToolProgression
 from ...test.assertion import WorldAssertMixin
-from ...test.bases import SVTestCase, solo_multiworld
+from ...test.bases import SVTestCase, solo_multiworld, skip_long_tests
+
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
 
 # These options affect logic, but are unrelated to any ginger island content, so pointless for this specific test class
 extra_options_to_ignore = [ArcadeMachineLocations.internal_name, BackpackProgression.internal_name, BackpackSize.internal_name, BundlePerRoom.internal_name,
