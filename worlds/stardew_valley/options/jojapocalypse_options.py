@@ -13,7 +13,7 @@ class Jojapocalypse(Choice):
     default = 0
     option_disabled = 0
     option_allowed = 1
-    # option_forced = 2
+    option_forced = 2
 
 
 class JojaStartPrice(Range):
