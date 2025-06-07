@@ -153,11 +153,10 @@ class KH1World(World):
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "Mermaid Kick":
-                if self.options.atlantica:
-                    if self.options.extra_shared_abilities:
-                        item_pool += [self.create_item(name) for _ in range(0, 2)]
-                    else:
-                        item_pool += [self.create_item(name) for _ in range(0, quantity)]
+                if self.options.atlantica and self.options.extra_shared_abilities:
+                    item_pool += [self.create_item(name) for _ in range(0, 2)]
+                else:
+                    item_pool += [self.create_item(name) for _ in range(0, quantity)]
             elif name == "Crystal Trident":
                 if self.options.atlantica:
                     item_pool += [self.create_item(name) for _ in range(0, quantity)]
