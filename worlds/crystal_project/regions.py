@@ -36,7 +36,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, SPAWNING_MEADOWS, excluded),
         create_region(world, player, locations_per_region, DELENDE, excluded),
         create_region(world, player, locations_per_region, SOILED_DEN, excluded),
-        create_region(world, player, locations_per_region, PALE_GROTTO, excluded),
+        create_region(world, player, locations_per_region, THE_PALE_GROTTO, excluded),
         create_region(world, player, locations_per_region, SEASIDE_CLIFFS, excluded),
         create_region(world, player, locations_per_region, DRAFT_SHAFT_CONDUIT, excluded),
         create_region(world, player, locations_per_region, MERCURY_SHRINE, excluded),
@@ -137,18 +137,18 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         POKO_POKO_DESERT: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 2),
         BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         YAMAGAWA_MA: lambda state: (logic.has_swimming or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 1)})
-    multiworld.get_region(DELENDE, player).add_exits([SPAWNING_MEADOWS, SOILED_DEN, PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
+    multiworld.get_region(DELENDE, player).add_exits([SPAWNING_MEADOWS, SOILED_DEN, THE_PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
         {JADE_CAVERN: lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
          ANCIENT_RESERVOIR: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 3),
         SALMON_PASS: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
         GREENSHIRE_REPRISE: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 2),
         PROVING_MEADOWS: logic.has_horizontal_movement,
         YAMAGAWA_MA: lambda state: logic.is_area_in_level_range(state, 1)})
-    multiworld.get_region(SOILED_DEN, player).add_exits([JADE_CAVERN, DELENDE, PALE_GROTTO, DRAFT_SHAFT_CONDUIT],
+    multiworld.get_region(SOILED_DEN, player).add_exits([JADE_CAVERN, DELENDE, THE_PALE_GROTTO, DRAFT_SHAFT_CONDUIT],
         {JADE_CAVERN: lambda state: logic.has_golden_quintar and logic.is_area_in_level_range(state, 5),
-        PALE_GROTTO: logic.has_swimming,
+        THE_PALE_GROTTO: logic.has_swimming,
         DRAFT_SHAFT_CONDUIT: logic.has_swimming})
-    multiworld.get_region(PALE_GROTTO, player).add_exits([DELENDE, PROVING_MEADOWS, JOJO_SEWERS, TALL_TALL_HEIGHTS, SALMON_PASS],
+    multiworld.get_region(THE_PALE_GROTTO, player).add_exits([DELENDE, PROVING_MEADOWS, JOJO_SEWERS, TALL_TALL_HEIGHTS, SALMON_PASS],
         {JOJO_SEWERS: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 1),
         TALL_TALL_HEIGHTS: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 4),
         SALMON_PASS: logic.has_swimming})
@@ -162,7 +162,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
     multiworld.get_region(YAMAGAWA_MA, player).add_exits([SPAWNING_MEADOWS, DELENDE, LAKE_DELENDE],
         {LAKE_DELENDE: lambda state: logic.is_area_in_level_range(state, 3)})
-    multiworld.get_region(PROVING_MEADOWS, player).add_exits([DELENDE, PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA], 
+    multiworld.get_region(PROVING_MEADOWS, player).add_exits([DELENDE, THE_PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA], 
         {SKUMPARADISE: lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 1),
         THE_OPEN_SEA: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(SKUMPARADISE, player).add_exits([PROVING_MEADOWS, CAPITAL_SEQUOIA],
@@ -174,9 +174,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5) and logic.is_area_in_level_range(state, 2),
         CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5),
         SKUMPARADISE: lambda state: logic.is_area_in_level_range(state, 1)})
-    multiworld.get_region(JOJO_SEWERS, player).add_exits([CAPITAL_SEQUOIA, BOOMER_SOCIETY, PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST], 
+    multiworld.get_region(JOJO_SEWERS, player).add_exits([CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST], 
         {CAPITAL_JAIL: lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 2),
-        PALE_GROTTO: logic.has_swimming,
+        THE_PALE_GROTTO: logic.has_swimming,
         QUINTAR_NEST: lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region(BOOMER_SOCIETY, player).add_exits([JOJO_SEWERS, GREENSHIRE_REPRISE],
         {JOJO_SEWERS: lambda state: logic.is_area_in_level_range(state, 1),
@@ -288,12 +288,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(EASTERN_CHASM, player).add_exits([QUINTAR_RESERVE, THE_OPEN_SEA],
         {QUINTAR_RESERVE: lambda state: logic.has_glide and logic.is_area_in_level_range(state, 4),
         THE_OPEN_SEA: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, PALE_GROTTO, NORTHERN_CAVE],
+    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
         {LANDS_END: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4),
         SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, world.player) and state.has(VIRIDIAN_BOOK, world.player) and state.has(CERULEAN_BOOK, world.player),
         NORTHERN_STRETCH: logic.has_glide,
         CASTLE_RAMPARTS: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4),
-        PALE_GROTTO: logic.has_swimming,
+        THE_PALE_GROTTO: logic.has_swimming,
         THE_CHALICE_OF_TAR: lambda state: logic.has_glide and logic.has_vertical_movement and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(NORTHERN_CAVE, player).add_exits([TALL_TALL_HEIGHTS, SLIP_GLIDE_RIDE],
         {SLIP_GLIDE_RIDE: logic.has_glide and logic.has_vertical_movement,
