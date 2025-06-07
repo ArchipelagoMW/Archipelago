@@ -813,7 +813,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Chloe and Talon sky fishing", 3700 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248) Fixed Missable; removed post-sparkle
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Chloe and Talon sky fishing", 3702 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248) Fixed Missable; removed post-sparkle
         #NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, logic.has_vertical_movement), #(765, 125, -248)
