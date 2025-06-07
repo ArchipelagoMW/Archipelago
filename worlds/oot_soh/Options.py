@@ -8,11 +8,15 @@ class DeathLink(Toggle):
     """
     display_name = "Death Link"
 
-class ShuffleDungeonRewards(Toggle):
+class ShuffleDungeonRewards(Choice):
     """
-    Shuffle dungeon rewards to be anywhere. If not turned on, dungeon rewards will be on their vanilla location.
+    Shuffle dungeon rewards to be vanilla, shuffled between dungeons, or anywhere. If not turned on, dungeon rewards will be on their vanilla location.
     """
     display_name = "Shuffle Dungeon Rewards"
+    option_off = 0
+    option_dungeons = 1
+    option_anywhere = 2
+    default = 0
 
 class GanonsCastleBossKeySetting(Choice):
     """
