@@ -177,7 +177,7 @@ class RequiredPuppies(Choice):
 
 class PuppyValue(Range):
     """
-    Determines how many dalmation puppies are given when a puppy item is found.
+    Determines how many dalmatian puppies are given when a puppy item is found.
     """
     display_name = "Puppy Value"
     default = 3
@@ -417,11 +417,21 @@ class InteractInBattle(DefaultOnToggle):
     """
     display_name = "Interact in Battle"
 
-class AdvancedLogic(Toggle):
+class LogicDifficulty(Choice):
     """
-    If on, logic may expect you to do advanced skips like using Combo Master, Dumbo, and other unusual methods to reach locations.
+    Determines what the randomizer logic may expect you to do to reach certain locations.
+
+    Beginner: Logic only expects what would be the natural solution in vanilla gameplay or similar, as well as a guarantee of tools for boss fights.
+    Normal: Logic expects some clever use of abilities, exploration of options, and competent combat ability; generally does not require advanced knowledge.
+    Proud: Logic expects advanced knowledge of tricks and obscure interactions, such as using Combo Master, Dumbo, and other unusual methods to reach locations.
+    Minimal: Logic expects the bare minimum to get to locations; may require extensive grinding, beating fights with no tools, and performing very difficult or tedious tricks.
     """
-    display_name = "Advanced Logic"
+    display_name = "Logic Difficulty"
+    option_beginner = 0
+    option_normal = 5
+    option_proud = 10
+    option_minimal = 15
+    default = 5
 
 class ExtraSharedAbilities(DefaultOnToggle):
     """
@@ -722,7 +732,7 @@ class KH1Options(PerGameCommonOptions):
     keyblades_unlock_chests: KeybladesUnlockChests
     interact_in_battle: InteractInBattle
     exp_multiplier: EXPMultiplier
-    advanced_logic: AdvancedLogic
+    logic_difficulty: LogicDifficulty
     extra_shared_abilities: ExtraSharedAbilities
     exp_zero_in_pool: EXPZeroInPool
     randomize_emblem_pieces: RandomizeEmblemPieces
@@ -852,7 +862,7 @@ kh1_option_groups = [
         RandomizePuppies,
         PuppyValue,
         InteractInBattle,
-        AdvancedLogic,
+        LogicDifficulty,
         ExtraSharedAbilities,
         EXPZeroInPool,
         RandomizePartyMemberStartingAccessories,

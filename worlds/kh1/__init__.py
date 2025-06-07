@@ -16,8 +16,6 @@ from .GenerateJSON import generate_json
 from .Data import VANILLA_KEYBLADE_STATS, VANILLA_PUPPY_LOCATIONS, CHAR_TO_KH, VANILLA_ABILITY_AP_COSTS
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-
-
 def launch_client():
     from .Client import launch
     launch_component(launch, name="KH1 Client")
@@ -255,7 +253,6 @@ class KH1World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {
-                    "advanced_logic": bool(self.options.advanced_logic),
                     "atlantica": bool(self.options.atlantica),
                     "auto_attack": bool(self.options.auto_attack),
                     "auto_save": bool(self.options.auto_save),
@@ -284,6 +281,7 @@ class KH1World(World):
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
+                    "logic_difficulty": str(self.options.logic_difficulty),
                     "materials_in_pool": int(self.options.materials_in_pool.value),
                     "max_ap_cost": int(self.options.max_ap_cost.value),
                     "min_ap_cost": int(self.options.min_ap_cost.value),
