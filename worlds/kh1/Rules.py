@@ -2147,7 +2147,8 @@ def set_rules(kh1world):
         except KeyError:
             continue
         if difficulty == 0 and location_table[location].behind_boss:
-            lambda state: has_basic_tools(state, player)
+            add_rule(kh1world.get_location(location),
+                lambda state: has_basic_tools(state, player))
         if location_table[location].type == "Starting Accessory":
             add_item_rule(kh1world.get_location(location),
                 lambda i: (i.player == player and i.name in get_items_by_category("Accessory").keys()))
