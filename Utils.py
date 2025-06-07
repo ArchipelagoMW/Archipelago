@@ -409,12 +409,10 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    common_path = cache_path("common.yaml")
+    common_path = cache_path("common.json")
     if os.path.exists(common_path):
         with open(common_path) as f:
-            common_file = unsafe_parse_yaml(f.read())
-            if common_file is None:
-                common_file = {}
+            common_file = json.loads(f.read())
             uuid = common_file.get("uuid", None)
     else:
         common_file = {}
@@ -427,7 +425,7 @@ def get_unique_identifier():
     uuid = str(uuid4())
     common_file["uuid"] = uuid
     with open(common_path, "w") as f:
-        f.write(dump(common_file, Dumper=Dumper))
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
