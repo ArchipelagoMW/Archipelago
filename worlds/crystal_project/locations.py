@@ -899,7 +899,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData(BEAURIOR_ROCK, "Beaurior Rock NPC - Gold in B4 big lava room with optional boss", 2822 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY) and logic.has_horizontal_movement), #Gold Ingot
         LocationData(BEAURIOR_ROCK, "Beaurior Rock NPC - B1 cheeky lava platforming Gold", 2823 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4)), #Dust
         LocationData(BEAURIOR_ROCK, "Beaurior Rock NPC - B1 Magic Well friendos hiding in the pillars", 2824 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_horizontal_movement), #Ore
-        LocationData(BEAURIOR_ROCK, "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_horizontal_movement), #Ore Beaurior Volcano but it's at the top so Rock it is
+        LocationData(BEAURIOR_ROCK, "Beaurior Volcano NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)), #Ore Beaurior Volcano but it's at the top so Rock it is
 
         #Crystals
 	    LocationData(BEAURIOR_ROCK, "Beaurior Volcano Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
