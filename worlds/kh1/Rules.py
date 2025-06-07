@@ -785,7 +785,7 @@ def set_rules(kh1world):
         lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Progressive Gravity", player)
-            and (difficulty > 0 and state.has("Progressive Glide", player))
+            and (difficulty > 0 or state.has("Progressive Glide", player))
         ))
     add_rule(kh1world.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"),
         lambda state: state.has("Progressive Gravity", player))
