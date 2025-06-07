@@ -75,6 +75,12 @@ class DarkSouls3World(World):
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
 
+    missable_dupe_prog_locs: Set[str] = {"PC: Storm Ruler - Siegward",
+                                         "US: Pyromancy Flame - Cornyx",
+                                         "US: Tower Key - kill Irina"}
+    """Locations whose vanilla item is a missable duplicate of a progression item.
+    """
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.all_excluded_locations = set()
@@ -258,10 +264,7 @@ class DarkSouls3World(World):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Don't allow missable duplicates of progression items to be expected progression.
-                if location.name in {"PC: Storm Ruler - Siegward",
-                                     "US: Pyromancy Flame - Cornyx",
-                                     "US: Tower Key - kill Irina"}:
-                    continue
+                if location.name in self.missable_dupe_prog_locs: continue
 
                 # Replace non-randomized items with events that give the default item
                 event_item = (
@@ -1286,6 +1289,8 @@ class DarkSouls3World(World):
             data = location_dictionary[location]
             if data.dlc and not self.options.enable_dlc: continue
             if data.ngp and not self.options.enable_ngp: continue
+            # Don't add rules to non-randomized duplicate progression locations
+            if location in self.missable_dupe_prog_locs and not self._is_location_available(location): continue
 
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
