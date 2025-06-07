@@ -1287,7 +1287,6 @@ class DarkSouls3World(World):
             if data.dlc and not self.options.enable_dlc: continue
             if data.ngp and not self.options.enable_ngp: continue
 
-            if not self._is_location_available(location): continue
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)
