@@ -7,5 +7,8 @@ REGIONS = [
     "totok",
     "sw ocean",
     "mercay freedle island",
-    "mercay freedle tunnel chest"
+    "mercay freedle tunnel chest",
+    "mercay passage 1",
+    "mercay passage 2",
+    "mercay passage 3"
 ]

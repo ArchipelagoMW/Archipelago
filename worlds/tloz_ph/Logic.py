@@ -17,7 +17,9 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["mercay island", "sw ocean", False, lambda state: ph_has_sw_sea_chart(state, player)],
         ["mercay island", "totok", False, None],
         ["mercay island", "mercay freedle island", False, lambda state: ph_has_explosives(state, player)],
-        ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: ph_has_range(state, player)]
+        ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: ph_has_range(state, player)],
+        ["mercay island", "mercay passage 1", False, lambda state: any([ph_has_sword(state, player),
+                                                                        ph_has_explosives(state, player)])]
 
         # ========== TotOK ===================
 

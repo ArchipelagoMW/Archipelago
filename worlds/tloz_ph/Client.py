@@ -61,9 +61,10 @@ async def read_memory_values(ctx, read_list: dict[str, tuple[int, int, str]]) ->
 
 # Read single memory value
 async def read_memory_value(ctx, address: int, size=1, domain="Main RAM") -> int:
-    print("Reading memory value", address, size, domain)
+    print("Reading memory value", hex(address), size, domain)
     read_result = await bizhawk.read(ctx.bizhawk_ctx, [(address, size, domain)])
     return int.from_bytes(read_result[0], "little")
+
 
 # Split up large values to write into smaller chunks
 def split_bits(value, size):
@@ -101,13 +102,9 @@ async def write_memory_value(ctx, address: int, value: int, domain="Main RAM", i
     return write_value
 
 
-
-
-
 read_keys = ["game_state", "received_item_index", "is_dead", "stage", "room", "floor", "entrance",
              "slot_id", "getting_item", "getting_ship_part"]
 READ_LIST = {k: v for k, v in RAM_ADDRS.items() if k in read_keys}
-print(READ_LIST)
 
 
 class PhantomHourglassClient(BizHawkClient):
@@ -171,8 +168,7 @@ class PhantomHourglassClient(BizHawkClient):
         super().on_package(ctx, cmd, args)
 
     async def set_starting_flags(self, ctx: "BizHawkClientContext") -> None:
-        write_list = []
-        write_list.append((RAM_ADDRS["slot_id"][0], [ctx.slot], "ARM7 System Bus"))
+        write_list = [(RAM_ADDRS["slot_id"][0], [ctx.slot], "ARM7 System Bus")]
 
         for adr, value in STARTING_FLAGS:
             write_list.append((adr, [value], "ARM7 System Bus"))
@@ -197,6 +193,7 @@ class PhantomHourglassClient(BizHawkClient):
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed or ctx.slot is None:
+            self.just_entered_game = True
             return
 
         # Enable "DeathLink" tag if option was enabled
@@ -268,13 +265,25 @@ class PhantomHourglassClient(BizHawkClient):
                 # Load locations in room into loop
                 self.locations_in_scene = self.location_area_to_watches.get(current_scene_id, None)
                 self.watches = {}
+                sram_read_list = {}
                 if self.locations_in_scene is not None:
-                    # Create memory watches for checks triggerd by flags
+                    # Create memory watches for checks triggerd by flags, and make list for checking sram
                     for loc_name, location in self.locations_in_scene.items():
                         if "address" in location:
                             self.watches[loc_name] = ([location["address"], 1, "ARM7 System Bus"])
+                        if "sram_addr" in location:
+                            sram_read_list[loc_name] = (location["sram_addr"], 1, "SRAM")
+
+                    # Read and set locations missed when bizhawk was disconnected
+                    if len(sram_read_list) > 0:
+                        sram_reads = await read_memory_values(ctx, sram_read_list)
+                        for loc_name, value in sram_reads.items():
+                            if value & LOCATIONS_DATA[loc_name]["sram_value"]:
+                                await self.process_checked_locations(ctx, loc_name)
+
 
                 self.scene_address = current_scene_id
+                await self.read_backup_sram(ctx, current_scene_id)
                 await self.process_scouted_locations(ctx)
 
                 # TODO: Read saveram on room reload for missing locaions
@@ -324,6 +333,9 @@ class PhantomHourglassClient(BizHawkClient):
         if pre_process is not None:
             loc_bytes = self.location_name_to_id[pre_process]
             local_checked_locations.add(loc_bytes)
+            location = LOCATIONS_DATA[pre_process]
+            self.last_vanilla_item = location.get("true_item", location["vanilla_item"])
+            self.receiving_location = True
         else:
             # Get link's coords
             coord_addr = {k: v for k, v in RAM_ADDRS.items() if k in ["link_x", "link_y", "link_z"]}
@@ -332,10 +344,7 @@ class PhantomHourglassClient(BizHawkClient):
             # Figure out what check was just gotten
             for loc_name, location in self.locations_in_scene.items():
                 loc_bytes = self.location_name_to_id[loc_name]
-                if "address" in location:
-                    # This gets handled in main loop, move to its own function?
-                    pass
-                elif len(self.locations_in_scene) == 1:
+                if len(self.locations_in_scene) == 1:
                     local_checked_locations.add(loc_bytes)
                     self.last_vanilla_item = location.get("true_item", location["vanilla_item"])
                     continue
@@ -362,7 +371,6 @@ class PhantomHourglassClient(BizHawkClient):
     async def process_received_items(self, ctx: "BizHawkClientContext", num_received_items: int) -> None:
         # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
         # fill it with the next item
-        print(f"items received: {num_received_items}, {len(ctx.items_received)}, {self.last_vanilla_item}")
         if num_received_items < len(ctx.items_received):
             next_item = ctx.items_received[num_received_items].item
             item_name = self.item_id_to_name[next_item]
@@ -406,6 +414,9 @@ class PhantomHourglassClient(BizHawkClient):
             # Write the new item to memory!
             print(f"Writing items {write_list}")
             await bizhawk.write(ctx.bizhawk_ctx, write_list)
+
+    async def read_backup_sram(self, ctx: "BizHawkClientContext", stage):
+        pass
 
     async def process_game_completion(self, ctx: "BizHawkClientContext", flag_bytes, current_room: int):
         pass
