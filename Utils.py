@@ -409,7 +409,7 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    common_path = os.path.expandvars(r"%LOCALAPPDATA%/Archipelago/common.yaml")
+    common_path = cache_path("common.yaml")
     if os.path.exists(common_path):
         with open(common_path) as f:
             common_file = unsafe_parse_yaml(f.read())
@@ -425,8 +425,8 @@ def get_unique_identifier():
 
     from uuid import uuid4
     uuid = str(uuid4())
+    common_file["uuid"] = uuid
     with open(common_path, "w") as f:
-        common_file["uuid"] = uuid
         f.write(dump(common_file, Dumper=Dumper))
     return uuid
 
