@@ -700,7 +700,7 @@ def set_rules(kh1world):
            or (difficulty > 0 and state.has("High Jump", player, 3))
         ))
     add_rule(kh1world.get_location("Neverland Clock Tower Chest"),
-        lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
+        lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Neverland Hold Flight 2nd Chest"),
         lambda state: (
            state.has("Green Trinity", player)
@@ -1231,7 +1231,7 @@ def set_rules(kh1world):
         ))
     for i in range(1,13):
             add_rule(kh1world.get_location("Neverland Clock Tower " + str(i).rjust(2, "0") + ":00 Door"),
-                lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
+                lambda state: state.has("Green Trinity", player))
     if options.hundred_acre_wood:
         add_rule(kh1world.get_location("100 Acre Wood Bouncing Spot Left Cliff Chest"),
             lambda state: (
@@ -1693,144 +1693,6 @@ def set_rules(kh1world):
             )
             and has_defensive_tools(state, player, difficulty)
         ))
-
-    if difficulty == 0:
-        add_rule(kh1world.get_location("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Deep Jungle Defeat Clayton Cure Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Jungle King Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Deep Jungle Seal Keyhole Red Trinity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Cerberus Inferno Band Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Blizzard Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Pot Centipede Ray of Light Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Jafar Blizzard Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Jafar Genie Fire Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Seal Keyhole Genie Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Seal Keyhole Three Wishes Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Seal Keyhole Green Trinity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Monstro Defeat Parasite Cage I Goofy Cheer Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Monstro Defeat Parasite Cage II Stop Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Atlantica Defeat Ursula I Mermaid Kick Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Atlantica Defeat Ursula II Thunder Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Atlantica Seal Keyhole Crabclaw Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Halloween Town Defeat Oogie's Manor Gravity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Halloween Town Seal Keyhole Pumpkinhead Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Defeat Anti Sora Raven's Claw Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Encounter Hook Cure Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Seal Keyhole Fairy Harp Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Seal Keyhole Tinker Bell Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Seal Keyhole Glide Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Defeat Captain Hook Ars Arcanum Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Riku I White Trinity Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Donald Cheer Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Dragon Maleficent Fireglow Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Riku II Ragnarok Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Behemoth Omega Arts Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Speak to Princesses Fire Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("End of the World Defeat Chernabog Superglide Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Seal Keyhole Navi-G Piece Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Jafar Genie Ansem's Report 1"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Library Speak to Aerith Cure"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Library Speak to Belle Divine Rose"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 2"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 4"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 6"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Maleficent Ansem's Report 5"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Atlantica Defeat Ursula II Ansem's Report 3"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Ansem's Report 7"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Hades Ansem's Report 8"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Neverland Defeat Hook Ansem's Report 9"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth Ansem's Report 12"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hades Cup Defeat Cloud and Leon Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hades Cup Defeat Yuffie Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hades Cup Defeat Cerberus Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hades Cup Defeat Hades Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Wonderland Rabbit Hole Defeat Heartless 3 Chest"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Aero Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Traverse Town Defeat Opposite Armor Navi-G Piece Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
-            lambda state: has_basic_tools(state, player))
-        add_rule(kh1world.get_location("Final Ansem"),
-            lambda state: has_basic_tools(state, player))
     if options.keyblades_unlock_chests:
         add_rule(kh1world.get_location("Traverse Town 1st District Candle Puzzle Chest"),
             lambda state: state.has("Lionheart", player))
@@ -2284,6 +2146,8 @@ def set_rules(kh1world):
             kh1world.get_location(location)
         except KeyError:
             continue
+        if difficulty == 0 and location_table[location].behind_boss:
+            lambda state: has_basic_tools(state, player)
         if location_table[location].type == "Starting Accessory":
             add_item_rule(kh1world.get_location(location),
                 lambda i: (i.player == player and i.name in get_items_by_category("Accessory").keys()))
