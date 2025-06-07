@@ -78,7 +78,8 @@ class DarkSouls3World(World):
     missable_dupe_prog_locs: Set[str] = {"PC: Storm Ruler - Siegward",
                                          "US: Pyromancy Flame - Cornyx",
                                          "US: Tower Key - kill Irina"}
-    """Locations whose vanilla item is a missable duplicate of a progression item.
+    """Locations whose vanilla item is a missable duplicate of a non-missable progression item.
+    If vanilla, these locations shouldn't be expected progression, so they aren't created and don't get rules.
     """
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -1289,7 +1290,7 @@ class DarkSouls3World(World):
             data = location_dictionary[location]
             if data.dlc and not self.options.enable_dlc: continue
             if data.ngp and not self.options.enable_ngp: continue
-            # Don't add rules to non-randomized duplicate progression locations
+            # Don't add rules to missable duplicates of progression items
             if location in self.missable_dupe_prog_locs and not self._is_location_available(location): continue
 
             if isinstance(rule, str):
