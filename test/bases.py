@@ -126,6 +126,7 @@ class WorldTestBase(unittest.TestCase):
             self.world_setup()
 
     def tearDown(self) -> None:
+        self.state = None  # type: ignore
         if self.__class__.memory_leak_tested or not self.options or not self.constructed or \
                 sys.version_info < (3, 11, 0):  # the leak check in tearDown fails in py<3.11 for an unknown reason
             # only run memory leak test once per class, only for constructed with non-default options
