@@ -1,0 +1,13 @@
+# Refer to ../docs/webhost configuration sample.yaml
+
+# We'll be hosting VIA gunicorn
+SELFHOST: false
+# Start room and generator processes
+SELFLAUNCH: true
+JOB_THRESHOLD: 0
+
+# Maximum concurrent world gens
+GENERATORS: 3
+
+# Rooms will be spread across multiple processes
+HOSTERS: 4
