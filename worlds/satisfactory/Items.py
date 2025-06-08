@@ -143,7 +143,8 @@ class Items:
         "Bundle: Ficsonium Fuel Rod": ItemData(G.Trap, 1338130, C.trap),
         "Bundle: Packaged Rocket Fuel": ItemData(G.Parts, 1338131),
         "Bundle: Packaged Ionized Fuel": ItemData(G.Parts, 1338132),
-        #1338131 - 1338149 Reserved for future parts
+        "Bundle: Dark Matter Crystal": ItemData(G.Parts, 1338133),
+        #1338134 - 1338149 Reserved for future parts
         #1338150 - 1338199 Equipment / Ammo
         "Bundle: Bacon Agaric": ItemData(G.Ammo, 1338150),
         "Bundle: Beryl Nut": ItemData(G.Ammo, 1338151),
