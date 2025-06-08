@@ -1524,9 +1524,11 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                                           f"dictionary, not {type(items)}")
                     locations = item.get("locations", [])
                     if not locations:
-                        locations = item.get("location", ["Everywhere"])
+                        locations = item.get("location", [])
                         if locations:
                             count = 1
+                        else:
+                            locations = ["Everywhere"]
                         if isinstance(locations, str):
                             locations = [locations]
                         if not isinstance(locations, list):
