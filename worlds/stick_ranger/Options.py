@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import (Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions,
-                     Range, Toggle)
+                     Range, Toggle, Visibility)
 
 
 class Goal(Choice):
@@ -112,6 +112,17 @@ class CastleMaximumStagesUnlocks(Range):
     range_end = 17
     default = 10
 
+class StagesReqForCastle(Range):
+    """
+    Actual number of required pre-Castle stages to beat.
+    Only used for rules and tracking.
+    """
+    display_name = "Actual number of required pre-Castle stages"
+    visibility = Visibility.none
+    range_start = 0
+    range_end = 17
+    default = 6
+
 class SubmarineShrineMinimumStagesUnlocks(Range):
     """
     Minimum number of pre-Submarine Shrine stages you must unlock before entering the Submarine Shrine stage.
@@ -131,6 +142,17 @@ class SubmarineShrineMaximumStagesUnlocks(Range):
     range_start = 0
     range_end = 12
     default = 7
+
+class StagesReqForSubmarineShrine(Range):
+    """
+    Actual number of required pre-Submarine Shrine stages to beat.
+    Only used for rules and tracking.
+    """
+    display_name = "Actual number of required pre-Submarine Shrine stages"
+    visibility = Visibility.none
+    range_start = 0
+    range_end = 12
+    default = 4
 
 class PyramidMinimumStagesUnlocks(Range):
     """
@@ -152,6 +174,17 @@ class PyramidMaximumStagesUnlocks(Range):
     range_end = 12
     default = 7
 
+class StagesReqForPyramid(Range):
+    """
+    Actual number of required pre-Pyramid stages to beat.
+    Only used for rules and tracking.
+    """
+    display_name = "Actual number of required pre-Pyramid stages"
+    visibility = Visibility.none
+    range_start = 0
+    range_end = 12
+    default = 4
+
 class IceCastleMinimumStagesUnlocks(Range):
     """
     Minimum number of pre-Ice Castle stages you must unlock before entering the Ice Castle stage.
@@ -172,6 +205,17 @@ class IceCastleMaximumStagesUnlocks(Range):
     range_end = 14
     default = 8
 
+class StagesReqForIceCastle(Range):
+    """
+    Actual number of required pre-Ice Castle stages to beat.
+    Only used for rules and tracking.
+    """
+    display_name = "Actual number of required pre-Ice Castle stages"
+    visibility = Visibility.none
+    range_start = 0
+    range_end = 14
+    default = 5
+
 class HellCastleMinimumStagesUnlocks(Range):
     """
     Minimum number of pre-Hell Castle stages you must unlock before entering the Hell Castle stage.
@@ -191,6 +235,17 @@ class HellCastleMaximumStagesUnlocks(Range):
     range_start = 0
     range_end = 22
     default = 12
+
+class StagesReqForHellCastle(Range):
+    """
+    Actual number of required pre-Hell Castle stages to beat.
+    Only used for rules and tracking.
+    """
+    display_name = "Actual number of required pre-HellCastle stages"
+    visibility = Visibility.none
+    range_start = 0
+    range_end = 22
+    default = 7
 
 class ShuffleBooks(DefaultOnToggle):
     """
@@ -288,14 +343,19 @@ class SROptions(PerGameCommonOptions):
     classes_req_for_hell_castle: HellCastleClassUnlocks
     min_stages_req_for_castle: CastleMinimumStagesUnlocks
     max_stages_req_for_castle: CastleMaximumStagesUnlocks
+    stages_req_for_castle: StagesReqForCastle
     min_stages_req_for_submarine_shrine: SubmarineShrineMinimumStagesUnlocks
     max_stages_req_for_submarine_shrine: SubmarineShrineMaximumStagesUnlocks
+    stages_req_for_submarine_shrine: StagesReqForSubmarineShrine
     min_stages_req_for_pyramid: PyramidMinimumStagesUnlocks
     max_stages_req_for_pyramid: PyramidMaximumStagesUnlocks
+    stages_req_for_pyramid: StagesReqForPyramid
     min_stages_req_for_ice_castle: IceCastleMinimumStagesUnlocks
     max_stages_req_for_ice_castle: IceCastleMaximumStagesUnlocks
+    stages_req_for_ice_castle: StagesReqForIceCastle
     min_stages_req_for_hell_castle: HellCastleMinimumStagesUnlocks
     max_stages_req_for_hell_castle: HellCastleMaximumStagesUnlocks
+    stages_req_for_hell_castle: StagesReqForHellCastle
     shuffle_books: ShuffleBooks
     shuffle_enemies: ShuffleEnemies
     gold_multiplier: GoldMultiplier

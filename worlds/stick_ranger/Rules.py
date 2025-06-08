@@ -11,14 +11,14 @@ if TYPE_CHECKING:
     from . import StickRanger
 
 
-def class_count(state, player) -> int:
+def class_count(state, player: int) -> int:
     """Return the number of ranger classes the player has unlocked."""
     return sum(
         state.has(f"Unlock {cls} Class", player)
         for cls in RANGER_CLASSES
     )
 
-def reached_castle(player, threshold, req_classes) -> Callable[[CollectionState], bool]:
+def reached_castle(player: int, threshold: int, req_classes: int) -> Callable[[CollectionState], bool]:
     """Return whether or not the player has unlocked access to the Castle stage yet."""
     return lambda state, _pl=player, _T=threshold, _keys=unlocks_by_region["Grassland"]: (
         state.has("Unlock Castle", _pl, 1)
@@ -26,7 +26,7 @@ def reached_castle(player, threshold, req_classes) -> Callable[[CollectionState]
         and class_count(state, _pl) >= req_classes
     )
 
-def reached_submarine_shrine(player, castle_pred, threshold, req_classes) -> Callable[[CollectionState], bool]:
+def reached_submarine_shrine(player: int, castle_pred, threshold: int, req_classes: int) -> Callable[[CollectionState], bool]:
     """Return whether or not the player has unlocked access to the Submarine Shrine stage yet."""
     return lambda state, _pl=player, _T=threshold, _keys=unlocks_by_region["Sea"], _c=castle_pred: (
         _c(state)
@@ -35,7 +35,7 @@ def reached_submarine_shrine(player, castle_pred, threshold, req_classes) -> Cal
         and class_count(state, _pl) >= req_classes
     )
 
-def reached_pyramid(player, submarine_shrine_pred, threshold, req_classes) -> Callable[[CollectionState], bool]:
+def reached_pyramid(player: int, submarine_shrine_pred, threshold: int, req_classes: int) -> Callable[[CollectionState], bool]:
     """Return whether or not the player has unlocked access to the Pyramid stage yet."""
     return lambda state, _pl=player, _T=threshold, _keys=unlocks_by_region["Desert"], _s=submarine_shrine_pred: (
         _s(state)
@@ -44,7 +44,7 @@ def reached_pyramid(player, submarine_shrine_pred, threshold, req_classes) -> Ca
         and class_count(state, _pl) >= req_classes
     )
 
-def reached_ice_castle(player, pyramid_pred, threshold, req_classes) -> Callable[[CollectionState], bool]:
+def reached_ice_castle(player: int, pyramid_pred, threshold: int, req_classes: int) -> Callable[[CollectionState], bool]:
     """Return whether or not the player has unlocked access to the Ice Castle stage yet."""
     return lambda state, _pl=player, _T=threshold, _keys=unlocks_by_region["Ice"], _p=pyramid_pred: (
         _p(state)
@@ -53,7 +53,7 @@ def reached_ice_castle(player, pyramid_pred, threshold, req_classes) -> Callable
         and class_count(state, _pl) >= req_classes
     )
 
-def reached_hell_castle(player, ice_castle_pred, threshold, req_classes) -> Callable[[CollectionState], bool]:
+def reached_hell_castle(player: int, ice_castle_pred, threshold: int, req_classes: int) -> Callable[[CollectionState], bool]:
     """Return whether or not the player has unlocked access to the Hell Castle stage yet."""
     return lambda state, _pl=player, _T=threshold, _keys=unlocks_by_region["Hell"], _i=ice_castle_pred: (
         _i(state)
@@ -62,15 +62,14 @@ def reached_hell_castle(player, ice_castle_pred, threshold, req_classes) -> Call
         and class_count(state, _pl) >= req_classes
     )
 
-def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) -> None:
+def set_region_rules(player: int, multiworld: MultiWorld, options: SROptions, boss_stage_reqs) -> None:
     """
     Sets region rules for every stage, except every stage before the Castle stage.
     This ensures players can beat the levels they unlock and make for a nice progression feeling.
     """
     castle_predicate: Callable[[CollectionState], bool] = reached_castle(
         player,
-        multiworld.random.randint(options.min_stages_req_for_castle,
-                                  max(options.min_stages_req_for_castle, options.max_stages_req_for_castle)),
+        options.stages_req_for_castle.value,
         boss_stage_reqs["Castle"]
         )
     set_rule(multiworld.get_entrance("Castle", player), castle_predicate)
@@ -78,10 +77,7 @@ def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) ->
     submarine_shrine_predicate: Callable[[CollectionState], bool] = reached_submarine_shrine(
         player,
         castle_predicate,
-        multiworld.random.randint(options.min_stages_req_for_submarine_shrine,
-                                  max(options.min_stages_req_for_submarine_shrine,
-                                      options.max_stages_req_for_submarine_shrine)
-                                 ),
+        options.stages_req_for_submarine_shrine.value,
         boss_stage_reqs["Submarine Shrine"]
         )
     set_rule(multiworld.get_entrance("Submarine Shrine", player), submarine_shrine_predicate)
@@ -89,8 +85,7 @@ def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) ->
     pyramid_predicate: Callable[[CollectionState], bool] = reached_pyramid(
         player,
         submarine_shrine_predicate,
-        multiworld.random.randint(options.min_stages_req_for_pyramid,
-                                  max(options.min_stages_req_for_pyramid, options.max_stages_req_for_pyramid)),
+        options.stages_req_for_pyramid.value,
         boss_stage_reqs["Pyramid"]
         )
     set_rule(multiworld.get_entrance("Pyramid", player), pyramid_predicate)
@@ -98,8 +93,7 @@ def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) ->
     ice_castle_predicate: Callable[[CollectionState], bool] = reached_ice_castle(
         player,
         pyramid_predicate,
-        multiworld.random.randint(options.min_stages_req_for_ice_castle,
-                                  max(options.min_stages_req_for_ice_castle, options.max_stages_req_for_ice_castle)),
+        options.stages_req_for_ice_castle.value,
         boss_stage_reqs["Ice Castle"]
         )
     set_rule(multiworld.get_entrance("Ice Castle", player), ice_castle_predicate)
@@ -107,8 +101,7 @@ def set_region_rules(player, multiworld, options: SROptions, boss_stage_reqs) ->
     hell_castle_predicate: Callable[[CollectionState], bool] = reached_hell_castle(
         player,
         ice_castle_predicate,
-        multiworld.random.randint(options.min_stages_req_for_hell_castle,
-                                  max(options.min_stages_req_for_hell_castle, options.max_stages_req_for_hell_castle)),
+        options.stages_req_for_hell_castle.value,
         boss_stage_reqs["Hell Castle"]
         )
     set_rule(multiworld.get_entrance("Hell Castle", player), hell_castle_predicate)
