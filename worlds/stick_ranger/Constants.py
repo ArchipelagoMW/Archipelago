@@ -1,4 +1,37 @@
-from typing import Dict, List
+from typing import Dict, List, Tuple
+
+STAGE_SETTINGS: List[Tuple[str, str, str, str]] = [
+    (
+        "castle",
+        "min_stages_req_for_castle",
+        "max_stages_req_for_castle",
+        "stages_req_for_castle"
+    ),
+    (
+        "submarine_shrine",
+        "min_stages_req_for_submarine_shrine",
+        "max_stages_req_for_submarine_shrine",
+        "stages_req_for_submarine_shrine"
+    ),
+    (
+        "pyramid",
+        "min_stages_req_for_pyramid",
+        "max_stages_req_for_pyramid",
+        "stages_req_for_pyramid"
+    ),
+    (
+        "ice_castle",
+        "min_stages_req_for_ice_castle",
+        "max_stages_req_for_ice_castle",
+        "stages_req_for_ice_castle"
+    ),
+    (
+        "hell_castle",
+        "min_stages_req_for_hell_castle",
+        "max_stages_req_for_hell_castle",
+        "stages_req_for_hell_castle"
+    )
+]
 
 ENEMIES_OPTION_NON_BOSS: int = 1
 ENEMIES_OPTION_BOSS: int = 2
