@@ -412,7 +412,7 @@ def get_unique_identifier():
     common_path = cache_path("common.json")
     if os.path.exists(common_path):
         with open(common_path) as f:
-            common_file = json.loads(f.read())
+            common_file = json.load(f)
             uuid = common_file.get("uuid", None)
     else:
         common_file = {}
