@@ -461,12 +461,18 @@ def create_region(
             victory_cache_locations += 1
         if world.options.required_tactics.value == world.options.required_tactics.option_any_units:
             if mission_needs_unit and not unit_given and location_data.type == easiest_category:
+                # Ensure there is at least one no-logic location if the first mission is a build mission
                 location = create_minimal_logic_location(world, location_data, region, location_cache, 0)
                 unit_given = True
             elif location_data.type == LocationType.MASTERY:
+                # Mastery locations always require max units regardless of position in the ramp
                 location = create_minimal_logic_location(world, location_data, region, location_cache, MAX_UNIT_REQUIREMENT)
             else:
-                location = create_minimal_logic_location(world, location_data, region, location_cache, min(slot.min_depth, MAX_UNIT_REQUIREMENT) + mission_needs_unit)
+                # Required number of units = mission depth; +1 if it's a starting build mission; +1 if it's a challenge location
+                location = create_minimal_logic_location(world, location_data, region, location_cache, min(
+                    slot.min_depth + mission_needs_unit + (location_data.type == LocationType.CHALLENGE),
+                    MAX_UNIT_REQUIREMENT
+                ))
         else:
             location = create_location(world.player, location_data, region, location_cache)
         region.locations.append(location)
