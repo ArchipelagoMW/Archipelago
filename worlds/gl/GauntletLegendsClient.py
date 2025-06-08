@@ -534,6 +534,8 @@ class GauntletLegendsContext(CommonContext):
         if cmd in {"Connected"}:
             self.glslotdata = args["slot_data"]
             self.players = self.glslotdata["players"]
+            if self.players is None:
+                self.players = 1
             self.deathlink_enabled = self.glslotdata["death_link"]
             self.update_death_link(self.deathlink_enabled)
             self.var_reset()
