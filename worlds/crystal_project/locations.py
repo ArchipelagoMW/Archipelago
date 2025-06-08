@@ -973,7 +973,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, logic.has_vertical_movement), #Potion chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, logic.has_vertical_movement and logic.has_horizontal_movement), #Z-Potion Pouch chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement or state.has("Item - Triton Stone", player)), #Ether chest
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement or logic.has_glide), #Frost Reaper chest
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, logic.has_vertical_movement or logic.has_glide), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement), #Potion Pouch chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #Radiance Northern Cave
@@ -986,7 +986,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData(TALL_TALL_HEIGHTS, "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, logic.has_vertical_movement and logic.has_glide), #(45, 215, -465) Overpass (Outpost) Scrap
         LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
         LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
-        LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset), #(191, 172, -437) (Underwater) Underpass Scrap chest
+        LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, logic.has_swimming), #(191, 172, -437) (Underwater) Underpass Scrap chest
 
 
         #NPCs
