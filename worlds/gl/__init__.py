@@ -53,6 +53,7 @@ class GLSettings(settings.Group):
 
         copy_to = "Gauntlet Legends (U) [!].z64"
         description = "Gauntlet Legends ROM File"
+        md5s = ["9cb963e8b71f18568f78ec1af120362e"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = False

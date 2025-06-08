@@ -20,8 +20,6 @@ from .Locations import location_data, GLLocation
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
 
-GL_HASH = "9cb963e8b71f18568f78ec1af120362e"
-
 
 def get_base_rom_as_bytes() -> bytes:
     """
@@ -34,15 +32,6 @@ def get_base_rom_as_bytes() -> bytes:
     except Exception:
         traceback.print_exc()
         raise Exception('Failed to read ROM file. Check file path and permissions.')
-
-    # Verify ROM hash
-    basemd5 = hashlib.md5()
-    basemd5.update(base_rom_bytes)
-    if GL_HASH != basemd5.hexdigest():
-        raise Exception('Supplied Base Rom does not match known MD5 for Gauntlet Legends USA release. '
-                        'Get the correct game and version, then dump it. '
-                        f'Expected: {GL_HASH}, Got: {basemd5.hexdigest()}')
-
     return base_rom_bytes
 
 
