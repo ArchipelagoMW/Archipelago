@@ -36,7 +36,7 @@ logger = logging.getLogger("PokemonGen3Adjuster")
 is_sprite_pack_valid = False
 is_patch_valid = False
 rom_version = "Emerald"
-object_folders = None
+object_folders = POKEMON_FOLDERS
 ap_rom: bytearray = None
 is_rom_ap: IntVar = None
 
@@ -256,6 +256,8 @@ def adjust_gui():
             pokemon_folder_object_info = find_folder_object_info("pokemon")
             object_folders = trainer_folder_object_info["folders"] + players_folder_object_info["folders"] \
                 + pokemon_folder_object_info["folders"]
+            if is_sprite_pack_valid:
+                detect_existing_folders(opts.sprite_pack.get())
             check_sprite_extraction("")
 
             # If the patch is valid, show the isAP checkbox, the Sprite Extractor
@@ -270,6 +272,16 @@ def adjust_gui():
             if is_sprite_pack_valid:
                 sprite_preview_frame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottom_frame.pack(side=TOP, pady=5)
+
+    def detect_existing_folders(sprite_pack: str):
+        # Detect existing object folders and list them
+        existing_folders: list[str] = []
+        for dir in os.listdir(sprite_pack):
+            if dir in object_folders:
+                existing_folders.append(dir)
+        nonlocal folders
+        folders = ["", *existing_folders]
+        folder_selector.set_completion_list(folders)
 
     def sprite_pack_select(_forced_sprite_pack: str = None, _forced_folder="", _forced_sprite=""):
         # Run when we ask for the user to select a sprite pack,
@@ -296,15 +308,7 @@ def adjust_gui():
             sprite_preview_frame.pack(side=TOP, expand=True, fill=X, pady=5)
             bottom_frame.pack(side=TOP, pady=5)
 
-            # Detect existing object folders and list them
-            existing_folders: list[str] = []
-            for dir in os.listdir(sprite_pack):
-                if dir in object_folders:
-                    existing_folders.append(dir)
-            nonlocal folders
-            folders = ["", *existing_folders]
-            folder_selector.set_completion_list(folders)
-
+            detect_existing_folders(sprite_pack)
         switch_sprite_folder(_forced_folder, _forced_sprite)
 
     global is_rom_ap

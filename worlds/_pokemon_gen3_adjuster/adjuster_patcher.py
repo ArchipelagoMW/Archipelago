@@ -135,13 +135,13 @@ def add_sprite_pack_object_collection(
 def add_sprite(_key: str, _object_name: str, _sprite_name: str, _extra_data: list[str], _path: str):
     # Adds a sprite to the patch
     sprite_key = f"{_key}_{_sprite_name}"
-    data_address, is_raw, data_object = get_address_from_address_collection(_object_name, sprite_key, _sprite_name)
+    data_address, is_raw, data_object = get_address_from_address_collection(_object_name, sprite_key, _sprite_name)[0]
 
     if _key == "pokemon" and _sprite_name == "icon" and _extra_data:
         # Pokemon palette indexed icon: Switch the palette to use if it"s forced within the file"s name
         palette_index = int(_extra_data[0])
         icon_index_address, _, _ = get_address_from_address_collection(_object_name, sprite_key + "_index",
-                                                                       _sprite_name)
+                                                                       _sprite_name)[0]
         add_data_to_patch({"address": icon_index_address, "length": 1, "data": palette_index.to_bytes(1, "little")})
 
     data_length = 0
@@ -169,7 +169,6 @@ def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: 
     palette_key = f"{_key}_{_palette_name}"
     if _object_name.startswith("Unown "):
         _object_name = "Unown A"
-    data_address, is_raw, data_object = get_address_from_address_collection(_object_name, palette_key, _palette_name)
     data_extended = False
     if is_overworld_sprite(palette_key) and _sprite_name != "reflection":
         # If trainer overworld sprite, the palette needs to be added to the palette list
@@ -186,23 +185,37 @@ def add_palette(_key: str, _object_name: str, _palette_name: str, _sprite_name: 
                                  extend_overworld_palette_table)
         sprite_key = f"{_key}_{_sprite_name}"
         reference_sprite_name: str = SPRITE_PIXEL_REFERENCE.get(_sprite_name, _sprite_name)
-        sprite_data_address, _, _ = get_address_from_address_collection(_object_name, sprite_key, reference_sprite_name)
+        sprite_data_address, _, _ = get_address_from_address_collection(_object_name, sprite_key,
+                                                                        reference_sprite_name)[0]
         replace_complex_sprite_palette(sprite_data_address, palette_key, new_id, data_extended)
+
+    data_address_infos = get_address_from_address_collection(_object_name, palette_key, _palette_name)
+    data_addresses = [data_address for data_address, _, _ in data_address_infos]
+    _, is_raw, _ = data_address_infos[0]
+    data_objects = [data_object for _, _, data_object in data_address_infos]
+
     if is_raw:
-        add_raw_resource(True, palette_key, data_address, _path)
+        add_raw_resource(True, palette_key, data_addresses[len(data_addresses) - 1], _path)
     else:
-        add_resource(True, palette_key, data_address, _path, data_object, not data_extended)
+        add_resource(True, palette_key, data_addresses, _path, data_objects, not data_extended)
 
 
-def add_resource(_is_palette: str, _key: str, _data_address: str, _path: str, _data_object: bytearray = None,
-                 _replace_address=True):
-    # Adds a resource (sprite or palette) to the patch and replaces its given pointer
+def add_resource(_is_palette: str, _key: str, _data_addresses: int | list[int], _path: str,
+                 _data_objects: bytearray | list[bytearray] = bytearray(), _replace_address=True):
+    # Adds a resource (sprite or palette) to the patch and replaces its given pointers
     if _replace_address:
-        address_bytes = resource_address_to_insert_to.to_bytes(3, "little")
-        if _data_object:
-            _data_object[_data_address:_data_address+3] = address_bytes
-        else:
-            add_data_to_patch({"address": _data_address, "length": 3, "data": address_bytes})
+        if type(_data_addresses) is int:
+            _data_addresses = [_data_addresses]
+        if type(_data_objects) is bytearray:
+            _data_objects = [_data_objects]
+        for i in range(len(_data_addresses)):
+            data_address = _data_addresses[i]
+            data_object = _data_objects[i]
+            address_bytes = resource_address_to_insert_to.to_bytes(3, "little")
+            if data_object:
+                data_object[data_address:data_address+3] = address_bytes
+            else:
+                add_data_to_patch({"address": data_address, "length": 3, "data": address_bytes})
     add_raw_resource(_is_palette, _key, resource_address_to_insert_to, _path)
 
 
@@ -247,7 +260,7 @@ def add_pokemon_data(_pokemon_name: str, _data_path="",
     # Replace the pokemon data as a whole
     pokemon_data = merge_pokemon_data(old_pokemon_data, new_pokemon_data, True)
     pokemon_data_bytes = encode_pokemon_data(pokemon_data)
-    data_address_stats, _, _ = get_address_from_address_collection(_pokemon_name, "pokemon_stats", "stats")
+    data_address_stats, _, _ = get_address_from_address_collection(_pokemon_name, "pokemon_stats", "stats")[0]
     add_data_to_patch({"address": data_address_stats, "length": 28, "data": pokemon_data_bytes})
 
     if "move_pool" in new_pokemon_data:
@@ -257,7 +270,7 @@ def add_pokemon_data(_pokemon_name: str, _data_path="",
         # Move pool data MUST be isolated in its own 16 byte blocks, or reading it WILL cause garbage code execution
         resource_address_to_insert_to = (((resource_address_to_insert_to - 1) >> 4) + 1) << 4
         data_pointer_move_pool, _, _ = get_address_from_address_collection(_pokemon_name, "pokemon_move_pool",
-                                                                           "move_pool")
+                                                                           "move_pool")[0]
         add_data_at_end(data_pointer_move_pool, pokemon_move_pool_bytes,
                         (((len(pokemon_move_pool_bytes) - 1) >> 4) + 1) << 4)
 
@@ -412,13 +425,13 @@ def replace_complex_sprite(_data_address: int, _sprite_key: str, _object_name: s
 
     if _sprite_key.endswith("battle_back_throw"):
         # Set the right animation for the battle back throwing animation
-        anim_data_address, _, _ = get_address_from_address_collection(_object_name, _sprite_key, "battle_throw_anim")
+        anim_data_address, _, _ = get_address_from_address_collection(_object_name, _sprite_key, "battle_throw_anim")[0]
         if sprite_frames == 4:
             new_anim_data_address, _, _ = get_address_from_address_collection(_object_name, _sprite_key,
-                                                                              "emerald_battle_throw_anim", True)
+                                                                              "emerald_battle_throw_anim", True)[0]
         else:
             new_anim_data_address, _, _ = get_address_from_address_collection(_object_name, _sprite_key,
-                                                                              "frlg_battle_throw_anim", True)
+                                                                              "frlg_battle_throw_anim", True)[0]
         add_data_to_patch({"address": anim_data_address, "length": 3,
                            "data": bytes(current_rom[new_anim_data_address:new_anim_data_address+3])})
     if is_overworld_sprite(_sprite_key):
@@ -442,7 +455,7 @@ def replace_complex_sprite_palette(_data_address: int, _palette_key: str, _new_i
         info_object_address = int.from_bytes(bytes(current_rom[_data_address:_data_address + 3]), "little")
         set_overworld_sprite_data(info_object_address, "palette_id", _new_id)
         if _palette_extended:
-            # If a palette has been added, change its palette slot so it doesn"t overlap with other object palettes
+            # If a palette has been added, change its palette slot so it doesn't overlap with other object palettes
             sprite_info = get_overworld_sprite_data(info_object_address, "sprite_info")
             sprite_info = (sprite_info >> 4 << 4) | 10  # Setting sprite to palette slot 10, expand if needed later
             set_overworld_sprite_data(info_object_address, "sprite_info", sprite_info)
@@ -518,7 +531,8 @@ def extract_sprites(_object_name: str, _output_path: str):
     def handle_sprite_extraction(_sprite_name: str):
         reference_sprite_name: str = SPRITE_PIXEL_REFERENCE.get(_sprite_name, _sprite_name)
         sprite_key = f"{folder_object_info['key']}_{reference_sprite_name}"
-        data_address, is_raw, _ = get_address_from_address_collection(_object_name, sprite_key, reference_sprite_name)
+        data_address, is_raw, _ = get_address_from_address_collection(_object_name, sprite_key,
+                                                                      reference_sprite_name)[0]
         if not is_raw:
             data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), "little")
 
@@ -586,7 +600,7 @@ def extract_sprite(_data_address: int, _sprite_key: str, _object_name: str, _pal
     if _palette_sprite_name == "icon":
         # Retrieve the icon's palette index and add it at the end of the file's name
         icon_index_address, _, _ = get_address_from_address_collection(_object_name, _sprite_key + "_index",
-                                                                       _object_name)
+                                                                       _object_name)[0]
         icon_index = int(current_rom[icon_index_address])
         sprite_palette: list[int] = VALID_ICON_PALETTES[icon_index]
         extra_sprite_name = f"-{int(icon_index)}"
@@ -613,7 +627,7 @@ def extract_palette(_object_name: str, _sprite_name: str, _key: str):
 
     sprite_requirements = get_sprite_requirements(sprite_key, _object_name)
     palette_size: int = sprite_requirements.get("palette_size", 16) * sprite_requirements.get("palettes", 1) * 2
-    data_address, is_raw, _ = get_address_from_address_collection(_object_name, palette_key, palette_name)
+    data_address, is_raw, _ = get_address_from_address_collection(_object_name, palette_key, palette_name)[0]
     if not is_raw:
         data_address = int.from_bytes(bytes(current_rom[data_address:data_address + 3]), "little")
 
@@ -822,7 +836,7 @@ def validate_sprite(_object_name: str, _sprite_name: str, _extra_data: list[str]
                 else:
                     # Icon palette ID must be retrieved from the ROM
                     icon_index_address, _, _ = get_address_from_address_collection(_object_name, sprite_key + "_index",
-                                                                                   _object_name)
+                                                                                   _object_name)[0]
                     palette_index = int.from_bytes(bytes(current_rom[icon_index_address]), "little")
                 if matching_palette_model:
                     palette_model = palette_model[palette_index]
@@ -1251,7 +1265,7 @@ def get_pokemon_data(_pokemon_name: str, _field=""):
         _pokemon_name = "Unown A"
     data_container_name = "move_pool" if _field == "move_pool" else "stats"
     data_key = f"pokemon_{data_container_name}"
-    data_address, _, _ = get_address_from_address_collection(_pokemon_name, data_key, data_container_name)
+    data_address, _, _ = get_address_from_address_collection(_pokemon_name, data_key, data_container_name)[0]
     if _field == "move_pool":
         # Move pools are given as pointers, so seek their value
         data_address = int.from_bytes(bytes(current_rom[data_address:data_address+3]), "little")
@@ -1518,9 +1532,8 @@ def get_bits_per_pixel_from_palette_size(_palette_size: int) -> int:
 
 
 def get_address_from_address_collection(_object_name: str, _resource_key: str, _resource_name: str,
-                                        _raw_key=False) -> tuple[int, bool, bytearray]:
-    # Returns a known address from the ROM's address collection, or if the pointer's data
-    # has been extracted for extension, returns the extracted object and its address shift instead
+                                        _raw_key=False) -> list[tuple[int, bool, bytearray]]:
+    # Returns known addresses from the ROM's address collection
 
     if _resource_key.startswith("pokemon_"):
         # Fetches internal Pokemon ID then resource address
@@ -1535,13 +1548,11 @@ def get_address_from_address_collection(_object_name: str, _resource_key: str, _
     else:
         address_name, shift, is_raw = INTERNAL_ID_TO_OBJECT_ADDRESS[_resource_name]
 
-    data_object: bytearray = {}
+    output: list[tuple[int, bool, bytearray]] = []
     if address_name in extended_data_dict_by_named_address:
-        address = shift
-        data_object = extended_data_dict_by_named_address[address_name]["data"]
-    else:
-        address = data_addresses[address_name] + shift
-    return address, is_raw, data_object
+        output.append((shift, is_raw, extended_data_dict_by_named_address[address_name]["data"]))
+    output.append((data_addresses[address_name] + shift, is_raw, bytearray()))
+    return output
 
 
 def get_overworld_sprite_addresses(_object_name: str, _resource_name: str):
