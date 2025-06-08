@@ -53,15 +53,37 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
         "levelGating": 1,
     }
 
+    def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):
+        self.collect_by_name("Item - Ibek Bell")
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
+
+    def test_poko_poko_connection_fails_with_level_cap_no_ibek(self):
+        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
+
+    def test_poko_poko_connection_succeeds_with_ibek_and_level_cap(self):
+        self.collect_by_name("Item - Ibek Bell")
+        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
+
     def test_tram_connection_fails_with_salmon_no_level_cap(self):
         self.collect_by_name("Item - Progressive Salmon Violin")
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_fails_with_level_cap_no_salmon(self):
+    def test_tram_connection_fails_with_quintar_no_level_cap(self):
+        self.collect_by_name(["Item - Progressive Quintar Flute", "Item - Progressive Quintar Flute","Item - Progressive Quintar Flute"])
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+
+    def test_tram_connection_fails_with_level_cap_no_swimming(self):
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_succeeds_with_salmon_and_level_cap(self):
         self.collect_by_name("Item - Progressive Salmon Violin")
+        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+
+    def test_tram_connection_succeeds_with_quintar_and_level_cap(self):
+        self.collect_by_name(["Item - Progressive Quintar Flute", "Item - Progressive Quintar Flute","Item - Progressive Quintar Flute"])
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
