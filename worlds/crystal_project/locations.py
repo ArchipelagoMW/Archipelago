@@ -577,7 +577,7 @@ def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, logic.has_horizontal_movement and logic.has_vertical_movement), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold on far end of the Tower of Zot", 2816 + npc_index_offset, logic.has_vertical_movement and logic.has_glide), #Ore
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset, logic.has_horizontal_movement), #Ore
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset), #Ore
         
         #Sara Sara Bazaar
         #Treasure chests
