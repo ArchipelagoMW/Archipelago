@@ -23,13 +23,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
 
     locations_per_region = get_locations_per_region(locations)
 
-    if (options.includedRegions == options.includedRegions.option_beginner or
-        options.includedRegions == options.includedRegions.option_advanced or
-        options.includedRegions == options.includedRegions.option_expert or
-        options.includedRegions == options.includedRegions.option_all):
-        excluded = False
-    else:
-        excluded = True
+    excluded = False
 
     beginner_regions = [
         create_region(world, player, locations_per_region, MENU, excluded),
@@ -162,7 +156,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3)})
     multiworld.get_region(YAMAGAWA_MA, player).add_exits([SPAWNING_MEADOWS, DELENDE, LAKE_DELENDE],
         {LAKE_DELENDE: lambda state: logic.is_area_in_level_range(state, 3)})
-    multiworld.get_region(PROVING_MEADOWS, player).add_exits([DELENDE, THE_PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA], 
+    multiworld.get_region(PROVING_MEADOWS, player).add_exits([DELENDE, THE_PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA],
         {SKUMPARADISE: lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 1),
         THE_OPEN_SEA: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(SKUMPARADISE, player).add_exits([PROVING_MEADOWS, CAPITAL_SEQUOIA],
@@ -174,14 +168,14 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5) and logic.is_area_in_level_range(state, 2),
         CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement and logic.has_glide and logic.is_area_in_level_range(state, 5),
         SKUMPARADISE: lambda state: logic.is_area_in_level_range(state, 1)})
-    multiworld.get_region(JOJO_SEWERS, player).add_exits([CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST], 
+    multiworld.get_region(JOJO_SEWERS, player).add_exits([CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST],
         {CAPITAL_JAIL: lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 2),
         THE_PALE_GROTTO: logic.has_swimming,
         QUINTAR_NEST: lambda state: (logic.has_rental_quintar or logic.has_swimming) and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region(BOOMER_SOCIETY, player).add_exits([JOJO_SEWERS, GREENSHIRE_REPRISE],
         {JOJO_SEWERS: lambda state: logic.is_area_in_level_range(state, 1),
         GREENSHIRE_REPRISE: lambda state: logic.is_area_in_level_range(state, 2)})
-    multiworld.get_region(ROLLING_QUINTAR_FIELDS, player).add_exits([CAPITAL_SEQUOIA, QUINTAR_NEST, QUINTAR_SANCTUM, QUINTAR_RESERVE], 
+    multiworld.get_region(ROLLING_QUINTAR_FIELDS, player).add_exits([CAPITAL_SEQUOIA, QUINTAR_NEST, QUINTAR_SANCTUM, QUINTAR_RESERVE],
         {QUINTAR_NEST: lambda state: logic.is_area_in_level_range(state, 1),
         QUINTAR_SANCTUM: lambda state: (logic.has_rental_quintar or logic.has_vertical_movement) and logic.is_area_in_level_range(state, 2),
         QUINTAR_RESERVE: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
@@ -198,7 +192,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(CAPITAL_PIPELINE, player).add_exits([CAPITAL_JAIL, JIDAMBA_TANGLE, CONTINENTAL_TRAM],
         {JIDAMBA_TANGLE: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 5),
         CONTINENTAL_TRAM: logic.has_vertical_movement})
-    multiworld.get_region(COBBLESTONE_CRAG, player).add_exits([CAPITAL_SEQUOIA, THE_OPEN_SEA, SHOUDU_WATERFRONT, OKIMOTO_NS], 
+    multiworld.get_region(COBBLESTONE_CRAG, player).add_exits([CAPITAL_SEQUOIA, THE_OPEN_SEA, SHOUDU_WATERFRONT, OKIMOTO_NS],
         {SHOUDU_WATERFRONT: logic.has_horizontal_movement,
         OKIMOTO_NS: lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
         THE_OPEN_SEA: lambda state: logic.has_swimming and logic.is_area_in_level_range(state, 5)})
@@ -209,14 +203,14 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
         {SALMON_PASS: lambda state: (logic.has_rental_quintar and logic.has_jobs(state, 5)) or logic.has_vertical_movement,
         TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
-    multiworld.get_region(SALMON_PASS, player).add_exits([GREENSHIRE_REPRISE, SALMON_RIVER, DELENDE], 
+    multiworld.get_region(SALMON_PASS, player).add_exits([GREENSHIRE_REPRISE, SALMON_RIVER, DELENDE],
         {GREENSHIRE_REPRISE: lambda state: (logic.has_horizontal_movement or logic.has_swimming) and logic.is_area_in_level_range(state, 2),
         SALMON_RIVER: lambda state: logic.has_horizontal_movement and logic.is_area_in_level_range(state, 2),
         DELENDE: logic.has_swimming})
-    multiworld.get_region(SALMON_RIVER, player).add_exits([SALMON_BAY, TALL_TALL_HEIGHTS], 
+    multiworld.get_region(SALMON_RIVER, player).add_exits([SALMON_BAY, TALL_TALL_HEIGHTS],
         {SALMON_BAY: (logic.has_vertical_movement and logic.has_glide) or logic.has_swimming,
         TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 4)})
-    multiworld.get_region(POKO_POKO_DESERT, player).add_exits([SARA_SARA_BAZAAR, ANCIENT_RESERVOIR, LAKE_DELENDE, SALMON_BAY, ANCIENT_LABYRINTH], 
+    multiworld.get_region(POKO_POKO_DESERT, player).add_exits([SARA_SARA_BAZAAR, ANCIENT_RESERVOIR, LAKE_DELENDE, SALMON_BAY, ANCIENT_LABYRINTH],
         {ANCIENT_RESERVOIR: lambda state: logic.has_key(state, PYRAMID_KEY) and logic.is_area_in_level_range(state, 3),
         LAKE_DELENDE: lambda state: logic.has_vertical_movement and logic.is_area_in_level_range(state, 3),
         SALMON_BAY: logic.has_horizontal_movement and logic.has_vertical_movement,
