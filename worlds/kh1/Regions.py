@@ -483,6 +483,8 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     for name, data in regions.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
 
+
+def connect_entrances(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Awakening", player).connect(multiworld.get_region("Awakening", player))
     multiworld.get_entrance("Destiny Islands", player).connect(multiworld.get_region("Destiny Islands", player))
     multiworld.get_entrance("Traverse Town", player).connect(multiworld.get_region("Traverse Town", player))
@@ -499,6 +501,7 @@ def create_regions(multiworld: MultiWorld, player: int, options):
     multiworld.get_entrance("100 Acre Wood", player).connect(multiworld.get_region("100 Acre Wood", player))
     multiworld.get_entrance("World Map", player).connect(multiworld.get_region("World Map", player))
     multiworld.get_entrance("Levels", player).connect(multiworld.get_region("Levels", player))
+
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: KH1RegionData):
     region = Region(name, player, multiworld)

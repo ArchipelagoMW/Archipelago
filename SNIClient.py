@@ -243,6 +243,9 @@ class SNIContext(CommonContext):
                 # Once the games handled by SNIClient gets made to be remote items,
                 # this will no longer be needed.
                 async_start(self.send_msgs([{"cmd": "LocationScouts", "locations": list(new_locations)}]))
+                
+        if self.client_handler is not None:
+            self.client_handler.on_package(self, cmd, args)
 
     def run_gui(self) -> None:
         from kvui import GameManager
@@ -732,6 +735,6 @@ async def main() -> None:
 
 
 if __name__ == '__main__':
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

@@ -9,7 +9,8 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
-component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
+component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"),
+                      description="A client for connecting to SNES consoles via Super Nintendo Interface.")
 components.append(component)
 
 
@@ -85,4 +86,8 @@ class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
 
     async def deathlink_kill_player(self, ctx: SNIContext) -> None:
         """ override this with implementation to kill player """
+        pass
+
+    def on_package(self, ctx: SNIContext, cmd: str, args: Dict[str, Any]) -> None:
+        """ override this with code to handle packages from the server """
         pass
