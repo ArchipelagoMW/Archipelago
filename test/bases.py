@@ -110,6 +110,8 @@ class WorldTestBase(unittest.TestCase):
     """The constructed MultiWorld instance after setup."""
     world: World
     """The constructed World instance after setup."""
+    state: CollectionState
+    """A base starting state created after setup. Performs a sweep collecting anything it can."""
     player: typing.ClassVar[int] = 1
 
     game: typing.ClassVar[str]
@@ -168,6 +170,8 @@ class WorldTestBase(unittest.TestCase):
             })
         self.multiworld.set_options(args)
         self.multiworld.state = CollectionState(self.multiworld)
+        # don't use the same state as multiworld.state is unsafe and needs to be phased out.
+        self.state = CollectionState(self.multiworld)
         self.world = self.multiworld.worlds[self.player]
         for step in gen_steps:
             call_all(self.multiworld, step)
