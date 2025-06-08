@@ -295,7 +295,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'vanilla_items_only': True,
             # Move the unit nerf items from the start inventory to the pool,
             # else this option could push non-vanilla items past this test
-            'nerf_unit_baselines': True,
+            'war_council_nerfs': True,
         }
 
         self.generate_world(world_options)
@@ -480,7 +480,7 @@ class TestItemFiltering(Sc2SetupTestBase):
                 SC2Campaign.LOTV.campaign_name
             },
             'mission_order': options.MissionOrder.option_grid,
-            'nerf_unit_baselines': options.NerfUnitBaselines.option_false,
+            'war_council_nerfs': options.WarCouncilNerfs.option_false,
         }
 
         self.generate_world(world_options)
@@ -491,7 +491,7 @@ class TestItemFiltering(Sc2SetupTestBase):
         starting_war_council_items = war_council_item_names.intersection(starting_inventory)
 
         self.assertTrue(itempool)
-        self.assertFalse(present_war_council_items, f'Found war council upgrades when nerf_unit_baselines is false: {present_war_council_items}')
+        self.assertFalse(present_war_council_items, f'Found war council upgrades when war_council_nerfs is false: {present_war_council_items}')
         self.assertEqual(war_council_item_names, starting_war_council_items)
 
     def test_disabling_speedrun_locations_removes_them_from_the_pool(self) -> None:

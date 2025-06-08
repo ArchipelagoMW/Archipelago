@@ -704,9 +704,9 @@ class EnableMorphling(Toggle):
     display_name = "Enable Morphling"
 
 
-class NerfUnitBaselines(Toggle):
+class WarCouncilNerfs(Toggle):
     """
-    Controls whether some units can initially be found in a nerfed state, with upgrades restoring their stronger power level.
+    Controls whether most Protoss units can initially be found in a nerfed state, with upgrades restoring their stronger power level.
     For example, nerfed Zealots will lack the whirlwind upgrade until it is found as an item.
     """
     display_name = "Allow Unit Nerfs"
@@ -1362,7 +1362,7 @@ class Starcraft2Options(PerGameCommonOptions):
     kerrigan_max_active_abilities: KerriganMaxActiveAbilities
     kerrigan_max_passive_abilities: KerriganMaxPassiveAbilities
     enable_morphling: EnableMorphling
-    nerf_unit_baselines: NerfUnitBaselines
+    war_council_nerfs: WarCouncilNerfs
     spear_of_adun_presence: SpearOfAdunPresence
     spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
     spear_of_adun_passive_ability_presence: SpearOfAdunPassiveAbilityPresence
@@ -1411,7 +1411,7 @@ option_groups = [
         GameSpeed,
         StarterUnit,
         RequiredTactics,
-        NerfUnitBaselines,
+        WarCouncilNerfs,
         DifficultyCurve,
     ]),
     OptionGroup("Primary Campaign Settings", [

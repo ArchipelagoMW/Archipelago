@@ -75,7 +75,7 @@ class SC2Logic:
         self.mission_order = MissionOrder.default if world is None else world.options.mission_order.value
         self.generic_upgrade_missions = 0 if world is None else world.options.generic_upgrade_missions.value
         self.all_in_map = AllInMap.option_ground if world is None else world.options.all_in_map.value
-        self.war_council_upgrades = True if world is None else not world.options.nerf_unit_baselines.value
+        self.war_council_upgrades = True if world is None else not world.options.war_council_nerfs.value
         self.base_power_rating = 2 if self.advanced_tactics else 0
 
         # Must be set externally for accurate logic checking of upgrade level when generic_upgrade_missions is checked
