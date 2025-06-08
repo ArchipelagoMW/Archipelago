@@ -262,6 +262,9 @@ class GauntletLegendsWorld(World):
             state.prog_items[item.player]["stones"] -= 1
         return change
 
+    def get_filler_item_name(self) -> str:
+        return self.random.choice(list(filter(lambda item: item.progression == ItemClassification.filler, item_list))).itemName
+
     def generate_output(self, output_directory: str) -> None:
         patch = GLProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
         write_files(self, patch)
