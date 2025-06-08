@@ -9,12 +9,12 @@ class TestSpawningMeadows(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_region(SPAWNING_MEADOWS))
 
     def test_region_connections_no_items(self):
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + DELENDE))
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + MERCURY_SHRINE))
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions=(DELENDE,), unreachable_regions=(MERCURY_SHRINE,POKO_POKO_DESERT,CONTINENTAL_TRAM,BEAURIOR_VOLCANO,YAMAGAWA_MA))
+
+class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
+    options = {
+        "levelGating": 0,
+    }
 
     def test_mercury_shrine_connection(self):
         self.collect_by_name("Item - Ibek Bell")
@@ -30,19 +30,20 @@ class TestSpawningMeadows(CrystalProjectTestBase):
         self.collect_by_name("Item - Progressive Salmon Violin")
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
+class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
+    options = {
+        "levelGating": 1,
+    }
+
     def test_tram_connection_fails_with_salmon_no_level_cap(self):
-        self.options["levelGating"] = 1
         self.collect_by_name("Item - Progressive Salmon Violin")
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_fails_with_level_cap_no_salmon(self):
-        self.options["levelGating"] = 1
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_succeeds_with_salmon_and_level_cap(self):
-        self.options["levelGating"] = 1
         self.collect_by_name("Item - Progressive Salmon Violin")
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-
