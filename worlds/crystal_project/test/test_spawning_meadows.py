@@ -12,6 +12,8 @@ class TestSpawningMeadows(CrystalProjectTestBase):
         self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions=(DELENDE,), unreachable_regions=(MERCURY_SHRINE,POKO_POKO_DESERT,CONTINENTAL_TRAM,BEAURIOR_VOLCANO,YAMAGAWA_MA))
 
 class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
+    run_default_tests = False
+
     options = {
         "levelGating": 0,
     }
@@ -45,6 +47,8 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
 class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
+    run_default_tests = False
+    
     options = {
         "levelGating": 1,
     }
