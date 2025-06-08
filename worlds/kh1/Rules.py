@@ -101,22 +101,6 @@ def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int
             or (logic_difficulty > 5 and state.has("High Jump", player, 2))
         )
 
-def has_phantom(state: CollectionState, player: int, logic_difficulty: int, keyblade_unlocking: bool) -> bool:
-    return (
-            state.has("Green Trinity", player)
-            and has_emblems(state, player, keyblade_unlocking, logic_difficulty)
-            and 
-            (
-                has_all_magic_lvx(state, player, 3)
-                or (logic_difficulty > 0 and has_all_magic_lvx(state, player, 2))
-                or (logic_difficulty > 5 and state.has_all({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Cure"}, player))
-                #or (logic_difficulty > 10 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1}, player) and state.has_any_count({"Progressive Fire": 1,"Progressive Thunder": 1}, player) and state.has_any_count({"Progressive Thunder": 1,"Progressive Blizzard": 1}, player))
-                #or (logic_difficulty > 12 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player))
-                or logic_difficulty > 14
-            )
-            and (state.has("Leaf Bracer", player) or logic_difficulty > 5)
-    )
-
 def has_parasite_cage(state: CollectionState, player: int, logic_difficulty: int, worlds: bool) -> bool:
     return (
             state.has("Monstro", player)
@@ -1563,7 +1547,27 @@ def set_rules(kh1world):
             ))
     if options.super_bosses or final_rest_door_requirement == "superbosses":
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
-            lambda state: (has_phantom(state, player, difficulty, options.keyblades_unlock_chests)))
+            lambda state: (
+                state.has("Green Trinity", player)
+                and has_emblems(state, player, keyblade_unlocking, difficulty)
+                and 
+                (
+                    has_all_magic_lvx(state, player, 3)
+                    or (difficulty > 0 and has_all_magic_lvx(state, player, 2))
+                    or (difficulty > 5 and state.has_all({"Progressive Fire", "Progressive Blizzard", "Progressive Thunder", "Progressive Stop"}, player))
+                    or
+                    (
+                        difficulty > 10 
+                        and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1}, player)
+                        and state.has_any_count({"Progressive Fire": 1,"Progressive Thunder": 1}, player)
+                        and state.has_any_count({"Progressive Thunder": 1,"Progressive Blizzard": 1}, player)
+                        and state.has("Progressive Stop", player)
+                    )
+                    #or (difficulty > 12 and state.has_any_count({"Progressive Fire": 1,"Progressive Blizzard": 1,"Progressive Thunder": 1}, player))
+                    #or difficulty > 14
+                )
+                and (state.has("Leaf Bracer", player) or difficulty > 5)
+            ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
