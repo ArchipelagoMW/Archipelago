@@ -19,7 +19,7 @@ boss_index_offset = 1000000
 shop_index_offset = 10000000
 #summon_index_offset = 1000000 Summons Todo
 
-def get_locations(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [

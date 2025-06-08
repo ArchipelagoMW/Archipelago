@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
 
-    def __init__(self, player: int, name: str = " ", address: int = None, parent=None):
+    def __init__(self, player: int, name: str = " ", address = None, parent=None):
         super().__init__(player, name, address, parent)
 
 def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
@@ -359,7 +359,6 @@ def create_region(world: "CrystalProjectWorld", player: int, locations_per_regio
 
 def create_location(player: int, location_data: LocationData, region: Region) -> Location:
     location = CrystalProjectLocation(player, location_data.name, location_data.code, region)
-    location.region = location_data.region
 
     if location_data.rule:
         location.access_rule = location_data.rule
@@ -367,13 +366,7 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
     return location
 
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
-    starting_region_list = {
-        0: MENU
-    }
-
     logic = CrystalProjectLogic(world.player, options)
-    world.starting_region = starting_region_list[0]
-    menu = world.multiworld.get_region(MENU, world.player)
     multiworld = world.multiworld
     multiworld.get_region(MENU, world.player).add_exits([SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD],
         {CAPITAL_SEQUOIA: lambda state: state.has("Item - Gaea Stone", world.player),
