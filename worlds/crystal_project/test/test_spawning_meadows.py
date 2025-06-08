@@ -20,15 +20,29 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
         self.collect_by_name("Item - Ibek Bell")
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + MERCURY_SHRINE))
 
-    def test_poko_poko_connection_no_level_gating(self):
-        self.options["levelGating"] = 0
+    def test_poko_poko_connection(self):
         self.collect_by_name("Item - Ibek Bell")
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
-    def test_tram_connection_no_level_gating(self):
-        self.options["levelGating"] = 0
+    def test_tram_connection(self):
         self.collect_by_name("Item - Progressive Salmon Violin")
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+
+    def test_volcano_connection(self):
+        self.collect_by_name("Item - Ibek Bell")
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
+
+    def test_yamagawa_connection_vertical_movement(self):
+        self.collect_by_name("Item - Ibek Bell")
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+
+    def test_yamagawa_connection_swimming_salmon(self):
+        self.collect_by_name("Item - Progressive Salmon Violin")
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+
+    def test_yamagawa_connection_swimming_quintar(self):
+        self.collect_by_name(["Item - Progressive Quintar Flute","Item - Progressive Quintar Flute","Item - Progressive Quintar Flute"])
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
 class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     options = {
