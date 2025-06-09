@@ -202,6 +202,7 @@ class LogicRegion:
     secret_notes = "Secret Notes"
     hat_mouse = "Hat Mouse"
     lost_items_shop = "Lost Items Shop"
+    garbage_cans = "Garbage Cans"
 
 
 

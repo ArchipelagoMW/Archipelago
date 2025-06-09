@@ -41,7 +41,7 @@ vanilla_regions: tuple[RegionData, ...] = (
                 Entrance.town_to_saloon, Entrance.town_to_alex_house, Entrance.town_to_trailer, Entrance.town_to_mayor_manor, Entrance.town_to_sam_house,
                 Entrance.town_to_haley_house, Entrance.town_to_sewer, Entrance.town_to_clint_blacksmith, Entrance.town_to_museum, Entrance.town_to_jojamart,
                 Entrance.purchase_movie_ticket, LogicEntrance.buy_experience_books, LogicEntrance.attend_egg_festival, LogicEntrance.attend_fair,
-                LogicEntrance.attend_spirit_eve, LogicEntrance.attend_winter_star)),
+                LogicEntrance.attend_spirit_eve, LogicEntrance.attend_winter_star, LogicEntrance.search_garbage_cans)),
     RegionData(RegionName.beach,
                (Entrance.beach_to_willy_fish_shop, Entrance.enter_elliott_house, Entrance.enter_tide_pools, LogicEntrance.attend_luau,
                 LogicEntrance.attend_moonlight_jellies, LogicEntrance.attend_night_market, LogicEntrance.attend_squidfest)),
@@ -201,6 +201,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(LogicRegion.bookseller_3),
     RegionData(LogicRegion.hat_mouse),
     RegionData(LogicRegion.lost_items_shop),
+    RegionData(LogicRegion.garbage_cans),
 )
 ginger_island_regions = (
     # This overrides the regions from vanilla... When regions are moved to content packs, overriding existing entrances should no longer be necessary.
@@ -457,6 +458,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.buy_experience_books, LogicRegion.bookseller_1),
     ConnectionData(LogicEntrance.buy_year1_books, LogicRegion.bookseller_2),
     ConnectionData(LogicEntrance.buy_year3_books, LogicRegion.bookseller_3),
+    ConnectionData(LogicEntrance.search_garbage_cans, LogicRegion.garbage_cans),
 )
 
 ginger_island_connections = (

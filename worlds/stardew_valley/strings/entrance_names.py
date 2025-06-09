@@ -244,6 +244,7 @@ class LogicEntrance:
     buy_from_raccoon = "Buy From Raccoon"
     fish_in_waterfall = "Fish In Waterfall"
     find_secret_notes = "Find Secret Notes"
+    search_garbage_cans = "Search Garbage Cans"
 
 
 # Skull Cavern Elevator
