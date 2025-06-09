@@ -145,11 +145,11 @@ item_table: Dict[str, ItemData] = {
     RAMPART_KEY: ItemData(KEY, 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     FORGOTTEN_KEY: ItemData(KEY, 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
     SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
-    PRISON_KEY_RING: ItemData(KEYRING, 501 + item_index_offset, ItemClassification.progression, 0, 1),
-    BEAURIOR_KEY_RING: ItemData(KEYRING, 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    ICE_PUZZLE_KEY_RING: ItemData(KEYRING, 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEYRING, 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    JIDAMBA_KEY_RING: ItemData(KEYRING, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    PRISON_KEY_RING: ItemData(KEY, 501 + item_index_offset, ItemClassification.progression, 0, 1),
+    BEAURIOR_KEY_RING: ItemData(KEY, 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    ICE_PUZZLE_KEY_RING: ItemData(KEY, 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_KEY_RING: ItemData(KEY, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
@@ -1526,35 +1526,35 @@ non_progressive_equipment: Tuple[str, ...] = (
 # )
 
 optional_scholar_abilities: Tuple[str, ...] = (
-    "Scholar - Roost",
-    "Scholar - Lucky Dice",
-    "Scholar - Sun Bath",
-    "Scholar - Sleep Aura",
-    "Scholar - Regenerate",
+    ROOST,
+    LUCKY_DICE,
+    SUN_BATH,
+    SLEEP_AURA,
+    REGENERATE,
     #"Scholar - Reverse Polarity" leaving this one always in the pool so you can merc Gran
-    "Scholar - Barrier",
-    "Scholar - MP Sickle",
-    "Scholar - Adrenaline",
-    "Scholar - Fire Breath",
-    "Scholar - Explode",
-    "Scholar - Whirlwind",
-    "Scholar - Atmoshear",
-    "Scholar - Build Life",
-    "Scholar - Aero",
-    "Scholar - Insult",
-    "Scholar - Infusion",
-    "Scholar - Overload",
-    "Scholar - Reflection",
-    "Scholar - Lifegiver"
+    BARRIER,
+    MP_SICKLE,
+    ADRENALINE,
+    FIRE_BREATH,
+    EXPLODE,
+    WHIRLWIND,
+    ATMOSHEAR,
+    BUILD_LIFE,
+    AERO,
+    INSULT,
+    INFUSION,
+    OVERlOAD,
+    REFLECTION,
+    LIFEGIVER
 )
 
 default_starting_job_list: List[Job] = [
-    Job("Job - Warrior", 0),
-    Job("Job - Monk", 5),
-    Job("Job - Rogue", 2),
-    Job("Job - Cleric", 4),
-    Job("Job - Wizard", 3),
-    Job("Job - Warlock", 14),
+    WARRIOR_JOB,
+    MONK_JOB,
+    ROGUE_JOB,
+    CLERIC_JOB,
+    WIZARD_JOB,
+    WARLOCK_JOB,
 ]
 
 job_list: List[Job] = [
@@ -1585,30 +1585,30 @@ job_list: List[Job] = [
 ]
 
 job_crystal_beginner_dictionary: Dict[str, str] = {
-    "Job - Fencer": "Pale Grotto Crystal - Fencer",
-    "Job - Shaman": "Draft Shaft Conduit Crystal - Shaman",
-    "Job - Scholar": "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar",
-    "Job - Aegis": "Skumparadise Crystal - Aegis",
+    FENCER_JOB: "Pale Grotto Crystal - Fencer",
+    SHAMAN_JOB: "Draft Shaft Conduit Crystal - Shaman",
+    SCHOLAR_JOB: "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar",
+    AEGIS_JOB: "Skumparadise Crystal - Aegis",
 }
 
 job_crystal_advanced_dictionary: Dict[str, str] = {
-    "Job - Hunter": "Quintar Nest Crystal - Hunter",
-    "Job - Chemist": "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)",
-    "Job - Reaper": "Capital Jail Crystal - Reaper, above hell pool",
-    "Job - Ninja": "Okimoto N.S. Crystal - Ninja",
-    "Job - Nomad": "River Cats Ego Crystal - Appease the QuizFish Nomad",
-    "Job - Dervish": "Ancient Reservoir Crystal - Dervish",
-    "Job - Beatsmith": "Capital Sequoia Crystal - Beatsmith",
+    HUNTER_JOB: "Quintar Nest Crystal - Hunter",
+    CHEMIST_JOB: "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)",
+    REAPER_JOB: "Capital Jail Crystal - Reaper, above hell pool",
+    NINJA_JOB: "Okimoto N.S. Crystal - Ninja",
+    NOMAD_JOB: "River Cats Ego Crystal - Appease the QuizFish Nomad",
+    DERVISH_JOB: "Ancient Reservoir Crystal - Dervish",
+    BEATSMITH_JOB: "Capital Sequoia Crystal - Beatsmith",
 }
 
 job_crystal_expert_dictionary: Dict[str, str] = {
-    "Job - Samurai": "Shoudu Province Crystal - Samurai for 3 Sky Arena wins",
-    "Job - Assassin": "The Undercity Crystal - Assassin",
-    "Job - Valkyrie": "Beaurior Volcano Crystal - Valkyrie",
-    "Job - Summoner": "Slip Glide Ride Crystal - Summoner",
-    "Job - Beastmaster": "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
-    "Job - Weaver": "Jidamba Eaclaneya Crystal - Weaver",
-    "Job - Mimic": "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
+    SAMURAI_JOB: "Shoudu Province Crystal - Samurai for 3 Sky Arena wins",
+    ASSASSIN_JOB: "The Undercity Crystal - Assassin",
+    VALKYRIE_JOB: "Beaurior Volcano Crystal - Valkyrie",
+    SUMMONER_JOB: "Slip Glide Ride Crystal - Summoner",
+    BEASTMASTER_JOB: "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
+    WEAVER_JOB: "Jidamba Eaclaneya Crystal - Weaver",
+    MIMIC_JOB: "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
 }
 
 filler_items: Tuple[str, ...] = (
