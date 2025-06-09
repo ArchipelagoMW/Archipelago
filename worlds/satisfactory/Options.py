@@ -504,7 +504,7 @@ option_presets: dict[str, dict[str, Any]] = {
         "goal_awesome_sink_points_total": 17804500, # 100 coupons
         "hard_drive_progression_limit": 20,
         "starting_inventory_preset": 3, # "Foundations"
-        "randomizer_starter_recipes": False,
+        "randomize_starter_recipes": False,
         "mam_logic_placement": int(Placement.starting_inventory),
         "awesome_logic_placement": int(Placement.starting_inventory),
         "energy_link_logic_placement": int(Placement.starting_inventory),
