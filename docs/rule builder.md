@@ -141,6 +141,7 @@ The `And` and `Or` rules have a slightly different format:
 To define a custom format, override the `to_json` function:
 
 ```python
+@dataclasses.dataclass()
 class MyRule(Rule):
     def to_json(self) -> Any:
         return {
@@ -152,6 +153,7 @@ class MyRule(Rule):
 If your logic has been done in custom JSON first, you can define a `from_json` class method on your rules to parse it correctly:
 
 ```python
+@dataclasses.dataclass()
 class MyRule(Rule):
     @classmethod
     def from_json(cls, data: Any) -> Self:
@@ -165,7 +167,9 @@ Resolved rules have a default implementation for an `explain` message, which ret
 To implement a custom message with a custom rule, override the `explain` method on your `Resolved` class:
 
 ```python
+@dataclasses.dataclass()
 class MyRule(Rule):
+    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -175,3 +179,39 @@ class MyRule(Rule):
                 {"type": "text", "text": " tall to beat the game"},
             ]
 ```
+
+## Item dependencies
+
+If there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system.
+
+```python
+@dataclasses.dataclass()
+class MyRule(Rule):
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        item_name: str
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {self.item_name: {id(self)}}
+```
+
+The default `Has`, `HasAll`, and `HasAny` rules define this function already.
+
+## Indirect connections
+
+If your custom rule references other regions, it must define an `indirect_regions` function that returns a tuple of region names. These will be collected and indirect connections will be registered when you set this rule on an entrance.
+
+```python
+@dataclasses.dataclass()
+class MyRule(Rule):
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        region_name: str
+
+        @override
+        def indirect_regions(self) -> tuple[str, ...]:
+            return (self.region_name,)
+```
+
+The default `CanReachLocation` and `CanReachRegion` rules define this function already.

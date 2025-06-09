@@ -39,7 +39,7 @@ class Rule:
 
     def _passes_options(self, options: "CommonOptions") -> bool:
         """Tests if the given world options pass the requirements for this rule"""
-        for key, value in self.options:
+        for key, value in self.options.items():
             parts = key.split("__", maxsplit=1)
 
             option_name = parts[0]
