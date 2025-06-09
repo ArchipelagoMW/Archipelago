@@ -671,6 +671,11 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
 
     write_quizzes(world, patch)
 
+    if "WTW" in world.options.debug_options.value:
+        write_bytes(rom_addresses["Debug_WTW"], 0x18)
+    if "SelectInvFull" in world.options.debug_options.value:
+        write_bytes(rom_addresses["Debug_SelectInvFull"], [0, 0])
+
     for location in world.multiworld.get_locations(world.player):
         if location.party_data:
             for party in location.party_data:

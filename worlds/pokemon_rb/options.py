@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from Options import (PerGameCommonOptions, Toggle, Choice, Range, NamedRange, FreeText, TextChoice, DeathLink,
-                     ItemsAccessibility)
+                     ItemsAccessibility, OptionList, Visibility)
 
 
 class GameVersion(Choice):
@@ -915,6 +915,15 @@ class RandomizeMapMusic(Choice):
     option_chaos = 3
 
 
+class DebugOptions(OptionList):
+    """Debug options.
+    SelectInvFull: Hold select to have
+    WTW: Walk through walls. Careful not to walk out of bounds and crash the game!
+    """
+    valid_keys = {"SelectInvFull", "WTW"}
+    visibility = Visibility.spoiler
+
+
 @dataclass
 class PokemonRBOptions(PerGameCommonOptions):
     accessibility: ItemsAccessibility
@@ -1021,3 +1030,4 @@ class PokemonRBOptions(PerGameCommonOptions):
     randomize_pokemon_palettes: RandomizePokemonPalettes
     randomize_map_music: RandomizeMapMusic
     death_link: DeathLink
+    debug_options: DebugOptions
