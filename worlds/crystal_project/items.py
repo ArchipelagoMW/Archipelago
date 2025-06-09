@@ -1548,40 +1548,13 @@ optional_scholar_abilities: Tuple[str, ...] = (
     LIFEGIVER
 )
 
-default_starting_job_list: List[Job] = [
+default_starting_job_list: List[str] = [
     WARRIOR_JOB,
     MONK_JOB,
     ROGUE_JOB,
     CLERIC_JOB,
     WIZARD_JOB,
     WARLOCK_JOB,
-]
-
-job_list: List[Job] = [
-    Job("Job - Warrior", 0),
-    Job("Job - Monk", 5),
-    Job("Job - Rogue", 2),
-    Job("Job - Cleric", 4),
-    Job("Job - Wizard", 3),
-    Job("Job - Warlock", 14),
-    Job("Job - Fencer", 1),
-    Job("Job - Shaman", 8),
-    Job("Job - Scholar", 13),
-    Job("Job - Aegis", 10),
-    Job("Job - Hunter", 7),
-    Job("Job - Chemist", 17),
-    Job("Job - Reaper", 6),
-    Job("Job - Ninja", 18),
-    Job("Job - Nomad", 12),
-    Job("Job - Dervish", 11),
-    Job("Job - Beatsmith", 9),
-    Job("Job - Samurai", 20),
-    Job("Job - Assassin", 19),
-    Job("Job - Valkyrie", 15),
-    Job("Job - Summoner", 21),
-    Job("Job - Beastmaster", 23),
-    Job("Job - Weaver", 16),
-    Job("Job - Mimic", 22),
 ]
 
 job_crystal_beginner_dictionary: Dict[str, str] = {
@@ -1643,14 +1616,14 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
 
     return categories
 
-def get_starting_jobs(world: "CrystalProjectWorld") -> List[Job]:
+def get_starting_jobs(world: "CrystalProjectWorld") -> List[str]:
     if world.options.jobRando.value == world.options.jobRando.option_full:
         return get_random_starting_jobs(world, world.options.startingJobQuantity.value)
     else:
         return default_starting_job_list
 
-def get_random_starting_jobs(self, count:int) -> List[Job]:
-    return self.random.sample(job_list, count)
+def get_random_starting_jobs(self, count:int) -> List[str]:
+    return self.random.sample(list(self.item_name_groups[JOB]), count)
 
 def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
     job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too

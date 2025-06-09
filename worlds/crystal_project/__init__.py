@@ -7,7 +7,7 @@ from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, default_starting_job_list, job_list
+    set_jobs_at_default_locations, default_starting_job_list
 from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -60,7 +60,7 @@ class CrystalProjectWorld(World):
 
         self.starting_jobs = get_starting_jobs(self)
         for job in self.starting_jobs:
-            self.multiworld.push_precollected(self.create_item(job.name))
+            self.multiworld.push_precollected(self.create_item(job))
 
         if self.options.startWithTreasureFinder:
             self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
@@ -85,7 +85,7 @@ class CrystalProjectWorld(World):
         if self.options.jobRando.value == self.options.jobRando.option_none:
             jobs_earnable = set_jobs_at_default_locations(self)
         else:
-            jobs_earnable = len(job_list) - len(self.starting_jobs)
+            jobs_earnable = len(self.item_name_groups[JOB]) - len(self.starting_jobs)
 
         if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
@@ -148,7 +148,7 @@ class CrystalProjectWorld(World):
         excluded_items.add(HOME_POINT_STONE)
 
         for job in self.starting_jobs:
-            excluded_items.add(job.name)
+            excluded_items.add(job)
 
         if not self.options.levelGating:
             excluded_items.add(PROGRESSIVE_LEVEL_CAP)
@@ -323,7 +323,7 @@ class CrystalProjectWorld(World):
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
         for job in self.starting_jobs:
-            job_ids.append(job.id)
+            job_ids.append(self.item_name_to_id[job])
 
         return job_ids
 
