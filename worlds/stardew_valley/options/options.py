@@ -776,6 +776,14 @@ class Hatsanity(Choice):
     option_post_perfection = 7
 
 
+class IncludeEndgameLocations(Toggle):
+    """Whether to include, as locations, several very expensive things that are usually purchased during the end-game in vanilla.
+    Examples: Obelisks, Community Upgrades, Catalogues, etc"""
+    internal_name = "include_endgame_location"
+    display_name = "Include Endgame Locations"
+    default = Toggle.option_false
+
+
 class NumberOfMovementBuffs(Range):
     """Number of movement speed buffs to the player that exist as items in the pool.
     Each movement speed buff is a +25% multiplier that stacks additively"""
@@ -1062,6 +1070,7 @@ class StardewValleyOptions(PerGameCommonOptions):
     moviesanity: Moviesanity
     secretsanity: Secretsanity
     hatsanity: Hatsanity
+    include_endgame_locations: IncludeEndgameLocations
     exclude_ginger_island: ExcludeGingerIsland
     quick_start: QuickStart
     starting_money: StartingMoney
