@@ -38,7 +38,7 @@ rule = Or(
 )
 ```
 
-When assigning the rule you must use the `set_rule` helper added by the rule mixing to correctly resolve and register the rule.
+When assigning the rule you must use the `set_rule` helper added by the rule mixin to correctly resolve and register the rule.
 
 ```python
 self.set_rule(location_or_entrance, rule)
