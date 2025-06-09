@@ -136,6 +136,9 @@ class LocationTags(enum.Enum):
     EATSANITY_ARTISAN = enum.auto()
     EATSANITY_SHOP = enum.auto()
     EATSANITY_POISONOUS = enum.auto()
+    ENDGAME_LOCATIONS = enum.auto()
+    REQUIRES_FRIENDSANITY = enum.auto()
+    REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
