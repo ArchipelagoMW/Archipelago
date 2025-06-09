@@ -42,7 +42,10 @@ locations = {
     RegionNames.KAMIKI_VILLAGE: {
         "Kamiki Village - Chest After Mr.Orange Yokai Fight": LocData(7),
         "Kamiki Village - Buried Chest near Komuso": LocData(8, buried=1),
+
+        #FIXME: Move this to Kushi's House
         "Kamiki Village - Kushi's Gift":LocData(11, has_events=["Kamiki Village - Repair Kushi's Watermill"]),
+
         "Kamiki Village - Underwater Chest 1" :LocData(13, power_slash_level=1),
         "Kamiki Village - Underwater Chest 2" :LocData(14, power_slash_level=1)
     },

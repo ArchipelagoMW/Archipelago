@@ -76,6 +76,8 @@ okami_items = {
     ### As these disappear and respanw each time you transition, the best way to handle those would be to set the flag
     ### making them appear/respawn active, instead of giving them to the player
     ### at a potential place where they can't use them.
+    ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
+    ### I'm not sure how that's going to work with ER.
     ### TODO: Update their ids
     "Kushi's Sake" : ItemData(0x200, ItemClassification.progression),
 
