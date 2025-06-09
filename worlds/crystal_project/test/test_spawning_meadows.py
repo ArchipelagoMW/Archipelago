@@ -1,5 +1,6 @@
 from ..constants.regions import *
 from ..constants.key_items import *
+from ..constants.mounts import *
 from .bases import CrystalProjectTestBase
 
 class TestSpawningMeadows(CrystalProjectTestBase):
@@ -19,31 +20,31 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
     }
 
     def test_mercury_shrine_connection(self):
-        self.collect_by_name("Item - Ibek Bell")
+        self.collect_by_name(IBEK_BELL)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + MERCURY_SHRINE))
 
     def test_poko_poko_connection(self):
-        self.collect_by_name("Item - Ibek Bell")
+        self.collect_by_name(IBEK_BELL)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
     def test_tram_connection(self):
-        self.collect_by_name("Item - Progressive Salmon Violin")
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_volcano_connection(self):
-        self.collect_by_name("Item - Ibek Bell")
+        self.collect_by_name(IBEK_BELL)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
 
     def test_yamagawa_connection_vertical_movement(self):
-        self.collect_by_name("Item - Ibek Bell")
+        self.collect_by_name(IBEK_BELL)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_swimming_salmon(self):
-        self.collect_by_name("Item - Progressive Salmon Violin")
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_swimming_quintar(self):
-        self.collect_by_name(["Item - Progressive Quintar Flute","Item - Progressive Quintar Flute","Item - Progressive Quintar Flute"])
+        self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND,PROGRESSIVE_QUINTAR_WOODWIND,PROGRESSIVE_QUINTAR_WOODWIND])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
 class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
@@ -54,7 +55,7 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     }
 
     def test_tram_connection_fails_with_salmon_no_level_cap(self):
-        self.collect_by_name("Item - Progressive Salmon Violin")
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_fails_with_level_cap_no_salmon(self):
@@ -62,6 +63,6 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_succeeds_with_salmon_and_level_cap(self):
-        self.collect_by_name("Item - Progressive Salmon Violin")
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))

@@ -1,5 +1,8 @@
 from .options import CrystalProjectOptions
 from .constants.keys import *
+from .constants.key_items import *
+from .constants.mounts import *
+from .constants.teleport_stones import *
 from BaseClasses import CollectionState
 from typing import TYPE_CHECKING, Optional
 if TYPE_CHECKING:
@@ -80,41 +83,41 @@ class CrystalProjectLogic:
         clamshell_quantity = 3
         if self.options.goal.value == self.options.goal.option_clamshells:
             clamshell_quantity = self.options.clamshellGoalQuantity.value
-        return state.has("Item - Clamshell", self.player, clamshell_quantity)
+        return state.has(CLAMSHELL, self.player, clamshell_quantity)
 
     def has_rental_quintar(self, state: CollectionState) -> bool:
-        return state.has("Item - Progressive Quintar Flute", self.player) or state.has("Item - Owl Drum", self.player)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(OWL_DRUM, self.player)
 
     def has_horizontal_movement(self, state: CollectionState) -> bool:
-        return state.has("Item - Progressive Quintar Flute", self.player, 2) or state.has("Item - Owl Drum", self.player)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 2) or state.has(OWL_DRUM, self.player)
 
     def has_vertical_movement(self, state: CollectionState) -> bool:
-        return state.has("Item - Ibek Bell", self.player)
+        return state.has(IBEK_BELL, self.player)
 
     def has_glide(self, state: CollectionState) -> bool: 
-        return state.has("Item - Owl Drum", self.player) or state.has("Item - Progressive Quintar Flute", self.player, 3)
+        return state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
 
     def has_swimming(self, state: CollectionState) -> bool:
-        return state.has("Item - Progressive Salmon Violin", self.player) or state.has("Item - Progressive Quintar Flute", self.player, 3)
+        return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
 
     def has_golden_quintar(self, state: CollectionState) -> bool:
-        return state.has("Item - Progressive Quintar Flute", self.player, 3)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
 
     def new_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
             return self.has_jobs(state, self.options.newWorldStoneJobQuantity.value)    
         else:
-            return state.has("Item - New World Stone", self.player)
+            return state.has(NEW_WORLD_STONE, self.player)
 
     def old_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_true_astley:
-            return self.has_swimming(state) and state.has("Item - Deity Eye", self.player, 4) and state.has("Item - STEM WARD", self.player)
+            return self.has_swimming(state) and state.has(DEITY_EYE, self.player, 4) and state.has(STEM_WARD, self.player)
         else:
-            return state.has("Item - Old World Stone", self.player)
+            return state.has(OLD_WORLD_STONE, self.player)
 
     def is_area_in_level_range(self, state: CollectionState, count: int) -> bool:
         if self.options.levelGating:
-            return state.has("Item - Progressive Level Cap", self.player, count)
+            return state.has(PROGRESSIVE_LEVEL_CAP, self.player, count)
         return True
 
     #has_key is for: Luxury Key, Gardeners Key, All Wing Keys, Cell Keys, Room One Key, Small Keys, Boss Key, Red Door Keys,

@@ -1,6 +1,9 @@
 import logging
+from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
+from .constants.regions import *
+from .constants.teleport_stones import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, job_list
@@ -52,14 +55,14 @@ class CrystalProjectWorld(World):
         self.statically_placed_jobs:int = 0
 
     def generate_early(self):
-        self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
+        self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
 
         self.starting_jobs = get_starting_jobs(self)
         for job in self.starting_jobs:
             self.multiworld.push_precollected(self.create_item(job.name))
 
         if self.options.startWithTreasureFinder:
-            self.multiworld.push_precollected(self.create_item("Item - Treasure Finder"))
+            self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
 
         if self.options.startWithMaps:
             self.multiworld.push_precollected(self.create_item("Item - Spawning Meadows Map"))
@@ -207,16 +210,16 @@ class CrystalProjectWorld(World):
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
-        excluded_items.add("Item - Home Point Stone")
+        excluded_items.add(HOME_POINT_STONE)
 
         for job in self.starting_jobs:
             excluded_items.add(job.name)
 
         if not self.options.levelGating:
-            excluded_items.add("Item - Progressive Level Cap")
+            excluded_items.add(PROGRESSIVE_LEVEL_CAP)
 
         if self.options.startWithTreasureFinder:
-            excluded_items.add("Item - Treasure Finder")
+            excluded_items.add(TREASURE_FINDER)
 
         if self.options.startWithMaps:
             excluded_items.add("Item - Spawning Meadows Map")
@@ -289,11 +292,11 @@ class CrystalProjectWorld(World):
             excluded_items.add("Item - The Old World Map")
 
         if self.options.goal == self.options.goal.option_astley:
-            excluded_items.add("Item - New World Stone")
+            excluded_items.add(NEW_WORLD_STONE)
 
         if self.options.goal == self.options.goal.option_true_astley:
-            excluded_items.add("Item - New World Stone")
-            excluded_items.add("Item - Old World Stone")
+            excluded_items.add(NEW_WORLD_STONE)
+            excluded_items.add(OLD_WORLD_STONE)
 
         if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
             excluded_items.add("Summon - Shaku")
@@ -425,14 +428,14 @@ class CrystalProjectWorld(World):
 
         if self.options.levelGating:
             for _ in range (self.options.levelUpsInPool):
-                item = self.set_classifications("Item - Progressive Level Cap")
+                item = self.set_classifications(PROGRESSIVE_LEVEL_CAP)
                 pool.append(item)
 
         if self.options.goal.value == self.options.goal.option_true_astley:
             for _ in range(4):
-                item = self.set_classifications("Item - Deity Eye")
+                item = self.set_classifications(DEITY_EYE)
                 pool.append(item)
-            item = self.set_classifications("Item - STEM WARD")
+            item = self.set_classifications(STEM_WARD)
             pool.append(item)
 
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
@@ -443,7 +446,7 @@ class CrystalProjectWorld(World):
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         for _ in range(self.get_total_clamshells(max_clamshells)):
-            item = self.set_classifications("Item - Clamshell")
+            item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
@@ -462,15 +465,15 @@ class CrystalProjectWorld(World):
         logic = CrystalProjectLogic(self.player, self.options)
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
-            win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
+            win_condition_item = NEW_WORLD_STONE # todo should this still be here if we auto-hand you the stone?
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-            self.included_regions.append("The New World")
+            self.included_regions.append(THE_NEW_WORLD)
         elif self.options.goal == self.options.goal.option_true_astley:
-            win_condition_item = "Item - Old World Stone"
+            win_condition_item = OLD_WORLD_STONE
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements
-            self.included_regions.append("The Old World")
+            self.included_regions.append(THE_OLD_WORLD)
         elif self.options.goal == self.options.goal.option_clamshells:
-            win_condition_item = "Item - Clamshell"
+            win_condition_item = CLAMSHELL
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellGoalQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
