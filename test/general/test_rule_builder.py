@@ -2,6 +2,8 @@ import unittest
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
+from typing_extensions import override
+
 from Options import Choice, PerGameCommonOptions, Toggle
 from rule_builder import And, False_, Has, HasAll, HasAny, Or, Rule, RuleWorldMixin
 from test.general import setup_solo_multiworld
@@ -80,6 +82,7 @@ class TestOptions(unittest.TestCase):
     multiworld: "MultiWorld"
     world: "RuleBuilderWorld"
 
+    @override
     def setUp(self) -> None:
         self.multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
         self.world = self.multiworld.worlds[1]  # type: ignore
