@@ -213,13 +213,10 @@ def process_pokemon_locations(self):
             if static_placed_mons[mon]:
                 if mon in poke_data.evolves_to:
                     evolutions_needed.append(poke_data.evolves_to[mon])
-                    print(f"Evolution needed: {poke_data.evolves_to[mon]}")
                 else:
                     placed_mons[mon] += 1
         static_exclusives = [mon for mon in static_placed_mons if static_placed_mons[mon]]
-        print(f"All statics: {static_exclusives}")
         static_exclusives = self.random.sample(static_exclusives, int(len(static_exclusives) * 0.75))
-        print(f"Chosen exclusive statics: {static_exclusives}")
         zone_mapping = {}
         zone_placed_mons = {}
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
