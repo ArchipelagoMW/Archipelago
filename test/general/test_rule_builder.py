@@ -4,6 +4,7 @@ from typing import ClassVar
 from rule_builder import And, Has, HasAll, HasAny, Or, Rule, RuleWorldMixin
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
+from worlds import network_data_package
 from worlds.AutoWorld import World
 
 
@@ -12,6 +13,9 @@ class RuleBuilderWorld(RuleWorldMixin, World):
     item_name_to_id = {}
     location_name_to_id = {}
     hidden = True
+
+
+network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data_package_data()
 
 
 @classvar_matrix(
