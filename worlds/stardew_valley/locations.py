@@ -15,7 +15,7 @@ from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity, Eatsanity
+from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -624,6 +624,22 @@ def extend_eatsanity_locations(randomized_locations: List[LocationData], options
     randomized_locations.extend(eatsanity_locations)
 
 
+def extend_endgame_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    if options.include_endgame_locations.value == IncludeEndgameLocations.option_false:
+        return
+
+    has_friendsanity_marriage = options.friendsanity == Friendsanity.option_all_with_marriage
+    has_friendsanity = (not has_friendsanity_marriage) and options.friendsanity != Friendsanity.option_none
+
+    endgame_locations = []
+    endgame_locations.extend(locations_by_tag[LocationTags.ENDGAME_LOCATIONS])
+
+    endgame_locations = [location for location in endgame_locations if LocationTags.REQUIRES_FRIENDSANITY_MARRIAGE not in location.tags or has_friendsanity_marriage]
+    endgame_locations = [location for location in endgame_locations if LocationTags.REQUIRES_FRIENDSANITY not in location.tags or has_friendsanity]
+    endgame_locations = filter_disabled_locations(options, content, endgame_locations)
+    randomized_locations.extend(endgame_locations)
+
+
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
@@ -676,6 +692,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_secrets_locations(randomized_locations, options, content)
     extend_hats_locations(randomized_locations, options, content)
     extend_eatsanity_locations(randomized_locations, options, content)
+    extend_endgame_locations(randomized_locations, options, content)
 
     # Mods
     extend_situational_quest_locations(randomized_locations, options, content)
