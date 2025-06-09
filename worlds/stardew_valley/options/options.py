@@ -779,7 +779,7 @@ class Hatsanity(Choice):
 class IncludeEndgameLocations(Toggle):
     """Whether to include, as locations, several very expensive things that are usually purchased during the end-game in vanilla.
     Examples: Obelisks, Community Upgrades, Catalogues, etc"""
-    internal_name = "include_endgame_location"
+    internal_name = "include_endgame_locations"
     display_name = "Include Endgame Locations"
     default = Toggle.option_false
 
