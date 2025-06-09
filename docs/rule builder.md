@@ -38,16 +38,25 @@ rule = Or(
 )
 ```
 
-When assigning the rule you must resolve the rule against the current world, and then assign the `.test` method as the `access_rule`.
+When assigning the rule you must use the `set_rule` helper added by the rule mixing to correctly resolve and register the rule.
 
 ```python
-resolved_rule = self.resolve_rule(rule)
-set_rule(location, resolved_rule.test)
+self.set_rule(location_or_entrance, rule)
 ```
 
 ## Restricting options
 
 Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is a dictionary of option name to expected value. If you want a comparison that isn't equals, you can add the operator name after a double underscore after the option name.
+
+The following operators are allowed:
+
+- `eq`: `==`
+- `ne`: `!=`
+- `gt`: `>`
+- `lt`: `<`
+- `ge`: `>=`
+- `le`: `<=`
+- `contains`: `in`
 
 To check if the player can reach a switch, or if they've receieved the switch item if switches are randomized:
 
@@ -147,4 +156,22 @@ class MyRule(Rule):
     @classmethod
     def from_json(cls, data: Any) -> Self:
         return cls(data.get("custom_logic"))
+```
+
+## Rule explanations
+
+Resolved rules have a default implementation for an `explain` message, which returns a list of `JSONMessagePart` appropriate for `print_json` in a client. It will display a human-readable message that explains what the rule requires.
+
+To implement a custom message with a custom rule, override the `explain` method on your `Resolved` class:
+
+```python
+class MyRule(Rule):
+    class Resolved(Rule.Resolved):
+        @override
+        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            return [
+                {"type": "text", "text": "You must be "},
+                {"type": "color", "color": "green", "text": "THIS"},
+                {"type": "text", "text": " tall to beat the game"},
+            ]
 ```

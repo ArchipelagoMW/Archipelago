@@ -3,14 +3,19 @@ import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Self
+from typing import TYPE_CHECKING, Any, ClassVar, Self, cast
 
-from worlds.AutoWorld import World
+from typing_extensions import override
+
+from BaseClasses import Entrance
 
 if TYPE_CHECKING:
-    from BaseClasses import CollectionState, Entrance, Item, MultiWorld
+    from BaseClasses import CollectionState, Item, Location, MultiWorld
     from NetUtils import JSONMessagePart
     from Options import CommonOptions, Option
+    from worlds.AutoWorld import World
+else:
+    World = object
 
 OPERATORS = {
     "eq": operator.eq,
@@ -25,7 +30,7 @@ OPERATORS = {
 
 @dataclasses.dataclass()
 class Rule:
-    """Base class for a static rule used to generate a"""
+    """Base class for a static rule used to generate an access rule"""
 
     options: dict[str, Any] = dataclasses.field(default_factory=dict, kw_only=True)
     """A mapping of option_name to value to restrict what options are required for this rule to be active.
@@ -36,11 +41,19 @@ class Rule:
         """Tests if the given world options pass the requirements for this rule"""
         for key, value in self.options:
             parts = key.split("__", maxsplit=1)
+
             option_name = parts[0]
+            opt = cast("Option[Any] | None", getattr(options, option_name, None))
+            if opt is None:
+                raise ValueError(f"Invalid option: {option_name}")
+
             operator = parts[1] if len(parts) > 1 else "eq"
-            opt: Option[Any] = getattr(options, option_name)
+            if operator not in OPERATORS:
+                raise ValueError(f"Invalid operator: {operator}")
+
             if not OPERATORS[operator](opt.value, value):
                 return False
+
         return True
 
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
@@ -58,7 +71,7 @@ class Rule:
             world.rule_ids[rule_hash] = instance
         return world.rule_ids[rule_hash]
 
-    def to_json(self) -> Any:
+    def to_json(self) -> Mapping[str, Any]:
         """Returns a JSON-serializable definition of this rule"""
         return {
             "rule": self.__class__.__name__,
@@ -66,9 +79,7 @@ class Rule:
         }
 
     @classmethod
-    def from_json(cls, data: Any) -> Self:
-        if not isinstance(data, Mapping):
-            raise ValueError("Invalid data format for parsed json")
+    def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(**data.get("args", {}))
 
     @dataclasses.dataclass(kw_only=True, frozen=True)
@@ -81,12 +92,13 @@ class Rule:
         cacheable: bool = dataclasses.field(repr=False, default=True)
         """If this rule should be cached in the state"""
 
-        always_true: ClassVar = False
+        always_true: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
 
-        always_false: ClassVar = False
+        always_false: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
 
+        @override
         def __hash__(self) -> int:
             return hash((self.__class__.__name__, *[getattr(self, f.name) for f in dataclasses.fields(self)]))
 
@@ -119,33 +131,42 @@ class Rule:
             return ()
 
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            """Returns a list of printJSON messages that explain the logic for this rule"""
             return [{"type": "text", "text": self.__class__.__name__}]
 
 
 @dataclasses.dataclass()
 class True_(Rule):
+    """A rule that always returns True"""
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
-        always_true = True
+        always_true: ClassVar[bool] = True
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return True
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [{"type": "color", "color": "green", "text": "True"}]
 
 
 @dataclasses.dataclass()
 class False_(Rule):
+    """A rule that always returns False"""
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
-        always_false = True
+        always_false: ClassVar[bool] = True
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return False
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [{"type": "color", "color": "salmon", "text": "False"}]
 
@@ -158,27 +179,29 @@ class NestedRule(Rule):
         super().__init__(options=options or {})
         self.children = children
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
         children = [c.resolve(world) for c in self.children]
         return self.Resolved(tuple(children), player=world.player).simplify()
 
-    def to_json(self) -> Any:
+    @override
+    def to_json(self) -> Mapping[str, Any]:
         return {
             "rule": self.__class__.__name__,
             "options": self.options,
             "children": [c.to_json() for c in self.children],
         }
 
+    @override
     @classmethod
-    def from_json(cls, data: Any) -> Self:
-        if not isinstance(data, Mapping):
-            raise ValueError("Invalid data format for parsed json")
+    def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(*data.get("children", []), options=data.get("options"))
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         children: "tuple[Rule.Resolved, ...]"
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             combined_deps: dict[str, set[int]] = {}
             for child in self.children:
@@ -189,6 +212,7 @@ class NestedRule(Rule):
                         combined_deps[item_name] = {id(self), *rules}
             return combined_deps
 
+        @override
         def indirect_regions(self) -> tuple[str, ...]:
             return tuple(itertools.chain.from_iterable(child.indirect_regions() for child in self.children))
 
@@ -200,12 +224,14 @@ class NestedRule(Rule):
 class And(NestedRule):
     @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
                 if not rule.test(state):
                     return False
             return True
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
             for i, child in enumerate(self.children):
@@ -215,10 +241,11 @@ class And(NestedRule):
             messages.append({"type": "text", "text": ")"})
             return messages
 
+        @override
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
-            items: set[str] = set()
+            items: dict[str, int] = {}
             true_rule: Rule.Resolved | None = None
 
             while children_to_process:
@@ -234,23 +261,30 @@ class And(NestedRule):
                     children_to_process.extend(child.children)
                     continue
 
-                if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.add(child.item_name)
+                if isinstance(child, Has.Resolved):
+                    if child.item_name not in items or items[child.item_name] < child.count:
+                        items[child.item_name] = child.count
                 elif isinstance(child, HasAll.Resolved):
-                    items.update(child.item_names)
+                    for item in child.item_names:
+                        if item not in items:
+                            items[item] = 1
                 else:
                     clauses.append(child)
 
             if not clauses and not items:
                 return true_rule or False_.Resolved(player=self.player)
-            if items:
-                if len(items) == 1:
-                    item_rule = Has.Resolved(items.pop(), player=self.player)
+
+            has_all_items: list[str] = []
+            for item, count in items.items():
+                if count == 1:
+                    has_all_items.append(item)
                 else:
-                    item_rule = HasAll.Resolved(tuple(items), player=self.player)
-                if not clauses:
-                    return item_rule
-                clauses.append(item_rule)
+                    clauses.append(Has.Resolved(item, count, player=self.player))
+
+            if len(has_all_items) == 1:
+                clauses.append(Has.Resolved(has_all_items[0], player=self.player))
+            elif len(has_all_items) > 1:
+                clauses.append(HasAll.Resolved(tuple(has_all_items), player=self.player))
 
             if len(clauses) == 1:
                 return clauses[0]
@@ -265,12 +299,14 @@ class And(NestedRule):
 class Or(NestedRule):
     @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
                 if rule.test(state):
                     return True
             return False
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
             for i, child in enumerate(self.children):
@@ -280,10 +316,11 @@ class Or(NestedRule):
             messages.append({"type": "text", "text": ")"})
             return messages
 
+        @override
         def simplify(self) -> "Rule.Resolved":
             children_to_process = list(self.children)
             clauses: list[Rule.Resolved] = []
-            items: set[str] = set()
+            items: dict[str, int] = {}
 
             while children_to_process:
                 child = children_to_process.pop(0)
@@ -297,23 +334,29 @@ class Or(NestedRule):
                     children_to_process.extend(child.children)
                     continue
 
-                if isinstance(child, Has.Resolved) and child.count == 1:
-                    items.add(child.item_name)
+                if isinstance(child, Has.Resolved):
+                    if child.item_name not in items or child.count < items[child.item_name]:
+                        items[child.item_name] = child.count
                 elif isinstance(child, HasAny.Resolved):
-                    items.update(child.item_names)
+                    for item in child.item_names:
+                        items[item] = 1
                 else:
                     clauses.append(child)
 
             if not clauses and not items:
                 return False_.Resolved(player=self.player)
-            if items:
-                if len(items) == 1:
-                    item_rule = Has.Resolved(items.pop(), player=self.player)
+
+            has_any_items: list[str] = []
+            for item, count in items.items():
+                if count == 1:
+                    has_any_items.append(item)
                 else:
-                    item_rule = HasAny.Resolved(tuple(items), player=self.player)
-                if not clauses:
-                    return item_rule
-                clauses.append(item_rule)
+                    clauses.append(Has.Resolved(item, count, player=self.player))
+
+            if len(has_any_items) == 1:
+                clauses.append(Has.Resolved(has_any_items[0], player=self.player))
+            elif len(has_any_items) > 1:
+                clauses.append(HasAny.Resolved(tuple(has_any_items), player=self.player))
 
             if len(clauses) == 1:
                 return clauses[0]
@@ -329,6 +372,7 @@ class Has(Rule):
     item_name: str
     count: int = 1
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.item_name, self.count, player=world.player)
 
@@ -337,12 +381,15 @@ class Has(Rule):
         item_name: str
         count: int = 1
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has(self.item_name, self.player, count=self.count)
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             return {self.item_name: {id(self)}}
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
             if self.count > 1:
@@ -363,8 +410,9 @@ class HasAll(Rule):
 
     def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
         super().__init__(options=options or {})
-        self.item_names = item_names
+        self.item_names = tuple(sorted(set(item_names)))
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
         if len(self.item_names) == 0:
             return True_().resolve(world)
@@ -376,12 +424,15 @@ class HasAll(Rule):
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has_all(self.item_names, self.player)
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             return {item: {id(self)} for item in self.item_names}
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [
                 {"type": "text", "text": "Has "},
@@ -405,8 +456,9 @@ class HasAny(Rule):
 
     def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
         super().__init__(options=options or {})
-        self.item_names = item_names
+        self.item_names = tuple(sorted(set(item_names)))
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
         if len(self.item_names) == 0:
             return True_().resolve(world)
@@ -418,12 +470,15 @@ class HasAny(Rule):
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has_any(self.item_names, self.player)
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             return {item: {id(self)} for item in self.item_names}
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [
                 {"type": "text", "text": "Has "},
@@ -442,6 +497,7 @@ class HasAny(Rule):
 class CanReachLocation(Rule):
     location_name: str
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         location = world.get_location(self.location_name)
         if not location.parent_region:
@@ -454,12 +510,15 @@ class CanReachLocation(Rule):
         parent_region_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_location(self.location_name, self.player)
 
+        @override
         def indirect_regions(self) -> tuple[str, ...]:
             return (self.parent_region_name,)
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Location "},
@@ -471,6 +530,7 @@ class CanReachLocation(Rule):
 class CanReachRegion(Rule):
     region_name: str
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.region_name, player=world.player)
 
@@ -479,12 +539,15 @@ class CanReachRegion(Rule):
         region_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_region(self.region_name, self.player)
 
+        @override
         def indirect_regions(self) -> tuple[str, ...]:
             return (self.region_name,)
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Region "},
@@ -496,6 +559,7 @@ class CanReachRegion(Rule):
 class CanReachEntrance(Rule):
     entrance_name: str
 
+    @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.entrance_name, player=world.player)
 
@@ -504,9 +568,11 @@ class CanReachEntrance(Rule):
         entrance_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
 
+        @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_entrance(self.entrance_name, self.player)
 
+        @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Entrance "},
@@ -514,7 +580,7 @@ class CanReachEntrance(Rule):
             ]
 
 
-class RuleWorldMixin(World if TYPE_CHECKING else object):
+class RuleWorldMixin(World):
     rule_ids: dict[int, Rule.Resolved]
     rule_dependencies: dict[str, set[int]]
 
@@ -526,17 +592,11 @@ class RuleWorldMixin(World if TYPE_CHECKING else object):
         self.rule_dependencies = defaultdict(set)
 
     @classmethod
-    def rule_from_json(cls, data: Any) -> "Rule":
-        if not isinstance(data, Mapping):
-            raise ValueError("Invalid data format for parsed json")
+    def rule_from_json(cls, data: Mapping[str, Any]) -> "Rule":
         name = data.get("rule", "")
-        if name not in DEFAULT_RULES and (
-            not getattr(cls, "custom_rule_classes", None) or name not in cls.custom_rule_classes
-        ):
+        if name not in DEFAULT_RULES and name not in getattr(cls, "custom_rule_classes", {}):
             raise ValueError("Rule not found")
-        rule_class = DEFAULT_RULES.get(name) or cls.custom_rule_classes[name]
-        if not issubclass(rule_class, Rule):
-            raise ValueError("Invalid rule")
+        rule_class = cls.custom_rule_classes[name] or DEFAULT_RULES.get(name)
         return rule_class.from_json(data)
 
     def resolve_rule(self, rule: "Rule") -> "Rule.Resolved":
@@ -549,20 +609,28 @@ class RuleWorldMixin(World if TYPE_CHECKING else object):
         for indirect_region in resolved_rule.indirect_regions():
             self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
+    def set_rule(self, spot: "Location | Entrance", rule: "Rule") -> None:
+        resolved_rule = self.resolve_rule(rule)
+        spot.access_rule = resolved_rule.test
+        if isinstance(spot, Entrance):
+            self.register_rule_connections(resolved_rule, spot)
+
+    @override
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().collect(state, item)
         if changed and getattr(self, "rule_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             for rule_id in self.rule_dependencies[item.name]:
-                player_results.pop(rule_id, None)
+                _ = player_results.pop(rule_id, None)
         return changed
 
+    @override
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().remove(state, item)
         if changed and getattr(self, "rule_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             for rule_id in self.rule_dependencies[item.name]:
-                player_results.pop(rule_id, None)
+                _ = player_results.pop(rule_id, None)
         return changed
 
 
