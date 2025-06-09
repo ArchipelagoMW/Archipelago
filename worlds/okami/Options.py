@@ -22,16 +22,23 @@ class BuriedChestsByNight(Toggle):
     display_name = "Buried chests by night"
     default = 1
 
+class StartWithDivineInstrument(Toggle):
+    """Start with a Divine Instrument"""
+    display_name = "Start with a Divine Instrument"
+    default = 1
 
 @dataclass
 class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
+    StartWithDivineInstrument:StartWithDivineInstrument
 
 
 okami_option_groups: Dict[str, List[Any]] = {
-    "General Options": [BuriedChestsByNight]
+    "General Options": [BuriedChestsByNight,StartWithDivineInstrument],
+
 }
 
 slot_data_options={
-    "BuriedChestsByNight"
+    "BuriedChestsByNight",
+    "StartWithDivineInstrument"
 }

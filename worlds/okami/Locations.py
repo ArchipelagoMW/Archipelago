@@ -2,7 +2,7 @@ from BaseClasses import Region, Location, ItemClassification
 from .Rules import apply_event_or_location_rules
 from .Types import LocData, BrushTechniques, OkamiLocation, OkamiItem
 from typing import Dict, TYPE_CHECKING
-from .RegionsData import r100, r122, r101, r102
+from .RegionsData import r100, r122, r101, r102, r103, rf01
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -23,13 +23,11 @@ def create_region_locations(reg: Region, world: "OkamiWorld"):
             location = OkamiLocation(world.player, location_name, location_data.id, reg)
             apply_event_or_location_rules(location, location_name, location_data, world)
             reg.locations.append(location)
-            print("Created Location " + location_name)
 
 
 def create_region_events(reg: Region, world: "OkamiWorld"):
     if reg.name in okami_events:
         for (event_name, event_data) in okami_events[reg.name].items():
-            print(event_data)
             if event_data.override_event_item_name:
                 event_location = create_event(event_name, event_data.override_event_item_name, reg, event_data, world)
             else:
@@ -60,12 +58,16 @@ okami_locations = {
     **r100.locations,
     **r122.locations,
     **r101.locations,
-    **r102.locations
+    **r102.locations,
+    **r103.locations,
+    **rf01.locations,
 }
 
 okami_events = {
     **r100.events,
     **r122.events,
     **r101.events,
-    **r102.events
+    **r102.events,
+    **r103.events,
+    **rf01.events,
 }

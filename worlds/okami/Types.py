@@ -32,10 +32,57 @@ class RegionNames(StrEnum):
     CAVE_OF_NAGI = "Cave of Nagi"
     CAVE_OF_NAGI_TACHIGAMI = "Cave of Nagi (Tachigami sequence)"
 
-    ## Kamiki Village Exteriors
+    ## Kamiki Village
+    ### Exteriors
     STONE_KAMIKI = "Kamiki Village (Stone state)"
     KAMIKI_VILLAGE = "Kamiki Village"
     KAMIKI_ISLANDS = "Kamiki Village Islands"
+
+    ### Interiors
+    KUSHIS_HOUSE = "Kushi's house"
+    SUSANOS_HOUSE = "Susano's house"
+    SUSANOS_UNDERGROUD = "Susano's Secret Underground Meditation Chamber"
+
+    ## Shinshu Field
+    CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
+
+    ## HANA VALLEY
+    CURSED_HANA_VALLEY = "Cursed Hana Valley"
+    HANA_VALLEY = "Hana Valley"
+
+
+class DivineInstrumentData(NamedTuple):
+    code: int
+    item_name: str
+    tier: int
+
+
+class DivineInstruments(Enum):
+    # MIRRORS
+    DIVINE_RETRIBUTION = DivineInstrumentData(0x10, "Divine Retribution", 1)
+    # SNARLING_BEAST = DivineInstrumentData(0x11, "Snarling Beast", 2)
+    # INFINITY_JUDGE = DivineInstrumentData(0x12, "Infinity Judge", 3)
+    # TRINITY_MIRROR = DivineInstrumentData(0x13, "Trinity Mirror", 4)
+    # SOLAR_FLARE = DivineInstrumentData(0x14, "Solar Flare", 5)
+
+    # ROSARIES
+    DEVOUT_BEADS = DivineInstrumentData(0x15, "Devout Beads", 1)
+    # LIFE_BEADS = DivineInstrumentData(0x16, "Life Beads", 2)
+    # EXORCISM_BEADS = DivineInstrumentData(0x17, "Exorcism Beads", 3)
+    # RESURRECTION_BEADS = DivineInstrumentData(0x18, "Resurrection Beads", 4)
+    # TUNDRA_BEADS = DivineInstrumentData(0x19, "Tundra Beads", 5)
+
+    # SWORDS
+    TSUMUGARI = DivineInstrumentData(0x1A, "Tsumugari", 1)
+
+    # SEVEN_STRIKE = DivineInstrumentData(0x1B, "Seven Strike", 2)
+    # BLADE_OF_KUSANAGI = DivineInstrumentData(0x1C, "Blade of Kusanagi", 3)
+    # EIGHT_WONDER = DivineInstrumentData(0x1D, "Eight Wonder", 4)
+    # THUNDER_EDGE = DivineInstrumentData(0x1E, "Thunder Edge", 5)
+
+    @staticmethod
+    def list():
+        return list(map(lambda d: d.value, DivineInstruments))
 
 
 class BrushTechniqueData(NamedTuple):
@@ -48,31 +95,49 @@ class BrushTechniqueData(NamedTuple):
 
 class BrushTechniques(Enum):
     # MAIN
-    SUNRISE = BrushTechniqueData(0x100, "Sunrise",item_classification=ItemClassification.progression)
-    REJUVENATION = BrushTechniqueData(0x101, "Rejuvenation",item_classification=ItemClassification.progression)
-    POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=1,item_classification=ItemClassification.progression)
-    #CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=3)
-    #GREENSPROUT_BLOOM = BrushTechniqueData(0x104, "Greensprout (Bloom)")
-    GREENSPROUT_WATERLILY = BrushTechniqueData(0x105, "Greensprout (Waterlily)",item_classification=ItemClassification.progression)
-    #GREENSPROUT_VINE = BrushTechniqueData(0x106, "Greensprout (Vine)")
-    #WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
-    CRESCENT = BrushTechniqueData(0x108, "Crescent",item_classification=ItemClassification.progression)
-    #GALESTROM = BrushTechniqueData(0x109, "Galestrom")
-    #INFERNO = BrushTechniqueData(0x110, "Inferno")
-    #VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
-    #CATWALK = BrushTechniqueData(0x112, "Cawalk")
-    #THUNDERSTORM = BrushTechniqueData(0x113, "Thunderstorm")
-    #BLIZZARD = BrushTechniqueData(0x114, "Blizzard")
+    SUNRISE = BrushTechniqueData(0x100, "Sunrise", item_classification=ItemClassification.progression)
+    REJUVENATION = BrushTechniqueData(0x101, "Rejuvenation", item_classification=ItemClassification.progression)
+    POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=1,
+                                     item_classification=ItemClassification.progression)
+    # CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=3)
+    GREENSPROUT_BLOOM = BrushTechniqueData(0x104, "Greensprout (Bloom)")
+    GREENSPROUT_WATERLILY = BrushTechniqueData(0x105, "Greensprout (Waterlily)",
+                                               item_classification=ItemClassification.progression)
+    # GREENSPROUT_VINE = BrushTechniqueData(0x106, "Greensprout (Vine)")
+    # WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
+    CRESCENT = BrushTechniqueData(0x108, "Crescent", item_classification=ItemClassification.progression)
+
+    # GALESTROM = BrushTechniqueData(0x109, "Galestrom")
+    # INFERNO = BrushTechniqueData(0x110, "Inferno")
+    # VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
+    # CATWALK = BrushTechniqueData(0x112, "Cawalk")
+    # THUNDERSTORM = BrushTechniqueData(0x113, "Thunderstorm")
+    # BLIZZARD = BrushTechniqueData(0x114, "Blizzard")
     ## UPGRADES/SECRET
-    #MIST_WARP = BrushTechniqueData(0x115, "Mist Warp")
-    #FIREBURST = BrushTechniqueData(0x116, "Fireburst")
-    #WHIRLWIND = BrushTechniqueData(0x117, "Whirlwind")
-    #DELUGE = BrushTechniqueData(0x118, "Deluge")
-    #FOUNTAIN = BrushTechniqueData(0x119, "Fountain")
-    #THUNDERBOLT = BrushTechniqueData(0x120, "Thunderbolt")
+    # MIST_WARP = BrushTechniqueData(0x115, "Mist Warp")
+    # FIREBURST = BrushTechniqueData(0x116, "Fireburst")
+    # WHIRLWIND = BrushTechniqueData(0x117, "Whirlwind")
+    # DELUGE = BrushTechniqueData(0x118, "Deluge")
+    # FOUNTAIN = BrushTechniqueData(0x119, "Fountain")
+    # THUNDERBOLT = BrushTechniqueData(0x120, "Thunderbolt")
     ## VERY SECRET ONE
     ## I think this is the only "optional" one, every other one is required at least to clear its tutorial ?
-    #ICESTORM = BrushTechniqueData(0x121, "Icestorm", item_classification=ItemClassification.filler)
+    # ICESTORM = BrushTechniqueData(0x121, "Icestorm", item_classification=ItemClassification.filler)
+
+    @staticmethod
+    def list():
+        return list(map(lambda b: b.value, BrushTechniques))
+
+class EnnemyData(NamedTuple):
+    code: int
+    name: str
+    required_weapon_tier: int
+    floral_finisher: BrushTechniques
+    required_techniques: List[BrushTechniques] = []
+
+class OkamiEnnemies(Enum):
+    GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
+    RED_IMP = EnnemyData(0x00, "Red Imp", 0, BrushTechniques.POWER_SLASH)
 
     @staticmethod
     def list():
@@ -85,17 +150,26 @@ class LocData(NamedTuple):
     power_slash_level: int = 0
     cherry_bomb_level: int = 0
     # 0 => No, 1=> Yes, 2=> Iron Claws
-    buried_chest: int = 0
+    buried: int = 0
+    has_events: [str] = []
+    required_items: [str] = []
+    mandatory_enemies: List[OkamiEnnemies] = []
 
 
 class EventData(NamedTuple):
-    id:int  = 0
+    id: int = 0
     required_brush_techniques: List[BrushTechniques] = []
     power_slash_level: int = 0
     cherry_bomb_level: int = 0
     # 0 => No, 1=> Yes, 2=> Iron Claws
-    buried_chest: int = 0
+    buried: int = 0
     override_event_item_name: str | None = None
+    has_events: [str] = []
+    required_items: [str] = []
+    mandatory_enemies: List[OkamiEnnemies] = []
+
+
+
 
 
 class ExitData(NamedTuple):

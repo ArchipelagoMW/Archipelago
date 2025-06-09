@@ -10,6 +10,7 @@ from CommonClient import CommonContext, gui_enabled, ClientCommandProcessor, log
 
 DEBUG = False
 
+# This is still the OG Hat in time client, haven't started looking into this yet
 
 class AHITJSONToTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):

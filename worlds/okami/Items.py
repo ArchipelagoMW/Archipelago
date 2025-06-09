@@ -1,6 +1,6 @@
 from BaseClasses import Item, ItemClassification
 from MultiServer import console
-from .Types import OkamiItem, ItemData, BrushTechniques, BrushTechniqueData
+from .Types import OkamiItem, ItemData, BrushTechniques, BrushTechniqueData, DivineInstrumentData, DivineInstruments
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -22,6 +22,15 @@ def create_brush_techniques_items(world: "OkamiWorld")-> List[Item]:
 
 def create_brush_technique_item(world: "OkamiWorld", data: BrushTechniqueData) -> Item:
     return OkamiItem(data.item_name, data.item_classification, data.code, world.player)
+
+def create_divine_instrument_items(world: "OkamiWorld")-> List[Item]:
+    items = []
+    for d in DivineInstruments.list():
+        items.append(create_divine_instrument_item(world, d))
+    return items
+
+def create_divine_instrument_item(world:"OkamiWorld", data:DivineInstrumentData) -> Item:
+    return OkamiItem(data.item_name, ItemClassification.progression,data.code,world.player)
 
 
 def create_multiple_items(world: "OkamiWorld", name: str, count: int = 1,
@@ -60,6 +69,15 @@ def get_item_name_to_id_dict() -> dict:
 okami_items = {
     # Equips
     "Water Tablet": ItemData(0x9c, ItemClassification.progression),
+
+    #Quest Items
+
+    ## "Biteable" Items
+    ### As these disappear and respanw each time you transition, the best way to handle those would be to set the flag
+    ### making them appear/respawn active, instead of giving them to the player
+    ### at a potential place where they can't use them.
+    ### TODO: Update their ids
+    "Kushi's Sake" : ItemData(0x200, ItemClassification.progression),
 
     # Other
     #"Astral Pouch": ItemData(0x06, ItemClassification.useful),

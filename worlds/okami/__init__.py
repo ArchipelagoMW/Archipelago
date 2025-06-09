@@ -1,45 +1,36 @@
+import random
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, item_frequencies, \
-    create_brush_techniques_items, get_item_name_to_id_dict
+    create_brush_techniques_items, get_item_name_to_id_dict, create_divine_instrument_items
 from .Regions import create_regions
 from .Locations import is_location_valid,get_total_locations, get_location_names
 from .Rules import set_rules
 from .Options import create_option_groups, OkamiOptions, slot_data_options
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List, Dict, TextIO
-from worlds.LauncherComponents import Component, components, icon_paths, launch as launch_component, Type
 from Utils import local_path
+from .Types import DivineInstruments, OkamiItem
 
-
-def launch_client():
-    from .Client import launch
-    launch_component(launch, name="AHITClient")
-
-
-components.append(Component("A Hat in Time Client", "AHITClient", func=launch_client,
-                            component_type=Type.CLIENT, icon='yatta'))
-
-icon_paths['yatta'] = local_path('data', 'yatta.png')
 
 
 # TODO: Replace
-class AWebInTime(WebWorld):
+class OkamiWebWolrd(WebWorld):
     theme = "partyTime"
     option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide for setting up A Hat in Time to be played in Archipelago.",
+        "A guide for setting up Okami HD to be played in Archipelago.",
         "English",
-        "ahit_en.md",
-        "setup/en",
-        ["CookieCat"]
+        "",
+        "",
+        [""]
     )]
 
 
 # TODO: Replace
 class OkamiWorld(World):
     """
-    OOOOOOOOOOKAMI
+    OKami HD
     """
 
     game = "Okami"
@@ -47,7 +38,7 @@ class OkamiWorld(World):
     location_name_to_id = get_location_names()
     options_dataclass = OkamiOptions
     options: OkamiOptions
-    web = AWebInTime()
+    web = OkamiWebWolrd()
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -93,8 +84,22 @@ class OkamiWorld(World):
     def create_itempool(world: "OkamiWorld") -> List[Item]:
         itempool: List[Item] = []
         itempool += create_brush_techniques_items(world)
+        itempool += create_divine_instrument_items(world)
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
         itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
+
+        if world.options.StartWithDivineInstrument:
+            # Get a random divine instrument.
+            di = random.choice(list(world.item_name_groups.get('divine_instrument')))
+            world.push_precollected(OkamiItem(di,ItemClassification.progression,0,world.player))
+
         return itempool
+
+    # Probably has to be a better way to do this.
+    item_name_groups = {
+            "divine_instrument":[DivineInstruments.DIVINE_RETRIBUTION.value.item_name,
+                                 DivineInstruments.DEVOUT_BEADS.value.item_name,
+                                 DivineInstruments.TSUMUGARI.value.item_name]
+    }
