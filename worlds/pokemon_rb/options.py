@@ -917,7 +917,8 @@ class RandomizeMapMusic(Choice):
 
 class DebugOptions(OptionList):
     """Debug options.
-    SelectInvFull: Hold select to have
+    SelectInvFull: Hold select to have AddItemToInventory fail and report inventory full when holding SELECT
+    (AddItemToInventory is not called when obtaining non-inventory items like AP_ITEM, badges, traps, etc.)
     WTW: Walk through walls. Careful not to walk out of bounds and crash the game!
     """
     valid_keys = {"SelectInvFull", "WTW"}
