@@ -6,6 +6,7 @@ from .rules import CrystalProjectLogic
 from .constants.keys import *
 from .constants.key_items import *
 from .constants.regions import *
+from .constants.teleport_stones import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
@@ -273,7 +274,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         QUINTAR_MAUSOLEUM: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(DIONE_SHRINE, player).add_exits([QUINTAR_RESERVE, EASTERN_CHASM, JIDAMBA_TANGLE, THE_CHALICE_OF_TAR],
         {JIDAMBA_TANGLE: lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 5),
-        THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and state.has("Item - Dione Stone", world.player) and logic.is_area_in_level_range(state, 5),
+        THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, world.player) and logic.is_area_in_level_range(state, 5),
         EASTERN_CHASM: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
     multiworld.get_region(QUINTAR_MAUSOLEUM, player).add_exits([QUINTAR_RESERVE, QUINTAR_SANCTUM],
         {QUINTAR_RESERVE: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 4),
@@ -369,15 +370,15 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
     logic = CrystalProjectLogic(world.player, options)
     multiworld = world.multiworld
     multiworld.get_region(MENU, world.player).add_exits([SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD],
-        {CAPITAL_SEQUOIA: lambda state: state.has("Item - Gaea Stone", world.player),
-        MERCURY_SHRINE: lambda state: state.has("Item - Mercury Stone", world.player),
-        SALMON_RIVER: lambda state: state.has("Item - Poseidon Stone", world.player),
-        POKO_POKO_DESERT: lambda state: state.has("Item - Mars Stone", world.player) and logic.is_area_in_level_range(state, 2),
-        GANYMEDE_SHRINE: lambda state: state.has("Item - Ganymede Stone", world.player),
-        DIONE_SHRINE: lambda state: state.has("Item - Dione Stone", world.player),
-        TALL_TALL_HEIGHTS: lambda state: state.has("Item - Triton Stone", world.player) and logic.is_area_in_level_range(state, 4),
-        LANDS_END: lambda state: state.has("Item - Callisto Stone", world.player) and logic.is_area_in_level_range(state, 4),
-        JIDAMBA_TANGLE: lambda state: state.has("Item - Europa Stone", world.player) and logic.is_area_in_level_range(state, 5),
-        NEPTUNE_SHRINE: lambda state: state.has("Item - Neptune Stone", world.player),
+        {CAPITAL_SEQUOIA: lambda state: state.has(GAEA_STONE, world.player),
+        MERCURY_SHRINE: lambda state: state.has(MERCURY_STONE, world.player),
+        SALMON_RIVER: lambda state: state.has(POSEIDON_STONE, world.player),
+        POKO_POKO_DESERT: lambda state: state.has(MARS_STONE, world.player) and logic.is_area_in_level_range(state, 2),
+        GANYMEDE_SHRINE: lambda state: state.has(GANYMEDE_STONE, world.player),
+        DIONE_SHRINE: lambda state: state.has(DIONE_STONE, world.player),
+        TALL_TALL_HEIGHTS: lambda state: state.has(TRITON_STONE, world.player) and logic.is_area_in_level_range(state, 4),
+        LANDS_END: lambda state: state.has(CALLISTO_STONE, world.player) and logic.is_area_in_level_range(state, 4),
+        JIDAMBA_TANGLE: lambda state: state.has(EUROPA_STONE, world.player) and logic.is_area_in_level_range(state, 5),
+        NEPTUNE_SHRINE: lambda state: state.has(NEPTUNE_STONE, world.player),
         THE_OLD_WORLD: lambda state: logic.old_world_requirements(state),
         THE_NEW_WORLD: lambda state: logic.new_world_requirements(state)})

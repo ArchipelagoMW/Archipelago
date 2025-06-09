@@ -1,6 +1,14 @@
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List, TYPE_CHECKING
 from BaseClasses import ItemClassification
+from .constants.item_groups import *
+from .constants.jobs import *
+from .constants.keys import *
 from .constants.key_items import *
+from .constants.maps import *
+from .constants.mounts import *
+from .constants.scholar_abilities import *
+from .constants.summons import *
+from .constants.teleport_stones import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
@@ -34,30 +42,30 @@ scholar_index_offset = 100001
 
 item_table: Dict[str, ItemData] = {
     #Jobs
-    "Job - Warrior": ItemData("Job", 0 + job_index_offset, ItemClassification.progression),
-    "Job - Monk": ItemData("Job", 5 + job_index_offset, ItemClassification.progression),
-    "Job - Rogue": ItemData("Job", 2 + job_index_offset, ItemClassification.progression),
-    "Job - Cleric": ItemData("Job", 4 + job_index_offset, ItemClassification.progression),
-    "Job - Wizard": ItemData("Job", 3 + job_index_offset, ItemClassification.progression),
-    "Job - Warlock": ItemData("Job", 14 + job_index_offset, ItemClassification.progression),
-    "Job - Fencer": ItemData("Job", 1 + job_index_offset, ItemClassification.progression),
-    "Job - Shaman": ItemData("Job", 8 + job_index_offset, ItemClassification.progression),
-    "Job - Scholar": ItemData("Job", 13 + job_index_offset, ItemClassification.progression), #requirement for Grans subbasement
-    "Job - Aegis": ItemData("Job", 10 + job_index_offset, ItemClassification.progression),
-    "Job - Hunter": ItemData("Job", 7 + job_index_offset, ItemClassification.progression),
-    "Job - Chemist": ItemData("Job", 17 + job_index_offset, ItemClassification.progression),
-    "Job - Reaper": ItemData("Job", 6 + job_index_offset, ItemClassification.progression),
-    "Job - Ninja": ItemData("Job", 18 + job_index_offset, ItemClassification.progression),
-    "Job - Nomad": ItemData("Job", 12 + job_index_offset, ItemClassification.progression),
-    "Job - Dervish": ItemData("Job", 11 + job_index_offset, ItemClassification.progression),
-    "Job - Beatsmith": ItemData("Job", 9 + job_index_offset, ItemClassification.progression),
-    "Job - Samurai": ItemData("Job", 20 + job_index_offset, ItemClassification.progression),
-    "Job - Assassin": ItemData("Job", 19 + job_index_offset, ItemClassification.progression),
-    "Job - Valkyrie": ItemData("Job", 15 + job_index_offset, ItemClassification.progression),
-    "Job - Summoner": ItemData("Job", 21 + job_index_offset, ItemClassification.progression), #Required for summon fights if we add them to locations; only job checked by NPCs
-    "Job - Beastmaster": ItemData("Job", 23 + job_index_offset, ItemClassification.progression),
-    "Job - Weaver": ItemData("Job", 16 + job_index_offset, ItemClassification.progression),
-    "Job - Mimic": ItemData("Job", 22 + job_index_offset, ItemClassification.progression),
+    WARRIOR_JOB: ItemData(JOB, 0 + job_index_offset, ItemClassification.progression),
+    MONK_JOB: ItemData(JOB, 5 + job_index_offset, ItemClassification.progression),
+    ROGUE_JOB: ItemData(JOB, 2 + job_index_offset, ItemClassification.progression),
+    CLERIC_JOB: ItemData(JOB, 4 + job_index_offset, ItemClassification.progression),
+    WIZARD_JOB: ItemData(JOB, 3 + job_index_offset, ItemClassification.progression),
+    WARLOCK_JOB: ItemData(JOB, 14 + job_index_offset, ItemClassification.progression),
+    FENCER_JOB: ItemData(JOB, 1 + job_index_offset, ItemClassification.progression),
+    SHAMAN_JOB: ItemData(JOB, 8 + job_index_offset, ItemClassification.progression),
+    SCHOLAR_JOB: ItemData(JOB, 13 + job_index_offset, ItemClassification.progression), #requirement for Grans subbasement
+    AEGIS_JOB: ItemData(JOB, 10 + job_index_offset, ItemClassification.progression),
+    HUNTER_JOB: ItemData(JOB, 7 + job_index_offset, ItemClassification.progression),
+    CHEMIST_JOB: ItemData(JOB, 17 + job_index_offset, ItemClassification.progression),
+    REAPER_JOB: ItemData(JOB, 6 + job_index_offset, ItemClassification.progression),
+    NINJA_JOB: ItemData(JOB, 18 + job_index_offset, ItemClassification.progression),
+    NOMAD_JOB: ItemData(JOB, 12 + job_index_offset, ItemClassification.progression),
+    DERVISH_JOB: ItemData(JOB, 11 + job_index_offset, ItemClassification.progression),
+    BEATSMITH_JOB: ItemData(JOB, 9 + job_index_offset, ItemClassification.progression),
+    SAMURAI_JOB: ItemData(JOB, 20 + job_index_offset, ItemClassification.progression),
+    ASSASSIN_JOB: ItemData(JOB, 19 + job_index_offset, ItemClassification.progression),
+    VALKYRIE_JOB: ItemData(JOB, 15 + job_index_offset, ItemClassification.progression),
+    SUMMONER_JOB: ItemData(JOB, 21 + job_index_offset, ItemClassification.progression), #Required for summon fights if we add them to locations; only job checked by NPCs
+    BEASTMASTER_JOB: ItemData(JOB, 23 + job_index_offset, ItemClassification.progression),
+    WEAVER_JOB: ItemData(JOB, 16 + job_index_offset, ItemClassification.progression),
+    MIMIC_JOB: ItemData(JOB, 22 + job_index_offset, ItemClassification.progression),
 
     #Consumables
     "Item - Tonic": ItemData("Item", 18 + item_index_offset, ItemClassification.filler, 0),
@@ -115,89 +123,89 @@ item_table: Dict[str, ItemData] = {
     "Item - Diamond Dust": ItemData("Item", 72 + item_index_offset, ItemClassification.useful, 0, 0, 18), #Used by Armorer in Tall Tall Heights and Weaponsmith in Jidamba Tangle, Expert Regions
 
     #Keys
-    "Item - Gardeners Key": ItemData("Item", 31 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Courtyard Key": ItemData("Item", 33 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia (Courtyard), Advanced Regions
-    "Item - Luxury Key": ItemData("Item", 36 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Cell Key": ItemData("Item", 40 + item_index_offset, ItemClassification.progression, 0, 7), #Turn-in: Capital Jail, Advanced Regions
-    "Item - South Wing Key": ItemData("Item", 41 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
-    "Item - East Wing Key": ItemData("Item", 42 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
-    "Item - West Wing Key": ItemData("Item", 43 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
-    "Item - Dark Wing Key": ItemData("Item", 44 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
-    "Item - Room 1 Key": ItemData("Item", 32 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Pyramid Key": ItemData("Item", 60 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Poko Poko Desert (unlocks Ancient Reservoir), Advanced Regions
-    "Item - Tram Key": ItemData("Item", 95 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Continental Tram (unlocks connection between Continental Tram and Sara Sara Bazaar), Expert Regions
-    "Item - Small Key": ItemData("Item", 29 + item_index_offset, ItemClassification.progression, 0, 0, 4), #Turn-in: Beaurior Rock, Expert Regions
-    "Item - Boss Key": ItemData("Item", 30 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Beaurior Rock, Expert Regions
-    "Item - Ice Cell Key": ItemData("Item", 156 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Northern Cave, Expert Regions
-    "Item - Red Door Key": ItemData("Item", 169 + item_index_offset, ItemClassification.progression, 0, 0, 3), #Turn-in: Slip Glide Ride, Expert Regions
-    "Item - Ice Puzzle Key": ItemData("Item", 160 + item_index_offset, ItemClassification.progression, 0, 0, 6), #Turn-in: Sequoia Athenaeum, Expert Regions
-    "Item - Foliage Key": ItemData("Item", 141 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
-    "Item - Cave Key": ItemData("Item", 118 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
-    "Item - Canopy Key": ItemData("Item", 116 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
-    "Item - Rampart Key": ItemData("Item", 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
-    "Item - Forgotten Key": ItemData("Item", 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
-    "Item - Skeleton Key": ItemData("Item", 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
-    "Item - Prison Key Ring": ItemData("Item", 501 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Beaurior Key Ring": ItemData("Item", 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Ice Puzzle Key Ring": ItemData("Item", 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Slip Glide Ride Key Ring": ItemData("Item", 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    "Item - Jidamba Key Ring": ItemData("Item", 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    GARDENERS_KEY: ItemData(KEY, 31 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia, Advanced Regions
+    COURTYARD_KEY: ItemData(KEY, 33 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia (Courtyard), Advanced Regions
+    LUXURY_KEY: ItemData(KEY, 36 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Sequoia, Advanced Regions
+    CELL_KEY: ItemData(KEY, 40 + item_index_offset, ItemClassification.progression, 0, 7), #Turn-in: Capital Jail, Advanced Regions
+    SOUTH_WING_KEY: ItemData(KEY, 41 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
+    EAST_WING_KEY: ItemData(KEY, 42 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
+    WEST_WING_KEY: ItemData(KEY, 43 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
+    DARK_WING_KEY: ItemData(KEY, 44 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Capital Jail, Advanced Regions
+    ROOM_ONE_KEY: ItemData(KEY, 32 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    PYRAMID_KEY: ItemData(KEY, 60 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Poko Poko Desert (unlocks Ancient Reservoir), Advanced Regions
+    TRAM_KEY: ItemData(KEY, 95 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Continental Tram (unlocks connection between Continental Tram and Sara Sara Bazaar), Expert Regions
+    SMALL_KEY: ItemData(KEY, 29 + item_index_offset, ItemClassification.progression, 0, 0, 4), #Turn-in: Beaurior Rock, Expert Regions
+    BEAURIOR_BOSS_KEY: ItemData(KEY, 30 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Beaurior Rock, Expert Regions
+    ICE_CELL_KEY: ItemData(KEY, 156 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Northern Cave, Expert Regions
+    RED_DOOR_KEY: ItemData(KEY, 169 + item_index_offset, ItemClassification.progression, 0, 0, 3), #Turn-in: Slip Glide Ride, Expert Regions
+    ICE_PUZZLE_KEY: ItemData(KEY, 160 + item_index_offset, ItemClassification.progression, 0, 0, 6), #Turn-in: Sequoia Athenaeum, Expert Regions
+    FOLIAGE_KEY: ItemData(KEY, 141 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    CAVE_KEY: ItemData(KEY, 118 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    CANOPY_KEY: ItemData(KEY, 116 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
+    RAMPART_KEY: ItemData(KEY, 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
+    FORGOTTEN_KEY: ItemData(KEY, 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
+    SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
+    PRISON_KEY_RING: ItemData(KEY, 501 + item_index_offset, ItemClassification.progression, 0, 1),
+    BEAURIOR_KEY_RING: ItemData(KEY, 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    ICE_PUZZLE_KEY_RING: ItemData(KEY, 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_KEY_RING: ItemData(KEY, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     #"Item - Quintar Pass": ItemData("Item", 7 + item_index_offset, ItemClassification.progression), (now part of Progressive Quintar Flute)
-    "Item - Progressive Luxury Pass": ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 0, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
+    PROGRESSIVE_LUXURY_PASS: ItemData("Item", 93 + item_index_offset, ItemClassification.progression, 0, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
     FERRY_PASS: ItemData("Item", 37 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
 
     #Key Items
-    "Item - Black Squirrel": ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Spawning Meadows, Beginner Regions
-    "Item - Dog Bone": ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Delende, Beginner Regions
+    BLACK_SQUIRREL: ItemData("Item", 21 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Spawning Meadows, Beginner Regions
+    DOG_BONE: ItemData("Item", 6 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Delende, Beginner Regions
     # Number of clamshells is set dynamically based on your Clamshells in pool variable
-    "Item - Clamshell": ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0), #Turn-in: Seaside Cliffs, Beginner Regions
-    "Item - Digested Head": ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 0, 3), #Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Lost Penguin": ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 0, 12), #Turn-in: Capital Sequoia, Advanced Regions
+    CLAMSHELL: ItemData("Item", 16 + item_index_offset, ItemClassification.progression, 0), #Turn-in: Seaside Cliffs, Beginner Regions
+    DIGESTED_HEAD: ItemData("Item", 17 + item_index_offset, ItemClassification.progression, 0, 3), #Turn-in: Capital Sequoia, Advanced Regions
+    LOST_PENGUIN: ItemData("Item", 24 + item_index_offset, ItemClassification.progression, 0, 12), #Turn-in: Capital Sequoia, Advanced Regions
     ELEVATOR_PART: ItemData("Item", 224 + item_index_offset, ItemClassification.progression, 0, 0, 10), #Turn-in: Shoudu Province, Expert Regions
-    "Item - Undersea Crab": ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 0, 0, 15), #Turn-in: The Deep Sea, Expert Regions
-    "Item - West Lookout Token": ItemData("Item", 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Central Lookout Token": ItemData("Item", 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - North Lookout Token": ItemData("Item", 131 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
-    "Item - Babel Quintar": ItemData("Item", 167 + item_index_offset, ItemClassification.progression), #Quintar shop!
+    UNDERSEA_CRAB: ItemData("Item", 212 + item_index_offset, ItemClassification.progression, 0, 0, 15), #Turn-in: The Deep Sea, Expert Regions
+    WEST_LOOKOUT_TOKEN: ItemData("Item", 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    CENTRAL_LOOKOUT_TOKEN: ItemData("Item", 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    NORTH_LOOKOUT_TOKEN: ItemData("Item", 131 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
+    BABEL_QUINTAR: ItemData("Item", 167 + item_index_offset, ItemClassification.progression), #Quintar shop!
     #"Item - Quintar Shedding": ItemData("Item", 168 + item_index_offset, ItemClassification.filler, 0), #12
-    "Item - Crag Demon Horn": ItemData("Item", 197 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Jojo Sewers, Advanced Regions
-    "Item - Vermillion Book": ItemData("Item", 172 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
-    "Item - Viridian Book": ItemData("Item", 173 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
-    "Item - Cerulean Book": ItemData("Item", 174 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
-    "Item - Ancient Tablet A": ItemData("Item", 161 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
-    "Item - Ancient Tablet B": ItemData("Item", 162 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
-    "Item - Ancient Tablet C": ItemData("Item", 163 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
-    "Item - Treasure Finder": ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
-    "Item - Progressive Level Cap": ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 0),
-    "Item - Special Shoudu Stew": ItemData("Item", 229 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Special Milk": ItemData("Item", 230 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Special Fresh Salmon": ItemData("Item", 231 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Special Rotten Salmon": ItemData("Item", 232 + item_index_offset, ItemClassification.progression, 0, 1),
-    "Item - Deity Eye": ItemData("Item", 176 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
-    "Item - STEM WARD": ItemData("Item", 177 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
+    CRAG_DEMON_HORN: ItemData("Item", 197 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Jojo Sewers, Advanced Regions
+    VERMILLION_BOOK: ItemData("Item", 172 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (unlocks Sequoia Athenaeum), Expert Regions
+    VIRIDIAN_BOOK: ItemData("Item", 173 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
+    CERULEAN_BOOK: ItemData("Item", 174 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Tall Tall Heights (Sequoia Athenaeum), Expert Regions
+    ANCIENT_TABLET_A: ItemData("Item", 161 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    ANCIENT_TABLET_B: ItemData("Item", 162 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    ANCIENT_TABLET_C: ItemData("Item", 163 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    TREASURE_FINDER: ItemData("Item", 196 + item_index_offset, ItemClassification.useful),
+    PROGRESSIVE_LEVEL_CAP: ItemData("Item", 500 + item_index_offset, ItemClassification.progression, 0),
+    SPECIAL_SHOUDU_STEW: ItemData("Item", 229 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_MILK: ItemData("Item", 230 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_FRESH_SALMON: ItemData("Item", 231 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_ROTTEN_SALMON: ItemData("Item", 232 + item_index_offset, ItemClassification.progression, 0, 1),
+    DEITY_EYE: ItemData("Item", 176 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
+    STEM_WARD: ItemData("Item", 177 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
 
     #Animal mount summons
-    "Item - Progressive Quintar Flute": ItemData("Item", 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
-    "Item - Ibek Bell": ItemData("Item", 50 + item_index_offset, ItemClassification.progression),
-    "Item - Owl Drum": ItemData("Item", 49 + item_index_offset, ItemClassification.progression),
-    "Item - Progressive Salmon Violin": ItemData("Item", 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
+    PROGRESSIVE_QUINTAR_WOODWIND: ItemData(MOUNT, 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
+    IBEK_BELL: ItemData(MOUNT, 50 + item_index_offset, ItemClassification.progression),
+    OWL_DRUM: ItemData(MOUNT, 49 + item_index_offset, ItemClassification.progression),
+    PROGRESSIVE_SALMON_VIOLA: ItemData(MOUNT, 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
 
     #Teleport items (shards not included since they are stones but worse)
-    "Item - Home Point Stone": ItemData("Item", 19 + item_index_offset, ItemClassification.useful), #Starter pack
-    "Item - Gaea Stone": ItemData("Item", 23 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Capital Sequoia, Advanced Regions
-    "Item - Mercury Stone": ItemData("Item", 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
-    "Item - Poseidon Stone": ItemData("Item", 57 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Salmon River, Advanced Regions
-    "Item - Mars Stone": ItemData("Item", 59 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Poko Poko Desert, Advanced Regions
-    "Item - Ganymede Stone": ItemData("Item", 65 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to above Shoudu Province, Expert Regions
-    "Item - Triton Stone": ItemData("Item", 66 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Tall Tall Heights, Expert Regions
-    "Item - Callisto Stone": ItemData("Item", 155 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Lands End, Expert Regions
-    "Item - Europa Stone": ItemData("Item", 64 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Jidamba Tangle, Expert Regions
-    "Item - Dione Stone": ItemData("Item", 166 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to above Quintar Reserve, Expert Regions
-    "Item - Neptune Stone": ItemData("Item", 208 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to The Deep Sea, Expert Regions
-    "Item - New World Stone": ItemData("Item", 140 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
-    "Item - Old World Stone": ItemData("Item", 253 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
+    HOME_POINT_STONE: ItemData(TELEPORT_STONE, 19 + item_index_offset, ItemClassification.useful), #Starter pack
+    GAEA_STONE: ItemData(TELEPORT_STONE, 23 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Capital Sequoia, Advanced Regions
+    MERCURY_STONE: ItemData(TELEPORT_STONE, 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
+    POSEIDON_STONE: ItemData(TELEPORT_STONE, 57 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Salmon River, Advanced Regions
+    MARS_STONE: ItemData(TELEPORT_STONE, 59 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Poko Poko Desert, Advanced Regions
+    GANYMEDE_STONE: ItemData(TELEPORT_STONE, 65 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to above Shoudu Province, Expert Regions
+    TRITON_STONE: ItemData(TELEPORT_STONE, 66 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Tall Tall Heights, Expert Regions
+    CALLISTO_STONE: ItemData(TELEPORT_STONE, 155 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Lands End, Expert Regions
+    EUROPA_STONE: ItemData(TELEPORT_STONE, 64 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Jidamba Tangle, Expert Regions
+    DIONE_STONE: ItemData(TELEPORT_STONE, 166 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to above Quintar Reserve, Expert Regions
+    NEPTUNE_STONE: ItemData(TELEPORT_STONE, 208 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to The Deep Sea, Expert Regions
+    NEW_WORLD_STONE: ItemData(TELEPORT_STONE, 140 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
+    OLD_WORLD_STONE: ItemData(TELEPORT_STONE, 253 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
 
     #Weapons
     #Swords
@@ -811,111 +819,111 @@ item_table: Dict[str, ItemData] = {
     "Equipment - Progressive Light Body": ItemData("Equipment", 621 + equipment_index_offset, ItemClassification.useful, 2, 3, 12, 3, 2, 5, 3, 0), # Light Body IDs [19], [20], 21, 81, 518, [216], 134, [108], 230, [174], [124], [123], [359], 357, [325], 360, 324, 349, [266], 337, 273, 319, 547, 549, 550, 551, 552, 553, 554, 555
 
     #Maps
-    "Item - Spawning Meadows Map": ItemData("Item", 73 + item_index_offset, ItemClassification.useful),
-    "Item - Delende Map": ItemData("Item", 74 + item_index_offset, ItemClassification.useful),
-    "Item - Pale Grotto Map": ItemData("Item", 75 + item_index_offset, ItemClassification.useful),
-    "Item - Seaside Cliffs Map": ItemData("Item", 76 + item_index_offset, ItemClassification.useful),
-    "Item - Draft Shaft Conduit Map": ItemData("Item", 77 + item_index_offset, ItemClassification.useful),
-    "Item - Proving Meadows Map": ItemData("Item", 78 + item_index_offset, ItemClassification.useful),
-    "Item - Soiled Den Map": ItemData("Item", 79 + item_index_offset, ItemClassification.useful),
-    "Item - Yamagawa M.A. Map": ItemData("Item", 80 + item_index_offset, ItemClassification.useful),
-    "Item - Skumparadise Map": ItemData("Item", 82 + item_index_offset, ItemClassification.useful),
-    "Item - Capital Courtyard Map": ItemData("Item", 83 + item_index_offset, ItemClassification.useful),
-    "Item - Capital Sequoia Map": ItemData("Item", 84 + item_index_offset, ItemClassification.useful),
-    "Item - Jojo Sewers Map": ItemData("Item", 85 + item_index_offset, ItemClassification.useful),
-    "Item - Greenshire Reprise Map": ItemData("Item", 86 + item_index_offset, ItemClassification.useful),
-    "Item - Mercury Shrine Map": ItemData("Item", 87 + item_index_offset, ItemClassification.useful),
-    "Item - Boomer Society Map": ItemData("Item", 89 + item_index_offset, ItemClassification.useful),
-    "Item - Rolling Quintar Fields Map": ItemData("Item", 90 + item_index_offset, ItemClassification.useful),
-    "Item - Quintar Nest Map": ItemData("Item", 92 + item_index_offset, ItemClassification.useful),
-    "Item - Capital Jail Map": ItemData("Item", 94 + item_index_offset, ItemClassification.useful),
-    "Item - Cobblestone Crag Map": ItemData("Item", 96 + item_index_offset, ItemClassification.useful),
-    "Item - Okimoto N.S. Map": ItemData("Item", 98 + item_index_offset, ItemClassification.useful),
-    "Item - Salmon Pass Map": ItemData("Item", 99 + item_index_offset, ItemClassification.useful),
-    "Item - Salmon River Map": ItemData("Item", 100 + item_index_offset, ItemClassification.useful),
-    "Item - Poseidon Shrine Map": ItemData("Item", 101 + item_index_offset, ItemClassification.useful),
-    "Item - Poko Poko Desert Map": ItemData("Item", 103 + item_index_offset, ItemClassification.useful),
-    "Item - Sara Sara Bazaar Map": ItemData("Item", 104 + item_index_offset, ItemClassification.useful),
-    "Item - Sara Sara Beach Map": ItemData("Item", 105 + item_index_offset, ItemClassification.useful),
-    "Item - Ancient Reservoir Map": ItemData("Item", 106 + item_index_offset, ItemClassification.useful),
-    "Item - Shoudu Province Map": ItemData("Item", 107 + item_index_offset, ItemClassification.useful),
-    "Item - The Undercity Map": ItemData("Item", 108 + item_index_offset, ItemClassification.useful),
-    "Item - Beaurior Volcano Map": ItemData("Item", 109 + item_index_offset, ItemClassification.useful),
-    "Item - Beaurior Rock Map": ItemData("Item", 110 + item_index_offset, ItemClassification.useful),
-    "Item - The Sequoia Map": ItemData("Item", 111 + item_index_offset, ItemClassification.useful),
-    "Item - Tall Tall Heights Map": ItemData("Item", 112 + item_index_offset, ItemClassification.useful),
-    "Item - Slip Glide Ride Map": ItemData("Item", 113 + item_index_offset, ItemClassification.useful),
-    "Item - Ganymede Shrine Map": ItemData("Item", 117 + item_index_offset, ItemClassification.useful),
-    "Item - Quintar Reserve Map": ItemData("Item", 119 + item_index_offset, ItemClassification.useful),
-    "Item - Quintar Sanctum Map": ItemData("Item", 120 + item_index_offset, ItemClassification.useful),
-    "Item - Lake Delende Map": ItemData("Item", 121 + item_index_offset, ItemClassification.useful),
-    "Item - Jidamba Tangle Map": ItemData("Item", 122 + item_index_offset, ItemClassification.useful),
-    "Item - Jidamba Eaclaneya Map": ItemData("Item", 123 + item_index_offset, ItemClassification.useful),
-    "Item - The Deep Sea Map": ItemData("Item", 124 + item_index_offset, ItemClassification.useful),
-    "Item - The New World Map": ItemData("Item", 125 + item_index_offset, ItemClassification.useful),
-    "Item - Continental Tram Map": ItemData("Item", 126 + item_index_offset, ItemClassification.useful),
-    "Item - Castle Ramparts Map": ItemData("Item", 127 + item_index_offset, ItemClassification.useful),
-    "Item - Salmon Bay Map": ItemData("Item", 128 + item_index_offset, ItemClassification.useful),
-    "Item - Lands End Map": ItemData("Item", 130 + item_index_offset, ItemClassification.useful),
-    "Item - Capital Pipeline Map": ItemData("Item", 170 + item_index_offset, ItemClassification.useful),
-    "Item - Northern Cave Map": ItemData("Item", 194 + item_index_offset, ItemClassification.useful),
-    "Item - The Depths Map": ItemData("Item", 195 + item_index_offset, ItemClassification.useful),
-    "Item - The Open Sea Map": ItemData("Item", 198 + item_index_offset, ItemClassification.useful),
-    "Item - Dione Shrine Map": ItemData("Item", 199 + item_index_offset, ItemClassification.useful),
-    "Item - Neptune Shrine Map": ItemData("Item", 206 + item_index_offset, ItemClassification.useful),
-    "Item - Castle Sequoia Map": ItemData("Item", 209 + item_index_offset, ItemClassification.useful),
-    "Item - Ancient Labyrinth Map": ItemData("Item", 210 + item_index_offset, ItemClassification.useful),
-    "Item - Quintar Mausoleum Map": ItemData("Item", 211 + item_index_offset, ItemClassification.useful),
-    "Item - Basement Map": ItemData("Item", 213 + item_index_offset, ItemClassification.useful),
-    "Item - Trial Caves Map": ItemData("Item", 214 + item_index_offset, ItemClassification.useful),
-    "Item - Overpass Map": ItemData("Item", 215 + item_index_offset, ItemClassification.useful),
-    "Item - Underpass Map": ItemData("Item", 216 + item_index_offset, ItemClassification.useful),
-    "Item - River Cats Ego Map": ItemData("Item", 217 + item_index_offset, ItemClassification.useful),
-    "Item - Northern Stretch Map": ItemData("Item", 218 + item_index_offset, ItemClassification.useful),
-    "Item - Eastern Chasm Map": ItemData("Item", 219 + item_index_offset, ItemClassification.useful),
-    "Item - Sequoia Athenaeum Map": ItemData("Item", 220 + item_index_offset, ItemClassification.useful),
-    "Item - The Chalice of Tar Map": ItemData("Item", 221 + item_index_offset, ItemClassification.useful),
-    "Item - Flyers Crag Map": ItemData("Item", 222 + item_index_offset, ItemClassification.useful),
-    "Item - Flyers Lookout Map": ItemData("Item", 223 + item_index_offset, ItemClassification.useful),
-    "Item - Jade Cavern Map": ItemData("Item", 228 + item_index_offset, ItemClassification.useful),
-    "Item - The Old World Map": ItemData("Item", 254 + item_index_offset, ItemClassification.useful),
+    SPAWNING_MEADOWS_MAP: ItemData(MAP, 73 + item_index_offset, ItemClassification.useful),
+    DELENDE_MAP: ItemData(MAP, 74 + item_index_offset, ItemClassification.useful),
+    THE_PALE_GROTTO_MAP: ItemData(MAP, 75 + item_index_offset, ItemClassification.useful),
+    SEASIDE_CLIFFS_MAP: ItemData(MAP, 76 + item_index_offset, ItemClassification.useful),
+    DRAFT_SHAFT_CONDUIT_MAP: ItemData(MAP, 77 + item_index_offset, ItemClassification.useful),
+    PROVING_MEADOWS_MAP: ItemData(MAP, 78 + item_index_offset, ItemClassification.useful),
+    SOILED_DEN_MAP: ItemData(MAP, 79 + item_index_offset, ItemClassification.useful),
+    YAMAGAWA_MA_MAP: ItemData(MAP, 80 + item_index_offset, ItemClassification.useful),
+    SKUMPARADISE_MAP: ItemData(MAP, 82 + item_index_offset, ItemClassification.useful),
+    CAPITAL_COURTYARD_MAP: ItemData(MAP, 83 + item_index_offset, ItemClassification.useful),
+    CAPITAL_SEQUOIA_MAP: ItemData(MAP, 84 + item_index_offset, ItemClassification.useful),
+    JOJO_SEWERS_MAP: ItemData(MAP, 85 + item_index_offset, ItemClassification.useful),
+    GREENSHIRE_REPRISE_MAP: ItemData(MAP, 86 + item_index_offset, ItemClassification.useful),
+    MERCURY_SHRINE_MAP: ItemData(MAP, 87 + item_index_offset, ItemClassification.useful),
+    BOOMER_SOCIETY_MAP: ItemData(MAP, 89 + item_index_offset, ItemClassification.useful),
+    ROLLING_QUINTAR_FIELDS_MAP: ItemData(MAP, 90 + item_index_offset, ItemClassification.useful),
+    QUINTAR_NEST_MAP: ItemData(MAP, 92 + item_index_offset, ItemClassification.useful),
+    CAPITAL_JAIL_MAP: ItemData(MAP, 94 + item_index_offset, ItemClassification.useful),
+    COBBLESTONE_CRAG_MAP: ItemData(MAP, 96 + item_index_offset, ItemClassification.useful),
+    OKIMOTO_NS_MAP: ItemData(MAP, 98 + item_index_offset, ItemClassification.useful),
+    SALMON_PASS_MAP: ItemData(MAP, 99 + item_index_offset, ItemClassification.useful),
+    SALMON_RIVER_MAP: ItemData(MAP, 100 + item_index_offset, ItemClassification.useful),
+    POSEIDON_SHRINE_MAP: ItemData(MAP, 101 + item_index_offset, ItemClassification.useful),
+    POKO_POKO_DESERT_MAP: ItemData(MAP, 103 + item_index_offset, ItemClassification.useful),
+    SARA_SARA_BAZAAR_MAP: ItemData(MAP, 104 + item_index_offset, ItemClassification.useful),
+    SARA_SARA_BEACH_MAP: ItemData(MAP, 105 + item_index_offset, ItemClassification.useful),
+    ANCIENT_RESERVOIR_MAP: ItemData(MAP, 106 + item_index_offset, ItemClassification.useful),
+    SHOUDU_PROVINCE_MAP: ItemData(MAP, 107 + item_index_offset, ItemClassification.useful),
+    THE_UNDERCITY_MAP: ItemData(MAP, 108 + item_index_offset, ItemClassification.useful),
+    BEAURIOR_VOLCANO_MAP: ItemData(MAP, 109 + item_index_offset, ItemClassification.useful),
+    BEAURIOR_ROCK_MAP: ItemData(MAP, 110 + item_index_offset, ItemClassification.useful),
+    THE_SEQUOIA_MAP: ItemData(MAP, 111 + item_index_offset, ItemClassification.useful),
+    TALL_TALL_HEIGHTS_MAP: ItemData(MAP, 112 + item_index_offset, ItemClassification.useful),
+    SLIP_GLIDE_RIDE_MAP: ItemData(MAP, 113 + item_index_offset, ItemClassification.useful),
+    GANYMEDE_SHRINE_MAP: ItemData(MAP, 117 + item_index_offset, ItemClassification.useful),
+    QUINTAR_RESERVE_MAP: ItemData(MAP, 119 + item_index_offset, ItemClassification.useful),
+    QUINTAR_SANCTUM_MAP: ItemData(MAP, 120 + item_index_offset, ItemClassification.useful),
+    LAKE_DELENDE_MAP: ItemData(MAP, 121 + item_index_offset, ItemClassification.useful),
+    JIDAMBA_TANGLE_MAP: ItemData(MAP, 122 + item_index_offset, ItemClassification.useful),
+    JIDAMBA_EACLANEYA_MAP: ItemData(MAP, 123 + item_index_offset, ItemClassification.useful),
+    THE_DEEP_SEA_MAP: ItemData(MAP, 124 + item_index_offset, ItemClassification.useful),
+    THE_NEW_WORLD_MAP: ItemData(MAP, 125 + item_index_offset, ItemClassification.useful),
+    CONTINENTAL_TRAM_MAP: ItemData(MAP, 126 + item_index_offset, ItemClassification.useful),
+    CASTLE_RAMPARTS_MAP: ItemData(MAP, 127 + item_index_offset, ItemClassification.useful),
+    SALMON_BAY_MAP: ItemData(MAP, 128 + item_index_offset, ItemClassification.useful),
+    LANDS_END_MAP: ItemData(MAP, 130 + item_index_offset, ItemClassification.useful),
+    CAPITAL_PIPELINE_MAP: ItemData(MAP, 170 + item_index_offset, ItemClassification.useful),
+    NORTHERN_CAVE_MAP: ItemData(MAP, 194 + item_index_offset, ItemClassification.useful),
+    THE_DEPTHS_MAP: ItemData(MAP, 195 + item_index_offset, ItemClassification.useful),
+    THE_OPEN_SEA_MAP: ItemData(MAP, 198 + item_index_offset, ItemClassification.useful),
+    DIONE_SHRINE_MAP: ItemData(MAP, 199 + item_index_offset, ItemClassification.useful),
+    NEPTUNE_SHRINE_MAP: ItemData(MAP, 206 + item_index_offset, ItemClassification.useful),
+    CASTLE_SEQUOIA_MAP: ItemData(MAP, 209 + item_index_offset, ItemClassification.useful),
+    ANCIENT_LABYRINTH_MAP: ItemData(MAP, 210 + item_index_offset, ItemClassification.useful),
+    QUINTAR_MAUSOLEUM_MAP: ItemData(MAP, 211 + item_index_offset, ItemClassification.useful),
+    BASEMENT_MAP: ItemData(MAP, 213 + item_index_offset, ItemClassification.useful),
+    TRIAL_CAVES_MAP: ItemData(MAP, 214 + item_index_offset, ItemClassification.useful),
+    OVERPASS_MAP: ItemData(MAP, 215 + item_index_offset, ItemClassification.useful),
+    UNDERPASS_MAP: ItemData(MAP, 216 + item_index_offset, ItemClassification.useful),
+    RIVER_CATS_EGO_MAP: ItemData(MAP, 217 + item_index_offset, ItemClassification.useful),
+    NORTHERN_STRETCH_MAP: ItemData(MAP, 218 + item_index_offset, ItemClassification.useful),
+    EASTERN_CHASM_MAP: ItemData(MAP, 219 + item_index_offset, ItemClassification.useful),
+    SEQUOIA_ATHENAEUM_MAP: ItemData(MAP, 220 + item_index_offset, ItemClassification.useful),
+    THE_CHALICE_OF_TAR_MAP: ItemData(MAP, 221 + item_index_offset, ItemClassification.useful),
+    FLYERS_CRAG_MAP: ItemData(MAP, 222 + item_index_offset, ItemClassification.useful),
+    FLYERS_LOOKOUT_MAP: ItemData(MAP, 223 + item_index_offset, ItemClassification.useful),
+    JADE_CAVERN_MAP: ItemData(MAP, 228 + item_index_offset, ItemClassification.useful),
+    THE_OLD_WORLD_MAP: ItemData(MAP, 254 + item_index_offset, ItemClassification.useful),
 
     #Currency
     #"Currency": ItemData("Currency", 0 + index_offset, ItemClassification.filler),
 
     #Summons
-    "Summon - Shaku": ItemData("Summon", 223 + summon_index_offset, ItemClassification.useful),
-    "Summon - Pamoa": ItemData("Summon", 224 + summon_index_offset, ItemClassification.useful),
-    "Summon - Guaba": ItemData("Summon", 225 + summon_index_offset, ItemClassification.useful),
-    "Summon - Niltsi": ItemData("Summon", 226 + summon_index_offset, ItemClassification.useful),
-    "Summon - Ioske": ItemData("Summon", 227 + summon_index_offset, ItemClassification.useful),
-    "Summon - Coyote": ItemData("Summon", 228 + summon_index_offset, ItemClassification.useful),
-    # "Summon - Pinga": ItemData("Summon", 230 + summon_index_offset, ItemClassification.useful), (commented out bc you start with Pinga as a summoner)
-    "Summon - Tira": ItemData("Summon", 231 + summon_index_offset, ItemClassification.useful),
-    "Summon - Juses": ItemData("Summon", 232 + summon_index_offset, ItemClassification.useful),
-    "Summon - Pah": ItemData("Summon", 234 + summon_index_offset, ItemClassification.useful),
+    SHAKU_SUMMON: ItemData(SUMMON, 223 + summon_index_offset, ItemClassification.useful),
+    PAMOA_SUMMON: ItemData(SUMMON, 224 + summon_index_offset, ItemClassification.useful),
+    GUABA_SUMMON: ItemData(SUMMON, 225 + summon_index_offset, ItemClassification.useful),
+    NILTSI_SUMMON: ItemData(SUMMON, 226 + summon_index_offset, ItemClassification.useful),
+    IOSKE_SUMMON: ItemData(SUMMON, 227 + summon_index_offset, ItemClassification.useful),
+    COYOTE_SUMMON: ItemData(SUMMON, 228 + summon_index_offset, ItemClassification.useful),
+    # PINGA_SUMMON: ItemData(SUMMON, 230 + summon_index_offset, ItemClassification.useful), (commented out bc you start with Pinga as a summoner)
+    TIRA_SUMMON: ItemData(SUMMON, 231 + summon_index_offset, ItemClassification.useful),
+    JUSES_SUMMON: ItemData(SUMMON, 232 + summon_index_offset, ItemClassification.useful),
+    PAH_SUMMON: ItemData(SUMMON, 234 + summon_index_offset, ItemClassification.useful),
 
     #Monster Abilities for Scholar
-    "Scholar - Roost": ItemData("Scholar", 25 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Lucky Dice": ItemData("Scholar", 70 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Sun Bath": ItemData("Scholar", 101 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Sleep Aura": ItemData("Scholar", 186 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Regenerate": ItemData("Scholar", 197 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Reverse Polarity": ItemData("Scholar", 198 + scholar_index_offset, ItemClassification.progression), #left in pool so you can merc Gran
-    "Scholar - Barrier": ItemData("Scholar", 199 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - MP Sickle": ItemData("Scholar", 200 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Adrenaline": ItemData("Scholar", 202 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Fire Breath": ItemData("Scholar", 205 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Explode": ItemData("Scholar", 206 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Whirlwind": ItemData("Scholar", 207 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Atmoshear": ItemData("Scholar", 213 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Build Life": ItemData("Scholar", 245 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Aero": ItemData("Scholar", 264 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Insult": ItemData("Scholar", 363 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Infusion": ItemData("Scholar", 364 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Overload": ItemData("Scholar", 365 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Reflection": ItemData("Scholar", 366 + scholar_index_offset, ItemClassification.useful, 0, 1),
-    "Scholar - Lifegiver": ItemData("Scholar", 376 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    ROOST: ItemData(SCHOLAR_ABILITY, 25 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    LUCKY_DICE: ItemData(SCHOLAR_ABILITY, 70 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    SUN_BATH: ItemData(SCHOLAR_ABILITY, 101 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    SLEEP_AURA: ItemData(SCHOLAR_ABILITY, 186 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    REGENERATE: ItemData(SCHOLAR_ABILITY, 197 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    REVERSE_POLARITY: ItemData(SCHOLAR_ABILITY, 198 + scholar_index_offset, ItemClassification.progression), #left in pool so you can merc Gran
+    BARRIER: ItemData(SCHOLAR_ABILITY, 199 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    MP_SICKLE: ItemData(SCHOLAR_ABILITY, 200 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    ADRENALINE: ItemData(SCHOLAR_ABILITY, 202 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    FIRE_BREATH: ItemData(SCHOLAR_ABILITY, 205 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    EXPLODE: ItemData(SCHOLAR_ABILITY, 206 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    WHIRLWIND: ItemData(SCHOLAR_ABILITY, 207 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    ATMOSHEAR: ItemData(SCHOLAR_ABILITY, 213 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    BUILD_LIFE: ItemData(SCHOLAR_ABILITY, 245 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    AERO: ItemData(SCHOLAR_ABILITY, 264 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    INSULT: ItemData(SCHOLAR_ABILITY, 363 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    INFUSION: ItemData(SCHOLAR_ABILITY, 364 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    OVERlOAD: ItemData(SCHOLAR_ABILITY, 365 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    REFLECTION: ItemData(SCHOLAR_ABILITY, 366 + scholar_index_offset, ItemClassification.useful, 0, 1),
+    LIFEGIVER: ItemData(SCHOLAR_ABILITY, 376 + scholar_index_offset, ItemClassification.useful, 0, 1),
 }
 
 progressive_equipment: Tuple[str, ...] = (
@@ -1518,89 +1526,62 @@ non_progressive_equipment: Tuple[str, ...] = (
 # )
 
 optional_scholar_abilities: Tuple[str, ...] = (
-    "Scholar - Roost",
-    "Scholar - Lucky Dice",
-    "Scholar - Sun Bath",
-    "Scholar - Sleep Aura",
-    "Scholar - Regenerate",
+    ROOST,
+    LUCKY_DICE,
+    SUN_BATH,
+    SLEEP_AURA,
+    REGENERATE,
     #"Scholar - Reverse Polarity" leaving this one always in the pool so you can merc Gran
-    "Scholar - Barrier",
-    "Scholar - MP Sickle",
-    "Scholar - Adrenaline",
-    "Scholar - Fire Breath",
-    "Scholar - Explode",
-    "Scholar - Whirlwind",
-    "Scholar - Atmoshear",
-    "Scholar - Build Life",
-    "Scholar - Aero",
-    "Scholar - Insult",
-    "Scholar - Infusion",
-    "Scholar - Overload",
-    "Scholar - Reflection",
-    "Scholar - Lifegiver"
+    BARRIER,
+    MP_SICKLE,
+    ADRENALINE,
+    FIRE_BREATH,
+    EXPLODE,
+    WHIRLWIND,
+    ATMOSHEAR,
+    BUILD_LIFE,
+    AERO,
+    INSULT,
+    INFUSION,
+    OVERlOAD,
+    REFLECTION,
+    LIFEGIVER
 )
 
-default_starting_job_list: List[Job] = [
-    Job("Job - Warrior", 0),
-    Job("Job - Monk", 5),
-    Job("Job - Rogue", 2),
-    Job("Job - Cleric", 4),
-    Job("Job - Wizard", 3),
-    Job("Job - Warlock", 14),
-]
-
-job_list: List[Job] = [
-    Job("Job - Warrior", 0),
-    Job("Job - Monk", 5),
-    Job("Job - Rogue", 2),
-    Job("Job - Cleric", 4),
-    Job("Job - Wizard", 3),
-    Job("Job - Warlock", 14),
-    Job("Job - Fencer", 1),
-    Job("Job - Shaman", 8),
-    Job("Job - Scholar", 13),
-    Job("Job - Aegis", 10),
-    Job("Job - Hunter", 7),
-    Job("Job - Chemist", 17),
-    Job("Job - Reaper", 6),
-    Job("Job - Ninja", 18),
-    Job("Job - Nomad", 12),
-    Job("Job - Dervish", 11),
-    Job("Job - Beatsmith", 9),
-    Job("Job - Samurai", 20),
-    Job("Job - Assassin", 19),
-    Job("Job - Valkyrie", 15),
-    Job("Job - Summoner", 21),
-    Job("Job - Beastmaster", 23),
-    Job("Job - Weaver", 16),
-    Job("Job - Mimic", 22),
+default_starting_job_list: List[str] = [
+    WARRIOR_JOB,
+    MONK_JOB,
+    ROGUE_JOB,
+    CLERIC_JOB,
+    WIZARD_JOB,
+    WARLOCK_JOB,
 ]
 
 job_crystal_beginner_dictionary: Dict[str, str] = {
-    "Job - Fencer": "Pale Grotto Crystal - Fencer",
-    "Job - Shaman": "Draft Shaft Conduit Crystal - Shaman",
-    "Job - Scholar": "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar",
-    "Job - Aegis": "Skumparadise Crystal - Aegis",
+    FENCER_JOB: "Pale Grotto Crystal - Fencer",
+    SHAMAN_JOB: "Draft Shaft Conduit Crystal - Shaman",
+    SCHOLAR_JOB: "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar",
+    AEGIS_JOB: "Skumparadise Crystal - Aegis",
 }
 
 job_crystal_advanced_dictionary: Dict[str, str] = {
-    "Job - Hunter": "Quintar Nest Crystal - Hunter",
-    "Job - Chemist": "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)",
-    "Job - Reaper": "Capital Jail Crystal - Reaper, above hell pool",
-    "Job - Ninja": "Okimoto N.S. Crystal - Ninja",
-    "Job - Nomad": "River Cats Ego Crystal - Appease the QuizFish Nomad",
-    "Job - Dervish": "Ancient Reservoir Crystal - Dervish",
-    "Job - Beatsmith": "Capital Sequoia Crystal - Beatsmith",
+    HUNTER_JOB: "Quintar Nest Crystal - Hunter",
+    CHEMIST_JOB: "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)",
+    REAPER_JOB: "Capital Jail Crystal - Reaper, above hell pool",
+    NINJA_JOB: "Okimoto N.S. Crystal - Ninja",
+    NOMAD_JOB: "River Cats Ego Crystal - Appease the QuizFish Nomad",
+    DERVISH_JOB: "Ancient Reservoir Crystal - Dervish",
+    BEATSMITH_JOB: "Capital Sequoia Crystal - Beatsmith",
 }
 
 job_crystal_expert_dictionary: Dict[str, str] = {
-    "Job - Samurai": "Shoudu Province Crystal - Samurai for 3 Sky Arena wins",
-    "Job - Assassin": "The Undercity Crystal - Assassin",
-    "Job - Valkyrie": "Beaurior Volcano Crystal - Valkyrie",
-    "Job - Summoner": "Slip Glide Ride Crystal - Summoner",
-    "Job - Beastmaster": "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
-    "Job - Weaver": "Jidamba Eaclaneya Crystal - Weaver",
-    "Job - Mimic": "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
+    SAMURAI_JOB: "Shoudu Province Crystal - Samurai for 3 Sky Arena wins",
+    ASSASSIN_JOB: "The Undercity Crystal - Assassin",
+    VALKYRIE_JOB: "Beaurior Volcano Crystal - Valkyrie",
+    SUMMONER_JOB: "Slip Glide Ride Crystal - Summoner",
+    BEASTMASTER_JOB: "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)",
+    WEAVER_JOB: "Jidamba Eaclaneya Crystal - Weaver",
+    MIMIC_JOB: "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
 }
 
 filler_items: Tuple[str, ...] = (
@@ -1635,14 +1616,14 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
 
     return categories
 
-def get_starting_jobs(world: "CrystalProjectWorld") -> List[Job]:
+def get_starting_jobs(world: "CrystalProjectWorld") -> List[str]:
     if world.options.jobRando.value == world.options.jobRando.option_full:
         return get_random_starting_jobs(world, world.options.startingJobQuantity.value)
     else:
         return default_starting_job_list
 
-def get_random_starting_jobs(self, count:int) -> List[Job]:
-    return self.random.sample(job_list, count)
+def get_random_starting_jobs(self, count:int) -> List[str]:
+    return self.random.sample(list(self.item_name_groups[JOB]), count)
 
 def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
     job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too

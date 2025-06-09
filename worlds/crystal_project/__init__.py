@@ -1,9 +1,13 @@
 import logging
+from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
+from .constants.regions import *
+from .constants.teleport_stones import *
+from .constants.item_groups import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, default_starting_job_list, job_list
+    set_jobs_at_default_locations, default_starting_job_list
 from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -52,84 +56,18 @@ class CrystalProjectWorld(World):
         self.statically_placed_jobs:int = 0
 
     def generate_early(self):
-        self.multiworld.push_precollected(self.create_item("Item - Home Point Stone"))
+        self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
 
         self.starting_jobs = get_starting_jobs(self)
         for job in self.starting_jobs:
-            self.multiworld.push_precollected(self.create_item(job.name))
+            self.multiworld.push_precollected(self.create_item(job))
 
         if self.options.startWithTreasureFinder:
-            self.multiworld.push_precollected(self.create_item("Item - Treasure Finder"))
+            self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
 
         if self.options.startWithMaps:
-            self.multiworld.push_precollected(self.create_item("Item - Spawning Meadows Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Delende Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Pale Grotto Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Seaside Cliffs Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Draft Shaft Conduit Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Proving Meadows Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Soiled Den Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Yamagawa M.A. Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Skumparadise Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Capital Courtyard Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Capital Sequoia Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Jojo Sewers Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Greenshire Reprise Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Mercury Shrine Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Boomer Society Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Rolling Quintar Fields Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Quintar Nest Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Capital Jail Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Cobblestone Crag Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Okimoto N.S. Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Salmon Pass Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Salmon River Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Poseidon Shrine Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Poko Poko Desert Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Sara Sara Bazaar Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Sara Sara Beach Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Ancient Reservoir Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Shoudu Province Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Undercity Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Beaurior Volcano Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Beaurior Rock Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Sequoia Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Tall Tall Heights Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Slip Glide Ride Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Ganymede Shrine Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Quintar Reserve Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Quintar Sanctum Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Lake Delende Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Jidamba Tangle Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Jidamba Eaclaneya Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Deep Sea Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The New World Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Continental Tram Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Castle Ramparts Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Salmon Bay Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Lands End Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Capital Pipeline Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Northern Cave Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Depths Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Open Sea Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Dione Shrine Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Neptune Shrine Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Castle Sequoia Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Ancient Labyrinth Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Quintar Mausoleum Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Basement Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Trial Caves Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Overpass Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Underpass Map"))
-            self.multiworld.push_precollected(self.create_item("Item - River Cats Ego Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Northern Stretch Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Eastern Chasm Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Sequoia Athenaeum Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Chalice of Tar Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Flyers Crag Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Flyers Lookout Map"))
-            self.multiworld.push_precollected(self.create_item("Item - Jade Cavern Map"))
-            self.multiworld.push_precollected(self.create_item("Item - The Old World Map"))
+            for map_name in self.item_name_groups[MAP]:
+                self.multiworld.push_precollected(self.create_item(map_name))
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
@@ -147,7 +85,7 @@ class CrystalProjectWorld(World):
         if self.options.jobRando.value == self.options.jobRando.option_none:
             jobs_earnable = set_jobs_at_default_locations(self)
         else:
-            jobs_earnable = len(job_list) - len(self.starting_jobs)
+            jobs_earnable = len(self.item_name_groups[JOB]) - len(self.starting_jobs)
 
         if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.newWorldStoneJobQuantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
@@ -207,126 +145,35 @@ class CrystalProjectWorld(World):
 
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
-        excluded_items.add("Item - Home Point Stone")
+        excluded_items.add(HOME_POINT_STONE)
 
         for job in self.starting_jobs:
-            excluded_items.add(job.name)
+            excluded_items.add(job)
 
         if not self.options.levelGating:
-            excluded_items.add("Item - Progressive Level Cap")
+            excluded_items.add(PROGRESSIVE_LEVEL_CAP)
 
         if self.options.startWithTreasureFinder:
-            excluded_items.add("Item - Treasure Finder")
+            excluded_items.add(TREASURE_FINDER)
 
         if self.options.startWithMaps:
-            excluded_items.add("Item - Spawning Meadows Map")
-            excluded_items.add("Item - Delende Map")
-            excluded_items.add("Item - Pale Grotto Map")
-            excluded_items.add("Item - Seaside Cliffs Map")
-            excluded_items.add("Item - Draft Shaft Conduit Map")
-            excluded_items.add("Item - Proving Meadows Map")
-            excluded_items.add("Item - Soiled Den Map")
-            excluded_items.add("Item - Yamagawa M.A. Map")
-            excluded_items.add("Item - Skumparadise Map")
-            excluded_items.add("Item - Capital Courtyard Map")
-            excluded_items.add("Item - Capital Sequoia Map")
-            excluded_items.add("Item - Jojo Sewers Map")
-            excluded_items.add("Item - Greenshire Reprise Map")
-            excluded_items.add("Item - Mercury Shrine Map")
-            excluded_items.add("Item - Boomer Society Map")
-            excluded_items.add("Item - Rolling Quintar Fields Map")
-            excluded_items.add("Item - Quintar Nest Map")
-            excluded_items.add("Item - Capital Jail Map")
-            excluded_items.add("Item - Cobblestone Crag Map")
-            excluded_items.add("Item - Okimoto N.S. Map")
-            excluded_items.add("Item - Salmon Pass Map")
-            excluded_items.add("Item - Salmon River Map")
-            excluded_items.add("Item - Poseidon Shrine Map")
-            excluded_items.add("Item - Poko Poko Desert Map")
-            excluded_items.add("Item - Sara Sara Bazaar Map")
-            excluded_items.add("Item - Sara Sara Beach Map")
-            excluded_items.add("Item - Ancient Reservoir Map")
-            excluded_items.add("Item - Shoudu Province Map")
-            excluded_items.add("Item - The Undercity Map")
-            excluded_items.add("Item - Beaurior Volcano Map")
-            excluded_items.add("Item - Beaurior Rock Map")
-            excluded_items.add("Item - The Sequoia Map")
-            excluded_items.add("Item - Tall Tall Heights Map")
-            excluded_items.add("Item - Slip Glide Ride Map")
-            excluded_items.add("Item - Ganymede Shrine Map")
-            excluded_items.add("Item - Quintar Reserve Map")
-            excluded_items.add("Item - Quintar Sanctum Map")
-            excluded_items.add("Item - Lake Delende Map")
-            excluded_items.add("Item - Jidamba Tangle Map")
-            excluded_items.add("Item - Jidamba Eaclaneya Map")
-            excluded_items.add("Item - The Deep Sea Map")
-            excluded_items.add("Item - The New World Map")
-            excluded_items.add("Item - Continental Tram Map")
-            excluded_items.add("Item - Castle Ramparts Map")
-            excluded_items.add("Item - Salmon Bay Map")
-            excluded_items.add("Item - Lands End Map")
-            excluded_items.add("Item - Capital Pipeline Map")
-            excluded_items.add("Item - Northern Cave Map")
-            excluded_items.add("Item - The Depths Map")
-            excluded_items.add("Item - The Open Sea Map")
-            excluded_items.add("Item - Dione Shrine Map")
-            excluded_items.add("Item - Neptune Shrine Map")
-            excluded_items.add("Item - Castle Sequoia Map")
-            excluded_items.add("Item - Ancient Labyrinth Map")
-            excluded_items.add("Item - Quintar Mausoleum Map")
-            excluded_items.add("Item - Basement Map")
-            excluded_items.add("Item - Trial Caves Map")
-            excluded_items.add("Item - Overpass Map")
-            excluded_items.add("Item - Underpass Map")
-            excluded_items.add("Item - River Cats Ego Map")
-            excluded_items.add("Item - Northern Stretch Map")
-            excluded_items.add("Item - Eastern Chasm Map")
-            excluded_items.add("Item - Sequoia Athenaeum Map")
-            excluded_items.add("Item - The Chalice of Tar Map")
-            excluded_items.add("Item - Flyers Crag Map")
-            excluded_items.add("Item - Flyers Lookout Map")
-            excluded_items.add("Item - Jade Cavern Map")
-            excluded_items.add("Item - The Old World Map")
+            for map_name in self.item_name_groups[MAP]:
+                excluded_items.add(map_name)
 
         if self.options.goal == self.options.goal.option_astley:
-            excluded_items.add("Item - New World Stone")
+            excluded_items.add(NEW_WORLD_STONE)
 
         if self.options.goal == self.options.goal.option_true_astley:
-            excluded_items.add("Item - New World Stone")
-            excluded_items.add("Item - Old World Stone")
+            excluded_items.add(NEW_WORLD_STONE)
+            excluded_items.add(OLD_WORLD_STONE)
 
         if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
-            excluded_items.add("Summon - Shaku")
-            excluded_items.add("Summon - Pamoa")
-            excluded_items.add("Summon - Guaba")
-            excluded_items.add("Summon - Niltsi")
-            excluded_items.add("Summon - Ioske")
-            excluded_items.add("Summon - Coyote")
-            excluded_items.add("Summon - Tira")
-            excluded_items.add("Summon - Juses")
-            excluded_items.add("Summon - Pah")
+            for summon in self.item_name_groups[SUMMON]:
+                excluded_items.add(summon)
 
         if self.options.includeScholarAbilities == self.options.includeScholarAbilities.option_false:
-            excluded_items.add("Scholar - Roost")
-            excluded_items.add("Scholar - Lucky Dice")
-            excluded_items.add("Scholar - Sun Bath")
-            excluded_items.add("Scholar - Sleep Aura")
-            excluded_items.add("Scholar - Regenerate")
-            excluded_items.add("Scholar - Reverse Polarity")
-            excluded_items.add("Scholar - Barrier")
-            excluded_items.add("Scholar - MP Sickle")
-            excluded_items.add("Scholar - Adrenaline")
-            excluded_items.add("Scholar - Fire Breath")
-            excluded_items.add("Scholar - Explode")
-            excluded_items.add("Scholar - Whirlwind")
-            excluded_items.add("Scholar - Atmoshear")
-            excluded_items.add("Scholar - Build Life")
-            excluded_items.add("Scholar - Aero")
-            excluded_items.add("Scholar - Insult")
-            excluded_items.add("Scholar - Infusion")
-            excluded_items.add("Scholar - Overload")
-            excluded_items.add("Scholar - Reflection")
-            excluded_items.add("Scholar - Lifegiver")
+            for scholar_ability in self.item_name_groups[SCHOLAR_ABILITY]:
+                excluded_items.add(scholar_ability)
 
         #Progressive Equipment Mode
         if self.options.progressiveEquipmentMode.value == self.options.progressiveEquipmentMode.option_false:
@@ -425,14 +272,14 @@ class CrystalProjectWorld(World):
 
         if self.options.levelGating:
             for _ in range (self.options.levelUpsInPool):
-                item = self.set_classifications("Item - Progressive Level Cap")
+                item = self.set_classifications(PROGRESSIVE_LEVEL_CAP)
                 pool.append(item)
 
         if self.options.goal.value == self.options.goal.option_true_astley:
             for _ in range(4):
-                item = self.set_classifications("Item - Deity Eye")
+                item = self.set_classifications(DEITY_EYE)
                 pool.append(item)
-            item = self.set_classifications("Item - STEM WARD")
+            item = self.set_classifications(STEM_WARD)
             pool.append(item)
 
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
@@ -443,7 +290,7 @@ class CrystalProjectWorld(World):
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         for _ in range(self.get_total_clamshells(max_clamshells)):
-            item = self.set_classifications("Item - Clamshell")
+            item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
@@ -462,21 +309,21 @@ class CrystalProjectWorld(World):
         logic = CrystalProjectLogic(self.player, self.options)
         win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
-            win_condition_item = "Item - New World Stone" # todo should this still be here if we auto-hand you the stone?
+            win_condition_item = NEW_WORLD_STONE # todo should this still be here if we auto-hand you the stone?
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value)
-            self.included_regions.append("The New World")
+            self.included_regions.append(THE_NEW_WORLD)
         elif self.options.goal == self.options.goal.option_true_astley:
-            win_condition_item = "Item - Old World Stone"
+            win_condition_item = OLD_WORLD_STONE
             self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements
-            self.included_regions.append("The Old World")
+            self.included_regions.append(THE_OLD_WORLD)
         elif self.options.goal == self.options.goal.option_clamshells:
-            win_condition_item = "Item - Clamshell"
+            win_condition_item = CLAMSHELL
             self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshellGoalQuantity.value)
 
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
         for job in self.starting_jobs:
-            job_ids.append(job.id)
+            job_ids.append(self.item_name_to_id[job])
 
         return job_ids
 

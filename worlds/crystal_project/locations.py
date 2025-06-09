@@ -2,9 +2,13 @@ from typing import List, Optional, Callable, NamedTuple
 from BaseClasses import CollectionState
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
+from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
+from .constants.mounts import *
 from .constants.regions import *
+from .constants.scholar_abilities import *
+from .constants.teleport_stones import *
 
 class LocationData(NamedTuple):
     region: str
@@ -49,7 +53,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Cross trees and jump down for Secret Herb", 546 + npc_index_offset), #(43, 104, -8) Secret Herb 3 Fixed Missable
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Map Nan", 84 + npc_index_offset),
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Nan Stew", 14 + npc_index_offset),
-        LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has("Item - Black Squirrel", player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
+        LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Butterfly Goo", 194 + npc_index_offset, lambda state: state.has(BLACK_SQUIRREL, player, 3)), #Tree Fairy NPC seems to have the dialogue for this (ID 194)
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Buttersquirrel on tree SW of spawn", 264 + npc_index_offset),
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Buttersquirrel on tree NW of spawn", 296 + npc_index_offset),
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
@@ -87,7 +91,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         #NPCs
         LocationData(DELENDE, "Delende NPC - Astley gives you a home point stone", 28 + npc_index_offset),
         LocationData(DELENDE, "Delende NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
-        LocationData(DELENDE, "Delende NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has("Item - Dog Bone", player, 3)),
+        LocationData(DELENDE, "Delende NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has(DOG_BONE, player, 3)),
         LocationData(DELENDE, "Delende NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
         LocationData(DELENDE, "Delende NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
         LocationData(DELENDE, "Delende NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
@@ -107,10 +111,10 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         #Treasure chests
         LocationData(DELENDE, "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData(DELENDE, "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData(DELENDE, "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(126, 115, -102) Basement map chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
+        LocationData(DELENDE, "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(126, 115, -102) Basement map chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
@@ -194,7 +198,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
 
         #Mercury Shrine
         #Treasure chests
-        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has("Item - Mercury Stone", player)), #Contract chest
+        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player)), #Contract chest
 
         #Yamagawa M.A.
         #Treasure chests
@@ -262,7 +266,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Gaea Shrine 3", 381 + treasure_index_offset), #Gaea Shard chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Gaea Shrine 4", 548 + treasure_index_offset), #Gaea Shard chest
         #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that's the logic were using
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has("Item - Gaea Stone", player)), #Craftwork Bow chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has(GAEA_STONE, player)), #Craftwork Bow chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Instrducktor classroom", 1387 + treasure_index_offset), #Craftwork Axe chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Watering Can chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset), #Craftwork Pages chest
@@ -302,13 +306,13 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
         # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
         # The original check that corresponds to the npc id should be last so that when it completes it stops showing up on your minimap.
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 3 Lost Penguins to Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 3)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 6)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 9)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has("Item - Lost Penguin", player, 12)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 3 Lost Penguins to Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 3)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 6)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 9)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 12)),
         #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has("Item - Gaea Stone", player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has("Item - Digested Head", player, 3)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has(GAEA_STONE, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has(DIGESTED_HEAD, player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin wandering Magic Store rooftop garden", 573 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
@@ -335,7 +339,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(JOJO_SEWERS, "Underpass Chest - Walking the plank above Pale Grotto waterfall", 3670 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(337, 155, -319) Underpass Scrap chest
 
         #NPCs
-        LocationData(JOJO_SEWERS, "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has("Item - Crag Demon Horn", player)),
+        LocationData(JOJO_SEWERS, "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has(CRAG_DEMON_HORN, player)),
 
         #Boomer Society
         #Treasure chests
@@ -568,7 +572,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has("Item - Special Milk", player)),
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Stormy Silver atop ruins", 2677 + npc_index_offset), #Ore
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
@@ -591,11 +595,11 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar West Stable Owner", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar East Stable Owner", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(-166,93,56) Fixed Missable
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has("Item - West Lookout Token", player) and state.has("Item - Central Lookout Token", player) and state.has("Item - North Lookout Token", player)),
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has(WEST_LOOKOUT_TOKEN, player) and state.has(CENTRAL_LOOKOUT_TOKEN, player) and state.has(NORTH_LOOKOUT_TOKEN, player)),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has("Item - Special Rotten Salmon", player) and state.has("Item - Special Fresh Salmon", player)),
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has("Item - Special Shoudu Stew", player)),
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has(SPECIAL_ROTTEN_SALMON, player) and state.has(SPECIAL_FRESH_SALMON, player)),
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has(SPECIAL_SHOUDU_STEW, player)),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Spilled booty Silver", 2905 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Spilled booty Silverer", 2906 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Spilled booty Silvererer", 2903 + npc_index_offset, lambda state: logic.has_swimming(state)), #Ingot
@@ -860,7 +864,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         #NPCs
         LocationData(THE_UNDERCITY, "The Undercity NPC - Gold hiding from the bats under the awning", 2835 + npc_index_offset), #Dust
         LocationData(THE_UNDERCITY, "The Undercity NPC - Gated-off room Gold", 2825 + npc_index_offset), #Ore
-        LocationData(THE_UNDERCITY, "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: state.has("Item - Progressive Salmon Violin", player)), #Dust
+        LocationData(THE_UNDERCITY, "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
         LocationData(THE_UNDERCITY, "The Undercity NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset), #Ingot
 
         #Crystals
@@ -868,7 +872,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
 
         #Ganymede Shrine
         #Treasure chests
-        LocationData(GANYMEDE_SHRINE, "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has("Item - Ganymede Stone", player)),
+        LocationData(GANYMEDE_SHRINE, "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has(GANYMEDE_STONE, player)),
 
         #Beaurior Volcano
         #Treasure chests
@@ -931,7 +935,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
-        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player) and logic.has_glide(state)), #Shedding 7
+        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: state.has(DIONE_STONE, player) and logic.has_glide(state)), #Shedding 7
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Treetop shedding north of Mausoleum", 2263 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 8
         #shedding 9 is in the Dione Shrine because why not I guess
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding overlooking the race start point", 2265 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 10
@@ -939,24 +943,24 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding just north of Quintar cosplayer", 2267 + npc_index_offset), #Shedding 12
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Gold on east side of map", 2837 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Climb the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
-        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and state.has("Item - Dione Stone", player)), #Dust
+        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and state.has(DIONE_STONE, player)), #Dust
 
         #Dione Shrine
         #Treasure chests
-        LocationData(DIONE_SHRINE, "Dione Shrine Chest - Roof", 2154 + treasure_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Dione Shard chest
+        LocationData(DIONE_SHRINE, "Dione Shrine Chest - Roof", 2154 + treasure_index_offset, lambda state: state.has(DIONE_STONE, player)), #Dione Shard chest
         LocationData(DIONE_SHRINE, "Dione Shrine Chest - Lobby", 2791 + treasure_index_offset), #Dione Shard chest
         LocationData(DIONE_SHRINE, "Dione Shrine Chest - 2nd floor", 2792 + treasure_index_offset), #Dione Shard chest
         LocationData(DIONE_SHRINE, "Dione Shrine Chest - 2nd floor balcony", 1146 + treasure_index_offset), #Dione Shard chest
-        LocationData(DIONE_SHRINE, "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has("Item - Dione Stone", player)), #4th Scrap on main Overpass map
-        LocationData(DIONE_SHRINE, "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has("Item - Dione Stone", player)), #Life Jewel Overpass main map
+        LocationData(DIONE_SHRINE, "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #4th Scrap on main Overpass map
+        LocationData(DIONE_SHRINE, "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #Life Jewel Overpass main map
 
         #NPCs
-        LocationData(DIONE_SHRINE, "Dione Shrine NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has("Item - Dione Stone", player)), #Shedding 9
-        LocationData(DIONE_SHRINE, "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state) and state.has("Item - Dione Stone", player)), #Ingot on Overpass main map
+        LocationData(DIONE_SHRINE, "Dione Shrine NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has(DIONE_STONE, player)), #Shedding 9
+        LocationData(DIONE_SHRINE, "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
         #Treasure chests
-        LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)), #(688, 114, -464) Babel Quintar chest
+        LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: state.has(PROGRESSIVE_QUINTAR_WOODWIND, player, 2)), #(the owl is too slow); (688, 114, -464) Babel Quintar chest
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Rocky room", 3401 + treasure_index_offset), #(664, 129, -425) Quintar Mausoleum map chest
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Glowing grass room", 3768 + treasure_index_offset), #(709, 129, -442) Wind Thresher chest
         LocationData(QUINTAR_MAUSOLEUM, "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) 6th Scrap chest on main Underpass map
@@ -972,10 +976,10 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Tear Seed chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Above the Boomer Society", 2844 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Z-Potion Pouch chest
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or state.has("Item - Triton Stone", player)), #Ether chest
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)), #Ether chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Frost Reaper chest
         #requires (Ibek or Triton Stone) and Quintar
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement(state)), #Potion Pouch chest
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)) and logic.has_horizontal_movement(state)), #Potion Pouch chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Break the ice", 2744 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Radiance Northern Cave
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, lambda state: logic.has_glide(state)), #Judo Gi chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - East of the souvenir store", 2993 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Money chest
@@ -994,9 +998,9 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
         #LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Z8_FisherInHut", 1549 + npc_index_offset),
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Gold above the Boomer Society", 1600 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has("Item - Triton Stone", player)), #Dust
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has("Item - Triton Stone", player)) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has("Item - Triton Stone", player)),
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)), #Dust
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)) and logic.has_horizontal_movement(state)), #Ingot
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)),
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Gold by the breakable ice wall", 2814 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Come back with the bird for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
@@ -1025,7 +1029,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(LANDS_END, "Lands End Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset), #Money chest
         LocationData(LANDS_END, "Lands End Chest - To defeat the Huns", 2740 + treasure_index_offset), #Blue Cape chest
         LocationData(LANDS_END, "Lands End Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
-        LocationData(LANDS_END, "Lands End Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)), #Defender chest
+        LocationData(LANDS_END, "Lands End Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Defender chest
         LocationData(LANDS_END, "Lands End Chest - Fancy some spikes cliff diving?", 1693 + treasure_index_offset), #Rune Ward chest
         LocationData(LANDS_END, "Lands End Chest - By the lovely owl tree", 1561 + treasure_index_offset), #Callisto Stone chest
         LocationData(LANDS_END, "Lands End Chest - Inside the shrine", 3017 + treasure_index_offset), #Ether chest
@@ -1034,9 +1038,9 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         #NPCs
         LocationData(LANDS_END, "Lands End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset), #Ingot
         LocationData(LANDS_END, "Lands End NPC - Pillar Gold by River Cats Ego", 2850 + npc_index_offset), #Ore
-        LocationData(LANDS_END, "Lands End NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: state.has("Item - Progressive Quintar Flute", player, 2)), #Dust
+        LocationData(LANDS_END, "Lands End NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(LANDS_END, "Lands End NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
-        LocationData(LANDS_END, "Lands End NPC - Owl Drum", 1176 + npc_index_offset), #Todo make the owl drum sparkle despawn after you pick up this check; it stays rn if you don't have the owl drum item
+        LocationData(LANDS_END, "Lands End NPC - Owl Drum", 1176 + npc_index_offset),
 
         #Slip Glide Ride
         #Treasure chests
@@ -1211,7 +1215,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Putt Putt Crab mows the lawn", 3437 + npc_index_offset), #(54, 52, 200) Crab 13
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
-        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has("Item - Undersea Crab", player, 15)), #(256, 63, 113)
+        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden Quintar but faster than royal salmon) Z35_SpeedOcto
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot
@@ -1332,7 +1336,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         LocationData(DELENDE, "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
-        LocationData(DELENDE, "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has("Job - Scholar", player) and state.has("Scholar - Reverse Polarity", player)) or logic.is_area_in_level_range(state, 2)),
+        LocationData(DELENDE, "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2)),
         LocationData(SOILED_DEN, "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
         LocationData(THE_PALE_GROTTO, "Pale Grotto Boss - Guardian", 143 + boss_index_offset),
         LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
@@ -1501,49 +1505,49 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Map Seller 9", 91158 + shop_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Map Seller 10", 101158 + shop_index_offset),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 1", 10599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 2", 20599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 3", 30599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 4", 40599 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 1", 50599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 2", 60599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 3", 70599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 4", 80599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 5", 90599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 6", 100599 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 1", 10599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 2", 20599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 3", 30599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 4", 40599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 1", 50599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 2", 60599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 3", 70599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 4", 80599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 5", 90599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 6", 100599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 1", 10600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 2", 20600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 3", 30600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 4", 40600 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 1", 50600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 2", 60600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 3", 70600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 4", 80600 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 1", 10600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 2", 20600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 3", 30600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 4", 40600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 1", 50600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 2", 60600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 3", 70600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 4", 80600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 1", 10601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 2", 20601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 3", 30601 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 1", 40601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 2", 50601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 3", 60601 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 1", 10601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 2", 20601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 3", 30601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 1", 40601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 2", 50601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 3", 60601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 1", 10602 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 2", 20602 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 1", 30602 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 2", 40602 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 1", 10602 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 2", 20602 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 1", 30602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 2", 40602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 1", 10603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 2", 20603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 3", 30603 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 1", 40603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 2", 50603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 3", 60603 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 1", 10603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 2", 20603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 3", 30603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 1", 40603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 2", 50603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 3", 60603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 1", 10604 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 2", 20604 + shop_index_offset, lambda state: state.has_any({"Item - Progressive Luxury Pass"}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 1", 30604 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 2", 40604 + shop_index_offset, lambda state: state.has("Item - Progressive Luxury Pass", player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 1", 10604 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 2", 20604 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 1", 30604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 2", 40604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Martial Weapons R Us 1", 10500 + shop_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Martial Weapons R Us 2", 20500 + shop_index_offset),

@@ -109,7 +109,7 @@ class JobRando(Choice):
 
 class StartingJobQuantity(Range):
     """
-    Select how many starting jobs you'll get.  Only does anything if you're randomizing starting jobs.
+    Select how many starting jobs you'll get.  Only does anything if JobRando is set to Full.
     """
     display_name = "Starting Job Quantity"
     range_start = 1

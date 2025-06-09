@@ -1,0 +1,10 @@
+SHAKU_SUMMON = "Summon - Shaku"
+PAMOA_SUMMON = "Summon - Pamoa"
+GUABA_SUMMON = "Summon - Guaba"
+NILTSI_SUMMON = "Summon - Niltsi"
+IOSKE_SUMMON = "Summon - Ioske"
+COYOTE_SUMMON = "Summon - Coyote"
+#PINGA_SUMMON = "Summon - Pinga" (starter summon)
+TIRA_SUMMON = "Summon - Tira"
+JUSES_SUMMON = "Summon - Juses"
+PAH_SUMMON = "Summon - Pah"
