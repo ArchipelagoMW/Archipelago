@@ -47,7 +47,8 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
 class ElevatorTier(NamedRange):
     """
     Put these Shipments to Space Elevator packages in logic.
-    if your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
+    Milestones past these packages will unchanged from the base game.
+    If your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
     """
     display_name = "Space Elevator shipments in logic"
     default = 2
@@ -107,7 +108,8 @@ class ResourceSinkPointsPerMinute(NamedRange):
     Does nothing if *AWESOME Sink Points (per minute)* goal is not enabled.
 
     Continuously Sink an amount of items to maintain a sink points per minute of this amount of points for 10 minutes to finish.
-    This setting is in *points per minute* on the orange track so no DNA Capsules!
+    This setting is in *points per minute* on the orange track, so DNA Capsules don't count.
+    This option's presets are example production thresholds - you don't have to sink exactly those specific items.
 
     Use the **TFIT - Ficsit Information Tool** mod or the Satisfactory wiki to find out how many points items are worth.
     """
@@ -343,6 +345,15 @@ _default_plus_foundations_starting_items = _default_starting_items + [
     "Building: Half Foundation"
 ]
 
+_explorer_starting_items = _default_plus_foundations_starting_items + [
+    "Single: Parachute",
+    "Single: Blade Runners",
+    "Single: Object Scanner",
+    "Single: Boom Box",
+    "Expanded Toolbelt",
+    "Inflated Pocket Dimension"
+]
+
 _foundation_lover_starting_items = _default_plus_foundations_starting_items + [
     "Bundle: Iron Plate", "Bundle: Iron Plate", "Bundle: Iron Plate",
     "Bundle: Concrete", "Bundle: Concrete", "Bundle: Concrete"
@@ -358,6 +369,7 @@ class StartingInventoryPreset(ChoiceMap):
     - **Archipelago**: The starting items we think will lead to a fun experience.
     - **Foundations**: 'Archipelago' option, but also guaranteeing that you have foundations unlocked at the start.
     - **Foundation Lover**: You really like foundations.
+    - **Explorer**: 'Foundations' option plus one set of early exploration equipment (Parachute, Blade Runners, Object Scanner, Boom Box).
     """
     display_name = "Starting Goodies Presets"
     choices = {
@@ -365,7 +377,8 @@ class StartingInventoryPreset(ChoiceMap):
         "Skip Tutorial Inspired": _skip_tutorial_starting_items,
         "Archipelago": _default_starting_items,
         "Foundations": _default_plus_foundations_starting_items,
-        "Foundation Lover": _foundation_lover_starting_items
+        "Foundation Lover": _foundation_lover_starting_items,
+        "Explorer": _explorer_starting_items
     }
     default = "Archipelago"
 
@@ -373,28 +386,29 @@ class ExplorationCollectableCount(Range):
     """
     Does nothing if *Exploration Collectables* goal is not enabled.
 
-    Collect this amount of Mercer Spheres, Somersloops, Harddrives, Paleberry, Beryl Nut and Bacon Agaric each to finish.
+    Collect this amount of Mercer Spheres, Somersloops, Hard Drives, Paleberries, Beryl Nuts and Bacon Agarics each to finish.
 
-    The amount for Mercer Spheres is 2x the selected amount
-    The amount for Somersloops is the selected amount
-    The amount for Harddrives is 1/5th the selected amount
-    The amount for Paleberry is 10x the selected amount
-    The amount for Beryl Nut is 20x the selected amount
-    The amount for Bacon Agaric is the selected amount
+    - The amount of **Mercer Spheres** is **2x** the selected amount
+    - The amount of **Somersloops** is **the** selected amount
+    - The amount of **Hard Drives** is **1/5th** the selected amount
+    - The amount of **Paleberries** is **10x** the selected amount
+    - The amount of **Beryl Nuts** is **20x** the selected amount
+    - The amount of **Bacon Agarics** is **the** selected amount
     """
     display_name = "Exploration Collectables"
     default = 20
-    range_start = 20
+    range_start = 5
     range_end = 100
 
 class MilestoneCostMultiplier(Range):
     """
-    Multiplies the amount of resources needed to unlock a milestone by this factor
+    Multiplies the amount of resources needed to unlock a Milestone by this factor.
 
     The value is in percentage:
-    50 = half cost
-    100 = normal milestone cost
-    200 = double the cost
+
+    - **50** = half cost
+    - **100** = normal milestone cost
+    - **200** = double the cost
     """
     display_name = "Milestone cost multiplier %"
     default = 100
@@ -429,13 +443,13 @@ class GoalRequirement(Choice):
 
 class RandomizeTier0(DefaultOnToggle):
     """
-    Randomizes the recipes used to craft the default unlocked parts:
+    Randomizes what recipes you use to craft the default unlocked parts:
     Iron Ingot, Iron Plate, Iron Rod, Copper Ingot, Wire, Concrete, Screw, Reinforced Iron Plate
 
-    * They could require usage of Foundries or Assemblers that will than also get unlocked by default if needed
-    * They could require other ores to be mixed in
+    * Could require usage of Foundries or Assemblers (which get unlocked by default if needed, at reduced build costs)
+    * Could require other ores to be mixed in via alt recipes (which will become hand-craftable if needed)
     """
-    display_name = "Randomize default part recipes"
+    display_name = "Randomize Default Part Recipes"
 
 @dataclass
 class SatisfactoryOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -524,7 +538,7 @@ option_presets: dict[str, dict[str, Any]] = {
         "splitter_placement": int(Placement.somewhere),
         "trap_selection_preset": 3 # Harder
     },
-    "Extra long": {
+    "Extra Long": {
         "final_elevator_package": 5,
         "goal_selection": {"Space Elevator Tier", "AWESOME Sink Points (per minute)"},
         "goal_requirement": GoalRequirement.option_require_all_goals,
