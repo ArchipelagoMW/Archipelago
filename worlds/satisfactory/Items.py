@@ -815,7 +815,8 @@ class Items:
         "Single: Ficsonium Fuel Rod": ItemData(G.Trap, 1339130, C.trap, count=0),
         "Single: Packaged Rocket Fuel": ItemData(G.Parts, 1339131, count=0),
         "Single: Packaged Ionized Fuel": ItemData(G.Parts, 1339132, count=0),
-        #1339133 - 1339149 Reserved for future parts
+        "Single: Dark Matter Crystal": ItemData(G.Parts, 1339133, count=0),
+        #1339134 - 1339149 Reserved for future parts
         #1339150 - 1339199 Equipment / Ammo
         "Single: Bacon Agaric": ItemData(G.Ammo, 1339150, count=0),
         "Single: Beryl Nut": ItemData(G.Ammo, 1339151, count=0),
