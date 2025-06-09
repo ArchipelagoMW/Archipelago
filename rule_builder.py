@@ -3,9 +3,9 @@ import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Self, cast
+from typing import TYPE_CHECKING, Any, ClassVar, cast
 
-from typing_extensions import override
+from typing_extensions import Self, override
 
 from BaseClasses import Entrance
 
@@ -395,9 +395,7 @@ class Has(Rule):
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
                 messages.append({"type": "text", "text": "x "})
-            messages.append(
-                {"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player}
-            )
+            messages.append({"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player})
             return messages
 
 
