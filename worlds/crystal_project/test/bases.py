@@ -28,11 +28,26 @@ class CrystalProjectTestBase(WorldTestBase):
                 with self.subTest(msg="Test Cannot Reach Entrance", region=region, unreachable_region=unreachable):
                     self.assertFalse(self.can_reach_entrance(region + " -> " + unreachable))
 
+
+    def assert_locations(self, reachable_locations: tuple[str, ...] | None=None, unreachable_locations: tuple[str, ...] | None=None):
+        if isinstance(reachable_locations, tuple):
+            for reachable in reachable_locations:
+                with self.subTest(msg="Test Can Reach Location", reachable_location=reachable):
+                    self.assertTrue(self.can_reach_location(reachable))
+
+        if isinstance(unreachable_locations, tuple):
+            for unreachable in unreachable_locations:
+                with self.subTest(msg="Test Cannot Reach Location", unreachable_location=unreachable):
+                    self.assertFalse(self.can_reach_location(unreachable))
+
+
     def collect_mounts(self):
         self.collect_by_name([PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_QUINTAR_WOODWIND, IBEK_BELL, OWL_DRUM])
 
+
     def collect_level_caps(self):
         self.collect_by_name(PROGRESSIVE_LEVEL_CAP)
+
 
     def collect_mounts_and_level_caps(self):
         self.collect_mounts()
