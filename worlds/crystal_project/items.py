@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 class ItemData(NamedTuple):
     category: str
-    code: Optional[int]
+    code: int
     classification: ItemClassification
     #Amount found in each region type; added together for each set you're including
     beginnerAmount: Optional[int] = 1

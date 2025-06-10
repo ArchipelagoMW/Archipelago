@@ -3,16 +3,14 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.mounts import *
 from .constants.teleport_stones import *
+from .items import singleton_keys
 from BaseClasses import CollectionState
-from typing import TYPE_CHECKING, Optional
-if TYPE_CHECKING:
-    from . import CrystalProjectWorld
 
 class CrystalProjectLogic:
     player: int
     options: CrystalProjectOptions
 
-    def __init__(self, player: Optional[int], options: Optional[CrystalProjectOptions]):
+    def __init__(self, player: int, options: CrystalProjectOptions):
         self.player = player
         self.options = options
 

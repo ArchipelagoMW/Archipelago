@@ -13,7 +13,7 @@ from .constants.teleport_stones import *
 class LocationData(NamedTuple):
     region: str
     name: str
-    code: Optional[int]
+    code: int
     rule: Optional[Callable[[CollectionState], bool]] = None
 
 treasure_index_offset = 1
@@ -23,7 +23,7 @@ boss_index_offset = 1000000
 shop_index_offset = 10000000
 #summon_index_offset = 1000000 Summons Todo
 
-def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
@@ -1332,7 +1332,7 @@ def get_locations(player: int, options: Optional[CrystalProjectOptions]) -> List
 
     return location_table
 
-def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         LocationData(DELENDE, "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
@@ -1370,7 +1370,7 @@ def get_bosses(player: Optional[int], options: Optional[CrystalProjectOptions]) 
         ]
     return location_table
 
-def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+def get_shops(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -1505,10 +1505,10 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Map Seller 9", 91158 + shop_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Map Seller 10", 101158 + shop_index_offset),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 1", 10599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 2", 20599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 3", 30599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 4", 40599 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 1", 10599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 2", 20599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 3", 30599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Martial Weapons 4", 40599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 1", 50599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 2", 60599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 3", 70599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
@@ -1516,36 +1516,36 @@ def get_shops(player: Optional[int], options: Optional[CrystalProjectOptions]) -
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 5", 90599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Martial Weapons 6", 100599 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 1", 10600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 2", 20600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 3", 30600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 4", 40600 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 1", 10600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 2", 20600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 3", 30600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Exotic Weapons 4", 40600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 1", 50600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 2", 60600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 3", 70600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Exotic Weapons 4", 80600 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 1", 10601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 2", 20601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 3", 30601 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 1", 10601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 2", 20601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Heavy Armor 3", 30601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 1", 40601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 2", 50601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Heavy Armor 3", 60601 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 1", 10602 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 2", 20602 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 1", 10602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Medium Armor 2", 20602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 1", 30602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Medium Armor 2", 40602 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 1", 10603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 2", 20603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 3", 30603 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 1", 10603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 2", 20603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Magic Weapons 3", 30603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 1", 40603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 2", 50603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Magic Weapons 3", 60603 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 1", 10604 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 2", 20604 + shop_index_offset, lambda state: state.has_any({PROGRESSIVE_LUXURY_PASS}, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 1", 10604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Luxury Shop Light Armor 2", 20604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 1", 30604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Shop - Upgraded Luxury Shop Light Armor 2", 40604 + shop_index_offset, lambda state: state.has(PROGRESSIVE_LUXURY_PASS, player, 2)),
 
