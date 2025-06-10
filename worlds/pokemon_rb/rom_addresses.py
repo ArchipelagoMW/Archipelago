@@ -135,7 +135,7 @@ rom_addresses = {
     "HM_Strength_Badge_b": 0x131ed,
     "HM_Flash_Badge_a": 0x131fc,
     "HM_Flash_Badge_b": 0x13201,
-    "Tea_Key_Item_A": 0x13546,
+    "Tea_Key_Item": 0x13546,
     "Trainer_Screen_Total_Key_Items": 0x13669,
     "TM_Moves": 0x1383e,
     "Encounter_Chances": 0x139f4,

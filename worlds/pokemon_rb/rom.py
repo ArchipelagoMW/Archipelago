@@ -417,9 +417,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
                     encode_text("<LINE>Gee, I have the<CONT>worst caffeine<CONT>headache though."
                                 "<PARA>Oh wait there,<LINE>the road's closed.<DONE>"))
 
-        write_bytes(rom_addresses["Tea_Key_Item_A"], 0x28)  #  jr .z
-        write_bytes(rom_addresses["Tea_Key_Item_B"], 0x28)  #  jr .z
-        write_bytes(rom_addresses["Tea_Key_Item_C"], 0x28)  #  jr .z
+        write_bytes(rom_addresses["Tea_Key_Item"], 0x28)  #  jr .z
 
     write_bytes(rom_addresses["Fossils_Needed_For_Second_Item"], world.options.second_fossil_check_condition.value)
 
