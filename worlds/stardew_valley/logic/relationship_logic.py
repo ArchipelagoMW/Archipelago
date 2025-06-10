@@ -10,7 +10,7 @@ from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
@@ -193,3 +193,9 @@ class RelationshipLogic(BaseLogic):
                 rules.append(self.logic.relationship.can_date(npc))
 
         return self.logic.and_(*rules)
+
+    def can_purchase_portrait(self, npc: str = "") -> StardewRule:
+        spend_rule = self.logic.money.can_spend_at(LogicRegion.traveling_cart, 30_000)
+        if npc == "":
+            return self.logic.relationship.can_get_married() & self.logic.relationship.has_hearts_with_any(14) & spend_rule
+        return self.logic.relationship.can_marry(npc) & self.logic.relationship.has_hearts(npc, 14) & spend_rule

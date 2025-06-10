@@ -36,11 +36,12 @@ from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.backpack_tiers import Backpack
-from .strings.building_names import Building
+from .strings.building_names import Building, WizardBuilding
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb, Furniture, Consumable
 from .strings.crop_names import Fruit, Vegetable
+from .strings.currency_names import Currency
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
 from .strings.fish_names import Fish
@@ -106,6 +107,7 @@ def set_rules(world):
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
     set_hatsanity_rules(all_location_names, logic, multiworld, player, world_options, world_content)
     set_eatsanity_rules(all_location_names, logic, multiworld, player, world_options)
+    set_endgame_locations_rules(logic, multiworld, player, world_options)
 
     set_deepwoods_rules(logic, multiworld, player, world_content)
     set_magic_spell_rules(logic, multiworld, player, world_content)
@@ -1018,6 +1020,56 @@ def set_eatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multi
         else:
             raise Exception(f"Eatsanity Location does not have a recognized prefix: '{eat_location.name}'")
         set_rule(multiworld.get_location(eat_location.name, player), logic.has(item_name))
+
+
+def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+    if not world_options.include_endgame_locations:
+        return
+
+    if SecretsanityOptionName.easy in world_options.secretsanity:
+        set_location_rule(multiworld, player, "Earth Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.earth_obelisk))
+        set_location_rule(multiworld, player, "Water Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.water_obelisk))
+        set_location_rule(multiworld, player, "Desert Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.desert_obelisk))
+        set_location_rule(multiworld, player, "Island Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.island_obelisk))
+        set_location_rule(multiworld, player, "Junimo Hut Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.junimo_hut))
+        set_location_rule(multiworld, player, "Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
+        set_location_rule(multiworld, player, "Purchase Return Scepter", logic.money.can_spend_at(Region.sewer, 2_000_000))
+        set_location_rule(multiworld, player, "Community Upgrade Blueprint", logic.money.can_spend_at(Region.carpenter, 300_000))
+        set_location_rule(multiworld, player, "Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Mountain To Jojamart Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Mountain To Town Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Mountain Lake To Adventure Guild Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+        set_location_rule(multiworld, player, "Purchase Horse Flute", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+        set_location_rule(multiworld, player, "Purchase Pierre's Missing Stocklist", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+        set_location_rule(multiworld, player, "Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
+        set_location_rule(multiworld, player, "Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
+        set_location_rule(multiworld, player, "Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+        set_location_rule(multiworld, player, "Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
+        set_location_rule(multiworld, player, "Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
+        set_location_rule(multiworld, player, "Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
+        set_location_rule(multiworld, player, "Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
+        set_location_rule(multiworld, player, "Purchase Joja Furniture Catalogue", logic.money.can_spend_at(Region.movie_theater, 25_000)) # Place it in theater region, because it won't be available during the broken jojamart in-between state
+        set_location_rule(multiworld, player, "Purchase Junimo Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
+        set_location_rule(multiworld, player, "Purchase Retro Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 110_000))
+        # set_location_rule(multiworld, player, "Find Trash Catalogue", logic) # No need, the region is enough
+        set_location_rule(multiworld, player, "Purchase Wizard Catalogue", logic.money.can_spend_at(Region.sewer, 150_000))
+        set_location_rule(multiworld, player, "Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
+        set_location_rule(multiworld, player, "Purchase Abigail Portrait", logic.relationship.can_purchase_portrait(NPC.abigail))
+        set_location_rule(multiworld, player, "Purchase Alex Portrait", logic.relationship.can_purchase_portrait(NPC.alex))
+        set_location_rule(multiworld, player, "Purchase Elliott Portrait", logic.relationship.can_purchase_portrait(NPC.elliott))
+        set_location_rule(multiworld, player, "Purchase Emily Portrait", logic.relationship.can_purchase_portrait(NPC.emily))
+        set_location_rule(multiworld, player, "Purchase Haley Portrait", logic.relationship.can_purchase_portrait(NPC.haley))
+        set_location_rule(multiworld, player, "Purchase Harvey Portrait", logic.relationship.can_purchase_portrait(NPC.harvey))
+        set_location_rule(multiworld, player, "Purchase Krobus Portrait", logic.relationship.can_purchase_portrait(NPC.krobus))
+        set_location_rule(multiworld, player, "Purchase Leah Portrait", logic.relationship.can_purchase_portrait(NPC.leah))
+        set_location_rule(multiworld, player, "Purchase Maru Portrait", logic.relationship.can_purchase_portrait(NPC.maru))
+        set_location_rule(multiworld, player, "Purchase Penny Portrait", logic.relationship.can_purchase_portrait(NPC.penny))
+        set_location_rule(multiworld, player, "Purchase Sam Portrait", logic.relationship.can_purchase_portrait(NPC.sam))
+        set_location_rule(multiworld, player, "Purchase Sebastian Portrait", logic.relationship.can_purchase_portrait(NPC.sebastian))
+        set_location_rule(multiworld, player, "Purchase Shane Portrait", logic.relationship.can_purchase_portrait(NPC.shane))
+        set_location_rule(multiworld, player, "Purchase Tea Set", logic.money.can_spend_at(LogicRegion.traveling_cart, 1_000_000) & logic.time.has_lived_max_months)
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
