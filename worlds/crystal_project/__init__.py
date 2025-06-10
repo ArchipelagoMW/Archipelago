@@ -7,7 +7,7 @@ from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, default_starting_job_list
+    set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys
 from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -184,39 +184,16 @@ class CrystalProjectWorld(World):
         #For non-keyring modes
         if (self.options.keyMode.value != self.options.keyMode.option_key_ring and
             self.options.keyMode.value != self.options.keyMode.option_key_ring_skelefree):
-            excluded_items.add(PRISON_KEY_RING)
-            excluded_items.add(BEAURIOR_KEY_RING)
-            excluded_items.add(SLIP_GLIDE_RIDE_KEY_RING)
-            excluded_items.add(ICE_PUZZLE_KEY_RING)
-            excluded_items.add(JIDAMBA_KEY_RING)
+            [excluded_items.add(keyring) for keyring in key_rings]
 
         #For non-vanilla key modes
         if (self.options.keyMode.value != self.options.keyMode.option_vanilla and
             self.options.keyMode.value != self.options.keyMode.option_vanilla_skelefree):
-            excluded_items.add(CELL_KEY)
-            excluded_items.add(SOUTH_WING_KEY)
-            excluded_items.add(EAST_WING_KEY)
-            excluded_items.add(WEST_WING_KEY)
-            excluded_items.add(DARK_WING_KEY)
-            excluded_items.add(SMALL_KEY)
-            excluded_items.add(BEAURIOR_BOSS_KEY)
-            excluded_items.add(ICE_PUZZLE_KEY)
-            excluded_items.add(RED_DOOR_KEY)
-            excluded_items.add(FOLIAGE_KEY)
-            excluded_items.add(CAVE_KEY)
-            excluded_items.add(CANOPY_KEY)
+            [excluded_items.add(key) for key in dungeon_keys]
 
         #For skeleton key mode
         if self.options.keyMode.value == self.options.keyMode.option_skeleton:
-            excluded_items.add(GARDENERS_KEY)
-            excluded_items.add(COURTYARD_KEY)
-            excluded_items.add(LUXURY_KEY)
-            excluded_items.add(ROOM_ONE_KEY)
-            excluded_items.add(PYRAMID_KEY)
-            excluded_items.add(TRAM_KEY)
-            excluded_items.add(RAMPART_KEY)
-            excluded_items.add(FORGOTTEN_KEY)
-            excluded_items.add(ICE_CELL_KEY)
+            [excluded_items.add(key) for key in singleton_keys]
 
         if (self.options.keyMode.value == self.options.keyMode.option_vanilla_skelefree or 
             self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):

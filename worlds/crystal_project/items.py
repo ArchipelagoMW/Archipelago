@@ -1584,6 +1584,41 @@ job_crystal_expert_dictionary: Dict[str, str] = {
     MIMIC_JOB: "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic",
 }
 
+key_rings: Tuple[str, ...] = (
+    PRISON_KEY_RING,
+    BEAURIOR_KEY_RING,
+    SLIP_GLIDE_RIDE_KEY_RING,
+    ICE_PUZZLE_KEY_RING,
+    JIDAMBA_KEY_RING,
+)
+
+dungeon_keys: Tuple[str, ...] = (
+    CELL_KEY,
+    SOUTH_WING_KEY,
+    EAST_WING_KEY,
+    WEST_WING_KEY,
+    DARK_WING_KEY,
+    SMALL_KEY,
+    BEAURIOR_BOSS_KEY,
+    RED_DOOR_KEY,
+    ICE_PUZZLE_KEY,
+    FOLIAGE_KEY,
+    CAVE_KEY,
+    CANOPY_KEY
+)
+
+singleton_keys: Tuple[str, ...] = (
+    GARDENERS_KEY,
+    COURTYARD_KEY,
+    LUXURY_KEY,
+    ROOM_ONE_KEY,
+    PYRAMID_KEY,
+    TRAM_KEY,
+    ICE_CELL_KEY,
+    RAMPART_KEY,
+    FORGOTTEN_KEY
+)
+
 filler_items: Tuple[str, ...] = (
     "Item - Tonic",
     "Item - Potion",
