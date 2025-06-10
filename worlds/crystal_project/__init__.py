@@ -51,7 +51,7 @@ class CrystalProjectWorld(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.starting_jobs = []
+        self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs:int = 0
 
@@ -177,9 +177,11 @@ class CrystalProjectWorld(World):
 
         #Progressive Equipment Mode
         if self.options.progressiveEquipmentMode.value == self.options.progressiveEquipmentMode.option_false:
-            [excluded_items.add(progressive_equipment_piece) for progressive_equipment_piece in progressive_equipment]
+            for progressive_equipment_piece in progressive_equipment:
+                excluded_items.add(progressive_equipment_piece)
         else:
-            [excluded_items.add(equipment_piece) for equipment_piece in non_progressive_equipment]
+            for equipment_piece in non_progressive_equipment:
+                excluded_items.add(equipment_piece)
 
         #For non-keyring modes
         if (self.options.keyMode.value != self.options.keyMode.option_key_ring and
@@ -230,22 +232,22 @@ class CrystalProjectWorld(World):
         for name, data in item_table.items():
             if name not in excluded_items:
                 #Check region and add the region amounts; then check Shopsanity and add the shop amounts
-                amount:int = data.beginnerAmount
+                amount:int = int(data.beginnerAmount or 0)
                 if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-                    amount = amount + data.beginnerShops
+                    amount = amount + int(data.beginnerShops or 0)
                 if self.options.includedRegions == self.options.includedRegions.option_advanced:
-                    amount = amount + data.advancedAmount
+                    amount = amount + int(data.advancedAmount or 0)
                     if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-                        amount = amount + data.advancedShops
+                        amount = amount + int(data.advancedShops or 0)
                 elif self.options.includedRegions == self.options.includedRegions.option_expert:
-                    amount = amount + data.advancedAmount + data.expertAmount
+                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0)
                     if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-                        amount = amount + data.expertShops
+                        amount = amount + int(data.expertShops or 0)
                 elif self.options.includedRegions == self.options.includedRegions.option_all:
-                    amount = amount + data.advancedAmount + data.expertAmount + data.endGameAmount
+                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                     #atm there are no end-game specific shopsanity items
                     if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-                        amount = amount + data.endGameShops
+                        amount = amount + int(data.endGameShops or 0)
                 for _ in range(amount):
                     item = self.set_classifications(name)
                     pool.append(item)
@@ -294,7 +296,7 @@ class CrystalProjectWorld(World):
             self.included_regions.append(THE_NEW_WORLD)
         elif self.options.goal == self.options.goal.option_true_astley:
             win_condition_item = OLD_WORLD_STONE
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.newWorldStoneJobQuantity.value) and logic.old_world_requirements(state)
             self.included_regions.append(THE_OLD_WORLD)
         elif self.options.goal == self.options.goal.option_clamshells:
             win_condition_item = CLAMSHELL
