@@ -84,7 +84,7 @@ class MedievilWorld(World):
         #print("location table size: " + str(len(location_table)))
         for location in location_table:
             #print("Creating location: " + location.name)
-            if location.category in self.enabled_location_categories and location.category != MedievilLocationCategory.LEVEL_END: # original line
+            if location.category in self.enabled_location_categories:
             # if location.category in self.enabled_location_categories:
                 #print("Adding location: " + location.name + " with default item " + location.default_item)
                 new_location = MedievilLocation(
@@ -120,81 +120,83 @@ class MedievilWorld(World):
         return new_region
 
 
+# In your __init__.py file, inside the MedievilWorld class
+
     def create_items(self):
-        skip_items: List[MedievilItem] = []
-        itempool: List[MedievilItem] = []
-        itempoolSize = 0
-        
-        #print("Creating items")
+        # Calculate the number of randomized locations that need an item.
+        # These are locations that are not locked events and have an Archipelago address.
+        randomized_location_count = 0 
         for location in self.multiworld.get_locations(self.player):
+            if not location.locked and location.address is not None:
+                randomized_location_count += 1
+        
+        print(f"Requesting itempool size for randomized locations: {randomized_location_count}")
+        
+        # Call BuildItemPool to get a list of item NAMES (strings)
+        item_names_to_add = BuildItemPool(randomized_location_count, self.options)
+        
+        # Now, create actual MedievilItem instances from these names
+        generated_items: List[Item] = []
+        for item_name in item_names_to_add:
+            # Use self.create_item to instantiate a proper MedievilItem object.
+            # This method handles assigning the correct ItemClassification and ensures
+            # the 'advancement' attribute is set by the BaseClasses.Item constructor.
+            new_item = self.create_item(item_name)
+            generated_items.append(new_item)
             
-                #print("found item in category: " + str(location.category))
-                item_data = item_dictionary[location.default_item_name]
-                if item_data.category in [MedievilItemCategory.SKIP] or location.category in [MedievilLocationCategory.LEVEL_END]:
-                    #print("Adding skip item: " + location.default_item_name)
-                    skip_items.append(self.create_item(location.default_item_name))
-                elif location.category in self.enabled_location_categories:
-                    #print("Adding item: " + location.default_item_name)
-                    itempoolSize += 1
-                    itempool.append(self.create_item(location.default_item_name))
-        
-        print("Requesting itempool size: " + str(itempoolSize))
-        foo = BuildItemPool(itempoolSize, self.options)
-        print("Created item pool size: " + str(len(foo)))
+        print(f"Created item pool size: {len(generated_items)}")
 
-        removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
-        print("marked " + str(len(removable_items)) + " items as removable")
-        
-        for item in removable_items:
-            print("removable item: " + item.name)
-            itempool.remove(item)
-            itempool.append(self.create_item(foo.pop().name))
-
-        # Add regular items to itempool
-        self.multiworld.itempool += itempool
-
-        # Handle SKIP items separately
-        for skip_item in skip_items:
-            location = next(loc for loc in self.multiworld.get_locations(self.player) 
-                            if loc.default_item_name == skip_item.name)
-            location.place_locked_item(skip_item)
-            #self.multiworld.itempool.append(skip_item)
-            #print("Placing skip item: " + skip_item.name + " in location: " + location.name)
+        # Add the generated MedievilItem objects to the multiworld's item pool
+        self.multiworld.itempool.extend(generated_items)
         
         print("Final Item pool: ")
         for item in self.multiworld.itempool:
             print(item.name)
 
-
     def create_item(self, name: str) -> Item:
-        useful_categories = {
-        }
+        # This method is crucial for creating Archipelago Item instances.
+        # It looks up the item's data to determine its properties.
+        item_data = item_dictionary.get(name)
         
-        data = self.item_name_to_id[name]
+        if not item_data:
+            # Fallback for unknown items. This indicates a data inconsistency.
+            print(f"Warning: Attempted to create unknown item: {name}. Falling back to filler.")
+            return MedievilItem(name, ItemClassification.filler, None, self.player)
 
-        if name in key_item_names or item_dictionary[name].category == MedievilItemCategory.FILLER or item_dictionary[name].category == MedievilItemCategory.FUN or item_dictionary[name].category == MedievilItemCategory.PROGRESSION or item_dictionary[name].category == MedievilItemCategory.LEVEL_END:
+        # Determine the Archipelago ItemClassification based on MedievilItemData.
+        item_classification: ItemClassification
+
+        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.LEVEL_END:
             item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in useful_categories:
-            item_classification = ItemClassification.useful
-        else:
+        elif item_data.category == MedievilItemCategory.FUN:
+            item_classification = ItemClassification.useful # Use 'useful' for non-progression, non-filler items
+        else: # Default for FILLER or other categories not explicitly useful/progression
             item_classification = ItemClassification.filler
 
-        return MedievilItem(name, item_classification, data, self.player)
+        # Instantiate MedievilItem, passing its name, determined classification,
+        # its game-specific m_code, and the player ID.
+        return MedievilItem(name, item_classification, item_data.m_code, self.player)
+
+# Also ensure your base_id in MedievilWorld is consistent with Items.py:
+# base_id = 9901000 
+
+# In generate_early, correct the comma if present:
+# self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END)
 
 
     def get_filler_item_name(self) -> str:
-        return "Resources"
+        return "Gold (50)"
     
-    def set_rules(self) -> None:   
+    # def set_rules(self) -> None:   
         
-        def is_level_completed(self, level, entrance, state):
-            #print("Checking if level is completed: " + level)
-            level_table = location_tables[level]
-            #print("Level table size: " + str(len(level_table)))
-            lock_location = level_table[0].name    
-            #print("Lock location: " + lock_location)   
-            reachable = state.can_reach_location(lock_location, self.player)
-            return reachable
+        # def is_level_completed(self, level, entrance, state):
+        #     #print("Checking if level is completed: " + level)
+        #     level_table = location_tables[level]
+        #     #print("Level table size: " + str(len(level_table)))
+        #     lock_location = level_table[0].name    
+        #     #print("Lock location: " + lock_location)   
+        #     reachable = state.can_reach_location(lock_location, self.player)
+        #     return reachable
         
         # set_rule(self.multiworld.get_entrance("Molten Crater", self.player), lambda state: state.has(is_level_completed(self,"Cloud Spires","Buzz", state)))  
             

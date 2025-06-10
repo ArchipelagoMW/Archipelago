@@ -67,7 +67,7 @@ location_tables = {
     MedievilLocationData(f"Ghost Ship Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
     MedievilLocationData(f"The Entrance Hall Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
     MedievilLocationData(f"The Time Device Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
-    MedievilLocationData(f"Zaroks Lai Clearedr",f"Level_End" ,MedievilLocationCategory.LEVEL_END),                              
+    MedievilLocationData(f"Zaroks Lair Cleared",f"Level_End" ,MedievilLocationCategory.PROGRESSION),                              
 ]
 }
 
