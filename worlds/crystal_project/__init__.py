@@ -184,16 +184,19 @@ class CrystalProjectWorld(World):
         #For non-keyring modes
         if (self.options.keyMode.value != self.options.keyMode.option_key_ring and
             self.options.keyMode.value != self.options.keyMode.option_key_ring_skelefree):
-            [excluded_items.add(keyring) for keyring in key_rings]
+            for keyring in key_rings:
+                excluded_items.add(keyring)
 
         #For non-vanilla key modes
         if (self.options.keyMode.value != self.options.keyMode.option_vanilla and
             self.options.keyMode.value != self.options.keyMode.option_vanilla_skelefree):
-            [excluded_items.add(key) for key in dungeon_keys]
+            for key in dungeon_keys:
+                excluded_items.add(key)
 
         #For skeleton key mode
         if self.options.keyMode.value == self.options.keyMode.option_skeleton:
-            [excluded_items.add(key) for key in singleton_keys]
+            for key in singleton_keys:
+                excluded_items.add(key)
 
         if (self.options.keyMode.value == self.options.keyMode.option_vanilla_skelefree or 
             self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
