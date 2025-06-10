@@ -26,8 +26,8 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.stingray: ["Boat Repair", "Island Resort"],
             Fish.ghostfish: ["Progressive Weapon"],
             Fish.stonefish: ["Progressive Weapon"],
-            Fish.ice_pip: ["Progressive Weapon", "Progressive Weapon"],
-            Fish.lava_eel: ["Progressive Weapon", "Progressive Weapon", "Progressive Weapon"],
+            Fish.ice_pip: ["Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe"],
+            Fish.lava_eel: ["Progressive Weapon", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe", "Progressive Pickaxe"],
             Fish.sandfish: ["Bus Repair"],
             Fish.scorpion_carp: ["Desert Obelisk"],
             # Starting the extended family quest requires having caught all the legendaries before, so they all have the rules of every other legendary
@@ -37,6 +37,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.legend_ii: ["Beach Bridge", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],
             Fish.ms_angler: ["Beach Bridge", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],
         }
+        self.collect("Progressive Fishing Rod", 4)
         self.original_state = self.multiworld.state.copy()
         for fish in fish_and_items:
             with self.subTest(f"Region rules for {fish}"):
