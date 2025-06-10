@@ -8,7 +8,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
         ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
         SkillProgression.internal_name: SkillProgression.option_vanilla,
-        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
         Fishsanity.internal_name: Fishsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
@@ -18,7 +18,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         fish_and_items = {
             Fish.crimsonfish: ["Beach Bridge"],
             Fish.void_salmon: ["Railroad Boulder Removed", "Dark Talisman"],
-            Fish.woodskip: ["Glittering Boulder Removed", "Progressive Weapon"],  # For the ores to get the axe upgrades
+            Fish.woodskip: ["Progressive Axe", "Progressive Axe", "Progressive Weapon"],  # For the ores to get the axe upgrades
             Fish.mutant_carp: ["Rusty Key"],
             Fish.slimejack: ["Railroad Boulder Removed", "Rusty Key"],
             Fish.lionfish: ["Boat Repair"],
