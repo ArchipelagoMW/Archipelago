@@ -829,6 +829,9 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Zerg Mind Control
     item_names.INFESTOR,
 
+    # Protoss Mind Control
+    item_names.DARK_ARCHON_INDOMITABLE_WILL,
+
     # Nova
     item_names.NOVA_PLASMA_RIFLE,
 
@@ -849,6 +852,8 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Protoss general
     item_names.QUATRO,
     item_names.MOTHERSHIP_INTEGRATED_POWER,
+    item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS,
+    item_names.IMMORTAL_ANNIHILATOR_DISRUPTOR_DISPERSION,
 
     # Mindless Broodwar garbage
     item_names.GHOST_BARGAIN_BIN_PRICES,
