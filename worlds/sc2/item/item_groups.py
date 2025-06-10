@@ -853,7 +853,6 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     item_names.QUATRO,
     item_names.MOTHERSHIP_INTEGRATED_POWER,
     item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS,
-    item_names.IMMORTAL_ANNIHILATOR_DISRUPTOR_DISPERSION,
 
     # Mindless Broodwar garbage
     item_names.GHOST_BARGAIN_BIN_PRICES,
