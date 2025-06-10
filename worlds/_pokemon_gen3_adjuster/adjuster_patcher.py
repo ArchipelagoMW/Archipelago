@@ -445,6 +445,8 @@ def replace_complex_sprite(_data_address: int, _sprite_key: str, _object_name: s
                 set_overworld_sprite_data(current_overworld_info_object, "sprite_height", sprite_height)
                 set_overworld_sprite_data(current_overworld_info_object, "size_draw_ptr",
                                           data_addresses[sprite_size_data.get("data")])
+                set_overworld_sprite_data(current_overworld_info_object, "distrib_ptr",
+                                          data_addresses[sprite_size_data.get("distrib")])
 
     return len(output_data)
 
