@@ -45,10 +45,16 @@ class RegionNames(StrEnum):
 
     ## Shinshu Field
     CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
+    SHINSHU_FIELD = "Shinshu Field"
+    SHINSHU_FIELD_AGATA_CAVE="Shinshu Field (Cave to Agata Forest)"
+    TAMA_HOUSE="Tama's house"
 
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"
     HANA_VALLEY = "Hana Valley"
+
+    ## AGATA FOREST
+    CURSED_AGATA_FOREST="Agata Forest"
 
 
 class DivineInstrumentData(NamedTuple):
@@ -74,7 +80,6 @@ class DivineInstruments(Enum):
 
     # SWORDS
     TSUMUGARI = DivineInstrumentData(0x1A, "Tsumugari", 1)
-
     # SEVEN_STRIKE = DivineInstrumentData(0x1B, "Seven Strike", 2)
     # BLADE_OF_KUSANAGI = DivineInstrumentData(0x1C, "Blade of Kusanagi", 3)
     # EIGHT_WONDER = DivineInstrumentData(0x1D, "Eight Wonder", 4)
@@ -97,9 +102,11 @@ class BrushTechniques(Enum):
     # MAIN
     SUNRISE = BrushTechniqueData(0x100, "Sunrise", item_classification=ItemClassification.progression)
     REJUVENATION = BrushTechniqueData(0x101, "Rejuvenation", item_classification=ItemClassification.progression)
+    # FIXME: set 3 power slashes when we have more locations
     POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=1,
                                      item_classification=ItemClassification.progression)
-    # CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=3)
+    # FIXME: set 3 cherry bombs when we have more locations
+    CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=1)
     GREENSPROUT_BLOOM = BrushTechniqueData(0x104, "Greensprout (Bloom)")
     GREENSPROUT_WATERLILY = BrushTechniqueData(0x105, "Greensprout (Waterlily)",
                                                item_classification=ItemClassification.progression)
@@ -128,6 +135,7 @@ class BrushTechniques(Enum):
     def list():
         return list(map(lambda b: b.value, BrushTechniques))
 
+
 class EnnemyData(NamedTuple):
     code: int
     name: str
@@ -135,9 +143,11 @@ class EnnemyData(NamedTuple):
     floral_finisher: BrushTechniques
     required_techniques: List[BrushTechniques] = []
 
+
 class OkamiEnnemies(Enum):
     GREEN_IMP = EnnemyData(0x03, "Green Imp", 0, BrushTechniques.POWER_SLASH)
     RED_IMP = EnnemyData(0x00, "Red Imp", 0, BrushTechniques.POWER_SLASH)
+    YELLOW_IMP = EnnemyData(0x02, "Yellow Imp", 0, BrushTechniques.POWER_SLASH)
 
     @staticmethod
     def list():
@@ -157,7 +167,6 @@ class LocData(NamedTuple):
 
 
 class EventData(NamedTuple):
-    id: int = 0
     required_brush_techniques: List[BrushTechniques] = []
     power_slash_level: int = 0
     cherry_bomb_level: int = 0
@@ -167,9 +176,6 @@ class EventData(NamedTuple):
     has_events: [str] = []
     required_items: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
-
-
-
 
 
 class ExitData(NamedTuple):

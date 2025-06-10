@@ -13,23 +13,23 @@ def has_power_slash_level(state: CollectionState, world: "OkamiWorld", level: in
 
 
 def has_cherry_bomb_level(state: CollectionState, world: "OkamiWorld", level: int) -> bool:
-    return state.has("0", world.player, level)
+    return state.has(BrushTechniques.CHERRY_BOMB.value.item_name, world.player, level)
 
 
 def has_brush_technique(state: CollectionState, world: "OkamiWorld", technique: BrushTechniques) -> bool:
     return state.has(technique.value.item_name, world.player)
 
 
-def has_portable_fire_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.SOLAR_FLARE.value.item_name, world.player)
+#def has_portable_fire_source(state: CollectionState, world: "OkamiWorld") -> bool:
+#    return state.has(DivineInstruments.SOLAR_FLARE.value.item_name, world.player)
 
 
-def has_portable_thunder_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.THUNDER_EDGE.value.item_name, world.player)
+#def has_portable_thunder_source(state: CollectionState, world: "OkamiWorld") -> bool:
+#    return state.has(DivineInstruments.THUNDER_EDGE.value.item_name, world.player)
 
 
-def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool:
-    return state.has(DivineInstruments.TUNDRA_BEADS.value.item_name, world.player)
+#def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool:
+#    return state.has(DivineInstruments.TUNDRA_BEADS.value.item_name, world.player)
 
 
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
@@ -101,7 +101,7 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 def set_rules(world: "OkamiWorld"):
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
-        "Shinshu Field - Restore Guardian Sapling", world.player)
+         "Agata Forest - Restore Guardian Sapling", world.player)
     return
     # set_specific_rules(world)
 

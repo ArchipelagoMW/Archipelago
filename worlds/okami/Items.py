@@ -23,10 +23,11 @@ def create_brush_techniques_items(world: "OkamiWorld")-> List[Item]:
 def create_brush_technique_item(world: "OkamiWorld", data: BrushTechniqueData) -> Item:
     return OkamiItem(data.item_name, data.item_classification, data.code, world.player)
 
-def create_divine_instrument_items(world: "OkamiWorld")-> List[Item]:
+def create_divine_instrument_items(world: "OkamiWorld",precollected_instrument:str|None)-> List[Item]:
     items = []
     for d in DivineInstruments.list():
-        items.append(create_divine_instrument_item(world, d))
+        if precollected_instrument and d.item_name!=precollected_instrument:
+            items.append(create_divine_instrument_item(world, d))
     return items
 
 def create_divine_instrument_item(world:"OkamiWorld", data:DivineInstrumentData) -> Item:
@@ -63,6 +64,8 @@ def get_item_name_to_id_dict() -> dict:
     item_dict = {name: data.code for name, data in item_table.items()}
     for b in BrushTechniques.list():
         item_dict[b.item_name] = b.code
+    for d in DivineInstruments.list():
+        item_dict[d.item_name] = d.code
     return item_dict
 
 
@@ -79,7 +82,7 @@ okami_items = {
     ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
     ### I'm not sure how that's going to work with ER.
     ### TODO: Update their ids
-    "Kushi's Sake" : ItemData(0x200, ItemClassification.progression),
+    "Vista of the Gods" : ItemData(0x200, ItemClassification.progression),
 
     # Other
     #"Astral Pouch": ItemData(0x06, ItemClassification.useful),
@@ -87,10 +90,14 @@ okami_items = {
 
     # Filler
     "Holy Bone S": ItemData(0x8F, ItemClassification.filler),
+    "Demon Fang": ItemData(0x1F, ItemClassification.filler),
+    "White porcelain pot":ItemData(0xA0, ItemClassification.filler)
 }
 
 junk_weights = {
-    "Holy Bone S": 1
+    "Holy Bone S": 1,
+    "Demon Fang":2,
+    "White porcelain pot":1
 }
 # For items that need to appear more than once
 item_frequencies = {

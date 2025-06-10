@@ -83,17 +83,22 @@ class OkamiWorld(World):
 
     def create_itempool(world: "OkamiWorld") -> List[Item]:
         itempool: List[Item] = []
+
+        di =None
+        if world.options.StartWithDivineInstrument:
+            # Get a random divine instrument.
+            di = random.choice(list(world.item_name_groups.get('divine_instrument')))
+            world.push_precollected(
+                OkamiItem(di, ItemClassification.progression, get_item_name_to_id_dict()[di], world.player))
+
         itempool += create_brush_techniques_items(world)
-        itempool += create_divine_instrument_items(world)
+        itempool += create_divine_instrument_items(world,di)
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
         itempool += create_junk_items(world, get_total_locations(world) - len(itempool))
 
-        if world.options.StartWithDivineInstrument:
-            # Get a random divine instrument.
-            di = random.choice(list(world.item_name_groups.get('divine_instrument')))
-            world.push_precollected(OkamiItem(di,ItemClassification.progression,0,world.player))
+
 
         return itempool
 
