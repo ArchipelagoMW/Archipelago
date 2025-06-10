@@ -29,15 +29,10 @@ class CrystalProjectTestBase(WorldTestBase):
                     self.assertFalse(self.can_reach_entrance(region + " -> " + unreachable))
 
     def collect_mounts(self):
-        self.collect_by_name(
-            [PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_SALMON_VIOLA,
-             PROGRESSIVE_QUINTAR_WOODWIND, PROGRESSIVE_QUINTAR_WOODWIND, PROGRESSIVE_QUINTAR_WOODWIND,
-             IBEK_BELL,
-             OWL_DRUM])
+        self.collect_by_name([PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_QUINTAR_WOODWIND, IBEK_BELL, OWL_DRUM])
 
     def collect_level_caps(self):
-        self.collect_by_name(
-            [PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.collect_by_name(PROGRESSIVE_LEVEL_CAP)
 
     def collect_mounts_and_level_caps(self):
         self.collect_mounts()
