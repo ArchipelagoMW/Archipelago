@@ -5,7 +5,7 @@ from .data import LOCATIONS_DATA, ITEMS_DATA
 def build_location_room_to_watches() -> Dict[int, dict[str, dict]]:
     location_room_to_watches: Dict[int, dict[str, dict]] = {}
     for loc_name, location in LOCATIONS_DATA.items():
-        room_id = location["stage_id"] * 100 + location["floor_id"]
+        room_id = location["stage_id"] * 0x100 + location["floor_id"]
         if room_id not in location_room_to_watches:
             location_room_to_watches[room_id] = {}
         location_room_to_watches[room_id][loc_name] = location

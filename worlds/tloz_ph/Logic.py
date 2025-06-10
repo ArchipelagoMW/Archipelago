@@ -1,12 +1,10 @@
 from BaseClasses import MultiWorld, Item
-from . data import LOCATIONS_DATA
+from .data import LOCATIONS_DATA
 from .data.LogicPredicates import *
-from . Options import PhantomHourglassOptions
-
+from .Options import PhantomHourglassOptions
 
 
 def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglassOptions):
-
     overworld_logic = [
 
         # ====== Mercay Island ==============
@@ -18,12 +16,22 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["mercay island", "totok", False, None],
         ["mercay island", "mercay freedle island", False, lambda state: ph_has_explosives(state, player)],
         ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: ph_has_range(state, player)],
-        ["mercay island", "mercay passage 1", False, lambda state: any([ph_has_sword(state, player),
-                                                                        ph_has_explosives(state, player)])]
+
+        # ======== Mountain Passage =========
+
+        ["mercay island", "mercay passage 1", False, lambda state:
+            any([ph_can_cut_small_trees(state, player),
+                ph_has_small_keys(state, player, "Mountain Passage", 3)])],
+        ["mercay island", "mercay passage 2", False, lambda state: ph_can_reach_MP2(state, player)],
+
 
         # ========== TotOK ===================
 
-
+        # ============ Shops ====================
+        ["mercay island", "shop power gem", False, lambda state: ph_has_rupees(state, player, 500)],
+        ["mercay island", "shop quiver", False, lambda state: ph_can_buy_quiver(state, player)],
+        ["mercay island", "shop bombchu bag", False, lambda state: ph_can_buy_chu_bag(state, player)],
+        ["mercay island", "shop heart container", False, lambda state: ph_can_buy_heart(state, player)],
 
         # ============ SW Ocean =================
 
@@ -35,11 +43,11 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
 def is_item(item: Item, player: int, item_name: str):
     return item.player == player and item.name == item_name
 
-def create_connections(multiworld: MultiWorld, player: int, origin_name: str, options):
 
+def create_connections(multiworld: MultiWorld, player: int, origin_name: str, options):
     all_logic = [
         make_overworld_logic(player, origin_name, options)
-        ]
+    ]
 
     # Create connections
     for logic_array in all_logic:

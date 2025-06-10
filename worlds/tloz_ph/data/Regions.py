@@ -10,5 +10,13 @@ REGIONS = [
     "mercay freedle tunnel chest",
     "mercay passage 1",
     "mercay passage 2",
-    "mercay passage 3"
+    "mercay passage 3",
+    
+    
+    # Shop Regions
+    "shop power gem",
+    "shop bombchu bag",
+    "shop quiver",
+    "shop heart container",
+    "shop heart container",
 ]
