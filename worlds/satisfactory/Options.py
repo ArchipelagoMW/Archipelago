@@ -47,7 +47,7 @@ class ChoiceMap(Choice, metaclass=ChoiceMapMeta):
 class ElevatorTier(NamedRange):
     """
     Put these Shipments to Space Elevator packages in logic.
-    Milestones past these packages will unchanged from the base game.
+    Milestones past these packages be empty.
     If your goal selection contains *Space Elevator Tier* then the goal will be to complete these shipments.
     """
     display_name = "Space Elevator shipments in logic"
