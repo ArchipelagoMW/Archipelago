@@ -7,6 +7,7 @@ permissions:
   contents: read
   pull-requests: write
 env:
+  # wondering if this helped
   GH_REPO: ${{ github.repository }}
 
 jobs:
