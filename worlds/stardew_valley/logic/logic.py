@@ -168,15 +168,15 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.building.has_building(Building.fish_pond),
             AnimalProduct.truffle: self.animal.has_animal(Animal.pig) & self.season.has_any_not_winter(),
-            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter), # Should also check void chicken if there was an alternative to obtain it without void egg
+            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter),  # Should also check void chicken if there was an alternative to obtain it without void egg
             AnimalProduct.wool: self.animal.has_animal(Animal.rabbit) | self.animal.has_animal(Animal.sheep),
             AnimalProduct.slime_egg_green: self.has(Machine.slime_egg_press) & self.has(Loot.slime),
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
             AnimalProduct.slime_egg_purple: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(9),
-            AnimalProduct.slime_egg_tiger: self.has(Fish.lionfish) & self.building.has_building(Building.fish_pond),
-            AnimalProduct.duck_egg_starter: self.logic.false_, # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
-            AnimalProduct.dinosaur_egg_starter: self.logic.false_, # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
+            AnimalProduct.slime_egg_tiger: self.can_fish_pond(Fish.lionfish, *(Forageable.ginger, Fruit.pineapple, Fruit.mango)),
+            AnimalProduct.duck_egg_starter: self.logic.false_,  # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
+            AnimalProduct.dinosaur_egg_starter: self.logic.false_,  # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
             AnimalProduct.egg_starter: self.logic.false_,  # It could be purchased at the Desert Festival, but festival logic is quite a mess, so not considering it yet...
             AnimalProduct.golden_egg_starter: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
             AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
@@ -381,5 +381,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
         return self.region.can_reach(Region.farm) & self.received(obelisk)
 
-    def can_fish_pond(self, fish: str) -> StardewRule:
-        return self.building.has_building(Building.fish_pond) & self.has(fish)
+    def can_fish_pond(self, fish: str, *items: str) -> StardewRule:
+        rule = self.building.has_building(Building.fish_pond) & self.has(fish)
+        if items:
+            rule = rule & self.has_all(*items)
+        return rule
