@@ -5,7 +5,7 @@ from collections import defaultdict
 from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, ClassVar, cast
 
-from typing_extensions import Self, override
+from typing_extensions import Never, Self, override
 
 from BaseClasses import Entrance
 
@@ -81,6 +81,38 @@ class Rule:
     @classmethod
     def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(**data.get("args", {}))
+
+    def __and__(self, other: "Rule") -> "Rule":
+        """Combines two rules into an And rule"""
+        if isinstance(self, And):
+            if isinstance(other, And):
+                if self.options == other.options:
+                    return And(*self.children, *other.children, options=self.options)
+            else:
+                return And(*self.children, other, options=self.options)
+        elif isinstance(other, And):
+            return And(self, *other.children, options=other.options)
+        return And(self, other)
+
+    def __or__(self, other: "Rule") -> "Rule":
+        """Combines two rules into an Or rule"""
+        if isinstance(self, Or):
+            if isinstance(other, Or):
+                if self.options == other.options:
+                    return Or(*self.children, *other.children, options=self.options)
+            else:
+                return Or(*self.children, other, options=self.options)
+        elif isinstance(other, Or):
+            return Or(self, *other.children, options=other.options)
+        return Or(self, other)
+
+    def __bool__(self) -> Never:
+        raise TypeError("Use & or | to combine rules, or use `is not None` for boolean tests")
+
+    @override
+    def __str__(self) -> str:
+        options = f"options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({options})"
 
     @dataclasses.dataclass(kw_only=True, frozen=True)
     class Resolved:
@@ -196,6 +228,12 @@ class NestedRule(Rule):
     @classmethod
     def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(*data.get("children", []), options=data.get("options"))
+
+    @override
+    def __str__(self) -> str:
+        children = ", ".join(str(c) for c in self.children)
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({children}{options})"
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -376,6 +414,12 @@ class Has(Rule):
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.item_name, self.count, player=world.player)
 
+    @override
+    def __str__(self) -> str:
+        count = f", count={self.count}" if self.count > 1 else ""
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({self.item_name}{count}{options})"
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_name: str
@@ -417,6 +461,12 @@ class HasAll(Rule):
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        items = ", ".join(self.item_names)
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}{options})"
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
@@ -464,6 +514,12 @@ class HasAny(Rule):
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
 
+    @override
+    def __str__(self) -> str:
+        items = ", ".join(self.item_names)
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}{options})"
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
@@ -502,6 +558,11 @@ class CanReachLocation(Rule):
             raise ValueError(f"Location {location.name} has no parent region")
         return self.Resolved(self.location_name, location.parent_region.name, player=world.player)
 
+    @override
+    def __str__(self) -> str:
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({self.location_name}{options})"
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         location_name: str
@@ -532,6 +593,11 @@ class CanReachRegion(Rule):
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.region_name, player=world.player)
 
+    @override
+    def __str__(self) -> str:
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({self.region_name}{options})"
+
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         region_name: str
@@ -560,6 +626,11 @@ class CanReachEntrance(Rule):
     @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
         return self.Resolved(self.entrance_name, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({self.entrance_name}{options})"
 
     @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):

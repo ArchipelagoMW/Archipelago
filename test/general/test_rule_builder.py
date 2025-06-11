@@ -45,7 +45,7 @@ network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data
 
 
 @classvar_matrix(
-    rule=(
+    rules=(
         (
             And(Has("A", 1), Has("A", 2)),
             Has.Resolved("A", 2, player=1),
@@ -69,13 +69,14 @@ network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data
     )
 )
 class TestSimplify(unittest.TestCase):
-    rule: ClassVar[tuple[Rule, Rule.Resolved]]
+    rules: ClassVar[tuple[Rule, Rule.Resolved]]
 
     def test_simplify(self) -> None:
         multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
-        rule, expected = self.rule
-        self.assertEqual(rule.resolve(world), expected)  # type: ignore
+        rule, expected = self.rules
+        resolved_rule = rule.resolve(world)  # type: ignore
+        self.assertEqual(resolved_rule, expected, str(resolved_rule))
 
 
 class TestOptions(unittest.TestCase):
@@ -108,3 +109,51 @@ class TestOptions(unittest.TestCase):
 
         self.world.options.choice_option.value = 2
         self.assertEqual(rule.resolve(self.world), Has.Resolved("A", player=1))
+
+
+@classvar_matrix(
+    rules=(
+        (
+            Has("A") & Has("B"),
+            And(Has("A"), Has("B")),
+        ),
+        (
+            Has("A") | Has("B"),
+            Or(Has("A"), Has("B")),
+        ),
+        (
+            And(Has("A")) & Has("B"),
+            And(Has("A"), Has("B")),
+        ),
+        (
+            And(Has("A"), Has("B")) & And(Has("C")),
+            And(Has("A"), Has("B"), Has("C")),
+        ),
+        (
+            And(Has("A"), Has("B")) | Or(Has("C"), Has("D")),
+            Or(And(Has("A"), Has("B")), Has("C"), Has("D")),
+        ),
+        (
+            Or(Has("A")) | Or(Has("B"), options={"opt": 1}),
+            Or(Or(Has("A")), Or(Has("B"), options={"opt": 1})),
+        ),
+        (
+            And(Has("A"), options={"opt": 1}) & And(Has("B"), options={"opt": 1}),
+            And(Has("A"), Has("B"), options={"opt": 1}),
+        ),
+        (
+            Has("A") & Has("B") & Has("C"),
+            And(Has("A"), Has("B"), Has("C")),
+        ),
+        (
+            Has("A") & Has("B") | Has("C") & Has("D"),
+            Or(And(Has("A"), Has("B")), And(Has("C"), Has("D"))),
+        ),
+    )
+)
+class TestComposition(unittest.TestCase):
+    rules: ClassVar[tuple[Rule, Rule]]
+
+    def test_composition(self) -> None:
+        combined_rule, expected = self.rules
+        self.assertEqual(combined_rule, expected, str(combined_rule))
