@@ -146,6 +146,7 @@ class Region:
     dangerous_mines_20 = "Dangerous Mines - Floor 20"
     dangerous_mines_60 = "Dangerous Mines - Floor 60"
     dangerous_mines_100 = "Dangerous Mines - Floor 100"
+    outside_adventure_guild = "Outside Adventure Guild"
 
 
 class LogicRegion:
@@ -203,7 +204,7 @@ class LogicRegion:
     hat_mouse = "Hat Mouse"
     lost_items_shop = "Lost Items Shop"
     garbage_cans = "Garbage Cans"
-
+    wizard_blueprints = "Wizard Blueprints"
 
 
 class DeepWoodsRegion:

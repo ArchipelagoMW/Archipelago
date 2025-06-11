@@ -210,10 +210,12 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_dangerous_mine_rules(logic, multiworld, player, content)
 
     set_entrance_rule(multiworld, player, Entrance.enter_tide_pools, logic.received("Beach Bridge") | logic.mod.magic.can_blink())
+    set_entrance_rule(multiworld, player, Entrance.mountain_to_outside_adventure_guild, logic.received("Landslide Removed"))
     set_entrance_rule(multiworld, player, Entrance.enter_quarry,
                       (logic.received("Bridge Repair") | logic.mod.magic.can_blink()) & logic.tool.has_tool(Tool.pickaxe))
     set_entrance_rule(multiworld, player, Entrance.enter_secret_woods, logic.tool.has_tool(Tool.axe, ToolMaterial.iron) | (logic.mod.magic.can_blink()))
-    set_entrance_rule(multiworld, player, Entrance.forest_to_wizard_tower, logic.region.can_reach(Region.community_center))
+    set_entrance_rule(multiworld, player, Entrance.town_to_community_center, logic.received("Community Center Key"))
+    set_entrance_rule(multiworld, player, Entrance.forest_to_wizard_tower, logic.received("Wizard Invitation"))
     set_entrance_rule(multiworld, player, Entrance.forest_to_sewer, logic.wallet.has_rusty_key())
     set_entrance_rule(multiworld, player, Entrance.town_to_sewer, logic.wallet.has_rusty_key())
     set_entrance_rule(multiworld, player, Entrance.enter_abandoned_jojamart, logic.has_abandoned_jojamart())
@@ -252,7 +254,15 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year1_books, logic.time.has_year_two)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year3_books, logic.time.has_year_three)
     set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
+    set_entrance_rule(multiworld, player, LogicEntrance.wizard_blueprints, logic.received("Magic Ink"))
     set_entrance_rule(multiworld, player, LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS/2))
+
+    set_entrance_rule(multiworld, player, Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_jojamart_shortcut, logic.received("Mountain To Jojamart Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_town_shortcut, logic.received("Mountain To Town Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Town To Tide Pools Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Lake To Adventure Guild Shortcut"))
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, content: StardewContent):
@@ -1033,7 +1043,7 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Junimo Hut Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.junimo_hut))
     set_location_rule(multiworld, player, "Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
     set_location_rule(multiworld, player, "Purchase Return Scepter", logic.money.can_spend_at(Region.sewer, 2_000_000))
-    set_location_rule(multiworld, player, "Community Upgrade Blueprint", logic.money.can_spend_at(Region.carpenter, 300_000))
+    set_location_rule(multiworld, player, "Pam House Blueprint", logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
     set_location_rule(multiworld, player, "Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
     set_location_rule(multiworld, player, "Mountain To Jojamart Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
     set_location_rule(multiworld, player, "Mountain To Town Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))

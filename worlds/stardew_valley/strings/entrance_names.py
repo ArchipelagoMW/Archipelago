@@ -178,6 +178,14 @@ class Entrance:
     parrot_express_jungle_to_docks = "Parrot Express Jungle to Docks"
     parrot_express_dig_site_to_docks = "Parrot Express Dig Site to Docks"
     parrot_express_volcano_to_docks = "Parrot Express Volcano to Docks"
+    mountain_to_outside_adventure_guild = "Mountain to Outside Adventure Guild"
+
+    forest_beach_shortcut = "Forest to Beach Shortcut"
+    mountain_jojamart_shortcut = "Mountain to Jojamart Shortcut"
+    mountain_town_shortcut = "Mountain to Town Shortcut"
+    town_tidepools_shortcut = "Town to Tide Pools Shortcut"
+    tunnel_backwoods_shortcut = "Tunnel to Backwoods Shortcut"
+    mountain_lake_to_outside_adventure_guild_shortcut = "Mountain Lake to Outside Adventure Guild"
 
 
 class LogicEntrance:
@@ -245,6 +253,7 @@ class LogicEntrance:
     fish_in_waterfall = "Fish In Waterfall"
     find_secret_notes = "Find Secret Notes"
     search_garbage_cans = "Search Garbage Cans"
+    wizard_blueprints = "Purchase Wizard Blueprints"
 
 
 # Skull Cavern Elevator
