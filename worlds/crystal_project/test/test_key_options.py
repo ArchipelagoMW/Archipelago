@@ -6,8 +6,6 @@ from ..constants.regions import *
 from ..constants.teleport_stones import *
 
 class TestVanillaKeys(CrystalProjectTestBase):
-    run_default_tests = False
-
     options = {
         "keyMode": 2,
     }
@@ -33,8 +31,6 @@ class TestVanillaKeys(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
 
 class TestKeyRings(CrystalProjectTestBase):
-    run_default_tests = False
-
     options = {
         "keyMode": 1
     }

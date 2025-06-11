@@ -2,21 +2,14 @@ from test.bases import WorldTestBase
 from ..constants.mounts import *
 from ..constants.regions import *
 from ..constants.key_items import *
-
+from ..constants.item_groups import *
 
 class CrystalProjectTestBase(WorldTestBase):
     game = "Crystal Project"
+    run_default_tests = False
 
     def assert_region_entrances(self, region: str, reachable_regions: tuple[str, ...] | None=None, unreachable_regions: tuple[str, ...] | None=None):
-        menu_entrance: str = MENU + " -> " + region
-        menu_entrances = self.multiworld.get_entrances(self.world.player)
-        menu_entrance_exists: bool = False
-        for entrance in menu_entrances:
-            if entrance.name == menu_entrance:
-                menu_entrance_exists = True
-
-        if not menu_entrance_exists:
-            self.multiworld.get_region(MENU, self.world.player).add_exits([region])
+        self.world.origin_region_name = region
 
         if isinstance(reachable_regions, tuple):
             for reachable in reachable_regions:
@@ -39,6 +32,11 @@ class CrystalProjectTestBase(WorldTestBase):
             for unreachable in unreachable_locations:
                 with self.subTest(msg="Test Cannot Reach Location", unreachable_location=unreachable):
                     self.assertFalse(self.can_reach_location(unreachable))
+
+    def set_collected_job_count(self, job_count: int):
+        """Guarantees that you have collected X non-starting jobs.
+        If you run this twice in a single test, i.e. collect_jobs(3) and then collect_jobs(4) you should assume you have 4 jobs collected, not 7"""
+        self.collect(self.get_items_by_name(self.world.item_name_groups[JOB])[:job_count])
 
 
     def collect_mounts(self):
