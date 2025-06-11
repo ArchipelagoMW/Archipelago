@@ -1049,7 +1049,6 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
     set_location_rule(multiworld, player, "Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
     set_location_rule(multiworld, player, "Mountain Lake To Adventure Guild Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
     set_location_rule(multiworld, player, "Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
     set_location_rule(multiworld, player, "Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
     set_location_rule(multiworld, player, "Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
@@ -1082,6 +1081,7 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
         set_location_rule(multiworld, player, "Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
         set_location_rule(multiworld, player, "Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
         set_location_rule(multiworld, player, "Island Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.island_obelisk))
+        set_location_rule(multiworld, player, "Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):

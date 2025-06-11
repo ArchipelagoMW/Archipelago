@@ -96,6 +96,7 @@ class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
         location_names = ["Walnutsanity: Complete Large Animal Collection", "Walnutsanity: Complete Snake Collection",
                           "Walnutsanity: Complete Mummified Frog Collection", "Walnutsanity: Complete Mummified Bat Collection",
                           "Walnutsanity: Purple Flowers Island Survey", "Walnutsanity: Purple Starfish Island Survey", ]
+        self.collect("Wizard Invitation")
         self.collect("Island Obelisk")
         self.collect("Island North Turtle")
         self.collect("Island West Turtle")
