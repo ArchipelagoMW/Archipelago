@@ -41,9 +41,9 @@ class CrystalProjectWorld(World):
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations(-1, None)}
-    boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, None)}
-    shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(-1, options)}
+    boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, options)}
+    shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, options)}
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
