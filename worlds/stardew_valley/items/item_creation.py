@@ -15,6 +15,7 @@ from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
+from ..options.options import IncludeEndgameLocations
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -119,6 +120,8 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_movie_items(item_factory, options, items)
     create_secrets_items(item_factory, options, items)
     create_eatsanity_enzyme_items(item_factory, options, items)
+    create_endgame_locations_items(item_factory, options, items)
+
     create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
     items.append(item_factory(CommunityUpgrade.mr_qi_plane_ride))
@@ -562,6 +565,13 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
     items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])
     items.extend(item_factory(item) for item in ["Oil Of Garlic Enzyme"])
     items.extend(item_factory(item) for item in ["Tipsy Enzyme"])
+
+
+def create_endgame_locations_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    if options.include_endgame_locations == IncludeEndgameLocations.option_false:
+        return
+
+    items.extend(item_factory(item) for item in items_by_group[Group.ENDGAME_LOCATION_ITEMS])
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
