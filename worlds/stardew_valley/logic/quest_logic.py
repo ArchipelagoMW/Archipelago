@@ -115,13 +115,13 @@ class QuestLogic(BaseLogic):
 
     def has_dark_talisman(self) -> StardewRule:
         if self.options.quest_locations.has_story_quests():
-            return self.logic.received(Wallet.magic_ink)
-        return self.logic.quest.can_complete_quest(Quest.magic_ink)
+            return self.logic.received(Wallet.dark_talisman)
+        return self.logic.quest.can_complete_quest(Quest.dark_talisman)
 
     def has_magic_ink(self) -> StardewRule:
         if self.options.quest_locations.has_story_quests():
-            return self.logic.received(Wallet.dark_talisman)
-        return self.logic.quest.can_complete_quest(Quest.dark_talisman)
+            return self.logic.received(Wallet.magic_ink)
+        return self.logic.quest.can_complete_quest(Quest.magic_ink)
 
     def has_raccoon_shop(self, tier: int = 1) -> StardewRule:
         number_raccoons_required = 1 + tier  # 1 for Mr Raccoon, plus 1 for each shop tier at Mrs Raccoon
