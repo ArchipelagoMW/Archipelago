@@ -64,7 +64,7 @@ class BuildingLogic(BaseLogic):
             return rule & self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Fish.clam, WaterItem.coral)
         if building_name == WizardBuilding.desert_obelisk:
             return rule & self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.coconut, Forageable.cactus_fruit)
-        if building_name == WizardBuilding.desert_obelisk:
+        if building_name == WizardBuilding.island_obelisk:
             return rule & self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.dragon_tooth, Fruit.banana)
         if building_name == WizardBuilding.junimo_hut:
             return rule & self.logic.money.can_spend(20_000) & self.logic.has_all(MetalBar.iridium, Material.stone, Fruit.starfruit, Material.fiber)

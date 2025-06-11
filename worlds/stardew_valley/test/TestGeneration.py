@@ -237,6 +237,7 @@ class TestShipsanityNone(SVTestBase):
         Shipsanity.internal_name: Shipsanity.option_none
     }
 
+    # @property
     def run_default_tests(self) -> bool:
         # None is default
         return False
