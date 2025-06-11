@@ -21,7 +21,6 @@ exits = {
 }
 events = {
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: {
-        #FIXME: Doesn't seem to require cherry bomb at the moment; not sure why
         "Shinshu Field - Open Entrance to Agata Forest": EventData(cherry_bomb_level=1)
     }
 }

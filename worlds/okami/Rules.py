@@ -75,7 +75,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
         add_rule(loc, (lambda state, level=data.power_slash_level: has_power_slash_level(state, world, level)))
 
     if data.cherry_bomb_level > 0:
-        add_rule(loc, (lambda state, level=data.power_slash_level: has_cherry_bomb_level(state, world, level)))
+        add_rule(loc, (lambda state, level=data.cherry_bomb_level: has_cherry_bomb_level(state, world, level)))
 
     if data.buried == 1 and world.options.BuriedChestsByNight == 1:
         add_rule(loc, lambda state: state.has(BrushTechniques.CRESCENT.value.item_name, world.player))

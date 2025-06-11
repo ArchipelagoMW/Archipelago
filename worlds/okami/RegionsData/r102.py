@@ -51,7 +51,10 @@ locations = {
         "Kamiki Village - Kushi's Gift": LocData(11, has_events=["Kamiki Village - Repair Kushi's Watermill"]),
     },
     RegionNames.KAMIKI_ISLANDS: {
-        "Kamiki Village - Island Chest 1": LocData(9),
-        "Kamiki Village - Island buried Chest 1": LocData(10, buried=1),
+        "Kamiki Village - West Island chest ": LocData(9),
+        "Kamiki Village - West Island buried chest": LocData(10, buried=1),
+        "Kamiki Village - East Islands Sun fragment chest": LocData(18),
+        "Kamiki Village - East Islands Stray Bead Chest": LocData(19),
+        "Kamiki Village - East Islands Buried Chest": LocData(20, buried=1),
     }
 }

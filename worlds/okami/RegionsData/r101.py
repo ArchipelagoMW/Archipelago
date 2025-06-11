@@ -15,6 +15,7 @@ events = {
     RegionNames.CAVE_OF_NAGI: {
         "Cave of Nagi - Repair statue": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION]),
     },
+    # Never gets collected, probably bc it's assumed you can backtrack
     RegionNames.CAVE_OF_NAGI_TACHIGAMI: {
         "Cave of Nagi - Cut tutorial rock": EventData(power_slash_level=1)
     }

@@ -52,6 +52,7 @@ class RegionNames(StrEnum):
     ## HANA VALLEY
     CURSED_HANA_VALLEY = "Cursed Hana Valley"
     HANA_VALLEY = "Hana Valley"
+    HANA_VALLEY_SAKIGAMI =" Hana Valley - Sakigami sequence"
 
     ## AGATA FOREST
     CURSED_AGATA_FOREST="Agata Forest"
@@ -102,11 +103,10 @@ class BrushTechniques(Enum):
     # MAIN
     SUNRISE = BrushTechniqueData(0x100, "Sunrise", item_classification=ItemClassification.progression)
     REJUVENATION = BrushTechniqueData(0x101, "Rejuvenation", item_classification=ItemClassification.progression)
-    # FIXME: set 3 power slashes when we have more locations
-    POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=1,
+    POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=3,
                                      item_classification=ItemClassification.progression)
     # FIXME: set 3 cherry bombs when we have more locations
-    CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=1)
+    CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=1,item_classification=ItemClassification.progression)
     GREENSPROUT_BLOOM = BrushTechniqueData(0x104, "Greensprout (Bloom)")
     GREENSPROUT_WATERLILY = BrushTechniqueData(0x105, "Greensprout (Waterlily)",
                                                item_classification=ItemClassification.progression)
