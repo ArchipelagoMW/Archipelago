@@ -237,11 +237,6 @@ class TestShipsanityNone(SVTestBase):
         Shipsanity.internal_name: Shipsanity.option_none
     }
 
-    # @property
-    def run_default_tests(self) -> bool:
-        # None is default
-        return False
-
     def test_no_shipsanity_locations(self):
         for location in self.get_real_locations():
             with self.subTest(location.name):
