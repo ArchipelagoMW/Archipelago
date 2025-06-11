@@ -57,7 +57,7 @@ class BuildingLogic(BaseLogic):
         return self.logic.region.can_reach(Region.carpenter)
 
     def can_purchase_wizard_blueprint(self, building_name: str) -> StardewRule:
-        rule = self.logic.region.can_reach(Region.wizard_tower) & self.logic.received("Magic Ink")
+        rule = self.logic.region.can_reach(Region.wizard_tower) & self.logic.quest.has_magic_ink
         if building_name == WizardBuilding.earth_obelisk:
             return rule & self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Mineral.earth_crystal)
         if building_name == WizardBuilding.water_obelisk:
