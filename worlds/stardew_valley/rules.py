@@ -1075,13 +1075,14 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     elif world_options.friendsanity != Friendsanity.option_none:
         set_location_rule(multiworld, player, "Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_false:
-        set_location_rule(multiworld, player, "Purchase Horse Flute", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-        set_location_rule(multiworld, player, "Purchase Pierre's Missing Stocklist", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-        set_location_rule(multiworld, player, "Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
-        set_location_rule(multiworld, player, "Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
-        set_location_rule(multiworld, player, "Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
         set_location_rule(multiworld, player, "Island Obelisk Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.island_obelisk))
-        set_location_rule(multiworld, player, "Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
+        if world_options.special_order_locations == SpecialOrderLocations.option_board_qi:
+            set_location_rule(multiworld, player, "Purchase Horse Flute", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+            set_location_rule(multiworld, player, "Purchase Pierre's Missing Stocklist", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+            set_location_rule(multiworld, player, "Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
+            set_location_rule(multiworld, player, "Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
+            set_location_rule(multiworld, player, "Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
+            set_location_rule(multiworld, player, "Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
 
 
 def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
