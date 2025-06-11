@@ -200,15 +200,17 @@ class TestSkullCavernLogic(SVTestBase):
         self.assert_can_reach_region(Region.skull_cavern_75)
 
     def generate_items_for_mine_115(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
         bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
-        return ["Landslide Removed", *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
     def generate_items_for_skull_50(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 3
         swords = [self.get_item_by_name("Progressive Sword")] * 4
         combat_levels = [self.get_item_by_name("Combat Level")] * 6
@@ -216,9 +218,10 @@ class TestSkullCavernLogic(SVTestBase):
         bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
         farm_house = self.get_item_by_name("Progressive House")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
 
     def generate_items_for_skull_100(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 4
         swords = [self.get_item_by_name("Progressive Sword")] * 5
         combat_levels = [self.get_item_by_name("Combat Level")] * 8
@@ -226,7 +229,7 @@ class TestSkullCavernLogic(SVTestBase):
         bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
         farm_house = self.get_item_by_name("Progressive House")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
+        return [landslide, *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
 
 
 class TestShipsanityNone(SVTestBase):
