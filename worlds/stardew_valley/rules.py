@@ -254,7 +254,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year1_books, logic.time.has_year_two)
     set_entrance_rule(multiworld, player, LogicEntrance.buy_year3_books, logic.time.has_year_three)
     set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
-    set_entrance_rule(multiworld, player, LogicEntrance.purchase_wizard_blueprints, logic.received("Magic Ink"))
+    set_entrance_rule(multiworld, player, LogicEntrance.purchase_wizard_blueprints, logic.received(Wallet.magic_ink))
     set_entrance_rule(multiworld, player, LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS/2))
 
     set_entrance_rule(multiworld, player, Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))

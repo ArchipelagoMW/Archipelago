@@ -10,3 +10,4 @@ class Wallet:
     club_card = "Club Card"
     mastery_of_the_five_ways = "Mastery Of The Five Ways"
     key_to_the_town = "Key To The Town"
+    magic_ink = "Magic Ink"
