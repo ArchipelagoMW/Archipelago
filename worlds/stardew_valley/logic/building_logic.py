@@ -57,17 +57,18 @@ class BuildingLogic(BaseLogic):
         return self.logic.region.can_reach(Region.carpenter)
 
     def can_purchase_wizard_blueprint(self, building_name: str) -> StardewRule:
-        rule = self.logic.region.can_reach(Region.wizard_tower) & self.logic.quest.has_magic_ink()
+        # This rule is part of the region, so not needed here
+        # rule = self.logic.region.can_reach(Region.wizard_tower) & self.logic.quest.has_magic_ink()
         if building_name == WizardBuilding.earth_obelisk:
-            return rule & self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Mineral.earth_crystal)
+            return self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Mineral.earth_crystal)
         if building_name == WizardBuilding.water_obelisk:
-            return rule & self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Fish.clam, WaterItem.coral)
+            return self.logic.money.can_spend(500_000) & self.logic.has_all(MetalBar.iridium, Fish.clam, WaterItem.coral)
         if building_name == WizardBuilding.desert_obelisk:
-            return rule & self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.coconut, Forageable.cactus_fruit)
+            return self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.coconut, Forageable.cactus_fruit)
         if building_name == WizardBuilding.island_obelisk:
-            return rule & self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.dragon_tooth, Fruit.banana)
+            return self.logic.money.can_spend(1_000_000) & self.logic.has_all(MetalBar.iridium, Forageable.dragon_tooth, Fruit.banana)
         if building_name == WizardBuilding.junimo_hut:
-            return rule & self.logic.money.can_spend(20_000) & self.logic.has_all(MetalBar.iridium, Material.stone, Fruit.starfruit, Material.fiber)
+            return self.logic.money.can_spend(20_000) & self.logic.has_all(MetalBar.iridium, Material.stone, Fruit.starfruit, Material.fiber)
         if building_name == WizardBuilding.gold_clock:
-            return rule & self.logic.money.can_spend(10_000_000)
+            return self.logic.money.can_spend(10_000_000)
         return false_
