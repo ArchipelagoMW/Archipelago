@@ -53,7 +53,7 @@ vanilla_regions: tuple[RegionData, ...] = (
     RegionData(RegionName.mastery_cave),
     RegionData(RegionName.sewer, (Entrance.enter_mutant_bug_lair,)),
     RegionData(RegionName.mutant_bug_lair),
-    RegionData(RegionName.wizard_tower, (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, LogicEntrance.wizard_blueprints)),
+    RegionData(RegionName.wizard_tower, (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, LogicEntrance.purchase_wizard_blueprints)),
     RegionData(RegionName.wizard_basement),
     RegionData(LogicRegion.wizard_blueprints),
     RegionData(RegionName.tent),
@@ -210,9 +210,11 @@ ginger_island_regions = (
     # This overrides the regions from vanilla... When regions are moved to content packs, overriding existing entrances should no longer be necessary.
     RegionData(RegionName.mountain,
                (Entrance.mountain_to_railroad, Entrance.mountain_to_tent, Entrance.mountain_to_carpenter_shop,
-                Entrance.mountain_to_the_mines, Entrance.enter_quarry, Entrance.mountain_to_adventurer_guild,
+                Entrance.mountain_to_outside_adventure_guild,
+                Entrance.mountain_lake_to_outside_adventure_guild_shortcut, Entrance.mountain_town_shortcut, Entrance.mountain_jojamart_shortcut,
                 Entrance.mountain_to_town, Entrance.mountain_to_maru_room, Entrance.mountain_to_leo_treehouse)),
-    RegionData(RegionName.wizard_tower, (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, Entrance.use_island_obelisk,)),
+    RegionData(RegionName.outside_adventure_guild, (Entrance.mountain_to_the_mines, Entrance.enter_quarry, Entrance.mountain_to_adventurer_guild,)),
+    RegionData(RegionName.wizard_tower, (Entrance.enter_wizard_basement, Entrance.use_desert_obelisk, Entrance.use_island_obelisk, LogicEntrance.purchase_wizard_blueprints,)),
     RegionData(RegionName.fish_shop, (Entrance.fish_shop_to_boat_tunnel,)),
     RegionData(RegionName.mines_floor_120, (Entrance.dig_to_dangerous_mines_20, Entrance.dig_to_dangerous_mines_60, Entrance.dig_to_dangerous_mines_100)),
     RegionData(RegionName.skull_cavern_200, (Entrance.enter_dangerous_skull_cavern,)),
@@ -304,6 +306,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(Entrance.mountain_to_maru_room, RegionName.maru_room,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.enter_sebastian_room, RegionName.sebastian_room, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(Entrance.mountain_to_outside_adventure_guild, RegionName.outside_adventure_guild),
     ConnectionData(Entrance.mountain_to_adventurer_guild, RegionName.adventurer_guild,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.adventurer_guild_to_bedroom, RegionName.adventurer_guild_bedroom),
@@ -470,7 +473,7 @@ vanilla_connections: tuple[ConnectionData, ...] = (
     ConnectionData(LogicEntrance.buy_year1_books, LogicRegion.bookseller_2),
     ConnectionData(LogicEntrance.buy_year3_books, LogicRegion.bookseller_3),
     ConnectionData(LogicEntrance.search_garbage_cans, LogicRegion.garbage_cans),
-    ConnectionData(LogicEntrance.wizard_blueprints, LogicRegion.wizard_blueprints),
+    ConnectionData(LogicEntrance.purchase_wizard_blueprints, LogicRegion.wizard_blueprints),
 )
 
 ginger_island_connections = (

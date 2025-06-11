@@ -253,7 +253,7 @@ class LogicEntrance:
     fish_in_waterfall = "Fish In Waterfall"
     find_secret_notes = "Find Secret Notes"
     search_garbage_cans = "Search Garbage Cans"
-    wizard_blueprints = "Purchase Wizard Blueprints"
+    purchase_wizard_blueprints = "Purchase Wizard Blueprints"
 
 
 # Skull Cavern Elevator
