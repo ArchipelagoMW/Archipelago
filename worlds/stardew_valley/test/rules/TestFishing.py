@@ -1,5 +1,6 @@
 from ..bases import SVTestBase
 from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
+from ...strings.ap_names.transport_names import Transportation
 from ...strings.fish_names import Fish
 
 
@@ -28,7 +29,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.stonefish: ["Progressive Weapon"],
             Fish.ice_pip: ["Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe"],
             Fish.lava_eel: ["Progressive Weapon", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe", "Progressive Pickaxe"],
-            Fish.sandfish: ["Bus Repair"],
+            Fish.sandfish: [Transportation.bus_repair],
             Fish.scorpion_carp: ["Desert Obelisk"],
             # Starting the extended family quest requires having caught all the legendaries before, so they all have the rules of every other legendary
             Fish.son_of_crimsonfish: ["Beach Bridge", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],

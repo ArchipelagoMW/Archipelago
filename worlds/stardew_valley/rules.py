@@ -25,7 +25,7 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import FarmType, Moviesanity, Eatsanity
+from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -222,7 +222,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     movie_theater_rule = logic.has_movie_theater()
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
     set_entrance_rule(multiworld, player, Entrance.enter_movie_theater, movie_theater_rule & logic.has(Gift.movie_ticket))
-    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received("Bus Repair") & logic.money.can_spend(500))
+    set_entrance_rule(multiworld, player, Entrance.take_bus_to_desert, logic.received(Transportation.bus_repair) & logic.money.can_spend(500))
     set_entrance_rule(multiworld, player, Entrance.enter_skull_cavern, logic.received(Wallet.skull_key))
     set_entrance_rule(multiworld, player, LogicEntrance.talk_to_mines_dwarf,
                       logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
@@ -348,7 +348,7 @@ def set_blacksmith_upgrade_rule(logic, multiworld, player, entrance_name: str, i
 
 def set_festival_entrance_rules(logic, multiworld, player):
     set_entrance_rule(multiworld, player, LogicEntrance.attend_egg_festival, logic.season.has(Season.spring))
-    set_entrance_rule(multiworld, player, LogicEntrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received("Bus Repair"))
+    set_entrance_rule(multiworld, player, LogicEntrance.attend_desert_festival, logic.season.has(Season.spring) & logic.received(Transportation.bus_repair))
     set_entrance_rule(multiworld, player, LogicEntrance.attend_flower_dance, logic.season.has(Season.spring))
 
     set_entrance_rule(multiworld, player, LogicEntrance.attend_luau, logic.season.has(Season.summer))
@@ -919,7 +919,7 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, "Confront Marnie", logic.gifts.can_gift_to(NPC.marnie, SpecialItem.lucky_purple_shorts))
         set_location_rule(multiworld, player, "Lucky Purple Bobber", logic.fishing.can_use_tackle(SpecialItem.lucky_purple_shorts))
         set_location_rule(multiworld, player, "Something For Santa", logic.season.has(Season.winter) & logic.has_any(AnimalProduct.any_milk, Meal.cookie))
-        cc_rewards = ["Bridge Repair", "Greenhouse", "Glittering Boulder Removed", "Minecarts Repair", "Bus Repair", "Friendship Bonus (2 <3)"]
+        cc_rewards = ["Bridge Repair", "Greenhouse", "Glittering Boulder Removed", "Minecarts Repair", Transportation.bus_repair, "Friendship Bonus (2 <3)"]
         set_location_rule(multiworld, player, "Jungle Junimo", logic.action.can_speak_junimo() & logic.and_(*[logic.received(reward) for reward in cc_rewards]))
         set_location_rule(multiworld, player, "??HMTGF??", logic.has(Fish.super_cucumber))
         set_location_rule(multiworld, player, "??Pinky Lemon??", logic.has(ArtisanGood.duck_mayonnaise))
@@ -1064,20 +1064,22 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Purchase Retro Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 110_000))
     # set_location_rule(multiworld, player, "Find Trash Catalogue", logic) # No need, the region is enough
     set_location_rule(multiworld, player, "Purchase Wizard Catalogue", logic.money.can_spend_at(Region.sewer, 150_000))
-    set_location_rule(multiworld, player, "Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
-    set_location_rule(multiworld, player, "Purchase Abigail Portrait", logic.relationship.can_purchase_portrait(NPC.abigail))
-    set_location_rule(multiworld, player, "Purchase Alex Portrait", logic.relationship.can_purchase_portrait(NPC.alex))
-    set_location_rule(multiworld, player, "Purchase Elliott Portrait", logic.relationship.can_purchase_portrait(NPC.elliott))
-    set_location_rule(multiworld, player, "Purchase Emily Portrait", logic.relationship.can_purchase_portrait(NPC.emily))
-    set_location_rule(multiworld, player, "Purchase Haley Portrait", logic.relationship.can_purchase_portrait(NPC.haley))
-    set_location_rule(multiworld, player, "Purchase Harvey Portrait", logic.relationship.can_purchase_portrait(NPC.harvey))
-    set_location_rule(multiworld, player, "Purchase Krobus Portrait", logic.relationship.can_purchase_portrait(NPC.krobus))
-    set_location_rule(multiworld, player, "Purchase Leah Portrait", logic.relationship.can_purchase_portrait(NPC.leah))
-    set_location_rule(multiworld, player, "Purchase Maru Portrait", logic.relationship.can_purchase_portrait(NPC.maru))
-    set_location_rule(multiworld, player, "Purchase Penny Portrait", logic.relationship.can_purchase_portrait(NPC.penny))
-    set_location_rule(multiworld, player, "Purchase Sam Portrait", logic.relationship.can_purchase_portrait(NPC.sam))
-    set_location_rule(multiworld, player, "Purchase Sebastian Portrait", logic.relationship.can_purchase_portrait(NPC.sebastian))
-    set_location_rule(multiworld, player, "Purchase Shane Portrait", logic.relationship.can_purchase_portrait(NPC.shane))
+    if world_options.friendsanity == Friendsanity.option_all_with_marriage:
+        set_location_rule(multiworld, player, "Purchase Abigail Portrait", logic.relationship.can_purchase_portrait(NPC.abigail))
+        set_location_rule(multiworld, player, "Purchase Alex Portrait", logic.relationship.can_purchase_portrait(NPC.alex))
+        set_location_rule(multiworld, player, "Purchase Elliott Portrait", logic.relationship.can_purchase_portrait(NPC.elliott))
+        set_location_rule(multiworld, player, "Purchase Emily Portrait", logic.relationship.can_purchase_portrait(NPC.emily))
+        set_location_rule(multiworld, player, "Purchase Haley Portrait", logic.relationship.can_purchase_portrait(NPC.haley))
+        set_location_rule(multiworld, player, "Purchase Harvey Portrait", logic.relationship.can_purchase_portrait(NPC.harvey))
+        set_location_rule(multiworld, player, "Purchase Krobus Portrait", logic.relationship.can_purchase_portrait(NPC.krobus))
+        set_location_rule(multiworld, player, "Purchase Leah Portrait", logic.relationship.can_purchase_portrait(NPC.leah))
+        set_location_rule(multiworld, player, "Purchase Maru Portrait", logic.relationship.can_purchase_portrait(NPC.maru))
+        set_location_rule(multiworld, player, "Purchase Penny Portrait", logic.relationship.can_purchase_portrait(NPC.penny))
+        set_location_rule(multiworld, player, "Purchase Sam Portrait", logic.relationship.can_purchase_portrait(NPC.sam))
+        set_location_rule(multiworld, player, "Purchase Sebastian Portrait", logic.relationship.can_purchase_portrait(NPC.sebastian))
+        set_location_rule(multiworld, player, "Purchase Shane Portrait", logic.relationship.can_purchase_portrait(NPC.shane))
+    elif world_options.friendsanity != Friendsanity.option_none:
+        set_location_rule(multiworld, player, "Purchase Spouse Portrait", logic.relationship.can_purchase_portrait())
     set_location_rule(multiworld, player, "Purchase Tea Set", logic.money.can_spend_at(LogicRegion.traveling_cart, 1_000_000) & logic.time.has_lived_max_months)
 
 

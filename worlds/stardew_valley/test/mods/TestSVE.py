@@ -2,6 +2,7 @@ from ..bases import SVTestBase
 from ... import options
 from ...mods.mod_data import ModNames
 from ...strings.ap_names.mods.mod_items import SVEQuestItem
+from ...strings.ap_names.transport_names import Transportation
 from ...strings.quest_names import ModQuest
 from ...strings.region_names import SVERegion
 
@@ -14,7 +15,7 @@ class TestAuroraVineyard(SVTestBase):
 
     def test_need_tablet_to_do_quest(self):
         self.collect("Starfruit Seeds")
-        self.collect("Bus Repair")
+        self.collect(Transportation.bus_repair)
         self.collect("Shipping Bin")
         self.collect("Summer")
         location_name = ModQuest.AuroraVineyard

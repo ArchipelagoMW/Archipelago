@@ -134,7 +134,7 @@ class TestEatsanityCooking(SVEatsanityTestBase):
 
     def test_need_recipe_and_ingredients_to_cook(self):
         location = self.world.get_location(f"Eat Vegetable Medley")
-        required_items = ["Vegetable Medley Recipe", "Progressive House", "Tomato Seeds", "Summer", "Beet Seeds", "Fall", "Desert Obelisk"]
+        required_items = ["Vegetable Medley Recipe", "Progressive House", "Tomato Seeds", "Summer", "Beet Seeds", "Fall", "Bus Repair"]
         unique_items = list(set(required_items))
         required_items = [self.create_item(item) for item in required_items]
         self.collect(required_items)
@@ -319,7 +319,7 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
 
     def test_need_lots_of_things_for_iridium_snake_milk(self):
         location = self.world.get_location(f"Drink Iridium Snake Milk")
-        required_items = ["Desert Obelisk", "Magnifying Glass", "Skull Key", "Progressive House", *["Progressive Pickaxe"]*2,
+        required_items = ["Wizard Invitation", "Desert Obelisk", "Magnifying Glass", "Skull Key", "Progressive House", *["Progressive Pickaxe"]*2,
                           *["Progressive Weapon"]*4, *["Mining Level"]*8, *["Combat Level"]*8]
         unique_items = list(set(required_items))
         required_items = [self.create_item(item) for item in required_items]

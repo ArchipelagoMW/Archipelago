@@ -18,7 +18,7 @@ class TestWeaponsLogic(SVTestBase):
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Mining Level")] * 10)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
-        self.multiworld.state.collect(self.create_item("Bus Repair"))
+        self.multiworld.state.collect(self.create_item(Transportation.bus_repair))
         self.multiworld.state.collect(self.create_item("Skull Key"))
 
         self.give_item_and_check_reachable_mine("Progressive Sword", 1)

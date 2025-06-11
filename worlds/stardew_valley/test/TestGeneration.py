@@ -8,6 +8,8 @@ from ..items import Group, ItemData, item_data
 from ..locations import LocationTags
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, SkillProgression, \
     Booksanity, Walnutsanity, Secretsanity, Moviesanity
+from ..options.options import IncludeEndgameLocations
+from ..strings.ap_names.transport_names import Transportation
 from ..strings.region_names import Region
 
 
@@ -42,6 +44,7 @@ class TestBaseItemGeneration(SVTestBase):
         Walnutsanity.internal_name: Walnutsanity.preset_all,
         Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Secretsanity.internal_name: Secretsanity.preset_all,
+        IncludeEndgameLocations.internal_name: IncludeEndgameLocations.option_true,
     }
 
     def test_all_progression_items_are_added_to_the_pool(self):
@@ -87,6 +90,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
         Booksanity.internal_name: Booksanity.option_all,
         Moviesanity.internal_name: Moviesanity.option_all_movies_and_all_loved_snacks,
         Secretsanity.internal_name: Secretsanity.preset_all,
+        IncludeEndgameLocations.internal_name: IncludeEndgameLocations.option_true,
     }
 
     def test_all_progression_items_except_island_are_added_to_the_pool(self):
@@ -145,12 +149,13 @@ class TestProgressiveElevator(SVTestBase):
         self.assert_can_reach_region(Region.mines_floor_120)
 
     def generate_items_for_mine_115(self) -> List[Item]:
+        landslide = self.get_item_by_name("Landslide Removed")
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 2
         elevators = [self.get_item_by_name("Progressive Mine Elevator")] * 21
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        return [*combat_levels, *mining_levels, *elevators, *pickaxes, *swords]
+        return [landslide, *combat_levels, *mining_levels, *elevators, *pickaxes, *swords]
 
     def generate_items_for_extra_mine_levels(self, weapon_name: str) -> List[Item]:
         last_pickaxe = self.get_item_by_name("Progressive Pickaxe")
@@ -199,16 +204,16 @@ class TestSkullCavernLogic(SVTestBase):
         swords = [self.get_item_by_name("Progressive Sword")] * 3
         combat_levels = [self.get_item_by_name("Combat Level")] * 4
         mining_levels = [self.get_item_by_name("Mining Level")] * 4
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
-        return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
+        return ["Landslide Removed", *combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key]
 
     def generate_items_for_skull_50(self) -> List[Item]:
         pickaxes = [self.get_item_by_name("Progressive Pickaxe")] * 3
         swords = [self.get_item_by_name("Progressive Sword")] * 4
         combat_levels = [self.get_item_by_name("Combat Level")] * 6
         mining_levels = [self.get_item_by_name("Mining Level")] * 6
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
         farm_house = self.get_item_by_name("Progressive House")
         return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]
@@ -218,7 +223,7 @@ class TestSkullCavernLogic(SVTestBase):
         swords = [self.get_item_by_name("Progressive Sword")] * 5
         combat_levels = [self.get_item_by_name("Combat Level")] * 8
         mining_levels = [self.get_item_by_name("Mining Level")] * 8
-        bus = self.get_item_by_name("Bus Repair")
+        bus = self.get_item_by_name(Transportation.bus_repair)
         skull_key = self.get_item_by_name("Skull Key")
         farm_house = self.get_item_by_name("Progressive House")
         return [*combat_levels, *mining_levels, *pickaxes, *swords, bus, skull_key, farm_house]

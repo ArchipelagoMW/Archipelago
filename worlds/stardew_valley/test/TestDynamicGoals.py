@@ -22,11 +22,12 @@ def collect_fishing_abilities(tester: SVTestBase):
         tester.multiworld.state.collect(tester.world.create_item("Mining Level"), prevent_sweep=False)
     for i in range(17):
         tester.multiworld.state.collect(tester.world.create_item("Progressive Mine Elevator"), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Landslide Removed"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Spring"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Summer"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Fall"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Winter"), prevent_sweep=False)
-    tester.multiworld.state.collect(tester.world.create_item(Transportation.desert_obelisk), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item(Transportation.bus_repair), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Beach Bridge"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Railroad Boulder Removed"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Island North Turtle"), prevent_sweep=False)
@@ -43,7 +44,7 @@ def create_and_collect_fishing_access_items(tester: SVTestBase) -> List[Tuple[St
     items = [(create_and_collect(tester, Wallet.dark_talisman), Fish.void_salmon),
              (create_and_collect(tester, Wallet.rusty_key), Fish.slimejack),
              (create_and_collect(tester, "Progressive Mine Elevator"), Fish.lava_eel),
-             (create_and_collect(tester, Transportation.island_obelisk), Fish.lionfish),
+             (create_and_collect(tester, Transportation.boat_repair), Fish.lionfish),
              (create_and_collect(tester, "Island Resort"), Fish.stingray)]
     return items
 
