@@ -3,7 +3,7 @@ from typing import Dict, List
 
 class Catalogue:
     wizard = "Wizard Catalogue"
-    furniture = "Wizard Catalogue"
+    furniture = "Furniture Catalogue"
 
 
 items_by_catalogue: Dict[str, List[str]] = dict()
