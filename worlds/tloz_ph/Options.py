@@ -9,10 +9,10 @@ from worlds.tloz_ph.data.Items import ITEMS_DATA
 class PhantomHourglassGoal(Choice):
     """
     The goal to accomplish in order to complete the seed.
-    - Beat Bellum: Kill bellum at the bottom of TotOK
+    - Triforce_door: Open the triforce door on TotOK B6
     """
     display_name = "Goal"
-    option_beat_bellum = 0
+    option_triforce_door = 0
     default = 0
 
 
@@ -21,7 +21,7 @@ class PhantomHourglassStartingTime(Range):
     How much time to start with in your Phantom Hourglass, in minutes
     """
     display_name = "Phantom Hourglass Starting Time"
-    range_start = 0.01
+    range_start = 0
     range_end = 30
     default = 10
 
@@ -31,7 +31,7 @@ class PhantomHourglassTimeIncrement(Range):
     How much time to get for each sand of hours upgrade, in minutes
     """
     display_name = "Increment for each Sand of Hours"
-    range_start = 0.01
+    range_start = 0
     range_end = 30
     default = 1
 
@@ -62,11 +62,11 @@ class PhantomHourglassLogic(Choice):
 class PhantomHourglassPhantomCombatDifficulty(Choice):
     """
     Option for what you need to kill phantoms in logic
-    - option_require_phantom_sword: need phantom sword
-    - option_require_traps: need a pit trap or boulder
-    - option_require_stun: require a method of stunning, and an open pit to push into. Includes bow, hammer,
+    - require_phantom_sword: need phantom sword
+    - require_traps: need a pit trap or boulder
+    - require_stun: require a method of stunning, and an open pit to push into. Includes bow, hammer,
     and sword + 2 progressive spirits of power
-    - option_require_weapon: all of the above plus grappling hook
+    - require_weapon: all of the above plus grappling hook
     """
     display_name = "Phantom Kill Requirements"
     option_require_phantom_sword = 0
@@ -79,9 +79,9 @@ class PhantomHourglassPhantomCombatDifficulty(Choice):
 class PhantomHourglassKeyRandomization(Choice):
     """
     Small Key Logic options:
-    - option_vanilla: Keys are not randomized
-    - option_in_own_dungeon: Keys can be found in their own dungeon
-    - option_anywhere: Keysanity. Keys can be found anywhere
+    - vanilla: Keys are not randomized
+    - in_own_dungeon: Keys can be found in their own dungeon
+    - anywhere: Keysanity. Keys can be found anywhere
     """
     display_name = "Key Settings"
     option_vanilla = 0

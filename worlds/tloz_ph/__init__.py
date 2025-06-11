@@ -62,7 +62,8 @@ class PhantomHourglassWorld(World):
     def restrict_non_local_items(self):
         # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
         # to be placed locally (e.g. dungeon items with keysanity off)
-        if not self.options.keysanity == "keysanity":
+        print(f"Keysanity value: {self.options.keysanity}, {self.options.keysanity.current_option_name}")
+        if not self.options.keysanity == "anywhere":
             self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
 
     def create_location(self, region_name: str, location_name: str, local: bool):
@@ -102,7 +103,7 @@ class PhantomHourglassWorld(World):
             return False
 
     def create_events(self):
-        pass
+        self.create_event("goal", "_beaten_game")
 
     def exclude_locations_automatically(self):
         locations_to_exclude = set()
@@ -112,6 +113,7 @@ class PhantomHourglassWorld(World):
     def set_rules(self):
         create_connections(self.multiworld, self.player, self.origin_region_name, self.options)
         self.multiworld.completion_condition[self.player] = lambda state: ph_has_sw_sea_chart(state, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
         classification = ITEMS_DATA[name]['classification']
@@ -127,27 +129,35 @@ class PhantomHourglassWorld(World):
         for loc_name, loc_data in LOCATIONS_DATA.items():
             print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):
+                print(f"{loc_name} is not active")
                 continue
             # If no defined vanilla item, fill with filler
             if "vanilla_item" not in loc_data:
+                print(f"{loc_name} has no defined vanilla item")
                 filler_item_count += 1
                 continue
 
-            item_name = loc_data['vanilla_item']
-            print(f"Addding item {item_name} to pool")
+            item_name = loc_data.get("item_override", loc_data["vanilla_item"])
             if item_name in removed_item_quantities and removed_item_quantities[item_name] > 0:
                 # If item was put in the "remove_items_from_pool" option, replace it with a random filler item
+                print(f"{item_name} @ {loc_name} was removed from pool")
                 removed_item_quantities[item_name] -= 1
                 filler_item_count += 1
                 continue
             if item_name == "Filler Item":
                 filler_item_count += 1
+                print(f"added filler item @ {loc_name}")
                 continue
             if self.options.keysanity == "vanilla":
                 if "Small Key" in item_name:
                     key_item = self.create_item(item_name)
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(key_item)
                     continue
+            if "force_vanilla" in loc_data and loc_data["force_vanilla"]:
+                print(f"Forcing {loc_name} with item {item_name}")
+                forced_item = self.create_item(item_name)
+                self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
+                continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
@@ -226,9 +236,11 @@ class PhantomHourglassWorld(World):
         return item_name
 
     def fill_slot_data(self) -> dict:
-        # options = self.options
-        # slot_data = self.options.as_dict(*options)
-        return {}
+        options = ["goal", "logic", "keysanity", "phantom_combat_difficulty",
+                   "ph_starting_time", "ph_time_increment"]
+        slot_data = self.options.as_dict(*options)
+        print(slot_data)
+        return slot_data
 
     def write_spoiler(self, spoiler_handle):
         pass

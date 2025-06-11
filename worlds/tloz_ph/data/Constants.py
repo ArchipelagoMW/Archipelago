@@ -2,6 +2,7 @@ VERSION = "0.3.0"
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 
 STARTING_FLAGS = [
+    # Starting flags (these are in series so can be simplified, but it's called once and this is easier to bugfix)
     [0x1B557C, 0xEF],
     [0x1B557D, 0x3C],
     [0x1B557E, 0x3E],
@@ -54,11 +55,25 @@ STARTING_FLAGS = [
     [0x1B55AD, 0x00],
     [0x1B55AE, 0x00],
     [0x1B55AF, 0x00],
+    # Set item can use flags
     [0x1BA6BC, 0x01],
     [0x1BA6BE, 0x01],
     [0x1BA6C4, 0x01],
     [0x1BA6C8, 0x01],
-    [0x1BA644, 0x04]
+    # Starting items, boomerang + PH
+    [0x1BA644, 0x04],
+    [0x1BA648, 0x01],
+    # Show treasure/ship part prices
+    [0x1BA658, 0xFF],
+    [0x1BA659, 0xFF],
+    [0x1BA65A, 0xFF],
+    [0x1BA65B, 0xFF],
+    [0x1BA65C, 0xFF],
+    [0x1BA65D, 0xFF],
+    [0x1BA65E, 0xFF],
+    [0x1BA65F, 0xFF],
+    [0x1BA660, 0xFF],
+    [0x1BA664, 0xFF],
 ]
 
 STAGES = {
@@ -159,6 +174,31 @@ DUNGEON_KEY_DATA = {
                 "min_z": 0x5000
             }
 
+        }
+    },
+    37: {
+        "name": "Temple of the Ocean King",
+        "address": 0x1BA64E,
+        "filter": 0xE0,
+        "value": 0x20,
+        "size": 3,
+        'entrances': {
+            0x2600: {
+                "max_z": 0x11800,
+                "min_z": 0x0
+            }
+        }
+    },
+    372: {
+        "name": "Temple of the Ocean King",
+        "address": 0x1BA64F,
+        "filter": 0xC0,
+        "value": 0x40,
+        "size": 2,
+        'entrances': {
+            0x2600: {
+                "max_z": 0x11800,
+                "min_z": 0x0}
         }
     }
 }

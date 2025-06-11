@@ -4,4 +4,10 @@ from test.bases import WorldTestBase
 
 class TestGeneration(WorldTestBase):
     game = "The Legend of Zelda - Phantom Hourglass"
-    options = {}
+    options = {
+        "keysanity": "anywhere",
+        "phantom_combat_difficulty": "require_weapon",
+        "logic": "glitched",
+        "accessibility": "full",
+        "fake_test": "oops"
+               }

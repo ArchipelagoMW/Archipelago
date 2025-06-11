@@ -1,5 +1,5 @@
 from typing import Dict
-from .data import LOCATIONS_DATA, ITEMS_DATA
+from .data import LOCATIONS_DATA, ITEMS_DATA, DYNAMIC_FLAGS
 
 
 def build_location_room_to_watches() -> Dict[int, dict[str, dict]]:
@@ -12,19 +12,29 @@ def build_location_room_to_watches() -> Dict[int, dict[str, dict]]:
     return location_room_to_watches
 
 
+def build_scene_to_dynamic_flag() -> Dict[int, list[dict]]:
+    scene_to_dynamic_flag: Dict[int, list[dict]] = {}
+    for flag_name, data in DYNAMIC_FLAGS.items():
+        if "on_scene" in data:
+            scene = data["on_scene"]
+            data["name"] = flag_name
+            if scene not in scene_to_dynamic_flag:
+                scene_to_dynamic_flag[scene] = []
+            scene_to_dynamic_flag[scene].append(data)
+    return scene_to_dynamic_flag
+
 def build_location_name_to_id_dict() -> Dict[str, int]:
     location_name_to_id: Dict[str, int] = {}
     for loc_name, location in LOCATIONS_DATA.items():
-        # ids do nothing, but I think AP wants unique ids?
-        location_name_to_id[loc_name] = (len(location_name_to_id) + 1)
+        # ids are for sending flags
+        location_name_to_id[loc_name] = location["id"]
     return location_name_to_id
 
 
 def build_item_name_to_id_dict() -> Dict[str, int]:
     item_name_to_id: Dict[str, int] = {}
     for item_name, item in ITEMS_DATA.items():
-        index = item["id"]
-        item_name_to_id[item_name] = index
+        item_name_to_id[item_name] = item["id"]
     return item_name_to_id
 
 

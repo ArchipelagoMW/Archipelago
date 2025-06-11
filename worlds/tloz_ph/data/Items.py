@@ -6,7 +6,7 @@ ITEMS_DATA = {
     #   'address': int,                         # address in memory
     #   'value': int,                           # value to set in memory, if incremental added else bitwise or
     #   'size': int,                            # size in bytes
-    #   'set_bit': int,                         # for setting additional bits on acquisition
+    #   'set_bit': list[tuple[int, int]],       # for setting additional bits on acquisition
     #   'incremental': bool                     # true for positive, False for negative
     #   'progressive': list[list[int, int]]     # address, value for each progressive stage
     #   'give_ammo': list[int]                  # how much ammo to give for each progressive stage
@@ -16,18 +16,17 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'address': 0x1BA645,
         'value': 0x01,
-        'set_bit': 0x1BA6C8
+        'set_bit': [(0x1BA6C8, 1)]
     },
     "Boomerang": {
         'classification': ItemClassification.progression,
         'address': 0x1BA644,
         'value': 0x04,
-        'set_bit': 0x1BA6BC
+        'set_bit': [(0x1BA6BC, 1)]
     },
-    "Sword": {
+    "Sword (Progressive)": {
         'classification': ItemClassification.progression,
-        'address': 0x1BA644,
-        'value': 0x01
+        'progressive': [[0x1BA644, 1], [0x1BA648, 32]]
     },
     "Shield": {
         'classification': ItemClassification.progression,
@@ -56,18 +55,29 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'address': 0x1BA644,
         'value': 0x40,
-        "set_bit": 0x1BA6C4
+        "set_bit": [(0x1BA6C4, 1)]
     },
     "Shovel": {
         'classification': ItemClassification.progression,
         'address': 0x1BA644,
         'value': 0x08,
-        "set_bit": 0x1BA6BE
+        "set_bit": [(0x1BA6BE, 1)]
     },
     "SW Sea Chart": {
         'classification': ItemClassification.progression,
         'address': 0x1BA648,
         'value': 0x02
+    },
+    "NW Sea Chart": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA648,
+        'value': 0x04
+    },
+    "SE Sea Chart": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA648,
+        'value': 0x08,
+        'set_bit': [(0x1B557D, 0x8)]
     },
     "Big Green Rupee (100)": {
         'classification': ItemClassification.filler,
@@ -148,10 +158,54 @@ ITEMS_DATA = {
         'progressive': [[0x1BA646, 0x10], [0x1BA646, 0x80], [0x1BA647, 0x04]]
     },
     "Heart Container": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.useful,
         'address': 0x1BA388,
         'value': 4,
+        'incremental': True,
+        'size': 2
+    },
+    "Sand of Hours": {
+        'classification': ItemClassification.useful,
+        'address': 0x1BA528,
+        'value': "Sand",
+        'incremental': True,
+        'size': 4
+    },
+    "Small Key (Temple of the Ocean King)": {
+        'classification': ItemClassification.progression,
+        'dungeon': 37,
         'incremental': True
+    },
+    "Force Gem": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Treasure Map #23": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA612,
+        'value': 128,
+    },
+    "Treasure Map #11": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA651,
+        'value': 0x2,
+    },
+    "Potion": {
+        'classification': ItemClassification.filler,
+        'dummy': True
+    },
+    "Courage Crest": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Pre-Alpha Rupee (5000)": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA53E,
+        'value': 5000,
+        'incremental': True,
+        'size': 2
     }
 
 }

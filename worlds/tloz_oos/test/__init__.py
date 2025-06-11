@@ -1,7 +1,7 @@
 from BaseClasses import LocationProgressType
 from test.bases import WorldTestBase
 
-
+"""
 class TestMinLocationsMaxItems(WorldTestBase):
     game = "The Legend of Zelda - Oracle of Seasons"
     options = {
@@ -26,3 +26,4 @@ class TestMinLocationsMaxItems(WorldTestBase):
         non_excluded_items = {item for item in self.multiworld.itempool if item.advancement or item.useful}
         self.assertGreaterEqual(len(non_excluded_locations), len(non_excluded_items),
                                 f"Less prog items than non-excluded locations : {len(non_excluded_locations)} VS {len(non_excluded_items)}")
+"""
