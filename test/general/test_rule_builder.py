@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 from typing_extensions import override
 
 from Options import Choice, PerGameCommonOptions, Toggle
-from rule_builder import And, False_, Has, HasAll, HasAny, Or, Rule, RuleWorldMixin
+from rule_builder import And, False_, Has, HasAll, HasAny, OptionFilter, Or, Rule, RuleWorldMixin
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds import network_data_package
@@ -90,7 +90,7 @@ class TestOptions(unittest.TestCase):
         return super().setUp()
 
     def test_option_filtering(self) -> None:
-        rule = Or(Has("A", options={"toggle_option": 0}), Has("B", options={"toggle_option": 1}))
+        rule = Or(Has("A", options=[OptionFilter(ToggleOption, 0)]), Has("B", options=[OptionFilter(ToggleOption, 1)]))
 
         self.world.options.toggle_option.value = 0
         self.assertEqual(rule.resolve(self.world), Has.Resolved("A", player=1))
@@ -99,7 +99,7 @@ class TestOptions(unittest.TestCase):
         self.assertEqual(rule.resolve(self.world), Has.Resolved("B", player=1))
 
     def test_gt_filtering(self) -> None:
-        rule = Or(Has("A", options={"choice_option__gt": 1}), False_())
+        rule = Or(Has("A", options=[OptionFilter(ChoiceOption, 1, operator="gt")]), False_())
 
         self.world.options.choice_option.value = 0
         self.assertEqual(rule.resolve(self.world), False_.Resolved(player=1))
@@ -134,12 +134,15 @@ class TestOptions(unittest.TestCase):
             Or(And(Has("A"), Has("B")), Has("C"), Has("D")),
         ),
         (
-            Or(Has("A")) | Or(Has("B"), options={"opt": 1}),
-            Or(Or(Has("A")), Or(Has("B"), options={"opt": 1})),
+            Or(Has("A")) | Or(Has("B"), options=[OptionFilter(ToggleOption, 1)]),
+            Or(Or(Has("A")), Or(Has("B"), options=[OptionFilter(ToggleOption, 1)])),
         ),
         (
-            And(Has("A"), options={"opt": 1}) & And(Has("B"), options={"opt": 1}),
-            And(Has("A"), Has("B"), options={"opt": 1}),
+            (
+                And(Has("A"), options=[OptionFilter(ToggleOption, 1)])
+                & And(Has("B"), options=[OptionFilter(ToggleOption, 1)])
+            ),
+            And(Has("A"), Has("B"), options=[OptionFilter(ToggleOption, 1)]),
         ),
         (
             Has("A") & Has("B") & Has("C"),

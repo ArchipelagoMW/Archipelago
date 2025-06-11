@@ -2,8 +2,8 @@ import dataclasses
 import itertools
 import operator
 from collections import defaultdict
-from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, cast
+from collections.abc import Iterable, Mapping
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, TypeVar, cast
 
 from typing_extensions import Never, Self, override
 
@@ -17,6 +17,8 @@ if TYPE_CHECKING:
 else:
     World = object
 
+Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
+
 OPERATORS = {
     "eq": operator.eq,
     "ne": operator.ne,
@@ -27,31 +29,37 @@ OPERATORS = {
     "contains": operator.contains,
 }
 
+T = TypeVar("T")
+
+
+@dataclasses.dataclass(frozen=True)
+class OptionFilter(Generic[T]):
+    option: "type[Option[T]]"
+    value: T
+    operator: Operator = "eq"
+
 
 @dataclasses.dataclass()
 class Rule:
     """Base class for a static rule used to generate an access rule"""
 
-    options: dict[str, Any] = dataclasses.field(default_factory=dict, kw_only=True)
-    """A mapping of option_name to value to restrict what options are required for this rule to be active.
-    An operator can be specified with a double underscore and the operator after the option name, eg `opt__le`
-    """
+    options: "Iterable[OptionFilter[Any]]" = dataclasses.field(default=(), kw_only=True)
+    """An iterable of OptionFilters to restrict what options are required for this rule to be active"""
 
     def _passes_options(self, options: "CommonOptions") -> bool:
         """Tests if the given world options pass the requirements for this rule"""
-        for key, value in self.options.items():
-            parts = key.split("__", maxsplit=1)
-
-            option_name = parts[0]
+        for option_filter in self.options:
+            option_name = next(
+                (name for name, cls in options.__class__.type_hints.items() if cls is option_filter.option),
+                None,
+            )
+            if option_name is None:
+                raise ValueError(f"Cannot find option: {option_filter.option.__name__}")
             opt = cast("Option[Any] | None", getattr(options, option_name, None))
             if opt is None:
                 raise ValueError(f"Invalid option: {option_name}")
 
-            operator = parts[1] if len(parts) > 1 else "eq"
-            if operator not in OPERATORS:
-                raise ValueError(f"Invalid operator: {operator}")
-
-            if not OPERATORS[operator](opt.value, value):
+            if not OPERATORS[option_filter.operator](opt.value, option_filter.value):
                 return False
 
         return True
@@ -73,9 +81,13 @@ class Rule:
 
     def to_json(self) -> Mapping[str, Any]:
         """Returns a JSON-serializable definition of this rule"""
+        args = {
+            field.name: getattr(self, field.name, None) for field in dataclasses.fields(self) if field.name != "options"
+        }
+        args["options"] = [dataclasses.asdict(o) for o in self.options]
         return {
             "rule": self.__class__.__name__,
-            "args": {field.name: getattr(self, field.name, None) for field in dataclasses.fields(self)},
+            "args": args,
         }
 
     @classmethod
@@ -207,8 +219,8 @@ class False_(Rule):
 class NestedRule(Rule):
     children: "tuple[Rule, ...]"
 
-    def __init__(self, *children: "Rule", options: dict[str, Any] | None = None) -> None:
-        super().__init__(options=options or {})
+    def __init__(self, *children: "Rule", options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+        super().__init__(options=options)
         self.children = children
 
     @override
@@ -227,7 +239,7 @@ class NestedRule(Rule):
     @override
     @classmethod
     def from_json(cls, data: Mapping[str, Any]) -> Self:
-        return cls(*data.get("children", []), options=data.get("options"))
+        return cls(*data.get("children", []), options=data.get("options", ()))
 
     @override
     def __str__(self) -> str:
@@ -450,8 +462,8 @@ class HasAll(Rule):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
-        super().__init__(options=options or {})
+    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+        super().__init__(options=options)
         self.item_names = tuple(sorted(set(item_names)))
 
     @override
@@ -502,8 +514,8 @@ class HasAny(Rule):
     item_names: tuple[str, ...]
     """A tuple of item names to check for"""
 
-    def __init__(self, *item_names: str, options: dict[str, Any] | None = None) -> None:
-        super().__init__(options=options or {})
+    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+        super().__init__(options=options)
         self.item_names = tuple(sorted(set(item_names)))
 
     @override

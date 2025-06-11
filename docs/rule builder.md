@@ -46,7 +46,7 @@ self.set_rule(location_or_entrance, rule)
 
 ## Restricting options
 
-Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is a dictionary of option name to expected value. If you want a comparison that isn't equals, you can add the operator name after a double underscore after the option name.
+Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` arguemnt.
 
 The following operators are allowed:
 
@@ -62,8 +62,8 @@ To check if the player can reach a switch, or if they've receieved the switch it
 
 ```python
 Or(
-    Has("Red switch", options={"switch_rando": 1}),
-    CanReachLocation("Red switch", options={"switch_rando": 0}),
+    Has("Red switch", options=[OptionFilter(SwitchRando, 1)]),
+    CanReachLocation("Red switch", options=[OptionFilter(SwitchRando, 0)]),
 )
 ```
 
@@ -73,8 +73,8 @@ To add an extra logic requirement on the easiest difficulty:
 And(
     # the rest of the logic
     Or(
-        Has("QoL item", options={"difficulty": 0}),
-        True_(options={"difficulty__ge": 1}),
+        Has("QoL item", options=[OptionFilter(Difficulty, Difficulty.option_easy)]),
+        True_(options=[OptionFilter(Difficulty, Difficulty.option_medium, operator="ge")]),
     ),
 )
 ```
