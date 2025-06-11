@@ -130,15 +130,6 @@ class CrystalProjectLogic:
 
     def has_key_ring(self, state: CollectionState, key_name: str) -> bool:
         if key_name in singleton_keys:
-                # key_name == GARDENERS_KEY
-                # or key_name == COURTYARD_KEY
-                # or key_name == LUXURY_KEY
-                # or key_name == ROOM_ONE_KEY
-                # or key_name == PYRAMID_KEY
-                # or key_name == TRAM_KEY
-                # or key_name == ICE_CELL_KEY
-                # or key_name == RAMPART_KEY
-                # or key_name == FORGOTTEN_KEY):
             return state.has(key_name, self.player)
 
         if (key_name == CELL_KEY
