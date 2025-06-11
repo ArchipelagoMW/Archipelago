@@ -183,6 +183,7 @@ class StardewValleyWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
+        self.precollect_early_keys()
         self.precollect_starting_season()
         self.precollect_building_items()
         items_to_exclude = [excluded_items
@@ -217,6 +218,25 @@ class StardewValleyWorld(World):
         self.total_progression_items += sum(1 for i in self.multiworld.get_filled_locations(self.player) if i.advancement)
         self.total_progression_items += sum(1 for i in created_items if i.advancement)
         self.total_progression_items -= 1  # -1 for the victory event
+
+    def precollect_early_keys(self):
+        # Very small worlds might be unable to escape early spheres without some of these items
+        early_keys = ["Community Center Key", "Wizard Invitation", "Forest Magic", "Landslide Removed"]
+        number_locations = len([location for location in self.get_locations()])
+        if number_locations < 80:
+            number_precollected = 4
+        elif number_locations < 90:
+            number_precollected = 3
+        elif number_locations < 100:
+            number_precollected = 2
+        elif number_locations < 120:
+            number_precollected = 1
+        else:
+            return
+
+        starting_keys = self.random.sample(early_keys, number_precollected)
+        for starting_key in starting_keys:
+            self.multiworld.push_precollected(self.create_item(starting_key))
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:

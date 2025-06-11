@@ -635,7 +635,7 @@ def weapons_count(content: StardewContent):
 
 def get_stardrop_classification(options) -> ItemClassification:
     return ItemClassification.progression_skip_balancing \
-        if goal_is_perfection(options) or goal_is_stardrops(options) \
+        if goal_is_perfection(options) or goal_is_stardrops(options) or EatsanityOptionName.shop in options.eatsanity \
         else ItemClassification.useful
 
 
