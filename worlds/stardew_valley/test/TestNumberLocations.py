@@ -41,7 +41,7 @@ class TestMinSanityHasAllExpectedLocations(SVTestBase):
     options = get_minsanity_options()
 
     def test_minsanity_has_fewer_than_locations(self):
-        expected_locations = 69
+        expected_locations = 70
         real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Minsanity Locations: {number_locations}")
