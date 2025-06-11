@@ -11,6 +11,7 @@ class TestFriendsanityDatingRules(SVTestBase):
 
     def test_earning_dating_heart_requires_dating(self):
         self.collect_all_the_money()
+        self.collect(self.create_item("Landslide Removed"))
         self.multiworld.state.collect(self.create_item("Fall"))
         self.multiworld.state.collect(self.create_item("Beach Bridge"))
         self.multiworld.state.collect(self.create_item("Progressive House"))

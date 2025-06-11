@@ -14,6 +14,7 @@ class TestCraftsanityLogic(SVTestBase):
 
     def test_can_craft_recipe(self):
         location = "Craft Marble Brazier"
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
@@ -51,6 +52,7 @@ class TestCraftsanityLogic(SVTestBase):
     def test_require_furnace_recipe_for_smelting_checks(self):
         locations = ["Craft Furnace", "Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)

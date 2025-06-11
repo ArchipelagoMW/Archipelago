@@ -11,6 +11,7 @@ class TestBooksLogic(SVTestBase):
         self.collect_months(12)
         self.assert_cannot_reach_location("Read Mapping Cave Systems")
 
+        self.collect("Landslide Removed")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")
         self.collect("Progressive Mine Elevator")

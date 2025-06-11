@@ -1,6 +1,7 @@
 from ..bases import SVTestBase
 from ... import options
 from ...options import ToolProgression
+from ...strings.ap_names.transport_names import Transportation
 
 
 class TestWeaponsLogic(SVTestBase):
@@ -10,6 +11,7 @@ class TestWeaponsLogic(SVTestBase):
     }
 
     def test_mine(self):
+        self.collect(self.create_item("Landslide Removed"))
         self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
         self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
         self.multiworld.state.collect(self.create_item("Progressive Pickaxe"))
