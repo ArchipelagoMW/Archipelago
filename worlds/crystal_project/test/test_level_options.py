@@ -6,8 +6,6 @@ from ..constants.regions import *
 
 
 class TestLevelGatingOff(CrystalProjectTestBase):
-    run_default_tests = False
-
     options = {
         "levelGating": 0,
     }
@@ -18,8 +16,6 @@ class TestLevelGatingOff(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_region(ANCIENT_RESERVOIR))
 
 class TestLevelGatingOn(CrystalProjectTestBase):
-    run_default_tests = False
-
     options = {
         "levelGating": 1,
     }

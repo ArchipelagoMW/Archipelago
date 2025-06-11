@@ -5,8 +5,6 @@ from ..constants.regions import *
 from ..items import key_rings, dungeon_keys
 
 class MultiuseKeyMethods(CrystalProjectTestBase):
-    run_default_tests = False
-
     def has_no_skeleton_key(self):
         self.assertTrue(self.count(SKELETON_KEY) == 0)
 
@@ -43,8 +41,6 @@ class MultiuseKeyMethods(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_location("Capital Sequoia Chest - Gardeners Shed 1"))
 
 class TestSkeletonKeyMode(MultiuseKeyMethods):
-    run_default_tests = False
-
     options = {
         "keyMode": 0
     }
