@@ -10,7 +10,7 @@ from .options import (
     kerrigan_unit_available, TakeOverAIAllies, MissionOrder, get_excluded_missions, get_enabled_campaigns,
     static_mission_orders,
     TwoStartPositions, KeyMode, EnableMissionRaceBalancing, EnableRaceSwapVariants, NovaGhostOfAChanceVariant,
-    NerfUnitBaselines, GrantStoryTech
+    WarCouncilNerfs, GrantStoryTech
 )
 from .mission_order.options import CustomMissionOrder
 from .mission_order import SC2MissionOrder
@@ -77,7 +77,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
     extra_locations = world.options.extra_locations.value
     grant_story_tech = world.options.grant_story_tech.value
     grant_story_levels = world.options.grant_story_levels.value
-    nerf_unit_baselines = world.options.nerf_unit_baselines.value == NerfUnitBaselines.option_true
+    war_council_nerfs = world.options.war_council_nerfs.value == WarCouncilNerfs.option_true
 
     # WoL
     if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
@@ -127,7 +127,7 @@ def adjust_mission_pools(world: 'SC2World', pools: SC2MOGenMissionPools):
         pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.THE_ESCAPE, Difficulty.MEDIUM, Difficulty.STARTER)
         pools.move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, Difficulty.MEDIUM, Difficulty.STARTER)
-    if not nerf_unit_baselines:
+    if not war_council_nerfs:
         pools.move_mission(SC2Mission.TEMPLAR_S_RETURN, Difficulty.MEDIUM, Difficulty.STARTER)
     if (grant_story_tech == GrantStoryTech.option_grant and grant_story_levels) or kerriganless:
         # The player has, all the stuff he needs, provided under these settings

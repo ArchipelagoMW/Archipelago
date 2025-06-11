@@ -848,7 +848,7 @@ def exclude_group(item_list:Iterable[FilterItem], excluded_count: Dict[str, int]
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
     """Excludes / start-inventories items based on `nerf_unit_baselines` option.
     Will skip items that are excluded by other sources."""
-    if world.options.nerf_unit_baselines:
+    if world.options.war_council_nerfs:
         return
 
     flagged_item_names = []
