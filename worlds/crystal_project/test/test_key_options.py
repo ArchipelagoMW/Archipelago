@@ -1,111 +1,75 @@
 from .bases import CrystalProjectTestBase
 from ..constants.key_items import *
 from ..constants.keys import *
-from ..constants.mounts import *
 from ..constants.regions import *
-from ..constants.teleport_stones import *
+from ..items import key_rings, dungeon_keys
 
-class TestVanillaKeys(CrystalProjectTestBase):
+class MultiuseKeyMethods(CrystalProjectTestBase):
     run_default_tests = False
 
-    options = {
-        "keyMode": 2,
-    }
+    def has_no_skeleton_key(self):
+        self.assertTrue(self.count(SKELETON_KEY) == 0)
 
-    def test_has_key(self):
+    def has_no_dungeon_keys(self):
+        self.assertTrue(len(self.get_items_by_name(dungeon_keys)) == 0)
+
+    def has_no_keyring(self):
+        self.assertTrue(len(self.get_items_by_name(key_rings)) == 0)
+
+    def has_skeleton_key(self):
+        self.collect_mounts_and_level_caps()
+
+        unreachable_locations = ["Capital Sequoia Chest - Gardeners Shed 1",
+                     "Capital Jail Chest - South Wing jail cell across from busted wall",
+                     "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1",
+                     "Capital Jail Chest - West Wing jail cell among the glowy plants",
+                     "Capital Jail Chest - Locked among the foliage in West Wing",
+                     "Capital Jail Chest - Locked beyond overgrown West Wing hallway",
+                     "Capital Jail Chest - East Wing bedroom closet twinsies the 1st",
+                     "Capital Jail Chest - Locked in broken East Wing jail cell",
+                     "Capital Jail Crystal - Reaper, above hell pool"]
+        reachable_locations = []
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(SKELETON_KEY))
+        reachable_locations.extend(unreachable_locations)
+        unreachable_locations = []
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+    def has_singleton_key(self):
         self.collect_mounts_and_level_caps()
         self.assertFalse(self.can_reach_location("Capital Sequoia Chest - Gardeners Shed 1"))
         self.collect(self.get_item_by_name(GARDENERS_KEY))
         self.assertTrue(self.can_reach_location("Capital Sequoia Chest - Gardeners Shed 1"))
 
-    def test_has_prison_keys(self):
-        self.collect_mounts_and_level_caps()
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertFalse(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(SOUTH_WING_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertFalse(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(CELL_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertFalse(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(WEST_WING_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertFalse(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(EAST_WING_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertFalse(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(DARK_WING_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertTrue(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect(self.get_item_by_name(CELL_KEY))
-        self.collect(self.get_item_by_name(CELL_KEY))
-        self.collect(self.get_item_by_name(CELL_KEY))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertFalse(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertTrue(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
-        self.collect_by_name(CELL_KEY)
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - South Wing jail cell across from busted wall"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - West Wing jail cell among the glowy plants"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - Locked among the foliage in West Wing"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - Locked beyond overgrown West Wing hallway"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - East Wing bedroom closet twinsies the 1st"))
-        self.assertTrue(self.can_reach_location("Capital Jail Chest - Locked in broken East Wing jail cell"))
-        self.assertTrue(self.can_reach_location("Capital Jail Crystal - Reaper, above hell pool"))
+class TestSkeletonKeyMode(MultiuseKeyMethods):
+    run_default_tests = False
 
-class TestKeyRings(CrystalProjectTestBase):
+    options = {
+        "keyMode": 0
+    }
+
+    def test_has_skeleton_key(self):
+        self.has_skeleton_key()
+
+class TestKeyRings(MultiuseKeyMethods):
     run_default_tests = False
 
     options = {
         "keyMode": 1
     }
 
-    def test_has_key(self):
-        self.collect_mounts_and_level_caps()
-        self.assertFalse(self.can_reach_location("Capital Sequoia Chest - Gardeners Shed 1"))
-        self.collect(self.get_item_by_name(GARDENERS_KEY))
-        self.assertTrue(self.can_reach_location("Capital Sequoia Chest - Gardeners Shed 1"))
+    def test_has_no_dungeon_keys(self):
+        self.has_no_dungeon_keys()
+
+    def test_has_skeleton_key(self, skeleton_key_bool = True):
+        if skeleton_key_bool:
+            self.has_skeleton_key()
+        else:
+            self.has_no_skeleton_key()
+
+    def test_has_singleton_key(self):
+        self.has_singleton_key()
 
     def test_has_prison_keyring(self):
         self.collect_mounts_and_level_caps()
@@ -137,3 +101,134 @@ class TestKeyRings(CrystalProjectTestBase):
         self.assertFalse(self.can_reach_region(JIDAMBA_EACLANEYA))
         self.collect(self.get_item_by_name(JIDAMBA_KEY_RING))
         self.assertTrue(self.can_reach_region(JIDAMBA_EACLANEYA))
+
+class TestVanillaKeys(MultiuseKeyMethods):
+    run_default_tests = False
+
+    options = {
+        "keyMode": 2
+    }
+
+    def test_has_no_keyring(self):
+        self.has_no_keyring()
+
+    def test_has_skeleton_key(self, skeleton_key_bool = True):
+        if skeleton_key_bool:
+            self.has_skeleton_key()
+        else:
+            self.has_no_skeleton_key()
+
+    def test_has_singleton_key(self):
+        self.has_singleton_key()
+
+    def test_has_prison_keys(self):
+        self.collect_mounts_and_level_caps()
+
+        unreachable_locations = ["Capital Jail Chest - South Wing jail cell across from busted wall",
+                                 "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1",
+                                 "Capital Jail Chest - West Wing jail cell among the glowy plants",
+                                 "Capital Jail Chest - Locked among the foliage in West Wing",
+                                 "Capital Jail Chest - Locked beyond overgrown West Wing hallway",
+                                 "Capital Jail Chest - East Wing bedroom closet twinsies the 1st",
+                                 "Capital Jail Chest - Locked in broken East Wing jail cell",
+                                 "Capital Jail Crystal - Reaper, above hell pool"]
+        reachable_locations = []
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(SOUTH_WING_KEY))
+        expected_passing_location = "Capital Jail Chest - South Wing jail cell across from busted wall"
+        unreachable_locations.remove(expected_passing_location)
+        reachable_locations.extend([expected_passing_location])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(CELL_KEY))
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(WEST_WING_KEY))
+        expected_passing_location = "Capital Jail Chest - West Wing jail cell among the glowy plants"
+        unreachable_locations.remove(expected_passing_location)
+        reachable_locations.extend([expected_passing_location])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(EAST_WING_KEY))
+        expected_passing_location = "Capital Jail Chest - East Wing bedroom closet twinsies the 1st"
+        unreachable_locations.remove(expected_passing_location)
+        reachable_locations.extend([expected_passing_location])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(DARK_WING_KEY))
+        expected_passing_location = "Capital Jail Crystal - Reaper, above hell pool"
+        unreachable_locations.remove(expected_passing_location)
+        reachable_locations.extend([expected_passing_location])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect(self.get_item_by_name(CELL_KEY))
+        self.collect(self.get_item_by_name(CELL_KEY))
+        self.collect(self.get_item_by_name(CELL_KEY))
+        expected_passing_location = "Capital Jail Chest - Locked among the foliage in West Wing"
+        unreachable_locations.remove(expected_passing_location)
+        reachable_locations.extend([expected_passing_location])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+        self.collect_by_name(CELL_KEY)
+        expected_passing_location_a = "Capital Jail Chest - Fiercely guarded and locked behind South Wing rubble 1"
+        expected_passing_location_b = "Capital Jail Chest - Locked beyond overgrown West Wing hallway"
+        expected_passing_location_c = "Capital Jail Chest - Locked in broken East Wing jail cell"
+        unreachable_locations.remove(expected_passing_location_a)
+        unreachable_locations.remove(expected_passing_location_b)
+        unreachable_locations.remove(expected_passing_location_c)
+        reachable_locations.extend([expected_passing_location_a, expected_passing_location_b, expected_passing_location_c])
+        self.assert_locations(reachable_locations, unreachable_locations)
+
+class TestKeyRingsSkeleFree(TestKeyRings):
+    run_default_tests = False
+
+    options = {
+        "keyMode": 3
+    }
+
+    def test_has_no_dungeon_keys(self):
+        self.has_no_dungeon_keys()
+
+    def test_has_skeleton_key(self, skeleton_key_bool = False):
+        TestKeyRings.test_has_skeleton_key(self, skeleton_key_bool)
+
+    def test_has_singleton_key(self):
+        self.has_singleton_key()
+
+    def test_has_prison_keyring(self):
+        TestKeyRings.test_has_prison_keyring(self)
+
+    def test_has_beaurior_keyring(self):
+        TestKeyRings.test_has_beaurior_keyring(self)
+
+    def test_has_slip_glide_ride_keyring(self):
+        TestKeyRings.test_has_slip_glide_ride_keyring(self)
+
+    def test_has_ice_puzzle_keyring(self):
+        TestKeyRings.test_has_ice_puzzle_keyring(self)
+
+    def test_has_jidamba_keyring(self):
+        TestKeyRings.test_has_jidamba_keyring(self)
+
+class TestVanillaKeysSkeleFree(TestVanillaKeys):
+    run_default_tests = False
+
+    options = {
+        "keyMode": 4
+    }
+
+    def test_has_no_skeleton_key(self):
+        self.has_no_skeleton_key()
+
+    def test_has_no_keyring(self):
+        self.has_no_keyring()
+
+    def test_has_skeleton_key(self, skeleton_key_bool = False):
+        TestVanillaKeys.test_has_skeleton_key(self, skeleton_key_bool)
+
+    def test_has_singleton_key(self):
+        self.has_singleton_key()
+
+    def test_has_prison_keys(self):
+        TestVanillaKeys.test_has_prison_keys(self)
