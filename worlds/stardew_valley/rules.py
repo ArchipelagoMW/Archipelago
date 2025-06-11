@@ -260,7 +260,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.mountain_jojamart_shortcut, logic.received("Mountain To Jojamart Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.mountain_town_shortcut, logic.received("Mountain To Town Shortcut"))
-    set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Town To Tide Pools Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.town_tidepools_shortcut, logic.received("Town To Tide Pools Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Lake To Adventure Guild Shortcut"))
 

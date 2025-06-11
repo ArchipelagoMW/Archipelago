@@ -45,6 +45,7 @@ class TestRaccoonBundlesLogic(SVTestBase):
 
     def test_raccoon_bundles_rely_on_previous_ones(self):
         self.collect("Forest Magic")
+        self.collect("Landslide Removed")
         self.collect("Progressive Raccoon", 6)
         self.collect("Progressive Mine Elevator", 24)
         self.collect("Mining Level", 12)

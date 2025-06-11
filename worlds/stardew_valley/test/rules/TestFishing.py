@@ -19,7 +19,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         fish_and_items = {
             Fish.crimsonfish: ["Beach Bridge"],
             Fish.void_salmon: ["Railroad Boulder Removed", "Dark Talisman"],
-            Fish.woodskip: ["Progressive Axe", "Progressive Axe", "Progressive Weapon"],  # For the ores to get the axe upgrades
+            Fish.woodskip: ["Landslide Removed", "Progressive Axe", "Progressive Axe", "Progressive Weapon"],  # For the ores to get the axe upgrades
             Fish.mutant_carp: ["Rusty Key"],
             Fish.slimejack: ["Railroad Boulder Removed", "Rusty Key"],
             Fish.lionfish: [Transportation.boat_repair],
