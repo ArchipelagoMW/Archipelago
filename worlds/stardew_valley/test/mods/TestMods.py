@@ -55,6 +55,7 @@ class TestBaseItemGeneration(SVTestBase):
         options.Walnutsanity.internal_name: options.Walnutsanity.preset_all,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
+        options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
@@ -78,6 +79,7 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
         options.Secretsanity.internal_name: options.Secretsanity.preset_all,
         options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys)
     }
 
