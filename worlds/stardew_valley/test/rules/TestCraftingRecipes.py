@@ -122,6 +122,7 @@ class TestNoCraftsanityLogic(SVTestBase):
     def test_requires_mining_levels_for_smelting_checks(self):
         locations = ["Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
+        self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
