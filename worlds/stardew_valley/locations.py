@@ -139,7 +139,6 @@ class LocationTags(enum.Enum):
     ENDGAME_LOCATIONS = enum.auto()
     REQUIRES_FRIENDSANITY = enum.auto()
     REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
-    ENDGAME_LOCATION_ITEMS = enum.auto()
 
     BEACH_FARM = enum.auto()
     # Mods
