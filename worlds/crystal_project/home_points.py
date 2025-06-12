@@ -65,8 +65,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SARA_SARA_BAZAAR, "Poko Poko West Gate", 3783),
         LocationData(SARA_SARA_BAZAAR, "Poko Poko East Gate", 3784),
 
-        LocationData(SARA_SARA_BEACH, "Ibek's Cave", 2005),
-        LocationData(SARA_SARA_BEACH, "Beach Bird's Nest", 2709),
+        LocationData(SARA_SARA_BEACH_EAST, "Ibek's Cave", 2005, lambda state: logic.has_vertical_movement(state)),
+        LocationData(SARA_SARA_BEACH_WEST, "Beach Bird's Nest", 2709, lambda state: logic.has_vertical_movement(state)),
 
         LocationData(BEAURIOR_VOLCANO, "Beaurior Rock", 1792),
         LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Peak", 3037),

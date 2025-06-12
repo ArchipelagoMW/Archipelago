@@ -41,7 +41,8 @@ region_levels_dictionary: Dict[str, Tuple[int, int]] = {
     SHOUDU_WATERFRONT: (0, 0),
     POKO_POKO_DESERT: (30, 32),
     SARA_SARA_BAZAAR: (0, 0),
-    SARA_SARA_BEACH: (38, 40),
+    SARA_SARA_BEACH_EAST: (30, 30),
+    SARA_SARA_BEACH_WEST: (38, 40),
     ANCIENT_RESERVOIR: (33, 35),
     IBEK_CAVE: (35, 35),
     SALMON_BAY: (0, 0),
@@ -135,7 +136,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, SHOUDU_WATERFRONT, excluded), #moved from Expert to Advanced
         create_region(world, player, locations_per_region, POKO_POKO_DESERT, excluded),
         create_region(world, player, locations_per_region, SARA_SARA_BAZAAR, excluded),
-        create_region(world, player, locations_per_region, SARA_SARA_BEACH, excluded),
+        create_region(world, player, locations_per_region, SARA_SARA_BEACH_EAST, excluded),
+        create_region(world, player, locations_per_region, SARA_SARA_BEACH_WEST, excluded),
         create_region(world, player, locations_per_region, ANCIENT_RESERVOIR, excluded),
         create_region(world, player, locations_per_region, IBEK_CAVE, excluded),
         create_region(world, player, locations_per_region, SALMON_BAY, excluded),
@@ -205,7 +207,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         YAMAGAWA_MA: lambda state: (logic.has_swimming(state) or logic.has_vertical_movement(state)) and logic.is_area_in_level_range(state, 1)})
     multiworld.get_region(DELENDE, player).add_exits([SPAWNING_MEADOWS, SOILED_DEN, THE_PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
         {JADE_CAVERN: lambda state: logic.has_golden_quintar(state) and logic.is_area_in_level_range(state, 5),
-         ANCIENT_RESERVOIR: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 3),
+        ANCIENT_RESERVOIR: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 3),
         SALMON_PASS: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 2),
         GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 2),
         PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state),
@@ -287,33 +289,40 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         LAKE_DELENDE: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3),
         SALMON_BAY: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
         ANCIENT_LABYRINTH: lambda state: state.has(ANCIENT_TABLET_A, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region(SARA_SARA_BAZAAR, player).add_exits([POKO_POKO_DESERT, SARA_SARA_BEACH, SHOUDU_PROVINCE, THE_OPEN_SEA, CONTINENTAL_TRAM],
+    multiworld.get_region(SARA_SARA_BAZAAR, player).add_exits([POKO_POKO_DESERT, SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_WEST, SHOUDU_PROVINCE, THE_OPEN_SEA, CONTINENTAL_TRAM],
         {POKO_POKO_DESERT: lambda state: logic.is_area_in_level_range(state, 2),
-        SARA_SARA_BEACH: lambda state: logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 3),
+        SARA_SARA_BEACH_EAST: lambda state: logic.is_area_in_level_range(state, 2),
+        SARA_SARA_BEACH_WEST: lambda state: logic.has_rental_quintar(state) and logic.is_area_in_level_range(state, 3),
         SHOUDU_PROVINCE: lambda state: state.has(FERRY_PASS, world.player) and logic.is_area_in_level_range(state, 3),
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5),
         CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)})
-    multiworld.get_region(SARA_SARA_BEACH, player).add_exits([SARA_SARA_BAZAAR, THE_OPEN_SEA, BEAURIOR_VOLCANO, IBEK_CAVE],
+    multiworld.get_region(SARA_SARA_BEACH_EAST, player).add_exits([SARA_SARA_BAZAAR, THE_OPEN_SEA, IBEK_CAVE, BEAURIOR_VOLCANO],
         {IBEK_CAVE: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3),
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5),
         BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3)})
-    multiworld.get_region(ANCIENT_RESERVOIR, player).add_exits([POKO_POKO_DESERT, IBEK_CAVE, SARA_SARA_BEACH, DELENDE],
-        {DELENDE: lambda state: logic.has_swimming(state),
+    multiworld.get_region(SARA_SARA_BEACH_WEST, player).add_exits([POKO_POKO_DESERT, SARA_SARA_BAZAAR, THE_OPEN_SEA],
+        {POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 2),
+        SARA_SARA_BAZAAR: lambda state: logic.has_horizontal_movement(state),
+        THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
+    multiworld.get_region(ANCIENT_RESERVOIR, player).add_exits([POKO_POKO_DESERT, IBEK_CAVE, DELENDE],
+       {DELENDE: lambda state: logic.has_swimming(state),
         POKO_POKO_DESERT: lambda state: logic.is_area_in_level_range(state, 2),
         IBEK_CAVE: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3)})
-    multiworld.get_region(IBEK_CAVE, player).add_exits([SARA_SARA_BEACH],
-        {SARA_SARA_BEACH: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3)})
+    multiworld.get_region(IBEK_CAVE, player).add_exits([SARA_SARA_BEACH_EAST],
+        {SARA_SARA_BEACH_EAST: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3)})
     multiworld.get_region(SALMON_BAY, player).add_exits([THE_OPEN_SEA, SALMON_RIVER],
         {THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5),
         SALMON_RIVER: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 2)})
-    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH, SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, JIDAMBA_TANGLE, THE_DEEP_SEA],
+    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH_EAST,
+                                                           SARA_SARA_BEACH_WEST, SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, JIDAMBA_TANGLE, THE_DEEP_SEA],
         {SEASIDE_CLIFFS: lambda state: logic.has_swimming(state),
         PROVING_MEADOWS: lambda state: logic.has_swimming(state),
         OKIMOTO_NS: lambda state: logic.has_swimming(state),
         SHOUDU_WATERFRONT: lambda state: logic.has_swimming(state),
         THE_UNDERCITY: lambda state: logic.has_swimming(state),
         SARA_SARA_BAZAAR: lambda state: logic.has_swimming(state),
-        SARA_SARA_BEACH: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 3),
+        SARA_SARA_BEACH_EAST: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 2),
+        SARA_SARA_BEACH_WEST: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 3),
         SALMON_BAY: lambda state: logic.has_swimming(state),
         SHOUDU_PROVINCE: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 3),
         JIDAMBA_TANGLE: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5),
@@ -332,8 +341,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(GANYMEDE_SHRINE, player).add_exits([SHOUDU_PROVINCE],
         {SHOUDU_PROVINCE: lambda state: logic.is_area_in_level_range(state, 3)})
-    multiworld.get_region(BEAURIOR_VOLCANO, player).add_exits([SARA_SARA_BEACH, BEAURIOR_ROCK, THE_OPEN_SEA],
-        {SARA_SARA_BEACH: lambda state: logic.is_area_in_level_range(state, 3),
+    multiworld.get_region(BEAURIOR_VOLCANO, player).add_exits([SARA_SARA_BEACH_EAST, BEAURIOR_ROCK, THE_OPEN_SEA],
+        {SARA_SARA_BEACH_EAST: lambda state: logic.is_area_in_level_range(state, 3),
         BEAURIOR_ROCK: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 3),
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
     multiworld.get_region(BEAURIOR_ROCK, player).add_exits([BEAURIOR_VOLCANO])
@@ -353,7 +362,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(EASTERN_CHASM, player).add_exits([QUINTAR_RESERVE, THE_OPEN_SEA],
         {QUINTAR_RESERVE: lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 4),
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
+    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS,
+                                                                THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
         {LANDS_END: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 4),
         SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, world.player) and state.has(VIRIDIAN_BOOK, world.player) and state.has(CERULEAN_BOOK, world.player),
         NORTHERN_STRETCH: lambda state: logic.has_glide(state),
