@@ -562,13 +562,25 @@ class HasAny(Rule):
 @dataclasses.dataclass()
 class CanReachLocation(Rule):
     location_name: str
+    """The name of the location to test access to"""
+
+    parent_region_name: str = ""
+    """The name of the location's parent region. If not specified it will be resolved when the rule is resolved"""
+
+    skip_indirect_connection: bool = False
+    """Skip finding the location's parent region.
+    Do not use this if this rule is for an entrance and explicit_indirect_conditions is True
+    """
 
     @override
     def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
-        location = world.get_location(self.location_name)
-        if not location.parent_region:
-            raise ValueError(f"Location {location.name} has no parent region")
-        return self.Resolved(self.location_name, location.parent_region.name, player=world.player)
+        parent_region_name = self.parent_region_name
+        if not parent_region_name and not self.skip_indirect_connection:
+            location = world.get_location(self.location_name)
+            if not location.parent_region:
+                raise ValueError(f"Location {location.name} has no parent region")
+            parent_region_name = location.parent_region.name
+        return self.Resolved(self.location_name, parent_region_name, player=world.player)
 
     @override
     def __str__(self) -> str:
@@ -587,7 +599,9 @@ class CanReachLocation(Rule):
 
         @override
         def indirect_regions(self) -> tuple[str, ...]:
-            return (self.parent_region_name,)
+            if self.parent_region_name:
+                return (self.parent_region_name,)
+            return ()
 
         @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -693,7 +707,7 @@ class RuleWorldMixin(World):
     def set_rule(self, spot: "Location | Entrance", rule: "Rule") -> None:
         resolved_rule = self.resolve_rule(rule)
         spot.access_rule = resolved_rule.test
-        if isinstance(spot, Entrance):
+        if self.explicit_indirect_conditions and isinstance(spot, Entrance):
             self.register_rule_connections(resolved_rule, spot)
 
     @override
