@@ -84,22 +84,22 @@ class CrystalProjectLogic:
         return state.has(CLAMSHELL, self.player, clamshell_quantity)
 
     def has_rental_quintar(self, state: CollectionState) -> bool:
-        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(OWL_DRUM, self.player)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
 
     def has_horizontal_movement(self, state: CollectionState) -> bool:
-        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 2) or state.has(OWL_DRUM, self.player)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 2) or state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 2)
 
     def has_vertical_movement(self, state: CollectionState) -> bool:
-        return state.has(IBEK_BELL, self.player)
+        return state.has(IBEK_BELL, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 3)
 
     def has_glide(self, state: CollectionState) -> bool: 
-        return state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
+        return state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 4)
 
     def has_swimming(self, state: CollectionState) -> bool:
-        return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
+        return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)  or state.has(PROGRESSIVE_MOUNT, self.player, 5)
 
     def has_golden_quintar(self, state: CollectionState) -> bool:
-        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 7)
 
     def new_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:

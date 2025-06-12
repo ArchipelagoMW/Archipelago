@@ -1,4 +1,5 @@
 import logging
+from .constants.mounts import *
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
@@ -149,6 +150,13 @@ class CrystalProjectWorld(World):
 
         for job in self.starting_jobs:
             excluded_items.add(job)
+
+        if self.options.progressiveMountMode.value == self.options.progressiveMountMode.option_true:
+            for mount in self.item_name_groups[MOUNT]:
+               if mount != PROGRESSIVE_MOUNT:
+                   excluded_items.add(mount)
+        else:
+            excluded_items.add(PROGRESSIVE_MOUNT)
 
         if not self.options.levelGating:
             excluded_items.add(PROGRESSIVE_LEVEL_CAP)
@@ -326,4 +334,5 @@ class CrystalProjectWorld(World):
             "shopsanity": self.options.shopsanity.value,
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
+            "progressiveMountMode": bool(self.options.progressiveMountMode.value),
         }
