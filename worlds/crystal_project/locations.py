@@ -965,7 +965,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Quintar Mausoleum
         #Treasure chests
-        LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: logic.has_fast(state)), #(the owl is too slow); (688, 114, -464) Babel Quintar chest
+        LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: logic.has_fast(state)), #(688, 114, -464) Babel Quintar chest
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Rocky room", 3401 + treasure_index_offset), #(664, 129, -425) Quintar Mausoleum map chest
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Glowing grass room", 3768 + treasure_index_offset), #(709, 129, -442) Wind Thresher chest
         LocationData(QUINTAR_MAUSOLEUM, "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) 6th Scrap chest on main Underpass map
