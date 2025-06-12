@@ -86,6 +86,10 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     for i in data.required_items:
         add_rule(loc, lambda state: state.has(i, world.player))
 
+    if data.needs_swim:
+        add_rule(loc, lambda state: (state.has("Water Tablet", world.player) or state.has(
+            BrushTechniques.GREENSPROUT_WATERLILY.value.item_name, world.player)))
+
 
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
     if data.needs_swim:

@@ -42,6 +42,7 @@ class RegionNames(StrEnum):
     KUSHIS_HOUSE = "Kushi's house"
     SUSANOS_HOUSE = "Susano's house"
     SUSANOS_UNDERGROUD = "Susano's Secret Underground Meditation Chamber"
+    ORANGES_HOUSE = "Mr and Mrs Orange's house"
 
     ## Shinshu Field
     CURSED_SHINSHU_FIELD = "Cursed Shinshu Field"
@@ -105,16 +106,14 @@ class BrushTechniques(Enum):
     REJUVENATION = BrushTechniqueData(0x101, "Rejuvenation", item_classification=ItemClassification.progression)
     POWER_SLASH = BrushTechniqueData(0x102, "Progressive Power Slash", item_count=3,
                                      item_classification=ItemClassification.progression)
-    # FIXME: set 3 cherry bombs when we have more locations
-    CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=1,item_classification=ItemClassification.progression)
+    CHERRY_BOMB = BrushTechniqueData(0x103, "Progressive Cherry Bomb", item_count=3,item_classification=ItemClassification.progression)
     GREENSPROUT_BLOOM = BrushTechniqueData(0x104, "Greensprout (Bloom)")
     GREENSPROUT_WATERLILY = BrushTechniqueData(0x105, "Greensprout (Waterlily)",
                                                item_classification=ItemClassification.progression)
-    # GREENSPROUT_VINE = BrushTechniqueData(0x106, "Greensprout (Vine)")
-    # WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
+    GREENSPROUT_VINE = BrushTechniqueData(0x106, "Greensprout (Vine)")
+    WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
     CRESCENT = BrushTechniqueData(0x108, "Crescent", item_classification=ItemClassification.progression)
-
-    # GALESTROM = BrushTechniqueData(0x109, "Galestrom")
+    GALESTROM = BrushTechniqueData(0x109, "Galestrom")
     # INFERNO = BrushTechniqueData(0x110, "Inferno")
     # VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
     # CATWALK = BrushTechniqueData(0x112, "Cawalk")
@@ -164,6 +163,7 @@ class LocData(NamedTuple):
     has_events: [str] = []
     required_items: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
+    needs_swim: bool = False
 
 
 class EventData(NamedTuple):
@@ -176,6 +176,8 @@ class EventData(NamedTuple):
     has_events: [str] = []
     required_items: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
+    needs_swim: bool = False
+
 
 
 class ExitData(NamedTuple):

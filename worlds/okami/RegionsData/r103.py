@@ -27,8 +27,14 @@ events = {
 locations = {
     RegionNames.CURSED_HANA_VALLEY: {
         "Hana Valley - Freestanding Chest": LocData(15),
+        "Hana Valley - Buried chest near tunnel": LocData(23, buried=True),
+        "Hana Valley - Buried chest at entrance boulder" :LocData(24,buried=True),
     },
     RegionNames.HANA_VALLEY_SAKIGAMI:{
         "Hana Valley - Sakigami": LocData(12)
+    },
+    RegionNames.HANA_VALLEY:{
+      "Hana Valley - Chest on Island":LocData(25),
+      "Hana Valley - Sun Fragment Chest (Bloom every Tree)": LocData(26, required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM],power_slash_level=1)
     }
 }
