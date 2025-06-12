@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import List, Dict, Tuple, TYPE_CHECKING
 from BaseClasses import Region, Location
 from .options import CrystalProjectOptions
 from .locations import LocationData
@@ -10,6 +10,77 @@ from .constants.teleport_stones import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
+
+region_levels_dictionary: Dict[str, Tuple[int, int]] = {
+    #Beginner
+    MENU: (0, 0),
+    SPAWNING_MEADOWS: (3, 3),
+    DELENDE: (5, 10),
+    SOILED_DEN: (7, 7),
+    THE_PALE_GROTTO: (7, 10),
+    SEASIDE_CLIFFS: (10, 15),
+    DRAFT_SHAFT_CONDUIT: (12, 12),
+    MERCURY_SHRINE: (0, 0),
+    YAMAGAWA_MA: (15, 15),
+    PROVING_MEADOWS: (0, 0),
+    SKUMPARADISE: (15, 17),
+    # #Advanced
+    CAPITAL_SEQUOIA: (0, 0),
+    JOJO_SEWERS: (20, 22),
+    BOOMER_SOCIETY: (0, 0),
+    ROLLING_QUINTAR_FIELDS: (18, 21),
+    QUINTAR_NEST: (18, 22),
+    QUINTAR_SANCTUM: (21, 21),
+    CAPITAL_JAIL: (24, 27),
+    CAPITAL_PIPELINE: (50, 50),
+    COBBLESTONE_CRAG: (0, 0),
+    OKIMOTO_NS: (27, 31),
+    GREENSHIRE_REPRISE: (33, 33),
+    SALMON_PASS: (0, 0),
+    SALMON_RIVER: (26, 29),
+    SHOUDU_WATERFRONT: (0, 0),
+    POKO_POKO_DESERT: (30, 32),
+    SARA_SARA_BAZAAR: (0, 0),
+    SARA_SARA_BEACH: (38, 40),
+    ANCIENT_RESERVOIR: (33, 35),
+    IBEK_CAVE: (35, 35),
+    SALMON_BAY: (0, 0),
+    # #Expert
+    THE_OPEN_SEA: (54, 56),
+    SHOUDU_PROVINCE: (36, 37),
+    THE_UNDERCITY: (37, 39),
+    GANYMEDE_SHRINE: (0, 0),
+    BEAURIOR_VOLCANO: (37, 37),
+    BEAURIOR_ROCK: (38, 40),
+    LAKE_DELENDE: (40, 40),
+    #Todo: check if any sparks in Quintar Reserve attack you or stand in the way of check locations
+    QUINTAR_RESERVE: (0, 0),
+    DIONE_SHRINE: (0, 0),
+    QUINTAR_MAUSOLEUM: (54, 56),
+    EASTERN_CHASM: (0, 0),
+    TALL_TALL_HEIGHTS: (41, 45),
+    NORTHERN_CAVE: (43, 44),
+    LANDS_END: (44, 47),
+    SLIP_GLIDE_RIDE: (46, 48),
+    SEQUOIA_ATHENAEUM: (0, 0),
+    NORTHERN_STRETCH: (0, 0),
+    CASTLE_RAMPARTS: (50, 50),
+    THE_CHALICE_OF_TAR: (60, 60),
+    FLYERS_CRAG: (0, 0),
+    JIDAMBA_TANGLE: (50, 54),
+    JIDAMBA_EACLANEYA: (54, 57),
+    THE_DEEP_SEA: (58, 64),
+    NEPTUNE_SHRINE: (0, 0),
+    JADE_CAVERN: (57, 57),
+    CONTINENTAL_TRAM: (0, 0),
+    # #End Game
+    ANCIENT_LABYRINTH: (62, 66),
+    THE_SEQUOIA: (60, 63),
+    THE_DEPTHS: (63, 65),
+    CASTLE_SEQUOIA: (56, 59),
+    THE_OLD_WORLD: (0, 0),
+    THE_NEW_WORLD: (60, 60),
+}
 
 class CrystalProjectLocation(Location):
     game: str = "CrystalProject"
