@@ -8,6 +8,7 @@ from ..constants.regions import *
 class TestLevelGatingOff(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
+        "progressiveMountMode": 0,
     }
 
     def test_region_accessibility(self):
@@ -18,6 +19,7 @@ class TestLevelGatingOff(CrystalProjectTestBase):
 class TestLevelGatingOn(CrystalProjectTestBase):
     options = {
         "levelGating": 1,
+        "progressiveMountMode": 0,
     }
 
     def test_region_accessibility(self):

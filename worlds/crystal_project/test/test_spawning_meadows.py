@@ -13,6 +13,7 @@ class TestSpawningMeadows(CrystalProjectTestBase):
 class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
+        "progressiveMountMode": 0,
     }
 
     def test_mercury_shrine_connection(self):
@@ -46,6 +47,7 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
 class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 1,
+        "progressiveMountMode": 0,
     }
 
     def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):

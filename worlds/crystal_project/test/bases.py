@@ -40,7 +40,7 @@ class CrystalProjectTestBase(WorldTestBase):
 
 
     def collect_mounts(self):
-        self.collect_by_name([PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_QUINTAR_WOODWIND, IBEK_BELL, OWL_DRUM])
+        self.collect_by_name([PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_QUINTAR_WOODWIND, IBEK_BELL, OWL_DRUM, PROGRESSIVE_MOUNT])
 
 
     def collect_level_caps(self):

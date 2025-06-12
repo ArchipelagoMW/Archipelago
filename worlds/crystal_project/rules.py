@@ -89,6 +89,9 @@ class CrystalProjectLogic:
     def has_horizontal_movement(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 2) or state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 2)
 
+    def has_fast(self, state: CollectionState) -> bool:
+        return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 2) or state.has(PROGRESSIVE_MOUNT, self.player, 2)
+
     def has_vertical_movement(self, state: CollectionState) -> bool:
         return state.has(IBEK_BELL, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 3)
 
