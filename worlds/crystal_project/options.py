@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Type, Any, List
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, OptionDict, OptionList, Visibility, Option, OptionGroup
+from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Visibility, Option, OptionGroup
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
 
 def create_option_groups() -> List[OptionGroup]:
@@ -136,6 +136,12 @@ class Shopsanity(Choice):
     default = 0
 
 #"""Progression Options"""
+class ProgressiveMountMode(Toggle):
+    """
+    When enabled, all the mounts will arrive in the same order every game (Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina
+    When disabled, there are 4 different items, Progressive Quintar Flute, Progressive Salmon Violin, Ibek Bell, and Owl Drum which are randomized."""
+    display_name = "Progressive Mount Mode"
+
 class LevelGating(DefaultOnToggle):
     """
     When enabled, the parties maximum level will be capped, with items in the pool increasing that cap.
@@ -160,14 +166,6 @@ class EasyLeveling(Toggle):
     """
     display_name = "Easy Leveling"
 
-class ProgressiveEquipmentMode(DefaultOnToggle):
-    """
-    When enabled, each category of weapon and armor will be sent to the player in progressive order from weakest to strongest.
-
-    When disabled, weapons and armor are fully randomized.
-    """
-    display_name = "Progressive Equipment"
-
 class KeyMode(Choice):
     """
     Choose how keys behave.
@@ -189,6 +187,14 @@ class KeyMode(Choice):
     default = 2
 
 #"""Item Pool Options"""
+class ProgressiveEquipmentMode(DefaultOnToggle):
+    """
+    When enabled, each category of weapon and armor will be sent to the player in progressive order from weakest to strongest.
+
+    When disabled, weapons and armor are fully randomized.
+    """
+    display_name = "Progressive Equipment"
+
 class StartWithTreasureFinder(DefaultOnToggle):
     """
     When enabled, the player will start with the Treasure Finder in their inventory. When disabled, it will be in the item pool.
@@ -236,11 +242,12 @@ class CrystalProjectOptions(PerGameCommonOptions):
     killBossesMode: KillBossesMode
     shopsanity: Shopsanity
     includedRegions: IncludedRegions
+    progressiveMountMode: ProgressiveMountMode
     levelGating: LevelGating
     levelUpsInPool: LevelUpsInPool
     easyLeveling: EasyLeveling
-    progressiveEquipmentMode: ProgressiveEquipmentMode
     keyMode: KeyMode
+    progressiveEquipmentMode: ProgressiveEquipmentMode
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
     includeSummonAbilities: IncludeSummonAbilities
@@ -250,7 +257,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity],
-    "Progression Options": [LevelGating, LevelUpsInPool, EasyLeveling, ProgressiveEquipmentMode, KeyMode],
-    "Item Pool Options": [StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelUpsInPool, EasyLeveling, KeyMode],
+    "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic]
 }

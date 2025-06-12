@@ -191,6 +191,7 @@ item_table: Dict[str, ItemData] = {
     IBEK_BELL: ItemData(MOUNT, 50 + item_index_offset, ItemClassification.progression),
     OWL_DRUM: ItemData(MOUNT, 49 + item_index_offset, ItemClassification.progression),
     PROGRESSIVE_SALMON_VIOLA: ItemData(MOUNT, 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
+    PROGRESSIVE_MOUNT: ItemData(MOUNT, 700 + item_index_offset, ItemClassification.progression, 7),
 
     #Teleport items (shards not included since they are stones but worse)
     HOME_POINT_STONE: ItemData(TELEPORT_STONE, 19 + item_index_offset, ItemClassification.useful), #Starter pack
