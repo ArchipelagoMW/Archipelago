@@ -9,6 +9,7 @@ from .bases import CrystalProjectTestBase
 class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
+        "progressiveMountMode": 0,
     }
 
     def test_region_connections_no_items(self):
@@ -43,6 +44,7 @@ class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
 class TestCapitalSequoiaWithLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 1,
+        "progressiveMountMode": 0,
     }
 
     def test_region_connections_no_items(self):

@@ -334,5 +334,4 @@ class CrystalProjectWorld(World):
             "shopsanity": self.options.shopsanity.value,
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
-            "progressiveMountMode": bool(self.options.progressiveMountMode.value),
         }
