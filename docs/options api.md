@@ -226,14 +226,8 @@ elif self.options.logic == Logic.option_extreme:
 elif self.options.logic == "crazy":
     do_insane_things()
 
-# check if the current option is in a collection of integers using the class attributes
-if self.options.weapon in {Weapon.option_bow, Weapon.option_sword}:
-    do_stuff()
-# in order to make a set of strings work, we have to compare against current_key
-elif self.options.weapon.current_key in {"none", "hammer"}:
-    do_something_else()
-# though it's usually better to just use a tuple instead
-elif self.options.weapon in ("none", "hammer"):
+# if we want to check if the option is in a collection, use a tuple, as options are unhashable so a dict and set are invalid.
+if self.options.weapon in ("none", "hammer"):
     do_something_else()
 ```
 ## Generic Option Classes
