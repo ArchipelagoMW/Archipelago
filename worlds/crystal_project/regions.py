@@ -315,8 +315,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(SALMON_BAY, player).add_exits([THE_OPEN_SEA, SALMON_RIVER],
         {THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5),
         SALMON_RIVER: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 2)})
-    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH_EAST,
-                                                           SARA_SARA_BEACH_WEST, SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, JIDAMBA_TANGLE, THE_DEEP_SEA],
+    multiworld.get_region(THE_OPEN_SEA, player).add_exits([SEASIDE_CLIFFS, PROVING_MEADOWS, OKIMOTO_NS, SHOUDU_WATERFRONT, SARA_SARA_BAZAAR, SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_WEST, SALMON_BAY, SHOUDU_PROVINCE, THE_UNDERCITY, JIDAMBA_TANGLE, THE_DEEP_SEA],
         {SEASIDE_CLIFFS: lambda state: logic.has_swimming(state),
         PROVING_MEADOWS: lambda state: logic.has_swimming(state),
         OKIMOTO_NS: lambda state: logic.has_swimming(state),
@@ -364,8 +363,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(EASTERN_CHASM, player).add_exits([QUINTAR_RESERVE, THE_OPEN_SEA],
         {QUINTAR_RESERVE: lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 4),
         THE_OPEN_SEA: lambda state: logic.has_swimming(state) and logic.is_area_in_level_range(state, 5)})
-    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS,
-                                                                THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
+    multiworld.get_region(TALL_TALL_HEIGHTS, player).add_exits([SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
         {LANDS_END: lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 4),
         SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, world.player) and state.has(VIRIDIAN_BOOK, world.player) and state.has(CERULEAN_BOOK, world.player),
         NORTHERN_STRETCH: lambda state: logic.has_glide(state),
