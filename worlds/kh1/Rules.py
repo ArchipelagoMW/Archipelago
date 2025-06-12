@@ -181,7 +181,7 @@ def set_rules(kh1world):
                     and
                     (
                         state.has("Mermaid Kick", player)
-                        or state.has_all({"High Jump", "Combo Master"}, player)
+                        or state.has("Combo Master") and (state.has("High Jump", player) or state.has("Air Combo Plus", player, 2))
                     )
                 )
             )
@@ -393,6 +393,7 @@ def set_rules(kh1world):
                 (
                     state.has("High Jump", player, 2)
                     or state.has("Progressive Glide", player)
+                    or state.has_all({"High Jump", "Combo Master"}, player)
                 )
             )
             or (difficulty > 10 and state.has("Combo Master", player)) # can_dumbo_skip(state, player)
@@ -402,8 +403,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Agrabah Cave of Wonders Entrance Tall Tower Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
-            or
-            (difficulty > 0 and state.has("High Jump", player, 2))
+            or (difficulty > 0 and state.has("High Jump", player, 2))
             or
             (
                 difficulty > 5
@@ -411,7 +411,7 @@ def set_rules(kh1world):
                 (
                     state.has("Combo Master", player)
                     or can_dumbo_skip(state, player)
-                    or state.has("High Jump", player, 1)
+                    or state.has("High Jump", player)
                 )
             )
             or difficulty > 10
