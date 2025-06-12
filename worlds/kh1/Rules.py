@@ -837,9 +837,9 @@ def set_rules(kh1world):
             or difficulty > 10
         ))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 2nd Chest"),
-            lambda state: (difficulty > 0 or state.has_any({"High Jump", "Progressive Glide"}, player)))
-    add_rule(kh1world.get_location("End of the World Giant Crevasse 3nd Chest"),
-            lambda state: (difficulty > 0 or state.has_any({"High Jump", "Progressive Glide"}, player)))
+        lambda state: (difficulty > 0 or state.has_any({"High Jump", "Progressive Glide"}, player)))
+    add_rule(kh1world.get_location("End of the World Giant Crevasse 3rd Chest"),
+        lambda state: (difficulty > 0 or state.has_any({"High Jump", "Progressive Glide"}, player)))
     add_rule(kh1world.get_location("End of the World Giant Crevasse 4th Chest"),
         lambda state: (
             state.has("Progressive Glide", player)
