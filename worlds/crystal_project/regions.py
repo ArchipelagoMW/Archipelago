@@ -236,9 +236,11 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld.get_region(CAPITAL_SEQUOIA, player).add_exits([JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
         {JOJO_SEWERS: lambda state: logic.is_area_in_level_range(state, 1),
         ROLLING_QUINTAR_FIELDS: lambda state: logic.is_area_in_level_range(state, 1),
-        COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state), #why rental and horizontal both listed?
+        #why rental and horizontal both listed?
+        COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
         GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5) and logic.is_area_in_level_range(state, 2),
-        CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 5), #glide? really?
+        #glide? really?
+        CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 5),
         SKUMPARADISE: lambda state: logic.is_area_in_level_range(state, 1)})
     multiworld.get_region(JOJO_SEWERS, player).add_exits([CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST], 
         {CAPITAL_JAIL: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state)) and logic.is_area_in_level_range(state, 2),
