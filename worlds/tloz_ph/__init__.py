@@ -40,7 +40,7 @@ class PhantomHourglassWorld(World):
     game = "The Legend of Zelda - Phantom Hourglass"
     options_dataclass = PhantomHourglassOptions
     options: PhantomHourglassOptions
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 1)
     web = PhantomHourglassWeb()
     topology_present = True
 
@@ -48,6 +48,7 @@ class PhantomHourglassWorld(World):
 
     location_name_to_id = build_location_name_to_id_dict()
     item_name_to_id = build_item_name_to_id_dict()
+    item_name_groups = ITEM_GROUPS
     origin_region_name = "mercay island"
 
     def __init__(self, multiworld, player):
@@ -56,11 +57,17 @@ class PhantomHourglassWorld(World):
         self.pre_fill_items: List[Item] = []
 
     def generate_early(self):
-        pass
+        self.restrict_non_local_items()
+
+    def restrict_non_local_items(self):
+        # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
+        # to be placed locally (e.g. dungeon items with keysanity off)
+        print(f"Keysanity value: {self.options.keysanity}, {self.options.keysanity.current_option_name}")
+        if not self.options.keysanity == "anywhere":
+            self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
 
     def create_location(self, region_name: str, location_name: str, local: bool):
         region = self.multiworld.get_region(region_name, self.player)
-        print(f"Creating Location: {location_name} with id {self.location_name_to_id[location_name]}")
         location = Location(self.player, location_name, self.location_name_to_id[location_name], region)
         region.locations.append(location)
         if local:
@@ -96,7 +103,7 @@ class PhantomHourglassWorld(World):
             return False
 
     def create_events(self):
-        pass
+        self.create_event("goal", "_beaten_game")
 
     def exclude_locations_automatically(self):
         locations_to_exclude = set()
@@ -106,11 +113,12 @@ class PhantomHourglassWorld(World):
     def set_rules(self):
         create_connections(self.multiworld, self.player, self.origin_region_name, self.options)
         self.multiworld.completion_condition[self.player] = lambda state: ph_has_sw_sea_chart(state, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
         classification = ITEMS_DATA[name]['classification']
         ap_code = self.item_name_to_id[name]
-        print(f"Created item {name} from {self.item_name_to_id}")
+        print(f"Created item {name}")
         return Item(name, classification, ap_code, self.player)
 
     def build_item_pool_dict(self):
@@ -119,19 +127,36 @@ class PhantomHourglassWorld(World):
         filler_item_count = 0
         rupee_item_count = 0
         for loc_name, loc_data in LOCATIONS_DATA.items():
+            print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):
+                print(f"{loc_name} is not active")
                 continue
+            # If no defined vanilla item, fill with filler
             if "vanilla_item" not in loc_data:
+                print(f"{loc_name} has no defined vanilla item")
+                filler_item_count += 1
                 continue
 
-            item_name = loc_data['vanilla_item']
+            item_name = loc_data.get("item_override", loc_data["vanilla_item"])
             if item_name in removed_item_quantities and removed_item_quantities[item_name] > 0:
                 # If item was put in the "remove_items_from_pool" option, replace it with a random filler item
+                print(f"{item_name} @ {loc_name} was removed from pool")
                 removed_item_quantities[item_name] -= 1
                 filler_item_count += 1
                 continue
             if item_name == "Filler Item":
                 filler_item_count += 1
+                print(f"added filler item @ {loc_name}")
+                continue
+            if self.options.keysanity == "vanilla":
+                if "Small Key" in item_name:
+                    key_item = self.create_item(item_name)
+                    self.multiworld.get_location(loc_name, self.player).place_locked_item(key_item)
+                    continue
+            if "force_vanilla" in loc_data and loc_data["force_vanilla"]:
+                print(f"Forcing {loc_name} with item {item_name}")
+                forced_item = self.create_item(item_name)
+                self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                 continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
@@ -145,32 +170,80 @@ class PhantomHourglassWorld(World):
 
     def create_items(self):
         item_pool_dict = self.build_item_pool_dict()
-        print(item_pool_dict)
         items = []
         for item_name, quantity in item_pool_dict.items():
             for _ in range(quantity):
                 items.append(self.create_item(item_name))
+
+        self.filter_confined_dungeon_items_from_pool(items)
         self.multiworld.itempool.extend(items)
 
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
-        pass
+        self.pre_fill_dungeon_items()
+
+    def filter_confined_dungeon_items_from_pool(self, items: List[Item]):
+        confined_dungeon_items = []
+
+        # Confine small keys to own dungeon if option is enabled
+        if self.options.keysanity == "in_own_dungeon":
+            confined_dungeon_items.extend([item for item in items if item.name.startswith("Small Key")])
+
+        for item in confined_dungeon_items:
+            items.remove(item)
+        self.pre_fill_items.extend(confined_dungeon_items)
+
+    def pre_fill_dungeon_items(self):
+        # If keysanity is off, dungeon items can only be put inside local dungeon locations, and there are not so many
+        # of those which makes them pretty crowded.
+        # This usually ends up with generator not having anywhere to place a few small keys, making the seed unbeatable.
+        # To circumvent this, we perform a restricted pre-fill here, placing only those dungeon items
+        # before anything else.
+        for dung_name in DUNGEON_NAMES:
+            # Build a list of locations in this dungeon
+            print(f"Pre-filling {dung_name}")
+            dungeon_location_names = [name for name, loc in LOCATIONS_DATA.items()
+                                      if "dungeon" in loc and loc["dungeon"] == dung_name]
+            dungeon_locations = [loc for loc in self.multiworld.get_locations(self.player)
+                                 if loc.name in dungeon_location_names and not loc.locked]
+
+            # From the list of all dungeon items that needs to be placed restrictively, only filter the ones for the
+            # dungeon we are currently processing.
+            confined_dungeon_items = [item for item in self.pre_fill_items
+                                      if item.name.endswith(f"({dung_name})")]
+            if len(confined_dungeon_items) == 0:
+                continue  # This list might be empty with some keysanity options
+
+            # Remove from the all_state the items we're about to place
+            for item in confined_dungeon_items:
+                self.pre_fill_items.remove(item)
+            collection_state = self.multiworld.get_all_state(False)
+            # Perform a prefill to place confined items inside locations of this dungeon
+            self.random.shuffle(dungeon_locations)
+            print(f"Removing items {confined_dungeon_items}")
+            print(f"Filling locations {dungeon_locations}")
+            fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
+                             single_player_placement=True, lock=True, allow_excluded=True)
 
     def get_filler_item_name(self) -> str:
         FILLER_ITEM_NAMES = [
-            "Red Rupee"
+            "Red Rupee (20)"
         ]
 
         item_name = self.random.choice(FILLER_ITEM_NAMES)
         return item_name
 
     def fill_slot_data(self) -> dict:
+        options = ["goal", "logic", "keysanity", "phantom_combat_difficulty",
+                   "ph_starting_time", "ph_time_increment"]
         slot_data = self.options.as_dict(*options)
-        return {}
+        print(slot_data)
+        return slot_data
 
     def write_spoiler(self, spoiler_handle):
         pass
+
 
 

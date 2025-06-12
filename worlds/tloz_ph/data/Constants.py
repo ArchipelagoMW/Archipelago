@@ -2,63 +2,126 @@ VERSION = "0.3.0"
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 
 STARTING_FLAGS = [
-    [0x021B557C, 0xEF],
-    [0x021B557D, 0x3C],
-    [0x021B557E, 0x3E],
-    [0x021B557F, 0x03],
-    [0x021B5580, 0xE7],
-    [0x021B5581, 0xB0],
-    [0x021B5582, 0x40],
-    [0x021B5583, 0xAB],
-    [0x021B5584, 0xFF],
-    [0x021B5585, 0xFF],
-    [0x021B5586, 0x27],
-    [0x021B5587, 0xFC],
-    [0x021B5588, 0x3B],
-    [0x021B5589, 0x00],
-    [0x021B558A, 0x04],
-    [0x021B558B, 0x02],
-    [0x021B558C, 0xD9],
-    [0x021B558D, 0x4F],
-    [0x021B558E, 0x12],
-    [0x021B558F, 0x04],
-    [0x021B5590, 0x02],
-    [0x021B5591, 0xFE],
-    [0x021B5592, 0x05],
-    [0x021B5593, 0xEA],
-    [0x021B5594, 0x47],
-    [0x021B5595, 0x00],
-    [0x021B5596, 0x08],
-    [0x021B5597, 0x03],
-    [0x021B5598, 0x34],
-    [0x021B5599, 0xE0],
-    [0x021B559A, 0x10],
-    [0x021B559B, 0xE0],
-    [0x021B559C, 0x4E],
-    [0x021B559D, 0xF9],
-    [0x021B559E, 0x0F],
-    [0x021B559F, 0x05],
-    [0x021B55A0, 0x31],
-    [0x021B55A1, 0x00],
-    [0x021B55A2, 0xA0],
-    [0x021B55A3, 0x1F],
-    [0x021B55A4, 0x26],
-    [0x021B55A5, 0xCC],
-    [0x021B55A6, 0x00],
-    [0x021B55A7, 0x48],
-    [0x021B55A8, 0x1F],
-    [0x021B55A9, 0x00],
-    [0x021B55AA, 0x18],
-    [0x021B55AB, 0x40],
-    [0x021B55AC, 0x70],
-    [0x021B55AD, 0x00],
-    [0x021B55AE, 0x00],
-    [0x021B55AF, 0x00],
-    [0x021BA6BC, 0x01],
-    [0x021BA6BE, 0x01],
-    [0x021BA6C4, 0x01],
-    [0x021BA6C8, 0x01]
+    # Starting flags (these are in series so can be simplified, but it's called once and this is easier to bugfix)
+    [0x1B557C, 0xEF],
+    [0x1B557D, 0x3C],
+    [0x1B557E, 0x3E],
+    [0x1B557F, 0x03],
+    [0x1B5580, 0xE7],
+    [0x1B5581, 0xB0],
+    [0x1B5582, 0x40],
+    [0x1B5583, 0xAB],
+    [0x1B5584, 0xFF],
+    [0x1B5585, 0xFF],
+    [0x1B5586, 0x27],
+    [0x1B5587, 0xFC],
+    [0x1B5588, 0x3B],
+    [0x1B5589, 0x00],
+    [0x1B558A, 0x04],
+    [0x1B558B, 0x02],
+    [0x1B558C, 0xD9],
+    [0x1B558D, 0x4F],
+    [0x1B558E, 0x12],
+    [0x1B558F, 0x04],
+    [0x1B5590, 0x02],
+    [0x1B5591, 0xFE],
+    [0x1B5592, 0x05],
+    [0x1B5593, 0xEA],
+    [0x1B5594, 0x47],
+    [0x1B5595, 0x00],
+    [0x1B5596, 0x08],
+    [0x1B5597, 0x03],
+    [0x1B5598, 0x34],
+    [0x1B5599, 0xE0],
+    [0x1B559A, 0x10],
+    [0x1B559B, 0xE0],
+    [0x1B559C, 0x4E],
+    [0x1B559D, 0xF9],
+    [0x1B559E, 0x0F],
+    [0x1B559F, 0x05],
+    [0x1B55A0, 0x31],
+    [0x1B55A1, 0x00],
+    [0x1B55A2, 0xA0],
+    [0x1B55A3, 0x1F],
+    [0x1B55A4, 0x26],
+    [0x1B55A5, 0xCC],
+    [0x1B55A6, 0x00],
+    [0x1B55A7, 0x48],
+    [0x1B55A8, 0x1F],
+    [0x1B55A9, 0x00],
+    [0x1B55AA, 0x18],
+    [0x1B55AB, 0x40],
+    [0x1B55AC, 0x70],
+    [0x1B55AD, 0x00],
+    [0x1B55AE, 0x00],
+    [0x1B55AF, 0x00],
+    # Set item can use flags
+    [0x1BA6BC, 0x01],
+    [0x1BA6BE, 0x01],
+    [0x1BA6C4, 0x01],
+    [0x1BA6C8, 0x01],
+    # Starting items, boomerang + PH
+    [0x1BA644, 0x04],
+    [0x1BA648, 0x01],
+    # Show treasure/ship part prices
+    [0x1BA658, 0xFF],
+    [0x1BA659, 0xFF],
+    [0x1BA65A, 0xFF],
+    [0x1BA65B, 0xFF],
+    [0x1BA65C, 0xFF],
+    [0x1BA65D, 0xFF],
+    [0x1BA65E, 0xFF],
+    [0x1BA65F, 0xFF],
+    [0x1BA660, 0xFF],
+    [0x1BA664, 0xFF],
 ]
+
+STAGE_FLAGS = {
+    11: [0xC4,  # Mercay
+         0xDC,
+         0x06,
+         0x00],
+    39: [0x40,  # Mountain Passage
+         0x00,
+         0x00,
+         0x00],
+    37: [0xFE,  # TotOK
+         0xBE,
+         0xFB,
+         0x8F],
+    0: [0x82,  # Sea
+        0x2C,
+        0x00,
+        0xC0],
+    13: [0xEC,  # Ember
+         0x18,
+         0x07,
+         0x00],
+    28: [0x8E,  # ToF
+         0xB9,
+         0x04,
+         0x00],
+    12: [0x34,  # Molida
+         0x01,
+         0x00,
+         0x00],
+    14: [0x02,  # Gusts
+         0x02,
+         0x00,
+         0x00],
+    29: [0x00,  # ToW
+         0x02,
+         0x00,
+         0x00],
+    30: [0x00,  # ToC
+         0x00,
+         0x02,
+         0x00],
+    41: [0xC2,  # Ghost Ship
+         0x10,
+         0xED,
+         0x00],
+}
 
 STAGES = {
     0: "Sea",
@@ -99,8 +162,8 @@ STAGES = {
     35: "Max's Temple",
     36: "Bremeur's Temple",
     37: "Temple of the Ocean King",
-    38: "Temple of teh Ocean King Entrance",
-    39: "Mercay Mountain Passage",
+    38: "Temple of the Ocean King Entrance",
+    39: "Mountain Passage",
     40: "Cannon Island Cave",
     41: "Ghost Ship",
     42: "Cyclok",
@@ -114,7 +177,80 @@ STAGES = {
     50: "Bellum's Ghost Ship",
     51: "Bellumbeck"
 
-
 }
 
-ROOMS = {}
+ITEM_GROUPS = {
+    "Small Keys": [
+        "Small Key (Mountain Passage)",
+        "Small Key (Temple of the Ocean King)",
+        "Small Key (Temple of Fire)",
+        "Small Key (Temple of Wind)",
+        "Small Key (Temple of Courage)",
+        "Small Key (Temple of Ice)",
+        "Small Key (Mutoh's Temple)"
+    ]
+}
+
+DUNGEON_NAMES = [
+    "Mountain Passage",
+    "Temple of the Ocean King",
+    "Temple of Fire",
+    "Temple of Wind",
+    "Temple of Courage",
+    "Goron Temple",
+    "Temple of Ice",
+    "Mutoh's Temple",
+    "Ghost Ship"
+]
+
+DUNGEON_KEY_DATA = {
+    39: {
+        "name": "Mountain Passage",
+        "address": 0x1BA64E,
+        "filter": 0x0C,
+        "value": 4,
+        "size": 2,
+        'entrances': {
+            0xB01: {
+                "max_z": 0x12800,
+                # "max_z": 0xFFFF7000
+            },
+            0xB03: {
+                "max_z": 0xB200,
+                "min_z": 0x5000
+            }
+
+        }
+    },
+    37: {
+        "name": "Temple of the Ocean King",
+        "address": 0x1BA64E,
+        "filter": 0xE0,
+        "value": 0x20,
+        "size": 3,
+        'entrances': {
+            0x2600: {
+                "max_z": 0x11800,
+                "min_z": 0x0
+            }
+        }
+    },
+    372: {
+        "name": "Temple of the Ocean King",
+        "address": 0x1BA64F,
+        "filter": 0xC0,
+        "value": 0x40,
+        "size": 2,
+        'entrances': {
+            0x2600: {
+                "max_z": 0x11800,
+                "min_z": 0x0}
+        }
+    }
+}
+
+SHOPS = {
+    0xB11: {
+        "unique": "Mercay Shop Power Gem"
+    }
+}

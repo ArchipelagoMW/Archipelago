@@ -59,6 +59,7 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
         for systems, handlers in AutoBizHawkClientRegister.game_handlers.items():
             if system in systems:
                 for handler in handlers.values():
+                    print("Getting handler")
                     if await handler.validate_rom(ctx):
                         return handler
 
