@@ -5,7 +5,6 @@ from .rules import CrystalProjectLogic
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
-from .constants.mounts import *
 from .constants.regions import *
 from .constants.scholar_abilities import *
 from .constants.teleport_stones import *
@@ -226,7 +225,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - On the climb up outside Skumparadise", 193 + treasure_index_offset), #Tonic Pouch chest
 
         #NPCs
-        #Todo NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
+        #NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
         #LocationData(PROVING_MEADOWS, "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
 
         #Skumparadise (we're smushing Trial Caves into there)
@@ -290,8 +289,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Todo NPCs Job Masters: Master Warlock ID 3570 (400, 171, -267); gives you Warlock Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Warrior ID 3566 (424, 182, -293); gives you Warrior Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
+        #NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
-        #Todo NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #(417, 171, -299) Fixed Missable
@@ -1204,7 +1203,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Locked *wink* sunken house 2 off Jidamba Diamond", 2519 + npc_index_offset), #(639, 54, 182) Dust
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Locked *wink* sunken house 2 off Jidamba Gold", 2518 + npc_index_offset), #(648, 54, 180)  Dust
-        #Todo Player Options: Carcinization victory condition (its crab tiem babey)
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Burrow to burrow crab", 3409 + npc_index_offset), #(20, 53, 251) Crab 1
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Tall tall crab S of volcano", 3426 + npc_index_offset), #(76, 76, 178) Crab 2
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab in underwater cove south of volcano", 3427 + npc_index_offset), #(96, 60, 131) Crab 3
@@ -1325,10 +1323,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #NPCs
         #NPCs CheckOrNot: Z58_StrandedShard ID 3785 (401, 183, -382); this gives you a Gaea Shard if you're stuck: no
-        #Todo NPCs Blocker: i think this guy might only show up in the vanilla game's randomizer? checks if Z58_EleOn (Z58 is Castle Sequoia); Z58Progression_Gate ID 3824 (400, 250, -478)
+        #NPCs Blocker: i think this guy might only show up in the vanilla game's randomizer? checks if Z58_EleOn (Z58 is Castle Sequoia); Z58Progression_Gate ID 3824 (400, 250, -478)
 
         #The New World
-        #Todo Player Options: if astley is the goal, make the requirement for entering the new world be the number of crystals the player picked to win
         #Treasure chests
         LocationData(THE_NEW_WORLD, "The New World Chest - NW lavafall", 2930 + treasure_index_offset), #(-134, 8, 230) Lunar Mail chest
         LocationData(THE_NEW_WORLD, "The New World Chest - Desolate peninsula past bounce shrooms", 2931 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(-11, 12, -577) Mages Pike chest
