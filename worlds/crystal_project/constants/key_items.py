@@ -1,6 +1,7 @@
+#Passes
 FERRY_PASS = "Item - Ferry Pass"
 PROGRESSIVE_LUXURY_PASS = "Item - Progressive Luxury Pass"
-
+#Key Items
 BLACK_SQUIRREL = "Item - Black Squirrel"
 DOG_BONE = "Item - Dog Bone"
 CLAMSHELL = "Item - Clamshell"
@@ -12,7 +13,6 @@ WEST_LOOKOUT_TOKEN = "Item - West Lookout Token"
 CENTRAL_LOOKOUT_TOKEN = "Item - Central Lookout Token"
 NORTH_LOOKOUT_TOKEN = "Item - North Lookout Token"
 BABEL_QUINTAR = "Item - Babel Quintar"
-#"Item - Quintar Shedding"
 CRAG_DEMON_HORN = "Item - Crag Demon Horn"
 VERMILLION_BOOK = "Item - Vermillion Book"
 VIRIDIAN_BOOK = "Item - Viridian Book"
