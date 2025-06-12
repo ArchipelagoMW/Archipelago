@@ -18,4 +18,3 @@ INFUSION = "Scholar - Infusion"
 OVERlOAD = "Scholar - Overload"
 REFLECTION = "Scholar - Reflection"
 LIFEGIVER = "Scholar - Lifegiver"
-
