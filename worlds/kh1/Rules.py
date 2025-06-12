@@ -243,8 +243,8 @@ def set_rules(kh1world):
         ))
     add_rule(kh1world.get_location("Wonderland Lotus Forest Corner Chest"),
         lambda state: (
-            state.has_all("High Jump","Progressive Glide", player)
-            or difficulty > 0 and state.has_any("High Jump","Progressive Glide", player)
+            state.has_all({"High Jump", "Progressive Glide"}, player)
+            or difficulty > 0 and state.has_any({"High Jump","Progressive Glide"}, player)
             or difficulty > 5
         ))
     add_rule(kh1world.get_location("Wonderland Bizarre Room Lamp Chest"),
@@ -645,12 +645,12 @@ def set_rules(kh1world):
     if difficulty == 0:
         add_rule(kh1world.get_location("Monstro Mouth Near Ship Chest"),
             lambda state: (
-                state.has_any("High Jump","Progressive Glide", player)
+                state.has_any({"High Jump","Progressive Glide"}, player)
                 or has_basic_tools
             ))
     add_rule(kh1world.get_location("Monstro Chamber 2 Platform Chest"),
         lambda state: (
-            state.has_any("High Jump","Progressive Glide", player)
+            state.has_any({"High Jump","Progressive Glide"}, player)
             or difficulty > 0
         ))
     add_rule(kh1world.get_location("Monstro Chamber 5 Platform Chest"),
@@ -912,7 +912,7 @@ def set_rules(kh1world):
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Neverland Seal Keyhole Tinker Bell Event"),
         lambda state: state.has("Green Trinity", player))
-    add_rule(kh1world.get_location("Neverland Seal Keyhole Glide Evrland Seal Keyhole Glide Event"),
+    add_rule(kh1world.get_location("Neverland Seal Keyhole Glide Event"),
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Neverland Seal Keyhole Navi-G Piece Event"),
         lambda state: state.has("Green Trinity", player))
