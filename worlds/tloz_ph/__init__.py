@@ -40,7 +40,7 @@ class PhantomHourglassWorld(World):
     game = "The Legend of Zelda - Phantom Hourglass"
     options_dataclass = PhantomHourglassOptions
     options: PhantomHourglassOptions
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 1)
     web = PhantomHourglassWeb()
     topology_present = True
 

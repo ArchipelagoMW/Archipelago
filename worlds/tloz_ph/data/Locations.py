@@ -209,7 +209,8 @@ LOCATIONS_DATA = {
         "stage_id": 37,
         "floor_id": 0,
         "y": 0x1333,
-        'dungeon': "Temple of the Ocean King"
+        'dungeon': "Temple of the Ocean King",
+        'set_bit': [(0x1B557D, 2)]
     },
     "TotOK 1F Linebeck Key": {
         "region_id": "totok",
@@ -314,6 +315,7 @@ LOCATIONS_DATA = {
         "stage_id": 37,
         "floor_id": 3,
         "x_max": 0xFFFF3000,
+        "x_min": 0xFFFE0000,
         "z_max": 0xFFFF7000,
         "y": 0,
         "delay_pickup": "TotOK B3 Small Key",
@@ -326,6 +328,7 @@ LOCATIONS_DATA = {
         "stage_id": 37,
         "floor_id": 3,
         "x_max": 0xFFFFC000,
+        "x_min": 0xFFFF8000,
         "z_min": 0x8000,
         "y": 0,
         "delay_pickup": "TotOK B3 Small Key",

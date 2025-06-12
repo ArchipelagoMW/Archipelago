@@ -76,6 +76,53 @@ STARTING_FLAGS = [
     [0x1BA664, 0xFF],
 ]
 
+STAGE_FLAGS = {
+    11: [0xC4,  # Mercay
+         0xDC,
+         0x06,
+         0x00],
+    39: [0x40,  # Mountain Passage
+         0x00,
+         0x00,
+         0x00],
+    37: [0xFE,  # TotOK
+         0xBE,
+         0xFB,
+         0x8F],
+    0: [0x82,  # Sea
+        0x2C,
+        0x00,
+        0xC0],
+    13: [0xEC,  # Ember
+         0x18,
+         0x07,
+         0x00],
+    28: [0x8E,  # ToF
+         0xB9,
+         0x04,
+         0x00],
+    12: [0x34,  # Molida
+         0x01,
+         0x00,
+         0x00],
+    14: [0x02,  # Gusts
+         0x02,
+         0x00,
+         0x00],
+    29: [0x00,  # ToW
+         0x02,
+         0x00,
+         0x00],
+    30: [0x00,  # ToC
+         0x00,
+         0x02,
+         0x00],
+    41: [0xC2,  # Ghost Ship
+         0x10,
+         0xED,
+         0x00],
+}
+
 STAGES = {
     0: "Sea",
     1: "Cannon Game",
@@ -116,7 +163,7 @@ STAGES = {
     36: "Bremeur's Temple",
     37: "Temple of the Ocean King",
     38: "Temple of the Ocean King Entrance",
-    39: "Mercay Mountain Passage",
+    39: "Mountain Passage",
     40: "Cannon Island Cave",
     41: "Ghost Ship",
     42: "Cyclok",
@@ -129,7 +176,6 @@ STAGES = {
     49: "Bellum",
     50: "Bellum's Ghost Ship",
     51: "Bellumbeck"
-
 
 }
 
