@@ -42,7 +42,7 @@ class QuestLogic(BaseLogic):
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
             Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
             Quest.rat_problem: self.logic.region.can_reach_all(Region.town, Region.community_center),
-            Quest.meet_the_wizard: self.logic.received("Wizard Invitation") & self.logic.region.can_reach(Region.wizard_tower),
+            Quest.meet_the_wizard: self.logic.region.can_reach_all(Region.community_center, Region.wizard_tower),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
             Quest.smelting: self.logic.has(MetalBar.copper),
             Quest.initiation: self.logic.mine.can_mine_in_the_mines_floor_1_40(),
