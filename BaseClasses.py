@@ -5,6 +5,7 @@ import functools
 import logging
 import random
 import secrets
+import warnings
 from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
@@ -438,12 +439,27 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False,
+    def get_all_state(self, use_cache: bool | None = None, allow_partial_entrances: bool = False,
                       collect_pre_fill_items: bool = True, perform_sweep: bool = True) -> CollectionState:
-        cached = getattr(self, "_all_state", None)
-        if use_cache and cached:
-            return cached.copy()
+        """
+        Creates a new CollectionState, and collects all precollected items, all items in the multiworld itempool, those
+        specified in each worlds' `get_pre_fill_items()`, and then sweeps the multiworld collecting any other items
+        it is able to reach, building as complete of a completed game state as possible.
 
+        :param use_cache: Deprecated and unused.
+        :param allow_partial_entrances: Whether the CollectionState should allow for disconnected entrances while
+         sweeping, such as before entrance randomization is complete.
+        :param collect_pre_fill_items: Whether the items in each worlds' `get_pre_fill_items()` should be added to this
+         state.
+        :param perform_sweep: Whether this state should perform a sweep for reachable locations, collecting any placed
+         items it can.
+
+        :return: The completed CollectionState.
+        """
+        if __debug__ and use_cache is not None:
+            # TODO swap to Utils.deprecate when we want this to crash on source and warn on frozen
+            warnings.warn("multiworld.get_all_state no longer caches all_state and this argument will be removed.",
+                          DeprecationWarning)
         ret = CollectionState(self, allow_partial_entrances)
 
         for item in self.itempool:
@@ -456,8 +472,6 @@ class MultiWorld():
         if perform_sweep:
             ret.sweep_for_advancements()
 
-        if use_cache:
-            self._all_state = ret
         return ret
 
     def get_items(self) -> List[Item]:
