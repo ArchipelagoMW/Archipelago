@@ -450,6 +450,8 @@ def distribute_early_items(multiworld: MultiWorld,
 
 def distribute_items_restrictive(multiworld: MultiWorld,
                                  panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
+    assert all(item.location is None for item in multiworld.itempool)
+
     fill_locations = sorted(multiworld.get_unfilled_locations())
     multiworld.random.shuffle(fill_locations)
     # get items to distribute
