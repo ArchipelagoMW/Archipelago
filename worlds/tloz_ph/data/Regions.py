@@ -9,6 +9,7 @@ REGIONS = [
     "sw ocean",
     "mercay freedle gift",
     "mercay freedle tunnel chest",
+    "mercay yellow guy",
     "mercay passage 1",
     "mercay passage 2",
     "mercay passage 3",
@@ -46,6 +47,36 @@ REGIONS = [
     "totok b6",
     "totok b6 phantom chest",
     "totok b6 bow chest",
+
+    # TotOK 2
+
+    # SW Ocean
+    "sw ocean east",
+    "sw ocean west",
+    "sw ocean crest salvage",
+
+    # Cannon Island
+    "cannon island",
+    "cannon island salvage arm",
+
+    # Isle of Ember
+    "ember island",
+    "ember island dig",
+    "ember island grapple",
+
+    # Temple of Fire
+    "tof 1f",
+    "tof 1f keese",
+    "tof 1f maze",
+    "tof 2f",
+    "tof 1f west",
+    "tof 1f sw",
+    "tof 2f south",
+    "tof 3f",
+    "tof 3f key drop",
+    "tof 3f boss key",
+    "tof blaaz",
+    "post tof"
 
 
 

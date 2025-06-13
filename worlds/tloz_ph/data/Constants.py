@@ -46,7 +46,7 @@ STARTING_FLAGS = [
     [0x1B55A4, 0x26],
     [0x1B55A5, 0xCC],
     [0x1B55A6, 0x00],
-    [0x1B55A7, 0x48],
+    [0x1B55A7, 0xC8],
     [0x1B55A8, 0x1F],
     [0x1B55A9, 0x00],
     [0x1B55AA, 0x18],
@@ -95,11 +95,11 @@ STAGE_FLAGS = {
         0xC0],
     13: [0xEC,  # Ember
          0x18,
-         0x07,
+         0x17,
          0x00],
     28: [0x8E,  # ToF
          0xB9,
-         0x04,
+         0x00,
          0x00],
     12: [0x34,  # Molida
          0x01,
@@ -246,11 +246,30 @@ DUNGEON_KEY_DATA = {
                 "max_z": 0x11800,
                 "min_z": 0x0}
         }
+    },
+    0x1C: {
+        "name": "Temple of Fire",
+        "address": 0x1BA64E,
+        "value": 1,
+        "size": 2,
+        "filter": 0x03,
+        "entrances": {
+            0xD01: {
+                "max_z": 0x10800,
+                "min_z": 0x8000},
+            0x2B00: {
+                "min_z": 0x800,
+                "max_z": 0xF000}
+        }
     }
 }
 
 SHOPS = {
     0xB11: {
-        "unique": "Mercay Shop Power Gem"
+        "unique": ["Mercay Shop Power Gem"],
+        "island_shop": True
+        },
+    0x130B: {
+        "unique": ["Cannon Island Cannon", "Cannon Island Salvage Arm"]
     }
 }

@@ -50,12 +50,14 @@ class PhantomHourglassLogic(Choice):
     """
     Logic options:
     - Normal: Glitches not in logic.
+    - Medium: Includes some cool uses of pots aren't hard, bun unconventional
     - Glitched: Hammer clips, chu camera displacement and clever use of items in logic
     Be careful, using glitches on normal logic can cause key-related softlocks
     """
     display_name = "Logic Settings"
     option_normal = 0
-    option_glitched = 1
+    option_medium = 1
+    option_glitched = 2
     default = 0
 
 

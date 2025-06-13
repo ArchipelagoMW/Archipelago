@@ -1,6 +1,7 @@
 from .Constants import *
 
 # TODO: Add sram data for saveslot 2
+# TODO: Add the rest of sram data in bulk
 
 LOCATIONS_DATA = {
     "Mercay Sword Chest": {
@@ -51,7 +52,7 @@ LOCATIONS_DATA = {
         "sram_value": 1,
         "vanilla_item": "Big Green Rupee (100)"
     },
-    "Mercay Zora Cave Chest": {
+    "Mercay Geozard Cave Chest": {
         "region_id": "mercay zora cave",
         "item_override": "Grappling Hook",
         "stage_id": 11,
@@ -60,7 +61,7 @@ LOCATIONS_DATA = {
         "sram_addr": 0x000418,
         "sram_value": 1
     },
-    "Mercay Zora Cave South Chest 1": {
+    "Mercay Geozard Cave South Chest 1": {
         "region_id": "mercay zora cave south",
         "item_override": "Shovel",
         "stage_id": 11,
@@ -71,7 +72,7 @@ LOCATIONS_DATA = {
         "sram_addr": 0x0003C4,
         "sram_value": 0x02
     },
-    "Mercay Zora Cave South Chest 2": {
+    "Mercay Geozard Cave South Chest 2": {
         "region_id": "mercay zora cave south",
         "item_override": "Ship Part",
         "stage_id": 11,
@@ -90,11 +91,10 @@ LOCATIONS_DATA = {
         "address": 0x1B55A0,
         "value": 0x4,
         "y": 0x399A,
-        "vanilla_item": "Green Rupee (1)"
+        "vanilla_item": "Nothing!"
     },
     "Mercay Freedle Tunnel Chest": {
         "region_id": "mercay freedle tunnel chest",
-        "item_override": "Boomerang",
         "stage_id": 11,
         "floor_id": 18,
         "vanilla_item": "Courage Gem",
@@ -123,6 +123,20 @@ LOCATIONS_DATA = {
         "sram_addr": 0x000EB0,
         "sram_value": 0x08
     },
+    "Mercay Yellow Guy Item": {
+        "region_id": "mercay yellow guy",
+        "stage_id": 11,
+        "floor_id": 3,
+        "y": 0,
+        "x_min": 140000,
+        "vanilla_item": "Treasure Map #9",
+    },
+    "Mercay Shipyard Chest": {
+        "region_id": "post tof",
+        "stage_id": 11,
+        "floor_id": 13,
+        "vanilla_item": "Ship Part",
+    },
 
 
     # Mountain Passage
@@ -142,8 +156,8 @@ LOCATIONS_DATA = {
         "item_override": "Spirit of Power (Progressive)",
         "stage_id": 0x27,
         "floor_id": 0,
-        "x_min": 0x00010900,
-        "z_max": 0xFFFF6E00,
+        "x_min": 0x10900,
+        "z_max": -30000,
         "vanilla_item": "Red Rupee (20)",
         "sram_addr": 0x000AE4,
         "sram_value": 2,
@@ -154,7 +168,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Small Key (Mountain Passage)",
         "stage_id": 0x27,
         "floor_id": 0,
-        "sram_addr": 0x000230,
+        "sram_addr": 0x230,
         "sram_value": 2,
         "dungeon": "Mountain Passage"
     },
@@ -167,6 +181,8 @@ LOCATIONS_DATA = {
         "sram_value": 32,
         "dungeon": "Mountain Passage"
     },
+
+    # Shops
     "Mercay Shop Power Gem": {
         "region_id": "shop power gem",
         "item_override": "SE Sea Chart",
@@ -224,7 +240,8 @@ LOCATIONS_DATA = {
     },
     "TotOK 1F Empty Chest": {
         "region_id": "totok",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Nothing!",
+        "item_override": "Sand of Hours",
         "stage_id": 37,
         "floor_id": 0,
         "x_min": 0x4000,
@@ -252,8 +269,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Courage Gem",
         "stage_id": 37,
         "floor_id": 1,
-        "x_max": 0xFFFF3000,
-        "x_min": 0xFFFF0000,
+        "x_max": -50000,
+        "x_min": -70000,
         "y": 0,
         'dungeon': "Temple of the Ocean King"
     },
@@ -274,7 +291,6 @@ LOCATIONS_DATA = {
         "vanilla_item": "Treasure",
         "stage_id": 37,
         "floor_id": 2,
-        "x_max": 0xFFFFE000,
         "z_min": 0x7000,
         "z_max": 0xF000,
         "delay_pickup": "TotOK B2 Small Key",
@@ -294,8 +310,8 @@ LOCATIONS_DATA = {
         "stage_id": 37,
         "floor_id": 3,
         "y": 0x1333,
-        "z_max": 0xFFFFA000,
-        "z_min": 0xFFFF5000,
+        "z_max": -22000,
+        "z_min": -40000,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B3 Phantom Chest": {
@@ -311,12 +327,11 @@ LOCATIONS_DATA = {
     },
     "TotOK B3 NW Chest": {
         "region_id": "totok b3",
-        "vanilla_item": "Force Gem",
+        "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
-        "x_max": 0xFFFF3000,
-        "x_min": 0xFFFE0000,
-        "z_max": 0xFFFF7000,
+        "x_max": -50000,
+        "z_max": -35000,
         "y": 0,
         "delay_pickup": "TotOK B3 Small Key",
         'force_vanilla': True,
@@ -324,11 +339,11 @@ LOCATIONS_DATA = {
     },
     "TotOK B3 SW Chest": {
         "region_id": "totok b3 locked chest",
-        "vanilla_item": "Force Gem",
+        "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
-        "x_max": 0xFFFFC000,
-        "x_min": 0xFFFF8000,
+        "x_max": -11000,
+        "x_min": -38500,
         "z_min": 0x8000,
         "y": 0,
         "delay_pickup": "TotOK B3 Small Key",
@@ -337,10 +352,10 @@ LOCATIONS_DATA = {
     },
     "TotOK B3 SE Chest": {
         "region_id": "totok b3",
-        "vanilla_item": "Force Gem",
+        "vanilla_item": "Force Gem (B3)",
         "stage_id": 37,
         "floor_id": 3,
-        "x_min": 0xFA00,
+        "x_min": 0xE000,
         "z_min": 0xB000,
         "y": 0,
         "delay_pickup": "TotOK B3 Small Key",
@@ -378,8 +393,7 @@ LOCATIONS_DATA = {
         "item_override": "Spirit of Courage (Progressive)",
         "stage_id": 37,
         "floor_id": 5,
-        "x_max": 0xFFFF1000,
-        "x_min": 0xFFFE0000,
+        "x_max": -60000,
         'dungeon': "Temple of the Ocean King",
         "delay_pickup": "TotOK B4 Small Key",
     },
@@ -397,8 +411,7 @@ LOCATIONS_DATA = {
         "item_override": "Spirit of Power (Progressive)",
         "stage_id": 37,
         "floor_id": 6,
-        "x_max": 0xFFFFD000,
-        "x_min": 0xFFFF6000,
+        "x_max": -15000,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B5 Chest": {
@@ -427,8 +440,7 @@ LOCATIONS_DATA = {
         "item_override": "Spirit of Courage (Progressive)",
         "stage_id": 37,
         "floor_id": 7,
-        "z_max": 0xFFFF3000,
-        "z_min": 0xFFFE0000,
+        "z_max": -40000,
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B6 Courage Crest": {
@@ -438,8 +450,188 @@ LOCATIONS_DATA = {
         "floor_id": 8,
         "address": 0x1B558C,
         "value": 0x4,
-        'force_vanilla': True,
         'dungeon': "Temple of the Ocean King"
+    },
+
+    # TotOK Part 2
+
+    # SW Ocean
+    "Ocean SW Salvage Courage Crest": {
+        "region_id": "sw ocean crest salvage",
+        "vanilla_item": "Sun Key",
+        "stage_id": 0,
+        "floor_id": 0,
+        "address": 0x1B557E,
+        "value": 0x40
+    },
+
+    # Cannon Island
+    "Cannon Island Bee Chest": {
+        "region_id": "cannon island",
+        "vanilla_item": "Treasure Map #1",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "x_max": -30000,
+        "z_max": -15000,
+        "y": 0x1333,
+    },
+    "Cannon Island Cave Chest": {
+        "region_id": "cannon island",
+        "vanilla_item": "Power Gem",
+        "stage_id": 0x28,
+        "floor_id": 0,
+    },
+    "Cannon Island Cliff Chest": {
+        "region_id": "cannon island",
+        "vanilla_item": "Red Rupee (20)",
+        "item_override": "Cyclone Slate",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x2666
+    },
+    "Cannon Island Bonk Tree": {
+        "region_id": "cannon island",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x1333,
+        "x_min": 0
+    },
+    "Cannon Island Cannon": {
+        "region_id": "cannon island",
+        "vanilla_item": "Cannon",
+        "stage_id": 0x13,
+        "floor_id": 11,
+        "address": 0x1BA649,
+        "value": 0x2
+    },
+    "Cannon Island Salvage Arm": {
+        "region_id": "cannon island salvage arm",
+        "vanilla_item": "Salvage Arm",
+        "stage_id": 0x13,
+        "floor_id": 11,
+        "address": 0x1B558D,
+        "value": 0x10,
+        # TODO: Coordinates don't work indoors
+    },
+
+    # Isle of Ember
+    "Isle of Ember Astrid's Basement Dig": {
+        "region_id": "ember island dig",
+        "vanilla_item": "Treasure Map #3",
+        "stage_id": 0xD,
+        "floor_id": 20
+    },
+    "Isle of Ember Grapple Chest": {
+        "region_id": "ember island grapple",
+        "vanilla_item": "Courage Gem",
+        "stage_id": 0xD,
+        "floor_id": 0,
+        "z_max": -70000,
+        "y": 0
+    },
+    "Isle of Ember Summit Dig": {
+        "region_id": "ember island dig",
+        "vanilla_item": "Treasure Map #4",
+        "stage_id": 0xD,
+        "floor_id": 1,
+        "y": 0x2666,
+    },
+    "Isle of Ember Summit Chest": {
+        "region_id": "ember island",
+        "vanilla_item": "Red Rupee (20)",
+        "stage_id": 0xD,
+        "floor_id": 0,
+        "y": 0x399A,
+    },
+    "Isle of Ember Astrid after Fire Temple": {
+        "region_id": "post tof",
+        "item_override": "Power Gem",
+        "vanilla_item": "Nothing!",
+        "stage_id": 0xD,
+        "floor_id": 10,
+        "address": 0x1B557F,
+        "value": 0x20
+    },
+    # Temple of Fire
+    "Temple of Fire 1F Keese Chest": {
+        "region_id": "tof 1f keese",
+        "vanilla_item": "Small Key (Temple of Fire)",
+        "stage_id": 0x1C,
+        "floor_id": 0,
+        "z_min": 0x9000,
+        "z_max": 0xF000,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 1F Maze Chest": {
+        "region_id": "tof 1f maze",
+        "vanilla_item": "Red Rupee (20)",
+        "stage_id": 0x1C,
+        "floor_id": 0,
+        "x_min": 40000,
+        "z_max": -40000,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 2F Boomerang Chest": {
+        "region_id": "tof 2f",
+        "vanilla_item": "Boomerang",
+        "stage_id": 0x1C,
+        "floor_id": 1,
+        "z_max": 10000,
+        "x_min": 10000,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 2F Fire Keese Chest": {
+        "region_id": "tof 2f south",
+        "vanilla_item": "Red Rupee (20)",
+        "stage_id": 0x1C,
+        "floor_id": 1,
+        "z_min": 0x4000,
+        "z_max": 0x7000,
+        "x_min": -7000,
+        "x_max": 0x1000,
+        "delay_pickup": "Temple of Fire 2F Rat Key",
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 2F Rat Key": {
+        "region_id": "tof 2f south",
+        "vanilla_item": "Small Key (Temple of Fire)",
+        "stage_id": 0x1C,
+        "floor_id": 1,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 3F Key Drop": {
+        "region_id": "tof 3f key drop",
+        "vanilla_item": "Small Key (Temple of Fire)",
+        "stage_id": 0x1C,
+        "floor_id": 2,
+        "y": 0,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire 3F Boss Key Chest": {
+        "region_id": "tof 3f boss key",
+        "vanilla_item": "Boss Key (Temple of Fire)",
+        "stage_id": 0x1C,
+        "floor_id": 2,
+        "y": 0x1333,
+        "force_vanilla": True,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire Blaaz Heart Container": {
+        "region_id": "tof blaaz",
+        "vanilla_item": "Heart Container",
+        "stage_id": 0x2B,
+        "floor_id": 0,
+        "dungeon": "Temple of Fire"
+    },
+    "Temple of Fire Blaaz Boss Reward": {
+        "region_id": "tof blaaz",
+        "vanilla_item": "Spirit of Power (Progressive)",
+        "stage_id": 0x2B,
+        "floor_id": 0,
+        "address": 0x1B557F,
+        "value": 0x20,
+        "dungeon": "Temple of Fire"
     },
 }
 

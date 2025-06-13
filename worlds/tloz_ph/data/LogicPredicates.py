@@ -50,6 +50,28 @@ def ph_has_spirit(state: CollectionState, player: int, spirit: str, count: int =
     return state.has(f"Spirit of {spirit} (Progressive)", player, count)
 
 
+def ph_has_sw_sea_chart(state: CollectionState, player: int):
+    return state.has("SW Sea Chart", player)
+
+
+def ph_has_se_sea_chart(state: CollectionState, player: int):
+    return state.has("SE Sea Chart", player)
+
+
+def ph_has_courage_crest(state, player):
+    return state.has("Courage Crest", player)
+
+
+def ph_has_cannon(state, player):
+    return state.has("Cannon", player)
+
+
+def ph_has_salvage(state, player):
+    return state.has("Salvage Arm", player)
+
+
+# =========== Combined item states ================
+
 def ph_has_explosives(state: CollectionState, player: int):
     return state.has_any(["Bombs (Progressive)", "Bombchus (Progressive)"], player)
 
@@ -93,7 +115,7 @@ def ph_has_range(state: CollectionState, player: int):
 
 def ph_has_short_range(state: CollectionState, player: int):
     return any([ph_has_range(state, player),
-                ph_has_bombs(state, player),
+                ph_clever_bombs(state, player),
                 ph_has_hammer(state, player),
                 ph_has_beam_sword(state, player)])
 
@@ -126,21 +148,25 @@ def ph_has_beam_sword(state: CollectionState, player: int):
     ])
 
 
-def ph_has_sw_sea_chart(state: CollectionState, player: int):
-    return state.has("SW Sea Chart", player)
+def ph_can_hit_spin_switches(state: CollectionState, player: int):
+    return any([
+        ph_has_sword(state, player),
+        all([
+            ph_option_med_logic(state, player),
+            any([
+                ph_has_explosives(state, player),
+                ph_has_boomerang(state, player)
+            ])
+        ])
+    ])
 
 
-def ph_has_se_sea_chart(state: CollectionState, player: int):
-    return state.has("SE Sea Chart", player)
-
-
-def ph_has_force_gems(state, player):
-    # TODO: Differentiate between B3 and B12
-    return state.has("Force Gem", player, 3)
-
-def ph_has_courage_crest(state, player):
-    # TODO: Differentiate between B3 and B12
-    return state.has("Courage Crest", player)
+def ph_spiral_wall_switches(state: CollectionState, player: int):
+    return any([
+        ph_has_boomerang(state, player),
+        ph_has_hammer(state, player),
+        ph_has_explosives(state, player)
+    ])
 
 
 # ================ Rupee States ==================
@@ -169,6 +195,10 @@ def ph_option_glitched_logic(state: CollectionState, player: int):
 
 def ph_option_normal_logic(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.logic == "normal"
+
+
+def ph_option_med_logic(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.logic in ["medium", "glitched"]
 
 
 def ph_option_keysanity(state: CollectionState, player: int):
@@ -201,8 +231,12 @@ def ph_option_phantoms_sword_only(state: CollectionState, player: int):
 
 
 def ph_option_clever_pots(state: CollectionState, player: int):
-    # TODO: add medium logic?
-    return True
+    return ph_option_med_logic(state, player)
+
+
+def ph_clever_bombs(state: CollectionState, player: int):
+    return all([ph_has_bombs(state, player),
+                ph_option_med_logic(state, player)])
 
 
 # ============= Key logic ==============
@@ -211,10 +245,19 @@ def ph_has_small_keys(state: CollectionState, player: int, dung_name: str, amoun
     return state.has(f"Small Key ({dung_name})", player, amount)
 
 
+def ph_has_boss_key(state: CollectionState, player: int, dung_name: str):
+    return state.has(f"Boss Key ({dung_name})", player)
+
+
+def ph_has_force_gems(state, player, floor=3):
+    # TODO: Differentiate between B3 and B12
+    return state.has(f"Force Gem (B{floor})", player, 3)
+
 # ============= Location states ========
 
 def ph_can_cut_small_trees(state: CollectionState, player: int):
     return any([ph_has_sword(state, player), ph_has_explosives(state, player)])
+
 
 
 # Handles keylocking due to lack of locations
@@ -242,6 +285,7 @@ def ph_totok_b6(state: CollectionState, player: int):
             ])
         ])
     ])
+
 
 # ======== Harder Logic ===========
 
@@ -293,6 +337,26 @@ def ph_totok_b5_key_logic(state: CollectionState, player: int):
         all([ph_has_small_keys(state, player, "Temple of the Ocean King", 4), ph_has_grapple(state, player)]),
         ph_has_small_keys(state, player, "Temple of the Ocean King", 5),
     ])
+
+
+def ph_tof_3f(state, player):
+    return all([
+        ph_has_small_keys(state, player, "Temple of Fire", 2),
+        any([
+            ph_has_boomerang(state, player),
+            ph_has_hammer(state, player),
+            ph_clever_bombs(state, player)
+        ])
+    ])
+
+
+def ph_salvage_courage_crest(state: CollectionState, player: int):
+    return all([
+        ph_has_courage_crest(state, player),
+        ph_has_salvage(state, player),
+        ph_has_cannon(state, player)
+    ])
+
 
 def ph_temp_goal(state, player):
     return all([ph_has_sw_sea_chart(state, player),
