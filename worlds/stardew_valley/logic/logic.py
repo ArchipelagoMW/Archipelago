@@ -174,8 +174,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
             AnimalProduct.slime_egg_purple: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(9),
-            AnimalProduct.slime_egg_tiger: self.can_fish_pond(Fish.lionfish, *(Forageable.ginger, Fruit.pineapple, Fruit.mango)) &
-                                           (self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(12)) &
+            AnimalProduct.slime_egg_tiger: self.can_fish_pond(Fish.lionfish, *(Forageable.ginger, Fruit.pineapple, Fruit.mango)) & self.time.has_lived_months(12) &
                                             self.building.has_building(Building.slime_hutch) & self.monster.can_kill(Monster.tiger_slime),
             AnimalProduct.duck_egg_starter: self.logic.false_,  # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
             AnimalProduct.dinosaur_egg_starter: self.logic.false_,  # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
