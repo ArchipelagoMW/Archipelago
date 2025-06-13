@@ -1525,16 +1525,16 @@ def set_rules(kh1world):
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
-        add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
-            ))
         if options.cups.current_key == "hades_cup":
+            add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
+                lambda state: (
+                    state.has_all({
+                        "Phil Cup",
+                        "Pegasus Cup",
+                        "Hercules Cup",
+                        "Entry Pass"}, player)
+                    and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
+                ))
             add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
                 lambda state: (
                     state.has_all({
