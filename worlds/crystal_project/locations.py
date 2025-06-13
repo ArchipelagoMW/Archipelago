@@ -24,7 +24,6 @@ shop_index_offset = 10000000
 
 def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
-    #Todo include crystals/job locations, NPC gifts, key items like squirrels, ore
     location_table: List[LocationData] = [
         #Zones (Beginner)
         #Spawning Meadows
@@ -760,14 +759,10 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Shoudu Province
         #Treasure chests
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Money chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Bone Mail chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Cutlass chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset), #(753, 105, -176) Tincture Pouch chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Hidden in a house by the elevator 1", 3505 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near sky fishing 1", 3507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Reservoir above the water", 3508 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_swimming(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Above accessory store", 3509 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Building near all the grates", 3510 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
@@ -780,9 +775,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Balance above the undercity 1", 2717 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ether chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ether Pouch chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_swimming(state)), #Ether Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ether Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_swimming(state)) or logic.has_glide(state)), #Ether Pouch chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Knicked Knackers chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Looters Pin chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Muggers Glove chest
@@ -792,56 +786,61 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion Pouch
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Suitor Hat chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Above the armor store", 1517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion Pouch chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Balance above the undercity 2", 2716 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Tincture Pouch chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Cross the balance beam east of save point", 3040 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion Pouch chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Cross the balance beam on the way to Sky Arena", 2754 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Acrobat Shoes chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Atop the roofs near the grates", 1369 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Enter building next to white hut to balance above The Undercity 1", 2717 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ether chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Enter building next to white hut to balance above The Undercity 2", 2716 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Tincture Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Cross the balance beam east of Fields save point", 3040 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Cross the balance beam on the way to Sky Arena", 2754 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Acrobat Shoes chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Atop the roofs near the grates", 1369 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - In the flower room", 2789 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Hidden in a house by the elevator 2", 2790 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near sky fishing 2", 2986 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Under the dry kid pit", 1365 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #The Immovable chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 4", 2796 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Tonic Pouch
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 5", 2748 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Soul Kris chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 1", 2812 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Money chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 2", 2723 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Gaia Axe chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 3", 2813 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Money chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 4", 2753 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Gaia Vest chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #Gravedigger chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #Malifice chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #Wizards Wall chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through broken grate below Sky Arena building", 2951 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset), #(753, 105, -176) Tincture Pouch chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(753, 134, -263) Yasha chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(754, 134, -264) Muramasa chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(755, 134, -263) Shadow Gi chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(754, 130, -264) Zether chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(755, 130, -263) Z-Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Hidden in a house by the elevator 1", 3505 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Hidden in a house by the elevator 2", 2790 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near sky fishing 1", 3507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near sky fishing 2", 2986 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Under the dry kid pit", 1365 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #The Immovable chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through broken grate in building west of Sky Arena Prize Counter", 2951 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Money chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Bone Mail chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Cutlass chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 4", 2796 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Tonic Pouch
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 2 Sky Arena Wins room 5", 2748 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Soul Kris chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 1", 2812 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 2", 2723 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Gaia Axe chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 3", 2813 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 4", 2753 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Gaia Vest chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Gravedigger chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Malifice chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Wizards Wall chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(753, 134, -263) Yasha chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(754, 134, -264) Muramasa chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(755, 134, -263) Shadow Gi chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(754, 130, -264) Zether chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(755, 130, -263) Z-Potion chest
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Chloe and Talon sky fishing", 3702 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #(765, 125, -248) Fixed Missable; removed post-sparkle
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Chloe and Talon sky fishing", 3702 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248) Fixed Missable; removed post-sparkle
         #NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(752, 133, -262) Dust
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(756, 133, -261) Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 5) and logic.has_vertical_movement(state)), #(753, 130, -264) Ore
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold at back reservoir wall", 2827 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_swimming(state)), #Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in farmland on way to shrine", 2821 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold near sky fishing", 2834 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 2 Sky Arena Wins room", 2829 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Dust
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 1", 2720 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 2", 2722 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 3", 2721 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Dust
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 4) and logic.has_vertical_movement(state)), #Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(752, 133, -262) Dust
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(756, 133, -261) Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(753, 130, -264) Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold at back reservoir wall", 2827 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.has_swimming(state)), #Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in farmland on way to shrine", 2821 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold near sky fishing", 2834 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 2 Sky Arena Wins room", 2829 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Dust
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 1", 2720 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 2", 2722 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 3", 2721 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Dust
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Ore
 
         #Crystals
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
 
         #Summons Todo: descriptivize and implement (720, 138, -278)
         #LocationData(SHOUDU_PROVINCE, "Shoudu Province Summon - Tira from SShadow_Summon", 1132 + summon_index_offset),

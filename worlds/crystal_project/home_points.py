@@ -76,13 +76,13 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Entrance", 1124),
         LocationData(ANCIENT_RESERVOIR, "Main Reservoir Chamber", 1660),
 
-        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Port", 672),
-        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523),
-        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524),
-        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523),
+        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
 
         LocationData(GANYMEDE_SHRINE, "Ganymede Shrine", 1573),
 
