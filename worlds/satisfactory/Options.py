@@ -319,12 +319,24 @@ class SplitterLogic(PlacementLogic):
 
 _skip_tutorial_starting_items = [
     # https://satisfactory.wiki.gg/wiki/Onboarding
-    "Bundle: Portable Miner",
+    "Single: Portable Miner",
+    "Single: Portable Miner",
+    "Single: Portable Miner",
+    "Single: Portable Miner",
     "Bundle: Iron Plate",
     "Bundle: Concrete",
     "Bundle: Iron Rod",
     "Bundle: Wire",
-    "Bundle: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
+    "Single: Reinforced Iron Plate",
     "Bundle: Cable",
     "Bundle: Iron Ore"
 ]
