@@ -71,6 +71,15 @@ with additional Components in order to automatically add them to the Launcher. M
 `icon` and `description` can be used to customize display in the Launcher UI, and `file_identifier` can be used to
 launch by file.
 
+Additionally, if you use `func` you have access to LauncherComponent.launch or launch_subprocess to run your
+function as a subprocesses that can be utilized side by side other clients.
+```py
+def my_func(*args: str):
+	from .client import run_client
+	LauncherComponent.launch(run_client, name="My Client", args=args)
+```
+
+
 ## World
 
 The world is your game integration for the Archipelago generator, webhost, and multiworld server. It contains all the
