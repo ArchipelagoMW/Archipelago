@@ -7,7 +7,7 @@ from .assertion import RuleAssertMixin
 from .bases import setup_solo_multiworld
 from .options.presets import allsanity_mods_6_x_x, minimal_locations_maximal_items
 from .. import StardewValleyWorld
-from ..data.bundle_data import all_bundle_items_except_money
+from ..data.bundles_data.bundle_data import all_bundle_items_except_money
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization
 
