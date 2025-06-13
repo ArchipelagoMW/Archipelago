@@ -335,7 +335,7 @@ class SC2Logic:
                 self.player,
             )
             or state.has_all((item_names.REAPER, item_names.REAPER_JET_PACK_OVERDRIVE), self.player)
-            or state.has_all((item_names.PLANETARY_FORTRESS, item_names.PLANETARY_FORTRESS_ADVANCED_TARGETING), self.player)
+            or state.has_all((item_names.PLANETARY_FORTRESS, item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS ), self.player)
             or (
                 state.has(item_names.MEDIVAC, self.player)
                 and state.has_any((item_names.SIEGE_TANK, item_names.SIEGE_BREAKERS, item_names.SHOCK_DIVISION), self.player)
@@ -674,7 +674,7 @@ class SC2Logic:
         # Impaler
         if self.morph_impaler(state):
             defense_score += 3
-            if state.has(item_names.IMPALER_HARDENED_TENTACLE_SPINES, self.player):
+            if state.has(item_names.IMPALER_SUNKEN_SPINES, self.player):
                 defense_score += 1
             if zerg_enemy:
                 defense_score += -1
@@ -1026,7 +1026,7 @@ class SC2Logic:
                     self.morph_brood_lord(state)
                     or self.morph_guardian(state)
                     and state.has_all((item_names.GUARDIAN_PROPELLANT_SACS, item_names.GUARDIAN_SORONAN_ACID), self.player)
-                    or state.has_all((item_names.INFESTED_BANSHEE, item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS), self.player)
+                    or state.has_all((item_names.INFESTED_BANSHEE, item_names.INFESTED_BANSHEE_FLESHFUSED_TARGETING_OPTICS), self.player)
                     # Highly-upgraded anti-ground devourers would also be good
                 )
             )
@@ -1263,7 +1263,7 @@ class SC2Logic:
             or state.has_all((item_names.WARP_PRISM, item_names.WARP_PRISM_PHASE_BLASTER), self.player)
             or state.has_all((item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING), self.player)
             or state.has_all((item_names.DISRUPTOR, item_names.DISRUPTOR_PERFECTED_POWER), self.player)
-            or state.has_all((item_names.IMMORTAL, item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS), self.player)
+            or state.has_all((item_names.IMMORTAL, item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING), self.player)
             or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
             or state.has_all((item_names.TRIREME, item_names.TRIREME_SOLAR_BEAM), self.player)
             or (
@@ -1308,7 +1308,7 @@ class SC2Logic:
             or state.has_any((item_names.SCOUT, item_names.MISTWING, item_names.DRAGOON), self.player)
             or (
                 state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
-                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING, self.player)
             )
             or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
         )
@@ -1378,14 +1378,14 @@ class SC2Logic:
                     or state.has_all({item_names.WRATHWALKER, item_names.WRATHWALKER_AERIAL_TRACKING}, self.player)
                     or (
                         state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
-                        and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player)
+                        and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING, self.player)
                     )
                 )
             )
             or (
                 self.advanced_tactics
                 and state.has_any({item_names.IMMORTAL, item_names.ANNIHILATOR}, self.player)
-                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player)
+                and state.has(item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING, self.player)
             )
         )
 
@@ -2627,7 +2627,7 @@ class SC2Logic:
             and (
                 state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_JUMP_JETS}, self.player)
                 or state.has_all(
-                    {item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY, item_names.BATTLECRUISER_COVERT_OPS_ENGINES}, self.player
+                    {item_names.BATTLECRUISER, item_names.BATTLECRUISER_ATX_LASER_BATTERY, item_names.BATTLECRUISER_MOIRAI_IMPULSE_DRIVE}, self.player
                 )
                 or (
                     self.advanced_tactics
@@ -3310,7 +3310,7 @@ class SC2Logic:
                 or state.has_all((item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
                 or state.has_all((item_names.EMPERORS_GUARDIAN, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
                 or state.has_all((item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES), self.player)
-                or state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_DEMOLITION_ARMAMENTS), self.player)
+                or state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_DEMOLITION_PAYLOAD), self.player)
             )
 
         return _has_terran_units

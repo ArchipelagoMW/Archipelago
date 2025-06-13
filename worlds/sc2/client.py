@@ -1337,7 +1337,7 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.HAVOC_ENDURING_SIGHT),
     CompatItemHolder(item_names.HIGH_TEMPLAR_PLASMA_SURGE),
     CompatItemHolder(item_names.SIGNIFIER_FEEDBACK),
-    CompatItemHolder(item_names.ASCENDANT_ABILITY_EFFICIENCY),
+    CompatItemHolder(item_names.ASCENDANT_BREATH_OF_CREATION ),
     CompatItemHolder(item_names.DARK_ARCHON_INDOMITABLE_WILL),
     CompatItemHolder(item_names.IMMORTAL_IMPROVED_BARRIER),
     CompatItemHolder(item_names.VANGUARD_RAPIDFIRE_CANNON),
@@ -1352,7 +1352,7 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.VOID_RAY_PRISMATIC_RANGE),
     CompatItemHolder(item_names.CARRIER_REPAIR_DRONES),
     CompatItemHolder(item_names.TEMPEST_DISINTEGRATION),
-    CompatItemHolder(item_names.ARBITER_ABILITY_EFFICIENCY),
+    CompatItemHolder(item_names.ARBITER_VESSEL_OF_THE_CONCLAVE),
     CompatItemHolder(item_names.MOTHERSHIP_INTEGRATED_POWER),
     # Other items
     CompatItemHolder(item_names.ASCENDANT_ARCHON_MERGE),
