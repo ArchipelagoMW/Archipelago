@@ -60,6 +60,7 @@ class TestCapitalSequoiaWithLevelGating(CrystalProjectTestBase):
     def test_region_connections_five_jobs(self):
         self.set_collected_job_count(5)
         self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
+        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,),
                                      unreachable_regions=(COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))

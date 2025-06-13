@@ -109,10 +109,10 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Treasure chests
         LocationData(DELENDE, "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
         LocationData(DELENDE, "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData(DELENDE, "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(126, 115, -102) Basement map chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
-        LocationData(DELENDE, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
+        LocationData(DELENDE, "Underpass Chest - Cracks in Grans foundation", 3653 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(126, 115, -102) Basement map chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
+        LocationData(DELENDE, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
         
         #Soiled Den
         #Treasure chests
@@ -807,14 +807,14 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 2", 2723 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Gaia Axe chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 3", 2813 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 5 Sky Arena Wins room 4", 2753 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Gaia Vest chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Gravedigger chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Malifice chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Wizards Wall chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(753, 134, -263) Yasha chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(754, 134, -264) Muramasa chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(755, 134, -263) Shadow Gi chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(754, 130, -264) Zether chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(755, 130, -263) Z-Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Gravedigger chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Malifice chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Wizards Wall chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(753, 134, -263) Yasha chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(754, 134, -264) Muramasa chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(755, 134, -263) Shadow Gi chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(754, 130, -264) Zether chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(755, 130, -263) Z-Potion chest
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
@@ -824,11 +824,11 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 1 Win Prize", 51921 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 4 Wins Prize", 51922 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 6 Wins Prize", 51923 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(752, 133, -262) Dust
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(756, 133, -261) Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 5)), #(753, 130, -264) Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 7 Wins Prize", 51924 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 52)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Sky Arena 9 Wins Prize", 1921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 56)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(752, 133, -262) Dust
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(756, 133, -261) Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(753, 130, -264) Ore
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold at back reservoir wall", 2827 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.has_swimming(state)), #Ingot
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in farmland on way to shrine", 2821 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold near sky fishing", 2834 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
@@ -836,8 +836,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 1", 2720 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 2", 2722 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
         LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 5 Sky Arena Wins room 3", 2721 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Dust
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Ingot
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 4)), #Ore
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Ingot
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Ore
 
         #Crystals
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
@@ -1336,38 +1336,38 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
-        LocationData(DELENDE, "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
-        LocationData(DELENDE, "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 2)),
-        LocationData(SOILED_DEN, "Soiled Den Boss - Bone Thief", 175 + boss_index_offset),
-        LocationData(THE_PALE_GROTTO, "Pale Grotto Boss - Guardian", 143 + boss_index_offset),
-        LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset),
-        LocationData(YAMAGAWA_MA, "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset),
-        LocationData(SKUMPARADISE, "Skumparadise Boss - Parasite", 333 + boss_index_offset),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 5)),
-        LocationData(JOJO_SEWERS, "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 2)),
-        LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset),
-        LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
-        LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 4)),
-        LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset),
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state)),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset),
-        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2)),
-        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
-        LocationData(EASTERN_CHASM, "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 5)),
-        LocationData(LANDS_END, "Lands End Boss - The Owlbear", 2104 + boss_index_offset),
-        LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
-        LocationData(CASTLE_RAMPARTS, "Castle Ramparts Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state)),
-        LocationData(CONTINENTAL_TRAM, "Continental Tram Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Boss - Anubis", 2473 + boss_index_offset),
-        LocationData(THE_SEQUOIA, "The Sequoia Boss - Spirit Cage", 2453 + boss_index_offset),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Devourer", 1265 + boss_index_offset),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Old One", 206 + boss_index_offset),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Enforcer", 1128 + boss_index_offset),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset),
-        LocationData(THE_OLD_WORLD, "The Old World Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 5)),
+        LocationData(DELENDE, "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
+        LocationData(DELENDE, "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30)),
+        LocationData(SOILED_DEN, "Soiled Den Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(THE_PALE_GROTTO, "Pale Grotto Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(YAMAGAWA_MA, "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)),
+        LocationData(SKUMPARADISE, "Skumparadise Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)),
+        LocationData(JOJO_SEWERS, "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
+        LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
+        LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)),
+        LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
+        LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)),
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
+        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)),
+        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)),
+        LocationData(EASTERN_CHASM, "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 55)),
+        LocationData(LANDS_END, "Lands End Boss - The Owlbear", 2104 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 47)),
+        LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)),
+        LocationData(CASTLE_RAMPARTS, "Castle Ramparts Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)),
+        LocationData(CONTINENTAL_TRAM, "Continental Tram Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)),
+        LocationData(THE_SEQUOIA, "The Sequoia Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
+        LocationData(THE_OLD_WORLD, "The Old World Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 70)),
         ]
     return location_table
 

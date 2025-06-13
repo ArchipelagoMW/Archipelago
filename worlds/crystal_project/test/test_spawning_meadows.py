@@ -63,13 +63,13 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
-    def test_tram_connection_fails_with_salmon_no_level_cap(self):
+    def test_tram_connection_succeeds_with_salmon_no_level_cap(self):
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_fails_with_quintar_no_level_cap(self):
+    def test_tram_connection_succeeds_with_quintar_no_level_cap(self):
         self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_fails_with_level_cap_no_swimming(self):
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
