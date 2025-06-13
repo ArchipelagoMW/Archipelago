@@ -571,12 +571,11 @@ class AquariaRegions:
         self.__connect_one_way_regions(self.openwater_tr, self.openwater_tr_turtle,
                                        lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         self.__connect_one_way_regions(self.openwater_tr_turtle, self.openwater_tr)
+        damaging_items_minus_nature_form = [item for item in DAMAGING_ITEMS if item != ItemNames.NATURE_FORM]
         self.__connect_one_way_regions(self.openwater_tr, self.openwater_tr_urns,
                                        lambda state: _has_bind_song(state, self.player) or
-                                                     _has_damaging_item(state, self.player, [
-                                                                            item for item in DAMAGING_ITEMS if
-                                                                            item != ItemNames.NATURE_FORM
-                                                                        ]))
+                                                     _has_damaging_item(state, self.player,
+                                                                        damaging_items_minus_nature_form))
         self.__connect_regions(self.openwater_tr, self.openwater_br)
         self.__connect_regions(self.openwater_tr, self.mithalas_city)
         self.__connect_regions(self.openwater_tr, self.veil_b)
