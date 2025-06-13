@@ -27,12 +27,12 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
 files. Your data file should have a `.apmc` extension.
 
-Double-click on your `.apmc` file to have the Minecraft client auto-launch the installed forge server. Make sure to
-leave this window open as this is your server console.
+Double-click on your `.apmc` file to have the Minecraft **Archipelago** client (not the Minecraft **Game** Client) auto-launch the installed forge server. Make sure to
+leave this window open as this is your Minecraft server console in addition to being the Minecraft Archipelago client.
 
 ### Connect to the MultiServer
 
-Open Minecraft, go to `Multiplayer > Direct Connection`, and join the `localhost` server address.
+Open Minecraft, go to `Multiplayer > Direct Connection`, enter `localhost` as the server address, and click Join Server.
 
 If you are using the website to host the game then it should auto-connect to the AP server without the need to `/connect`
 
@@ -60,7 +60,7 @@ to see which java version is required. New installations will default to the top
 
 ## Full Manual Installation
 
-It is highly recommended to ues the Archipelago installer to handle the installation of the forge server for you.
+It is highly recommended to use the Archipelago installer to handle the installation of the forge server for you.
 Support will not be given for those wishing to manually install forge. For those of you who know how, and wish to do so,
 the following links are the versions of the software we use.
 
