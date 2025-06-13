@@ -259,11 +259,11 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS/2))
 
     set_entrance_rule(multiworld, player, Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
-    set_entrance_rule(multiworld, player, Entrance.mountain_jojamart_shortcut, logic.received("Mountain To Jojamart Shortcut"))
-    set_entrance_rule(multiworld, player, Entrance.mountain_town_shortcut, logic.received("Mountain To Town Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_jojamart_shortcut, logic.received("Mountain Shortcuts"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_town_shortcut, logic.received("Mountain Shortcuts"))
     set_entrance_rule(multiworld, player, Entrance.town_tidepools_shortcut, logic.received("Town To Tide Pools Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
-    set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Lake To Adventure Guild Shortcut"))
+    set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts"))
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, content: StardewContent):
@@ -1044,12 +1044,10 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
     set_location_rule(multiworld, player, "Purchase Return Scepter", logic.money.can_spend_at(Region.sewer, 2_000_000))
     set_location_rule(multiworld, player, "Pam House Blueprint", logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
-    set_location_rule(multiworld, player, "Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Mountain To Jojamart Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Mountain To Town Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
-    set_location_rule(multiworld, player, "Mountain Lake To Adventure Guild Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 50_000))
+    set_location_rule(multiworld, player, "Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
+    set_location_rule(multiworld, player, "Mountain Shortcuts Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
+    set_location_rule(multiworld, player, "Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
+    set_location_rule(multiworld, player, "Tunnel To Backwoods Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     set_location_rule(multiworld, player, "Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
     set_location_rule(multiworld, player, "Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
     set_location_rule(multiworld, player, "Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
