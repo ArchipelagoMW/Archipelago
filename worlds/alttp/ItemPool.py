@@ -223,7 +223,7 @@ items_reduction_table = (
 
 
 def generate_itempool(world):
-    player = world.player
+    player: int = world.player
     multiworld = world.multiworld
 
     if world.options.item_pool.current_key not in difficulties:
@@ -280,7 +280,6 @@ def generate_itempool(world):
     if multiworld.custom:
         pool, placed_items, precollected_items, clock_mode, treasure_hunt_required = (
             make_custom_item_pool(multiworld, player))
-        multiworld.rupoor_cost = min(multiworld.customitemarray[67], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
          additional_triforce_pieces) = get_pool_core(multiworld, player)
@@ -386,8 +385,8 @@ def generate_itempool(world):
 
     if world.options.retro_bow:
         shop_items = 0
-        shop_locations = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if
-                          shop.type == ShopType.Shop and shop.region.player == player) for location in shop_locations if
+        shop_locations = [location for shop_locations in (shop.region.locations for shop in world.shops if
+                          shop.type == ShopType.Shop) for location in shop_locations if
                           location.shop_slot is not None]
         for location in shop_locations:
             if location.shop.inventory[location.shop_slot]["item"] == "Single Arrow":
@@ -546,7 +545,7 @@ def set_up_take_anys(multiworld, world, player):
     connect_entrance(multiworld, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
-    multiworld.shops.append(old_man_take_any.shop)
+    world.shops.append(old_man_take_any.shop)
 
     sword_indices = [
         index for index, item in enumerate(multiworld.itempool) if item.player == player and item.type == 'Sword'
@@ -574,7 +573,7 @@ def set_up_take_anys(multiworld, world, player):
         connect_entrance(multiworld, entrance.name, take_any.name, player)
         entrance.target = target
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
-        multiworld.shops.append(take_any.shop)
+        world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
         location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)
