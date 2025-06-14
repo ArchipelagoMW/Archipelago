@@ -10,6 +10,23 @@ class TestSpawningMeadows(CrystalProjectTestBase):
     def test_region_connections_no_items(self):
         self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions=(DELENDE,), unreachable_regions=(MERCURY_SHRINE,POKO_POKO_DESERT,CONTINENTAL_TRAM,BEAURIOR_VOLCANO,YAMAGAWA_MA))
 
+class TestSpawningMeadowsObscureRoutes(CrystalProjectTestBase):
+    options = {
+        "levelGating": 0,
+        "progressiveMountMode": 0,
+        "obscureRoutes": 1
+    }
+
+    def test_obscure_routes(self):
+        unreachable_regions = (MERCURY_SHRINE, CONTINENTAL_TRAM, BEAURIOR_VOLCANO, YAMAGAWA_MA)
+        reachable_regions = (DELENDE, POKO_POKO_DESERT,)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
+        unreachable_regions = (MERCURY_SHRINE, BEAURIOR_VOLCANO)
+        reachable_regions = (DELENDE, POKO_POKO_DESERT, CONTINENTAL_TRAM, YAMAGAWA_MA)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
 class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
@@ -41,7 +58,7 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
         "progressiveMountMode": 0,
-        "obscureRoutes": 1
+        "obscureRoutes": 0
     }
 
     def test_mercury_shrine_connection(self):
@@ -54,7 +71,7 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
 
     def test_tram_connection(self):
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_volcano_connection(self):
         self.collect_by_name(IBEK_BELL)
@@ -76,7 +93,7 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 1,
         "progressiveMountMode": 0,
-        "obscureRoutes": 1
+        "obscureRoutes": 0
     }
 
     def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):
@@ -92,27 +109,27 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
-    def test_tram_connection_succeeds_with_salmon_no_level_cap(self):
+    def test_tram_connection_fails_with_salmon_no_level_cap(self):
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_succeeds_with_quintar_no_level_cap(self):
+    def test_tram_connection_fails_with_quintar_no_level_cap(self):
         self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_tram_connection_fails_with_level_cap_no_swimming(self):
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_succeeds_with_salmon_and_level_cap(self):
+    def test_tram_connection_fails_with_salmon_and_level_cap(self):
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_succeeds_with_quintar_and_level_cap(self):
+    def test_tram_connection_fails_with_quintar_and_level_cap(self):
         self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
         self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
     def test_beaurior_volcano_fails_with_ibek_no_level_cap(self):
         self.collect_by_name([IBEK_BELL])
