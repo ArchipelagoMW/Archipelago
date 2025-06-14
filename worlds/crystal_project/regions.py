@@ -239,9 +239,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SKUMPARADISE, [PROVING_MEADOWS, CAPITAL_SEQUOIA],
                     {PROVING_MEADOWS: lambda state: logic.has_jobs(state, 3)})
     fancy_add_exits(world, CAPITAL_SEQUOIA, [JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
-                    {
-                    #why rental and horizontal both listed?
-                    COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
+                    # why rental and horizontal both listed?
+                    {COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5),
                     #glide? really?
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
