@@ -923,9 +923,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
             if isinstance(locations, str):
                 locations = [locations]
 
-            locations_from_groups: list[str] = []
             resolved_locations: list[Location] = []
             for target_player in worlds:
+                locations_from_groups: list[str] = []
                 world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
