@@ -152,7 +152,7 @@ class Items:
         "Bundle: Boom Box": ItemData(G.Equipment, 1338153, count=0),
         "Bundle: Chainsaw": ItemData(G.Equipment, 1338154, count=0),
         "Bundle: Cluster Nobelisk": ItemData(G.Ammo, 1338155),
-        "Bundle: Iodine-Infused Filter": ItemData(G.Ammo, 1338156), #1.1
+        "Bundle: Iodine-Infused Filter": ItemData(G.Equipment, 1338156, C.useful, count=3), #1.1
         "Bundle: Cup": ItemData(G.Equipment, 1338157, count=0),
         "Bundle: Cup (gold)": ItemData(G.Equipment, 1338158, count=0),
         "Bundle: Explosive Rebar": ItemData(G.Ammo, 1338159),
@@ -183,7 +183,7 @@ class Items:
         "Bundle: Xeno-Zapper": ItemData(G.Equipment, 1338184, count=0),
         "Bundle: Zipline": ItemData(G.Equipment, 1338185, count=0),
         "Bundle: Portable Miner": ItemData(G.Equipment, 1338186, count=0),
-        "Bundle: Gas Filter": ItemData(G.Ammo, 1338187),
+        "Bundle: Gas Filter": ItemData(G.Equipment, 1338187, C.useful, count=3),
         # Special cases
         "Small Inflated Pocket Dimension": ItemData(G.Upgrades, 1338188, C.useful, 11),
         "Inflated Pocket Dimension": ItemData(G.Upgrades, 1338189, C.useful, 5),
@@ -820,49 +820,49 @@ class Items:
         #1339150 - 1339199 Equipment / Ammo
         "Single: Bacon Agaric": ItemData(G.Ammo, 1339150, count=0),
         "Single: Beryl Nut": ItemData(G.Ammo, 1339151, count=0),
-        "Single: Blade Runners": ItemData(G.Equipment, 1339152),
+        "Single: Blade Runners": ItemData(G.Equipment, 1339152, C.useful),
         "Single: Boom Box": ItemData(G.Equipment, 1339153),
-        "Single: Chainsaw": ItemData(G.Equipment, 1339154),
+        "Single: Chainsaw": ItemData(G.Equipment, 1339154, C.useful),
         "Single: Cluster Nobelisk": ItemData(G.Ammo, 1339155, count=0),
-        "Single: Iodine-Infused Filter": ItemData(G.Ammo, 1339156, count=0), #1.1
+        "Single: Iodine-Infused Filter": ItemData(G.Equipment, 1339156, count=0), #1.1
         "Single: Cup": ItemData(G.Equipment, 1339157),
         "Single: Cup (gold)": ItemData(G.Equipment, 1339158, count=0),
         "Single: Explosive Rebar": ItemData(G.Ammo, 1339159, count=0),
-        "Single: Factory Cart": ItemData(G.Equipment, 1339160),
+        "Single: Factory Cart": ItemData(G.Equipment, 1339160, C.useful),
         "Single: Factory Cart (golden)": ItemData(G.Equipment, 1339161, count=0),
-        "Single: Gas Mask": ItemData(G.Equipment, 1339162),
+        "Single: Gas Mask": ItemData(G.Equipment, 1339162, C.useful),
         "Single: Gas Nobelisk": ItemData(G.Ammo, 1339163, count=0),
-        "Single: Hazmat Suit": ItemData(G.Equipment, 1339164),
+        "Single: Hazmat Suit": ItemData(G.Equipment, 1339164, C.useful),
         "Single: Homing Rifle Ammo": ItemData(G.Ammo, 1339165, count=0),
-        "Single: Hoverpack": ItemData(G.Equipment, 1339166),
+        "Single: Hoverpack": ItemData(G.Equipment, 1339166, C.useful),
         "Single: Iron Rebar": ItemData(G.Ammo, 1339167, count=0),
-        "Single: Jetpack": ItemData(G.Equipment, 1339168),
+        "Single: Jetpack": ItemData(G.Equipment, 1339168, C.useful),
         "Single: Medicinal Inhaler": ItemData(G.Ammo, 1339169, count=0),
         "Single: Nobelisk": ItemData(G.Ammo, 1339170, count=0),
-        "Single: Nobelisk Detonator": ItemData(G.Equipment, 1339171),
+        "Single: Nobelisk Detonator": ItemData(G.Equipment, 1339171, C.useful),
         "Single: Nuke Nobelisk": ItemData(G.Ammo, 1339172, count=0),
         "Single: Object Scanner": ItemData(G.Equipment, 1339173),
         "Single: Paleberry": ItemData(G.Ammo, 1339174, count=0),
-        "Single: Parachute": ItemData(G.Equipment, 1339175),
+        "Single: Parachute": ItemData(G.Equipment, 1339175, C.useful),
         "Single: Pulse Nobelisk": ItemData(G.Ammo, 1339176, count=0),
-        "Single: Rebar Gun": ItemData(G.Equipment, 1339177),
-        "Single: Rifle": ItemData(G.Equipment, 1339178),
+        "Single: Rebar Gun": ItemData(G.Equipment, 1339177, C.useful),
+        "Single: Rifle": ItemData(G.Equipment, 1339178, C.useful),
         "Single: Rifle Ammo": ItemData(G.Ammo, 1339179, count=0),
         "Single: Shatter Rebar": ItemData(G.Ammo, 1339180, count=0),
         "Single: Stun Rebar": ItemData(G.Ammo, 1339181, count=0),
         "Single: Turbo Rifle Ammo": ItemData(G.Ammo, 1339182, count=0),
-        "Single: Xeno-Basher": ItemData(G.Equipment, 1339183),
-        "Single: Xeno-Zapper": ItemData(G.Equipment, 1339184),
-        "Single: Zipline": ItemData(G.Equipment, 1339185),
+        "Single: Xeno-Basher": ItemData(G.Equipment, 1339183, C.useful),
+        "Single: Xeno-Zapper": ItemData(G.Equipment, 1339184, C.useful),
+        "Single: Zipline": ItemData(G.Equipment, 1339185, C.useful),
         "Single: Portable Miner": ItemData(G.Equipment, 1339186),
-        "Single: Gas Filter": ItemData(G.Ammo, 1339187, count=0)
+        "Single: Gas Filter": ItemData(G.Equipment, 1339187, count=0)
     }
 
     non_unique_item_categories: ClassVar[G] = G.Parts | G.Equipment | G.Ammo | G.Trap | G.Upgrades
     pool_item_categories: ClassVar[G] = G.Recipe | G.Building | G.Equipment | G.Transport | G.Upgrades
     item_names_and_ids: ClassVar[dict[str, int]] = {name: item_data.code for name, item_data in item_data.items()}
     filler_items: ClassVar[tuple[str, ...]] = tuple(item for item, details in item_data.items() 
-                                                    if details.category & (G.Parts | G.Ammo))
+                                                    if details.count > 0 and details.category & (G.Parts | G.Ammo))
 
 
     @classmethod
@@ -885,6 +885,9 @@ class Items:
     random: Random
     critical_path: CriticalPathCalculator
 
+    trap_chance: int 
+    enabled_traps: tuple[str]
+
     def __init__(self, player: Optional[int], logic: GameLogic, random: Random,
                   options: SatisfactoryOptions, critical_path: CriticalPathCalculator):
         self.player = player
@@ -893,15 +896,18 @@ class Items:
         self.critical_path = critical_path
         self.options = options
 
+        self.trap_chance = self.options.trap_chance.value
+        self.enabled_traps = tuple(self.options.trap_selection_override.value)
+
 
     @classmethod
     def create_item(cls, instance: Optional["Items"], name: str, player: int) -> Item:
         data: ItemData = cls.item_data[name]
         type = data.type
 
-        if (type == C.progression or type == C.useful) \
-            and instance and instance.critical_path.required_item_names \
+        if type == C.progression \
             and (data.category & (G.Recipe | G.Building)) and not (data.category & G.NeverExclude) \
+            and instance and instance.critical_path.required_item_names \
             and name not in instance.critical_path.required_item_names:
                 type = C.useful
 
@@ -909,27 +915,25 @@ class Items:
 
 
     def get_filler_item_name(self, filler_items: tuple[str, ...], random: Random) -> str:
-        trap_chance: int = self.options.trap_chance.value
-        enabled_traps: list[str] = list(self.options.trap_selection_override.value)
-
-        if enabled_traps and random.random() < (trap_chance / 100):
-            return random.choice(enabled_traps)
+        if self.enabled_traps and random.random() < (self.trap_chance / 100):
+            return random.choice(self.enabled_traps)
         else:
             return random.choice(filler_items)
 
 
     def get_excluded_items(self, multiworld: MultiWorld) -> set[str]:
-        excluded_items: set[str] = set()
-        excluded_items.update("Bundle: "+ part for part in self.critical_path.parts_to_exclude)
-        excluded_items.update(recipe for recipe in self.critical_path.recipes_to_exclude)
-        excluded_items.update("Building: "+ building for building in self.critical_path.buildings_to_exclude)
+        excluded_items: set[str] = { 
+            item.name 
+            for item in multiworld.precollected_items[self.player]
+            if item.name in self.item_data
+                and not (self.item_data[item.name].category & self.non_unique_item_categories)
+                and item.name not in self.options.start_inventory_from_pool.value
+        }
 
-        for item in multiworld.precollected_items[self.player]:
-            if item.name in self.item_data \
-                    and not (self.item_data[item.name].category & self.non_unique_item_categories) \
-                    and item.name not in self.options.start_inventory_from_pool:
-
-                excluded_items.add(item.name)
+        excluded_items.update({"Bundle: "+ part for part in self.critical_path.parts_to_exclude})
+        excluded_items.update({"Single: "+ part for part in self.critical_path.parts_to_exclude})
+        excluded_items.update({"Building: "+ building for building in self.critical_path.buildings_to_exclude})
+        excluded_items.update({recipe for recipe in self.critical_path.recipes_to_exclude})
 
         return excluded_items
 
@@ -937,18 +941,16 @@ class Items:
     def build_item_pool(self, random: Random, multiworld: MultiWorld, number_of_locations: int) -> list[Item]:
         excluded_from_pool: set[str] = self.get_excluded_items(multiworld) \
                                            .union(self.critical_path.implicitly_unlocked)
-        pool: list[Item] = []
 
-        for name, data in self.item_data.items():
-            if data.count > 0 \
-                and data.category & self.pool_item_categories \
-                and name not in excluded_from_pool:
-
-                for _ in range(data.count):
-                    item = self.create_item(self, name, self.player)
-                    if item.classification != C.filler:
-                        pool.append(item)
-
+        pool_items: list[Item] = [
+            self.create_item(self, name, self.player)
+            for name, data in self.item_data.items()
+            for _ in range(data.count)
+            if  data.category & self.pool_item_categories
+                and (data.category & G.Equipment or name not in excluded_from_pool)
+        ]
+        pool: list[Item] = [item for item in pool_items if item.classification != C.filler]
+        
         filler_pool_size: int = number_of_locations - len(pool)
         
         if (filler_pool_size < 0):
