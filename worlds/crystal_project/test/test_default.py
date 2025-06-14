@@ -12,3 +12,8 @@ class TestDefault(CrystalProjectTestBase):
         self.assertBeatable(False)
         self.collect_all_but("")
         self.assertBeatable(True)
+
+    def test_base_functions(self):
+        self.collect_mounts_and_level_caps()
+        self.assert_region_entrances(JIDAMBA_TANGLE, (THE_OPEN_SEA,), (JIDAMBA_EACLANEYA,))
+        self.assert_locations(["Spawning Meadows Chest - Jump on Nan"], ["Spawning Meadows NPC - Butterfly Goo"])
