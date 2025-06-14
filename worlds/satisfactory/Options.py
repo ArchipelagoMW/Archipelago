@@ -19,9 +19,9 @@ class PlacementLogicMeta(AssembleOptions):
         return cast(PlacementLogicMeta, cls)
 
 class PlacementLogic(Choice, metaclass=PlacementLogicMeta):
-    option_unlocked_from_start = Placement.starting_inventory
-    option_early_game = Placement.early
-    option_somewhere = Placement.somewhere
+    option_unlocked_from_start = Placement.starting_inventory.value
+    option_early_game = Placement.early.value
+    option_somewhere = Placement.somewhere.value
 
 class ChoiceMapMeta(AssembleOptions):
     def __new__(mcs, name: str, bases: tuple[type], attrs: dict[Any, Any]) -> "ChoiceMapMeta":
@@ -291,7 +291,7 @@ class MamLogic(PlacementLogic):
     Earlier means it will be more likely you need to interact with it for progression purposes.
     """
     display_name = "MAM Placement"
-    default = Placement.early
+    default = Placement.early.value
 
 class AwesomeLogic(PlacementLogic):
     """
@@ -299,7 +299,7 @@ class AwesomeLogic(PlacementLogic):
     Earlier means it will be more likely you need to interact with it for progression purposes.
     """
     display_name = "AWESOME Stuff Placement"
-    default = Placement.early
+    default = Placement.early.value
 
 class EnergyLinkLogic(PlacementLogic):
     """
@@ -307,7 +307,7 @@ class EnergyLinkLogic(PlacementLogic):
     Earlier means it will be more likely to get access to it early into your game.
     """
     display_name = "EnergyLink Placement"
-    default = Placement.early
+    default = Placement.early.value
 
 class SplitterLogic(PlacementLogic):
     """
@@ -315,7 +315,7 @@ class SplitterLogic(PlacementLogic):
     Earlier means it will be more likely to get access to it early into your game.
     """
     display_name = "Splitter and Merger Placement"
-    default = Placement.starting_inventory
+    default = Placement.starting_inventory.value
 
 _skip_tutorial_starting_items = [
     # https://satisfactory.wiki.gg/wiki/Onboarding
@@ -531,10 +531,10 @@ option_presets: dict[str, dict[str, Any]] = {
         "hard_drive_progression_limit": 20,
         "starting_inventory_preset": 3, # "Foundations"
         "randomize_starter_recipes": False,
-        "mam_logic_placement": int(Placement.starting_inventory),
-        "awesome_logic_placement": int(Placement.starting_inventory),
-        "energy_link_logic_placement": int(Placement.starting_inventory),
-        "splitter_placement": int(Placement.starting_inventory),
+        "mam_logic_placement": Placement.starting_inventory.value,
+        "awesome_logic_placement": Placement.starting_inventory.value,
+        "energy_link_logic_placement": Placement.starting_inventory.value,
+        "splitter_placement": Placement.starting_inventory.value,
         "milestone_cost_multiplier": 50,
         "trap_selection_preset": 1 # Gentle
     },
@@ -544,10 +544,10 @@ option_presets: dict[str, dict[str, Any]] = {
         "goal_requirement": GoalRequirement.option_require_all_goals,
         "goal_awesome_sink_points_per_minute": 100000, # ~10 heavy modular frame/min
         "hard_drive_progression_limit": 60,
-        "mam_logic_placement": int(Placement.somewhere),
-        "awesome_logic_placement": int(Placement.somewhere),
-        "energy_link_logic_placement": int(Placement.somewhere),
-        "splitter_placement": int(Placement.somewhere),
+        "mam_logic_placement": Placement.somewhere.value,
+        "awesome_logic_placement": Placement.somewhere.value,
+        "energy_link_logic_placement": Placement.somewhere.value,
+        "splitter_placement": Placement.somewhere.value,
         "trap_selection_preset": 3 # Harder
     },
     "Extra Long": {
@@ -556,10 +556,10 @@ option_presets: dict[str, dict[str, Any]] = {
         "goal_requirement": GoalRequirement.option_require_all_goals,
         "goal_awesome_sink_points_per_minute": 625000, # ~10 fused modular frame/min
         "hard_drive_progression_limit": 100,
-        "mam_logic_placement": int(Placement.somewhere),
-        "awesome_logic_placement": int(Placement.somewhere),
-        "energy_link_logic_placement": int(Placement.somewhere),
-        "splitter_placement": int(Placement.somewhere),
+        "mam_logic_placement": Placement.somewhere.value,
+        "awesome_logic_placement": Placement.somewhere.value,
+        "energy_link_logic_placement": Placement.somewhere.value,
+        "splitter_placement": Placement.somewhere.value,
         "milestone_cost_multiplier": 300,
         "trap_selection_preset": 4 # All
     }
