@@ -319,7 +319,7 @@ item_descriptions = {
     item_names.HERC_JUGGERNAUT_PLATING: "Increases HERC armor by 2.",
     item_names.HERC_KINETIC_FOAM: "Increases HERC life by 50.",
     item_names.REAPER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAPER),
-    item_names.REAPER_BALLISTIC_FLIGHTSUIT : "Increases Reaper life by 10.",
+    item_names.REAPER_BALLISTIC_FLIGHTSUIT: "Increases Reaper life by 10.",
     item_names.SIEGE_TANK_PROGRESSIVE_TRANSPORT_HOOK: inspect.cleandoc("""
         Level 1: Allows Siege Tanks to be transported in Siege Mode.
         Level 2: Siege Tanks in Siege Mode can attack air units while transported by a Medivac.
@@ -476,7 +476,7 @@ item_descriptions = {
         Level 1: Lift Off - Planetary Fortress can lift off.
         Level 2: Armament Stabilizers - Planetary Fortress can attack while lifted off.
     """),
-    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS:  "Planetary Fortress can attack air units.",
+    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS: "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
     item_names.PREDATOR_VESPENE_SYNTHESIS: "Gives 1 free Vespene per target hit with Lightning Field.",
@@ -1059,7 +1059,7 @@ item_descriptions = {
     item_names.HAVOC_ENDURING_SIGHT: "Havoc War Council upgrade. Havoc Squad Sight stays up indefinitely and no longer takes energy.",
     item_names.HIGH_TEMPLAR_PLASMA_SURGE: "High Templar War Council upgrade. High Templar Psionic Storm will heal fiendly protoss shields under it.",
     item_names.SIGNIFIER_FEEDBACK: "Signifier War Council upgrade. " + _ability_desc("Signifiers", "Feedback", "drains all energy from a target and deals 1 damage per point of energy drained"),
-    item_names.ASCENDANT_BREATH_OF_CREATION : "Ascendant War Council upgrade. Ascendant spells cost -25 energy.",
+    item_names.ASCENDANT_BREATH_OF_CREATION: "Ascendant War Council upgrade. Ascendant spells cost -25 energy.",
     item_names.DARK_ARCHON_INDOMITABLE_WILL: "Dark Archon War Council upgrade. Casting Mind Control will no longer deplete the Dark Archon's shields.",
     item_names.IMMORTAL_IMPROVED_BARRIER: "Immortal War Council upgrade. The Immortal's Barrier ability absorbs an additional +100 damage.",
     item_names.VANGUARD_RAPIDFIRE_CANNON: "Vanguard War Council upgrade. Vanguards attack 60% faster.",

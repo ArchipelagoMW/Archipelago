@@ -1337,7 +1337,7 @@ API3_TO_API4_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
     CompatItemHolder(item_names.HAVOC_ENDURING_SIGHT),
     CompatItemHolder(item_names.HIGH_TEMPLAR_PLASMA_SURGE),
     CompatItemHolder(item_names.SIGNIFIER_FEEDBACK),
-    CompatItemHolder(item_names.ASCENDANT_BREATH_OF_CREATION ),
+    CompatItemHolder(item_names.ASCENDANT_BREATH_OF_CREATION),
     CompatItemHolder(item_names.DARK_ARCHON_INDOMITABLE_WILL),
     CompatItemHolder(item_names.IMMORTAL_IMPROVED_BARRIER),
     CompatItemHolder(item_names.VANGUARD_RAPIDFIRE_CANNON),

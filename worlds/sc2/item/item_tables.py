@@ -720,7 +720,7 @@ item_table = {
     item_names.PLANETARY_FORTRESS_PROGRESSIVE_AUGMENTED_THRUSTERS:
         ItemData(388 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 28, SC2Race.TERRAN,
                  parent=item_names.PLANETARY_FORTRESS, quantity=2),
-    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS :
+    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS:
         ItemData(389 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.PLANETARY_FORTRESS),
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR:
@@ -1761,7 +1761,7 @@ item_table = {
     item_names.CORSAIR_SUSTAINING_DISRUPTION: ItemData(323 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 23, SC2Race.PROTOSS, parent=item_names.CORSAIR),
     item_names.CORSAIR_NEUTRON_SHIELDS: ItemData(324 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 24, SC2Race.PROTOSS, parent=item_names.CORSAIR),
     item_names.ORACLE_STEALTH_DRIVE: ItemData(325 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 25, SC2Race.PROTOSS, parent=item_names.ORACLE),
-    item_names.ORACLE_SKYWARD_CHRONOANOMALY : ItemData(544 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 26, SC2Race.PROTOSS, parent=item_names.ORACLE),
+    item_names.ORACLE_SKYWARD_CHRONOANOMALY: ItemData(544 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 26, SC2Race.PROTOSS, parent=item_names.ORACLE),
     item_names.ORACLE_TEMPORAL_ACCELERATION_BEAM: ItemData(327 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 27, SC2Race.PROTOSS, classification=ItemClassification.progression, parent=item_names.ORACLE),
     item_names.ARBITER_CHRONOSTATIC_REINFORCEMENT: ItemData(328 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 28, SC2Race.PROTOSS, parent=item_names.ARBITER),
     item_names.ARBITER_KHAYDARIN_CORE: ItemData(329 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_1, 29, SC2Race.PROTOSS, parent=item_names.ARBITER),
