@@ -205,7 +205,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     connect_menu_region(world, options)
 
     fancy_add_exits(world, SPAWNING_MEADOWS, [DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, CONTINENTAL_TRAM, BEAURIOR_VOLCANO, YAMAGAWA_MA],
-                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state),
+                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) and options.obscureRoutes.value,
                     MERCURY_SHRINE: lambda state: logic.has_vertical_movement(state),
                     POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state),
                     BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state),

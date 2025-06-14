@@ -10,10 +10,38 @@ class TestSpawningMeadows(CrystalProjectTestBase):
     def test_region_connections_no_items(self):
         self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions=(DELENDE,), unreachable_regions=(MERCURY_SHRINE,POKO_POKO_DESERT,CONTINENTAL_TRAM,BEAURIOR_VOLCANO,YAMAGAWA_MA))
 
+class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
+    options = {
+        "levelGating": 0,
+        "progressiveMountMode": 0,
+        "obscureRoutes": 0
+    }
+
+    def test_obscure_routes(self):
+        unreachable_regions = (MERCURY_SHRINE, POKO_POKO_DESERT, CONTINENTAL_TRAM, BEAURIOR_VOLCANO, YAMAGAWA_MA)
+        reachable_regions = (DELENDE,)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
+        self.collect(self.get_item_by_name(IBEK_BELL))
+        unreachable_regions = (CONTINENTAL_TRAM,)
+        reachable_regions = (DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, BEAURIOR_VOLCANO, YAMAGAWA_MA)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
+        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
+        unreachable_regions = (CONTINENTAL_TRAM,)
+        reachable_regions = (DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, BEAURIOR_VOLCANO, YAMAGAWA_MA)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
+        self.collect_mounts()
+        unreachable_regions = (CONTINENTAL_TRAM,)
+        reachable_regions = (DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, BEAURIOR_VOLCANO, YAMAGAWA_MA)
+        self.assert_region_entrances(SPAWNING_MEADOWS, reachable_regions, unreachable_regions)
+
 class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 0,
         "progressiveMountMode": 0,
+        "obscureRoutes": 1
     }
 
     def test_mercury_shrine_connection(self):
@@ -48,6 +76,7 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     options = {
         "levelGating": 1,
         "progressiveMountMode": 0,
+        "obscureRoutes": 1
     }
 
     def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):
