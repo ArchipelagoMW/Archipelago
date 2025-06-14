@@ -116,7 +116,12 @@ class CrystalProjectLogic:
         else:
             return state.has(OLD_WORLD_STONE, self.player)
 
-    def is_area_in_level_range(self, state: CollectionState, count: int) -> bool:
+    def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
+        if min_level > 60:
+            min_level = 60
+
+        count = (min_level - 1) // 10
+
         if self.options.levelGating:
             return state.has(PROGRESSIVE_LEVEL_CAP, self.player, count)
         return True

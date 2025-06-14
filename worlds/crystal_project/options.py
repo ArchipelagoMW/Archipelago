@@ -138,7 +138,7 @@ class Shopsanity(Choice):
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
     """
-    When enabled, all the mounts will arrive in the same order every game (Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina
+    When enabled, all the mounts will arrive in the same order every game (Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina)
     When disabled, there are 4 different items, Progressive Quintar Flute, Progressive Salmon Violin, Ibek Bell, and Owl Drum which are randomized."""
     display_name = "Progressive Mount Mode"
 
