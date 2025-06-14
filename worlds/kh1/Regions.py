@@ -526,8 +526,9 @@ def create_regions(kh1world):
             regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Behemoth Event")
             regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
             regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
-            regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
             regions["Olympus Coliseum"].locations.append("Olympus Coliseum Gates Purple Jar After Defeating Hades")
+        if options.cups.current_key == "hades_cup" and options.super_bosses:
+            regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Ice Titan Diamond Dust Event")
     if options.super_bosses:
         regions["Neverland"].locations.append("Neverland Defeat Phantom Stop Event")
         regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Zantetsuken Event")
