@@ -1,18 +1,6 @@
-from typing import Union
-
-from ...data.craftable_data import all_crafting_recipes_by_name
 from ..mod_data import ModNames
-from ...logic.action_logic import ActionLogicMixin
-from ...logic.artisan_logic import ArtisanLogicMixin
+from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.crafting_logic import CraftingLogicMixin
-from ...logic.crop_logic import CropLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogicMixin
-from ...logic.season_logic import SeasonLogicMixin
-from ...logic.wallet_logic import WalletLogicMixin
 from ...strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import Consumable, Edible, Bomb
@@ -34,8 +22,7 @@ class ModSpecialOrderLogicMixin(BaseLogicMixin):
         self.special_order = ModSpecialOrderLogic(*args, **kwargs)
 
 
-class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, CropLogicMixin, HasLogicMixin, RegionLogicMixin,
-ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
+class ModSpecialOrderLogic(BaseLogic):
     def get_modded_special_orders_rules(self):
         special_orders = {}
         if ModNames.juna in self.options.mods:
@@ -54,7 +41,7 @@ ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]
                                               self.logic.region.can_reach(SVERegion.fairhaven_farm),
                 ModSpecialOrder.a_mysterious_venture: self.logic.has(Bomb.cherry_bomb) & self.logic.has(Bomb.bomb) & self.logic.has(Bomb.mega_bomb) &
                                                       self.logic.region.can_reach(Region.adventurer_guild),
-                ModSpecialOrder.an_elegant_reception: self.logic.artisan.can_keg(Fruit.starfruit) & self.logic.has(ArtisanGood.cheese) &
+                ModSpecialOrder.an_elegant_reception: self.logic.has(ArtisanGood.specific_wine(Fruit.starfruit)) & self.logic.has(ArtisanGood.cheese) &
                                                       self.logic.has(ArtisanGood.goat_cheese) & self.logic.season.has_any_not_winter() &
                                                       self.logic.region.can_reach(SVERegion.jenkins_cellar),
                 ModSpecialOrder.fairy_garden: self.logic.has(Consumable.fairy_dust) &

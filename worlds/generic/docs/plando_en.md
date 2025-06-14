@@ -22,9 +22,9 @@ enabled (opt-in).
 * You can add the necessary plando modules for your settings to the `requires` section of your YAML. Doing so will throw an error if the options that you need to generate properly are not enabled to ensure you will get the results you desire. Only enter in the plando modules that you are using here but it should look like:
 
 ```yaml
-  requires: 
-    version: current.version.number
-    plando: bosses, items, texts, connections
+requires: 
+  version: current.version.number
+  plando: bosses, items, texts, connections
 ``` 
 
 ## Item Plando
@@ -74,88 +74,79 @@ A list of all available items and locations can be found in the [website's datap
 ### Examples
 
 ```yaml
-plando_items:
-  # example block 1 - Timespinner
-  - item:
-      Empire Orb: 1
-      Radiant Orb: 1
-    location: Starter Chest 1
-    from_pool: true
-    world: true
-    percentage: 50
-
-  # example block 2 - Ocarina of Time
-  - items:
-      Kokiri Sword: 1
-      Biggoron Sword: 1
-      Bow: 1
-      Magic Meter: 1
-      Progressive Strength Upgrade: 3
-      Progressive Hookshot: 2
-    locations:
-      - Deku Tree Slingshot Chest
-      - Dodongos Cavern Bomb Bag Chest
-      - Jabu Jabus Belly Boomerang Chest
-      - Bottom of the Well Lens of Truth Chest
-      - Forest Temple Bow Chest
-      - Fire Temple Megaton Hammer Chest
-      - Water Temple Longshot Chest
-      - Shadow Temple Hover Boots Chest
-      - Spirit Temple Silver Gauntlets Chest
-    world: false
-
-  # example block 3 - Slay the Spire
-  - items:
-      Boss Relic: 3
-    locations:
-      - Boss Relic 1
-      - Boss Relic 2
-      - Boss Relic 3
-
-  # example block 4 - Factorio
-  - items:
-      progressive-electric-energy-distribution: 2
-      electric-energy-accumulators: 1
-      progressive-turret: 2
-    locations:
-      - military
-      - gun-turret
-      - logistic-science-pack
-      - steel-processing
-    percentage: 80
-    force: true
-
-# example block 5 - Secret of Evermore
-  - items:
-      Levitate: 1
-      Revealer: 1
-      Energize: 1
-    locations:
-      - Master Sword Pedestal
-      - Boss Relic 1
-    world: true
-    count: 2
-
-# example block 6 - A Link to the Past
-  - items:
-      Progressive Sword: 4
-    world:
-      - BobsSlaytheSpire
-      - BobsRogueLegacy
-    count:
-      min: 1
-      max: 4
+  plando_items:
+    # example block 1 - Timespinner
+    - item:
+        Empire Orb: 1
+        Radiant Orb: 1
+      location: Starter Chest 1
+      from_pool: true
+      world: true
+      percentage: 50
+  
+    # example block 2 - Ocarina of Time
+    - items:
+        Kokiri Sword: 1
+        Biggoron Sword: 1
+        Bow: 1
+        Magic Meter: 1
+        Progressive Strength Upgrade: 3
+        Progressive Hookshot: 2
+      locations:
+        - Deku Tree Slingshot Chest
+        - Dodongos Cavern Bomb Bag Chest
+        - Jabu Jabus Belly Boomerang Chest
+        - Bottom of the Well Lens of Truth Chest
+        - Forest Temple Bow Chest
+        - Fire Temple Megaton Hammer Chest
+        - Water Temple Longshot Chest
+        - Shadow Temple Hover Boots Chest
+        - Spirit Temple Silver Gauntlets Chest
+      world: false
+  
+    # example block 3 - Factorio
+    - items:
+        progressive-electric-energy-distribution: 2
+        electric-energy-accumulators: 1
+        progressive-turret: 2
+      locations:
+        - military
+        - gun-turret
+        - logistic-science-pack
+        - steel-processing
+      percentage: 80
+      force: true
+  
+  # example block 4 - Secret of Evermore
+    - items:
+        Levitate: 1
+        Revealer: 1
+        Energize: 1
+      locations:
+        - Master Sword Pedestal
+        - Boss Relic 1
+      world: true
+      count: 2
+  
+  # example block 5 - A Link to the Past
+    - items:
+        Progressive Sword: 4
+      world:
+        - BobsSlaytheSpire
+        - BobsRogueLegacy
+      count:
+        min: 1
+        max: 4
 ```
 1. This block has a 50% chance to occur, and if it does, it will place either the Empire Orb or Radiant Orb on another
 player's Starter Chest 1 and removes the chosen item from the item pool.
 2. This block will always trigger and will place the player's swords, bow, magic meter, strength upgrades, and hookshots
 in their own dungeon major item chests.
-3. This block will always trigger and will lock boss relics on the bosses.
-4. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
+3. This block has an 80% chance of occurring, and when it does, it will place all but 1 of the items randomly among the
 four locations chosen here.
-5. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
+4. This block will always trigger and will attempt to place a random 2 of Levitate, Revealer and Energize into
 other players' Master Sword Pedestals or Boss Relic 1 locations.
-6. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
+5. This block will always trigger and will attempt to place a random number, between 1 and 4, of progressive swords
 into any locations within the game slots named BobsSlaytheSpire and BobsRogueLegacy.
 
 
@@ -201,7 +192,7 @@ Kirby's Dream Land 3:
 As this is currently only supported by A Link to the Past, instead of finding an explanation here, please refer to the
 relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
 
-## Connections Plando
+## Connection Plando
 
 This is currently only supported by a few games, including A Link to the Past, Minecraft, and Ocarina of Time. As the way that these games interact with their
 connections is different, only the basics are explained here. More specific information for connection plando in A Link to the Past can be found in 
@@ -221,25 +212,25 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 ### Examples
 
 ```yaml
-plando_connections:
-  # example block 1 - A Link to the Past
-  - entrance: Cave Shop (Lake Hylia)
-    exit: Cave 45
-    direction: entrance
-  - entrance: Cave 45
-    exit: Cave Shop (Lake Hylia)
-    direction: entrance
-  - entrance: Agahnims Tower
-    exit: Old Man Cave Exit (West)
-    direction: exit
-
-  # example block 2 - Minecraft
-  - entrance: Overworld Structure 1
-    exit: Nether Fortress
-    direction: both
-  - entrance: Overworld Structure 2
-    exit: Village
-    direction: both
+  plando_connections:
+    # example block 1 - A Link to the Past
+    - entrance: Cave Shop (Lake Hylia)
+      exit: Cave 45
+      direction: entrance
+    - entrance: Cave 45
+      exit: Cave Shop (Lake Hylia)
+      direction: entrance
+    - entrance: Agahnims Tower
+      exit: Old Man Cave Exit (West)
+      direction: exit
+  
+    # example block 2 - Minecraft
+    - entrance: Overworld Structure 1
+      exit: Nether Fortress
+      direction: both
+    - entrance: Overworld Structure 2
+      exit: Village
+      direction: both
 ```
 
 1. These connections are decoupled, so going into the Lake Hylia Cave Shop will take you to the inside of Cave 45, and

@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from BaseClasses import MultiWorld
 from .world_assert import get_all_item_names, get_all_location_names
-from ... import StardewValleyWorld, options, item_table, Group, location_table, ExcludeGingerIsland
+from ... import StardewValleyWorld, options, item_table, Group, location_table
 from ...locations import LocationTags
 from ...strings.ap_names.transport_names import Transportation
 
@@ -49,7 +49,7 @@ class OptionAssertMixin(TestCase):
 
     def assert_can_reach_island_if_should(self, multiworld: MultiWorld):
         stardew_options = get_stardew_options(multiworld)
-        include_island = stardew_options.exclude_ginger_island.value == ExcludeGingerIsland.option_false
+        include_island = stardew_options.exclude_ginger_island.value == options.ExcludeGingerIsland.option_false
         if include_island:
             self.assert_can_reach_island(multiworld)
         else:
@@ -63,8 +63,12 @@ class OptionAssertMixin(TestCase):
         all_item_names = set(get_all_item_names(multiworld))
         all_location_names = set(get_all_location_names(multiworld))
         all_cropsanity_item_names = {item_name for item_name in all_item_names if Group.CROPSANITY in item_table[item_name].groups}
-        all_cropsanity_location_names = {location_name for location_name in all_location_names if LocationTags.CROPSANITY in location_table[location_name].tags}
-        self.assertEqual(len(all_cropsanity_item_names), len(all_cropsanity_location_names))
+        all_cropsanity_location_names = {location_name
+                                         for location_name in all_location_names
+                                         if LocationTags.CROPSANITY in location_table[location_name].tags
+                                         # Qi Beans do not have an item
+                                         and location_name != "Harvest Qi Fruit"}
+        self.assertEqual(len(all_cropsanity_item_names) + 1, len(all_cropsanity_location_names))
 
     def assert_all_rarecrows_exist(self, multiworld: MultiWorld):
         all_item_names = set(get_all_item_names(multiworld))

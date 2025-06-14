@@ -1,8 +1,18 @@
-# This file is required to get pyximport to work with C++.
-# Switching from std::set to a pure C implementation is still on the table to simplify everything.
+# This file is used when doing pyximport
+import os
 
 def make_ext(modname, pyxfilename):
     from distutils.extension import Extension
-    return Extension(name=modname,
-                     sources=[pyxfilename],
-                     language='c++')
+    return Extension(
+        name=modname,
+        sources=[pyxfilename],
+        depends=["intset.h"],
+        include_dirs=[os.getcwd()],
+        language="c",
+        # to enable ASAN and debug build:
+        # extra_compile_args=["-fsanitize=address", "-UNDEBUG", "-Og", "-g"],
+        # extra_objects=["-fsanitize=address"],
+        # NOTE: we can not put -lasan at the front of link args, so needs to be run with
+        #       LD_PRELOAD=/usr/lib/libasan.so ASAN_OPTIONS=detect_leaks=0 path/to/exe
+        # NOTE: this can't find everything unless libpython and cymem are also built with ASAN
+    )

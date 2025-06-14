@@ -1,4 +1,5 @@
-from Options import Choice, Range, DefaultOnToggle
+from dataclasses import dataclass
+from Options import Choice, Range, DefaultOnToggle, Toggle, PerGameCommonOptions
 
 
 class ExtraRanks(Range):
@@ -16,9 +17,16 @@ class ExtraRanks(Range):
 
 class IncludeJobs(DefaultOnToggle):
     """
-    Whether Jobs can be included in logic.
+    Whether Jobs can contain progression or useful items.
     """
     display_name = "Include Jobs"
+
+
+class IncludeSecretArea(Toggle):
+    """
+    Whether the Secret Area (including Serenade) can contain progression or useful items.
+    """
+    display_name = "Include Secret Area"
 
 # Possible logic options:
 # - Include Number Trader
@@ -41,8 +49,10 @@ class TradeQuestHinting(Choice):
     default = 2
 
 
-MMBN3Options = {
-    "extra_ranks": ExtraRanks,
-    "include_jobs": IncludeJobs,
-    "trade_quest_hinting": TradeQuestHinting,
-}
+@dataclass
+class MMBN3Options(PerGameCommonOptions):
+    extra_ranks: ExtraRanks
+    include_jobs: IncludeJobs
+    include_secret: IncludeSecretArea
+    trade_quest_hinting: TradeQuestHinting
+    

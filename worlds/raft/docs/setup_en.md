@@ -17,7 +17,7 @@
 
 4. Open RML and click Play. If you've already installed it, the executable that was used to install RML ("RMLLauncher.exe" unless renamed) should be used to run RML. Raft should start after clicking Play.
 
-5. Open the RML menu. This should open automatically when Raft first loads. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it.
+5. Open the RML menu. This should open automatically when Raft first loads. If it does not, and you see RML information in the top center of the Raft main menu, press F9 to open it. If you do not see RML information at the top, close Raft+RML, go back to Step 4 and run RML as administrator.
 
 6. Navigate to the "Mod manager" tab in the left-hand menu.
 
@@ -45,7 +45,8 @@
 ## Multiplayer Raft
 
 You're able to have multiple Raft players on a single Raftipelago world. This will work, with a few notes:
-- Only the player that creates/loads the world can connect to Archipelago (this is the "host" of the Raft world). Other players do not need to connect; everything will be routed through the the host.
+- Every player that joins the Raft world must have the Raftipelago mod loaded.
+- Only the player that creates/loads the world can connect to Archipelago (this is the "host" of the Raft world). Other players do not need to run */connect*; everything will be routed through the the host.
 - Players other than the host will be labeled as a "Raft Player (Steam name)" when using ingame chat, which will be routed through Archipelago chat.
 - Ingame chat will only work when the host is connected to the Archipelago server.
 

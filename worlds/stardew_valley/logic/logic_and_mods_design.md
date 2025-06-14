@@ -12,7 +12,7 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, ReceivedLogicMixin]]):
+class TimeLogic(BaseLogic):
 
     def has_lived_months(self, number: int) -> StardewRule:
         return self.logic.received(Event.month_end, number)
@@ -55,4 +55,33 @@ dependencies. Vanilla would always be first, then anything that depends only on 
 3. In `create_items`, AP items are unpacked, and randomized.
 4. In `set_rules`, the rules are applied to the AP entrances and locations. Each content pack have to apply the proper rules for their entrances and locations.
     - (idea) To begin this step, sphere 0 could be simplified instantly as sphere 0 regions and items are already known.
-5. Nothing to do in `generate_basic`. 
+5. Nothing to do in `generate_basic`.
+
+## Item Sources
+
+Instead of containing rules directly, items would contain sources that would then be transformed into rules. Using a single dispatch mechanism, the sources will
+be associated to their actual logic.
+
+This system is extensible and easily maintainable in the ways that it decouple the rule and the actual items. Any "type" of item could be used with any "type"
+of source (Monster drop and fish can have foraging sources).
+
+- Mods requiring special rules can remove sources from vanilla content or wrap them to add their own logic (Magic add sources for some items), or change the
+  rules for monster drop sources.
+- (idea) A certain difficulty level (or maybe tags) could be added to the source, to enable or disable them given settings chosen by the player. Someone with a
+  high grinding tolerance can enable "hard" or "grindy" sources. Some source that are pushed back in further spheres can be replaced by less forgiving sources
+  if easy logic is disabled. For instance, anything that requires money could be accessible as soon as you can sell something to someone (even wood).
+
+Items are classified by their source. An item with a fishing or a crab pot source is considered a fish, an item dropping from a monster is a monster drop. An
+item with a foraging source is a forageable. Items can fit in multiple categories.
+
+## Prefer rich class to anemic list of sources
+
+For game mechanic that might need more logic/interaction than a simple game item, prefer creating a class than just listing the sources and adding generic
+requirements to them. This will simplify the implementation of more complex mechanics and increase cohesion.
+
+For instance, `Building` can be upgraded. Instead of having a simple source for the `Big Coop` being a shop source with an additional requirement being having
+the previous building, the `Building` class has knowledge of the upgrade system and know from which building it can be upgraded.
+
+Another example is `Animal`. Instead of a shopping source with a requirement of having a `Coop`, the `Chicken` knows that a building is required. This way, a
+potential source of chicken from incubating an egg would not require an additional requirement of having a coop (assuming the incubator could be obtained
+without a big coop).

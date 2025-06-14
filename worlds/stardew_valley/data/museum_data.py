@@ -3,12 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple, Union, Optional
 
-from ..strings.monster_names import Monster
+from ..strings.animal_product_names import AnimalProduct
 from ..strings.fish_names import WaterChest
 from ..strings.forageable_names import Forageable
-from ..strings.metal_names import Mineral, Artifact, Fossil
-from ..strings.region_names import Region
 from ..strings.geode_names import Geode
+from ..strings.metal_names import Mineral, Artifact, Fossil
+from ..strings.monster_names import Monster
+from ..strings.region_names import Region
 
 
 @dataclass(frozen=True)
@@ -76,6 +77,8 @@ def create_mineral(name: str,
             difficulty += 1.0 / 26.0 * 100
         if "Omni Geode" in geodes:
             difficulty += 31.0 / 2750.0 * 100
+        if "Fishing Chest" in geodes:
+            difficulty += 4.3
 
     mineral_item = MuseumItem.of(name, difficulty, locations, geodes, monsters)
     all_museum_minerals.append(mineral_item)
@@ -95,7 +98,7 @@ class Artifact:
                                       geodes=Geode.artifact_trove)
     arrowhead = create_artifact("Arrowhead", 8.5, (Region.mountain, Region.forest, Region.bus_stop),
                                 geodes=Geode.artifact_trove)
-    ancient_doll = create_artifact("Ancient Doll", 13.1, (Region.mountain, Region.forest, Region.bus_stop),
+    ancient_doll = create_artifact(Artifact.ancient_doll, 13.1, (Region.mountain, Region.forest, Region.bus_stop),
                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     elvish_jewelry = create_artifact("Elvish Jewelry", 5.3, Region.forest,
                                      geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
@@ -103,8 +106,7 @@ class Artifact:
                                     geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     ornamental_fan = create_artifact("Ornamental Fan", 7.4, (Region.beach, Region.forest, Region.town),
                                      geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
-    dinosaur_egg = create_artifact("Dinosaur Egg", 11.4, (Region.mountain, Region.skull_cavern),
-                                   geodes=WaterChest.fishing_chest,
+    dinosaur_egg = create_artifact(AnimalProduct.dinosaur_egg, 11.4, (Region.skull_cavern),
                                    monsters=Monster.pepper_rex)
     rare_disc = create_artifact("Rare Disc", 5.6, Region.stardew_valley,
                                 geodes=(Geode.artifact_trove, WaterChest.fishing_chest),
@@ -170,18 +172,18 @@ class Artifact:
 
 
 class Mineral:
-    quartz = create_mineral(Mineral.quartz, Region.mines_floor_20)
+    quartz = create_mineral(Mineral.quartz, Region.mines_floor_20, difficulty=100.0 / 5.0)
     fire_quartz = create_mineral("Fire Quartz", Region.mines_floor_100,
                                  geodes=(Geode.magma, Geode.omni, WaterChest.fishing_chest),
-                                 difficulty=1.0 / 12.0)
+                                 difficulty=100.0 / 5.0)
     frozen_tear = create_mineral("Frozen Tear", Region.mines_floor_60,
                                  geodes=(Geode.frozen, Geode.omni, WaterChest.fishing_chest),
                                  monsters=unlikely,
-                                 difficulty=1.0 / 12.0)
+                                 difficulty=100.0 / 5.0)
     earth_crystal = create_mineral("Earth Crystal", Region.mines_floor_20,
                                    geodes=(Geode.geode, Geode.omni, WaterChest.fishing_chest),
                                    monsters=Monster.duggy,
-                                   difficulty=1.0 / 12.0)
+                                   difficulty=100.0 / 5.0)
     emerald = create_mineral("Emerald", Region.mines_floor_100,
                              geodes=WaterChest.fishing_chest)
     aquamarine = create_mineral("Aquamarine", Region.mines_floor_60,

@@ -34,11 +34,11 @@ class TestDungeons(TestVanillaOWG):
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Flute", "Lamp"]],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Magic Mirror", "Hammer"]],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Magic Mirror", "Hookshot"]],
-            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots']],
-            ["Tower of Hera - Basement Cage", True, ["Flute", "Magic Mirror"]],
-            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
+            ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ["Flute", "Magic Mirror", 'Bomb Upgrade (50)']],
+            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror", 'Bomb Upgrade (50)']],
             ["Tower of Hera - Basement Cage", True, ["Flute", "Hookshot", "Hammer"]],
-            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror"]],
+            ["Tower of Hera - Basement Cage", True, ["Progressive Glove", "Lamp", "Magic Mirror", 'Bomb Upgrade (50)']],
 
             ["Castle Tower - Room 03", False, []],
             ["Castle Tower - Room 03", False, ['Progressive Sword'], ['Progressive Sword', 'Cape', 'Beat Agahnim 1']],
@@ -120,8 +120,8 @@ class TestDungeons(TestVanillaOWG):
             #todo: does clip require sword?
             #["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)']],
             ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Progressive Sword']],
-            ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot']],
-            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Big Key (Turtle Rock)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Turtle Rock)', 'Hookshot', 'Bomb Upgrade (50)']],
+            ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Big Key (Turtle Rock)', 'Bomb Upgrade (50)']],
 
             ["Ganons Tower - Hope Room - Left", False, []],
             ["Ganons Tower - Hope Room - Left", False, ['Moon Pearl', 'Crystal 1']],

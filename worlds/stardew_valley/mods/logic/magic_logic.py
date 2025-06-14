@@ -1,14 +1,9 @@
-from typing import Union
-
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
 from ...mods.mod_data import ModNames
 from ...stardew_rule import StardewRule, False_
 from ...strings.ap_names.skill_level_names import ModSkillLevel
 from ...strings.region_names import MagicRegion
-from ...strings.spells import MagicSpell
+from ...strings.spells import MagicSpell, all_spells
 
 
 class MagicLogicMixin(BaseLogicMixin):
@@ -18,7 +13,7 @@ class MagicLogicMixin(BaseLogicMixin):
 
 
 # TODO add logic.mods.magic for altar
-class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
+class MagicLogic(BaseLogic):
     def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
         if ModNames.magic not in self.options.mods:
             return False_()
@@ -27,7 +22,8 @@ class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, HasLogicM
     def can_use_altar(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:
             return False_()
-        return self.logic.region.can_reach(MagicRegion.altar)
+        spell_rule = False_()
+        return self.logic.region.can_reach(MagicRegion.altar) & self.logic.received_any(*all_spells)
 
     def has_any_spell(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:
