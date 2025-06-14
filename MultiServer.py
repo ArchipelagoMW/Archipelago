@@ -43,7 +43,7 @@ import NetUtils
 import Utils
 from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
-    SlotType, LocationStore, Hint, HintStatus
+    SlotType, LocationStore, MultiData, Hint, HintStatus
 from BaseClasses import ItemClassification
 
 
@@ -445,7 +445,7 @@ class Context:
             raise Utils.VersionException("Incompatible multidata.")
         return restricted_loads(zlib.decompress(data[1:]))
 
-    def _load(self, decoded_obj: dict, game_data_packages: typing.Dict[str, typing.Any],
+    def _load(self, decoded_obj: MultiData, game_data_packages: typing.Dict[str, typing.Any],
               use_embedded_server_options: bool):
 
         self.read_data = {}

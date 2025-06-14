@@ -1,10 +1,12 @@
 import collections
+from collections.abc import Mapping
 import concurrent.futures
 import logging
 import os
 import pickle
 import tempfile
 import time
+from typing import Any
 import zipfile
 import zlib
 
@@ -238,11 +240,13 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
             def write_multidata():
                 import NetUtils
                 from NetUtils import HintStatus
-                slot_data = {}
-                client_versions = {}
-                games = {}
-                minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
-                slot_info = {}
+                slot_data: dict[int, Mapping[str, Any]] = {}
+                client_versions: dict[int, tuple[int, int, int]] = {}
+                games: dict[int, str] = {}
+                minimum_versions: NetUtils.MinimumVersions = {
+                    "server": AutoWorld.World.required_server_version, "clients": client_versions
+                }
+                slot_info: dict[int, NetUtils.NetworkSlot] = {}
                 names = [[name for player, name in sorted(multiworld.player_name.items())]]
                 for slot in multiworld.player_ids:
                     player_world: AutoWorld.World = multiworld.worlds[slot]
@@ -257,7 +261,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                                                            group_members=sorted(group["players"]))
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in multiworld.precollected_items.items()}
-                precollected_hints = {player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))}
+                precollected_hints: dict[int, set[NetUtils.Hint]] = {
+                    player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))
+                }
 
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
@@ -314,7 +320,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     if current_sphere:
                         spheres.append(dict(current_sphere))
 
-                multidata = {
+                multidata: NetUtils.MultiData | bytes = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
