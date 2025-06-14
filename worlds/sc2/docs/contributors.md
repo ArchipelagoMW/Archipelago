@@ -28,7 +28,7 @@ code contributors also reported bugs and participated in beta testing.
 * Subsourian (@Subsourian) - Signifier
 * GiantGrantGames (@GiantGrantGames) - Trireme
 * Phaneros (@MatthewMarinets)- Skirmisher
-* Dikhovinka (@AYaroslavskiy91) - Dawnbringer
+* Durygathn - Dawnbringer
 
 ## Maintenance of 2024 release
 * Ziktofel (@Ziktofel)

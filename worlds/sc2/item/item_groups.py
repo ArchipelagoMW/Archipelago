@@ -382,7 +382,7 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.MARINE_COMBAT_SHIELD,   # Baseline from mission 2
     item_names.MARAUDER_KINETIC_FOAM,  # Baseline outside WOL
     item_names.MARAUDER_CONCUSSIVE_SHELLS,  # Baseline from mission 2
-    item_names.REAPER_KINETIC_FOAM, # Baseline from mission 2
+    item_names.REAPER_BALLISTIC_FLIGHTSUIT, # Baseline from mission 2
     item_names.HELLION_HELLBAT,  # Baseline from mission 3
     item_names.GOLIATH_INTERNAL_TECH_MODULE,  # Baseline from mission 4
     item_names.GOLIATH_SHAPED_HULL,
@@ -392,7 +392,7 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.LIBERATOR_RAID_ARTILLERY,  # Baseline in mission 5
     item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,  # Baseline in mission 5
     item_names.BATTLECRUISER_TACTICAL_JUMP,
-    item_names.BATTLECRUISER_COVERT_OPS_ENGINES,
+    item_names.BATTLECRUISER_MOIRAI_IMPULSE_DRIVE,
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,  # Baseline from mission 2
     item_names.ORBITAL_DEPOTS,  # Baseline from mission 2
     item_names.COMMAND_CENTER_SCANNER_SWEEP,  # In NCO you must actually morph Command Center into Orbital Command
@@ -656,7 +656,7 @@ item_name_groups[ItemGroupNames.INF_TERRAN_UPGRADES] = infterr_upgrades = [
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL,
     item_names.INFESTED_LIBERATOR_DEFENDER_MODE,
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION,
-    item_names.INFESTED_BANSHEE_ADVANCED_TARGETING_OPTICS,
+    item_names.INFESTED_BANSHEE_FLESHFUSED_TARGETING_OPTICS,
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON,
     item_names.INFESTED_BANSHEE_RAPID_HIBERNATION,
     item_names.FRIGHTFUL_FLESHWELDER_INFESTED_DIAMONDBACK,
@@ -827,8 +827,8 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
 
     # Terran Mind Control
     item_names.HIVE_MIND_EMULATOR,
-    item_names.BRAINWASHING,
-    item_names.KHALAI_TAKEOVER,
+    item_names.PSI_INDOCTRINATOR,
+    item_names.ARGUS_AMPLIFIER,
 
     # Zerg Mind Control
     item_names.INFESTOR,
