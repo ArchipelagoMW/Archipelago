@@ -392,7 +392,7 @@ item_name_groups[ItemGroupNames.NCO_BASELINE_UPGRADES] = nco_baseline_upgrades =
     item_names.LIBERATOR_RAID_ARTILLERY,  # Baseline in mission 5
     item_names.RAVEN_BIO_MECHANICAL_REPAIR_DRONE,  # Baseline in mission 5
     item_names.BATTLECRUISER_TACTICAL_JUMP,
-    item_names.BBATTLECRUISER_MOIRAI_IMPULSE_DRIVE,
+    item_names.BATTLECRUISER_MOIRAI_IMPULSE_DRIVE,
     item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM,  # Baseline from mission 2
     item_names.ORBITAL_DEPOTS,  # Baseline from mission 2
     item_names.COMMAND_CENTER_SCANNER_SWEEP,  # In NCO you must actually morph Command Center into Orbital Command

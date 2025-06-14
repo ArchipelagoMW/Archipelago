@@ -476,7 +476,7 @@ item_descriptions = {
         Level 1: Lift Off - Planetary Fortress can lift off.
         Level 2: Armament Stabilizers - Planetary Fortress can attack while lifted off.
     """),
-    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS  "Planetary Fortress can attack air units.",
+    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS:  "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
     item_names.PREDATOR_VESPENE_SYNTHESIS: "Gives 1 free Vespene per target hit with Lightning Field.",
