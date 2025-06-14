@@ -115,8 +115,8 @@ def create_regions(world: "JakAndDaxterWorld"):
     elif options.jak_completion_condition == CompletionCondition.option_cross_lava_tube:
         multiworld.completion_condition[player] = lambda state: state.can_reach(gmc, "Region", player)
 
-    elif options.jak_completion_condition == CompletionCondition.option_defeat_dark_eco_plant:
-        multiworld.completion_condition[player] = lambda state: state.can_reach(fjp, "Region", player)
+    # elif options.jak_completion_condition == CompletionCondition.option_defeat_dark_eco_plant:
+    #     multiworld.completion_condition[player] = lambda state: state.can_reach(fjp, "Region", player)
 
     elif options.jak_completion_condition == CompletionCondition.option_defeat_klaww:
         multiworld.completion_condition[player] = lambda state: state.can_reach(mp, "Region", player)
