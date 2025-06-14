@@ -937,13 +937,16 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
 
             count = block.count
             if not count:
-                count = len(new_block.items)
+                count = (min(len(new_block.items), len(new_block.resolved_locations))
+                         if new_block.resolved_locations else len(new_block.items))
             if isinstance(count, int):
                 count = {"min": count, "max": count}
             if "min" not in count:
                 count["min"] = 0
             if "max" not in count:
-                count["max"] = len(new_block.items)
+                count["max"] = (min(len(new_block.items), len(new_block.resolved_locations))
+                                if new_block.resolved_locations else len(new_block.items))
+
 
             new_block.count = count
             plando_blocks[player].append(new_block)
