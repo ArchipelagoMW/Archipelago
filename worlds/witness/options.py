@@ -400,12 +400,11 @@ class HintAmount(Range):
 
 
 class VagueHints(Choice):
-    """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
+    """Make direct hints a bit more vague, where they only tell you about the general area the item is in.
     Area Hints will be generated as normal.
 
     If set to "stable", only location groups will be used. If location groups aren't implemented for the game your item ended up in, your hint will instead only tell you that the item is "somewhere in" that game.
     If set to "experimental", region names will be eligible as well, and you will never receive a "somewhere in" hint. Keep in mind that region names are not always intended to be comprehensible to players — only turn this on if you are okay with a bit of chaos.
-
 
     The distinction does not matter in single player, as Witness implements location groups for every location.
 
@@ -421,9 +420,9 @@ class VagueHints(Choice):
 class AreaHintPercentage(Range):
     """
     There are two types of hints for The Witness.
-    "Location hints" hint one location in your world or one location containing an item for your world.
+    "Direct hints" hint one location in your world or one location containing an item for your world.
     "Area hints" tell you some general info about the items you can find in one of the main geographic areas on the island.
-    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
+    Use this option to specify how many of your hints you want to be area hints. The rest will be direct hints.
     """
     display_name = "Area Hint Percentage"
     range_start = 0

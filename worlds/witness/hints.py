@@ -440,7 +440,7 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
                  already_hinted_locations: Set[Location]) -> Tuple[List[str], Dict[str, Set[Location]]]:
     """
     Choose areas to hint.
-    This takes into account that some areas may already have had items hinted in them through location hints.
+    This takes into account that some areas may already have had items hinted in them through direct hints.
     When this happens, they are made less likely to receive an area hint.
     """
 
@@ -610,7 +610,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
 
     if len(hinted_areas) < amount:
         logging.warning(f"Was not able to make {amount} area hints for player {world.player_name}. "
-                        f"Made {len(hinted_areas)} instead, and filled the rest with random location hints.")
+                        f"Made {len(hinted_areas)} instead, and filled the rest with random direct hints.")
 
     return hints, unhinted_locations_per_area
 
