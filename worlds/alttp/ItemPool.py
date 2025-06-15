@@ -548,10 +548,12 @@ def set_up_take_anys(multiworld, world, player):
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
     multiworld.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in multiworld.itempool if item.player == player and item.type == 'Sword']
-    if swords:
-        sword = multiworld.random.choice(swords)
-        multiworld.itempool.remove(sword)
+    sword_indices = [
+        index for index, item in enumerate(multiworld.itempool) if item.player == player and item.type == 'Sword'
+    ]
+    if sword_indices:
+        sword_index = multiworld.random.choice(sword_indices)
+        sword = multiworld.itempool.pop(sword_index)
         multiworld.itempool.append(item_factory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
