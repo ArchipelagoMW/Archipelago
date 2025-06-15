@@ -6,16 +6,19 @@ from BaseClasses import Item, ItemClassification
 class SRItem(Item):
     game: str = "Stick Ranger"
 
+
 class StagesData(NamedTuple):
     code: int
     item_name: str
     classification: ItemClassification
     region: str
 
+
 class FillerData(NamedTuple):
     code: int
     item_name: str
     classification: ItemClassification
+
 
 class TrapItemData(NamedTuple):
     code: int
@@ -23,26 +26,50 @@ class TrapItemData(NamedTuple):
     classification: ItemClassification
     weight: int
 
+
 class RangerClassData(NamedTuple):
     code: int
     item_name: str
     classification: ItemClassification
 
+
 stages: List[StagesData] = [
     # StagesData(11000, "Unlock Town", ItemClassification.useful, "Town"),
     # StagesData(11001, "Unlock Opening Street", ItemClassification.progression, "Grassland"),
-    StagesData(11002, "Unlock Grassland 1", ItemClassification.progression, "Grassland"),
-    StagesData(11003, "Unlock Grassland 2", ItemClassification.progression, "Grassland"),
-    StagesData(11004, "Unlock Grassland 3", ItemClassification.progression, "Grassland"),
-    StagesData(11005, "Unlock Grassland 4", ItemClassification.progression, "Grassland"),
-    StagesData(11006, "Unlock Grassland 5", ItemClassification.progression, "Grassland"),
-    StagesData(11007, "Unlock Grassland 6", ItemClassification.progression, "Grassland"),
-    StagesData(11008, "Unlock Grassland 7", ItemClassification.progression, "Grassland"),
-    StagesData(11009, "Unlock Castle Gate", ItemClassification.progression, "Grassland"),
+    StagesData(
+        11002, "Unlock Grassland 1", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11003, "Unlock Grassland 2", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11004, "Unlock Grassland 3", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11005, "Unlock Grassland 4", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11006, "Unlock Grassland 5", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11007, "Unlock Grassland 6", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11008, "Unlock Grassland 7", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11009, "Unlock Castle Gate", ItemClassification.progression, "Grassland"
+    ),
     StagesData(11010, "Unlock Castle", ItemClassification.progression, "Boss"),
-    StagesData(11011, "Unlock Hill Country 1", ItemClassification.progression, "Grassland"),
-    StagesData(11012, "Unlock Hill Country 2", ItemClassification.progression, "Grassland"),
-    StagesData(11013, "Unlock Hill Country 3", ItemClassification.progression, "Grassland"),
+    StagesData(
+        11011, "Unlock Hill Country 1", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11012, "Unlock Hill Country 2", ItemClassification.progression, "Grassland"
+    ),
+    StagesData(
+        11013, "Unlock Hill Country 3", ItemClassification.progression, "Grassland"
+    ),
     StagesData(11014, "Unlock Lake", ItemClassification.progression, "Grassland"),
     StagesData(11015, "Unlock Forest 1", ItemClassification.progression, "Grassland"),
     StagesData(11016, "Unlock Forest 2", ItemClassification.progression, "Grassland"),
@@ -58,7 +85,9 @@ stages: List[StagesData] = [
     StagesData(11026, "Unlock Submarine 2", ItemClassification.progression, "Sea"),
     StagesData(11027, "Unlock Submarine 3", ItemClassification.progression, "Sea"),
     StagesData(11028, "Unlock Submarine 4", ItemClassification.progression, "Sea"),
-    StagesData(11029, "Unlock Submarine Shrine", ItemClassification.progression, "Boss"),
+    StagesData(
+        11029, "Unlock Submarine Shrine", ItemClassification.progression, "Boss"
+    ),
     StagesData(11030, "Unlock Mist Grove 1", ItemClassification.progression, "Sea"),
     StagesData(11031, "Unlock Mist Grove 2", ItemClassification.progression, "Sea"),
     StagesData(11032, "Unlock Mist Grove 3", ItemClassification.progression, "Sea"),
@@ -660,7 +689,7 @@ filler: List[FillerData] = [
     FillerData(12379, "Ice Spirit 2", ItemClassification.filler),
     FillerData(12381, "Ice Spirit 3", ItemClassification.filler),
     FillerData(12383, "Ice Spirit 4", ItemClassification.filler),
-    FillerData(12404, "Poison Spirit", ItemClassification.filler)
+    FillerData(12404, "Poison Spirit", ItemClassification.filler),
 ]
 
 traps: List[TrapItemData] = [

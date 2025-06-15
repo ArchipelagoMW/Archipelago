@@ -4,8 +4,7 @@ from typing import Set, Type
 from worlds.AutoWorld import AutoWorldRegister, World
 
 from ..Items import item_table
-from ..Locations import (books_table, enemies_table, location_name_to_id,
-                         stages_table)
+from ..Locations import books_table, enemies_table, location_name_to_id, stages_table
 from . import StickRangerTestBase
 
 
@@ -16,17 +15,25 @@ class StickRangerTest(StickRangerTestBase):
         for loc_table in (stages_table, books_table, enemies_table):
             for entry in loc_table.values():
                 name: str = entry["name"]
-                self.assertNotIn(name, all_locations, f"Duplicate location name: {name}")
+                self.assertNotIn(
+                    name, all_locations, f"Duplicate location name: {name}"
+                )
                 all_locations.add(name)
         # And check location_name_to_id keys
         for name in location_name_to_id:
-            self.assertIn(name, all_locations, f"Location name in location_name_to_id missing from tables: {name}")
+            self.assertIn(
+                name,
+                all_locations,
+                f"Location name in location_name_to_id missing from tables: {name}",
+            )
 
     def test_items_classification_and_contiguity(self) -> None:
         """Ensure item codes are unique, positive, and contiguous within expected ranges."""
         codes: Set[int] = set()
         for item in item_table.values():
-            self.assertGreater(item.code, 0, f"Item code for {item.item_name} not positive")
+            self.assertGreater(
+                item.code, 0, f"Item code for {item.item_name} not positive"
+            )
             self.assertNotIn(item.code, codes, f"Duplicate item code: {item.code}")
             codes.add(item.code)
 
@@ -34,7 +41,9 @@ class StickRangerTest(StickRangerTestBase):
         """Ensure stage and book names are unique and do not overlap with each other or enemies."""
         all_names: Set[str] = set(stages_table)
         for name in books_table:
-            self.assertNotIn(name, all_names, f"Book location overlaps with stage: {name}")
+            self.assertNotIn(
+                name, all_names, f"Book location overlaps with stage: {name}"
+            )
             all_names.add(name)
         for name in enemies_table:
             self.assertNotIn(name, all_names, f"Enemy location overlaps: {name}")

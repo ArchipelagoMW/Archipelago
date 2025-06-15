@@ -6,12 +6,14 @@ from BaseClasses import Location
 class SRLocation(Location):
     game: str = "Stick Ranger"
 
+
 class LocationDict(TypedDict, total=False):
     name: str
     region: str
 
+
 stages_table: Dict[int, LocationDict] = {
-   #10000: {"name": "Town: Exit", "region": "Town"},
+    # 10000: {"name": "Town: Exit", "region": "Town"},
     10001: {"name": "Opening Street: Exit", "region": "Opening Street"},
     10002: {"name": "Grassland 1: Exit", "region": "Grassland 1"},
     10003: {"name": "Grassland 2: Exit", "region": "Grassland 2"},
@@ -31,7 +33,7 @@ stages_table: Dict[int, LocationDict] = {
     10017: {"name": "Cavern 1: Exit", "region": "Cavern 1"},
     10018: {"name": "Cavern 2: Exit", "region": "Cavern 2"},
     10019: {"name": "Cavern 3: Exit", "region": "Cavern 3"},
-   #10020: {"name": "Village: Exit", "region": "Village"},
+    # 10020: {"name": "Village: Exit", "region": "Village"},
     10021: {"name": "Seaside 1: Exit", "region": "Seaside 1"},
     10022: {"name": "Seaside 2: Exit", "region": "Seaside 2"},
     10023: {"name": "Seaside 3: Exit", "region": "Seaside 3"},
@@ -58,7 +60,7 @@ stages_table: Dict[int, LocationDict] = {
     10044: {"name": "Beach 1: Exit", "region": "Beach 1"},
     10045: {"name": "Beach 2: Exit", "region": "Beach 2"},
     10046: {"name": "Beach 3: Exit", "region": "Beach 3"},
-   #10047: {"name": "Resort: Exit", "region": "Resort"},
+    # 10047: {"name": "Resort: Exit", "region": "Resort"},
     10048: {"name": "Cavern 4: Exit", "region": "Cavern 4"},
     10049: {"name": "Cavern 5: Exit", "region": "Cavern 5"},
     10050: {"name": "Cavern 6: Exit", "region": "Cavern 6"},
@@ -81,14 +83,14 @@ stages_table: Dict[int, LocationDict] = {
     10067: {"name": "Forest 4: Exit", "region": "Forest 4"},
     10068: {"name": "Forest 5: Exit", "region": "Forest 5"},
     10069: {"name": "Forest 6: Exit", "region": "Forest 6"},
-   #10070: {"name": "Forget Tree: Exit", "region": "Forget Tree"},
+    # 10070: {"name": "Forget Tree: Exit", "region": "Forget Tree"},
     10071: {"name": "!!!: Exit", "region": "!!!"},
     10072: {"name": "Hell 1: Exit", "region": "Hell 1"},
     10073: {"name": "Hell 2: Exit", "region": "Hell 2"},
     10074: {"name": "Hell 3: Exit", "region": "Hell 3"},
     10075: {"name": "Hell 4: Exit", "region": "Hell 4"},
     10076: {"name": "Hell 5: Exit", "region": "Hell 5"},
-   #10077: {"name": "Island: Exit", "region": "Island"},
+    # 10077: {"name": "Island: Exit", "region": "Island"},
     10078: {"name": "Hell 6: Exit", "region": "Hell 6"},
     10079: {"name": "Inferno 1: Exit", "region": "Inferno 1"},
     10080: {"name": "Inferno 2: Exit", "region": "Inferno 2"},
@@ -104,7 +106,7 @@ stages_table: Dict[int, LocationDict] = {
 }
 
 books_table: Dict[int, LocationDict] = {
-   #10100: {"name": "Town: Book", "region": "Town"},
+    # 10100: {"name": "Town: Book", "region": "Town"},
     10101: {"name": "Opening Street: Book", "region": "Opening Street"},
     10102: {"name": "Grassland 1: Book", "region": "Grassland 1"},
     10103: {"name": "Grassland 2: Book", "region": "Grassland 2"},
@@ -124,7 +126,7 @@ books_table: Dict[int, LocationDict] = {
     10117: {"name": "Cavern 1: Book", "region": "Cavern 1"},
     10118: {"name": "Cavern 2: Book", "region": "Cavern 2"},
     10119: {"name": "Cavern 3: Book", "region": "Cavern 3"},
-   #10120: {"name": "Village: Book", "region": "Village"},
+    # 10120: {"name": "Village: Book", "region": "Village"},
     10121: {"name": "Seaside 1: Book", "region": "Seaside 1"},
     10122: {"name": "Seaside 2: Book", "region": "Seaside 2"},
     10123: {"name": "Seaside 3: Book", "region": "Seaside 3"},
@@ -151,7 +153,7 @@ books_table: Dict[int, LocationDict] = {
     10144: {"name": "Beach 1: Book", "region": "Beach 1"},
     10145: {"name": "Beach 2: Book", "region": "Beach 2"},
     10146: {"name": "Beach 3: Book", "region": "Beach 3"},
-   #10147: {"name": "Resort: Book", "region": "Resort"},
+    # 10147: {"name": "Resort: Book", "region": "Resort"},
     10148: {"name": "Cavern 4: Book", "region": "Cavern 4"},
     10149: {"name": "Cavern 5: Book", "region": "Cavern 5"},
     10150: {"name": "Cavern 6: Book", "region": "Cavern 6"},
@@ -174,14 +176,14 @@ books_table: Dict[int, LocationDict] = {
     10167: {"name": "Forest 4: Book", "region": "Forest 4"},
     10168: {"name": "Forest 5: Book", "region": "Forest 5"},
     10169: {"name": "Forest 6: Book", "region": "Forest 6"},
-   #10170: {"name": "Forget Tree: Book", "region": "Forget Tree"},
+    # 10170: {"name": "Forget Tree: Book", "region": "Forget Tree"},
     10171: {"name": "!!!: Book", "region": "!!!"},
     10172: {"name": "Hell 1: Book", "region": "Hell 1"},
     10173: {"name": "Hell 2: Book", "region": "Hell 2"},
     10174: {"name": "Hell 3: Book", "region": "Hell 3"},
     10175: {"name": "Hell 4: Book", "region": "Hell 4"},
     10176: {"name": "Hell 5: Book", "region": "Hell 5"},
-   #10177: {"name": "Island: Book", "region": "Island"},
+    # 10177: {"name": "Island: Book", "region": "Island"},
     10178: {"name": "Hell 6: Book", "region": "Hell 6"},
     10179: {"name": "Inferno 1: Book", "region": "Inferno 1"},
     10180: {"name": "Inferno 2: Book", "region": "Inferno 2"},
@@ -201,7 +203,10 @@ enemies_table: Dict[int, LocationDict] = {
     10201: {"name": "Opening Street: Cyan Smiley Walker", "region": "Opening Street"},
     10202: {"name": "Opening Street: Red Smiley Walker", "region": "Opening Street"},
     10203: {"name": "Opening Street: Blue X Walker", "region": "Opening Street"},
-    10204: {"name": "Opening Street: Grey Boss Smiley Walker", "region": "Opening Street"},
+    10204: {
+        "name": "Opening Street: Grey Boss Smiley Walker",
+        "region": "Opening Street",
+    },
     10205: {"name": "Grassland 1: Green Skull Snake", "region": "Grassland 1"},
     10206: {"name": "Grassland 1: Grey Smiley Snake", "region": "Grassland 1"},
     10207: {"name": "Grassland 1: Red Skull Snake", "region": "Grassland 1"},
@@ -237,19 +242,34 @@ enemies_table: Dict[int, LocationDict] = {
     10237: {"name": "Castle Gate: Orange Smiley Wheel", "region": "Castle Gate"},
     10238: {"name": "Castle Gate: White Boss Skull Stickman", "region": "Castle Gate"},
     10239: {"name": "Castle: Castle Boss", "region": "Castle"},
-   #10240 Castle Boss attack id
-    10241: {"name": "Hill Country 1: Green Big Smiley Walker", "region": "Hill Country 1"},
+    # 10240 Castle Boss attack id
+    10241: {
+        "name": "Hill Country 1: Green Big Smiley Walker",
+        "region": "Hill Country 1",
+    },
     10242: {"name": "Hill Country 1: Green Smiley Walker", "region": "Hill Country 1"},
     10243: {"name": "Hill Country 1: Brown X Walker", "region": "Hill Country 1"},
     10244: {"name": "Hill Country 1: White Boss X Walker", "region": "Hill Country 1"},
     10245: {"name": "Hill Country 2: Blue Big Skull Bat", "region": "Hill Country 2"},
     10246: {"name": "Hill Country 2: Blue Skull Bat", "region": "Hill Country 2"},
     10247: {"name": "Hill Country 2: Green Skull Tree", "region": "Hill Country 2"},
-    10248: {"name": "Hill Country 2: Orange Boss Skull Bat", "region": "Hill Country 2"},
-    10249: {"name": "Hill Country 3: Green Big Smiley Snake", "region": "Hill Country 3"},
-    10250: {"name": "Hill Country 3: Green Big Fairy Snake", "region": "Hill Country 3"},
+    10248: {
+        "name": "Hill Country 2: Orange Boss Skull Bat",
+        "region": "Hill Country 2",
+    },
+    10249: {
+        "name": "Hill Country 3: Green Big Smiley Snake",
+        "region": "Hill Country 3",
+    },
+    10250: {
+        "name": "Hill Country 3: Green Big Fairy Snake",
+        "region": "Hill Country 3",
+    },
     10251: {"name": "Hill Country 3: Pink Skull Tree", "region": "Hill Country 3"},
-    10252: {"name": "Hill Country 3: White Boss Smiley Snake", "region": "Hill Country 3"},
+    10252: {
+        "name": "Hill Country 3: White Boss Smiley Snake",
+        "region": "Hill Country 3",
+    },
     10253: {"name": "Lake: Tan Skull Fish", "region": "Lake"},
     10254: {"name": "Lake: Pink Skull Tree", "region": "Lake"},
     10255: {"name": "Lake: Green Smiley Fish", "region": "Lake"},
@@ -312,15 +332,21 @@ enemies_table: Dict[int, LocationDict] = {
     10312: {"name": "Submarine 4: Grey Big Mask Fish", "region": "Submarine 4"},
     10313: {"name": "Submarine 4: Grey Boss Mask Fish", "region": "Submarine 4"},
     10314: {"name": "Submarine Shrine: Shrine Boss", "region": "Submarine Shrine"},
-   #10315 Submarine Shrine Boss attack id
+    # 10315 Submarine Shrine Boss attack id
     10316: {"name": "Mist Grove 1: White Roundhead Mushroom", "region": "Mist Grove 1"},
     10317: {"name": "Mist Grove 1: White Roundhead Tree", "region": "Mist Grove 1"},
     10318: {"name": "Mist Grove 1: Green Gel Bat", "region": "Mist Grove 1"},
-    10319: {"name": "Mist Grove 1: White Boss Roundhead Mushroom", "region": "Mist Grove 1"},
+    10319: {
+        "name": "Mist Grove 1: White Boss Roundhead Mushroom",
+        "region": "Mist Grove 1",
+    },
     10320: {"name": "Mist Grove 2: Yellow Roundhead Bat", "region": "Mist Grove 2"},
     10321: {"name": "Mist Grove 2: Yellow Roundhead Dragon", "region": "Mist Grove 2"},
     10322: {"name": "Mist Grove 2: Orange Roundhead Tree", "region": "Mist Grove 2"},
-    10323: {"name": "Mist Grove 2: Orange Boss Roundhead Tree", "region": "Mist Grove 2"},
+    10323: {
+        "name": "Mist Grove 2: Orange Boss Roundhead Tree",
+        "region": "Mist Grove 2",
+    },
     10324: {"name": "Mist Grove 3: Green Gel Wheel", "region": "Mist Grove 3"},
     10325: {"name": "Mist Grove 3: Olive Roundhead Stickman", "region": "Mist Grove 3"},
     10326: {"name": "Mist Grove 3: Olive Star Mushroom", "region": "Mist Grove 3"},
@@ -360,7 +386,7 @@ enemies_table: Dict[int, LocationDict] = {
     10360: {"name": "Desert 7: Orange Diamond Snake", "region": "Desert 7"},
     10361: {"name": "Desert 7: Orange Boss Diamond Snake", "region": "Desert 7"},
     10362: {"name": "Pyramid: Pyramid Boss", "region": "Pyramid"},
-   #10363 Pyramid Boss attack id
+    # 10363 Pyramid Boss attack id
     10364: {"name": "Desert 8: Yellow Roundhead Spider", "region": "Desert 8"},
     10365: {"name": "Desert 8: Orange Big Roundhead Spider", "region": "Desert 8"},
     10366: {"name": "Desert 8: Grey Box Tree", "region": "Desert 8"},
@@ -427,7 +453,10 @@ enemies_table: Dict[int, LocationDict] = {
     10427: {"name": "Snowfield 6: Pink X Walker", "region": "Snowfield 6"},
     10428: {"name": "Snowfield 6: Orange X Walker", "region": "Snowfield 6"},
     10429: {"name": "Snowfield 6: Yellow Mask Tree", "region": "Snowfield 6"},
-    10430: {"name": "Snowfield 6: Orange Boss Castle Stickman", "region": "Snowfield 6"},
+    10430: {
+        "name": "Snowfield 6: Orange Boss Castle Stickman",
+        "region": "Snowfield 6",
+    },
     10431: {"name": "Snowfield 7: Blue Diamond Mushroom", "region": "Snowfield 7"},
     10432: {"name": "Snowfield 7: White Big Vampire Snake", "region": "Snowfield 7"},
     10433: {"name": "Snowfield 7: Orange Castle Snake", "region": "Snowfield 7"},
@@ -439,9 +468,12 @@ enemies_table: Dict[int, LocationDict] = {
     10439: {"name": "Frozen Lake: Blue Shield Copter", "region": "Frozen Lake"},
     10440: {"name": "Frozen Lake: White Big Fairy Snake", "region": "Frozen Lake"},
     10441: {"name": "Frozen Lake: Yellow Big Gel Tree", "region": "Frozen Lake"},
-    10442: {"name": "Frozen Lake: White Boss Vampire Mushroom", "region": "Frozen Lake"},
+    10442: {
+        "name": "Frozen Lake: White Boss Vampire Mushroom",
+        "region": "Frozen Lake",
+    },
     10443: {"name": "Ice Castle: Ice Castle Boss", "region": "Ice Castle"},
-   #10444 Ice Castle Boss attack id
+    # 10444 Ice Castle Boss attack id
     10445: {"name": "Snowfield 9: Grey Roundhead Tree", "region": "Snowfield 9"},
     10446: {"name": "Snowfield 9: White Roundhead Copter", "region": "Snowfield 9"},
     10447: {"name": "Snowfield 9: White Roundhead Walker", "region": "Snowfield 9"},
@@ -530,13 +562,13 @@ enemies_table: Dict[int, LocationDict] = {
     10530: {"name": "Hell Gate: Red X Walker", "region": "Hell Gate"},
     10531: {"name": "Hell Gate: White Boss Skull Stickman", "region": "Hell Gate"},
     10532: {"name": "Hell Castle: Hell Castle Boss", "region": "Hell Castle"},
-   #10533 Hell Castle Boss attack id
-   #10534 Hell Castle Boss attack id
-   #10535 Hell Castle Boss attack id
-   #10536 Hell Castle Boss attack id
-   #10537 Hell Castle Boss attack id
+    # 10533 Hell Castle Boss attack id
+    # 10534 Hell Castle Boss attack id
+    # 10535 Hell Castle Boss attack id
+    # 10536 Hell Castle Boss attack id
+    # 10537 Hell Castle Boss attack id
     10538: {"name": "Volcano: Yellow Boss Box Eel", "region": "Volcano"},
-   #10539 Map sign spawning
+    # 10539 Map sign spawning
 }
 
 location_table: Dict[int, LocationDict] = {}
@@ -545,8 +577,7 @@ location_table.update(books_table)
 location_table.update(enemies_table)
 
 location_name_to_id: Dict[str, int] = {
-    value["name"]: id
-    for id, value in location_table.items()
+    value["name"]: id for id, value in location_table.items()
 }
 
 lookup_id_to_name: Dict[int, str] = {
