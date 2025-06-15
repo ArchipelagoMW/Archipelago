@@ -479,6 +479,7 @@ def restricted_dumps(obj: Any) -> bytes:
 
     return s
 
+
 class ByValue:
     """
     Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
