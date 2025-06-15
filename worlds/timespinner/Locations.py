@@ -92,15 +92,15 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Military Fortress (hangar)', 'Military Fortress: Pedestal',  1337065, lambda state: state.has('Water Mask', player) if flooded.flood_lab else (logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state))),
         LocationData('The lab', 'Lab: Coffee break',  1337066),
         LocationData('The lab', 'Lab: Lower trash right',  1337067, logic.has_doublejump),
-        LocationData('The lab', 'Lab: Lower trash left',  1337068, logic.has_upwarddash),
+        LocationData('The lab', 'Lab: Lower trash left',  1337068, lambda state: logic.has_doublejump_of_npc(state) if options.lock_key_amadeus else logic.has_upwarddash(state) ),
         LocationData('The lab', 'Lab: Below lab entrance',  1337069, logic.has_doublejump),
-        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070),
-        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071),
+        LocationData('The lab (power off)', 'Lab: Trash jump room',  1337070, lambda state: not options.lock_key_amadeus or logic.has_doublejump_of_npc(state) ),
+        LocationData('The lab (power off)', 'Lab: Dynamo Works',  1337071, lambda state: not options.lock_key_amadeus or (state.has_all(('Lab Access Research', 'Lab Access Dynamo'), player)) ),
         LocationData('The lab (upper)', 'Lab: Genza (Blob Mom)',  1337072),
-        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073),
+        LocationData('The lab (power off)', 'Lab: Experiment #13',  1337073, lambda state: not options.lock_key_amadeus or state.has('Lab Access Experiment', player) ),
         LocationData('The lab (upper)', 'Lab: Download and chest room chest',  1337074),
         LocationData('The lab (upper)', 'Lab: Lab secret',  1337075, logic.can_break_walls),
-        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, logic.has_keycard_A),
+        LocationData('The lab (power off)', 'Lab: Spider Hell',  1337076, lambda state: logic.has_keycard_A(state) and not options.lock_key_amadeus or state.has('Lab Access Research', player)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard bottom chest',  1337077),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard floor secret',  1337078, lambda state: logic.has_upwarddash(state) and logic.can_break_walls(state)),
         LocationData('Emperors tower', 'Emperor\'s Tower: Courtyard upper chest',  1337079, lambda state: logic.has_upwarddash(state)),
@@ -150,10 +150,10 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Jackpot room chest 3',  1337118, lambda state: flooded.flood_maw or logic.has_forwarddash_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Jackpot room chest 4',  1337119, lambda state: flooded.flood_maw or logic.has_forwarddash_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Pedestal',  1337120, lambda state: not flooded.flood_maw or state.has('Water Mask', player)),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Last chance before Maw',  1337121, lambda state: state.has('Water Mask', player) if flooded.flood_maw else logic.has_doublejump(state)),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Plasma Crystal', 1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) and (not flooded.flood_maw or state.has('Water Mask', player))),
-        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player) and (not flooded.flood_maw or state.has('Water Mask', player))),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Mineshaft',  1337122, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) and (not flooded.flood_maw or state.has('Water Mask', player))),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Last chance before Maw',  1337121, lambda state: flooded.flood_maw or logic.has_doublejump(state)),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Plasma Crystal', 1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
+        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Mineshaft',  1337122, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Siren room above water chest',  1337124),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Siren room underwater left chest',  1337125, lambda state: state.has('Water Mask', player)),
@@ -214,11 +214,11 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Library top', 'Library: Backer room terminal (Vandagray Metropolis Map)',  1337163, lambda state: state.has('Tablet', player)),
             LocationData('Varndagroth tower right (elevator)', 'Varndagroth Towers (Right): Medbay terminal (Bleakness Research)',  1337164, lambda state: state.has('Tablet', player) and logic.has_keycard_B(state)),
             LocationData('The lab (upper)', 'Lab: Download and chest room terminal (Experiment #13)',  1337165, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player)),
+            LocationData('The lab (power off)', 'Lab: Middle terminal (Amadeus Laboratory Map)',  1337166, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Research', player))),
+            LocationData('The lab (power off)', 'Lab: Sentry platform terminal (Origins)',  1337167, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Genza', player) or logic.can_teleport_to(state, "Time", "GateDadsTower"))),
             LocationData('The lab', 'Lab: Experiment 13 terminal (W.R.E.C Farewell)',  1337168, lambda state: state.has('Tablet', player)),
             LocationData('The lab', 'Lab: Left terminal (Biotechnology)',  1337169, lambda state: state.has('Tablet', player)),
-            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player))
+            LocationData('The lab (power off)', 'Lab: Right terminal (Experiment #11)',  1337170, lambda state: state.has('Tablet', player) and (not options.lock_key_amadeus or state.has('Lab Access Research', player)))
         )
 
     # 1337176 - 1337176 Cantoran
@@ -251,10 +251,20 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Aelana Boss (Stained Letter)',  1337196),
             LocationData('Royal towers', 'Royal Towers: Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: flooded.flood_courtyard or logic.has_doublejump_of_npc(state)),
-            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198, lambda state: not flooded.flood_maw or state.has('Water Mask', player))
+            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198)
         )
 
-    # 1337199 - 1337236 Reserved for future use
+    # 1337199 - 1337232 Reserved for future use
+
+    # 1337233 - 1337235 Pyramid Start checks
+    if not options or options.pyramid_start: 
+        location_table += (
+            LocationData('Ancient Pyramid (entrance)', 'Dark Forest: Training Dummy',  1337233),
+            LocationData('Ancient Pyramid (entrance)', 'Temporal Gyre: Forest Entrance',  1337234, lambda state: logic.has_upwarddash(state) or logic.can_teleport_to(state, "Time", "GateGyre")),
+            LocationData('Ancient Pyramid (entrance)', 'Ancient Pyramid: Rubble',  1337235),
+        )
+
+    # 1337236 Nightmare door
 
     # 1337237 - 1337245 GyreArchives
     if not options or options.gyre_archives:

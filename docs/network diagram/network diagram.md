@@ -117,9 +117,6 @@ flowchart LR
     %% Java Based Games
     subgraph Java
         JM[Mod with Archipelago.MultiClient.Java]
-        STS[Slay the Spire]
-        JM <-- Mod the Spire --> STS
-        JM <-- Forge Mod Loader --> MCS
     end
     AS <-- WebSockets --> JM
 
