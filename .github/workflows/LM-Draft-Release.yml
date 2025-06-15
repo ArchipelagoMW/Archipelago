@@ -80,14 +80,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lib-windows
-          path: ${{github.workspace}}/worlds/luigismansion/lib/
+          path: worlds/luigismansion/lib/
+
+      - run: echo "Windows Deps"
+      - run: ls worlds/luigismansion/lib/
         
       - name: Download Linux Deps
         id: dl-lin-deps
         uses: actions/download-artifact@v4
         with:
           name: lib-linux
-          path: ${{github.workspace}}/worlds/luigismansion/lib/
+          path: worlds/luigismansion/lib/
+
+      - run: echo "Windows + Linux Deps"
+      - run: ls worlds/luigismansion/lib/
       
       - name: Creates the LM APWorld
         id: apworld
