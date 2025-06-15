@@ -17,7 +17,7 @@ jobs:
     - name: Create Lib-Windows
       run: mkdir lib-windows
     - name: Install Windows-Deps
-      run: pip install -r ${{GITHUB_WORKSPACE}}/worlds/luigismansion/requirements.txt --target ./lib-windows
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows
     - name: Zip Lib-Windows
       run: |
         Compress-Archive -Path ./lib-windows -DestinationPath ./lib-windows.zip
@@ -37,7 +37,7 @@ jobs:
     - name: Create Lib-Linux
       run: mkdir lib-linux
     - name: Install Linux-Deps
-      run: pip install -r ${{GITHUB_WORKSPACE}}/luigismansion/requirements.txt --target ./lib-linux
+      run: pip install -r ${{github.workspace}}/luigismansion/requirements.txt --target ./lib-linux
     - name: Zip Lib-Linux
       run: zip -r lib-linux.zip ./lib-linux
     - uses: actions/upload-artifact@v4
@@ -76,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Create Main Lib
-        run: mkdir ${{GITHUB_WORKSPACE}}/worlds/luigismansion/lib
+        run: mkdir ${{github.workspace}}/worlds/luigismansion/lib
 
       - name: Download Windows Deps
         id: dl-win-deps
@@ -84,7 +84,7 @@ jobs:
         with:
           name: lib-windows
       - name: Unzip Windows directory
-        run: unzip -o -d ${{GITHUB_WORKSPACE}}/luigismansion/lib ${{steps.dl-win-deps.outputs.dl-win-deps}}
+        run: unzip -o -d ${{github.workspace}}/luigismansion/lib ${{steps.dl-win-deps.outputs.dl-win-deps}}
         
       - name: Download Linux Deps
         id: dl-lin-deps
@@ -92,7 +92,7 @@ jobs:
         with:
           name: lib-linux
       - name: Unzip Linux directory
-        run: unzip -o -d ${{GITHUB_WORKSPACE}}/luigismansion/lib ${{steps.dl-lin-deps.outputs.dl-lin-deps}}
+        run: unzip -o -d ${{github.workspace}}/luigismansion/lib ${{steps.dl-lin-deps.outputs.dl-lin-deps}}
       
       - name: Creates the LM APWorld
         id: apworld
@@ -109,7 +109,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lib
-          path: ${{GITHUB_WORKSPACE}}/luigismansion/lib/lib.zip
+          path: ${{github.workspace}}/luigismansion/lib/lib.zip
 
   publish:
     runs-on: ubuntu-latest
