@@ -67,8 +67,7 @@ jobs:
         yamls-per-run: 3
 
   package:
-    # needs: [fuzz]
-    needs: [windows-deps, linux-deps]
+    needs: [fuzz]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,14 +79,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lib-windows
-          path: ${{github.workspace}}/worlds/luigismansion/lib
+          path: ${{github.workspace}}/worlds/luigismansion/lib/
         
       - name: Download Linux Deps
         id: dl-lin-deps
         uses: actions/download-artifact@v4
         with:
           name: lib-linux
-          path: ${{github.workspace}}/worlds/luigismansion/lib
+          path: ${{github.workspace}}/worlds/luigismansion/lib/
       
       - name: Creates the LM APWorld
         id: apworld
