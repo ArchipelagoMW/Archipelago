@@ -24,6 +24,8 @@ def __get_item_name(item_data, slot: int):
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
     elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bars" in item_data["name"]:
+        if item_data["type"] == "Freestanding":
+            return "nothing" # Do not spawn the money physically let it be handled remotely
         return "money"
 
     match item_data["name"]:
@@ -46,14 +48,24 @@ def __get_item_name(item_data, slot: int):
             return "mstar"
 
         case "Gold Diamond":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "rdiamond"
         case "Sapphire":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "sapphire"
         case "Emerald":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "emerald"
         case "Ruby":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "ruby"
         case "Diamond":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "diamond"
 
         case "Poison Mushroom":
