@@ -769,7 +769,7 @@ def adjust_gui():
         main_window_tooltip.bind_widget(
             label,
             balloonmsg=f"{balloonMessage}"
-                       + {'\n{}'.format(errors) if has_error else blue_balloon_message if is_different_from_rom else ''}
+                       + '\n{}'.format(errors) if has_error else blue_balloon_message if is_different_from_rom else ''
                        + f"{bold_balloon_message if is_different_from_data else ''}"
         )
         update_field_validity(field, not has_error)
