@@ -18,16 +18,13 @@ jobs:
       run: mkdir lib-windows
     - name: Install Windows-Deps
       run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows
-    - name: Zip Lib-Windows
-      run: |
-        Compress-Archive -Path ./lib-windows -DestinationPath ./lib-windows.zip
     - uses: actions/upload-artifact@v4
       with:
         name: lib-windows
-        path: ./lib-windows.zip
+        path: ./lib-windows
   
   linux-deps:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-python@v5
@@ -38,14 +35,13 @@ jobs:
       run: mkdir lib-linux
     - name: Install Linux-Deps
       run: pip install -r ${{github.workspace}}/luigismansion/requirements.txt --target ./lib-linux
-    - name: Zip Lib-Linux
-      run: zip -r lib-linux.zip ./lib-linux
     - uses: actions/upload-artifact@v4
       with:
         name: lib-linux
-        path: ./lib-linux.zip
+        path: ./lib-linux
 
   fuzz:
+    needs: [windows-deps, linux-deps]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -71,7 +67,7 @@ jobs:
         yamls-per-run: 3
 
   package:
-    needs: [windows-deps, linux-deps, fuzz]
+    needs: [fuzz]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -104,12 +100,11 @@ jobs:
           name: apworld
           path: ${{ steps.apworld.outputs.apworld }}
 
-      - name: Zip Main Lib
-        run: zip -r lib.zip worlds/luigismansion/lib
-      - uses: actions/upload-artifact@v4
+      - name: Zip Lib folder
+        uses: actions/upload-artifact@v4
         with:
           name: lib
-          path: ${{github.workspace}}/luigismansion/lib/lib.zip
+          path: ${{github.workspace}}/luigismansion/lib
 
   publish:
     runs-on: ubuntu-latest
