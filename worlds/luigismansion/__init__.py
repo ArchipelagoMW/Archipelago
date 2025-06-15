@@ -11,6 +11,7 @@ from yaml import CDumper as Dumper
 import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
+from CommonClient import logger
 from Utils import visualize_regions, local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
@@ -537,6 +538,7 @@ class LMWorld(World):
             self.origin_region_name = passthrough["spawn_region"]  # this should be the same region from slot data
         elif self.options.random_spawn.value > 0:
             self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
+        logger.info("Spawn Region for " + self.player_name + " is: " + self.origin_region_name)
 
         if self.using_ut:
             # We know we're in second gen
