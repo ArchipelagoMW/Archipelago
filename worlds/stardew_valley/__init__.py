@@ -7,6 +7,7 @@ import entrance_rando
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
 from .content import StardewContent, create_content
@@ -34,6 +35,7 @@ STARDEW_VALLEY = "Stardew Valley"
 UNIVERSAL_TRACKER_SEED_PROPERTY = "ut_seed"
 
 client_version = 0
+TRACKER_ENABLED = True
 
 
 class StardewLocation(Location):
@@ -59,6 +61,29 @@ class StardewWebWorld(WebWorld):
             "setup/en",
             ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
         )]
+
+
+if TRACKER_ENABLED:
+    from .. import user_folder
+    import os
+
+    # Best effort to detect if universal tracker is installed
+    if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
+        def launch_client():
+            from .client import launch
+            launch_subprocess(launch, name="Stardew Valley Tracker")
+
+
+        components.append(Component(
+            "Stardew Valley Tracker",
+            func=launch_client,
+            component_type=Type.CLIENT,
+            icon='stardew',
+            description="A Stardew Valley text client integrated with Universal Tracker\n"
+                        " supporting specific commands to query the logic",
+        ))
+
+        icon_paths['stardew'] = f"ap:{__name__}/stardew.png"
 
 
 class StardewValleyWorld(World):
