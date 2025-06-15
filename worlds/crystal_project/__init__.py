@@ -8,14 +8,16 @@ from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys
+    set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
+    region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, MultiWorld
+from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
+
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -52,6 +54,7 @@ class CrystalProjectWorld(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
+        self.starter_region: str
         self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs:int = 0
@@ -92,6 +95,21 @@ class CrystalProjectWorld(World):
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
             logging.getLogger().info(message.format(self.options.newWorldStoneJobQuantity.value, jobs_earnable, self.player_name))
             self.options.newWorldStoneJobQuantity.value = jobs_earnable
+
+        # pick one region to give a starting pass to and then save that later
+        if self.options.regionsanity.value == self.options.regionsanity.option_true:
+            initially_reachable_regions = []
+            # Generate a collection state that is a copy of the current state but also has all the passes so we can
+            # check what regions we can access without just getting told none because we have no passes
+            all_passes_state: CollectionState = CollectionState(self.multiworld)
+            for region_pass in self.item_name_groups[PASS]:
+                all_passes_state.collect(self.create_item(region_pass))
+            for region in self.get_regions():
+                if region.can_reach(all_passes_state) and region.name != MENU:
+                    initially_reachable_regions.append(region)
+            self.starter_region = self.random.choice(initially_reachable_regions).name
+            self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
+
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -232,6 +250,13 @@ class CrystalProjectWorld(World):
             excluded_items.add(WEAVER_JOB)
             excluded_items.add(MIMIC_JOB)
 
+        #regionsanity items
+        if self.options.regionsanity.value == self.options.regionsanity.option_false:
+            for region_pass in self.item_name_groups[PASS]:
+                excluded_items.add(region_pass)
+        else:
+            excluded_items.add(region_name_to_pass_dict[self.starter_region])
+
         return excluded_items
 
     def get_item_pool(self, excluded_items: Set[str]) -> List[Item]:
@@ -332,6 +357,7 @@ class CrystalProjectWorld(World):
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
             "shopsanity": self.options.shopsanity.value,
+            "regionsanity": bool(self.options.regionsanity.value),
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
         }

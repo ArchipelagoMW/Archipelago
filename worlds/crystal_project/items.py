@@ -9,6 +9,8 @@ from .constants.mounts import *
 from .constants.scholar_abilities import *
 from .constants.summons import *
 from .constants.teleport_stones import *
+from .constants.region_passes import *
+from .constants.regions import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
@@ -185,6 +187,74 @@ item_table: Dict[str, ItemData] = {
     SPECIAL_ROTTEN_SALMON: ItemData(ITEM, 232 + item_index_offset, ItemClassification.progression, 0, 1),
     DEITY_EYE: ItemData(ITEM, 176 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
     STEM_WARD: ItemData(ITEM, 177 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
+
+    #Passes for Regionsanity
+    SPAWNING_MEADOWS_PASS : ItemData(PASS, 901 + item_index_offset, ItemClassification.progression, 1),
+    DELENDE_PASS : ItemData(PASS, 902 + item_index_offset, ItemClassification.progression, 1),
+    SOILED_DEN_PASS : ItemData(PASS, 903 + item_index_offset, ItemClassification.progression, 1),
+    THE_PALE_GROTTO_PASS : ItemData(PASS, 904 + item_index_offset, ItemClassification.progression, 1),
+    SEASIDE_CLIFFS_PASS : ItemData(PASS, 905 + item_index_offset, ItemClassification.progression, 1),
+    DRAFT_SHAFT_CONDUIT_PASS : ItemData(PASS, 906 + item_index_offset, ItemClassification.progression, 1),
+    MERCURY_SHRINE_PASS : ItemData(PASS, 907 + item_index_offset, ItemClassification.progression, 1),
+    YAMAGAWA_MA_PASS : ItemData(PASS, 908 + item_index_offset, ItemClassification.progression, 1),
+    PROVING_MEADOWS_PASS : ItemData(PASS, 909 + item_index_offset, ItemClassification.progression, 1),
+    SKUMPARADISE_PASS : ItemData(PASS, 910 + item_index_offset, ItemClassification.progression, 1),
+    #Advanced
+    CAPITAL_SEQUOIA_PASS : ItemData(PASS, 911 + item_index_offset, ItemClassification.progression, 0, 1),
+    JOJO_SEWERS_PASS : ItemData(PASS, 912 + item_index_offset, ItemClassification.progression, 0, 1),
+    BOOMER_SOCIETY_PASS : ItemData(PASS, 913 + item_index_offset, ItemClassification.progression, 0, 1),
+    ROLLING_QUINTAR_FIELDS_PASS : ItemData(PASS, 914 + item_index_offset, ItemClassification.progression, 0, 1),
+    QUINTAR_NEST_PASS : ItemData(PASS, 915 + item_index_offset, ItemClassification.progression, 0, 1),
+    QUINTAR_SANCTUM_PASS : ItemData(PASS, 916 + item_index_offset, ItemClassification.progression, 0, 1),
+    CAPITAL_JAIL_PASS : ItemData(PASS, 917 + item_index_offset, ItemClassification.progression, 0, 1),
+    CAPITAL_PIPELINE_PASS : ItemData(PASS, 918 + item_index_offset, ItemClassification.progression, 0, 1),
+    COBBLESTONE_CRAG_PASS : ItemData(PASS, 919 + item_index_offset, ItemClassification.progression, 0, 1),
+    OKIMOTO_NS_PASS : ItemData(PASS, 920 + item_index_offset, ItemClassification.progression, 0, 1),
+    GREENSHIRE_REPRISE_PASS : ItemData(PASS, 921 + item_index_offset, ItemClassification.progression, 0, 1),
+    SALMON_PASS_PASS : ItemData(PASS, 922 + item_index_offset, ItemClassification.progression, 0, 1),
+    SALMON_RIVER_PASS : ItemData(PASS, 923 + item_index_offset, ItemClassification.progression, 0, 1),
+    SHOUDU_WATERFRONT_PASS : ItemData(PASS, 924 + item_index_offset, ItemClassification.progression, 0, 1),
+    POKO_POKO_DESERT_PASS : ItemData(PASS, 925 + item_index_offset, ItemClassification.progression, 0, 1),
+    SARA_SARA_BAZAAR_PASS : ItemData(PASS, 926 + item_index_offset, ItemClassification.progression, 0, 1),
+    SARA_SARA_BEACH_EAST_PASS : ItemData(PASS, 927 + item_index_offset, ItemClassification.progression, 0, 1),
+    SARA_SARA_BEACH_WEST_PASS : ItemData(PASS, 928 + item_index_offset, ItemClassification.progression, 0, 1),
+    ANCIENT_RESERVOIR_PASS : ItemData(PASS, 929 + item_index_offset, ItemClassification.progression, 0, 1),
+    IBEK_CAVE_PASS : ItemData(PASS, 930 + item_index_offset, ItemClassification.progression, 0, 1),
+    SALMON_BAY_PASS : ItemData(PASS, 931 + item_index_offset, ItemClassification.progression, 0, 1),
+    #Expert
+    THE_OPEN_SEA_PASS : ItemData(PASS, 932 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SHOUDU_PROVINCE_PASS : ItemData(PASS, 933 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    THE_UNDERCITY_PASS : ItemData(PASS, 934 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    GANYMEDE_SHRINE_PASS : ItemData(PASS, 935 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    BEAURIOR_VOLCANO_PASS : ItemData(PASS, 936 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    BEAURIOR_ROCK_PASS : ItemData(PASS, 937 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    LAKE_DELENDE_PASS : ItemData(PASS, 938 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    QUINTAR_RESERVE_PASS : ItemData(PASS, 939 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    DIONE_SHRINE_PASS : ItemData(PASS, 940 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    QUINTAR_MAUSOLEUM_PASS : ItemData(PASS, 941 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    EASTERN_CHASM_PASS : ItemData(PASS, 942 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    TALL_TALL_HEIGHTS_PASS : ItemData(PASS, 943 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    NORTHERN_CAVE_PASS : ItemData(PASS, 944 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    LANDS_END_PASS : ItemData(PASS, 945 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SLIP_GLIDE_RIDE_PASS : ItemData(PASS, 946 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SEQUOIA_ATHENAEUM_PASS : ItemData(PASS, 947 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    NORTHERN_STRETCH_PASS : ItemData(PASS, 948 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    CASTLE_RAMPARTS_PASS : ItemData(PASS, 949 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    THE_CHALICE_OF_TAR_PASS : ItemData(PASS, 950 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    FLYERS_CRAG_PASS : ItemData(PASS, 951 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_TANGLE_PASS : ItemData(PASS, 952 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_EACLANEYA_PASS : ItemData(PASS, 953 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    THE_DEEP_SEA_PASS : ItemData(PASS, 954 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    NEPTUNE_SHRINE_PASS : ItemData(PASS, 955 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JADE_CAVERN_PASS : ItemData(PASS, 956 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    CONTINENTAL_TRAM_PASS : ItemData(PASS, 957 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    #End Game
+    ANCIENT_LABYRINTH_PASS : ItemData(PASS, 958 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    THE_SEQUOIA_PASS : ItemData(PASS, 959 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    THE_DEPTHS_PASS : ItemData(PASS, 960 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    CASTLE_SEQUOIA_PASS : ItemData(PASS, 961 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    THE_OLD_WORLD_PASS : ItemData(PASS, 962 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
+    THE_NEW_WORLD_PASS : ItemData(PASS, 963 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
 
     #Animal mount summons
     PROGRESSIVE_QUINTAR_WOODWIND: ItemData(MOUNT, 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
@@ -1619,6 +1689,76 @@ singleton_keys: Tuple[str, ...] = (
     RAMPART_KEY,
     FORGOTTEN_KEY
 )
+
+region_name_to_pass_dict: Dict[str, str] = {
+    #Beginner
+    SPAWNING_MEADOWS: SPAWNING_MEADOWS_PASS,
+    DELENDE: DELENDE_PASS,
+    SOILED_DEN: SOILED_DEN_PASS,
+    THE_PALE_GROTTO: THE_PALE_GROTTO_PASS,
+    SEASIDE_CLIFFS: SEASIDE_CLIFFS_PASS,
+    DRAFT_SHAFT_CONDUIT: DRAFT_SHAFT_CONDUIT_PASS,
+    MERCURY_SHRINE: MERCURY_SHRINE_PASS,
+    YAMAGAWA_MA: YAMAGAWA_MA_PASS,
+    PROVING_MEADOWS: PROVING_MEADOWS_PASS,
+    SKUMPARADISE: SKUMPARADISE_PASS,
+    #Advanced
+    CAPITAL_SEQUOIA: CAPITAL_SEQUOIA_PASS,
+    JOJO_SEWERS: JOJO_SEWERS_PASS,
+    BOOMER_SOCIETY: BOOMER_SOCIETY_PASS,
+    ROLLING_QUINTAR_FIELDS: ROLLING_QUINTAR_FIELDS_PASS,
+    QUINTAR_NEST: QUINTAR_NEST_PASS,
+    QUINTAR_SANCTUM: QUINTAR_SANCTUM_PASS,
+    CAPITAL_JAIL: CAPITAL_JAIL_PASS,
+    CAPITAL_PIPELINE: CAPITAL_PIPELINE_PASS,
+    COBBLESTONE_CRAG: COBBLESTONE_CRAG_PASS,
+    OKIMOTO_NS: OKIMOTO_NS_PASS,
+    GREENSHIRE_REPRISE: GREENSHIRE_REPRISE_PASS,
+    SALMON_PASS: SALMON_PASS_PASS,
+    SALMON_RIVER: SALMON_RIVER_PASS,
+    SHOUDU_WATERFRONT: SHOUDU_WATERFRONT_PASS,
+    POKO_POKO_DESERT: POKO_POKO_DESERT_PASS,
+    SARA_SARA_BAZAAR: SARA_SARA_BAZAAR_PASS,
+    SARA_SARA_BEACH_EAST: SARA_SARA_BEACH_EAST_PASS,
+    SARA_SARA_BEACH_WEST: SARA_SARA_BEACH_WEST_PASS,
+    ANCIENT_RESERVOIR: ANCIENT_RESERVOIR_PASS,
+    IBEK_CAVE: IBEK_CAVE_PASS,
+    SALMON_BAY: SALMON_BAY_PASS,
+    #Expert
+    THE_OPEN_SEA: THE_OPEN_SEA_PASS,
+    SHOUDU_PROVINCE: SHOUDU_PROVINCE_PASS,
+    THE_UNDERCITY: THE_UNDERCITY_PASS,
+    GANYMEDE_SHRINE: GANYMEDE_SHRINE_PASS,
+    BEAURIOR_VOLCANO: BEAURIOR_VOLCANO_PASS,
+    BEAURIOR_ROCK: BEAURIOR_ROCK_PASS,
+    LAKE_DELENDE: LAKE_DELENDE_PASS,
+    QUINTAR_RESERVE: QUINTAR_RESERVE_PASS,
+    DIONE_SHRINE: DIONE_SHRINE_PASS,
+    QUINTAR_MAUSOLEUM: QUINTAR_MAUSOLEUM_PASS,
+    EASTERN_CHASM: EASTERN_CHASM_PASS,
+    TALL_TALL_HEIGHTS: TALL_TALL_HEIGHTS_PASS,
+    NORTHERN_CAVE: NORTHERN_CAVE_PASS,
+    LANDS_END: LANDS_END_PASS,
+    SLIP_GLIDE_RIDE: SLIP_GLIDE_RIDE_PASS,
+    SEQUOIA_ATHENAEUM: SEQUOIA_ATHENAEUM_PASS,
+    NORTHERN_STRETCH: NORTHERN_STRETCH_PASS,
+    CASTLE_RAMPARTS: CASTLE_RAMPARTS_PASS,
+    THE_CHALICE_OF_TAR: THE_CHALICE_OF_TAR_PASS,
+    FLYERS_CRAG: FLYERS_CRAG_PASS,
+    JIDAMBA_TANGLE: JIDAMBA_TANGLE_PASS,
+    JIDAMBA_EACLANEYA: JIDAMBA_EACLANEYA_PASS,
+    THE_DEEP_SEA: THE_DEEP_SEA_PASS,
+    NEPTUNE_SHRINE: NEPTUNE_SHRINE_PASS,
+    JADE_CAVERN: JADE_CAVERN_PASS,
+    CONTINENTAL_TRAM: CONTINENTAL_TRAM_PASS,
+    #End Game
+    ANCIENT_LABYRINTH: ANCIENT_LABYRINTH_PASS,
+    THE_SEQUOIA: THE_SEQUOIA_PASS,
+    THE_DEPTHS: THE_DEPTHS_PASS,
+    CASTLE_SEQUOIA: CASTLE_SEQUOIA_PASS,
+    THE_OLD_WORLD: THE_OLD_WORLD_PASS,
+    THE_NEW_WORLD: THE_NEW_WORLD_PASS,
+}
 
 filler_items: Tuple[str, ...] = (
     "Item - Tonic",

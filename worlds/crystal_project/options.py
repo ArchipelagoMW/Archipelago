@@ -135,6 +135,14 @@ class Shopsanity(Choice):
     option_enabled_and_hint = 2
     default = 0
 
+class Regionsanity(Toggle):
+    """
+    When enabled, all locations in a zone will not be completeable until you have discovered the "pass" for a region (i.e. "Item - Spawning Meadows Pass")
+
+    You will start the game with a pass for a zone which can be reached without any items.
+    """
+    display_name = "Regionsanity"
+
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
     """
@@ -241,6 +249,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     startingJobQuantity: StartingJobQuantity
     killBossesMode: KillBossesMode
     shopsanity: Shopsanity
+    regionsanity: Regionsanity
     includedRegions: IncludedRegions
     progressiveMountMode: ProgressiveMountMode
     levelGating: LevelGating
@@ -256,7 +265,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelUpsInPool, EasyLeveling, KeyMode],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic]
