@@ -5,6 +5,7 @@ import random
 import tempfile
 import zipfile
 from collections import Counter
+from pickle import PicklingError
 from typing import Any, Dict, List, Optional, Union, Set
 
 from flask import flash, redirect, render_template, request, session, url_for
@@ -82,12 +83,18 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
               f"If you have a larger group, please generate it yourself and upload it.")
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
-        gen = Generation(
-            options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
-            # convert to json compatible
-            meta=json.dumps(meta),
-            state=STATE_QUEUED,
-            owner=session["_id"])
+        try:
+            gen = Generation(
+                options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
+                # convert to json compatible
+                meta=json.dumps(meta),
+                state=STATE_QUEUED,
+                owner=session["_id"])
+        except PicklingError as e:
+            from .autolauncher import handle_generation_failure
+            handle_generation_failure(e)
+            return render_template("seedError.html", seed_error=("PicklingError: " + str(e)))
+
         commit()
 
         return redirect(url_for("wait_seed", seed=gen.id))
