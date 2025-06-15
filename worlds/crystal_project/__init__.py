@@ -329,6 +329,7 @@ class CrystalProjectWorld(World):
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
             "killBossesMode" : bool(self.options.killBossesMode.value),
             "easyLeveling": bool(self.options.easyLeveling.value),
+            "obscureRoutes": bool(self.options.obscureRoutes.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": bool(self.options.levelGating.value),
             "shopsanity": self.options.shopsanity.value,

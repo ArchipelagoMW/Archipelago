@@ -245,7 +245,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     #glide? really?
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS, [CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST],
-                    {CAPITAL_JAIL: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state)),
+                    {CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state) or logic.has_swimming(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state))})
     fancy_add_exits(world, BOOMER_SOCIETY, [JOJO_SEWERS, GREENSHIRE_REPRISE])
