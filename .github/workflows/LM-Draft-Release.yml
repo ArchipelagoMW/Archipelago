@@ -34,7 +34,7 @@ jobs:
     - name: Create Lib-Linux
       run: mkdir lib-linux
     - name: Install Linux-Deps
-      run: pip install -r ${{github.workspace}}/luigismansion/requirements.txt --target ./lib-linux
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-linux
     - uses: actions/upload-artifact@v4
       with:
         name: lib-linux
