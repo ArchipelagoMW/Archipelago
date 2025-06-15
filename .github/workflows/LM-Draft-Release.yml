@@ -1,4 +1,4 @@
-name: Build APWorld
+name: LM-Release-World
 on:
   push:
     branches:
