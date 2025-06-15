@@ -579,7 +579,7 @@ class LMWorld(World):
             self.options.balcony_boo_count.value = 36
 
         if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
-            if self.options.balcony_boo_count > 4 and () and self.options.boosanity == 0:
+            if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
                 self.options.balcony_boo_count.value = 4
 
         if self.options.boo_gates.value == 0:
