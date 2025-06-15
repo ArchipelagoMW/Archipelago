@@ -67,7 +67,8 @@ jobs:
         yamls-per-run: 3
 
   package:
-    needs: [fuzz]
+    # needs: [fuzz]
+    needs: [windows-deps, linux-deps]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
