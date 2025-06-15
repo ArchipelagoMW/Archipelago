@@ -4,6 +4,7 @@ from ..constants.regions import *
 from ..constants.key_items import *
 from ..constants.mounts import *
 from ..constants.item_groups import *
+from ..constants.region_passes import *
 from .bases import CrystalProjectTestBase
 
 class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
@@ -41,10 +42,13 @@ class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
         self.assert_region_entrances(CAPITAL_SEQUOIA, reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE, COBBLESTONE_CRAG, CASTLE_SEQUOIA,),
                                      unreachable_regions=(GREENSHIRE_REPRISE,))
 
-class TestCapitalSequoiaWithLevelGating(CrystalProjectTestBase):
+
+
+class TestCapitalSequoiaWithRegionsanity(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
+        "levelGating": 0,
         "progressiveMountMode": 0,
+        "regionsanity": 1
     }
 
     def test_region_connections_no_items(self):
@@ -52,36 +56,28 @@ class TestCapitalSequoiaWithLevelGating(CrystalProjectTestBase):
                                      unreachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG,
                                                           GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE,))
 
-    def test_region_connections_one_level_cap(self):
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
+    def test_region_connections_with_just_passes(self):
+        self.collect_passes()
         self.assert_region_entrances(CAPITAL_SEQUOIA, reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,),
                                      unreachable_regions=( COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
 
-    def test_region_connections_five_jobs(self):
+    def test_region_connections_five_jobs_and_passes(self):
         self.set_collected_job_count(5)
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
-        self.assert_region_entrances(CAPITAL_SEQUOIA,
-                                     reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,),
-                                     unreachable_regions=(COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
+        self.collect_passes()
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         GREENSHIRE_REPRISE,),
                                      unreachable_regions=(COBBLESTONE_CRAG, CASTLE_SEQUOIA,))
 
-    def test_region_connections_ibek_owl_five_level_cap(self):
+    def test_region_connections_ibek_owl_and_passes(self):
         self.collect_by_name(IBEK_BELL)
         self.collect_by_name(OWL_DRUM)
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
+        self.collect_passes()
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG,),
                                      unreachable_regions=(GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
-        self.collect((self.get_item_by_name(PROGRESSIVE_LEVEL_CAP)))
+
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG, CASTLE_SEQUOIA,),

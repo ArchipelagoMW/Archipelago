@@ -2,6 +2,7 @@ from typing import List, Dict, Tuple, Callable, Optional, Union, Iterable, TYPE_
 from BaseClasses import Region, Location, CollectionState
 from .options import CrystalProjectOptions
 from .locations import LocationData
+from .items import region_name_to_pass_dict
 from .rules import CrystalProjectLogic
 from .constants.keys import *
 from .constants.key_items import *
@@ -97,7 +98,11 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     logic = CrystalProjectLogic(player, options)
 
     for region in region_levels_dictionary:
-        rules_on_regions[region] = lambda state, lambda_region = region: logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0])
+        if world.options.regionsanity.value == world.options.regionsanity.option_true:
+            rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0])
+                                                                            and state.has(region_name_to_pass_dict[lambda_region], world.player))
+        else:
+            rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0]))
 
     locations_per_region = get_locations_per_region(locations)
 
