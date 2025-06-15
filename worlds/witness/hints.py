@@ -76,7 +76,7 @@ def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
             continue
 
         corresponding_obelisk_side = static_witness_logic.EP_TO_OBELISK_SIDE[location_obj["entity_hex"]]
-        always.append(static_witness_logic.ENTITIES_BY_ID[corresponding_obelisk_side]["checkName"])
+        always.append(static_witness_logic.ENTITIES_BY_HEX[corresponding_obelisk_side]["checkName"])
 
     return always
 
