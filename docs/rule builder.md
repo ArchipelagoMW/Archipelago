@@ -20,23 +20,22 @@ The rule builder comes with a few by default:
 
 - `True_`: Always returns true
 - `False_`: Always returns false
-- `And`: Checks that all child rules are true
-- `Or`: Checks that at least one child rule is true
+- `And`: Checks that all child rules are true (provided by `&` operator)
+- `Or`: Checks that at least one child rule is true (provided by `|` operator)
 - `Has`: Checks that the player has the given item with the given count (default 1)
 - `HasAll`: Checks that the player has all given items
 - `HasAny`: Checks that the player has at least one of the given items
-- `CanReachLocation`: Checks that the player can reach the given location
-- `CanReachRegion`: Checks that the player can reach the given region
-- `CanReachEntrance`: Checks that the player can reach the given entrance
+- `CanReachLocation`: Checks that the player can logically reach the given location
+- `CanReachRegion`: Checks that the player can logically reach the given region
+- `CanReachEntrance`: Checks that the player can logically reach the given entrance
 
 You can combine these rules together to describe the logic required for something. For example, to check if a player either has `Movement ability` or they have both `Key 1` and `Key 2`, you can do:
 
 ```python
-rule = Or(
-    Has("Movement ability"),
-    HasAll("Key 1", "Key 2"),
-)
+rule = Has("Movement ability") | HasAll("Key 1", "Key 2")
 ```
+
+> ⚠️ Composing rules with the `and` and `or` keywords will not work. You must use the bitwise `&` and `|` operators. In order to catch mistakes, the rule builder will not let you do boolean operations. In order to check if a rule is defined you must use `if rule is not None`.
 
 When assigning the rule you must use the `set_rule` helper added by the rule mixin to correctly resolve and register the rule.
 
@@ -61,21 +60,30 @@ The following operators are allowed:
 To check if the player can reach a switch, or if they've receieved the switch item if switches are randomized:
 
 ```python
-Or(
-    Has("Red switch", options=[OptionFilter(SwitchRando, 1)]),
-    CanReachLocation("Red switch", options=[OptionFilter(SwitchRando, 0)]),
+rule = (
+    Has("Red switch", options=[OptionFilter(SwitchRando, 1)])
+    | CanReachLocation("Red switch", options=[OptionFilter(SwitchRando, 0)])
 )
 ```
 
 To add an extra logic requirement on the easiest difficulty:
 
 ```python
-And(
-    # the rest of the logic
-    Or(
-        Has("QoL item", options=[OptionFilter(Difficulty, Difficulty.option_easy)]),
-        True_(options=[OptionFilter(Difficulty, Difficulty.option_medium, operator="ge")]),
-    ),
+rule = (
+    # ...the rest of the logic
+    & (
+        Has("QoL item", options=[OptionFilter(Difficulty, Difficulty.option_easy)])
+        | True_(options=[OptionFilter(Difficulty, Difficulty.option_medium, operator="ge")])
+    )
+)
+```
+
+If you would like to provide option filters when composing rules, you can use the `And` and `Or` rules directly:
+
+```python
+rule = Or(
+    And(Has("A"), HasAny("B", "C"), options=[OptionFilter(Opt, 0)]),
+    Or(Has("X"), CanReachRegion("Y"), options=[OptionFilter(Opt, 1)]),
 )
 ```
 
