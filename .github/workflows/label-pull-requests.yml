@@ -6,6 +6,8 @@ on:
 permissions:
   contents: read
   pull-requests: write
+env:
+  GH_REPO: ${{ github.repository }}
 
 jobs:
   labeler:
