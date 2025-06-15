@@ -88,6 +88,8 @@ jobs:
         with:
           name: lib-linux
           path: ${{github.workspace}}/worlds/luigismansion/lib
+
+      - run: ls ${{github.workspace}}/worlds/luigismansion/lib
       
       - name: Creates the LM APWorld
         id: apworld
