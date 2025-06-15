@@ -88,8 +88,6 @@ jobs:
         with:
           name: lib-linux
           path: ${{github.workspace}}/worlds/luigismansion/lib
-
-      - run: ls ${{github.workspace}}/worlds/luigismansion/lib
       
       - name: Creates the LM APWorld
         id: apworld
@@ -105,7 +103,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lib
-          path: ${{github.workspace}}/worlds/luigismansion/lib
+          path: ${{github.workspace}}/worlds/luigismansion/lib/
 
   publish:
     runs-on: ubuntu-latest
