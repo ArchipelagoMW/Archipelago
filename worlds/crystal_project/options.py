@@ -53,7 +53,7 @@ class ClamshellGoalQuantity(Range):
     """
     display_name = "Clamshells needed to win"
     range_start = 1
-    range_end = 100
+    range_end = 99
     default = 13
     
 class ExtraClamshellsInPool(Range):
@@ -64,7 +64,7 @@ class ExtraClamshellsInPool(Range):
     """
     display_name = "Extra Clamshells in the pool"
     range_start = 0
-    range_end = 100
+    range_end = 99
     default = 6
 
 #"""Location Options"""
