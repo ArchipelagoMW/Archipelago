@@ -383,7 +383,7 @@ class Hint(typing.NamedTuple):
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
                 "item": NetworkItem(self.item, self.location, self.finding_player, self.item_flags),
-                "found": self.found}
+                "found": self.found, "hint_status": self.status}
 
     @property
     def local(self):
