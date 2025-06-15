@@ -11,7 +11,6 @@ from yaml import CDumper as Dumper
 import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
-from CommonClient import logger
 from Utils import visualize_regions, local_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
