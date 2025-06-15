@@ -603,10 +603,6 @@ class LMWorld(World):
             else:
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.type == "Freestanding":
-                    add_item_rule(entry, lambda
-                        item: item.player != self.player or (
-                            item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
