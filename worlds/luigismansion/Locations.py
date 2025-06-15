@@ -58,12 +58,8 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, ram_byte_size=2)]),
     "E. Gadd's Gift": LMLocationData("Foyer", 853, "KingdomHearts", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, ram_byte_size=2)]),
-    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, [],
-        update_ram_addr=[LMRamData(0x803D3399, bit_position=3, in_game_room_id=2)]),
     "1F Washroom Toilet": LMLocationData("1F Washroom", 4, "Furniture", 233, [],
         update_ram_addr=[LMRamData(in_game_room_id=16)]),
-    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"],
-        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=3)]),
     "Laundry Room Washing Machine": LMLocationData("Laundry Room", 7, "Furniture", 187, [],
         update_ram_addr=[LMRamData(in_game_room_id=5)]),
     "Hidden Room Large Chest R": LMLocationData("Hidden Room", 11, "Furniture", 242, [],
@@ -124,6 +120,21 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Shivers Spawn": LMLocationData("1F Hallway", None, "Event", -1, [], locked_item="Shivers Spawn")
 }
 
+FREESTANDING_KEY_TABLE = {
+    "Ghost Foyer Key": LMLocationData("Foyer", 713, "Freestanding", 1, [], remote_only=True,
+        update_ram_addr=[LMRamData(0x803D3399, bit_position=3, in_game_room_id=2)]),
+    "Fortune Teller Candles": LMLocationData("Fortune-Teller's Room", 6, "Freestanding", 4, ["Fire Element Medal"],
+        remote_only=True, update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=3)]),
+    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, [], remote_only=True,
+        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=72)]),
+    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [], remote_only=True,
+        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=41)]),
+    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [], remote_only=True,
+        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21)]),
+}
+
+BASE_LOCATION_TABLE = {**BASE_LOCATION_TABLE, **FREESTANDING_KEY_TABLE}
+
 # Adds all the chests that are spawned after clearing a room of ghosts.
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal", "Shivers Spawn"],
@@ -144,8 +155,6 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDFC6, bit_position=2, in_game_room_id=62, ram_byte_size=2)]),
     "Ceramics Studio Clear Chest": LMLocationData("Ceramics Studio", 28, "Chest", 30, ["Ice Element Medal"],
         update_ram_addr=[LMRamData(0x803CDFBE, bit_position=2, in_game_room_id=58, ram_byte_size=2)]),
-    "The Well Key": LMLocationData("The Well", 21, "Freestanding", 0, [],
-        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=72)]),
     "2F Bathroom Clear Chest": LMLocationData("2F Bathroom", 22, "Chest", 24, ["Ice Element Medal"],
         update_ram_addr=[LMRamData(0x803CDFAA, bit_position=2, in_game_room_id=48, ram_byte_size=2)]),
     "Nana's Room Clear Chest": LMLocationData("Nana's Room", 23, "Chest", 25, [],
@@ -172,8 +181,6 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
-    "Wardrobe Shelf Key": LMLocationData("Wardrobe", 50, "Freestanding", 5, [],
-        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=41)]),
     "Laundry Room Clear Chest": LMLocationData("Laundry Room", 710, "Chest", 4, [],
         update_ram_addr=[LMRamData(0x803CDF5A, bit_position=2, in_game_room_id=5, ram_byte_size=2)]),
     "Hidden Room Clear Chest": LMLocationData("Hidden Room", 51, "Chest", 1, [],
@@ -182,8 +189,6 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDF58, bit_position=2, in_game_room_id=4, ram_byte_size=2)]),
     "Kitchen Clear Chest": LMLocationData("Kitchen", 53, "Chest", 5, [],
         update_ram_addr=[LMRamData(0x803CDF60, bit_position=2, in_game_room_id=7, ram_byte_size=2)]),
-    "1F Bathroom Shelf Key": LMLocationData("1F Bathroom", 54, "Freestanding", 3, [],
-        update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21)]),
     "Graveyard Clear Chest": LMLocationData("Graveyard", 711, "Chest", 11, [],
         update_ram_addr=[LMRamData(0x803CDF70, bit_position=2, in_game_room_id=15, ram_byte_size=2)]),
     "Courtyard Clear Chest": LMLocationData("Courtyard", 55, "Chest", 14, [],
