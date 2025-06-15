@@ -27,8 +27,9 @@ def get_base_rom_as_bytes() -> bytes:
     Raises an exception if the ROM doesn't match the expected hash.
     """
     try:
-        get_settings().gl_options.rom_file.validate()
-        with open(get_settings().gl_options.rom_file, "rb") as infile:
+        from . import GauntletLegendsWorld
+        GauntletLegendsWorld.settings.rom_file.validate()
+        with open(GauntletLegendsWorld.settings.rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
     except Exception:
         traceback.print_exc()
