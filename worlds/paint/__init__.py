@@ -34,6 +34,7 @@ class PaintWorld(World):
     web = PaintWebWorld()
     location_name_to_id = location_table
     item_name_to_id = item_table
+    origin_region_name = "Canvas"
 
     def generate_early(self) -> None:
         if self.options.canvas_size_increment < 50 and self.options.logic_percent <= 55:
@@ -83,16 +84,12 @@ class PaintWorld(World):
         self.multiworld.itempool += [self.create_item(item) for item in items_to_create]
 
     def create_regions(self) -> None:
-        menu = Region("Menu", self.player, self.multiworld)
         canvas = Region("Canvas", self.player, self.multiworld)
         canvas.locations += [PaintLocation(self.player, loc_name, loc_data.address, canvas)
                              for loc_name, loc_data in location_data_table.items()
                              if location_exists_with_options(self, loc_data.address)]
 
-        connection = Entrance(self.player, "New Canvas", menu)
-        menu.exits.append(connection)
-        connection.connect(canvas)
-        self.multiworld.regions += [menu, canvas]
+        self.multiworld.regions += [canvas]
 
     def set_rules(self) -> None:
         from .rules import set_rules, set_completion_rules
