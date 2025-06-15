@@ -1,7 +1,6 @@
 import concurrent.futures
 import json
 import os
-import pickle
 import random
 import tempfile
 import zipfile
@@ -14,7 +13,7 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
-from Utils import __version__
+from Utils import __version__, restricted_dumps
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
@@ -84,7 +83,7 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
         gen = Generation(
-            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+            options=restricted_dumps({name: vars(options) for name, options in gen_options.items()}),
             # convert to json compatible
             meta=json.dumps(meta),
             state=STATE_QUEUED,
