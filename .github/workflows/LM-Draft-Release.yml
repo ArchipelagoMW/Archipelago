@@ -102,7 +102,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lib
-          path: ${{github.workspace}}/worlds/luigismansion/lib/
+          path: worlds/luigismansion/lib/
+          if-no-files-found: error
 
   publish:
     runs-on: ubuntu-latest
