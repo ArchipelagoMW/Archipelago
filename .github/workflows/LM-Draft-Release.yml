@@ -80,16 +80,18 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lib-windows
+          path: ./lib-windows.zip
       - name: Unzip Windows directory
-        run: unzip -o -d ${{github.workspace}}/worlds/luigismansion/lib ${{steps.dl-win-deps.outputs.dl-win-deps}}
+        run: unzip -o -d ${{github.workspace}}/worlds/luigismansion/lib ./lib-windows.zip
         
       - name: Download Linux Deps
         id: dl-lin-deps
         uses: actions/download-artifact@v4
         with:
           name: lib-linux
+          path: ./lib-linux.zip
       - name: Unzip Linux directory
-        run: unzip -o -d ${{github.workspace}}/worlds/luigismansion/lib ${{steps.dl-lin-deps.outputs.dl-lin-deps}}
+        run: unzip -o -d ${{github.workspace}}/worlds/luigismansion/lib ./lib-linux.zip
       
       - name: Creates the LM APWorld
         id: apworld
