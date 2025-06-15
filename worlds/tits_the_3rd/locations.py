@@ -6,6 +6,7 @@ from .names.location_name import LocationName
 from .names.region_name import RegionName
 from .names.item_name import ItemName
 from .tables.locationList import location_table
+from .names.item_name import ItemName
 
 class TitsThe3rdLocation(Location):
     """Trails in the Sky the 3rd Location Definition"""
@@ -45,6 +46,9 @@ def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = F
         player: The player number.
     """
     for location_name in location_table:
-        create_location(multiworld, player, location_name)
+        if spoiler_mode & (location_table[location_name].spoiler_name != ""):
+            create_location(multiworld, player, location_name)
+        else:
+            create_location(multiworld, player, location_name)
 
 location_groups: Dict[str, Set[str]] = {}
