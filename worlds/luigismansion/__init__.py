@@ -578,6 +578,10 @@ class LMWorld(World):
         if self.options.boosanity == 0 and self.options.balcony_boo_count > 36:
             self.options.balcony_boo_count.value = 36
 
+        if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
+            if self.options.balcony_boo_count > 4 and () and self.options.boosanity == 0:
+                self.options.balcony_boo_count.value = 4
+
         if self.options.boo_gates.value == 0:
             self.options.final_boo_count.value = 0
             self.options.balcony_boo_count.value = 0
@@ -724,7 +728,7 @@ class LMWorld(World):
         n_items = len(self.pre_fill_items) + len(self.itempool)
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
-        n_other_filler = n_filler_items-n_trap_items
+        n_other_filler = n_filler_items - n_trap_items
         filler_trap_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,
