@@ -205,16 +205,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     connect_menu_region(world, options)
 
     fancy_add_exits(world, SPAWNING_MEADOWS, [DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, CONTINENTAL_TRAM, BEAURIOR_VOLCANO, YAMAGAWA_MA],
-                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state),
+                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) and options.obscureRoutes.value,
                     MERCURY_SHRINE: lambda state: logic.has_vertical_movement(state),
-                    POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state),
+                    POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value,
                     BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state),
                     YAMAGAWA_MA: lambda state: logic.has_swimming(state) or logic.has_vertical_movement(state)})
     fancy_add_exits(world, DELENDE, [SPAWNING_MEADOWS, SOILED_DEN, THE_PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
                     {JADE_CAVERN: lambda state: logic.has_golden_quintar(state),
                     ANCIENT_RESERVOIR: lambda state: logic.has_swimming(state),
                     SALMON_PASS: lambda state: logic.has_swimming(state),
-                    GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state),
+                    GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) or options.obscureRoutes.value,
                     PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state)})
     fancy_add_exits(world, SOILED_DEN, [JADE_CAVERN, DELENDE, THE_PALE_GROTTO, DRAFT_SHAFT_CONDUIT],
                     {JADE_CAVERN: lambda state: logic.has_golden_quintar(state),
@@ -239,14 +239,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SKUMPARADISE, [PROVING_MEADOWS, CAPITAL_SEQUOIA],
                     {PROVING_MEADOWS: lambda state: logic.has_jobs(state, 3)})
     fancy_add_exits(world, CAPITAL_SEQUOIA, [JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
-                    {
-                    #why rental and horizontal both listed?
-                    COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
+                    # why rental and horizontal both listed?
+                    {COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5),
                     #glide? really?
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS, [CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST],
-                    {CAPITAL_JAIL: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state)),
+                    {CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state) or logic.has_swimming(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state))})
     fancy_add_exits(world, BOOMER_SOCIETY, [JOJO_SEWERS, GREENSHIRE_REPRISE])

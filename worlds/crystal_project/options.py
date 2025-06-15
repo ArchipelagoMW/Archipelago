@@ -194,6 +194,12 @@ class KeyMode(Choice):
     option_vanilla_skelefree = 4
     default = 2
 
+class ObscureRoutes(Toggle):
+    """
+    When enabled, connections between regions that are difficult to find will be expected in logic.
+    """
+    display_name = "Obscure Routes"
+
 #"""Item Pool Options"""
 class ProgressiveEquipmentMode(DefaultOnToggle):
     """
@@ -256,6 +262,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     levelUpsInPool: LevelUpsInPool
     easyLeveling: EasyLeveling
     keyMode: KeyMode
+    obscureRoutes: ObscureRoutes
     progressiveEquipmentMode: ProgressiveEquipmentMode
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
@@ -266,7 +273,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelUpsInPool, EasyLeveling, KeyMode],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelUpsInPool, EasyLeveling, KeyMode, ObscureRoutes],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic]
 }
