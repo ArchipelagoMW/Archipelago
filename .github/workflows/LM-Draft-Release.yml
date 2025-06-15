@@ -105,13 +105,12 @@ jobs:
           name: apworld
           path: ${{ steps.apworld.outputs.apworld }}
 
-      - name: Zip Lib folder
-        uses: actions/upload-artifact@v4
+      - name: Make combined Lib folder
+        uses: actions/upload-artifact/merge@v4
         with:
           name: lib
-          path: worlds/luigismansion/lib/
-          if-no-files-found: error
-          include-hidden-files: true
+          pattern: lib-*
+          delete-merged: true
 
   publish:
     runs-on: ubuntu-latest
