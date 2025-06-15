@@ -49,8 +49,8 @@ class CrystalProjectTestBase(WorldTestBase):
 
 
     def collect_passes(self):
-        for region_pass in region_name_to_pass_dict:
-            self.collect_by_name(region_pass)
+        for region in region_name_to_pass_dict:
+            self.collect_by_name(region_name_to_pass_dict[region])
 
 
     def collect_mounts_and_level_caps_and_passes(self):

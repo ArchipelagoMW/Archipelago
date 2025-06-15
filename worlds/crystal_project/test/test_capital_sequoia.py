@@ -75,10 +75,5 @@ class TestCapitalSequoiaWithRegionsanity(CrystalProjectTestBase):
         self.collect_passes()
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
-                                                        COBBLESTONE_CRAG,),
-                                     unreachable_regions=(GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
-
-        self.assert_region_entrances(CAPITAL_SEQUOIA,
-                                     reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG, CASTLE_SEQUOIA,),
                                      unreachable_regions=(GREENSHIRE_REPRISE,))
