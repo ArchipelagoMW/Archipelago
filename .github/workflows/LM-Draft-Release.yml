@@ -104,6 +104,7 @@ jobs:
           name: lib
           path: worlds/luigismansion/lib
           if-no-files-found: error
+          include-hidden-files: true
 
   publish:
     runs-on: ubuntu-latest
