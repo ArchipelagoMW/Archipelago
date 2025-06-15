@@ -242,7 +242,7 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            (location, static_witness_logic.ENTITIES_BY_NAME[location]["region"]["name"])
+            (static_witness_logic.ENTITIES_BY_NAME[location]["region"]["name"], location)
             for location in static_witness_locations.EXTRA_LOCATIONS
         ]
 
