@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - Luigi's-Mansion-AP
+  workflow_dispatch:
 
 jobs:
   checkout-code:
