@@ -14,6 +14,7 @@ class LocationData(NamedTuple):
     name: str
     code: int
     rule: Optional[Callable[[CollectionState], bool]] = None
+    regionsanity: bool = False
 
 treasure_index_offset = 1
 npc_index_offset = 10000
@@ -21,6 +22,7 @@ crystal_index_offset = 100000
 boss_index_offset = 1000000
 shop_index_offset = 10000000
 #summon_index_offset = 1000000 Summons Todo
+regionsanity_index_offset = 100000000
 
 def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
@@ -59,6 +61,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Summons Todo: descriptivize and implement
         #LocationData(SPAWNING_MEADOWS, "Spawning Meadows Summon - Shaku from SFire_Summon", 477 + summon_index_offset), #(118, 109, 10)
+        
+        #Regionsanity Meta Location
+        LocationData(SPAWNING_MEADOWS, SPAWNING_MEADOWS + " Region Completion", 1 + regionsanity_index_offset, regionsanity=True),
 
         #Delende
         #Treasure chests
@@ -113,6 +118,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 1", 181 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(129, 98, -111) Fenix Juice Pouch chest
         LocationData(DELENDE, "Underpass Chest - Grans subbasement pair 2", 182 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(128, 98, -111) Plate of Wolf chest
         LocationData(DELENDE, "Underpass Chest - Grans subbasement loner", 3671 + treasure_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30) or logic.has_swimming(state)), #(119, 98, -110) Underpass Scrap
+
+        #Regionsanity Meta Location
+        LocationData(DELENDE, DELENDE + " Region Completion", 2 + regionsanity_index_offset, regionsanity=True),
         
         #Soiled Den
         #Treasure chests
@@ -124,6 +132,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         #296, 112, -155
         LocationData(SOILED_DEN, "Soiled Den NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(SOILED_DEN, SOILED_DEN + " Region Completion", 3 + regionsanity_index_offset, regionsanity=True),
 
         #Pale Grotto
         #Treasure chests
@@ -145,6 +156,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Crystals
         LocationData(THE_PALE_GROTTO, "Pale Grotto Crystal - Fencer", 130 + crystal_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(THE_PALE_GROTTO, THE_PALE_GROTTO + " Region Completion", 4 + regionsanity_index_offset, regionsanity=True),
 
         #Seaside Cliffs
         #Treasure chests
@@ -186,6 +200,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SEASIDE_CLIFFS, "Seaside Cliffs NPC - Diamond below the bay", 2896 + npc_index_offset, lambda state: logic.has_swimming(state)), #(343, 81, 0) Ore
         #Todo NPCs Job Masters: Seaside Cliffs Outpost map has Master Shaman ID 3572 (387, 155, -104); gives you Shaman Seal in exchange for job mastery
 
+        #Regionsanity Meta Location
+        LocationData(SEASIDE_CLIFFS, SEASIDE_CLIFFS + " Region Completion", 5 + regionsanity_index_offset, regionsanity=True),
+
         #Draft Shaft Conduit
         #Treasure chests
         LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Chest - Straight shot", 82 + treasure_index_offset), #Torch chest
@@ -194,9 +211,15 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Crystal - Shaman", 35 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(DRAFT_SHAFT_CONDUIT, DRAFT_SHAFT_CONDUIT + " Region Completion", 6 + regionsanity_index_offset, regionsanity=True),
+
         #Mercury Shrine
         #Treasure chests
         LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player)), #Contract chest
+
+        #Regionsanity Meta Location
+        LocationData(MERCURY_SHRINE, MERCURY_SHRINE + " Region Completion", 7 + regionsanity_index_offset, regionsanity=True),
 
         #Yamagawa M.A.
         #Treasure chests
@@ -214,6 +237,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Crystal - Jump into fireplace cave for Scholar", 166 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(YAMAGAWA_MA, YAMAGAWA_MA + " Region Completion", 8 + regionsanity_index_offset, regionsanity=True),
+
         #Proving Meadows
         #Treasure chests
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Next to trial guard", 207 + treasure_index_offset), #Money chest
@@ -226,6 +252,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         #NPCs Blocker: this guy checks whether you have enough crystals to pass; this is a blocker guy not a location check guy
         #LocationData(PROVING_MEADOWS, "Proving Meadows NPC - Crystal Checker", 128 + npc_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(PROVING_MEADOWS, PROVING_MEADOWS + " Region Completion", 9 + regionsanity_index_offset, regionsanity=True),
 
         #Skumparadise (we're smushing Trial Caves into there)
         #Treasure chests
@@ -242,6 +271,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Crystals
         LocationData(SKUMPARADISE, "Skumparadise Crystal - Aegis", 68 + crystal_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(SKUMPARADISE, SKUMPARADISE + " Region Completion", 10 + regionsanity_index_offset, regionsanity=True),
 
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
@@ -326,6 +358,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #376, 178, -345 (Capital Sequoia (Maze) map)
         #LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Summon - Niltsi from SWind_Summon", 1109 + summon_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(CAPITAL_SEQUOIA, CAPITAL_SEQUOIA + " Region Completion", 11 + regionsanity_index_offset, regionsanity=True),
+
         #Jojo Sewers
         #Treasure chests
         LocationData(JOJO_SEWERS, "Jojo Sewers Chest - Hiding in the guarded grass", 743 + treasure_index_offset), #Tonic Pouch chest
@@ -339,6 +374,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(JOJO_SEWERS, "Jojo Sewers NPC - Who even wants Stone of Jordan these days?", 2759 + npc_index_offset, lambda state: state.has(CRAG_DEMON_HORN, player)),
 
+        #Regionsanity Meta Location
+        LocationData(JOJO_SEWERS, JOJO_SEWERS + " Region Completion", 12 + regionsanity_index_offset, regionsanity=True),
+
         #Boomer Society
         #Treasure chests
         LocationData(BOOMER_SOCIETY, "Boomer Society Chest - Log cabin", 2667 + treasure_index_offset), #Gospel chest
@@ -347,6 +385,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(BOOMER_SOCIETY, "Boomer Society NPC - Nice Allowance Lady", 476 + npc_index_offset),
         LocationData(BOOMER_SOCIETY, "Boomer Society NPC - Treasury Grandpa", 547 + npc_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(BOOMER_SOCIETY, BOOMER_SOCIETY + " Region Completion", 13 + regionsanity_index_offset, regionsanity=True),
 
         #Rolling Quintar Fields
         #Treasure chests
@@ -369,6 +410,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset), #Fixed Missable
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Ore
+
+        #Regionsanity Meta Location
+        LocationData(ROLLING_QUINTAR_FIELDS, ROLLING_QUINTAR_FIELDS + " Region Completion", 14 + regionsanity_index_offset, regionsanity=True),
 
         #Quintar Nest
         #Treasure chests
@@ -393,6 +437,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(QUINTAR_NEST, "Quintar Nest Crystal - Hunter", 621 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(QUINTAR_NEST, QUINTAR_NEST + " Region Completion", 15 + regionsanity_index_offset, regionsanity=True),
+
         #Quintar Sanctum
         #Treasure chests
         LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Chest - West wall big bounce", 810 + treasure_index_offset), #Money chest
@@ -415,6 +462,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Crystals
         LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Crystal - Chemist (of course this is in the shroom zone)", 970 + crystal_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(QUINTAR_SANCTUM, QUINTAR_SANCTUM + " Region Completion", 16 + regionsanity_index_offset, regionsanity=True),
 
         #Capital Jail
         #Treasure chests
@@ -451,6 +501,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(CAPITAL_JAIL, "Capital Jail Crystal - Reaper, above hell pool", 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
 
+        #Regionsanity Meta Location
+        LocationData(CAPITAL_JAIL, CAPITAL_JAIL + " Region Completion", 17 + regionsanity_index_offset, regionsanity=True),
+
         #Capital Pipeline
         #Treasure chests
         #If you got here from the jail, you'd need vert, or you could get in with swimming, or you could get in with the tram key, TODO, also from jidamba?
@@ -461,6 +514,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
         LocationData(CAPITAL_PIPELINE, "Jidamba Eaclaneya NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset,lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)), #Dust
+
+        #Regionsanity Meta Location
+        LocationData(CAPITAL_PIPELINE, CAPITAL_PIPELINE + " Region Completion", 18 + regionsanity_index_offset, regionsanity=True),
 
         #Cobblestone Crag
         #Treasure chests
@@ -474,6 +530,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #NPCs
         LocationData(COBBLESTONE_CRAG, "Cobblestone Crag NPC - Westernmost Silver", 1120 + npc_index_offset), #Dust
+
+        #Regionsanity Meta Location
+        LocationData(COBBLESTONE_CRAG, COBBLESTONE_CRAG + " Region Completion", 19 + regionsanity_index_offset, regionsanity=True),
 
         #Okimoto N.S.
         #Treasure chests
@@ -502,6 +561,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(OKIMOTO_NS, "Okimoto N.S. Crystal - Ninja", 699 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(OKIMOTO_NS, OKIMOTO_NS + " Region Completion", 20 + regionsanity_index_offset, regionsanity=True),
+
         #Greenshire Reprise
         #Treasure chests
         LocationData(GREENSHIRE_REPRISE, "Greenshire Reprise Chest - Jump off bridge 4", 483 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ambush Knife chest
@@ -516,11 +578,17 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(GREENSHIRE_REPRISE, "Greenshire Reprise NPC - Silver across 1st bridge hiding in a crack", 486 + npc_index_offset), #Dust
         LocationData(GREENSHIRE_REPRISE, "Greenshire Reprise NPC - The furthest southern edge Silver", 474 + npc_index_offset), #Ingot
 
+        #Regionsanity Meta Location
+        LocationData(GREENSHIRE_REPRISE, GREENSHIRE_REPRISE + " Region Completion", 21 + regionsanity_index_offset, regionsanity=True),
+
         #Salmon Pass
         #Treasure chests
         LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset), #Paypirbak chest
         LocationData(SALMON_PASS, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Fenix Juice chest
         LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset), #Fenix Juice chest
+
+        #Regionsanity Meta Location
+        LocationData(SALMON_PASS, SALMON_PASS + " Region Completion", 22 + regionsanity_index_offset, regionsanity=True),
 
         #Salmon River
         #Treasure chests
@@ -549,6 +617,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Crystals
         LocationData(SALMON_RIVER, "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
+
+        #Regionsanity Meta Location
+        LocationData(SALMON_RIVER, SALMON_RIVER + " Region Completion", 23 + regionsanity_index_offset, regionsanity=True),
 
         #Poko Poko Desert
         #Treasure chests
@@ -580,7 +651,10 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold on far end of the Tower of Zot", 2816 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset), #Ore
-        
+
+        #Regionsanity Meta Location
+        LocationData(POKO_POKO_DESERT, POKO_POKO_DESERT + " Region Completion", 24 + regionsanity_index_offset, regionsanity=True),
+
         #Sara Sara Bazaar
         #Treasure chests
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Someone took the St James and left a...", 408 + treasure_index_offset, lambda state: logic.has_key(state, ROOM_ONE_KEY)), #Knockout Stick chest
@@ -605,6 +679,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Spilled booty Silvererererer", 2901 + npc_index_offset, lambda state: logic.has_swimming(state)), #Ore
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Spilled booty Silverererererer", 2902 + npc_index_offset, lambda state: logic.has_swimming(state)), #Ore
 
+        #Regionsanity Meta Location
+        LocationData(SARA_SARA_BAZAAR, SARA_SARA_BAZAAR + " Region Completion", 25 + regionsanity_index_offset, regionsanity=True),
+
         #Sara Sara Beach East
         # Treasure chests
         LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach Chest - Glittering in the sun at Ibek Cave exit 1", 1083 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tincture Pouch chest
@@ -621,6 +698,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ingot
         LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset),  # Ingot
         LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ore
+
+        #Regionsanity Meta Location
+        LocationData(SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_EAST + " Region Completion", 26 + regionsanity_index_offset, regionsanity=True),
 
         #Sara Sara Beach West
         #Treasure chests
@@ -639,6 +719,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
         LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
+
+        #Regionsanity Meta Location
+        LocationData(SARA_SARA_BEACH_WEST, SARA_SARA_BEACH_WEST + " Region Completion", 27 + regionsanity_index_offset, regionsanity=True),
 
         #Ancient Reservoir
         #Treasure chests
@@ -662,6 +745,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Crystal - Dervish", 1121 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(ANCIENT_RESERVOIR, ANCIENT_RESERVOIR + " Region Completion", 28 + regionsanity_index_offset, regionsanity=True),
+
         #Ibek Cave
         #Treasure chests
         LocationData(IBEK_CAVE, "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
@@ -669,6 +755,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
         LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+
+        #Regionsanity Meta Location
+        LocationData(IBEK_CAVE, IBEK_CAVE + " Region Completion", 29 + regionsanity_index_offset, regionsanity=True),
 
         #Salmon Bay
         #Treasure chests
@@ -684,6 +773,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Summons Todo: descriptivize and implement
         #-50, 91, -330
         #LocationData(SALMON_BAY, "Salmon Bay Summon - Guaba from SThunder_Summon", 1138 + summon_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(SALMON_BAY, SALMON_BAY + " Region Completion", 30 + regionsanity_index_offset, regionsanity=True),
 
         #Overpass
         #Treasure chests
@@ -751,11 +843,17 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #CheckOrNot: (930, 91, 253) do we put a check on the guy who gives you a Gaea Shard if you get there with no Salmon lol: no
         #LocationData(THE_OPEN_SEA, "The Open Sea NPC - Z34_SinisterSailor", 2520 + npc_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(THE_OPEN_SEA, THE_OPEN_SEA + " Region Completion", 31 + regionsanity_index_offset, regionsanity=True),
+
         #Shoudu Waterfront
         #Treasure chests
         LocationData(SHOUDU_WATERFRONT, "Shoudu Waterfront Chest - Along the water", 2419 + treasure_index_offset), #Money chest
         LocationData(SHOUDU_WATERFRONT, "Shoudu Waterfront Chest - Hop around 1", 3690 + treasure_index_offset), #Empty chest
         LocationData(SHOUDU_WATERFRONT, "Shoudu Waterfront Chest - Hop around 2", 1114 + treasure_index_offset), #Mars Stone chest
+
+        #Regionsanity Meta Location
+        LocationData(SHOUDU_WATERFRONT, SHOUDU_WATERFRONT + " Region Completion", 32 + regionsanity_index_offset, regionsanity=True),
 
         #Shoudu Province
         #Treasure chests
@@ -845,6 +943,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Summons Todo: descriptivize and implement (720, 138, -278)
         #LocationData(SHOUDU_PROVINCE, "Shoudu Province Summon - Tira from SShadow_Summon", 1132 + summon_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(SHOUDU_PROVINCE, SHOUDU_PROVINCE + " Region Completion", 33 + regionsanity_index_offset, regionsanity=True),
+
         #The Undercity
         #Treasures
         LocationData(THE_UNDERCITY, "The Undercity Chest - Hiding in the rafters", 2989 + treasure_index_offset), #Potion Pouch chest
@@ -872,15 +973,24 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(THE_UNDERCITY, "The Undercity Crystal - Assassin", 1204 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(THE_UNDERCITY, THE_UNDERCITY + " Region Completion", 34 + regionsanity_index_offset, regionsanity=True),
+
         #Ganymede Shrine
         #Treasure chests
         LocationData(GANYMEDE_SHRINE, "Ganymede Shrine Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has(GANYMEDE_STONE, player)),
+
+        # Regionsanity Meta Location
+        LocationData(GANYMEDE_SHRINE, GANYMEDE_SHRINE + " Region Completion", 35 + regionsanity_index_offset, regionsanity=True),
 
         #Beaurior Volcano
         #Treasure chests
         LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Chest - Beaurior Rock entrance", 3770 + treasure_index_offset), #Fenix Syrup chest
 	    LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Chest - Outcropping above the fog", 1168 + treasure_index_offset), #Temporal Blade chest
 	    LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Chest - Tricky jumps past Rock entrance", 2750 + treasure_index_offset), #Tome of Light chest
+
+        # Regionsanity Meta Location
+        LocationData(BEAURIOR_VOLCANO, BEAURIOR_VOLCANO + " Region Completion", 36 + regionsanity_index_offset, regionsanity=True),
 
         #Beaurior Rock
         #Treasure chests
@@ -911,6 +1021,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
 	    LocationData(BEAURIOR_ROCK, "Beaurior Volcano Crystal - Valkyrie", 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
+        #Regionsanity Meta Location
+        LocationData(BEAURIOR_ROCK, BEAURIOR_ROCK + " Region Completion", 37 + regionsanity_index_offset, regionsanity=True),
+
         #Lake Delende
         #Treasure chests
         LocationData(LAKE_DELENDE, "Lake Delende Chest - North edge 1", 1263 + treasure_index_offset), #Float Shoes chest
@@ -922,6 +1035,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Summons Todo: descriptivize and implement
         #97, 126, -211
         #LocationData(LAKE_DELENDE, "Lake Delende Summon - Ioske from SEarth_Summon", 1111 + summon_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(LAKE_DELENDE, LAKE_DELENDE + " Region Completion", 38 + regionsanity_index_offset, regionsanity=True),
 
         #Quintar Reserve
         #Treasure chests
@@ -948,6 +1064,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Climb the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and state.has(DIONE_STONE, player)), #Dust
 
+        #Regionsanity Meta Location
+        LocationData(QUINTAR_RESERVE, QUINTAR_RESERVE + " Region Completion", 39 + regionsanity_index_offset, regionsanity=True),
+
         #Dione Shrine
         #Treasure chests
         LocationData(DIONE_SHRINE, "Dione Shrine Chest - Roof", 2154 + treasure_index_offset, lambda state: state.has(DIONE_STONE, player)), #Dione Shard chest
@@ -961,6 +1080,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(DIONE_SHRINE, "Dione Shrine NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has(DIONE_STONE, player)), #Shedding 9
         LocationData(DIONE_SHRINE, "Dione Shrine NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #Ingot on Overpass main map
 
+        #Regionsanity Meta Location
+        LocationData(DIONE_SHRINE, DIONE_SHRINE + " Region Completion", 40 + regionsanity_index_offset, regionsanity=True),
+
         #Quintar Mausoleum
         #Treasure chests
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: logic.has_fast(state)), #(688, 114, -464) Babel Quintar chest
@@ -968,9 +1090,15 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(QUINTAR_MAUSOLEUM, "Quintar Mausoleum Chest - Glowing grass room", 3768 + treasure_index_offset), #(709, 129, -442) Wind Thresher chest
         LocationData(QUINTAR_MAUSOLEUM, "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) 6th Scrap chest on main Underpass map
 
+        #Regionsanity Meta Location
+        LocationData(QUINTAR_MAUSOLEUM, QUINTAR_MAUSOLEUM + " Region Completion", 41 + regionsanity_index_offset, regionsanity=True),
+
         #Eastern Chasm
         #Treasure chests
         LocationData(EASTERN_CHASM, "Eastern Chasm Chest - Overgrown opposite of chasm", 3543 + treasure_index_offset), #Eastern Chasm map chest
+
+        #Regionsanity Meta Location
+        LocationData(EASTERN_CHASM, EASTERN_CHASM + " Region Completion", 42 + regionsanity_index_offset, regionsanity=True),
 
         #Tall Tall Heights
         #Treasure chests
@@ -995,7 +1123,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
         LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(191, 172, -437) (Underwater) Underpass Scrap chest
 
-
         #NPCs
         #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
         #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
@@ -1015,6 +1142,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #498, 218, -412
         #LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Summon - Pamoa from SIce_Summon", 1136 + summon_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(TALL_TALL_HEIGHTS, TALL_TALL_HEIGHTS + " Region Completion", 43 + regionsanity_index_offset, regionsanity=True),
+
         #Northern Cave
         #Treasure chests
         LocationData(NORTHERN_CAVE, "Northern Cave Chest - Island in the ice", 2787 + treasure_index_offset), #Tear Seed chest
@@ -1024,6 +1154,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #NPCs
         LocationData(NORTHERN_CAVE, "Northern Cave NPC - Gold past the wiggly block spike pit", 2815 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
+
+        #Regionsanity Meta Location
+        LocationData(NORTHERN_CAVE, NORTHERN_CAVE + " Region Completion", 44 + regionsanity_index_offset, regionsanity=True),
 
         #Lands End
         #Treasure chests
@@ -1045,6 +1178,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(LANDS_END, "Lands End NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
         LocationData(LANDS_END, "Lands End NPC - Owl Drum", 1176 + npc_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(LANDS_END, LANDS_END + " Region Completion", 45 + regionsanity_index_offset, regionsanity=True),
+
         #Slip Glide Ride
         #Treasure chests
         LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Chest - Back out to 1st room", 2554 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY)), #Money chest
@@ -1058,6 +1194,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Crystal - Summoner", 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
 
+        #Regionsanity Meta Location
+        LocationData(SLIP_GLIDE_RIDE, SLIP_GLIDE_RIDE + " Region Completion", 46 + regionsanity_index_offset, regionsanity=True),
+
         #Sequoia Athenaeum
         #Treasure chests
         LocationData(SEQUOIA_ATHENAEUM, "Sequoia Athenaeum Chest - Atop the shelves above the books door", 2932 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(412, 200, -551) Spellsword Helm chest
@@ -1070,9 +1209,15 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SEQUOIA_ATHENAEUM, "Sequoia Athenaeum Chest - Shattered labyrinth Chips Challenge", 2373 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 5) and logic.has_vertical_movement(state)), #(424, 148, -570) Ice Puzzle Key chest
         LocationData(SEQUOIA_ATHENAEUM, "Sequoia Athenaeum Chest - You expected another Chips Challenge, but it was me, Dio!", 2335 + treasure_index_offset, lambda state: logic.has_key(state, ICE_PUZZLE_KEY, 6) and logic.has_vertical_movement(state)), #(415, 131, -565) Skeleton Key chest
 
+        #Regionsanity Meta Location
+        LocationData(SEQUOIA_ATHENAEUM, SEQUOIA_ATHENAEUM + " Region Completion", 47 + regionsanity_index_offset, regionsanity=True),
+
         #Northern Stretch
         #Treasure chests
         LocationData(NORTHERN_STRETCH, "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map in Overpass (Outpost)
+
+        #Regionsanity Meta Location
+        LocationData(NORTHERN_STRETCH, NORTHERN_STRETCH + " Region Completion", 48 + regionsanity_index_offset, regionsanity=True),
 
         #Castle Ramparts
         #Treasure chests
@@ -1091,6 +1236,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(CASTLE_RAMPARTS, "Castle Ramparts Crystal - Beastmaster (say high to the Ramparts Demon!)", 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
 
+        #Regionsanity Meta Location
+        LocationData(CASTLE_RAMPARTS, CASTLE_RAMPARTS + " Region Completion", 49 + regionsanity_index_offset, regionsanity=True),
+
         #The Chalice of Tar
         #Treasure chests
         LocationData(THE_CHALICE_OF_TAR, "The Chalice of Tar Chest - At the tippy-top", 3544 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #The Chalice of Tar map chest
@@ -1104,6 +1252,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(THE_CHALICE_OF_TAR, "The Chalice of Tar Crystal - Biiiiiig glide to the Mimic", 3701 + crystal_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(THE_CHALICE_OF_TAR, THE_CHALICE_OF_TAR + " Region Completion", 50 + regionsanity_index_offset, regionsanity=True),
+
         #Flyers Crag
         #Treasure chests
         LocationData(FLYERS_CRAG, "Flyers Crag Chest - You cant miss it", 3656 + treasure_index_offset), #(658, 216, -170) Flyers Crag map chest
@@ -1111,6 +1262,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(FLYERS_CRAG, "Flyers Crag NPC - Gold twinsies the 1st south of Ganymede Shrine", 2820 + npc_index_offset), #(695, 137, -159) Dust
         LocationData(FLYERS_CRAG, "Flyers Crag NPC - Gold twinsies the 2nd south of Ganymede Shrine", 2819 + npc_index_offset), #(686, 132, -162) Ingot
+
+        #Regionsanity Meta Location
+        LocationData(FLYERS_CRAG, FLYERS_CRAG + " Region Completion", 51 + regionsanity_index_offset, regionsanity=True),
 
         #Flyers Lookout
         #Treasure chests
@@ -1156,6 +1310,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Summons Todo: descriptivize and implement (672, 124, 106)
         #LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Summon - Juses from SLife_Summon", 1134 + summon_index_offset),
 
+        #Regionsanity Meta Location
+        LocationData(JIDAMBA_TANGLE, JIDAMBA_TANGLE + " Region Completion", 52 + regionsanity_index_offset, regionsanity=True),
+
         #Jidamba Eaclaneya
         #Treasure chests
         LocationData(JIDAMBA_EACLANEYA, "Jidamba Eaclaneya Chest - Climb the lamp in the south room", 2799 + treasure_index_offset, lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)), #Celestial Crown chest
@@ -1173,6 +1330,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Crystals
         LocationData(JIDAMBA_EACLANEYA, "Jidamba Eaclaneya Crystal - Weaver", 2403 + crystal_index_offset),
+
+        #Regionsanity Meta Location
+        LocationData(JIDAMBA_EACLANEYA, JIDAMBA_EACLANEYA + " Region Completion", 53 + regionsanity_index_offset, regionsanity=True),
 
         #The Deep Sea
         #Treasure chests
@@ -1226,6 +1386,12 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Summons Todo: descriptivize and implement
         #LocationData(THE_DEEP_SEA, "The Deep Sea Summon - Coyote from SWater_Summon", 1140 + summon_index_offset), #(-60, 53, 202)
 
+        #Regionsanity Meta Location
+        LocationData(THE_DEEP_SEA, THE_DEEP_SEA + " Region Completion", 54 + regionsanity_index_offset, regionsanity=True),
+
+        #Regionsanity Meta Location
+        LocationData(NEPTUNE_SHRINE, NEPTUNE_SHRINE + " Region Completion", 55 + regionsanity_index_offset, regionsanity=True),
+
         #Jade Cavern
         #Treasure chests
         LocationData(JADE_CAVERN, "Jade Cavern Chest - Tell Archie to say hi to the Quizard", 3604 + treasure_index_offset), #(239, 99, -124) Jade Cavern map chest
@@ -1233,7 +1399,10 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         #Todo NPCs CheckOrNot Job Masters: this guy trades you a thing for each job seal you've gotten from a job master for mastering that job
         #LocationData(JADE_CAVERN, "Jade Cavern NPC - Jade Cavern Map chest", 3603 + npc_index_offset), #(255, 91, -90)
-        
+
+        #Regionsanity Meta Location
+        LocationData(JADE_CAVERN, JADE_CAVERN + " Region Completion", 56 + regionsanity_index_offset, regionsanity=True),
+
         #Continental Tram
         #Treasure chests
         LocationData(CONTINENTAL_TRAM, "Continental Tram Chest - Tickets please 1", 1844 + treasure_index_offset), #Continental Tram map chest
@@ -1243,6 +1412,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(CONTINENTAL_TRAM, "Continental Tram NPC - Diamond hanging out with the conscript 1", 2895 + npc_index_offset), #Dust
         LocationData(CONTINENTAL_TRAM, "Continental Tram NPC - Diamond hanging out with the conscript 2", 2894 + npc_index_offset), #Ingot
+
+        #Regionsanity Meta Location
+        LocationData(CONTINENTAL_TRAM, CONTINENTAL_TRAM + " Region Completion", 57 + regionsanity_index_offset, regionsanity=True),
 
         #Zones (End-Game)
         #Ancient Labyrinth
@@ -1259,6 +1431,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth NPC - Sneaky hole in wall Diamond in entry touchdown room", 2880 + npc_index_offset), #(-182, 126, -326) F2 Ore
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth NPC - B1 Thats right, Diamond goes in the bluish-white square hole", 2882 + npc_index_offset), #(-200, 98, -334) F3 Ingot
+
+        #Regionsanity Meta Location
+        LocationData(ANCIENT_LABYRINTH, ANCIENT_LABYRINTH + " Region Completion", 58 + regionsanity_index_offset, regionsanity=True),
 
         #The Sequoia
         #Treasure chests
@@ -1277,6 +1452,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(THE_SEQUOIA, "The Sequoia NPC - Post-boss victory Diamond 1", 2889 + npc_index_offset), #(-269, 240, -545) Dust
         LocationData(THE_SEQUOIA, "The Sequoia NPC - Post-boss victory Diamond 2", 2890 + npc_index_offset), #(-268, 240, -547) Ingot
         LocationData(THE_SEQUOIA, "The Sequoia NPC - Post-boss victory Diamond 3", 2888 + npc_index_offset), #(-275, 240, -546) Ore
+
+        #Regionsanity Meta Location
+        LocationData(THE_SEQUOIA, THE_SEQUOIA + " Region Completion", 59 + regionsanity_index_offset, regionsanity=True),
 
         #The Depths
         #Treasure chests
@@ -1301,6 +1479,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(THE_DEPTHS, "The Depths NPC - Follow barnacled meat branches for Diamond 2", 2862 + npc_index_offset), #(-303, 14, 183) Ingot
         LocationData(THE_DEPTHS, "The Depths NPC - Follow barnacled meat branches for Diamond 3", 2860 + npc_index_offset), #(-359, 10, 162) Ore
 
+        #Regionsanity Meta Location
+        LocationData(THE_DEPTHS, THE_DEPTHS + " Region Completion", 60 + regionsanity_index_offset, regionsanity=True),
+
         #Castle Sequoia
         #Treasure chests
         #Map and Decapitator chests categorized in Castle Ramparts since they're in a locked room there requiring the Ramparts key
@@ -1324,11 +1505,17 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs CheckOrNot: Z58_StrandedShard ID 3785 (401, 183, -382); this gives you a Gaea Shard if you're stuck: no
         #NPCs Blocker: i think this guy might only show up in the vanilla game's randomizer? checks if Z58_EleOn (Z58 is Castle Sequoia); Z58Progression_Gate ID 3824 (400, 250, -478)
 
+        #Regionsanity Meta Location
+        LocationData(CASTLE_SEQUOIA, CASTLE_SEQUOIA + " Region Completion", 61 + regionsanity_index_offset, regionsanity=True),
+
         #The New World
         #Treasure chests
         LocationData(THE_NEW_WORLD, "The New World Chest - NW lavafall", 2930 + treasure_index_offset), #(-134, 8, 230) Lunar Mail chest
         LocationData(THE_NEW_WORLD, "The New World Chest - Desolate peninsula past bounce shrooms", 2931 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(-11, 12, -577) Mages Pike chest
         LocationData(THE_NEW_WORLD, "The New World Chest - Tiny shrooms keep shed", 1938 + treasure_index_offset), #(-85, 8, 142) The New World map chest
+
+        # Regionsanity Meta Location
+        LocationData(THE_NEW_WORLD, THE_NEW_WORLD + " Region Completion", 63 + regionsanity_index_offset, regionsanity=True),
     ]
 
     return location_table

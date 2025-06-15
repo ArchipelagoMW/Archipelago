@@ -102,14 +102,18 @@ class CrystalProjectWorld(World):
             # Generate a collection state that is a copy of the current state but also has all the passes so we can
             # check what regions we can access without just getting told none because we have no passes
             all_passes_state: CollectionState = CollectionState(self.multiworld)
+            starting_state: CollectionState = CollectionState(self.multiworld)
             for region_pass in self.item_name_groups[PASS]:
                 all_passes_state.collect(self.create_item(region_pass))
             for region in self.get_regions():
                 if region.can_reach(all_passes_state) and region.name != MENU:
-                    initially_reachable_regions.append(region)
+                    if len(region.locations) > 2:
+                        initially_reachable_regions.append(region)
             self.starter_region = self.random.choice(initially_reachable_regions).name
+            # logging.getLogger().info("Starting region is " + self.starter_region)
+            self.origin_region_name = self.starter_region
             self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
-
+            self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
