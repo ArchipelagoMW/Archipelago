@@ -27,10 +27,13 @@ class SatisfactoryWorld(World):
     ut_can_gen_without_yaml = True
 
     game_logic: ClassVar[GameLogic] = GameLogic()
-    state_logic: StateLogic
-    items: Items
-    critical_path: CriticalPathCalculator
+
+    # These are set in generate_early and thus aren't always available
+    state_logic: StateLogic | None = None
+    items: Items | None = None
+    critical_path: CriticalPathCalculator | None = None
     critical_path_seed: float | None = None
+    #
 
     item_name_to_id = Items.item_names_and_ids
     location_name_to_id = Locations().get_locations_for_data_package()
@@ -79,8 +82,10 @@ class SatisfactoryWorld(World):
         self.setup_events()
 
         number_of_locations: int = len(self.multiworld.get_unfilled_locations(self.player))
+        precollected_items: list[Item] = self.multiworld.precollected_items[self.player]
+        
         self.multiworld.itempool += \
-            self.items.build_item_pool(self.random, self.multiworld, number_of_locations)
+            self.items.build_item_pool(self.random, precollected_items, number_of_locations)
 
 
     def set_rules(self) -> None:
@@ -98,15 +103,15 @@ class SatisfactoryWorld(World):
 
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
-        if change and item.name == "Recipe: Quartz Purification":
-            state.prog_items[self.player]["Recipe: Distilled Silica"] = 1
+        if change and item.name in self.game_logic.indirect_recipes:
+            state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]] = 1
         return change
 
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
-        if change and item.name == "Recipe: Quartz Purification":
-            del state.prog_items[self.player]["Recipe: Distilled Silica"]
+        if change and item.name in self.game_logic.indirect_recipes:
+            del state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]]
         return change
 
 
@@ -159,6 +164,7 @@ class SatisfactoryWorld(World):
             "DeathLink": bool(self.options.death_link)
         }
 
+
     def interpret_slot_data(self, slot_data: dict[str, Any] | None) -> dict[str, Any] | None:
         """Used by Universal Tracker to correctly rebuild state"""
 
@@ -197,13 +203,10 @@ class SatisfactoryWorld(World):
 
         return slot_data
 
+
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.randomize_starter_recipes:
             spoiler_handle.write(f'Starter Recipes:                 {sorted(self.critical_path.tier_0_recipes)}\n')
-
-
-    def get_filler_item_name(self) -> str:
-        return self.items.get_filler_item_name(self.items.filler_items, self.random)
 
 
     def setup_events(self) -> None:
@@ -218,8 +221,18 @@ class SatisfactoryWorld(World):
                 location.show_in_spoiler = False
 
 
+    def get_filler_item_name(self) -> str:
+        if self.items:
+            return self.items.get_filler_item_name(self.random)
+        else:
+            return Items.get_filler_item_name_uninitialized(self.random)
+
+
     def create_item(self, name: str) -> Item:
-        return Items.create_item(self.items, name, self.player)
+        if self.items:
+            return self.items.create_item(name, self.player)
+        else:
+            return Items.create_item_uninitialized(name, self.player)
 
 
     def push_precollected(self, item_name: str) -> None:

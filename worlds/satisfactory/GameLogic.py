@@ -134,6 +134,10 @@ class DropPodData:
 
 
 class GameLogic:
+    indirect_recipes: dict[str, str] = {
+        "Recipe: Quartz Purification": "Recipe: Distilled Silica"
+    }
+
     recipes: dict[str, tuple[Recipe, ...]] = {
         # This Dict should only contain items that are used somewhere in a logic chain
 
@@ -173,7 +177,8 @@ class GameLogic:
 
         # Raw Resources
         "Water": (
-            Recipe("Water", "Water Extractor", implicitly_unlocked=True), ),
+            Recipe("Water", "Water Extractor", implicitly_unlocked=True),
+            Recipe("Water (Resource Well)", "Resource Well Pressurizer", implicitly_unlocked=True, minimal_tier=2)),
         "Limestone": (
             Recipe("Limestone", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True), ),
         "Raw Quartz": (
@@ -189,7 +194,8 @@ class GameLogic:
         "Caterium Ore": (
             Recipe("Caterium Ore", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True), ),
         "Crude Oil": (
-            Recipe("Crude Oil", "Oil Extractor", implicitly_unlocked=True), ),
+            Recipe("Crude Oil", "Oil Extractor", implicitly_unlocked=True),
+            Recipe("Crude Oil (Resource Well)", "Resource Well Pressurizer", implicitly_unlocked=True, minimal_tier=2)),
         "Bauxite": (
             Recipe("Bauxite", "Miner Mk.1", handcraftable=True, implicitly_unlocked=True, minimal_tier=2), ),
         "Nitrogen Gas": (
@@ -408,7 +414,7 @@ class GameLogic:
             Recipe("Battery", "Blender", ("Sulfuric Acid", "Alumina Solution", "Aluminum Casing"), additional_outputs=("Water", ), minimal_tier=2), 
             Recipe("Classic Battery", "Manufacturer", ("Sulfur", "Alclad Aluminum Sheet", "Plastic", "Wire"), minimal_belt_speed=2, minimal_tier=2)),
         "Supercomputer": (
-            Recipe("Supercomputer", "Manufacturer", ("Computer", "AI Limiter", "High-Speed Connector", "Plastic"), handcraftable=True),
+            Recipe("Supercomputer", "Manufacturer", ("Computer", "AI Limiter", "High-Speed Connector", "Plastic"), handcraftable=True, minimal_tier=2),
             Recipe("OC Supercomputer", "Assembler", ("Radio Control Unit", "Cooling System"), minimal_tier=2),
             Recipe("Super-State Computer", "Manufacturer", ("Computer", "Electromagnetic Control Rod", "Battery", "Wire"), minimal_tier=2)),
         "Sulfuric Acid": (
@@ -419,17 +425,17 @@ class GameLogic:
         "Uranium Fuel Rod": (
             Recipe("Uranium Fuel Rod", "Manufacturer", ("Encased Uranium Cell", "Encased Industrial Beam", "Electromagnetic Control Rod")), 
             Recipe("Uranium Fuel Unit", "Manufacturer", ("Encased Uranium Cell", "Electromagnetic Control Rod", "Crystal Oscillator", "Rotor"))),
-        #"Non-fissile Uranium": (
-        #    Recipe("Non-fissile Uranium", "Blender", ("Uranium Waste", "Silica", "Nitric Acid", "Sulfuric Acid"), additional_outputs=("Water", )), 
-        #    Recipe("Fertile Uranium", "Blender", ("Uranium", "Uranium Waste", "Nitric Acid", "Sulfuric Acid"), additional_outputs=("Water", ), minimal_belt_speed=2)),
-        #"Plutonium Pellet": (
-        #    Recipe("Plutonium Pellet", "Particle Accelerator", ("Non-fissile Uranium", "Uranium Waste"), minimal_belt_speed=2), ),
-        #"Encased Plutonium Cell": (
-        #    Recipe("Encased Plutonium Cell", "Assembler", ("Plutonium Pellet", "Concrete")), 
-        #    Recipe("Instant Plutonium Cell", "Particle Accelerator", ("Non-fissile Uranium", "Aluminum Casing"), minimal_belt_speed=2)),
-        #"Plutonium Fuel Rod": (
-        #    Recipe("Plutonium Fuel Rod", "Manufacturer", ("Encased Plutonium Cell", "Steel Beam", "Electromagnetic Control Rod", "Heat Sink")), 
-        #    Recipe("Plutonium Fuel Unit", "Assembler", ("Encased Plutonium Cell", "Pressure Conversion Cube"))),
+        "Non-fissile Uranium": (
+            Recipe("Non-fissile Uranium", "Blender", ("Uranium Waste", "Silica", "Nitric Acid", "Sulfuric Acid"), additional_outputs=("Water", )), 
+            Recipe("Fertile Uranium", "Blender", ("Uranium", "Uranium Waste", "Nitric Acid", "Sulfuric Acid"), additional_outputs=("Water", ), minimal_belt_speed=2)),
+        "Plutonium Pellet": (
+            Recipe("Plutonium Pellet", "Particle Accelerator", ("Non-fissile Uranium", "Uranium Waste"), minimal_belt_speed=2), ),
+        "Encased Plutonium Cell": (
+            Recipe("Encased Plutonium Cell", "Assembler", ("Plutonium Pellet", "Concrete")), 
+            Recipe("Instant Plutonium Cell", "Particle Accelerator", ("Non-fissile Uranium", "Aluminum Casing"), minimal_belt_speed=2)),
+        "Plutonium Fuel Rod": (
+            Recipe("Plutonium Fuel Rod", "Manufacturer", ("Encased Plutonium Cell", "Steel Beam", "Electromagnetic Control Rod", "Heat Sink")), 
+            Recipe("Plutonium Fuel Unit", "Assembler", ("Encased Plutonium Cell", "Pressure Conversion Cube"))),
         "Gas Filter": (
             Recipe("Gas Filter", "Manufacturer", ("Coal", "Rubber", "Fabric"), handcraftable=True), ),
         "Iodine-Infused Filter": (
@@ -523,12 +529,13 @@ class GameLogic:
         "Rocket Fuel": (
             Recipe("Rocket Fuel", "Blender", ("Turbofuel", "Nitric Acid"), additional_outputs=("Compacted Coal", ), minimal_tier=2),
             Recipe("Nitro Rocket Fuel", "Blender", ("Fuel", "Nitrogen Gas", "Sulfur", "Coal"), minimal_belt_speed=2, additional_outputs=("Compacted Coal", ), minimal_tier=2)),
-        #"Ionized Fuel": (
-        #    Recipe("Ionized Fuel", "Refinery", ("Rocket Fuel", "Power Shard"), additional_outputs=("Compacted Coal", )), ),
+        "Ionized Fuel": (
+            Recipe("Ionized Fuel", "Refinery", ("Rocket Fuel", "Power Shard"), additional_outputs=("Compacted Coal", )),
+            Recipe("Dark-Ion Fuel", "Blender", ("Packaged Rocket Fuel", "Dark Matter Crystal"), minimal_belt_speed=3, additional_outputs=("Compacted Coal", ), minimal_tier=4)),
         "Packaged Rocket Fuel": (
             Recipe("Packaged Rocket Fuel", "Packager", ("Rocket Fuel", "Empty Fluid Tank")), ),
-        #"Packaged Ionized Fuel": (
-        #    Recipe("Packaged Ionized Fuel", "Packager", ("Ionized Fuel", "Empty Fluid Tank")), ),
+        "Packaged Ionized Fuel": (
+            Recipe("Packaged Ionized Fuel", "Packager", ("Ionized Fuel", "Empty Fluid Tank")), ),
         "Diamonds": (
             Recipe("Diamonds", "Particle Accelerator", ("Coal", ), minimal_belt_speed=5),
             Recipe("Cloudy Diamonds", "Particle Accelerator", ("Coal", "Limestone"), minimal_belt_speed=4),
@@ -577,6 +584,17 @@ class GameLogic:
             Recipe("AI Expansion Server", "Quantum Encoder", ("Dark Matter Residue", "Excited Photonic Matter", "Magnetic Field Generator", "Neural-Quantum Processor", "Superposition Oscillator"), minimal_tier=5), ),
         ###
 #1.0
+        #For exclusion logic
+        "Hoverpack": (
+            Recipe("Hoverpack", "Equipment Workshop", ("Motor", "Heavy Modular Frame", "Computer", "Alclad Aluminum Sheet")), ),
+        "Rifle Ammo": (
+            Recipe("Rifle Ammo", "Assembler", ("Copper Sheet", "Smokeless Powder"), minimal_belt_speed=2), ),
+        "Turbo Rifle Ammo": (
+            Recipe("Turbo Rifle Ammo", "Blender", ("Rifle Ammo", "Aluminum Casing", "Turbofuel"), minimal_belt_speed=3),
+            Recipe("Turbo Rifle Ammo (Packaged)", "Manufacturer", ("Rifle Ammo", "Aluminum Casing", "Packaged Turbofuel"), minimal_belt_speed=2, minimal_tier=2)),
+        "Homing Rifle Ammo": (
+            Recipe("Homing Rifle Ammo", "Assembler", ("Rifle Ammo", "High-Speed Connector")), ),
+        ###
     }
 
     buildings: dict[str, Building] = {
@@ -598,8 +616,8 @@ class GameLogic:
         "Oil Extractor": Building("Oil Extractor", ("Motor", "Encased Industrial Beam", "Cable")),
         "Water Extractor": Building("Water Extractor", ("Copper Sheet", "Reinforced Iron Plate", "Rotor")),
         "Smelter": Building("Smelter", ("Iron Rod", "Wire"), PowerInfrastructureLevel.Basic),
-        "Foundry": Building("Foundry", ("Reinforced Iron Plate", "Iron Rod", "Concrete"), PowerInfrastructureLevel.Basic), # Simplified , used ("Modular Frame", "Rotor", "Concrete")
-        "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Wire", "Rubber", "Encased Industrial Beam", "Motor", "Steel Beam", "Plastic"), PowerInfrastructureLevel.Advanced),
+        "Foundry": Building("Foundry", ("Reinforced Iron Plate", "Iron Rod", "Concrete"), PowerInfrastructureLevel.Basic), # Simplified, used ("Modular Frame", "Rotor", "Concrete")
+        "Resource Well Pressurizer": Building("Resource Well Pressurizer", ("Steel Pipe", "Heavy Modular Frame", "Motor", "Reinforced Iron Plate", "Copper Sheet", "Steel Beam"), PowerInfrastructureLevel.Advanced), # Simplified, used ("Radio Control Unit", "Heavy Modular Frame", "Motor", "Alclad Aluminum Sheet", "Rubber", "Steel Beam", "Aluminum Casing")
         "Equipment Workshop": Building("Equipment Workshop", ("Iron Plate", "Iron Rod"), implicitly_unlocked=True),
         "AWESOME Sink": Building("AWESOME Sink", ("Reinforced Iron Plate", "Cable", "Concrete"), can_produce=False),
         "AWESOME Shop": Building("AWESOME Shop", ("Screw", "Iron Plate", "Cable"), can_produce=False),
@@ -630,6 +648,10 @@ class GameLogic:
         "Quantum Encoder": Building("Quantum Encoder", ("Turbo Motor", "Supercomputer", "Cooling System", "Time Crystal", "Ficsite Trigon"), PowerInfrastructureLevel.Complex),
         "Alien Power Augmenter": Building("Alien Power Augmenter", ("SAM Fluctuator", "Cable", "Encased Industrial Beam", "Motor", "Computer")),
 #1.0
+
+        #For exclusion logic
+        "Portal": Building("Portal", ("Turbo Motor", "Radio Control Unit", "Superposition Oscillator", "SAM Fluctuator", "Ficsite Trigon", "Singularity Cell"), PowerInfrastructureLevel.Advanced),
+        ###
     }
 
     requirement_per_powerlevel: dict[PowerInfrastructureLevel, tuple[Recipe, ...]] = {

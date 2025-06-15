@@ -67,7 +67,7 @@ class CriticalPathCalculator:
         self.select_minimal_required_parts_for_building("Pipes Mk.2")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.1")
         self.select_minimal_required_parts_for_building("Pipeline Pump Mk.2")
-        
+
         if self.logic.recipes["Uranium"][0].minimal_tier <= self.final_elevator_package:
             self.select_minimal_required_parts_for(("Hazmat Suit", "Iodine-Infused Filter"))
 
@@ -214,12 +214,14 @@ class CriticalPathCalculator:
             self.tier_0_recipes.add(self.random.choice(
                 ("Recipe: Iron Ingot", "Recipe: Basic Iron Ingot", "Recipe: Iron Alloy Ingot")))
             
-            selected_recipe = self.random.choice(("Recipe: Iron Plate", "Recipe: Steel Cast Plate"))
+            selected_recipe = self.random.choice(
+                ("Recipe: Iron Plate", "Recipe: Iron Plate", "Recipe: Iron Plate", "Recipe: Steel Cast Plate"))
             self.tier_0_recipes.add(selected_recipe)
             if selected_recipe == "Recipe: Steel Cast Plate":
                 self.add_steel_ingot_to_starter_recipes()
 
-            selected_recipe = self.random.choice(("Recipe: Iron Rod", "Recipe: Steel Rod"))
+            selected_recipe = self.random.choice(
+                ("Recipe: Iron Rod", "Recipe: Iron Rod", "Recipe: Iron Rod", "Recipe: Steel Rod"))
             self.tier_0_recipes.add(selected_recipe)
             if selected_recipe == "Recipe: Steel Rod":
                 self.add_steel_ingot_to_starter_recipes()
@@ -239,7 +241,8 @@ class CriticalPathCalculator:
                 # add Silica
                 self.tier_0_recipes.add(self.random.choice(("Recipe: Silica", "Recipe: Cheap Silica")))
 
-            selected_recipe = self.random.choice(("Recipe: Screw", "Recipe: Cast Screw", "Recipe: Steel Screw"))
+            selected_recipe = self.random.choice(
+                ("Recipe: Screw", "Recipe: Screw","Recipe: Cast Screw", "Recipe: Cast Screw", "Recipe: Steel Screw"))
             self.tier_0_recipes.add(selected_recipe)
             if selected_recipe == "Recipe: Steel Screw":
                 # add Steel Beam and steel Ingot
