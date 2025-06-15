@@ -2,7 +2,6 @@ import collections
 import concurrent.futures
 import logging
 import os
-import pickle
 import tempfile
 import time
 import zipfile
@@ -13,7 +12,7 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType, M
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, restricted_dumps, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -334,7 +333,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
-                multidata = zlib.compress(pickle.dumps(multidata), 9)
+                multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format
