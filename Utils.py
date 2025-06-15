@@ -475,7 +475,7 @@ def restricted_dumps(obj: Any) -> bytes:
     try:
         restricted_loads(s)
     except pickle.UnpicklingError as e:
-        raise pickle.PicklingError(e)
+        raise pickle.PicklingError(e) from e
 
     return s
 
