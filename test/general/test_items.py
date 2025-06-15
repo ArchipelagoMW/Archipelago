@@ -19,20 +19,18 @@ class TestBase(unittest.TestCase):
                 with self.subTest("Item Name", item_name=item_name, game_name=game_name):
                     self.assertEqual(item.name, item_name)
 
-                if item.advancement:
-                    with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
-                        test_state.collect(item, True)
+                if not item.advancement:
+                    # state.collect and state.remove exit immediately if the item is not an advancement, we can skip it
+                    continue
 
-                    with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
-                        test_state.remove(item)
+                with self.subTest("Item State Collect", item_name=item_name, game_name=game_name):
+                    test_state.collect(item, True)
 
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
-                                         "Item Collect -> Remove should restore empty state.")
-                else:
-                    with self.subTest("Item State Collect No Change", item_name=item_name, game_name=game_name):
-                        # Non-Advancement should not modify state.
-                        test_state.collect(item)
-                        self.assertEqual(test_state.prog_items, multiworld.state.prog_items)
+                with self.subTest("Item State Remove", item_name=item_name, game_name=game_name):
+                    test_state.remove(item)
+
+                    self.assertEqual(test_state.prog_items, multiworld.state.prog_items,
+                                     "Item Collect -> Remove should restore empty state.")
 
     def test_item_name_group_has_valid_item(self):
         """Test that all item name groups contain valid items. """
