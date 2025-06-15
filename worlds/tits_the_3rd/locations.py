@@ -52,3 +52,19 @@ def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = F
             create_location(multiworld, player, location_name)
 
 location_groups: Dict[str, Set[str]] = {}
+
+default_sealing_stone_quartz = {
+    # Tita
+    LocationName.tita_orbment_item_1: ItemName.ep_cut_2,
+    LocationName.tita_orbment_item_2: ItemName.attack_1,
+    LocationName.tita_orbment_item_3: ItemName.eagle_eye,
+    LocationName.tita_orbment_item_4: ItemName.hp_1,
+    # Julia
+    LocationName.julia_orbment_item_1: ItemName.ep_cut_2,
+    LocationName.julia_orbment_item_2: ItemName.action_1,
+    LocationName.julia_orbment_item_3: ItemName.hit_1,
+    LocationName.julia_orbment_item_4: ItemName.range_1,
+    LocationName.julia_orbment_item_5: ItemName.move_1,
+    LocationName.julia_orbment_item_6: ItemName.attack_1,
+    LocationName.julia_orbment_item_7: ItemName.shield_1,
+}
