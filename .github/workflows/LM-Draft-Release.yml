@@ -6,7 +6,44 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout-code:
+  windows-deps:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "~3.12.6"
+        cache: pip
+    - name: Create Lib-Windows
+      run: mkdir lib-windows
+    - name: Install Windows-Deps
+      run: pip install -r requirements.txt --target ./lib-windows
+    - name: Zip Lib-Windows
+      run: |
+        Compress-Archive -Path ./lib-windows -DestinationPath ./lib-windows.zip
+    - uses: actions/upload-artifact@v4
+      with:
+        name: lib-windows
+        path: ./lib-windows.zip
+  
+  linux-deps:
+    runs-on: linux-latest
+    steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "~3.12.6"
+        cache: pip
+    - name: Create Lib-Linux
+      run: mkdir lib-linux
+    - name: Install Linux-Deps
+      run: pip install -r requirements.txt --target ./lib-linux
+    - name: Zip Lib-Linux
+      run: zip -r lib-linux.zip ./lib-linux
+    - uses: actions/upload-artifact@v4
+      with:
+        name: lib-linux
+        path: ./lib-linux.zip
+
+  fuzz:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -14,38 +51,62 @@ jobs:
       with:
         python-version: "~3.12.6"
         cache: pip
-
-  fuzz:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: Eijebong/ap-actions/fuzz@main
-        with:
-          apworld-path: ${{ github.repository }}/worlds/luigismansion
-          ap-version: '0.6.1'
-          python-version: '3.12'
-          runs: 1000
-          yamls-per-run: 1
-      - uses: Eijebong/ap-actions/fuzz@main
-        with:
-          apworld-path: ${{ github.repository }}/worlds/luigismansion
-          ap-version: '0.6.1'
-          python-version: '3.12'
-          runs: 1000
-          yamls-per-run: 3
+    - name: Fuzzer-Check-1-yml
+      uses: Eijebong/ap-actions/fuzz@main
+      with:
+        apworld-path: worlds/luigismansion
+        ap-version: '0.6.1'
+        python-version: '3.12'
+        runs: 1000
+        yamls-per-run: 1
+    - name: Fuzzer-Check-3-yml
+      uses: Eijebong/ap-actions/fuzz@main
+      with:
+        apworld-path: worlds/luigismansion
+        ap-version: '0.6.1'
+        python-version: '3.12'
+        runs: 1000
+        yamls-per-run: 3
 
   package:
-    needs: [fuzz]
+    needs: [windows-deps, linux-deps, fuzz]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - name: Create Main Lib
+        run: mkdir worlds/luigismansion/lib
+      - name: Download Windows Deps
+        id: dl-win-deps
+        uses: actions/download-artifact@v4
+        with:
+          name: lib-windows
+      - name: Unzip Windows directory
+        run: unzip -o -d worlds/luigismansion/lib ${{steps.dl-win-deps.outputs.dl-win-deps}}
+        
+      - name: Download Linux Deps
+        id: dl-lin-deps
+        uses: actions/download-artifact@v4
+        with:
+          name: lib-linux
+      - name: Unzip Linux directory
+        run: unzip -o -d worlds/luigismansion/lib ${{steps.dl-lin-deps.outputs.dl-lin-deps}}
+      
       - name: Creates the LM APWorld
         id: apworld
         uses: Eijebong/ap-actions/package-apworld@main
         with:
-          path: ${{ github.repository }}/worlds/luigismansion
+          path: worlds/luigismansion
       - uses: actions/upload-artifact@v4
         with:
           name: apworld
           path: ${{ steps.apworld.outputs.apworld }}
+
+      - name: Zip Main Lib
+        run: zip -r lib.zip worlds/luigismansion/lib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lib
+          path: worlds/luigismansion/lib/lib.zip
 
   publish:
     runs-on: ubuntu-latest
@@ -55,11 +116,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: lib
+      - uses: actions/download-artifact@v4
+        with:
           name: apworld
 
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: '*'
+          artifacts: 'lib, apworld'
           allowUpdates: true
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
