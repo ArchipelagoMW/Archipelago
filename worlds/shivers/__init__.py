@@ -245,7 +245,7 @@ class ShiversWorld(World):
 
         storage_items += [self.create_item("Empty") for _ in range(3)]
 
-        state = self.multiworld.get_all_state(False)
+        state = self.multiworld.get_all_state(False, True, False)
 
         self.random.shuffle(storage_locs)
         self.random.shuffle(storage_items)
@@ -254,6 +254,27 @@ class ShiversWorld(World):
 
         self.storage_placements = {location.name.replace("Storage: ", ""): location.item.name.replace(" DUPE", "") for
                                    location in storage_locs}
+
+    def get_pre_fill_items(self) -> List[Item]:
+        if self.options.full_pots == "pieces":
+            return [self.create_item(name) for name, data in item_table.items() if
+                    data.type == ItemType.POT_DUPLICATE]
+        elif self.options.full_pots == "complete":
+            return [self.create_item(name) for name, data in item_table.items() if
+                    data.type == ItemType.POT_COMPLETE_DUPLICATE]
+        else:
+            pool = []
+            pieces = [self.create_item(name) for name, data in item_table.items() if
+                      data.type == ItemType.POT_DUPLICATE]
+            complete = [self.create_item(name) for name, data in item_table.items() if
+                        data.type == ItemType.POT_COMPLETE_DUPLICATE]
+            for i in range(10):
+                if self.pot_completed_list[i] == 0:
+                    pool.append(pieces[i])
+                    pool.append(pieces[i + 10])
+                else:
+                    pool.append(complete[i])
+            return pool
 
     def fill_slot_data(self) -> dict:
         return {

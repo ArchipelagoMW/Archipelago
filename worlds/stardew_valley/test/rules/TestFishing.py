@@ -1,6 +1,6 @@
+from ..bases import SVTestBase
 from ...options import SeasonRandomization, Fishsanity, ExcludeGingerIsland, SkillProgression, ToolProgression, ElevatorProgression, SpecialOrderLocations
 from ...strings.fish_names import Fish
-from ...test import SVTestBase
 
 
 class TestNeedRegionToCatchFish(SVTestBase):
@@ -8,7 +8,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_disabled,
         ElevatorProgression.internal_name: ElevatorProgression.option_vanilla,
         SkillProgression.internal_name: SkillProgression.option_vanilla,
-        ToolProgression.internal_name: ToolProgression.option_vanilla,
+        ToolProgression.internal_name: ToolProgression.option_progressive,
         Fishsanity.internal_name: Fishsanity.option_all,
         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
         SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
@@ -18,7 +18,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         fish_and_items = {
             Fish.crimsonfish: ["Beach Bridge"],
             Fish.void_salmon: ["Railroad Boulder Removed", "Dark Talisman"],
-            Fish.woodskip: ["Glittering Boulder Removed", "Progressive Weapon"],  # For the ores to get the axe upgrades
+            Fish.woodskip: ["Progressive Axe", "Progressive Axe", "Progressive Weapon"],  # For the ores to get the axe upgrades
             Fish.mutant_carp: ["Rusty Key"],
             Fish.slimejack: ["Railroad Boulder Removed", "Rusty Key"],
             Fish.lionfish: ["Boat Repair"],
@@ -26,8 +26,8 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.stingray: ["Boat Repair", "Island Resort"],
             Fish.ghostfish: ["Progressive Weapon"],
             Fish.stonefish: ["Progressive Weapon"],
-            Fish.ice_pip: ["Progressive Weapon", "Progressive Weapon"],
-            Fish.lava_eel: ["Progressive Weapon", "Progressive Weapon", "Progressive Weapon"],
+            Fish.ice_pip: ["Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe"],
+            Fish.lava_eel: ["Progressive Weapon", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe", "Progressive Pickaxe"],
             Fish.sandfish: ["Bus Repair"],
             Fish.scorpion_carp: ["Desert Obelisk"],
             # Starting the extended family quest requires having caught all the legendaries before, so they all have the rules of every other legendary
@@ -37,6 +37,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.legend_ii: ["Beach Bridge", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],
             Fish.ms_angler: ["Beach Bridge", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],
         }
+        self.collect("Progressive Fishing Rod", 4)
         self.original_state = self.multiworld.state.copy()
         for fish in fish_and_items:
             with self.subTest(f"Region rules for {fish}"):
