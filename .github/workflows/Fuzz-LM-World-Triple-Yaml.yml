@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  fuzz-3:
+  fuzz:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
