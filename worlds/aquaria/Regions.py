@@ -34,12 +34,14 @@ def _has_li(state: CollectionState, player: int) -> bool:
     return state.has(ItemNames.LI_AND_LI_SONG, player)
 
 
-def _has_damaging_item(state: CollectionState, player: int, to_remove:Iterable[str] = []) -> bool:
+DAMAGING_ITEMS:Iterable[str] = [
+    ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM,
+    ItemNames.LI_AND_LI_SONG, ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA,
+    ItemNames.BABY_BLASTER
+]
+
+def _has_damaging_item(state: CollectionState, player: int, damaging_items:Iterable[str] = DAMAGING_ITEMS) -> bool:
     """`player` in `state` has the an item that do damage other than the ones in `to_remove`"""
-    damaging_items = [item for item in
-                      {ItemNames.ENERGY_FORM, ItemNames.NATURE_FORM, ItemNames.BEAST_FORM, ItemNames.LI_AND_LI_SONG,
-                          ItemNames.BABY_NAUTILUS, ItemNames.BABY_PIRANHA, ItemNames.BABY_BLASTER}
-                      if item not in to_remove ]
     return state.has_any(damaging_items, player)
 
 
@@ -611,9 +613,11 @@ class AquariaRegions:
         self.__connect_one_way_regions(self.openwater_tr, self.openwater_tr_turtle,
                                        lambda state: _has_beast_form_or_arnassi_armor(state, self.player))
         self.__connect_one_way_regions(self.openwater_tr_turtle, self.openwater_tr)
+        damaging_items_minus_nature_form = [item for item in DAMAGING_ITEMS if item != ItemNames.NATURE_FORM]
         self.__connect_one_way_regions(self.openwater_tr, self.openwater_tr_urns,
                                        lambda state: _has_bind_song(state, self.player) or
-                                                     _has_damaging_item(state, self.player, {ItemNames.NATURE_FORM}))
+                                                     _has_damaging_item(state, self.player,
+                                                                        damaging_items_minus_nature_form))
         self.__connect_regions(self.openwater_tr, self.openwater_br)
         self.__connect_regions(self.openwater_tr, self.mithalas_city)
         self.__connect_regions(self.openwater_tr, self.veil_b)
