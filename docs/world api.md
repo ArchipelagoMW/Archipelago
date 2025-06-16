@@ -316,8 +316,8 @@ reject the placement of an item there.
 
 ### Events (or "generation-only items/locations")
 
-An event item or location is one that only exists during multiworld generation. The server is never made aware of them,
-event locations can never be checked by the player, nor can event items be received during play.
+An event item or location is one that only exists during multiworld generation; the server is never made aware of them.
+Event locations can never be checked by the player, and event items cannot be received during play.
 
 Events are used to represent in-game actions (that aren't regular Archipelago locations) when either:
 
