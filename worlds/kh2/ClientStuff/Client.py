@@ -7,6 +7,7 @@ import os
 import asyncio
 import json
 import requests
+from werkzeug.utils import secure_filename
 from pymem import pymem
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
@@ -324,7 +325,7 @@ class KH2Context(CommonContext):
                 logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
                 return
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
-            self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, self.kh2_seed_save_path)
+            self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, secure_filename(self.kh2_seed_save_path))
 
             if not os.path.exists(self.kh2_seed_save_path_join):
                 self.kh2_seed_save = {

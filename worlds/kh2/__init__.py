@@ -102,16 +102,16 @@ class KH2World(World):
                 self.goofy_ability_dict[ability] -= 1
 
         slot_data = self.options.as_dict(
-            "Goal", 
-            "FinalXemnas", 
-            "LuckyEmblemsRequired", 
-            "BountyRequired",
-            "FightLogic",
-            "FinalFormLogic",
-            "AutoFormLogic",
-            "LevelDepth",
-            "DonaldGoofyStatsanity",
-            "CorSkipToggle"
+                "Goal",
+                "FinalXemnas",
+                "LuckyEmblemsRequired",
+                "BountyRequired",
+                "FightLogic",
+                "FinalFormLogic",
+                "AutoFormLogic",
+                "LevelDepth",
+                "DonaldGoofyStatsanity",
+                "CorSkipToggle"
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
@@ -201,6 +201,9 @@ class KH2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
+        if self.player_name != self.multiworld.get_file_safe_player_name(self.player):
+            raise Exception(f"{self.player_name} yaml name containts characters not supported for kingdom hearts 2")
+
         # Item: Quantity Map
         # Example. Quick Run: 4
         self.total_locations = len(all_locations.keys())
