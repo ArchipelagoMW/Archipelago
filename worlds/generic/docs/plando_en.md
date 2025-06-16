@@ -28,7 +28,7 @@ requires:
 ``` 
 
 For a basic understanding of YAML files, refer to 
-[YAML Formatting](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en#yaml-formatting) 
+[YAML Formatting](/tutorial/Archipelago/advanced_settings/en#yaml-formatting) 
 in Advanced Settings.
 
 ## Item Plando
