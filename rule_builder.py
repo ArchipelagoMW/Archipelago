@@ -559,6 +559,71 @@ class Or(NestedRule[TWorld]):
 
 
 @dataclasses.dataclass()
+class Wrapper(Rule[TWorld]):
+    """A rule that wraps another rule to provide extra logic or data"""
+
+    child: "Rule[TWorld]"
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
+        return self.Resolved(self.child.resolve(world), player=world.player)
+
+    @override
+    def to_json(self) -> Mapping[str, Any]:
+        return {
+            "rule": self.__class__.__name__,
+            "options": self.options,
+            "child": self.child.to_json(),
+        }
+
+    @override
+    @classmethod
+    def from_json(cls, data: Mapping[str, Any]) -> Self:
+        child = data.get("child")
+        if child is None:
+            raise ValueError("Child rule cannot be None")
+        return cls(child, options=data.get("options", ()))
+
+    @override
+    def __str__(self) -> str:
+        return f"{self.__class__.__name__}[{self.child}]"
+
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        child: "Rule.Resolved"
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return self.child._evaluate(state)
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            deps: dict[str, set[int]] = {}
+            for item_name, rules in self.child.item_dependencies().items():
+                deps[item_name] = {id(self), *rules}
+            return deps
+
+        @override
+        def indirect_regions(self) -> tuple[str, ...]:
+            return self.child.indirect_regions()
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: "list[JSONMessagePart]" = [{"type": "text", "text": f"{self.__class__.__name__} ["}]
+            messages.extend(self.child.explain_json(state))
+            messages.append({"type": "text", "text": "]"})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            return f"{self.__class__.__name__}[{self.child.explain_str(state)}]"
+
+        @override
+        def __str__(self) -> str:
+            return f"{self.__class__.__name__}[{self.child}]"
+
+
+@dataclasses.dataclass()
 class Has(Rule[TWorld]):
     item_name: str
     count: int = 1
