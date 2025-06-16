@@ -196,7 +196,8 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
 def launch(exe, in_terminal=False):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
+            # intentionally using a window title with a space so it gets quoted and treated as a title
+            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
             return
         elif is_linux:
             terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')

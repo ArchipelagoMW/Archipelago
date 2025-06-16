@@ -335,7 +335,9 @@ class LinksAwakeningWorld(World):
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:
-                itempool.remove(start_item)
+                # Make sure we're removing the same copy of the item that we're placing
+                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
+                start_item = itempool.pop(itempool.index(start_item))
                 start_loc.place_locked_item(start_item)
             else:
                 logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
