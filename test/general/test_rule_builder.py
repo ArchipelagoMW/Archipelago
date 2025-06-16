@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, ClassVar
 from typing_extensions import override
 
 from Options import Choice, PerGameCommonOptions, Toggle
-from rule_builder import And, False_, Has, HasAll, HasAny, OptionFilter, Or, Rule, RuleWorldMixin
+from rule_builder import And, False_, Has, HasAll, HasAny, OptionFilter, Or, Rule, RuleWorldMixin, True_
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds import network_data_package
@@ -160,3 +160,13 @@ class TestComposition(unittest.TestCase):
     def test_composition(self) -> None:
         combined_rule, expected = self.rules
         self.assertEqual(combined_rule, expected, str(combined_rule))
+
+
+class TestHashes(unittest.TestCase):
+    def test_hashes(self) -> None:
+        rule1 = And.Resolved((True_.Resolved(player=1),), player=1)
+        rule2 = And.Resolved((True_.Resolved(player=1),), player=1)
+        rule3 = Or.Resolved((True_.Resolved(player=1),), player=1)
+
+        self.assertEqual(hash(rule1), hash(rule2))
+        self.assertNotEqual(hash(rule1), hash(rule3))
