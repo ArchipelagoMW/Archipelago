@@ -47,7 +47,7 @@ def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = F
     """
     for location_name in location_table:
         if spoiler_mode & (location_table[location_name].spoiler_name != ""):
-            create_location(multiworld, player, location_name)
+            create_location(multiworld, player, location_table[location_name].spoiler_name)
         else:
             create_location(multiworld, player, location_name)
 
