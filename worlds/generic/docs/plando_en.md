@@ -63,9 +63,6 @@ Each block can have several different options to tailor it the way you like.
     * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
       before they become logically reachable).
 
-* The `location` section defines a list of locations to use, from which one will be chosen at random. Each location 
-    name can be followed by a colon and a value. The value indicates the weight of that location being chosen.
-
 * `from_pool` determines if the item should be taken *from* the item pool or *created* from scratch.
     * `false`: Create a new item with the same name (the world will determine its properties e.g. classification).
     * `true`: Take the existing item, if it exists, from the item pool. If it does not exist, one will be created from 
