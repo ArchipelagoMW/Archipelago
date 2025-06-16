@@ -451,7 +451,8 @@ def distribute_early_items(multiworld: MultiWorld,
 def distribute_items_restrictive(multiworld: MultiWorld,
                                  panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
     assert all(item.location is None for item in multiworld.itempool), (
-        "There are items in the multiworld itempool that are already placed on locations:\n"
+        "At the start of distribute_items_restrictive, "
+        "there are items in the multiworld itempool that are already placed on locations:\n"
         f"{[(item.location, item) for item in multiworld.itempool if item.location is not None]}"
     )
 
