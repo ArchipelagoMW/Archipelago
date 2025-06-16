@@ -1,4 +1,4 @@
-name: Fuzz-LM-World-Single-Yaml
+name: Fuzz-LM-World-Triple-Yaml
 on:
   workflow_dispatch:
 
