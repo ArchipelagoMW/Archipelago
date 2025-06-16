@@ -5,7 +5,8 @@ on:
       - Luigi's-Mansion-AP
   workflow_dispatch:
     inputs:
-       tag:
+      tag:
+        description: "Required tag to create the pre-draft."
         required: true
 
 jobs:
@@ -128,11 +129,17 @@ jobs:
         with:
           name: apworld
 
-      - uses: ncipollo/release-action@v1
+      - if: ${{inputs.tag != '' }}
+        uses: ncipollo/release-action@v1
         with:
-          artifacts: 'lib, apworld'
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          omitNameDuringUpdate: true
-          draft: true
+          artifacts: 'lib,apworld'
+          generateReleaseNotes: true
+          draft: true          
           tag: ${{inputs.tag}}
+      - if: ${{inputs.tag == '' }}
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'lib,apworld'
+          generateReleaseNotes: true
+          draft: true          
+          tag: ${{github.ref_name}}
