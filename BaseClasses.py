@@ -778,7 +778,7 @@ class CollectionState():
         else:
             self._update_reachable_regions_auto_indirect_conditions(player, queue)
 
-    def _update_reachable_regions_explicit_indirect_conditions(self, player: int, queue: deque):
+    def _update_reachable_regions_explicit_indirect_conditions(self, player: int, queue: deque[Entrance]):
         reachable_regions = self.reachable_regions[player]
         blocked_connections = self.blocked_connections[player]
         # run BFS on all connections, and keep track of those blocked by missing items
@@ -796,13 +796,14 @@ class CollectionState():
                 blocked_connections.update(new_region.exits)
                 queue.extend(new_region.exits)
                 self.path[new_region] = (new_region.name, self.path.get(connection, None))
+                self.multiworld.worlds[player].reached_region(self, new_region)
 
                 # Retry connections if the new region can unblock them
                 for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
                     if new_entrance in blocked_connections and new_entrance not in queue:
                         queue.append(new_entrance)
 
-    def _update_reachable_regions_auto_indirect_conditions(self, player: int, queue: deque):
+    def _update_reachable_regions_auto_indirect_conditions(self, player: int, queue: deque[Entrance]):
         reachable_regions = self.reachable_regions[player]
         blocked_connections = self.blocked_connections[player]
         new_connection: bool = True
@@ -824,6 +825,7 @@ class CollectionState():
                     queue.extend(new_region.exits)
                     self.path[new_region] = (new_region.name, self.path.get(connection, None))
                     new_connection = True
+                    self.multiworld.worlds[player].reached_region(self, new_region)
             # sweep for indirect connections, mostly Entrance.can_reach(unrelated_Region)
             queue.extend(blocked_connections)
 

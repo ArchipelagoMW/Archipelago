@@ -1,5 +1,4 @@
 import dataclasses
-import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
@@ -20,14 +19,16 @@ else:
 
 class RuleWorldMixin(World):
     rule_ids: "dict[int, Rule.Resolved]"
-    rule_dependencies: dict[str, set[int]]
+    rule_item_dependencies: dict[str, set[int]]
+    rule_region_dependencies: dict[str, set[int]]
 
     custom_rule_classes: "ClassVar[dict[str, type[Rule[Self]]]]"
 
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
         self.rule_ids = {}
-        self.rule_dependencies = defaultdict(set)
+        self.rule_item_dependencies = defaultdict(set)
+        self.rule_region_dependencies = defaultdict(set)
 
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
@@ -45,16 +46,18 @@ class RuleWorldMixin(World):
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         resolved_rule = rule.resolve(self)
         for item_name, rule_ids in resolved_rule.item_dependencies().items():
-            self.rule_dependencies[item_name] |= rule_ids
+            self.rule_item_dependencies[item_name] |= rule_ids
+        for region_name, rule_ids in resolved_rule.region_dependencies().items():
+            self.rule_region_dependencies[region_name] |= rule_ids
         return resolved_rule
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
-        for indirect_region in resolved_rule.indirect_regions():
+        for indirect_region in resolved_rule.region_dependencies().keys():
             self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
         resolved_rule = self.resolve_rule(rule)
-        spot.access_rule = resolved_rule
+        spot.access_rule = resolved_rule  # type: ignore (this is due to backwards compat)
         if self.explicit_indirect_conditions and isinstance(spot, Entrance):
             self.register_rule_connections(resolved_rule, spot)
 
@@ -190,20 +193,36 @@ class RuleWorldMixin(World):
     @override
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().collect(state, item)
-        if changed and getattr(self, "rule_dependencies", None):
+        if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_dependencies[item.name]:
+            for rule_id in self.rule_item_dependencies[item.name]:
                 _ = player_results.pop(rule_id, None)
         return changed
 
     @override
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().remove(state, item)
-        if changed and getattr(self, "rule_dependencies", None):
+
+        if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_dependencies[item.name]:
+            for rule_id in self.rule_item_dependencies[item.name]:
                 _ = player_results.pop(rule_id, None)
+
+        # clear all region dependent caches as none can be trusted
+        if changed and getattr(self, "rule_region_dependencies", None):
+            for rule_ids in self.rule_region_dependencies.values():
+                for rule_id in rule_ids:
+                    _ = state.rule_cache[self.player].pop(rule_id, None)
+
         return changed
+
+    @override
+    def reached_region(self, state: "CollectionState", region: "Region") -> None:
+        super().reached_region(state, region)
+        if getattr(self, "rule_region_dependencies", None):
+            player_results: dict[int, bool] = state.rule_cache[self.player]
+            for rule_id in self.rule_region_dependencies[region.name]:
+                _ = player_results.pop(rule_id, None)
 
 
 TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
@@ -408,12 +427,13 @@ class Rule(Generic[TWorld]):
             return self.evaluate(state)
 
         def item_dependencies(self) -> dict[str, set[int]]:
-            """Returns a mapping of item name to set of object ids to be used for cache invalidation"""
+            """Returns a mapping of item name to set of object ids, used for cache invalidation"""
             return {}
 
-        def indirect_regions(self) -> tuple[str, ...]:
-            """Returns a tuple of region names this rule is indirectly connected to"""
-            return ()
+        def region_dependencies(self) -> dict[str, set[int]]:
+            """Returns a mapping of region name to set of object ids,
+            used for indirect connections and cache invalidation"""
+            return {}
 
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             """Returns a list of printJSON messages that explain the logic for this rule"""
@@ -434,7 +454,6 @@ class True_(Rule[TWorld]):
 
     @resolved_rule
     class Resolved(Rule.Resolved):
-        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_true: ClassVar[bool] = True
 
         @override
@@ -456,7 +475,6 @@ class False_(Rule[TWorld]):
 
     @resolved_rule
     class Resolved(Rule.Resolved):
-        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_false: ClassVar[bool] = True
 
         @override
@@ -520,8 +538,15 @@ class NestedRule(Rule[TWorld]):
             return combined_deps
 
         @override
-        def indirect_regions(self) -> tuple[str, ...]:
-            return tuple(itertools.chain.from_iterable(child.indirect_regions() for child in self.children))
+        def region_dependencies(self) -> dict[str, set[int]]:
+            combined_deps: dict[str, set[int]] = {}
+            for child in self.children:
+                for region_name, rules in child.region_dependencies().items():
+                    if region_name in combined_deps:
+                        combined_deps[region_name] |= rules
+                    else:
+                        combined_deps[region_name] = {id(self), *rules}
+            return combined_deps
 
 
 @dataclasses.dataclass(init=False)
@@ -634,8 +659,11 @@ class Wrapper(Rule[TWorld]):
             return deps
 
         @override
-        def indirect_regions(self) -> tuple[str, ...]:
-            return self.child.indirect_regions()
+        def region_dependencies(self) -> dict[str, set[int]]:
+            deps: dict[str, set[int]] = {}
+            for region_name, rules in self.child.region_dependencies().items():
+                deps[region_name] = {id(self), *rules}
+            return deps
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -874,17 +902,16 @@ class CanReachLocation(Rule[TWorld]):
     class Resolved(Rule.Resolved):
         location_name: str
         parent_region_name: str
-        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_location(self.location_name, self.player)
 
         @override
-        def indirect_regions(self) -> tuple[str, ...]:
+        def region_dependencies(self) -> dict[str, set[int]]:
             if self.parent_region_name:
-                return (self.parent_region_name,)
-            return ()
+                return {self.parent_region_name: {id(self)}}
+            return {}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -908,6 +935,7 @@ class CanReachLocation(Rule[TWorld]):
 @dataclasses.dataclass()
 class CanReachRegion(Rule[TWorld]):
     region_name: str
+    """The name of the region to test access to"""
 
     @override
     def _instantiate(self, world: "TWorld") -> "Resolved":
@@ -921,15 +949,14 @@ class CanReachRegion(Rule[TWorld]):
     @resolved_rule
     class Resolved(Rule.Resolved):
         region_name: str
-        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_region(self.region_name, self.player)
 
         @override
-        def indirect_regions(self) -> tuple[str, ...]:
-            return (self.region_name,)
+        def region_dependencies(self) -> dict[str, set[int]]:
+            return {self.region_name: {id(self)}}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -953,10 +980,20 @@ class CanReachRegion(Rule[TWorld]):
 @dataclasses.dataclass()
 class CanReachEntrance(Rule[TWorld]):
     entrance_name: str
+    """The name of the entrance to test access to"""
+
+    parent_region_name: str = ""
+    """The name of the entrance's parent region. If not specified it will be resolved when the rule is resolved"""
 
     @override
     def _instantiate(self, world: "TWorld") -> "Resolved":
-        return self.Resolved(self.entrance_name, player=world.player)
+        parent_region_name = self.parent_region_name
+        if not parent_region_name:
+            entrance = world.get_entrance(self.entrance_name)
+            if not entrance.parent_region:
+                raise ValueError(f"Entrance {entrance.name} has no parent region")
+            parent_region_name = entrance.parent_region.name
+        return self.Resolved(self.entrance_name, parent_region_name, player=world.player)
 
     @override
     def __str__(self) -> str:
@@ -966,11 +1003,17 @@ class CanReachEntrance(Rule[TWorld]):
     @resolved_rule
     class Resolved(Rule.Resolved):
         entrance_name: str
-        cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
+        parent_region_name: str
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.can_reach_entrance(self.entrance_name, self.player)
+
+        @override
+        def region_dependencies(self) -> dict[str, set[int]]:
+            if self.parent_region_name:
+                return {self.parent_region_name: {id(self)}}
+            return {}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
