@@ -313,14 +313,14 @@ class CrystalProjectWorld(World):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
+        if self.options.useMods:
+            modded_items = mod_helper.get_modded_items(self.player, self.player_name)
+            for modded_item in modded_items:
+                pool.append(modded_item)
+
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
-
-        if self.options.useMods:
-            modded_items = mod_helper.get_modded_items(self.player)
-            for modded_item in modded_items:
-                pool.append(modded_item)
 
         return pool
 

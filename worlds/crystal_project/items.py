@@ -156,6 +156,7 @@ item_table: Dict[str, ItemData] = {
     #Passes
     "Item - Quintar Pass": ItemData(ITEM, 7 + item_index_offset, ItemClassification.progression, 0), #(now part of Progressive Quintar Flute)
     PROGRESSIVE_LUXURY_PASS: ItemData(ITEM, 93 + item_index_offset, ItemClassification.progression, 0, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
+    "Item - Luxury Pass V2": ItemData(ITEM, 148 + item_index_offset, ItemClassification.progression, 0), #(now part of Progressive Luxury Pass)
     FERRY_PASS: ItemData(ITEM, 37 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
 
     #Key Items
@@ -187,6 +188,7 @@ item_table: Dict[str, ItemData] = {
     SPECIAL_ROTTEN_SALMON: ItemData(ITEM, 232 + item_index_offset, ItemClassification.progression, 0, 1),
     DEITY_EYE: ItemData(ITEM, 176 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
     STEM_WARD: ItemData(ITEM, 177 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
+    PROOF_OF_MERIT: ItemData(ITEM, 191 + item_index_offset, ItemClassification.progression, 0),
 
     #Passes for Regionsanity
     SPAWNING_MEADOWS_PASS : ItemData(PASS, 801 + item_index_offset, ItemClassification.progression, 1),
@@ -958,6 +960,67 @@ item_table: Dict[str, ItemData] = {
     FLYERS_LOOKOUT_MAP: ItemData(MAP, 223 + item_index_offset, ItemClassification.useful),
     JADE_CAVERN_MAP: ItemData(MAP, 228 + item_index_offset, ItemClassification.useful),
     THE_OLD_WORLD_MAP: ItemData(MAP, 254 + item_index_offset, ItemClassification.useful),
+
+    # Teleport Shards
+    "Gaea Shard": ItemData(TELEPORT_SHARD, 22 + item_index_offset, ItemClassification.useful, 0),
+    "Mercury Shard": ItemData(TELEPORT_SHARD, 12 + item_index_offset, ItemClassification.useful, 0),
+    "Poseidon Shard": ItemData(TELEPORT_SHARD, 56 + item_index_offset, ItemClassification.useful, 0),
+    "Mars Shard": ItemData(TELEPORT_SHARD, 58 + item_index_offset, ItemClassification.useful, 0),
+    "Ganymede Shard": ItemData(TELEPORT_SHARD, 62 + item_index_offset, ItemClassification.useful, 0),
+    "Triton Shard": ItemData(TELEPORT_SHARD, 63 + item_index_offset, ItemClassification.useful, 0),
+    "Callisto Shard": ItemData(TELEPORT_SHARD, 154 + item_index_offset, ItemClassification.useful, 0),
+    "Europa Shard": ItemData(TELEPORT_SHARD, 61 + item_index_offset, ItemClassification.useful, 0),
+    "Dione Shard": ItemData(TELEPORT_SHARD, 165 + item_index_offset, ItemClassification.useful, 0),
+    "Neptune Shard": ItemData(TELEPORT_SHARD, 207 + item_index_offset, ItemClassification.useful, 0),
+    "New World Shard": ItemData(TELEPORT_SHARD, 139 + item_index_offset, ItemClassification.useful, 0),
+    "Old World Shard": ItemData(TELEPORT_SHARD, 252 + item_index_offset, ItemClassification.useful, 0),
+
+    #Seeds
+    "Sketchy Seed": ItemData(ITEM, 178 + item_index_offset, ItemClassification.filler, 0),
+    "Tuber Seed": ItemData(ITEM, 179 + item_index_offset, ItemClassification.filler, 0),
+    "Spore Seed": ItemData(ITEM, 180 + item_index_offset, ItemClassification.filler, 0),
+    "Gourmet Seed": ItemData(ITEM, 181 + item_index_offset, ItemClassification.filler, 0),
+    "Fetish Seed": ItemData(ITEM, 182 + item_index_offset, ItemClassification.filler, 0),
+    "Tear Seed": ItemData(ITEM, 187 + item_index_offset, ItemClassification.filler, 0),
+    "Colony Seed": ItemData(ITEM, 188 + item_index_offset, ItemClassification.filler, 0),
+    "Watery Seed": ItemData(ITEM, 189 + item_index_offset, ItemClassification.filler, 0),
+    "Bloody Seed": ItemData(ITEM, 190 + item_index_offset, ItemClassification.filler, 0),
+    "Dark Seed": ItemData(ITEM, 183 + item_index_offset, ItemClassification.filler, 0),
+
+    #Seals
+    "Warrior Seal": ItemData(ITEM, 564 + equipment_index_offset, ItemClassification.filler, 0),
+    "Monk Seal": ItemData(ITEM, 565 + equipment_index_offset, ItemClassification.filler, 0),
+    "Rogue Seal": ItemData(ITEM, 566 + equipment_index_offset, ItemClassification.filler, 0),
+    "Cleric Seal": ItemData(ITEM, 567 + equipment_index_offset, ItemClassification.filler, 0),
+    "Wizard Seal": ItemData(ITEM, 568 + equipment_index_offset, ItemClassification.filler, 0),
+    "Warlock Seal": ItemData(ITEM, 569 + equipment_index_offset, ItemClassification.filler, 0),
+    "Fencer Seal": ItemData(ITEM, 570 + equipment_index_offset, ItemClassification.filler, 0),
+    "Shaman Seal": ItemData(ITEM, 571 + equipment_index_offset, ItemClassification.filler, 0),
+    "Scholar Seal": ItemData(ITEM, 572 + equipment_index_offset, ItemClassification.filler, 0),
+    "Aegis Seal": ItemData(ITEM, 573 + equipment_index_offset, ItemClassification.filler, 0),
+    "Hunter Seal": ItemData(ITEM, 574 + equipment_index_offset, ItemClassification.filler, 0),
+    "Chemist Seal": ItemData(ITEM, 575 + equipment_index_offset, ItemClassification.filler, 0),
+    "Reaper Seal": ItemData(ITEM, 576 + equipment_index_offset, ItemClassification.filler, 0),
+    "Ninja Seal": ItemData(ITEM, 577 + equipment_index_offset, ItemClassification.filler, 0),
+    "Nomad Seal": ItemData(ITEM, 578 + equipment_index_offset, ItemClassification.filler, 0),
+    "Dervish Seal": ItemData(ITEM, 579 + equipment_index_offset, ItemClassification.filler, 0),
+    "Beatsmith Seal": ItemData(ITEM, 580 + equipment_index_offset, ItemClassification.filler, 0),
+    "Samurai Seal": ItemData(ITEM, 581 + equipment_index_offset, ItemClassification.filler, 0),
+    "Assassin Seal": ItemData(ITEM, 582 + equipment_index_offset, ItemClassification.filler, 0),
+    "Valkyrie Seal": ItemData(ITEM, 583 + equipment_index_offset, ItemClassification.filler, 0),
+    "Weaver Seal": ItemData(ITEM, 584 + equipment_index_offset, ItemClassification.filler, 0),
+    "Summoner Seal": ItemData(ITEM, 585 + equipment_index_offset, ItemClassification.filler, 0),
+    "Beastmaster Seal": ItemData(ITEM, 586 + equipment_index_offset, ItemClassification.filler, 0),
+    "Mimic Seal": ItemData(ITEM, 587 + equipment_index_offset, ItemClassification.filler, 0),
+
+    #Quintar Raising
+    "Quintar Grass": ItemData(ITEM, 157 + item_index_offset, ItemClassification.filler, 0),
+    "Quintar Wheat": ItemData(ITEM, 202 + item_index_offset, ItemClassification.filler, 0),
+    "Quintar Berries": ItemData(ITEM, 203 + item_index_offset, ItemClassification.filler, 0),
+    "Quintar Cheese": ItemData(ITEM, 204 + item_index_offset, ItemClassification.filler, 0),
+    "Quintar Cookie": ItemData(ITEM, 205 + item_index_offset, ItemClassification.filler, 0),
+    "Name Tag": ItemData(ITEM, 200 + item_index_offset, ItemClassification.filler, 0),
+    "Incubator": ItemData(ITEM, 201 + item_index_offset, ItemClassification.filler, 0),
 
     #Currency
     #"Currency": ItemData("Currency", 0 + index_offset, ItemClassification.filler),
