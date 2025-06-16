@@ -58,10 +58,10 @@ Each block can have several different options to tailor it the way you like.
     followed by a colon and a value. The value indicates the weight of that item being chosen.
 
 * The `locations` section defines possible locations those items can be placed in. Two special location groups exist:
-      * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
-        inventory).
-      * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
-        before they become logically reachable).
+    * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
+      inventory).
+    * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
+      before they become logically reachable).
 
 * The `location` section defines a list of locations to use, from which one will be chosen at random. Each location 
     name can be followed by a colon and a value. The value indicates the weight of that location being chosen.
