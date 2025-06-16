@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, MultiWorld, Location
 from .names.location_name import LocationName
 from .names.region_name import RegionName
 from .names.item_name import ItemName
-from .tables.locationList import location_table
+from .tables.location_list import location_table
 from .names.item_name import ItemName
 
 class TitsThe3rdLocation(Location):
@@ -21,7 +21,7 @@ def get_location_id(location_name: LocationName):
 
 def create_location(multiworld: MultiWorld, player: int, location_name: str, rule: Optional[Callable[[CollectionState], bool]] = None):
     """
-    Create a location in accordance with the location table in locationList.py
+    Create a location in accordance with the location table in location_list.py
 
     Args:
         multiworld: The multiworld object.

@@ -27,7 +27,7 @@ from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, Seali
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
-from .tables import locationList
+from .tables import location_list
 
 
 def launch_client():
@@ -60,7 +60,7 @@ class TitsThe3rdWorld(World):
     item_name_groups: Dict[str, Set[str]] = item_groups
     location_name_groups: Dict[str, Set[str]] = location_groups
     item_name_to_id: Dict[str, int] = item_table
-    location_name_to_id: Dict[str, int] = {key: data.flag for key, data in locationList.location_table.items()}
+    location_name_to_id: Dict[str, int] = {key: data.flag for key, data in location_table.items()}
 
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
