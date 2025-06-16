@@ -51,6 +51,12 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
+    modded_items = mod_helper.get_modded_items(-1)
+
+    for modded_item in modded_items:
+        item_name_to_id[modded_item.name] = modded_item.code
+        item_name_groups.setdefault('MOD', set()).add(modded_item.name)
+
     web = CrystalProjectWeb()
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -314,7 +320,8 @@ class CrystalProjectWorld(World):
             pool.append(item)
 
         if self.options.useMods:
-            modded_items = mod_helper.get_modded_items(self.player, self.player_name)
+            modded_items = mod_helper.get_modded_items(self.player)
+
             for modded_item in modded_items:
                 pool.append(modded_item)
 
