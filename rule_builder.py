@@ -3,9 +3,9 @@ import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, Literal, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, Literal, cast
 
-from typing_extensions import Never, Self, dataclass_transform, override
+from typing_extensions import Never, Self, TypeVar, dataclass_transform, override
 
 from BaseClasses import Entrance
 
@@ -207,7 +207,7 @@ class RuleWorldMixin(World):
         return changed
 
 
-TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True)  # noqa: PLC0105
+TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
 
 
 @dataclass_transform()
