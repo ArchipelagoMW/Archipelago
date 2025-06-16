@@ -734,7 +734,8 @@ class HasAll(Rule[TWorld]):
             prefix = "Has all" if self.test(state) else "Missing some"
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
-            return f"{prefix} of ({found_str}{missing_str})"
+            infix = "; " if found and missing else ""
+            return f"{prefix} of ({found_str}{infix}{missing_str})"
 
         @override
         def __str__(self) -> str:
@@ -802,7 +803,8 @@ class HasAny(Rule[TWorld]):
             prefix = "Has some" if self.test(state) else "Missing all"
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
-            return f"{prefix} of ({found_str}{missing_str})"
+            infix = "; " if found and missing else ""
+            return f"{prefix} of ({found_str}{infix}{missing_str})"
 
         @override
         def __str__(self) -> str:
