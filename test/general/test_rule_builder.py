@@ -74,8 +74,9 @@ class TestSimplify(unittest.TestCase):
     def test_simplify(self) -> None:
         multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
+        assert isinstance(world, RuleBuilderWorld)
         rule, expected = self.rules
-        resolved_rule = rule.resolve(world)  # type: ignore
+        resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, str(resolved_rule))
 
 
@@ -86,7 +87,9 @@ class TestOptions(unittest.TestCase):
     @override
     def setUp(self) -> None:
         self.multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
-        self.world = self.multiworld.worlds[1]  # type: ignore
+        world = self.multiworld.worlds[1]
+        assert isinstance(world, RuleBuilderWorld)
+        self.world = world
         return super().setUp()
 
     def test_option_filtering(self) -> None:

@@ -220,6 +220,34 @@ def custom_rule(world_cls: "type[TWorld]", init: bool = True) -> "Callable[..., 
     return decorator
 
 
+def _create_hash_fn(resolved_rule_cls: "type[Rule.Resolved]") -> "Callable[..., int]":
+    def __hash__(self: "Rule.Resolved") -> int:
+        return hash(
+            (
+                self.__class__.__module__,
+                self.rule_name,
+                *[getattr(self, f.name) for f in dataclasses.fields(self)],
+            )
+        )
+
+    __hash__.__qualname__ = f"{resolved_rule_cls.__qualname__}.{__hash__.__name__}"
+    return __hash__
+
+
+@dataclass_transform(frozen_default=True, field_specifiers=(dataclasses.field, dataclasses.Field))
+def resolved_rule(
+    resolved_rule_cls: "type[Rule.Resolved] | None" = None,
+) -> "Callable[..., type[Rule.Resolved]] | type[Rule.Resolved]":
+    def decorator(resolved_rule_cls: "type[Rule.Resolved]") -> "type[Rule.Resolved]":
+        resolved_rule_cls.__hash__ = _create_hash_fn(resolved_rule_cls)
+        resolved_rule_cls.rule_name = resolved_rule_cls.__qualname__
+        return dataclasses.dataclass(frozen=True)(resolved_rule_cls)
+
+    if resolved_rule_cls is None:
+        return decorator
+    return decorator(resolved_rule_cls)
+
+
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
 
 OPERATORS = {
@@ -337,7 +365,7 @@ class Rule(Generic[TWorld]):
         player: int
         """The player this rule is for"""
 
-        cacheable: bool = dataclasses.field(repr=False, default=True)
+        cacheable: bool = dataclasses.field(repr=False, default=True, kw_only=True)
         """If this rule should be cached in the state"""
 
         rule_name: ClassVar[str] = "Rule"
@@ -389,7 +417,7 @@ class Rule(Generic[TWorld]):
 
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             """Returns a list of printJSON messages that explain the logic for this rule"""
-            return [{"type": "text", "text": self.__class__.__name__}]
+            return [{"type": "text", "text": self.rule_name}]
 
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             """Returns a human readable string describing this rule"""
@@ -397,18 +425,17 @@ class Rule(Generic[TWorld]):
 
         @override
         def __str__(self) -> str:
-            return f"{self.__class__.__name__}()"
+            return f"{self.rule_name}()"
 
 
 @dataclasses.dataclass()
 class True_(Rule[TWorld]):
     """A rule that always returns True"""
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_true: ClassVar[bool] = True
-        rule_name: ClassVar[str] = "True_"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -422,20 +449,15 @@ class True_(Rule[TWorld]):
         def __str__(self) -> str:
             return "True"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass()
 class False_(Rule[TWorld]):
     """A rule that always returns False"""
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
         always_false: ClassVar[bool] = True
-        rule_name: ClassVar[str] = "False_"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -448,10 +470,6 @@ class False_(Rule[TWorld]):
         @override
         def __str__(self) -> str:
             return "False"
-
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
 
 
 @dataclasses.dataclass(init=False)
@@ -486,10 +504,9 @@ class NestedRule(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({children}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         children: "tuple[Rule.Resolved, ...]"
-        rule_name: ClassVar[str] = "NestedRule"
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -506,17 +523,11 @@ class NestedRule(Rule[TWorld]):
         def indirect_regions(self) -> tuple[str, ...]:
             return tuple(itertools.chain.from_iterable(child.indirect_regions() for child in self.children))
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass(init=False)
 class And(NestedRule[TWorld]):
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(NestedRule.Resolved):
-        rule_name: ClassVar[str] = "And"
-
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
@@ -544,17 +555,11 @@ class And(NestedRule[TWorld]):
             clauses = " & ".join([str(c) for c in self.children])
             return f"({clauses})"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass(init=False)
 class Or(NestedRule[TWorld]):
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(NestedRule.Resolved):
-        rule_name: ClassVar[str] = "Or"
-
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
@@ -581,10 +586,6 @@ class Or(NestedRule[TWorld]):
         def __str__(self) -> str:
             clauses = " | ".join([str(c) for c in self.children])
             return f"({clauses})"
-
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
 
 
 @dataclasses.dataclass()
@@ -617,10 +618,9 @@ class Wrapper(Rule[TWorld]):
     def __str__(self) -> str:
         return f"{self.__class__.__name__}[{self.child}]"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         child: "Rule.Resolved"
-        rule_name: ClassVar[str] = "Wrapper"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -639,22 +639,18 @@ class Wrapper(Rule[TWorld]):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
-            messages: "list[JSONMessagePart]" = [{"type": "text", "text": f"{self.__class__.__name__} ["}]
+            messages: "list[JSONMessagePart]" = [{"type": "text", "text": f"{self.rule_name} ["}]
             messages.extend(self.child.explain_json(state))
             messages.append({"type": "text", "text": "]"})
             return messages
 
         @override
         def explain_str(self, state: "CollectionState | None" = None) -> str:
-            return f"{self.__class__.__name__}[{self.child.explain_str(state)}]"
+            return f"{self.rule_name}[{self.child.explain_str(state)}]"
 
         @override
         def __str__(self) -> str:
-            return f"{self.__class__.__name__}[{self.child}]"
-
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
+            return f"{self.rule_name}[{self.child}]"
 
 
 @dataclasses.dataclass()
@@ -672,11 +668,10 @@ class Has(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name}{count}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         item_name: str
         count: int = 1
-        rule_name: ClassVar[str] = "Has"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -708,10 +703,6 @@ class Has(Rule[TWorld]):
             count = f"{self.count}x " if self.count > 1 else ""
             return f"Has {count}{self.item_name}"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass(init=False)
 class HasAll(Rule[TWorld]):
@@ -738,10 +729,9 @@ class HasAll(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({items}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
-        rule_name: ClassVar[str] = "HasAll"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -782,10 +772,6 @@ class HasAll(Rule[TWorld]):
             items = ", ".join(self.item_names)
             return f"Has all of ({items})"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass()
 class HasAny(Rule[TWorld]):
@@ -812,10 +798,9 @@ class HasAny(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({items}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
-        rule_name: ClassVar[str] = "HasAny"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -856,10 +841,6 @@ class HasAny(Rule[TWorld]):
             items = ", ".join(self.item_names)
             return f"Has all of ({items})"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass()
 class CanReachLocation(Rule[TWorld]):
@@ -889,12 +870,11 @@ class CanReachLocation(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.location_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         location_name: str
         parent_region_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
-        rule_name: ClassVar[str] = "CanReachLocation"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -924,10 +904,6 @@ class CanReachLocation(Rule[TWorld]):
         def __str__(self) -> str:
             return f"Can reach location {self.location_name}"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass()
 class CanReachRegion(Rule[TWorld]):
@@ -942,11 +918,10 @@ class CanReachRegion(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.region_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         region_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
-        rule_name: ClassVar[str] = "CanReachRegion"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -974,10 +949,6 @@ class CanReachRegion(Rule[TWorld]):
         def __str__(self) -> str:
             return f"Can reach region {self.region_name}"
 
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
-
 
 @dataclasses.dataclass()
 class CanReachEntrance(Rule[TWorld]):
@@ -992,11 +963,10 @@ class CanReachEntrance(Rule[TWorld]):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.entrance_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         entrance_name: str
         cacheable: bool = dataclasses.field(repr=False, default=False, init=False)
-        rule_name: ClassVar[str] = "CanReachEntrance"
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -1019,10 +989,6 @@ class CanReachEntrance(Rule[TWorld]):
         @override
         def __str__(self) -> str:
             return f"Can reach entrance {self.entrance_name}"
-
-        @override
-        def __hash__(self) -> int:
-            return super().__hash__()
 
 
 DEFAULT_RULES = {
