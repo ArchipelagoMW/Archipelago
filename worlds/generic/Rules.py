@@ -2,7 +2,7 @@ import collections
 import logging
 import typing
 
-from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
+from BaseClasses import Entrance, Location, LocationProgressType, MultiWorld, Region
 
 if typing.TYPE_CHECKING:
     import BaseClasses
@@ -103,7 +103,7 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
-    if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
+    if old_rule is Location.default_access_rule or old_rule is Entrance.default_access_rule:
         spot.access_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":

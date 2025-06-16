@@ -9,7 +9,7 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Final, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
 import dataclasses
 
@@ -1078,7 +1078,8 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    _access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    default_access_rule: Final[Callable[[CollectionState], bool]] = staticmethod(lambda state: True)
+    _access_rule: Callable[[CollectionState], bool] = default_access_rule
     resolved_rule: "Rule.Resolved | None" = None
     hide_path: bool = False
     player: int
@@ -1108,9 +1109,6 @@ class Entrance:
         else:
             self._access_rule = value.test
             self.resolved_rule = value
-
-    # purposefully shadow the property to keep backwards compat
-    access_rule: Callable[[CollectionState], bool] = _access_rule
 
     def can_reach(self, state: CollectionState) -> bool:
         assert self.parent_region, f"called can_reach on an Entrance \"{self}\" with no parent_region"
@@ -1395,7 +1393,8 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    _access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    default_access_rule: Final[Callable[[CollectionState], bool]] = staticmethod(lambda state: True)
+    _access_rule: Callable[[CollectionState], bool] = default_access_rule
     resolved_rule: "Rule.Resolved | None" =None
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
@@ -1418,9 +1417,6 @@ class Location:
         else:
             self._access_rule = value.test
             self.resolved_rule = value
-
-    # purposefully shadow the property to keep backwards compat
-    access_rule: Callable[[CollectionState], bool] = _access_rule
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((

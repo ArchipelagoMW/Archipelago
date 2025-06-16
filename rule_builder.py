@@ -57,7 +57,7 @@ class RuleWorldMixin(World):
 
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
         resolved_rule = self.resolve_rule(rule)
-        spot.access_rule = resolved_rule  # type: ignore (this is due to backwards compat)
+        spot.access_rule = resolved_rule
         if self.explicit_indirect_conditions and isinstance(spot, Entrance):
             self.register_rule_connections(resolved_rule, spot)
 

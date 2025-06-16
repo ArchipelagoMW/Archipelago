@@ -99,7 +99,7 @@ class CanGoal(Rule[MyWorld]):
     def _instantiate(self, world: "MyWorld") -> "Resolved":
         return self.Resolved(world.required_mcguffins, player=world.player)
 
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         goal: int
 
@@ -117,7 +117,7 @@ If there are items that when collected will affect the result of your rule evalu
 ```python
 @custom_rule(MyWorld)
 class MyRule(Rule[MyWorld]):
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         item_name: str
 
@@ -128,23 +128,23 @@ class MyRule(Rule[MyWorld]):
 
 The default `Has`, `HasAll`, and `HasAny` rules define this function already.
 
-### Indirect connections
+### Region dependencies
 
-If your custom rule references other regions, it must define an `indirect_regions` function that returns a tuple of region names. These will be collected and indirect connections will be registered when you set this rule on an entrance.
+If your custom rule references other regions, it must define an `region_dependencies` function that returns a mapping of region names to the id of your rule. These will be combined to inform the caching system and indirect connections will be registered when you set this rule on an entrance.
 
 ```python
 @custom_rule(MyWorld)
 class MyRule(Rule[MyWorld]):
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         region_name: str
 
         @override
-        def indirect_regions(self) -> tuple[str, ...]:
-            return (self.region_name,)
+        def indirect_regions(self) -> dict[str, set[int]]:
+            return {self.region_name: {id(self)}}
 ```
 
-The default `CanReachLocation` and `CanReachRegion` rules define this function already.
+The default `CanReachLocation`, `CanReachRegion`, and `CanReachEntrance` rules define this function already.
 
 ## JSON serialization
 
@@ -175,7 +175,7 @@ The `And` and `Or` rules have a slightly different format:
 To define a custom format, override the `to_json` function:
 
 ```python
-@dataclasses.dataclass()
+@custom_rule(MyWorld)
 class MyRule(Rule):
     def to_json(self) -> Any:
         return {
@@ -187,7 +187,7 @@ class MyRule(Rule):
 If your logic has been done in custom JSON first, you can define a `from_json` class method on your rules to parse it correctly:
 
 ```python
-@dataclasses.dataclass()
+@custom_rule(MyWorld)
 class MyRule(Rule):
     @classmethod
     def from_json(cls, data: Any) -> Self:
@@ -201,9 +201,9 @@ Resolved rules have a default implementation for an `explain` message, which ret
 To implement a custom message with a custom rule, override the `explain` method on your `Resolved` class:
 
 ```python
-@dataclasses.dataclass()
+@custom_rule(MyWorld)
 class MyRule(Rule):
-    @dataclasses.dataclass(frozen=True)
+    @resolved_rule
     class Resolved(Rule.Resolved):
         @override
         def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
