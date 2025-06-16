@@ -3,19 +3,111 @@ import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, Literal, TypeVar, cast, dataclass_transform
 
 from typing_extensions import Never, Self, override
 
 from BaseClasses import Entrance
 
 if TYPE_CHECKING:
-    from BaseClasses import CollectionState, Item, Location, MultiWorld
+    from BaseClasses import CollectionState, Item, Location, MultiWorld, Region
     from NetUtils import JSONMessagePart
     from Options import CommonOptions, Option
     from worlds.AutoWorld import World
 else:
     World = object
+
+
+class RuleWorldMixin(World):
+    rule_ids: "dict[int, Rule.Resolved]"
+    rule_dependencies: dict[str, set[int]]
+
+    custom_rule_classes: "ClassVar[dict[str, type[Rule[Self]]]]"
+
+    def __init__(self, multiworld: "MultiWorld", player: int) -> None:
+        super().__init__(multiworld, player)
+        self.rule_ids = {}
+        self.rule_dependencies = defaultdict(set)
+
+    @classmethod
+    def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
+        custom_rule_classes = getattr(cls, "custom_rule_classes", {})
+        if name not in DEFAULT_RULES and name not in custom_rule_classes:
+            raise ValueError(f"Rule {name} not found")
+        return custom_rule_classes.get(name) or DEFAULT_RULES[name]
+
+    @classmethod
+    def rule_from_json(cls, data: Mapping[str, Any]) -> "Rule[Self]":
+        name = data.get("rule", "")
+        rule_class = cls.get_rule_cls(name)
+        return rule_class.from_json(data)
+
+    def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
+        resolved_rule = rule.resolve(self)
+        if resolved_rule.cacheable:
+            for item_name, rule_ids in resolved_rule.item_dependencies().items():
+                self.rule_dependencies[item_name] |= rule_ids
+        return resolved_rule
+
+    def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
+        for indirect_region in resolved_rule.indirect_regions():
+            self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
+
+    def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
+        resolved_rule = self.resolve_rule(rule)
+        spot.access_rule = resolved_rule.test
+        if self.explicit_indirect_conditions and isinstance(spot, Entrance):
+            self.register_rule_connections(resolved_rule, spot)
+
+    def create_entrance(
+        self,
+        from_region: "Region",
+        to_region: "Region",
+        rule: "Rule[Self] | None",
+    ) -> "Entrance | None":
+        resolved_rule = None
+        if rule is not None:
+            resolved_rule = self.resolve_rule(rule)
+            if resolved_rule.always_false:
+                return None
+
+        entrance = from_region.connect(to_region, rule=resolved_rule.test if resolved_rule else None)
+        if resolved_rule is not None:
+            self.register_rule_connections(resolved_rule, entrance)
+        return entrance
+
+    @override
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        changed = super().collect(state, item)
+        if changed and getattr(self, "rule_dependencies", None):
+            player_results: dict[int, bool] = state.rule_cache[self.player]
+            for rule_id in self.rule_dependencies[item.name]:
+                _ = player_results.pop(rule_id, None)
+        return changed
+
+    @override
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        changed = super().remove(state, item)
+        if changed and getattr(self, "rule_dependencies", None):
+            player_results: dict[int, bool] = state.rule_cache[self.player]
+            for rule_id in self.rule_dependencies[item.name]:
+                _ = player_results.pop(rule_id, None)
+        return changed
+
+
+TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True)  # noqa: PLC0105
+
+
+@dataclass_transform()
+def custom_rule(world_cls: "type[TWorld]", init: bool = True) -> "Callable[..., type[Rule[TWorld]]]":
+    def decorator(rule_cls: "type[Rule[TWorld]]") -> "type[Rule[TWorld]]":
+        if not hasattr(world_cls, "custom_rule_classes"):
+            world_cls.custom_rule_classes = {}
+        world_cls.custom_rule_classes[rule_cls.__name__] = rule_cls
+        return dataclasses.dataclass(init=init)(rule_cls)
+
+    return decorator
+
 
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
 
@@ -40,7 +132,7 @@ class OptionFilter(Generic[T]):
 
 
 @dataclasses.dataclass()
-class Rule:
+class Rule(Generic[TWorld]):
     """Base class for a static rule used to generate an access rule"""
 
     options: "Iterable[OptionFilter[Any]]" = dataclasses.field(default=(), kw_only=True)
@@ -64,11 +156,11 @@ class Rule:
 
         return True
 
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+    def _instantiate(self, world: "TWorld") -> "Resolved":
         """Create a new resolved rule for this world"""
         return self.Resolved(player=world.player)
 
-    def resolve(self, world: "RuleWorldMixin") -> "Resolved":
+    def resolve(self, world: "TWorld") -> "Resolved":
         """Resolve a rule with the given world"""
         if not self._passes_options(world.options):
             return False_.Resolved(player=world.player)
@@ -94,7 +186,7 @@ class Rule:
     def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(**data.get("args", {}))
 
-    def __and__(self, other: "Rule") -> "Rule":
+    def __and__(self, other: "Rule[TWorld]") -> "Rule[TWorld]":
         """Combines two rules into an And rule"""
         if isinstance(self, And):
             if isinstance(other, And):
@@ -106,7 +198,7 @@ class Rule:
             return And(self, *other.children, options=other.options)
         return And(self, other)
 
-    def __or__(self, other: "Rule") -> "Rule":
+    def __or__(self, other: "Rule[TWorld]") -> "Rule[TWorld]":
         """Combines two rules into an Or rule"""
         if isinstance(self, Or):
             if isinstance(other, Or):
@@ -119,6 +211,7 @@ class Rule:
         return Or(self, other)
 
     def __bool__(self) -> Never:
+        """Safeguard to prevent devs from mistakenly doing `rule1 and rule2` and getting the wrong result"""
         raise TypeError("Use & or | to combine rules, or use `is not None` for boolean tests")
 
     @override
@@ -144,7 +237,13 @@ class Rule:
 
         @override
         def __hash__(self) -> int:
-            return hash((self.__class__.__name__, *[getattr(self, f.name) for f in dataclasses.fields(self)]))
+            return hash(
+                (
+                    self.__class__.__module__,
+                    self.__class__.__name__,
+                    *[getattr(self, f.name) for f in dataclasses.fields(self)],
+                )
+            )
 
         def _evaluate(self, state: "CollectionState") -> bool:
             """Calculate this rule's result with the given state"""
@@ -180,7 +279,7 @@ class Rule:
 
 
 @dataclasses.dataclass()
-class True_(Rule):
+class True_(Rule[TWorld]):
     """A rule that always returns True"""
 
     @dataclasses.dataclass(frozen=True)
@@ -198,7 +297,7 @@ class True_(Rule):
 
 
 @dataclasses.dataclass()
-class False_(Rule):
+class False_(Rule[TWorld]):
     """A rule that always returns False"""
 
     @dataclasses.dataclass(frozen=True)
@@ -216,15 +315,15 @@ class False_(Rule):
 
 
 @dataclasses.dataclass(init=False)
-class NestedRule(Rule):
-    children: "tuple[Rule, ...]"
+class NestedRule(Rule[TWorld]):
+    children: "tuple[Rule[TWorld], ...]"
 
-    def __init__(self, *children: "Rule", options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+    def __init__(self, *children: "Rule[TWorld]", options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
         self.children = children
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         children = [c.resolve(world) for c in self.children]
         return self.Resolved(tuple(children), player=world.player).simplify()
 
@@ -271,7 +370,7 @@ class NestedRule(Rule):
 
 
 @dataclasses.dataclass(init=False)
-class And(NestedRule):
+class And(NestedRule[TWorld]):
     @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
         @override
@@ -346,7 +445,7 @@ class And(NestedRule):
 
 
 @dataclasses.dataclass(init=False)
-class Or(NestedRule):
+class Or(NestedRule[TWorld]):
     @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
         @override
@@ -418,12 +517,12 @@ class Or(NestedRule):
 
 
 @dataclasses.dataclass()
-class Has(Rule):
+class Has(Rule[TWorld]):
     item_name: str
     count: int = 1
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+    def _instantiate(self, world: "TWorld") -> "Resolved":
         return self.Resolved(self.item_name, self.count, player=world.player)
 
     @override
@@ -456,7 +555,7 @@ class Has(Rule):
 
 
 @dataclasses.dataclass(init=False)
-class HasAll(Rule):
+class HasAll(Rule[TWorld]):
     """A rule that checks if the player has all of the given items"""
 
     item_names: tuple[str, ...]
@@ -467,11 +566,11 @@ class HasAll(Rule):
         self.item_names = tuple(sorted(set(item_names)))
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
-            return True_().resolve(world)
+            return True_[TWorld]().resolve(world)
         if len(self.item_names) == 1:
-            return Has(self.item_names[0]).resolve(world)
+            return Has[TWorld](self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
 
     @override
@@ -508,7 +607,7 @@ class HasAll(Rule):
 
 
 @dataclasses.dataclass()
-class HasAny(Rule):
+class HasAny(Rule[TWorld]):
     """A rule that checks if the player has at least one of the given items"""
 
     item_names: tuple[str, ...]
@@ -519,11 +618,11 @@ class HasAny(Rule):
         self.item_names = tuple(sorted(set(item_names)))
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Rule.Resolved":
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
-            return True_().resolve(world)
+            return True_[TWorld]().resolve(world)
         if len(self.item_names) == 1:
-            return Has(self.item_names[0]).resolve(world)
+            return Has[TWorld](self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
 
     @override
@@ -560,7 +659,7 @@ class HasAny(Rule):
 
 
 @dataclasses.dataclass()
-class CanReachLocation(Rule):
+class CanReachLocation(Rule[TWorld]):
     location_name: str
     """The name of the location to test access to"""
 
@@ -573,7 +672,7 @@ class CanReachLocation(Rule):
     """
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+    def _instantiate(self, world: "TWorld") -> "Resolved":
         parent_region_name = self.parent_region_name
         if not parent_region_name and not self.skip_indirect_connection:
             location = world.get_location(self.location_name)
@@ -612,11 +711,11 @@ class CanReachLocation(Rule):
 
 
 @dataclasses.dataclass()
-class CanReachRegion(Rule):
+class CanReachRegion(Rule[TWorld]):
     region_name: str
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+    def _instantiate(self, world: "TWorld") -> "Resolved":
         return self.Resolved(self.region_name, player=world.player)
 
     @override
@@ -646,11 +745,11 @@ class CanReachRegion(Rule):
 
 
 @dataclasses.dataclass()
-class CanReachEntrance(Rule):
+class CanReachEntrance(Rule[TWorld]):
     entrance_name: str
 
     @override
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+    def _instantiate(self, world: "TWorld") -> "Resolved":
         return self.Resolved(self.entrance_name, player=world.player)
 
     @override
@@ -675,62 +774,8 @@ class CanReachEntrance(Rule):
             ]
 
 
-class RuleWorldMixin(World):
-    rule_ids: dict[int, Rule.Resolved]
-    rule_dependencies: dict[str, set[int]]
-
-    custom_rule_classes: ClassVar[dict[str, type[Rule]]]
-
-    def __init__(self, multiworld: "MultiWorld", player: int) -> None:
-        super().__init__(multiworld, player)
-        self.rule_ids = {}
-        self.rule_dependencies = defaultdict(set)
-
-    @classmethod
-    def rule_from_json(cls, data: Mapping[str, Any]) -> "Rule":
-        name = data.get("rule", "")
-        if name not in DEFAULT_RULES and name not in getattr(cls, "custom_rule_classes", {}):
-            raise ValueError("Rule not found")
-        rule_class = cls.custom_rule_classes[name] or DEFAULT_RULES.get(name)
-        return rule_class.from_json(data)
-
-    def resolve_rule(self, rule: "Rule") -> "Rule.Resolved":
-        resolved_rule = rule.resolve(self)
-        for item_name, rule_ids in resolved_rule.item_dependencies().items():
-            self.rule_dependencies[item_name] |= rule_ids
-        return resolved_rule
-
-    def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
-        for indirect_region in resolved_rule.indirect_regions():
-            self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
-
-    def set_rule(self, spot: "Location | Entrance", rule: "Rule") -> None:
-        resolved_rule = self.resolve_rule(rule)
-        spot.access_rule = resolved_rule.test
-        if self.explicit_indirect_conditions and isinstance(spot, Entrance):
-            self.register_rule_connections(resolved_rule, spot)
-
-    @override
-    def collect(self, state: "CollectionState", item: "Item") -> bool:
-        changed = super().collect(state, item)
-        if changed and getattr(self, "rule_dependencies", None):
-            player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_dependencies[item.name]:
-                _ = player_results.pop(rule_id, None)
-        return changed
-
-    @override
-    def remove(self, state: "CollectionState", item: "Item") -> bool:
-        changed = super().remove(state, item)
-        if changed and getattr(self, "rule_dependencies", None):
-            player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_dependencies[item.name]:
-                _ = player_results.pop(rule_id, None)
-        return changed
-
-
 DEFAULT_RULES = {
-    rule_name: rule_class
+    rule_name: cast("type[Rule[RuleWorldMixin]]", rule_class)
     for rule_name, rule_class in locals().items()
     if isinstance(rule_class, type) and issubclass(rule_class, Rule) and rule_class is not Rule
 }

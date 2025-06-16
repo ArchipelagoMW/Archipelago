@@ -20,8 +20,8 @@ The rule builder comes with a few by default:
 
 - `True_`: Always returns true
 - `False_`: Always returns false
-- `And`: Checks that all child rules are true (provided by `&` operator)
-- `Or`: Checks that at least one child rule is true (provided by `|` operator)
+- `And`: Checks that all child rules are true (also provided by `&` operator)
+- `Or`: Checks that at least one child rule is true (also provided by `|` operator)
 - `Has`: Checks that the player has the given item with the given count (default 1)
 - `HasAll`: Checks that the player has all given items
 - `HasAny`: Checks that the player has at least one of the given items
@@ -35,7 +35,7 @@ You can combine these rules together to describe the logic required for somethin
 rule = Has("Movement ability") | HasAll("Key 1", "Key 2")
 ```
 
-> ⚠️ Composing rules with the `and` and `or` keywords will not work. You must use the bitwise `&` and `|` operators. In order to catch mistakes, the rule builder will not let you do boolean operations. In order to check if a rule is defined you must use `if rule is not None`.
+> ⚠️ Composing rules with the `and` and `or` keywords will not work. You must use the bitwise `&` and `|` operators. In order to catch mistakes, the rule builder will not let you do boolean operations. As a consequence, in order to check if a rule is defined you must use `if rule is not None`.
 
 When assigning the rule you must use the `set_rule` helper added by the rule mixin to correctly resolve and register the rule.
 
@@ -89,14 +89,14 @@ rule = Or(
 
 ## Defining custom rules
 
-You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide a `Resolved` child class that defines an `_evaluate` method. You may need to also define an `item_dependencies` or `indirect_regions` function.
+You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules and putting the `custom_rule` decorator on it. You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. You may need to also define an `item_dependencies` or `indirect_regions` function.
 
 To add a rule that checks if the user has enough mcguffins to goal, with a randomized requirement:
 
 ```python
-@dataclasses.dataclass()
-class CanGoal(Rule):
-    def _instantiate(self, world: "RuleWorldMixin") -> "Resolved":
+@custom_rule(MyWorld)
+class CanGoal(Rule[MyWorld]):
+    def _instantiate(self, world: "MyWorld") -> "Resolved":
         return self.Resolved(world.required_mcguffins, player=world.player)
 
     @dataclasses.dataclass(frozen=True)
@@ -110,15 +110,41 @@ class CanGoal(Rule):
             return {"McGuffin": {id(self)}}
 ```
 
-If you want to use the serialization, you must add a `custom_rule_classes` class var to your world that points to the custom rules you've defined.
+### Item dependencies
+
+If there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system.
 
 ```python
-class MyWorld(RuleWorldMixin, World):
-    game = "My Game"
-    custom_rule_classes = {
-        "CanGoal": CanGoal,
-    }
+@custom_rule(MyWorld)
+class MyRule(Rule[MyWorld]):
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        item_name: str
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {self.item_name: {id(self)}}
 ```
+
+The default `Has`, `HasAll`, and `HasAny` rules define this function already.
+
+### Indirect connections
+
+If your custom rule references other regions, it must define an `indirect_regions` function that returns a tuple of region names. These will be collected and indirect connections will be registered when you set this rule on an entrance.
+
+```python
+@custom_rule(MyWorld)
+class MyRule(Rule[MyWorld]):
+    @dataclasses.dataclass(frozen=True)
+    class Resolved(Rule.Resolved):
+        region_name: str
+
+        @override
+        def indirect_regions(self) -> tuple[str, ...]:
+            return (self.region_name,)
+```
+
+The default `CanReachLocation` and `CanReachRegion` rules define this function already.
 
 ## JSON serialization
 
@@ -187,39 +213,3 @@ class MyRule(Rule):
                 {"type": "text", "text": " tall to beat the game"},
             ]
 ```
-
-## Item dependencies
-
-If there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system.
-
-```python
-@dataclasses.dataclass()
-class MyRule(Rule):
-    @dataclasses.dataclass(frozen=True)
-    class Resolved(Rule.Resolved):
-        item_name: str
-
-        @override
-        def item_dependencies(self) -> dict[str, set[int]]:
-            return {self.item_name: {id(self)}}
-```
-
-The default `Has`, `HasAll`, and `HasAny` rules define this function already.
-
-## Indirect connections
-
-If your custom rule references other regions, it must define an `indirect_regions` function that returns a tuple of region names. These will be collected and indirect connections will be registered when you set this rule on an entrance.
-
-```python
-@dataclasses.dataclass()
-class MyRule(Rule):
-    @dataclasses.dataclass(frozen=True)
-    class Resolved(Rule.Resolved):
-        region_name: str
-
-        @override
-        def indirect_regions(self) -> tuple[str, ...]:
-            return (self.region_name,)
-```
-
-The default `CanReachLocation` and `CanReachRegion` rules define this function already.
