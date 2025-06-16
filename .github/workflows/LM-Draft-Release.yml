@@ -4,6 +4,10 @@ on:
     branches:
       - Luigi's-Mansion-AP
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Required tag to create the pre-draft."
+        required: true
 
 jobs:
   windows-deps:
@@ -67,7 +71,8 @@ jobs:
         yamls-per-run: 3
 
   package:
-    needs: [fuzz]
+    # needs: [fuzz]
+    needs: [windows-deps, linux-deps]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -79,14 +84,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lib-windows
-          path: ${{github.workspace}}/worlds/luigismansion/lib/
+          path: worlds/luigismansion/lib/
+
+      - run: echo "Windows Deps"
+      - run: ls worlds/luigismansion/lib/
         
       - name: Download Linux Deps
         id: dl-lin-deps
         uses: actions/download-artifact@v4
         with:
           name: lib-linux
-          path: ${{github.workspace}}/worlds/luigismansion/lib/
+          path: worlds/luigismansion/lib/
+
+      - run: echo "Windows + Linux Deps"
+      - run: ls worlds/luigismansion/lib/
       
       - name: Creates the LM APWorld
         id: apworld
@@ -98,12 +109,12 @@ jobs:
           name: apworld
           path: ${{ steps.apworld.outputs.apworld }}
 
-      - name: Zip Lib folder
-        uses: actions/upload-artifact@v4
+      - name: Make combined Lib folder
+        uses: actions/upload-artifact/merge@v4
         with:
           name: lib
-          path: worlds/luigismansion/lib
-          if-no-files-found: error
+          pattern: lib-*
+          delete-merged: true
 
   publish:
     runs-on: ubuntu-latest
@@ -118,10 +129,17 @@ jobs:
         with:
           name: apworld
 
-      - uses: ncipollo/release-action@v1
+      - if: ${{inputs.tag != '' }}
+        uses: ncipollo/release-action@v1
         with:
-          artifacts: 'lib, apworld'
-          allowUpdates: true
-          omitBodyDuringUpdate: true
-          omitNameDuringUpdate: true
-          draft: true
+          artifacts: 'lib,apworld'
+          generateReleaseNotes: true
+          draft: true          
+          tag: ${{inputs.tag}}
+      - if: ${{inputs.tag == '' }}
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'lib,apworld'
+          generateReleaseNotes: true
+          draft: true          
+          tag: ${{github.ref_name}}
