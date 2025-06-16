@@ -51,17 +51,16 @@ Once you are satisfied with your first block, you may continue to define ones un
 Each block can have several different options to tailor it the way you like.
 
 ### `items`
-The `items` list defines the items to use. Each item name should be followed by a colon and a value.
+The `items` section defines the items to use. Each item name can be followed by a colon and a value.
 * A numerical value indicates the amount of that item.
 * A `true` value uses all copies of that item that are in your item pool.
 
 ### `item`
-The `item` key defines a list of items to use, of which we will pick only one. Each item name should be followed by a 
-colon and a value. The value indicates the weight of that item being chosen.
+The `item` section defines a list of items to use, from which one will be chosen at random. Each item name can be 
+followed by a colon and a value. The value indicates the weight of that item being chosen.
 
 ### `locations` 
-The `locations` list defines possible locations those items can be placed in. Some special location group names can be 
-specified:
+The `locations` section defines possible locations those items can be placed in. Two special location groups exist:
   * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
     inventory).
   * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
@@ -102,9 +101,8 @@ This option sets the number of items placed from the list.
 ### Available Items and Locations
 
 A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and 
-locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. You do not need 
-the quotes but the name must be entered in the same as it appears on that page and is case-sensitive. You can also use 
-item groups and location groups that are defined in the datapackage.
+locations will be in the `"item_name_to_id"` and `"location_name_to_id"` sections of the relevant game. Names are 
+case-sensitive. You can also use item groups and location groups that are defined in the datapackage.
 
 ## Item Plando Examples
 ```yaml
