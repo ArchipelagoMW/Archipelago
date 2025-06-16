@@ -69,7 +69,8 @@ The `locations` section defines possible locations those items can be placed in.
 ### `from_pool`
 This option determines if the item should be taken *from* the item pool or *created* from scratch. 
 * `false`: Create a new item with the same name (the world will determine its properties e.g. classification).
-* `true`: Take the existing item, if it exists, from the item pool. **(Default)**
+* `true`: Take the existing item, if it exists, from the item pool. If it does not exist, one will be created from 
+  scratch. **(Default)**
 
 ### `world`
 This option is the target world to place the item in. It gets ignored if only one world is generated.
