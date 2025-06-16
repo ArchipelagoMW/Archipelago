@@ -21,6 +21,7 @@ jobs:
         yamls-per-run: 1
 
   fuzz-rename:
+    needs: [fuzz]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v4
@@ -37,6 +38,7 @@ jobs:
         path: archipelago/fuzz_output
   
   fuzz-3:
+    needs: [fuzz-rename]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
