@@ -21,6 +21,7 @@ import Utils
 
 if TYPE_CHECKING:
     from entrance_rando import ERPlacementState
+    from rule_builder import Rule
     from worlds import AutoWorld
 
 
@@ -1075,7 +1076,8 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    _access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    resolved_rule: "Rule.Resolved | None" = None
     hide_path: bool = False
     player: int
     name: str
@@ -1091,6 +1093,22 @@ class Entrance:
         self.player = player
         self.randomization_group = randomization_group
         self.randomization_type = randomization_type
+
+    @property
+    def access_rule(self) -> Callable[[CollectionState], bool]:
+        return self._access_rule
+
+    @access_rule.setter
+    def access_rule(self, value: "Callable[[CollectionState], bool] | Rule.Resolved") -> None:
+        if callable(value):
+            self._access_rule = value
+            self.resolved_rule = None
+        else:
+            self._access_rule = value.test
+            self.resolved_rule = value
+
+    # purposefully shadow the property to keep backwards compat
+    access_rule: Callable[[CollectionState], bool] = _access_rule
 
     def can_reach(self, state: CollectionState) -> bool:
         assert self.parent_region, f"called can_reach on an Entrance \"{self}\" with no parent_region"
@@ -1375,7 +1393,8 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    _access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    resolved_rule: "Rule.Resolved | None" =None
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
@@ -1384,6 +1403,22 @@ class Location:
         self.name = name
         self.address = address
         self.parent_region = parent
+
+    @property
+    def access_rule(self) -> Callable[[CollectionState], bool]:
+        return self._access_rule
+
+    @access_rule.setter
+    def access_rule(self, value: "Callable[[CollectionState], bool] | Rule.Resolved") -> None:
+        if callable(value):
+            self._access_rule = value
+            self.resolved_rule = None
+        else:
+            self._access_rule = value.test
+            self.resolved_rule = value
+
+    # purposefully shadow the property to keep backwards compat
+    access_rule: Callable[[CollectionState], bool] = _access_rule
 
     def can_fill(self, state: CollectionState, item: Item, check_access: bool = True) -> bool:
         return ((

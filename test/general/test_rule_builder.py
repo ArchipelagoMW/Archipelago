@@ -16,14 +16,14 @@ if TYPE_CHECKING:
 
 
 class ToggleOption(Toggle):
-    auto_display_name = True
+    auto_display_name: ClassVar[bool] = True
 
 
 class ChoiceOption(Choice):
-    option_first = 0
-    option_second = 1
-    option_third = 2
-    default = 0
+    option_first: ClassVar[int] = 0
+    option_second: ClassVar[int] = 1
+    option_third: ClassVar[int] = 2
+    default: ClassVar[int] = 0
 
 
 @dataclass
@@ -33,10 +33,10 @@ class RuleBuilderOptions(PerGameCommonOptions):
 
 
 class RuleBuilderWorld(RuleWorldMixin, World):
-    game = "Rule Builder Test Game"
-    item_name_to_id = {}
-    location_name_to_id = {}
-    hidden = True
+    game: ClassVar[str] = "Rule Builder Test Game"
+    item_name_to_id: ClassVar[dict[str, int]] = {}
+    location_name_to_id: ClassVar[dict[str, int]] = {}
+    hidden: ClassVar[bool] = True
     options_dataclass = RuleBuilderOptions
     options: RuleBuilderOptions  # type: ignore
 
