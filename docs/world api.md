@@ -333,7 +333,7 @@ location". Event items and locations are created the same way as normal items an
 understand that they are perfectly real during generation.
 
 The most common way to create an event is to create the event item and the event location, then immediately call
-`.place_locked_item()`:
+`Location.place_locked_item()`:
 
 ```python
 victory_loc = MyGameLocation(self.player, "Defeat the Final Boss", None, final_boss_arena_region)
