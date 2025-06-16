@@ -4,6 +4,9 @@ on:
     branches:
       - Luigi's-Mansion-AP
   workflow_dispatch:
+    inputs:
+       tag:
+        required: true
 
 jobs:
   windows-deps:
