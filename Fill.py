@@ -138,32 +138,21 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                         # to clean that up later, so there is a chance generation fails.
                         if (not single_player_placement or location.player == item_to_place.player) \
                                 and location.can_fill(swap_state, item_to_place, perform_access_check):
+                            # Add this item to the existing placement, and
+                            # add the old item to the back of the queue
+                            spot_to_fill = placements.pop(i)
 
-                            # Verify placing this item won't reduce available locations, which would be a useless swap.
-                            prev_state = swap_state.copy()
-                            prev_loc_count = len(
-                                multiworld.get_reachable_locations(prev_state))
+                            swap_count += 1
+                            swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
 
-                            swap_state.collect(item_to_place, True)
-                            new_loc_count = len(
-                                multiworld.get_reachable_locations(swap_state))
+                            reachable_items[placed_item.player].appendleft(
+                                placed_item)
+                            item_pool.append(placed_item)
 
-                            if new_loc_count >= prev_loc_count:
-                                # Add this item to the existing placement, and
-                                # add the old item to the back of the queue
-                                spot_to_fill = placements.pop(i)
+                            # cleanup at the end to hopefully get better errors
+                            cleanup_required = True
 
-                                swap_count += 1
-                                swapped_items[placed_item.player, placed_item.name, unsafe] = swap_count
-
-                                reachable_items[placed_item.player].appendleft(
-                                    placed_item)
-                                item_pool.append(placed_item)
-
-                                # cleanup at the end to hopefully get better errors
-                                cleanup_required = True
-
-                                break
+                            break
 
                         # Item can't be placed here, restore original item
                         location.item = placed_item
@@ -901,7 +890,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                 worlds = set()
                 for listed_world in target_world:
                     if listed_world not in world_name_lookup:
-                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                        failed(f"Cannot place item to {listed_world}'s world as that world does not exist.",
                                block.force)
                         continue
                     worlds.add(world_name_lookup[listed_world])
@@ -934,9 +923,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
             if isinstance(locations, str):
                 locations = [locations]
 
-            locations_from_groups: list[str] = []
             resolved_locations: list[Location] = []
             for target_player in worlds:
+                locations_from_groups: list[str] = []
                 world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
@@ -948,13 +937,16 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
 
             count = block.count
             if not count:
-                count = len(new_block.items)
+                count = (min(len(new_block.items), len(new_block.resolved_locations))
+                         if new_block.resolved_locations else len(new_block.items))
             if isinstance(count, int):
                 count = {"min": count, "max": count}
             if "min" not in count:
                 count["min"] = 0
             if "max" not in count:
-                count["max"] = len(new_block.items)
+                count["max"] = (min(len(new_block.items), len(new_block.resolved_locations))
+                                if new_block.resolved_locations else len(new_block.items))
+
 
             new_block.count = count
             plando_blocks[player].append(new_block)
