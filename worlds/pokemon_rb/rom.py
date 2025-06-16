@@ -497,7 +497,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
     write_bytes(rom_addresses["Text_Badges_Needed"],
                 encode_text(str(world.options.elite_four_badges_condition.value))[0])
     write_bytes(rom_addresses["Text_Magikarp_Salesman"],
-                encode_text(" ".join(world.multiworld.get_location("Route 4 Pokemon Center - Pokemon For Sale", world.player).item.name.upper().split()[1:])))
+                encode_text(world.multiworld.get_location("Route 4 Pokemon Center - Pokemon For Sale", world.player).item.name.upper()))
 
     if world.options.badges_needed_for_hm_moves.value == 0:
         for hm_move in poke_data.hm_moves:
