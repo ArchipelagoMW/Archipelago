@@ -69,7 +69,7 @@ network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data
     )
 )
 class TestSimplify(unittest.TestCase):
-    rules: ClassVar[tuple[Rule, Rule.Resolved]]
+    rules: ClassVar[tuple[Rule[RuleBuilderWorld], Rule.Resolved]]
 
     def test_simplify(self) -> None:
         multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
@@ -155,7 +155,7 @@ class TestOptions(unittest.TestCase):
     )
 )
 class TestComposition(unittest.TestCase):
-    rules: ClassVar[tuple[Rule, Rule]]
+    rules: ClassVar[tuple[Rule[RuleBuilderWorld], Rule[RuleBuilderWorld]]]
 
     def test_composition(self) -> None:
         combined_rule, expected = self.rules
