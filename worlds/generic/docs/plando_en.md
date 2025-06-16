@@ -50,54 +50,49 @@ in locations **until the shorter of the two lists is used up.**
 Once you are satisfied with your first block, you may continue to define ones under the same `plando_items` parent.
 Each block can have several different options to tailor it the way you like.
 
-### `items`
-The `items` section defines the items to use. Each item name can be followed by a colon and a value.
-* A numerical value indicates the amount of that item.
-* A `true` value uses all copies of that item that are in your item pool.
+* The `items` section defines the items to use. Each item name can be followed by a colon and a value.
+    * A numerical value indicates the amount of that item.
+    * A `true` value uses all copies of that item that are in your item pool.
 
-### `item`
-The `item` section defines a list of items to use, from which one will be chosen at random. Each item name can be 
-followed by a colon and a value. The value indicates the weight of that item being chosen.
+* The `item` section defines a list of items to use, from which one will be chosen at random. Each item name can be 
+    followed by a colon and a value. The value indicates the weight of that item being chosen.
 
-### `locations` 
-The `locations` section defines possible locations those items can be placed in. Two special location groups exist:
-  * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
-    inventory).
-  * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
-    before they become logically reachable).
+* The `locations` section defines possible locations those items can be placed in. Two special location groups exist:
+      * `early_locations` will add all sphere 1 locations (locations logically reachable only with your starting 
+        inventory).
+      * `non_early_locations` will add all locations beyond sphere 1 (locations that require finding at least one item 
+        before they become logically reachable).
 
-### `from_pool`
-This option determines if the item should be taken *from* the item pool or *created* from scratch. 
-* `false`: Create a new item with the same name (the world will determine its properties e.g. classification).
-* `true`: Take the existing item, if it exists, from the item pool. If it does not exist, one will be created from 
-  scratch. **(Default)**
+* The `location` section defines a list of locations to use, from which one will be chosen at random. Each location 
+    name can be followed by a colon and a value. The value indicates the weight of that location being chosen.
 
-### `world`
-This option is the target world to place the item in. It gets ignored if only one world is generated.
-* **A number:** Use this slot or player number in the multiworld.
-* **A name:** Use the world with that player name.
-* **A list of names:** Use the worlds with the player names specified.
-* `true`: Locations will be in any player's world besides your own.
-* `false`: Locations will be in your own world. **(Default)**
-* `null`: Locations will be in a random world in the multiworld.
+* `from_pool` determines if the item should be taken *from* the item pool or *created* from scratch.
+    * `false`: Create a new item with the same name (the world will determine its properties e.g. classification).
+    * `true`: Take the existing item, if it exists, from the item pool. If it does not exist, one will be created from 
+      scratch. **(Default)**
 
-### `force` 
-This option determines whether the generator will fail if the plando block cannot be fulfilled. 
-* `true`: The generator will throw an error if it is unable to place an item.
-* `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
-* `silent`: If the placement fails, it will be ignored entirely. **(Default)**
+* `world` is the target world to place the item in. It gets ignored if only one world is generated.
+    * **A number:** Use this slot or player number in the multiworld.
+    * **A name:** Use the world with that player name.
+    * **A list of names:** Use the worlds with the player names specified.
+    * `true`: Locations will be in any player's world besides your own.
+    * `false`: Locations will be in your own world. **(Default)**
+    * `null`: Locations will be in a random world in the multiworld.
 
-### `percentage` 
-This option is the percentage chance for the relevant list element to trigger. This can be any integer from 0 to 100. 
-**(Default: 100)**
+* `force` determines whether the generator will fail if the plando block cannot be fulfilled.
+    * `true`: The generator will throw an error if it is unable to place an item.
+    * `false`: The generator will log a warning if it is unable to place an item, but it will still generate.
+    * `silent`: If the placement fails, it will be ignored entirely. **(Default)**
 
-### `count` 
-This option sets the number of items placed from the list. 
-* **Default: 1 if using `item` or `location`, and `false` otherwise.**
-* **A number:** It will place this number of items.
-* `false`: It will place as many items from the list as it can.
-* **If `min` is defined,** it will place at least `min` many items (can be combined with `max`).
-* **If `max` is defined,** it will place at most `max` many items (can be combined with `min`).
+* `percentage` is the percentage chance for the block to trigger. This can be any integer from 0 to 100. 
+    **(Default: 100)**
+
+* `count` sets the number of items placed from the list.
+    * **Default: 1 if using `item` or `location`, and `false` otherwise.**
+    * **A number:** It will place this number of items.
+    * `false`: It will place as many items from the list as it can.
+    * **If `min` is defined,** it will place at least `min` many items (can be combined with `max`).
+    * **If `max` is defined,** it will place at most `max` many items (can be combined with `min`).
 
 ### Available Items and Locations
 
