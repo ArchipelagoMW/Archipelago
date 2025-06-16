@@ -14,7 +14,7 @@ from .data import LOCATIONS_DATA
 from .data.Constants import *
 from .data.Items import ITEMS_DATA
 from .data.Regions import REGIONS
-from .data.LogicPredicates import ph_has_sw_sea_chart
+from .data.LogicPredicates import *
 
 from .Client import PhantomHourglassClient  # Unused, but required to register with BizHawkClient
 
@@ -100,7 +100,10 @@ class PhantomHourglassWorld(World):
         if not location_data.get("conditional", False):
             return True
         else:
+            if location_name in FROG_LOCATION_NAMES:
+                return self.options.randomize_frogs != PhantomHourglassFrogRandomization.option_start_with
             return False
+
 
     def create_events(self):
         self.create_event("goal", "_beaten_game")
@@ -112,7 +115,7 @@ class PhantomHourglassWorld(World):
 
     def set_rules(self):
         create_connections(self.multiworld, self.player, self.origin_region_name, self.options)
-        self.multiworld.completion_condition[self.player] = lambda state: ph_has_sw_sea_chart(state, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: ph_has_sea_chart(state, self.player, "SW")
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
@@ -158,6 +161,11 @@ class PhantomHourglassWorld(World):
                 forced_item = self.create_item(item_name)
                 self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                 continue
+            if item_name in FROG_NAMES:
+                if self.options.randomize_frogs == "vanilla":
+                    forced_item = self.create_item(item_name)
+                    self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
+                    continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
@@ -195,6 +203,7 @@ class PhantomHourglassWorld(World):
             items.remove(item)
         self.pre_fill_items.extend(confined_dungeon_items)
 
+
     def pre_fill_dungeon_items(self):
         # If keysanity is off, dungeon items can only be put inside local dungeon locations, and there are not so many
         # of those which makes them pretty crowded.
@@ -227,6 +236,7 @@ class PhantomHourglassWorld(World):
             fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
+
     def get_filler_item_name(self) -> str:
         FILLER_ITEM_NAMES = [
             "Red Rupee (20)"
@@ -237,13 +247,10 @@ class PhantomHourglassWorld(World):
 
     def fill_slot_data(self) -> dict:
         options = ["goal", "logic", "keysanity", "phantom_combat_difficulty",
-                   "ph_starting_time", "ph_time_increment"]
+                   "ph_starting_time", "ph_time_increment", "randomize_frogs"]
         slot_data = self.options.as_dict(*options)
         print(slot_data)
         return slot_data
 
     def write_spoiler(self, spoiler_handle):
         pass
-
-
-

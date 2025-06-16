@@ -21,6 +21,10 @@ REGIONS = [
     "shop quiver",
     "shop heart container",
 
+    "beedle gem",
+    "beedle bomb bag",
+
+
     # TotOK
     "totok",
     "totok 1f chart chest",
@@ -54,10 +58,14 @@ REGIONS = [
     "sw ocean east",
     "sw ocean west",
     "sw ocean crest salvage",
+    "sw ocean frog x",
+    "sw ocean frog phi",
+    "sw ocean nyave",
 
     # Cannon Island
     "cannon island",
     "cannon island salvage arm",
+    "cannon island dig",
 
     # Isle of Ember
     "ember island",
@@ -76,8 +84,50 @@ REGIONS = [
     "tof 3f key drop",
     "tof 3f boss key",
     "tof blaaz",
-    "post tof"
+    "post tof",
 
+    # Molida Island
+    "molida island",
+    "molida dig",
+    "molida grapple",
+    "molida cave back",
+    "molida cave back dig",
+    "molida cuccoo dig",
+    "molida north",
+    "molida north grapple",
+    "molida archery",
+
+    # Temple of Courage
+    "toc",
+    "toc bomb alcove",
+    "toc b1",
+    "toc hammer clips",
+    "toc b1 grapple",
+    "toc 1f west",
+    "toc map room",
+    "toc 2f beamos",
+    "toc b1 maze",
+    "toc south 1f",
+    "toc 2f platforms",
+    "toc 2f spike corridor",
+    "toc torches",
+    "toc torches chest",
+    "toc pols 2",
+    "toc bk room",
+    "toc bk chest",
+    "toc before boss",
+    "toc before boss chest",
+    "toc crayk",
+
+    # Spirit Island
+    "spirit island",
+    "spirit island gauntlet",
+    "spirit power 1",
+    "spirit power 2",
+    "spirit wisdom 1",
+    "spirit wisdom 2",
+    "spirit courage 1",
+    "spirit courage 2",
 
 
 

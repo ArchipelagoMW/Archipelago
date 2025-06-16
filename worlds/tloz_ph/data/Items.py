@@ -33,6 +33,7 @@ ITEMS_DATA = {
     "Bombs (Progressive)": {
         'classification': ItemClassification.progression,
         "progressive": [[0x1BA644, 0x10], [0x1BA5D2, 1], [0x1BA5D2, 2]],
+        "progressive_overwrite": True,
         "give_ammo": [10, 20, 30],
         "ammo_address": 0x1BA6C0
     },
@@ -40,13 +41,15 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'progressive': [[0x1BA644, 0x80], [0x1BA5D4, 1], [0x1BA5D4, 2]],
         "give_ammo": [10, 20, 30],
-        "ammo_address": 0x1BA6C6
+        "ammo_address": 0x1BA6C6,
+        "progressive_overwrite": True,
     },
     "Bow (Progressive)": {
         'classification': ItemClassification.progression,
         "progressive": [[0x1BA644, 0x20], [0x1BA5D0, 1], [0x1BA5D0, 2]],
         "give_ammo": [20, 30, 50],
-        "ammo_address": 0x1BA6C2
+        "ammo_address": 0x1BA6C2,
+        "progressive_overwrite": True,
     },
     "Grappling Hook": {
         'classification': ItemClassification.progression,
@@ -258,6 +261,11 @@ ITEMS_DATA = {
         'address': 0x1BA650,
         'value': 0x80
     },
+    "Treasure Map #2": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA650,
+        'value': 0x10
+    },
     "Treasure Map #3": {
         'classification': ItemClassification.filler,
         'address': 0x1BA651,
@@ -288,6 +296,11 @@ ITEMS_DATA = {
         'address': 0x1BA652,
         'value': 0x20
     },
+    "Treasure Map #20": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA651,
+        'value': 0x40
+    },
     "Treasure Map #23": {
         'classification': ItemClassification.filler,
         'address': 0x1BA612,
@@ -312,7 +325,22 @@ ITEMS_DATA = {
         'dungeon': 0x1C,
         'incremental': True
     },
+    "Small Key (Temple of Courage)": {
+        'classification': ItemClassification.progression,
+        'dungeon': 0x1E,
+        'incremental': True
+    },
     "Boss Key (Temple of Fire)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Boss Key (Temple of Courage)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Square Crystal (Temple of Courage)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
         'dummy': True
@@ -337,7 +365,40 @@ ITEMS_DATA = {
         'address': 0x1BA649,
         'value': 0x04
     },
+
+    # Frogs
+    "Golden Frog Glyph X": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A2,
+        'value': 0x80
+    },
+    "Golden Frog Glyph Phi": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A3,
+        'value': 0x01
+    },
+    "Golden Frog Glyph N": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A3,
+        'value': 0x02
+    },
+    "Golden Frog Glyph Omega": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A3,
+        'value': 0x04
+    },
+    "Golden Frog Glyph W": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A3,
+        'value': 0x08
+    },
+    "Golden Frog Glyph Square": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A3,
+        'value': 0x10
+    },
 }
+
 
 # Oops apparently not a constant lul (it will be after this)
 for i, k in enumerate(ITEMS_DATA.keys()):

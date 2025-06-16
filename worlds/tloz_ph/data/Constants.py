@@ -2,9 +2,10 @@ VERSION = "0.3.0"
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 
 STARTING_FLAGS = [
-    # Starting flags (these are in series so can be simplified, but it's called once and this is easier to bugfix)
+    # Starting flags (these are in the same memory block so can be simplified, but it's called once and this is
+    # easier to bugfix)
     [0x1B557C, 0xEF],
-    [0x1B557D, 0x3C],
+    [0x1B557D, 0x34],
     [0x1B557E, 0x3E],
     [0x1B557F, 0x03],
     [0x1B5580, 0xE7],
@@ -25,7 +26,7 @@ STARTING_FLAGS = [
     [0x1B558F, 0x04],
     [0x1B5590, 0x02],
     [0x1B5591, 0xFE],
-    [0x1B5592, 0x05],
+    [0x1B5592, 0x04],
     [0x1B5593, 0xEA],
     [0x1B5594, 0x47],
     [0x1B5595, 0x00],
@@ -41,8 +42,8 @@ STARTING_FLAGS = [
     [0x1B559F, 0x05],
     [0x1B55A0, 0x31],
     [0x1B55A1, 0x00],
-    [0x1B55A2, 0xA0],
-    [0x1B55A3, 0x1F],
+    [0x1B55A2, 0x20],
+    [0x1B55A3, 0x20],
     [0x1B55A4, 0x26],
     [0x1B55A5, 0xCC],
     [0x1B55A6, 0x00],
@@ -74,6 +75,11 @@ STARTING_FLAGS = [
     [0x1BA65F, 0xFF],
     [0x1BA660, 0xFF],
     [0x1BA664, 0xFF],
+]
+
+STARTING_FROG_FLAGS = [
+    [0x1B55A2, 0xA0],
+    [0x1B55A3, 0x3F]
 ]
 
 STAGE_FLAGS = {
@@ -203,6 +209,24 @@ DUNGEON_NAMES = [
     "Ghost Ship"
 ]
 
+FROG_LOCATION_NAMES = [
+    "Ocean SW Golden Frog X",
+    "Ocean SW Golden Frog Phi",
+    "Ocean NW Golden Frog N",
+    "Ocean SE Golden Frog Omega",
+    "Ocean SE Golden Frog W",
+    "Ocean NE Golden Frog Square"
+]
+
+FROG_NAMES = [
+    "Golden Frog Glyph X",
+    "Golden Frog Glyph Phi",
+    "Golden Frog Glyph N",
+    "Golden Frog Glyph Omega",
+    "Golden Frog Glyph W",
+    "Golden Frog Glyph Square"
+]
+
 DUNGEON_KEY_DATA = {
     39: {
         "name": "Mountain Passage",
@@ -261,15 +285,28 @@ DUNGEON_KEY_DATA = {
                 "min_z": 0x800,
                 "max_z": 0xF000}
         }
+    },
+    0x1E: {
+        "name": "Temple of Courage",
+        "address": 0x1BA64F,
+        "value": 0x10,
+        "size": 2,
+        "filter": 0x30,
     }
 }
 
 SHOPS = {
-    0xB11: {
-        "unique": ["Mercay Shop Power Gem"],
+    0xB11: {  # Mercay Shop
         "island_shop": True
         },
-    0x130B: {
+    0xC0E: {  # Molida Shop
+        "island_shop": True
+    },
+    0x130B: {  # Eddo Cannon Island
         "unique": ["Cannon Island Cannon", "Cannon Island Salvage Arm"]
+    },
+    0x500: {  # Beedle Shop
+        "unique": ["Beedle Shop Wisdom Gem"],
+        "beedle": True  # TODO: make this modular, instead of hard coding item requirements
     }
 }

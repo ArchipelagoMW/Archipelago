@@ -50,24 +50,87 @@ def ph_has_spirit(state: CollectionState, player: int, spirit: str, count: int =
     return state.has(f"Spirit of {spirit} (Progressive)", player, count)
 
 
-def ph_has_sw_sea_chart(state: CollectionState, player: int):
-    return state.has("SW Sea Chart", player)
+def ph_has_spirit_gems(state: CollectionState, player: int, spirit: str, count: int = 1):
+    return state.has(f"{spirit} Gem", player, count)
 
 
-def ph_has_se_sea_chart(state: CollectionState, player: int):
-    return state.has("SE Sea Chart", player)
+def ph_has_sun_key(state: CollectionState, player: int):
+    return state.has("Sun Key", player)
 
 
-def ph_has_courage_crest(state, player):
+# ========= Sea Items =============
+
+def ph_has_sea_chart(state: CollectionState, player: int, quadrant: str):
+    return state.has(f"{quadrant} Sea Chart", player)
+
+
+def ph_has_courage_crest(state: CollectionState, player: int):
     return state.has("Courage Crest", player)
 
 
-def ph_has_cannon(state, player):
+def ph_has_cannon(state: CollectionState, player: int):
     return state.has("Cannon", player)
 
 
-def ph_has_salvage(state, player):
+def ph_has_salvage(state: CollectionState, player: int):
     return state.has("Salvage Arm", player)
+
+
+# ============== Frogs =======================
+
+def ph_has_cyclone_slate(state: CollectionState, player: int):
+    return state.has("Cyclone Slate", player)
+
+
+# Does not mean you can logically get back, use the other frogs
+def ph_has_frog(state: CollectionState, player: int, glyph: str, quadrant: str):
+    return all([
+        ph_has_sea_chart(state, player, quadrant),
+        ph_has_cyclone_slate(state, player),
+        any([
+            state.has(f"Frog Glyph {glyph}", player),
+            ph_option_start_with_frogs(state, player)
+        ])
+    ])
+
+
+def ph_has_frog_x(state: CollectionState, player: int):
+    return ph_has_frog(state, player, "X", "SW")
+
+
+def ph_has_frog_phi(state: CollectionState, player: int):
+    return all([
+        ph_has_frog(state, player, "Phi", "SW"),
+        any([
+            ph_has_cannon(state, player),
+            ph_has_frog_x(state, player),
+            ph_has_sea_chart(state, player, "NW")
+        ])
+    ])
+
+
+def ph_has_frog_n(state: CollectionState, player: int):
+    return ph_has_frog(state, player, "N", "NW")
+
+
+def ph_has_frog_omega(state: CollectionState, player: int):
+    return ph_has_frog(state, player, "Omega", "SE")
+
+
+def ph_has_frog_w(state: CollectionState, player: int):
+    return ph_has_frog(state, player, "W", "SE")
+
+
+def ph_has_frog_square(state: CollectionState, player: int):
+    return all([
+        ph_has_frog(state, player, "Square", "NE"),
+        any([
+            ph_has_sea_chart(state, player, "SE"),
+            ph_has_frog_phi(state, player),
+            ph_has_frog_n(state, player),
+            ph_has_frog_x(state, player)
+        ])
+    ])
 
 
 # =========== Combined item states ================
@@ -124,7 +187,7 @@ def ph_has_mid_range(state: CollectionState, player: int):
     return any([ph_has_range(state, player),
                 ph_has_hammer(state, player),
                 ph_has_beam_sword(state, player),
-                ph_option_clever_pots(state, player)])
+                ph_clever_pots(state, player)])
 
 
 def ph_has_fire_sword(state: CollectionState, player: int):
@@ -201,6 +264,10 @@ def ph_option_med_logic(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.logic in ["medium", "glitched"]
 
 
+def ph_option_not_glitched_logic(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.logic in ["medium", "normal"]
+
+
 def ph_option_keysanity(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.keysanity == "anywhere"
 
@@ -230,13 +297,21 @@ def ph_option_phantoms_sword_only(state: CollectionState, player: int):
                 ph_has_phantom_sword(state, player)])
 
 
-def ph_option_clever_pots(state: CollectionState, player: int):
+def ph_clever_pots(state: CollectionState, player: int):
     return ph_option_med_logic(state, player)
 
 
 def ph_clever_bombs(state: CollectionState, player: int):
     return all([ph_has_bombs(state, player),
                 ph_option_med_logic(state, player)])
+
+
+def ph_option_randomize_frogs(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.randomize_frogs == "randomize"
+
+
+def ph_option_start_with_frogs(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.randomize_frogs == "start_with"
 
 
 # ============= Key logic ==============
@@ -250,14 +325,17 @@ def ph_has_boss_key(state: CollectionState, player: int, dung_name: str):
 
 
 def ph_has_force_gems(state, player, floor=3):
-    # TODO: Differentiate between B3 and B12
     return state.has(f"Force Gem (B{floor})", player, 3)
+
+
+def ph_has_shape_crystal(state: CollectionState, player: int, dung_name: str, shape: str):
+    return state.has(f"{shape} Crystal ({dung_name})", player)
+
 
 # ============= Location states ========
 
 def ph_can_cut_small_trees(state: CollectionState, player: int):
     return any([ph_has_sword(state, player), ph_has_explosives(state, player)])
-
 
 
 # Handles keylocking due to lack of locations
@@ -308,7 +386,7 @@ def ph_can_kill_phantoms_traps(state: CollectionState, player: int):
 
 def ph_can_hit_tricky_switches(state: CollectionState, player: int):
     return any([
-        ph_option_clever_pots(state, player),
+        ph_clever_pots(state, player),
         ph_has_short_range(state, player)
     ])
 
@@ -354,11 +432,48 @@ def ph_salvage_courage_crest(state: CollectionState, player: int):
     return all([
         ph_has_courage_crest(state, player),
         ph_has_salvage(state, player),
-        ph_has_cannon(state, player)
+        # The sea monster is disabled, otherwise add cannon to reqs
+    ])
+
+
+def ph_can_enter_ocean_sw_west(state, player):
+    return any([
+        ph_has_cannon(state, player),
+        ph_has_frog_phi(state, player)
+    ])
+
+
+def ph_can_enter_toc(state, player):
+    return all([
+        ph_has_damage(state, player),
+        any([
+            ph_has_boomerang(state, player),
+            ph_has_bow(state, player)
+        ])
+    ])
+
+
+def ph_toc_key_doors(state, player, glitched: int, not_glitched: int):
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Courage", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Courage", not_glitched)
+        ])
+    ])
+
+
+def ph_toc_final_switch_state(state, player):
+    return any([
+        ph_has_bow(state, player),
+        ph_toc_key_doors(state, player, 2, 1)
     ])
 
 
 def ph_temp_goal(state, player):
-    return all([ph_has_sw_sea_chart(state, player),
+    return all([ph_has_sea_chart(state, player, "SW"),
                 ph_has_phantom_sword(state, player),
                 ph_has_courage_crest(state, player)])

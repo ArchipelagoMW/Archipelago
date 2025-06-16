@@ -94,7 +94,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                 unplaced_items += items_to_place
                 break
             item_to_place = items_to_place.pop(0)
-
+            print(f"Filling {item_to_place} in {locations}")
             spot_to_fill: typing.Optional[Location] = None
 
             # if minimal accessibility, only check whether location is reachable if game not beatable

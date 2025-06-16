@@ -91,18 +91,41 @@ class PhantomHourglassKeyRandomization(Choice):
     option_anywhere = 2
     default = 1
 
+
+class PhantomHourglassFrogRandomization(Choice):
+    """
+    Ramdomize golden cyclone frogs
+    - vanilla: shooting a frog gives their warp spot
+    - start_with: start with all warps unlocked. Frogs are not checks. You don't start with cyclone slate unless it's
+    in starting_items. You also need their respective sea charts to actually warp.
+    - randomize: frog glyphs are random and frogs are checks
+    """
+    display_name = "Randomize Frogs"
+    option_vanilla = 0
+    option_start_with = 1
+    option_randomize = 2
+    default = 0
+
+
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
+    # Generic
     accessibility: ItemsAccessibility
     goal: PhantomHourglassGoal
     start_inventory_from_pool: StartInventoryPool
-    logic: PhantomHourglassLogic
+    remove_items_from_pool: PhantomHourglassRemoveItemsFromPool
+    death_link: DeathLink
 
-    # Dungeon Options
-    keysanity: PhantomHourglassKeyRandomization
+    # Logic options
+    logic: PhantomHourglassLogic
     phantom_combat_difficulty: PhantomHourglassPhantomCombatDifficulty
+
+    # Item Randomization
+    keysanity: PhantomHourglassKeyRandomization
+    randomize_frogs: PhantomHourglassFrogRandomization
+
+    # Phantom Hourglass
     ph_starting_time: PhantomHourglassStartingTime
     ph_time_increment: PhantomHourglassTimeIncrement
 
-    remove_items_from_pool: PhantomHourglassRemoveItemsFromPool
-    death_link: DeathLink
+
