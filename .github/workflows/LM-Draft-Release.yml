@@ -135,3 +135,4 @@ jobs:
           omitBodyDuringUpdate: true
           omitNameDuringUpdate: true
           draft: true
+          tag: ${{inputs.tag}}
