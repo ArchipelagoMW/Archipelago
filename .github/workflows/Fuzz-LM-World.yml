@@ -19,6 +19,23 @@ jobs:
         python-version: '3.12'
         runs: 1000
         yamls-per-run: 1
+
+  fuzz-rename:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        name: fuzz-output
+        path: archipelago/fuzz_output
+    - uses: geekyeggo/delete-artifact@v5
+      with:
+          name: fuzz-output
+    - name: Upload fuzzer renamed
+      uses: actions/upload-artifact@v4
+      with:
+        name: fuzz-output-single-yaml
+        path: archipelago/fuzz_output
+  
   fuzz-3:
     runs-on: ubuntu-latest
     steps:
