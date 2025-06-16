@@ -44,9 +44,8 @@ class RuleWorldMixin(World):
 
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         resolved_rule = rule.resolve(self)
-        if resolved_rule.cacheable:
-            for item_name, rule_ids in resolved_rule.item_dependencies().items():
-                self.rule_dependencies[item_name] |= rule_ids
+        for item_name, rule_ids in resolved_rule.item_dependencies().items():
+            self.rule_dependencies[item_name] |= rule_ids
         return resolved_rule
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
