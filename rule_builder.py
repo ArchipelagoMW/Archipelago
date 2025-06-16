@@ -3,9 +3,9 @@ import itertools
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, Literal, TypeVar, cast, dataclass_transform
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Generic, Literal, TypeVar, cast
 
-from typing_extensions import Never, Self, override
+from typing_extensions import Never, Self, dataclass_transform, override
 
 from BaseClasses import Entrance
 
@@ -273,9 +273,17 @@ class Rule(Generic[TWorld]):
             """Returns a tuple of region names this rule is indirectly connected to"""
             return ()
 
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             """Returns a list of printJSON messages that explain the logic for this rule"""
             return [{"type": "text", "text": self.__class__.__name__}]
+
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            """Returns a human readable string describing this rule"""
+            return str(self)
+
+        @override
+        def __str__(self) -> str:
+            return f"{self.__class__.__name__}()"
 
 
 @dataclasses.dataclass()
@@ -292,8 +300,12 @@ class True_(Rule[TWorld]):
             return True
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [{"type": "color", "color": "green", "text": "True"}]
+
+        @override
+        def __str__(self) -> str:
+            return "True"
 
 
 @dataclasses.dataclass()
@@ -310,8 +322,12 @@ class False_(Rule[TWorld]):
             return False
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [{"type": "color", "color": "salmon", "text": "False"}]
+
+        @override
+        def __str__(self) -> str:
+            return "False"
 
 
 @dataclasses.dataclass(init=False)
@@ -381,14 +397,24 @@ class And(NestedRule[TWorld]):
             return True
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
             for i, child in enumerate(self.children):
                 if i > 0:
                     messages.append({"type": "text", "text": " & "})
-                messages.extend(child.explain(state))
+                messages.extend(child.explain_json(state))
             messages.append({"type": "text", "text": ")"})
             return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            clauses = " & ".join([c.explain_str(state) for c in self.children])
+            return f"({clauses})"
+
+        @override
+        def __str__(self) -> str:
+            clauses = " & ".join([str(c) for c in self.children])
+            return f"({clauses})"
 
         @override
         def simplify(self) -> "Rule.Resolved":
@@ -456,14 +482,24 @@ class Or(NestedRule[TWorld]):
             return False
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "("}]
             for i, child in enumerate(self.children):
                 if i > 0:
                     messages.append({"type": "text", "text": " | "})
-                messages.extend(child.explain(state))
+                messages.extend(child.explain_json(state))
             messages.append({"type": "text", "text": ")"})
             return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            clauses = " | ".join([c.explain_str(state) for c in self.children])
+            return f"({clauses})"
+
+        @override
+        def __str__(self) -> str:
+            clauses = " | ".join([str(c) for c in self.children])
+            return f"({clauses})"
 
         @override
         def simplify(self) -> "Rule.Resolved":
@@ -545,13 +581,26 @@ class Has(Rule[TWorld]):
             return {self.item_name: {id(self)}}
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
                 messages.append({"type": "text", "text": "x "})
             messages.append({"type": "item_name", "flags": 0b001, "text": self.item_name, "player": self.player})
             return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            prefix = "Has" if self.test(state) else "Missing"
+            count = f"{self.count}x " if self.count > 1 else ""
+            return f"{prefix} {count}{self.item_name}"
+
+        @override
+        def __str__(self) -> str:
+            count = f"{self.count}x " if self.count > 1 else ""
+            return f"Has {count}{self.item_name}"
 
 
 @dataclasses.dataclass(init=False)
@@ -592,7 +641,7 @@ class HasAll(Rule[TWorld]):
             return {item: {id(self)} for item in self.item_names}
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [
                 {"type": "text", "text": "Has "},
                 {"type": "color", "color": "cyan", "text": "all"},
@@ -604,6 +653,22 @@ class HasAll(Rule[TWorld]):
                 messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
             messages.append({"type": "text", "text": ")"})
             return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            prefix = "Has all" if self.test(state) else "Missing some"
+            found_str = f"Found: {', '.join(found)}" if found else ""
+            missing_str = f"Missing: {', '.join(missing)}" if missing else ""
+            return f"{prefix} of ({found_str}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join(self.item_names)
+            return f"Has all of ({items})"
 
 
 @dataclasses.dataclass()
@@ -644,7 +709,7 @@ class HasAny(Rule[TWorld]):
             return {item: {id(self)} for item in self.item_names}
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             messages: list[JSONMessagePart] = [
                 {"type": "text", "text": "Has "},
                 {"type": "color", "color": "cyan", "text": "any"},
@@ -656,6 +721,22 @@ class HasAny(Rule[TWorld]):
                 messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
             messages.append({"type": "text", "text": ")"})
             return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            prefix = "Has some" if self.test(state) else "Missing all"
+            found_str = f"Found: {', '.join(found)}" if found else ""
+            missing_str = f"Missing: {', '.join(missing)}" if missing else ""
+            return f"{prefix} of ({found_str}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join(self.item_names)
+            return f"Has all of ({items})"
 
 
 @dataclasses.dataclass()
@@ -703,11 +784,22 @@ class CanReachLocation(Rule[TWorld]):
             return ()
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Location "},
                 {"type": "location_name", "text": self.location_name, "player": self.player},
             ]
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            prefix = "Reached" if self.test(state) else "Cannot reach"
+            return f"{prefix} location {self.location_name}"
+
+        @override
+        def __str__(self) -> str:
+            return f"Can reach location {self.location_name}"
 
 
 @dataclasses.dataclass()
@@ -737,11 +829,22 @@ class CanReachRegion(Rule[TWorld]):
             return (self.region_name,)
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Region "},
                 {"type": "color", "color": "yellow", "text": self.region_name},
             ]
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            prefix = "Reached" if self.test(state) else "Cannot reach"
+            return f"{prefix} region {self.region_name}"
+
+        @override
+        def __str__(self) -> str:
+            return f"Can reach region {self.region_name}"
 
 
 @dataclasses.dataclass()
@@ -767,11 +870,22 @@ class CanReachEntrance(Rule[TWorld]):
             return state.can_reach_entrance(self.entrance_name, self.player)
 
         @override
-        def explain(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             return [
                 {"type": "text", "text": "Reached Entrance "},
                 {"type": "entrance_name", "text": self.entrance_name, "player": self.player},
             ]
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            prefix = "Reached" if self.test(state) else "Cannot reach"
+            return f"{prefix} entrance {self.entrance_name}"
+
+        @override
+        def __str__(self) -> str:
+            return f"Can reach entrance {self.entrance_name}"
 
 
 DEFAULT_RULES = {
