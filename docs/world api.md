@@ -328,7 +328,7 @@ Typical examples include completing the goal, defeating a boss, or flipping a sw
 
 To be precise: the term "event" on its own refers to the special combination of an "event item" placed on an "event
 location". Event items and locations are created the same way as normal items and locations, except that they have an
-`id` of `None` and an event item must be placed on an event location
+`id` of `None`, and an event item must be placed on an event location
 (and vice versa). Finally, although events are often described as "fake" items and locations, it's important to
 understand that they are perfectly real during generation.
 
