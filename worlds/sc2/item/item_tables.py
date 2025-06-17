@@ -1915,9 +1915,6 @@ item_table = {
     item_names.MISTWING_PHANTOM_DASH: ItemData(552 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 22, SC2Race.PROTOSS, parent=item_names.MISTWING),
     item_names.SUPPLICANT_SACRIFICE: ItemData(553 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.War_Council_2, 23, SC2Race.PROTOSS, parent=item_names.SUPPLICANT),
 
-    "Removed item": ItemData(554 + SC2LOTV_ITEM_ID_OFFSET, FactionlessItemType.Deprecated, -1, SC2Race.PROTOSS, quantity=0),
-
-
     # SoA Calldown powers
     item_names.SOA_CHRONO_SURGE: ItemData(700 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Spear_Of_Adun, 0, SC2Race.PROTOSS),
     item_names.SOA_PROGRESSIVE_PROXY_PYLON: ItemData(701 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Progressive, 0, SC2Race.PROTOSS, quantity=2, classification=ItemClassification.progression),

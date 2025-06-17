@@ -452,7 +452,6 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         self.assertTrue(itempool)
         self.assertNotIn(item_names.PROGRESSIVE_ORBITAL_COMMAND, itempool)
-        self.assertNotIn("Removed item", itempool)  # temporary to keep games generated in the beta from breaking
 
     def test_planetary_orbital_module_not_present_without_cc_spells(self) -> None:
         world_options = {
