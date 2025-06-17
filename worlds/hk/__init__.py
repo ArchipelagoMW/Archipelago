@@ -218,6 +218,7 @@ class HKWorld(World):
         wp = self.options.WhitePalace
         if wp <= WhitePalace.option_nopathofpain:
             exclusions.update(path_of_pain_locations)
+            exclusions.add("Soul_Totem-Path_of_Pain")
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
         if wp == WhitePalace.option_exclude:
@@ -226,6 +227,9 @@ class HKWorld(World):
                 # If charms are randomized, this will be junk-filled -- so transitions and events are not progression
                 exclusions.update(white_palace_transitions)
                 exclusions.update(white_palace_events)
+            exclusions.update(item_name_groups["PalaceJournal"])
+            exclusions.update(item_name_groups["PalaceLore"])
+            exclusions.update(item_name_groups["PalaceTotem"])
         return exclusions
 
     def create_regions(self):
