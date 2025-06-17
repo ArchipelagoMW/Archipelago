@@ -1,8 +1,7 @@
 from math import sqrt
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import set_rule
-from . import PaintWorld, location_exists_with_options
+from . import PaintWorld
 
 
 def paint_percent_available(state: CollectionState, world: PaintWorld, player: int) -> bool:
@@ -32,17 +31,6 @@ def calculate_paint_percent_available(state: CollectionState, world: PaintWorld,
     return ((1 - ((sqrt(((2 ** (7 - r) - 1) ** 2 + (2 ** (7 - g) - 1) ** 2 + (2 ** (7 - b) - 1) ** 2) * 12)) / 765)) *
             (400 + w * world.options.canvas_size_increment) * (300 + h * world.options.canvas_size_increment) *
             world.options.logic_percent / 480000)
-
-
-def set_single_rule(world: PaintWorld, player: int, i: int) -> None:
-    set_rule(world.multiworld.get_location(f"Similarity: {i/4}%", player),
-             lambda state: paint_percent_available(state, world, player) >= i/4)
-
-
-def set_rules(world: PaintWorld, player: int) -> None:
-    for i in range(1, world.options.logic_percent * 4 + 1):
-        if location_exists_with_options(world, i):
-            set_single_rule(world, player, i)
 
 
 def set_completion_rules(world: PaintWorld, player: int) -> None:

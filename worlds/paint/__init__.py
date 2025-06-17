@@ -92,8 +92,7 @@ class PaintWorld(World):
         self.multiworld.regions += [canvas]
 
     def set_rules(self) -> None:
-        from .rules import set_rules, set_completion_rules
-        set_rules(self, self.player)
+        from .rules import set_completion_rules
         set_completion_rules(self, self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:

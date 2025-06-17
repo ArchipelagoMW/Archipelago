@@ -1,10 +1,14 @@
 from typing import NamedTuple, Dict
 
-from BaseClasses import Location
+from BaseClasses import CollectionState, Location
 
 
 class PaintLocation(Location):
     game = "Paint"
+    def access_rule(self, state: CollectionState):
+        from .rules import paint_percent_available
+        return paint_percent_available(state, state.multiworld.worlds[self.player], self.player) >=\
+               (self.address % 198600) / 4
 
 
 class PaintLocationData(NamedTuple):
