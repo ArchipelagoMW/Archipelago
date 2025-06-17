@@ -2,7 +2,7 @@ from typing import List, TYPE_CHECKING, Dict, Any
 from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup
+from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup, StartInventoryPool
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -625,6 +625,8 @@ class ParadeTrapWeight(Range):
 
 @dataclass
 class AHITOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+
     EndGoal:                  EndGoal
     ActRandomizer:            ActRandomizer
     ActPlando:                ActPlando

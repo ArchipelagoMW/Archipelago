@@ -4,7 +4,7 @@ from collections import Counter
 from . import TunicTestBase
 from .. import options
 from ..combat_logic import (check_combat_reqs, area_data, get_money_count, calc_effective_hp, get_potion_level,
-                            get_hp_level, get_def_level, get_sp_level)
+                            get_hp_level, get_def_level, get_sp_level, has_combat_reqs)
 from ..items import item_table
 from .. import TunicWorld
 
@@ -81,3 +81,39 @@ class TestCombat(TunicTestBase):
                                     f"Free Def and Offerings: {player_def - def_offerings}, {def_offerings}\n"
                                     f"Free SP and Offerings: {player_sp - sp_offerings}, {sp_offerings}")
                 prev_statuses[area] = curr_statuses[area]
+
+    # the issue was that a direct check of the logic and the cache had different results
+    # it was actually due to the combat_items in items.py not having the Gun in it
+    # but this test is still helpful for verifying the cache
+    def test_combat_magic_weapons(self):
+        combat_items = self.combat_items.copy()
+        combat_items.remove("Magic Wand")
+        combat_items.remove("Gun")
+        area_names = list(area_data.keys())
+        self.multiworld.worlds[1].random.shuffle(combat_items)
+        self.multiworld.worlds[1].random.shuffle(area_names)
+        current_items = Counter()
+        state = self.multiworld.state.copy()
+        player = self.player
+        gun = TunicWorld.create_item(self.world, "Gun")
+
+        for current_item_name in combat_items:
+            current_item = TunicWorld.create_item(self.world, current_item_name)
+            state.collect(current_item)
+            current_items[current_item_name] += 1
+            for area in area_names:
+                if check_combat_reqs(area, state, player) != has_combat_reqs(area, state, player):
+                    raise Exception(f"Cache for {area} does not match a direct check "
+                                    f"after collecting {current_item_name}.\n"
+                                    f"Current items: {current_items}.\n"
+                                    f"Cache {'succeeded' if has_combat_reqs(area, state, player) else 'failed'}\n"
+                                    f"Direct {'succeeded' if check_combat_reqs(area, state, player) else 'failed'}")
+            state.collect(gun)
+            for area in area_names:
+                if check_combat_reqs(area, state, player) != has_combat_reqs(area, state, player):
+                    raise Exception(f"Cache for {area} does not match a direct check "
+                                    f"after collecting the Gun.\n"
+                                    f"Current items: {current_items}.\n"
+                                    f"Cache {'succeeded' if has_combat_reqs(area, state, player) else 'failed'}\n"
+                                    f"Direct {'succeeded' if check_combat_reqs(area, state, player) else 'failed'}")
+            state.remove(gun)
