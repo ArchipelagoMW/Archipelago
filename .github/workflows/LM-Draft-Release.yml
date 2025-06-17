@@ -116,30 +116,30 @@ jobs:
           pattern: lib-*
           delete-merged: true
 
-  publish:
-    runs-on: ubuntu-latest
-    needs: [package]
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: lib
-      - uses: actions/download-artifact@v4
-        with:
-          name: apworld
+  #publish:
+  #  runs-on: ubuntu-latest
+  #  needs: [package]
+  #  permissions:
+  #    contents: write
+  #  steps:
+  #    - uses: actions/download-artifact@v4
+  #      with:
+  #        name: lib
+  #    - uses: actions/download-artifact@v4
+  #      with:
+  #        name: apworld
 
-      - if: ${{inputs.tag != '' }}
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: 'lib,apworld'
-          generateReleaseNotes: true
-          draft: true          
-          tag: ${{inputs.tag}}
-      - if: ${{inputs.tag == '' }}
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: 'lib,apworld'
-          generateReleaseNotes: true
-          draft: true          
-          tag: ${{github.ref_name}}
+  #    - if: ${{inputs.tag != '' }}
+  #      uses: ncipollo/release-action@v1
+  #      with:
+  #        artifacts: 'lib,apworld'
+  #        generateReleaseNotes: true
+  #        draft: true          
+  #        tag: ${{inputs.tag}}
+  #    - if: ${{inputs.tag == '' }}
+  #      uses: ncipollo/release-action@v1
+  #      with:
+  #        artifacts: 'lib,apworld'
+  #        generateReleaseNotes: true
+  #        draft: true          
+  #        tag: ${{github.ref_name}}
