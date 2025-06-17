@@ -121,6 +121,8 @@ jobs:
           name: apworld
           path: tmp-lib
 
+      - run: ls
+
       - name: Zip Lib folder together
         run: cd /tmp-lib && zip -r ../tmp-artifacts/lib.zip .
 
