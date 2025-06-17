@@ -71,7 +71,7 @@ def get_item_name_to_id_dict() -> dict:
 
 okami_items = {
     # Equips
-    "Water Tablet": ItemData(0x9c, ItemClassification.progression),
+    #"Water Tablet": ItemData(0x9c, ItemClassification.progression),
 
     #Quest Items
 
@@ -82,6 +82,7 @@ okami_items = {
     ### Edit: So this Sake only resets if you go outside Kamiki village or on of its interiors;
     ### I'm not sure how that's going to work with ER.
     ### TODO: Update their ids
+    "Tsuta Ruins Key": ItemData(0x40,ItemClassification.progression),
     "Vista of the Gods" : ItemData(0x200, ItemClassification.progression),
 
     # Other

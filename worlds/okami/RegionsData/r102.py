@@ -12,6 +12,7 @@ exits = {
                                  ExitData("Swim to Kamiki Islands", RegionNames.KAMIKI_ISLANDS, needs_swim=True),
                                  ExitData("Enter Susano's House",RegionNames.SUSANOS_HOUSE),
                                  ExitData("Enter Kushi's House",RegionNames.KUSHIS_HOUSE),
+                                 ExitData("Enter Oranges' House",RegionNames.ORANGES_HOUSE),
                                  ExitData("Exit Village to Cursed Shinshu field",RegionNames.CURSED_SHINSHU_FIELD,has_events=["Kamiki Village - Help Susano Train/Break the boulder"])],
     RegionNames.SUSANOS_HOUSE: [ExitData("Exit Susano's House",RegionNames.KAMIKI_VILLAGE),
                                 ExitData("Enter meditation Chamber",RegionNames.SUSANOS_UNDERGROUD)],
@@ -48,7 +49,9 @@ locations = {
         "Kamiki Village - Underwater chest in lake near Kushi's house": LocData(21,power_slash_level=1),
         "Kamiki Village - Hasugami" : LocData(16,has_events=["Kamiki Village - Restore Sakuya's Tree"]),
         "Kamiki Village - Buried chest in field": LocData(19,buried=1),
-        "Kamiki Village - Chest on Ledge":LocData(22, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE])
+        "Kamiki Village - Chest on Ledge":LocData(22, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
+        "Kamiki Village - Rafters Lower Chest" :LocData(75),
+        "Kamiki Village - Rafters Upper Chest" :LocData(76, power_slash_level=1)
     },
     RegionNames.ORANGES_HOUSE:{
         "Kamiki Village - Chest buried in Oranges' house": LocData(45,buried=1)
@@ -59,6 +62,7 @@ locations = {
     RegionNames.KAMIKI_ISLANDS: {
         "Kamiki Village - West Island chest ": LocData(9),
         "Kamiki Village - West Island buried chest": LocData(10, buried=1),
+        # Waterlily tutorial,
         "Kamiki Village - East Islands Sun fragment chest": LocData(18),
         "Kamiki Village - East Islands Stray Bead Chest": LocData(44),
         "Kamiki Village - East Islands Buried Chest": LocData(20, buried=1),

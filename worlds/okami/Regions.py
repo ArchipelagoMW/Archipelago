@@ -1,7 +1,7 @@
 from BaseClasses import Region, Entrance, ItemClassification, Location, LocationProgressType, CollectionState
 from .Locations import create_region_locations, create_region_events
 from typing import TYPE_CHECKING, List, Dict, Optional
-from .RegionsData import menu,r100,r122,r101,r102,r103,rf01,rf02,rf03
+from .RegionsData import menu,r100,r122,r101,r102,r103,rf01,rf02,rf03,rf04
 from .Rules import apply_exit_rules
 from .Types import RegionNames
 
@@ -19,6 +19,7 @@ okami_exits={
     **rf01.exits,
     **rf02.exits,
     **rf03.exits,
+    **rf04.exits,
 }
 
 def get_region_name(key:str):

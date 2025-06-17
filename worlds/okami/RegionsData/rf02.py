@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData
+from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData, OkamiEnnemies
 
 if TYPE_CHECKING:
     from .. import OkamiWorld
@@ -34,12 +34,11 @@ locations = {
                                                                                  required_brush_techniques=[
                                                                                      BrushTechniques.GREENSPROUT_BLOOM]),
         "Shinshu Field - Buried chest near Dojo": LocData(32, buried=True),
-        # FIXME: Fill out ennemies required to clear this gate
-        "Shinshu Field - Chest after devil gate": LocData(33),
+        "Shinshu Field - Chest after devil gate": LocData(33,mandatory_enemies=[OkamiEnnemies.GREEN_IMP,OkamiEnnemies.RED_IMP,OkamiEnnemies.YELLOW_IMP]),
         # Probably should find a better name for this one
         "Shinshu Field - Buried chest on ledge": LocData(34, buried=True),
         "Shinshu Field - Buried chest near Ovens": LocData(35, buried=True),
-        # This is the cherry bomb tutorial. Need to check if it's required to get this item after getting Bakigami.
+        # This is the cherry bomb tutorial. Need to check what happens if you blow the wall before doing the tutorial.
         "Shinshu Field - In Bombable cave near Tama's house": LocData(36, cherry_bomb_level=1),
         "Shinshu Field - In Bombable cave near cat statue": LocData(37, cherry_bomb_level=1),
         "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(38, buried=True,
