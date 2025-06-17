@@ -122,7 +122,7 @@ jobs:
           path: tmp-lib
 
       - name: Zip Lib folder together
-        run: zip -r ../tmp-artifacts/lib.zip ./tmp-lib
+        run: zip -r ./tmp-artifacts/lib.zip ./tmp-lib
 
       - if: ${{inputs.tag != '' }}
         name: Create Manual Release
