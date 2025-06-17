@@ -66,8 +66,15 @@ def set_card_rules(world):
              CardRule(["Mystik Wok", "Barox", "Cyber-Stein",
                        "Poison of the Old Man"], 1, amount_protocol="each")],
         "Max Damage Bonus":
-            CardRule(["Wave-Motion Cannon", "Megamorph", "United We Stand",
+            [CardRule(["Wave-Motion Cannon", "United We Stand",
                       "Mage Power"], 1),
+             CardRule("Limiter Removal", 1, additional_cards=InnerCardRule(
+                 lambda: find_cards_with(min_attack=2050, max_level=6, types=["Machine"]), 1)),
+             CardRule("Great Maju Garzett", 1, additional_cards=InnerCardRule(
+                 lambda: find_cards_with(min_attack=2050, max_level=6), 1)),
+             CardRule("Megamorph", 1, additional_cards=InnerCardRule(
+                 lambda: find_cards_with(min_attack=2050, max_level=6), 1)),
+             ],
         "Tribute Summon Bonus": CardRule(cards=lambda: find_cards_with(min_level=5, max_level=6), min_amount=1),
         "Fusion Summon Bonus": any_fusion(world),
         "Ritual Summon Bonus": any_ritual(),
