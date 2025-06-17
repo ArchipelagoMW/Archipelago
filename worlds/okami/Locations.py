@@ -2,7 +2,7 @@ from BaseClasses import Region, Location, ItemClassification
 from .Rules import apply_event_or_location_rules
 from .Types import LocData, BrushTechniques, OkamiLocation, OkamiItem
 from typing import Dict, TYPE_CHECKING
-from .RegionsData import r100, r122, r101, r102, r103, rf01, rf02, rf03
+from .RegionsData import r100, r122, r101, r102, r103, rf01, rf02, rf03,rf04
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -20,6 +20,7 @@ def get_location_names():
 def create_region_locations(reg: Region, world: "OkamiWorld"):
     if reg.name in okami_locations:
         for (location_name, location_data) in okami_locations[reg.name].items():
+            #if location_data.praise_sanity  <= world.options.PraiseSanity:
             location = OkamiLocation(world.player, location_name, location_data.id, reg)
             apply_event_or_location_rules(location, location_name, location_data, world)
             reg.locations.append(location)
@@ -63,6 +64,7 @@ okami_locations = {
     **rf01.locations,
     **rf02.locations,
     **rf03.locations,
+    **rf04.locations,
 }
 
 okami_events = {
@@ -73,5 +75,6 @@ okami_events = {
     **r103.events,
     **rf01.events,
     **rf02.events,
-    **rf03.events
+    **rf03.events,
+    **rf04.events
 }

@@ -39,7 +39,7 @@ locations = {
         # Probably should find a better name for this one
         "Shinshu Field - Buried chest on ledge": LocData(34, buried=True),
         "Shinshu Field - Buried chest near Ovens": LocData(35, buried=True),
-        # This is the cherry bomb tutorial. Need to check if it's required to get this item after getting Bakigami.
+        # This is the cherry bomb tutorial. Need to check what happens if you blow the wall before doing the tutorial.
         "Shinshu Field - In Bombable cave near Tama's house": LocData(36, cherry_bomb_level=1),
         "Shinshu Field - In Bombable cave near cat statue": LocData(37, cherry_bomb_level=1),
         "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(38, buried=True,

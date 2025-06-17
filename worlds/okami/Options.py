@@ -22,23 +22,42 @@ class BuriedChestsByNight(Toggle):
     display_name = "Buried chests by night"
     default = 1
 
+
 class StartWithDivineInstrument(Toggle):
     """Start with a Divine Instrument"""
     display_name = "Start with a Divine Instrument"
     default = 1
 
+#
+#class PraiseSanity(Choice):
+#    """Randomize Praise Rewards"""
+#    display_name = "Randomise Praise Rewards"
+#    default = 0
+#    options = {
+#        "None" :0,
+#        "Exclude Animals":1,
+#        "Full":2 # 607 Locations, Total of 7724 praise, but you need less to max everything(6020)
+#    }
+#
+#
 @dataclass
 class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
-    StartWithDivineInstrument:StartWithDivineInstrument
+    StartWithDivineInstrument: StartWithDivineInstrument
+#    PraiseSanity:PraiseSanity
 
 
 okami_option_groups: Dict[str, List[Any]] = {
-    "General Options": [BuriedChestsByNight,StartWithDivineInstrument],
+    "General Options": [
+        BuriedChestsByNight,
+        StartWithDivineInstrument,
+        #PraiseSanity
+        ],
 
 }
 
-slot_data_options={
+slot_data_options = {
     "BuriedChestsByNight",
     "StartWithDivineInstrument"
+#    "PraiseSanity"
 }
