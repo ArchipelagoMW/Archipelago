@@ -39,8 +39,8 @@ class PaintWorld(World):
     def generate_early(self) -> None:
         if self.options.canvas_size_increment < 50 and self.options.logic_percent <= 55:
             if self.multiworld.players == 1:
-                raise OptionError(f"Logic Percent must be greater than 55 when generating a single-player world with "
-                                  f"Canvas Size Increment below 50.")
+                raise OptionError("Logic Percent must be greater than 55 when generating a single-player world with "
+                                  "Canvas Size Increment below 50.")
 
     def get_filler_item_name(self) -> str:
         if self.random.randint(0, 99) >= self.options.trap_count:
@@ -72,8 +72,8 @@ class PaintWorld(World):
         to_fill = len(self.get_region("Canvas").locations)
         if pre_filled > to_fill:
             raise OptionError(f"{self.player_name}'s Paint world has too few locations for its required items. "
-                              f"Consider adding more locations by raising logic percent or adding fractional checks. "
-                              f"Alternatively, increasing the canvas size increment will require fewer items.")
+                              "Consider adding more locations by raising logic percent or adding fractional checks. "
+                              "Alternatively, increasing the canvas size increment will require fewer items.")
         while len(items_to_create) < (to_fill - pre_filled) * (self.options.trap_count / 100) + pre_filled:
             if self.options.death_link:
                 items_to_create += [self.random.choice(deathlink_traps)]
