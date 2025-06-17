@@ -122,7 +122,10 @@ jobs:
           path: tmp-lib
 
       - name: Zip Lib folder together
-        run: zip -r ${{github.workspace}}/tmp-artifacts/lib.zip ${{github.workspace}}/tmp-artifacts
+        run: cd /tmp-lib && zip -r ../tmp-artifacts/lib.zip ./
+
+      - name: Remove tmp-lib
+        run: cd ../ && rm -rf /tmp-lib
 
       - if: ${{inputs.tag != '' }}
         name: Create Manual Release
