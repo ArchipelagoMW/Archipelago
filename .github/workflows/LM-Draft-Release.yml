@@ -27,7 +27,7 @@ jobs:
         name: lib-windows
         path: |
           ./lib-windows/**
-          !**/___pycache___
+          !**/__pycache__
           !**/*.a
           !**/*.lib
   
@@ -48,7 +48,7 @@ jobs:
         name: lib-linux
         path: |
           ./lib-linux/**
-          !**/___pycache___
+          !**/__pycache__
           !**/*.a
           !**/*.lib
 
@@ -122,7 +122,7 @@ jobs:
           path: tmp-artifacts
 
       - name: Zip Lib folder together
-        run: zip -r ./tmp-artifacts/lib.zip ./tmp-lib
+        run: cd tmp-lib && zip -r ../tmp-artifacts/lib.zip * && cd ../
 
       - if: ${{inputs.tag != '' }}
         name: Create Manual Release
