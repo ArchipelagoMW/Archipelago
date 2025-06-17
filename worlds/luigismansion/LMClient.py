@@ -736,18 +736,18 @@ async def give_player_items(ctx: LMContext):
             lm_item_name = ctx.item_names.lookup_in_game(item.item)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
-            item_name_display = lm_item_name[0:min(len(lm_item_name), RECV_MAX_STRING_LENGTH)].replace("&", "")
+            item_name_display = lm_item_name[:RECV_MAX_STRING_LENGTH].replace("&", "")
             dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
 
             if item.player == ctx.slot:
                 loc_name_display = ctx.location_names.lookup_in_game(item.location)
             else:
                 loc_name_display = ctx.location_names.lookup_in_slot(item.location, item.player)
-            loc_name_display = loc_name_display[0:min(len(loc_name_display), SLOT_NAME_STR_LENGTH)].replace("&", "")
+            loc_name_display = loc_name_display[:SLOT_NAME_STR_LENGTH].replace("&", "")
             dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
 
             recv_name_display = ctx.player_names[item.player].replace("&", "")
-            recv_name_display = recv_name_display[0:min(len(recv_name_display), SLOT_NAME_STR_LENGTH)] + "'s Game"
+            recv_name_display = recv_name_display[:SLOT_NAME_STR_LENGTH] + "'s Game"
             dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
 
             dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
