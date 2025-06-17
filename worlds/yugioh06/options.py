@@ -1,7 +1,7 @@
 import typing
 from dataclasses import dataclass
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict
+from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict, OptionCounter
 from worlds.yugioh06.card_data import get_all_valid_cards_set
 
 
@@ -31,7 +31,7 @@ class StructureDeck(Choice):
     default = 7
 
 
-class CustomStructureDeck(OptionDict):
+class CustomStructureDeck(OptionCounter):
     """
     Create your own Structure Deck to start with
     Only works if structure deck is set to custom
@@ -40,17 +40,8 @@ class CustomStructureDeck(OptionDict):
     """
     display_name = "Custom Structure Deck"
     valid_keys = get_all_valid_cards_set()
-
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(amount is None for amount in value.values()):
-            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
-        if any(amount < 1 for amount in value.values()):
-            raise Exception("Cannot have non-positive card amounts.")
-        if any(amount > 3 for amount in value.values()):
-            raise Exception("Cannot have more than 3 of the same card.")
-        if sum(value.values()) > 80:
-            raise Exception("The Structure Deck cannot have more than 80 cards.")
-        super(CustomStructureDeck, self).__init__(value)
+    min = 0
+    max = 3
 
 
 class StarterDeck(Choice):
@@ -71,7 +62,7 @@ class StarterDeck(Choice):
     default = 0
 
 
-class CustomStarterDeck(OptionDict):
+class CustomStarterDeck(OptionCounter):
     """
     Choose the cards that you have in your trunk at the start of the game
     Only works if starter deck is set to custom.
@@ -79,17 +70,8 @@ class CustomStarterDeck(OptionDict):
     """
     display_name = "Custom Starter Deck"
     valid_keys = get_all_valid_cards_set()
-
-    def __init__(self, value: typing.Dict[str, int]):
-        if any(amount is None for amount in value.values()):
-            raise Exception("Cards must have amounts associated with them. Please provide positive integer values in the format \"card\": amount .")
-        if any(amount < 1 for amount in value.values()):
-            raise Exception("Cannot have non-positive card amounts.")
-        if any(amount > 3 for amount in value.values()):
-            raise Exception("Cannot have more than 3 of the same card.")
-        if sum(value.values()) > 40:
-            raise Exception("The Starter Deck cannot have more than 40 cards.")
-        super(CustomStarterDeck, self).__init__(value)
+    min = 0
+    max = 3
 
 
 class Banlist(Choice):
