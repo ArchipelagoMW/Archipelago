@@ -811,7 +811,7 @@ class GameLogic:
             MamNode("Smart Splitter", {"AI Limiter":10,"Reinforced Iron Plate":50,}, depends_on=("AI Limiter", )), #(Research_Caterium_4_1_1_C)
             MamNode("Programmable Splitter", {"AI Limiter":100, "Computer":50,"Heavy Modular Frame":50,}, depends_on=("AI Limiter", "High-Speed Connector")), #(Research_Caterium_7_1_C) # 1.0
             MamNode("Zipline", {"Quickwire":100,"Cable":50,}, depends_on=("Quickwire", )), #(Research_Caterium_2_1_C)
-            MamNode("Geothermal Generator", {"Supercomputer":50,"Heavy Modular Frame":50,"Rubber":300,}, depends_on=("AI Limiter", "High-Speed Connector")), #(Research_Caterium_7_2_C) # 1.0
+            MamNode("Geothermal Generator", {"High-Speed Connector":100,"Quickwire":1000,"Motor":50,}, depends_on=("AI Limiter", "High-Speed Connector")), #(Research_Caterium_7_2_C) # 1.0
             MamNode("Stun Rebar", {"Quickwire":50,"Iron Rebar":10,}, depends_on=("Quickwire", )), #(Research_Caterium_3_2_C)
             MamNode("Power Poles Mk.3", {"High-Speed Connector":50,"Steel Pipe":200,}, depends_on=("Power Poles Mk.2", )), #(Research_Caterium_6_2_C) # 1.0
         )),
