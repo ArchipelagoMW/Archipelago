@@ -564,6 +564,7 @@ class LMWorld(World):
                         spawn_doors.remove(door)
                 if not spawn_doors:
                     self.spawn_full_locked: bool = True
+            print(self.open_doors)
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
