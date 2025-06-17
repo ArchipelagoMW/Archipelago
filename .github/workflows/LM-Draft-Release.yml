@@ -122,7 +122,7 @@ jobs:
           path: tmp-lib
 
       - name: Zip Lib folder together
-        run: cd /tmp-lib && zip -r ../tmp-artifacts/lib.zip ./
+        run: cd /tmp-lib && zip -r ../tmp-artifacts/lib.zip .
 
       - name: Remove tmp-lib
         run: cd ../ && rm -rf /tmp-lib
