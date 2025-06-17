@@ -577,8 +577,8 @@ class LMWorld(World):
                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
             )
 
-        if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 36:
-            self.options.balcony_boo_count.value = 36
+        if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
+            self.options.balcony_boo_count.value = 31
 
         if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
             if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
