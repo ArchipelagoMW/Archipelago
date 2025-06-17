@@ -223,7 +223,7 @@ class SatisfactoryWorld(World):
 
     def get_filler_item_name(self) -> str:
         if self.items:
-            return self.items.get_filler_item_name(self.random)
+            return self.items.get_filler_item_name(self.random, None)
         else:
             return Items.get_filler_item_name_uninitialized(self.random)
 
