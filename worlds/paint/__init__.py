@@ -57,8 +57,8 @@ class PaintWorld(World):
     def create_items(self) -> None:
         starting_tools = ["Brush", "Pencil", "Eraser/Color Eraser", "Airbrush", "Line", "Rectangle", "Ellipse",
                           "Rounded Rectangle"]
-        self.multiworld.push_precollected(self.create_item("Magnifier"))
-        self.multiworld.push_precollected(self.create_item(starting_tools.pop(self.options.starting_tool)))
+        self.push_precollected(self.create_item("Magnifier"))
+        self.push_precollected(self.create_item(starting_tools.pop(self.options.starting_tool)))
         items_to_create = ["Free-Form Select", "Select", "Fill With Color", "Pick Color", "Text", "Curve", "Polygon"]
         items_to_create += starting_tools
         items_to_create += ["Progressive Canvas Width"] * (400 // self.options.canvas_size_increment)
@@ -66,7 +66,7 @@ class PaintWorld(World):
         depth_items = ["Progressive Color Depth (Red)", "Progressive Color Depth (Green)",
                        "Progressive Color Depth (Blue)"]
         for item in depth_items:
-            self.multiworld.push_precollected(self.create_item(item))
+            self.push_precollected(self.create_item(item))
         items_to_create += depth_items * 6
         pre_filled = len(items_to_create)
         to_fill = len(self.get_region("Canvas").locations)
