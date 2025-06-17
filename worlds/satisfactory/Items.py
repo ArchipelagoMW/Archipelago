@@ -74,7 +74,7 @@ class Items:
         "Bundle: Motor": ItemData(G.Parts, 1338060),
         "Bundle: Mycelia": ItemData(G.Parts, 1338061),
         "Bundle: Non-fissile Uranium": ItemData(G.Trap, 1338062, C.trap),
-        "Bundle: Nuclear Pasta": ItemData(G.Parts, 1338063),
+        "Bundle: Nuclear Pasta": ItemData(G.Parts, 1338063, count=0),
         "Bundle: Lizard Doggo Statue": ItemData(G.Parts, 1338064),
         "Bundle: Organic Data Capsule": ItemData(G.Parts, 1338065),
         "Bundle: Packaged Alumina Solution": ItemData(G.Parts, 1338066),
@@ -359,7 +359,7 @@ class Items:
         "Recipe: Assembly Director System": ItemData(G.Recipe, 1338357, C.progression),
         "Recipe: Magnetic Field Generator": ItemData(G.Recipe, 1338358, C.progression),
         "Recipe: Copper Powder": ItemData(G.Recipe, 1338359, C.progression),
-        "Recipe: Nuclear Pasta": ItemData(G.Recipe, 1338360, C.progression, count=0),
+        "Recipe: Nuclear Pasta": ItemData(G.Recipe, 1338360, C.progression),
         "Recipe: Thermal Propulsion Rocket": ItemData(G.Recipe, 1338361, C.progression),
         "Recipe: Ficsonium": ItemData(G.Recipe, 1338362), # 1.0
         "Recipe: Ficsonium Fuel Rod": ItemData(G.Recipe, 1338363), # 1.0

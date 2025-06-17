@@ -851,7 +851,7 @@ class GameLogic:
             MamNode("Explosive Resonance Application", {"Crystal Oscillator":5,"Nobelisk":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_4_C)
             MamNode("Blade Runners", {"Silica":50,"Modular Frame":10,}, depends_on=("Silica", )), #(Research_Caterium_4_3_C)
             MamNode("The Explorer", {"Crystal Oscillator":10,"Modular Frame":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_1_C)
-            MamNode("Material Resonance Screening", {"Crystal Oscillator":15,"Reinforced Iron Plate":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_3_1_C)
+            MamNode("Material Resonance Screening", {"Crystal Oscillator":15,"Reinforced Iron Plate":100,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_PriorityMerger_C)
             MamNode("Radio Signal Scanning", {"Crystal Oscillator":100,"Motor":100,"Object Scanner":1,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_4_1_C)
             MamNode("Inflated Pocket Dimension", {"Silica":200,}, depends_on=("Silica", )), #(Research_Caterium_3_1_C)
             MamNode("Radar Technology", {"Crystal Oscillator":50,"Heavy Modular Frame":50,"Computer":50,}, depends_on=("Crystal Oscillator", )), #(Research_Quartz_4_C) # 1.0

@@ -338,14 +338,14 @@ class Locations():
            number_of_slots_per_milestone_for_game = self.max_slots
         else:
             if self.options.final_elevator_package <= 2:
-                number_of_slots_per_milestone_for_game = 10
+                number_of_slots_per_milestone_for_game = self.max_slots
             else:
                 number_of_slots_per_milestone_for_game = self.game_logic.slots_per_milestone
 
         hub_location_id = self.hub_location_start
         for tier in range(1, max_tier + 1):
             for milestone in range(1, self.max_milestones + 1):
-                for slot in range(1, number_of_slots_per_milestone_for_game + 1):
+                for slot in range(1, self.max_slots + 1):
                     if for_data_package:
                         location_table.append(HubSlot(tier, milestone, slot, hub_location_id))
                     else:
