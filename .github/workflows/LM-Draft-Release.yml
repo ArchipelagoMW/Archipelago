@@ -109,44 +109,36 @@ jobs:
     steps:
       - name: Create Local Artifact Folder
         run: mkdir tmp-artifacts
+      - name: Create Local Lib Folder
+        run: mkdir tmp-lib
+      
       - uses: actions/download-artifact@v4
         with:
           name: lib
-          path: tmp-artifacts
+          path: tmp-lib
       - uses: actions/download-artifact@v4
         with:
           name: apworld
-          path: tmp-artifacts
+          path: tmp-lib
+
+      - name: Zip Lib folder together
+        run: zip -r ${{github.workspace}}/tmp-artifacts/lib.zip ${{github.workspace}}/tmp-artifacts
 
       - if: ${{inputs.tag != '' }}
         name: Create Manual Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@v2.3.2
         with:
           draft: true
           prerelease: false
           name: Luigis Mansion AP ${{inputs.tag}}
           files: |
             tmp-artifacts/*
-        #uses: ncipollo/release-action@v1
-        #with:
-        #  artifacts: 'lib,apworld'
-        #  artifactErrorsFailBuild: true
-        #  draft: true          
-        #  tag: ${{inputs.tag}}
-        #  name: "Luigi's Mansion AP ${{inputs.tag}}"
       - if: ${{inputs.tag == '' }}
         name: Create Manual Release
-        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
+        uses: softprops/action-gh-release@v2.3.2
         with:
           draft: true
           prerelease: false
-          name: Luigis Mansion AP ${{inputs.tag}}
+          name: Luigis Mansion AP ${{github.ref_name}}
           files: |
             tmp-artifacts/*
-        #uses: ncipollo/release-action@v1
-        #with:
-        #  artifacts: 'lib,apworld'
-        #  artifactErrorsFailBuild: true
-        #  draft: true          
-        #  tag: ${{github.ref_name}}
-        #  name: "Luigi's Mansion AP ${{github.ref_name}}"
