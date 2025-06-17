@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from BaseClasses import CollectionState, Item, MultiWorld, Tutorial, Region, Entrance
+from BaseClasses import CollectionState, Item, MultiWorld, Tutorial, Region
 from Options import OptionError
 from worlds.AutoWorld import LogicMixin, World, WebWorld
 from .items import item_table, PaintItem, item_data_table, traps, deathlink_traps
