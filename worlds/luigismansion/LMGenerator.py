@@ -279,6 +279,9 @@ class LuigisMansionRandomizer:
         logger.info("Updating common events with the generated in-game hints.")
         self.gcm = write_in_game_hints(self.gcm, hint_dist, hint_list, max_health, self.seed)
 
+        logger.info("Updating the spawn event...")
+        self.gcm = update_spawn_events(self.gcm)
+
         if bool_portrait_hints:
             logger.info("Portrait Hints are enabled, updating portrait ghost hearts with the generated in-game hints.")
             self.gcm = write_portrait_hints(self.gcm, hint_dist, hint_list, self.seed)
@@ -286,9 +289,6 @@ class LuigisMansionRandomizer:
         if bool_randomize_music:
             logger.info("Randomized Music is enabled, updating all events with various in-game music.")
             self.gcm = randomize_music(self.gcm, self.seed)
-
-        logger.info("Updating the spawn event...")
-        self.gcm = update_spawn_events(self.gcm)
 
         logger.info("Updating the in-game tables for chests, furniture, ghosts, etc.")
         self.update_maptwo_jmp_tables()
