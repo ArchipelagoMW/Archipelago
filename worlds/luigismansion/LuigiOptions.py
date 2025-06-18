@@ -572,8 +572,8 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     good_vacuum: BetterVacuum
     boo_radar: StartWithBooRadar
     hidden_mansion: StartHiddenMansion
-    fear_animation: LuigiFearAnim
-    pickup_animation: PickupAnim
+    enable_fear_animation: LuigiFearAnim
+    enable_pickup_animation: PickupAnim
     luigi_max_health: LuigiMaxHealth
     random_music: RandomMusic
     door_model_rando: DoorModelRando
