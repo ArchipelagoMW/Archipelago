@@ -1,0 +1,38 @@
+<MENUOFF>
+---
+<LUIGISTOP3>
+<WAIT>(24)
+<ACTOR>"demo_luigi"<STOP>
+<ACTOR>"demo_luigi"<ACT>"WAIT0"
+---
+<BGM>(35)
+<FULLSCREEN>
+<WAIT>(45)
+<ACTOR>"demo_luigi"<ACT>"ACT_01"
+<WINDOW>(0)<COLOR>(1)
+<SAY><COLOR>(0)...<COLOR>(1)L<COLOR>(0)...<COLOR>(1)U<COLOR>(0)...<COLOR>(1)IGI
+<SE>(134)
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<CAMTARGET>"demo_luigi"(140)
+<WAIT(60)
+<WINDOW>(0)<COLOR>(1)
+<SAY><COLOR>(0)You can save anywhere holding\nDown on D-Pad and B button.
+<WAIT>(20)
+<ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
+<ANYKEY>
+<SAY><COLOR>(0)This only works when not in\nBlackout or fighting bosses.
+<WAIT>(20)
+<ACTOR>"demo_luigi"<ACT>"DM_LOKGB_ST"
+<ANYKEY>
+<SAY><COLOR>(0)Don't forget, your health resets\nto max HP every time you quit.
+<ACTOR>"demo_luigi"<ACT>"DM_NOD_01"
+<ANYKEY>
+<CLOSEWINDOW>(0)
+<ALLSTART>
+<WAIT>(15)
+<LUIGIFREE2>
+<CAMERAEND>
+<NORMALSCREEN>
+<MENUON>
+<END>

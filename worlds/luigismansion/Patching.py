@@ -6,14 +6,13 @@ from .Regions import spawn_locations
 from .Items import ALL_ITEMS_TABLE, filler_items
 from .Locations import FLIP_BALCONY_BOO_EVENT_LIST
 
-#TODO remove this in favor of JMP entries?
-speedy_observer_index: [int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
-speedy_enemy_index: [int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
-money_item_names: [str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
-explode_item_names: [str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor", "Boot", "Shoe"]
-icy_item_names: [str] = ["Ice Trap", "White", "Ice Beam", "Icy", "Freeze"]
-light_item_names: [str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun", "Laser"]
-blueish_item_names: [str] = ["Small Key", "Blue", "Ocean", "Sea", "Magic"]
+speedy_observer_index: list[int] = [183, 182, 179, 178, 177, 101, 100, 99, 98, 97, 21, 19]
+speedy_enemy_index: list[int] = [128, 125, 115, 114, 113, 67, 66, 60, 59, 58, 7, 6]
+money_item_names: list[str] = ["Bills", "Coin", "Gold Bar", "Rupee", "Leaf", "Green", "Gold", "Jewel"]
+explode_item_names: list[str] = ["Bomb", "Missile", "Glove", "Red", "Tunic", "Cloth", "Armor", "Boot", "Shoe"]
+icy_item_names: list[str] = ["Ice Trap", "White", "Ice Beam", "Icy", "Freeze"]
+light_item_names: list[str] = ["Light", "Big Key", "Yellow", "Banana", "Boss Key", "Sun", "Laser"]
+blueish_item_names: list[str] = ["Small Key", "Blue", "Ocean", "Sea", "Magic"]
 
 
 # Converts AP readable name to in-game name
@@ -24,6 +23,8 @@ def __get_item_name(item_data, slot: int):
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
     elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bars" in item_data["name"]:
+        if item_data["type"] == "Freestanding":
+            return "nothing" # Do not spawn the money physically let it be handled remotely
         return "money"
 
     match item_data["name"]:
@@ -46,14 +47,24 @@ def __get_item_name(item_data, slot: int):
             return "mstar"
 
         case "Gold Diamond":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "rdiamond"
         case "Sapphire":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "sapphire"
         case "Emerald":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "emerald"
         case "Ruby":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "ruby"
         case "Diamond":
+            if item_data["type"] == "Freestanding":
+                return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "diamond"
 
         case "Poison Mushroom":
@@ -80,7 +91,7 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [7, 11, 12, 15, 18, 19, 20, 21, 41, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -205,6 +216,23 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["EventLock"] = 1
             x["PlayerStop"] = 1
             x["EventLoad"] = 0
+
+        # Update the Into event to talk about save anywhere and healing.
+        if x["EventNo"] == 11:
+            x["EventFlag"] = 0
+            x["disappear_flag"] = 0
+            x["EventArea"] = 65535
+            x["EventLoad"] = 1
+            x["EventIf"] = 2
+            x["PlayerStop"] = 1
+            x["EventLock"] = 1
+            x["event_parameter"] = 0
+
+            spawn_region: dict[str, int] = spawn_locations[output_data["Options"]["spawn"]]
+            x["room_no"] = spawn_region["room_no"]
+            x["pos_y"] = spawn_region["pos_y"]
+            x["pos_x"] = spawn_region["pos_x"]
+            x["pos_z"] = spawn_region["pos_z"]
 
 
 def update_character_info(character_info, output_data):

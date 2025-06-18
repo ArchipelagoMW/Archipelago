@@ -23,8 +23,9 @@ class StringByteFunction:
         if len(encoded_string) < encoded_byte_length:
             encoded_string += b'\x00' * (encoded_byte_length - len(encoded_string))
         elif len(encoded_string) > encoded_byte_length:
-            raise Exception("Provided string '" + user_string + "' was longer than the expected byte length of '" +
-                            str(encoded_byte_length) + "', which will not be accepted by the info file.")
+            print("Provided string '" + user_string + "' was longer than the expected byte length of '" +
+                            str(encoded_byte_length) + "', adjusting the length...")
+            encoded_string = encoded_string[:encoded_byte_length]
 
         return encoded_string
 

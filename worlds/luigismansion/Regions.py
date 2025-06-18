@@ -228,8 +228,8 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "1F Hallway", "Conservatory", "Conservatory Key", 21)
     lmconnect(world, "1F Hallway", "Billiards Room", "Billiards Room Key", 17)
     lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state, boo_count=world.options.washroom_boo_count: state.has_group("Boo", world.player, boo_count)
-                          or state.has("Boo", world.player, boo_count))
+            lambda state, wash_boo_count=world.options.washroom_boo_count.value: state.has_group("Boo", world.player, wash_boo_count)
+                          or state.has("Boo", world.player, wash_boo_count))
     lmconnect(world, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     lmconnect(world, "1F Hallway", "Dining Room", "Dining Room Key", 14)
     lmconnect(world, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)
@@ -262,8 +262,8 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
     lmconnect(world, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)
     lmconnect(world, "East Attic Hallway", "Balcony", "Balcony Key", 62,
-            lambda state, boo_count=world.options.balcony_boo_count: state.has_group("Boo", world.player, boo_count)
-                          or state.has("Boo", world.player, boo_count))
+            lambda state, balc_boo_count=world.options.balcony_boo_count.value: state.has_group("Boo", world.player, balc_boo_count)
+                          or state.has("Boo", world.player, balc_boo_count))
     lmconnect(world, "Balcony", "West Attic Hallway", "Diamond Key", 59)
     lmconnect(world, "West Attic Hallway", "Armory", "Armory Key", 51)
     lmconnect(world, "West Attic Hallway", "Telephone Room", "Telephone Room Key", 52)
@@ -278,8 +278,8 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Basement Hallway", "Pipe Room", "Pipe Room Key", 69)
     lmconnect(world, "Basement Hallway", "Altar Hallway", "Altar Hallway Key", 70)
     lmconnect(world, "Altar Hallway", "Secret Altar", "Spade Key", 72,
-            lambda state, boo_count=world.options.final_boo_count: state.has_group("Boo", world.player, boo_count)
-                          or state.has("Boo", world.player, boo_count))
+            lambda state, final_boo_count=world.options.final_boo_count.value: state.has_group("Boo", world.player, final_boo_count)
+                          or state.has("Boo", world.player, final_boo_count))
 
 
 REGION_LIST = {

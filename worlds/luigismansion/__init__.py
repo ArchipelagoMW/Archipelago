@@ -537,6 +537,7 @@ class LMWorld(World):
             self.origin_region_name = passthrough["spawn_region"]  # this should be the same region from slot data
         elif self.options.random_spawn.value > 0:
             self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
+        print("Spawn Region for " + self.player_name + " is: " + self.origin_region_name)
 
         if self.using_ut:
             # We know we're in second gen
@@ -563,6 +564,7 @@ class LMWorld(World):
                         spawn_doors.remove(door)
                 if not spawn_doors:
                     self.spawn_full_locked: bool = True
+            print(self.open_doors)
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
@@ -575,8 +577,12 @@ class LMWorld(World):
                     self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
             )
 
-        if self.options.boosanity == 0 and self.options.balcony_boo_count > 36:
-            self.options.balcony_boo_count.value = 36
+        if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
+            self.options.balcony_boo_count.value = 31
+
+        if self.origin_region_name in ["Telephone Room", "Clockwork Room"]:
+            if self.options.balcony_boo_count.value > 4 and () and self.options.boosanity.value == 0:
+                self.options.balcony_boo_count.value = 4
 
         if self.options.boo_gates.value == 0:
             self.options.final_boo_count.value = 0
@@ -599,10 +605,6 @@ class LMWorld(World):
             else:
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
-                if entry.type == "Freestanding":
-                    add_item_rule(entry, lambda
-                        item: item.player != self.player or (
-                            item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -621,10 +623,6 @@ class LMWorld(World):
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
-            if entry.type == "Freestanding":
-                add_item_rule(entry, lambda
-                    item: item.player != self.player or (
-                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -651,10 +649,6 @@ class LMWorld(World):
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
-            if entry.type == "Freestanding":
-                add_item_rule(entry, lambda
-                    item: item.player != self.player or (
-                        item.player == self.player and item.type != "Money" and item.type != "Trap" and item.type != "Medal"))
             if entry.code == 5:
                 add_rule(entry,
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
@@ -724,7 +718,7 @@ class LMWorld(World):
         n_items = len(self.pre_fill_items) + len(self.itempool)
         n_filler_items = n_locations - n_items
         n_trap_items = math.ceil(n_filler_items*(self.options.trap_percentage.value/100))
-        n_other_filler = n_filler_items-n_trap_items
+        n_other_filler = n_filler_items - n_trap_items
         filler_trap_weights = [self.options.poss_trap_weight.value, self.options.bonk_trap_weight.value,
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.poison_trap_weight.value,

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin, OptionSet
+from Options import Toggle, Range, PerGameCommonOptions, Choice, StartInventoryPool, DeathLinkMixin, OptionSet, \
+    DefaultOnToggle
 
 
 class LuigiWalkSpeed(Choice):
@@ -177,10 +178,10 @@ class HintDistribution(Choice):
     option_disabled = 5
     default = 0
 
-class PickupAnim(Toggle):
-    """Disable Luigi's pickup animations"""
-    display_name = "Pickup Animation"
-    internal_name = "pickup_animation"
+class PickupAnim(DefaultOnToggle):
+    """Turn on Luigi's pickup animations"""
+    display_name = "Enable Pickup Animation"
+    internal_name = "enable_pickup_animation"
 
 
 class Toadsanity(Toggle):
@@ -334,10 +335,10 @@ class DoorRando(Toggle):
     internal_name = "door_rando"
 
 
-class LuigiFearAnim(Toggle):
-    """Turn off Luigi being scared by ghosts if they spawn close to him"""
-    display_name = "Courageous Luigi"
-    internal_name = "fear_animation"
+class LuigiFearAnim(DefaultOnToggle):
+    """Turn on Luigi being scared by ghosts if they spawn close to him"""
+    display_name = "Enable Fear Animation"
+    internal_name = "enable_fear_animation"
 
 
 class ChestTypes(Choice):

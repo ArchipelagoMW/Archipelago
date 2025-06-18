@@ -218,8 +218,8 @@ class LuigisMansionRandomizer:
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["pickup_animation"]) == 1 else False
-        bool_fear_anim_disabled: bool = True if int(self.output_data["Options"]["fear_animation"]) == 1 else False
+        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["fear_animation"]) == 0 else False
+        bool_fear_anim_disabled: bool = True if int(self.output_data["Options"]["pickup_animation"]) == 0 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
@@ -278,6 +278,9 @@ class LuigisMansionRandomizer:
 
         logger.info("Updating common events with the generated in-game hints.")
         self.gcm = write_in_game_hints(self.gcm, hint_dist, hint_list, max_health, self.seed)
+
+        logger.info("Updating the spawn event...")
+        self.gcm = update_spawn_events(self.gcm)
 
         if bool_portrait_hints:
             logger.info("Portrait Hints are enabled, updating portrait ghost hearts with the generated in-game hints.")

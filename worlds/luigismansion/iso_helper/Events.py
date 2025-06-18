@@ -355,6 +355,11 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
             gcm = __update_custom_event(gcm, str(event_no), True, lines, csv_lines)
     return gcm
 
+# Update the spawn event info
+def update_spawn_events(gcm: GCM) -> GCM:
+    lines = get_data(MAIN_PKG_NAME, "data/custom_events/event11.txt").decode('utf-8')
+    return __update_custom_event(gcm, "11", True, lines, None)
+
 # Using the provided txt or csv lines for a given event file, updates the actual szp file in memory with this data.
 def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: bool,
     event_txt=None, event_csv=None) -> GCM:

@@ -1,0 +1,144 @@
+name: LM-Release-World
+on:
+  push:
+    branches:
+      - Luigi's-Mansion-AP
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Required tag to create the pre-draft."
+        required: true
+
+jobs:
+  windows-deps:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "~3.12.6"
+        cache: pip
+    - name: Create Lib-Windows
+      run: mkdir lib-windows
+    - name: Install Windows-Deps
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows      
+    - uses: actions/upload-artifact@v4
+      with:
+        name: lib-windows
+        path: |
+          ./lib-windows/**
+          !**/__pycache__
+          !**/*.a
+          !**/*.lib
+  
+  linux-deps:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "~3.12.6"
+        cache: pip
+    - name: Create Lib-Linux
+      run: mkdir lib-linux
+    - name: Install Linux-Deps
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-linux
+    - uses: actions/upload-artifact@v4
+      with:
+        name: lib-linux
+        path: |
+          ./lib-linux/**
+          !**/__pycache__
+          !**/*.a
+          !**/*.lib
+
+  fuzz:
+    needs: [windows-deps, linux-deps]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: "~3.12.6"
+        cache: pip
+    - name: Fuzzer-Check-1-yml
+      uses: Eijebong/ap-actions/fuzz@main
+      with:
+        apworld-path: worlds/luigismansion
+        ap-version: '0.6.1'
+        python-version: '3.12'
+        runs: 1000
+        yamls-per-run: 1
+    - name: Fuzzer-Check-3-yml
+      uses: Eijebong/ap-actions/fuzz@main
+      with:
+        apworld-path: worlds/luigismansion
+        ap-version: '0.6.1'
+        python-version: '3.12'
+        runs: 1000
+        yamls-per-run: 3
+
+  package:
+    needs: [windows-deps, linux-deps]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make combined Lib folder
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: lib
+          pattern: lib-*
+          delete-merged: true
+      
+      - name: Creates the LM APWorld
+        id: apworld
+        uses: Eijebong/ap-actions/package-apworld@main
+        with:
+          path: worlds/luigismansion
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apworld
+          path: ${{ steps.apworld.outputs.apworld }}
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [package]
+    permissions:
+      contents: write
+    steps:
+      - name: Create Local Artifact Folder
+        run: mkdir tmp-artifacts
+      - name: Create Local Lib Folder
+        run: mkdir tmp-lib
+      
+      - uses: actions/download-artifact@v4
+        with:
+          name: lib
+          path: tmp-lib
+      - uses: actions/download-artifact@v4
+        with:
+          name: apworld
+          path: tmp-artifacts
+
+      - name: Zip Lib folder together
+        run: cd tmp-lib && zip -r ../tmp-artifacts/lib.zip * && cd ../
+
+      - if: ${{inputs.tag != '' }}
+        name: Create Manual Release
+        uses: softprops/action-gh-release@v2.3.2
+        with:
+          draft: true
+          prerelease: false
+          name: Luigis Mansion AP ${{inputs.tag}}
+          files: |
+            tmp-artifacts/*
+      - if: ${{inputs.tag == '' }}
+        name: Create Manual Release
+        uses: softprops/action-gh-release@v2.3.2
+        with:
+          draft: true
+          prerelease: false
+          name: Luigis Mansion AP ${{github.ref_name}}
+          files: |
+            tmp-artifacts/*
