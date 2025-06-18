@@ -337,7 +337,7 @@ class Rule(Generic[TWorld]):
     def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(**data.get("args", {}))
 
-    def __and__(self, other: "Rule[TWorld]") -> "Rule[TWorld]":
+    def __and__(self, other: "Rule[Any]") -> "Rule[TWorld]":
         """Combines two rules into an And rule"""
         if isinstance(self, And):
             if isinstance(other, And):
@@ -349,7 +349,7 @@ class Rule(Generic[TWorld]):
             return And(self, *other.children, options=other.options)
         return And(self, other)
 
-    def __or__(self, other: "Rule[TWorld]") -> "Rule[TWorld]":
+    def __or__(self, other: "Rule[Any]") -> "Rule[TWorld]":
         """Combines two rules into an Or rule"""
         if isinstance(self, Or):
             if isinstance(other, Or):
