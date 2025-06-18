@@ -1013,6 +1013,8 @@ class GameManager(ThemedApp):
         self.screens.remove_widget(self.screens.get_screen(tab.text))
 
     def update_texts(self, dt):
+        if hasattr(self.screens.current_tab.content, "fix_heights"):
+            getattr(self.screens.current_tab.content, "fix_heights")()
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
