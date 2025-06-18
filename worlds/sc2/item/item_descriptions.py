@@ -45,8 +45,8 @@ resource_efficiency_cost_reduction = {
     item_names.WARHOUND:      (75, 0, 0),
     item_names.HERC:          (25, 25, 1),
     item_names.WRAITH:        (0, 50, 0),
-    item_names.GHOST:         [(25, 25, 1), (125, 75, 1)],
-    item_names.SPECTRE:       [(25, 25, 1), (125, 75, 1)],
+    item_names.GHOST:         (25, 25, 0),
+    item_names.SPECTRE:       (25, 25, 0),
     item_names.RAVEN:         (0, 50, 0),
     item_names.CYCLONE:       (25, 50, 1),
     item_names.WIDOW_MINE:    (0, 25, 1),
@@ -64,9 +64,9 @@ resource_efficiency_cost_reduction = {
     DISPLAY_NAME_BROOD_LORD:  (0, 75, 0),
     item_names.SWARM_QUEEN:   (0, 50, 0),
     item_names.ARBITER:       (50, 0, 0),
-    item_names.REAVER:        [(50, 25, 1), (100, 100, 2)],
+    item_names.REAVER:        (50, 25, 1),
     DISPLAY_NAME_CLOAKED_ASSASSIN: (0, 50, 0),
-    item_names.SCOUT:         [(75, 25, 0), (125, 25, 1)],
+    item_names.SCOUT:         (75, 25, 0),
     item_names.DESTROYER:     (50, 25, 1),
     DISPLAY_NAME_WORMS:       (50, 75, 0),
 
@@ -81,34 +81,27 @@ resource_efficiency_cost_reduction = {
     item_names.SENTINEL:      (60, 0, 1),
 }
 
+op_re_cost_reduction = {
+    item_names.GHOST:   (100, 50, 1),
+    item_names.SPECTRE: (100, 50, 1),
+    item_names.REAVER:  (50, 75, 1),
+    item_names.SCOUT:   (50, 0, 1),
+}
 
-def _get_resource_efficiency_desc(item_name: str) -> str:
-    def render_level(level_title: str, cost) -> str:
-        parts = [f"{cost[0]} minerals"] if cost[0] else []
-        parts += [f"{cost[1]} gas"] if cost[1] else []
-        parts += [f"{cost[2]} supply"] if cost[2] else []
-        assert parts, f"{item_name} doesn't reduce cost by anything"
-        if len(parts) == 1:
-            amount = parts[0]
-        elif len(parts) == 2:
-            amount = " and ".join(parts)
-        else:
-            amount = ", ".join(parts[:-1]) + ", and " + parts[-1]
-        return f"{level_title}Reduces {item_name} cost by {amount}."
 
-    levels = resource_efficiency_cost_reduction[item_name]
-    if type(levels) is list:
-        # Progressives
-        level_values = []
-        for index, cost in enumerate(levels):
-            level = index + 1
-            level_title = f"Level {level}: "
-            level_values.append(render_level(level_title, cost))
-        return "\n".join(level_values)
+def _get_resource_efficiency_desc(item_name: str, reduction_map: dict = resource_efficiency_cost_reduction) -> str:
+    cost = reduction_map[item_name]
+    parts = [f"{cost[0]} minerals"] if cost[0] else []
+    parts += [f"{cost[1]} gas"] if cost[1] else []
+    parts += [f"{cost[2]} supply"] if cost[2] else []
+    assert parts, f"{item_name} doesn't reduce cost by anything"
+    if len(parts) == 1:
+        amount = parts[0]
+    elif len(parts) == 2:
+        amount = " and ".join(parts)
     else:
-        # Only one level
-        return render_level("", levels)
-
+        amount = ", ".join(parts[:-1]) + ", and " + parts[-1]
+    return (f"Reduces {item_name} cost by {amount}.")
 
 
 
@@ -403,8 +396,10 @@ item_descriptions = {
     item_names.BANSHEE_ADVANCED_TARGETING_OPTICS: "Increases Banshee attack range by 2 while cloaked.",
     item_names.BANSHEE_DISTORTION_BLASTERS: "Increases Banshee attack damage by 25% while cloaked.",
     item_names.BANSHEE_ROCKET_BARRAGE: _ability_desc("Banshees", "Rocket Barrage", "deals 75 damage to enemy ground units in the target area"),
-    item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.GHOST),
-    item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SPECTRE),
+    item_names.GHOST_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.GHOST),
+    item_names.GHOST_BARGAIN_BIN_PRICES: _get_resource_efficiency_desc(item_names.GHOST, op_re_cost_reduction),
+    item_names.SPECTRE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SPECTRE),
+    item_names.SPECTRE_BARGAIN_BIN_PRICES: _get_resource_efficiency_desc(item_names.SPECTRE, op_re_cost_reduction),
     item_names.THOR_BUTTON_WITH_A_SKULL_ON_IT: "Allows Thors to launch nukes.",
     item_names.THOR_LASER_TARGETING_SYSTEM: LASER_TARGETING_SYSTEMS_DESCRIPTION,
     item_names.THOR_LARGE_SCALE_FIELD_CONSTRUCTION: "Allows Thors to be built by SCVs like a structure.",
@@ -943,8 +938,8 @@ item_descriptions = {
     item_names.SCOUT_APIAL_SENSORS: "Scouts gain increased sight range.",
     item_names.SCOUT_GRAVITIC_THRUSTERS: "All Scout variants gain increased movement speed.",
     item_names.SCOUT_ADVANCED_PHOTON_BLASTERS: "Scouts, Oppressors and Mist Wings gain increased damage against ground targets.",
-    item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
-    item_names.SCOUT_GAMMA_PHOTON_BLASTERS: "Scouts do double damage to ground light targets.",
+    item_names.SCOUT_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT),
+    item_names.SCOUT_SUPPLY_EFFICIENCY: _get_resource_efficiency_desc(item_names.SCOUT, op_re_cost_reduction),
     item_names.OPPRESSOR_ACCELERATED_WARP: "Oppressors gain increased training and warp-in speed.",
     item_names.OPPRESSOR_ARMOR_MELTING_BLASTERS: "Oppressor ground weapons gain bonus damage to armored targets. Allows Vulcan Blaster to hit structures.",
     item_names.CALADRIUS_SIDE_MISSILES: "Caladrius can hit up to 4 additional air targets with their missiles.",
@@ -963,12 +958,8 @@ item_descriptions = {
     item_names.CORSAIR_SUSTAINING_DISRUPTION: "Corsair disruption webs last longer.",
     item_names.CORSAIR_NEUTRON_SHIELDS: "Increases corsair maximum shields by +20.",
     item_names.ORACLE_STEALTH_DRIVE: "Oracles become permanently cloaked.",
-    item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION: inspect.cleandoc("""
-        Oracle War Council upgrade. 
-        Level 1: Enemies caught by the Oracle's Stasis Ward may now be attacked for first 5 seconds of the duration of the effect.
-        Level 2: Enemies caught by the Oracle's Stasis Ward may now be attacked for full duration of the effect.
-    """),
-    item_names.ORACLE_SKYWARD_CHRONOANOMALY : "The Oracle's Stasis Ward can affect air units.",
+    item_names.ORACLE_STASIS_CALIBRATION: "Oracle War Council upgrade. Enemies caught by the Oracle's Stasis Ward may now be attacked for the first 5 seconds of stasis.",
+    item_names.ORACLE_SKYWARD_CHRONOANOMALY: "The Oracle's Stasis Ward can affect air units.",
     item_names.ORACLE_TEMPORAL_ACCELERATION_BEAM: "Oracles no longer need to to spend energy to attack.",
     item_names.ORACLE_BOSONIC_CORE: "Increases starting energy by 150 and maximum energy by 50.",
     item_names.ARBITER_CHRONOSTATIC_REINFORCEMENT: "Arbiters gain +50 maximum life and +1 armor.",
@@ -984,7 +975,6 @@ item_descriptions = {
     item_names.INTERCESSOR_CHRONOCLYSM: "Intercessor slow effect is also applied in an area around the primary target.",
     item_names.INTERCESSOR_ENTROPIC_REVERSAL: "Intercessors recover life as well as shields.",
     item_names.DESTROYER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.DESTROYER),
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyers do full damage to secondary targets if fully charged.",
     item_names.WARP_PRISM_GRAVITIC_DRIVE: "Increases the movement speed of Warp Prisms.",
     item_names.WARP_PRISM_PHASE_BLASTER: "Equips Warp Prisms with an auto-attack that can hit ground and air targets.",
     item_names.WARP_PRISM_WAR_CONFIGURATION: "Warp Prisms transform faster and gain increased power radius in Phasing Mode.",
@@ -993,7 +983,8 @@ item_descriptions = {
     item_names.REAVER_SCARAB_DAMAGE: "Reaver Scarabs deal +25 damage.",
     item_names.REAVER_SOLARITE_PAYLOAD: "Reaver Scarabs gain increased splash damage radius.",
     item_names.REAVER_REAVER_CAPACITY: "Reavers can store 10 Scarabs.",
-    item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAVER),
+    item_names.REAVER_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.REAVER),
+    item_names.REAVER_BARGAIN_BIN_PRICES: _get_resource_efficiency_desc(item_names.REAVER, op_re_cost_reduction),
     item_names.VANGUARD_AGONY_LAUNCHERS: "Increases Vanguard attack range by +2.",
     item_names.VANGUARD_MATTER_DISPERSION: "Increases Vanguard attack area.",
     item_names.IMMORTAL_ANNIHILATOR_SINGULARITY_CHARGE: "Increases Immortal and Annihilator attack range by +2.",
@@ -1077,7 +1068,7 @@ item_descriptions = {
     item_names.MIRAGE_GRAVITON_BEAM: "Mirage War Council upgrade. Allows Mirages to use Graviton Beam.",
     item_names.SKIRMISHER_PEER_CONTEMPT: "Skirmisher War Council upgrade. Allows Skirmishers to target air units.",
     item_names.VOID_RAY_PRISMATIC_RANGE: "Void Ray War Council upgrade. Void Rays gain increased range as they charge their beam.",
-    item_names.DESTROYER_BLOODSHARD_REALIGNMENT: "Destroyer War Council upgrade. Increases the Destroyer's bounce attack damage to 3 (+2 vs armored) at all charge levels, and allows the bounces to benefit from protoss air weapon upgrades.",
+    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE: "Destroyer War Council upgrade. Increases the Destroyer's bounce attack damage to 3 (+2 vs armored) at all charge levels, and allows the bounces to benefit from protoss air weapon upgrades.",
     item_names.INTERCESSOR_CHRONO_SHEAR: "Intercessor War Council upgrade. Fully-stacked slow on non-heroic targets also applies a defense debuff.",
     item_names.DAWNBRINGER_SOLARITE_LENS: "Dawnbringer War Council upgrade. Dawnbringers gain +2 range.",
     item_names.CARRIER_REPAIR_DRONES: "Carrier War Council upgrade. Carriers gain 2 repair drones which heal nearby mechanical units.",

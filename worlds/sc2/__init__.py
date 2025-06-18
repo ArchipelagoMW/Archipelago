@@ -25,7 +25,7 @@ from .options import (
     get_enabled_campaigns, SpearOfAdunPassiveAbilityPresence, Starcraft2Options,
     GrantStoryTech, GenericUpgradeResearch, RequiredTactics,
     upgrade_included_names, EnableVoidTrade, FillerItemsDistribution, MissionOrderScouting, option_groups,
-    NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems, ExcludeLegacyItems,
+    NovaGhostOfAChanceVariant, MissionOrder, VanillaItemsOnly, ExcludeOverpoweredItems,
 )
 from .rules import get_basic_units, SC2Logic
 from . import settings
@@ -823,8 +823,7 @@ def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -
     excluded_count: Dict[str, int] = dict()
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         exclude_group(item_list, excluded_count, vanilla_nonprogressive_count, item_groups.overpowered_items)
-    if world.options.exclude_legacy_items.value == ExcludeLegacyItems.option_true:
-        exclude_group(item_list, excluded_count, vanilla_nonprogressive_count, item_groups.legacy_items)
+    exclude_group(item_list, excluded_count, vanilla_nonprogressive_count, item_groups.legacy_items)
 
 
 def exclude_group(item_list:Iterable[FilterItem], excluded_count: Dict[str, int], vanilla_nonprogressive_count: Dict[str, int], group: List[str]) -> None:

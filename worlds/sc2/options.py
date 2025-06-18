@@ -464,18 +464,13 @@ class VanillaItemsOnly(Toggle):
 
 class ExcludeOverpoweredItems(Toggle):
     """
-    If turned on, the most powerful items are disabled. Locked Items may override these exclusions.
+    If turned on, a curated list of very strong items are excluded.
+    These items were selected for promoting repetitive strategies, or for providing a lot of power in a boring way.
+    Recommended off for players looking for a challenge or for repeat playthroughs.
+    Locked Items may override these exclusions, but Unexcluded Items will not.
     """
     display_name = "Exclude Overpowered Items"
 
-class ExcludeLegacyItems(DefaultOnToggle):
-    """
-    If turned on, items that are considered outdated, unbalanced or unfit are disabled.
-    However, these items remain in the system for backwards compatibility or those wanting to play with them.
-    Doesn't affect anything present in the vanilla campaigns.
-    Locked Items may override these exclusions.
-    """
-    display_name = "Exclude Legacy Items"
 
 # Current maximum number of upgrades for a unit
 MAX_UPGRADES_OPTION = 13
@@ -1383,7 +1378,6 @@ class Starcraft2Options(PerGameCommonOptions):
     exclude_very_hard_missions: ExcludeVeryHardMissions
     vanilla_items_only: VanillaItemsOnly
     exclude_overpowered_items: ExcludeOverpoweredItems
-    exclude_legacy_items: ExcludeLegacyItems
     victory_cache: VictoryCache
     vanilla_locations: VanillaLocations
     extra_locations: ExtraLocations
@@ -1497,7 +1491,6 @@ option_groups = [
         UnexcludedItems,
         VanillaItemsOnly,
         ExcludeOverpoweredItems,
-        ExcludeLegacyItems,
         ExcludedMissions,
     ]),
     OptionGroup("Advanced Gameplay", [

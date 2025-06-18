@@ -1452,18 +1452,15 @@ class SC2Logic:
 
     def protoss_basic_splash(self, state: CollectionState) -> bool:
         return (
-            state.has_any(
-                {
-                    item_names.COLOSSUS,
-                    item_names.VANGUARD,
-                    item_names.HIGH_TEMPLAR,
-                    item_names.SIGNIFIER,
-                    item_names.REAVER,
-                    item_names.ASCENDANT,
-                    item_names.DAWNBRINGER,
-                },
-                self.player,
-            )
+            state.has_any((
+                item_names.COLOSSUS,
+                item_names.VANGUARD,
+                item_names.HIGH_TEMPLAR,
+                item_names.SIGNIFIER,
+                item_names.REAVER,
+                item_names.ASCENDANT,
+                item_names.DAWNBRINGER,
+            ), self.player)
             or state.has_all((item_names.ZEALOT, item_names.ZEALOT_WHIRLWIND), self.player)
             or (
                 state.has_all(
@@ -1473,14 +1470,10 @@ class SC2Logic:
             or (
                 state.has(item_names.DESTROYER, self.player)
                 and (
-                    state.has_any(
-                        (
-                            item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
-                            item_names.DESTROYER_BLOODSHARD_REALIGNMENT,
-                            item_names.DESTROYER_RESOURCE_EFFICIENCY,
-                        ),
-                        self.player,
-                    )
+                    state.has_any((
+                        item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
+                        item_names.DESTROYER_RESOURCE_EFFICIENCY,
+                    ), self.player)
                 )
             )
         )

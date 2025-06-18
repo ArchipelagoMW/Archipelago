@@ -8,7 +8,7 @@ from .. import mission_groups, mission_tables, options, locations, SC2Mission, S
 from ..item import item_groups, item_tables, item_names
 from .. import get_all_missions, get_random_first_mission
 from ..options import EnabledCampaigns, NovaGhostOfAChanceVariant, MissionOrder, ExcludeOverpoweredItems, \
-    VanillaItemsOnly, ExcludeLegacyItems, MaximumCampaignSize
+    VanillaItemsOnly, MaximumCampaignSize
 
 
 class TestItemFiltering(Sc2SetupTestBase):
@@ -302,7 +302,7 @@ class TestItemFiltering(Sc2SetupTestBase):
 
         world_items = [(item.name, item_tables.item_table[item.name]) for item in self.multiworld.itempool]
         self.assertTrue(world_items)
-        self.assertNotIn(item_names.DESTROYER_BLOODSHARD_REALIGNMENT, world_items)
+        self.assertNotIn(item_names.DESTROYER_REFORGED_BLOODSHARD_CORE, world_items)
         for item_name, item_data in world_items:
             if item_data.quantity == 0:
                 continue
@@ -1147,7 +1147,6 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             'mission_order': MissionOrder.option_grid,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
-            'exclude_legacy_items': ExcludeLegacyItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
         self.generate_world(world_options)
@@ -1165,7 +1164,6 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             'mission_order': MissionOrder.option_grid,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
-            'exclude_legacy_items': ExcludeLegacyItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'locked_items': {item_name: 0 for item_name in unreleased_items},
         }

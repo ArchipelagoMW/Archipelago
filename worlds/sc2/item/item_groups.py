@@ -788,7 +788,6 @@ item_name_groups[ItemGroupNames.LOTV_GLOBAL_UPGRADES] = lotv_global_upgrades = [
 item_name_groups[ItemGroupNames.WAR_COUNCIL] = war_council_upgrades = [
     item_name for item_name, item_data in item_tables.item_table.items()
     if item_data.type in (item_tables.ProtossItemType.War_Council, item_tables.ProtossItemType.War_Council_2)
-       or item_name == item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION
 ]
 
 lotv_war_council_upgrades = [
@@ -797,7 +796,7 @@ lotv_war_council_upgrades = [
         item_name in war_council_upgrades
         and item_data.parent in item_name_groups[ItemGroupNames.LOTV_UNITS]
         # Destroyers get a custom (non-vanilla) buff, not a nerf over their vanilla council state
-        and item_name != item_names.DESTROYER_BLOODSHARD_REALIGNMENT
+        and item_name != item_names.DESTROYER_REFORGED_BLOODSHARD_CORE
     )
 ]
 item_name_groups[ItemGroupNames.LOTV_ITEMS] = vanilla_lotv_items = (
@@ -816,14 +815,11 @@ item_name_groups[ItemGroupNames.VANILLA_ITEMS] = vanilla_items = (
 item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Terran general
     item_names.SIEGE_TANK_GRADUATING_RANGE,
-    item_names.SIEGE_TANK_RESOURCE_EFFICIENCY,
     item_names.RAVEN_HUNTER_SEEKER_WEAPON,
     item_names.BATTLECRUISER_ATX_LASER_BATTERY,
     item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL,
     item_names.MECHANICAL_KNOW_HOW,
     item_names.MERCENARY_MUNITIONS,
-    item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY,
-    item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY,
 
     # Terran Mind Control
     item_names.HIVE_MIND_EMULATOR,
@@ -832,6 +828,9 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
 
     # Zerg Mind Control
     item_names.INFESTOR,
+
+    # Protoss Mind Control
+    item_names.DARK_ARCHON_INDOMITABLE_WILL,
 
     # Nova
     item_names.NOVA_PLASMA_RIFLE,
@@ -853,6 +852,13 @@ item_name_groups[ItemGroupNames.OVERPOWERED_ITEMS] = overpowered_items = [
     # Protoss general
     item_names.QUATRO,
     item_names.MOTHERSHIP_INTEGRATED_POWER,
+    item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING,
+
+    # Mindless Broodwar garbage
+    item_names.GHOST_BARGAIN_BIN_PRICES,
+    item_names.SPECTRE_BARGAIN_BIN_PRICES,
+    item_names.REAVER_BARGAIN_BIN_PRICES,
+    item_names.SCOUT_SUPPLY_EFFICIENCY,
 ]
 
 # Items not aimed to be officially released
@@ -880,14 +886,7 @@ item_name_groups[ItemGroupNames.UNRELEASED_ITEMS] = unreleased_items = [
 # Currently, it disables only the topmost level of the progressives.
 # Don't place here anything that's present in the vanilla campaigns (if it's overpowered, use overpowered items instead)
 item_name_groups[ItemGroupNames.LEGACY_ITEMS] = legacy_items = [
-    item_names.GHOST_PROGRESSIVE_RESOURCE_EFFICIENCY,
-    item_names.SPECTRE_PROGRESSIVE_RESOURCE_EFFICIENCY,
     item_names.ASCENDANT_ARCHON_MERGE,
-    item_names.SCOUT_PROGRESSIVE_RESOURCE_EFFICIENCY,
-    item_names.SCOUT_GAMMA_PHOTON_BLASTERS,
-    item_names.REAVER_PROGRESSIVE_RESOURCE_EFFICIENCY,
-    item_names.ORACLE_PROGRESSIVE_STASIS_CALIBRATION,
-    item_names.DESTROYER_REFORGED_BLOODSHARD_CORE,
 ]
 
 item_name_groups[ItemGroupNames.KEYS] = keys = [
