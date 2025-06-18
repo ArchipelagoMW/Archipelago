@@ -201,6 +201,8 @@ TODO implement filter_item_sends and bridge_chat_out mentioned in the Factorio g
   - Use the Mod Manager to generate a debug zip and attach that file.
    [Satisfactory Modding Documentation FAQ: Generating a debug zip](https://docs.ficsit.app/satisfactory-modding/latest/faq.html#_where_can_i_find_the_games_log_files)
   - Attach your Archipelago config file and spoiler to your report.
+- If your early game power grid is repeatedly shutting down for unclear reasons,
+  ensure you are not wearing a Hover Pack, as they draw 100 MW.
 
 ## Additional Resources
 
