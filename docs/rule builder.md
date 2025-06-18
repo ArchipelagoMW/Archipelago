@@ -95,9 +95,9 @@ rule = Or(
 
 ## Defining custom rules
 
-You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate.
+You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate to provide your world as a type argument to add correct type checking to the `_instantiate` method.
 
-You must provide or inherit a `Resolved` child class that defines an `_evaluate` method and has the `@dataclass(frozen=True)` decorator on it. You may need to also define an `item_dependencies` or `region_dependencies` function.
+You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. This class will automatically be converted into a frozen `dataclass`. You may need to also define an `item_dependencies` or `region_dependencies` function.
 
 To add a rule that checks if the user has enough mcguffins to goal, with a randomized requirement:
 
@@ -107,7 +107,6 @@ class CanGoal(Rule["MyWorld"], game="My Game"):
     def _instantiate(self, world: "MyWorld") -> "Resolved":
         return self.Resolved(world.required_mcguffins, player=world.player)
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         goal: int
 
@@ -125,7 +124,6 @@ If there are items that when collected will affect the result of your rule evalu
 ```python
 @dataclasses.dataclass()
 class MyRule(Rule["MyWorld"], game="My Game"):
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_name: str
 
@@ -143,7 +141,6 @@ If your custom rule references other regions, it must define an `region_dependen
 ```python
 @dataclasses.dataclass()
 class MyRule(Rule["MyWorld"], game="My Game"):
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         region_name: str
 
@@ -208,7 +205,6 @@ To implement a custom message with a custom rule, override the `explain_json` an
 
 ```python
 class MyRule(Rule, game="My Game"):
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":

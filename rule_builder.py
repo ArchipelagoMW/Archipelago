@@ -4,7 +4,7 @@ from collections import defaultdict
 from collections.abc import Iterable, Mapping
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, cast
 
-from typing_extensions import ClassVar, Never, Self, TypeVar, override
+from typing_extensions import ClassVar, Never, Self, TypeVar, dataclass_transform, override
 
 from BaseClasses import Entrance
 
@@ -15,10 +15,6 @@ if TYPE_CHECKING:
     from worlds.AutoWorld import World
 else:
     World = object
-
-
-class CustomRuleRegister:
-    custom_rules: ClassVar[dict[str, dict[str, type["Rule"]]]] = {}
 
 
 class RuleWorldMixin(World):
@@ -227,20 +223,6 @@ class RuleWorldMixin(World):
                 _ = player_results.pop(rule_id, None)
 
 
-def _create_hash_fn(resolved_rule_cls: "type[Rule.Resolved]") -> "Callable[..., int]":
-    def __hash__(self: "Rule.Resolved") -> int:
-        return hash(
-            (
-                self.__class__.__module__,
-                self.rule_name,
-                *[getattr(self, f.name) for f in dataclasses.fields(self)],
-            )
-        )
-
-    __hash__.__qualname__ = f"{resolved_rule_cls.__qualname__}.{__hash__.__name__}"
-    return __hash__
-
-
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
 
 OPERATORS = {
@@ -262,6 +244,42 @@ class OptionFilter(Generic[T]):
     option: "type[Option[T]]"
     value: T
     operator: Operator = "eq"
+
+
+def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> "Callable[..., int]":
+    def __hash__(self: "Rule.Resolved") -> int:
+        return hash(
+            (
+                self.__class__.__module__,
+                self.rule_name,
+                *[getattr(self, f.name) for f in dataclasses.fields(self)],
+            )
+        )
+
+    __hash__.__qualname__ = f"{resolved_rule_cls.__qualname__}.{__hash__.__name__}"
+    return __hash__
+
+
+@dataclass_transform(frozen_default=True, field_specifiers=(dataclasses.field, dataclasses.Field))
+class CustomRuleRegister(type):
+    custom_rules: ClassVar[dict[str, dict[str, type["Rule"]]]] = {}
+    rule_name: str = "Rule"
+
+    def __new__(
+        cls,
+        name: str,
+        bases: tuple[type, ...],
+        namespace: dict[str, Any],
+        /,
+        **kwds: dict[str, Any],
+    ) -> "CustomRuleRegister":
+        new_cls = super().__new__(cls, name, bases, namespace, **kwds)
+        new_cls.__hash__ = _create_hash_fn(new_cls)
+        rule_name = new_cls.__qualname__
+        if rule_name.endswith(".Resolved"):
+            rule_name = rule_name[:-9]
+        new_cls.rule_name = rule_name
+        return dataclasses.dataclass(frozen=True)(new_cls)  # type: ignore
 
 
 @dataclasses.dataclass()
@@ -368,9 +386,10 @@ class Rule(Generic[TWorld]):
             # TODO: test to make sure this works on frozen
             raise TypeError("You cannot define custom rules for the base Archipelago world")
 
-    @dataclasses.dataclass(kw_only=True, frozen=True)
-    class Resolved:
+    class Resolved(metaclass=CustomRuleRegister):
         """A resolved rule for a given world that can be used as an access rule"""
+
+        _: dataclasses.KW_ONLY
 
         player: int
         """The player this rule is for"""
@@ -438,21 +457,20 @@ class Rule(Generic[TWorld]):
         def __str__(self) -> str:
             return f"{self.rule_name}()"
 
-        def __init_subclass__(cls) -> None:
-            cls.__hash__ = _create_hash_fn(cls)
-            cls.rule_name = cls.__qualname__
+        # def __init_subclass__(cls) -> None:
+        #     cls.__hash__ = _create_hash_fn(cls)
+        #     cls.rule_name = cls.__qualname__
 
-            # if "__dataclass_fields__" not in cls.__dict__:
-            #     # ensure rule gets marked as a dataclass, but don't override manually dataclassed classes
-            #     # is_dataclass will return True since all resolved rules inherit from a dataclass
-            #     dataclasses.dataclass(frozen=True)(cls)
+        #     # if "__dataclass_fields__" not in cls.__dict__:
+        #     #     # ensure rule gets marked as a dataclass, but don't override manually dataclassed classes
+        #     #     # is_dataclass will return True since all resolved rules inherit from a dataclass
+        #     #     dataclasses.dataclass(frozen=True)(cls)
 
 
 @dataclasses.dataclass()
 class True_(Rule[TWorld], game="Archipelago"):
     """A rule that always returns True"""
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         always_true: ClassVar[bool] = True
 
@@ -473,7 +491,6 @@ class True_(Rule[TWorld], game="Archipelago"):
 class False_(Rule[TWorld], game="Archipelago"):
     """A rule that always returns False"""
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         always_false: ClassVar[bool] = True
 
@@ -522,7 +539,6 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({children}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         children: "tuple[Rule.Resolved, ...]"
 
@@ -551,7 +567,6 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass(init=False)
 class And(NestedRule[TWorld], game="Archipelago"):
-    @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -583,7 +598,6 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass(init=False)
 class Or(NestedRule[TWorld], game="Archipelago"):
-    @dataclasses.dataclass(frozen=True)
     class Resolved(NestedRule.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
@@ -643,7 +657,6 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
     def __str__(self) -> str:
         return f"{self.__class__.__name__}[{self.child}]"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         child: "Rule.Resolved"
 
@@ -696,7 +709,6 @@ class Has(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.item_name}{count}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_name: str
         count: int = 1
@@ -757,7 +769,6 @@ class HasAll(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({items}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
 
@@ -826,7 +837,6 @@ class HasAny(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({items}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_names: tuple[str, ...]
 
@@ -898,7 +908,6 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.location_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         location_name: str
         parent_region_name: str
@@ -946,7 +955,6 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.region_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         region_name: str
 
@@ -1000,7 +1008,6 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
         options = f", options={self.options}" if self.options else ""
         return f"{self.__class__.__name__}({self.entrance_name}{options})"
 
-    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         entrance_name: str
         parent_region_name: str
