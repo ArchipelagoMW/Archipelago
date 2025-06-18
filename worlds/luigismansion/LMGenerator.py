@@ -287,6 +287,9 @@ class LuigisMansionRandomizer:
             logger.info("Randomized Music is enabled, updating all events with various in-game music.")
             self.gcm = randomize_music(self.gcm, self.seed)
 
+        logger.info("Updating the spawn event...")
+        self.gcm = update_spawn_events(self.gcm)
+
         logger.info("Updating the in-game tables for chests, furniture, ghosts, etc.")
         self.update_maptwo_jmp_tables()
 
