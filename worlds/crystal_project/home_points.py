@@ -1,5 +1,5 @@
 from locations import LocationData
-from typing import List, Optional, Callable, NamedTuple
+from typing import List, Optional
 
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
