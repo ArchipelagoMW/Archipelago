@@ -21,15 +21,11 @@ jobs:
     - name: Create Lib-Windows
       run: mkdir lib-windows
     - name: Install Windows-Deps
-      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows      
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows
     - uses: actions/upload-artifact@v4
       with:
         name: lib-windows
-        path: |
-          ./lib-windows/**
-          !**/__pycache__
-          # !**/*.a
-          # !**/*.lib
+        path: ./lib-windows/**
   
   linux-deps:
     runs-on: ubuntu-latest
@@ -46,11 +42,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: lib-linux
-        path: |
-          ./lib-linux/**
-          !**/__pycache__
-          # !**/*.a
-          # !**/*.lib
+        path: ./lib-linux/**
 
   fuzz:
     needs: [windows-deps, linux-deps]
@@ -83,13 +75,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Make combined Lib folder
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: lib
-          pattern: lib-*
-          delete-merged: true
-      
       - name: Creates the LM APWorld
         id: apworld
         uses: Eijebong/ap-actions/package-apworld@main
@@ -109,20 +94,28 @@ jobs:
     steps:
       - name: Create Local Artifact Folder
         run: mkdir tmp-artifacts
-      - name: Create Local Lib Folder
-        run: mkdir tmp-lib
+      - name: Create Local Windows Lib Folder
+        run: mkdir tmp-windows-lib
+      - name: Create Local Linux Lib Folder
+        run: mkdir tmp-linux-lib
       
       - uses: actions/download-artifact@v4
         with:
-          name: lib
-          path: tmp-lib
+          name: lib-windows
+          path: tmp-windows-lib
+      - uses: actions/download-artifact@v4
+        with:
+          name: lib-linux
+          path: tmp-linux-lib
       - uses: actions/download-artifact@v4
         with:
           name: apworld
           path: tmp-artifacts
 
-      - name: Zip Lib folder together
-        run: cd tmp-lib && zip -r ../tmp-artifacts/lib.zip * && cd ../
+      - name: Zip Lib Windows folder
+        run: cd tmp-windows-lib && zip -r ../tmp-artifacts/lib-windows.zip * && cd ../
+      - name: Zip Lib Linux folder
+        run: cd tmp-linux-lib && zip -r ../tmp-artifacts/lib-linux.zip * && cd ../
 
       - if: ${{inputs.tag != '' }}
         name: Create Manual Release
