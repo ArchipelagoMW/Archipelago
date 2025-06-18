@@ -95,17 +95,19 @@ rule = Or(
 
 ## Defining custom rules
 
-You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules and putting the `@custom_rule` decorator on it. You must provide or inherit a `Resolved` child class that defines an `_evaluate` method and has the `@resolved_rule` decorator on it. You may need to also define an `item_dependencies` or `indirect_regions` function.
+You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate.
+
+You must provide or inherit a `Resolved` child class that defines an `_evaluate` method and has the `@dataclass(frozen=True)` decorator on it. You may need to also define an `item_dependencies` or `region_dependencies` function.
 
 To add a rule that checks if the user has enough mcguffins to goal, with a randomized requirement:
 
 ```python
-@custom_rule(MyWorld)
-class CanGoal(Rule[MyWorld]):
+@dataclasses.dataclass()
+class CanGoal(Rule["MyWorld"], game="My Game"):
     def _instantiate(self, world: "MyWorld") -> "Resolved":
         return self.Resolved(world.required_mcguffins, player=world.player)
 
-    @resolved_rule
+    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         goal: int
 
@@ -121,9 +123,9 @@ class CanGoal(Rule[MyWorld]):
 If there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system.
 
 ```python
-@custom_rule(MyWorld)
-class MyRule(Rule[MyWorld]):
-    @resolved_rule
+@dataclasses.dataclass()
+class MyRule(Rule["MyWorld"], game="My Game"):
+    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         item_name: str
 
@@ -139,14 +141,14 @@ The default `Has`, `HasAll`, and `HasAny` rules define this function already.
 If your custom rule references other regions, it must define an `region_dependencies` function that returns a mapping of region names to the id of your rule. These will be combined to inform the caching system and indirect connections will be registered when you set this rule on an entrance.
 
 ```python
-@custom_rule(MyWorld)
-class MyRule(Rule[MyWorld]):
-    @resolved_rule
+@dataclasses.dataclass()
+class MyRule(Rule["MyWorld"], game="My Game"):
+    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         region_name: str
 
         @override
-        def indirect_regions(self) -> dict[str, set[int]]:
+        def region_dependencies(self) -> dict[str, set[int]]:
             return {self.region_name: {id(self)}}
 ```
 
@@ -181,9 +183,8 @@ The `And` and `Or` rules have a slightly different format:
 To define a custom format, override the `to_json` function:
 
 ```python
-@custom_rule(MyWorld)
-class MyRule(Rule):
-    def to_json(self) -> Any:
+class MyRule(Rule, game="My Game"):
+    def to_json(self) -> Mapping[str, Any]:
         return {
             "rule": "my_rule",
             "custom_logic": [...]
@@ -193,10 +194,9 @@ class MyRule(Rule):
 If your logic has been done in custom JSON first, you can define a `from_json` class method on your rules to parse it correctly:
 
 ```python
-@custom_rule(MyWorld)
-class MyRule(Rule):
+class MyRule(Rule, game="My Game"):
     @classmethod
-    def from_json(cls, data: Any) -> Self:
+    def from_json(cls, data: Mapping[str, Any]) -> Self:
         return cls(data.get("custom_logic"))
 ```
 
@@ -207,9 +207,8 @@ Resolved rules have a default implementation for `explain_json` and `explain_str
 To implement a custom message with a custom rule, override the `explain_json` and/or `explain_str` method on your `Resolved` class:
 
 ```python
-@custom_rule(MyWorld)
-class MyRule(Rule):
-    @resolved_rule
+class MyRule(Rule, game="My Game"):
+    @dataclasses.dataclass(frozen=True)
     class Resolved(Rule.Resolved):
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
