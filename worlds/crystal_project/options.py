@@ -195,7 +195,7 @@ class MaxLevel(Range):
     """
     display_name = "Max Level"
     range_start = 60
-    range_end = 90
+    range_end = 99
     default = 60
 
 class EasyLeveling(Toggle):
