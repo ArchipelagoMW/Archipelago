@@ -921,7 +921,7 @@ class LMWorld(World):
             "death_link": self.options.death_link.value,
             "trap_link": self.options.trap_link.value,
             "luigi max health": self.options.luigi_max_health.value,
-            "pickup animation": self.options.pickup_animation.value,
+            "pickup animation": self.options.enable_pickup_animation.value,
             "apworld version": CLIENT_VERSION,
             "seed": self.multiworld.seed,
         }
