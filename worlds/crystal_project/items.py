@@ -154,9 +154,9 @@ item_table: Dict[str, ItemData] = {
     JIDAMBA_KEY_RING: ItemData(KEY, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
-    "Item - Quintar Pass": ItemData(ITEM, 7 + item_index_offset, ItemClassification.progression, 0), #(now part of Progressive Quintar Flute)
+    "Item - Quintar Pass": ItemData(ITEM, 7 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified (now part of Progressive Quintar Flute)
     PROGRESSIVE_LUXURY_PASS: ItemData(ITEM, 93 + item_index_offset, ItemClassification.progression, 0, 2), #Luxury Pass ID 93; Luxury Pass V2 148; Turn-in: Capital Sequoia, Advanced Regions
-    "Item - Luxury Pass V2": ItemData(ITEM, 148 + item_index_offset, ItemClassification.progression, 0), #(now part of Progressive Luxury Pass)
+    "Item - Luxury Pass V2": ItemData(ITEM, 148 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified (now part of Progressive Luxury Pass)
     FERRY_PASS: ItemData(ITEM, 37 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Sara Sara Bazaar (unlocks connection to Shoudu Province), Expert Regions
 
     #Key Items
@@ -188,7 +188,7 @@ item_table: Dict[str, ItemData] = {
     SPECIAL_ROTTEN_SALMON: ItemData(ITEM, 232 + item_index_offset, ItemClassification.progression, 0, 1),
     DEITY_EYE: ItemData(ITEM, 176 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
     STEM_WARD: ItemData(ITEM, 177 + item_index_offset, ItemClassification.progression, 0), #Used for true astley win con
-    PROOF_OF_MERIT: ItemData(ITEM, 191 + item_index_offset, ItemClassification.progression, 0),
+    PROOF_OF_MERIT: ItemData(ITEM, 191 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified
 
     #Passes for Regionsanity
     SPAWNING_MEADOWS_PASS: ItemData(PASS, 801 + item_index_offset, ItemClassification.progression, 1),
