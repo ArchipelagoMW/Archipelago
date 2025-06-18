@@ -49,7 +49,7 @@ class NewWorldStoneJobQuantity(Range):
 class ClamshellGoalQuantity(Range):
     """
     If your goal is Clamshells, select how many you need to win.
-    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool and the Manana Man asks for 2. Don't worry, he's cool with it.)
+    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool and the Mañana Man asks for 2. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
     range_start = 1
@@ -137,7 +137,7 @@ class Shopsanity(Choice):
 
 class Regionsanity(Toggle):
     """
-    When enabled, all locations in a zone will not be completeable until you have discovered the "pass" for a region (i.e. "Item - Spawning Meadows Pass")
+    When enabled, all locations in a zone will not be completable until you have discovered the "pass" for a region (i.e. "Item - Spawning Meadows Pass")
 
     You will start the game with a pass for a zone which can be reached without any items.
     """
@@ -150,23 +150,64 @@ class ProgressiveMountMode(DefaultOnToggle):
     When disabled, there are 4 different items, Progressive Quintar Flute, Progressive Salmon Violin, Ibek Bell, and Owl Drum which are randomized."""
     display_name = "Progressive Mount Mode"
 
-class LevelGating(DefaultOnToggle):
+class LevelGating(Choice):
     """
-    When enabled, the parties maximum level will be capped, with items in the pool increasing that cap.
-    Areas in the game will be considered out of logic (but still accessible) if the party level cap is below the area level.
+    When enabled, the party's level is considered for Archipelago logic, and level items are added to the item pool. This won't stop you from beating the game at level 3.
+
+    None: Level gating is disabled. No Progressive Levels in the pool.
+
+    Level Passes: Progressive Levels are added to the pool. They do not affect the party's actual level or level cap. Archipelago will expect you to collect them to access level-gated areas,
+    and in-game tracking will light up checks that you have access to based on that level.
+
+    Level Capped: The party's maximum level is hard capped. Progressive Levels are added to the pool. Collecting them allows your party to gain more levels, and in-game tracking will light up
+    checks that you have access to based on that max level.
+
+    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels based on the number you've collected. For example, if the Progressive Level
+    Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
+    has already reached that level, no extra levels will be granted. In-game tracking will light up checks that you have access to based on the number you have collected.
     """
     display_name = "Level Gating"
+    option_none = 0
+    option_level_passes = 1
+    option_level_capped = 2
+    option_levels_catch_up = 3
+    default = 1
 
-class LevelUpsInPool(Range):
+class ProgressiveLevelSize(Range):
     """
-    If level gating is enabled, this will control how many max level ups are in the pool.
-    Each max level up increases the max character level by 10, so a value of 5 here is a maximum possible level of 60
-    Changing this value to a higher number will allow the player to exceed the default level cap.
+    If level gating is on, Progressive Levels will be added to your item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
+
+    For example, if Level Item Size is 6, the three Level Gating options would behave like this:
+       Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
+       Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
+       Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
+
+    This setting will not increase your party's starting level (3) or maximum level (default 60 - see Max Level option).
     """
-    display_name = "Max level ups in the pool"
-    range_start = 5
-    range_end = 8
-    default = 5
+    display_name = "Progressive Level Size"
+    range_start = 3
+    range_end = 10
+    default = 6
+
+class MaxLevel(Range):
+    """
+    This allows your party to level past the default max level of 60. If level gating is on, increasing this number will also put more level items in your pool.
+    """
+    display_name = "Max Level"
+    range_start = 60
+    range_end = 90
+    default = 60
+
+# class LevelUpsInPool(Range):
+#     """
+#     If level gating is enabled, this will control how many max level ups are in the pool.
+#     Each max level up increases the max character level by 10, so a value of 5 here is a maximum possible level of 60
+#     Changing this value to a higher number will allow the player to exceed the default level cap.
+#     """
+#     display_name = "Max level ups in the pool"
+#     range_start = 5
+#     range_end = 8
+#     default = 5
 
 class EasyLeveling(Toggle):
     """
@@ -259,7 +300,9 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includedRegions: IncludedRegions
     progressiveMountMode: ProgressiveMountMode
     levelGating: LevelGating
-    levelUpsInPool: LevelUpsInPool
+    progressiveLevelSize: ProgressiveLevelSize
+    maxLevel: MaxLevel
+    # levelUpsInPool: LevelUpsInPool
     easyLeveling: EasyLeveling
     keyMode: KeyMode
     obscureRoutes: ObscureRoutes
@@ -273,7 +316,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelUpsInPool, EasyLeveling, KeyMode, ObscureRoutes],
+    "Progression Options": [ProgressiveMountMode, LevelGating, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic]
 }

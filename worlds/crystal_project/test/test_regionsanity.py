@@ -1,7 +1,4 @@
 from .bases import CrystalProjectTestBase
-from ..constants.key_items import *
-from ..constants.keys import *
-from ..constants.mounts import *
 from ..constants.region_passes import *
 from ..constants.regions import *
 
@@ -14,7 +11,7 @@ class TestRegionsanityOff(CrystalProjectTestBase):
     def test_region_accessibility(self):
         self.set_collected_job_count(5)
         self.collect_mounts()
-        self.collect_level_caps()
+        self.collect_all_progressive_levels()
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA))
@@ -27,7 +24,7 @@ class TestRegionsanityOn(CrystalProjectTestBase):
     def test_region_accessibility(self):
         self.set_collected_job_count(5)
         self.collect_mounts()
-        self.collect_level_caps()
+        self.collect_all_progressive_levels()
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      unreachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))

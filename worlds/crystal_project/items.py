@@ -180,7 +180,8 @@ item_table: Dict[str, ItemData] = {
     ANCIENT_TABLET_B: ItemData(ITEM, 162 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
     ANCIENT_TABLET_C: ItemData(ITEM, 163 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
     TREASURE_FINDER: ItemData(ITEM, 196 + item_index_offset, ItemClassification.useful),
-    PROGRESSIVE_LEVEL_CAP: ItemData(ITEM, 500 + item_index_offset, ItemClassification.progression, 0),
+    # Progressive Level is used for all level gating options: Progressive Level Pass, Progressive Level Cap, and Progressive Level Catch-Up
+    PROGRESSIVE_LEVEL: ItemData(ITEM, 500 + item_index_offset, ItemClassification.progression, 0),
     SPECIAL_SHOUDU_STEW: ItemData(ITEM, 229 + item_index_offset, ItemClassification.progression, 0, 1),
     SPECIAL_MILK: ItemData(ITEM, 230 + item_index_offset, ItemClassification.progression, 0, 1),
     SPECIAL_FRESH_SALMON: ItemData(ITEM, 231 + item_index_offset, ItemClassification.progression, 0, 1),

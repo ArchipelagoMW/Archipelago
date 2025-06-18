@@ -1,7 +1,6 @@
 from test.bases import WorldTestBase
 from ..items import region_name_to_pass_dict
 from ..constants.mounts import *
-from ..constants.regions import *
 from ..constants.key_items import *
 from ..constants.item_groups import *
 
@@ -44,16 +43,19 @@ class CrystalProjectTestBase(WorldTestBase):
         self.collect_by_name([PROGRESSIVE_SALMON_VIOLA, PROGRESSIVE_QUINTAR_WOODWIND, IBEK_BELL, OWL_DRUM, PROGRESSIVE_MOUNT])
 
 
-    def collect_level_caps(self):
-        self.collect_by_name(PROGRESSIVE_LEVEL_CAP)
+    def collect_all_progressive_levels(self):
+        self.collect_by_name(PROGRESSIVE_LEVEL)
 
+    def collect_progressive_levels(self, count):
+        for _ in range(count):
+            self.collect(self.get_item_by_name(PROGRESSIVE_LEVEL))
 
     def collect_passes(self):
         for region in region_name_to_pass_dict:
             self.collect_by_name(region_name_to_pass_dict[region])
 
 
-    def collect_mounts_and_level_caps_and_passes(self):
+    def collect_mounts_and_progressive_levels_and_passes(self):
         self.collect_mounts()
-        self.collect_level_caps()
+        self.collect_all_progressive_levels()
         self.collect_passes()

@@ -117,13 +117,15 @@ class CrystalProjectLogic:
             return state.has(OLD_WORLD_STONE, self.player)
 
     def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
-        if min_level > 60:
-            min_level = 60
+        if min_level > self.options.maxLevel.value:
+            min_level = self.options.maxLevel.value
 
-        count = (min_level - 1) // 10
+        # Players start with 1 Progressive Level
+        count = ((min_level - 1) // self.options.progressiveLevelSize.value) + 1
 
-        if self.options.levelGating:
-            return state.has(PROGRESSIVE_LEVEL_CAP, self.player, count)
+        if not self.options.levelGating.value == self.options.levelGating.option_none:
+            return state.has(PROGRESSIVE_LEVEL, self.player, count)
+
         return True
 
     #has_key is for: Luxury Key, Gardeners Key, All Wing Keys, Cell Keys, Room One Key, Small Keys, Boss Key, Red Door Keys,

@@ -54,7 +54,7 @@ class CrystalProjectWorld(World):
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
-        self.starter_region: str
+        self.starter_region: str = ""
         self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs:int = 0
@@ -66,12 +66,15 @@ class CrystalProjectWorld(World):
         for job in self.starting_jobs:
             self.multiworld.push_precollected(self.create_item(job))
 
-        if self.options.startWithTreasureFinder:
+        if self.options.startWithTreasureFinder.value:
             self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
 
-        if self.options.startWithMaps:
+        if self.options.startWithMaps.value:
             for map_name in self.item_name_groups[MAP]:
                 self.multiworld.push_precollected(self.create_item(map_name))
+
+        if not self.options.levelGating.value == self.options.levelGating.option_none:
+            self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
@@ -102,7 +105,6 @@ class CrystalProjectWorld(World):
             # Generate a collection state that is a copy of the current state but also has all the passes so we can
             # check what regions we can access without just getting told none because we have no passes
             all_passes_state: CollectionState = CollectionState(self.multiworld)
-            starting_state: CollectionState = CollectionState(self.multiworld)
             for region_pass in self.item_name_groups[PASS]:
                 all_passes_state.collect(self.create_item(region_pass))
             for region in self.get_regions():
@@ -180,8 +182,8 @@ class CrystalProjectWorld(World):
         else:
             excluded_items.add(PROGRESSIVE_MOUNT)
 
-        if not self.options.levelGating:
-            excluded_items.add(PROGRESSIVE_LEVEL_CAP)
+        if self.options.levelGating.value == self.options.levelGating.option_none:
+            excluded_items.add(PROGRESSIVE_LEVEL)
 
         if self.options.startWithTreasureFinder:
             excluded_items.add(TREASURE_FINDER)
@@ -289,9 +291,11 @@ class CrystalProjectWorld(World):
                     item = self.set_classifications(name)
                     pool.append(item)
 
-        if self.options.levelGating:
-            for _ in range (self.options.levelUpsInPool):
-                item = self.set_classifications(PROGRESSIVE_LEVEL_CAP)
+        if not self.options.levelGating.value == self.options.levelGating.option_none:
+            #this formula is how we can do ceiling division in Python. because it's a terrible language that can't do basic things.
+            progressive_levels_in_pool = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
+            for _ in range (progressive_levels_in_pool):
+                item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 
         if self.options.goal.value == self.options.goal.option_true_astley:
@@ -360,7 +364,9 @@ class CrystalProjectWorld(World):
             "easyLeveling": bool(self.options.easyLeveling.value),
             "obscureRoutes": bool(self.options.obscureRoutes.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
-            "levelGating": bool(self.options.levelGating.value),
+            "levelGating": self.options.levelGating.value,
+            "progressiveLevelSize": self.options.progressiveLevelSize.value,
+            "maxLevel": self.options.maxLevel.value,
             "shopsanity": self.options.shopsanity.value,
             "regionsanity": bool(self.options.regionsanity.value),
             "startingJobs": self.get_job_id_list(),

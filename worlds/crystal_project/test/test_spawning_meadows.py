@@ -1,5 +1,4 @@
 from ..constants.regions import *
-from ..constants.key_items import *
 from ..constants.mounts import *
 from .bases import CrystalProjectTestBase
 
@@ -95,82 +94,70 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
         "progressiveMountMode": 0,
         "obscureRoutes": 0
     }
-
+    # Default Progressive Level Size: 6, 1 Progressive Level in player's starting inventory
+    # Poko Poko Desert: 30
     def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):
         self.collect_by_name(IBEK_BELL)
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
     def test_poko_poko_connection_fails_with_level_cap_no_ibek(self):
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(2)
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
     def test_poko_poko_connection_succeeds_with_ibek_and_level_cap(self):
         self.collect_by_name(IBEK_BELL)
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(3)
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
+        self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + POKO_POKO_DESERT))
 
-    def test_tram_connection_fails_with_salmon_no_level_cap(self):
-        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
+    # Continental Tram
+    def test_tram_connection_fails_with_obscure_routes_off(self):
+        self.collect_mounts_and_progressive_levels_and_passes()
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
 
-    def test_tram_connection_fails_with_quintar_no_level_cap(self):
-        self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-
-    def test_tram_connection_fails_with_level_cap_no_swimming(self):
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-
-    def test_tram_connection_fails_with_salmon_and_level_cap(self):
-        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP, PROGRESSIVE_LEVEL_CAP])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-
-    def test_tram_connection_fails_with_quintar_and_level_cap(self):
-        self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + CONTINENTAL_TRAM))
-
+    # Beaurior Volcano: 37
     def test_beaurior_volcano_fails_with_ibek_no_level_cap(self):
         self.collect_by_name([IBEK_BELL])
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
 
     def test_beaurior_volcano_connection_fails_with_level_cap_no_ibek(self):
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(1)
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
 
     def test_beaurior_connection_succeeds_with_ibek_and_level_cap(self):
         self.collect_by_name(IBEK_BELL)
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(5)
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
+        self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + BEAURIOR_VOLCANO))
 
-    def test_yamagawa_connection_fails_with_ibek_no_level_cap(self):
-        self.collect_by_name([IBEK_BELL])
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
-
-    def test_yamagawa_connection_fails_with_salmon_no_level_cap(self):
-        self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
-
-    def test_yamagawa_connection_fails_with_quintar_no_level_cap(self):
-        self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
+    # Yamagawa M.A.: 15
+    def test_yamagawa_connection_fails_with_mounts_no_level_cap(self):
+        self.collect_mounts()
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_fails_with_level_cap_no_mounts(self):
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_all_progressive_levels()
         self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_succeeds_with_level_cap_and_ibek(self):
         self.collect_by_name([IBEK_BELL])
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(1)
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+        self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_succeeds_with_level_cap_and_salmon(self):
         self.collect_by_name([PROGRESSIVE_SALMON_VIOLA])
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(1)
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+        self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
 
     def test_yamagawa_connection_succeeds_with_level_cap_and_quintar(self):
         self.collect_by_name([PROGRESSIVE_QUINTAR_WOODWIND])
-        self.collect_by_name([PROGRESSIVE_LEVEL_CAP])
+        self.collect_progressive_levels(1)
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
+        self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS + " -> " + YAMAGAWA_MA))
