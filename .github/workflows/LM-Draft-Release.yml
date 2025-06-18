@@ -28,8 +28,8 @@ jobs:
         path: |
           ./lib-windows/**
           !**/__pycache__
-          !**/*.a
-          !**/*.lib
+          # !**/*.a
+          # !**/*.lib
   
   linux-deps:
     runs-on: ubuntu-latest
@@ -49,8 +49,8 @@ jobs:
         path: |
           ./lib-linux/**
           !**/__pycache__
-          !**/*.a
-          !**/*.lib
+          # !**/*.a
+          # !**/*.lib
 
   fuzz:
     needs: [windows-deps, linux-deps]
