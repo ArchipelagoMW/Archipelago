@@ -292,9 +292,10 @@ class CrystalProjectWorld(World):
                     pool.append(item)
 
         if not self.options.levelGating.value == self.options.levelGating.option_none:
-            #this formula is how we can do ceiling division in Python. because it's a terrible language that can't do basic things.
+            #this formula is how we can do ceiling division in Python
             progressive_levels_in_pool = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
-            for _ in range (progressive_levels_in_pool):
+            #players start with one
+            for _ in range (progressive_levels_in_pool - 1):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 
