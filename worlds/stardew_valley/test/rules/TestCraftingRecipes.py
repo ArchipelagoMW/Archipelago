@@ -50,7 +50,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.assert_rule_true(rule)
 
     def test_require_furnace_recipe_for_smelting_checks(self):
-        locations = ["Craft Furnace", "Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        locations = ["Craft Furnace", "Quest: Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
         self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)
@@ -120,7 +120,7 @@ class TestNoCraftsanityLogic(SVTestBase):
         self.assert_rule_true(rule)
 
     def test_requires_mining_levels_for_smelting_checks(self):
-        locations = ["Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
+        locations = ["Quest: Smelting", "Copper Pickaxe Upgrade", "Gold Trash Can Upgrade"]
         rules = [self.world.logic.region.can_reach_location(location) for location in locations]
         self.collect(self.create_item("Landslide Removed"))
         self.collect([self.create_item("Progressive Pickaxe")] * 4)

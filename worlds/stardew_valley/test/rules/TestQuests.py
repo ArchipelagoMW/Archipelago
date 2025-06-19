@@ -9,7 +9,7 @@ class TestQuestsLogic(SVTestBase):
     }
 
     def test_giant_stump_requires_one_raccoon(self):
-        quest_name = "The Giant Stump"
+        quest_name = "Quest: The Giant Stump"
         quest_location = self.world.get_location(quest_name)
 
         self.assert_cannot_reach_location(quest_location)

@@ -18,7 +18,7 @@ class TestAuroraVineyard(SVTestBase):
         self.collect(Transportation.bus_repair)
         self.collect("Shipping Bin")
         self.collect("Summer")
-        location_name = ModQuest.AuroraVineyard
+        location_name = f"Quest: {ModQuest.AuroraVineyard}"
         self.assert_cannot_reach_location(location_name, self.multiworld.state)
         self.collect(SVEQuestItem.aurora_vineyard_tablet)
         self.assert_can_reach_location(location_name, self.multiworld.state)

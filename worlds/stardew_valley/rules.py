@@ -14,7 +14,8 @@ from .data.craftable_data import all_crafting_recipes_by_name
 from .data.game_item import ItemTag
 from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
 from .data.hats_data import wear_prefix, hat_clarifier
-from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
+from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
+    all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
 from .data.recipe_data import all_cooking_recipes_by_name
 from .data.secret_note_data import gift_requirements, SecretNote
@@ -25,7 +26,8 @@ from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
-from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity, ExcludeGingerIsland, IncludeEndgameLocations
+from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity, ExcludeGingerIsland, \
+    IncludeEndgameLocations
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -42,7 +44,8 @@ from .strings.calendar_names import Weekday
 from .strings.craftable_names import Bomb, Furniture, Consumable
 from .strings.crop_names import Fruit, Vegetable
 from .strings.currency_names import Currency
-from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
+from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
+    DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance, LogicEntrance
 from .strings.fish_names import Fish
 from .strings.food_names import Meal
@@ -528,10 +531,13 @@ def set_cropsanity_rules(logic: StardewLogic, multiworld, player, world_content:
 def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     if world_options.quest_locations.has_no_story_quests():
         return
-    for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
-        if quest.name in all_location_names:
-            set_rule(multiworld.get_location(quest.name, player),
-                     logic.registry.quest_rules[quest.name])
+    for quest_location in locations.locations_by_tag[LocationTags.STORY_QUEST]:
+        quest_location_name = quest_location.name
+        quest_prefix = "Quest: "
+        quest_name = quest_location_name[len(quest_prefix):]
+        if quest_name in all_location_names:
+            set_rule(multiworld.get_location(quest_location_name, player),
+                     logic.registry.quest_rules[quest_name])
 
 
 def set_special_order_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player,
