@@ -46,19 +46,52 @@ def create_regions(multiworld: MultiWorld, player: int):
 
 def connect_regions(multiworld: MultiWorld, player: int):
     """Connect AP regions for Trails in the Sky the 3rd"""
-    connect_region(multiworld, player, RegionName.menu, RegionName.hermit_garden)
-
-    connect_region(multiworld, player, RegionName.hermit_garden, RegionName.lusitania)
-    connect_region(multiworld, player, RegionName.lusitania, RegionName.hermit_garden)
-
-    connect_region(multiworld, player, RegionName.hermit_garden, RegionName.jade_corridor_start)
-    connect_region(multiworld, player, RegionName.jade_corridor_start, RegionName.hermit_garden)
+    connect_region(
+        multiworld,
+        player,
+        RegionName.menu,
+        RegionName.hermit_garden
+    )
 
     connect_region(
-        multiworld, player, RegionName.jade_corridor_start, RegionName.jade_corridor_expansion_area_1, lambda state: state.has(ItemName.jade_corridor_unlock_1, player, 1)
+        multiworld,
+        player,
+        RegionName.hermit_garden,
+        RegionName.lusitania
     )
     connect_region(
-        multiworld, player, RegionName.jade_corridor_expansion_area_1, RegionName.jade_corridor_start, lambda state: state.has(ItemName.jade_corridor_unlock_1, player, 1)
+        multiworld,
+        player,
+        RegionName.lusitania,
+        RegionName.hermit_garden
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.hermit_garden,
+        RegionName.jade_corridor_start
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.jade_corridor_start,
+        RegionName.hermit_garden
+    )
+
+    connect_region(
+        multiworld,
+        player,
+        RegionName.jade_corridor_start,
+        RegionName.jade_corridor_expansion_area_1,
+        lambda state: state.has(ItemName.jade_corridor_unlock_1, player, 1)
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.jade_corridor_expansion_area_1,
+        RegionName.jade_corridor_start,
+        lambda state: state.has(ItemName.jade_corridor_unlock_1, player, 1)
     )
 
     connect_region(
@@ -77,10 +110,18 @@ def connect_regions(multiworld: MultiWorld, player: int):
     )
 
     connect_region(
-        multiworld, player, RegionName.jade_corridor_expansion_area_1, RegionName.jade_corridor_arseille, lambda state: state.has(ItemName.jade_corridor_arseille_unlock, player, 1)
+        multiworld,
+        player,
+        RegionName.jade_corridor_expansion_area_1,
+        RegionName.jade_corridor_arseille,
+        lambda state: state.has(ItemName.jade_corridor_arseille_unlock, player, 1)
     )
     connect_region(
-        multiworld, player, RegionName.jade_corridor_arseille, RegionName.jade_corridor_expansion_area_1, lambda state: state.has(ItemName.jade_corridor_arseille_unlock, player, 1)
+        multiworld,
+        player,
+        RegionName.jade_corridor_arseille,
+        RegionName.jade_corridor_expansion_area_1,
+        lambda state: state.has(ItemName.jade_corridor_arseille_unlock, player, 1)
     )
 
     connect_region(
@@ -188,14 +229,37 @@ def connect_regions(multiworld: MultiWorld, player: int):
     )
 
     # Assume the warp menu is always reachable, but add access rules to specific warps.
-    connect_region(multiworld, player, RegionName.menu, RegionName.warp_menu)
-    connect_region(multiworld, player, RegionName.warp_menu, RegionName.hermit_garden, lambda state: state.can_reach_region(RegionName.hermit_garden, player))
     connect_region(
-        multiworld, player, RegionName.warp_menu, RegionName.jade_corridor_start, lambda state: state.can_reach_region(RegionName.jade_corridor_start, player)
+        multiworld,
+        player,
+        RegionName.menu,
+        RegionName.warp_menu
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.warp_menu,
+        RegionName.hermit_garden,
+        lambda state: state.can_reach_region(RegionName.hermit_garden, player)
+    )
+    connect_region(
+        multiworld,
+        player,
+        RegionName.warp_menu,
+        RegionName.jade_corridor_start,
+        lambda state: state.can_reach_region(RegionName.jade_corridor_start, player)
     )  # Jade Corridor Moon Door 1
     connect_region(  # Jade Corridor first warp + Sun Door One
-        multiworld, player, RegionName.warp_menu, RegionName.jade_corridor_expansion_area_1, lambda state: state.can_reach_region(RegionName.jade_corridor_expansion_area_1, player)
+        multiworld,
+        player,
+        RegionName.warp_menu,
+        RegionName.jade_corridor_expansion_area_1,
+        lambda state: state.can_reach_region(RegionName.jade_corridor_expansion_area_1, player)
     )
     connect_region(  # Jade Corridor second warp
-        multiworld, player, RegionName.warp_menu, RegionName.jade_corridor_expansion_area_2, lambda state: state.can_reach_region(RegionName.jade_corridor_expansion_area_2, player)
+        multiworld,
+        player,
+        RegionName.warp_menu,
+        RegionName.jade_corridor_expansion_area_2,
+        lambda state: state.can_reach_region(RegionName.jade_corridor_expansion_area_2, player)
     )
