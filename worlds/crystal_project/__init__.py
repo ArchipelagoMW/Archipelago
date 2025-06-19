@@ -14,6 +14,7 @@ from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
+from .mod_helper import get_modded_items
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -50,6 +51,12 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
+    modded_items = mod_helper.get_modded_items(-1)
+
+    for modded_item in modded_items:
+        item_name_to_id[modded_item.name] = modded_item.code
+        item_name_groups.setdefault('MOD', set()).add(modded_item.name)
+
     web = CrystalProjectWeb()
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -316,6 +323,12 @@ class CrystalProjectWorld(World):
         for _ in range(self.get_total_clamshells(max_clamshells)):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
+
+        if self.options.useMods:
+            modded_items = mod_helper.get_modded_items(self.player)
+
+            for modded_item in modded_items:
+                pool.append(modded_item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())

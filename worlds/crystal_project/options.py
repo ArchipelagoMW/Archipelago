@@ -274,6 +274,12 @@ class RandomizeMusic(Toggle):
     """
     display_name = "Randomize Music"
 
+class UseMods(Toggle):
+    """
+    When enabled, on generate the crystal_project_mods folder in custom_worlds will be read and items and locations will be created from the mod jsons.
+    """
+    display_name = "Use Mods"
+
 @dataclass
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -300,11 +306,12 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
     randomizeMusic: RandomizeMusic
+    useMods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
-    "Bonus Fun": [RandomizeMusic]
+    "Bonus Fun": [RandomizeMusic, UseMods]
 }
