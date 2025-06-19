@@ -52,10 +52,14 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
     modded_items = mod_helper.get_modded_items(-1)
+    modded_locations = mod_helper.get_modded_locations(-1, options)
 
     for modded_item in modded_items:
         item_name_to_id[modded_item.name] = modded_item.code
         item_name_groups.setdefault('MOD', set()).add(modded_item.name)
+
+    for modded_location in modded_locations:
+        location_name_to_id[modded_location.name] = modded_location.code
 
     web = CrystalProjectWeb()
 
@@ -123,6 +127,10 @@ class CrystalProjectWorld(World):
             self.origin_region_name = self.starter_region
             self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
+
+        if self.options.useMods:
+            modded_locations = mod_helper.get_modded_locations(self.player, self.options)
+            locations.extend(modded_locations)
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]

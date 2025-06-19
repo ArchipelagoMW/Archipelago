@@ -276,7 +276,7 @@ class RandomizeMusic(Toggle):
 
 class UseMods(Toggle):
     """
-    When enabled, on generate the crystal_project_mods folder in custom_worlds will be read and items and locations will be created from the mod jsons.
+    When enabled, on generate the crystal_project_mods folder in the archipelago directory will be read and items and locations will be created from the mod jsons.
     """
     display_name = "Use Mods"
 
