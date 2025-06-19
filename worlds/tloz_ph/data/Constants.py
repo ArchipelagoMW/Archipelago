@@ -8,7 +8,7 @@ STARTING_FLAGS = [
     [0x1B557D, 0x34],
     [0x1B557E, 0x3E],
     [0x1B557F, 0x03],
-    [0x1B5580, 0xE7],
+    [0x1B5580, 0xE5],
     [0x1B5581, 0xB0],
     [0x1B5582, 0x40],
     [0x1B5583, 0xAB],
@@ -50,7 +50,7 @@ STARTING_FLAGS = [
     [0x1B55A7, 0xC8],
     [0x1B55A8, 0x1F],
     [0x1B55A9, 0x00],
-    [0x1B55AA, 0x18],
+    [0x1B55AA, 0x08],
     [0x1B55AB, 0x40],
     [0x1B55AC, 0x70],
     [0x1B55AD, 0x00],
@@ -94,7 +94,7 @@ STAGE_FLAGS = {
     37: [0xFE,  # TotOK
          0xBE,
          0xFB,
-         0x8F],
+         0xAF],
     0: [0x82,  # Sea
         0x2C,
         0x00,
@@ -194,6 +194,16 @@ ITEM_GROUPS = {
         "Small Key (Temple of Courage)",
         "Small Key (Temple of Ice)",
         "Small Key (Mutoh's Temple)"
+    ],
+    "Vanilla Metals": [
+        "Crimzonine",
+        "Azurine",
+        "Aquanine"
+    ],
+    "Custom Metals": [
+        "Verdanite",
+        "Lavendite",
+
     ]
 }
 
@@ -208,6 +218,17 @@ DUNGEON_NAMES = [
     "Mutoh's Temple",
     "Ghost Ship"
 ]
+
+DUNGEON_TO_BOSS_ITEM_LOCATION = {
+    "Temple of the Ocean King": "TotOK B13 NE Sea Chart Chest",
+    "Temple of Fire": "Temple of Fire Blaaz Boss Reward",
+    "Temple of Wind": None,
+    "Temple of Courage": "Temple of Courage Crayk Spirit of Courage",
+    "Goron Temple": None,
+    "Temple of Ice": None,
+    "Mutoh's Temple": None,
+    "Ghost Ship": None,
+}
 
 FROG_LOCATION_NAMES = [
     "Ocean SW Golden Frog X",

@@ -158,19 +158,19 @@ ITEMS_DATA = {
     # ========= Gems ==============
 
     "Power Gem": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA541,
         'value': 1,
         'incremental': True
     },
     "Wisdom Gem": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA542,
         'value': 1,
         'incremental': True
     },
     "Courage Gem": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA540,
         'value': 1,
         'incremental': True
@@ -303,7 +303,17 @@ ITEMS_DATA = {
     },
     "Treasure Map #23": {
         'classification': ItemClassification.filler,
-        'address': 0x1BA612,
+        'address': 0x1BA652,
+        'value': 128,
+    },
+    "Treasure Map #30": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 64,
+    },
+    "Treasure Map #31": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
         'value': 128,
     },
 
@@ -343,12 +353,36 @@ ITEMS_DATA = {
     "Square Crystal (Temple of Courage)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
-        'dummy': True
+        'dummy': True,
+    },
+    "Round Crystal (Temple of the Ocean King)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True,
+        'dungeon': 37,
+    },
+    "Triangle Crystal (Temple of the Ocean King)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True,
+        'dungeon': 37,
     },
     "Force Gem (B3)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
-        'dummy': True
+        'dummy': True,
+        'dungeon': 37,
+    },
+    "Force Gem (B12)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True,
+        'dungeon': 37,
+    },
+    "Triforce Crest": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5580,
+        'value': 0x02
     },
     "Sun Key": {
         'classification': ItemClassification.progression,
@@ -364,6 +398,22 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'address': 0x1BA649,
         'value': 0x04
+    },
+    "Crimzonine": {
+        'classification': ItemClassification.progression,
+        'dummy': True
+    },
+    "Azurine": {
+        'classification': ItemClassification.progression,
+        'dummy': True
+    },
+    "Aquanine": {
+        'classification': ItemClassification.progression,
+        'dummy': True
+    },
+    "Rare Metal": {
+        'classification': ItemClassification.progression,
+        'dummy': True
     },
 
     # Frogs

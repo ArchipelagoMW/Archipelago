@@ -6,6 +6,7 @@
     "not_has_locations": list[str],
     "set_if_true": list[tuple[int, int]],       adress, value
     "unset_if_true": list[tuple[int, int]],     adress, value
+    "has_slot_data": list[list[str, any]]       slot_data, ==value
 }
 """
 DYNAMIC_FLAGS = {
@@ -31,7 +32,7 @@ DYNAMIC_FLAGS = {
     },
     "Mercay yellow guy treasure map": {
         "on_scenes": [0xB03],
-        "not_has_locations": ["Mercay Yellow Guy Item"],
+        "not_has_locations": ["Mercay Chartreuse Guy Item"],
         "unset_if_true": [(0x1BA650, 0x02)]
     },
     "RESET Mercay yellow guy treasure map": {
@@ -225,80 +226,79 @@ DYNAMIC_FLAGS = {
         "has_items": [("Courage Crest", 1)],
         "set_if_true": [(0x1B558C, 0x04)]
     },
+    # Endgame
+    "Spawn Phantoms in Totok B13": {
+        "on_scenes": [0x2511],
+        "has_items": [("Sword (Progressive)", 2)],
+        "has_slot_data": [["bellum_access", 1], ["bellum_access", 2], ["bellum_access", 3]],
+        "set_if_true": [(0x1B5592, 0x40)]
+    },
+    "Spawn Phantoms in Totok B13 door option": {
+        "on_scenes": [0x2511],
+        "has_items": [("Sword (Progressive)", 2)],
+        "goal_requirement": True,
+        "has_slot_data": [["bellum_access", 0]],
+        "set_if_true": [(0x1B5592, 0x40)]
+    },
+    "RESET Spawn Phantoms in Totok B13": {
+        "on_scenes": [0x2600],
+        "unset_if_true": [(0x1B5592, 0x40)]
+    },
+    "Block Bellum Staircase": {
+        "on_scenes": [0x2600],
+        "set_if_true": [(0x1B5595, 0x2)]
+    },
+    "RESET Block Bellum Staircase": {
+        "on_scenes": [0xB01],
+        "unset_if_true": [(0x1B5595, 0x2)]
+    },
+    "Unblock bellum staircase": {
+        "on_scenes": [0x2512],
+        "goal_requirement": True,
+        "unset_if_true": [(0x1B5595, 0x2)]
+    },
+    "Spawn bellum warp": {
+        "on_scenes": [0x2600],
+        "goal_requirement": True,
+        "set_if_true": [(0x1B5599, 0x4)],
+        "has_slot_data": [["bellum_access", 2]],
+    },
+    "Spawn phantom wreckage": {
+        "on_scenes": [0x0],
+        "goal_requirement": True,
+        "has_items": [("Sword (Progressive)", 2), ("Spirit of Courage (Progressive)", 1)],
+        "set_if_true": [(0x1B559B, 0x1)],
+        "has_slot_data": [["bellum_access", 3]],
+    },
+    "Not Triforce Crest Rando": {
+        "on_scenes": [0x2507],
+        "set_if_true": [(0x1B5580, 0x2)],
+        "has_slot_data": [["randomize_triforce_crest", 0]],
+    },
+    # boat requires sea chart
+    "Despawn linebeck 2": {
+        "on_scenes": [0xB03],
+        "unset_if_true": [(0x1B5580, 0x4)],
+    },
+    "RESET despawn linebeck 2": {
+        "on_scenes": [0xB02],
+        "set_if_true": [(0x1B5580, 0x4)],
+    },
+    "Despawn Linebeck setting": {
+        "on_scenes": [0xB03],
+        "has_slot_data": [["boat_requires_sea_chart", 1]],
+        "has_items": [("SW Sea Chart", 0)],
+        "unset_if_true": [(0x1B557E, 0x8)]
+    },
+    "Spawn Linebeck setting": {
+        "on_scenes": [0xB03],
+        "has_slot_data": [["boat_requires_sea_chart", 1]],
+        "has_items": [("SW Sea Chart", 1)],
+        "set_if_true": [(0x1B557E, 0x8)]
+    },
+    "RESET Despawn Linebeck setting": {
+        "on_scenes": [0xB02],
+        "set_if_true": [(0x1B557E, 0x8)]
+    }
 }
 
-
-DYNAMIC_FLAGS_OLD = {
-    "Cannon island buy salvage without cannon": {
-        "on_scene": 0x130B,
-        "requires_location": "Cannon Island Cannon",
-        "bit": 1,
-        "address": 0x1B5582,
-        "unset": True
-    },
-    "Cannon island buy cannon with cannon": {
-        "on_scene": 0x130B,
-        "requires_item": "Cannon",
-        "remove_bit": True,
-        "bit": 1,
-        "address": 0x1B5582,
-        "unset": True,
-        "stop_on_read": [(0x1BA649, 2)]
-    },
-    "Cannon island buy salvage arm with arm": {
-        "on_scene": 0x130B,
-        "requires_item": "Salvage Arm",
-        "remove_bit": True,
-        "bit": 0x10,
-        "address": 0x1BA649,
-        "unset": True,
-    },
-    "Astrid basement treasure map": {
-        "on_scene": 0xD01,
-        "requires_item": "Treasure Map #3",
-        "remove_bit": True,
-        "address": 0x1BA651,
-        "bit": 0x20,
-        "unset": True
-    },
-    "Ember summit treasure map": {
-        "on_scene": 0xD01,
-        "requires_item": "Treasure Map #4",
-        "remove_bit": True,
-        "address": 0x1BA651,
-        "bit": 0x80,
-        "unset": True
-    },
-    "Mercay yellow guy treasure map": {
-        "on_scene": 0xB03,
-        "requires_item": "Treasure Map #9",
-        "remove_bit": True,
-        "address": 0x1BA650,
-        "bit": 0x02,
-        "unset": True
-    },
-    "Mercay freedle gift treasure map": {
-        "on_scene": 0xB03,
-        "requires_item": "Treasure Map #12",
-        "remove_bit": True,
-        "address": 0x1BA652,
-        "bit": 0x20,
-        "unset": True
-    },
-    "Mercay oshus dig treasure map": {
-        "on_scene": 0xB03,
-        "requires_item": "Treasure Map #10",
-        "remove_bit": True,
-        "address": 0x1BA651,
-        "bit": 0x10,
-        "unset": True
-    },
-    "TotoK 1F celia lets you leave": {
-        "on_scene": 0x2500,
-        "address": 0x1B557D,
-        "bit": 0x02,
-        "requires_location": "TotOK 1F SW Sea Chart Chest",
-        "if_not_have_req": True,
-        "remove_bit": True
-    },
-}

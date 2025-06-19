@@ -51,11 +51,17 @@ def ph_has_spirit(state: CollectionState, player: int, spirit: str, count: int =
 
 
 def ph_has_spirit_gems(state: CollectionState, player: int, spirit: str, count: int = 1):
-    return state.has(f"{spirit} Gem", player, count)
+    return all([state.has(f"{spirit} Gem", player, count),
+                ph_has_spirit(state, player, spirit)])
 
 
 def ph_has_sun_key(state: CollectionState, player: int):
     return state.has("Sun Key", player)
+
+
+def ph_has_triforce_crest(state: CollectionState, player: int):
+    return any([state.has("Triforce Crest", player),
+                not ph_option_triforce_crest(state, player)])
 
 
 # ========= Sea Items =============
@@ -143,6 +149,15 @@ def ph_has_damage(state: CollectionState, player: int):
     return any([
         state.has("Sword (Progressive)", player),
         ph_has_explosives(state, player),
+        state.has("Bow (Progressive)", player),
+        state.has("Grappling Hook", player),
+        state.has("Hammer", player)
+    ])
+
+def ph_has_cave_damage(state: CollectionState, player: int):
+    return any([
+        state.has("Sword (Progressive)", player),
+        ph_has_bombs(state, player),
         state.has("Bow (Progressive)", player),
         state.has("Grappling Hook", player),
         state.has("Hammer", player)
@@ -301,6 +316,10 @@ def ph_clever_pots(state: CollectionState, player: int):
     return ph_option_med_logic(state, player)
 
 
+def ph_can_hit_switches(state: CollectionState, player: int):
+    return any([ph_option_med_logic(state, player), ph_can_kill_bat(state, player)])
+
+
 def ph_clever_bombs(state: CollectionState, player: int):
     return all([ph_has_bombs(state, player),
                 ph_option_med_logic(state, player)])
@@ -314,6 +333,30 @@ def ph_option_start_with_frogs(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_frogs == "start_with"
 
 
+def ph_option_triforce_crest(state, player):
+    return state.multiworld.worlds[player].options.randomize_triforce_crest
+
+
+def ph_beat_required_dungeons(state: CollectionState, player: int):
+    return state.has_from_list(ITEM_GROUPS["Vanilla Metals"], player, state.multiworld.worlds[player].options.dungeons_required)
+
+
+def ph_goal_option_phantom_door(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.bellum_access == "spawn_phantoms_on_b13"
+
+def ph_goal_option_staircase(state: CollectionState, player: int):
+    return (state.multiworld.worlds[player].options.bellum_access in
+            ["spawn_phantoms_on_b13", "spawn_phantoms_on_b13", "warp_to_bellum"])
+
+def ph_goal_option_warp(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.bellum_access == "warp_to_bellum"
+
+def ph_goal_option_spawn_bellumbeck(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.bellum_access == "spawn_bellumbeck"
+
+def ph_option_boat_requires_sea_chart(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.boat_requires_sea_chart
+
 # ============= Key logic ==============
 
 def ph_has_small_keys(state: CollectionState, player: int, dung_name: str, amount: int = 1):
@@ -324,8 +367,8 @@ def ph_has_boss_key(state: CollectionState, player: int, dung_name: str):
     return state.has(f"Boss Key ({dung_name})", player)
 
 
-def ph_has_force_gems(state, player, floor=3):
-    return state.has(f"Force Gem (B{floor})", player, 3)
+def ph_has_force_gems(state, player, floor=3, count=3):
+    return state.has(f"Force Gem (B{floor})", player, count)
 
 
 def ph_has_shape_crystal(state: CollectionState, player: int, dung_name: str, shape: str):
@@ -409,11 +452,115 @@ def ph_can_boomerang_return(state: CollectionState, player: int):
     ])
 
 
+def ph_totok_b2_key(state: CollectionState, player: int):
+    return any([ph_can_boomerang_return(state, player),
+                all([ph_can_hit_switches(state, player),
+                     any([ph_option_med_logic(state, player),
+                          ph_has_explosives(state, player),
+                          ph_can_hit_tricky_switches(state, player)
+                          ])
+                     ])
+                ])
+
+def ph_boat_access(state, player):
+    return any([
+        not ph_option_boat_requires_sea_chart(state, player),
+        ph_has_sea_chart(state, player, "SW")
+    ])
+
 def ph_totok_b5_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
     return any([
         all([ph_has_small_keys(state, player, "Temple of the Ocean King", 4), ph_has_grapple(state, player)]),
         ph_has_small_keys(state, player, "Temple of the Ocean King", 5),
+    ])
+
+
+def ph_has_totok_crystal(state: CollectionState, player: int, shape: str):
+    return state.has(f"{shape} Crystal ({"Temple of the Ocean King"})", player)
+
+
+def ph_totok_b8_2_crystals(state, player):
+    return all([
+        ph_has_explosives(state, player),
+        ph_has_totok_crystal(state, player, "Round"),
+        ph_has_totok_crystal(state, player, "Triangle")
+    ])
+
+
+def ph_totok_b9(state, player):
+    return any([
+        ph_can_hit_bombchu_switches(state, player),
+        all([
+            ph_has_explosives(state, player),
+            ph_has_totok_crystal(state, player, "Triangle")])
+    ])
+
+
+
+
+def ph_totok_b9_phantom_kill(state, player):
+    return any([
+        ph_has_phantom_sword(state, player),
+        all([
+            ph_can_kill_phantoms_traps(state, player),
+            any([
+                ph_can_hammer_clip(state, player),
+                all([ph_has_bow(state, player), ph_has_boomerang(state, player)])
+            ])])
+    ])
+
+def ph_totok_b10_key_logic(state: CollectionState, player: int):
+    # TODO: Does not take into account force gem shuffling
+    return any([
+        all([ph_has_small_keys(state, player, "Temple of the Ocean King", 5), ph_has_grapple(state, player)]),
+        ph_has_small_keys(state, player, "Temple of the Ocean King", 6),
+    ])
+
+def ph_totok_b12(state: CollectionState, player: int):
+    return any([
+        ph_has_hammer(state, player),
+        ph_has_shovel(state, player)
+    ])
+
+def ph_totok_b13_door(state: CollectionState, player: int):
+    # Required to enter the phantom door
+    return all([
+        ph_has_phantom_sword(state, player),
+        any([
+            all([ph_goal_option_phantom_door(state, player),
+                 ph_beat_required_dungeons(state, player)]),
+            ph_goal_option_staircase(state, player)
+        ])
+    ])
+
+
+def ph_totok_blue_warp(state: CollectionState, player: int):
+    return all([
+        ph_goal_option_warp(state, player),
+        ph_beat_required_dungeons(state, player)
+    ])
+
+def ph_totok_bellum_staircase(state, player):
+    return ph_beat_required_dungeons(state, player)
+
+def ph_can_beat_bellum(state, player):
+    return all([
+        ph_has_grapple(state, player),
+        ph_has_phantom_sword(state, player),
+        ph_has_bow(state, player),
+        ph_has_spirit(state, player, "Courage")
+    ])
+
+
+def ph_can_beat_ghost_ship_fight(state, player):
+    return ph_has_cannon(state, player)
+
+
+def ph_can_beat_bellumbeck(state, player):
+    return all([
+        ph_has_phantom_sword(state, player),
+        ph_has_spirit(state, player, "Courage")
     ])
 
 
@@ -439,7 +586,7 @@ def ph_salvage_courage_crest(state: CollectionState, player: int):
 def ph_can_enter_ocean_sw_west(state, player):
     return any([
         ph_has_cannon(state, player),
-        ph_has_frog_phi(state, player)
+        ph_has_frog_phi(state, player),  # Includes return data, and NW way back
     ])
 
 
@@ -477,3 +624,5 @@ def ph_temp_goal(state, player):
     return all([ph_has_sea_chart(state, player, "SW"),
                 ph_has_phantom_sword(state, player),
                 ph_has_courage_crest(state, player)])
+
+

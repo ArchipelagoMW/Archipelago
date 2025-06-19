@@ -1,5 +1,6 @@
 REGIONS = [
     "goal",
+    "beat required dungeons",
 
     "mercay island",
     "mercay dig spot",
@@ -51,8 +52,43 @@ REGIONS = [
     "totok b6",
     "totok b6 phantom chest",
     "totok b6 bow chest",
+    "totok midway",
 
     # TotOK 2
+
+    "totok b7",
+    "totok b8",
+    "totok b7 east",
+    "totok b7 peg",
+    "totok b7 phantom",
+    "totok b8 phantom",
+    "totok b8 2 crystals",
+    "totok b9",
+    "totok b9 nw",
+    "totok b9 ghosts",
+    "totok b9 phantom",
+    "totok b9.5",
+
+    "totok b10",
+    "totok b10 inner",
+    "totok b10 hammer",
+    "totok b10 phantom",
+    "totok b10 phantom eyes",
+    "totok b11",
+    "totok b11 phantom",
+    "totok b12",
+    "totok b12 hammer",
+    "totok b12 phantom",
+    "totok b13",
+    "totok before bellum",
+
+    "bellum 1",
+    "ghost ship fight",
+    "bellumbeck",
+    "beat bellumbeck",
+
+
+    
 
     # SW Ocean
     "sw ocean east",

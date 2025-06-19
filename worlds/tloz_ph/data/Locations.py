@@ -19,6 +19,7 @@ LOCATIONS_DATA = {
         "stage_id": 11,
         "floor_id": 0,
         "y": 0,
+        "x_max": -170000,
         "sram_addr": 0x0020CA,
         "sram_value": 0x40
     },
@@ -85,7 +86,7 @@ LOCATIONS_DATA = {
     },
     "TotOK Phantom Hourglass": {
         "region_id": "totok",
-        "item_override": "Bombs (Progressive)",
+        "item_override": "Triforce Crest",
         "stage_id": 38,
         "floor_id": 0,
         "address": 0x1B55A0,
@@ -122,7 +123,7 @@ LOCATIONS_DATA = {
         "sram_addr": 0x000EB0,
         "sram_value": 0x08
     },
-    "Mercay Yellow Guy Item": {
+    "Mercay Chartreuse Guy Item": {
         "region_id": "mercay yellow guy",
         "stage_id": 11,
         "floor_id": 3,
@@ -492,7 +493,212 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
 
-    # TotOK Part 2
+    # =============== TotOK Part 2 ===================
+
+    "TotOK B7 North Chest": {
+        "region_id": "totok b7 east",
+        "vanilla_item": "Round Crystal (Temple of the Ocean King)",
+        "stage_id": 37,
+        "floor_id": 0xA,
+        "x_min": -5000,
+        "x_max": 15000,
+        "z_max": -50000,
+        'force_vanilla': True,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B7 Peg Chest": {
+        "region_id": "totok b7 peg",
+        "vanilla_item": "Courage Gem",
+        "stage_id": 37,
+        "floor_id": 0xA,
+        "x_min": 50000,
+        "x_max": 75000,
+        "z_max": 11000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B7 Phantom Chest": {
+        "region_id": "totok b7 phantom",
+        "vanilla_item": "Ship Part",
+        "stage_id": 37,
+        "floor_id": 0xA,
+        "x_max": -60000,
+        "z_max": -50000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B8 2 Crystals Chest": {
+        "region_id": "totok b8 2 crystals",
+        "vanilla_item": "Courage Gem",
+        "stage_id": 37,
+        "floor_id": 0xB,
+        "x_max": -10000,
+        "z_max": -30000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B8 Phantom Chest": {
+        "region_id": "totok b7 phantom",
+        "vanilla_item": "Ship Part",
+        "stage_id": 37,
+        "floor_id": 0xB,
+        "x_max": 50000,
+        "z_max": 10000,
+        "x_min": 25000,
+        "z_min": -10000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B9 NW Chest": {
+        "region_id": "totok b9 nw",
+        "vanilla_item": "Triangle Crystal (Temple of the Ocean King)",
+        "stage_id": 37,
+        "floor_id": 0xC,
+        "x_min": -45000,
+        "z_max": -30000,
+        'force_vanilla': True,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B9 Ghost Chest": {
+        "region_id": "totok b9 ghosts",
+        "vanilla_item": "Wisdom Gem",
+        "stage_id": 37,
+        "floor_id": 0xC,
+        "x_min": -30000,
+        "z_min": -9000,
+        "x_max": -3000,
+        "z_max": 20000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B9 Phantom Chest": {
+        "region_id": "totok b9 phantom",
+        "vanilla_item": "Ship Part",
+        "stage_id": 37,
+        "floor_id": 0xC,
+        "x_max": -60000,
+        "z_min": 45000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B9.5 SE Sea Chart Chest": {
+        "region_id": "totok b9.5",
+        "vanilla_item": "SE Sea Chart",
+        "stage_id": 37,
+        "floor_id": 0xD,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B10 Hammer Switch Chest": {
+        "region_id": "totok b10 hammer",
+        "vanilla_item": "Treasure Map #30",
+        "stage_id": 37,
+        "floor_id": 0xE,
+        "x_min": 15000,
+        "z_min": -15000,
+        "x_max": 40000,
+        "z_max": 10000,
+        "y": 0,
+        "delay_pickup": "TotOK B10 Small Key",
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B10 Phantom Chest": {
+        "region_id": "totok b10 phantom",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 37,
+        "floor_id": 0xE,
+        "x_min": -40000,
+        "z_min": -10000,
+        "x_max": -20000,
+        "z_max": 10000,
+        "y": 0,
+        "delay_pickup": "TotOK B10 Small Key",
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B10 Phantom Eye Chest": {
+        "region_id": "totok b10 phantom eyes",
+        "vanilla_item": "Potion",
+        "stage_id": 37,
+        "floor_id": 0xE,
+        "y": 0x1333,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B10 Small Key": {
+        "region_id": "totok b10",
+        "vanilla_item": "Small Key (Temple of the Ocean King)",
+        "stage_id": 37,
+        "floor_id": 0xE,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B11 Phantom Eye Chest": {
+        "region_id": "totok b11",
+        "vanilla_item": "Treasure",
+        "item_override": "Bombs (Progressive)",
+        "stage_id": 37,
+        "floor_id": 0x0F,
+        "x_min": 50000,
+        "z_max": -45000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B11 Phantom Chest": {
+        "region_id": "totok b11 phantom",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 37,
+        "floor_id": 0x0F,
+        "x_max": -50000,
+        "z_min": 40000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B12 NW Chest": {
+        "region_id": "totok b12",
+        "vanilla_item": "Force Gem (B12)",
+        "stage_id": 37,
+        "floor_id": 0x10,
+        "x_min": 35000,
+        "z_max": -50000,
+        "force_vanilla": True,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B12 NE Chest": {
+        "region_id": "totok b12",
+        "vanilla_item": "Force Gem (B12)",
+        "stage_id": 37,
+        "floor_id": 0x10,
+        "x_max": -35000,
+        "z_max": -50000,
+        "force_vanilla": True,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B12 Hammer Chest": {
+        "region_id": "totok b12 hammer",
+        "vanilla_item": "Treasure Map #31",
+        "item_override": "Spirit of Power (Progressive)",
+        "stage_id": 37,
+        "floor_id": 0x10,
+        "x_min": 65000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B12 Ghost Chest": {
+        "region_id": "totok b13",
+        "vanilla_item": "Ship Part",
+        "item_override": "Spirit of Courage (Progressive)",
+        "stage_id": 37,
+        "floor_id": 0x10,
+        "x_max": -65000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B12 Phantom Chest": {
+        "region_id": "totok b12 phantom",
+        "vanilla_item": "Gold Rupee (300)",
+        "stage_id": 37,
+        "floor_id": 0x10,
+        "x_min": -10000,
+        "z_min": 0,
+        "x_max": 10000,
+        "z_max": 25000,
+        'dungeon': "Temple of the Ocean King"
+    },
+    "TotOK B13 NE Sea Chart Chest": {
+        "region_id": "totok b13",
+        "vanilla_item": "NE Sea Chart",
+        "stage_id": 37,
+        "floor_id": 0x11,
+        "y": 0,
+        'dungeon': "Temple of the Ocean King"
+    },
 
     # SW Ocean
     "Ocean SW Salvage Courage Crest": {
@@ -560,7 +766,9 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "y": 0x1333,
         "x_min": 0,
-        "z_min": 12300
+        "z_min": 12300,
+        "sram_addr": 0x0006DC,
+        "sram_value": 0x1
     },
     "Cannon Island Dig": {
         "region_id": "cannon island dig",
@@ -569,7 +777,9 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "y": 0x1333,
         "x_min": 0,
-        "z_max": 12300
+        "z_max": 12300,
+        "sram_addr": 0x000190,
+        "sram_value": 2
     },
     "Cannon Island Cannon": {
         "region_id": "cannon island",
@@ -702,11 +912,13 @@ LOCATIONS_DATA = {
     "Temple of Fire Blaaz Boss Reward": {
         "region_id": "tof blaaz",
         "vanilla_item": "Spirit of Power (Progressive)",
+        "item_override": "Rare Metal",
         "stage_id": 0x2B,
         "floor_id": 0,
         "address": 0x1B557F,
         "value": 0x20,
-        "dungeon": "Temple of Fire"
+        "dungeon": "Temple of Fire",
+        "boss_reward_location": True,
     },
 
     # ============ Molida Island ==============
@@ -756,13 +968,17 @@ LOCATIONS_DATA = {
         "vanilla_item": "Shovel",
         "stage_id": 0xC,
         "floor_id": 15,
-        "z_max": 41000
+        "z_max": 41000,
+        "sram_addr": 0x49C,
+        "sram_value": 0x1
     },
     "Molida Cave Shovel Room Dig": {
         "region_id": "molida cave back dig",
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0xC,
-        "floor_id": 15
+        "floor_id": 15,
+        "sram_addr": 0x158,
+        "sram_value": 0x100
     },
     "Molida Island Cliff Chest": {
         "region_id": "molida cave back",
@@ -951,11 +1167,13 @@ LOCATIONS_DATA = {
     "Temple of Courage Crayk Spirit of Courage": {
         "region_id": "toc crayk",
         "vanilla_item": "Spirit of Courage (Progressive)",
+        "item_override": "Rare Metal",
         "stage_id": 0x2C,
         "floor_id": 0,
         "address": 0x1B557F,
         "value": 0x80,
-        "dungeon": "Temple of Courage"
+        "dungeon": "Temple of Courage",
+        "boss_reward_location": True
     },
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
@@ -1026,7 +1244,7 @@ LOCATIONS_DATA = {
         "value": 0x10
     },
     "Spirit Island Courage Upgrade Level 1": {
-        "region_id": "spirit courage 2",
+        "region_id": "spirit courage 1",
         "vanilla_item": "Spirit of Courage (Progressive)",
         "stage_id": 0x17,
         "floor_id": 1,
