@@ -15,7 +15,7 @@ from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations
+from ..options.options import IncludeEndgameLocations, Friendsanity
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -572,7 +572,12 @@ def create_endgame_locations_items(item_factory: StardewItemFactory, options: St
     if options.include_endgame_locations == IncludeEndgameLocations.option_false:
         return
 
-    items.extend(item_factory(item) for item in items_by_group[Group.ENDGAME_LOCATION_ITEMS])
+    items_to_add = []
+    items_to_add.extend(items_by_group[Group.ENDGAME_LOCATION_ITEMS])
+    if options.friendsanity != Friendsanity.option_all_with_marriage:
+        for portrait in items_by_group[Group.REQUIRES_FRIENDSANITY_MARRIAGE]:
+            items_to_add.remove(portrait)
+    items.extend(item_factory(item) for item in items_to_add)
 
 
 def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

@@ -91,6 +91,7 @@ class Group(enum.Enum):
     TRINKET = enum.auto()
     EATSANITY_ENZYME = enum.auto()
     ENDGAME_LOCATION_ITEMS = enum.auto()
+    REQUIRES_FRIENDSANITY_MARRIAGE = enum.auto()
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()
