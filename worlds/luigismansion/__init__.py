@@ -537,7 +537,6 @@ class LMWorld(World):
             self.origin_region_name = passthrough["spawn_region"]  # this should be the same region from slot data
         elif self.options.random_spawn.value > 0:
             self.origin_region_name = self.random.choice(list(spawn_locations.keys()))
-        print("Spawn Region for " + self.player_name + " is: " + self.origin_region_name)
 
         if self.using_ut:
             # We know we're in second gen
@@ -564,7 +563,6 @@ class LMWorld(World):
                         spawn_doors.remove(door)
                 if not spawn_doors:
                     self.spawn_full_locked: bool = True
-            print(self.open_doors)
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
