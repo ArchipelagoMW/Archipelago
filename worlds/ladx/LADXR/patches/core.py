@@ -541,7 +541,7 @@ OAMData:
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
 
-def addBootsControls(rom, boots_controls: BootsControls):
+def addBootsControls(rom, boots_controls: int):
     if boots_controls == BootsControls.option_vanilla:
         return
     consts = {
@@ -578,7 +578,7 @@ def addBootsControls(rom, boots_controls: BootsControls):
         jr  z, .yesBoots
         ld   a, [hl]
         """
-    }[boots_controls.value]
+    }[boots_controls]
     
     # The new code fits exactly within Nintendo's poorly space optimzied code while having more features
     boots_code = assembler.ASM("""
