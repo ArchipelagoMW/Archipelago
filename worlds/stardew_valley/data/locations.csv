@@ -289,57 +289,57 @@ id,region,name,tags,content_packs
 417,Carpenter Shop,Kids Room Blueprint,BUILDING_BLUEPRINT,
 418,Carpenter Shop,Cellar Blueprint,BUILDING_BLUEPRINT,
 419,Carpenter Shop,Pet Bowl Blueprint,BUILDING_BLUEPRINT,
-501,Town,Introductions,"STORY_QUEST",
-502,Town,How To Win Friends,"STORY_QUEST",
-503,Farm,Getting Started,"STORY_QUEST",
-504,Farm,Raising Animals,"STORY_QUEST",
-505,Farm,Advancement,"STORY_QUEST",
-506,Museum,Archaeology,"STORY_QUEST",
-507,Wizard Tower,Meet The Wizard,"STORY_QUEST",
-508,The Mines - Floor 5,Forging Ahead,"STORY_QUEST",
-509,The Mines - Floor 10,Smelting,"STORY_QUEST",
-510,The Mines - Floor 15,Initiation,"STORY_QUEST",
-511,Mountain,Robin's Lost Axe,"STORY_QUEST",
-512,Town,Jodi's Request,"STORY_QUEST",
-513,Town,"Mayor's ""Shorts""","STORY_QUEST",
-514,Mountain,Blackberry Basket,"STORY_QUEST",
-515,Marnie's Ranch,Marnie's Request,"STORY_QUEST",
-516,Town,Pam Is Thirsty,"STORY_QUEST",
-517,Wizard Tower,A Dark Reagent,"STORY_QUEST",
-518,Forest,Cow's Delight,"STORY_QUEST",
-519,Skull Cavern Entrance,The Skull Key,"STORY_QUEST",
-520,Mountain,Crop Research,"STORY_QUEST",
-521,Alex's House,Knee Therapy,"STORY_QUEST",
-522,Mountain,Robin's Request,"STORY_QUEST",
-523,Skull Cavern Floor 25,Qi's Challenge,"STORY_QUEST",
-524,Desert,The Mysterious Qi,"STORY_QUEST",
-525,Town,Carving Pumpkins,"STORY_QUEST",
-526,Town,A Winter Mystery,"STORY_QUEST",
-527,Secret Woods,Strange Note,"STORY_QUEST",
-528,Skull Cavern Floor 100,Cryptic Note,"STORY_QUEST",
-529,Town,Fresh Fruit,"STORY_QUEST",
-530,Mountain,Aquatic Research,"STORY_QUEST",
-531,Town,A Soldier's Star,"STORY_QUEST",
-532,Town,Mayor's Need,"STORY_QUEST",
-533,Saloon,Wanted: Lobster,"STORY_QUEST",
-534,Town,Pam Needs Juice,"STORY_QUEST",
-535,Sam's House,Fish Casserole,"STORY_QUEST",
-536,Beach,Catch A Squid,"STORY_QUEST",
-537,Saloon,Fish Stew,"STORY_QUEST",
-538,Pierre's General Store,Pierre's Notice,"STORY_QUEST",
-539,Clint's Blacksmith,Clint's Attempt,"STORY_QUEST",
-540,Town,A Favor For Clint,"STORY_QUEST",
-541,Wizard Tower,Staff Of Power,"STORY_QUEST",
-542,Town,Granny's Gift,"STORY_QUEST",
-543,Desert,Exotic Spirits,"STORY_QUEST",
-544,Fishing,Catch a Lingcod,"STORY_QUEST",
-545,Island West,The Pirate's Wife,"GINGER_ISLAND,STORY_QUEST",
-546,Mutant Bug Lair,Dark Talisman,"STORY_QUEST",
-547,Witch's Swamp,Goblin Problem,"STORY_QUEST",
-548,Witch's Hut,Magic Ink,"STORY_QUEST",
-549,Forest,The Giant Stump,"STORY_QUEST",
-550,Farm,Feeding Animals,"STORY_QUEST",
-551,Community Center,Rat Problem,"STORY_QUEST",
+501,Town,Quest: Introductions,"STORY_QUEST",
+502,Town,Quest: How To Win Friends,"STORY_QUEST",
+503,Farm,Quest: Getting Started,"STORY_QUEST",
+504,Farm,Quest: Raising Animals,"STORY_QUEST",
+505,Farm,Quest: Advancement,"STORY_QUEST",
+506,Museum,Quest: Archaeology,"STORY_QUEST",
+507,Wizard Tower,Quest: Meet The Wizard,"STORY_QUEST",
+508,The Mines - Floor 5,Quest: Forging Ahead,"STORY_QUEST",
+509,The Mines - Floor 10,Quest: Smelting,"STORY_QUEST",
+510,The Mines - Floor 15,Quest: Initiation,"STORY_QUEST",
+511,Mountain,Quest: Robin's Lost Axe,"STORY_QUEST",
+512,Town,Quest: Jodi's Request,"STORY_QUEST",
+513,Town,"Quest: Mayor's ""Shorts""","STORY_QUEST",
+514,Mountain,Quest: Blackberry Basket,"STORY_QUEST",
+515,Marnie's Ranch,Quest: Marnie's Request,"STORY_QUEST",
+516,Town,Quest: Pam Is Thirsty,"STORY_QUEST",
+517,Wizard Tower,Quest: A Dark Reagent,"STORY_QUEST",
+518,Forest,Quest: Cow's Delight,"STORY_QUEST",
+519,Skull Cavern Entrance,Quest: The Skull Key,"STORY_QUEST",
+520,Mountain,Quest: Crop Research,"STORY_QUEST",
+521,Alex's House,Quest: Knee Therapy,"STORY_QUEST",
+522,Mountain,Quest: Robin's Request,"STORY_QUEST",
+523,Skull Cavern Floor 25,Quest: Qi's Challenge,"STORY_QUEST",
+524,Desert,Quest: The Mysterious Qi,"STORY_QUEST",
+525,Town,Quest: Carving Pumpkins,"STORY_QUEST",
+526,Town,Quest: A Winter Mystery,"STORY_QUEST",
+527,Secret Woods,Quest: Strange Note,"STORY_QUEST",
+528,Skull Cavern Floor 100,Quest: Cryptic Note,"STORY_QUEST",
+529,Town,Quest: Fresh Fruit,"STORY_QUEST",
+530,Mountain,Quest: Aquatic Research,"STORY_QUEST",
+531,Town,Quest: A Soldier's Star,"STORY_QUEST",
+532,Town,Quest: Mayor's Need,"STORY_QUEST",
+533,Saloon,Quest: Wanted: Lobster,"STORY_QUEST",
+534,Town,Quest: Pam Needs Juice,"STORY_QUEST",
+535,Sam's House,Quest: Fish Casserole,"STORY_QUEST",
+536,Beach,Quest: Catch A Squid,"STORY_QUEST",
+537,Saloon,Quest: Fish Stew,"STORY_QUEST",
+538,Pierre's General Store,Quest: Pierre's Notice,"STORY_QUEST",
+539,Clint's Blacksmith,Quest: Clint's Attempt,"STORY_QUEST",
+540,Town,Quest: A Favor For Clint,"STORY_QUEST",
+541,Wizard Tower,Quest: Staff Of Power,"STORY_QUEST",
+542,Town,Quest: Granny's Gift,"STORY_QUEST",
+543,Desert,Quest: Exotic Spirits,"STORY_QUEST",
+544,Fishing,Quest: Catch a Lingcod,"STORY_QUEST",
+545,Island West,Quest: The Pirate's Wife,"GINGER_ISLAND,STORY_QUEST",
+546,Mutant Bug Lair,Quest: Dark Talisman,"STORY_QUEST",
+547,Witch's Swamp,Quest: Goblin Problem,"STORY_QUEST",
+548,Witch's Hut,Quest: Magic Ink,"STORY_QUEST",
+549,Forest,Quest: The Giant Stump,"STORY_QUEST",
+550,Farm,Quest: Feeding Animals,"STORY_QUEST",
+551,Community Center,Quest: Rat Problem,"STORY_QUEST",
 601,JotPK World 1,JotPK: Boots 1,"ARCADE_MACHINE,JOTPK",
 602,JotPK World 1,JotPK: Boots 2,"ARCADE_MACHINE,JOTPK",
 603,JotPK World 1,JotPK: Gun 1,"ARCADE_MACHINE,JOTPK",
@@ -3629,31 +3629,31 @@ id,region,name,tags,content_packs
 57453,Alesia Shop,Haste Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
 57454,Isaac Shop,Hero Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
 57455,Alesia Shop,Armor Elixir Recipe,"CRAFTSANITY,CRAFTSANITY_RECIPE",Stardew Valley Expanded
-57501,Mountain,Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
-57502,Forest,Ayeisha's Lost Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
-57503,Forest,Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
-57504,Forest,Juna's Drink Request,"STORY_QUEST",Juna - Roommate NPC
-57505,Forest,Juna's BFF Request,"STORY_QUEST",Juna - Roommate NPC
-57506,Forest,Juna's Monster Mash,SPECIAL_ORDER_BOARD,Juna - Roommate NPC
-57507,Adventurer's Guild,Marlon's Boat,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
-57508,Railroad,The Railroad Boulder,"STORY_QUEST",Stardew Valley Expanded
-57509,Grandpa's Shed Interior,Grandpa's Shed,"STORY_QUEST",Stardew Valley Expanded
-57510,Aurora Vineyard,Aurora Vineyard,"STORY_QUEST",Stardew Valley Expanded
-57511,Lance's House Main,Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
-57512,Sewer,Void Soul Retrieval,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+57501,Mountain,Quest: Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
+57502,Forest,Quest: Ayeisha's Lost Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
+57503,Forest,Quest: Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
+57504,Forest,Quest: Juna's Drink Request,"STORY_QUEST",Juna - Roommate NPC
+57505,Forest,Quest: Juna's BFF Request,"STORY_QUEST",Juna - Roommate NPC
+57506,Forest,Quest: Juna's Monster Mash,SPECIAL_ORDER_BOARD,Juna - Roommate NPC
+57507,Adventurer's Guild,Quest: Marlon's Boat,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+57508,Railroad,Quest: The Railroad Boulder,"STORY_QUEST",Stardew Valley Expanded
+57509,Grandpa's Shed Interior,Quest: Grandpa's Shed,"STORY_QUEST",Stardew Valley Expanded
+57510,Aurora Vineyard,Quest: Aurora Vineyard,"STORY_QUEST",Stardew Valley Expanded
+57511,Lance's House Main,Quest: Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+57512,Sewer,Quest: Void Soul Retrieval,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
 57513,Fairhaven Farm,Andy's Cellar,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57514,Adventurer's Guild,A Mysterious Venture,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57516,Sophia's House,Fairy Garden,"SPECIAL_ORDER_BOARD,GINGER_ISLAND",Stardew Valley Expanded
 57517,Susan's House,Homemade Fertilizer,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 57519,Witch's Swamp,Corrupted Crops Task,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
-57520,Witch's Swamp,A New Pot,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
-57521,Witch's Swamp,Fancy Blanket Task,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
+57520,Witch's Swamp,Quest: A New Pot,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
+57521,Witch's Swamp,Quest: Fancy Blanket Task,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
 57522,Witch's Swamp,Witch's order,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
-57523,Boarding House - First Floor,Pumpkin Soup,STORY_QUEST,Boarding House and Bus Stop Extension
+57523,Boarding House - First Floor,Quest: Pumpkin Soup,STORY_QUEST,Boarding House and Bus Stop Extension
 57524,Museum,Geode Order,SPECIAL_ORDER_BOARD,Professor Jasper Thomas
 57525,Museum,Dwarven Scrolls,SPECIAL_ORDER_BOARD,Professor Jasper Thomas
-57526,Mouse House,Hats for the Hat Mouse,STORY_QUEST,Hat Mouse Lacey
+57526,Mouse House,Quest: Hats for the Hat Mouse,STORY_QUEST,Hat Mouse Lacey
 57551,Kitchen,Cook Baked Berry Oatmeal,COOKSANITY,Stardew Valley Expanded
 57552,Kitchen,Cook Flower Cookie,COOKSANITY,Stardew Valley Expanded
 57553,Kitchen,Cook Big Bark Burger,COOKSANITY,Stardew Valley Expanded
