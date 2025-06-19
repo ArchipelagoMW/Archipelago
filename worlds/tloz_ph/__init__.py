@@ -1,5 +1,6 @@
 import os
 import logging
+import random
 from typing import List, Union, ClassVar, Any, Optional, Tuple
 import settings
 from BaseClasses import Tutorial, Region, Location, LocationProgressType, Item, ItemClassification
@@ -14,7 +15,7 @@ from .data import LOCATIONS_DATA
 from .data.Constants import *
 from .data.Items import ITEMS_DATA
 from .data.Regions import REGIONS
-from .data.LogicPredicates import ph_has_sw_sea_chart
+from .data.LogicPredicates import *
 
 from .Client import PhantomHourglassClient  # Unused, but required to register with BizHawkClient
 
@@ -55,14 +56,16 @@ class PhantomHourglassWorld(World):
         super().__init__(multiworld, player)
 
         self.pre_fill_items: List[Item] = []
+        self.required_dungeons = []
+        self.boss_reward_items_pool = []
 
     def generate_early(self):
+        self.pick_required_dungeons()
         self.restrict_non_local_items()
 
     def restrict_non_local_items(self):
         # Restrict non_local_items option in cases where it's incompatible with other options that enforce items
         # to be placed locally (e.g. dungeon items with keysanity off)
-        print(f"Keysanity value: {self.options.keysanity}, {self.options.keysanity.current_option_name}")
         if not self.options.keysanity == "anywhere":
             self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
 
@@ -95,14 +98,37 @@ class PhantomHourglassWorld(World):
         location = Location(self.player, region_name + ".event", None, region)
         region.locations.append(location)
         location.place_locked_item(Item(event_item_name, ItemClassification.progression, None, self.player))
+        print(f"Created Event for {event_item_name} at {region_name}")
 
     def location_is_active(self, location_name, location_data):
         if not location_data.get("conditional", False):
             return True
         else:
+            if location_name in FROG_LOCATION_NAMES:
+                return self.options.randomize_frogs != PhantomHourglassFrogRandomization.option_start_with
             return False
 
+    def pick_required_dungeons(self):
+        implemented_dungeons = ["Temple of Fire", "Temple of Courage"]
+        self.random.shuffle(implemented_dungeons)
+        self.required_dungeons = implemented_dungeons[:self.options.dungeons_required]
+
+        boss_reward_pool = ITEM_GROUPS["Vanilla Metals"]
+        self.random.shuffle(boss_reward_pool)
+        self.boss_reward_items_pool = boss_reward_pool[:self.options.dungeons_required]
+
+        # For dungeons not required, change their item to filler
+
     def create_events(self):
+        # Create events for required dungeons
+        if "Temple of Fire" in self.required_dungeons:
+            self.create_event("tof blaaz", "_required_dungeon")
+        if "Temple of Courage" in self.required_dungeons:
+            self.create_event("toc crayk", "_required_dungeon")
+        self.create_event("beat required dungeons", "_has_bellum_requirement")
+        self.create_event("totok", "_dummy_test_event_items")
+
+        # Goal
         self.create_event("goal", "_beaten_game")
 
     def exclude_locations_automatically(self):
@@ -112,7 +138,6 @@ class PhantomHourglassWorld(World):
 
     def set_rules(self):
         create_connections(self.multiworld, self.player, self.origin_region_name, self.options)
-        self.multiworld.completion_condition[self.player] = lambda state: ph_has_sw_sea_chart(state, self.player)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("_beaten_game", self.player)
 
     def create_item(self, name: str) -> Item:
@@ -126,6 +151,7 @@ class PhantomHourglassWorld(World):
         item_pool_dict = {}
         filler_item_count = 0
         rupee_item_count = 0
+        boss_reward_item_count = self.options.dungeons_required
         for loc_name, loc_data in LOCATIONS_DATA.items():
             print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):
@@ -158,6 +184,22 @@ class PhantomHourglassWorld(World):
                 forced_item = self.create_item(item_name)
                 self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                 continue
+            if item_name in FROG_NAMES:
+                if self.options.randomize_frogs == "vanilla":
+                    forced_item = self.create_item(item_name)
+                    self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
+                    continue
+            if item_name == "Rare Metal":  # Change rare metals to filler items for unrequired dungeons
+                if boss_reward_item_count <= 0:
+                    filler_item_count += 1
+                    print(f"added filler item @ {loc_name}")
+                    continue
+                item_name = self.boss_reward_items_pool[boss_reward_item_count-1]
+                boss_reward_item_count -= 1
+            if item_name == "Triforce Crest" and not self.options.randomize_triforce_crest:
+                filler_item_count += 1
+                print(f"added filler item @ {loc_name}")
+                continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
@@ -182,6 +224,7 @@ class PhantomHourglassWorld(World):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
+        self.pre_fill_boss_rewards()
         self.pre_fill_dungeon_items()
 
     def filter_confined_dungeon_items_from_pool(self, items: List[Item]):
@@ -191,9 +234,30 @@ class PhantomHourglassWorld(World):
         if self.options.keysanity == "in_own_dungeon":
             confined_dungeon_items.extend([item for item in items if item.name.startswith("Small Key")])
 
+        # Remove boss reward items from pool for pre filling
+        confined_dungeon_items.extend([item for item in items if item.name in self.boss_reward_items_pool])
+
         for item in confined_dungeon_items:
             items.remove(item)
         self.pre_fill_items.extend(confined_dungeon_items)
+        print(f"Filtered pre fill items {self.pre_fill_items}")
+
+    def pre_fill_boss_rewards(self):
+        boss_reward_location_names = [DUNGEON_TO_BOSS_ITEM_LOCATION[dung_name] for dung_name in self.required_dungeons]
+        boss_reward_locations = [loc for loc in self.multiworld.get_locations(self.player)
+                                 if loc.name in boss_reward_location_names]
+        boss_reward_items = [item for item in self.pre_fill_items if item.name in self.boss_reward_items_pool]
+
+        # Remove from the all_state the items we're about to place
+        for item in boss_reward_items:
+            self.pre_fill_items.remove(item)
+        collection_state = self.multiworld.get_all_state(False)
+        # Perform a prefill to place confined items inside locations of this dungeon
+        self.random.shuffle(boss_reward_locations)
+        print(f"Removing items {boss_reward_items}")
+        print(f"Filling locations {boss_reward_locations}")
+        fill_restrictive(self.multiworld, collection_state, boss_reward_locations, boss_reward_items,
+                         single_player_placement=True, lock=True, allow_excluded=True)
 
     def pre_fill_dungeon_items(self):
         # If keysanity is off, dungeon items can only be put inside local dungeon locations, and there are not so many
@@ -227,6 +291,7 @@ class PhantomHourglassWorld(World):
             fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
+
     def get_filler_item_name(self) -> str:
         FILLER_ITEM_NAMES = [
             "Red Rupee (20)"
@@ -236,14 +301,18 @@ class PhantomHourglassWorld(World):
         return item_name
 
     def fill_slot_data(self) -> dict:
-        options = ["goal", "logic", "keysanity", "phantom_combat_difficulty",
-                   "ph_starting_time", "ph_time_increment"]
+        options = ["goal", "dungeons_required", "bellum_access",
+                   "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
+                   "keysanity", "randomize_frogs", "randomize_triforce_crest",
+                   "ph_starting_time", "ph_time_increment",
+                   "death_link"]
         slot_data = self.options.as_dict(*options)
+        slot_data["boss_rewards"] = self.boss_reward_items_pool
         print(slot_data)
+        # TODO: Write UT connector for required dungeons
         return slot_data
 
     def write_spoiler(self, spoiler_handle):
-        pass
-
-
-
+        spoiler_handle.write(f"\n\nRequired Dungeons ({self.multiworld.player_name[self.player]}):\n")
+        for dung in self.required_dungeons:
+            spoiler_handle.write(f"\t- {dung}\n")

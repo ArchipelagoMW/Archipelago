@@ -7,7 +7,9 @@ class TestGeneration(WorldTestBase):
     options = {
         "keysanity": "anywhere",
         "phantom_combat_difficulty": "require_weapon",
-        "logic": "glitched",
+        "logic": "normal",
         "accessibility": "full",
-        "fake_test": "oops"
+        "randomize_frogs": "start_with",
+        "dungeons_required": 1,
+        "goal": "beat_bellumbeck"
                }

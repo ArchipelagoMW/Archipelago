@@ -2,12 +2,13 @@ VERSION = "0.3.0"
 ROM_HASH = "f2dc6c4e093e4f8c6cbea80e8dbd62cb"
 
 STARTING_FLAGS = [
-    # Starting flags (these are in series so can be simplified, but it's called once and this is easier to bugfix)
+    # Starting flags (these are in the same memory block so can be simplified, but it's called once and this is
+    # easier to bugfix)
     [0x1B557C, 0xEF],
-    [0x1B557D, 0x3C],
+    [0x1B557D, 0x34],
     [0x1B557E, 0x3E],
     [0x1B557F, 0x03],
-    [0x1B5580, 0xE7],
+    [0x1B5580, 0xE5],
     [0x1B5581, 0xB0],
     [0x1B5582, 0x40],
     [0x1B5583, 0xAB],
@@ -25,7 +26,7 @@ STARTING_FLAGS = [
     [0x1B558F, 0x04],
     [0x1B5590, 0x02],
     [0x1B5591, 0xFE],
-    [0x1B5592, 0x05],
+    [0x1B5592, 0x04],
     [0x1B5593, 0xEA],
     [0x1B5594, 0x47],
     [0x1B5595, 0x00],
@@ -41,15 +42,15 @@ STARTING_FLAGS = [
     [0x1B559F, 0x05],
     [0x1B55A0, 0x31],
     [0x1B55A1, 0x00],
-    [0x1B55A2, 0xA0],
-    [0x1B55A3, 0x1F],
+    [0x1B55A2, 0x20],
+    [0x1B55A3, 0x20],
     [0x1B55A4, 0x26],
     [0x1B55A5, 0xCC],
     [0x1B55A6, 0x00],
-    [0x1B55A7, 0x48],
+    [0x1B55A7, 0xC8],
     [0x1B55A8, 0x1F],
     [0x1B55A9, 0x00],
-    [0x1B55AA, 0x18],
+    [0x1B55AA, 0x08],
     [0x1B55AB, 0x40],
     [0x1B55AC, 0x70],
     [0x1B55AD, 0x00],
@@ -76,6 +77,11 @@ STARTING_FLAGS = [
     [0x1BA664, 0xFF],
 ]
 
+STARTING_FROG_FLAGS = [
+    [0x1B55A2, 0xA0],
+    [0x1B55A3, 0x3F]
+]
+
 STAGE_FLAGS = {
     11: [0xC4,  # Mercay
          0xDC,
@@ -88,18 +94,18 @@ STAGE_FLAGS = {
     37: [0xFE,  # TotOK
          0xBE,
          0xFB,
-         0x8F],
+         0xAF],
     0: [0x82,  # Sea
         0x2C,
         0x00,
         0xC0],
     13: [0xEC,  # Ember
          0x18,
-         0x07,
+         0x17,
          0x00],
     28: [0x8E,  # ToF
          0xB9,
-         0x04,
+         0x00,
          0x00],
     12: [0x34,  # Molida
          0x01,
@@ -188,6 +194,16 @@ ITEM_GROUPS = {
         "Small Key (Temple of Courage)",
         "Small Key (Temple of Ice)",
         "Small Key (Mutoh's Temple)"
+    ],
+    "Vanilla Metals": [
+        "Crimzonine",
+        "Azurine",
+        "Aquanine"
+    ],
+    "Custom Metals": [
+        "Verdanite",
+        "Lavendite",
+
     ]
 }
 
@@ -201,6 +217,35 @@ DUNGEON_NAMES = [
     "Temple of Ice",
     "Mutoh's Temple",
     "Ghost Ship"
+]
+
+DUNGEON_TO_BOSS_ITEM_LOCATION = {
+    "Temple of the Ocean King": "TotOK B13 NE Sea Chart Chest",
+    "Temple of Fire": "Temple of Fire Blaaz Boss Reward",
+    "Temple of Wind": None,
+    "Temple of Courage": "Temple of Courage Crayk Spirit of Courage",
+    "Goron Temple": None,
+    "Temple of Ice": None,
+    "Mutoh's Temple": None,
+    "Ghost Ship": None,
+}
+
+FROG_LOCATION_NAMES = [
+    "Ocean SW Golden Frog X",
+    "Ocean SW Golden Frog Phi",
+    "Ocean NW Golden Frog N",
+    "Ocean SE Golden Frog Omega",
+    "Ocean SE Golden Frog W",
+    "Ocean NE Golden Frog Square"
+]
+
+FROG_NAMES = [
+    "Golden Frog Glyph X",
+    "Golden Frog Glyph Phi",
+    "Golden Frog Glyph N",
+    "Golden Frog Glyph Omega",
+    "Golden Frog Glyph W",
+    "Golden Frog Glyph Square"
 ]
 
 DUNGEON_KEY_DATA = {
@@ -246,11 +291,43 @@ DUNGEON_KEY_DATA = {
                 "max_z": 0x11800,
                 "min_z": 0x0}
         }
+    },
+    0x1C: {
+        "name": "Temple of Fire",
+        "address": 0x1BA64E,
+        "value": 1,
+        "size": 2,
+        "filter": 0x03,
+        "entrances": {
+            0xD01: {
+                "max_z": 0x10800,
+                "min_z": 0x8000},
+            0x2B00: {
+                "min_z": 0x800,
+                "max_z": 0xF000}
+        }
+    },
+    0x1E: {
+        "name": "Temple of Courage",
+        "address": 0x1BA64F,
+        "value": 0x10,
+        "size": 2,
+        "filter": 0x30,
     }
 }
 
 SHOPS = {
-    0xB11: {
-        "unique": "Mercay Shop Power Gem"
+    0xB11: {  # Mercay Shop
+        "island_shop": True
+        },
+    0xC0E: {  # Molida Shop
+        "island_shop": True
+    },
+    0x130B: {  # Eddo Cannon Island
+        "unique": ["Cannon Island Cannon", "Cannon Island Salvage Arm"]
+    },
+    0x500: {  # Beedle Shop
+        "unique": ["Beedle Shop Wisdom Gem"],
+        "beedle": True  # TODO: make this modular, instead of hard coding item requirements
     }
 }
