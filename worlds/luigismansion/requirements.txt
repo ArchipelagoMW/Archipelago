@@ -1,3 +1,2 @@
-dolphin-memory-engine==1.3.0
-gclib[speedups] @ git+https://github.com/LagoLunatic/gclib.git@62df9574d99249ea16ec90dbcee9ea6b0759da29
+gclib[speedups] @ git+https://github.com/LagoLunatic/gclib.git@4ddebd0a9717dca67684fe1cc55a86da9265e6b7
 
