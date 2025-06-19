@@ -401,18 +401,3 @@ def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: b
 
     gcm.changed_files["files/Event/event" + event_number + ".szp"] = Yay0.compress(custom_event.data)
     return gcm
-
-# Small function to identify all files that need to be deleted within a given event.
-def __get_all_files_to_delete(custom_rarc: RARC, curr_dir_node: RARCNode, keep_file_list: list[str]) -> {RARCFileEntry}:
-    files_to_delete: {RARCFileEntry} = set()
-    directories_to_ignore = [".", ".."]
-    for sub_path in curr_dir_node.files:
-        if sub_path.name in directories_to_ignore:
-            continue
-
-        if sub_path.is_dir:
-            __get_all_files_to_delete(custom_rarc, sub_path.node, keep_file_list)
-
-        if sub_path.name not in keep_file_list:
-            files_to_delete.difference_update([sub_path])
-    return files_to_delete
