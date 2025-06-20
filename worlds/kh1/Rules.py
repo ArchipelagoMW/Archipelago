@@ -1440,6 +1440,20 @@ def set_rules(kh1world):
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
             ))
+        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
+            lambda state: (
+                state.has_all({
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
+            ))
+        add_rule(kh1world.get_location("Hercules Cup Yellow Trinity Event"),
+            lambda state: (
+                state.has_all({
+                    "Hercules Cup",
+                    "Entry Pass"}, player)
+                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
+            ))
         if options.cups.current_key == "hades_cup":
             add_rule(kh1world.get_location("Complete Hades Cup"),
                 lambda state: (
@@ -1520,26 +1534,18 @@ def set_rules(kh1world):
                         "Entry Pass"}, player)
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
+                ))            
+            add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
+                lambda state: (
+                    state.has_all({
+                        "Phil Cup",
+                        "Pegasus Cup",
+                        "Hercules Cup",
+                        "Entry Pass"}, player)
+                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_defensive_tools(state, player, difficulty)
                 ))
-        add_rule(kh1world.get_location("Hercules Cup Defeat Cloud Event"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
-            ))
-        add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
-            lambda state: (
-                state.has_all({
-                    "Phil Cup",
-                    "Pegasus Cup",
-                    "Hercules Cup",
-                    "Entry Pass"}, player)
-                and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
-            ))
-        if options.cups.current_key == "hades_cup":
+        if options.cups.current_key == "hades_cup" and options.super_bosses:
             add_rule(kh1world.get_location("Olympus Coliseum Defeat Ice Titan Diamond Dust Event"),
                 lambda state: (
                     state.has_all({
@@ -1551,16 +1557,6 @@ def set_rules(kh1world):
                     and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
-            add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
-                lambda state: (
-                    state.has_all({
-                        "Phil Cup",
-                        "Pegasus Cup",
-                        "Hercules Cup",
-                        "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
-                    and has_defensive_tools(state, player, difficulty)
-                ))
         add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
             lambda state: (
                 state.has_all({
@@ -1569,8 +1565,8 @@ def set_rules(kh1world):
                     "Hercules Cup",
                     "Entry Pass"}, player)
                 and has_x_worlds(state, player, 4, options.keyblades_unlock_chests, difficulty)
-            ))
-    if options.super_bosses or final_rest_door_requirement == "superbosses":
+            ))    
+    if options.super_bosses:
         add_rule(kh1world.get_location("Neverland Defeat Phantom Stop Event"),
             lambda state: (
                 state.has("Green Trinity", player)
