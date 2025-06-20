@@ -67,6 +67,9 @@ All resource bundle type items are named either `Single: <item name>` or `Bundle
 They must be collected by constructing an Archipelago Portal.
 For example, `Single: Jetpack` would contain a single jetpack, and `Bundle: Biomass` would contain one stack of biomass.
 
+Any Resource Bundle type items added to your starting inventory will be delivered to your player inventory when you initally spawn,
+unless they can't fit, in which case they can be collected by building an Archipelago Portal.
+
 ## What is a Trap?
 
 Traps are items intended to disrupt the player that replace non-progression filler items.

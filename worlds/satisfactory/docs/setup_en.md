@@ -51,6 +51,8 @@ YAML Validator page: [Yaml Validation Page](/mysterycheck)
 
 The Player Settings page provides a few options for controlling what materials you start with
 and when certain key technologies are unlocked.
+Any Resource Bundle type items added to your starting inventory will be delivered to your player inventory when you initally spawn,
+unless they can't fit, in which case they can be collected by building an Archipelago Portal.
 
 Advanced users can use Plando, Weighted Options, and manual yaml editing to further configure the starting inventory.
 If you don't wish to use these techniques, consider using Satisfactory's
