@@ -7,7 +7,6 @@ from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
 
 from . import poke_data
 from .items import item_table
-from .options import PokeDollSkip
 from .text import encode_text
 from .pokemon import set_mon_palettes
 from .regions import PokemonRBWarp, map_ids, town_map_coords
