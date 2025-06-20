@@ -92,17 +92,7 @@ class TestGlobalOptionsImport(TestCase):
                                               f"{max_levels_and_upgrades} instead.")
 
 
-class TestMinimum(ShapezTestBase):
-    options = options_presets["Minimum checks"]
-
-
-class TestMaximum(ShapezTestBase):
-    options = options_presets["Maximum checks"]
-
-
-class TestRestrictive(ShapezTestBase):
-    options = options_presets["Restrictive start"]
-
+# The following unittests are intended to test all code paths of the generator
 
 class TestAllRelevantOptions1(ShapezTestBase):
     options = {
