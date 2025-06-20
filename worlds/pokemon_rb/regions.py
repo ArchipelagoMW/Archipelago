@@ -2414,6 +2414,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 loc.place_locked_item(badge)
 
         state = multiworld.state.copy()
+        state.allow_partial_entrances = True
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
                     and ("Badge" not in item or world.options.badgesanity):

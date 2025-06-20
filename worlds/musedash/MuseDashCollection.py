@@ -52,11 +52,13 @@ class MuseDashCollections:
         "Nyaa SFX Trap": STARTING_CODE + 8,
         "Error SFX Trap": STARTING_CODE + 9,
         "Focus Line Trap": STARTING_CODE + 10,
+        "Beefcake SFX Trap": STARTING_CODE + 11,
     }
 
     sfx_trap_items: List[str] = [
         "Nyaa SFX Trap",
         "Error SFX Trap",
+        "Beefcake SFX Trap",
     ]
 
     filler_items: Dict[str, int] = {

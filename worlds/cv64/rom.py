@@ -644,6 +644,9 @@ class CV64PatchExtensions(APPatchExtension):
             # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
             if not options["multi_hit_breakables"]:
                 rom_data.write_byte(0x10C7A1, 0x03)
+            # Replace the PowerUp in one of the lizard lockers if the lizard locker items aren't randomized.
+            if not options["lizard_locker_items"]:
+                rom_data.write_byte(0xBFCA07, 0x03)
         # Change the appearance of the Pot-Pourri to that of a larger PowerUp regardless of the above setting, so other
         # game PermaUps are distinguishable.
         rom_data.write_int32s(0xEE558, [0x06005F08, 0x3FB00000, 0xFFFFFF00])
@@ -714,7 +717,11 @@ class CV64PatchExtensions(APPatchExtension):
         rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
         rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
         rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
-        rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+
+        # Change the pointer to the Clock Tower final room 3HB door slab drops to not share its values with those of the
+        # 3HB slab near Renon at the top of the room.
+        if options["multi_hit_breakables"]:
+            rom_data.write_byte(0x10CF37, 0x04)
 
         # Once-per-frame gameplay checks
         rom_data.write_int32(0x6C848, 0x080FF40D)  # J 0x803FD034
@@ -1000,6 +1007,7 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
         "multi_hit_breakables": world.options.multi_hit_breakables.value,
         "drop_previous_sub_weapon": world.options.drop_previous_sub_weapon.value,
         "countdown": world.options.countdown.value,
+        "lizard_locker_items": world.options.lizard_locker_items.value,
         "shopsanity": world.options.shopsanity.value,
         "panther_dash": world.options.panther_dash.value,
         "big_toss": world.options.big_toss.value,
