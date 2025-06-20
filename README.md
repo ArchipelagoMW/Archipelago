@@ -7,7 +7,6 @@ Currently, the following games are supported:
 
 * The Legend of Zelda: A Link to the Past
 * Factorio
-* Minecraft
 * Subnautica
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
@@ -82,6 +81,7 @@ Currently, the following games are supported:
 * The Legend of Zelda: The Wind Waker
 * Jak and Daxter: The Precursor Legacy
 * Super Mario Land 2: 6 Golden Coins
+* shapez
 * Wargroove 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
