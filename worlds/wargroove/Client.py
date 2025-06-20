@@ -9,8 +9,6 @@ import random
 import typing
 from typing import Tuple, List, Iterable, Dict
 
-from pony.utils import throw
-
 from . import WargrooveWorld
 from .Items import item_table, faction_table, CommanderData, ItemData
 
