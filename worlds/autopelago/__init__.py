@@ -179,8 +179,8 @@ class AutopelagoWorld(World):
         excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
         nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
                                      for c, items in generic_nonprogression_item_table.items()}
-        dlc_games = {game for game in game_specific_nonprogression_items}
         for category, items in nonprogression_item_table.items():
+            dlc_games = set(game_specific_nonprogression_items)
             self.multiworld.random.shuffle(items)
             replacements_made = 0
             for game_name in self.multiworld.game.values():
