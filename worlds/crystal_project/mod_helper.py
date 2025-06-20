@@ -12,11 +12,29 @@ import json
 
 class ModDataModel(object):
     def __init__(self, json_data):
+        self.ID = None
         self.Equipment = None
         self.Items = None
         self.Jobs = None
         self.Entities = None
         self.__dict__ = json.loads(json_data)
+
+def get_mod_guids() -> List[str]:
+    guids: List[str] = []
+    file_directory = get_mod_directory()
+
+    if not os.path.isdir(file_directory):
+        return guids
+
+    only_files = [f for f in listdir(file_directory) if
+                  isfile(join(file_directory, f))]
+
+    for file in only_files:
+        file_text = open(join(file_directory, file)).read()
+        data = ModDataModel(file_text)
+        guids.append(data.ID)
+
+    return guids
 
 def get_modded_items(player: int) -> List[Item]:
     items: List[Item] = []
@@ -80,8 +98,8 @@ def get_modded_locations(player: int, options: CrystalProjectOptions) -> List[Lo
             #Entity type 0 is NPC
             if location['EntityType'] == 0:
                 region = get_region_by_id(location['BiomeID'])
-                name = region + ' NPC - Modded NPC'
                 item_id = location['ID'] + npc_index_offset
+                name = region + ' NPC - Modded NPC ' + str(item_id)
                 has_add_inventory = False
 
                 pages = location['NpcData']['Pages']

@@ -14,11 +14,10 @@ from .locations import get_locations, get_bosses, get_shops
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import get_modded_items
+from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
-
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -98,6 +97,10 @@ class CrystalProjectWorld(World):
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
+        if self.options.useMods:
+            modded_locations = mod_helper.get_modded_locations(self.player, self.options)
+            locations.extend(modded_locations)
+
         init_areas(self, locations, self.options)
 
         if self.options.jobRando.value == self.options.jobRando.option_none:
@@ -127,10 +130,6 @@ class CrystalProjectWorld(World):
             self.origin_region_name = self.starter_region
             self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
-
-        if self.options.useMods:
-            modded_locations = mod_helper.get_modded_locations(self.player, self.options)
-            locations.extend(modded_locations)
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -375,6 +374,10 @@ class CrystalProjectWorld(World):
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
+        mod_guids = None
+        if options.UseMods:
+            mod_guids = mod_helper.get_mod_guids()
+
         return {
             "apworld_version": self.apworld_version,
             "goal": self.options.goal.value,
@@ -393,4 +396,5 @@ class CrystalProjectWorld(World):
             "regionsanity": bool(self.options.regionsanity.value),
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
+            "modGuids": mod_guids
         }
