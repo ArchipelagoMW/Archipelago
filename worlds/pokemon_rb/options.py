@@ -852,18 +852,22 @@ class IceTrapWeight(TrapWeight):
 
 
 class PokeDollSkip(Choice):
-    """Patch out the Pokemon Tower Poke Doll skip or have this skip considered in logic."""
+    """Patch out the Pokemon Tower Poke Doll skip, have this skip considered in logic or leave it unpatched but out of
+    logic."""
     display_name = "Poke Doll Skip"
     option_patched = 0
     option_in_logic = 1
+    option_out_of_logic = 2
     default = 0
 
 
 class BicycleGateSkips(Choice):
-    """Patch out the Route 16/18 Bicycle Gate skips or have these skips considered in logic."""
+    """Patch out the Route 16/18 Bicycle Gate skips, have these skips considered in logic or leave them unpatched but
+    out of logic."""
     display_name = "Bicycle Gate Skips"
     option_patched = 0
     option_in_logic = 1
+    option_out_of_logic = 2
     default = 0
 
 

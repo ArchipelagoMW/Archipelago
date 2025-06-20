@@ -1743,7 +1743,7 @@ def create_regions(world):
     connect(multiworld, player, "Route 12-L", "Lavender Town")
     connect(multiworld, player, "Route 10-S", "Lavender Town")
     connect(multiworld, player, "Route 8", "Lavender Town")
-    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and world.options.poke_doll_skip))
+    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and world.options.poke_doll_skip == "in_logic"))
     connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: logic.can_cut(state, world, player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon City-G", lambda state: logic.can_cut(state, world, player))
