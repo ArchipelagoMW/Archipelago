@@ -140,7 +140,7 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
     elif options.bundle_price > 0:
         num_per_type = min(4, num_per_type + options.bundle_price)
 
-    trash_bear_requests["Forage"] = pick_trash_bear_items(ItemTag.FORAGE, content, num_per_type, random)
+    trash_bear_requests["Foraging"] = pick_trash_bear_items(ItemTag.FORAGE, content, num_per_type, random)
     if options.bundle_per_room >= 0:
         # Cooking items are not in content packs yet. This can be simplified once they are
         # trash_bear_requests["Cooking"] = pick_trash_bear_items(ItemTag.COOKING, content, num_per_type, random)

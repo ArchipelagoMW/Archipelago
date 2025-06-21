@@ -187,6 +187,8 @@ class Entrance:
     tunnel_backwoods_shortcut = "Tunnel to Backwoods Shortcut"
     mountain_lake_to_outside_adventure_guild_shortcut = "Mountain Lake to Outside Adventure Guild"
 
+    feed_trash_bear = "Feed Trash Bear"
+
 
 class LogicEntrance:
     talk_to_mines_dwarf = "Talk to Mines Dwarf"

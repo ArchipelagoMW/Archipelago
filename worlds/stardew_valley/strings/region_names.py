@@ -147,6 +147,7 @@ class Region:
     dangerous_mines_60 = "Dangerous Mines - Floor 60"
     dangerous_mines_100 = "Dangerous Mines - Floor 100"
     outside_adventure_guild = "Outside Adventure Guild"
+    trash_bear = "Trash Bear"
 
 
 class LogicRegion:

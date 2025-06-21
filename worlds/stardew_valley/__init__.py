@@ -181,7 +181,7 @@ class StardewValleyWorld(World):
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.options, self.content, self.random)
+        create_locations(add_location, self.modified_bundles, self.trash_bear_requests, self.options, self.content, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
