@@ -693,7 +693,7 @@ class Day2Materials(Range):
     display_name = "Day 2 Materials"
     default = 4
     range_start = 0
-    range_end = 20
+    range_end = 99
 
 class HomecomingMaterials(Range):
     """
@@ -702,7 +702,7 @@ class HomecomingMaterials(Range):
     display_name = "Homecoming Materials"
     default = 14
     range_start = 0
-    range_end = 20
+    range_end = 99
 
 class MaterialsInPool(Range):
     """
