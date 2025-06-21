@@ -16,6 +16,7 @@ import operator
 import pickle
 import random
 import shlex
+import string
 import threading
 import time
 import typing
@@ -41,7 +42,7 @@ except ImportError:
 
 import NetUtils
 import Utils
-from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text
+from Utils import version_tuple, restricted_loads, Version, async_start, get_intended_text, get_fuzzy_results
 from NetUtils import Endpoint, ClientStatus, NetworkItem, decode, encode, NetworkPlayer, Permission, NetworkSlot, \
     SlotType, LocationStore, Hint, HintStatus
 from BaseClasses import ItemClassification
@@ -1748,6 +1749,75 @@ class ClientMessageProcessor(CommonCommandProcessor):
         """Use !hint_location {location_name},
         for example !hint_location atomic-bomb to get a spoiler peek for that location."""
         return self.get_hints(location, True)
+    
+    @mark_raw
+    def _cmd_search_item(self, item_query: str) -> bool:
+        """Use !search_item {item_query},
+        for example !seach_item Key gets all item names in the world that matches \"Key\""""
+        slot = self.client.slot
+        if slot:
+            item_query = item_query.strip()
+            game = self.ctx.games[slot]
+
+            # Hard limit to not flood the console.
+            limit = 50
+
+            # Hardcoded excluded names never to show in results.
+            exclude_items = frozenset()
+            exclude_groups = {"Everything"}
+
+            # Hardcoded switch for showing contents of group in results.
+            show_group_contents = False
+
+            # If game exists, then return the fuzzy results for query
+            if game in self.ctx.all_item_and_group_names:
+                results = get_fuzzy_results(item_query, self.ctx.all_item_and_group_names[game], limit)
+            else:
+                self.output("Can't look up item for unknown game.")
+                return False
+            
+            # True only if results actually got pushed to output.
+            got_results = False
+
+            # Make query pieces. These pieces are key to making the results output manageable, but helpful.
+            # This works by splitting the query into lowercase words without symbols, then check if those
+            # words are in the the fuzzy result to determine whether to show it or not.
+            # For example: Searching "Black Key" will return results with both "black" and "key" without
+            # requiring the exact phrase "Black Key". An example result would be "Key Black".
+            query_pieces = "".join([c for c in item_query.lower() if c.isalnum() or c.isspace()]).split(" ")
+
+            if results:
+                # Iterate through results
+                for item, percent in results:
+                    # Only include names that contain the query string
+                    if all(query_piece in item.lower() for query_piece in query_pieces):
+                        # Format percent to be Exact if it is 101%, Case-Insensitive (CI) Exact if it is 100%, or just percent for anything else.
+                        _percent = (
+                            "Exact" if percent >= 101 else "CI Exact" if percent >= 100 else f"{percent}%"
+                        )
+                        # If item is group show group else show item
+                        if item in self.ctx.item_name_groups[game] and item not in exclude_groups:
+                            self.output(f"Group: {item} ({_percent})")
+                            # Show items in that group if this is true.
+                            if show_group_contents:
+                                for item_name_from_group in self.ctx.item_name_groups[game][item]:
+                                    game_item_names = self.ctx.item_names_for_game(game)
+                                    if item_name_from_group in game_item_names if game_item_names else {}:  # all items in group
+                                        self.output(f"- {item_name_from_group}")
+                            got_results = True
+                        elif item not in exclude_items:  # Item results
+                            self.output(f"Item: {item} ({_percent})")
+                            got_results = True
+
+            # If results got sent to output.
+            if got_results:
+                return True
+            else:
+                self.output("No Results")
+                return False
+        else:
+            self.output("Invalid slot")
+            return False
 
 
 def get_checked_checks(ctx: Context, team: int, slot: int) -> typing.List[int]:
