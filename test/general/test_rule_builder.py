@@ -47,7 +47,8 @@ class RuleBuilderOptions(PerGameCommonOptions):
 
 
 GAME = "Rule Builder Test Game"
-LOC_COUNT = 5
+LOC_COUNT = 15
+PROG_COUNT = 5
 
 
 class RuleBuilderItem(Item):
@@ -60,7 +61,9 @@ class RuleBuilderLocation(Location):
 
 class RuleBuilderWorld(RuleWorldMixin, World):
     game: ClassVar[str] = GAME
-    item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
+    item_name_to_id: ClassVar[dict[str, int]] = {"Filler": PROG_COUNT + 1} | {
+        f"Item {i}": i for i in range(1, PROG_COUNT + 1)
+    }
     location_name_to_id: ClassVar[dict[str, int]] = {f"Location {i}": i for i in range(1, LOC_COUNT + 1)}
     hidden: ClassVar[bool] = True
     options_dataclass: "ClassVar[type[PerGameCommonOptions]]" = RuleBuilderOptions
@@ -84,14 +87,20 @@ class RuleBuilderWorld(RuleWorldMixin, World):
         self.set_rule(self.get_location("Location 4"), HasAll("Item 2", "Item 3"))
         self.set_rule(self.get_location("Location 5"), CanReachLocation("Location 4"))
 
+        for i in range(PROG_COUNT + 1, LOC_COUNT + 1):
+            region1.locations.append(RuleBuilderLocation(self.player, f"Location {i}", i, region1))
+
     @override
     def create_items(self) -> None:
-        for i in range(1, LOC_COUNT + 1):
-            self.create_item(f"Item {i}")
+        for i in range(1, PROG_COUNT + 1):
+            self.multiworld.itempool.append(self.create_item(f"Item {i}"))
+        for _ in range(LOC_COUNT - PROG_COUNT):
+            self.multiworld.itempool.append(self.create_item("Filler"))
 
     @override
     def create_item(self, name: str) -> "RuleBuilderItem":
-        return RuleBuilderItem(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+        classification = ItemClassification.filler if name == "Filler" else ItemClassification.progression
+        return RuleBuilderItem(name, classification, self.item_name_to_id[name], self.player)
 
 
 network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data_package_data()
