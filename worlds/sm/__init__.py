@@ -15,7 +15,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 
-from .Options import SMOptions
+from .Options import SMOptions, sm_option_groups
 from .Client import SMSNIClient
 from .Rom import SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMProcedurePatch, get_sm_symbols
 import Utils
@@ -78,6 +78,7 @@ class SMWeb(WebWorld):
         "multiworld/en",
         ["Farrak Kilhn"]
     )]
+    option_groups = sm_option_groups
 
 
 class ByteEdit(TypedDict):
