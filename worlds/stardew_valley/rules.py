@@ -273,6 +273,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.tunnel_backwoods_shortcut, logic.received("Tunnel To Backwoods Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts"))
 
+    set_entrance_rule(multiworld, player, Entrance.feed_trash_bear, logic.received("Trash Bear Arrival"))
+
 
 def set_dangerous_mine_rules(logic, multiworld, player, content: StardewContent):
     if not content.is_enabled(ginger_island_content_pack):
