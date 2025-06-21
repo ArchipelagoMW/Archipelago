@@ -216,7 +216,7 @@ class RequiredLuckyEmblemsEotW(Range):
     display_name = "Lucky Emblems to Open End of the World"
     default = 7
     range_start = 0
-    range_end = 13
+    range_end = 99
 
 class RequiredLuckyEmblemsDoor(Range):
     """
@@ -225,7 +225,7 @@ class RequiredLuckyEmblemsDoor(Range):
     display_name = "Lucky Emblems to Open Final Rest Door"
     default = 10
     range_start = 0
-    range_end = 13
+    range_end = 99
 
 class LuckyEmblemsInPool(Range):
     """
@@ -234,7 +234,7 @@ class LuckyEmblemsInPool(Range):
     display_name = "Lucky Emblems in Pool"
     default = 13
     range_start = 0
-    range_end = 13
+    range_end = 99
 
 class KeybladeStats(Choice):
     """
@@ -550,7 +550,7 @@ class MythrilPrice(Range):
     Determines the cost of Mythril in each shop.
     """
     display_name = "Mythril Price"
-    default = 5000
+    default = 500
     range_start = 100
     range_end = 5000
 
@@ -559,7 +559,7 @@ class OrichalcumPrice(Range):
     Determines the cost of Orichalcum in each shop.
     """
     display_name = "Orichalcum Price"
-    default = 5000
+    default = 500
     range_start = 100
     range_end = 5000
 

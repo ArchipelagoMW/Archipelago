@@ -53,9 +53,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_mp": -2,
         
         "orichalcum_in_pool": 20,
-        "orichalcum_price": 5000,
+        "orichalcum_price": 500,
         "mythril_in_pool": 20,
-        "mythril_price": 5000,
+        "mythril_price": 500,
         
         "randomize_ap_costs": RandomizeAPCosts.option_off,
         "max_ap_cost": 5,
@@ -137,9 +137,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_mp": -2,
         
         "orichalcum_in_pool": 20,
-        "orichalcum_price": 5000,
+        "orichalcum_price": 500,
         "mythril_in_pool": 20,
-        "mythril_price": 5000,
+        "mythril_price": 500,
         
         "randomize_ap_costs": RandomizeAPCosts.option_off,
         "max_ap_cost": 5,
@@ -221,9 +221,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_mp": -2,
         
         "orichalcum_in_pool": 20,
-        "orichalcum_price": 5000,
+        "orichalcum_price": 500,
         "mythril_in_pool": 20,
-        "mythril_price": 5000,
+        "mythril_price": 500,
         
         "randomize_ap_costs": RandomizeAPCosts.option_off,
         "max_ap_cost": 5,
@@ -304,9 +304,9 @@ kh1_option_presets: Dict[str, Dict[str, Any]] = {
         "keyblade_min_mp": -2,
         
         "orichalcum_in_pool": 20,
-        "orichalcum_price": 5000,
+        "orichalcum_price": 500,
         "mythril_in_pool": 20,
-        "mythril_price": 5000,
+        "mythril_price": 500,
         
         "randomize_ap_costs": RandomizeAPCosts.option_off,
         "max_ap_cost": 5,
