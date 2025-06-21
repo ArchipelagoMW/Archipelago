@@ -1,0 +1,23 @@
+from typing import Any, Dict
+
+from Options import Accessibility, ProgressionBalancing
+from .options import *
+from .constants.key_items import *
+
+explorer_mode_options = {
+    "progression_balancing":         ProgressionBalancing.default,
+    "goal":                          Goal.option_clamshells,
+    "clamshellGoalQuantity":         40,
+    "extraClamshellsInPool":         10,
+    "shopsanity":                    Shopsanity.option_disabled,
+    "progressiveMountMode":          ProgressiveMountMode.option_false,
+    "levelGating":                   LevelGating.option_levels_catch_up,
+    "progressiveLevelSize":          10,
+    "maxLevel":                      99,
+    "keyMode":                       KeyMode.option_vanilla_skelefree,
+    "start_inventory_from_pool":     {PROGRESSIVE_LEVEL: 5},
+}
+
+crystal_project_options_presets: Dict[str, Dict[str, Any]] = {
+    "Explorer Mode": explorer_mode_options,
+}

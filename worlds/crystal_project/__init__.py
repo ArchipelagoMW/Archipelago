@@ -11,6 +11,7 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops
+from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
@@ -33,7 +34,7 @@ class CrystalProjectWeb(WebWorld):
 
     tutorials = [setup_en]
     option_groups = create_option_groups()
-    #options_presets = MuseDashPresets
+    options_presets = crystal_project_options_presets
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""

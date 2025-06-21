@@ -137,9 +137,17 @@ class Shopsanity(Choice):
 
 class Regionsanity(Toggle):
     """
-    When enabled, all locations in a zone will not be completable until you have discovered the "pass" for a region (i.e. "Item - Spawning Meadows Pass")
+    Nothing I have tried has been able to drive the citizens of Sequoia to collect enough crystals!
+    Adventurers have had TOO MUCH freedom!  From now on you will adventure where I tell you to.
+    Unless you have a pass from ME, you won't be able to do any adventuring!
+    - Grandmaster
 
-    You will start the game with a pass for a zone which can be reached without any items.
+    When enabled, the grandmaster will not permit you to interact with any locations/checks
+        in a region without receiving his "official permission" (i.e. "Item - Spawning Meadows Pass").
+    However, the Overpass and Underpass are regions of lawlessness where the Grandmaster has no authority ;)
+    You're also still allowed to use the save points, we won't tell
+
+    You will start the game with a pass for one reachable region.
     """
     display_name = "Regionsanity"
 
