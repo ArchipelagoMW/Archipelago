@@ -446,6 +446,7 @@ class StardewValleyWorld(World):
             UNIVERSAL_TRACKER_SEED_PROPERTY: self.seed,
             "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
+            "trash_bear_requests": self.trash_bear_requests,
             "modified_bundles": bundles,
             "client_version": "6.0.0",
         })
