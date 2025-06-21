@@ -41,6 +41,7 @@ class Check:
 
 class LocationTracker:
     all_checks = []
+    meta_to_check = {}
 
     def __init__(self, gameboy):
         self.gameboy = gameboy
@@ -149,6 +150,7 @@ class LocationTracker:
             if check_id == '0x2A3':
                 self.start_check = check
             self.all_checks.append(check)
+            self.meta_to_check[check.id] = check
         self.remaining_checks = [check for check in self.all_checks]
         self.gameboy.set_checks_range(
             lowest_check, highest_check - lowest_check + 1)
