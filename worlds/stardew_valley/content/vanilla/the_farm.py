@@ -1,6 +1,7 @@
 from .pelican_town import pelican_town as pelican_town_content_pack
 from ..game_content import ContentPack
 from ...data.animal import IncubatorSource, Animal, AnimalName
+from ...data.game_item import Tag, ItemTag
 from ...data.harvest import FruitBatsSource, MushroomCaveSource
 from ...data.shop import ShopSource
 from ...strings.animal_product_names import AnimalProduct
@@ -16,32 +17,41 @@ the_farm = ContentPack(
     harvest_sources={
         # Fruit cave
         Forageable.blackberry: (
+            Tag(ItemTag.FORAGE),
             FruitBatsSource(),
         ),
         Forageable.salmonberry: (
+            Tag(ItemTag.FORAGE),
             FruitBatsSource(),
         ),
         Forageable.spice_berry: (
+            Tag(ItemTag.FORAGE),
             FruitBatsSource(),
         ),
         Forageable.wild_plum: (
+            Tag(ItemTag.FORAGE),
             FruitBatsSource(),
         ),
 
         # Mushrooms
         Mushroom.common: (
+            Tag(ItemTag.FORAGE),
             MushroomCaveSource(),
         ),
         Mushroom.chanterelle: (
+            Tag(ItemTag.FORAGE),
             MushroomCaveSource(),
         ),
         Mushroom.morel: (
+            Tag(ItemTag.FORAGE),
             MushroomCaveSource(),
         ),
         Mushroom.purple: (
+            Tag(ItemTag.FORAGE),
             MushroomCaveSource(),
         ),
         Mushroom.red: (
+            Tag(ItemTag.FORAGE),
             MushroomCaveSource(),
         ),
     },

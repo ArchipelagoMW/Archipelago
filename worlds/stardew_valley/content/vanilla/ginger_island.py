@@ -49,12 +49,15 @@ ginger_island_content_pack = GingerIslandContentPack(
     harvest_sources={
         # Foraging
         Forageable.dragon_tooth: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.volcano_floor_10,)),
         ),
         Forageable.ginger: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.island_west,)),
         ),
         Mushroom.magma_cap: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.volcano_floor_5,)),
         ),
 

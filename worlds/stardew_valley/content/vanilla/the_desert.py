@@ -27,13 +27,16 @@ the_desert = ContentPack(
     ),
     harvest_sources={
         Forageable.cactus_fruit: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.desert,)),
             HarvestCropSource(seed=Seed.cactus, seasons=())
         ),
         Forageable.coconut: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.desert,)),
         ),
         Mushroom.purple: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.skull_cavern_25,)),
         ),
 

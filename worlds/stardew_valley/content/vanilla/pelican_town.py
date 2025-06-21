@@ -38,73 +38,91 @@ pelican_town = ContentPack(
     harvest_sources={
         # Spring
         Forageable.daffodil: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.bus_stop, Region.town, Region.railroad)),
         ),
         Forageable.dandelion: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.bus_stop, Region.forest, Region.railroad)),
         ),
         Forageable.leek: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.railroad)),
         ),
         Forageable.wild_horseradish: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.backwoods, Region.mountain, Region.forest, Region.secret_woods)),
         ),
         Forageable.salmonberry: (
+            Tag(ItemTag.FORAGE),
             SeasonalForagingSource(season=Season.spring, days=(15, 16, 17, 18),
                                    regions=(Region.backwoods, Region.mountain, Region.town, Region.forest, Region.tunnel_entrance, Region.railroad)),
         ),
         Forageable.spring_onion: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.forest,)),
         ),
 
         # Summer
         Fruit.grape: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer,), regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.railroad)),
         ),
         Forageable.spice_berry: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer,), regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.forest, Region.railroad)),
         ),
         Forageable.sweet_pea: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer,), regions=(Region.bus_stop, Region.town, Region.forest, Region.railroad)),
         ),
         Forageable.fiddlehead_fern: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer,), regions=(Region.secret_woods,)),
         ),
 
         # Fall
         Forageable.blackberry: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.fall,), regions=(Region.backwoods, Region.town, Region.forest, Region.railroad)),
             SeasonalForagingSource(season=Season.fall, days=(8, 9, 10, 11),
                                    regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.tunnel_entrance,
                                             Region.railroad)),
         ),
         Forageable.hazelnut: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.fall,), regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.railroad)),
         ),
         Forageable.wild_plum: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.fall,), regions=(Region.mountain, Region.bus_stop, Region.railroad)),
         ),
 
         # Winter
         Forageable.crocus: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.secret_woods)),
         ),
         Forageable.crystal_fruit: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad)),
         ),
         Forageable.holly: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad)),
         ),
         Forageable.snow_yam: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.farm, Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad,
                                     Region.secret_woods, Region.beach),
                            other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
         Forageable.winter_root: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,),
                            regions=(Region.farm, Region.backwoods, Region.mountain, Region.bus_stop, Region.town, Region.forest, Region.railroad,
                                     Region.secret_woods, Region.beach),
@@ -113,31 +131,39 @@ pelican_town = ContentPack(
 
         # Mushrooms
         Mushroom.common: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring,), regions=(Region.secret_woods,)),
             ForagingSource(seasons=(Season.fall,), regions=(Region.backwoods, Region.mountain, Region.forest)),
         ),
         Mushroom.chanterelle: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.fall,), regions=(Region.secret_woods,)),
         ),
         Mushroom.morel: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.spring, Season.fall), regions=(Region.secret_woods,)),
         ),
         Mushroom.red: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer, Season.fall), regions=(Region.secret_woods,)),
         ),
 
         # Beach
         WaterItem.coral: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.tide_pools,)),
             SeasonalForagingSource(season=Season.summer, days=(12, 13, 14), regions=(Region.beach,)),
         ),
         WaterItem.nautilus_shell: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.winter,), regions=(Region.beach,)),
         ),
         Forageable.rainbow_shell: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(seasons=(Season.summer,), regions=(Region.beach,)),
         ),
         WaterItem.sea_urchin: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.tide_pools,)),
         ),
 

@@ -21,12 +21,15 @@ the_mines = ContentPack(
     ),
     harvest_sources={
         Forageable.cave_carrot: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.mines_floor_10,), other_requirements=(ToolRequirement(Tool.hoe),)),
         ),
         Mushroom.red: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.mines_floor_95,)),
         ),
         Mushroom.purple: (
+            Tag(ItemTag.FORAGE),
             ForagingSource(regions=(Region.mines_floor_95,)),
         )
     },
