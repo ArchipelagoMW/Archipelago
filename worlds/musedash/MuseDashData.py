@@ -641,4 +641,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Save Yourself": SongData(2900765, "85-3", "Happy Otaku Pack Vol.20", True, 5, 7, 10),
     "Menace": SongData(2900766, "85-4", "Happy Otaku Pack Vol.20", True, 7, 9, 11),
     "Dangling": SongData(2900767, "85-5", "Happy Otaku Pack Vol.20", True, 6, 8, 10),
+    "Inverted World": SongData(2900768, "86-0", "Aquaria Cruising Guide", True, 4, 6, 8),
+    "Cuidu": SongData(2900769, "86-1", "Aquaria Cruising Guide", True, 6, 8, 11),
+    "The Promised Land": SongData(2900770, "86-2", "Aquaria Cruising Guide", True, 4, 6, 9),
+    "Alfheim's faith": SongData(2900771, "86-3", "Aquaria Cruising Guide", True, 6, 8, 11),
+    "Heaven's Cage": SongData(2900772, "86-4", "Aquaria Cruising Guide", True, 5, 7, 10),
+    "Broomstick adventure!": SongData(2900773, "86-5", "Aquaria Cruising Guide", True, 7, 9, 11),
 }
