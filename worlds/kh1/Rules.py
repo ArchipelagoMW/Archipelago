@@ -59,7 +59,7 @@ def has_emblems(state: CollectionState, player: int, keyblades_unlock_chests: bo
         "Emblem Piece (Chest)",
         "Emblem Piece (Statue)",
         "Emblem Piece (Fountain)",
-        "Hollow Bastion"}, player) and has_x_worlds(state, player, 5, keyblades_unlock_chests, logic_difficulty)
+        "Hollow Bastion"}, player) and has_x_worlds(state, player, 6, keyblades_unlock_chests, logic_difficulty)
 
 def has_puppies(state: CollectionState, player: int, puppies_required: int, puppy_value: int) -> bool:
     return (state.count("Puppy", player) * puppy_value) >= puppies_required
@@ -173,7 +173,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Secret Waterway White Trinity Chest"),
         lambda state: state.has("White Trinity", player))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Chest"),
-        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))))
+        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty))))
     add_rule(kh1world.get_location("Traverse Town Item Workshop Right Chest"),
         lambda state: (has_item_workshop(state, player, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Item Workshop Left Chest"),
@@ -229,8 +229,8 @@ def set_rules(kh1world):
         lambda state: state.has("Green Trinity", player))
     add_rule(kh1world.get_location("Wonderland Rabbit Hole Defeat Heartless 3 Chest"),
         lambda state: (
-            has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
-            or (difficulty > 5 and has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
+            has_x_worlds(state, player, 6, options.keyblades_unlock_chests, difficulty)
+            or (difficulty > 5 and has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty))
             or difficulty > 10
         ))
         
@@ -906,13 +906,13 @@ def set_rules(kh1world):
         lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Hollow Bastion", player)
-            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
+            and has_x_worlds(state, player, 6, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Traverse Town Secret Waterway Navi Gummi Event"),
         lambda state: (
             has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
             and state.has("Hollow Bastion", player)
-            and has_x_worlds(state, player, 5, options.keyblades_unlock_chests, difficulty)
+            and has_x_worlds(state, player, 6, options.keyblades_unlock_chests, difficulty)
         ))
     add_rule(kh1world.get_location("Deep Jungle Defeat Sabor White Fang Event"),
         lambda state: state.has("Slides", player))
@@ -931,7 +931,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Wonderland Defeat Trickmaster Ifrit's Horn Event"),
         lambda state: state.has("Footprints", player))
     add_rule(kh1world.get_location("Monstro Defeat Parasite Cage II Stop Event"),
-        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))))
+        lambda state: (has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty))))
     add_rule(kh1world.get_location("Halloween Town Defeat Oogie Boogie Holy Circlet Event"),
         lambda state: (
             state.has_all({
@@ -1021,27 +1021,27 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Hollow Bastion Speak with Aerith Ansem's Report 10"),
         lambda state: has_emblems(state, player, options.keyblades_unlock_chests, difficulty))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 1"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 2"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 3"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 4"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto Reward 5"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Geppetto All Summons Reward"),
         lambda state: 
-            has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)
+            has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)
             and has_all_summons(state, player)
         ))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Talk to Pinocchio"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Magician's Study Obtained All Arts Items"),
         lambda state: (
             has_all_magic_lvx(state, player, 1)
             and has_all_arts(state, player)
-            and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, 0) #due to the softlock potential, I'm forcing it to logic normally instead of allowing the bypass
+            and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, 0) #due to the softlock potential, I'm forcing it to logic normally instead of allowing the bypass
         ))
     add_rule(kh1world.get_location("Traverse Town Magician's Study Obtained All LV1 Magic"),
         lambda state: has_all_magic_lvx(state, player, 1))
@@ -1120,7 +1120,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Traverse Town Item Workshop Postcard"),
         lambda state: (has_item_workshop(state, player, difficulty)))
     add_rule(kh1world.get_location("Traverse Town Geppetto's House Postcard"),
-        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty)))
+        lambda state: has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty)))
     add_rule(kh1world.get_location("Hollow Bastion Entrance Hall Emblem Piece (Flame)"),
         lambda state: (
             (
@@ -1190,7 +1190,7 @@ def set_rules(kh1world):
     add_rule(kh1world.get_location("Monstro Throat Blue Trinity"),
         lambda state: (
             state.has("Blue Trinity", player)
-            and has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 2, options.keyblades_unlock_chests, difficulty))
+            and has_parasite_cage(state, player, difficulty, has_x_worlds(state, player, 3, options.keyblades_unlock_chests, difficulty))
             ))
     add_rule(kh1world.get_location("Monstro Chamber 5 Blue Trinity"),
         lambda state: state.has("Blue Trinity", player))
@@ -1412,7 +1412,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
         add_rule(kh1world.get_location("Complete Phil Cup"),
@@ -1494,7 +1494,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Solo"),
@@ -1504,7 +1504,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Complete Hades Cup Time Trial"),
@@ -1514,7 +1514,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cloud and Leon Event"),
@@ -1524,7 +1524,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Yuffie Event"),
@@ -1534,7 +1534,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Cerberus Event"),
@@ -1544,7 +1544,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Behemoth Event"),
@@ -1554,7 +1554,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
             add_rule(kh1world.get_location("Hades Cup Defeat Hades Event"),
@@ -1564,7 +1564,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))            
             add_rule(kh1world.get_location("Olympus Coliseum Gates Purple Jar After Defeating Hades"),
@@ -1574,7 +1574,7 @@ def set_rules(kh1world):
                         "Pegasus Cup",
                         "Hercules Cup",
                         "Entry Pass"}, player)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
         if options.cups.current_key == "hades_cup" and options.super_bosses:
@@ -1586,7 +1586,7 @@ def set_rules(kh1world):
                         "Hercules Cup",
                         "Entry Pass"}, player)
                     and (state.has("Guard", player) or difficulty > 10)
-                    and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                    and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                     and has_defensive_tools(state, player, difficulty)
                 ))
         add_rule(kh1world.get_location("Olympus Coliseum Olympia Chest"),
@@ -1624,7 +1624,7 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Ansem's Report 11"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
                 and
                 (
@@ -1637,7 +1637,7 @@ def set_rules(kh1world):
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
                 and
                 (
@@ -1655,7 +1655,7 @@ def set_rules(kh1world):
                     "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
             ))
         add_rule(kh1world.get_location("Olympus Coliseum Defeat Sephiroth One-Winged Angel Event"),
@@ -1665,21 +1665,21 @@ def set_rules(kh1world):
                     "Pegasus Cup",
                     "Hercules Cup",
                     "Entry Pass"}, player)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "unknown":
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown Ansem's Report 13"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
         add_rule(kh1world.get_location("Hollow Bastion Defeat Unknown EXP Necklace Event"),
             lambda state: (
                 has_emblems(state, player, options.keyblades_unlock_chests, difficulty)
-                and has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty)
+                and has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty)
                 and has_defensive_tools(state, player, difficulty)
                 and (difficulty > 0 or state.has("Progressive Gravity", player))
             ))
@@ -1733,7 +1733,7 @@ def set_rules(kh1world):
                 ))
     add_rule(kh1world.get_location("Final Ansem"),
         lambda state: (
-            has_x_worlds(state, player, 7, options.keyblades_unlock_chests, difficulty) # In logic, player is strong enough
+            has_x_worlds(state, player, 8, options.keyblades_unlock_chests, difficulty) # In logic, player is strong enough
             and 
             (
                 ( # Can DI Finish
