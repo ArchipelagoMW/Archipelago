@@ -86,7 +86,7 @@ class AutoWorldRegister(type):
         new_class.__file__ = sys.modules[new_class.__module__].__file__
         if "game" in dct:
             if dct["game"] in AutoWorldRegister.world_types:
-                raise RuntimeError(f"""Game {dct["game"]} already registered in 
+                raise RuntimeError(f"""Game {dct["game"]} already registered in
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
@@ -312,7 +312,7 @@ class World(metaclass=AutoWorldRegister):
 
     explicit_indirect_conditions: bool = True
     """If True, the world implementation is supposed to use MultiWorld.register_indirect_condition() correctly.
-    If False, everything is rechecked at every step, which is slower computationally, 
+    If False, everything is rechecked at every step, which is slower computationally,
     but may be desirable in complex/dynamic worlds."""
 
     multiworld: "MultiWorld"
@@ -539,6 +539,10 @@ class World(metaclass=AutoWorldRegister):
             state.remove_item(name, self.player)
             return True
         return False
+
+    def reached_region(self, state: "CollectionState", region: "Region") -> None:
+        """Called when a region is newly reachable by the state."""
+        pass
 
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
