@@ -21,12 +21,14 @@ class RuleWorldMixin(World):
     rule_ids: "dict[int, Rule.Resolved]"
     rule_item_dependencies: dict[str, set[int]]
     rule_region_dependencies: dict[str, set[int]]
+    rule_location_dependencies: dict[str, set[int]]
 
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
         self.rule_ids = {}
         self.rule_item_dependencies = defaultdict(set)
         self.rule_region_dependencies = defaultdict(set)
+        self.rule_location_dependencies = defaultdict(set)
 
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
@@ -71,7 +73,9 @@ class RuleWorldMixin(World):
             if resolved_rule.always_false:
                 return None
 
-        entrance = from_region.connect(to_region, rule=resolved_rule.test if resolved_rule else None)
+        entrance = from_region.connect(to_region)
+        if resolved_rule:
+            entrance.access_rule = resolved_rule
         if resolved_rule is not None:
             self.register_rule_connections(resolved_rule, entrance)
         return entrance
@@ -194,7 +198,7 @@ class RuleWorldMixin(World):
         if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             for rule_id in self.rule_item_dependencies[item.name]:
-                _ = player_results.pop(rule_id, None)
+                player_results.pop(rule_id, None)
         return changed
 
     @override
@@ -204,13 +208,13 @@ class RuleWorldMixin(World):
         if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             for rule_id in self.rule_item_dependencies[item.name]:
-                _ = player_results.pop(rule_id, None)
+                player_results.pop(rule_id, None)
 
         # clear all region dependent caches as none can be trusted
         if changed and getattr(self, "rule_region_dependencies", None):
             for rule_ids in self.rule_region_dependencies.values():
                 for rule_id in rule_ids:
-                    _ = state.rule_cache[self.player].pop(rule_id, None)
+                    state.rule_cache[self.player].pop(rule_id, None)
 
         return changed
 
@@ -220,7 +224,7 @@ class RuleWorldMixin(World):
         if getattr(self, "rule_region_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             for rule_id in self.rule_region_dependencies[region.name]:
-                _ = player_results.pop(rule_id, None)
+                player_results.pop(rule_id, None)
 
 
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
@@ -262,7 +266,7 @@ def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> "Callable[..., i
 
 @dataclass_transform(frozen_default=True, field_specifiers=(dataclasses.field, dataclasses.Field))
 class CustomRuleRegister(type):
-    custom_rules: ClassVar[dict[str, dict[str, type["Rule"]]]] = {}
+    custom_rules: ClassVar[dict[str, dict[str, type["Rule[Any]"]]]] = {}
     rule_name: str = "Rule"
 
     def __new__(
@@ -272,14 +276,14 @@ class CustomRuleRegister(type):
         namespace: dict[str, Any],
         /,
         **kwds: dict[str, Any],
-    ) -> "CustomRuleRegister":
+    ) -> "type[CustomRuleRegister]":
         new_cls = super().__new__(cls, name, bases, namespace, **kwds)
         new_cls.__hash__ = _create_hash_fn(new_cls)
         rule_name = new_cls.__qualname__
         if rule_name.endswith(".Resolved"):
             rule_name = rule_name[:-9]
         new_cls.rule_name = rule_name
-        return dataclasses.dataclass(frozen=True)(new_cls)  # type: ignore
+        return dataclasses.dataclass(frozen=True)(new_cls)
 
 
 @dataclasses.dataclass()
@@ -372,16 +376,11 @@ class Rule(Generic[TWorld]):
 
     @classmethod
     def __init_subclass__(cls, /, game: str) -> None:
-        # if "__dataclass_fields__" not in cls.__dict__:
-        #     # ensure rule gets marked as a dataclass, but don't override manually dataclassed classes
-        #     # is_dataclass will return True since all rule inherit from a dataclass
-        #     dataclasses.dataclass(cls)
-
         if game != "Archipelago":
             custom_rules = CustomRuleRegister.custom_rules.setdefault(game, {})
             if cls.__qualname__ in custom_rules:
                 raise TypeError(f"Rule {cls.__qualname__} has already been registered for game {game}")
-            custom_rules[cls.__qualname__] = cls  # type: ignore
+            custom_rules[cls.__qualname__] = cls
         elif cls.__module__ != "rule_builder":
             # TODO: test to make sure this works on frozen
             raise TypeError("You cannot define custom rules for the base Archipelago world")
@@ -405,16 +404,6 @@ class Rule(Generic[TWorld]):
 
         always_false: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
-
-        @override
-        def __hash__(self) -> int:
-            return hash(
-                (
-                    self.__class__.__module__,
-                    self.rule_name,
-                    *[getattr(self, f.name) for f in dataclasses.fields(self)],
-                )
-            )
 
         def _evaluate(self, state: "CollectionState") -> bool:
             """Calculate this rule's result with the given state"""
@@ -456,15 +445,6 @@ class Rule(Generic[TWorld]):
         @override
         def __str__(self) -> str:
             return f"{self.rule_name}()"
-
-        # def __init_subclass__(cls) -> None:
-        #     cls.__hash__ = _create_hash_fn(cls)
-        #     cls.rule_name = cls.__qualname__
-
-        #     # if "__dataclass_fields__" not in cls.__dict__:
-        #     #     # ensure rule gets marked as a dataclass, but don't override manually dataclassed classes
-        #     #     # is_dataclass will return True since all resolved rules inherit from a dataclass
-        #     #     dataclasses.dataclass(frozen=True)(cls)
 
 
 @dataclasses.dataclass()
