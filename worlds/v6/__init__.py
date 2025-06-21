@@ -59,7 +59,7 @@ class V6World(World):
         self.multiworld.itempool += filltrinkets
 
     def generate_basic(self):
-        musiclist_o = [1,2,3,4,9,12]
+        musiclist_o = [1,2,3,4,9,11,12]
         musiclist_s = musiclist_o.copy()
         if self.options.music_rando:
             self.multiworld.random.shuffle(musiclist_s)
