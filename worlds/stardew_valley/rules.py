@@ -78,6 +78,7 @@ def set_rules(world):
     player = world.player
     logic = world.logic
     bundle_rooms: List[BundleRoom] = world.modified_bundles
+    trash_bear_requests: Dict[str, List[str]] = world.trash_bear_requests
 
     all_location_names = set(location.name for location in multiworld.get_locations(player))
 
@@ -104,7 +105,7 @@ def set_rules(world):
     set_chefsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_craftsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_booksanity_rules(logic, multiworld, player, world_content)
-    set_isolated_locations_rules(logic, multiworld, player)
+    set_isolated_locations_rules(logic, multiworld, player, trash_bear_requests)
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
@@ -117,10 +118,14 @@ def set_rules(world):
     set_sve_rules(logic, multiworld, player, world_content)
 
 
-def set_isolated_locations_rules(logic: StardewLogic, multiworld, player):
+def set_isolated_locations_rules(logic: StardewLogic, multiworld, player, trash_bear_requests: Dict[str, List[str]]):
     set_location_rule(multiworld, player, "Galaxy Sword Shrine", logic.has("Prismatic Shard"))
     set_location_rule(multiworld, player, "Krobus Stardrop", logic.money.can_spend(20000))
     set_location_rule(multiworld, player, "Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
+    for request_type in trash_bear_requests:
+        location = f"Trash Bear {request_type}"
+        items = trash_bear_requests[request_type]
+        set_location_rule(multiworld, player, location, logic.bundle.can_feed_trash_bear(*(items,)))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewContent):

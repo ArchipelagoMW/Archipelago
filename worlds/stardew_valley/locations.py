@@ -29,6 +29,7 @@ LOCATION_CODE_OFFSET = 717000
 class LocationTags(enum.Enum):
     MANDATORY = enum.auto()
     BUNDLE = enum.auto()
+    TRASH_BEAR = enum.auto()
     COMMUNITY_CENTER_BUNDLE = enum.auto()
     CRAFTS_ROOM_BUNDLE = enum.auto()
     PANTRY_BUNDLE = enum.auto()
@@ -398,6 +399,11 @@ def extend_bundle_locations(randomized_locations: List[LocationData], bundle_roo
             randomized_locations.append(location_table[bundle.name])
 
 
+def extend_trash_bear_locations(randomized_locations: List[LocationData], trash_bear_requests: Dict[str, List[str]]):
+    for request_type in trash_bear_requests:
+        randomized_locations.append(location_table[f"Trash Bear {request_type}"])
+
+
 def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
@@ -642,6 +648,7 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
 
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
+                     trash_bear_requests: Dict[str, List[str]],
                      options: StardewValleyOptions,
                      content: StardewContent,
                      random: Random):
@@ -649,6 +656,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_mandatory_locations(randomized_locations, options, content)
     extend_bundle_locations(randomized_locations, bundle_rooms)
+    extend_trash_bear_locations(randomized_locations, trash_bear_requests)
     extend_backpack_locations(randomized_locations, options, content)
 
     if content.features.tool_progression.is_progressive:

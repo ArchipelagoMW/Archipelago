@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from .bundle import Bundle
 from .bundle_room import BundleRoom, BundleRoomTemplate
@@ -13,6 +13,8 @@ from ..data.bundles_data.meme_bundles import community_center_meme_bundles, pant
     fish_tank_meme, bulletin_board_meme, \
     boiler_room_meme, vault_meme
 from ..data.bundles_data.remixed_anywhere_bundles import community_center_remixed_anywhere
+from ..data.game_item import ItemTag
+from ..data.recipe_data import all_cooking_recipes
 from ..logic.logic import StardewLogic
 from ..options import BundleRandomization, StardewValleyOptions
 from ..strings.bundle_names import CCRoom
@@ -128,3 +130,30 @@ def fix_raccoon_bundle_names(raccoon):
     for i in range(len(raccoon.bundles)):
         raccoon_bundle = raccoon.bundles[i]
         raccoon_bundle.name = f"Raccoon Request {i + 1}"
+
+
+def get_trash_bear_requests(random: Random, content: StardewContent, options: StardewValleyOptions) -> Dict[str, List[str]]:
+    trash_bear_requests = dict()
+    num_per_type = 2
+    if options.bundle_price < 0:
+        num_per_type = 1
+    elif options.bundle_price > 0:
+        num_per_type = min(4, num_per_type + options.bundle_price)
+
+    trash_bear_requests["Forage"] = pick_trash_bear_items(ItemTag.FORAGE, content, num_per_type, random)
+    if options.bundle_per_room >= 0:
+        # Cooking items are not in content packs yet. This can be simplified once they are
+        # trash_bear_requests["Cooking"] = pick_trash_bear_items(ItemTag.COOKING, content, num_per_type, random)
+        trash_bear_requests["Cooking"] = random.sample([recipe.meal for recipe in all_cooking_recipes if not recipe.mod_name], num_per_type)
+    if options.bundle_per_room >= 1:
+        trash_bear_requests["Farming"] = pick_trash_bear_items(ItemTag.CROPSANITY, content, num_per_type, random)
+    if options.bundle_per_room >= 2:
+        # Fish items are not tagged properly in content packs yet. This can be simplified once they are
+        # trash_bear_requests["Fishing"] = pick_trash_bear_items(ItemTag.FISH, content, num_per_type, random)
+        trash_bear_requests["Fishing"] = random.sample(content.fishes.keys(), num_per_type)
+    return trash_bear_requests
+
+
+def pick_trash_bear_items(item_tag: ItemTag, content: StardewContent, number_items: int, random: Random):
+    forage_items = [item.name for item in content.find_tagged_items(item_tag)]
+    return random.sample(forage_items, number_items)

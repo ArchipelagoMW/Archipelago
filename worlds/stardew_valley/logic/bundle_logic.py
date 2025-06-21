@@ -10,6 +10,7 @@ from ..strings.currency_names import Currency
 from ..strings.machine_names import Machine
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
 from ..strings.quest_names import Quest
+from ..strings.region_names import Region
 
 
 class BundleLogicMixin(BaseLogicMixin):
@@ -78,3 +79,8 @@ class BundleLogic(BaseLogic):
         # 1 - Break the tree
         # 2 - Build the house, which summons the bundle racoon. This one is done manually if quests are turned off
         return self.logic.received(CommunityUpgrade.raccoon, 2)
+
+    def can_feed_trash_bear(self, *items: str) -> StardewRule:
+        return (self.logic.received("Trash Bear Arrival") &
+                self.logic.region.can_reach(Region.forest) &
+                self.logic.has_all(*items))

@@ -590,6 +590,8 @@ id,name,classification,groups,content_packs
 666,Sam Portrait,filler,"ENDGAME_LOCATION_ITEMS,REQUIRES_FRIENDSANITY_MARRIAGE",
 667,Sebastian Portrait,filler,"ENDGAME_LOCATION_ITEMS,REQUIRES_FRIENDSANITY_MARRIAGE",
 668,Shane Portrait,filler,"ENDGAME_LOCATION_ITEMS,REQUIRES_FRIENDSANITY_MARRIAGE",
+669,Trash Bear Arrival,progression,"TRASH_BEAR,COMMUNITY_REWARD",
+670,Trash Bear Cleanup,filler,"TRASH_BEAR,COMMUNITY_REWARD",
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,

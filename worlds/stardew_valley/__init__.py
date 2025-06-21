@@ -9,7 +9,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
 from .bundles.bundle_room import BundleRoom
-from .bundles.bundles import get_all_bundles
+from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
 from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
     setup_early_items
@@ -124,6 +124,7 @@ class StardewValleyWorld(World):
     web = StardewWebWorld()
     modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
+    trash_bear_requests: Dict[str, List[str]]
 
     total_progression_items: int
     classifications_to_override_post_fill: list[tuple[Item, ItemClassification]]
@@ -169,6 +170,7 @@ class StardewValleyWorld(World):
 
         self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random, self.logic, self.content, self.options, self.player_name)
+        self.trash_bear_requests = get_trash_bear_requests(self.random, self.content, self.options)
 
         for bundle_room in self.modified_bundles:
             bundle_room.special_behavior(self)

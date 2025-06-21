@@ -29,6 +29,7 @@ class Group(enum.Enum):
     RESOURCE_PACK = enum.auto()
     FRIENDSHIP_PACK = enum.auto()
     COMMUNITY_REWARD = enum.auto()
+    TRASH_BEAR = enum.auto()
     TRASH = enum.auto()
     FOOTWEAR = enum.auto()
     HAT = enum.auto()
