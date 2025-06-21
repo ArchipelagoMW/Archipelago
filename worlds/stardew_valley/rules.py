@@ -125,7 +125,7 @@ def set_isolated_locations_rules(logic: StardewLogic, multiworld, player, trash_
     for request_type in trash_bear_requests:
         location = f"Trash Bear {request_type}"
         items = trash_bear_requests[request_type]
-        set_location_rule(multiworld, player, location, logic.bundle.can_feed_trash_bear(*(items,)))
+        set_location_rule(multiworld, player, location, logic.bundle.can_feed_trash_bear(*items))
 
 
 def set_tool_rules(logic: StardewLogic, multiworld, player, content: StardewContent):

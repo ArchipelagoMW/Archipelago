@@ -256,8 +256,8 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
                     if self.complement in rules_to_simplify:
                         return self.short_circuit_simplification()
                     local_state.rules_to_simplify = deque(rules_to_simplify)
-                except Exception:
-                    assert False
+                except Exception as err:
+                    assert False, err
 
             # Start simplification where we left.
             while local_state.rules_to_simplify:
