@@ -3,7 +3,7 @@ from BaseClasses import Location, ItemClassification
 from .items import item_table
 from .rom_addresses import rom_addresses
 from . import poke_data
-loc_id_start = 172000000
+loc_id_start = 1
 
 
 def trainersanity(world, player):

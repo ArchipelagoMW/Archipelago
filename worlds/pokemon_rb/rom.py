@@ -578,12 +578,12 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
                       "Awakening", "Burn Heal", "Ice Heal", "Paralyze Heal", "Full Heal", "Repel", "Super Repel",
                       "Max Repel", "Escape Rope"]
         shop_data = [0xFE, len(inventory)]
-        shop_data += [item_table[item].id - 172000000 for item in inventory]
+        shop_data += [item_table[item].id for item in inventory]
         shop_data.append(0xFF)
         for shop in range(1, 11):
             write_bytes(rom_addresses[f"Shop{shop}"], shop_data)
     if world.options.stonesanity:
-        write_bytes(rom_addresses["Shop_Stones"], [0xFE, 1, item_table["Poke Doll"].id - 172000000, 0xFF])
+        write_bytes(rom_addresses["Shop_Stones"], [0xFE, 1, item_table["Poke Doll"].id, 0xFF])
 
     price = str(world.options.master_ball_price.value).zfill(6)
     price = [int(price[:2], 16), int(price[2:4], 16), int(price[4:], 16)]
@@ -592,7 +592,9 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
     from collections import Counter
     start_inventory = Counter(item.code for item in reversed(world.multiworld.precollected_items[world.player]))
     for item, value in start_inventory.items():
-        write_bytes(rom_addresses["Start_Inventory"] + item - 172000000, min(value, 255))
+        if item > 255:
+            item -= 256
+        write_bytes(rom_addresses["Start_Inventory"] + item, min(value, 255))
 
     set_mon_palettes(world, patch)
 
@@ -712,7 +714,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
                     elif " ".join(location.item.name.split()[1:]) in poke_data.pokemon_data.keys():
                         write_bytes(address, poke_data.pokemon_data[" ".join(location.item.name.split()[1:])]["id"])
                     else:
-                        item_id = world.item_name_to_id[location.item.name] - 172000000
+                        item_id = world.item_name_to_id[location.item.name]
                         if item_id > 255:
                             item_id -= 256
                         write_bytes(address, item_id)
