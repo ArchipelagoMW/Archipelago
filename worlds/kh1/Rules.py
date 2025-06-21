@@ -91,8 +91,8 @@ def has_oogie_manor(state: CollectionState, player: int, logic_difficulty: int) 
     return (
             state.has("Progressive Fire", player)
             or (logic_difficulty > 0 and state.has("High Jump", player, 3))
-            or (logic_difficulty > 5 and state.has("High Jump", player, 2) or (state.has("High Jump", player) and state.has_any({"Progressive Glide", "Combo Master"}, player)))
-            or logic_difficulty > 10
+            or (logic_difficulty > 5 and state.has("High Jump", player, 2) or (state.has_all({"High Jump", "Progressive Glide"}, player)))
+            or (logic_difficulty > 10 and state.has_any({"High Jump", "Progressive Glide"}, player))
         )
 
 def has_item_workshop(state: CollectionState, player: int, logic_difficulty: int) -> bool:
@@ -157,21 +157,26 @@ def set_rules(kh1world):
             and
             (
                 state.has("Progressive Glide", player)
-                or
-                (difficulty > 0 and state.has("High Jump", player, 3))
+                or (difficulty > 0 and state.has("High Jump", player, 3))
                 or
                 (
                     difficulty > 5
                     and
-                    state.has("Combo Master", player)
-                    and
                     (
-                        state.has("High Jump", player, 2)
+                        state.has("High Jump", player, 3)
                         or
                         (
-                            state.has("High Jump", player)
-                            and state.has("Air Combo Plus", player, 2)
-                            #or state.has("Yellow Trinity", player)
+                            state.has("Combo Master", player)
+                            and
+                            (
+                                state.has("High Jump", player, 2)
+                                or
+                                (
+                                    state.has("High Jump", player)
+                                    and state.has("Air Combo Plus", player, 2)
+                                    #or state.has("Yellow Trinity", player)
+                                )
+                            )
                         )
                     )
                 )
@@ -181,7 +186,7 @@ def set_rules(kh1world):
                     and
                     (
                         state.has("Mermaid Kick", player)
-                        or state.has("Combo Master") and (state.has("High Jump", player) or state.has("Air Combo Plus", player, 2))
+                        or state.has("Combo Master", player) and (state.has("High Jump", player) or state.has("Air Combo Plus", player, 2))
                     )
                 )
             )
@@ -1591,11 +1596,11 @@ def set_rules(kh1world):
                 and has_defensive_tools(state, player, difficulty)
                 and
                 (
-                    state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
-                    or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 2,"Progressive Thunder": 3}, player))
-                    or (difficulty > 5 and (state.has_any_count({"Progressive Blizzard": 1, "Progressive Fire": 1, "Progressive Thunder": 2}, player) or (state.has("Mushu", player) and state.has_group("Magic", player))))
-                    or (difficulty > 10 and state.has("Progressive Thunder", player) or (state.has("Genie", player) and state.has_group("Magic", player)))
-                ) 
+                    state.has("Progressive Blizzard", player, 3)
+                    or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 3,"Progressive Thunder": 3, "Progressive Gravity": 3}, player))
+                    or (difficulty > 5 and (state.has_any_count({"Progressive Blizzard": 1, "Progressive Fire": 2, "Progressive Thunder": 2, "Progressive Gravity": 2}, player)))
+                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or has_all_summons))
+                )
             ))
         add_rule(kh1world.get_location("Agrabah Defeat Kurt Zisa Zantetsuken Event"),
             lambda state: (
@@ -1604,10 +1609,10 @@ def set_rules(kh1world):
                 and has_defensive_tools(state, player, difficulty)
                 and
                 (
-                    state.has("Progressive Blizzard", player, 3) or state.has("Progressive Fire", player, 3)
-                    or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 2, "Progressive Thunder": 3}, player))
-                    or (difficulty > 5 and (state.has_any({"Progressive Blizzard", "Progressive Fire", "Mushu"}, player) or state.has("Progressive Thunder", player, 2)))
-                    or (difficulty > 10 and state.has_any({"Progressive Thunder", "Genie"}, player))
+                    state.has("Progressive Blizzard", player, 3)
+                    or (difficulty > 0 and state.has_any_count({"Progressive Blizzard": 2, "Progressive Fire": 3,"Progressive Thunder": 3, "Progressive Gravity": 3}, player))
+                    or (difficulty > 5 and (state.has_any_count({"Progressive Blizzard": 1, "Progressive Fire": 2, "Progressive Thunder": 2, "Progressive Gravity": 2}, player)))
+                    or (difficulty > 10 and (state.has_any({"Progressive Fire", "Progressive Thunder", "Progressive Gravity"}, player) or has_all_summons))
                 ) 
             ))
     if options.super_bosses or options.final_rest_door_key.current_key == "sephiroth":
