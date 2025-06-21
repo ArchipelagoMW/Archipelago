@@ -146,7 +146,7 @@ class HardDrive(LocationData):
             return logic_rule
 
         super().__init__(
-            get_region(data.gassed, data.radioactive), f"Hard drive random check {locationId - 1338600}", locationId,
+            get_region(data.gassed, data.radioactive), f"Hard drive random check {(locationId - 1338600) + 1}", locationId,
                 non_progression = not can_hold_progression, rule = get_rule(data.item, data.power))
 
 

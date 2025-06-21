@@ -1,5 +1,6 @@
 from typing import TextIO, ClassVar, Any
 from BaseClasses import Item, ItemClassification, CollectionState
+from collections.abc import Sequence
 from .GameLogic import GameLogic
 from .Items import Items
 from .Locations import Locations, LocationData
@@ -9,6 +10,8 @@ from .Regions import SatisfactoryLocation, create_regions_and_return_locations
 from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
 from ..AutoWorld import World
+from NetUtils import Hint
+from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):
@@ -233,6 +236,23 @@ class SatisfactoryWorld(World):
             return self.items.create_item(name, self.player)
         else:
             return Items.create_item_uninitialized(name, self.player)
+
+
+    def modify_multidata(self, multidata: dict[str, Any]) -> None: 
+        locations_visiable_from_start: list[int] = [] #list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
+
+        if "Building: AWESOME Shop" in self.options.start_inventory \
+                or "Building: AWESOME Shop" in self.options.start_inventory_from_pool \
+                or 1338622 in multidata["precollected_items"][self.player]: # id of Building: AWESOME Shop
+            locations_visiable_from_start.extend(range(1338700, 1338709)) # ids of shop locations 1 to 10
+
+        for location_id in locations_visiable_from_start:
+            if location_id in multidata["locations"][self.player]:
+                item_id, player_id, flags = multidata["locations"][self.player][location_id]
+
+                if player_id != self.player and flags & (ItemClassification.progression|ItemClassification.useful) > 0:
+                    hint = Hint(player_id, self.player, location_id, item_id, False, item_flags=flags)
+                    multidata["precollected_hints"][self.player].add(hint)
 
 
     def push_precollected(self, item_name: str) -> None:
