@@ -150,7 +150,7 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
     if options.bundle_per_room >= 2:
         # Fish items are not tagged properly in content packs yet. This can be simplified once they are
         # trash_bear_requests["Fishing"] = pick_trash_bear_items(ItemTag.FISH, content, num_per_type, random)
-        trash_bear_requests["Fishing"] = random.sample(content.fishes.keys(), num_per_type)
+        trash_bear_requests["Fishing"] = random.sample([fish for fish in content.fishes], num_per_type)
     return trash_bear_requests
 
 
