@@ -221,9 +221,6 @@ components: List[Component] = [
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
-    # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
-              file_identifier=SuffixIdentifier('.apmc')),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
@@ -246,6 +243,5 @@ components: List[Component] = [
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.png'),
     'discord': local_path('data', 'discord-mark-blue.png'),
 }

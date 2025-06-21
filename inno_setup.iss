@@ -138,11 +138,6 @@ Root: HKCR; Subkey: "{#MyAppName}kdl3patch";                     ValueData: "Arc
 Root: HKCR; Subkey: "{#MyAppName}kdl3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}kdl3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
-Root: HKCR; Subkey: ".apmc";                                     ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata";                        ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata\DefaultIcon";            ValueData: "{app}\ArchipelagoMinecraftClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}mcdata\shell\open\command";     ValueData: """{app}\ArchipelagoMinecraftClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
-
 Root: HKCR; Subkey: ".apz5";                                     ValueData: "{#MyAppName}n64zpf";         Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}n64zpf";                        ValueData: "Archipelago Ocarina of Time Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}n64zpf\DefaultIcon";            ValueData: "{app}\ArchipelagoOoTClient.exe,0";                           ValueType: string;  ValueName: "";
