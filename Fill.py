@@ -308,7 +308,8 @@ def remaining_fill(multiworld: MultiWorld,
                 logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
                 multiworld.push_precollected(item)
                 last_batch.append(multiworld.worlds[item.player].create_filler())
-            remaining_fill(multiworld, locations, unplaced_items, name + " Start Inventory Retry")
+            unplaced_items = []
+            remaining_fill(multiworld, locations, last_batch, name + " Start Inventory Retry")
         else:
             raise FillError(f"No more spots to place {len(unplaced_items)} items. Remaining locations are invalid.\n"
                             f"Unplaced items:\n"
