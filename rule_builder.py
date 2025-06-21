@@ -23,6 +23,11 @@ class RuleWorldMixin(World):
     rule_region_dependencies: dict[str, set[int]]
     rule_location_dependencies: dict[str, set[int]]
 
+    item_mapping: ClassVar[dict[str, str]] = {}
+    """A mapping of actual item name to logical item name.
+    Useful when there are multiple versions of a collected item but the logic only uses one. For example:
+    item = Item("Currency x500"), rule = Has("Currency", count=1000), item_mapping = {"Currency x500": "Currency"}"""
+
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
         self.rule_ids = {}
@@ -197,8 +202,11 @@ class RuleWorldMixin(World):
         changed = super().collect(state, item)
         if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_item_dependencies[item.name]:
+            mapped_name = self.item_mapping.get(item.name, "")
+            rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
+            for rule_id in rule_ids:
                 player_results.pop(rule_id, None)
+
         return changed
 
     @override
@@ -207,7 +215,9 @@ class RuleWorldMixin(World):
 
         if changed and getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
-            for rule_id in self.rule_item_dependencies[item.name]:
+            mapped_name = self.item_mapping.get(item.name, "")
+            rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
+            for rule_id in rule_ids:
                 player_results.pop(rule_id, None)
 
         # clear all region dependent caches as none can be trusted
