@@ -47,8 +47,7 @@ class RuleBuilderOptions(PerGameCommonOptions):
 
 
 GAME = "Rule Builder Test Game"
-LOC_COUNT = 15
-PROG_COUNT = 5
+LOC_COUNT = 5
 
 
 class RuleBuilderItem(Item):
@@ -59,48 +58,23 @@ class RuleBuilderLocation(Location):
     game: str = GAME
 
 
-class RuleBuilderWorld(RuleWorldMixin, World):
+class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
     game: ClassVar[str] = GAME
-    item_name_to_id: ClassVar[dict[str, int]] = {"Filler": PROG_COUNT + 1} | {
-        f"Item {i}": i for i in range(1, PROG_COUNT + 1)
-    }
+    item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
     location_name_to_id: ClassVar[dict[str, int]] = {f"Location {i}": i for i in range(1, LOC_COUNT + 1)}
     hidden: ClassVar[bool] = True
     options_dataclass: "ClassVar[type[PerGameCommonOptions]]" = RuleBuilderOptions
-    options: RuleBuilderOptions  # type: ignore
+    options: RuleBuilderOptions  # type: ignore # pyright: ignore[reportIncompatibleVariableOverride]
     origin_region_name: str = "Region 1"
-
-    @override
-    def create_regions(self) -> None:
-        region1 = Region("Region 1", self.player, self.multiworld)
-        region2 = Region("Region 2", self.player, self.multiworld)
-        region3 = Region("Region 3", self.player, self.multiworld)
-        self.multiworld.regions.extend([region1, region2, region3])
-
-        region1.add_locations({"Location 1": 1, "Location 2": 2}, RuleBuilderLocation)
-        region2.add_locations({"Location 3": 3, "Location 4": 4}, RuleBuilderLocation)
-        region3.add_locations({"Location 5": 5}, RuleBuilderLocation)
-
-        self.create_entrance(region1, region2, Has("Item 1"))
-        self.create_entrance(region1, region3, HasAny("Item 3", "Item 4"))
-        self.set_rule(self.get_location("Location 2"), CanReachRegion("Region 2") & Has("Item 2"))
-        self.set_rule(self.get_location("Location 4"), HasAll("Item 2", "Item 3"))
-        self.set_rule(self.get_location("Location 5"), CanReachLocation("Location 4"))
-
-        for i in range(PROG_COUNT + 1, LOC_COUNT + 1):
-            region1.locations.append(RuleBuilderLocation(self.player, f"Location {i}", i, region1))
-
-    @override
-    def create_items(self) -> None:
-        for i in range(1, PROG_COUNT + 1):
-            self.multiworld.itempool.append(self.create_item(f"Item {i}"))
-        for _ in range(LOC_COUNT - PROG_COUNT):
-            self.multiworld.itempool.append(self.create_item("Filler"))
 
     @override
     def create_item(self, name: str) -> "RuleBuilderItem":
         classification = ItemClassification.filler if name == "Filler" else ItemClassification.progression
         return RuleBuilderItem(name, classification, self.item_name_to_id[name], self.player)
+
+    @override
+    def get_filler_item_name(self) -> str:
+        return "Filler"
 
 
 network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data_package_data()
@@ -143,8 +117,8 @@ class TestSimplify(unittest.TestCase):
 
 
 class TestOptions(unittest.TestCase):
-    multiworld: "MultiWorld"
-    world: "RuleBuilderWorld"
+    multiworld: "MultiWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
+    world: "RuleBuilderWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
 
     @override
     def setUp(self) -> None:
@@ -238,9 +212,10 @@ class TestHashes(unittest.TestCase):
 
 
 class TestCaching(unittest.TestCase):
-    multiworld: "MultiWorld"
-    world: "RuleBuilderWorld"
-    state: "CollectionState"
+    multiworld: "MultiWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
+    world: "RuleBuilderWorld"  # pyright: ignore[reportUninitializedInstanceVariable]
+    state: "CollectionState"  # pyright: ignore[reportUninitializedInstanceVariable]
+    player: int = 1
 
     @override
     def setUp(self) -> None:
@@ -249,6 +224,25 @@ class TestCaching(unittest.TestCase):
         assert isinstance(world, RuleBuilderWorld)
         self.world = world
         self.state = self.multiworld.state
+
+        region1 = Region("Region 1", self.player, self.multiworld)
+        region2 = Region("Region 2", self.player, self.multiworld)
+        region3 = Region("Region 3", self.player, self.multiworld)
+        self.multiworld.regions.extend([region1, region2, region3])
+
+        region1.add_locations({"Location 1": 1, "Location 2": 2}, RuleBuilderLocation)
+        region2.add_locations({"Location 3": 3, "Location 4": 4}, RuleBuilderLocation)
+        region3.add_locations({"Location 5": 5}, RuleBuilderLocation)
+
+        world.create_entrance(region1, region2, Has("Item 1"))
+        world.create_entrance(region1, region3, HasAny("Item 3", "Item 4"))
+        world.set_rule(world.get_location("Location 2"), CanReachRegion("Region 2") & Has("Item 2"))
+        world.set_rule(world.get_location("Location 4"), HasAll("Item 2", "Item 3"))
+        world.set_rule(world.get_location("Location 5"), CanReachLocation("Location 4"))
+
+        for i in range(1, LOC_COUNT + 1):
+            self.multiworld.itempool.append(world.create_item(f"Item {i}"))
+
         return super().setUp()
 
     def test_item_cache_busting(self) -> None:
