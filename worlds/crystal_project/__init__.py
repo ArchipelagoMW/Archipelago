@@ -64,6 +64,11 @@ class CrystalProjectWorld(World):
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
 
+    modded_shops = mod_helper.get_modded_shopsanity_locations(-1, World, options)
+
+    for modded_shop in modded_shops:
+        location_name_to_id[modded_shop.name] = modded_shop.code
+
     web = CrystalProjectWeb()
 
     def __init__(self, multiworld: "MultiWorld", player: int):
@@ -101,9 +106,13 @@ class CrystalProjectWorld(World):
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
-        if self.options.UseMods:
+        if self.options.useMods:
             modded_locations = mod_helper.get_modded_locations(self.player, self, self.options)
             locations.extend(modded_locations)
+
+        if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
+            modded_shops = mod_helper.get_modded_shopsanity_locations(self.player, self, self.options)
+            locations.extend(modded_shops)
 
         init_areas(self, locations, self.options)
 
@@ -350,7 +359,7 @@ class CrystalProjectWorld(World):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
-        if self.options.UseMods:
+        if self.options.useMods:
             modded_items = mod_helper.get_modded_items(self.player, self.options)
 
             for modded_item in modded_items:

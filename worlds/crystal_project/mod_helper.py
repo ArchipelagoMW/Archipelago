@@ -6,7 +6,7 @@ from BaseClasses import Item, ItemClassification, CollectionState
 from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
-from .locations import LocationData, get_locations, npc_index_offset, treasure_index_offset, crystal_index_offset
+from .locations import LocationData, get_locations, get_shops, npc_index_offset, treasure_index_offset, crystal_index_offset, shop_index_offset
 from .constants.biomes import get_region_by_id
 from .rules import CrystalProjectLogic
 import json
@@ -50,87 +50,109 @@ def get_modded_items(player: int, options: CrystalProjectOptions) -> List[Item]:
     items: List[Item] = []
     file_directory = get_mod_directory()
 
-    if options.UseMods:
-        if not os.path.isdir(file_directory):
-            return items
+    if not os.path.isdir(file_directory):
+        return items
 
-        only_files = [f for f in listdir(file_directory) if
-                      isfile(join(file_directory, f))]
+    only_files = [f for f in listdir(file_directory) if
+                  isfile(join(file_directory, f))]
 
-        for file in only_files:
-            file_text = open(join(file_directory, file)).read()
-            data = ModDataModel(file_text)
-            excluded_ids = get_excluded_ids(data)
+    for file in only_files:
+        file_text = open(join(file_directory, file)).read()
+        data = ModDataModel(file_text)
+        excluded_ids = get_excluded_ids(data)
 
-            for item in data.Equipment:
-                item_id = item['ID'] + equipment_index_offset
-                item_in_pool = any(data.code == item_id for name, data in item_table.items())
-                excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
-                name = 'Equipment - ' + item['Name']
+        for item in data.Equipment:
+            item_id = item['ID'] + equipment_index_offset
+            item_in_pool = any(data.code == item_id for name, data in item_table.items())
+            excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
+            name = 'Equipment - ' + item['Name']
 
-                if not item_in_pool and not excluded:
-                    mod_item = Item(name, ItemClassification.useful, item_id, player)
-                    items.append(mod_item)
+            if not item_in_pool and not excluded:
+                mod_item = Item(name, ItemClassification.useful, item_id, player)
+                items.append(mod_item)
 
-            for item in data.Items:
-                item_id = item['ID'] + item_index_offset
-                item_in_pool = any(data.code == item_id for name, data in item_table.items())
-                excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
-                name = 'Item - ' + item['Name']
+        for item in data.Items:
+            item_id = item['ID'] + item_index_offset
+            item_in_pool = any(data.code == item_id for name, data in item_table.items())
+            excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
+            name = 'Item - ' + item['Name']
 
-                if not item_in_pool and not excluded:
-                    mod_item = Item(name, ItemClassification.progression, item_id, player)
-                    items.append(mod_item)
+            if not item_in_pool and not excluded:
+                mod_item = Item(name, ItemClassification.progression, item_id, player)
+                items.append(mod_item)
 
-            for item in data.Jobs:
-                item_id = item['ID'] + job_index_offset
-                item_in_pool = any(data.code == item_id for name, data in item_table.items())
-                excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
-                is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
-                name = 'Job - ' + item['Name']
+        for item in data.Jobs:
+            item_id = item['ID'] + job_index_offset
+            item_in_pool = any(data.code == item_id for name, data in item_table.items())
+            excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
+            is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
+            name = 'Job - ' + item['Name']
 
-                if not item_in_pool and not is_unselectable and not excluded:
-                    mod_item = Item(name, ItemClassification.progression, item_id, player)
-                    items.append(mod_item)
+            if not item_in_pool and not is_unselectable and not excluded:
+                mod_item = Item(name, ItemClassification.progression, item_id, player)
+                items.append(mod_item)
 
     return items
 
 def get_modded_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
     locations: List[LocationData] = []
+    file_directory = get_mod_directory()
 
-    if options.UseMods:
-        file_directory = get_mod_directory()
+    if not os.path.isdir(file_directory):
+        return locations
 
-        if not os.path.isdir(file_directory):
-            return locations
+    only_files = [f for f in listdir(file_directory) if
+                  isfile(join(file_directory, f))]
 
-        only_files = [f for f in listdir(file_directory) if
-                      isfile(join(file_directory, f))]
+    for file in only_files:
+        file_text = open(join(file_directory, file)).read()
+        data = ModDataModel(file_text)
+        excluded_ids = get_excluded_ids(data)
 
-        for file in only_files:
-            file_text = open(join(file_directory, file)).read()
-            data = ModDataModel(file_text)
-            excluded_ids = get_excluded_ids(data)
+        for location in data.Entities:
+            entity_type = location['EntityType']
+            #Entity type 0 is NPC
+            if entity_type == 0:
+                location = build_npc_location(location, excluded_ids, player, world, options)
+                if location is not None:
+                    locations.append(location)
 
-            for location in data.Entities:
-                entity_type = location['EntityType']
-                #Entity type 0 is NPC
-                if entity_type == 0:
-                    location = build_npc_location(location, excluded_ids, player, world, options)
-                    if location is not None:
-                        locations.append(location)
+            #Entity type 5 is Treasure
+            if entity_type == 5:
+                location = build_treasure_location(location, excluded_ids, player, options)
+                if location is not None:
+                    locations.append(location)
 
-                #Entity type 5 is Treasure
-                if entity_type == 5:
-                    location = build_treasure_location(location, excluded_ids, player, options)
-                    if location is not None:
-                        locations.append(location)
+            # Entity type 6 is Crystal
+            if entity_type == 6:
+                location = build_crystal_location(location, excluded_ids, player, options)
+                if location is not None:
+                    locations.append(location)
 
-                # Entity type 6 is Crystal
-                if entity_type == 6:
-                    location = build_crystal_location(location, excluded_ids, player, options)
-                    if location is not None:
-                        locations.append(location)
+    return locations
+
+def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
+    locations: List[LocationData] = []
+
+    file_directory = get_mod_directory()
+
+    if not os.path.isdir(file_directory):
+        return locations
+
+    only_files = [f for f in listdir(file_directory) if
+                  isfile(join(file_directory, f))]
+
+    for file in only_files:
+        file_text = open(join(file_directory, file)).read()
+        data = ModDataModel(file_text)
+        excluded_ids = get_excluded_ids(data)
+
+        for location in data.Entities:
+            entity_type = location['EntityType']
+            # Entity type 0 is NPC
+            if entity_type == 0:
+                npc_locations = build_shop_locations(location, excluded_ids, player, world, options)
+                locations.extend(npc_locations)
 
     return locations
 
@@ -200,6 +222,42 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
 
     return None
 
+def build_shop_locations(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
+    logic = CrystalProjectLogic(player, options)
+    locations: List[LocationData] = []
+    region = get_region_by_id(location['BiomeID'])
+    item_id = location['ID'] + npc_index_offset
+
+    pages = location['NpcData']['Pages']
+    for page in pages:
+        actions = page['Actions']
+
+        for action in actions:
+            # 5 is Shop, only add if shopsanity is on
+            if action['ActionType'] == 5:
+                stock = action['Data']['Stock']
+                id_offset = shop_index_offset
+                for shop_item in stock:
+                    shop_item_id = item_id + id_offset
+                    shop_name = region + ' Shop - Modded Shop ' + str(shop_item_id)
+                    shop_item_excluded = is_item_at_location_excluded(shop_item, excluded_ids)
+                    shop_item_in_pool = any(location.code == shop_item_id for location in get_shops(player, options))
+
+                    if not shop_item_in_pool and not shop_item_excluded:
+                        condition = shop_item['Condition']
+                        if condition['ConditionType'] == 5 and not condition['IsNegation']:
+                            condition_rule = build_condition_rule(condition, world, player, options)
+                        else:
+                            condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
+                                state) and logic.has_vertical_movement(state)
+
+                        location = LocationData(region, shop_name, shop_item_id, condition_rule)
+                        locations.append(location)
+
+                    id_offset += shop_index_offset
+
+    return locations
+
 def build_treasure_location(location, excluded_ids, player, options):
     #Chests always add an item and never have conditions, so nice and easy
     region = get_region_by_id(location['BiomeID'])
@@ -238,6 +296,7 @@ def build_crystal_location(location, excluded_ids, player, options):
     return None
 
 def build_condition_rule(condition, world: "CrystalProjectWorld", player: int, options: CrystalProjectOptions) -> Optional[Callable[[CollectionState], bool]]:
+    logic = CrystalProjectLogic(player, options)
     loot_type = condition['Data']['LootType']
     loot_id = condition['Data']['LootValue']
     archipelago_loot_id = None
@@ -247,14 +306,13 @@ def build_condition_rule(condition, world: "CrystalProjectWorld", player: int, o
     elif loot_type == 2:
         archipelago_loot_id = loot_id + equipment_index_offset
     else:
-        return None
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
     if archipelago_loot_id in world.item_id_to_name:
         item_name = world.item_id_to_name[archipelago_loot_id]
-        logic = CrystalProjectLogic(player, options)
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and state.has(item_name, player)
     else:
-        return None
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
 def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
     excluded_item_ids = mod.System['Randomizer']['ExcludeItemIDs']
