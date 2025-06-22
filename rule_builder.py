@@ -1141,9 +1141,10 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     count: int = 1
     """The number of items the player needs to have"""
 
-    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+    def __init__(self, *item_names: str, count: int = 1, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
-        self.item_names = item_names
+        self.item_names = tuple(sorted(set(item_names)))
+        self.count = 1
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
@@ -1239,9 +1240,15 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of the given items, ignoring duplicates"""
 
-    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+    def __init__(self, *item_names: str, count: int = 1, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
         self.item_names: tuple[str, ...] = tuple(sorted(set(item_names)))
+        self.count: int = 1
+
+    class Resolved(HasFromList.Resolved):
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_from_list_unique(self.item_names, self.player, self.count)
 
 
 @dataclasses.dataclass()
