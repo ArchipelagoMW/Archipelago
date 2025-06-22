@@ -1804,7 +1804,7 @@ def set_rules(kh1world):
                         )
                     ))
         if options.keyblades_unlock_chests:
-            if location_table[location].type == "Chest" or location.endswith(" Clam") or location in BROKEN_KEYBLADE_LOCKING_LOCATIONS:
+            if location_table[location].type == "Chest" or location in BROKEN_KEYBLADE_LOCKING_LOCATIONS:
                 location_world = location_table[location].category
                 location_required_keyblade = KEYBLADES[WORLDS.index(location_world)]
                 if location not in BROKEN_KEYBLADE_LOCKING_LOCATIONS:
