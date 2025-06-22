@@ -19,7 +19,8 @@ from .rules import CrystalProjectLogic
 from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
+from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
+
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -52,12 +53,13 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = mod_helper.get_modded_items(-1)
-    modded_locations = mod_helper.get_modded_locations(-1, options)
+    modded_items = mod_helper.get_modded_items(-1, options)
 
     for modded_item in modded_items:
         item_name_to_id[modded_item.name] = modded_item.code
         item_name_groups.setdefault('MOD', set()).add(modded_item.name)
+
+    modded_locations = mod_helper.get_modded_locations(-1, World, options)
 
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
@@ -99,8 +101,8 @@ class CrystalProjectWorld(World):
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
-        if self.options.useMods:
-            modded_locations = mod_helper.get_modded_locations(self.player, self.options)
+        if self.options.UseMods:
+            modded_locations = mod_helper.get_modded_locations(self.player, self, self.options)
             locations.extend(modded_locations)
 
         init_areas(self, locations, self.options)
@@ -134,8 +136,11 @@ class CrystalProjectWorld(World):
             self.multiworld.get_region(self.starter_region, self.player).add_exits([MENU])
 
     def create_item(self, name: str) -> Item:
-        data = item_table[name]
-        return Item(name, data.classification, data.code, self.player)
+        if name in item_table:
+            data = item_table[name]
+            return Item(name, data.classification, data.code, self.player)
+
+        return Item(name, ItemClassification.filler, None, self.player)
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())
@@ -345,8 +350,8 @@ class CrystalProjectWorld(World):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
-        if self.options.useMods:
-            modded_items = mod_helper.get_modded_items(self.player)
+        if self.options.UseMods:
+            modded_items = mod_helper.get_modded_items(self.player, self.options)
 
             for modded_item in modded_items:
                 pool.append(modded_item)

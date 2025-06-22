@@ -314,7 +314,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
     randomizeMusic: RandomizeMusic
-    useMods: UseMods
+    UseMods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
