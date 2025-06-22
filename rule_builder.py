@@ -454,7 +454,7 @@ class Rule(Generic[TWorld]):
 
         @override
         def __str__(self) -> str:
-            return f"{self.rule_name}()"
+            return self.rule_name
 
 
 @dataclasses.dataclass()
@@ -713,7 +713,8 @@ class Has(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
-            messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
+            verb = "Missing " if state and not self.test(state) else "Has "
+            messages: list[JSONMessagePart] = [{"type": "text", "text": verb}]
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
                 messages.append({"type": "text", "text": "x "})
@@ -748,9 +749,9 @@ class HasAll(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
-            return True_[TWorld]().resolve(world)
+            return True_().resolve(world)
         if len(self.item_names) == 1:
-            return Has[TWorld](self.item_names[0]).resolve(world)
+            return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
 
     @override
@@ -772,15 +773,46 @@ class HasAll(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
-            messages: list[JSONMessagePart] = [
-                {"type": "text", "text": "Has "},
-                {"type": "color", "color": "cyan", "text": "all"},
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": "all"},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, item in enumerate(self.item_names):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            messages = [
+                {"type": "text", "text": "Has " if not missing else "Missing "},
+                {"type": "color", "color": "cyan", "text": "all" if not missing else "some"},
                 {"type": "text", "text": " of ("},
             ]
-            for i, item in enumerate(self.item_names):
-                if i > 0:
-                    messages.append({"type": "text", "text": ", "})
-                messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, item in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, item in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
             messages.append({"type": "text", "text": ")"})
             return messages
 
@@ -816,9 +848,9 @@ class HasAny(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
-            return True_[TWorld]().resolve(world)
+            return True_().resolve(world)
         if len(self.item_names) == 1:
-            return Has[TWorld](self.item_names[0]).resolve(world)
+            return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
 
     @override
@@ -840,15 +872,46 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
-            messages: list[JSONMessagePart] = [
-                {"type": "text", "text": "Has "},
-                {"type": "color", "color": "cyan", "text": "any"},
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": "any"},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, item in enumerate(self.item_names):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            messages = [
+                {"type": "text", "text": "Has " if found else "Missing "},
+                {"type": "color", "color": "cyan", "text": "some" if found else "all"},
                 {"type": "text", "text": " of ("},
             ]
-            for i, item in enumerate(self.item_names):
-                if i > 0:
-                    messages.append({"type": "text", "text": ", "})
-                messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, item in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, item in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
             messages.append({"type": "text", "text": ")"})
             return messages
 
@@ -868,6 +931,317 @@ class HasAny(Rule[TWorld], game="Archipelago"):
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
             return f"Has all of ({items})"
+
+
+@dataclasses.dataclass()
+class HasAllCounts(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the player has all of the specified counts of the given items"""
+
+    item_counts: dict[str, int]
+    """A mapping of item name to count to check for"""
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
+        if len(self.item_counts) == 0:
+            return True_().resolve(world)
+        if len(self.item_counts) == 1:
+            item = next(iter(self.item_counts))
+            return Has(item, self.item_counts[item]).resolve(world)
+        return self.Resolved(self.item_counts, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_counts: dict[str, int]
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_all_counts(self.item_counts, self.player)
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_counts}
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": "all"},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, (item, count) in enumerate(self.item_counts.items()):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                    messages.append({"type": "text", "text": f" x{count}"})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            messages = [
+                {"type": "text", "text": "Has " if not missing else "Missing "},
+                {"type": "color", "color": "cyan", "text": "all" if not missing else "some"},
+                {"type": "text", "text": " of ("},
+            ]
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, (item, count) in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                    messages.append({"type": "text", "text": f" x{count}"})
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, (item, count) in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
+                    messages.append({"type": "text", "text": f" x{count}"})
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            prefix = "Has all" if self.test(state) else "Missing some"
+            found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
+            missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
+            infix = "; " if found and missing else ""
+            return f"{prefix} of ({found_str}{infix}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+            return f"Has all of ({items})"
+
+
+@dataclasses.dataclass()
+class HasAnyCount(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the player has any of the specified counts of the given items"""
+
+    item_counts: dict[str, int]
+    """A mapping of item name to count to check for"""
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
+        if len(self.item_counts) == 0:
+            return True_().resolve(world)
+        if len(self.item_counts) == 1:
+            item = next(iter(self.item_counts))
+            return Has(item, self.item_counts[item]).resolve(world)
+        return self.Resolved(self.item_counts, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_counts: dict[str, int]
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_any_count(self.item_counts, self.player)
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_counts}
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": "any"},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, (item, count) in enumerate(self.item_counts.items()):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                    messages.append({"type": "text", "text": f" x{count}"})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            messages = [
+                {"type": "text", "text": "Has " if found else "Missing "},
+                {"type": "color", "color": "cyan", "text": "some" if found else "all"},
+                {"type": "text", "text": " of ("},
+            ]
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, (item, count) in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                    messages.append({"type": "text", "text": f" x{count}"})
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, (item, count) in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
+                    messages.append({"type": "text", "text": f" x{count}"})
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            prefix = "Has some" if self.test(state) else "Missing all"
+            found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
+            missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
+            infix = "; " if found and missing else ""
+            return f"{prefix} of ({found_str}{infix}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+            return f"Has any of ({items})"
+
+
+@dataclasses.dataclass()
+class HasFromList(Rule[TWorld], game="Archipelago"):
+    """A rule that checks if the player has at least `count` of the given items"""
+
+    item_names: tuple[str, ...]
+    """A tuple of item names to check for"""
+
+    count: int = 1
+    """The number of items the player needs to have"""
+
+    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+        super().__init__(options=options)
+        self.item_names = item_names
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
+        if len(self.item_names) < self.count:
+            return False_().resolve(world)
+        if len(self.item_names) == 0:
+            return True_().resolve(world)
+        if len(self.item_names) == 1:
+            return Has(self.item_names[0]).resolve(world)
+        return self.Resolved(self.item_names, self.count, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        items = ", ".join(self.item_names)
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}({items}, count={self.count}{options})"
+
+    class Resolved(Rule.Resolved):
+        item_names: tuple[str, ...]
+        count: int = 1
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_from_list(self.item_names, self.player, self.count)
+
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_names}
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = []
+            if state is None:
+                messages = [
+                    {"type": "text", "text": "Has "},
+                    {"type": "color", "color": "cyan", "text": str(self.count)},
+                    {"type": "text", "text": " of ("},
+                ]
+                for i, item in enumerate(self.item_names):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
+                messages.append({"type": "text", "text": ")"})
+                return messages
+
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            messages = [
+                {"type": "text", "text": "Has "},
+                {"type": "color", "color": "cyan", "text": f"{len(found)}/{self.count}"},
+                {"type": "text", "text": " of ("},
+            ]
+            if found:
+                messages.append({"type": "text", "text": "Found: "})
+                for i, item in enumerate(found):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "green", "text": item, "player": self.player}
+                    )
+                if missing:
+                    messages.append({"type": "text", "text": "; "})
+
+            if missing:
+                messages.append({"type": "text", "text": "Missing: "})
+                for i, item in enumerate(missing):
+                    if i > 0:
+                        messages.append({"type": "text", "text": ", "})
+                    messages.append(
+                        {"type": "item_name", "flags": 0b001, "color": "salmon", "text": item, "player": self.player}
+                    )
+            messages.append({"type": "text", "text": ")"})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            found = [item for item in self.item_names if state.has(item, self.player)]
+            missing = [item for item in self.item_names if item not in found]
+            found_str = f"Found: {', '.join(found)}" if found else ""
+            missing_str = f"Missing: {', '.join(missing)}" if missing else ""
+            infix = "; " if found and missing else ""
+            return f"Has {len(found)}/{self.count} of ({found_str}{infix}{missing_str})"
+
+        @override
+        def __str__(self) -> str:
+            items = ", ".join(self.item_names)
+            return f"Has {self.count} of ({items})"
+
+
+@dataclasses.dataclass()
+class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
+    """A rule that checks if the player has at least `count` of the given items, ignoring duplicates"""
+
+    def __init__(self, *item_names: str, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
+        super().__init__(options=options)
+        self.item_names: tuple[str, ...] = tuple(sorted(set(item_names)))
 
 
 @dataclasses.dataclass()
@@ -914,8 +1288,14 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            if state is None:
+                verb = "Can reach"
+            elif self.test(state):
+                verb = "Reached"
+            else:
+                verb = "Cannot reach"
             return [
-                {"type": "text", "text": "Reached Location "},
+                {"type": "text", "text": f"{verb} location "},
                 {"type": "location_name", "text": self.location_name, "player": self.player},
             ]
 
@@ -958,8 +1338,14 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            if state is None:
+                verb = "Can reach"
+            elif self.test(state):
+                verb = "Reached"
+            else:
+                verb = "Cannot reach"
             return [
-                {"type": "text", "text": "Reached Region "},
+                {"type": "text", "text": f"{verb} region "},
                 {"type": "color", "color": "yellow", "text": self.region_name},
             ]
 
@@ -1014,8 +1400,14 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            if state is None:
+                verb = "Can reach"
+            elif self.test(state):
+                verb = "Reached"
+            else:
+                verb = "Cannot reach"
             return [
-                {"type": "text", "text": "Reached Entrance "},
+                {"type": "text", "text": f"{verb} entrance "},
                 {"type": "entrance_name", "text": self.entrance_name, "player": self.player},
             ]
 
