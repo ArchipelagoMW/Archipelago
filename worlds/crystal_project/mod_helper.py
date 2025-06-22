@@ -3,10 +3,10 @@ from os import listdir, getcwd
 from os.path import isfile, join
 from typing import Optional, Callable, TYPE_CHECKING
 from BaseClasses import Item, ItemClassification, CollectionState
-from typing import List
+from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
-from .locations import LocationData, get_locations, npc_index_offset, treasure_index_offset
+from .locations import LocationData, get_locations, npc_index_offset, treasure_index_offset, crystal_index_offset
 from .constants.biomes import get_region_by_id
 from .rules import CrystalProjectLogic
 import json
@@ -17,11 +17,17 @@ if TYPE_CHECKING:
 class ModDataModel(object):
     def __init__(self, json_data):
         self.ID = None
+        self.System = None
         self.Equipment = None
         self.Items = None
         self.Jobs = None
         self.Entities = None
         self.__dict__ = json.loads(json_data)
+
+class IdsExcludedFromRandomization(NamedTuple):
+    excluded_equipment_ids : List[int]
+    excluded_item_ids : List[int]
+    excluded_job_ids : List[int]
 
 def get_mod_guids() -> List[str]:
     guids: List[str] = []
@@ -54,32 +60,36 @@ def get_modded_items(player: int, options: CrystalProjectOptions) -> List[Item]:
         for file in only_files:
             file_text = open(join(file_directory, file)).read()
             data = ModDataModel(file_text)
+            excluded_ids = get_excluded_ids(data)
 
             for item in data.Equipment:
                 item_id = item['ID'] + equipment_index_offset
                 item_in_pool = any(data.code == item_id for name, data in item_table.items())
+                excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
                 name = 'Equipment - ' + item['Name']
 
-                if not item_in_pool:
+                if not item_in_pool and not excluded:
                     mod_item = Item(name, ItemClassification.useful, item_id, player)
                     items.append(mod_item)
 
             for item in data.Items:
                 item_id = item['ID'] + item_index_offset
                 item_in_pool = any(data.code == item_id for name, data in item_table.items())
+                excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
                 name = 'Item - ' + item['Name']
 
-                if not item_in_pool:
+                if not item_in_pool and not excluded:
                     mod_item = Item(name, ItemClassification.progression, item_id, player)
                     items.append(mod_item)
 
             for item in data.Jobs:
                 item_id = item['ID'] + job_index_offset
                 item_in_pool = any(data.code == item_id for name, data in item_table.items())
+                excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
                 is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
                 name = 'Job - ' + item['Name']
 
-                if not item_in_pool and not is_unselectable:
+                if not item_in_pool and not is_unselectable and not excluded:
                     mod_item = Item(name, ItemClassification.progression, item_id, player)
                     items.append(mod_item)
 
@@ -100,18 +110,25 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
         for file in only_files:
             file_text = open(join(file_directory, file)).read()
             data = ModDataModel(file_text)
+            excluded_ids = get_excluded_ids(data)
 
             for location in data.Entities:
                 entity_type = location['EntityType']
                 #Entity type 0 is NPC
                 if entity_type == 0:
-                    location = build_npc_location(location, player, world, options)
+                    location = build_npc_location(location, excluded_ids, player, world, options)
                     if location is not None:
                         locations.append(location)
 
                 #Entity type 5 is Treasure
                 if entity_type == 5:
-                    location = build_treasure_location(location, player, world, options)
+                    location = build_treasure_location(location, excluded_ids, player, options)
+                    if location is not None:
+                        locations.append(location)
+
+                # Entity type 6 is Crystal
+                if entity_type == 6:
+                    location = build_crystal_location(location, excluded_ids, player, options)
                     if location is not None:
                         locations.append(location)
 
@@ -123,7 +140,7 @@ def get_mod_directory() -> str:
 
     return mod_directory
 
-def build_npc_location(location, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> Optional[LocationData]:
+def build_npc_location(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> Optional[LocationData]:
     region = get_region_by_id(location['BiomeID'])
     item_id = location['ID'] + npc_index_offset
     name = region + ' NPC - Modded NPC ' + str(item_id)
@@ -142,24 +159,29 @@ def build_npc_location(location, player: int, world: "CrystalProjectWorld", opti
                 actions_false = action['Data']['ConditionActionsFalse']
 
                 for action_true in actions_true:
+                    # 8 is Add Inventory, this means it's a check
                     if action_true['ActionType'] == 8:
-                        has_add_inventory = True
+                        is_excluded = is_item_at_location_excluded(action_true['Data'], excluded_ids)
+                        has_add_inventory = not is_excluded
 
                         # Condition Type 5 is Check Inventory
-                        if condition['ConditionType'] == 5 and not condition['IsNegation']:
+                        if has_add_inventory and condition['ConditionType'] == 5 and not condition['IsNegation']:
                             condition_rule = build_condition_rule(condition, world, player, options)
 
                 for action_false in actions_false:
+                    # 8 is Add Inventory, this means it's a check
                     if action_false['ActionType'] == 8:
-                        has_add_inventory = True
+                        is_excluded = is_item_at_location_excluded(action_false['Data'], excluded_ids)
+                        has_add_inventory = not is_excluded
 
                         # Condition Type 5 is Check Inventory
-                        if condition['ConditionType'] == 5 and not condition['IsNegation']:
+                        if has_add_inventory and condition['ConditionType'] == 5 and not condition['IsNegation']:
                             condition_rule = build_condition_rule(condition, world, player, options)
 
             # 8 is Add Inventory, this means it's a check
             if action['ActionType'] == 8:
-                has_add_inventory = True
+                is_excluded = is_item_at_location_excluded(action['Data'], excluded_ids)
+                has_add_inventory = not is_excluded
 
     if has_add_inventory:
         item_in_pool = any(location.code == item_id for location in get_locations(player, options))
@@ -178,16 +200,37 @@ def build_npc_location(location, player: int, world: "CrystalProjectWorld", opti
 
     return None
 
-def build_treasure_location(location, player, world, options):
+def build_treasure_location(location, excluded_ids, player, options):
     #Chests always add an item and never have conditions, so nice and easy
     region = get_region_by_id(location['BiomeID'])
     item_id = location['ID'] + treasure_index_offset
     name = region + ' Chest - Modded Chest ' + str(item_id)
+    is_excluded = is_item_at_location_excluded(location['TreasureData'], excluded_ids)
 
     item_in_pool = any(location.code == item_id for location in get_locations(player, options))
-    if not item_in_pool:
+    if not item_in_pool and not is_excluded:
         logic = CrystalProjectLogic(player, options)
         condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
+        location = LocationData(region, name, item_id, condition_rule)
+
+        return location
+
+    return None
+
+def build_crystal_location(location, excluded_ids, player, options):
+    # Crystals always add a job and never have conditions, so nice and easy
+    region = get_region_by_id(location['BiomeID'])
+    item_id = location['ID'] + crystal_index_offset
+    name = region + ' Crystal - Modded Job ' + str(item_id)
+
+    job_id = location['CrystalData']['JobID']
+    is_excluded = job_id in excluded_ids.excluded_job_ids
+
+    item_in_pool = any(location.code == item_id for location in get_locations(player, options))
+    if not item_in_pool and not is_excluded:
+        logic = CrystalProjectLogic(player, options)
+        condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
+            state) and logic.has_vertical_movement(state)
         location = LocationData(region, name, item_id, condition_rule)
 
         return location
@@ -212,3 +255,22 @@ def build_condition_rule(condition, world: "CrystalProjectWorld", player: int, o
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state) and state.has(item_name, player)
     else:
         return None
+
+def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
+    excluded_item_ids = mod.System['Randomizer']['ExcludeItemIDs']
+    excluded_job_ids = mod.System['Randomizer']['ExcludeJobIDs']
+    excluded_equipment_ids = mod.System['Randomizer']['ExcludeEquipmentIDs']
+
+    return IdsExcludedFromRandomization(excluded_equipment_ids, excluded_item_ids, excluded_job_ids)
+
+def is_item_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomization) -> bool:
+    loot_type = data['LootType']
+    item_id = data['LootValue']
+
+    #Loot Type 1 is item and 2 is equipment
+    if loot_type == 1:
+        return item_id in excluded_ids.excluded_item_ids
+    elif loot_type == 2:
+        return item_id in excluded_ids.excluded_equipment_ids
+
+    return False
