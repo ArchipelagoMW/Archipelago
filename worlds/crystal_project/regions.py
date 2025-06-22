@@ -221,6 +221,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     SALMON_PASS: lambda state: logic.has_swimming(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) or options.obscureRoutes.value,
                     PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state)})
+    fancy_add_exits(world, MERCURY_SHRINE, [DELENDE, SEASIDE_CLIFFS, BEAURIOR_VOLCANO],
+                    {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, SOILED_DEN, [JADE_CAVERN, DELENDE, THE_PALE_GROTTO, DRAFT_SHAFT_CONDUIT],
                     {JADE_CAVERN: lambda state: logic.has_golden_quintar(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
@@ -235,8 +237,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     MERCURY_SHRINE: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, DRAFT_SHAFT_CONDUIT, [SEASIDE_CLIFFS, SOILED_DEN],
                     {SOILED_DEN: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, MERCURY_SHRINE, [DELENDE, SEASIDE_CLIFFS, BEAURIOR_VOLCANO],
-                    {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, YAMAGAWA_MA, [SPAWNING_MEADOWS, DELENDE, LAKE_DELENDE])
     fancy_add_exits(world, PROVING_MEADOWS, [DELENDE, THE_PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA],
                     {SKUMPARADISE: lambda state: logic.has_jobs(state, 3),
