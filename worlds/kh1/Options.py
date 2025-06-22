@@ -216,7 +216,7 @@ class RequiredLuckyEmblemsEotW(Range):
     display_name = "Lucky Emblems to Open End of the World"
     default = 7
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 class RequiredLuckyEmblemsDoor(Range):
     """
@@ -225,7 +225,7 @@ class RequiredLuckyEmblemsDoor(Range):
     display_name = "Lucky Emblems to Open Final Rest Door"
     default = 10
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 class LuckyEmblemsInPool(Range):
     """
@@ -234,7 +234,7 @@ class LuckyEmblemsInPool(Range):
     display_name = "Lucky Emblems in Pool"
     default = 13
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 class KeybladeStats(Choice):
     """
@@ -693,7 +693,7 @@ class Day2Materials(Range):
     display_name = "Day 2 Materials"
     default = 4
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 class HomecomingMaterials(Range):
     """
@@ -702,7 +702,7 @@ class HomecomingMaterials(Range):
     display_name = "Homecoming Materials"
     default = 14
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 class MaterialsInPool(Range):
     """
@@ -711,7 +711,7 @@ class MaterialsInPool(Range):
     display_name = "Materials in Pool"
     default = 16
     range_start = 0
-    range_end = 50
+    range_end = 20
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
