@@ -6,6 +6,7 @@ from .constants.key_items import *
 from .constants.regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
+from .constants.region_passes import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
@@ -302,6 +303,18 @@ class CrystalProjectWorld(World):
                     #atm there are no end-game specific shopsanity items
                     if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                         amount = amount + int(data.endGameShops or 0)
+
+                # Make sure new world pass is included if region sanity of on and its required for the goal
+                if (self.options.regionsanity.value == self.options.regionsanity.option_true and
+                        (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
+                        name == THE_NEW_WORLD_PASS):
+                    amount = 1
+                # Same goes for old world pass
+                elif (self.options.regionsanity.value == self.options.regionsanity.option_true and
+                        self.options.goal.value == self.options.goal.option_true_astley and
+                        name == THE_OLD_WORLD_PASS):
+                    amount = 1
+
                 for _ in range(amount):
                     item = self.set_classifications(name)
                     pool.append(item)
