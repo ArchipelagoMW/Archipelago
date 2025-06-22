@@ -406,6 +406,8 @@ class CrystalProjectWorld(World):
         if options.UseMods:
             mod_guids = mod_helper.get_mod_guids()
 
+        # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
+
         return {
             "apworld_version": self.apworld_version,
             "goal": self.options.goal.value,
@@ -424,5 +426,5 @@ class CrystalProjectWorld(World):
             "regionsanity": bool(self.options.regionsanity.value),
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
-            "modGuids": mod_guids
+            "modGuids": mod_guids,
         }
