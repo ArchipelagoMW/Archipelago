@@ -220,7 +220,7 @@ class LMContext(CommonContext):
         self.spawn = "Foyer"
 
         # Track if the user has pickup animations turned on.
-        self.pickup_anim_off = False
+        self.pickup_anim_on = False
 
         # Used for handling received items to the client.
         self.already_mentioned_rank_diff = False
@@ -303,7 +303,7 @@ class LMContext(CommonContext):
                                 "Please verify that you are using the right ISO/seed/APLM file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.pickup_anim_off = bool(args["slot_data"]["pickup animation"])
+            self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
             self.rank_req = int(args["slot_data"]["rank requirement"])
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
@@ -616,7 +616,7 @@ class LMContext(CommonContext):
 
         # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
-        if not self.pickup_anim_off:
+        if not self.pickup_anim_on:
             crown_helper_val = "00000001"
             dme.write_bytes(0x804DE16C, bytes.fromhex(crown_helper_val))
 
