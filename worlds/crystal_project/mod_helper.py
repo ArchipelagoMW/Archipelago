@@ -128,7 +128,7 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
 
                 # Entity type 6 is Crystal
                 if entity_type == 6:
-                    location = build_crystal_location(location, player, options)
+                    location = build_crystal_location(location, excluded_ids, player, options)
                     if location is not None:
                         locations.append(location)
 
@@ -217,14 +217,17 @@ def build_treasure_location(location, excluded_ids, player, options):
 
     return None
 
-def build_crystal_location(location, player, options):
+def build_crystal_location(location, excluded_ids, player, options):
     # Crystals always add a job and never have conditions, so nice and easy
     region = get_region_by_id(location['BiomeID'])
     item_id = location['ID'] + crystal_index_offset
     name = region + ' Crystal - Modded Job ' + str(item_id)
 
+    job_id = location['CrystalData']['JobID']
+    is_excluded = job_id in excluded_ids.excluded_job_ids
+
     item_in_pool = any(location.code == item_id for location in get_locations(player, options))
-    if not item_in_pool:
+    if not item_in_pool and not is_excluded:
         logic = CrystalProjectLogic(player, options)
         condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
             state) and logic.has_vertical_movement(state)
