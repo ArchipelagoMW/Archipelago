@@ -1760,9 +1760,6 @@ def set_rules(kh1world):
         if difficulty == 0 and location_table[location].behind_boss:
             add_rule(kh1world.get_location(location),
                 lambda state: has_basic_tools(state, player))
-        if location_table[location].type == "Starting Accessory":
-            add_item_rule(kh1world.get_location(location),
-                lambda i: (i.player == player and i.name in get_items_by_category("Accessory").keys()))
         if options.remote_items.current_key == "off":
             if location_table[location].type == "Chest":
                 add_item_rule(kh1world.get_location(location),

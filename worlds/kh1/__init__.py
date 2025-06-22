@@ -63,6 +63,7 @@ class KH1World(World):
     slot_2_levels = None
     keyblade_stats = None
     starting_accessory_locations = None
+    starting_accessories = None
     ap_costs = None
 
     def create_items(self):
@@ -87,6 +88,14 @@ class KH1World(World):
             starting_tools = ["Scan", "Dodge Roll"]
             self.multiworld.push_precollected(self.create_item("Scan"))
             self.multiworld.push_precollected(self.create_item("Dodge Roll"))
+        
+        # Handle starting party member accessories
+        starting_party_member_accessories = []
+        starting_party_member_locations = []
+        starting_party_member_locations = self.get_starting_accessory_locations()
+        starting_party_member_accessories = self.get_starting_accessories()
+        for i in range(len(starting_party_member_locations)):
+            self.get_location(self.starting_accessory_locations[i]).place_locked_item(self.create_item(self.starting_accessories[i]))
         
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
@@ -143,7 +152,7 @@ class KH1World(World):
             quantity = data.max_quantity
             if data.category not in non_filler_item_categories:
                 continue
-            if name in starting_worlds or name in starting_tools:
+            if name in starting_worlds or name in starting_tools or name in starting_party_member_accessories:
                 continue
             if name == "Puppy":
                 item_pool += [self.create_item(name) for _ in range(ceil(99/self.options.puppy_value.value))]
@@ -536,6 +545,15 @@ class KH1World(World):
             else:
                 self.starting_accessory_locations = []
         return self.starting_accessory_locations
+    
+    def get_starting_accessories(self):
+        if self.starting_accessories is None:
+            if self.options.randomize_party_member_starting_accessories:
+                self.starting_accessories = list(get_items_by_category("Accessory").keys())
+                self.starting_accessories = self.random.sample(self.starting_accessories, 10)
+            else:
+                self.starting_accessories = []
+        return self.starting_accessories
     
     def get_ap_costs(self):
         if self.ap_costs is None:
