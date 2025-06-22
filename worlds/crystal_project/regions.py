@@ -112,7 +112,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, MENU, excluded),
         create_region(world, player, locations_per_region, SPAWNING_MEADOWS, excluded),
         create_region(world, player, locations_per_region, DELENDE, excluded),
-        # bumped up mercury shrine because region order influences shop price NOTE TO KATE, DO NOT MOVE WITHOUT REASON!!
+        # bumped up mercury shrine because region order influences shop price NOTE TO DRAGONS, DO NOT MOVE WITHOUT REASON!!
         create_region(world, player, locations_per_region, MERCURY_SHRINE, excluded),
         create_region(world, player, locations_per_region, SOILED_DEN, excluded),
         create_region(world, player, locations_per_region, THE_PALE_GROTTO, excluded),
