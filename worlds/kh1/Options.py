@@ -711,7 +711,7 @@ class MaterialsInPool(Range):
     display_name = "Materials in Pool"
     default = 16
     range_start = 0
-    range_end = 20
+    range_end = 99
 
 @dataclass
 class KH1Options(PerGameCommonOptions):
