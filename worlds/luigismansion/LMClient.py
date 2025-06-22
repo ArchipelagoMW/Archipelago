@@ -616,7 +616,7 @@ class LMContext(CommonContext):
 
         # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
-        if self.pickup_anim_off:
+        if not self.pickup_anim_off:
             crown_helper_val = "00000001"
             dme.write_bytes(0x804DE16C, bytes.fromhex(crown_helper_val))
 

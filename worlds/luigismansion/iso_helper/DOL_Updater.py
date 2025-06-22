@@ -13,7 +13,7 @@ CUSTOM_CODE_OFFSET_START = 0x39FA20
 # Updates the main DOL file, which is the main file used for GC and Wii games. This section includes some custom code
 # inside the DOL file itself.
 def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk_speed: int, slot_name: str,
-    random_spawn: str, king_boo_health: int, fear_anim_disabled: bool, pickup_anim_enabled: bool,
+    random_spawn: str, king_boo_health: int, fear_anim_enabled: bool, pickup_anim_enabled: bool,
     boo_rand_on: bool, dool_model_rando_on: bool) -> (GCM, DOL):
 
     random.seed(seed)
@@ -56,8 +56,13 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
         dol.data.seek(0x04DC10)
         dol.data.write(bytes.fromhex("4848D061"))
 
-    # Turn off pickup animations
+    # Turn on/off pickup animations
     if pickup_anim_enabled == 1:
+        keys_and_others_val = "02"
+        gem_val = "06"
+        hat_val = "06"
+        elem_val = "16"
+    else:
         keys_and_others_val = "01"
         gem_val = "05"
         hat_val = "05"
@@ -66,11 +71,6 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
         # Write additional code to enable Custom Pickup animations when animations are turned off for King Boo
         dol.data.seek(0x0AD624)
         dol.data.write(bytes.fromhex("4842D769"))
-    else:
-        keys_and_others_val = "02"
-        gem_val = "06"
-        hat_val = "06"
-        elem_val = "16"
 
     # Keys and important animations
     dol.data.seek(0xCD39B)
@@ -88,11 +88,11 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.seek(0x0CF4A3)
     dol.data.write(bytes.fromhex(elem_val))
 
-    # Turn off luigi scare animations
-    if fear_anim_disabled == 1:
-        scare_val = [0x00]
-    else:
+    # Turn on/off luigi scare animations
+    if fear_anim_enabled == 1:
         scare_val = [0x44]
+    else:
+        scare_val = [0x00]
     dol.data.seek(0x396578)
     dol.data.write(struct.pack(">B", *scare_val))
 

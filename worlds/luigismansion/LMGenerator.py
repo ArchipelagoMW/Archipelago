@@ -218,8 +218,8 @@ class LuigisMansionRandomizer:
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = False if int(self.output_data["Options"]["enable_fear_animation"]) == 0 else True
-        bool_fear_anim_disabled: bool = False if int(self.output_data["Options"]["enable_pickup_animation"]) == 0 else True
+        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 0 else False
+        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 0 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
@@ -239,7 +239,7 @@ class LuigisMansionRandomizer:
 
         logger.info("Updating all the main.dol offsets with their appropriate values.")
         self.gcm, self.dol = update_dol_offsets(self.gcm, self.dol, self.seed, start_inv_list, walk_speed, player_name,
-            random_spawn, king_boo_health, bool_fear_anim_disabled, bool_pickup_anim_enabled, bool_boo_rando_enabled,
+            random_spawn, king_boo_health, bool_fear_anim_enabled, bool_pickup_anim_enabled, bool_boo_rando_enabled,
             door_model_rando_on)
 
         logger.info("Updating all of the common events with the customized version.")
