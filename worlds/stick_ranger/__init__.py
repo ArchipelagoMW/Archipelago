@@ -6,14 +6,8 @@ from worlds.AutoWorld import WebWorld, World
 
 from .Constants import *
 from .Items import SRItem, TrapItemData, filler, item_table, stages, traps
-from .Locations import (
-    LocationDict,
-    SRLocation,
-    books_table,
-    enemies_table,
-    location_name_to_id,
-    stages_table,
-)
+from .Locations import (LocationDict, SRLocation, books_table, enemies_table,
+                        location_name_to_id, stages_table)
 from .Options import SROptions
 from .Regions import regions
 from .Rules import set_rules
