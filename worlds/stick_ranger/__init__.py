@@ -76,7 +76,6 @@ class StickRanger(World):
 
     def _generate_randomness(self) -> None:
         """Clamp min/max and roll actual required stages per goal."""
-        rng: Random = self.random
         for _, min_attr, max_attr, req_attr in STAGE_SETTINGS:
             low: int = min(
                 getattr(self.options, min_attr).value,
@@ -90,7 +89,7 @@ class StickRanger(World):
             opt_max = getattr(self.options, max_attr)
             opt_min.value = low
             opt_max.value = high
-            getattr(self.options, req_attr).value = rng.randint(low, high)
+            getattr(self.options, req_attr).value = self.random.randint(low, high)
 
     def generate_early(self) -> None:
         self._validate_options()
