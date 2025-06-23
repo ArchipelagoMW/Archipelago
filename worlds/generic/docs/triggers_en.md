@@ -160,3 +160,82 @@ Super Metroid:
 In this example, if the `start_location` option rolls `landing_site`, only a starting hint for Morph Ball will be 
 created. If `aqueduct` is rolled, a starting hint for Gravity Suit will also be created alongside the hint for Morph 
 Ball.
+
+## Using Arithmetic to Determine Output Values
+
+By adding a * at the end of an option name when specifying changes, you can perform
+addition, subtraction, multiplication, or division of values. This is done here: 
+```
+options: 
+  game_name:
+    option_name1: option_name1_value
+    option_name2*: option_name2_value
+```
+option_name1 will be assigned as normal, option_name2's value will be calculated because of the star attached to the end
+
+When performing arithmetic, the value should be either a string, or a weighted list of strings
+in the form: 
+
+`"value1 <[+, -, *, /] value2> <[+, -, *, /] value3> ..."`
+
+So, in quotes, the values and operations to be used in the
+calculations in the pattern: first value, then pairs of operator and next value. 
+
+You may separate values/operators with 
+spaces if you prefer, it is not necessary. You CANNOT negate a reference value 
+(i.e. "2 * -amount_of_stars" will not work.)
+
+Standard order of operation does NOT apply. Operations will be performed in the order they appear. 
+"2+amount+of_stars/10" will be equivalent to (2+amount_of_stars)/10
+
+Values can be either constants or option names whose values you wish to use. Options referenced this way must be either 
+a constant value `coinsanity: 3`, or a weighted list of values: 
+```yaml
+coinsanity:
+  3: 2
+  4: 5
+  10: 6
+```
+and the values must be numeric. No operations involving values of 1,000,000 or more (positive or negative) are allowed.
+All calculated decimals are rounded to 6 decimal places (13.7526489852 -> 13.752649) 
+
+For example:
+```yaml
+math_door: 
+  true: 1
+  false: 1
+
+triggers:
+  - option_category: Super Mario 64
+    option_name: math_door
+    option_result: true
+    options:
+      Super Mario 64:
+        first_bowser_star_door_cost*: "amount_of_stars / 10"
+        basement_star_door_cost*: 
+          "amount_of_stars / 5": 2
+          "amount_of_stars - 10": 3
+          "amount_of_stars+3/5": 2
+        second_floor_star_door_cost: 20
+        stars_to_finish*: "amount_of_stars"
+```
+
+This first checks the option math_door. If it rolled true, then the options take effect:
+
+`first_bowser_star_door_cost*: "amount_of_stars / 10"` takes whatever value
+amount_of_stars has, and divides it by 10.
+
+```
+basement_star_door_cost*:
+  "amount_of_stars / 5": 2
+  "amount_of_stars - 10": 3
+  "amount_of_stars+3/5": 2
+```
+This says there is a 2/7 chance that the basement door will cost 1/5 of the stars selected by
+amount_of_stars, a 3/7 chance that the basement door will cost 10 fewer stars than selected by
+amount_of_stars, and a 2/7 chance that the basement door will cost 1/5 of 3 more stars than selected by
+amount_of_stars.
+
+`second_floor_star_door_cost: 20` says that the second door will take 20 stars to open.
+
+`stars_to_finish*: "amount_of_stars"` says that you will need every star to finish. 
