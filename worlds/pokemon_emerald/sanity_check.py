@@ -5,8 +5,6 @@ duplicate claims and give warnings for unused and unignored locations or warps.
 import logging
 from typing import List
 
-from .data import load_json_data, data
-
 
 _IGNORABLE_LOCATIONS = frozenset({
     "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",  # Is permanently mssiable and has special behavior that sets the flag early
@@ -247,12 +245,29 @@ _IGNORABLE_WARPS = frozenset({
 })
 
 
+def validate_group_maps() -> bool:
+    from .data import data
+    from .groups import _LOCATION_GROUP_MAPS
+
+    failed = False
+
+    for group_name, map_set in _LOCATION_GROUP_MAPS.items():
+        for map_name in map_set:
+            if map_name not in data.maps:
+                failed = True
+                logging.error("Pokemon Emerald: Map named %s in location group %s does not exist", map_name, group_name)
+
+    return not failed
+
+
 def validate_regions() -> bool:
     """
     Verifies that Emerald's data doesn't have duplicate or missing
     regions/warps/locations. Meant to catch problems during development like
     forgetting to add a new location or incorrectly splitting a region.
     """
+    from .data import load_json_data, data
+
     extracted_data_json = load_json_data("extracted_data.json")
     error_messages: List[str] = []
     warn_messages: List[str] = []

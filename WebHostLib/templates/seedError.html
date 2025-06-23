@@ -1,5 +1,6 @@
 {% extends 'pageWrapper.html' %}
 {% import "macros.html" as macros %}
+{% set show_footer = True %}
 
 {% block head %}
     <title>Generation failed, please retry.</title>
@@ -15,5 +16,4 @@
             {{ seed_error }}
         </div>
     </div>
-    {% include 'islandFooter.html' %}
 {% endblock %}

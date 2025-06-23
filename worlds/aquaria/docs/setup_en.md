@@ -3,11 +3,11 @@
 ## Required Software
 
 - The original Aquaria Game (purchasable from most online game stores)
-- The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases)
+- The [Aquaria randomizer](https://github.com/tioui/Aquaria_Randomizer/releases/latest)
 
 ## Optional Software
  
-- For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
+- For sending [commands](/tutorial/Archipelago/commands/en) like `!hint`: the TextClient from [the most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
 - [Aquaria AP Tracker](https://github.com/palex00/aquaria-ap-tracker/releases/latest), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases/latest)
 

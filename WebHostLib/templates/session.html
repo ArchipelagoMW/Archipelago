@@ -1,0 +1,30 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    {% include 'header/stoneHeader.html' %}
+    <title>Session</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+{% endblock %}
+
+{% block body %}
+    <div class="markdown">
+        {% if old_id is defined %}
+            <p>Your old code was:</p>
+            <code>{{ old_id }}</code>
+            <br>
+        {% endif %}
+        <p>The following code is your unique identifier, it binds your uploaded content, such as rooms and seeds to you.
+            Treat it like a combined login name and password.
+            You should save this securely if you ever need to restore access.
+            You can also paste it into another device to access your content from multiple devices / browsers.
+            Some browsers, such as Brave, will delete your identifier cookie on a timer.</p>
+        <code>{{ session["_id"] }}</code>
+        <br>
+        <p>
+            The following link can be used to set the identifier. Do not share the code or link with others. <br>
+            <a href="{{ url_for('set_session', _id=session['_id']) }}">
+                {{ url_for('set_session', _id=session['_id'], _external=True) }}
+            </a>
+        </p>
+    </div>
+{%  endblock %}

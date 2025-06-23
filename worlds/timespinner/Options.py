@@ -60,6 +60,7 @@ class EnemyRando(Choice):
     option_scaled = 1
     option_unscaled = 2
     option_ryshia = 3
+    option_no_hell_spiders = 4
     alias_true = 1
 
 class DamageRando(Choice):
@@ -180,9 +181,16 @@ class DamageRandoOverrides(OptionDict):
     }
 
 class HpCap(Range):
-    "Sets the number that Lunais's HP maxes out at."
+    """Sets the number that Lunais's HP maxes out at."""
     display_name = "HP Cap"
     range_start = 1
+    range_end = 999
+    default = 999
+
+class AuraCap(Range):
+    """Sets the maximum Aura Lunais is allowed to have. Level 1 is 80. Djinn Inferno costs 45."""
+    display_name = "Aura Cap"
+    range_start = 45
     range_end = 999
     default = 999
 
@@ -359,12 +367,37 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
     display_name = "Back to the future"
+
+class PrismBreak(Toggle):
+    """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
+    instead of needing to beat the Golden Idol, Aelana, and The Maw."""
+    display_name = "Prism Break"
+    
+class LockKeyAmadeus(Toggle):
+    """Lasers in Amadeus' Laboratory are disabled via items, rather than by de-powering the lab. Experiments will spawn in the lab."""
+    display_name = "Lock Key Amadeus"
+    
+class RiskyWarps(Toggle):
+    """Expanded free-warp eligible locations, including Azure Queen, Xarion, Amadeus' Laboratory, and Emperor's Tower."""
+    display_name = "Risky Warps"
+
+class PyramidStart(Toggle):
+    """Start in ???. Takes priority over Inverted. Additional chests in Dark Forest and Pyramid. Sandman door behaves as it does in Enter Sandman."""
+    display_name = "Pyramid Start"
+
+class GateKeep(Toggle):
+    """The castle drawbridge starts raised, and can be lowered via item."""
+    display_name = "Gate Keep"
+
+class RoyalRoadblock(Toggle):
+    """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
+    display_name = "Royal Roadblock"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -383,6 +416,7 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
+    aura_cap: AuraCap
     level_cap: LevelCap
     extra_earrings_xp: ExtraEarringsXP
     boss_healing: BossHealing
@@ -401,6 +435,12 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
+    prism_break: PrismBreak
+    lock_key_amadeus: LockKeyAmadeus
+    risky_warps: RiskyWarps
+    pyramid_start: PyramidStart
+    gate_keep: GateKeep
+    royal_roadblock: RoyalRoadblock
     trap_chance: TrapChance
     traps: Traps
 

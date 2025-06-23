@@ -241,7 +241,10 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint) -> Witnes
             area = chosen_group
 
             # local locations should only ever return a location group, as Witness defines groups for every location.
-            hint_text = f"{item_name} can be found in the {area} area."
+            if area == "Easter Eggs":
+                hint_text = f"{item_name} can be found by collecting Easter Eggs."
+            else:
+                hint_text = f"{item_name} can be found in the {area} area."
         else:
             player_name = world.multiworld.get_player_name(hint.location.player)
 
@@ -301,11 +304,11 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
 
 def get_item_and_location_names_in_random_order(world: "WitnessWorld",
                                                 own_itempool: List["WitnessItem"]) -> Tuple[List[str], List[str]]:
-    prog_item_names_in_this_world = [
+    progression_item_names_in_this_world = [
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
     ]
-    world.random.shuffle(prog_item_names_in_this_world)
+    world.random.shuffle(progression_item_names_in_this_world)
 
     locations_in_this_world = [
         location for location in world.multiworld.get_locations(world.player)
@@ -318,22 +321,24 @@ def get_item_and_location_names_in_random_order(world: "WitnessWorld",
 
     location_names_in_this_world = [location.name for location in locations_in_this_world]
 
-    return prog_item_names_in_this_world, location_names_in_this_world
+    return progression_item_names_in_this_world, location_names_in_this_world
 
 
 def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["WitnessItem"],
                                    already_hinted_locations: Set[Location]
                                    ) -> Tuple[List[WitnessLocationHint], List[WitnessLocationHint]]:
 
-    prog_items_in_this_world, loc_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
+    progression_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(
+        world, own_itempool
+    )
 
     always_items = [
         item for item in get_always_hint_items(world)
-        if item in prog_items_in_this_world
+        if item in progression_items_in_this_world
     ]
     priority_items = [
         item for item in get_priority_hint_items(world)
-        if item in prog_items_in_this_world
+        if item in progression_items_in_this_world
     ]
 
     if world.options.vague_hints:
@@ -341,11 +346,11 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
     else:
         always_locations = [
             location for location in get_always_hint_locations(world)
-            if location in loc_in_this_world
+            if location in locations_in_this_world
         ]
         priority_locations = [
             location for location in get_priority_hint_locations(world)
-            if location in loc_in_this_world
+            if location in locations_in_this_world
         ]
 
     # Get always and priority location/item hints
@@ -376,7 +381,9 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List["Wi
 def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List["WitnessItem"],
                               already_hinted_locations: Set[Location], hints_to_use_first: List[WitnessLocationHint],
                               unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[WitnessWordedHint]:
-    prog_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
+    progression_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(
+        world, own_itempool
+    )
 
     next_random_hint_is_location = world.random.randrange(0, 2)
 
@@ -390,7 +397,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
     }
 
     while len(hints) < hint_amount:
-        if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
+        if not progression_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
             logging.warning(f"Ran out of items/locations to hint for player {world.player_name}.")
             break
 
@@ -399,8 +406,8 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
             location_hint = hints_to_use_first.pop()
         elif next_random_hint_is_location and locations_in_this_world:
             location_hint = hint_from_location(world, locations_in_this_world.pop())
-        elif not next_random_hint_is_location and prog_items_in_this_world:
-            location_hint = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
+        elif not next_random_hint_is_location and progression_items_in_this_world:
+            location_hint = hint_from_item(world, progression_items_in_this_world.pop(), own_itempool)
         # The list that the hint was supposed to be taken from was empty.
         # Try the other list, which has to still have something, as otherwise, all lists would be empty,
         # which would have triggered the guard condition above.
@@ -457,7 +464,7 @@ def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[st
 
 
 def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]], Dict[str, List[Item]]]:
-    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.keys())
+    potential_areas = list(static_witness_logic.ALL_AREAS_BY_NAME.values())
 
     locations_per_area = {}
     items_per_area = {}
@@ -465,14 +472,14 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
     for area in potential_areas:
         regions = [
             world.get_region(region)
-            for region in static_witness_logic.ALL_AREAS_BY_NAME[area]["regions"]
+            for region in area.regions
             if region in world.player_regions.created_region_names
         ]
         locations = [location for region in regions for location in region.get_locations() if not location.is_event]
 
         if locations:
-            locations_per_area[area] = locations
-            items_per_area[area] = [location.item for location in locations]
+            locations_per_area[area.name] = locations
+            items_per_area[area.name] = [location.item for location in locations]
 
     return locations_per_area, items_per_area
 
@@ -501,12 +508,15 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, area_items: List[Ite
 
     area_progression_word = "Both" if total_progression == 2 else "All"
 
-    hint_string = f"In the {hinted_area} area, you will find "
+    if hinted_area == "Easter Eggs":
+        hint_string = "Through collecting Easter Eggs, you will find "
+    else:
+        hint_string = f"In the {hinted_area} area, you will find "
 
     hunt_panels = None
-    if world.options.victory_condition == "panel_hunt":
+    if world.options.victory_condition == "panel_hunt" and hinted_area != "Easter Eggs":
         hunt_panels = sum(
-            static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"]["name"] == hinted_area
+            static_witness_logic.ENTITIES_BY_HEX[hunt_entity]["area"].name == hinted_area
             for hunt_entity in world.player_logic.HUNT_ENTITIES
         )
 
@@ -587,9 +597,11 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
-        hint_string, prog_amount, hunt_panels = word_area_hint(world, hinted_area, items_per_area[hinted_area])
+        hint_string, progression_amount, hunt_panels = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount, hunt_panels))
+        hints.append(
+            WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", progression_amount, hunt_panels)
+        )
 
     if len(hinted_areas) < amount:
         logging.warning(f"Was not able to make {amount} area hints for player {world.player_name}. "
@@ -608,7 +620,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
 
     already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
-        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
+        if loc.address and static_witness_logic.ENTITIES_BY_NAME[loc.name]["area"].name == "Tutorial (Inside)"
     }
 
     intended_location_hints = hint_amount - area_hints

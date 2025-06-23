@@ -5,7 +5,7 @@ import dataclasses
 from logging import error, warning
 from typing import Any, Dict, List, Optional, cast
 
-from BaseClasses import CollectionState, Entrance, Location, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
 from Options import OptionError, PerGameCommonOptions, Toggle
 from worlds.AutoWorld import WebWorld, World
@@ -63,7 +63,7 @@ class WitnessWorld(World):
     item_name_groups = static_witness_items.ITEM_GROUPS
     location_name_groups = static_witness_locations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 5, 1)
+    required_client_version = (0, 6, 0)
 
     player_logic: WitnessPlayerLogic
     player_locations: WitnessPlayerLocations
@@ -84,7 +84,8 @@ class WitnessWorld(World):
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
             "panelhex_to_id": self.player_locations.CHECK_PANELHEX_TO_ID,
             "item_id_to_door_hexes": static_witness_items.get_item_to_door_mappings(),
-            "door_hexes_in_the_pool": self.player_items.get_door_ids_in_pool(),
+            "door_items_in_the_pool": self.player_items.get_door_item_ids_in_pool(),
+            "doors_that_shouldnt_be_locked": [int(h, 16) for h in self.player_logic.FORBIDDEN_DOORS],
             "symbols_not_in_the_game": self.player_items.get_symbol_ids_not_in_pool(),
             "disabled_entities": [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             "hunt_entities": [int(h, 16) for h in self.player_logic.HUNT_ENTITIES],
@@ -150,12 +151,14 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints = {}
+        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
+        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
 
         self.determine_sufficient_progression()
 
-        if self.options.shuffle_lasers == "local":
-            self.options.local_items.value |= self.item_name_groups["Lasers"]
+        for item_name, item_data in self.player_items.item_data.items():
+            if item_data.local_only:
+                self.options.local_items.value.add(item_name)
 
         if self.options.victory_condition == "panel_hunt":
             total_panels = self.options.panel_hunt_total
@@ -321,13 +324,8 @@ class WitnessWorld(World):
 
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
-            if self.player_items.item_data[item_name].local_only:
-                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
-        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
-
         already_hinted_locations = set()
 
         # Laser hints
@@ -381,6 +379,10 @@ class WitnessWorld(World):
         if isinstance(item_name, dict):
             item_name = next(iter(item_name))
 
+        # Easter Egg events with arbitrary sizes
+        if item_name.startswith("+") and "Easter Egg" in item_name:
+            return WitnessItem.make_egg_event(item_name, self.player)
+
         # this conditional is purely for unit tests, which need to be able to create an item before generate_early
         item_data: ItemData
         if hasattr(self, "player_items") and self.player_items and item_name in self.player_items.item_data:
@@ -389,6 +391,18 @@ class WitnessWorld(World):
             item_data = static_witness_items.ITEM_DATA[item_name]
 
         return WitnessItem(item_name, item_data.classification, item_data.ap_code, player=self.player)
+
+    def collect(self, state: "CollectionState", item: WitnessItem) -> bool:
+        changed = super().collect(state, item)
+        if changed and item.eggs:
+            state.prog_items[self.player]["Egg"] += item.eggs
+        return changed
+
+    def remove(self, state: "CollectionState", item: WitnessItem) -> bool:
+        changed = super().remove(state, item)
+        if changed and item.eggs:
+            state.prog_items[self.player]["Egg"] -= item.eggs
+        return changed
 
     def get_filler_item_name(self) -> str:
         return "Speed Boost"
@@ -399,11 +413,9 @@ class WitnessLocation(Location):
     Archipelago Location for The Witness
     """
     game: str = "The Witness"
-    entity_hex: int = -1
 
-    def __init__(self, player: int, name: str, address: Optional[int], parent: Region, ch_hex: int = -1) -> None:
+    def __init__(self, player: int, name: str, address: Optional[int], parent: Region) -> None:
         super().__init__(player, name, address, parent)
-        self.entity_hex = ch_hex
 
 
 def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlayerLocations,
@@ -417,14 +429,13 @@ def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlaye
         for location in region_locations:
             loc_id = player_locations.CHECK_LOCATION_TABLE[location]
 
-            entity_hex = -1
+            location_obj = WitnessLocation(world.player, location, loc_id, ret)
+
             if location in static_witness_logic.ENTITIES_BY_NAME:
-                entity_hex = int(
-                    static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"], 0
-                )
-            location_obj = WitnessLocation(
-                world.player, location, loc_id, ret, entity_hex
-            )
+                entity_hex = static_witness_logic.ENTITIES_BY_NAME[location]["entity_hex"]
+
+                if entity_hex in world.player_logic.EXCLUDED_ENTITIES:
+                    location_obj.progress_type = LocationProgressType.EXCLUDED
 
             ret.locations.append(location_obj)
     if exits:

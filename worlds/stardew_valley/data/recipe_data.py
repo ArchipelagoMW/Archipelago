@@ -1,15 +1,16 @@
 from typing import Dict, List, Optional
-from ..mods.mod_data import ModNames
+
 from .recipe_source import RecipeSource, FriendshipSource, SkillSource, QueenOfSauceSource, ShopSource, StarterSource, ShopTradeSource, ShopFriendshipSource
+from ..mods.mod_data import ModNames
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.craftable_names import ModEdible, Edible
 from ..strings.crop_names import Fruit, Vegetable, SVEFruit, DistantLandsCrop
 from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish, SVEWaterItem
 from ..strings.flower_names import Flower
-from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable, Mushroom
-from ..strings.ingredient_names import Ingredient
 from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal, ArchaeologyMeal, TrashyMeal
+from ..strings.forageable_names import Forageable, SVEForage, Mushroom
+from ..strings.ingredient_names import Ingredient
 from ..strings.material_names import Material
 from ..strings.metal_names import Fossil, Artifact
 from ..strings.monster_drop_names import Loot
@@ -45,7 +46,8 @@ def friendship_recipe(name: str, friend: str, hearts: int, ingredients: Dict[str
     return create_recipe(name, ingredients, source, mod_name)
 
 
-def friendship_and_shop_recipe(name: str, friend: str, hearts: int, region: str, price: int, ingredients: Dict[str, int], mod_name: Optional[str] = None) -> CookingRecipe:
+def friendship_and_shop_recipe(name: str, friend: str, hearts: int, region: str, price: int, ingredients: Dict[str, int],
+                               mod_name: Optional[str] = None) -> CookingRecipe:
     source = ShopFriendshipSource(friend, hearts, region, price)
     return create_recipe(name, ingredients, source, mod_name)
 
@@ -85,7 +87,8 @@ algae_soup = friendship_recipe(Meal.algae_soup, NPC.clint, 3, {WaterItem.green_a
 artichoke_dip = queen_of_sauce_recipe(Meal.artichoke_dip, 1, Season.fall, 28, {Vegetable.artichoke: 1, AnimalProduct.cow_milk: 1})
 autumn_bounty = friendship_recipe(Meal.autumn_bounty, NPC.demetrius, 7, {Vegetable.yam: 1, Vegetable.pumpkin: 1})
 baked_fish = queen_of_sauce_recipe(Meal.baked_fish, 1, Season.summer, 7, {Fish.sunfish: 1, Fish.bream: 1, Ingredient.wheat_flour: 1})
-banana_pudding = shop_trade_recipe(Meal.banana_pudding, Region.island_trader, Fossil.bone_fragment, 30, {Fruit.banana: 1, AnimalProduct.cow_milk: 1, Ingredient.sugar: 1})
+banana_pudding = shop_trade_recipe(Meal.banana_pudding, Region.island_trader, Fossil.bone_fragment, 30,
+                                   {Fruit.banana: 1, AnimalProduct.cow_milk: 1, Ingredient.sugar: 1})
 bean_hotpot = friendship_recipe(Meal.bean_hotpot, NPC.clint, 7, {Vegetable.green_bean: 2})
 blackberry_cobbler_ingredients = {Forageable.blackberry: 2, Ingredient.sugar: 1, Ingredient.wheat_flour: 1}
 blackberry_cobbler_qos = queen_of_sauce_recipe(Meal.blackberry_cobbler, 2, Season.fall, 14, blackberry_cobbler_ingredients)
@@ -181,21 +184,23 @@ vegetable_medley = friendship_recipe(Meal.vegetable_medley, NPC.caroline, 7, {Ve
 magic_elixir = shop_recipe(ModEdible.magic_elixir, Region.adventurer_guild, 3000, {Edible.life_elixir: 1, Mushroom.purple: 1}, ModNames.magic)
 
 baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 0, {Forageable.salmonberry: 15, Forageable.blackberry: 15,
-                                                                                            Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, ModNames.sve)
+                                                                                        Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, ModNames.sve)
 big_bark_burger = friendship_and_shop_recipe(SVEMeal.big_bark_burger, NPC.gus, 5, Region.saloon, 5500,
                                              {SVEFish.puppyfish: 1, Meal.bread: 1, Ingredient.oil: 1}, ModNames.sve)
 flower_cookie = shop_recipe(SVEMeal.flower_cookie, SVERegion.bear_shop, 0, {SVEForage.ferngill_primrose: 1, SVEForage.goldenrod: 1,
-                                                                               SVEForage.winter_star_rose: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1,
-                                                                               AnimalProduct.large_egg: 1}, ModNames.sve)
+                                                                            SVEForage.winter_star_rose: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1,
+                                                                            AnimalProduct.large_egg: 1}, ModNames.sve)
 frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFish.frog: 1, Ingredient.oil: 1, Ingredient.wheat_flour: 1}, ModNames.sve)
 glazed_butterfish = friendship_and_shop_recipe(SVEMeal.glazed_butterfish, NPC.gus, 10, Region.saloon, 4000,
                                                {SVEFish.butterfish: 1, Ingredient.wheat_flour: 1, Ingredient.oil: 1}, ModNames.sve)
 mixed_berry_pie = shop_recipe(SVEMeal.mixed_berry_pie, Region.saloon, 3500, {Fruit.strawberry: 6, SVEFruit.salal_berry: 6, Forageable.blackberry: 6,
                                                                              SVEForage.bearberry: 6, Ingredient.sugar: 1, Ingredient.wheat_flour: 1},
                               ModNames.sve)
-mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500, {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10,
-                                                                                               Ingredient.rice: 1, Ingredient.sugar: 2}, ModNames.sve)
-seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEWaterItem.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1}, ModNames.sve)
+mushroom_berry_rice = friendship_and_shop_recipe(SVEMeal.mushroom_berry_rice, ModNPC.marlon, 6, Region.adventurer_guild, 1500,
+                                                 {SVEForage.poison_mushroom: 3, SVEForage.red_baneberry: 10, Ingredient.rice: 1, Ingredient.sugar: 2},
+                                                 ModNames.sve)
+seaweed_salad = shop_recipe(SVEMeal.seaweed_salad, Region.fish_shop, 1250, {SVEWaterItem.dulse_seaweed: 2, WaterItem.seaweed: 2, Ingredient.oil: 1},
+                            ModNames.sve)
 void_delight = friendship_and_shop_recipe(SVEMeal.void_delight, NPC.krobus, 10, Region.sewer, 5000,
                                           {SVEFish.void_eel: 1, Loot.void_essence: 50, Loot.solar_essence: 20}, ModNames.sve)
 void_salmon_sushi = friendship_and_shop_recipe(SVEMeal.void_salmon_sushi, NPC.krobus, 10, Region.sewer, 5000,
@@ -205,15 +210,20 @@ mushroom_kebab = friendship_recipe(DistantLandsMeal.mushroom_kebab, ModNPC.gobli
                                                                                        Mushroom.red: 1, Material.wood: 1}, ModNames.distant_lands)
 void_mint_tea = friendship_recipe(DistantLandsMeal.void_mint_tea, ModNPC.goblin, 4, {DistantLandsCrop.void_mint: 1}, ModNames.distant_lands)
 crayfish_soup = friendship_recipe(DistantLandsMeal.crayfish_soup, ModNPC.goblin, 6, {Forageable.cave_carrot: 1, Fish.crayfish: 1,
-                                                                                     DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1}, ModNames.distant_lands)
+                                                                                     DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1},
+                                  ModNames.distant_lands)
 pemmican = friendship_recipe(DistantLandsMeal.pemmican, ModNPC.goblin, 8, {Loot.bug_meat: 1, Fish.any: 1, Forageable.salmonberry: 3,
                                                                            Material.stone: 2}, ModNames.distant_lands)
 
 special_pumpkin_soup = friendship_recipe(BoardingHouseMeal.special_pumpkin_soup, ModNPC.joel, 6, {Vegetable.pumpkin: 2, AnimalProduct.large_goat_milk: 1,
                                                                                                   Vegetable.garlic: 1}, ModNames.boarding_house)
-diggers_delight = skill_recipe(ArchaeologyMeal.diggers_delight, ModSkill.archaeology, 3, {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.milk: 1}, ModNames.archaeology)
-rocky_root = skill_recipe(ArchaeologyMeal.rocky_root, ModSkill.archaeology, 7, {Forageable.cave_carrot: 3, Seed.coffee: 1, Material.stone: 1}, ModNames.archaeology)
-ancient_jello = skill_recipe(ArchaeologyMeal.ancient_jello, ModSkill.archaeology, 9, {WaterItem.cave_jelly: 6, Ingredient.sugar: 5, AnimalProduct.egg: 1, AnimalProduct.milk: 1, Artifact.chipped_amphora: 1}, ModNames.archaeology)
+diggers_delight = skill_recipe(ArchaeologyMeal.diggers_delight, ModSkill.archaeology, 3,
+                               {Forageable.cave_carrot: 2, Ingredient.sugar: 1, AnimalProduct.milk: 1}, ModNames.archaeology)
+rocky_root = skill_recipe(ArchaeologyMeal.rocky_root, ModSkill.archaeology, 7, {Forageable.cave_carrot: 3, Seed.coffee: 1, Material.stone: 1},
+                          ModNames.archaeology)
+ancient_jello = skill_recipe(ArchaeologyMeal.ancient_jello, ModSkill.archaeology, 9,
+                             {WaterItem.cave_jelly: 6, Ingredient.sugar: 5, AnimalProduct.egg: 1, AnimalProduct.milk: 1, Artifact.chipped_amphora: 1},
+                             ModNames.archaeology)
 
 grilled_cheese = skill_recipe(TrashyMeal.grilled_cheese, ModSkill.binning, 1, {Meal.bread: 1, ArtisanGood.cheese: 1}, ModNames.binning_skill)
 fish_casserole = skill_recipe(TrashyMeal.fish_casserole, ModSkill.binning, 8, {Fish.any: 1, AnimalProduct.milk: 1, Vegetable.carrot: 1}, ModNames.binning_skill)

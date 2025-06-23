@@ -35,10 +35,13 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "challenge_lasers": 11,
 
         "early_caves": EarlyCaves.option_off,
-        "elevators_come_to_you": False,
+
+        "elevators_come_to_you": ElevatorsComeToYou.default,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": PuzzleSkipAmount.default,
+        "trap_weights": TrapWeights.default,
+
         "hint_amount": HintAmount.default,
         "area_hint_percentage": AreaHintPercentage.default,
         "laser_hints": LaserHints.default,
@@ -73,10 +76,13 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "challenge_lasers": 9,
 
         "early_caves": EarlyCaves.option_off,
-        "elevators_come_to_you": False,
+
+        "elevators_come_to_you": ElevatorsComeToYou.default,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
+        "trap_weights": TrapWeights.default,
+
         "hint_amount": HintAmount.default,
         "area_hint_percentage": AreaHintPercentage.default,
         "laser_hints": LaserHints.default,
@@ -111,10 +117,13 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "challenge_lasers": 9,
 
         "early_caves": EarlyCaves.option_off,
-        "elevators_come_to_you": True,
+
+        "elevators_come_to_you": ElevatorsComeToYou.valid_keys,
 
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
+        "trap_weights": TrapWeights.default,
+        
         "hint_amount": HintAmount.default,
         "area_hint_percentage": AreaHintPercentage.default,
         "laser_hints": LaserHints.default,

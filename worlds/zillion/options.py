@@ -1,12 +1,12 @@
 from collections import Counter
 from dataclasses import dataclass
-from typing import ClassVar, Dict, Literal, Tuple, TypeGuard
+from typing import ClassVar, Literal, TypeGuard
 
 from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCommonOptions, Range, Removed, Toggle
 
 from zilliandomizer.options import (
     Options as ZzOptions, char_to_gun, char_to_jump, ID,
-    VBLR as ZzVBLR, Chars, ItemCounts as ZzItemCounts
+    VBLR as ZzVBLR, Chars, ItemCounts as ZzItemCounts,
 )
 from zilliandomizer.options.parsing import validate as zz_validate
 
@@ -23,7 +23,7 @@ class ZillionContinues(NamedRange):
     display_name = "continues"
     special_range_names = {
         "vanilla": 3,
-        "infinity": 21
+        "infinity": 21,
     }
 
 
@@ -107,7 +107,7 @@ class ZillionStartChar(Choice):
     display_name = "start character"
     default = "random"
 
-    _name_capitalization: ClassVar[Dict[int, Chars]] = {
+    _name_capitalization: ClassVar[dict[int, Chars]] = {
         option_jj: "JJ",
         option_apple: "Apple",
         option_champ: "Champ",
@@ -247,7 +247,7 @@ class ZillionStartingCards(NamedRange):
     range_end = 10
     display_name = "starting cards"
     special_range_names = {
-        "vanilla": 0
+        "vanilla": 0,
     }
 
 
@@ -263,13 +263,27 @@ class ZillionMapGen(Choice):
     option_full = 2
     default = 0
 
-    def zz_value(self) -> Literal['none', 'rooms', 'full']:
+    def zz_value(self) -> Literal["none", "rooms", "full"]:
         if self.value == ZillionMapGen.option_none:
             return "none"
         if self.value == ZillionMapGen.option_rooms:
             return "rooms"
         assert self.value == ZillionMapGen.option_full
         return "full"
+
+
+class ZillionPriorityDeadEnds(DefaultOnToggle):
+    """
+    Single locations that are in a dead end behind a door
+    (example: vanilla Apple location)
+    are prioritized for progression items.
+    """
+    display_name = "priority dead ends"
+
+    vanilla_dead_ends: ClassVar = frozenset(("E-5 top far right", "J-4 top left"))
+    """ dead ends when not generating these rooms """
+    always_dead_ends: ClassVar = frozenset(("A-6 top right",))
+    """ dead ends in rooms that never get generated """
 
 
 @dataclass
@@ -293,6 +307,7 @@ class ZillionOptions(PerGameCommonOptions):
     skill: ZillionSkill
     starting_cards: ZillionStartingCards
     map_gen: ZillionMapGen
+    priority_dead_ends: ZillionPriorityDeadEnds
 
     room_gen: Removed
 
@@ -300,12 +315,12 @@ class ZillionOptions(PerGameCommonOptions):
 z_option_groups = [
     OptionGroup("item counts", [
         ZillionIDCardCount, ZillionBreadCount, ZillionOpaOpaCount, ZillionZillionCount,
-        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount
-    ])
+        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount,
+    ]),
 ]
 
 
-def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
+def convert_item_counts(ic: Counter[str]) -> ZzItemCounts:
     tr: ZzItemCounts = {
         ID.card: ic["ID Card"],
         ID.red: ic["Red ID Card"],
@@ -319,7 +334,7 @@ def convert_item_counts(ic: "Counter[str]") -> ZzItemCounts:
     return tr
 
 
-def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
+def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
     """
     adjusts options to make game completion possible
 
@@ -346,7 +361,7 @@ def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
         "Zillion": options.zillion_count,
         "Floppy Disk": options.floppy_disk_count,
         "Scope": options.scope_count,
-        "Red ID Card": options.red_id_card_count
+        "Red ID Card": options.red_id_card_count,
     })
     minimums = Counter({
         "ID Card": 0,
@@ -355,7 +370,7 @@ def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
         "Zillion": guns_required,
         "Floppy Disk": floppy_req.value,
         "Scope": 0,
-        "Red ID Card": 1
+        "Red ID Card": 1,
     })
     for key in minimums:
         item_counts[key] = max(minimums[key], item_counts[key])
@@ -411,7 +426,7 @@ def validate(options: ZillionOptions) -> "Tuple[ZzOptions, Counter[str]]":
         bool(options.early_scope.value),
         True,  # balance defense
         starting_cards.value,
-        map_gen
+        map_gen,
     )
     zz_validate(zz_op)
     return zz_op, item_counts
