@@ -239,7 +239,7 @@ class SatisfactoryWorld(World):
 
 
     def modify_multidata(self, multidata: dict[str, Any]) -> None: 
-        locations_visiable_from_start: list[int] = [] #list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
+        locations_visiable_from_start: list[int] = list(range(1338000, 1338099)) # ids of Hub 1-1,1 to 2-5,10
 
         if "Building: AWESOME Shop" in self.options.start_inventory \
                 or "Building: AWESOME Shop" in self.options.start_inventory_from_pool \
