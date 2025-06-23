@@ -5,6 +5,8 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
 
 
 class BeastFormAccessTest(AquariaTestBase):
@@ -13,16 +15,16 @@ class BeastFormAccessTest(AquariaTestBase):
     def test_beast_form_location(self) -> None:
         """Test locations that require beast form"""
         locations = [
-            "Mermog cave, Piranha Egg",
-            "Kelp Forest top left area, Jelly Egg",
-            "Mithalas Cathedral, Mithalan Dress",
-            "The Veil top right area, bulb at the top of the waterfall",
-            "Sunken City, bulb on top of the boss area",
-            "Octopus Cave, Dumbo Egg",
-            "Beating the Golem",
-            "Beating Mergog",
-            "Beating Octopus Prime",
-            "Sunken City cleared",
+            AquariaLocationNames.MERMOG_CAVE_PIRANHA_EGG,
+            AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG,
+            AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS,
+            AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
+            AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
+            AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+            AquariaLocationNames.BEATING_THE_GOLEM,
+            AquariaLocationNames.BEATING_MERGOG,
+            AquariaLocationNames.BEATING_OCTOPUS_PRIME,
+            AquariaLocationNames.SUNKEN_CITY_CLEARED,
         ]
-        items = [["Beast form"]]
+        items = [[ItemNames.BEAST_FORM]]
         self.assertAccessDependency(locations, items)

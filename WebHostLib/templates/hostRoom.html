@@ -178,8 +178,15 @@
               })
               .then(text => new DOMParser().parseFromString(text, 'text/html'))
               .then(newDocument => {
-                let el = newDocument.getElementById("host-room-info");
-                document.getElementById("host-room-info").innerHTML = el.innerHTML;
+                ["host-room-info", "slots-table"].forEach(function(id) {
+                  const newEl = newDocument.getElementById(id);
+                  const oldEl = document.getElementById(id);
+                  if (oldEl && newEl) {
+                    oldEl.innerHTML = newEl.innerHTML;
+                  } else if (newEl) {
+                    console.warn(`Did not find element to replace for ${id}`)
+                  }
+                });
             });
           }
 
