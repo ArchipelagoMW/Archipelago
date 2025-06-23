@@ -77,7 +77,6 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-
 def main(args=None) -> tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
