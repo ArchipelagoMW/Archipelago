@@ -420,8 +420,8 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def compare_results(
-        yaml_value: Union[str, int, bool, dict, list],
-        trigger_value: Union[str, int, bool, dict, list],
+        yaml_value: str | int | bool | dict | list,
+        trigger_value: str | int | bool | dict | list,
         comparator: str):
     if yaml_value is None:
         return False
@@ -470,7 +470,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             currently_targeted_weights[key] = result
 
             if (compare_results(result, trigger_result, compare) and
-                    roll_percentage(get_choice("percentage", option_set, 100))):
+                    Options.roll_percentage(get_choice("percentage", option_set, 100))):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
