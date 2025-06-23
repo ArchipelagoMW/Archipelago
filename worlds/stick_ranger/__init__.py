@@ -76,7 +76,7 @@ class StickRanger(World):
 
     def _generate_randomness(self) -> None:
         """Clamp min/max and roll actual required stages per goal."""
-        rng: Random = self.multiworld.random
+        rng: Random = self.random
         for _, min_attr, max_attr, req_attr in STAGE_SETTINGS:
             low: int = min(
                 getattr(self.options, min_attr).value,
@@ -163,7 +163,7 @@ class StickRanger(World):
 
     def create_items(self) -> None:
         # Make sure at least 1 Opening Street check is an early unlock
-        starter_item_name: str = self.multiworld.random.choice(STARTER_UNLOCK_CHOICES)
+        starter_item_name: str = self.random.choice(STARTER_UNLOCK_CHOICES)
         starter_item: SRItem = self.create_item(starter_item_name)
 
         starter_location_names: List[str] = [OPENING_STREET_EXIT]
@@ -175,7 +175,7 @@ class StickRanger(World):
         if shuffle_enemies in (2, 3):
             starter_location_names.append(OPENING_STREET_BOSS)
 
-        random_loc_name: str = self.multiworld.random.choice(starter_location_names)
+        random_loc_name: str = self.random.choice(starter_location_names)
         starter_loc: Location = self.multiworld.get_location(
             random_loc_name, self.player
         )
@@ -211,7 +211,7 @@ class StickRanger(World):
         trap_count: int = int((traps_percentage / 100) * missing_locs)
         trap_weights: List[int] = [trap.weight for trap in traps]
         for _ in range(trap_count):
-            trap: TrapItemData = self.multiworld.random.choices(
+            trap: TrapItemData = self.random.choices(
                 traps, weights=trap_weights, k=1
             )[0]
             itempool.append(self.create_item(trap.item_name))
@@ -219,7 +219,7 @@ class StickRanger(World):
         # Add Filler
         while len(itempool) < self.location_count:
             itempool.append(
-                self.create_item(self.multiworld.random.choice(filler).item_name)
+                self.create_item(self.random.choice(filler).item_name)
             )
 
         self.multiworld.itempool += itempool
