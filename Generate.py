@@ -420,8 +420,8 @@ def roll_linked_options(weights: dict) -> dict:
 
 
 def compare_results(
-        yaml_value: Union[str, int, bool, dict, list],
-        trigger_value: Union[str, int, bool, dict, list],
+        yaml_value: str | int | bool | dict | list,
+        trigger_value: str | int | bool | dict | list,
         comparator: str):
     if yaml_value is None:
         return False
@@ -508,7 +508,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
                     raise Exception(f"options_advanced is malformed. "
                                     f"Block {x} should have either 2 or 3 entries, but had {len(advanced[x])}.\n")
             if (compare_triggers(option_set, currently_targeted_weights) and
-                    roll_percentage(get_choice("percentage", option_set, 100))):
+                    Options.roll_percentage(get_choice("percentage", option_set, 100))):
 
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
