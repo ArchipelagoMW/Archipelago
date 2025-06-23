@@ -339,7 +339,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
     def new_check(location_id):
         new_locations.append(location_id)
         ctx.locations_checked.add(location_id)
-        location = ctx.location_names.lookup_in_slot(location_id)
+        location = ctx.location_names.lookup_in_game(location_id)
         snes_logger.info(
             f'New Check: {location} ' +
             f'({len(ctx.checked_locations) + 1 if ctx.checked_locations else len(ctx.locations_checked)}/' +
@@ -464,7 +464,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
             snes_logger.info(f"Discarding recent {len(new_locations)} checks as ROM Status has changed.")
             return False
         else:
-            await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_locations}])
+            await ctx.check_locations(new_locations)
     await snes_flush_writes(ctx)
     return True
 
@@ -552,7 +552,7 @@ class ALTTPSNIClient(SNIClient):
             item = ctx.items_received[recv_index]
             recv_index += 1
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
-                color(ctx.item_names.lookup_in_slot(item.item), 'red', 'bold'),
+                color(ctx.item_names.lookup_in_game(item.item), 'red', 'bold'),
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names.lookup_in_slot(item.location, item.player), recv_index, len(ctx.items_received)))
 
@@ -682,7 +682,7 @@ def get_alttp_settings(romfile: str):
 
         if 'yes' in choice:
             import LttPAdjuster
-            from worlds.alttp.Rom import get_base_rom_path
+            from .Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
             last_settings.world = None

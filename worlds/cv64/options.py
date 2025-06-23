@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import OptionGroup, Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions, StartInventoryPool
+from Options import (OptionGroup, Choice, DefaultOnToggle, ItemsAccessibility, PerGameCommonOptions, Range, Toggle,
+                     StartInventoryPool)
 
 
 class CharacterStages(Choice):
@@ -423,6 +424,7 @@ class PantherDash(Choice):
 class IncreaseShimmySpeed(Toggle):
     """
     Increases the speed at which characters shimmy left and right while hanging on ledges.
+    Hold Z to use the regular speed in case it's needed to do something.
     """
     display_name = "Increase Shimmy Speed"
 
@@ -521,6 +523,7 @@ class DeathLink(Choice):
 
 @dataclass
 class CV64Options(PerGameCommonOptions):
+    accessibility: ItemsAccessibility
     start_inventory_from_pool: StartInventoryPool
     character_stages: CharacterStages
     stage_shuffle: StageShuffle

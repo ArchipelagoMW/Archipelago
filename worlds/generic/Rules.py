@@ -69,7 +69,7 @@ def locality_rules(multiworld: MultiWorld):
             if (location.player, location.item_rule) in func_cache:
                 location.item_rule = func_cache[location.player, location.item_rule]
             # empty rule that just returns True, overwrite
-            elif location.item_rule is location.__class__.item_rule:
+            elif location.item_rule is Location.item_rule:
                 func_cache[location.player, location.item_rule] = location.item_rule = \
                     lambda i, sending_blockers = forbid_data[location.player], \
                                             old_rule = location.item_rule: \
@@ -103,7 +103,7 @@ def set_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"], rule: CollectionRule, combine="and"):
     old_rule = spot.access_rule
     # empty rule, replace instead of add
-    if old_rule is spot.__class__.access_rule:
+    if old_rule is Location.access_rule or old_rule is Entrance.access_rule:
         spot.access_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":
@@ -115,7 +115,7 @@ def add_rule(spot: typing.Union["BaseClasses.Location", "BaseClasses.Entrance"],
 def forbid_item(location: "BaseClasses.Location", item: str, player: int):
     old_rule = location.item_rule
     # empty rule
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = lambda i: i.name != item or i.player != player
     else:
         location.item_rule = lambda i: (i.name != item or i.player != player) and old_rule(i)
@@ -135,7 +135,7 @@ def forbid_items(location: "BaseClasses.Location", items: typing.Set[str]):
 def add_item_rule(location: "BaseClasses.Location", rule: ItemRule, combine: str = "and"):
     old_rule = location.item_rule
     # empty rule, replace instead of add
-    if old_rule is location.__class__.item_rule:
+    if old_rule is Location.item_rule:
         location.item_rule = rule if combine == "and" else old_rule
     else:
         if combine == "and":

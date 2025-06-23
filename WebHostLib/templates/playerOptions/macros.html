@@ -54,7 +54,7 @@
 {% macro NamedRange(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
     <div class="named-range-container">
-        <select id="{{ option_name }}-select" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
+        <select id="{{ option_name }}-select" name="{{ option_name }}" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
             {% for key, val in option.special_range_names.items() %}
                 {% if option.default == val %}
                     <option value="{{ val }}" selected>{{ key|replace("_", " ")|title }} ({{ val }})</option>
@@ -64,17 +64,17 @@
             {% endfor %}
             <option value="custom" hidden>Custom</option>
         </select>
-        <div class="named-range-wrapper">
+        <div class="named-range-wrapper js-required">
             <input
                     type="range"
                     id="{{ option_name }}"
-                    name="{{ option_name }}"
+                    name="{{ option_name }}-range"
                     min="{{ option.range_start }}"
                     max="{{ option.range_end }}"
                     value="{{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}"
                     {{ "disabled" if option.default == "random" }}
             />
-            <span id="{{ option_name }}-value" class="range-value js-required">
+            <span id="{{ option_name }}-value" class="range-value">
                 {{ option.default | default(option.range_start) if option.default != "random" else option.range_start }}
             </span>
             {{ RandomizeButton(option_name, option) }}
@@ -111,10 +111,19 @@
     </div>
 {% endmacro %}
 
-{% macro ItemDict(option_name, option) %}
+{% macro OptionCounter(option_name, option) %}
+    {% set relevant_keys = option.valid_keys %}
+    {% if not relevant_keys %}
+        {% if option.verify_item_name %}
+            {% set relevant_keys = world.item_names %}
+        {% elif option.verify_location_name %}
+            {% set relevant_keys = world.location_names %}
+        {% endif %}
+    {% endif %}
+
     {{ OptionTitle(option_name, option) }}
     <div class="option-container">
-        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
+        {% for item_name in (relevant_keys if relevant_keys is ordered else relevant_keys|sort) %}
             <div class="option-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input type="number" id="{{ option_name }}-{{ item_name }}-qty" name="{{ option_name }}||{{ item_name }}||qty" value="{{ option.default[item_name]|default("0") }}" data-option-name="{{ option_name }}" data-item-name="{{ item_name }}" />
@@ -196,13 +205,14 @@
 {% macro OptionTitle(option_name, option) %}
     <label for="{{ option_name }}">
         {{ option.display_name|default(option_name) }}:
+        {% set rich_text = option.rich_text_doc or (option.rich_text_doc is none and world.web.rich_text_options_doc) %}
         <span
             class="interactive tooltip-container"
-            {% if not (option.rich_text_doc | default(world.web.rich_text_options_doc, true)) %}
+            {% if not rich_text %}
               data-tooltip="{{(option.__doc__ | default("Please document me!"))|replace('\n    ', '\n')|escape|trim}}"
             {% endif %}>
           (?)
-          {% if option.rich_text_doc | default(world.web.rich_text_options_doc, true) %}
+          {% if rich_text %}
             <div class="tooltip">
               {{ option.__doc__ | default("**Please document me!**") | rst_to_html | safe }}
             </div>
@@ -212,7 +222,7 @@
 {% endmacro %}
 
 {% macro RandomizeButton(option_name, option) %}
-    <div class="randomize-button" data-tooltip="Toggle randomization for this option!">
+    <div class="randomize-button" data-tooltip="Pick a random value for this option.">
         <label for="random-{{ option_name }}">
             <input type="checkbox" id="random-{{ option_name }}" name="random-{{ option_name }}" class="randomize-checkbox" data-option-name="{{ option_name }}" {{ "checked" if option.default == "random" }} />
             🎲

@@ -53,7 +53,7 @@
     <table class="range-rows" data-option="{{ option_name }}">
         <tbody>
             {{ RangeRow(option_name, option, option.range_start, option.range_start, True) }}
-            {% if option.range_start < option.default < option.range_end %}
+            {% if option.default is number and option.range_start < option.default < option.range_end %}
                 {{ RangeRow(option_name, option, option.default, option.default, True) }}
             {% endif %}
             {{ RangeRow(option_name, option, option.range_end, option.range_end, True) }}
@@ -113,9 +113,18 @@
     {{ TextChoice(option_name, option) }}
 {% endmacro %}
 
-{% macro ItemDict(option_name, option, world) %}
+{% macro OptionCounter(option_name, option, world) %}
+    {% set relevant_keys = option.valid_keys %}
+    {% if not relevant_keys %}
+        {% if option.verify_item_name %}
+            {% set relevant_keys = world.item_names %}
+        {% elif option.verify_location_name %}
+            {% set relevant_keys = world.location_names %}
+        {% endif %}
+    {% endif %}
+
     <div class="dict-container">
-        {% for item_name in (option.valid_keys|sort if (option.valid_keys|length > 0) else world.item_names|sort) %}
+        {% for item_name in (relevant_keys if relevant_keys is ordered else relevant_keys|sort) %}
             <div class="dict-entry">
                 <label for="{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
                 <input
@@ -138,7 +147,7 @@
                     id="{{ option_name }}-{{ key }}"
                     name="{{ option_name }}||{{ key }}"
                     value="1"
-                    checked="{{ "checked" if key in option.default else "" }}"
+                    {{ "checked" if key in option.default }}
                 />
                 <label for="{{ option_name }}-{{ key }}">
                     {{ key }}

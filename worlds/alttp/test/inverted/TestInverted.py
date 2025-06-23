@@ -1,11 +1,11 @@
-from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import link_inverted_entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
 from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
-from test.TestBase import TestBase
+from test.bases import TestBase
 
 from worlds.alttp.test import LTTPTestBase
 
@@ -14,9 +14,9 @@ class TestInverted(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
         self.multiworld.worlds[1].difficulty_requirements = difficulties['normal']
-        self.multiworld.mode[1].value = 2
-        self.multiworld.bombless_start[1].value = True
-        self.multiworld.shuffle_capacity_upgrades[1].value = 2
+        self.multiworld.worlds[1].options.mode.value = 2
+        self.multiworld.worlds[1].options.bombless_start.value = True
+        self.multiworld.worlds[1].options.shuffle_capacity_upgrades.value = 2
         create_inverted_regions(self.multiworld, 1)
         self.world.create_dungeons()
         create_shops(self.multiworld, 1)

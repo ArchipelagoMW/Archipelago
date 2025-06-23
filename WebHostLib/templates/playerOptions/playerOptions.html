@@ -11,7 +11,7 @@
     <noscript>
         <style>
             .js-required{
-                display: none;
+                display: none !important;
             }
         </style>
     </noscript>
@@ -42,7 +42,7 @@
             A list of all games you have generated can be found on the <a href="/user-content">User Content Page</a>.
             <br />
             You may also download the
-            <a href="/static/generated/configs/{{ world_name }}.yaml">template file for this game</a>.
+            <a href="/static/generated/configs/{{ world_name | get_file_safe_name }}.yaml">template file for this game</a>.
         </p>
 
         <form id="options-form" method="post" enctype="application/x-www-form-urlencoded" action="generate-yaml">
@@ -93,8 +93,10 @@
                                         {% elif issubclass(option, Options.FreeText) %}
                                             {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option) }}
+                                        {% elif issubclass(option, Options.OptionCounter) and (
+                                            option.valid_keys or option.verify_item_name or option.verify_location_name
+                                        ) %}
+                                            {{ inputs.OptionCounter(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}
@@ -133,8 +135,10 @@
                                         {% elif issubclass(option, Options.FreeText) %}
                                             {{ inputs.FreeText(option_name, option) }}
 
-                                        {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                            {{ inputs.ItemDict(option_name, option) }}
+                                        {% elif issubclass(option, Options.OptionCounter) and (
+                                            option.valid_keys or option.verify_item_name or option.verify_location_name
+                                        ) %}
+                                            {{ inputs.OptionCounter(option_name, option) }}
 
                                         {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
                                             {{ inputs.OptionList(option_name, option) }}

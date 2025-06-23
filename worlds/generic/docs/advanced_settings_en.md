@@ -102,10 +102,10 @@ See the plando guide for more info on plando options. Plando
 guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
 
 * `accessibility` determines the level of access to the game the generation will expect you to have in order to reach
-  your completion goal. This supports `items`, `locations`, and `minimal` and is set to `locations` by default.
-    * `locations` will guarantee all locations are accessible in your world.
+  your completion goal. This supports `full`, `items`, and `minimal` and is set to `full` by default.
+    * `full` will guarantee all locations are accessible in your world.
     * `items` will guarantee you can acquire all logically relevant items in your world. Some items, such as keys, may
-      be self-locking.
+      be self-locking. This value only exists in and affects some worlds.
     * `minimal` will only guarantee that the seed is beatable. You will be guaranteed able to finish the seed logically
       but may not be able to access all locations or acquire all items. A good example of this is having a big key in
       the big chest in a dungeon in ALTTP making it impossible to get and finish the dungeon.
@@ -131,8 +131,8 @@ guide: [Archipelago Plando Guide](/tutorial/Archipelago/plando/en)
   the location without using any hint points.
 * `start_location_hints` is the same as `start_hints` but for locations, allowing you to hint for the item contained
   there without using any hint points.
-* `exclude_locations` lets you define any locations that you don't want to do and forces a filler or trap item which
-  isn't necessary for progression into these locations.
+* `exclude_locations` lets you define any locations that you don't want to do and prevents items classified as
+  "progression" or "useful" from being placed on them.
 * `priority_locations` lets you define any locations that you want to do and forces a progression item into these
   locations.
 * `item_links` allows players to link their items into a group with the same item link name and game. The items declared
@@ -278,7 +278,7 @@ one file, removing the need to manage separate files if one chooses to do so.
 As a precautionary measure, before submitting a multi-game yaml like this one in a synchronous/sync multiworld, please
 confirm that the other players in the multi are OK with what you are submitting, and please be fairly reasonable about
 the submission. (i.e. Multiple long games (SMZ3, OoT, HK, etc.) for a game intended to be <2 hrs is not likely considered
-reasonable, but submitting a ChecksFinder alongside another game OR submitting multiple Slay the Spire runs is likely
+reasonable, but submitting a ChecksFinder alongside another game is likely
 OK)
 
 To configure your file to generate multiple worlds, use 3 dashes `---` on an empty line to separate the ending of one
@@ -288,7 +288,7 @@ world and the beginning of another world. You can also combine multiple files by
 ### Example
 
 ```yaml
-description: Example of generating multiple worlds. World 1 of 3
+description: Example of generating multiple worlds. World 1 of 2
 name: Mario
 game: Super Mario 64
 requires:
@@ -310,32 +310,7 @@ Super Mario 64:
 
 ---
 
-description: Example of generating multiple worlds. World 2 of 3
-name: Minecraft
-game: Minecraft
-Minecraft:
-  progression_balancing: 50
-  accessibility: items
-  advancement_goal: 40
-  combat_difficulty: hard
-  include_hard_advancements: false
-  include_unreasonable_advancements: false
-  include_postgame_advancements: false
-  shuffle_structures: true
-  structure_compasses: true
-  send_defeated_mobs: true
-  bee_traps: 15
-  egg_shards_required: 7
-  egg_shards_available: 10
-  required_bosses:
-    none: 0
-    ender_dragon: 1
-    wither: 0
-    both: 0
-
----
-
-description: Example of generating multiple worlds. World 3 of 3
+description: Example of generating multiple worlds. World 2 of 2
 name: ExampleFinder
 game: ChecksFinder
 
@@ -344,6 +319,6 @@ ChecksFinder:
   accessibility: items
 ```
 
-The above example will generate 3 worlds - one Super Mario 64, one Minecraft, and one ChecksFinder.
+The above example will generate 2 worlds - one Super Mario 64 and one ChecksFinder.
  
 

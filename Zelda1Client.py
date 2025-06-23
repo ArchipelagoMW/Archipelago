@@ -152,7 +152,7 @@ def get_payload(ctx: ZeldaContext):
 
 
 def reconcile_shops(ctx: ZeldaContext):
-    checked_location_names = [ctx.location_names.lookup_in_slot(location) for location in ctx.checked_locations]
+    checked_location_names = [ctx.location_names.lookup_in_game(location) for location in ctx.checked_locations]
     shops = [location for location in checked_location_names if "Shop" in location]
     left_slots = [shop for shop in shops if "Left" in shop]
     middle_slots = [shop for shop in shops if "Middle" in shop]
@@ -190,7 +190,7 @@ async def parse_locations(locations_array, ctx: ZeldaContext, force: bool, zone=
         locations_checked = []
         location = None
         for location in ctx.missing_locations:
-            location_name = ctx.location_names.lookup_in_slot(location)
+            location_name = ctx.location_names.lookup_in_game(location)
 
             if location_name in Locations.overworld_locations and zone == "overworld":
                 status = locations_array[Locations.major_location_offsets[location_name]]
@@ -386,7 +386,7 @@ if __name__ == '__main__':
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a Archipelago Binary Patch file')
     args = parser.parse_args()
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main(args))
     colorama.deinit()

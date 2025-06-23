@@ -197,6 +197,23 @@ deathlink_nitro_edition = [
     0xA168FFFD,  # SB    T0, 0xFFFD (T3)
 ]
 
+deathlink_nitro_state_checker = [
+    # Checks to see if the player is in an alright state before exploding them. If not, then the Nitro explosion spawn
+    # code will be aborted, and they should eventually explode after getting out of that state.
+    #
+    # Invalid states so far include: interacting/going through a door, being grabbed by a vampire.
+    0x90880009,  # LBU   T0, 0x0009 (A0)
+    0x24090005,  # ADDIU T1, R0, 0x0005
+    0x11090005,  # BEQ   T0, T1, [forward 0x05]
+    0x24090002,  # ADDIU T1, R0, 0x0002
+    0x11090003,  # BEQ   T0, T1, [forward 0x03]
+    0x00000000,  # NOP
+    0x08000660,  # J     0x80001980
+    0x00000000,  # NOP
+    0x03E00008,  # JR    RA
+    0xAC400048   # SW    R0, 0x0048 (V0)
+]
+
 launch_fall_killer = [
     # Custom code to force the instant fall death if at a high enough falling speed after getting killed by something
     # that launches you (whether it be the Nitro explosion or a Big Toss hit). The game doesn't normally run the check
@@ -2875,4 +2892,19 @@ dog_bite_ice_trap_fix = [
     0x3C090F00,  # LUI   T1, 0x0F00
     0x25291CB8,  # ADDIU T1, T1, 0x1CB8
     0x01200008   # JR    T1
+]
+
+shimmy_speed_modifier = [
+    # Increases the player's speed while shimmying as long as they are not holding down Z. If they are holding Z, it
+    # will be the normal speed, allowing it to still be used to set up any tricks that might require the normal speed
+    # (like Left Tower Skip).
+    0x3C088038,  # LUI   T0, 0x8038
+    0x91087D7E,  # LBU   T0, 0x7D7E (T0)
+    0x31090020,  # ANDI  T1, T0, 0x0020
+    0x3C0A800A,  # LUI   T2, 0x800A
+    0x240B005A,  # ADDIU T3, R0, 0x005A
+    0x55200001,  # BNEZL T1,     [forward 0x01]
+    0x240B0032,  # ADDIU T3, R0, 0x0032
+    0xA14B3641,  # SB    T3, 0x3641 (T2)
+    0x0800B7C3   # J     0x8002DF0C
 ]
