@@ -236,7 +236,7 @@ cooperation_items = [*all_simple_items]
 cooperation_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cooperation, cooperation_items, 4, 4)
 
 doctor_items = [apple.as_amount(365)]
-doctor_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.doctor, doctor_items, 1, 1)
+doctor_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.doctor, doctor_items, 1, 1)
 
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
