@@ -903,6 +903,7 @@ id,name,classification,groups,content_packs
 5290,Stardrop Tea,filler,"RESOURCE_PACK",
 5291,Resource Pack: 2 Artifact Trove,filler,"RESOURCE_PACK",
 5292,Resource Pack: 20 Cinder Shard,filler,"GINGER_ISLAND,RESOURCE_PACK",
+5293,Workbench,useful,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 10001,Luck Level,progression,SKILL_LEVEL_UP,Luck Skill
 10002,Magic Level,progression,SKILL_LEVEL_UP,Magic
 10003,Socializing Level,progression,SKILL_LEVEL_UP,Socializing Skill
