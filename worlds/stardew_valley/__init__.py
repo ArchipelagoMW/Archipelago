@@ -1,4 +1,5 @@
 import logging
+import math
 import typing
 from random import Random
 from typing import Dict, List, Any, ClassVar, TextIO, Optional
@@ -16,7 +17,7 @@ from .items import item_table, ItemData, Group, items_by_group, create_items, ge
 from .locations import location_table, create_locations, LocationData, locations_by_tag
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
-    NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType
+    NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType, ToolProgression, BackpackProgression
 from .options.forced_options import force_change_options_if_incompatible, force_change_options_if_banned
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
@@ -188,6 +189,7 @@ class StardewValleyWorld(World):
         self.precollect_early_keys()
         self.precollect_starting_season()
         self.precollect_building_items()
+        self.precollect_starting_backpacks()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
                             if item_table[excluded_items.name].has_any_group(Group.MAXIMUM_ONE)
@@ -272,6 +274,13 @@ class StardewValleyWorld(World):
             item, quantity = building_progression.to_progressive_item(building)
             for _ in range(quantity):
                 self.multiworld.push_precollected(self.create_item(item))
+
+    def precollect_starting_backpacks(self):
+        if self.options.backpack_progression != BackpackProgression.option_vanilla and self.options.tool_progression & ToolProgression.value_no_starting_tools:
+            num_starting_slots = max(4, self.options.backpack_size.value)
+            num_starting_backpacks = math.ceil(num_starting_slots / self.options.backpack_size.value)
+            for i in range(num_starting_backpacks):
+                self.multiworld.push_precollected(self.create_item("Progressive Backpack"))
 
     def setup_logic_events(self):
         def register_event(name: str, region: str, rule: StardewRule):

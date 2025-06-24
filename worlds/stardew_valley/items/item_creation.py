@@ -1,5 +1,4 @@
 import logging
-import math
 from random import Random
 from typing import List
 
@@ -149,13 +148,9 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     num_per_tier = options.backpack_size.count_per_tier()
-    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs)
+    backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs, options.tool_progression & ToolProgression.value_no_starting_tools)
     num_backpacks = len(backpack_tier_names) * num_per_tier
 
-    if options.tool_progression & ToolProgression.value_no_starting_tools:
-        num_starting_slots = max(4, options.backpack_size.value)
-        num_extra_backpacks = math.ceil(num_starting_slots / options.backpack_size.value)
-        num_backpacks += num_extra_backpacks
     items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
 
 
