@@ -18,7 +18,7 @@
 - [What do Traps do?](#what-do-traps-do)
 - [What kind of Traps are there?](#what-kind-of-traps-are-there)
 - [I got soft-locked and cannot leave, how do I get out of here?](#i-got-soft-locked-and-cannot-leave-how-do-i-get-out-of-here)
-- [Why did I get an Option Error when generating a seed, and how do I fix it?](#why-did-i-get-an-option-error-when-generating-a-seed-and-how-do-i-fix-it)
+- [How do I generate seeds with 1 Orb Orbsanity and other extreme options?](#how-do-i-generate-seeds-with-1-orb-orbsanity-and-other-extreme-options)
 - [How do I check my player options in-game?](#how-do-i-check-my-player-options-in-game)
 - [How does the HUD work?](#how-does-the-hud-work)
 - [I think I found a bug, where should I report it?](#i-think-i-found-a-bug-where-should-i-report-it)
@@ -201,16 +201,19 @@ Open the game's menu, navigate to `Options`, then `Archipelago Options`, then `W
 Selecting this option will ask if you want to be teleported to Geyser Rock. From there, you can teleport back 
 to the nearest sage's hut to continue your journey.
 
-## Why did I get an Option Error when generating a seed and how do I fix it
+## How do I generate seeds with 1 orb orbsanity and other extreme options?
 Depending on your player YAML, Jak and Daxter can have a lot of items, which can sometimes be overwhelming or 
 disruptive to multiworld games. There are also options that are mutually incompatible with each other, even in a solo
 game. To prevent the game from disrupting multiworlds, or generating an impossible solo seed, some options have
-Singleplayer and Multiplayer Minimums and Maximums, collectively called "friendly limits."
+"friendly limits" that prevent you from choosing more extreme values.
 
-If you're generating a solo game, or your multiworld host agrees to your request, you can override those limits by
-editing the `host.yaml`. In the Archipelago Launcher, click `Open host.yaml`, then search for `jakanddaxter_options`,
-then search for `enforce_friendly_options`, then change this value from `true` to `false`. Disabling this allows for 
-more disruptive and challenging options, but it may cause seed generation to fail. **Use at your own risk!**
+You can override **some**, not all, of those limits by editing the `host.yaml`. In the Archipelago Launcher, click 
+`Open host.yaml`, then search for `jakanddaxter_options`, then search for `enforce_friendly_options`, then change this 
+value from `true` to `false`. You can then generate a seed locally, and upload that to the Archipelago website to host
+for you (or host it yourself). 
+
+**Remember:** disabling this setting allows for more disruptive and challenging options, but it may cause seed 
+generation to fail. **Use at your own risk!**
 
 ## How do I check my player options in-game
 When you connect your text client to the Archipelago Server, the server will tell the game what options were chosen

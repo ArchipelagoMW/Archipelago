@@ -305,7 +305,7 @@ hopper = ap_recipe(Craftable.hopper, {Material.hardwood: 10, MetalBar.iridium: 1
 cookout_kit = skill_recipe(Craftable.cookout_kit, Skill.foraging, 3, {Material.wood: 15, Material.fiber: 10, Material.coal: 3})
 tent_kit = skill_recipe(Craftable.tent_kit, Skill.foraging, 8, {Material.hardwood: 10, Material.fiber: 25, ArtisanGood.cloth: 1})
 
-statue_of_blessings = mastery_recipe(Statue.blessings, Skill.farming, {Material.sap: 999, Material.fiber: 999, Material.stone: 999})
+statue_of_blessings = mastery_recipe(Statue.blessings, Skill.farming, {Material.sap: 999, Material.fiber: 999, Material.stone: 999, Material.moss: 333})
 statue_of_dwarf_king = mastery_recipe(Statue.dwarf_king, Skill.mining, {MetalBar.iridium: 20})
 heavy_furnace = mastery_recipe(Machine.heavy_furnace, Skill.mining, {Machine.furnace: 2, MetalBar.iron: 3, Material.stone: 50})
 mystic_tree_seed = mastery_recipe(TreeSeed.mystic, Skill.foraging, {TreeSeed.acorn: 5, TreeSeed.maple: 5, TreeSeed.pine: 5, TreeSeed.mahogany: 5})

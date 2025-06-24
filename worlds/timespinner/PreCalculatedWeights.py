@@ -88,12 +88,15 @@ class PreCalculatedWeights:
 
         if options.risky_warps: 
             past_teleportation_gates.append("GateLakeSereneLeft")
-            present_teleportation_gates.append("GateDadsTower")
             if not is_xarion_flooded:
                 present_teleportation_gates.append("GateXarion")
-            if not is_lab_flooded:
-                present_teleportation_gates.append("GateLabEntrance")
+            # Prevent going past the lazers without a way to the past
+            if options.unchained_keys or options.prism_break or not options.pyramid_start:
+                present_teleportation_gates.append("GateDadsTower")
+                if not is_lab_flooded:
+                    present_teleportation_gates.append("GateLabEntrance")
 
+        # Prevent getting stuck in the past without a way back to the future
         if options.inverted or (options.pyramid_start and not options.back_to_the_future):
             all_gates: Tuple[str, ...] = present_teleportation_gates
         else:

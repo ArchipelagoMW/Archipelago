@@ -25,7 +25,7 @@ is strongly recommended in case they become corrupted.
 
 ## Linux Only: Select AppData equivalent when starting the client
 1. Shut down Wargroove if it is open.
-2. Start the ArchipelagoWargrooveClient from the Archipelago installation.
+2. Start the Archipelago Wargroove Client from the Archipelago Launcher.
 3. A file select dialogue will appear, claiming it cannot detect a path to the AppData folder.
 4. Navigate to your Steam install directory and select .
 `/steamapps/compatdata/607050/pfx/drive_c/users/steamuser/AppData/Roaming` as the save directory.
@@ -36,7 +36,7 @@ is strongly recommended in case they become corrupted.
 ## Installing the Archipelago Wargroove Mod and Campaign files
 
 1. Shut down Wargroove if it is open.
-2. Start the ArchipelagoWargrooveClient.exe from the Archipelago installation. 
+2. Start the Archipelago Wargroove Client from the Archipelago Launcher. 
 This should install the mod and campaign for you.
 3. Start Wargroove.
 
