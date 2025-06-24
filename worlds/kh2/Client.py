@@ -515,23 +515,38 @@ class KH2Context(CommonContext):
 
     async def give_item(self, item, location):
         try:
-            # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites
-            #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
+            # sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
             while not self.lookup_id_to_item:
                 await asyncio.sleep(0.5)
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
-            # itemcode = self.kh2_item_name_to_id[itemname]
             if itemdata.ability:
                 if location in self.all_weapon_location_id:
                     return
+                # growth have reserved ability slots because of how the goa handles them
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
                     self.kh2_seed_save_cache["AmountInvo"]["Growth"][itemname] += 1
                     return
 
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
-                    #  appending the slot that the ability should be in
+                #  appending the slot that the ability should be in
+                # abilities have a limit amount of slots.
+                # we start from the back going down to not mess with stuff.
+                # Front of Invo
+                # Sora:   Save+24F0+0x54 : 0x2546
+                # Donald: Save+2604+0x54 : 0x2658
+                # Goofy:  Save+2718+0x54 : 0x276C
+                # Back of Invo. Sora has 6 ability slots that are reserved
+                # Sora:   Save+24F0+0x54+0x92 : 0x25D8
+                # Donald: Save+2604+0x54+0x9C : 0x26F4
+                # Goofy:  Save+2718+0x54+0x9C : 0x2808
+                # seed has 2 scans in sora's abilities
+                # recieved second scan
+                # if len(seed_save(Scan:[ability slot 52]) < (2)amount of that ability they should have from slot data
+                # ability_slot = back of inventory that isnt taken
+                # add ability_slot to seed_save(Scan[]) so now its Scan:[ability slot 52,50]
+                # decrease back of inventory since its ability_slot is already taken
                 if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
@@ -550,18 +565,21 @@ class KH2Context(CommonContext):
                     if ability_slot in self.front_ability_slots:
                         self.front_ability_slots.remove(ability_slot)
 
+            # if itemdata in {bitmask} all the forms,summons and a few other things are bitmasks
             elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
                 # if memaddr is in a bitmask location in memory
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Bitmask"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Bitmask"].append(itemname)
 
+            # if itemdata in {magic}
             elif itemdata.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
-                # if memaddr is in magic addresses
                 self.kh2_seed_save_cache["AmountInvo"]["Magic"][itemname] += 1
 
+            # equipment is a list instead of dict because you can only have 1 currently
             elif itemname in self.all_equipment:
                 self.kh2_seed_save_cache["AmountInvo"]["Equipment"].append(itemname)
 
+            # weapons are done differently since you can only have one and has to check it differently
             elif itemname in self.all_weapons:
                 if itemname in self.keyblade_set:
                     self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"].append(itemname)
@@ -570,9 +588,11 @@ class KH2Context(CommonContext):
                 else:
                     self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"].append(itemname)
 
+            # TODO: this can just be removed and put into the else below it
             elif itemname in self.stat_increase_set:
                 self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][itemname] += 1
             else:
+                # "normal" items. They have a unique byte reserved for how many they have
                 if itemname in self.kh2_seed_save_cache["AmountInvo"]["Amount"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Amount"][itemname] += 1
                 else:
