@@ -16,7 +16,7 @@ from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids
+from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids, get_modded_shopsanity_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
@@ -53,18 +53,18 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = mod_helper.get_modded_items(-1, options)
+    modded_items = get_modded_items(-1, options)
 
     for modded_item in modded_items:
         item_name_to_id[modded_item.name] = modded_item.code
         item_name_groups.setdefault('MOD', set()).add(modded_item.name)
 
-    modded_locations = mod_helper.get_modded_locations(-1, World, options)
+    modded_locations = get_modded_locations(-1, World, options)
 
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = mod_helper.get_modded_shopsanity_locations(-1, World, options)
+    modded_shops = get_modded_shopsanity_locations(-1, World, options)
 
     for modded_shop in modded_shops:
         location_name_to_id[modded_shop.name] = modded_shop.code
@@ -107,11 +107,11 @@ class CrystalProjectWorld(World):
             locations.extend(shops)
 
         if self.options.useMods:
-            modded_locations = mod_helper.get_modded_locations(self.player, self, self.options)
+            modded_locations = get_modded_locations(self.player, self, self.options)
             locations.extend(modded_locations)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-            modded_shops = mod_helper.get_modded_shopsanity_locations(self.player, self, self.options)
+            modded_shops = get_modded_shopsanity_locations(self.player, self, self.options)
             locations.extend(modded_shops)
 
         init_areas(self, locations, self.options)
@@ -360,7 +360,7 @@ class CrystalProjectWorld(World):
             pool.append(item)
 
         if self.options.useMods:
-            modded_items = mod_helper.get_modded_items(self.player, self.options)
+            modded_items = get_modded_items(self.player, self.options)
 
             for modded_item in modded_items:
                 pool.append(modded_item)
@@ -404,7 +404,7 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         mod_guids = None
         if self.options.useMods:
-            mod_guids = mod_helper.get_mod_guids()
+            mod_guids = get_mod_guids()
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
 
