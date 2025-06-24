@@ -1,4 +1,5 @@
 import logging
+import math
 from random import Random
 from typing import List
 
@@ -15,7 +16,7 @@ from ..mods.mod_data import ModNames
 from ..options import StardewValleyOptions, FestivalLocations, SpecialOrderLocations, SeasonRandomization, Museumsanity, \
     ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity, Walnutsanity, Moviesanity
-from ..options.options import IncludeEndgameLocations, Friendsanity
+from ..options.options import IncludeEndgameLocations, Friendsanity, ToolProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -150,6 +151,11 @@ def create_backpack_items(item_factory: StardewItemFactory, options: StardewVall
     num_per_tier = options.backpack_size.count_per_tier()
     backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs)
     num_backpacks = len(backpack_tier_names) * num_per_tier
+
+    if options.tool_progression & ToolProgression.value_no_starting_tools:
+        num_starting_slots = max(4, options.backpack_size.value)
+        num_extra_backpacks = math.ceil(num_starting_slots / options.backpack_size.value)
+        num_backpacks += num_extra_backpacks
     items.extend(item_factory(item) for item in ["Progressive Backpack"] * num_backpacks)
 
 

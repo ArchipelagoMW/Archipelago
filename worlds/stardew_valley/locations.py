@@ -15,7 +15,7 @@ from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
-from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity
+from .options.options import BackpackSize, Moviesanity, Eatsanity, IncludeEndgameLocations, Friendsanity, ToolProgression
 from .strings.ap_names.ap_option_names import WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from .strings.backpack_tiers import Backpack
 from .strings.goal_names import Goal
@@ -412,12 +412,12 @@ def extend_backpack_locations(randomized_locations: List[LocationData], options:
         backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK_TIER]]
     else:
         num_per_tier = options.backpack_size.count_per_tier()
-        backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs)
+        backpack_tier_names = Backpack.get_purchasable_tiers(ModNames.big_backpack in content.registered_packs,
+                                                             options.tool_progression & ToolProgression.value_no_starting_tools)
         backpack_locations = []
         for tier in backpack_tier_names:
             for i in range(1, num_per_tier + 1):
                 backpack_locations.append(location_table[f"{tier} {i}"])
-                i += 1
 
     filtered_backpack_locations = filter_modded_locations(backpack_locations, content)
     randomized_locations.extend(filtered_backpack_locations)
