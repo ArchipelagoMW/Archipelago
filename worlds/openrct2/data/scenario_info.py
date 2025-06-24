@@ -441,10 +441,12 @@ scenario_info = {
         "archipelago_madness_expansions"
     ],
     "unreasonable_scenarios":[
+        "big_pier",
         "alton_towers",
         "blackpool_pleasure_beach",
         "heide_park",
         "jolly_jungle",
+        "big_pier_2",
         "urban_park",
         "megaworld_park",
         "micro_park",

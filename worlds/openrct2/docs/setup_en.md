@@ -2,8 +2,8 @@
 
 
 ## Quick Links
-- [Main Page](../../../../games/OpenRCT2/info/en)
-- [Options Page](../../../../games/OpenRCT2/player-options)
+- [Main Page](../info/en)
+- [Options Page](../player-options)
 - [OpenRCT2 Plugins](https://openrct2plugins.org/)
 
 ## Required Software
