@@ -86,9 +86,9 @@ class SkipPercentage(Range):
 class DiscountPercentage(Range):
     """The number of target time discounts in the item pool, calculated as a percentage of the total number of maps.
     
-    This item increases the target time on a map by 1.5%. That might not sounds like a lot, but it helps!
+    This item decreases your personal best time used by this plugin by 1.5%. That might not sound like a lot, but it helps!
     """
-    display_name = "Map Skip Item Percentage"
+    display_name = "PB Discount Item Percentage"
     range_start = 0
     range_end = 100
     default = 20

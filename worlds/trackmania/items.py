@@ -14,12 +14,12 @@ trackmania_items: dict[str,int] = {
     "Gold Medal"           : base_id + 2,
     "Author Medal"         : base_id + 3,
     "Map Skip"             : base_id + 4,
-    "Target Time Discount" : base_id + 5,
+    "PB Discount"          : base_id + 5,
 }
 
 trackmania_item_groups = {
     "Medals": {"Bronze Medal", "Silver Medal", "Gold Medal", "Author Medal"},
-    "Useful Items": {"Map Skip", "Target Time Discount"},
+    "Useful Items": {"Map Skip", "PB Discount"},
     "Filler Items": set(filler_item_names)
 }
 
@@ -37,7 +37,7 @@ def determine_item_classification(world:"TrackmaniaWorld", name: str) -> ItemCla
             return ItemClassification.progression if 300 <= target_time else ItemClassification.filler
         case "Map Skip":
             return ItemClassification.useful
-        case "Target Time Discount":
+        case "PB Discount":
             return ItemClassification.useful
         case _:
             return ItemClassification.filler
@@ -77,7 +77,7 @@ def create_itempool(world: "TrackmaniaWorld") -> list[Item]:
     itempool += create_items(world, "Map Skip", skip_count)
 
     discount_count = min(round(float(spots_remaining) * (world.options.discount_percentage / 100.0)),spots_remaining-skip_count)
-    itempool += create_items(world, "Target Time Discount", discount_count)
+    itempool += create_items(world, "PB Discount", discount_count)
 
     filler_count = spots_remaining - skip_count - discount_count
     for x in range(filler_count):
