@@ -216,6 +216,7 @@ class SC2Manager(GameManager):
             data_changed
             and not hovering_tooltip
             or not self.refresh_from_launching
+            or self.last_data_out_of_date != self.ctx.data_out_of_date
             or self.first_check
         )
         self.last_shown_tooltip = shown_tooltip
