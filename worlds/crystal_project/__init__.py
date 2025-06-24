@@ -394,7 +394,7 @@ class CrystalProjectWorld(World):
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
         mod_guids = None
-        if options.UseMods:
+        if self.options.UseMods:
             mod_guids = mod_helper.get_mod_guids()
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after

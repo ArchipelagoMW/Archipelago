@@ -584,7 +584,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Salmon Pass
         #Treasure chests
         LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset), #Paypirbak chest
-        LocationData(SALMON_PASS, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Fenix Juice chest
         LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset), #Fenix Juice chest
 
         #Regionsanity Meta Location
@@ -592,6 +591,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Salmon River
         #Treasure chests
+        LocationData(SALMON_RIVER, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset), #Fenix Juice chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Hop on chest once you have become frogger", 1264 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Atop river island crown", 1297 + treasure_index_offset), #Bloodbind chest
         LocationData(SALMON_RIVER, "Salmon River Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
