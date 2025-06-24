@@ -279,7 +279,11 @@ class StardewValleyWorld(World):
         if self.options.backpack_progression != BackpackProgression.option_vanilla and self.options.tool_progression & ToolProgression.value_no_starting_tools:
             num_starting_slots = max(4, self.options.backpack_size.value)
             num_starting_backpacks = math.ceil(num_starting_slots / self.options.backpack_size.value)
-            for i in range(num_starting_backpacks):
+            num_already_starting_backpacks = 0
+            for precollected_item in self.multiworld.precollected_items[self.player]:
+                if precollected_item.name == "Progressive Backpack":
+                    num_already_starting_backpacks += 1
+            for i in range(num_starting_backpacks - num_already_starting_backpacks):
                 self.multiworld.push_precollected(self.create_item("Progressive Backpack"))
 
     def setup_logic_events(self):
