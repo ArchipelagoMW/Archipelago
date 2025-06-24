@@ -29,11 +29,24 @@ def create_region_locations(reg: Region, world: "OkamiWorld"):
 def create_region_events(reg: Region, world: "OkamiWorld"):
     if reg.name in okami_events:
         for (event_name, event_data) in okami_events[reg.name].items():
-            if event_data.override_event_item_name:
-                event_location = create_event(event_name, event_data.override_event_item_name, reg, event_data, world)
+
+            if isinstance(event_data.precollected, bool):
+                precollected_item_event_state = event_data.precollected
             else:
-                event_location = create_event(event_name, event_name, reg, event_data, world)
-            event_location.show_in_spoiler = False
+                precollected_item_event_state = event_data.precollected(world.options)
+
+            if isinstance(event_data.is_event_item, bool):
+                is_event_item_state = event_data.is_event_item
+            else:
+                is_event_item_state = event_data.is_event_item(world.options)
+
+            if not precollected_item_event_state and not is_event_item_state:
+                # It's a true event, we need to create it as such.
+                if event_data.override_event_item_name:
+                    event_location = create_event(event_name, event_data.override_event_item_name, reg, event_data, world)
+                else:
+                    event_location = create_event(event_name, event_name, reg, event_data, world)
+                event_location.show_in_spoiler = False
 
 
 def create_event(location_name: str, item_name: str, region: Region, data: LocData, world: "OkamiWorld") -> Location:

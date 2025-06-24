@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData
 
 if TYPE_CHECKING:
-    from .. import OkamiWorld
+    from .. import OkamiWorld, OkamiOptions
 
 exits = {
     RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: [ExitData("Exit to Cursed Kamiki", RegionNames.CURSED_KAMIKI,
@@ -24,16 +24,9 @@ exits = {
 }
 events = {
     RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI: {
-        "River of the Heavens (Kamiki Side) - Restoring the River": EventData(
-            override_event_item_name="River of the Heavens - Restoring the River",
+        "River of the Heavens - Restoring the River": EventData(id=0x200,
             required_brush_techniques=[BrushTechniques.REJUVENATION],
-        )
-    },
-    # Doable from the other side too
-    RegionNames.RIVER_OF_THE_HEAVENS_NAGI: {
-        "River of the Heavens (Nagi Side) - Restoring the River": EventData(
-            required_brush_techniques=[BrushTechniques.REJUVENATION],
-            override_event_item_name="River of the Heavens - Restoring the River")
+            precollected=lambda o: o.RestoreRiverOfTheHeavens)
     }
 }
 locations = {

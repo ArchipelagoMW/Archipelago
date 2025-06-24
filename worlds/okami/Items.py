@@ -83,7 +83,7 @@ okami_items = {
     ### I'm not sure how that's going to work with ER.
     ### TODO: Update their ids
     "Tsuta Ruins Key": ItemData(0x40,ItemClassification.progression),
-    "Vista of the Gods" : ItemData(0x200, ItemClassification.progression),
+    "Vista of the Gods" : ItemData(0x5C, ItemClassification.progression),
 
     # Other
     #"Astral Pouch": ItemData(0x06, ItemClassification.useful),

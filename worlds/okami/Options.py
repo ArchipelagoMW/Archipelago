@@ -3,7 +3,6 @@ from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
 from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup
-from ..ahit import slot_data_options
 
 if TYPE_CHECKING:
     from . import OkamiWorld
@@ -28,6 +27,16 @@ class StartWithDivineInstrument(Toggle):
     display_name = "Start with a Divine Instrument"
     default = 1
 
+class RestoreRiverOfTheHeavens(Toggle):
+    """Start with the River of the Heavens already restored"""
+    display_name = "Start with the River of the Heavens already restored"
+    default = 1
+
+class RemoveKamikiBoulder(Toggle):
+    """Remove Kamiki Boulder"""
+    display_name = "Remove Kamiki Boulder"
+    default = 1
+
 #
 #class PraiseSanity(Choice):
 #    """Randomize Praise Rewards"""
@@ -44,6 +53,8 @@ class StartWithDivineInstrument(Toggle):
 class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
     StartWithDivineInstrument: StartWithDivineInstrument
+    RestoreRiverOfTheHeavens: RestoreRiverOfTheHeavens
+    RemoveKamikiBoulder: RemoveKamikiBoulder
 #    PraiseSanity:PraiseSanity
 
 
@@ -53,11 +64,17 @@ okami_option_groups: Dict[str, List[Any]] = {
         StartWithDivineInstrument,
         #PraiseSanity
         ],
+    "Event Options":[
+        RestoreRiverOfTheHeavens,
+        RemoveKamikiBoulder
+    ]
 
 }
 
 slot_data_options = {
     "BuriedChestsByNight",
-    "StartWithDivineInstrument"
+    "StartWithDivineInstrument",
+    "RestoreRiverOfTheHeavens",
+    "RemoveKamikiBoulder"
 #    "PraiseSanity"
 }

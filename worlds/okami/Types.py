@@ -1,6 +1,8 @@
+import typing
 from enum import IntEnum, Enum, StrEnum
 from typing import NamedTuple, Optional, List
 from BaseClasses import Location, Item, ItemClassification
+from .Options import OkamiOptions
 
 
 class OkamiLocation(Location):
@@ -61,6 +63,7 @@ class RegionNames(StrEnum):
     AGATA_FOREST="Agata Forest"
 
     ## TUSTA RUINS
+    ###
     TSUTA_RUINS="Tsuta Ruins"
 
     ## TAKA PASS
@@ -122,11 +125,11 @@ class BrushTechniques(Enum):
     WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
     CRESCENT = BrushTechniqueData(0x108, "Crescent", item_classification=ItemClassification.progression)
     GALESTROM = BrushTechniqueData(0x109, "Galestrom")
-    # INFERNO = BrushTechniqueData(0x110, "Inferno")
-    # VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
-    # CATWALK = BrushTechniqueData(0x112, "Cawalk")
-    # THUNDERSTORM = BrushTechniqueData(0x113, "Thunderstorm")
-    # BLIZZARD = BrushTechniqueData(0x114, "Blizzard")
+    INFERNO = BrushTechniqueData(0x110, "Inferno")
+    VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
+    CATWALK = BrushTechniqueData(0x112, "Cawalk")
+    THUNDERSTORM = BrushTechniqueData(0x113, "Thunderstorm")
+    BLIZZARD = BrushTechniqueData(0x114, "Blizzard")
     ## UPGRADES/SECRET
     # MIST_WARP = BrushTechniqueData(0x115, "Mist Warp")
     # FIREBURST = BrushTechniqueData(0x116, "Fireburst")
@@ -157,6 +160,7 @@ class OkamiEnnemies(Enum):
     YELLOW_IMP = EnnemyData(0x02, "Yellow Imp", 0, BrushTechniques.POWER_SLASH)
     #Not sure if this is the code for waka 1 or 2
     WAKA_1 = EnnemyData(0x7e, "Waka (Agata Forest)",1)
+    BUD_OGRE = EnnemyData(0x4d, "Bud Ogre",1,BrushTechniques.GREENSPROUT_BLOOM,required_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
 
     @staticmethod
     def list():
@@ -178,6 +182,7 @@ class LocData(NamedTuple):
 
 
 class EventData(NamedTuple):
+    id: int | None = None
     required_brush_techniques: List[BrushTechniques] = []
     power_slash_level: int = 0
     cherry_bomb_level: int = 0
@@ -188,7 +193,8 @@ class EventData(NamedTuple):
     required_items: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
     needs_swim: bool = False
-
+    is_event_item: bool | typing.Callable[[OkamiOptions], bool] = False
+    precollected: bool | typing.Callable[[OkamiOptions], bool] = False
 
 class ExitData(NamedTuple):
     name: str
