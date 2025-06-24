@@ -129,6 +129,7 @@ class BundleName:
 
 class MemeBundleName:
     investment = meme_bundle("Investment")
+    doctor = meme_bundle("Doctor")
     scam = meme_bundle("Scam")
     blossom_garden = meme_bundle("Blossom Garden")
     deathlink = meme_bundle("DeathLink")
