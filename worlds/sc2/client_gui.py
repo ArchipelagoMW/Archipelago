@@ -38,6 +38,7 @@ class MissionButton(HoverableButton, MDTooltip):
     mission_id = NumericProperty(-1)
     is_exit = BooleanProperty(False)
     is_goal = BooleanProperty(False)
+    showing_tooltip = BooleanProperty(False)
 
     def __init__(self, *args, **kwargs):
         super(HoverableButton, self).__init__(**kwargs)
@@ -52,6 +53,14 @@ class MissionButton(HoverableButton, MDTooltip):
 
     def on_leave(self):
         self.remove_tooltip()
+    
+    def display_tooltip(self, *args):
+        self.showing_tooltip = True
+        return super().display_tooltip(*args)
+    
+    def remove_tooltip(self, *args):
+        self.showing_tooltip = False
+        return super().remove_tooltip(*args)
 
     @property
     def ctx(self) -> SC2Context:
@@ -124,6 +133,8 @@ class SC2Manager(GameManager):
     campaign_panel: Optional[MultiCampaignLayout] = None
     campaign_scroll_panel: Optional[CampaignScroll] = None
     last_checked_locations: Set[int] = set()
+    last_items_received: List[int] = []
+    last_shown_tooltip: int = -1
     last_data_out_of_date = False
     mission_buttons: List[MissionButton] = []
     launching: Union[bool, int] = False  # if int -> mission ID
@@ -160,6 +171,12 @@ class SC2Manager(GameManager):
         for button in self.mission_buttons:
             button.remove_tooltip()
 
+    def shown_tooltip(self) -> int:
+        for button in self.mission_buttons:
+            if button.showing_tooltip:
+                return button.mission_id
+        return -1
+
     def build(self):
         container = super().build()
 
@@ -185,18 +202,30 @@ class SC2Manager(GameManager):
                 self.ctx.ui.clear_tooltip()
             return
         
-        needs_redraw = (
+        sorted_items_received = sorted([item.item for item in self.ctx.items_received])
+        shown_tooltip = self.shown_tooltip()
+        hovering_tooltip = (
+            self.last_shown_tooltip != -1
+            and self.last_shown_tooltip == shown_tooltip
+        )
+        data_changed = (
             self.last_checked_locations != self.ctx.checked_locations
+            or self.last_items_received != sorted_items_received
+        )
+        needs_redraw = (
+            data_changed
+            and not hovering_tooltip
             or not self.refresh_from_launching
-            or self.last_data_out_of_date != self.ctx.data_out_of_date
             or self.first_check
         )
+        self.last_shown_tooltip = shown_tooltip
         if not needs_redraw:
             return
 
         assert self.campaign_panel is not None
         self.refresh_from_launching = True
 
+        self.clear_tooltip()
         self.campaign_panel.clear_widgets()
         if self.ctx.data_out_of_date:
             self.campaign_panel.add_widget(Label(text="", padding=[0, 5, 0, 5]))
@@ -213,15 +242,16 @@ class SC2Manager(GameManager):
             self.campaign_panel.add_widget(Label(text="Connect to a world to see a mission layout here."))
             return
 
-        # if self.ctx.slot_data_version >= 4 and self.ctx.mission_order:
         self.last_checked_locations = self.ctx.checked_locations.copy()
+        self.last_items_received = sorted_items_received
         self.first_check = False
 
         self.mission_buttons = []
 
         available_missions, available_layouts, available_campaigns, unfinished_missions = calc_unfinished_nodes(self.ctx)
 
-        multi_campaign_layout_height = 0
+        # The MultiCampaignLayout widget needs a default height of 15 (set in the .kv) to display the above Labels correctly
+        multi_campaign_layout_height = 15
 
         # Fetching IDs of all the locations with hints  
         self.hints_to_highlight = []
@@ -303,6 +333,13 @@ class SC2Manager(GameManager):
             self.campaign_panel.add_widget(campaign_layout)
         self.campaign_panel.height = multi_campaign_layout_height
 
+        # For some reason the AP HoverBehavior won't send an enter event if a button spawns under the cursor,
+        # so manually send an enter event if a button is hovered immediately
+        for button in self.mission_buttons:
+            if button.hovered:
+                button.dispatch("on_enter")
+                break
+
     def mission_text(
         self, ctx: SC2Context, mission_id: int, mission_obj: SC2Mission,
         layout_id: int, is_layout_exit: bool, layout_name: str, campaign_id: int, is_campaign_exit: bool, campaign_name: str,
@@ -319,8 +356,8 @@ class SC2Manager(GameManager):
         COLOR_FINAL_PARENT_LOCKED = "D0C0BE" # gray + orange
         COLOR_FINAL_MISSION_REMINDER = "FF5151" # light red
         COLOR_VICTORY_LOCATION = "FFC156" # gold
-        COLOR_TOOLTIP_DONE = "00FF00" # green
-        COLOR_TOOLTIP_NOT_DONE = "FF0000" # red
+        COLOR_TOOLTIP_DONE = "51FF51" # light green
+        COLOR_TOOLTIP_NOT_DONE = "FF5151" # light red
 
         text = mission_obj.mission_name
         tooltip: str = ""
@@ -390,7 +427,10 @@ class SC2Manager(GameManager):
                 tooltip += "\n\n"
             elif exit_for:
                 tooltip += "\n"
-            tooltip += f"[color={COLOR_FINAL_MISSION_REMINDER}]Required to beat the world[/color]"
+            if any(location_type == LocationType.VICTORY for (location_type, _, _) in remaining_locations):
+                tooltip += f"[color={COLOR_FINAL_MISSION_REMINDER}]Required to beat the world[/color]"
+            else:
+                tooltip += "This goal mission is already beaten.\nBeat the remaining goal missions to beat the world."
 
         # Populate remaining location list
         if remaining_count > 0:
