@@ -711,6 +711,15 @@ class RequiredUniqueRides(Range):
     range_end = 10
     default = 5
 
+class LocalityOfUniqueRides(Choice):
+    """Whether the unique rides should be local, remote, or anywhere."""
+    display_name = "Placement of Unique Rides"
+    option_off = 0
+    option_local = 1
+    option_remote = 2
+    default = 0
+
+
 class ParkRatingObjective(Range):
     """If enabled, choose the minimum park rating needed to beat the scenario."""
     display_name = "Park Rating Objective"
@@ -808,6 +817,7 @@ openrct2_option_groups = [
         RollerCoasterIntensity,
         RollerCoasterNausea,
         RequiredUniqueRides,
+        LocalityOfUniqueRides,
         ParkRatingObjective,
         PayOffLoan,
         MonopolyMode
@@ -900,6 +910,7 @@ class openRCT2Options(PerGameCommonOptions):
     roller_coaster_intensity: RollerCoasterIntensity
     roller_coaster_nausea: RollerCoasterNausea
     required_unique_rides: RequiredUniqueRides
+    unique_rides_placement: LocalityOfUniqueRides
     # include_park_rating_objective: Include_Park_Rating_Objective
     park_rating_objective: ParkRatingObjective
     pay_off_loan: PayOffLoan
