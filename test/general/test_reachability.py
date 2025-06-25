@@ -113,7 +113,7 @@ class TestBase(unittest.TestCase):
                 # Only keep progression items.
                 additional_candidate_items = [item for item in additional_candidate_items if item.advancement]
 
-                # Now, we choose random items over and over, allowing duplicates but handling them carefully.-+-
+                # Now, we choose random items over and over, allowing duplicates but handling them carefully.
                 additional_chosen_items = []
                 target_amount = len(additional_candidate_items) / 4
                 while len(additional_chosen_items) < target_amount:
