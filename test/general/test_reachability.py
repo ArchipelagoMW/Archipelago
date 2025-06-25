@@ -99,13 +99,10 @@ class TestBase(unittest.TestCase):
                 )
                 proxy_world = multiworld.worlds[1]
 
-                # First, we need to get a random set of items.
+                # First, we need to get a set of items to test on.
                 # All of them need to be progression items. To ensure this, we need to do a bit of work.
-                # Since this is an actual world that had gen steps called on it, we can take some from the item pool.
-                candidate_items_from_pool = [item for item in multiworld.itempool if item.advancement]
-                chosen_items_from_itempool = proxy_world.random.choices(
-                    candidate_items_from_pool, k=len(candidate_items_from_pool) // 2
-                )
+                # Since this is an actual world that gen steps were called on, we can take the ones from the item pool.
+                items_from_pool = [item for item in multiworld.itempool if item.advancement]
 
                 # However, the intent of this test is also to catch scenarios in which extra items were created,
                 # e.g. through plando or itemlinks. So, we make some random items from the datapackage as well.
@@ -118,7 +115,7 @@ class TestBase(unittest.TestCase):
 
                 # Now, we choose random items over and over, allowing duplicates but handling them carefully.-+-
                 additional_chosen_items = []
-                target_amount = len(additional_candidate_items) // 2
+                target_amount = len(additional_candidate_items) / 4
                 while len(additional_chosen_items) < target_amount:
                     random_item = proxy_world.random.choice(additional_candidate_items)
 
@@ -141,11 +138,10 @@ class TestBase(unittest.TestCase):
 
                     additional_chosen_items.append(random_item)
 
-                proxy_world.random.shuffle(additional_chosen_items)
+                chosen_items = [*items_from_pool, *additional_chosen_items]
+                proxy_world.random.shuffle(chosen_items)
 
                 all_locations = list(proxy_world.get_locations())
-                chosen_items = [*chosen_items_from_itempool, *additional_chosen_items]
-                proxy_world.random.shuffle(chosen_items)
 
                 state = CollectionState(multiworld)
                 reachable_locations = {
