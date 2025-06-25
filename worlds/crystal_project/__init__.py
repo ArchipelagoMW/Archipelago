@@ -11,7 +11,7 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
-from .locations import get_locations, get_bosses, get_shops
+from .locations import get_locations, get_bosses, get_shops, LocationData
 from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -20,7 +20,6 @@ from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
-
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -53,7 +52,7 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = mod_helper.get_modded_items(-1, options)
+    modded_items = mod_helper.get_modded_items(-1)
 
     for modded_item in modded_items:
         item_name_to_id[modded_item.name] = modded_item.code
@@ -108,11 +107,15 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             modded_locations = mod_helper.get_modded_locations(self.player, self, self.options)
-            locations.extend(modded_locations)
+            for modded_location in modded_locations:
+                location = LocationData(modded_location.region, modded_location.name, modded_location.code, modded_location.rule)
+                locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             modded_shops = mod_helper.get_modded_shopsanity_locations(self.player, self, self.options)
-            locations.extend(modded_shops)
+            for shop in modded_shops:
+                location = LocationData(shop.region, shop.name, shop.code, shop.rule)
+                locations.append(location)
 
         init_areas(self, locations, self.options)
 
@@ -360,7 +363,7 @@ class CrystalProjectWorld(World):
             pool.append(item)
 
         if self.options.useMods:
-            modded_items = mod_helper.get_modded_items(self.player, self.options)
+            modded_items = mod_helper.get_modded_items(self.player)
 
             for modded_item in modded_items:
                 pool.append(modded_item)
@@ -403,8 +406,13 @@ class CrystalProjectWorld(World):
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
         mod_guids = None
+        slot_data_locations = []
         if options.UseMods:
             mod_guids = mod_helper.get_mod_guids()
+            for modded_location in self.modded_locations:
+                slot_data_locations.append({"Id": modded_location.offsetless_code, "Region": modded_location.region, "Name": modded_location.name, "Coordinates": modded_location.coordinates, "biomeId": modded_location.biomeId, "Rule": None })
+            for shop in self.modded_shops:
+                slot_data_locations.append({ "Id": shop.offsetless_code, "Region": shop.region, "Name": shop.name, "Coordinates": shop.coordinates, "BiomeId": shop.biomeId, "Rule": None })
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
 
@@ -427,4 +435,5 @@ class CrystalProjectWorld(World):
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
             "modGuids": mod_guids,
+            "moddedLocations": slot_data_locations
         }

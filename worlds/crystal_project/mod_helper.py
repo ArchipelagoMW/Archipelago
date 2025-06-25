@@ -6,13 +6,22 @@ from BaseClasses import Item, ItemClassification, CollectionState
 from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
-from .locations import LocationData, get_locations, get_shops, npc_index_offset, treasure_index_offset, crystal_index_offset, shop_index_offset
+from .locations import get_locations, get_shops, npc_index_offset, treasure_index_offset, crystal_index_offset, shop_index_offset
 from .constants.biomes import get_region_by_id
 from .rules import CrystalProjectLogic
 import json
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
+
+class ModLocationData(NamedTuple):
+    region: str
+    name: str
+    code: int
+    offsetless_code: int
+    coordinates: str
+    biomeId: int
+    rule: Optional[Callable[[CollectionState], bool]] = None
 
 class ModDataModel(object):
     def __init__(self, json_data):
@@ -46,7 +55,7 @@ def get_mod_guids() -> List[str]:
 
     return guids
 
-def get_modded_items(player: int, options: CrystalProjectOptions) -> List[Item]:
+def get_modded_items(player: int) -> List[Item]:
     items: List[Item] = []
     file_directory = get_mod_directory()
 
@@ -94,8 +103,8 @@ def get_modded_items(player: int, options: CrystalProjectOptions) -> List[Item]:
 
     return items
 
-def get_modded_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
-    locations: List[LocationData] = []
+def get_modded_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
+    locations: List[ModLocationData] = []
     file_directory = get_mod_directory()
 
     if not os.path.isdir(file_directory):
@@ -131,8 +140,8 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
 
     return locations
 
-def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
-    locations: List[LocationData] = []
+def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
+    locations: List[ModLocationData] = []
 
     file_directory = get_mod_directory()
 
@@ -162,10 +171,14 @@ def get_mod_directory() -> str:
 
     return mod_directory
 
-def build_npc_location(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> Optional[LocationData]:
-    region = get_region_by_id(location['BiomeID'])
-    item_id = location['ID'] + npc_index_offset
+def build_npc_location(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> Optional[ModLocationData]:
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+    id_with_offset = item_id + npc_index_offset
     name = region + ' NPC - Modded NPC ' + str(item_id)
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     has_add_inventory = False
     condition_rule = None
 
@@ -206,7 +219,7 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
                 has_add_inventory = not is_excluded
 
     if has_add_inventory:
-        item_in_pool = any(location.code == item_id for location in get_locations(player, options))
+        item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
 
         if not item_in_pool:
             if not options is None:
@@ -214,19 +227,21 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
 
                 if condition_rule is None:
                     # We don't know what's required to actually reach these checks, so assume worst case, it's probably less than this
-                    condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
-                        state) and logic.has_vertical_movement(state)
+                    condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
-            location = LocationData(region, name, item_id, condition_rule)
+            location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, condition_rule)
             return location
 
     return None
 
-def build_shop_locations(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[LocationData]:
+def build_shop_locations(location, excluded_ids, player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
     logic = CrystalProjectLogic(player, options)
-    locations: List[LocationData] = []
-    region = get_region_by_id(location['BiomeID'])
-    item_id = location['ID'] + npc_index_offset
+    locations: List[ModLocationData] = []
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
 
     pages = location['NpcData']['Pages']
     for page in pages:
@@ -236,12 +251,14 @@ def build_shop_locations(location, excluded_ids, player: int, world: "CrystalPro
             # 5 is Shop, only add if shopsanity is on
             if action['ActionType'] == 5:
                 stock = action['Data']['Stock']
-                id_offset = shop_index_offset
+                id_offset = 10000
+
                 for shop_item in stock:
                     shop_item_id = item_id + id_offset
+                    id_with_offset = shop_item_id + shop_index_offset
                     shop_name = region + ' Shop - Modded Shop ' + str(shop_item_id)
                     shop_item_excluded = is_item_at_location_excluded(shop_item, excluded_ids)
-                    shop_item_in_pool = any(location.code == shop_item_id for location in get_shops(player, options))
+                    shop_item_in_pool = any(location.code == id_with_offset for location in get_shops(player, options))
 
                     if not shop_item_in_pool and not shop_item_excluded:
                         condition = shop_item['Condition']
@@ -251,25 +268,29 @@ def build_shop_locations(location, excluded_ids, player: int, world: "CrystalPro
                             condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
                                 state) and logic.has_vertical_movement(state)
 
-                        location = LocationData(region, shop_name, shop_item_id, condition_rule)
+                        location = ModLocationData(region, shop_name, id_with_offset, shop_item_id, coordinates, biome_id, condition_rule)
                         locations.append(location)
 
-                    id_offset += shop_index_offset
+                    id_offset += 10000
 
     return locations
 
 def build_treasure_location(location, excluded_ids, player, options):
     #Chests always add an item and never have conditions, so nice and easy
-    region = get_region_by_id(location['BiomeID'])
-    item_id = location['ID'] + treasure_index_offset
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+    id_with_offset = item_id + treasure_index_offset
     name = region + ' Chest - Modded Chest ' + str(item_id)
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     is_excluded = is_item_at_location_excluded(location['TreasureData'], excluded_ids)
 
-    item_in_pool = any(location.code == item_id for location in get_locations(player, options))
+    item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
     if not item_in_pool and not is_excluded:
         logic = CrystalProjectLogic(player, options)
         condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
-        location = LocationData(region, name, item_id, condition_rule)
+        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, condition_rule)
 
         return location
 
@@ -277,19 +298,21 @@ def build_treasure_location(location, excluded_ids, player, options):
 
 def build_crystal_location(location, excluded_ids, player, options):
     # Crystals always add a job and never have conditions, so nice and easy
-    region = get_region_by_id(location['BiomeID'])
-    item_id = location['ID'] + crystal_index_offset
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+    id_with_offset = item_id + crystal_index_offset
     name = region + ' Crystal - Modded Job ' + str(item_id)
-
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     job_id = location['CrystalData']['JobID']
     is_excluded = job_id in excluded_ids.excluded_job_ids
 
-    item_in_pool = any(location.code == item_id for location in get_locations(player, options))
+    item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
     if not item_in_pool and not is_excluded:
         logic = CrystalProjectLogic(player, options)
-        condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
-            state) and logic.has_vertical_movement(state)
-        location = LocationData(region, name, item_id, condition_rule)
+        condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
+        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, condition_rule)
 
         return location
 
