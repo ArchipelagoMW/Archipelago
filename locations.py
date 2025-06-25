@@ -1,4 +1,4 @@
-from typing import NamedTuple, Optional, Sequence
+from typing import NamedTuple
 
 from BaseClasses import Location, Region
 
@@ -10,7 +10,7 @@ class LocationData(NamedTuple):
     passage: Passage
     level: int
     flag: ItemFlag
-    difficulties: Sequence[int]
+    difficulties: list[int]
 
     def level_id(self):
         return (self.passage, self.level)
@@ -358,12 +358,12 @@ location_name_to_id = {name: data.to_ap_id() for name, data in location_table.it
 
 class WL4Location(Location):
     game: str = "Wario Land 4"
-    passage: Optional[int]
-    level: Optional[int]
-    flag: Optional[int]
-    difficulty: Sequence[int]
+    passage: int | None
+    level: int | None
+    flag: int | None
+    difficulty: list[int]
 
-    def __init__(self, player: int, name: str, parent: Optional[Region] = None):
+    def __init__(self, player: int, name: str, parent: Region | None = None):
         super().__init__(player, name, location_name_to_id.get(name, None), parent)
         self.passage, self.level, self.flag, self.difficulty = location_table[name]
 

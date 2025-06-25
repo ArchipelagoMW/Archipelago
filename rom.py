@@ -4,7 +4,7 @@ import itertools
 import random
 from pathlib import Path
 import struct
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import NamedTuple, TYPE_CHECKING
 
 import Utils
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
@@ -239,9 +239,9 @@ def fill_items(world: WL4World, patch: WL4ProcedurePatch):
 
 
 class StartInventory:
-    level_table: List[List[int]]
+    level_table: list[list[int]]
     abilities: int
-    junk_counts: List[int]
+    junk_counts: list[int]
 
     def __init__(self):
         self.level_table = [[0] * 6 for _ in Passage]
@@ -339,8 +339,8 @@ def create_starting_inventory(world: WL4World, patch: WL4ProcedurePatch):
 
 
 def create_strings(patch: WL4ProcedurePatch,
-                   multiworld_items: Dict[int, Optional[MultiworldData]]
-                   ) -> Dict[Optional[str], int]:
+                   multiworld_items: dict[int, MultiworldData | None]
+                   ) -> dict[str | None, int]:
     receivers = set()
     items = set()
     address = get_rom_address("MultiworldStringDump")
@@ -364,8 +364,8 @@ def create_strings(patch: WL4ProcedurePatch,
 
 
 def write_multiworld_table(patch: WL4ProcedurePatch,
-                           multiworld_items: Dict[int, Optional[MultiworldData]],
-                           strings: Dict[Optional[str], int]):
+                           multiworld_items: dict[int, MultiworldData | None],
+                           strings: dict[str | None, int]):
     entry_address = get_rom_address("MultiworldStringDump")
     for location_address, item in multiworld_items.items():
         if item is None:

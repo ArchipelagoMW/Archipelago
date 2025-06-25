@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import IntEnum
-from typing import Any, Iterable, NamedTuple, Optional, Tuple, Union
+from typing import Iterable, NamedTuple
 
 from BaseClasses import Item, ItemClassification as IC
 
@@ -84,7 +84,7 @@ def ap_id_from_wl4_data(data: ItemData) -> int:
     return ap_id_offset + item
 
 
-def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
+def wl4_data_from_ap_id(ap_id: int) -> tuple[str, ItemData]:
     val = ap_id - ap_id_offset
     if val >> 6 == 0:
         passage = (val & 0x1C) >> 2
@@ -121,10 +121,10 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
 
 class WL4Item(Item):
     game: str = "Wario Land 4"
-    type: Optional[ItemType]
-    passage: Optional[Passage]
-    level: Optional[int]
-    flag: Optional[ItemFlag]
+    type: ItemType | None
+    passage: Passage | None
+    level: int | None
+    flag: ItemFlag | None
 
     def __init__(self, name: str, player: int, force_non_progression: bool = False):
         if name in item_table:
@@ -148,15 +148,15 @@ class WL4Item(Item):
 
 class ItemData(NamedTuple):
     type: ItemType
-    id: Union[Tuple[Passage, Box], Tuple[Passage, int], int]
+    id: tuple[Passage, Box] | tuple[Passage, int] | int
     prog: IC
 
-    def passage(self):
+    def passage(self) -> Passage | None:
         if not isinstance(self.id, tuple):
             return None
         return self.id[0]
 
-    def box(self) -> Optional[Box]:
+    def box(self) -> Box | None:
         if self.type == ItemType.JEWEL:
             return self.id[1]
         if self.type == ItemType.CD:
@@ -233,8 +233,8 @@ item_table = {
 }
 
 
-def filter_items(*, type: Optional[ItemType] = None, passage: Optional[Passage] = None) -> Iterable[Tuple[str, ItemData]]:
-    items: Iterable[Tuple[str, ItemData]] = item_table.items()
+def filter_items(*, type: ItemType | None = None, passage: Passage | None = None) -> Iterable[tuple[str, ItemData]]:
+    items: Iterable[tuple[str, ItemData]] = item_table.items()
     if type is not None:
         items = filter(lambda i: i[1].type == type, items)
     if passage is not None:
@@ -242,5 +242,5 @@ def filter_items(*, type: Optional[ItemType] = None, passage: Optional[Passage] 
     return items
 
 
-def filter_item_names(*, type: Optional[ItemType] = None, passage: Optional[Passage] = None) -> Iterable[str]:
+def filter_item_names(*, type: ItemType | None = None, passage: Passage | None = None) -> Iterable[str]:
     return map(lambda entry: entry[0], filter_items(type=type, passage=passage))

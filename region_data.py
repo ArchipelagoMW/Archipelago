@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import NamedTuple, Optional, Sequence
+from typing import NamedTuple
 
 from .data import Passage
 from .options import Difficulty, Goal
@@ -13,33 +13,33 @@ s_hard = Difficulty.option_s_hard
 
 
 class LevelData(NamedTuple):
-    regions: Sequence[RegionData]
+    regions: list[RegionData]
     use_entrance_region: bool = True
 
 
 class RegionData(NamedTuple):
     name: str
-    exits: Sequence[ExitData]
-    locations: Sequence[LocationData] = ()
-    diamonds: Sequence[LocationData] = ()
+    exits: list[ExitData]
+    locations: list[LocationData] = []
+    diamonds: list[LocationData] = []
 
 
 class ExitData(NamedTuple):
     destination: str
-    access_rule: Optional[Requirement] = None  # Forward and reverse
+    access_rule: Requirement | None = None  # Forward and reverse
 
 
 class LocationData(NamedTuple):
     name: str
-    access_rule: Optional[Requirement] = None
-    difficulties: Sequence[int] = [normal, hard, s_hard]
+    access_rule: Requirement | None = None
+    difficulties: list[int] = [normal, hard, s_hard]
     event: bool = False
 
 
 class BossData(NamedTuple):
     name: str
     kill_rule: Requirement
-    quick_kill_rule: Optional[Requirement] = None
+    quick_kill_rule: Requirement | None = None
 
 
 passage_levels = {

@@ -3,7 +3,6 @@ from __future__ import annotations
 from enum import Enum, IntEnum, IntFlag
 from io import StringIO
 import pkgutil
-from typing import Mapping
 
 
 ap_id_offset = 0xEC0000
@@ -68,7 +67,7 @@ def data_path(file_name: str):
     return pkgutil.get_data(__name__, f"data/{file_name}")
 
 
-def _get_symbols() -> Mapping[str, int]:
+def _get_symbols() -> dict[str, int]:
     symbols = {}
     symbol_data = data_path("basepatch.sym").decode("utf-8")
     with StringIO(symbol_data) as stream:
@@ -88,7 +87,7 @@ def _get_symbols() -> Mapping[str, int]:
     return symbols
 
 
-def _get_charset() -> Mapping[str, int]:
+def _get_charset() -> dict[str, int]:
     charset = {}
     symbol_data = data_path("charset.tbl").decode("utf-8")
     with StringIO(symbol_data) as stream:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import itertools
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import CollectionRule, add_rule, add_item_rule
 from BaseClasses import Item, Location, Region, Entrance
@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from . import WL4World
 
 
-AccessRule = Optional[CollectionRule]
+AccessRule = CollectionRule | None
 
 
 class WL4Region(Region):
@@ -25,7 +25,7 @@ class WL4Region(Region):
         super().__init__(name, world.player, world.multiworld)
 
 
-def get_region_name(level: str, region: Optional[str]):
+def get_region_name(level: str, region: str | None):
     return level if region is None else f"{level} - {region}"
 
 

@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import Sequence
 from BaseClasses import CollectionState, ItemClassification
 
 from test.bases import TestBase, WorldTestBase
@@ -8,7 +7,7 @@ class WL4TestBase(WorldTestBase, TestBase):
     game = "Wario Land 4"
     player = 1
 
-    starting_regions: Sequence[str] = []
+    starting_regions: list[str] = []
 
     def get_state(self, items):
         if (self.multiworld, tuple(self.starting_regions), tuple(items)) in self._state_cache:

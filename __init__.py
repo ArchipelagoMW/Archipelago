@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 import settings
-from typing import Any, ClassVar, Mapping
+from typing import Any, ClassVar
 
 from BaseClasses import Item, Tutorial
 from Options import OptionError
@@ -224,7 +224,7 @@ class WL4World(World):
         output_filename = self.multiworld.get_out_file_name_base(self.player)
         patch.write(f"{(output_path / output_filename).with_suffix(patch.patch_file_ending)}")
 
-    def fill_slot_data(self) -> Mapping[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict(
             "goal",
             "golden_treasure_count",

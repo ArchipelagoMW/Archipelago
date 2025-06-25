@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import functools
-from typing import Callable, Mapping, NamedTuple, Sequence, Tuple, Union, TYPE_CHECKING
+from typing import Callable, Iterable, NamedTuple, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 
@@ -15,10 +15,10 @@ if TYPE_CHECKING:
 __all__ = ["Requirement", "has", "has_all", "has_any", "has_treasures", "option", "difficulty", "not_difficulty", "advanced_logic"]
 
 
-RequiredItem = Union[str, Tuple[str, int]]
+RequiredItem = str | tuple[str, int]
 
 
-helpers: Mapping[str, Tuple[str, int]] = {
+helpers: dict[str, tuple[str, int]] = {
     "Ground Pound":       ("Progressive Ground Pound", 1),
     "Super Ground Pound": ("Progressive Ground Pound", 2),
     "Grab":               ("Progressive Grab", 1),
@@ -49,10 +49,10 @@ def has(item_name: RequiredItem) -> Requirement:
     item, count = resolve_helper(item_name)
     return Requirement(lambda w, s: s.has(item, w.player, count))
 
-def has_all(items: Sequence[RequiredItem]) -> Requirement:
+def has_all(items: Iterable[RequiredItem]) -> Requirement:
     return Requirement(lambda w, s: all(has(item).inner(w, s) for item in items))
 
-def has_any(items: Sequence[RequiredItem]) -> Requirement:
+def has_any(items: Iterable[RequiredItem]) -> Requirement:
     return Requirement(lambda w, s: any(has(item).inner(w, s) for item in items))
 
 def has_treasures() -> Requirement:
