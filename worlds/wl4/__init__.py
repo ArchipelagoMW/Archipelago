@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 import settings
-from typing import Any, ClassVar, Mapping
+from typing import Any, ClassVar
 
 from BaseClasses import Item, Tutorial
 from Options import OptionError
@@ -19,8 +19,8 @@ from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 class WL4Settings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the Wario Land 4 ROM"""
-        description = 'Wario Land 4 ROM File'
-        copy_to = 'Wario Land 4.gba'
+        description = "Wario Land 4 ROM File"
+        copy_to = "Wario Land 4.gba"
         md5s = [MD5_US_EU, MD5_JP]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
@@ -29,15 +29,15 @@ class WL4Settings(settings.Group):
 
 class WL4Web(WebWorld):
     setup_en = Tutorial(
-        'Multiworld Setup Guide',
-        'A guide to setting up the Wario Land 4 randomizer connected to an Archipelago Multiworld.',
-        'English',
-        'setup_en.md',
-        'setup/en',
-        ['lil David', 'Fairweather-Furry']
+        "Multiworld Setup Guide",
+        "A guide to setting up the Wario Land 4 randomizer connected to an Archipelago Multiworld.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["lil David", "Fairweather-Furry"]
     )
 
-    theme = 'jungle'
+    theme = "jungle"
     tutorials = [setup_en]
     option_groups = wl4_option_groups
 
@@ -51,7 +51,7 @@ class WL4World(World):
     the Golden Diva.
     """
 
-    game: str = 'Wario Land 4'
+    game: str = "Wario Land 4"
     options_dataclass = WL4Options
     options: WL4Options
     settings: ClassVar[WL4Settings]
@@ -63,51 +63,51 @@ class WL4World(World):
     origin_region_name = "Pyramid"
 
     item_name_groups = {
-        'Entry Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY)),
-        'Emerald Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.EMERALD)),
-        'Ruby Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.RUBY)),
-        'Topaz Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.TOPAZ)),
-        'Sapphire Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.SAPPHIRE)),
-        'Golden Jewel Pieces': set(filter_item_names(type=ItemType.JEWEL, passage=Passage.GOLDEN)),
-        'CDs': set(filter_item_names(type=ItemType.CD)),
-        'Abilities': set(filter_item_names(type=ItemType.ABILITY)),
-        'Golden Treasure': set(filter_item_names(type=ItemType.TREASURE)),
-        'Traps': {'Wario Form Trap', 'Lightning Trap'},
-        'Junk': {'Heart', 'Minigame Medal'},
-        'Prizes': {'Full Health Item', 'Diamond'},
+        "Entry Jewel Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.ENTRY)),
+        "Emerald Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.EMERALD)),
+        "Ruby Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.RUBY)),
+        "Topaz Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.TOPAZ)),
+        "Sapphire Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.SAPPHIRE)),
+        "Golden Jewel Pieces": set(filter_item_names(type=ItemType.JEWEL, passage=Passage.GOLDEN)),
+        "CDs": set(filter_item_names(type=ItemType.CD)),
+        "Abilities": set(filter_item_names(type=ItemType.ABILITY)),
+        "Golden Treasure": set(filter_item_names(type=ItemType.TREASURE)),
+        "Traps": {"Wario Form Trap", "Lightning Trap"},
+        "Junk": {"Heart", "Minigame Medal"},
+        "Prizes": {"Full Health Item", "Diamond"},
 
         # Aliases
-        'Ground Pound': {'Progressive Ground Pound'},
-        'Grab': {'Progressive Grab'},
-        'Smash Attack': {'Progressive Ground Pound'},
-        'Progressive Smash Attack': {'Progressive Ground Pound'},
-        'Enemy Jump': {'Stomp Jump'},
-        'Minigame Coin': {'Minigame Medal'},
+        "Ground Pound": {"Progressive Ground Pound"},
+        "Grab": {"Progressive Grab"},
+        "Smash Attack": {"Progressive Ground Pound"},
+        "Progressive Smash Attack": {"Progressive Ground Pound"},
+        "Enemy Jump": {"Stomp Jump"},
+        "Minigame Coin": {"Minigame Medal"},
     }
 
     location_name_groups = {
-        'Hall of Hieroglyphs': set(get_level_locations(Passage.ENTRY, 0)),
-        'Palm Tree Paradise': set(get_level_locations(Passage.EMERALD, 0)),
-        'Wildflower Fields': set(get_level_locations(Passage.EMERALD, 1)),
-        'Mystic Lake': set(get_level_locations(Passage.EMERALD, 2)),
-        'Monsoon Jungle': set(get_level_locations(Passage.EMERALD, 3)),
-        'Cractus Treasures': set(get_level_locations(Passage.EMERALD, 4)),
-        'The Curious Factory': set(get_level_locations(Passage.RUBY, 0)),
-        'The Toxic Landfill': set(get_level_locations(Passage.RUBY, 1)),
-        '40 Below Fridge': set(get_level_locations(Passage.RUBY, 2)),
-        'Pinball Zone': set(get_level_locations(Passage.RUBY, 3)),
-        'Cuckoo Condor Treasures': set(get_level_locations(Passage.RUBY, 4)),
-        'Toy Block Tower': set(get_level_locations(Passage.TOPAZ, 0)),
-        'The Big Board': set(get_level_locations(Passage.TOPAZ, 1)),
-        'Doodle Woods': set(get_level_locations(Passage.TOPAZ, 2)),
-        'Domino Row': set(get_level_locations(Passage.TOPAZ, 3)),
-        'Aerodent Treasures': set(get_level_locations(Passage.TOPAZ, 4)),
-        'Crescent Moon Village': set(get_level_locations(Passage.SAPPHIRE, 0)),
-        'Arabian Night': set(get_level_locations(Passage.SAPPHIRE, 1)),
-        'Fiery Cavern': set(get_level_locations(Passage.SAPPHIRE, 2)),
-        'Hotel Horror': set(get_level_locations(Passage.SAPPHIRE, 3)),
-        'Catbat Treasures': set(get_level_locations(Passage.SAPPHIRE, 4)),
-        'Golden Passage': set(get_level_locations(Passage.GOLDEN, 0)),
+        "Hall of Hieroglyphs": set(get_level_locations(Passage.ENTRY, 0)),
+        "Palm Tree Paradise": set(get_level_locations(Passage.EMERALD, 0)),
+        "Wildflower Fields": set(get_level_locations(Passage.EMERALD, 1)),
+        "Mystic Lake": set(get_level_locations(Passage.EMERALD, 2)),
+        "Monsoon Jungle": set(get_level_locations(Passage.EMERALD, 3)),
+        "Cractus Treasures": set(get_level_locations(Passage.EMERALD, 4)),
+        "The Curious Factory": set(get_level_locations(Passage.RUBY, 0)),
+        "The Toxic Landfill": set(get_level_locations(Passage.RUBY, 1)),
+        "40 Below Fridge": set(get_level_locations(Passage.RUBY, 2)),
+        "Pinball Zone": set(get_level_locations(Passage.RUBY, 3)),
+        "Cuckoo Condor Treasures": set(get_level_locations(Passage.RUBY, 4)),
+        "Toy Block Tower": set(get_level_locations(Passage.TOPAZ, 0)),
+        "The Big Board": set(get_level_locations(Passage.TOPAZ, 1)),
+        "Doodle Woods": set(get_level_locations(Passage.TOPAZ, 2)),
+        "Domino Row": set(get_level_locations(Passage.TOPAZ, 3)),
+        "Aerodent Treasures": set(get_level_locations(Passage.TOPAZ, 4)),
+        "Crescent Moon Village": set(get_level_locations(Passage.SAPPHIRE, 0)),
+        "Arabian Night": set(get_level_locations(Passage.SAPPHIRE, 1)),
+        "Fiery Cavern": set(get_level_locations(Passage.SAPPHIRE, 2)),
+        "Hotel Horror": set(get_level_locations(Passage.SAPPHIRE, 3)),
+        "Catbat Treasures": set(get_level_locations(Passage.SAPPHIRE, 4)),
+        "Golden Passage": set(get_level_locations(Passage.GOLDEN, 0)),
     }
 
     web = WL4Web()
@@ -116,32 +116,38 @@ class WL4World(World):
     CDS = tuple(filter_item_names(type=ItemType.CD))
     ABILITIES = tuple(filter_item_names(type=ItemType.ABILITY))
     GOLDEN_TREASURES = tuple(filter_item_names(type=ItemType.TREASURE))
-    PRIZES = ('Full Health Item', 'Diamond')
-    JUNK = ('Heart', 'Minigame Medal')
-    TRAPS = ('Wario Form Trap', 'Lightning Trap')
+    PRIZES = ("Full Health Item", "Diamond")
+    JUNK = ("Heart", "Minigame Medal")
+    TRAPS = ("Wario Form Trap", "Lightning Trap")
 
-    filler_item_weights: tuple[int, ...]
+    filler_item_weights: tuple[int, int, int]
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
-            self.options.local_items.value.update(self.item_name_groups['Golden Treasure'])
+            self.options.local_items.value.update(self.item_name_groups["Golden Treasure"])
         if self.options.required_jewels > self.options.pool_jewels:
-            logging.warning(f'{self.player_name} has Required Jewels set to '
-                            f'{self.options.required_jewels.value} but Pool Jewels set to '
-                            f'{self.options.pool_jewels.value}. Setting Pool Jewels to '
-                            f'{self.options.required_jewels.value}')
-            self.options.pool_jewels = PoolJewels(self.options.required_jewels.value)
+            logging.warning(f"{self.player_name} has Required Jewels set to "
+                            f"{self.options.required_jewels.value} but Pool Jewels set to "
+                            f"{self.options.pool_jewels.value}. Setting Pool Jewels to "
+                            f"{self.options.required_jewels.value}")
+            self.options.pool_jewels.value = self.options.required_jewels.value
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
-            logging.warning(f'{self.player_name} has Required Jewels set to at least 1 but '
-                            f'Golden Jewels set to {self.options.golden_jewels}. Setting Golden '
-                            'Jewels to 1.')
-            self.options.golden_jewels = GoldenJewels(1)
+            logging.warning(f"{self.player_name} has Required Jewels set to at least 1 but "
+                            f"Golden Jewels set to {self.options.golden_jewels}. Setting Golden "
+                            "Jewels to 1.")
+            self.options.golden_jewels.value = 1
 
-        if (self.options.pool_jewels == 4 and
-            not self.options.diamond_shuffle and
-            self.options.difficulty != Difficulty.option_normal):
-            raise OptionError(f'Not enough locations to place abilities for {self.player_name}. '
-                              'Set the "Pool Jewels" option to a lower value and try again.')
+        # TODO: Make this more tolerant when start inventory from pool is involved?
+        abilities = 8
+        full_health_items = (9, 7, 6)[self.options.difficulty.value]
+        rando_jewel_pieces = 4 * (min(self.options.pool_jewels.value, 1) +  # Entry
+                                  4 * self.options.pool_jewels.value +  # Emerald, Ruby, Topaz, Sapphire
+                                  self.options.golden_jewels.value)  # Golden Pyramid
+        vanilla_jewel_pieces = 4 * 18
+        if (rando_jewel_pieces + abilities - vanilla_jewel_pieces > full_health_items and
+            not self.options.diamond_shuffle.value):
+            raise OptionError(f"Not enough locations to place abilities for {self.player_name}. "
+                              'Set the "Pool Jewels" or "Golden Jewels" option to a lower value and try again.')
 
         self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
 
@@ -154,12 +160,12 @@ class WL4World(World):
         treasure_hunt = self.options.goal.needs_treasure_hunt()
         diamond_shuffle = self.options.diamond_shuffle.value
 
-        gem_pieces = 18 * 4
+        vanilla_jewel_pieces = 18 * 4
         cds = 16
         full_health_items = (9, 7, 6)[difficulty]
         treasures = 12 * treasure_hunt
         diamonds = diamond_shuffle * (109, 71, 68)[difficulty]
-        total_required_locations = gem_pieces + cds + full_health_items + treasures + diamonds
+        total_required_locations = vanilla_jewel_pieces + cds + full_health_items + treasures + diamonds
 
         itempool = []
 
@@ -176,37 +182,38 @@ class WL4World(World):
             else:
                 copies = pool_jewels
 
-            for _ in range(copies):
-                itempool.append(self.create_item(name, force_non_progression))
+            itempool += [self.create_item(name, force_non_progression) for _ in range(copies)]
 
-        for name in self.CDS:
-            itempool.append(self.create_item(name))
+        itempool += [self.create_item(name) for name in self.CDS]
 
         for name in self.ABILITIES:
             itempool.append(self.create_item(name))
-            if name.startswith('Progressive'):
+            if name.startswith("Progressive"):
                 itempool.append(self.create_item(name))
 
         # Remove diamonds or full health items to make space for abilities
-        if pool_jewels == 4:
+        abilities = 8
+        total_rando_jewel_pieces = 4 * (min(self.options.pool_jewels.value, 1) +  # Entry
+                                        4 * self.options.pool_jewels.value +  # Emerald, Ruby, Topaz, Sapphire
+                                        self.options.golden_jewels.value)  # Golden Pyramid
+        extra_items = total_rando_jewel_pieces + abilities - vanilla_jewel_pieces
+        if extra_items > 0:
             if diamond_shuffle:
-                diamonds -= 8
+                diamonds -= extra_items
             else:
-                full_health_items -= 8
+                full_health_items -= extra_items
         assert diamonds >= 0 and full_health_items >= 0
 
-        for _ in range(full_health_items):
-            itempool.append(self.create_item('Full Health Item'))
+        itempool += [self.create_item("Full Health Item") for _ in range(full_health_items)]
 
         if treasure_hunt:
-            for name in self.GOLDEN_TREASURES:
-                itempool.append(self.create_item(name))
+            itempool += [self.create_item(name) for name in self.GOLDEN_TREASURES]
 
         if diamond_shuffle:
-            itempool.extend(self.create_item('Diamond') for _ in range(diamonds))
+            itempool += [self.create_item("Diamond") for _ in range(diamonds)]
 
         junk_count = total_required_locations - len(itempool)
-        itempool.extend(self.create_item(self.get_filler_item_name()) for _ in range(junk_count))
+        itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk_count)]
 
         self.multiworld.itempool += itempool
 
@@ -214,27 +221,27 @@ class WL4World(World):
         output_path = Path(output_directory)
 
         patch = WL4ProcedurePatch(player=self.player, player_name=self.player_name)
-        patch.write_file('basepatch.bsdiff', data_path('basepatch.bsdiff'))
+        patch.write_file("basepatch.bsdiff", data_path("basepatch.bsdiff"))
         write_tokens(self, patch)
         patch.procedure.append((
-            'shuffle_music_and_wario_voice',
+            "shuffle_music_and_wario_voice",
             [self.options.music_shuffle.value, self.options.wario_voice_shuffle.value]
         ))
 
         output_filename = self.multiworld.get_out_file_name_base(self.player)
-        patch.write(f'{(output_path / output_filename).with_suffix(patch.patch_file_ending)}')
+        patch.write(str((output_path / output_filename).with_suffix(patch.patch_file_ending)))
 
-    def fill_slot_data(self) -> Mapping[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict(
-            'goal',
-            'golden_treasure_count',
-            'difficulty',
-            'logic',
-            'required_jewels',
-            'open_doors',
-            'portal',
-            'diamond_shuffle',
-            'death_link',
+            "goal",
+            "golden_treasure_count",
+            "difficulty",
+            "logic",
+            "required_jewels",
+            "open_doors",
+            "portal",
+            "diamond_shuffle",
+            "death_link",
         )
 
     def get_filler_item_name(self) -> str:
@@ -246,4 +253,4 @@ class WL4World(World):
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
-            lambda state: state.has('Escape the Pyramid', self.player))
+            lambda state: state.has("Escape the Pyramid", self.player))
