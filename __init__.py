@@ -120,7 +120,7 @@ class WL4World(World):
     JUNK = ("Heart", "Minigame Medal")
     TRAPS = ("Wario Form Trap", "Lightning Trap")
 
-    filler_item_weights: tuple[int, ...]
+    filler_item_weights: tuple[int, int, int]
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
@@ -130,12 +130,12 @@ class WL4World(World):
                             f"{self.options.required_jewels.value} but Pool Jewels set to "
                             f"{self.options.pool_jewels.value}. Setting Pool Jewels to "
                             f"{self.options.required_jewels.value}")
-            self.options.pool_jewels = PoolJewels(self.options.required_jewels.value)
+            self.options.pool_jewels.value = self.options.required_jewels.value
         if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
             logging.warning(f"{self.player_name} has Required Jewels set to at least 1 but "
                             f"Golden Jewels set to {self.options.golden_jewels}. Setting Golden "
                             "Jewels to 1.")
-            self.options.golden_jewels = GoldenJewels(1)
+            self.options.golden_jewels.value = 1
 
         if (self.options.pool_jewels == 4 and
             not self.options.diamond_shuffle and
@@ -176,11 +176,9 @@ class WL4World(World):
             else:
                 copies = pool_jewels
 
-            for _ in range(copies):
-                itempool.append(self.create_item(name, force_non_progression))
+            itempool += [self.create_item(name, force_non_progression) for _ in range(copies)]
 
-        for name in self.CDS:
-            itempool.append(self.create_item(name))
+        itempool += [self.create_item(name) for name in self.CDS]
 
         for name in self.ABILITIES:
             itempool.append(self.create_item(name))
@@ -195,18 +193,16 @@ class WL4World(World):
                 full_health_items -= 8
         assert diamonds >= 0 and full_health_items >= 0
 
-        for _ in range(full_health_items):
-            itempool.append(self.create_item("Full Health Item"))
+        itempool += [self.create_item("Full Health Item") for _ in range(full_health_items)]
 
         if treasure_hunt:
-            for name in self.GOLDEN_TREASURES:
-                itempool.append(self.create_item(name))
+            itempool += [self.create_item(name) for name in self.GOLDEN_TREASURES]
 
         if diamond_shuffle:
-            itempool.extend(self.create_item("Diamond") for _ in range(diamonds))
+            itempool += [self.create_item("Diamond") for _ in range(diamonds)]
 
         junk_count = total_required_locations - len(itempool)
-        itempool.extend(self.create_item(self.get_filler_item_name()) for _ in range(junk_count))
+        itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk_count)]
 
         self.multiworld.itempool += itempool
 
@@ -222,7 +218,7 @@ class WL4World(World):
         ))
 
         output_filename = self.multiworld.get_out_file_name_base(self.player)
-        patch.write(f"{(output_path / output_filename).with_suffix(patch.patch_file_ending)}")
+        patch.write(str((output_path / output_filename).with_suffix(patch.patch_file_ending)))
 
     def fill_slot_data(self) -> dict[str, Any]:
         return self.options.as_dict(

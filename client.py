@@ -143,6 +143,12 @@ def cmd_receive_death(self):
         client_handler.death_link.pending = True
 
 
+wl4_client_commands = {
+    "deathlink": cmd_toggle_deathlink,
+    # "kill": cmd_receive_death,
+}
+
+
 class DeathLinkCtx:
     enabled: bool = False
     update_pending: bool = False
@@ -184,6 +190,10 @@ class WL4Client(BizHawkClient):
 
     async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
+
+        # Remove WL4 commands in case this returns false after validating before
+        for cmd_name in wl4_client_commands.keys():
+            del client_ctx.command_processor.commands[cmd_name]
 
         bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
@@ -229,8 +239,7 @@ class WL4Client(BizHawkClient):
             logger.info("Could not determine seed name from ROM. Are you sure this ROM matches this client version?")
             return False
 
-        client_ctx.command_processor.commands["deathlink"] = cmd_toggle_deathlink
-        # client_ctx.command_processor.commands["kill"] = cmd_receive_death
+        client_ctx.command_processor.commands.update(wl4_client_commands)
 
         self.dc_pending = False
 

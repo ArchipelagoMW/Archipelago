@@ -126,7 +126,7 @@ def write_tokens(world: WL4World, patch: WL4ProcedurePatch):
     fill_items(world, patch)
 
     # Write player name and number
-    player_name = world.multiworld.player_name[world.player].encode("utf-8")
+    player_name = world.player_name.encode("utf-8")
     seed_name = world.multiworld.seed_name.encode("utf-8")[:64]
     patch.write_token(
         APTokenTypes.WRITE,
