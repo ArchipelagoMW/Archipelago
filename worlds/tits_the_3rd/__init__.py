@@ -27,6 +27,7 @@ from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, Seali
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
+from .tables import location_list
 
 
 def launch_client():
@@ -59,7 +60,7 @@ class TitsThe3rdWorld(World):
     item_name_groups: Dict[str, Set[str]] = item_groups
     location_name_groups: Dict[str, Set[str]] = location_groups
     item_name_to_id: Dict[str, int] = item_table
-    location_name_to_id: Dict[str, int] = location_table
+    location_name_to_id: Dict[str, int] = {key: data.flag for key, data in location_table.items()}
 
     def create_item(self, name: str) -> TitsThe3rdItem:
         """Create a Trails in the Sky the 3rd item for this player"""
@@ -200,7 +201,8 @@ class TitsThe3rdWorld(World):
 
         # For now hard code beating Bennu as victory
         victory_item = self.create_item(ItemName.bennu_defeat)
-        self.multiworld.get_location(LocationName.chapter1_boss_defeated, self.player).place_locked_item(victory_item)
+        # TODO: change victory condition
+        self.multiworld.get_location(LocationName.grancel_castle_queens_bedroom, self.player).place_locked_item(victory_item)
 
         # Setup all the playable characters stuffs
         itempool = self.setup_characters(itempool)

@@ -292,7 +292,7 @@ class TitsThe3rdContext(CommonContext):
             if self.game_interface.read_flag(location_id):
                 if not self.game_interface.should_send_and_recieve_items(self.world_player_identifier):
                     return
-                if location_id == get_location_id(LocationName.chapter1_boss_defeated):
+                if location_id == get_location_id(LocationName.grancel_castle_queens_bedroom):
                     # Chapter 1 boss defeated
                     self.finished_game = True
                     await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

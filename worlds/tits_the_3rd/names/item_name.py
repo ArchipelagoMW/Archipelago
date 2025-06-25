@@ -6,13 +6,26 @@ class ItemName:
     """Constants for item names."""
     # Consumables
     extra_spicy_fries = "Extra Spicy Fries"
+    fried_phoenix = "Fried Phoenix"
+    brain_roast = "Brain Roast"
+    swingwich = "Swingwich"
+    repellent_dish = "Repellent Dish"
+    fluffy_crepe = "Fluffy Crepe"
+    septium_drops = "Seeptium Drops"
+    queenly_cookie = "Queenly Cookie"
     fresh_water = "Fresh Water"
     fishy_finale = "Fishy Finale"
     tear_balm = "Tear Balm"
     teara_balm = "Teara Balm"
     reviving_balm = "Reviving Balm"
+    celestial_balm = "Celestial Balm"
     ep_charge = "EP Charge"
     smelling_salts = "Smelling Salts"
+    insulating_tape = "Insulting Tape"
+    softening_balm = "Softening Balm"
+    s_tablet = "S-Tablet"
+    purging_balm = "Purging Balm"
+    zeram_powder = "Zeram Powder"
 
     # Recipes
     easy_paella_recipe = "Easy Paella Recipe"
@@ -20,12 +33,29 @@ class ItemName:
     # Equipment
     royal_spikes = "Royal Spikes"
     black_bangle = "Black Bangle"
+    black_bangle_plus = "Black Bangle+"
     glam_choker = "Glam Choker"
+    glam_choker_plus = "Glam Choker+"
+    white_bracelet = "White Bracelet"
+    proxy_puppet = "Proxy Puppet"
+    long_barrel_2 = "Long Barrel 2"
+    crimson_eye = "Crimson Eye"
+    pearl_earings = "Pearl Earings"
+
+    # Weapons
+    akashic_heart = "Akashic Heart"
+    stun_gb = "Stun GB"
+
+    # Armor
+    bestia_coat = "Bestia Coat"
 
     # Quartz
     hp_1 = "HP 1"
+    hp_2 = "HP 2"
     attack_1 = "Attack 1"
+    attack_2 = "Attack 2"
     shield_1 = "Shield 1"
+    shield_2 = "Shield 2"
     hit_1 = "Hit 1"
     hit_2 = "Hit 2"
     move_1 = "Move 1"
@@ -34,6 +64,8 @@ class ItemName:
     information = "Information"
     ep_cut_2 = "EP Cut 2"
     eagle_eye = "Eagle Eye"
+    scent = "Scent"
+    haze = "Haze"
 
     # Currency
     mira_300 = "Mira (300)"
