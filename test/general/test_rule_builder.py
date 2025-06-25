@@ -243,6 +243,8 @@ class TestCaching(unittest.TestCase):
         for i in range(1, LOC_COUNT + 1):
             self.multiworld.itempool.append(world.create_item(f"Item {i}"))
 
+        world.register_location_dependencies()
+
         return super().setUp()
 
     def test_item_cache_busting(self) -> None:
@@ -265,8 +267,6 @@ class TestCaching(unittest.TestCase):
         self.assertTrue(location.can_reach(self.state))
         self.assertTrue(self.state.rule_cache[1][id(location.resolved_rule)])
 
-    # TODO: fix can reach location caching
-    @unittest.expectedFailure
     def test_location_cache_busting(self) -> None:
         location = self.world.get_location("Location 5")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2

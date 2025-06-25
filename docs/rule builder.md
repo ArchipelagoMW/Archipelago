@@ -49,6 +49,14 @@ There is also a `create_entrance` helper that will resolve the rule, check if it
 self.create_entrance(from_region, to_region, rule)
 ```
 
+You can also set a rule for your world's completion condition:
+
+```python
+self.set_completion_rule(rule)
+```
+
+If your rules use `CanReachLocation` or a custom rule that depends on locations, you must call `self.register_location_dependencies()` after all of your locations exist to setup the caching system.
+
 ## Restricting options
 
 Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` arguemnt.
@@ -150,6 +158,23 @@ class MyRule(Rule["MyWorld"], game="My Game"):
 ```
 
 The default `CanReachLocation`, `CanReachRegion`, and `CanReachEntrance` rules define this function already.
+
+### Location dependencies
+
+If your custom rule references other locations, it must define a `location_dependencies` function that returns a mapping of the location name to the id of your rule. These dependencies will be combined to inform the caching system.
+
+```python
+@dataclasses.dataclass()
+class MyRule(Rule["MyWorld"], game="My Game"):
+    class Resolved(Rule.Resolved):
+        location_name: str
+
+        @override
+        def location_dependencies(self) -> dict[str, set[int]]:
+            return {self.location_name: {id(self)}}
+```
+
+The default `CanReachLocation` rule defines this function already.
 
 ## JSON serialization
 

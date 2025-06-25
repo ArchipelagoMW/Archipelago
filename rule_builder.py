@@ -18,10 +18,22 @@ else:
 
 
 class RuleWorldMixin(World):
+    """A World mixin that provides helpers for interacting with the rule builder"""
+
     rule_ids: "dict[int, Rule.Resolved]"
+    """A mapping of ids to resolved rules"""
+
     rule_item_dependencies: dict[str, set[int]]
+    """A mapping of item name to set of rule ids"""
+
     rule_region_dependencies: dict[str, set[int]]
+    """A mapping of region name to set of rule ids"""
+
     rule_location_dependencies: dict[str, set[int]]
+    """A mapping of location name to set of rule ids"""
+
+    completion_rule: "Rule.Resolved | None" = None
+    """The resolved rule used for the completion condition of this world"""
 
     item_mapping: ClassVar[dict[str, str]] = {}
     """A mapping of actual item name to logical item name.
@@ -37,6 +49,7 @@ class RuleWorldMixin(World):
 
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
+        """Returns the world-registered or default rule with the given name"""
         custom_rule_classes = CustomRuleRegister.custom_rules.get(cls.game, {})
         if name not in DEFAULT_RULES and name not in custom_rule_classes:
             raise ValueError(f"Rule {name} not found")
@@ -44,23 +57,43 @@ class RuleWorldMixin(World):
 
     @classmethod
     def rule_from_json(cls, data: Mapping[str, Any]) -> "Rule[Self]":
+        """Create a rule instance from a json loaded mapping"""
         name = data.get("rule", "")
         rule_class = cls.get_rule_cls(name)
         return rule_class.from_json(data)
 
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
+        """Returns a resolved rule registered with the caching system for this world"""
         resolved_rule = rule.resolve(self)
         for item_name, rule_ids in resolved_rule.item_dependencies().items():
             self.rule_item_dependencies[item_name] |= rule_ids
         for region_name, rule_ids in resolved_rule.region_dependencies().items():
             self.rule_region_dependencies[region_name] |= rule_ids
+        for location_name, rule_ids in resolved_rule.location_dependencies().items():
+            self.rule_location_dependencies[location_name] |= rule_ids
         return resolved_rule
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
+        """Register indirect connections for this entrance based on the rule's dependencies"""
         for indirect_region in resolved_rule.region_dependencies().keys():
             self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
+    def register_location_dependencies(self) -> None:
+        """Register all rules that depend on locations with that location's dependencies"""
+        for location_name, rule_ids in self.rule_location_dependencies.items():
+            try:
+                location = self.get_location(location_name)
+            except KeyError:
+                continue
+            if location.resolved_rule is None:
+                continue
+            for item_name in location.resolved_rule.item_dependencies():
+                self.rule_item_dependencies[item_name] |= rule_ids
+            for region_name in location.resolved_rule.region_dependencies():
+                self.rule_region_dependencies[region_name] |= rule_ids
+
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
+        """Resolve and set a rule on a location or entrance"""
         resolved_rule = self.resolve_rule(rule)
         spot.access_rule = resolved_rule
         if self.explicit_indirect_conditions and isinstance(spot, Entrance):
@@ -72,6 +105,7 @@ class RuleWorldMixin(World):
         to_region: "Region",
         rule: "Rule[Self] | None",
     ) -> "Entrance | None":
+        """Try to create an entrance between regions with the given rule, skipping it if the rule resolves to False"""
         resolved_rule = None
         if rule is not None:
             resolved_rule = self.resolve_rule(rule)
@@ -85,7 +119,14 @@ class RuleWorldMixin(World):
             self.register_rule_connections(resolved_rule, entrance)
         return entrance
 
+    def set_completion_rule(self, rule: "Rule[Self]") -> None:
+        """Set the completion rule for this world"""
+        resolved_rule = self.resolve_rule(rule)
+        self.multiworld.completion_condition[self.player] = resolved_rule.test
+        self.completion_rule = resolved_rule
+
     def simplify_rule(self, rule: "Rule.Resolved") -> "Rule.Resolved":
+        """Simplify and optimize a resolved rule"""
         if isinstance(rule, And.Resolved):
             return self._simplify_and(rule)
         if isinstance(rule, Or.Resolved):
@@ -223,6 +264,12 @@ class RuleWorldMixin(World):
         # clear all region dependent caches as none can be trusted
         if changed and getattr(self, "rule_region_dependencies", None):
             for rule_ids in self.rule_region_dependencies.values():
+                for rule_id in rule_ids:
+                    state.rule_cache[self.player].pop(rule_id, None)
+
+        # clear all location dependent caches as they may have lost region access
+        if changed and getattr(self, "rule_location_dependencies", None):
+            for rule_ids in self.rule_location_dependencies.values():
                 for rule_id in rule_ids:
                     state.rule_cache[self.player].pop(rule_id, None)
 
@@ -444,6 +491,10 @@ class Rule(Generic[TWorld]):
             used for indirect connections and cache invalidation"""
             return {}
 
+        def location_dependencies(self) -> dict[str, set[int]]:
+            """Returns a mapping of location name to set of object ids, used for cache invalidation"""
+            return {}
+
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             """Returns a list of printJSON messages that explain the logic for this rule"""
             return [{"type": "text", "text": self.rule_name}]
@@ -552,6 +603,17 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
                         combined_deps[region_name] |= rules
                     else:
                         combined_deps[region_name] = {id(self), *rules}
+            return combined_deps
+
+        @override
+        def location_dependencies(self) -> dict[str, set[int]]:
+            combined_deps: dict[str, set[int]] = {}
+            for child in self.children:
+                for location_name, rules in child.location_dependencies().items():
+                    if location_name in combined_deps:
+                        combined_deps[location_name] |= rules
+                    else:
+                        combined_deps[location_name] = {id(self), *rules}
             return combined_deps
 
 
@@ -666,6 +728,13 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
             deps: dict[str, set[int]] = {}
             for region_name, rules in self.child.region_dependencies().items():
                 deps[region_name] = {id(self), *rules}
+            return deps
+
+        @override
+        def location_dependencies(self) -> dict[str, set[int]]:
+            deps: dict[str, set[int]] = {}
+            for location_name, rules in self.child.location_dependencies().items():
+                deps[location_name] = {id(self), *rules}
             return deps
 
         @override
@@ -1292,6 +1361,10 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
             if self.parent_region_name:
                 return {self.parent_region_name: {id(self)}}
             return {}
+
+        @override
+        def location_dependencies(self) -> dict[str, set[int]]:
+            return {self.location_name: {id(self)}}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
