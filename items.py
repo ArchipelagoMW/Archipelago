@@ -80,7 +80,7 @@ def ap_id_from_wl4_data(data: ItemData) -> int:
     elif cat == ItemType.TREASURE:
         item = 0x70 | itemid
     else:
-        raise ValueError(f'Unexpected WL4 item type: {cat}')
+        raise ValueError(f"Unexpected WL4 item type: {cat}")
     return ap_id_offset + item
 
 
@@ -115,12 +115,12 @@ def wl4_data_from_ap_id(ap_id: int) -> Tuple[str, ItemData]:
         candidates = ()
 
     if not candidates:
-        raise ValueError(f'Could not find WL4 item ID: {ap_id}')
+        raise ValueError(f"Could not find WL4 item ID: {ap_id}")
     return candidates[0]
 
 
 class WL4Item(Item):
-    game: str = 'Wario Land 4'
+    game: str = "Wario Land 4"
     type: Optional[ItemType]
     passage: Optional[Passage]
     level: Optional[int]
@@ -166,70 +166,70 @@ class ItemData(NamedTuple):
 
 item_table = {
     # Item name                                  Item type          ID                                 Progression
-    'Top Right Entry Jewel Piece':      ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_NE),  IC.filler),
-    'Top Right Emerald Piece':          ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_NE),  IC.progression_skip_balancing),
-    'Top Right Ruby Piece':             ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_NE),  IC.progression_skip_balancing),
-    'Top Right Topaz Piece':            ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_NE),  IC.progression_skip_balancing),
-    'Top Right Sapphire Piece':         ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_NE),  IC.progression_skip_balancing),
-    'Top Right Golden Jewel Piece':     ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_NE),  IC.progression_skip_balancing),
-    'Bottom Right Entry Jewel Piece':   ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_SE),  IC.filler),
-    'Bottom Right Emerald Piece':       ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_SE),  IC.progression_skip_balancing),
-    'Bottom Right Ruby Piece':          ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_SE),  IC.progression_skip_balancing),
-    'Bottom Right Topaz Piece':         ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_SE),  IC.progression_skip_balancing),
-    'Bottom Right Sapphire Piece':      ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_SE),  IC.progression_skip_balancing),
-    'Bottom Right Golden Jewel Piece':  ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_SE),  IC.progression_skip_balancing),
-    'Bottom Left Entry Jewel Piece':    ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_SW),  IC.filler),
-    'Bottom Left Emerald Piece':        ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_SW),  IC.progression_skip_balancing),
-    'Bottom Left Ruby Piece':           ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_SW),  IC.progression_skip_balancing),
-    'Bottom Left Topaz Piece':          ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_SW),  IC.progression_skip_balancing),
-    'Bottom Left Sapphire Piece':       ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_SW),  IC.progression_skip_balancing),
-    'Bottom Left Golden Jewel Piece':   ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_SW),  IC.progression_skip_balancing),
-    'Top Left Entry Jewel Piece':       ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_NW),  IC.filler),
-    'Top Left Emerald Piece':           ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_NW),  IC.progression_skip_balancing),
-    'Top Left Ruby Piece':              ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_NW),  IC.progression_skip_balancing),
-    'Top Left Topaz Piece':             ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_NW),  IC.progression_skip_balancing),
-    'Top Left Sapphire Piece':          ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_NW),  IC.progression_skip_balancing),
-    'Top Left Golden Jewel Piece':      ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_NW),  IC.progression_skip_balancing),
-    'About that Shepherd CD':           ItemData(ItemType.CD,       (Passage.EMERALD,  0),             IC.filler),
-    'Things that Never Change CD':      ItemData(ItemType.CD,       (Passage.EMERALD,  1),             IC.filler),
+    "Top Right Entry Jewel Piece":      ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_NE),  IC.filler),
+    "Top Right Emerald Piece":          ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_NE),  IC.progression_skip_balancing),
+    "Top Right Ruby Piece":             ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_NE),  IC.progression_skip_balancing),
+    "Top Right Topaz Piece":            ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_NE),  IC.progression_skip_balancing),
+    "Top Right Sapphire Piece":         ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_NE),  IC.progression_skip_balancing),
+    "Top Right Golden Jewel Piece":     ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_NE),  IC.progression_skip_balancing),
+    "Bottom Right Entry Jewel Piece":   ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_SE),  IC.filler),
+    "Bottom Right Emerald Piece":       ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_SE),  IC.progression_skip_balancing),
+    "Bottom Right Ruby Piece":          ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_SE),  IC.progression_skip_balancing),
+    "Bottom Right Topaz Piece":         ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_SE),  IC.progression_skip_balancing),
+    "Bottom Right Sapphire Piece":      ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_SE),  IC.progression_skip_balancing),
+    "Bottom Right Golden Jewel Piece":  ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_SE),  IC.progression_skip_balancing),
+    "Bottom Left Entry Jewel Piece":    ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_SW),  IC.filler),
+    "Bottom Left Emerald Piece":        ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_SW),  IC.progression_skip_balancing),
+    "Bottom Left Ruby Piece":           ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_SW),  IC.progression_skip_balancing),
+    "Bottom Left Topaz Piece":          ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_SW),  IC.progression_skip_balancing),
+    "Bottom Left Sapphire Piece":       ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_SW),  IC.progression_skip_balancing),
+    "Bottom Left Golden Jewel Piece":   ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_SW),  IC.progression_skip_balancing),
+    "Top Left Entry Jewel Piece":       ItemData(ItemType.JEWEL,    (Passage.ENTRY,    Box.JEWEL_NW),  IC.filler),
+    "Top Left Emerald Piece":           ItemData(ItemType.JEWEL,    (Passage.EMERALD,  Box.JEWEL_NW),  IC.progression_skip_balancing),
+    "Top Left Ruby Piece":              ItemData(ItemType.JEWEL,    (Passage.RUBY,     Box.JEWEL_NW),  IC.progression_skip_balancing),
+    "Top Left Topaz Piece":             ItemData(ItemType.JEWEL,    (Passage.TOPAZ,    Box.JEWEL_NW),  IC.progression_skip_balancing),
+    "Top Left Sapphire Piece":          ItemData(ItemType.JEWEL,    (Passage.SAPPHIRE, Box.JEWEL_NW),  IC.progression_skip_balancing),
+    "Top Left Golden Jewel Piece":      ItemData(ItemType.JEWEL,    (Passage.GOLDEN,   Box.JEWEL_NW),  IC.progression_skip_balancing),
+    "About that Shepherd CD":           ItemData(ItemType.CD,       (Passage.EMERALD,  0),             IC.filler),
+    "Things that Never Change CD":      ItemData(ItemType.CD,       (Passage.EMERALD,  1),             IC.filler),
     "Tomorrow's Blood Pressure CD":     ItemData(ItemType.CD,       (Passage.EMERALD,  2),             IC.filler),
-    'Beyond the Headrush CD':           ItemData(ItemType.CD,       (Passage.EMERALD,  3),             IC.filler),
-    'Driftwood & the Island Dog CD':    ItemData(ItemType.CD,       (Passage.RUBY,     0),             IC.filler),
+    "Beyond the Headrush CD":           ItemData(ItemType.CD,       (Passage.EMERALD,  3),             IC.filler),
+    "Driftwood & the Island Dog CD":    ItemData(ItemType.CD,       (Passage.RUBY,     0),             IC.filler),
     "The Judge's Feet CD":              ItemData(ItemType.CD,       (Passage.RUBY,     1),             IC.filler),
     "The Moon's Lamppost CD":           ItemData(ItemType.CD,       (Passage.RUBY,     2),             IC.filler),
-    'Soft Shell CD':                    ItemData(ItemType.CD,       (Passage.RUBY,     3),             IC.filler),
-    'So Sleepy CD':                     ItemData(ItemType.CD,       (Passage.TOPAZ,    0),             IC.filler),
-    'The Short Futon CD':               ItemData(ItemType.CD,       (Passage.TOPAZ,    1),             IC.filler),
-    'Avocado Song CD':                  ItemData(ItemType.CD,       (Passage.TOPAZ,    2),             IC.filler),
-    'Mr. Fly CD':                       ItemData(ItemType.CD,       (Passage.TOPAZ,    3),             IC.filler),
+    "Soft Shell CD":                    ItemData(ItemType.CD,       (Passage.RUBY,     3),             IC.filler),
+    "So Sleepy CD":                     ItemData(ItemType.CD,       (Passage.TOPAZ,    0),             IC.filler),
+    "The Short Futon CD":               ItemData(ItemType.CD,       (Passage.TOPAZ,    1),             IC.filler),
+    "Avocado Song CD":                  ItemData(ItemType.CD,       (Passage.TOPAZ,    2),             IC.filler),
+    "Mr. Fly CD":                       ItemData(ItemType.CD,       (Passage.TOPAZ,    3),             IC.filler),
     "Yesterday's Words CD":             ItemData(ItemType.CD,       (Passage.SAPPHIRE, 0),             IC.filler),
-    'The Errand CD':                    ItemData(ItemType.CD,       (Passage.SAPPHIRE, 1),             IC.filler),
-    'You and Your Shoes CD':            ItemData(ItemType.CD,       (Passage.SAPPHIRE, 2),             IC.filler),
-    'Mr. Ether & Planaria CD':          ItemData(ItemType.CD,       (Passage.SAPPHIRE, 3),             IC.filler),
-    'Progressive Ground Pound':         ItemData(ItemType.ABILITY,  0x40,                              IC.progression),
-    'Swim':                             ItemData(ItemType.ABILITY,  0x41,                              IC.progression),
-    'Head Smash':                       ItemData(ItemType.ABILITY,  0x42,                              IC.progression),
-    'Progressive Grab':                 ItemData(ItemType.ABILITY,  0x43,                              IC.progression),
-    'Dash Attack':                      ItemData(ItemType.ABILITY,  0x44,                              IC.progression),
-    'Stomp Jump':                       ItemData(ItemType.ABILITY,  0x45,                              IC.progression),
-    'Golden Tree Pot':                  ItemData(ItemType.TREASURE, 0x70,                              IC.progression_skip_balancing),
-    'Golden Apple':                     ItemData(ItemType.TREASURE, 0x71,                              IC.progression_skip_balancing),
-    'Golden Fish':                      ItemData(ItemType.TREASURE, 0x72,                              IC.progression_skip_balancing),
-    'Golden Candle Holder':             ItemData(ItemType.TREASURE, 0x73,                              IC.progression_skip_balancing),
-    'Golden Lamp':                      ItemData(ItemType.TREASURE, 0x74,                              IC.progression_skip_balancing),
-    'Golden Crescent Moon Bed':         ItemData(ItemType.TREASURE, 0x75,                              IC.progression_skip_balancing),
-    'Golden Teddy Bear':                ItemData(ItemType.TREASURE, 0x76,                              IC.progression_skip_balancing),
-    'Golden Lollipop':                  ItemData(ItemType.TREASURE, 0x77,                              IC.progression_skip_balancing),
-    'Golden Game Boy Advance':          ItemData(ItemType.TREASURE, 0x78,                              IC.progression_skip_balancing),
-    'Golden Robot':                     ItemData(ItemType.TREASURE, 0x79,                              IC.progression_skip_balancing),
-    'Golden Rocket':                    ItemData(ItemType.TREASURE, 0x7A,                              IC.progression_skip_balancing),
-    'Golden Rocking Horse':             ItemData(ItemType.TREASURE, 0x7B,                              IC.progression_skip_balancing),
-    'Full Health Item':                 ItemData(ItemType.ITEM,     0x80,                              IC.useful),
-    'Wario Form Trap':                  ItemData(ItemType.ITEM,     0x81,                              IC.trap),
-    'Heart':                            ItemData(ItemType.ITEM,     0x82,                              IC.filler),
-    'Lightning Trap':                   ItemData(ItemType.ITEM,     0x83,                              IC.trap),
-    'Minigame Medal':                   ItemData(ItemType.ITEM,     0x84,                              IC.filler),
-    'Diamond':                          ItemData(ItemType.ITEM,     0x85,                              IC.filler),
+    "The Errand CD":                    ItemData(ItemType.CD,       (Passage.SAPPHIRE, 1),             IC.filler),
+    "You and Your Shoes CD":            ItemData(ItemType.CD,       (Passage.SAPPHIRE, 2),             IC.filler),
+    "Mr. Ether & Planaria CD":          ItemData(ItemType.CD,       (Passage.SAPPHIRE, 3),             IC.filler),
+    "Progressive Ground Pound":         ItemData(ItemType.ABILITY,  0x40,                              IC.progression),
+    "Swim":                             ItemData(ItemType.ABILITY,  0x41,                              IC.progression),
+    "Head Smash":                       ItemData(ItemType.ABILITY,  0x42,                              IC.progression),
+    "Progressive Grab":                 ItemData(ItemType.ABILITY,  0x43,                              IC.progression),
+    "Dash Attack":                      ItemData(ItemType.ABILITY,  0x44,                              IC.progression),
+    "Stomp Jump":                       ItemData(ItemType.ABILITY,  0x45,                              IC.progression),
+    "Golden Tree Pot":                  ItemData(ItemType.TREASURE, 0x70,                              IC.progression_skip_balancing),
+    "Golden Apple":                     ItemData(ItemType.TREASURE, 0x71,                              IC.progression_skip_balancing),
+    "Golden Fish":                      ItemData(ItemType.TREASURE, 0x72,                              IC.progression_skip_balancing),
+    "Golden Candle Holder":             ItemData(ItemType.TREASURE, 0x73,                              IC.progression_skip_balancing),
+    "Golden Lamp":                      ItemData(ItemType.TREASURE, 0x74,                              IC.progression_skip_balancing),
+    "Golden Crescent Moon Bed":         ItemData(ItemType.TREASURE, 0x75,                              IC.progression_skip_balancing),
+    "Golden Teddy Bear":                ItemData(ItemType.TREASURE, 0x76,                              IC.progression_skip_balancing),
+    "Golden Lollipop":                  ItemData(ItemType.TREASURE, 0x77,                              IC.progression_skip_balancing),
+    "Golden Game Boy Advance":          ItemData(ItemType.TREASURE, 0x78,                              IC.progression_skip_balancing),
+    "Golden Robot":                     ItemData(ItemType.TREASURE, 0x79,                              IC.progression_skip_balancing),
+    "Golden Rocket":                    ItemData(ItemType.TREASURE, 0x7A,                              IC.progression_skip_balancing),
+    "Golden Rocking Horse":             ItemData(ItemType.TREASURE, 0x7B,                              IC.progression_skip_balancing),
+    "Full Health Item":                 ItemData(ItemType.ITEM,     0x80,                              IC.useful),
+    "Wario Form Trap":                  ItemData(ItemType.ITEM,     0x81,                              IC.trap),
+    "Heart":                            ItemData(ItemType.ITEM,     0x82,                              IC.filler),
+    "Lightning Trap":                   ItemData(ItemType.ITEM,     0x83,                              IC.trap),
+    "Minigame Medal":                   ItemData(ItemType.ITEM,     0x84,                              IC.filler),
+    "Diamond":                          ItemData(ItemType.ITEM,     0x85,                              IC.filler),
 }
 
 

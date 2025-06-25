@@ -5,7 +5,7 @@ from BaseClasses import CollectionState, ItemClassification
 from test.bases import TestBase, WorldTestBase
 
 class WL4TestBase(WorldTestBase, TestBase):
-    game = 'Wario Land 4'
+    game = "Wario Land 4"
     player = 1
 
     starting_regions: Sequence[str] = []

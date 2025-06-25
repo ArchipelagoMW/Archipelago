@@ -11,7 +11,7 @@ class Goal(Choice):
     Local Golden Treasure Hunt: Find the treasures scattered in the pyramid and escape through the Sound Room
     Local Golden Diva Treasure Hunt: Find the golden treasures in the pyramid and defeat the Golden Diva
     """
-    display_name = 'Goal'
+    display_name = "Goal"
     option_golden_diva = 0
     option_golden_treasure_hunt = 1
     option_golden_diva_treasure_hunt = 2
@@ -38,7 +38,7 @@ class GoldenTreasureCount(Range):
     """
     Number of treasures required to win in Golden Treasure Hunt.
     """
-    display_name = 'Golden Treasure Count'
+    display_name = "Golden Treasure Count"
     range_start = 1
     range_end = 12
     default = 6  # Minimum for a good ending
@@ -49,7 +49,7 @@ class Difficulty(Choice):
     The game's difficulty level.
     Hard and S-Hard have slightly fewer locations to check since some Full Health item boxes are missing on those difficulties.
     """
-    display_name = 'Difficulty'
+    display_name = "Difficulty"
     option_normal = 0
     option_hard = 1
     option_s_hard = 2
@@ -61,7 +61,7 @@ class Logic(Choice):
     Advanced logic enables some strategies that are more difficult or can risk forcing a Give Up, many of which involve Grab.
     A list of these strategies can be found on the game page.
     """
-    display_name = 'Logic'
+    display_name = "Logic"
     option_basic = 0
     option_advanced = 1
     default = option_basic
@@ -75,7 +75,7 @@ class PoolJewels(Range):
     range_start = 0
     range_end = 4
     default = 3
-    display_name = 'Jewels in Pool'
+    display_name = "Jewels in Pool"
 
 
 class GoldenJewels(Range):
@@ -85,7 +85,7 @@ class GoldenJewels(Range):
     range_start = 0
     range_end = 2
     default = 1
-    display_name = 'Golden Pyramid Jewels'
+    display_name = "Golden Pyramid Jewels"
 
 
 class RequiredJewels(Range):
@@ -97,7 +97,7 @@ class RequiredJewels(Range):
     range_start = 0
     range_end = 4
     default = 2
-    display_name = 'Required Jewels'
+    display_name = "Required Jewels"
 
 
 class RestrictSelfLockingJewelPieces(Toggle):
@@ -106,7 +106,7 @@ class RestrictSelfLockingJewelPieces(Toggle):
     Golden Passage in treasure hunt modes. The latter does not apply to the
     golden jewel pieces.
     """
-    display_name = 'Restrict Self-Locking Jewel Pieces'
+    display_name = "Restrict Self-Locking Jewel Pieces"
 
 
 class OpenDoors(Choice):
@@ -114,7 +114,7 @@ class OpenDoors(Choice):
     Start with all doors in the passages unlocked. This skips the requirement
     to find Keyzer in each level, opening more locations earlier.
     """
-    display_name = 'Open Level Doors'
+    display_name = "Open Level Doors"
     option_off = 0
     option_closed_diva = 1
     option_open = 2
@@ -127,7 +127,7 @@ class Portal(Choice):
     Vanilla: The exit portal closes, and Wario must reopen it with the frog switch
     Open: The portal stays open, allowing Wario to leave at any time.
     """
-    display_name = 'Portal'
+    display_name = "Portal"
     option_vanilla = 0
     option_open = 1
     default = option_vanilla
@@ -137,7 +137,7 @@ class DiamondShuffle(Toggle):
     """
     Shuffle the 1,000-point diamonds into the item pool.
     """
-    display_name = 'Diamond Shuffle'
+    display_name = "Diamond Shuffle"
 
 
 class SmashThroughHardBlocks(Toggle):
@@ -146,7 +146,7 @@ class SmashThroughHardBlocks(Toggle):
     as in Pizza Tower and Wario Land: Shake It!
     This option does not affect logic.
     """
-    display_name = 'Smash Hard Blocks Without Stopping'
+    display_name = "Smash Hard Blocks Without Stopping"
 
 
 class MultiworldSend(Choice):
@@ -156,7 +156,7 @@ class MultiworldSend(Choice):
     Immediately: Count your locations as you take them from the box.
     Regardless of this setting, sending other players items from a level you can't clear is never in logic.
     """
-    display_name = 'Send Locations to Server'
+    display_name = "Send Locations to Server"
     option_on_escape = 0
     option_immediately = 1
     default = option_on_escape
@@ -166,7 +166,7 @@ class PrizeWeight(Range):
     """
     How often to place prizes (full health items, diamonds) when filling vacant spots in the item pool.
     """
-    display_name = 'Prize Weight'
+    display_name = "Prize Weight"
     range_start = 0
     range_end = 100
     default = 30
@@ -176,7 +176,7 @@ class JunkWeight(Range):
     """
     How often to place junk items (hearts, minigame medals) when filling vacant spots in the item pool.
     """
-    display_name = 'Junk Weight'
+    display_name = "Junk Weight"
     range_start = 0
     range_end = 100
     default = 60
@@ -186,7 +186,7 @@ class TrapWeight(Range):
     """
     How often to place traps when filling vacant spots in the item pool.
     """
-    display_name = 'Trap Weight'
+    display_name = "Trap Weight"
     range_start = 0
     range_end = 100
     default = 10
@@ -199,7 +199,7 @@ class TrapBehavior(Choice):
     Apply Once: You will be forcibly transformed or hurt only once.
     If you die in a level with several traps accumulated, they will be limited to one each the next time you enter.
     """
-    display_name = 'Trap Behavior'
+    display_name = "Trap Behavior"
     option_accumulate = 0
     option_apply_once = 1
     default = option_accumulate
@@ -210,11 +210,11 @@ class MusicShuffle(Choice):
     Music shuffle type
     None: Music is not shuffled
     Levels Only: Only shuffle music between the main levels
-    Levels And Extras: Shuffle any music that plays in levels, including the 'Hurry up!' and boss themes
+    Levels And Extras: Shuffle any music that plays in levels, including the "Hurry up!" and boss themes
     Full: Shuffle all music
     Disabled: Disable all music
     """
-    display_name = 'Music Shuffle'
+    display_name = "Music Shuffle"
     option_none = 0
     option_levels_only = 1
     option_levels_and_extras = 2

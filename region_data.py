@@ -60,7 +60,7 @@ level_table = {
                 [
                     ExitData(
                         None,
-                        has_all(['Dash Attack', 'Grab', 'Super Ground Pound'])
+                        has_all(["Dash Attack", "Grab", "Super Ground Pound"])
                     ),
                 ]
             ),
@@ -110,12 +110,12 @@ level_table = {
                     LocationData("Ledge Diamond", difficulties=[s_hard]),
                     LocationData("Hidden Tunnel Diamond", difficulties=[normal]),
                     LocationData("Platform Cave Hidden Diamond", difficulties=[normal]),
-                    LocationData("Submerged Diamond", access_rule=has('Swim')),
+                    LocationData("Submerged Diamond", access_rule=has("Swim")),
                     LocationData(
                         "Switch Staircase Diamond",
-                        access_rule=has('Grab') | advanced_logic() & has('Stomp Jump')
+                        access_rule=has("Grab") | advanced_logic() & has("Stomp Jump")
                     ),
-                    LocationData("Scienstein Throw Diamond", access_rule=has('Grab')),
+                    LocationData("Scienstein Throw Diamond", access_rule=has("Grab")),
                 ]
             ),
         ],
@@ -126,8 +126,8 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("8-Shaped Cave", has('Super Ground Pound')),
-                    ExitData("Sunflower Roots", has('Super Ground Pound')),
+                    ExitData("8-Shaped Cave", has("Super Ground Pound")),
+                    ExitData("Sunflower Roots", has("Super Ground Pound")),
                 ],
                 [
                     LocationData("CD Box"),
@@ -139,21 +139,21 @@ level_table = {
                 [
                     LocationData(
                         "8-Shaped Cave Box",
-                        access_rule=(difficulty(hard) & has('Grab')) | (difficulty(s_hard) & has('Heavy Grab')),
+                        access_rule=(difficulty(hard) & has("Grab")) | (difficulty(s_hard) & has("Heavy Grab")),
                         difficulties=[hard, s_hard]
                     ),
                 ],
                 diamonds=[
-                    LocationData("8-Shaped Cave Diamond", has('Grab'), difficulties=[normal]),
+                    LocationData("8-Shaped Cave Diamond", has("Grab"), difficulties=[normal]),
                 ]
             ),
             RegionData(
                 "Sunflower Roots",
                 [
-                    ExitData("Giant Sunflower", has('Swim')),
+                    ExitData("Giant Sunflower", has("Swim")),
                 ],
                 diamonds=[
-                    LocationData("Scienstein Stomp Diamond", access_rule=has('Grab') & has('Stomp Jump'))
+                    LocationData("Scienstein Stomp Diamond", access_rule=has("Grab") & has("Stomp Jump"))
                 ]
             ),
             RegionData(
@@ -175,7 +175,7 @@ level_table = {
                     LocationData("Escape Detour Corner Diamond"),
                     LocationData("Current Cave Diamond"),
                     LocationData("Sunflower Diamond", difficulties=[normal]),
-                    LocationData("Switch Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Switch Puzzle Diamond", access_rule=has("Grab")),
                 ]
             ),
         ]
@@ -185,8 +185,8 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Rock Cave", has('Grab')),
-                    ExitData("Shallows", has('Swim')),
+                    ExitData("Rock Cave", has("Grab")),
+                    ExitData("Shallows", has("Swim")),
                 ],
                 []
             ),
@@ -201,8 +201,8 @@ level_table = {
             RegionData(
                 "Shallows",
                 [
-                    ExitData("Large Cave", has('Head Smash')),
-                    ExitData("Depths", has('Head Smash')),
+                    ExitData("Large Cave", has("Head Smash")),
+                    ExitData("Depths", has("Head Smash")),
                 ],
                 [
                     LocationData("Air Pocket Box", difficulties=[normal]),
@@ -219,13 +219,13 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Large Cave Diamond", difficulties=[normal]),
-                    LocationData("Shallow Pool Puzzle Diamond", access_rule=has_all(['Super Ground Pound', 'Grab'])),
+                    LocationData("Shallow Pool Puzzle Diamond", access_rule=has_all(["Super Ground Pound", "Grab"])),
                 ]
             ),
             RegionData(
                 "Depths",
                 [
-                    ExitData("Utsuboanko Hidden Cave", access_rule=has('Dash Attack')),
+                    ExitData("Utsuboanko Hidden Cave", access_rule=has("Dash Attack")),
                 ],
                 [
                     LocationData("Hill Room Box", difficulties=[normal]),
@@ -233,14 +233,14 @@ level_table = {
                     LocationData("Spring Cave Box", difficulties=[hard, s_hard]),
                     LocationData("Box Before Bridge", difficulties=[normal]),
                     LocationData("Lake Exit Bubble Box", difficulties=[hard, s_hard]),
-                    LocationData("CD Box", access_rule=has('Dash Attack')),
+                    LocationData("CD Box", access_rule=has("Dash Attack")),
                     LocationData("Keyzer", event=True),
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
                     LocationData("Eel Cave Underwater Diamond"),
                     LocationData("Bubble Path Diamond", difficulties=[normal]),
-                    LocationData("Deep Pool Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Deep Pool Puzzle Diamond", access_rule=has("Grab")),
                 ]
             ),
             RegionData(
@@ -261,17 +261,17 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Fat Plummet Extra Area", access_rule=has('Ground Pound')),
-                    ExitData("Deeps", access_rule=has('Ground Pound')),
+                    ExitData("Fat Plummet Extra Area", access_rule=has("Ground Pound")),
+                    ExitData("Deeps", access_rule=has("Ground Pound")),
                 ],
                 [
                     LocationData("Fat Plummet Box", difficulties=[normal]),
-                    LocationData("CD Box", access_rule=has('Ground Pound')),
-                    LocationData("Full Health Item Box", access_rule=has('Swim')),
+                    LocationData("CD Box", access_rule=has("Ground Pound")),
+                    LocationData("Full Health Item Box", access_rule=has("Swim")),
                 ],
                 diamonds=[
                     LocationData("Archer Pink Room Diamond"),
-                    LocationData("Rock Catching Diamond", access_rule=has('Grab')),
+                    LocationData("Rock Catching Diamond", access_rule=has("Grab")),
                 ]
             ),
             RegionData(
@@ -287,8 +287,8 @@ level_table = {
             RegionData(
                 "Deeps",
                 [
-                    ExitData("Puffy Hallway", access_rule=has('Dash Attack')),
-                    ExitData("Buried Cave", access_rule=has('Grab')),
+                    ExitData("Puffy Hallway", access_rule=has("Dash Attack")),
+                    ExitData("Buried Cave", access_rule=has("Grab")),
                 ],
                 [
                     LocationData("Spiky Box", difficulties=[normal]),
@@ -328,11 +328,11 @@ level_table = {
             RegionData(
                 None,
                 [
-                    ExitData("Gear Elevator", access_rule=has('Dash Attack')),
+                    ExitData("Gear Elevator", access_rule=has("Dash Attack")),
                 ],
                 [
                     LocationData("First Drop Box", difficulties=[normal]),
-                    LocationData('Thin Gap Box', difficulties=[hard, s_hard]),
+                    LocationData("Thin Gap Box", difficulties=[hard, s_hard]),
                     LocationData("Early Escape Box", difficulties=[normal]),
                     LocationData("Conveyor Room Box", difficulties=[hard, s_hard]),
                     LocationData("Late Escape Box", difficulties=[normal]),
@@ -344,8 +344,8 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("T-Tunnel Diamond", difficulties=[normal]),
-                    LocationData("Scienstein Puzzle Diamond", access_rule=has('Grab')),
-                    LocationData("Rock Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Scienstein Puzzle Diamond", access_rule=has("Grab")),
+                    LocationData("Rock Puzzle Diamond", access_rule=has("Grab")),
                     LocationData("Underground Chamber Diamond", difficulties=[normal]),
                 ]
             ),
@@ -367,14 +367,14 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData(None, has_all(['Dash Attack', 'Super Ground Pound', 'Head Smash'])),
+                    ExitData(None, has_all(["Dash Attack", "Super Ground Pound", "Head Smash"])),
                 ]
             ),
             RegionData(
                 None,
                 [
-                    ExitData("Current Circle Room", access_rule=has('Swim')),
-                    ExitData("Transformation Puzzle", access_rule=has_any(['Heavy Grab', 'Stomp Jump'])),
+                    ExitData("Current Circle Room", access_rule=has("Swim")),
+                    ExitData("Transformation Puzzle", access_rule=has_any(["Heavy Grab", "Stomp Jump"])),
                 ],
                 [
                     LocationData("Portal Room Box", difficulties=[normal]),
@@ -390,13 +390,13 @@ level_table = {
                 diamonds=[
                     LocationData("Trash Plummet Diamond", difficulties=[normal]),
                     LocationData("Spike Ceiling Diamond"),
-                    LocationData("Sewage Pool Diamond", access_rule=has('Swim')),
+                    LocationData("Sewage Pool Diamond", access_rule=has("Swim")),
                     LocationData("Trash Sprint Diamond"),
                     LocationData(
                         "Transformation Puzzle Lower Diamond",
-                        access_rule=has('Swim') & (advanced_logic() | has('Heavy Grab'))
+                        access_rule=has("Swim") & (advanced_logic() | has("Heavy Grab"))
                     ),
-                    LocationData("Rock Throwing Diamond", access_rule=has('Grab')),
+                    LocationData("Rock Throwing Diamond", access_rule=has("Grab")),
                 ]
             ),
             RegionData(
@@ -426,7 +426,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData(None, has('Super Ground Pound')),
+                    ExitData(None, has("Super Ground Pound")),
                 ],
                 diamonds=[
                     LocationData("Conveyor Room Diamond"),
@@ -440,7 +440,7 @@ level_table = {
                     LocationData("Maze Room Box"),
                     LocationData("Snowman Puzzle Lower Box"),
                     LocationData("Snowman Puzzle Upper Box"),
-                    LocationData("CD Box", access_rule=has('Head Smash')),
+                    LocationData("CD Box", access_rule=has("Head Smash")),
                     LocationData("Keyzer", event=True),
                     LocationData("Frog Switch", event=True),
                 ],
@@ -455,9 +455,9 @@ level_table = {
                     LocationData("Snowman Puzzle Right Diamond"),
                     LocationData(
                         "Glass Ball Puzzle Diamond",
-                        access_rule=has('Grab') | advanced_logic() & has_all(['Stomp Jump', 'Ground Pound'])
+                        access_rule=has("Grab") | advanced_logic() & has_all(["Stomp Jump", "Ground Pound"])
                     ),
-                    LocationData("Yeti Puzzle Diamond", access_rule=has('Heavy Grab')),
+                    LocationData("Yeti Puzzle Diamond", access_rule=has("Heavy Grab")),
                 ]
             ),
         ]
@@ -467,13 +467,13 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Early Rooms", has('Grab')),
+                    ExitData("Early Rooms", has("Grab")),
                 ]
             ),
             RegionData(
                 "Early Rooms",
                 [
-                    ExitData("Jungle Room", has('Ground Pound') | advanced_logic()),
+                    ExitData("Jungle Room", has("Ground Pound") | advanced_logic()),
                 ],
                 [
                     LocationData("Rolling Room Box", difficulties=[normal, hard]),
@@ -488,7 +488,7 @@ level_table = {
             RegionData(
                 "Jungle Room",
                 [
-                    ExitData("Late Rooms", has('Ground Pound') | advanced_logic() & has('Heavy Grab')),
+                    ExitData("Late Rooms", has("Ground Pound") | advanced_logic() & has("Heavy Grab")),
                 ],
                 [
                     LocationData("Jungle Room Box"),
@@ -497,8 +497,8 @@ level_table = {
             RegionData(
                 "Late Rooms",
                 [
-                    ExitData("Scienstein Puzzle Pink Room", has('Super Ground Pound')),
-                    ExitData("Escape", has_all(['Ground Pound', 'Head Smash'])),
+                    ExitData("Scienstein Puzzle Pink Room", has("Super Ground Pound")),
+                    ExitData("Escape", has_all(["Ground Pound", "Head Smash"])),
                 ],
                 [
                     LocationData("Switch Room Box", difficulties=[s_hard]),
@@ -526,7 +526,7 @@ level_table = {
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Robot Room Diamond", access_rule=has('Dash Attack')),
+                    LocationData("Robot Room Diamond", access_rule=has("Dash Attack")),
                 ]
             ),
         ]
@@ -537,19 +537,19 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData(None, has('Heavy Grab')),
+                    ExitData(None, has("Heavy Grab")),
                 ]
             ),
             RegionData(
                 None,
                 [
-                    ExitData("Block Catch Pink Room", access_rule=has('Dash Attack')),
+                    ExitData("Block Catch Pink Room", access_rule=has("Dash Attack")),
                 ],
                 [
                     LocationData("Toy Car Overhang Box", difficulties=[normal, hard]),
                     LocationData("Tower Exterior Top Box", difficulties=[s_hard]),
                     LocationData("Hidden Tower Room Box", difficulties=[normal]),
-                    LocationData("Digging Room Box", access_rule=has('Dash Attack'), difficulties=[hard, s_hard]),
+                    LocationData("Digging Room Box", access_rule=has("Dash Attack"), difficulties=[hard, s_hard]),
                     LocationData("Fire Box", difficulties=[normal]),
                     LocationData("Hidden Falling Block Door Box", difficulties=[hard]),
                     LocationData("Bonfire Block Box", difficulties=[s_hard]),
@@ -561,10 +561,10 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Tower Diamond", difficulties=[hard]),
-                    LocationData("Digging Room Diamond", access_rule=has('Dash Attack')),
+                    LocationData("Digging Room Diamond", access_rule=has("Dash Attack")),
                     LocationData("Escape Ledge Diamond", difficulties=[normal]),
                     LocationData("Cage Diamond", difficulties=[normal]),
-                    LocationData("Circle Block Diamond", access_rule=has_all(['Super Ground Pound', 'Dash Attack'])),
+                    LocationData("Circle Block Diamond", access_rule=has_all(["Super Ground Pound", "Dash Attack"])),
                 ]
             ),
             RegionData(
@@ -584,7 +584,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData(None, access_rule=has('Ground Pound')),
+                    ExitData(None, access_rule=has("Ground Pound")),
                 ]
             ),
             RegionData(
@@ -594,7 +594,7 @@ level_table = {
                     LocationData("First Box", difficulties=[normal]),
                     LocationData("Hard Fire Room Box", difficulties=[hard, s_hard]),
                     LocationData("Normal Fire Room Box", difficulties=[normal]),
-                    LocationData("Hard Enemy Room Box", access_rule=has('Grab'), difficulties=[hard, s_hard]),
+                    LocationData("Hard Enemy Room Box", access_rule=has("Grab"), difficulties=[hard, s_hard]),
                     LocationData("Normal Enemy Room Box", difficulties=[normal]),
                     LocationData("Fat Room Box", difficulties=[hard, s_hard]),
                     LocationData("Toy Car Box", difficulties=[normal]),
@@ -602,7 +602,7 @@ level_table = {
                     LocationData("CD Box"),
                     LocationData(
                         "Full Health Item Box",
-                        access_rule=has_all(['Grab', 'Stomp Jump']),
+                        access_rule=has_all(["Grab", "Stomp Jump"]),
                         difficulties=[normal, hard]
                     ),
                     LocationData("Keyzer", event=True),
@@ -610,10 +610,10 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Fire Room Diamond", difficulties=[normal]),
-                    LocationData("Enemy Room Diamond", access_rule=has('Grab'), difficulties=[normal]),
+                    LocationData("Enemy Room Diamond", access_rule=has("Grab"), difficulties=[normal]),
                     LocationData("Fat Room Diamond", difficulties=[normal]),
                     LocationData("Bouncy Room Diamond", difficulties=[normal]),
-                    LocationData("Scienstein Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Scienstein Puzzle Diamond", access_rule=has("Grab")),
                 ]
             ),
         ]
@@ -623,11 +623,11 @@ level_table = {
             RegionData(
                 None,
                 [
-                    ExitData("Blue Circle Room", has('Stomp Jump')),
-                    ExitData("Pink Circle Room", has('Ground Pound')),
+                    ExitData("Blue Circle Room", has("Stomp Jump")),
+                    ExitData("Pink Circle Room", has("Ground Pound")),
                     ExitData(
                         "Gray Square Room",
-                        has('Ground Pound') | not_difficulty(normal) & advanced_logic() & has('Grab')
+                        has("Ground Pound") | not_difficulty(normal) & advanced_logic() & has("Grab")
                     ),
                 ],
                 [
@@ -682,7 +682,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Lake Entrance", has('Ground Pound') | advanced_logic() & has_any(['Head Smash', 'Grab'])),
+                    ExitData("Lake Entrance", has("Ground Pound") | advanced_logic() & has_any(["Head Smash", "Grab"])),
                 ],
                 [
                     LocationData("Racing Box"),
@@ -691,12 +691,12 @@ level_table = {
             RegionData(
                 "Lake Entrance",
                 [
-                    ExitData("Lake Area", has('Swim')),
+                    ExitData("Lake Area", has("Swim")),
                 ],
                 diamonds=[
                     LocationData(
                         "Toy Car Tower Diamond",
-                        access_rule=has_all(['Grab', 'Stomp Jump']),
+                        access_rule=has_all(["Grab", "Stomp Jump"]),
                         difficulties=[normal, hard]
                     ),
                 ]
@@ -706,15 +706,15 @@ level_table = {
                 [],
                 [
                     LocationData("Rolling Box"),
-                    LocationData("Swimming Detour Box", access_rule=has('Head Smash'), difficulties=[normal, hard]),
-                    LocationData("Swimming Room Escape Box", access_rule=has('Ground Pound'), difficulties=[s_hard]),
-                    LocationData("Keyzer Room Box", access_rule=has('Ground Pound')),
+                    LocationData("Swimming Detour Box", access_rule=has("Head Smash"), difficulties=[normal, hard]),
+                    LocationData("Swimming Room Escape Box", access_rule=has("Ground Pound"), difficulties=[s_hard]),
+                    LocationData("Keyzer Room Box", access_rule=has("Ground Pound")),
                     LocationData("CD Box"),
                     LocationData("Keyzer", event=True),
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Switch Ladder Diamond", difficulties=[normal, hard], access_rule=has('Super Ground Pound')),
+                    LocationData("Switch Ladder Diamond", difficulties=[normal, hard], access_rule=has("Super Ground Pound")),
                 ]
             ),
         ]
@@ -725,7 +725,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Upper", access_rule=has('Head Smash'))
+                    ExitData("Upper", access_rule=has("Head Smash"))
                 ],
                 diamonds=[
                     LocationData("First Village Diamond"),
@@ -734,8 +734,8 @@ level_table = {
             RegionData(
                 "Upper",
                 [
-                    ExitData("Agile Bat Rock Puzzle", access_rule=has_all(['Ground Pound', 'Grab'])),
-                    ExitData("Lower", access_rule=has('Dash Attack')),
+                    ExitData("Agile Bat Rock Puzzle", access_rule=has_all(["Ground Pound", "Grab"])),
+                    ExitData("Lower", access_rule=has("Dash Attack")),
                 ],
                 [
                     LocationData("Agile Bat Box", difficulties=[normal]),
@@ -754,7 +754,7 @@ level_table = {
             RegionData(
                 "Lower",
                 [
-                    ExitData("Sewer", access_rule=has('Swim'))
+                    ExitData("Sewer", access_rule=has("Swim"))
                 ],
                 [
                     LocationData("Metal Platform Box", difficulties=[normal]),
@@ -768,7 +768,7 @@ level_table = {
                 diamonds=[
                     LocationData("Dropdown Diamond"),
                     LocationData("Candle Dodging Diamond"),
-                    LocationData("Glass Ball Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Glass Ball Puzzle Diamond", access_rule=has("Grab")),
                 ]
             ),
             RegionData(
@@ -790,11 +790,11 @@ level_table = {
                 [
                     ExitData(
                         "Onomi Room Bottom",
-                        has_any(['Ground Pound', 'Head Smash']) | advanced_logic() & has('Grab')
+                        has_any(["Ground Pound", "Head Smash"]) | advanced_logic() & has("Grab")
                     ),
-                    ExitData("Flying Carpet Dash Attack Puzzle", has('Dash Attack')),
-                    ExitData("Kool-Aid Man", has('Dash Attack')),
-                    ExitData("Sewer", has('Swim')),
+                    ExitData("Flying Carpet Dash Attack Puzzle", has("Dash Attack")),
+                    ExitData("Kool-Aid Man", has("Dash Attack")),
+                    ExitData("Sewer", has("Swim")),
                 ],
                 [
                     LocationData("Onomi Box", difficulties=[normal]),
@@ -824,7 +824,7 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Flying Carpet Dash Attack Diamond", difficulties=[normal]),
-                    LocationData("Scienstein Puzzle Diamond", access_rule=has('Grab')),
+                    LocationData("Scienstein Puzzle Diamond", access_rule=has("Grab")),
                 ]
             ),
             RegionData(
@@ -840,7 +840,7 @@ level_table = {
             RegionData(
                 "Sewer",
                 [
-                    ExitData("Sewer Underwater", access_rule=has('Super Ground Pound'))
+                    ExitData("Sewer Underwater", access_rule=has("Super Ground Pound"))
                 ],
                 [
                     LocationData("Sewer Box", difficulties=[normal]),
@@ -870,7 +870,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Frozen", has_all(['Ground Pound', 'Dash Attack', 'Head Smash'])),
+                    ExitData("Frozen", has_all(["Ground Pound", "Dash Attack", "Head Smash"])),
                 ],
                 [
                     LocationData("Lava Dodging Box", difficulties=[normal]),
@@ -878,8 +878,8 @@ level_table = {
                 ],
                 diamonds=[
                     LocationData("Long Lava Geyser Diamond", difficulties=[normal]),
-                    LocationData("Scienstein Puzzle Diamond", access_rule=has('Grab')),
-                    LocationData("Spring Puzzle Diamond", access_rule=has('Ground Pound')),
+                    LocationData("Scienstein Puzzle Diamond", access_rule=has("Grab")),
+                    LocationData("Spring Puzzle Diamond", access_rule=has("Ground Pound")),
                 ]
             ),
             RegionData(
@@ -894,7 +894,7 @@ level_table = {
                     LocationData("Frog Switch", event=True),
                 ],
                 diamonds=[
-                    LocationData("Ice Jump Diamond", access_rule=has('Stomp Jump'), difficulties=[normal, hard]),
+                    LocationData("Ice Jump Diamond", access_rule=has("Stomp Jump"), difficulties=[normal, hard]),
                     LocationData("Corner Diamond", difficulties=[normal, hard]),
                     LocationData("Hidden Ice Diamond", difficulties=[normal]),
                     LocationData("Frozen Diamond"),
@@ -910,8 +910,8 @@ level_table = {
                     ExitData(
                         "Switch Room",
                         access_rule=(
-                            has('Heavy Grab')
-                            | difficulty(hard) & advanced_logic() & has_all(['Grab', 'Stomp Jump', 'Super Ground Pound'])
+                            has("Heavy Grab")
+                            | difficulty(hard) & advanced_logic() & has_all(["Grab", "Stomp Jump", "Super Ground Pound"])
                             | difficulty(s_hard)
                         )
                     ),
@@ -953,7 +953,7 @@ level_table = {
             RegionData(
                 "Entrance",
                 [
-                    ExitData("Current Puzzle", has('Swim')),
+                    ExitData("Current Puzzle", has("Swim")),
                     ExitData("Passage", advanced_logic()),
                 ],
                 [
@@ -981,7 +981,7 @@ level_table = {
                 [
                     # Trick undocumented due to being currently not doable in practice: Reaching Golden Passage always
                     # requires Ground Pound because of Cractus and Catbat
-                    ExitData("Scienstein Area", has('Ground Pound') | advanced_logic() & has('Grab')),
+                    ExitData("Scienstein Area", has("Ground Pound") | advanced_logic() & has("Grab")),
                 ],
                 [
                     LocationData("River Box"),
@@ -993,13 +993,13 @@ level_table = {
                     LocationData("Zombie Hall Right Diamond"),
                     LocationData("Digging Diamond"),
                     LocationData("Slope Diamond"),
-                    LocationData("Scienstein Escape Diamond", access_rule=has('Swim')),
+                    LocationData("Scienstein Escape Diamond", access_rule=has("Swim")),
                 ]
             ),
             RegionData(
                 "Scienstein Area",
                 [
-                    ExitData("Keyzer Area", has('Grab')),
+                    ExitData("Keyzer Area", has("Grab")),
                 ],
                 [
                     LocationData("Mad Scienstein Box"),
@@ -1023,19 +1023,19 @@ level_table = {
 passage_boss_table = {
     Passage.EMERALD: BossData(
         "Cractus",
-        has('Ground Pound'),
-        not_difficulty(s_hard) | has('Stomp Jump') | advanced_logic()
+        has("Ground Pound"),
+        not_difficulty(s_hard) | has("Stomp Jump") | advanced_logic()
     ),
-    Passage.RUBY: BossData("Cuckoo Condor", has('Grab')),
-    Passage.TOPAZ: BossData("Aerodent", has('Grab')),
+    Passage.RUBY: BossData("Cuckoo Condor", has("Grab")),
+    Passage.TOPAZ: BossData("Aerodent", has("Grab")),
     Passage.SAPPHIRE: BossData(
         "Catbat",
-        has('Ground Pound') & (has('Stomp Jump') | advanced_logic()),
-        has('Stomp Jump') | advanced_logic() & not_difficulty(s_hard)
+        has("Ground Pound") & (has("Stomp Jump") | advanced_logic()),
+        has("Stomp Jump") | advanced_logic() & not_difficulty(s_hard)
     ),
 }
 
 golden_diva = BossData(
     "Golden Diva",
-    has('Heavy Grab') & (option('goal', Goal.option_golden_diva) | has_treasures())
+    has("Heavy Grab") & (option("goal", Goal.option_golden_diva) | has_treasures())
 )
