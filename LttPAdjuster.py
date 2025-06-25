@@ -233,7 +233,7 @@ def adjust(args):
     apply_rom_settings(rom, args.heartbeep, args.heartcolor, args.quickswap, args.menuspeed, args.music,
                        args.sprite, args.oof, palettes_options, reduceflashing=args.reduceflashing or racerom, world=world,
                        deathlink=args.deathlink, allowcollect=args.allowcollect)
-    path = output_path(f'{os.path.basename(args.rom)[:-4]}_adjusted.sfc')
+    path = output_path(f'{os.path.basename(args.rom)[:-4]}.sfc')
     rom.write_to_file(path)
 
     logger.info('Done. Enjoy.')
