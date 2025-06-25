@@ -392,7 +392,7 @@ class TitsThe3rdMemoryIO():
         if scena_id not in self.scena_offsets:
             address = self.tits_the_3rd_mem.pattern_scan_all(scena_id)
             if not address:
-                logger.error("Could not find give item function. Is the game running?")
+                logger.error(f"Could not find signature {scena_id.decode()}. Is the game running?")
                 return None
             self.scena_offsets[scena_id] = address
 
@@ -400,7 +400,7 @@ class TitsThe3rdMemoryIO():
             del self.scena_offsets[scena_id]
             address = self.tits_the_3rd_mem.pattern_scan_all(scena_id)
             if not address:
-                logger.error("Could not find give item function. Is the game running?")
+                logger.error(f"Could not find signature {scena_id.decode()}. Is the game running?")
                 return None
             self.scena_offsets[scena_id] = address
 
@@ -483,12 +483,12 @@ class TitsThe3rdMemoryIO():
         self.call_scena(self.scena_functions["give_all_sepith"])
         return True
 
-    def send_item(self):
-        # Not currently needed
-        # TODO: Patch item table to have these ghost items for this
-        # address: int = self.get_scena_offset(b"AP All Item Send Notification")
-        # if not address:
-        #     return False
+    def send_item(self, item_id: int):
+        address: int = self.get_scena_offset(b"AP Item Send Notification")
+        if not address:
+            return False
+        logger.info(f"Sending Item {item_id}")
+        self.tits_the_3rd_mem.write_bytes(address + 36, item_id.to_bytes(2, "little"), 2)
         self.call_scena(self.scena_functions["send_item"])
         return True
 

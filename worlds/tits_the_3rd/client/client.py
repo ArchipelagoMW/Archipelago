@@ -3,24 +3,24 @@ import hashlib
 import io
 import os
 from pathlib import Path
-import pkgutil
 import shutil
 import subprocess
 import time
 import queue
-from typing import Optional, Set
+from typing import Dict, Optional
 import zipfile
 
 import bsdiff4
 import colorama
 
-from NetUtils import ClientStatus, NetworkItem
+from NetUtils import ClientStatus, NetworkItem, NetworkPlayer
 from settings import get_settings
 from worlds.tits_the_3rd.locations import get_location_id
 from worlds.tits_the_3rd.items import get_item_id
 from worlds.tits_the_3rd.names.location_name import LocationName
 from worlds.tits_the_3rd.names.item_name import ItemName
 from worlds.tits_the_3rd.util import load_file
+from worlds.tits_the_3rd.dt_utils import items as dt_items
 
 from .memory_io import TitsThe3rdMemoryIO
 from CommonClient import (
@@ -42,15 +42,16 @@ class TitsThe3rdContext(CommonContext):
         self.game_interface = None
         self.world_player_identifier: bytes = b"\x00\x00\x00\x00"
         self.location_ids = None
-        self.location_name_to_ap_id = None
-        self.location_ap_id_to_name = None
-        self.item_name_to_ap_id = None
-        self.item_ap_id_to_name = None
+        self.location_name_to_ap_id = dict()
+        self.location_ap_id_to_name = dict()
+        self.item_name_to_ap_id = dict()
+        self.item_ap_id_to_name = dict()
         self.last_received_item_index = -1
-        self.non_local_locations: Set[int] = set()
+        self.non_local_locations: Dict[int, tuple] = dict()
         self.non_local_locations_initiated = False
 
         self.items_to_be_sent_notification = queue.Queue()
+        self.player_name_to_game: Dict[str, str] = dict()
 
         self.critical_section_lock = asyncio.Lock()
 
@@ -69,8 +70,10 @@ class TitsThe3rdContext(CommonContext):
             raise Exception("Incorrect game directory")
 
         lb_ark_folder = game_dir / "data"
-        scena_temp_folder = lb_ark_folder / "ED6_DT21_BASE"
-        game_mod_folder = lb_ark_folder / "ED6_DT21"
+        scena_base_folder = lb_ark_folder / "ED6_DT21_BASE"
+        scena_game_mod_folder = lb_ark_folder / "ED6_DT21"
+        dt_base_folder = lb_ark_folder / "ED6_DT22_BASE"
+        dt_game_mod_folder = lb_ark_folder / "ED6_DT22"
         os.makedirs(lb_ark_folder, exist_ok=True)
         if "player.txt" in os.listdir(lb_ark_folder):
             with open(lb_ark_folder / "player.txt") as player_id_file:
@@ -78,33 +81,61 @@ class TitsThe3rdContext(CommonContext):
                     logger.info("Player has not changed. Skip installing patch")
                     return True
 
-        with open(lb_ark_folder / "player.txt", "w") as player_id_file:
-            player_id_file.write(f"{self.auth}-{self.seed_name}")
+        if os.path.exists(scena_game_mod_folder):  # Remove previously installed mod for a clean install
+            shutil.rmtree(scena_game_mod_folder)
 
-        if os.path.exists(game_mod_folder):  # Remove previously installed mod for a clean install
-            shutil.rmtree(game_mod_folder)
+        if os.path.exists(dt_game_mod_folder):  # Remove previously installed mod for a clean install
+            shutil.rmtree(dt_game_mod_folder)
 
         if not "factoria.exe" in files_in_game_dir:
             raise Exception("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
 
-        # Create the temporary base game folder
-        if not os.path.exists(scena_temp_folder):
-            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{scena_temp_folder}" "{game_dir / "ED6_DT21.dir"}"'
+        # Create the base game folders
+        if not os.path.exists(scena_base_folder):
+            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{scena_base_folder}" "{game_dir / "ED6_DT21.dir"}"'
             subprocess.run(factoria_command, shell=True)
 
+        if not os.path.exists(dt_base_folder):
+            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{dt_base_folder}" "{game_dir / "ED6_DT22.dir"}"'
+            subprocess.run(factoria_command, shell=True)
+
+        # Patch the game scena scripts
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-            for file in sorted(os.listdir(scena_temp_folder)):
+            for file in sorted(os.listdir(scena_base_folder)):
                 if file.endswith("._sn"):
-                    zip_file.write(scena_temp_folder / file, arcname=file)
+                    zip_file.write(scena_base_folder / file, arcname=file)
 
         zip_buffer.seek(0)
         patch = load_file("data/tits3rd_basepatch.bsdiff4")
         output_data = bsdiff4.patch(zip_buffer.read(), patch)
         output_buffer = io.BytesIO(output_data)
         with zipfile.ZipFile(output_buffer, "r") as output_file:
-            os.makedirs(game_mod_folder, exist_ok=True)
-            output_file.extractall(game_mod_folder)
+            os.makedirs(scena_game_mod_folder, exist_ok=True)
+            output_file.extractall(scena_game_mod_folder)
+
+        # Create custom item table
+        os.makedirs(dt_game_mod_folder, exist_ok=True)
+        game_items, game_items_text = dt_items.parse_item_table(dt_base_folder / "t_item2._dt", dt_base_folder / "t_ittxt2._dt")
+        last_item = game_items.pop()
+        last_text = game_items_text.pop()
+
+        for location, (player, game, item_id) in self.non_local_locations.items():
+            item_name = f"{player}'s {self.item_ap_id_to_name[game][item_id]}"
+            item, item_text = dt_items.create_non_local_item(50000 + location, item_name)
+
+            game_items.append(item)
+            game_items_text.append(item_text)
+
+        game_items.append(last_item)
+        game_items_text.append(last_text)
+
+        dt_items.write_item_table(dt_game_mod_folder / "t_item2._dt", game_items)
+        dt_items.write_item_text_table(dt_game_mod_folder / "t_ittxt2._dt", game_items_text)
+
+        with open(lb_ark_folder / "player.txt", "w") as player_id_file:
+            player_id_file.write(f"{self.auth}-{self.seed_name}")
+
         return True
 
     def reset_client_state(self):
@@ -114,15 +145,16 @@ class TitsThe3rdContext(CommonContext):
         self.game_interface = None
         self.world_player_identifier = b"\x00\x00\x00\x00"
         self.location_ids = None
-        self.location_name_to_ap_id = None
-        self.location_ap_id_to_name = None
-        self.item_name_to_ap_id = None
-        self.item_ap_id_to_name = None
+        self.location_name_to_ap_id = dict()
+        self.location_ap_id_to_name = dict()
+        self.item_name_to_ap_id = dict()
+        self.item_ap_id_to_name = dict()
         self.last_received_item_index = -1
         self.items_to_be_sent_notification = queue.Queue()
         self.locations_checked = set()
-        self.non_local_locations = set()
+        self.non_local_locations = dict()
         self.non_local_locations_initiated = False
+        self.player_name_to_game = dict()
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -142,13 +174,22 @@ class TitsThe3rdContext(CommonContext):
             self.location_ids = set(args["missing_locations"] + args["checked_locations"])
             self.locations_checked = set(args["checked_locations"])
 
+            games = set()
+            for player in [NetworkPlayer(*player) for player in args["players"]]:
+                self.player_name_to_game[player.name] = self.slot_info[player.slot].game
+                games.add(self.slot_info[player.slot].game)
+
+            asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": list(games)}]))
             asyncio.create_task(self.send_msgs([{"cmd": "LocationScouts", "locations": self.location_ids}]))
 
         elif cmd == "LocationInfo":
             if not self.non_local_locations_initiated:
                 for item in [NetworkItem(*item) for item in args["locations"]]:
-                    if self.player_names[item.player] != self.slot_info[self.slot].name:
-                        self.non_local_locations.add(item.location)
+                    receiving_player = self.player_names[item.player]
+                    current_player = self.slot_info[self.slot].name
+                    if receiving_player != current_player:
+                        original_game = self.player_name_to_game[receiving_player]
+                        self.non_local_locations[item.location] = (receiving_player, original_game, item.item)
                 self.non_local_locations_initiated = True
 
         elif cmd == "RoomInfo":
@@ -158,11 +199,15 @@ class TitsThe3rdContext(CommonContext):
             if not self.location_ids:
                 # Connected package not recieved yet, wait for datapackage request after connected package
                 return
+
+            for game, game_data in args["data"]["games"].items():
+                self.item_name_to_ap_id[game] = game_data["item_name_to_id"]
+                self.item_ap_id_to_name[game] = {v: k for k, v in self.item_name_to_ap_id[game].items()}
             self.location_name_to_ap_id = args["data"]["games"]["Trails in the Sky the 3rd"]["location_name_to_id"]
             self.location_name_to_ap_id = {name: loc_id for name, loc_id in self.location_name_to_ap_id.items() if loc_id in self.location_ids}
             self.location_ap_id_to_name = {v: k for k, v in self.location_name_to_ap_id.items()}
-            self.item_name_to_ap_id = args["data"]["games"]["Trails in the Sky the 3rd"]["item_name_to_id"]
-            self.item_ap_id_to_name = {v: k for k, v in self.item_name_to_ap_id.items()}
+            # self.item_name_to_ap_id = args["data"]["games"]["Trails in the Sky the 3rd"]["item_name_to_id"]
+            # self.item_ap_id_to_name = {v: k for k, v in self.item_name_to_ap_id.items()}
 
     def client_recieved_initial_server_data(self):
         """
@@ -219,7 +264,9 @@ class TitsThe3rdContext(CommonContext):
         if not self.items_to_be_sent_notification.empty():
             item_to_be_sent = self.items_to_be_sent_notification.get()
             item_id = 50000 + int(item_to_be_sent)  # Make that non native item be 50000 + location_id
-            result = self.game_interface.send_item()
+            result = self.game_interface.send_item(item_id)
+            if not result:
+                self.items_to_be_sent_notification.put(item_to_be_sent)
             while self.game_interface.is_in_event():
                 await asyncio.sleep(0.1)
 
@@ -253,6 +300,7 @@ class TitsThe3rdContext(CommonContext):
                 await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
                 if location_id in self.non_local_locations:
                     self.items_to_be_sent_notification.put(location_id)
+
 
 async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
     """
