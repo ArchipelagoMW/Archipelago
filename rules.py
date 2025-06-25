@@ -49,20 +49,41 @@ def has(item_name: RequiredItem) -> Requirement:
     item, count = resolve_helper(item_name)
     return Requirement(lambda w, s: s.has(item, w.player, count))
 
+def _has_all(items: list[tuple[str, int]], state: CollectionState, player: int, ):
+    for item, count in items:
+        if not state.has(item, player, count):
+            return False
+    return True
+
 def has_all(items: Iterable[RequiredItem]) -> Requirement:
-    return Requirement(lambda w, s: all(has(item).inner(w, s) for item in items))
+    resolved_items = [resolve_helper(item) for item in items]
+    return Requirement(lambda w, s: _has_all(resolved_items, s, w.player))
+
+def _has_any(items: list[tuple[str, int]], state: CollectionState, player: int):
+    for item, count in items:
+        if state.has(item, player, count):
+            return True
+    return False
 
 def has_any(items: Iterable[RequiredItem]) -> Requirement:
-    return Requirement(lambda w, s: any(has(item).inner(w, s) for item in items))
+    resolved_items = [resolve_helper(item) for item in items]
+    return Requirement(lambda w, s: _has_any(resolved_items, s, w.player))
+
+treasures = list(filter_item_names(type=ItemType.TREASURE))
+
+def treasure_count(state: CollectionState, player: int):
+    count = 0
+    for treasure in treasures:
+        if state.has(treasure, player):
+            count += 1
+    return count
 
 def has_treasures() -> Requirement:
-    return Requirement(lambda w, s: sum(has(item).inner(w, s)
-                                        for item in filter_item_names(type=ItemType.TREASURE))
-                                    >= w.options.golden_treasure_count)
+    return Requirement(lambda w, s: treasure_count(s, w.player) >= w.options.golden_treasure_count.value)
 
 
 def option(option_name: str, choice: int):
-    return Requirement(lambda w, _: getattr(w.options, option_name) == choice)
+    return Requirement(lambda w, _: getattr(w.options, option_name).value == choice)
 
 def difficulty(difficulty: int):
     return option("difficulty", difficulty)
