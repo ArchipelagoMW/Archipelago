@@ -15,8 +15,8 @@ exits = {
 events = {
     RegionNames.CURSED_HANA_VALLEY:{
         "Hana Valley - Open the sun stone door": EventData(required_brush_techniques=[BrushTechniques.SUNRISE], mandatory_enemies=[OkamiEnnemies.GREEN_IMP,OkamiEnnemies.YELLOW_IMP]),
-        "Hana Valley - Defeat Sleepy": EventData(power_slash_level=1,has_events=["Hana Valley - Open the sun stone door"]),
-        "Hana Valley - Grow Guardian Sapling": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],has_events=["Hana Valley - Defeat Sleepy"]),
+        "Hana Valley - Defeat Sleepy": EventData(power_slash_level=1,required_items_events=["Hana Valley - Open the sun stone door"]),
+        "Hana Valley - Grow Guardian Sapling": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],required_items_events=["Hana Valley - Defeat Sleepy"]),
     },
     # Never gets collected, probably bc it's assumed you can backtrack
     RegionNames.HANA_VALLEY_SAKIGAMI:{

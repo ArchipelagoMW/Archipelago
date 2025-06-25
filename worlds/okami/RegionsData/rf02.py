@@ -53,6 +53,6 @@ locations = {
     },
 
     RegionNames.TAMA_HOUSE: {
-        "Shinshu Field - Bakigami": LocData(17, has_events=["Kamiki Village - Restore Sakuya's Tree"])
+        "Shinshu Field - Bakigami": LocData(17, required_items_events=["Kamiki Village - Restore Sakuya's Tree"])
     }
 }

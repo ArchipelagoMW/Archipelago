@@ -24,14 +24,14 @@ events = {
         "Kamiki Village - Restoring the villagers": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],mandatory_enemies=[OkamiEnnemies.GREEN_IMP])
     },
     RegionNames.SUSANOS_UNDERGROUD:{
-        "Kamiki Village - Wake up Susano": EventData(has_events=["Kamiki Village - Save the merchant"])
+        "Kamiki Village - Wake up Susano": EventData(required_items_events=["Kamiki Village - Save the merchant"])
     },
     RegionNames.KAMIKI_VILLAGE: {
-        "Kamiki Village - Repair Kushi's Watermill": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION],has_events=["Kamiki Village - Wake up Susano"]),
+        "Kamiki Village - Repair Kushi's Watermill": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION],required_items_events=["Kamiki Village - Wake up Susano"]),
         "Kamiki Village - Save the merchant": EventData(mandatory_enemies=[OkamiEnnemies.GREEN_IMP, OkamiEnnemies.RED_IMP]),
-        "Kamiki Village - Help Susano Train/Break the boulder":EventData (power_slash_level=1,required_items=["Vista of the Gods"],has_events=["Kamiki Village - Wake up Susano"]),
+        "Kamiki Village - Help Susano Train/Break the boulder":EventData (power_slash_level=1,required_items_events=["Vista of the Gods","Kamiki Village - Wake up Susano"]),
         "Kamiki Village - Bloom every Tree":EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM]),
-        "Kamiki Village - Restore Sakuya's Tree": EventData(has_events=["Kamiki Village - Bloom every Tree"],required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
+        "Kamiki Village - Restore Sakuya's Tree": EventData(required_items_events=["Kamiki Village - Bloom every Tree"],required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
     },
     RegionNames.KAMIKI_ISLANDS: {
         "End for now": EventData(required_brush_techniques=[BrushTechniques.CRESCENT,BrushTechniques.REJUVENATION,BrushTechniques.SUNRISE,BrushTechniques.GREENSPROUT_BLOOM],power_slash_level=1)
@@ -47,7 +47,7 @@ locations = {
         "Kamiki Village - Underwater Chest 1" :LocData(13, power_slash_level=1),
         "Kamiki Village - Underwater Chest 2" :LocData(14, power_slash_level=1),
         "Kamiki Village - Underwater chest in lake near Kushi's house": LocData(21,power_slash_level=1),
-        "Kamiki Village - Hasugami" : LocData(16,has_events=["Kamiki Village - Restore Sakuya's Tree"]),
+        "Kamiki Village - Hasugami" : LocData(16,required_items_events=["Kamiki Village - Restore Sakuya's Tree"]),
         "Kamiki Village - Buried chest in field": LocData(19,buried=1),
         "Kamiki Village - Chest on Ledge":LocData(22, required_brush_techniques=[BrushTechniques.GREENSPROUT_VINE]),
         "Kamiki Village - Rafters Lower Chest" :LocData(75),
@@ -57,7 +57,7 @@ locations = {
         "Kamiki Village - Chest buried in Oranges' house": LocData(45,buried=1)
     },
     RegionNames.KUSHIS_HOUSE:{
-        "Kamiki Village - Kushi's Gift": LocData(11, has_events=["Kamiki Village - Repair Kushi's Watermill"]),
+        "Kamiki Village - Kushi's Gift": LocData(11, required_items_events=["Kamiki Village - Repair Kushi's Watermill"]),
     },
     RegionNames.KAMIKI_ISLANDS: {
         "Kamiki Village - West Island chest ": LocData(9),

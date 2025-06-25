@@ -174,8 +174,7 @@ class LocData(NamedTuple):
     cherry_bomb_level: int = 0
     # 0 => No, 1=> Yes, 2=> Iron Claws
     buried: int = 0
-    has_events: [str] = []
-    required_items: [str] = []
+    required_items_events: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
     needs_swim: bool = False
     praise_sanity:int=0
@@ -189,8 +188,7 @@ class EventData(NamedTuple):
     # 0 => No, 1=> Yes, 2=> Iron Claws
     buried: int = 0
     override_event_item_name: str | None = None
-    has_events: [str] = []
-    required_items: [str] = []
+    required_items_events: [str] = []
     mandatory_enemies: List[OkamiEnnemies] = []
     needs_swim: bool = False
     is_event_item: bool | typing.Callable[[OkamiOptions], bool] = False

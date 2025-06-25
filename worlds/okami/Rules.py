@@ -80,10 +80,7 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
     if data.buried == 1 and world.options.BuriedChestsByNight == 1:
         add_rule(loc, lambda state: state.has(BrushTechniques.CRESCENT.value.item_name, world.player))
 
-    for e in data.has_events:
-        add_rule(loc, lambda state: state.has(e, world.player))
-
-    for i in data.required_items:
+    for i in data.required_items_events:
         add_rule(loc, lambda state: state.has(i, world.player))
 
     if data.needs_swim:
