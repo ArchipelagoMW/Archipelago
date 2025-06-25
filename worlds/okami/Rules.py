@@ -101,9 +101,6 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
     for e in data.has_events:
         add_rule(etr, lambda state: state.has(e, world.player))
 
-    for e in data.doesnt_have_events:
-        add_rule(etr, lambda state: not state.has(e, world.player))
-
 
 def set_rules(world: "OkamiWorld"):
     world.multiworld.completion_condition[world.player] = lambda state: state.has(

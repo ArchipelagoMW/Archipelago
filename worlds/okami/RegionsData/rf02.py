@@ -5,10 +5,9 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.SHINSHU_FIELD: [ExitData("Shinshu Field - To Cursed Hana Valley", RegionNames.CURSED_HANA_VALLEY,
-                                         doesnt_have_events=["Hana Valley - Guardian Sapling Restoration"]),
-                                ExitData("Shinshu field - To Hana Valley", RegionNames.HANA_VALLEY,
-                                         has_events=["Hana Valley - Guardian Sapling Restoration"]),
+    RegionNames.SHINSHU_FIELD: [ExitData("Shinshu Field - To Cursed Hana Valley", RegionNames.CURSED_HANA_VALLEY),
+                                #ExitData("Shinshu field - To Hana Valley", RegionNames.HANA_VALLEY,
+                                #         has_events=["Hana Valley - Guardian Sapling Restoration"]),
                                 ExitData("Shinshu field - To Kamiki Village", RegionNames.KAMIKI_VILLAGE),
                                 ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE,
                                          needs_swim=True),

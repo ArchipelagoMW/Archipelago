@@ -198,5 +198,4 @@ class ExitData(NamedTuple):
     name: str
     destination: str
     has_events: [str] = []
-    doesnt_have_events: [str] = []
     needs_swim: bool = False

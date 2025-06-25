@@ -9,8 +9,7 @@ exits = {
    RegionNames.CURSED_HANA_VALLEY:[ExitData("Cursed Hana Valley - Exit to Cursed Shinshu Field",RegionNames.CURSED_SHINSHU_FIELD),
                                     ExitData("Enter Sakigami sequence",RegionNames.HANA_VALLEY_SAKIGAMI,has_events=["Hana Valley - Grow Guardian Sapling"])],
    RegionNames.HANA_VALLEY_SAKIGAMI:[ExitData("Hana Valley Restoration",RegionNames.HANA_VALLEY,has_events=["Hana Valley - Guardian Sapling Restoration"])],
-   RegionNames.HANA_VALLEY:[ExitData("Hana Valley - Exit to Cursed Shinshu Field",RegionNames.CURSED_SHINSHU_FIELD,doesnt_have_events=["Shinshu Field - Restore Guardian Sapling"]),
-                            ExitData("Hana Valley - Exit to Sinhsu Field",RegionNames.SHINSHU_FIELD,has_events=["Shinshu Field - Restore Guardian Sapling"])]
+   RegionNames.HANA_VALLEY:[ExitData("Hana Valley - Exit to Cursed Shinshu Field",RegionNames.CURSED_SHINSHU_FIELD)]
 }
 events = {
     RegionNames.CURSED_HANA_VALLEY:{
