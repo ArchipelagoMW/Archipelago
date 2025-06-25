@@ -5,19 +5,14 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.STONE_KAMIKI: [ExitData("Kamiki Village (stone) Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
-                               ExitData("Restore the villagers", RegionNames.KAMIKI_VILLAGE,
+    RegionNames.STONE_KAMIKI: [ExitData("Restore the villagers", RegionNames.KAMIKI_VILLAGE,
                                         has_events=["Kamiki Village - Restoring the villagers"])],
-    RegionNames.KAMIKI_VILLAGE: [ExitData("Kamiki Village Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),
-                                 ExitData("Swim to Kamiki Islands", RegionNames.KAMIKI_ISLANDS, needs_swim=True),
+    RegionNames.KAMIKI_VILLAGE: [ExitData("Swim to Kamiki Islands", RegionNames.KAMIKI_ISLANDS, needs_swim=True),
                                  ExitData("Enter Susano's House",RegionNames.SUSANOS_HOUSE),
                                  ExitData("Enter Kushi's House",RegionNames.KUSHIS_HOUSE),
                                  ExitData("Enter Oranges' House",RegionNames.ORANGES_HOUSE),
                                  ExitData("Exit Village to Cursed Shinshu field",RegionNames.CURSED_SHINSHU_FIELD,has_events=["Kamiki Village - Help Susano Train/Break the boulder"])],
-    RegionNames.SUSANOS_HOUSE: [ExitData("Exit Susano's House",RegionNames.KAMIKI_VILLAGE),
-                                ExitData("Enter meditation Chamber",RegionNames.SUSANOS_UNDERGROUD)],
-    RegionNames.SUSANOS_UNDERGROUD:[ExitData("Exit meditation Chamber",RegionNames.SUSANOS_HOUSE)],
-    RegionNames.KAMIKI_ISLANDS: [ExitData("Swim to Kamiki Village", RegionNames.KAMIKI_VILLAGE, needs_swim=True)],
+    RegionNames.SUSANOS_HOUSE: [ExitData("Enter meditation Chamber",RegionNames.SUSANOS_UNDERGROUD)]
 }
 events = {
     RegionNames.STONE_KAMIKI: {

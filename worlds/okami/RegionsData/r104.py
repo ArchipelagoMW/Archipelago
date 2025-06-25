@@ -6,7 +6,6 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-   RegionNames.TSUTA_RUINS:[ExitData("Exit Tsuta Ruins",RegionNames.CURSED_AGATA_FOREST)],
 }
 events = {
 }

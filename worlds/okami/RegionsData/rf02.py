@@ -5,18 +5,11 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.SHINSHU_FIELD: [ExitData("Shinshu Field - To Cursed Hana Valley", RegionNames.CURSED_HANA_VALLEY),
-                                #ExitData("Shinshu field - To Hana Valley", RegionNames.HANA_VALLEY,
-                                #         has_events=["Hana Valley - Guardian Sapling Restoration"]),
-                                ExitData("Shinshu field - To Kamiki Village", RegionNames.KAMIKI_VILLAGE),
-                                ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE,
-                                         needs_swim=True),
-                                ExitData("Enter Tama's house", RegionNames.TAMA_HOUSE)],
-    RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData('To Curesed Agata Forest', RegionNames.CURSED_AGATA_FOREST,
-                                                    has_events=["Shinshu Field - Open Entrance to Agata Forest"]),
-                                           ExitData("Cross Cave to Shinshu Field", RegionNames.SHINSHU_FIELD)],
-    RegionNames.TAMA_HOUSE: [ExitData("Exit to Shinshu field", RegionNames.SHINSHU_FIELD)]
-
+    RegionNames.SHINSHU_FIELD: [
+        ExitData("Cross Cave to Agata Forest", RegionNames.SHINSHU_FIELD_AGATA_CAVE, needs_swim=True),
+        ExitData("Enter Tama's house", RegionNames.TAMA_HOUSE)],
+    RegionNames.SHINSHU_FIELD_AGATA_CAVE: [ExitData('To Cursed Agata Forest', RegionNames.CURSED_AGATA_FOREST,
+                                                    has_events=["Shinshu Field - Open Entrance to Agata Forest"])],
 }
 events = {
     RegionNames.SHINSHU_FIELD_AGATA_CAVE: {
@@ -33,7 +26,9 @@ locations = {
                                                                                  required_brush_techniques=[
                                                                                      BrushTechniques.GREENSPROUT_BLOOM]),
         "Shinshu Field - Buried chest near Dojo": LocData(32, buried=True),
-        "Shinshu Field - Chest after devil gate": LocData(33,mandatory_enemies=[OkamiEnnemies.GREEN_IMP,OkamiEnnemies.RED_IMP,OkamiEnnemies.YELLOW_IMP]),
+        "Shinshu Field - Chest after devil gate": LocData(33, mandatory_enemies=[OkamiEnnemies.GREEN_IMP,
+                                                                                 OkamiEnnemies.RED_IMP,
+                                                                                 OkamiEnnemies.YELLOW_IMP]),
         # Probably should find a better name for this one
         "Shinshu Field - Buried chest on ledge": LocData(34, buried=True),
         "Shinshu Field - Buried chest near Ovens": LocData(35, buried=True),
@@ -41,14 +36,16 @@ locations = {
         "Shinshu Field - In Bombable cave near Tama's house": LocData(36, cherry_bomb_level=1),
         "Shinshu Field - In Bombable cave near cat statue": LocData(37, cherry_bomb_level=1),
         "Shinshu Field - Buried Chest in leaf pile near Tama's house": LocData(38, buried=True,
-                                                                                required_brush_techniques=[
-                                                                                    BrushTechniques.GALESTROM]),
+                                                                               required_brush_techniques=[
+                                                                                   BrushTechniques.GALESTROM]),
         "Shinshu Field - Chest on Big Torii": LocData(39, required_brush_techniques=[BrushTechniques.WATERSPROUT],
                                                       needs_swim=True),
         "Shinshu Field - Freestanding chest after Rejuvenation": LocData(40),
         "Shinshu Field - Freestanding chest near Agata Forest Cave": LocData(41),
         "Shinshu Field - Freestanding chest near Tama's house": LocData(42),
-        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(43,buried=1,required_brush_techniques=[BrushTechniques.GALESTROM])
+        "Shinshu Field - Buried Chest in burning leaf pile behind Dojo": LocData(43, buried=1,
+                                                                                 required_brush_techniques=[
+                                                                                     BrushTechniques.GALESTROM])
     },
 
     RegionNames.TAMA_HOUSE: {

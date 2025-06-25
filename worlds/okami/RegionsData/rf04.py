@@ -7,9 +7,7 @@ if TYPE_CHECKING:
 exits = {
     # small region to force waka fight to be cleared before acessing the rest of the forest.
     RegionNames.AGATA_FOREST_WAKA: [ExitData("Agata Forest Waka cutscene",RegionNames.AGATA_FOREST,has_events=["Agata Forest - Defeat Waka"])],
-    RegionNames.AGATA_FOREST:[
-        #ExitData("Agata Forest - To Shinshu Field",RegionNames.SHINSHU_FIELD),
-                              ExitData("Agata Forest - To Taka Pass",RegionNames.CURSED_TAKA_PASS)
+    RegionNames.AGATA_FOREST:[ExitData("Agata Forest - To Taka Pass",RegionNames.CURSED_TAKA_PASS)
     ],
     RegionNames.TSUTA_RUINS:[ExitData("Agata Ruins - Enter Tsuta Ruins",RegionNames.TSUTA_RUINS,has_events=["Agata Forest - Open Ruins Door"])]
 }

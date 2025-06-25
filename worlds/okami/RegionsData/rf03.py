@@ -5,8 +5,7 @@ if TYPE_CHECKING:
     from .. import OkamiWorld
 
 exits = {
-    RegionNames.CURSED_AGATA_FOREST: [ExitData("Cursed Agata Forest - To Shinshu Field", RegionNames.CURSED_SHINSHU_FIELD),
-                                      ExitData("Agata Forest Restoration",RegionNames.AGATA_FOREST_WAKA)],
+    RegionNames.CURSED_AGATA_FOREST: [ExitData("Agata Forest Restoration",RegionNames.AGATA_FOREST_WAKA)],
 
 }
 events = {
