@@ -1,3 +1,4 @@
+from typing import Callable
 import unittest
 from enum import IntEnum
 
@@ -34,7 +35,7 @@ def generate_entrance_pair(region: Region, name_suffix: str, group: int):
 
 
 def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: int, region_size: int = 0,
-                                      region_type: type[Region] = Region):
+                                      region_creator: Callable[[str, int, MultiWorld], Region] = Region):
     """
     Generates a grid-like region structure for ER testing, where menu is connected to the top-left region, and each
     region "in vanilla" has 2 2-way exits going either down or to the right, until reaching the goal region in the
@@ -44,7 +45,7 @@ def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: 
         for col in range(grid_side_length):
             index = row * grid_side_length + col
             name = f"region{index}"
-            region = region_type(name, 1, multiworld)
+            region = region_creator(name, 1, multiworld)
             multiworld.regions.append(region)
             generate_locations(region_size, 1, region=region, tag=f"_{name}")
 
@@ -65,8 +66,10 @@ class TestEntranceLookup(unittest.TestCase):
         """tests that get_targets shuffles targets between groups when requested"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
+        exits_set = set([ex for region in multiworld.get_regions(1)
+                        for ex in region.exits if not ex.connected_region])
 
-        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True, usable_exits=exits_set)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -86,8 +89,10 @@ class TestEntranceLookup(unittest.TestCase):
         """tests that get_targets does not shuffle targets between groups when requested"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
+        exits_set = set([ex for region in multiworld.get_regions(1)
+                        for ex in region.exits if not ex.connected_region])
 
-        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True)
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True, usable_exits=exits_set)
         er_targets = [entrance for region in multiworld.get_regions(1)
                       for entrance in region.entrances if not entrance.parent_region]
         for entrance in er_targets:
@@ -99,6 +104,30 @@ class TestEntranceLookup(unittest.TestCase):
         group_order = [prev := group.randomization_group for group in retrieved_targets if prev != group.randomization_group]
         self.assertEqual([ERTestGroups.TOP, ERTestGroups.BOTTOM], group_order)
 
+    def test_selective_dead_ends(self):
+        """test that entrances that EntranceLookup has not been told to consider are ignored when finding dead-ends"""
+        multiworld = generate_test_multiworld()
+        generate_disconnected_region_grid(multiworld, 5)
+        exits_set = set([ex for region in multiworld.get_regions(1)
+                        for ex in region.exits if not ex.connected_region
+                         and ex.name != "region20_right" and ex.name != "region21_left"])
+
+        lookup = EntranceLookup(multiworld.worlds[1].random, coupled=True, usable_exits=exits_set)
+        er_targets = [entrance for region in multiworld.get_regions(1)
+                      for entrance in region.entrances if not entrance.parent_region and
+                      entrance.name != "region20_right" and entrance.name != "region21_left"]
+        for entrance in er_targets:
+            lookup.add(entrance)
+        # region 20 is the bottom left corner of the grid, and therefore only has a right entrance from region 21
+        # and a top entrance from region 15; since we've told lookup to ignore the right entrance from region 21,
+        # the top entrance from region 15 should be considered a dead-end
+        dead_end_region = multiworld.get_region("region20", 1)
+        for dead_end in dead_end_region.entrances:
+            if dead_end.name == "region20_top":
+                break
+        # there should be only this one dead-end
+        self.assertTrue(dead_end in lookup.dead_ends)
+        self.assertEqual(len(lookup.dead_ends), 1)
 
 class TestBakeTargetGroupLookup(unittest.TestCase):
     def test_lookup_generation(self):
@@ -148,7 +177,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e.randomization_group = 1
         e.connect(r2)
 
-        disconnect_entrance_for_randomization(e)
+        disconnect_entrance_for_randomization(e, one_way_target_name="foo")
 
         self.assertIsNone(e.connected_region)
         self.assertEqual([], r1.entrances)
@@ -158,9 +187,21 @@ class TestDisconnectForRandomization(unittest.TestCase):
 
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
-        self.assertEqual("r2", r2.entrances[0].name)
+        self.assertEqual("foo", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
         self.assertEqual(1, r2.entrances[0].randomization_group)
+
+    def test_disconnect_default_1way_no_vanilla_target_raises(self):
+        multiworld = generate_test_multiworld()
+        r1 = Region("r1", 1, multiworld)
+        r2 = Region("r2", 1, multiworld)
+        e = r1.create_exit("e")
+        e.randomization_type = EntranceType.ONE_WAY
+        e.randomization_group = 1
+        e.connect(r2)
+
+        with self.assertRaises(ValueError):
+            disconnect_entrance_for_randomization(e)
 
     def test_disconnect_uses_alternate_group(self):
         multiworld = generate_test_multiworld()
@@ -171,7 +212,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
         e.randomization_group = 1
         e.connect(r2)
 
-        disconnect_entrance_for_randomization(e, 2)
+        disconnect_entrance_for_randomization(e, 2, "foo")
 
         self.assertIsNone(e.connected_region)
         self.assertEqual([], r1.entrances)
@@ -181,7 +222,7 @@ class TestDisconnectForRandomization(unittest.TestCase):
 
         self.assertEqual(1, len(r2.entrances))
         self.assertIsNone(r2.entrances[0].parent_region)
-        self.assertEqual("r2", r2.entrances[0].name)
+        self.assertEqual("foo", r2.entrances[0].name)
         self.assertEqual(EntranceType.ONE_WAY, r2.entrances[0].randomization_type)
         self.assertEqual(2, r2.entrances[0].randomization_group)
 
@@ -218,7 +259,7 @@ class TestRandomizeEntrances(unittest.TestCase):
         self.assertEqual(80, len(result.pairings))
         self.assertEqual(80, len(result.placements))
 
-    def test_coupling(self):
+    def test_coupled(self):
         """tests that in coupled mode, all 2 way transitions have an inverse"""
         multiworld = generate_test_multiworld()
         generate_disconnected_region_grid(multiworld, 5)
@@ -235,6 +276,36 @@ class TestRandomizeEntrances(unittest.TestCase):
                                      on_connect=verify_coupled)
         # if we didn't visit every placement the verification on_connect doesn't really mean much
         self.assertEqual(len(result.placements), seen_placement_count)
+
+    def test_uncoupled_succeeds_stage1_indirect_condition(self):
+        multiworld = generate_test_multiworld()
+        menu = multiworld.get_region("Menu", 1)
+        generate_entrance_pair(menu, "_right", ERTestGroups.RIGHT)
+        end = Region("End", 1, multiworld)
+        multiworld.regions.append(end)
+        generate_entrance_pair(end, "_left", ERTestGroups.LEFT)
+        multiworld.register_indirect_condition(end, None)
+
+        result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_lookup)
+        self.assertSetEqual({
+            ("Menu_right", "End_left"),
+            ("End_left", "Menu_right")
+        }, set(result.pairings))
+
+    def test_coupled_succeeds_stage1_indirect_condition(self):
+        multiworld = generate_test_multiworld()
+        menu = multiworld.get_region("Menu", 1)
+        generate_entrance_pair(menu, "_right", ERTestGroups.RIGHT)
+        end = Region("End", 1, multiworld)
+        multiworld.regions.append(end)
+        generate_entrance_pair(end, "_left", ERTestGroups.LEFT)
+        multiworld.register_indirect_condition(end, None)
+
+        result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_lookup)
+        self.assertSetEqual({
+            ("Menu_right", "End_left"),
+            ("End_left", "Menu_right")
+        }, set(result.pairings))
 
     def test_uncoupled(self):
         """tests that in uncoupled mode, no transitions have an (intentional) inverse"""
@@ -395,7 +466,7 @@ class TestRandomizeEntrances(unittest.TestCase):
             entrance_type = CustomEntrance
 
         multiworld = generate_test_multiworld()
-        generate_disconnected_region_grid(multiworld, 5, region_type=CustomRegion)
+        generate_disconnected_region_grid(multiworld, 5, region_creator=CustomRegion)
 
         self.assertRaises(EntranceRandomizationError, randomize_entrances, multiworld.worlds[1], False,
                           directionally_matched_group_lookup)

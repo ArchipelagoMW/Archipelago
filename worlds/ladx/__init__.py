@@ -310,7 +310,8 @@ class LinksAwakeningWorld(World):
 
             def opens_new_regions(item):
                 collection_state = base_collection_state.copy()
-                collection_state.collect(item)
+                collection_state.collect(item, prevent_sweep=True)
+                collection_state.sweep_for_advancements(self.get_locations())
                 return len(collection_state.reachable_regions[self.player]) > reachable_count
 
             start_items = [item for item in itempool if is_possible_start_item(item)]
@@ -329,12 +330,14 @@ class LinksAwakeningWorld(World):
                 if entrance_mapping['start_house'] not in ['start_house', 'shop']:
                     start_items = [item for item in start_items if item.name != 'Shovel']
                 base_collection_state = CollectionState(self.multiworld)
-                base_collection_state.update_reachable_regions(self.player)
+                base_collection_state.sweep_for_advancements(self.get_locations())
                 reachable_count = len(base_collection_state.reachable_regions[self.player])
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:
-                itempool.remove(start_item)
+                # Make sure we're removing the same copy of the item that we're placing
+                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
+                start_item = itempool.pop(itempool.index(start_item))
                 start_loc.place_locked_item(start_item)
             else:
                 logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
@@ -444,7 +447,7 @@ class LinksAwakeningWorld(World):
             phrases.update(ItemIconGuessing.GAME_SPECIFIC_PHRASES[foreign_game])
 
         for phrase, icon in phrases.items():
-            if phrase in uppered:
+            if phrase.upper() in uppered:
                 return icon
         # pattern for breaking down camelCase, also separates out digits
         pattern = re.compile(r"(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|(?<=[a-zA-Z])(?=\d)")
@@ -587,5 +590,7 @@ class LinksAwakeningWorld(World):
                 option: value.current_key
                 for option, value in dataclasses.asdict(self.options).items() if option in slot_options_display_name
             })
+
+            slot_data.update({"entrance_mapping": self.ladxr_logic.world_setup.entrance_mapping})
 
         return slot_data

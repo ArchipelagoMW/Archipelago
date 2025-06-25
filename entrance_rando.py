@@ -50,13 +50,15 @@ class EntranceLookup:
     _random: random.Random
     _expands_graph_cache: dict[Entrance, bool]
     _coupled: bool
+    _usable_exits: set[Entrance]
 
-    def __init__(self, rng: random.Random, coupled: bool):
+    def __init__(self, rng: random.Random, coupled: bool, usable_exits: set[Entrance]):
         self.dead_ends = EntranceLookup.GroupLookup()
         self.others = EntranceLookup.GroupLookup()
         self._random = rng
         self._expands_graph_cache = {}
         self._coupled = coupled
+        self._usable_exits = usable_exits
 
     def _can_expand_graph(self, entrance: Entrance) -> bool:
         """
@@ -95,7 +97,8 @@ class EntranceLookup:
                 # randomizable exits which are not reverse of the incoming entrance.
                 # uncoupled mode is an exception because in this case going back in the door you just came in could
                 # actually lead somewhere new
-                if not exit_.connected_region and (not self._coupled or exit_.name != entrance.name):
+                if (not exit_.connected_region and (not self._coupled or exit_.name != entrance.name)
+                        and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
                 elif exit_.connected_region and exit_.connected_region not in visited:
@@ -265,14 +268,19 @@ def bake_target_group_lookup(world: World, get_target_groups: Callable[[int], li
     return { group: get_target_groups(group) for group in unique_groups }
 
 
-def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int | None = None) -> None:
+def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int | None = None,
+                                          one_way_target_name: str | None = None) -> None:
     """
     Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
-    in randomize_entrances. This should be done after setting the type and group of the entrance.
+    in randomize_entrances. This should be done after setting the type and group of the entrance. Because it attempts
+    to meet strict entrance naming requirements for coupled mode, this function may produce unintuitive results when
+    called only on a single entrance; it produces eventually-correct outputs only after calling it on all entrances.
 
     :param entrance: The entrance which will be disconnected in preparation for randomization.
     :param target_group: The group to assign to the created ER target. If not specified, the group from
                          the original entrance will be copied.
+    :param one_way_target_name: The name of the created ER target if `entrance` is one-way. This argument
+                                is required for one-way entrances and is ignored otherwise.
     """
     child_region = entrance.connected_region
     parent_region = entrance.parent_region
@@ -287,8 +295,11 @@ def disconnect_entrance_for_randomization(entrance: Entrance, target_group: int 
         # targets in the child region will be created when the other direction edge is disconnected
         target = parent_region.create_er_target(entrance.name)
     else:
-        # for 1-ways, the child region needs a target and coupling/naming is not a concern
-        target = child_region.create_er_target(child_region.name)
+        # for 1-ways, the child region needs a target. naming is not a concern for coupling so we
+        # allow it to be user provided (and require it, to prevent an unhelpful assumed name in pairings)
+        if not one_way_target_name:
+            raise ValueError("Cannot disconnect a one-way entrance without a target name specified")
+        target = child_region.create_er_target(one_way_target_name)
     target.randomization_type = entrance.randomization_type
     target.randomization_group = target_group or entrance.randomization_group
 
@@ -325,7 +336,6 @@ def randomize_entrances(
 
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
-    entrance_lookup = EntranceLookup(world.random, coupled)
     # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
     perform_validity_check = True
 
@@ -341,6 +351,7 @@ def randomize_entrances(
 
     # used when membership checks are needed on the exit list, e.g. speculative sweep
     exits_set = set(exits)
+    entrance_lookup = EntranceLookup(world.random, coupled, exits_set)
     for entrance in er_targets:
         entrance_lookup.add(entrance)
 
@@ -358,6 +369,34 @@ def randomize_entrances(
         if on_connect:
             on_connect(er_state, placed_exits)
 
+    def needs_speculative_sweep(dead_end: bool, require_new_exits: bool, placeable_exits: list[Entrance]) -> bool:
+        # speculative sweep is expensive. We currently only do it as a last resort, if we might cap off the graph
+        # entirely
+        if len(placeable_exits) > 1:
+            return False
+
+        # in certain stages of randomization we either expect or don't care if the search space shrinks.
+        # we should never speculative sweep here.
+        if dead_end or not require_new_exits or not perform_validity_check:
+            return False
+
+        # edge case - if all dead ends have pre-placed progression or indirect connections, they are pulled forward
+        # into the non dead end stage. In this case, and only this case, it's possible that the last connection may
+        # actually be placeable in stage 1. We need to skip speculative sweep in this case because we expect the graph
+        # to get capped off.
+
+        # check to see if we are proposing the last placement
+        if not coupled:
+            # in uncoupled, this check is easy as there will only be one target.
+            is_last_placement = len(entrance_lookup) == 1
+        else:
+            # a bit harder, there may be 1 or 2 targets depending on if the exit to place is one way or two way.
+            # if it is two way, we can safely assume that one of the targets is the logical pair of the exit.
+            desired_target_count = 2 if placeable_exits[0].randomization_type == EntranceType.TWO_WAY else 1
+            is_last_placement = len(entrance_lookup) == desired_target_count
+        # if it's not the last placement, we need a sweep
+        return not is_last_placement
+
     def find_pairing(dead_end: bool, require_new_exits: bool) -> bool:
         nonlocal perform_validity_check
         placeable_exits = er_state.find_placeable_exits(perform_validity_check, exits)
@@ -371,11 +410,9 @@ def randomize_entrances(
                 # very last exit and check whatever exits we open up are functionally accessible.
                 # this requirement can be ignored on a beaten minimal, islands are no issue there.
                 exit_requirement_satisfied = (not perform_validity_check or not require_new_exits
-                                                or target_entrance.connected_region not in er_state.placed_regions)
-                needs_speculative_sweep = (not dead_end and require_new_exits and perform_validity_check
-                                           and len(placeable_exits) == 1)
+                                              or target_entrance.connected_region not in er_state.placed_regions)
                 if exit_requirement_satisfied and source_exit.can_connect_to(target_entrance, dead_end, er_state):
-                    if (needs_speculative_sweep
+                    if (needs_speculative_sweep(dead_end, require_new_exits, placeable_exits)
                             and not er_state.test_speculative_connection(source_exit, target_entrance, exits_set)):
                         continue
                     do_placement(source_exit, target_entrance)
