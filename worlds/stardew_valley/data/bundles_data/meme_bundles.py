@@ -292,7 +292,7 @@ pantry_bundles_meme = [hurricane_tortilla_bundle, look_at_chickens_bundle, lemon
 pantry_meme = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_meme, 6)
 
 crafts_room_bundles_meme = [AAAA_bundle, anything_for_beyonce_bundle, potato_bundle, chaos_emerald_bundle, caffeinated_bundle, reverse_bundle,
-                            ikea_bundle, this_is_fine_bundle]
+                            ikea_bundle, this_is_fine_bundle, very_sticky_bundle]
 crafts_room_meme = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_meme, 6)
 
 fish_tank_bundles_meme = [crab_rave_bundle, trout_bundle, doctor_angler_bundle, mermaid_bundle, legendairy_bundle, kent_c_bundle, bundle_bundle,
