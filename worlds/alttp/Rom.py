@@ -213,7 +213,8 @@ def check_enemizer(enemizercli):
 
 
 def apply_random_sprite_on_event(rom: LocalRom, sprite, local_random, allow_random_on_event, sprite_pool):
-    userandomsprites = False
+    userandomsprites = True
+    sprite = 'randomonbonk'
     if sprite and not isinstance(sprite, Sprite):
         sprite = sprite.lower()
         userandomsprites = sprite.startswith('randomon')
@@ -1868,26 +1869,26 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
     local_random = random if not world else world.worlds[player].random
     disable_music: bool = not music
     # enable instant item menu
-    if menuspeed == 'instant':
-        rom.write_byte(0x6DD9A, 0x20)
-        rom.write_byte(0x6DF2A, 0x20)
-        rom.write_byte(0x6E0E9, 0x20)
-    else:
-        rom.write_byte(0x6DD9A, 0x11)
-        rom.write_byte(0x6DF2A, 0x12)
-        rom.write_byte(0x6E0E9, 0x12)
-    if menuspeed == 'instant':
-        rom.write_byte(0x180048, 0xE8)
-    elif menuspeed == 'double':
-        rom.write_byte(0x180048, 0x10)
-    elif menuspeed == 'triple':
-        rom.write_byte(0x180048, 0x18)
-    elif menuspeed == 'quadruple':
-        rom.write_byte(0x180048, 0x20)
-    elif menuspeed == 'half':
-        rom.write_byte(0x180048, 0x04)
-    else:
-        rom.write_byte(0x180048, 0x08)
+    # if menuspeed == 'instant':
+    #     rom.write_byte(0x6DD9A, 0x20)
+    #     rom.write_byte(0x6DF2A, 0x20)
+    #     rom.write_byte(0x6E0E9, 0x20)
+    # else:
+    #     rom.write_byte(0x6DD9A, 0x11)
+    #     rom.write_byte(0x6DF2A, 0x12)
+    #     rom.write_byte(0x6E0E9, 0x12)
+    # if menuspeed == 'instant':
+    #     rom.write_byte(0x180048, 0xE8)
+    # elif menuspeed == 'double':
+    #     rom.write_byte(0x180048, 0x10)
+    # elif menuspeed == 'triple':
+    #     rom.write_byte(0x180048, 0x18)
+    # elif menuspeed == 'quadruple':
+    #     rom.write_byte(0x180048, 0x20)
+    # elif menuspeed == 'half':
+    #     rom.write_byte(0x180048, 0x04)
+    # else:
+    #     rom.write_byte(0x180048, 0x08)
 
     # Reduce flashing by nopping out instructions
     if reduceflashing:
@@ -1910,7 +1911,7 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
         rom.write_byte(0x3FAB6, 0xF0)  # GT flashing
         rom.write_byte(0x3FAC2, 0xD0)  # GT flashing
 
-    rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
+    # rom.write_byte(0x18004B, 0x01 if quickswap else 0x00)
 
     rom.write_byte(0x0CFE18, 0x00 if disable_music else rom.orig_buffer[0x0CFE18] if rom.orig_buffer else 0x70)
     rom.write_byte(0x0CFEC1, 0x00 if disable_music else rom.orig_buffer[0x0CFEC1] if rom.orig_buffer else 0xC0)
@@ -1924,11 +1925,12 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
     rom.write_byte(0x18021A, 1 if disable_music else 0x00)
 
     # set heart beep rate
-    rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20, 'double': 0x10}[beep])
+    # rom.write_byte(0x180033, {'off': 0x00, 'half': 0x40, 'quarter': 0x80, 'normal': 0x20, 'double': 0x10}[beep])
 
     # set heart color
-    if color == 'random':
-        color = local_random.choice(['red', 'blue', 'green', 'yellow'])
+    # if color == 'random':
+    #     color = local_random.choice(['red', 'blue', 'green', 'yellow'])
+    color = local_random.choice(['red', 'blue', 'green', 'yellow'])
     rom.write_byte(0x6FA1E, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA20, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
     rom.write_byte(0x6FA22, {'red': 0x24, 'blue': 0x2C, 'green': 0x3C, 'yellow': 0x28}[color])
@@ -1968,39 +1970,39 @@ def apply_rom_settings(rom, beep, color, quickswap, menuspeed, music: bool, spri
                 mode = 'maseya'
             z3pr.randomize(rom.buffer, mode, offset_collections=offsets_array, random_colors=next_color_generator())
 
-        uw_palettes = palettes_options['dungeon']
-        ow_palettes = palettes_options['overworld']
-        hud_palettes = palettes_options['hud']
-        sword_palettes = palettes_options['sword']
-        shield_palettes = palettes_options['shield']
+        # uw_palettes = palettes_options['dungeon']
+        # ow_palettes = palettes_options['overworld']
+        # hud_palettes = palettes_options['hud']
+        # sword_palettes = palettes_options['sword']
+        # shield_palettes = palettes_options['shield']
         # link_palettes = palettes_options['link']
-        buildAndRandomize("randomize_dungeon", uw_palettes)
-        buildAndRandomize("randomize_overworld", ow_palettes)
-        buildAndRandomize("randomize_hud", hud_palettes)
-        buildAndRandomize("randomize_sword", sword_palettes)
-        buildAndRandomize("randomize_shield", shield_palettes)
+        # buildAndRandomize("randomize_dungeon", uw_palettes)
+        # buildAndRandomize("randomize_overworld", ow_palettes)
+        # buildAndRandomize("randomize_hud", hud_palettes)
+        # buildAndRandomize("randomize_sword", sword_palettes)
+        # buildAndRandomize("randomize_shield", shield_palettes)
         # link palette shuffle does not work very well and it's incompatible with random sprite on event
         # buildAndRandomize("randomize_link_sprite", link_palettes)
 
-    else:
-        # reset palette if it was adjusted already
-        default_ow_palettes(rom)
-        default_uw_palettes(rom)
-        logging.warning("Could not find z3pr palette shuffle. "
-                        "If you want improved palette shuffling please install the maseya-z3pr package.")
-        if palettes_options['overworld'] == 'random':
-            randomize_ow_palettes(rom, local_random)
-        elif palettes_options['overworld'] == 'blackout':
-            blackout_ow_palettes(rom)
+    # else:
+    #     # reset palette if it was adjusted already
+    #     default_ow_palettes(rom)
+    #     default_uw_palettes(rom)
+    #     logging.warning("Could not find z3pr palette shuffle. "
+    #                     "If you want improved palette shuffling please install the maseya-z3pr package.")
+    #     if palettes_options['overworld'] == 'random':
+    #         randomize_ow_palettes(rom, local_random)
+    #     elif palettes_options['overworld'] == 'blackout':
+    #         blackout_ow_palettes(rom)
 
-        if palettes_options['dungeon'] == 'blackout':
-            blackout_uw_palettes(rom)
-        elif palettes_options['dungeon'] == 'random':
-            randomize_uw_palettes(rom, local_random)
+    #     if palettes_options['dungeon'] == 'blackout':
+    #         blackout_uw_palettes(rom)
+    #     elif palettes_options['dungeon'] == 'random':
+    #         randomize_uw_palettes(rom, local_random)
 
-    rom.write_byte(0x18008D, (0b00000001 if deathlink else 0) |
-                   #          0b00000010 is already used for death_link_allow_survive in super metroid.
-                             (0b00000100 if allowcollect else 0))
+    # rom.write_byte(0x18008D, (0b00000001 if deathlink else 0) |
+    #                #          0b00000010 is already used for death_link_allow_survive in super metroid.
+    #                          (0b00000100 if allowcollect else 0))
 
     apply_random_sprite_on_event(rom, sprite, local_random, allow_random_on_event,
                                  world.sprite_pool[player] if world else [])
