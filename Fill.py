@@ -459,16 +459,31 @@ def distribute_items_restrictive(multiworld: MultiWorld,
     fill_locations, itempool = distribute_early_items(multiworld, fill_locations, itempool)
 
     progitempool: typing.List[Item] = []
+    progitempoolskipprogression: typing.List[Item] = []
     usefulitempool: typing.List[Item] = []
     filleritempool: typing.List[Item] = []
 
     for item in itempool:
+        if item.skip_in_prog_balancing:
+            progitempoolskipprogression.append(item)
         if item.advancement:
             progitempool.append(item)
         elif item.useful:
             usefulitempool.append(item)
         else:
             filleritempool.append(item)
+
+    progset = set(progitempool)
+    progset.update(progitempoolskipprogression)
+    
+    for player in range(multiworld.players):
+        print ("  non_local_items: #")
+        for item in progset:
+            if (player + 1 == item.player):
+                print ("    - " + item.name)
+        for item in set(usefulitempool):
+            if (player + 1 == item.player):
+                print ("#    - " + item.name)
 
     call_all(multiworld, "fill_hook", progitempool, usefulitempool, filleritempool, fill_locations)
 
