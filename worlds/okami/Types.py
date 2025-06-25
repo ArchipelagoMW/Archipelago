@@ -6,11 +6,11 @@ from .Options import OkamiOptions
 
 
 class OkamiLocation(Location):
-    game = "Okami"
+    game = "Ōkami HD"
 
 
 class OkamiItem(Item):
-    game = "Okami"
+    game = "Ōkami HD"
 
 
 class ItemData(NamedTuple):

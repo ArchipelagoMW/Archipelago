@@ -18,7 +18,7 @@ class OkamiWebWolrd(WebWorld):
     option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide for setting up Okami HD to be played in Archipelago.",
+        "A guide for setting up Ōkami HD to be played in Archipelago.",
         "English",
         "",
         "",
@@ -29,10 +29,10 @@ class OkamiWebWolrd(WebWorld):
 # TODO: Replace
 class OkamiWorld(World):
     """
-    OKami HD
+    Ōkami HD
     """
 
-    game = "Okami"
+    game = "Ōkami HD"
     item_name_to_id = get_item_name_to_id_dict()
     location_name_to_id = get_location_names()
     options_dataclass = OkamiOptions
@@ -90,26 +90,27 @@ class OkamiWorld(World):
 
         # Event Items Creation
         for name in RegionNames:
-            for (event_name, event_data) in okami_events[name].items():
-                if isinstance(event_data.precollected, bool):
-                    precollected_item_event_state = event_data.precollected
-                else:
-                    precollected_item_event_state = event_data.precollected(world.options)
-
-                if precollected_item_event_state:
-                    # With the current options this event is unlocked at the start, so we create a precollected item
-                    # Classification probably doesn't matter much for precollected items I'd guess
-                    world.push_precollected(
-                        OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player))
-                # If it's precollected, no need to add it to the itempool
-                else:
-                    if isinstance(event_data.is_event_item, bool):
-                        is_event_item_state = event_data.is_event_item
+            if name in okami_events:
+                for (event_name, event_data) in okami_events[name].items():
+                    if isinstance(event_data.precollected, bool):
+                        precollected_item_event_state = event_data.precollected
                     else:
-                        is_event_item_state = event_data.is_event_item(world.options)
-                    if is_event_item_state:
-                        # With the current options this event becomes its own item, so we need to add it to the item pool
-                        itempool += OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player)
+                        precollected_item_event_state = event_data.precollected(world.options)
+
+                        if precollected_item_event_state:
+                        # With the current options this event is unlocked at the start, so we create a precollected item
+                        # Classification probably doesn't matter much for precollected items I'd guess
+                            world.push_precollected(
+                                OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player))
+                        # If it's precollected, no need to add it to the itempool
+                        else:
+                            if isinstance(event_data.is_event_item, bool):
+                                is_event_item_state = event_data.is_event_item
+                            else:
+                                is_event_item_state = event_data.is_event_item(world.options)
+                            if is_event_item_state:
+                                # With the current options this event becomes its own item, so we need to add it to the item pool
+                                itempool += OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player)
 
         itempool += create_brush_techniques_items(world)
         itempool += create_divine_instrument_items(world, di)
