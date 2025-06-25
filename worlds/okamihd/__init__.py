@@ -18,7 +18,7 @@ class OkamiWebWolrd(WebWorld):
     option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide for setting up Ōkami HD to be played in Archipelago.",
+        "A guide for setting up Okami HD to be played in Archipelago.",
         "English",
         "",
         "",
@@ -29,10 +29,10 @@ class OkamiWebWolrd(WebWorld):
 # TODO: Replace
 class OkamiWorld(World):
     """
-    Ōkami HD
+    Okami HD
     """
 
-    game = "Ōkami HD"
+    game = "Okami HD"
     item_name_to_id = get_item_name_to_id_dict()
     location_name_to_id = get_location_names()
     options_dataclass = OkamiOptions
