@@ -11,6 +11,7 @@ Additional components can be added to worlds.LauncherComponents.components.
 import argparse
 import logging
 import multiprocessing
+import os
 import shlex
 import subprocess
 import sys
@@ -41,13 +42,17 @@ def open_host_yaml():
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
               which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, file])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, file])
     else:
         webbrowser.open(file)
+        return
 
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    subprocess.Popen([exe, file], env=env)
 
 def open_patch():
     suffixes = []
@@ -92,7 +97,11 @@ def open_folder(folder_path):
         return
 
     if exe:
-        subprocess.Popen([exe, folder_path])
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.Popen([exe, folder_path], env=env)
     else:
         logging.warning(f"No file browser available to open {folder_path}")
 
@@ -187,7 +196,8 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
 def launch(exe, in_terminal=False):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
+            # intentionally using a window title with a space so it gets quoted and treated as a title
+            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
             return
         elif is_linux:
             terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
