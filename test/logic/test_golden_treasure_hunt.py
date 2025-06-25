@@ -1,4 +1,4 @@
-from .. import WL4TestBase
+from ..bases import WL4TestBase
 from ...options import Difficulty, Goal, Logic
 
 

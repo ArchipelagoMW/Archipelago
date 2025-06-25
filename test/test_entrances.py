@@ -1,5 +1,5 @@
 from .. import options
-from . import WL4TestBase
+from .bases import WL4TestBase
 
 
 class TestEntrances(WL4TestBase):
