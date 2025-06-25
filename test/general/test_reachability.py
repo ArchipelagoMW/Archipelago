@@ -100,25 +100,31 @@ class TestBase(unittest.TestCase):
                 proxy_world = multiworld.worlds[1]
 
                 # First, we need to get a random set of items.
-                # ALl of them need to be progression items. To ensure this, we need to do a bit of work.
+                # All of them need to be progression items. To ensure this, we need to do a bit of work.
+                # Since this is an actual world that had gen steps called on it, we can take some from the item pool.
+                candidate_items_from_pool = [item for item in multiworld.itempool if item.advancement]
+                chosen_items_from_itempool = proxy_world.random.choices(
+                    candidate_items_from_pool, k=len(candidate_items_from_pool) // 2
+                )
 
+                # However, the intent of this test is also to catch scenarios in which extra items were created,
+                # e.g. through plando or itemlinks. So, we make some random items from the datapackage as well.
                 # First, generate one copy of each item in the world's datapackage using the world's create_item.
-                items = [proxy_world.create_item(item_name) for item_name in world_type.item_name_to_id]
+                additional_candidate_items = [
+                    proxy_world.create_item(item_name) for item_name in world_type.item_name_to_id
+                ]
                 # Only keep progression items.
-                candidate_items = [item for item in items if item.advancement]
-
-                if not candidate_items:
-                    self.skipTest(f"{game_name} does not have any progression items.")
+                additional_candidate_items = [item for item in additional_candidate_items if item.advancement]
 
                 # Now, we choose random items over and over, allowing duplicates but handling them carefully.-+-
-                chosen_items = []
-                target_amount = len(candidate_items) / 2
-                while len(chosen_items) < target_amount:
-                    random_item = proxy_world.random.choice(candidate_items)
+                additional_chosen_items = []
+                target_amount = len(additional_candidate_items) // 2
+                while len(additional_chosen_items) < target_amount:
+                    random_item = proxy_world.random.choice(additional_candidate_items)
 
                     # If the chosen candidate item is not already in our list of chosen items, just use that instance
-                    if random_item not in chosen_items:
-                        chosen_items.append(random_item)
+                    if random_item not in additional_chosen_items:
+                        additional_chosen_items.append(random_item)
                         continue
 
                     # Otherwise, we'll have to create a new copy.
@@ -126,20 +132,20 @@ class TestBase(unittest.TestCase):
                     # If that's the case, we stop trying to use this item.
                     second_or_higher_copy = proxy_world.create_item(random_item.name)
                     if not second_or_higher_copy.advancement:
-                        candidate_items.remove(random_item)
+                        additional_candidate_items.remove(random_item)
 
-                        if not candidate_items:
-                            self.skipTest(
-                                f"Was not able to make {target_amount} progression items for game {game_name}."
-                            )
+                        if not additional_candidate_items:
+                            break
 
                         continue
 
-                    chosen_items.append(random_item)
+                    additional_chosen_items.append(random_item)
 
-                proxy_world.random.shuffle(chosen_items)
+                proxy_world.random.shuffle(additional_chosen_items)
 
                 all_locations = list(proxy_world.get_locations())
+                chosen_items = [*chosen_items_from_itempool, *additional_chosen_items]
+                proxy_world.random.shuffle(chosen_items)
 
                 state = CollectionState(multiworld)
                 reachable_locations = {
