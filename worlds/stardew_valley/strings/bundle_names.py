@@ -128,6 +128,7 @@ class BundleName:
 
 
 class MemeBundleName:
+    very_sticky = meme_bundle("Very Sticky")
     investment = meme_bundle("Investment")
     doctor = meme_bundle("Doctor")
     scam = meme_bundle("Scam")

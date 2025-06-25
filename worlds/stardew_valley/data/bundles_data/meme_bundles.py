@@ -238,6 +238,9 @@ cooperation_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cooper
 doctor_items = [apple.as_amount(365)]
 doctor_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.doctor, doctor_items, 1, 1)
 
+very_sticky_items = [sap.as_amount(125), sap.as_amount(125), sap.as_amount(125), sap.as_amount(125)]
+very_sticky_bundle = FixedPriceBundleTemplate(CCRoom.crafts_room, MemeBundleName.very_sticky, very_sticky_items, 4, 4)
+
 vampire_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.vampire, BundleItem(MemeCurrency.blood, 200))
 exhaustion_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.exhaustion, BundleItem(MemeCurrency.energy, 400))
 tick_tock_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.tick_tock, BundleItem(MemeCurrency.time, 1440))
