@@ -137,11 +137,17 @@ class WL4World(World):
                             "Jewels to 1.")
             self.options.golden_jewels.value = 1
 
-        if (self.options.pool_jewels == 4 and
-            not self.options.diamond_shuffle and
-            self.options.difficulty != Difficulty.option_normal):
+        # TODO: Make this more tolerant when start inventory from pool is involved?
+        abilities = 8
+        full_health_items = (9, 7, 6)[self.options.difficulty.value]
+        rando_jewel_pieces = 4 * (min(self.options.pool_jewels.value, 1) +  # Entry
+                                  4 * self.options.pool_jewels.value +  # Emerald, Ruby, Topaz, Sapphire
+                                  self.options.golden_jewels.value)  # Golden Pyramid
+        vanilla_jewel_pieces = 4 * 18
+        if (rando_jewel_pieces + abilities - vanilla_jewel_pieces > full_health_items and
+            not self.options.diamond_shuffle.value):
             raise OptionError(f"Not enough locations to place abilities for {self.player_name}. "
-                              'Set the "Pool Jewels" option to a lower value and try again.')
+                              'Set the "Pool Jewels" or "Golden Jewels" option to a lower value and try again.')
 
         self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
 
@@ -154,12 +160,12 @@ class WL4World(World):
         treasure_hunt = self.options.goal.needs_treasure_hunt()
         diamond_shuffle = self.options.diamond_shuffle.value
 
-        gem_pieces = 18 * 4
+        vanilla_jewel_pieces = 18 * 4
         cds = 16
         full_health_items = (9, 7, 6)[difficulty]
         treasures = 12 * treasure_hunt
         diamonds = diamond_shuffle * (109, 71, 68)[difficulty]
-        total_required_locations = gem_pieces + cds + full_health_items + treasures + diamonds
+        total_required_locations = vanilla_jewel_pieces + cds + full_health_items + treasures + diamonds
 
         itempool = []
 
@@ -186,11 +192,16 @@ class WL4World(World):
                 itempool.append(self.create_item(name))
 
         # Remove diamonds or full health items to make space for abilities
-        if pool_jewels == 4:
+        abilities = 8
+        total_rando_jewel_pieces = 4 * (min(self.options.pool_jewels.value, 1) +  # Entry
+                                        4 * self.options.pool_jewels.value +  # Emerald, Ruby, Topaz, Sapphire
+                                        self.options.golden_jewels.value)  # Golden Pyramid
+        extra_items = total_rando_jewel_pieces + abilities - vanilla_jewel_pieces
+        if extra_items > 0:
             if diamond_shuffle:
-                diamonds -= 8
+                diamonds -= extra_items
             else:
-                full_health_items -= 8
+                full_health_items -= extra_items
         assert diamonds >= 0 and full_health_items >= 0
 
         itempool += [self.create_item("Full Health Item") for _ in range(full_health_items)]
