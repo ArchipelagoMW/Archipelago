@@ -59,7 +59,7 @@ class WL4World(World):
     item_name_to_id = {item_name: ap_id_from_wl4_data(data) for item_name, data in item_table.items()}
     location_name_to_id = location_name_to_id
 
-    required_client_version = (0, 5, 0)
+    required_client_version = (0, 6, 0)
     origin_region_name = "Pyramid"
 
     item_name_groups = {
