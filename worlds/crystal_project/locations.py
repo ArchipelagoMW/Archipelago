@@ -89,7 +89,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(DELENDE, "Delende Chest - Off north path", 259 + treasure_index_offset), #Tonic chest
         LocationData(DELENDE, "Delende Chest - Before Proving Meadows", 216 + treasure_index_offset), #Tonic Pouch chest
         LocationData(DELENDE, "Delende Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(DELENDE, "Overpass Chest - Dead tree by Fencers Keep", 3537 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData(DELENDE, "Delende NPC - Astley gives you a home point stone", 28 + npc_index_offset),
@@ -229,6 +228,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Chest - Dead end", 3056 + treasure_index_offset), #Tonic chest
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Chest - Hidden stairway", 757 + treasure_index_offset), #Tonic Pouch chest
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Chest - Drop down to mountain balcony", 290 + treasure_index_offset), #Torpid Cuffs chest
+        LocationData(YAMAGAWA_MA, "Overpass Chest - Dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. NPC - Hidden inside waterfall source", 628 + npc_index_offset, lambda state: logic.has_swimming(state)), #Autumns Oath
@@ -785,7 +785,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #3rd Scrap on main Overpass map has been categorized under the Okimoto N.S.
         #4th Scrap on main Overpass map has been categorized under Dione Shrine
         #5th Scrap on main Overpass map has been categorized under Quintar Reserve
-        #6th Scrap on main Overpass map has been categorized under Delende
+        #6th Scrap on main Overpass map has been categorized under Yamagawa M.A.
         #7th Scrap on main Overpass map has been categorized under Beaurior Rock
         #8th Scrap on main Overpass map has been categorized under Salmon Bay
         #9th Scrap on main Overpass map has been categorized under Lands End
