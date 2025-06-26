@@ -59,6 +59,38 @@ def ph_has_sun_key(state: CollectionState, player: int):
     return state.has("Sun Key", player)
 
 
+def ph_has_ghost_key(state: CollectionState, player: int):
+    return state.has("Ghost Key", player)
+
+
+def ph_has_kings_key(state: CollectionState, player: int):
+    return state.has("King's Key", player)
+
+
+def ph_has_regal_necklace(state: CollectionState, player: int):
+    return state.has("Regal Necklace", player)
+
+
+def ph_has_phantom_blade(state: CollectionState, player: int):
+    return state.has("Phantom Blade", player)
+
+
+def ph_has_heros_new_clothes(state: CollectionState, player: int):
+    return state.has("Hero's New Clothes", player)
+
+
+def ph_has_guard_notebook(state: CollectionState, player: int):
+    return state.has("Guard Notebook", player)
+
+
+def ph_has_kaleidoscope(state: CollectionState, player: int):
+    return state.has("Kaleidoscope", player)
+
+
+def ph_has_wood_heart(state: CollectionState, player: int):
+    return state.has("Wood Heart", player)
+
+
 def ph_has_triforce_crest(state: CollectionState, player: int):
     return any([state.has("Triforce Crest", player),
                 not ph_option_triforce_crest(state, player)])
@@ -154,6 +186,7 @@ def ph_has_damage(state: CollectionState, player: int):
         state.has("Hammer", player)
     ])
 
+
 def ph_has_cave_damage(state: CollectionState, player: int):
     return any([
         state.has("Sword (Progressive)", player),
@@ -192,17 +225,14 @@ def ph_has_range(state: CollectionState, player: int):
 
 
 def ph_has_short_range(state: CollectionState, player: int):
-    return any([ph_has_range(state, player),
-                ph_clever_bombs(state, player),
-                ph_has_hammer(state, player),
-                ph_has_beam_sword(state, player)])
+    return any([ph_has_mid_range(state, player),
+                ph_clever_bombs(state, player), ])
 
 
 def ph_has_mid_range(state: CollectionState, player: int):
     return any([ph_has_range(state, player),
                 ph_has_hammer(state, player),
-                ph_has_beam_sword(state, player),
-                ph_clever_pots(state, player)])
+                ph_has_beam_sword(state, player)])
 
 
 def ph_has_fire_sword(state: CollectionState, player: int):
@@ -248,21 +278,81 @@ def ph_spiral_wall_switches(state: CollectionState, player: int):
 
 
 # ================ Rupee States ==================
+
+
 def ph_has_rupees(state: CollectionState, player: int, cost: int):
-    # TODO code rupee logic
-    return state.has("Pre-Alpha Rupee (5000)", player)
+    # If has a farmable minigame and the means to sell, expensive things are in logic.
+    if ph_can_farm_rupees(state, player):
+        return True
+
+    # Count up regular rupee items
+    rupees = state.count("Green Rupee (1)", player)
+    rupees += state.count("Blue Rupee (5)", player) * 5
+    rupees += state.count("Red Rupee (20)", player) * 20
+    rupees += state.count("Big Green Rupee (100)", player) * 100
+    rupees += state.count("Big Red Rupee (200)", player) * 200
+    rupees += state.count("Gold Rupee (300)", player) * 300
+
+    # Sell Treasure for safe average 150 (can be 50, 150, 800 or 1500)
+    if ph_has_courage_crest(state, player):
+        rupees += state.count_group("Treasure Items", player) * 150
+
+    return rupees >= cost
+
+
+def ph_can_farm_rupees(state: CollectionState, player: int):
+    return any([
+        all([
+            ph_has_courage_crest(state, player),  # Can Sell Treasure
+            any([
+                all([  # Can Farm Phantoms in TotOK
+                    ph_has_phantom_sword(state, player),
+                    ph_has_spirit(state, player, "Power")
+                ]),
+                state.has("_beat_toc", player),
+                state.has("_can_play_cannon_game", player),
+            ])
+        ]),
+        all([  # Can farm harrow (and chooses to play with harrow)
+            state.has("_can_play_harrow", player),
+            ph_option_randomize_harrow(state, player)
+        ])
+    ])
+
+
+def ph_island_shop(state, player, price):
+    other_costs = 0
+    if ph_has_sea_chart(state, player, "SW"):
+        # Includes cannon island, but not salvage arm cause that also unlocks treasure shop
+        other_costs += 1550  # TODO this might break generation
+    return ph_has_rupees(state, player, price + other_costs)
+
+
+def ph_beedle_shop(state, player, price):
+    other_costs = 550
+    if ph_has_bow(state, player):
+        other_costs += 1000
+        if ph_has_chus(state, player):
+            other_costs += 3000
+    if ph_has_bombs(state, player):
+        other_costs += 1000
+    return ph_has_rupees(state, player, price + other_costs)
+
+
+def ph_can_buy_gem(state: CollectionState, player: int):
+    return all([ph_has_bow(state, player), ph_island_shop(state, player, 500)])
 
 
 def ph_can_buy_quiver(state: CollectionState, player: int):
-    return all([ph_has_bow(state, player), ph_has_rupees(state, player, 1500)])
+    return all([ph_has_bow(state, player), ph_island_shop(state, player, 1500)])
 
 
 def ph_can_buy_chu_bag(state: CollectionState, player: int):
-    return all([ph_has_chus(state, player), ph_has_bow(state, player), ph_has_rupees(state, player, 2500)])
+    return all([ph_has_chus(state, player), ph_has_bow(state, player), ph_island_shop(state, player, 2500)])
 
 
 def ph_can_buy_heart(state: CollectionState, player: int):
-    return all([ph_has_chus(state, player), ph_has_bow(state, player), ph_has_rupees(state, player, 4500)])
+    return all([ph_has_chus(state, player), ph_has_bow(state, player), ph_island_shop(state, player, 4500)])
 
 
 # ============ Option states =============
@@ -338,24 +428,44 @@ def ph_option_triforce_crest(state, player):
 
 
 def ph_beat_required_dungeons(state: CollectionState, player: int):
-    return state.has_from_list(ITEM_GROUPS["Vanilla Metals"], player, state.multiworld.worlds[player].options.dungeons_required)
+    # print(f"Dungeons required: {state.count_group("Current Metals", player)}/{state.multiworld.worlds[player].options.dungeons_required} {state.has_group("Current Metals", player,
+    #                       state.multiworld.worlds[player].options.dungeons_required)}")
+    return state.has_group("Current Metals", player,
+                           state.multiworld.worlds[player].options.dungeons_required)
 
 
 def ph_goal_option_phantom_door(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.bellum_access == "spawn_phantoms_on_b13"
 
+
 def ph_goal_option_staircase(state: CollectionState, player: int):
     return (state.multiworld.worlds[player].options.bellum_access in
             ["spawn_phantoms_on_b13", "spawn_phantoms_on_b13", "warp_to_bellum"])
 
+
 def ph_goal_option_warp(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.bellum_access == "warp_to_bellum"
+
 
 def ph_goal_option_spawn_bellumbeck(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.bellum_access == "spawn_bellumbeck"
 
+
 def ph_option_boat_requires_sea_chart(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.boat_requires_sea_chart
+
+
+def ph_option_fog_vanilla(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.fog_settings in ["vanilla_fog", "no_fog"]
+
+
+def ph_option_fog_open(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.fog_settings == "open_ghost_ship"
+
+
+def ph_option_randomize_harrow(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.randomize_harrow
+
 
 # ============= Key logic ==============
 
@@ -395,16 +505,12 @@ def ph_can_reach_MP2(state: CollectionState, player: int):
     ])
 
 
-def ph_totok_b6(state: CollectionState, player: int):
+def ph_totok_b5(state: CollectionState, player: int):
     return all([
-        ph_totok_b5_key_logic(state, player),
+        ph_can_kill_bubble(state, player),
         any([
-            ph_can_hit_bombchu_switches(state, player),
-            all([
-                ph_can_kill_bubble(state, player),
-                ph_has_mid_range(state, player)
-            ])
-        ])
+            ph_has_mid_range(state, player),
+            ph_clever_bombs(state, player)])
     ])
 
 
@@ -452,6 +558,13 @@ def ph_can_boomerang_return(state: CollectionState, player: int):
     ])
 
 
+def ph_can_arrow_despawn(state: CollectionState, player: int):
+    return all([
+        ph_has_bow(state, player),
+        ph_option_glitched_logic(state, player)
+    ])
+
+
 def ph_totok_b2_key(state: CollectionState, player: int):
     return any([ph_can_boomerang_return(state, player),
                 all([ph_can_hit_switches(state, player),
@@ -462,11 +575,13 @@ def ph_totok_b2_key(state: CollectionState, player: int):
                      ])
                 ])
 
+
 def ph_boat_access(state, player):
     return any([
         not ph_option_boat_requires_sea_chart(state, player),
         ph_has_sea_chart(state, player, "SW")
     ])
+
 
 def ph_totok_b5_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
@@ -497,18 +612,17 @@ def ph_totok_b9(state, player):
     ])
 
 
-
-
 def ph_totok_b9_phantom_kill(state, player):
     return any([
         ph_has_phantom_sword(state, player),
         all([
             ph_can_kill_phantoms_traps(state, player),
             any([
-                ph_can_hammer_clip(state, player),
+                ph_has_hammer(state, player),
                 all([ph_has_bow(state, player), ph_has_boomerang(state, player)])
             ])])
     ])
+
 
 def ph_totok_b10_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
@@ -517,11 +631,13 @@ def ph_totok_b10_key_logic(state: CollectionState, player: int):
         ph_has_small_keys(state, player, "Temple of the Ocean King", 6),
     ])
 
+
 def ph_totok_b12(state: CollectionState, player: int):
     return any([
         ph_has_hammer(state, player),
         ph_has_shovel(state, player)
     ])
+
 
 def ph_totok_b13_door(state: CollectionState, player: int):
     # Required to enter the phantom door
@@ -541,8 +657,11 @@ def ph_totok_blue_warp(state: CollectionState, player: int):
         ph_beat_required_dungeons(state, player)
     ])
 
+
 def ph_totok_bellum_staircase(state, player):
     return ph_beat_required_dungeons(state, player)
+
+
 
 def ph_can_beat_bellum(state, player):
     return all([
@@ -563,6 +682,12 @@ def ph_can_beat_bellumbeck(state, player):
         ph_has_spirit(state, player, "Courage")
     ])
 
+def ph_bellumbeck_quick_finish(state, player):
+    return all([
+        ph_can_beat_bellumbeck(state, player),
+        ph_beat_required_dungeons(state, player),
+        ph_goal_option_spawn_bellumbeck(state, player)
+    ])
 
 def ph_tof_3f(state, player):
     return all([
@@ -613,6 +738,53 @@ def ph_toc_key_doors(state, player, glitched: int, not_glitched: int):
     ])
 
 
+def ph_toi_key_doors(state, player, glitched: int, not_glitched: int):
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Ice", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Ice", not_glitched)
+        ])
+    ])
+
+
+def ph_mutoh_key_doors(state, player, glitched: int, not_glitched: int):
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Mutoh's Temple", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Mutoh's Temple", not_glitched)
+        ])
+    ])
+
+
+def ph_has_ghost_ship_access(state, player):
+    return any([
+        all([
+            ph_has_spirit(state, player, "Power"),
+            ph_has_spirit(state, player, "Wisdom"),
+            ph_has_spirit(state, player, "Courage"),
+            ph_option_fog_vanilla(state, player)
+        ]),
+        ph_option_fog_open(state, player)
+    ])
+
+
+def ph_ghost_ship_barrel(state, player):
+    return any([
+        ph_has_bombs(state, player),
+        ph_has_hammer(state, player),
+        ph_has_boomerang(state, player),
+        ph_has_grapple(state, player)
+    ])
+
+
 def ph_toc_final_switch_state(state, player):
     return any([
         ph_has_bow(state, player),
@@ -620,9 +792,36 @@ def ph_toc_final_switch_state(state, player):
     ])
 
 
+def ph_goron_chus(state, player):
+    return all([
+        ph_has_shovel(state, player),
+        ph_has_mid_range(state, player)
+    ])
+
+
+def ph_bannan_scroll(state, player):
+    return all([
+        ph_has_wood_heart(state, player),
+        ph_has_cannon(state, player),
+        ph_has_sea_chart(state, player, "SE"),
+    ])
+
+
+def ph_mutoh_water(state, player):
+    return any([
+        all([
+            ph_mutoh_key_doors(state, player, 2, 1),
+            ph_has_bow(state, player),
+        ]),
+        ph_can_arrow_despawn(state, player)
+    ])
+
+
+def ph_beat_ghost_ship(state: CollectionState, player):
+    return state.has("_beat_ghost_ship", player)
+
+
 def ph_temp_goal(state, player):
     return all([ph_has_sea_chart(state, player, "SW"),
                 ph_has_phantom_sword(state, player),
                 ph_has_courage_crest(state, player)])
-
-

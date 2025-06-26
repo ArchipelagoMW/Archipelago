@@ -6,20 +6,20 @@ STARTING_FLAGS = [
     # easier to bugfix)
     [0x1B557C, 0xEF],
     [0x1B557D, 0x34],
-    [0x1B557E, 0x3E],
+    [0x1B557E, 0x2E],
     [0x1B557F, 0x03],
-    [0x1B5580, 0xE5],
+    [0x1B5580, 0xED],
     [0x1B5581, 0xB0],
     [0x1B5582, 0x40],
     [0x1B5583, 0xAB],
     [0x1B5584, 0xFF],
     [0x1B5585, 0xFF],
-    [0x1B5586, 0x27],
+    [0x1B5586, 0x2F],
     [0x1B5587, 0xFC],
     [0x1B5588, 0x3B],
     [0x1B5589, 0x00],
     [0x1B558A, 0x04],
-    [0x1B558B, 0x02],
+    [0x1B558B, 0x00],
     [0x1B558C, 0xD9],
     [0x1B558D, 0x4F],
     [0x1B558E, 0x12],
@@ -32,7 +32,7 @@ STARTING_FLAGS = [
     [0x1B5595, 0x00],
     [0x1B5596, 0x08],
     [0x1B5597, 0x03],
-    [0x1B5598, 0x34],
+    [0x1B5598, 0x35],
     [0x1B5599, 0xE0],
     [0x1B559A, 0x10],
     [0x1B559B, 0xE0],
@@ -75,11 +75,26 @@ STARTING_FLAGS = [
     [0x1BA65F, 0xFF],
     [0x1BA660, 0xFF],
     [0x1BA664, 0xFF],
+    # Starting treasure at 0 so incr works properly
+    [0x1BA5AC, 0],
+    [0x1BA5AD, 0],
+    [0x1BA5AE, 0],
+    [0x1BA5AF, 0],
+    [0x1BA5B0, 0],
+    [0x1BA5B1, 0],
+    [0x1BA5B2, 0],
+    [0x1BA5B3, 0],
 ]
 
 STARTING_FROG_FLAGS = [
     [0x1B55A2, 0xA0],
     [0x1B55A3, 0x3F]
+]
+
+FOG_SETTINGS_FLAGS = [
+    [[0x1B5582, 0xC0]],
+    [],
+    [[0x1B557E, 0x3E]]
 ]
 
 STAGE_FLAGS = {
@@ -91,42 +106,24 @@ STAGE_FLAGS = {
          0x00,
          0x00,
          0x00],
-    37: [0xFE,  # TotOK
-         0xBE,
-         0xFB,
-         0xAF],
-    0: [0x82,  # Sea
-        0x2C,
-        0x00,
-        0xC0],
-    13: [0xEC,  # Ember
-         0x18,
-         0x17,
-         0x00],
-    28: [0x8E,  # ToF
-         0xB9,
-         0x00,
-         0x00],
-    12: [0x34,  # Molida
-         0x01,
-         0x00,
-         0x00],
-    14: [0x02,  # Gusts
-         0x02,
-         0x00,
-         0x00],
-    29: [0x00,  # ToW
-         0x02,
-         0x00,
-         0x00],
-    30: [0x00,  # ToC
-         0x00,
-         0x02,
-         0x00],
-    41: [0xC2,  # Ghost Ship
-         0x10,
-         0xED,
-         0x00],
+    37: [0xFE, 0xBE, 0xFB, 0xFF],  # TotOK
+    0: [0x82, 0x3C, 0x00, 0xC0],  # Sea
+    13: [0xEC, 0x18, 0x17, 0x00],  # Ember
+    28: [0x8E, 0xB9, 0x00, 0x00],  # ToF
+    12: [0x34, 0x01, 0x00, 0x00],  # Molida
+    14: [0x02, 0x02, 0x00, 0x00],  # Gusts
+    29: [0x00, 0x12, 0x00, 0x00],  # ToW
+    30: [0xFE, 0xBE, 0xFB, 0xFF],  # ToC
+    41: [0xC2, 0x10, 0xED, 0x00],  # Ghost Ship
+    16: [0x84, 0x13, 0x00, 0xE0],  # Goron Island
+    32: [0x10, 0x82, 0x30, 0xF0],  # Goron Temple
+    15: [0x00, 0x3C, 0x00, 0x40],  # Isle of Frost
+    31: [0x00, 0x00, 0xD0, 0x00],  # Temple of Ice
+    21: [0xB6, 0x01, 0x00, 0x00],  # Isle of the Dead
+    17: [0x12, 0x4C, 0x43, 0x00],  # Isle of ruins
+    18: [0x12, 0x4C, 0x43, 0x00],  # Isle of ruins
+    36: [0x70, 0x00, 0x00, 0x00],  # Bremeur's Temple
+    33: [0x00, 0x26, 0x00, 0x00],  # Mutoh's Temple
 }
 
 STAGES = {
@@ -200,11 +197,32 @@ ITEM_GROUPS = {
         "Azurine",
         "Aquanine"
     ],
-    "Custom Metals": [
-        "Verdanite",
-        "Lavendite",
-
+    "Current Metals": [
+        "Crimzonine",
+        "Azurine",
+        "Aquanine",
+        "Additional Rare Metal",
+    ],
+    "Treasure Items": [
+        "Pink Coral",
+        "White Pearl Loop",
+        "Dark Pearl Loop",
+        "Zora Scale",
+        "Goron Amber",
+        "Ruto Crown",
+        "Helmaroc Plume",
+        "Regal Ring"
     ]
+}
+
+CUSTOM_METALS = {
+    "Custom Metals": [
+        "Verdanine",
+        "Lavendine",
+        "Amberine",
+        "Vermilline",
+        "Crystaline",
+    ],
 }
 
 DUNGEON_NAMES = [
@@ -221,14 +239,19 @@ DUNGEON_NAMES = [
 
 DUNGEON_TO_BOSS_ITEM_LOCATION = {
     "Temple of the Ocean King": "TotOK B13 NE Sea Chart Chest",
-    "Temple of Fire": "Temple of Fire Blaaz Boss Reward",
-    "Temple of Wind": None,
-    "Temple of Courage": "Temple of Courage Crayk Spirit of Courage",
-    "Goron Temple": None,
-    "Temple of Ice": None,
-    "Mutoh's Temple": None,
-    "Ghost Ship": None,
+    "Temple of Fire": "Temple of Fire Blaaz Dungeon Reward",
+    "Temple of Wind": "Temple of Wind Cyclok Dungeon Reward",
+    "Temple of Courage": "Temple of Courage Crayk Dungeon Reward",
+    "Goron Temple": "Goron Temple Dongorongo Dungeon Reward",
+    "Temple of Ice": "Temple of Ice Dungeon Reward",
+    "Mutoh's Temple": "Mutoh's Temple Dungeon Reward",
+    "Ghost Ship": "_gs",
 }
+
+GHOST_SHIP_BOSS_ITEM_LOCATION = [
+    "Ghost Ship Rescue Tetra",
+    "Ghost Ship Cubus Sisters Ghost Key"
+]
 
 FROG_LOCATION_NAMES = [
     "Ocean SW Golden Frog X",
@@ -313,21 +336,74 @@ DUNGEON_KEY_DATA = {
         "value": 0x10,
         "size": 2,
         "filter": 0x30,
-    }
+    },
+    0x1D: {
+        "name": "Temple of Wind",
+        "address": 0x1BA64E,
+        "value": 0x10,
+        "size": 1,
+        "filter": 0x10
+    },
+    0x1F: {
+        "name": "Temple of Ice",
+        "address": 0x1BA64F,
+        "value": 0x1,
+        "size": 2,
+        "filter": 0x03
+    },
+    0x21: {
+        "name": "Mutoh's Temple",
+        "address": 0x1BA64F,
+        "value": 0x4,
+        "size": 2,
+        "filter": 0x0C
+    },
 }
 
-SHOPS = {
+HINTS_ON_SCENE = {
     0xB11: {  # Mercay Shop
         "island_shop": True
-        },
+    },
     0xC0E: {  # Molida Shop
+        "island_shop": True
+    },
+    0x1014: {  # Goron Shop
         "island_shop": True
     },
     0x130B: {  # Eddo Cannon Island
         "unique": ["Cannon Island Cannon", "Cannon Island Salvage Arm"]
     },
     0x500: {  # Beedle Shop
-        "unique": ["Beedle Shop Wisdom Gem"],
+        "unique": ["Beedle Shop Wisdom Gem", "Masked Beedle Courage Gem", "Masked Beedle Heart Container"],
         "beedle": True  # TODO: make this modular, instead of hard coding item requirements
     }
 }
+
+HINTS_ON_TRIGGER = {
+    "Masked Beedle": ["Masked Beedle Courage Gem", "Masked Beedle Heart Container"]
+}
+
+SHIPS = [
+    "S.S. Linebeck",
+    "Bright Ship",
+    "Iron Ship",
+    "Stone Ship",
+    "Vintage Ship",
+    "Demon Ship",
+    "Tropical Ship",
+    "Dignified Ship",
+    "Golden Ship",
+]
+
+EQUIPPED_SHIP_PARTS_ADDR = [
+    0x1BA544,
+    0x1BA548,
+    0x1BA54C,
+    0x1BA550,
+    0x1BA554,
+    0x1BA558,
+    0x1BA55C,
+    0x1BA560,
+]
+
+TREASURE_READ_LIST = {i: (0x1BA5AC + i * 4, 4, "Main RAM") for i in range(8)}

@@ -106,12 +106,12 @@ class PhantomHourglassTriforceCrestRandomization(Toggle):
 class PhantomHourglassDungeonsRequired(Range):
     """
     How many dungeons are required to access the endgame.
-    Currently, there are 2 dungeons implemented
+    Max is 6 unless you add Ghost ship and TotOK with their own options below
     """
     display_name = "dungeons_required"
     range_start = 0
-    range_end = 2
-    default = 2
+    range_end = 8
+    default = 3
 
 
 class PhantomHourglassBellumAccess(Choice):
@@ -157,6 +157,54 @@ class PhantomHourglassBoatRequriesSeaChart(Toggle):
     display_name = "Boat Requires Sea Chart"
     default = 1
 
+class PhantomHourglassFogSettings(Choice):
+    """
+    Choose when the fog exists in the NW Quadrant
+    - no_fog: there's no fog in the NW quadrant. You need all 3 spirits to find the ghost ship
+    - vanilla_fog: fog exists until you defeat the ghost ship, you have to take the twisty route to NW
+    - open_ghost_ship: fog exists until you beat the ghost ship, and you don't need the spirit items to find it.
+    """
+    display_name = "Fog Settings"
+    option_no_fog = 0
+    option_vanilla_fog = 1
+    option_open_ghost_ship = 2
+    default = 0
+
+
+class PhantomHourglassRandomizeHarrow(Toggle):
+    """
+    Choose whether to randomize the rng hell checks on harrow island
+    """
+    display_name = "Randomize Harrow"
+    default = 1
+
+class PhantomHourglassGhostShipInDungeonPool(Choice):
+    """
+    Choose whether the ghost ship can be in the dungeon reward pool
+    - rescue_tetra: the dungeon reward, if rolled, will be on using the ghost key
+    - cubus_sisters: the dungeon reward will be on defeating the cubus sisters
+    - false: the ghost ship cannot be rolled for the required dungeon pool
+    """
+    display_name = "Ghost Ship in Dungeon Pool"
+    option_rescue_tetra = 0
+    option_cubus_sisters = 1
+    option_false = 2
+    default = 0
+
+class PhantomHourglassTotokInDungeonPool(Toggle):
+    """
+    Choose whether the NE Sea Chart chest on B13 of Temple of the Ocean King is in the dungeon reward pool
+    """
+    display_name = "TotOK in Dungeon Pool"
+    default = 0
+
+class PhantomHourglassRandomizeMaskedBeedle(Toggle):
+    """
+    Choose whether to randomize the masked beedle ship. You may need to change time of day for this.
+    Masked beedle appears between 10pm and midnight on weekdays or 10am and noon on weekends.
+    """
+    auto_display_name = "masked_beedle"
+    default = 0
 
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
@@ -167,6 +215,8 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     goal: PhantomHourglassGoal
     dungeons_required: PhantomHourglassDungeonsRequired
     bellum_access: PhantomHourglassBellumAccess
+    ghost_ship_in_dungeon_pool: PhantomHourglassGhostShipInDungeonPool
+    totok_in_dungeon_pool: PhantomHourglassTotokInDungeonPool
 
     # Logic options
     logic: PhantomHourglassLogic
@@ -177,11 +227,17 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     keysanity: PhantomHourglassKeyRandomization
     randomize_frogs: PhantomHourglassFrogRandomization
     randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
+    randomize_harrow: PhantomHourglassRandomizeHarrow
+    randomize_masked_beedle: PhantomHourglassRandomizeMaskedBeedle
+
+    # World Options
+    fog_settings: PhantomHourglassFogSettings
 
     # Phantom Hourglass
     ph_starting_time: PhantomHourglassStartingTime
     ph_time_increment: PhantomHourglassTimeIncrement
 
+    # Generic
     start_inventory_from_pool: StartInventoryPool
     remove_items_from_pool: PhantomHourglassRemoveItemsFromPool
     death_link: DeathLink

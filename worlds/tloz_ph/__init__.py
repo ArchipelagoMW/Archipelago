@@ -20,6 +20,7 @@ from .data.LogicPredicates import *
 from .Client import PhantomHourglassClient  # Unused, but required to register with BizHawkClient
 
 
+
 class PhantomHourglassWeb(WebWorld):
     theme = "grass"
     setup_en = Tutorial(
@@ -32,6 +33,22 @@ class PhantomHourglassWeb(WebWorld):
     )
 
     tutorials = [setup_en]
+
+
+def add_additional_spirit_gems(item_pool_dict, filler_item_count: int):
+    def add_gems(gem: str, filler_count: int):
+        gems = 20-item_pool_dict[gem]
+        print(f"Processing {gem}: adding {gems}")
+        if filler_count >= gems:
+            filler_count -= gems
+            item_pool_dict[gem] = 20
+        return filler_count
+
+    filler_item_count = add_gems("Power Gem", filler_item_count)
+    filler_item_count = add_gems("Wisdom Gem", filler_item_count)
+    filler_item_count = add_gems("Courage Gem", filler_item_count)
+
+    return [item_pool_dict, filler_item_count]
 
 
 class PhantomHourglassWorld(World):
@@ -60,6 +77,7 @@ class PhantomHourglassWorld(World):
         self.boss_reward_items_pool = []
 
     def generate_early(self):
+        print("GENERATING EARLY")
         self.pick_required_dungeons()
         self.restrict_non_local_items()
 
@@ -106,15 +124,44 @@ class PhantomHourglassWorld(World):
         else:
             if location_name in FROG_LOCATION_NAMES:
                 return self.options.randomize_frogs != PhantomHourglassFrogRandomization.option_start_with
+            if "Harrow Island" in location_name:
+                return self.options.randomize_harrow
+            if "Zauz's Island Triforce Crest" in location_name:
+                return self.options.randomize_triforce_crest
+            if "Masked Beedle" in location_name:
+                return self.options.randomize_masked_beedle
+            if "GOAL" in location_name:
+                if location_name == "GOAL: Beat Bellumbeck" and self.options.goal == "beat_bellumbeck":
+                    return True
+                elif location_name == "GOAL: Triforce Door" and self.options.goal == "triforce_door":
+                    return True
             return False
 
     def pick_required_dungeons(self):
-        implemented_dungeons = ["Temple of Fire", "Temple of Courage"]
+        implemented_dungeons = ["Temple of Fire",
+                                "Temple of Wind",
+                                "Temple of Courage",
+                                "Goron Temple",
+                                "Temple of Ice",
+                                "Mutoh's Temple",
+                                "Ghost Ship",
+                                "Temple of the Ocean King"]
+        # Remove optional dungeons from pool
+        if self.options.ghost_ship_in_dungeon_pool == "false":
+            implemented_dungeons.remove("Ghost Ship")
+        if not self.options.totok_in_dungeon_pool:
+            implemented_dungeons.remove("Temple of the Ocean King")
         self.random.shuffle(implemented_dungeons)
-        self.required_dungeons = implemented_dungeons[:self.options.dungeons_required]
+        # Cap dungeons required if over the nuber of eligible dungeons
+        dungeons_required = len(implemented_dungeons) if self.options.dungeons_required > len(implemented_dungeons) \
+            else self.options.dungeons_required
+        self.required_dungeons = implemented_dungeons[:dungeons_required]
 
+        # Extend mcguffin list
         boss_reward_pool = ITEM_GROUPS["Vanilla Metals"]
         self.random.shuffle(boss_reward_pool)
+        while self.options.dungeons_required > len(boss_reward_pool):
+            boss_reward_pool.append("Additional Rare Metal")
         self.boss_reward_items_pool = boss_reward_pool[:self.options.dungeons_required]
 
         # For dungeons not required, change their item to filler
@@ -123,11 +170,30 @@ class PhantomHourglassWorld(World):
         # Create events for required dungeons
         if "Temple of Fire" in self.required_dungeons:
             self.create_event("tof blaaz", "_required_dungeon")
+        if "Temple of Wind" in self.required_dungeons:
+            self.create_event("tow cyclok", "_required_dungeon")
         if "Temple of Courage" in self.required_dungeons:
             self.create_event("toc crayk", "_required_dungeon")
+        if "Ghost Ship" in self.required_dungeons:
+            if self.options.ghost_ship_in_dungeon_pool == "rescue_tetra":
+                self.create_event("ghost ship tetra", "_required_dungeon")
+            elif self.options.ghost_ship_in_dungeon_pool == "cubus_sisters":
+                self.create_event("ghost ship cubus", "_required_dungeon")
+        if "Goron Temple" in self.required_dungeons:
+            self.create_event("gt dongo", "_required_dungeon")
+        if "Temple of Ice" in self.required_dungeons:
+            self.create_event("toi gleeok", "_required_dungeon")
+        if "Mutoh's Temple" in self.required_dungeons:
+            self.create_event("mutoh eox", "_required_dungeon")
         self.create_event("beat required dungeons", "_has_bellum_requirement")
-        self.create_event("totok", "_dummy_test_event_items")
-
+        # Post Dungeon Events
+        self.create_event("post tof", "_beat_tof")
+        self.create_event("post toc", "_beat_toc")
+        self.create_event("post tow", "_beat_tow")
+        self.create_event("spawn pirate ambush", "_beat_ghost_ship")
+        # Farmable minigame events
+        self.create_event("bannan cannon game", "_can_play_cannon_game")
+        self.create_event("harrow dig", "_can_play_harrow")
         # Goal
         self.create_event("goal", "_beaten_game")
 
@@ -194,14 +260,27 @@ class PhantomHourglassWorld(World):
                     filler_item_count += 1
                     print(f"added filler item @ {loc_name}")
                     continue
-                item_name = self.boss_reward_items_pool[boss_reward_item_count-1]
+                item_name = self.boss_reward_items_pool[boss_reward_item_count - 1]
                 boss_reward_item_count -= 1
             if item_name == "Triforce Crest" and not self.options.randomize_triforce_crest:
                 filler_item_count += 1
                 print(f"added filler item @ {loc_name}")
                 continue
+            if item_name in ["Treasure", "Ship Part", "Nothing!", "Potion"] or "Treasure Map" in item_name:
+                filler_item_count += 1
+                print(f"added filler item @ {loc_name}")
+                continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
+        print(f"Finished making item dict from locations, filler count {filler_item_count}")
+        # Add additional Spirit Gems
+        item_pool_dict, filler_item_count = add_additional_spirit_gems(item_pool_dict, filler_item_count)
+        print(f"Made aditional spirit gems: {item_pool_dict}, \n{filler_item_count}")
+        # Add ships if enough room in filler pool
+        if filler_item_count >= 8:
+            for i in SHIPS[1:]:
+                item_pool_dict[i] = 1
+            filler_item_count -= 8
 
         # Add as many filler items as required
         for _ in range(filler_item_count):
@@ -244,6 +323,10 @@ class PhantomHourglassWorld(World):
 
     def pre_fill_boss_rewards(self):
         boss_reward_location_names = [DUNGEON_TO_BOSS_ITEM_LOCATION[dung_name] for dung_name in self.required_dungeons]
+        if "_gs" in boss_reward_location_names:  # Ghost ship can have variable dungeon reward location
+            boss_reward_location_names.remove("_gs")
+            boss_reward_location_names.append(GHOST_SHIP_BOSS_ITEM_LOCATION[self.options.ghost_ship_in_dungeon_pool.value])
+
         boss_reward_locations = [loc for loc in self.multiworld.get_locations(self.player)
                                  if loc.name in boss_reward_location_names]
         boss_reward_items = [item for item in self.pre_fill_items if item.name in self.boss_reward_items_pool]
@@ -291,19 +374,23 @@ class PhantomHourglassWorld(World):
             fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
-
     def get_filler_item_name(self) -> str:
         FILLER_ITEM_NAMES = [
-            "Red Rupee (20)"
+            "Blue Rupee (5)",
+            "Red Rupee (20)",
+            "Rupoor (-10)"
         ]
+        FILLER_ITEM_NAMES += ITEM_GROUPS["Treasure Items"]
 
         item_name = self.random.choice(FILLER_ITEM_NAMES)
         return item_name
 
     def fill_slot_data(self) -> dict:
         options = ["goal", "dungeons_required", "bellum_access",
+                   "ghost_ship_in_dungeon_pool",
                    "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
-                   "keysanity", "randomize_frogs", "randomize_triforce_crest",
+                   "keysanity", "randomize_frogs", "randomize_triforce_crest", "randomize_harrow",
+                   "fog_settings",
                    "ph_starting_time", "ph_time_increment",
                    "death_link"]
         slot_data = self.options.as_dict(*options)

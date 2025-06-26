@@ -40,3 +40,11 @@ There is a backup system that reads savedata for missing checks when you enter a
 There is so far no proper implementation, but you can freeze certain values in the cheat menu to change where an entrance takes you.
 You want to freeze `0x1B2E94` in `Main RAM` at `0xB` for Mercay, and probably also set your room id `0x1B2E98`, floor number `0x1B2EA6` and entrance id `0x1B2EA7`to `0` to avoid pesky crashes
 
+### How do small keys work in Temple of the Ocean King?
+
+Since most locked doors in TotOK re-lock themselves each time you enter, TotOK has some special key rules:
+* When you enter the dungeon, you start with as many TotOK small keys as you've found so far
+* If you've opened the locked door on 1F that stays *permanently* unlocked, you don't get that key back. Logic assumes you can permanently lose that key, so you can safely open the 1F door unless you wanna go out of logic.
+* When you reach the midway room with the yellow warp, it saves the number of keys you still have. When you take the yellow warp you should start with however many keys you saved.
+* Logic can expect you to restart from the beginning to use your keys differently.
+* The grappling hook can be used to skip a key on B3. This is in logic.

@@ -99,7 +99,7 @@ ITEMS_DATA = {
         'size': 4
     },
     "Swordsman's Scroll": {
-        'classification': ItemClassification.progression,
+        'classification': ItemClassification.useful,
         'address': 0x1BA649,
         'value': 0x20,
 
@@ -200,23 +200,37 @@ ITEMS_DATA = {
         'size': 2
     },
     "Big Green Rupee (100)": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA53E,
         'value': 100,
         'incremental': True,
         'size': 2
     },
     "Big Red Rupee (200)": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA53E,
         'value': 200,
         'incremental': True,
         'size': 2
     },
     "Gold Rupee (300)": {
-        'classification': ItemClassification.filler,
+        'classification': ItemClassification.progression_skip_balancing,
         'address': 0x1BA53E,
         'value': 300,
+        'incremental': True,
+        'size': 2
+    },
+    "Rupoor (-10)": {
+        'classification': ItemClassification.trap,
+        'address': 0x1BA53E,
+        'value': -10,
+        'incremental': True,
+        'size': 2
+    },
+    "Big Rupoor (-50)": {
+        'classification': ItemClassification.trap,
+        'address': 0x1BA53E,
+        'value': -50,
         'incremental': True,
         'size': 2
     },
@@ -229,15 +243,11 @@ ITEMS_DATA = {
     },
     "Treasure": {
         'classification': ItemClassification.filler,
-        'address': 0x1BA564,  # Not correct, not priority
-        'value': 0x01,
         'incremental': True
     },
     "Ship Part": {
         'classification': ItemClassification.filler,
-        'address': 0x1BA564,  # Not correct, not priority
-        'value': 1,
-        'incremental': True
+        'ship_part': True
     },
     "Potion": {
         'classification': ItemClassification.filler,
@@ -246,6 +256,57 @@ ITEMS_DATA = {
     "Nothing!": {
         'classification': ItemClassification.filler,
         'dummy': True
+    },
+
+    # ========= Treasure =============
+
+    "Pink Coral": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5AC,
+        'incremental': True
+    },
+    "White Pearl Loop": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5AD,
+        'incremental': True
+    },
+    "Dark Pearl Loop": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5AE,
+        'incremental': True
+    },
+    "Zora Scale": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5AF,
+        'incremental': True
+    },
+    "Goron Amber": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5B0,
+        'incremental': True
+    },
+    "Ruto Crown": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5B1,
+        'incremental': True
+    },
+    "Helmaroc Plume": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5B2,
+        'incremental': True
+    },
+    "Regal Ring": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'treasure': True,
+        'address': 0x1BA5B3,
+        'incremental': True
     },
 
     # =============== Treasure Maps ==============
@@ -276,8 +337,28 @@ ITEMS_DATA = {
         'address': 0x1BA651,
         'value': 0x80
     },
+    "Treasure Map #5": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA650,
+        'value': 0x40
+    },
+    "Treasure Map #6": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA651,
+        'value': 0x1
+    },
+    "Treasure Map #7": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA651,
+        'value': 0x8
+    },
+    "Treasure Map #8": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA650,
+        'value': 0x8
+    },
     "Treasure Map #9": {
-        'classification': ItemClassification.progression,
+        'classification': ItemClassification.filler,
         'address': 0x1BA650,
         'value': 0x02
     },
@@ -296,15 +377,90 @@ ITEMS_DATA = {
         'address': 0x1BA652,
         'value': 0x20
     },
+    "Treasure Map #13": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x04
+    },
+    "Treasure Map #14": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x1
+    },
+    "Treasure Map #15": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x2
+    },
+    "Treasure Map #16": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x10
+    },
+    "Treasure Map #17": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x40
+    },
+    "Treasure Map #18": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA650,
+        'value': 0x4
+    },
+    "Treasure Map #19": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA651,
+        'value': 0x4
+    },
     "Treasure Map #20": {
         'classification': ItemClassification.filler,
         'address': 0x1BA651,
         'value': 0x40
     },
+    "Treasure Map #21": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA650,
+        'value': 0x20
+    },
+    "Treasure Map #22": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA652,
+        'value': 0x08
+    },
     "Treasure Map #23": {
         'classification': ItemClassification.filler,
         'address': 0x1BA652,
         'value': 128,
+    },
+    "Treasure Map #24": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 0x2,
+    },
+    "Treasure Map #25": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 0x04,
+    },
+    "Treasure Map #26": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 0x20,
+    },
+    "Treasure Map #27": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 0x8,
+    },
+    "Treasure Map #28": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 1,
+    },
+    "Treasure Map #29": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA653,
+        'value': 0x10,
     },
     "Treasure Map #30": {
         'classification': ItemClassification.filler,
@@ -335,12 +491,32 @@ ITEMS_DATA = {
         'dungeon': 0x1C,
         'incremental': True
     },
+    "Small Key (Temple of Wind)": {
+        'classification': ItemClassification.progression,
+        'dungeon': 0x1D,
+        'incremental': True
+    },
     "Small Key (Temple of Courage)": {
         'classification': ItemClassification.progression,
         'dungeon': 0x1E,
         'incremental': True
     },
+    "Small Key (Temple of Ice)": {
+        'classification': ItemClassification.progression,
+        'dungeon': 0x1F,
+        'incremental': True
+    },
+    "Small Key (Mutoh's Temple)": {
+        'classification': ItemClassification.progression,
+        'dungeon': 0x21,
+        'incremental': True
+    },
     "Boss Key (Temple of Fire)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Boss Key (Temple of Wind)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
         'dummy': True
@@ -350,7 +526,32 @@ ITEMS_DATA = {
         'force_vanilla': True,
         'dummy': True
     },
+    "Boss Key (Goron Temple)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Boss Key (Temple of Ice)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
+    "Boss Key (Mutoh's Temple)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True
+    },
     "Square Crystal (Temple of Courage)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True,
+    },
+    "Triangle Crystal (Ghost Ship)": {
+        'classification': ItemClassification.progression,
+        'force_vanilla': True,
+        'dummy': True,
+    },
+    "Round Crystal (Ghost Ship)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
         'dummy': True,
@@ -399,21 +600,60 @@ ITEMS_DATA = {
         'address': 0x1BA649,
         'value': 0x04
     },
+    "Regal Necklace": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5582,
+        'value': 0x08
+    },
     "Crimzonine": {
         'classification': ItemClassification.progression,
-        'dummy': True
+        "address": 0x1B558B,
+        "value": 0x40
     },
     "Azurine": {
         'classification': ItemClassification.progression,
-        'dummy': True
+        "address": 0x1B558B,
+        "value": 0x20
     },
     "Aquanine": {
         'classification': ItemClassification.progression,
-        'dummy': True
+        "address": 0x1B558B,
+        "value": 0x80
     },
     "Rare Metal": {
         'classification': ItemClassification.progression,
         'dummy': True
+    },
+    "Additional Rare Metal": {
+        'classification': ItemClassification.progression,
+        'dummy': True
+    },
+    # Trade Quest and misc
+
+    "Hero's New Clothes": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5590,
+        'value': 0x4
+    },
+    "Kaleidoscope": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5590,
+        'value': 0x8
+    },
+    "Guard Notebook": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5590,
+        'value': 0x10
+    },
+    "Wood Heart": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5590,
+        'value': 0x80
+    },
+    "Phantom Blade": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B5592,
+        'value': 0x20
     },
 
     # Frogs
@@ -433,12 +673,12 @@ ITEMS_DATA = {
         'value': 0x02
     },
     "Golden Frog Glyph Omega": {
-        'classification': ItemClassification.progression,
+        'classification': ItemClassification.useful,
         'address': 0x1B55A3,
         'value': 0x04
     },
     "Golden Frog Glyph W": {
-        'classification': ItemClassification.progression,
+        'classification': ItemClassification.useful,
         'address': 0x1B55A3,
         'value': 0x08
     },
@@ -446,6 +686,40 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'address': 0x1B55A3,
         'value': 0x10
+    },
+
+    # Ships
+    "Bright Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 1
+    },
+    "Iron Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 2
+    },
+    "Stone Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 3
+    },
+    "Vintage Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 4
+    },
+    "Demon Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 5
+    },
+    "Tropical Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 6
+    },
+    "Dignified Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 7
+    },
+    "Golden Ship": {
+        'classification': ItemClassification.useful,
+        'ship': 8
     },
 }
 
