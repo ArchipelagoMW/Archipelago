@@ -282,7 +282,6 @@ stanley_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.s
 #   Relay Bundle        (Relay Stick passed around the multiworld)
 #   Scavenger Bundle    (The bundle moves around the map and you need to keep finding it)
 #   Side Quest Bundle   (Sends you on side quests to talk to random NPCs several times)
-#   Sticky Bundle       (But it sticks, somehow?)
 
 
 # Bundles that need special Mod Handling:
