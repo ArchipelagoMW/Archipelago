@@ -11,7 +11,7 @@ from .client import WL4Client
 from .data import Passage, data_path
 from .items import ItemType, WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import get_level_locations, location_name_to_id
-from .options import Difficulty, Goal, GoldenJewels, PoolJewels, WL4Options, wl4_option_groups
+from .options import Goal, WL4Options, wl4_option_groups
 from .regions import connect_regions, create_regions
 from .rom import MD5_JP, MD5_US_EU, WL4ProcedurePatch, write_tokens
 
