@@ -1064,7 +1064,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        return self.Resolved(self.item_counts, player=world.player)
+        return self.Resolved(tuple(self.item_counts.items()), player=world.player)
 
     @override
     def __str__(self) -> str:
@@ -1073,15 +1073,17 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         return f"{self.__class__.__name__}({items}{options})"
 
     class Resolved(Rule.Resolved):
-        item_counts: dict[str, int]
+        item_counts: tuple[tuple[str, int], ...]
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
-            return state.has_all_counts(self.item_counts, self.player)
+            # it will certainly be faster to reimplement has_all_counts here
+            # I'm leaving it for now so I can benchmark it later
+            return state.has_all_counts(dict(self.item_counts), self.player)
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
-            return {item: {id(self)} for item in self.item_counts}
+            return {item: {id(self)} for item, _ in self.item_counts}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -1092,7 +1094,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                     {"type": "color", "color": "cyan", "text": "all"},
                     {"type": "text", "text": " of ("},
                 ]
-                for i, (item, count) in enumerate(self.item_counts.items()):
+                for i, (item, count) in enumerate(self.item_counts):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
                     messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
@@ -1100,8 +1102,8 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                 messages.append({"type": "text", "text": ")"})
                 return messages
 
-            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
-            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
             messages = [
                 {"type": "text", "text": "Has " if not missing else "Missing "},
                 {"type": "color", "color": "cyan", "text": "all" if not missing else "some"},
@@ -1135,8 +1137,8 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
-            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
             prefix = "Has all" if self.test(state) else "Missing some"
             found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
             missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
@@ -1145,16 +1147,13 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
 
         @override
         def __str__(self) -> str:
-            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts])
             return f"Has all of ({items})"
 
 
 @dataclasses.dataclass()
-class HasAnyCount(Rule[TWorld], game="Archipelago"):
+class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
     """A rule that checks if the player has any of the specified counts of the given items"""
-
-    item_counts: dict[str, int]
-    """A mapping of item name to count to check for"""
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
@@ -1163,24 +1162,14 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
-        return self.Resolved(self.item_counts, player=world.player)
+        return self.Resolved(tuple(self.item_counts.items()), player=world.player)
 
-    @override
-    def __str__(self) -> str:
-        items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
-        options = f", options={self.options}" if self.options else ""
-        return f"{self.__class__.__name__}({items}{options})"
-
-    class Resolved(Rule.Resolved):
-        item_counts: dict[str, int]
-
+    class Resolved(HasAllCounts.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
-            return state.has_any_count(self.item_counts, self.player)
-
-        @override
-        def item_dependencies(self) -> dict[str, set[int]]:
-            return {item: {id(self)} for item in self.item_counts}
+            # it will certainly be faster to reimplement has_all_counts here
+            # I'm leaving it for now so I can benchmark it later
+            return state.has_any_count(dict(self.item_counts), self.player)
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
@@ -1191,7 +1180,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
                     {"type": "color", "color": "cyan", "text": "any"},
                     {"type": "text", "text": " of ("},
                 ]
-                for i, (item, count) in enumerate(self.item_counts.items()):
+                for i, (item, count) in enumerate(self.item_counts):
                     if i > 0:
                         messages.append({"type": "text", "text": ", "})
                     messages.append({"type": "item_name", "flags": 0b001, "text": item, "player": self.player})
@@ -1199,8 +1188,8 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
                 messages.append({"type": "text", "text": ")"})
                 return messages
 
-            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
-            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
             messages = [
                 {"type": "text", "text": "Has " if found else "Missing "},
                 {"type": "color", "color": "cyan", "text": "some" if found else "all"},
@@ -1234,8 +1223,8 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            found = [(item, count) for item, count in self.item_counts.items() if state.has(item, self.player, count)]
-            missing = [(item, count) for item, count in self.item_counts.items() if (item, count) not in found]
+            found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
+            missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
             prefix = "Has some" if self.test(state) else "Missing all"
             found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
             missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
@@ -1244,7 +1233,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
 
         @override
         def __str__(self) -> str:
-            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts.items()])
+            items = ", ".join([f"{item} x{count}" for item, count in self.item_counts])
             return f"Has any of ({items})"
 
 
@@ -1261,7 +1250,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     def __init__(self, *item_names: str, count: int = 1, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
         self.item_names = tuple(sorted(set(item_names)))
-        self.count = 1
+        self.count = count
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
@@ -1360,7 +1349,7 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
     def __init__(self, *item_names: str, count: int = 1, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
         self.item_names: tuple[str, ...] = tuple(sorted(set(item_names)))
-        self.count: int = 1
+        self.count: int = count
 
     class Resolved(HasFromList.Resolved):
         @override
