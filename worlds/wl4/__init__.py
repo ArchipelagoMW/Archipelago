@@ -149,8 +149,6 @@ class WL4World(World):
             raise OptionError(f"Not enough locations to place abilities for {self.player_name}. "
                               'Set the "Pool Jewels" or "Golden Jewels" option to a lower value and try again.')
 
-        self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
-
     def create_regions(self):
         create_regions(self)
         connect_regions(self)
@@ -245,6 +243,8 @@ class WL4World(World):
         )
 
     def get_filler_item_name(self) -> str:
+        if not hasattr(self, "filler_item_weights"):
+            self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
         pool = self.random.choices((self.PRIZES, self.JUNK, self.TRAPS), self.filler_item_weights)[0]
         return self.random.choice(pool)
 
