@@ -270,6 +270,7 @@ humble_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.humble, Bund
 deathlink_bundle = CurrencyBundleTemplate(CCRoom.boiler_room, MemeBundleName.deathlink, BundleItem(MemeCurrency.deathlinks, 10))
 investment_bundle = CurrencyBundleTemplate(CCRoom.vault, MemeBundleName.scam, BundleItem.money_bundle(10000))
 stanley_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.stanley, BundleItem.money_bundle(9999999))
+hairy_bundle = FixedPriceCurrencyBundleTemplate(CCRoom.vault, MemeBundleName.hairy, BundleItem.money_bundle(0))
 
 # Stopped at 49 responses on the form
 
@@ -313,7 +314,7 @@ vault_bundles_meme = [capitalist_bundle, death_bundle, permit_a38_bundle, vampir
                       tick_tock_bundle, archipela_go_bundle, clique_bundle, cookie_clicker_bundle, communism_bundle,
                       flashbang_bundle, connection_bundle, nft_bundle, firstborn_bundle, restraint_bundle, fast_bundle,
                       floor_is_lava_bundle, gacha_bundle, hibernation_bundle, crowdfunding_bundle, clickbait_bundle,
-                      humble_bundle, puzzle_bundle, asmr_bundle, investment_bundle, stanley_bundle]
+                      humble_bundle, puzzle_bundle, asmr_bundle, investment_bundle, stanley_bundle, hairy_bundle]
 vault_meme = BundleRoomTemplate(CCRoom.vault, vault_bundles_meme, 4)
 
 all_cc_meme_bundles = [*pantry_bundles_meme, *crafts_room_bundles_meme, *fish_tank_bundles_meme,
