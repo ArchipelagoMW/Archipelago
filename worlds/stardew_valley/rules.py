@@ -226,6 +226,10 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.forest_to_wizard_tower, logic.received("Wizard Invitation"))
     set_entrance_rule(multiworld, player, Entrance.forest_to_sewer, logic.wallet.has_rusty_key())
     set_entrance_rule(multiworld, player, Entrance.town_to_sewer, logic.wallet.has_rusty_key())
+    # The money requirement is just in case Joja got replaced by a theater, you need to buy a ticket.
+    # We do not put directly a ticket requirement, because we don't want to place an indirect theater requirement only
+    # for the safeguard "in case you get a theater"
+    set_entrance_rule(multiworld, player, Entrance.town_to_jojamart, logic.money.can_spend(1000))
     set_entrance_rule(multiworld, player, Entrance.enter_abandoned_jojamart, logic.has_abandoned_jojamart())
     movie_theater_rule = logic.has_movie_theater()
     set_entrance_rule(multiworld, player, Entrance.purchase_movie_ticket, movie_theater_rule)
