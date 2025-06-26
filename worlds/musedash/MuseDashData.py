@@ -647,4 +647,11 @@ SONG_DATA: Dict[str, SongData] = {
     "Alfheim's faith": SongData(2900771, "86-3", "Aquaria Cruising Guide", True, 6, 8, 11),
     "Heaven's Cage": SongData(2900772, "86-4", "Aquaria Cruising Guide", True, 5, 7, 10),
     "Broomstick adventure!": SongData(2900773, "86-5", "Aquaria Cruising Guide", True, 7, 9, 11),
+    "Strong Nurse Buro-chan!": SongData(2900774, "43-61", "MD Plus Project", True, 5, 7, 9),
+    "Cubism": SongData(2900775, "43-62", "MD Plus Project", False, 5, 7, 9),
+    "Cubibibibism": SongData(2900776, "43-63", "MD Plus Project", False, 6, 8, 10),
+    "LET'S TOAST!!": SongData(2900777, "43-64", "MD Plus Project", False, 6, 8, 10),
+    "#YamiKawa": SongData(2900778, "43-65", "MD Plus Project", False, 5, 7, 10),
+    "Rainy Step": SongData(2900779, "43-66", "MD Plus Project", False, 2, 5, 8),
+    "OHOSHIKATSU": SongData(2900780, "43-67", "MD Plus Project", False, 5, 7, 10),
 }
