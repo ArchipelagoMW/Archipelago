@@ -243,9 +243,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Proving Meadows
         #Treasure chests
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Next to trial guard", 207 + treasure_index_offset), #Money chest
-        LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Along mountain behind waterfall", 258 + treasure_index_offset), #Battle Scythe chest
+        LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Hop on shops to sneak behind waterfall", 258 + treasure_index_offset), #Battle Scythe chest
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Hidden behind the inn", 118 + treasure_index_offset), #Burglars Glove chest
-        LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Along mountain", 2980 + treasure_index_offset), #Tincture Pouch chest
+        LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Tucked into waterfall nook", 2980 + treasure_index_offset), #Tincture Pouch chest
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - Tarzan", 256 + treasure_index_offset), #Tonic chest
         LocationData(PROVING_MEADOWS, "Proving Meadows Chest - On the climb up outside Skumparadise", 193 + treasure_index_offset), #Tonic Pouch chest
 
