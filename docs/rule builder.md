@@ -55,7 +55,7 @@ You can also set a rule for your world's completion condition:
 self.set_completion_rule(rule)
 ```
 
-If your rules use `CanReachLocation` or a custom rule that depends on locations, you must call `self.register_location_dependencies()` after all of your locations exist to setup the caching system.
+If your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
 
 ## Restricting options
 
@@ -105,7 +105,7 @@ rule = Or(
 
 You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate to provide your world as a type argument to add correct type checking to the `_instantiate` method.
 
-You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. This class will automatically be converted into a frozen `dataclass`. You may need to also define an `item_dependencies` or `region_dependencies` function.
+You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. This class will automatically be converted into a frozen `dataclass`. You may need to also define one or more dependencies functions as outlined below.
 
 To add a rule that checks if the user has enough mcguffins to goal, with a randomized requirement:
 
@@ -175,6 +175,23 @@ class MyRule(Rule["MyWorld"], game="My Game"):
 ```
 
 The default `CanReachLocation` rule defines this function already.
+
+### Entrance dependencies
+
+If your custom rule references other entrances, it must define a `entrance_dependencies` function that returns a mapping of the entrance name to the id of your rule. These dependencies will be combined to inform the caching system.
+
+```python
+@dataclasses.dataclass()
+class MyRule(Rule["MyWorld"], game="My Game"):
+    class Resolved(Rule.Resolved):
+        entrance_name: str
+
+        @override
+        def entrance_dependencies(self) -> dict[str, set[int]]:
+            return {self.entrance_name: {id(self)}}
+```
+
+The default `CanReachEntrance` rule defines this function already.
 
 ## JSON serialization
 

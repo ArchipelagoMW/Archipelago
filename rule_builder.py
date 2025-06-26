@@ -32,6 +32,9 @@ class RuleWorldMixin(World):
     rule_location_dependencies: dict[str, set[int]]
     """A mapping of location name to set of rule ids"""
 
+    rule_entrance_dependencies: dict[str, set[int]]
+    """A mapping of entrance name to set of rule ids"""
+
     completion_rule: "Rule.Resolved | None" = None
     """The resolved rule used for the completion condition of this world"""
 
@@ -46,6 +49,7 @@ class RuleWorldMixin(World):
         self.rule_item_dependencies = defaultdict(set)
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
+        self.rule_entrance_dependencies = defaultdict(set)
 
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
@@ -71,6 +75,8 @@ class RuleWorldMixin(World):
             self.rule_region_dependencies[region_name] |= rule_ids
         for location_name, rule_ids in resolved_rule.location_dependencies().items():
             self.rule_location_dependencies[location_name] |= rule_ids
+        for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
+            self.rule_entrance_dependencies[entrance_name] |= rule_ids
         return resolved_rule
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
@@ -78,7 +84,7 @@ class RuleWorldMixin(World):
         for indirect_region in resolved_rule.region_dependencies().keys():
             self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
-    def register_location_dependencies(self) -> None:
+    def register_dependencies(self) -> None:
         """Register all rules that depend on locations with that location's dependencies"""
         for location_name, rule_ids in self.rule_location_dependencies.items():
             try:
@@ -90,6 +96,18 @@ class RuleWorldMixin(World):
             for item_name in location.resolved_rule.item_dependencies():
                 self.rule_item_dependencies[item_name] |= rule_ids
             for region_name in location.resolved_rule.region_dependencies():
+                self.rule_region_dependencies[region_name] |= rule_ids
+
+        for entrance_name, rule_ids in self.rule_entrance_dependencies.items():
+            try:
+                entrance = self.get_entrance(entrance_name)
+            except KeyError:
+                continue
+            if entrance.resolved_rule is None:
+                continue
+            for item_name in entrance.resolved_rule.item_dependencies():
+                self.rule_item_dependencies[item_name] |= rule_ids
+            for region_name in entrance.resolved_rule.region_dependencies():
                 self.rule_region_dependencies[region_name] |= rule_ids
 
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
@@ -253,8 +271,10 @@ class RuleWorldMixin(World):
     @override
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().remove(state, item)
+        if not changed:
+            return changed
 
-        if changed and getattr(self, "rule_item_dependencies", None):
+        if getattr(self, "rule_item_dependencies", None):
             player_results: dict[int, bool] = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
@@ -262,14 +282,20 @@ class RuleWorldMixin(World):
                 player_results.pop(rule_id, None)
 
         # clear all region dependent caches as none can be trusted
-        if changed and getattr(self, "rule_region_dependencies", None):
+        if getattr(self, "rule_region_dependencies", None):
             for rule_ids in self.rule_region_dependencies.values():
                 for rule_id in rule_ids:
                     state.rule_cache[self.player].pop(rule_id, None)
 
         # clear all location dependent caches as they may have lost region access
-        if changed and getattr(self, "rule_location_dependencies", None):
+        if getattr(self, "rule_location_dependencies", None):
             for rule_ids in self.rule_location_dependencies.values():
+                for rule_id in rule_ids:
+                    state.rule_cache[self.player].pop(rule_id, None)
+
+        # clear all entrance dependent caches as they may have lost region access
+        if getattr(self, "rule_entrance_dependencies", None):
+            for rule_ids in self.rule_entrance_dependencies.values():
                 for rule_id in rule_ids:
                     state.rule_cache[self.player].pop(rule_id, None)
 
@@ -495,6 +521,10 @@ class Rule(Generic[TWorld]):
             """Returns a mapping of location name to set of object ids, used for cache invalidation"""
             return {}
 
+        def entrance_dependencies(self) -> dict[str, set[int]]:
+            """Returns a mapping of entrance name to set of object ids, used for cache invalidation"""
+            return {}
+
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             """Returns a list of printJSON messages that explain the logic for this rule"""
             return [{"type": "text", "text": self.rule_name}]
@@ -616,6 +646,17 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
                         combined_deps[location_name] = {id(self), *rules}
             return combined_deps
 
+        @override
+        def entrance_dependencies(self) -> dict[str, set[int]]:
+            combined_deps: dict[str, set[int]] = {}
+            for child in self.children:
+                for entrance_name, rules in child.entrance_dependencies().items():
+                    if entrance_name in combined_deps:
+                        combined_deps[entrance_name] |= rules
+                    else:
+                        combined_deps[entrance_name] = {id(self), *rules}
+            return combined_deps
+
 
 @dataclasses.dataclass(init=False)
 class And(NestedRule[TWorld], game="Archipelago"):
@@ -735,6 +776,13 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
             deps: dict[str, set[int]] = {}
             for location_name, rules in self.child.location_dependencies().items():
                 deps[location_name] = {id(self), *rules}
+            return deps
+
+        @override
+        def entrance_dependencies(self) -> dict[str, set[int]]:
+            deps: dict[str, set[int]] = {}
+            for entrance_name, rules in self.child.entrance_dependencies().items():
+                deps[entrance_name] = {id(self), *rules}
             return deps
 
         @override
@@ -1321,6 +1369,30 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass()
+class HasGroup(Rule[TWorld], game="Archipelago"):
+    item_name_group: str
+    count: int = 1
+
+    # TODO
+
+    class Resolved(Rule.Resolved):
+        item_name_group: str
+        count: int = 1
+
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_group(self.item_name_group, self.player, self.count)
+
+
+@dataclasses.dataclass()
+class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
+    class Resolved(HasGroup.Resolved):
+        @override
+        def _evaluate(self, state: "CollectionState") -> bool:
+            return state.has_group_unique(self.item_name_group, self.player, self.count)
+
+
+@dataclasses.dataclass()
 class CanReachLocation(Rule[TWorld], game="Archipelago"):
     location_name: str
     """The name of the location to test access to"""
@@ -1477,6 +1549,10 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
             if self.parent_region_name:
                 return {self.parent_region_name: {id(self)}}
             return {}
+
+        @override
+        def entrance_dependencies(self) -> dict[str, set[int]]:
+            return {self.entrance_name: {id(self)}}
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":

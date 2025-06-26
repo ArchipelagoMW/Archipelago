@@ -8,6 +8,7 @@ from BaseClasses import Item, ItemClassification, Location, Region
 from Options import Choice, PerGameCommonOptions, Toggle
 from rule_builder import (
     And,
+    CanReachEntrance,
     CanReachLocation,
     CanReachRegion,
     False_,
@@ -47,7 +48,7 @@ class RuleBuilderOptions(PerGameCommonOptions):
 
 
 GAME = "Rule Builder Test Game"
-LOC_COUNT = 5
+LOC_COUNT = 6
 
 
 class RuleBuilderItem(Item):
@@ -230,7 +231,7 @@ class TestCaching(unittest.TestCase):
         region3 = Region("Region 3", self.player, self.multiworld)
         self.multiworld.regions.extend([region1, region2, region3])
 
-        region1.add_locations({"Location 1": 1, "Location 2": 2}, RuleBuilderLocation)
+        region1.add_locations({"Location 1": 1, "Location 2": 2, "Location 6": 6}, RuleBuilderLocation)
         region2.add_locations({"Location 3": 3, "Location 4": 4}, RuleBuilderLocation)
         region3.add_locations({"Location 5": 5}, RuleBuilderLocation)
 
@@ -239,11 +240,12 @@ class TestCaching(unittest.TestCase):
         world.set_rule(world.get_location("Location 2"), CanReachRegion("Region 2") & Has("Item 2"))
         world.set_rule(world.get_location("Location 4"), HasAll("Item 2", "Item 3"))
         world.set_rule(world.get_location("Location 5"), CanReachLocation("Location 4"))
+        world.set_rule(world.get_location("Location 6"), CanReachEntrance("Region 1 -> Region 2") & Has("Item 2"))
 
         for i in range(1, LOC_COUNT + 1):
             self.multiworld.itempool.append(world.create_item(f"Item {i}"))
 
-        world.register_location_dependencies()
+        world.register_dependencies()
 
         return super().setUp()
 
@@ -275,5 +277,15 @@ class TestCaching(unittest.TestCase):
         self.assertFalse(self.state.rule_cache[1][id(location.resolved_rule)])
 
         self.state.collect(self.world.create_item("Item 2"))  # clears cache, item only needed for location 2 access
-        # self.assertNotIn(id(location.resolved_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.resolved_rule), self.state.rule_cache[1])
+        self.assertTrue(location.can_reach(self.state))
+
+    def test_entrance_cache_busting(self) -> None:
+        location = self.world.get_location("Location 6")
+        self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
+        self.assertFalse(location.can_reach(self.state))  # populates cache
+        self.assertFalse(self.state.rule_cache[1][id(location.resolved_rule)])
+
+        self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for entrance access
+        self.assertNotIn(id(location.resolved_rule), self.state.rule_cache[1])
         self.assertTrue(location.can_reach(self.state))
