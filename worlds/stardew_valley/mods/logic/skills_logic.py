@@ -74,7 +74,7 @@ class ModSkillLogic(BaseLogic):
         shifter_rule = True_()
         preservation_rule = True_()
         if self.content.features.skill_progression.is_progressive:
-            shifter_rule = self.logic.has(ModCraftable.water_shifter)
+            shifter_rule = self.logic.has(ModCraftable.water_sifter)
             preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         if level >= 8:
             tool_rule = self.logic.tool.has_pan(ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)

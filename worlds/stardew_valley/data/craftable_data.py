@@ -316,27 +316,27 @@ mini_forge = mastery_recipe(Machine.mini_forge, Skill.combat, {Forageable.dragon
 
 travel_charm = shop_recipe(ModCraftable.travel_core, Region.adventurer_guild, 250, {Loot.solar_essence: 1, Loot.void_essence: 1}, ModNames.magic)
 preservation_chamber = skill_recipe(ModMachine.preservation_chamber, ModSkill.archaeology, 1,
-                                    {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 30},
+                                    {MetalBar.copper: 1, Material.wood: 15, ArtisanGood.oak_resin: 10},
                                     ModNames.archaeology)
-restoration_table = skill_recipe(ModMachine.restoration_table, ModSkill.archaeology, 1, {Material.wood: 15, MetalBar.copper: 1, MetalBar.iron: 1},
+restoration_table = skill_recipe(ModMachine.restoration_table, ModSkill.archaeology, 1, {Material.wood: 25, MetalBar.quartz: 1, MetalBar.iron: 1},
                                  ModNames.archaeology)
 preservation_chamber_h = skill_recipe(ModMachine.hardwood_preservation_chamber, ModSkill.archaeology, 6, {MetalBar.copper: 1, Material.hardwood: 15,
-                                                                                                          ArtisanGood.oak_resin: 30}, ModNames.archaeology)
-grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 2, {Artifact.rusty_cog: 10, MetalBar.iron: 5, ArtisanGood.battery_pack: 1},
+                                                                                                          ArtisanGood.oak_resin: 10}, ModNames.archaeology)
+grinder = skill_recipe(ModMachine.grinder, ModSkill.archaeology, 2, {Artifact.rusty_cog: 4, MetalBar.iron: 5, ArtisanGood.battery_pack: 1},
                        ModNames.archaeology)
-ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 7, {Material.stone: 40, MetalBar.copper: 10, MetalBar.iron: 5},
+ancient_battery = skill_recipe(ModMachine.ancient_battery, ModSkill.archaeology, 7, {Material.stone: 40, Material.clay: 10, MetalBar.iron: 5},
                                ModNames.archaeology)
-glass_bazier = skill_recipe(ModCraftable.glass_brazier, ModSkill.archaeology, 4, {Artifact.glass_shards: 10}, ModNames.archaeology)
-glass_path = skill_recipe(ModFloor.glass_path, ModSkill.archaeology, 3, {Artifact.glass_shards: 1}, ModNames.archaeology)
-glass_fence = skill_recipe(ModCraftable.glass_fence, ModSkill.archaeology, 7, {Artifact.glass_shards: 5}, ModNames.archaeology)
-bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 4, {Fossil.bone_fragment: 1}, ModNames.archaeology)
+glass_brazier = skill_recipe(ModCraftable.glass_brazier, ModSkill.archaeology, 4, {Artifact.glass_shards: 10, Material.coal: 1, Material.fiber: 1}, ModNames.archaeology)
+glass_path = skill_recipe(ModFloor.glass_path, ModSkill.archaeology, 3, {Artifact.glass_shards: 2}, ModNames.archaeology)
+glass_fence = skill_recipe(ModCraftable.glass_fence, ModSkill.archaeology, 7, {Artifact.glass_shards: 2}, ModNames.archaeology)
+bone_path = skill_recipe(ModFloor.bone_path, ModSkill.archaeology, 4, {Fossil.bone_fragment: 2}, ModNames.archaeology)
 rust_path = skill_recipe(ModFloor.rusty_path, ModSkill.archaeology, 2, {ModTrash.rusty_scrap: 2}, ModNames.archaeology)
 rusty_brazier = skill_recipe(ModCraftable.rusty_brazier, ModSkill.archaeology, 3, {ModTrash.rusty_scrap: 10, Material.coal: 1, Material.fiber: 1},
                              ModNames.archaeology)
 bone_fence = skill_recipe(ModCraftable.bone_fence, ModSkill.archaeology, 8, {Fossil.bone_fragment: 2}, ModNames.archaeology)
-water_shifter = skill_recipe(ModCraftable.water_shifter, ModSkill.archaeology, 4, {Material.wood: 40, MetalBar.copper: 4}, ModNames.archaeology)
+water_sifter = skill_recipe(ModCraftable.water_sifter, ModSkill.archaeology, 8, {MetalBar.copper: 4, Material.fiber: 8}, ModNames.archaeology)
 wooden_display = skill_recipe(ModCraftable.wooden_display, ModSkill.archaeology, 1, {Material.wood: 25}, ModNames.archaeology)
-hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeology, 7, {Material.hardwood: 10}, ModNames.archaeology)
+hardwood_display = skill_recipe(ModCraftable.hardwood_display, ModSkill.archaeology, 6, {Material.hardwood: 10}, ModNames.archaeology)
 lucky_ring = skill_recipe(Ring.lucky_ring, ModSkill.archaeology, 8, {Artifact.elvish_jewelry: 1, AnimalProduct.rabbit_foot: 5, Mineral.tigerseye: 1},
                           ModNames.archaeology)
 volcano_totem = skill_recipe(ModConsumable.volcano_totem, ModSkill.archaeology, 9, {Material.cinder_shard: 5, Artifact.rare_disc: 1, Artifact.dwarf_gadget: 1},
