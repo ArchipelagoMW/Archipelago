@@ -79,9 +79,9 @@ class ModSkillLogic(BaseLogic):
         if level >= 8:
             tool_rule = self.logic.tool.has_pan(ToolMaterial.iridium) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)
             return tool_rule & shifter_rule & preservation_rule
-        if level >= 5:
+        if level >= 6:
             tool_rule = self.logic.tool.has_pan(ToolMaterial.gold) & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)
-            return tool_rule & shifter_rule
+            return tool_rule & preservation_rule
         if level >= 3:
             return self.logic.tool.has_pan(ToolMaterial.iron) | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
         return self.logic.tool.has_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)

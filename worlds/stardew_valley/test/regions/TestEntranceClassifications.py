@@ -7,6 +7,9 @@ from ...regions.regions import create_all_connections
 class EntranceRandomizationAssertMixin:
 
     def assert_non_progression_are_all_accessible_with_empty_inventory(self: SVTestBase):
+        # You need a tiny bit of money, for Jojamart specifically, because of a safeguard in case you get an early theater
+        self.collect("Shipping Bin")
+        self.collect_months(1)
         all_connections = create_all_connections(self.world.content.registered_packs)
         non_progression_connections = [connection for connection in all_connections.values() if RandomizationFlag.BIT_NON_PROGRESSION in connection.flag]
 
