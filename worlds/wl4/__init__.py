@@ -120,7 +120,11 @@ class WL4World(World):
     JUNK = ("Heart", "Minigame Medal")
     TRAPS = ("Wario Form Trap", "Lightning Trap")
 
-    filler_item_weights: tuple[int, int, int]
+    filler_item_weights: tuple[int, int, int] | None
+
+    def __init__(self, *args, **kwargs):
+        super(WL4World, self).__init__(*args, **kwargs)
+        self.filler_item_weights = None
 
     def generate_early(self):
         if self.options.goal in (Goal.option_local_golden_treasure_hunt, Goal.option_local_golden_diva_treasure_hunt):
@@ -243,7 +247,7 @@ class WL4World(World):
         )
 
     def get_filler_item_name(self) -> str:
-        if not hasattr(self, "filler_item_weights"):
+        if self.filler_item_weights is None:
             self.filler_item_weights = self.options.prize_weight.value, self.options.junk_weight.value, self.options.trap_weight.value
         pool = self.random.choices((self.PRIZES, self.JUNK, self.TRAPS), self.filler_item_weights)[0]
         return self.random.choice(pool)
