@@ -16,7 +16,7 @@ class MyWorld(RuleWorldMixin, World):
     game = "My Game"
 ```
 
-The rule builder comes with a few by default:
+The rule builder comes with a few rules by default:
 
 - `True_`: Always returns true
 - `False_`: Always returns false
@@ -25,6 +25,12 @@ The rule builder comes with a few by default:
 - `Has`: Checks that the player has the given item with the given count (default 1)
 - `HasAll`: Checks that the player has all given items
 - `HasAny`: Checks that the player has at least one of the given items
+- `HasAllCounts`: Checks that the player has all of the counts for the given items
+- `HasAnyCount`: Checks that the player has any of the counts for the given items
+- `HasFromList`: Checks that the player has some number of given items
+- `HasFromListUnique`: Checks that the player has some number of given items, ignoring duplicates of the same item
+- `HasGroup`: Checks that the player has some number of items from a given item group
+- `HasGroupUnique`: Checks that the player has some number of items from a given item group, ignoring duplicates of the same item
 - `CanReachLocation`: Checks that the player can logically reach the given location
 - `CanReachRegion`: Checks that the player can logically reach the given region
 - `CanReachEntrance`: Checks that the player can logically reach the given entrance
@@ -36,6 +42,8 @@ rule = Has("Movement ability") | HasAll("Key 1", "Key 2")
 ```
 
 > ⚠️ Composing rules with the `and` and `or` keywords will not work. You must use the bitwise `&` and `|` operators. In order to catch mistakes, the rule builder will not let you do boolean operations. As a consequence, in order to check if a rule is defined you must use `if rule is not None`.
+
+### Assigning rules
 
 When assigning the rule you must use the `set_rule` helper added by the rule mixin to correctly resolve and register the rule.
 
@@ -57,7 +65,7 @@ self.set_completion_rule(rule)
 
 If your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
 
-## Restricting options
+### Restricting options
 
 Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` arguemnt.
 
@@ -193,7 +201,7 @@ class MyRule(Rule["MyWorld"], game="My Game"):
 
 The default `CanReachEntrance` rule defines this function already.
 
-## JSON serialization
+### JSON serialization
 
 The rule builder is intended to be written first in Python for optimization and type safety. To export the rules to a client or tracker, there is a default JSON serializer implementation for all rules. By default the rules will export with the following format:
 

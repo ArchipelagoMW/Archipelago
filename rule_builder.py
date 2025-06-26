@@ -1298,7 +1298,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
                 messages = [
                     {"type": "text", "text": "Has "},
                     {"type": "color", "color": "cyan", "text": str(self.count)},
-                    {"type": "text", "text": " of ("},
+                    {"type": "text", "text": " items from ("},
                 ]
                 for i, item in enumerate(self.item_names):
                     if i > 0:
@@ -1312,7 +1312,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             messages = [
                 {"type": "text", "text": "Has "},
                 {"type": "color", "color": "cyan", "text": f"{len(found)}/{self.count}"},
-                {"type": "text", "text": " of ("},
+                {"type": "text", "text": " items from ("},
             ]
             if found:
                 messages.append({"type": "text", "text": "Found: "})
@@ -1345,17 +1345,17 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
             infix = "; " if found and missing else ""
-            return f"Has {len(found)}/{self.count} of ({found_str}{infix}{missing_str})"
+            return f"Has {len(found)}/{self.count} items from ({found_str}{infix}{missing_str})"
 
         @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
-            return f"Has {self.count} of ({items})"
+            return f"Has {self.count} items from ({items})"
 
 
 @dataclasses.dataclass()
 class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
-    """A rule that checks if the player has at least `count` of the given items, ignoring duplicates"""
+    """A rule that checks if the player has at least `count` of the given items, ignoring duplicates of the same item"""
 
     def __init__(self, *item_names: str, count: int = 1, options: "Iterable[OptionFilter[Any]]" = ()) -> None:
         super().__init__(options=options)
@@ -1370,26 +1370,98 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
 
 @dataclasses.dataclass()
 class HasGroup(Rule[TWorld], game="Archipelago"):
-    item_name_group: str
-    count: int = 1
+    """A rule that checks if the player has at least `count` of the items present in the specified item group"""
 
-    # TODO
+    item_name_group: str
+    """The name of the item group containing the items"""
+
+    count: int = 1
+    """The number of items the player needs to have"""
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Resolved":
+        item_names = tuple(sorted(world.item_name_groups[self.item_name_group]))
+        return self.Resolved(self.item_name_group, item_names, self.count, player=world.player)
+
+    @override
+    def __str__(self) -> str:
+        count = f", count={self.count}" if self.count > 1 else ""
+        options = f", options={self.options}" if self.options else ""
+        return f"{self.__class__.__name__}(item_name_group={self.item_name_group}{count}{options})"
 
     class Resolved(Rule.Resolved):
         item_name_group: str
+        item_names: tuple[str, ...]
         count: int = 1
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has_group(self.item_name_group, self.player, self.count)
 
+        @override
+        def item_dependencies(self) -> dict[str, set[int]]:
+            return {item: {id(self)} for item in self.item_names}
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
+            if state is None:
+                messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
+            else:
+                count = state.count_group(self.item_name_group, self.player)
+                color = "green" if count >= self.count else "salmon"
+                messages.append({"type": "color", "color": color, "text": f"{count}/{self.count}"})
+            messages.append({"type": "text", "text": " items from "})
+            messages.append({"type": "color", "color": "cyan", "text": self.item_name_group})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            count = state.count_group(self.item_name_group, self.player)
+            return f"Has {count}/{self.count} items from {self.item_name_group}"
+
+        @override
+        def __str__(self) -> str:
+            count = f"{self.count}x items" if self.count > 1 else "an item"
+            return f"Has {count} from {self.item_name_group}"
+
 
 @dataclasses.dataclass()
 class HasGroupUnique(HasGroup[TWorld], game="Archipelago"):
+    """A rule that checks if the player has at least `count` of the items present
+    in the specified item group, ignoring duplicates of the same item"""
+
     class Resolved(HasGroup.Resolved):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             return state.has_group_unique(self.item_name_group, self.player, self.count)
+
+        @override
+        def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
+            messages: list[JSONMessagePart] = [{"type": "text", "text": "Has "}]
+            if state is None:
+                messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
+            else:
+                count = state.count_group_unique(self.item_name_group, self.player)
+                color = "green" if count >= self.count else "salmon"
+                messages.append({"type": "color", "color": color, "text": f"{count}/{self.count}"})
+            messages.append({"type": "text", "text": " unique items from "})
+            messages.append({"type": "color", "color": "cyan", "text": self.item_name_group})
+            return messages
+
+        @override
+        def explain_str(self, state: "CollectionState | None" = None) -> str:
+            if state is None:
+                return str(self)
+            count = state.count_group_unique(self.item_name_group, self.player)
+            return f"Has {count}/{self.count} unique items from {self.item_name_group}"
+
+        @override
+        def __str__(self) -> str:
+            count = f"{self.count}x unique items" if self.count > 1 else "a unique item"
+            return f"Has {count} from {self.item_name_group}"
 
 
 @dataclasses.dataclass()
