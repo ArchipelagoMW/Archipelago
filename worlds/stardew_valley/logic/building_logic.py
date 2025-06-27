@@ -52,6 +52,10 @@ class BuildingLogic(BaseLogic):
         item, count = building_progression.to_progressive_item(building_name)
         return self.logic.received(item, count) & carpenter_rule
 
+    @cache_self1
+    def has_wizard_building(self, building_name: str) -> StardewRule:
+        return self.logic.region.can_reach(Region.wizard_tower) & self.logic.received(building_name)
+
     @cached_property
     def can_construct_buildings(self) -> StardewRule:
         return self.logic.region.can_reach(Region.carpenter)

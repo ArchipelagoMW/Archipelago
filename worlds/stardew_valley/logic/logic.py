@@ -414,7 +414,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         return self.received(CommunityUpgrade.movie_theater, 2)
 
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
-        return self.region.can_reach(Region.farm) & self.received(obelisk)
+        return self.region.can_reach(Region.farm) & self.building.has_wizard_building(obelisk)
 
     def can_fish_pond(self, fish: str, *items: str) -> StardewRule:
         rule = self.building.has_building(Building.fish_pond) & self.has(fish)
