@@ -246,17 +246,17 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {PROVING_MEADOWS: lambda state: logic.has_jobs(state, 3)})
     fancy_add_exits(world, CAPITAL_SEQUOIA, [JOJO_SEWERS, ROLLING_QUINTAR_FIELDS, COBBLESTONE_CRAG, GREENSHIRE_REPRISE, CASTLE_SEQUOIA, SKUMPARADISE],
                     # why rental and horizontal both listed?
-                    {COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state),
+                    {COBBLESTONE_CRAG: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_jobs(state, 5),
                     #glide? really?
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS, [CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST],
-                    {CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state) or logic.has_swimming(state),
+                    {CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
-                    QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state) or logic.has_swimming(state))})
+                    QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state))})
     fancy_add_exits(world, BOOMER_SOCIETY, [JOJO_SEWERS, GREENSHIRE_REPRISE])
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS, [CAPITAL_SEQUOIA, QUINTAR_NEST, QUINTAR_SANCTUM, QUINTAR_RESERVE],
-                    {QUINTAR_SANCTUM: lambda state: (logic.has_rental_quintar(state) or logic.has_vertical_movement(state)),
+                    {QUINTAR_SANCTUM: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_vertical_movement(state)),
                     QUINTAR_RESERVE: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_NEST, [QUINTAR_SANCTUM, COBBLESTONE_CRAG, JOJO_SEWERS],
                     {QUINTAR_SANCTUM: lambda state: logic.has_swimming(state)})
@@ -277,7 +277,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     FLYERS_CRAG: lambda state: (logic.has_glide(state) and logic.has_vertical_movement(state)) or logic.has_swimming(state)})
     fancy_add_exits(world, GREENSHIRE_REPRISE, [CAPITAL_SEQUOIA, SALMON_PASS, TALL_TALL_HEIGHTS],
                     # if we add hard logic, it is possible to jump from the rolling quintar fields onto the cap seq walls from the southeast and manage to bypass the guard and thus the job requirement
-                    {SALMON_PASS: lambda state: (logic.has_rental_quintar(state) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
+                    {SALMON_PASS: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) and logic.has_jobs(state, 5)) or logic.has_vertical_movement(state),
                     TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, SALMON_PASS, [GREENSHIRE_REPRISE, SALMON_RIVER, DELENDE],
                     {GREENSHIRE_REPRISE: lambda state: (logic.has_horizontal_movement(state) or logic.has_swimming(state)),
@@ -293,7 +293,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     SALMON_BAY: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
                     ANCIENT_LABYRINTH: lambda state: state.has(ANCIENT_TABLET_A, player) and logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, SARA_SARA_BAZAAR, [POKO_POKO_DESERT, SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_WEST, SHOUDU_PROVINCE, THE_OPEN_SEA, CONTINENTAL_TRAM],
-                    {SARA_SARA_BEACH_WEST: lambda state: logic.has_rental_quintar(state),
+                    {SARA_SARA_BEACH_WEST: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR),
                     SHOUDU_PROVINCE: lambda state: state.has(FERRY_PASS, world.player),
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state),
                     CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)})

@@ -398,9 +398,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Deep in eastern Quintar cave", 745 + treasure_index_offset), #Hunting Bow chest
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - At the end of the road", 825 + treasure_index_offset), #Money chest
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Hidden beneath end of the road", 2674 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - West of and above sneaky chest", 338 + treasure_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Money chest
-        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Tincture Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Spore Blocker chest
+        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - West of and above sneaky chest", 338 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)), #Money chest
+        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)), #Tincture Pouch chest
+        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)), #Spore Blocker chest
         LocationData(ROLLING_QUINTAR_FIELDS, "Overpass Chest - Climb the mountain west of Quintar Sanctum entrance", 3532 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #1st Overpass Scrap chest on main Overpass map
 
         #NPCs
@@ -409,7 +409,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset), #Dust
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset), #Fixed Missable
         LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
-        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Ore
+        LocationData(ROLLING_QUINTAR_FIELDS, "Rolling Quintar Fields NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)), #Ore
 
         #Regionsanity Meta Location
         LocationData(ROLLING_QUINTAR_FIELDS, ROLLING_QUINTAR_FIELDS + " Region Completion", 6014 + regionsanity_index_offset, regionsanity=True),
@@ -658,8 +658,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Sara Sara Bazaar
         #Treasure chests
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Someone took the St James and left a...", 408 + treasure_index_offset, lambda state: logic.has_key(state, ROOM_ONE_KEY)), #Knockout Stick chest
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Potion chest
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)), #Storm Rod chest
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR) or logic.has_horizontal_movement(state)), #Potion chest
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR) or logic.has_horizontal_movement(state)), #Storm Rod chest
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Potion Mixer", 1194 + treasure_index_offset), #Beaurior Volcano map chest
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Chest - Spilled booty", 2936 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Captains Hat chest
 
@@ -1530,7 +1530,7 @@ def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData
         LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
         LocationData(YAMAGAWA_MA, "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)),
         LocationData(SKUMPARADISE, "Skumparadise Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)),
         LocationData(JOJO_SEWERS, "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
         LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
         LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)),

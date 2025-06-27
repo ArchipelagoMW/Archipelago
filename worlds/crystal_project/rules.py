@@ -3,8 +3,12 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.mounts import *
 from .constants.teleport_stones import *
+from .constants.regions import *
+from .constants.region_passes import *
 from .items import singleton_keys
 from BaseClasses import CollectionState
+from ..stardew_valley.stardew_rule import false_
+
 
 class CrystalProjectLogic:
     player: int
@@ -83,7 +87,13 @@ class CrystalProjectLogic:
             clamshell_quantity = self.options.clamshellGoalQuantity.value
         return state.has(CLAMSHELL, self.player, clamshell_quantity)
 
-    def has_rental_quintar(self, state: CollectionState) -> bool:
+    def has_rental_quintar(self, state: CollectionState, rental_region_name: str) -> bool:
+        if self.options.regionsanity:
+            if rental_region_name == ROLLING_QUINTAR_FIELDS and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
+                return False
+            if rental_region_name == SARA_SARA_BAZAAR and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
+                return False
+
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
 
     def has_horizontal_movement(self, state: CollectionState) -> bool:
