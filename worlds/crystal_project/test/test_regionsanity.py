@@ -33,7 +33,11 @@ class TestRegionsanityOn(CrystalProjectTestBase):
                                      reachable_regions=(JOJO_SEWERS,),
                                      unreachable_regions=(ROLLING_QUINTAR_FIELDS, SKUMPARADISE,
                                                         COBBLESTONE_CRAG,GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
+        # Checking reachability of Salmon Pass tests whether or not has_rental_quintar is correctly making sure you can use the rental desk in rolling quintar fields
+        self.collect_by_name(SALMON_PASS_PASS)
+        self.assertFalse(self.can_reach_region(SALMON_PASS))
         self.collect_by_name(ROLLING_QUINTAR_FIELDS_PASS)
+        self.assertTrue(self.can_reach_region(SALMON_PASS))
         self.assert_region_entrances(CAPITAL_SEQUOIA,
                                      reachable_regions=(JOJO_SEWERS, ROLLING_QUINTAR_FIELDS,),
                                      unreachable_regions=(SKUMPARADISE, COBBLESTONE_CRAG,GREENSHIRE_REPRISE, CASTLE_SEQUOIA,))
