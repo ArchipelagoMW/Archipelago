@@ -20,16 +20,16 @@ def has_brush_technique(state: CollectionState, world: "OkamiWorld", technique: 
     return state.has(technique.value.item_name, world.player)
 
 
-#def has_portable_fire_source(state: CollectionState, world: "OkamiWorld") -> bool:
-#    return state.has(DivineInstruments.SOLAR_FLARE.value.item_name, world.player)
+def has_portable_fire_source(state: CollectionState, world: "OkamiWorld") -> bool:
+    return state.has(DivineInstruments.SOLAR_FLARE.value.item_name, world.player)
 
 
-#def has_portable_thunder_source(state: CollectionState, world: "OkamiWorld") -> bool:
-#    return state.has(DivineInstruments.THUNDER_EDGE.value.item_name, world.player)
+def has_portable_thunder_source(state: CollectionState, world: "OkamiWorld") -> bool:
+    return state.has(DivineInstruments.THUNDER_EDGE.value.item_name, world.player)
 
 
-#def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool:
-#    return state.has(DivineInstruments.TUNDRA_BEADS.value.item_name, world.player)
+def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool:
+    return state.has(DivineInstruments.TUNDRA_BEADS.value.item_name, world.player)
 
 
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:

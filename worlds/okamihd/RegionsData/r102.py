@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 exits = {
     RegionNames.STONE_KAMIKI: [ExitData("Restore the villagers", RegionNames.KAMIKI_VILLAGE,
-                                        has_events=["Kamiki Village - Restoring the villagers"])],
+                                        has_events=["Kamiki Village - Fight with Mr.Orange"])],
     RegionNames.KAMIKI_VILLAGE: [ExitData("Swim to Kamiki Islands", RegionNames.KAMIKI_ISLANDS, needs_swim=True),
                                  ExitData("Enter Susano's House",RegionNames.SUSANOS_HOUSE),
                                  ExitData("Enter Kushi's House",RegionNames.KUSHIS_HOUSE),
@@ -16,15 +16,18 @@ exits = {
 }
 events = {
     RegionNames.STONE_KAMIKI: {
-        "Kamiki Village - Restoring the villagers": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],mandatory_enemies=[OkamiEnnemies.GREEN_IMP])
+        "Kamiki Village - Restoring the villagers": EventData(required_brush_techniques=[BrushTechniques.SUNRISE],id=0x203,precollected=lambda o:o.OpenGameStart),
+        "Kamiki Village - Fight with Mr.Orange": EventData(mandatory_enemies=[OkamiEnnemies.GREEN_IMP], id=0x208,
+                                                              precollected=lambda o: o.OpenGameStart,required_items_events=["Kamiki Village - Restoring the villagers"])
+
     },
     RegionNames.SUSANOS_UNDERGROUD:{
-        "Kamiki Village - Wake up Susano": EventData(required_items_events=["Kamiki Village - Save the merchant"])
+        "Kamiki Village - Wake up Susano": EventData(required_items_events=["Kamiki Village - Save the merchant"],id=0x204,precollected=lambda o:o.OpenGameStart)
     },
     RegionNames.KAMIKI_VILLAGE: {
-        "Kamiki Village - Repair Kushi's Watermill": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION],required_items_events=["Kamiki Village - Wake up Susano"]),
-        "Kamiki Village - Save the merchant": EventData(mandatory_enemies=[OkamiEnnemies.GREEN_IMP, OkamiEnnemies.RED_IMP]),
-        "Kamiki Village - Help Susano Train/Break the boulder":EventData (power_slash_level=1,required_items_events=["Vista of the Gods","Kamiki Village - Wake up Susano"]),
+        "Kamiki Village - Repair Kushi's Watermill": EventData(required_brush_techniques=[BrushTechniques.REJUVENATION],required_items_events=["Kamiki Village - Wake up Susano"],id=0x205,precollected=lambda o:o.OpenGameStart),
+        "Kamiki Village - Save the merchant": EventData(mandatory_enemies=[OkamiEnnemies.GREEN_IMP, OkamiEnnemies.RED_IMP],id=0x206,precollected=lambda o:o.OpenGameStart),
+        "Kamiki Village - Help Susano Train/Break the boulder":EventData (power_slash_level=1,required_items_events=["Vista of the Gods","Kamiki Village - Wake up Susano"],id=0x207,precollected=lambda o:o.OpenGameStart),
         "Kamiki Village - Bloom every Tree":EventData(required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM]),
         "Kamiki Village - Restore Sakuya's Tree": EventData(required_items_events=["Kamiki Village - Bloom every Tree"],required_brush_techniques=[BrushTechniques.GREENSPROUT_BLOOM])
     },

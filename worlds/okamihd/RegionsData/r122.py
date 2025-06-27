@@ -15,7 +15,7 @@ events = {
         "River of the Heavens - Restoring the River": EventData(id=0x200,
                                                                 required_brush_techniques=[
                                                                     BrushTechniques.REJUVENATION],
-                                                                precollected=lambda o: o.RestoreRiverOfTheHeavens)
+                                                                precollected=lambda o: o.OpenGameStart)
     }
 }
 locations = {

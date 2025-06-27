@@ -49,6 +49,6 @@ locations = {
         "Agata Forest - Chest after Bridge cutscene" : LocData(72),
         "Agata Forest - Chest near Demon Fang merchant": LocData(73),
         "Agata Forest - Chest near Tusta ruins door": LocData(74),
-        "Agata Forest - Fish Giant Salmon with Kokari" : LocData(77)
+        "Agata Forest - Fish Giant Salmon with Kokari" : LocData(77,power_slash_level=1)
     }
 }

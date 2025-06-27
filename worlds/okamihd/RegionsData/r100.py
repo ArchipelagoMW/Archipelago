@@ -11,7 +11,7 @@ exits = {
 }
 events = {
     RegionNames.CURSED_KAMIKI: {
-        "Cursed Kamiki - Cutting the peach": EventData(power_slash_level=1),
+        "Cursed Kamiki - Cutting the peach": EventData(id=0x202,power_slash_level=1,precollected=lambda o:o.OpenGameStart),
     }
 }
 locations = {

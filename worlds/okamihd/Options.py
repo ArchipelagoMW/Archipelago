@@ -27,14 +27,17 @@ class StartWithDivineInstrument(Toggle):
     display_name = "Start with a Divine Instrument"
     default = 1
 
-class RestoreRiverOfTheHeavens(Toggle):
-    """Start with the River of the Heavens already restored"""
-    display_name = "Start with the River of the Heavens already restored"
-    default = 1
-
-class RemoveKamikiBoulder(Toggle):
-    """Remove Kamiki Boulder"""
-    display_name = "Remove Kamiki Boulder"
+class OpenGameStart(Toggle):
+    """Remove some early events for a more open game start:
+        - Restoring the river of the Heavens
+        - Cutting the peach containing the villagers in Kamiki
+        - Restoring Kamiki Village with Sunrise
+        - Fixing Kushi's Water Mill
+        - Wkaking Up Susano
+        - Saving the Merchant in Kamiki
+        - Opening the boulder to Shinshu field
+        - Mr. Orange fight after restoring Kamiki Villagers"""
+    display_name = "Remove some events for a more open start"
     default = 1
 
 #
@@ -53,8 +56,7 @@ class RemoveKamikiBoulder(Toggle):
 class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
     StartWithDivineInstrument: StartWithDivineInstrument
-    RestoreRiverOfTheHeavens: RestoreRiverOfTheHeavens
-    RemoveKamikiBoulder: RemoveKamikiBoulder
+    OpenGameStart: OpenGameStart
 #    PraiseSanity:PraiseSanity
 
 
@@ -62,19 +64,15 @@ okami_option_groups: Dict[str, List[Any]] = {
     "General Options": [
         BuriedChestsByNight,
         StartWithDivineInstrument,
+        OpenGameStart
         #PraiseSanity
         ],
-    "Event Options":[
-        RestoreRiverOfTheHeavens,
-        RemoveKamikiBoulder
-    ]
 
 }
 
 slot_data_options = {
     "BuriedChestsByNight",
     "StartWithDivineInstrument",
-    "RestoreRiverOfTheHeavens",
-    "RemoveKamikiBoulder"
+    "OpenGameStart"
 #    "PraiseSanity"
 }
