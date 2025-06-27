@@ -1,6 +1,6 @@
 from BaseClasses import Region, Location, ItemClassification
 from .Rules import apply_event_or_location_rules
-from .Types import LocData, BrushTechniques, OkamiLocation, OkamiItem
+from .Types import LocData, OkamiLocation, OkamiItem
 from typing import Dict, TYPE_CHECKING
 from .RegionsData import r100, r122, r101, r102, r103, rf01, rf02, rf03,rf04
 

@@ -9,8 +9,9 @@ from .Options import create_option_groups, OkamiOptions, slot_data_options
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List, Dict, TextIO
 from Utils import local_path
-from .Types import DivineInstruments, OkamiItem, RegionNames
-
+from .Types import OkamiItem
+from .Enums.DivineInstruments import DivineInstruments
+from .Enums.RegionNames import RegionNames
 
 # TODO: Replace
 class OkamiWebWolrd(WebWorld):

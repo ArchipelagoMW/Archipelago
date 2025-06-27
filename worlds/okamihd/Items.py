@@ -1,6 +1,8 @@
 from BaseClasses import Item, ItemClassification
 from MultiServer import console
-from .Types import OkamiItem, ItemData, BrushTechniques, BrushTechniqueData, DivineInstrumentData, DivineInstruments
+from .Types import OkamiItem, ItemData
+from .Enums.BrushTechniques import BrushTechniques, BrushTechniqueData
+from .Enums.DivineInstruments import DivineInstrumentData, DivineInstruments
 from typing import List, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:

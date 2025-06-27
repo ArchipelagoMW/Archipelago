@@ -1,6 +1,8 @@
 from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
-from .Types import LocData, ExitData, BrushTechniques, DivineInstruments, EventData
+from .Enums.BrushTechniques import BrushTechniques
+from .Enums.DivineInstruments import DivineInstruments
+from .Types import LocData, ExitData, EventData
 from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
 

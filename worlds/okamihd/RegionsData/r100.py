@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, RegionNames, EventData
+from ..Types import ExitData, EventData
+from ..Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:
-    from .. import OkamiWorld
+    pass
 
 exits = {
     RegionNames.CURSED_KAMIKI: [ExitData("Cursed Kamiki Torii", RegionNames.RIVER_OF_THE_HEAVENS_KAMIKI),

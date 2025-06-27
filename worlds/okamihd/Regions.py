@@ -3,7 +3,7 @@ from .Locations import create_region_locations, create_region_events
 from typing import TYPE_CHECKING, List, Dict, Optional
 from .RegionsData import menu,r100,r122,r101,r102,r103,rf01,rf02,rf03,rf04
 from .Rules import apply_exit_rules
-from .Types import RegionNames
+from .Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:
     from . import OkamiWorld

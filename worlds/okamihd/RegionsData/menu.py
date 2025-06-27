@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, RegionNames
+from ..Enums.RegionNames import RegionNames
+from ..Types import ExitData
 
 if TYPE_CHECKING:
-    from .. import OkamiWorld
+    pass
 
 exits = {
     # TODO: in ER this should be the starting point

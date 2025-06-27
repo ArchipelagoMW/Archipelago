@@ -1,8 +1,11 @@
 from typing import TYPE_CHECKING
-from ..Types import ExitData, LocData, BrushTechniques, RegionNames, EventData
+
+from ..Enums.BrushTechniques import BrushTechniques
+from ..Types import ExitData, LocData, EventData
+from ..Enums.RegionNames import RegionNames
 
 if TYPE_CHECKING:
-    from .. import OkamiWorld
+    pass
 
 exits = {
     RegionNames.CAVE_OF_NAGI: [ExitData("Exit to River of the Heavens", RegionNames.RIVER_OF_THE_HEAVENS_NAGI),
