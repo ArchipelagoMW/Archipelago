@@ -104,7 +104,7 @@ class Read(NamedTuple):
     size: int
 
 
-@dataclass
+@dataclass(frozen=True)
 class _MemRead:
     location: Read
     data: bytes
@@ -123,8 +123,9 @@ class SnesData(Generic[_T_Enum]):
             self._ranges.append(_MemRead(r, d))
 
     def get(self, read: _T_Enum) -> bytes:
-        address: int = read.value.address
-        size: int = read.value.size
+        assert isinstance(read.value, Read)
+        address = read.value.address
+        size = read.value.size
         index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
         assert index >= 0, f"{self._ranges=} {read.value=}"
         mem_read = self._ranges[index]
