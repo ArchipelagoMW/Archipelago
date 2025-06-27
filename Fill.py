@@ -890,7 +890,7 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
                 worlds = set()
                 for listed_world in target_world:
                     if listed_world not in world_name_lookup:
-                        failed(f"Cannot place item to {target_world}'s world as that world does not exist.",
+                        failed(f"Cannot place item to {listed_world}'s world as that world does not exist.",
                                block.force)
                         continue
                     worlds.add(world_name_lookup[listed_world])
@@ -923,9 +923,9 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
             if isinstance(locations, str):
                 locations = [locations]
 
-            locations_from_groups: list[str] = []
             resolved_locations: list[Location] = []
             for target_player in worlds:
+                locations_from_groups: list[str] = []
                 world_locations = multiworld.get_unfilled_locations(target_player)
                 for group in multiworld.worlds[target_player].location_name_groups:
                     if group in locations:
@@ -937,13 +937,16 @@ def parse_planned_blocks(multiworld: MultiWorld) -> dict[int, list[PlandoItemBlo
 
             count = block.count
             if not count:
-                count = len(new_block.items)
+                count = (min(len(new_block.items), len(new_block.resolved_locations))
+                         if new_block.resolved_locations else len(new_block.items))
             if isinstance(count, int):
                 count = {"min": count, "max": count}
             if "min" not in count:
                 count["min"] = 0
             if "max" not in count:
-                count["max"] = len(new_block.items)
+                count["max"] = (min(len(new_block.items), len(new_block.resolved_locations))
+                                if new_block.resolved_locations else len(new_block.items))
+
 
             new_block.count = count
             plando_blocks[player].append(new_block)
