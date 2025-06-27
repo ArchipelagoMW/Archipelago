@@ -184,7 +184,7 @@ def get_rules(world):
             "Outback Safari - Find 5 Bilbies":
                 lambda state:
                     has_all_bilbies(world, state, Ty1LevelCode.B3),
-            "Outback Safari - Time Attack":
+            "Outback Safari - Race Shazza":
                 lambda state:
                     has_stopwatch(world, state, Ty1LevelCode.B3) if world.options.gate_time_attacks
                     else state.can_reach_location("Outback Safari - Emu Roundup", world.player),
