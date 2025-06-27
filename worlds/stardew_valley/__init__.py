@@ -8,7 +8,7 @@ import entrance_rando
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld, CollectionState
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import launch_subprocess, components, Component, icon_paths, Type
+from worlds.LauncherComponents import components, Component, icon_paths, Type
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
@@ -79,9 +79,10 @@ if TRACKER_ENABLED:
 
     # Best effort to detect if universal tracker is installed
     if any("tracker.apworld" in f.name for f in os.scandir(user_folder)):
-        def launch_client():
-            from .client import launch
-            launch_subprocess(launch, name="Stardew Valley Tracker")
+        def launch_client(*args):
+            from worlds.LauncherComponents import launch
+            from .client import launch as client_main
+            launch(client_main, name="Stardew Valley Tracker", args=args)
 
 
         components.append(Component(
