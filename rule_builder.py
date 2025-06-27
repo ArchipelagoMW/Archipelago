@@ -122,6 +122,7 @@ class RuleWorldMixin(World):
         from_region: "Region",
         to_region: "Region",
         rule: "Rule[Self] | None",
+        name: str | None = None,
     ) -> "Entrance | None":
         """Try to create an entrance between regions with the given rule, skipping it if the rule resolves to False"""
         resolved_rule = None
@@ -130,7 +131,7 @@ class RuleWorldMixin(World):
             if resolved_rule.always_false:
                 return None
 
-        entrance = from_region.connect(to_region)
+        entrance = from_region.connect(to_region, name)
         if resolved_rule:
             entrance.access_rule = resolved_rule
         if resolved_rule is not None:
