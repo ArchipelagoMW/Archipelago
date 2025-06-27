@@ -38,19 +38,22 @@ def get_all_bundles(random: Random, logic: StardewLogic, content: StardewContent
 
 
 def get_vanilla_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    generated_bundle_rooms = {room_name: vanilla_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in vanilla_bundles.bundles_by_room}
+    generated_bundle_rooms = {room_name: vanilla_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in
+                              vanilla_bundles.bundles_by_room}
     fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
     return list(generated_bundle_rooms.values())
 
 
 def get_thematic_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    generated_bundle_rooms = {room_name: thematic_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in thematic_bundles.bundles_by_room}
+    generated_bundle_rooms = {room_name: thematic_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in
+                              thematic_bundles.bundles_by_room}
     fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
     return list(generated_bundle_rooms.values())
 
 
 def get_remixed_bundles(random: Random, content: StardewContent, options: StardewValleyOptions) -> List[BundleRoom]:
-    generated_bundle_rooms = {room_name: remixed_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in remixed_bundles.bundles_by_room}
+    generated_bundle_rooms = {room_name: remixed_bundles.bundles_by_room[room_name].create_bundle_room(random, content, options) for room_name in
+                              remixed_bundles.bundles_by_room}
     fix_raccoon_bundle_names(generated_bundle_rooms[CCRoom.raccoon_requests])
     return list(generated_bundle_rooms.values())
 
@@ -144,7 +147,7 @@ def get_trash_bear_requests(random: Random, content: StardewContent, options: St
     if options.bundle_per_room >= 0:
         # Cooking items are not in content packs yet. This can be simplified once they are
         # trash_bear_requests["Cooking"] = pick_trash_bear_items(ItemTag.COOKING, content, num_per_type, random)
-        trash_bear_requests["Cooking"] = random.sample([recipe.meal for recipe in all_cooking_recipes if not recipe.mod_name], num_per_type)
+        trash_bear_requests["Cooking"] = random.sample([recipe.meal for recipe in all_cooking_recipes if not recipe.content_pack], num_per_type)
     if options.bundle_per_room >= 1:
         trash_bear_requests["Farming"] = pick_trash_bear_items(ItemTag.CROPSANITY, content, num_per_type, random)
     if options.bundle_per_room >= 2:

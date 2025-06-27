@@ -1,15 +1,38 @@
 from ..bases import SVTestBase
 from ... import options
-from ...options import BuildingProgression, ExcludeGingerIsland, Chefsanity
+from ...content.content_packs import ginger_island_content_pack
+from ...data.recipe_data import all_cooking_recipes
+
+
+class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):
+    options = {
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
+        options.Mods: frozenset(options.Mods.valid_keys)
+    }
+
+    def test_recipe_without_content_pack_contains_only_pure_vanilla_ingredients(self):
+        for item in self.multiworld.get_items():
+            self.multiworld.state.collect(item, prevent_sweep=True)
+
+        logic = self.world.logic
+
+        for recipe in all_cooking_recipes:
+            if recipe.content_pack is ginger_island_content_pack.name:
+                continue
+
+            with self.subTest(recipe.meal):
+                for item in recipe.ingredients:
+                    rule = logic.has(item)
+                    self.assert_rule_true(rule, self.multiworld.state)
 
 
 class TestRecipeLearnLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        options.Cooksanity.internal_name: options.Cooksanity.option_all,
-        Chefsanity.internal_name: Chefsanity.option_none,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.BuildingProgression: options.BuildingProgression.option_progressive,
+        options.Cropsanity: options.Cropsanity.option_enabled,
+        options.Cooksanity: options.Cooksanity.option_all,
+        options.Chefsanity: options.Chefsanity.option_none,
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_learn_qos_recipe(self):
@@ -29,11 +52,11 @@ class TestRecipeLearnLogic(SVTestBase):
 
 class TestRecipeReceiveLogic(SVTestBase):
     options = {
-        BuildingProgression.internal_name: BuildingProgression.option_progressive,
-        options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
-        options.Cooksanity.internal_name: options.Cooksanity.option_all,
-        Chefsanity.internal_name: Chefsanity.option_all,
-        ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
+        options.BuildingProgression: options.BuildingProgression.option_progressive,
+        options.Cropsanity: options.Cropsanity.option_enabled,
+        options.Cooksanity: options.Cooksanity.option_all,
+        options.Chefsanity: options.Chefsanity.option_all,
+        options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
     }
 
     def test_can_learn_qos_recipe(self):

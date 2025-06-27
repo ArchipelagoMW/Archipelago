@@ -119,7 +119,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
-            if recipe.mod_name and not self.content.is_enabled(recipe.mod_name):
+            if recipe.content_pack and not self.content.is_enabled(recipe.content_pack):
                 continue
 
             can_cook_rule = self.cooking.can_cook(recipe)

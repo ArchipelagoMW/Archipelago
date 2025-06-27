@@ -85,9 +85,8 @@ class CookingLogic(BaseLogic):
             return self.logic.true_
         recipe_rules = []
         for recipe in all_cooking_recipes:
-            if recipe.mod_name and recipe.mod_name not in self.options.mods:
+            if recipe.content_pack and recipe.content_pack not in self.options.mods:
                 continue
             recipe_rules.append(self.can_cook(recipe))
         number = min(len(recipe_rules), number)
         return self.logic.count(number, *recipe_rules)
-
