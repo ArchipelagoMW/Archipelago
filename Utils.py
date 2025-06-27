@@ -19,7 +19,7 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from time import sleep
-from typing import BinaryIO, Callable, Coroutine, Optional, Sequence, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -1096,27 +1096,3 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
-
-
-# re-implementation of bisect.bisect_right
-# for compatibility with Python < 3.10 when `key` param was added.
-# TODO: delete when Python < 3.10 is gone
-def bisect_right(
-    a: Sequence[T],
-    x: Any,
-    lo: int = 0,
-    hi: Optional[int] = None,
-    *,
-    key: Callable[[T], Any]
-) -> int:
-    if lo < 0:
-        raise ValueError(f"{lo=} negative")
-    if hi is None:
-        hi = len(a)
-    while lo < hi:
-        mid = (lo + hi) // 2
-        if x < key(a[mid]):
-            hi = mid
-        else:
-            lo = mid + 1
-    return lo

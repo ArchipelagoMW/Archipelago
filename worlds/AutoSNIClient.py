@@ -1,18 +1,13 @@
 
 from __future__ import annotations
 import abc
+from bisect import bisect_right
 from dataclasses import dataclass
 import enum
 import logging
-import sys
 from typing import (TYPE_CHECKING, Any, ClassVar, Dict, Generic, Iterable, List,
                     NamedTuple, Optional, Sequence, Tuple, TypeGuard, TypeVar, Union)
 
-# TODO: get rid of python version check when < 3.10 is gone
-if sys.version_info.major == 3 and sys.version_info.minor < 10:
-    from Utils import bisect_right
-else:
-    from bisect import bisect_right
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
@@ -122,7 +117,7 @@ class SnesData(Generic[_T_Enum]):
     _ranges: Sequence[_MemRead]
     """ sorted by address """
 
-    def __init__(self, ranges: Sequence[Tuple[Read, bytes]]) -> None:
+    def __init__(self, ranges: Sequence[tuple[Read, bytes]]) -> None:
         self._ranges = []
         for r, d in ranges:
             self._ranges.append(_MemRead(r, d))
@@ -149,13 +144,13 @@ class SnesReader(Generic[_T_Enum]):
     @staticmethod
     def _make_ranges(reads: type[enum.Enum]) -> Sequence[Read]:
 
-        unprocessed_reads: List[Read] = []
+        unprocessed_reads: list[Read] = []
         for e in reads:
             assert isinstance(e.value, Read), f"{reads.__name__} {e=} {type(e.value)=}"
             unprocessed_reads.append(e.value)
         unprocessed_reads.sort()
 
-        ranges: List[Read] = []
+        ranges: list[Read] = []
         for read in unprocessed_reads:
             #                                      v  end of the previous range
             if len(ranges) == 0 or read.address - (ranges[-1].address + ranges[-1].size) > 255:
@@ -170,7 +165,7 @@ class SnesReader(Generic[_T_Enum]):
         logging.debug(f"{len(ranges)=} {max(r.size for r in ranges)=}")
         return ranges
 
-    async def read(self) -> Optional[SnesData[_T_Enum]]:
+    async def read(self) -> SnesData[_T_Enum] | None:
         """
         returns `None` if reading fails,
         otherwise returns the data for the registered `Enum`
@@ -178,7 +173,7 @@ class SnesReader(Generic[_T_Enum]):
         from SNIClient import snes_read
 
         # To keep things better synced, we don't update any unless we read all successfully.
-        reads: List[Tuple[Read, bytes]] = []
+        reads: list[tuple[Read, bytes]] = []
         for r in self._ranges:
             response = await snes_read(self._ctx, r.address, r.size)
             if response is None:
