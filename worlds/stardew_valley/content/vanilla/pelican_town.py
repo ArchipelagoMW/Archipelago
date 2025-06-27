@@ -14,7 +14,7 @@ from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, Priz
 from ...logic.tailoring_logic import TailoringSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
-from ...strings.building_names import Building as BuildingNames, WizardBuilding
+from ...strings.building_names import Building as BuildingNames
 from ...strings.catalogue_names import Catalogue
 from ...strings.craftable_names import Furniture
 from ...strings.crop_names import Fruit
@@ -25,7 +25,7 @@ from ...strings.forageable_names import Forageable, Mushroom
 from ...strings.fruit_tree_names import Sapling
 from ...strings.generic_names import Generic
 from ...strings.material_names import Material
-from ...strings.metal_names import MetalBar, Mineral
+from ...strings.metal_names import MetalBar
 from ...strings.region_names import Region, LogicRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import Seed, TreeSeed
@@ -632,65 +632,65 @@ pelican_town = ContentPack(
             ),
             upgrade_from=BuildingNames.kids_room,
         ),
-        Building(
-            WizardBuilding.earth_obelisk,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=500_000,
-                    items_price=((10, MetalBar.iridium), (10, Mineral.earth_crystal),)
-                ),
-            ),
-        ),
-        Building(
-            WizardBuilding.water_obelisk,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=500_000,
-                    items_price=((5, MetalBar.iridium), (10, Fish.clam), (10, WaterItem.coral),)
-                ),
-            ),
-        ),
-        Building(
-            WizardBuilding.desert_obelisk,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=1_000_000,
-                    items_price=((20, MetalBar.iridium), (10, Forageable.coconut), (10, Forageable.cactus_fruit),)
-                ),
-            ),
-        ),
-        Building(
-            WizardBuilding.island_obelisk,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=1_000_000,
-                    items_price=((10, MetalBar.iridium), (10, Forageable.dragon_tooth), (10, Fruit.banana),)
-                ),
-            ),
-        ),
-        Building(
-            WizardBuilding.junimo_hut,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=20_000,
-                    items_price=((200, Material.stone), (9, Fruit.starfruit), (100, Material.fiber),)
-                ),
-            ),
-        ),
-        Building(
-            WizardBuilding.gold_clock,
-            sources=(
-                ShopSource(
-                    shop_region=Region.wizard_tower,
-                    price=10_000_000,
-                ),
-            ),
-        ),
+        # Building(
+        #     WizardBuilding.earth_obelisk,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=500_000,
+        #             items_price=((10, MetalBar.iridium), (10, Mineral.earth_crystal),)
+        #         ),
+        #     ),
+        # ),
+        # Building(
+        #     WizardBuilding.water_obelisk,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=500_000,
+        #             items_price=((5, MetalBar.iridium), (10, Fish.clam), (10, WaterItem.coral),)
+        #         ),
+        #     ),
+        # ),
+        # Building(
+        #     WizardBuilding.desert_obelisk,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=1_000_000,
+        #             items_price=((20, MetalBar.iridium), (10, Forageable.coconut), (10, Forageable.cactus_fruit),)
+        #         ),
+        #     ),
+        # ),
+        # Building(
+        #     WizardBuilding.island_obelisk,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=1_000_000,
+        #             items_price=((10, MetalBar.iridium), (10, Forageable.dragon_tooth), (10, Fruit.banana),)
+        #         ),
+        #     ),
+        # ),
+        # Building(
+        #     WizardBuilding.junimo_hut,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=20_000,
+        #             items_price=((200, Material.stone), (9, Fruit.starfruit), (100, Material.fiber),)
+        #         ),
+        #     ),
+        # ),
+        # Building(
+        #     WizardBuilding.gold_clock,
+        #     sources=(
+        #         ShopSource(
+        #             shop_region=Region.wizard_tower,
+        #             price=10_000_000,
+        #         ),
+        #     ),
+        # ),
     ),
     hat_sources={
         # Hats from the Hat Mouse
