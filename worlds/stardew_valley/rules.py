@@ -1009,11 +1009,11 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         set_location_rule(multiworld, player, SecretNote.note_22, logic.registry.quest_rules[Quest.the_mysterious_qi])
         set_location_rule(multiworld, player, SecretNote.note_23, logic.registry.quest_rules[Quest.strange_note])
         set_location_rule(multiworld, player, SecretNote.note_24,
-                          logic.building.has_wizard_building(Building.junimo_hut) & logic.has(Mineral.any_gem) & logic.season.has_any_not_winter())
+                          logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(Mineral.any_gem) & logic.season.has_any_not_winter())
         set_location_rule(multiworld, player, SecretNote.note_25, logic.season.has_any_not_winter() & logic.fishing.can_fish_at(Region.railroad)
                           & logic.relationship.can_meet_any(NPC.abigail, NPC.caroline, ))
         set_location_rule(multiworld, player, SecretNote.note_26,
-                          logic.building.has_wizard_building(Building.junimo_hut) & logic.has(ArtisanGood.raisins) & logic.season.has_any_not_winter())
+                          logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(ArtisanGood.raisins) & logic.season.has_any_not_winter())
         set_location_rule(multiworld, player, SecretNote.note_27, logic.region.can_reach(Region.mastery_cave))
 
 
