@@ -172,7 +172,6 @@ class SnesReader(Generic[_T_Enum]):
         """
         from SNIClient import snes_read
 
-        # To keep things better synced, we don't update any unless we read all successfully.
         reads: list[tuple[Read, bytes]] = []
         for r in self._ranges:
             response = await snes_read(self._ctx, r.address, r.size)
