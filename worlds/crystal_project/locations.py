@@ -21,7 +21,6 @@ npc_index_offset = 10000
 crystal_index_offset = 100000
 boss_index_offset = 1000000
 shop_index_offset = 10000000
-#summon_index_offset = 1000000 Summons Todo
 regionsanity_index_offset = 100000000
 
 def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
@@ -59,9 +58,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Buttersquirrel on tree near lampposts", 110 + npc_index_offset),
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows NPC - Buttersquirrel on Mario jump tree", 3085 + npc_index_offset),
 
-        #Summons Todo: descriptivize and implement
-        #LocationData(SPAWNING_MEADOWS, "Spawning Meadows Summon - Shaku from SFire_Summon", 477 + summon_index_offset), #(118, 109, 10)
-        
         #Regionsanity Meta Location
         LocationData(SPAWNING_MEADOWS, SPAWNING_MEADOWS + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
 
@@ -353,11 +349,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Crystal - Beatsmith", 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
 
-        #Summons
-        #Todo: descriptivize and implement
-        #376, 178, -345 (Capital Sequoia (Maze) map)
-        #LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Summon - Niltsi from SWind_Summon", 1109 + summon_index_offset),
-
         #Regionsanity Meta Location
         LocationData(CAPITAL_SEQUOIA, CAPITAL_SEQUOIA + " Region Completion", 6011 + regionsanity_index_offset, regionsanity=True),
 
@@ -506,7 +497,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Capital Pipeline
         #Treasure chests
-        #If you got here from the jail, you'd need vert, or you could get in with swimming, or you could get in with the tram key, TODO, also from jidamba?
+        #If you got here from the jail, you'd need vert, or you could get in with swimming, or you could get in with the tram key, (not from jidamba)
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline Chest - I wanna go home", 2912 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)), #Capital Pipeline map chest
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline Chest - Do not anger the fungus", 1294 + treasure_index_offset), #Lucky Platter chest
 
@@ -770,10 +761,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(SALMON_BAY, "Salmon Bay NPC - West cliff diving Ancient Tablet C", 1271 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),
         LocationData(SALMON_BAY, "Salmon Bay NPC - Quintar splish splash Ancient Tablet A", 1272 + npc_index_offset),
 
-        #Summons Todo: descriptivize and implement
-        #-50, 91, -330
-        #LocationData(SALMON_BAY, "Salmon Bay Summon - Guaba from SThunder_Summon", 1138 + summon_index_offset),
-
         #Regionsanity Meta Location
         LocationData(SALMON_BAY, SALMON_BAY + " Region Completion", 6030 + regionsanity_index_offset, regionsanity=True),
 
@@ -826,10 +813,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Underpass (Ice Pass) Scrap chest has been categorized under Tall Tall Heights
         #Underpass (Ice Pass) Potion chest has been categorized under Tall Tall Heights
         #Underpass (Underwater) Scrap chest has been categorized under Tall Tall Heights
-
-        #Summons Todo: descriptivize and implement
-        #614, 91, -213
-        #LocationData(THE_UNDERCITY, "Underpass Summon - Pah from SReflect_Summon", 1130 + summon_index_offset),
 
         #Zones (Expert)
         #The Open Sea
@@ -940,9 +923,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Crystals
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 35)),
 
-        #Summons Todo: descriptivize and implement (720, 138, -278)
-        #LocationData(SHOUDU_PROVINCE, "Shoudu Province Summon - Tira from SShadow_Summon", 1132 + summon_index_offset),
-
         #Regionsanity Meta Location
         LocationData(SHOUDU_PROVINCE, SHOUDU_PROVINCE + " Region Completion", 6033 + regionsanity_index_offset, regionsanity=True),
 
@@ -1031,10 +1011,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #NPCs
         LocationData(LAKE_DELENDE, "Lake Delende NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Dust
-
-        #Summons Todo: descriptivize and implement
-        #97, 126, -211
-        #LocationData(LAKE_DELENDE, "Lake Delende Summon - Ioske from SEarth_Summon", 1111 + summon_index_offset),
 
         #Regionsanity Meta Location
         LocationData(LAKE_DELENDE, LAKE_DELENDE + " Region Completion", 6038 + regionsanity_index_offset, regionsanity=True),
@@ -1137,10 +1113,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
         LocationData(TALL_TALL_HEIGHTS, "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #1st Gold Dust Overpass (Cloudy Wind)
-
-        #Summons Todo: descriptivize and implement
-        #498, 218, -412
-        #LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Summon - Pamoa from SIce_Summon", 1136 + summon_index_offset),
 
         #Regionsanity Meta Location
         LocationData(TALL_TALL_HEIGHTS, TALL_TALL_HEIGHTS + " Region Completion", 6043 + regionsanity_index_offset, regionsanity=True),
@@ -1299,16 +1271,13 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond hot girl summer on the beach", 2873 + npc_index_offset), #Dust
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Damp Diamond lurking beneath diamondsmith", 2869 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond at southern mouth of cave", 2874 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Fly from Summoners weeping tree to hot tub Diamond", 2876 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Splash Mountain Diamond (pool at S end of canopy)", 2870 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond atop broken ruins along the beach", 2872 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond atop broken ruins by the Summoner tree", 2875 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond atop broken ruins by the Summoner tree", 2875 + npc_index_offset, lambda state: logic.has_glide(state)), #Ore
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Splash Mountain Gold (pool at NE end of canopy)", 2900 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Diamond in the boughs above the shrine", 2898 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
         LocationData(JIDAMBA_TANGLE, "Jidamba Tangle NPC - Canopy Gold above big lake", 2899 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-
-        #Summons Todo: descriptivize and implement (672, 124, 106)
-        #LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Summon - Juses from SLife_Summon", 1134 + summon_index_offset),
 
         #Regionsanity Meta Location
         LocationData(JIDAMBA_TANGLE, JIDAMBA_TANGLE + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
@@ -1382,9 +1351,6 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 3", 2856 + npc_index_offset), #(-370, 53, -173) Ore
-
-        #Summons Todo: descriptivize and implement
-        #LocationData(THE_DEEP_SEA, "The Deep Sea Summon - Coyote from SWater_Summon", 1140 + summon_index_offset), #(-60, 53, 202)
 
         #Regionsanity Meta Location
         LocationData(THE_DEEP_SEA, THE_DEEP_SEA + " Region Completion", 6054 + regionsanity_index_offset, regionsanity=True),
@@ -1523,38 +1489,62 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
-        LocationData(DELENDE, "Delende Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
-        LocationData(DELENDE, "Delende Boss - Gran...?", 183 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30)),
-        LocationData(SOILED_DEN, "Soiled Den Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
-        LocationData(THE_PALE_GROTTO, "Pale Grotto Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
-        LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
-        LocationData(YAMAGAWA_MA, "Yamagawa M.A. Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)),
-        LocationData(SKUMPARADISE, "Skumparadise Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)),
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)),
-        LocationData(JOJO_SEWERS, "Jojo Sewers Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
-        LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
-        LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)),
-        LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
-        LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)),
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
-        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)),
-        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)),
-        LocationData(EASTERN_CHASM, "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 55)),
-        LocationData(LANDS_END, "Lands End Boss - The Owlbear", 2104 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 47)),
-        LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)),
-        LocationData(CASTLE_RAMPARTS, "Castle Ramparts Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)),
-        LocationData(CONTINENTAL_TRAM, "Continental Tram Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)),
-        LocationData(THE_SEQUOIA, "The Sequoia Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
-        LocationData(THE_DEPTHS, "The Depths Boss - The Peacekeeper", 2579 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
-        LocationData(THE_OLD_WORLD, "The Old World Boss - Periculum", 3650 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 70)),
+        #IDs here are specifically the monster IDs from Crystal Edit
+        #Summons
+        #Not included: Pinga (unused)
+        LocationData(SPAWNING_MEADOWS, "Spawning Meadows Boss - Shaku Summon", 102 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #(118, 109, 10)
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Niltsi Summon", 93 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #376, 178, -345 (Capital Sequoia (Maze) map)
+        LocationData(SALMON_BAY, "Salmon Bay Boss - Guaba Summon", 94 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #-50, 91, -330
+        LocationData(THE_UNDERCITY, "Underpass Boss - Pah Summon", 97 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #614, 91, -213
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Tira Summon", 98 + boss_index_offset, lambda state:  (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE) or state.can_reach(GANYMEDE_SHRINE)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278)
+        LocationData(LAKE_DELENDE, "Lake Delende Boss - Ioske Summon", 92 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 57)), #97, 126, -211
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Pamoa Summon", 91 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Boss - Juses Summon", 99 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106)
+        #Mind's Delusion is part of the Coyote fight
+        LocationData(THE_DEEP_SEA, "The Deep Sea Boss - Coyote Summon", 95 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #(-60, 53, 202)
+
+        #Bosses
+        #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
+        LocationData(DELENDE, "Delende Boss - Troll", 8 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
+        LocationData(DELENDE, "Delende Boss - Gran...?", 28 + boss_index_offset, lambda state: (state.has(SCHOLAR_JOB, player) and state.has(REVERSE_POLARITY, player)) or logic.is_area_in_level_range(state, 30)),
+        LocationData(SOILED_DEN, "Soiled Den Boss - Bone Thief", 12 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(THE_PALE_GROTTO, "Pale Grotto Boss - Guardian", 23 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(DRAFT_SHAFT_CONDUIT, "Draft Shaft Conduit Boss - Canal Beast", 18 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)),
+        LocationData(YAMAGAWA_MA, "Yamagawa M.A. Boss - Sepulchra", 27 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)),
+        LocationData(PROVING_MEADOWS, "Proving Meadows Boss - Knight", 212 + boss_index_offset, lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 10)),
+        LocationData(SKUMPARADISE, "Skumparadise Boss - Parasite", 38 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Defeat L60 dummy and it shall appear...!", 303 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Enami", 49 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)),
+        LocationData(JOJO_SEWERS, "Jojo Sewers Boss - Blood Slop", 4 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
+        LocationData(QUINTAR_SANCTUM, "Quintar Sanctum Boss - Fancy Quintar", 68 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)),
+        LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 37 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)),
+        LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 217 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)),
+        LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 63 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)),
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 221 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Final Sky Arena Fight: Arachlea", 252 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 145 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 144 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 146 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)),
+        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Ancient Sword", 59 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)),
+        #Note: using Iguanadin's monster id; Iguanadon's is 78
+        LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Iguanadon & Iguanadin", 100 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)),
+        LocationData(EASTERN_CHASM, "Eastern Chasm Boss - Undergrowth", 293 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Hermetic", 309 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 55)),
+        LocationData(LANDS_END, "Lands End Boss - The Owlbear", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 47)),
+        LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Boss - Red Guardian", 224 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)),
+        LocationData(CASTLE_RAMPARTS, "Castle Ramparts Boss - Rampart Demon", 222 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)),
+        LocationData(CONTINENTAL_TRAM, "Continental Tram Boss - Conscript", 242 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)),
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Boss - Anubis", 117 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)),
+        LocationData(THE_SEQUOIA, "The Sequoia Boss - Spirit Cage", 192 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Devourer", 171 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Old One", 170 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Enforcer", 172 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)),
+        LocationData(THE_DEPTHS, "The Depths Boss - The Peacekeeper", 169 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)),
+        LocationData(THE_DEPTHS, "The Depths Boss - With STEM WARD in hand, offer 4 Deity Eyes to battle Gabriel", 241 + boss_index_offset, lambda state: state.has(DEITY_EYE, player, 4) and state.has(STEM_WARD, player) and logic.is_area_in_level_range(state, 65)),
+        LocationData(CASTLE_SEQUOIA, "Castle Sequoia Boss - Parasite X", 198 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 56)),
+        LocationData(CASTLE_SEQUOIA, "Castle Sequoia Boss - Neo Warden", 200 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 57)),
+        LocationData(CASTLE_SEQUOIA, "Castle Sequoia Boss - Akamanto", 201 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)),
+        LocationData(THE_OLD_WORLD, "The Old World Boss - Periculum", 268 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 70)),
         ]
     return location_table
 

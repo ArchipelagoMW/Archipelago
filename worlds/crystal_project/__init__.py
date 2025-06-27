@@ -321,7 +321,7 @@ class CrystalProjectWorld(World):
                     if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
                         amount = amount + int(data.endGameShops or 0)
 
-                # Make sure new world pass is included if region sanity of on and its required for the goal
+                # Make sure new world pass is included if regionsanity is on and its required for the goal
                 if (self.options.regionsanity.value == self.options.regionsanity.option_true and
                         (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
                         name == THE_NEW_WORLD_PASS):
@@ -331,6 +331,9 @@ class CrystalProjectWorld(World):
                         self.options.goal.value == self.options.goal.option_true_astley and
                         name == THE_OLD_WORLD_PASS):
                     amount = 1
+                # adds true Astley goal required items if they don't already exist
+                if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE):
+                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
 
                 for _ in range(amount):
                     item = self.set_classifications(name)
@@ -343,13 +346,6 @@ class CrystalProjectWorld(World):
             for _ in range (progressive_levels_in_pool - 1):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
-
-        if self.options.goal.value == self.options.goal.option_true_astley:
-            for _ in range(4):
-                item = self.set_classifications(DEITY_EYE)
-                pool.append(item)
-            item = self.set_classifications(STEM_WARD)
-            pool.append(item)
 
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
         if self.options.includedRegions == self.options.includedRegions.option_beginner:
