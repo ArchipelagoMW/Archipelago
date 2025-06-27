@@ -1,13 +1,15 @@
 from copy import deepcopy
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from BaseClasses import ItemClassification, Location, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table, item_table
+from .Items import Celeste64Item, unlockable_item_data_table, move_item_data_table, item_data_table,\
+                                  checkpoint_item_data_table, item_table
 from .Locations import Celeste64Location, strawberry_location_data_table, friend_location_data_table,\
-                                          sign_location_data_table, car_location_data_table, location_table
+                                          sign_location_data_table, car_location_data_table, checkpoint_location_data_table,\
+                                          location_table
 from .Names import ItemName, LocationName
-from .Options import Celeste64Options, celeste_64_option_groups
+from .Options import Celeste64Options, celeste_64_option_groups, resolve_options
 
 
 class Celeste64WebWorld(WebWorld):
@@ -42,8 +44,15 @@ class Celeste64World(World):
     # Instance Data
     strawberries_required: int
     active_logic_mapping: Dict[str, List[List[str]]]
-    goal_logic_mapping: Dict[str, List[List[str]]]
+    active_region_logic_mapping: Dict[Tuple[str], List[List[str]]]
 
+    madeline_one_dash_hair_color: int
+    madeline_two_dash_hair_color: int
+    madeline_no_dash_hair_color: int
+    madeline_feather_hair_color: int
+
+    def generate_early(self) -> None:
+        resolve_options(self)
 
     def create_item(self, name: str) -> Celeste64Item:
         # Only make required amount of strawberries be Progression
@@ -76,25 +85,49 @@ class Celeste64World(World):
                       for name in unlockable_item_data_table.keys()
                       if name not in self.options.start_inventory]
 
-        if self.options.move_shuffle:
-            move_items_for_itempool: List[str] = deepcopy(list(move_item_data_table.keys()))
+        chosen_start_item: str = ""
 
+        if self.options.move_shuffle:
             if self.options.logic_difficulty == "standard":
-                # If the start_inventory already includes a move, don't worry about giving it one
-                if not [move for move in move_items_for_itempool if move in self.options.start_inventory]:
-                    chosen_start_move = self.random.choice(move_items_for_itempool)
-                    move_items_for_itempool.remove(chosen_start_move)
+                possible_unwalls: List[str] = [name for name in move_item_data_table.keys()
+                                                if name != ItemName.skid_jump]
+
+                if self.options.checkpointsanity:
+                    possible_unwalls.extend([name for name in checkpoint_item_data_table.keys()
+                                                if name != ItemName.checkpoint_1 and name != ItemName.checkpoint_10])
+
+                # If the start_inventory already includes a move or checkpoint, don't worry about giving it one
+                if not [item for item in possible_unwalls if item in self.multiworld.precollected_items[self.player]]:
+                    chosen_start_item = self.random.choice(possible_unwalls)
 
                     if self.options.carsanity:
                         intro_car_loc: Location = self.multiworld.get_location(LocationName.car_1, self.player)
-                        intro_car_loc.place_locked_item(self.create_item(chosen_start_move))
+                        intro_car_loc.place_locked_item(self.create_item(chosen_start_item))
                         location_count -= 1
                     else:
-                        self.multiworld.push_precollected(self.create_item(chosen_start_move))
+                        self.multiworld.push_precollected(self.create_item(chosen_start_item))
 
             item_pool += [self.create_item(name)
-                          for name in move_items_for_itempool
-                          if name not in self.options.start_inventory]
+                          for name in move_item_data_table.keys()
+                          if name not in self.multiworld.precollected_items[self.player]
+                          and name != chosen_start_item]
+        else:
+            for start_move in move_item_data_table.keys():
+                self.multiworld.push_precollected(self.create_item(start_move))
+
+        if self.options.checkpointsanity:
+            location_count += 9
+            goal_checkpoint_loc: Location = self.multiworld.get_location(LocationName.checkpoint_10, self.player)
+            goal_checkpoint_loc.place_locked_item(self.create_item(ItemName.checkpoint_10))
+            item_pool += [self.create_item(name)
+                          for name in checkpoint_item_data_table.keys()
+                          if name not in self.multiworld.precollected_items[self.player]
+                          and name != ItemName.checkpoint_10
+                          and name != chosen_start_item]
+        else:
+            for item_name in checkpoint_item_data_table.keys():
+                checkpoint_loc: Location = self.multiworld.get_location(item_name, self.player)
+                checkpoint_loc.place_locked_item(self.create_item(item_name))
 
         real_total_strawberries: int = min(self.options.total_strawberries.value, location_count - len(item_pool))
         self.strawberries_required = int(real_total_strawberries * (self.options.strawberries_required_percentage / 100))
@@ -140,16 +173,21 @@ class Celeste64World(World):
                     if location_data.region == region_name
                 }, Celeste64Location)
 
-            region.add_exits(region_data_table[region_name].connecting_regions)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in checkpoint_location_data_table.items()
+                if location_data.region == region_name
+            }, Celeste64Location)
+
+            from .Rules import connect_region
+            connect_region(self, region, region_data_table[region_name].connecting_regions)
+
+        # Have to do this here because of other games using State in a way that's bad
+        from .Rules import set_rules
+        set_rules(self)
 
 
     def get_filler_item_name(self) -> str:
         return ItemName.raspberry
-
-
-    def set_rules(self) -> None:
-        from .Rules import set_rules
-        set_rules(self)
 
 
     def fill_slot_data(self):
@@ -161,6 +199,11 @@ class Celeste64World(World):
             "friendsanity": self.options.friendsanity.value,
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
+            "checkpointsanity": self.options.checkpointsanity.value,
+            "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
+            "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
+            "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
+            "madeline_feather_hair_color": self.madeline_feather_hair_color,
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,

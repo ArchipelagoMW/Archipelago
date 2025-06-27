@@ -1,4 +1,4 @@
-from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union, cast
+from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
 
@@ -7,6 +7,7 @@ from test.general import gen_steps, setup_multiworld
 from test.multiworld.test_multiworlds import MultiworldTestBase
 
 from .. import WitnessWorld
+from ..data.utils import cast_not_none
 
 
 class WitnessTestBase(WorldTestBase):
@@ -32,7 +33,7 @@ class WitnessTestBase(WorldTestBase):
         event_items = [item for item in self.multiworld.get_items() if item.name == item_name]
         self.assertTrue(event_items, f"Event item {item_name} does not exist.")
 
-        event_locations = [cast(Location, event_item.location) for event_item in event_items]
+        event_locations = [cast_not_none(event_item.location) for event_item in event_items]
 
         # Checking for an access dependency on an event item requires a bit of extra work,
         # as state.remove forces a sweep, which will pick up the event item again right after we tried to remove it.

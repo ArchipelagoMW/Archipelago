@@ -6,9 +6,7 @@ import enum
 import logging
 import sys
 from typing import (TYPE_CHECKING, Any, ClassVar, Dict, Generic, Iterable, List,
-                    NamedTuple, Optional, Sequence, Tuple, TypeVar, Union)
-
-from typing_extensions import TypeGuard
+                    NamedTuple, Optional, Sequence, Tuple, TypeGuard, TypeVar, Union)
 
 # TODO: get rid of python version check when < 3.10 is gone
 if sys.version_info.major == 3 and sys.version_info.minor < 10:
@@ -21,7 +19,8 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
-component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"))
+component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"),
+                      description="A client for connecting to SNES consoles via Super Nintendo Interface.")
 components.append(component)
 
 
@@ -71,8 +70,12 @@ class AutoSNIClientRegister(abc.ABCMeta):
     @staticmethod
     async def get_handler(ctx: SNIContext) -> Optional[SNIClient]:
         for _game, handler in AutoSNIClientRegister.game_handlers.items():
-            if await handler.validate_rom(ctx):
-                return handler
+            try:
+                if await handler.validate_rom(ctx):
+                    return handler
+            except Exception as e:
+                text_file_logger = logging.getLogger()
+                text_file_logger.exception(e)
         return None
 
 
@@ -93,6 +96,10 @@ class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
 
     async def deathlink_kill_player(self, ctx: SNIContext) -> None:
         """ override this with implementation to kill player """
+        pass
+
+    def on_package(self, ctx: SNIContext, cmd: str, args: Dict[str, Any]) -> None:
+        """ override this with code to handle packages from the server """
         pass
 
 

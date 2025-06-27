@@ -29,13 +29,25 @@ Then continue to `Using the Launcher`
 
 *Using the Launcher*
 
-1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry
+1. Go to the page linked for SM64AP-Launcher, and press on the topmost entry.
 2. Scroll down, and download the zip file for your OS.
-3. Unpack the zip file in an empty folder
+3. Unpack the zip file in an empty folder.
 4. Run the Launcher. On first start, press `Check Requirements`, which will guide you through the rest of the needed steps.
     - Windows: If you did not use the default install directory for MSYS, close this window, check `Show advanced options` and reopen using `Re-check Requirements`. You can then set the path manually.
-5. When finished, use `Compile default SM64AP build` to continue
-    - Advanced user can use `Show advanced options` to build with custom makeflags (`BETTERCAMERA`, `NODRAWINGDISTANCE`, ...), different repos and branches, and game patches such as 60FPS, Enhanced Moveset and others.
+5. When finished, use `Compile default SM64AP build` to continue.
+    - **Advanced configuration:** If you want to use additional build options such as Better Camera, No Drawing Distance, etc or apply game patches such as 60FPS, Enhanced Moveset, etc, then use the `Compile custom build` option:
+      - Set a name for your build, e.g. "archipelago" or whatever you like.
+      - Press the `Download Files` button.
+      - Set Make Flags, e.g. `-j8 BETTERCAMERA=1 NODRAWINGDISTANCE=1` to enable Better Camera and No Drawing Distance.
+      - Press `Apply Patches` to select patches to apply. Example patches include:
+        - 60FPS: Improves frame rate.
+        - Enhanced Moveset: Gives Mario new abilities. [Details here](https://github.com/TheGag96/sm64-port).
+        - Nonstop Mode: Makes it possible to fetch multiple stars in a level without exiting the level first.
+      - Press `Create Build`. This will take several minutes.
+      - You can also use the Repository and Branch fields to build with different repos or branches if you want to build using a fork or development version of SM64AP.
+      - For more details, see:
+        - [Available Makeflags](https://github.com/sm64pc/sm64ex/wiki/Build-options)
+        - [Included Game Patches](https://github.com/N00byKing/sm64ex/blob/archipelago/enhancements/README.md)
 6. Press `Download Files` to prepare the build, afterwards `Create Build`.
 7. SM64EX will now be compiled. This can take a while.
 
@@ -76,9 +88,6 @@ Should your name or password have spaces, enclose it in quotes: `"YourPassword"`
 
 Should the connection fail (for example when using the wrong name or IP/Port combination) the game will inform you of that.
 Additionally, any time the game is not connected (for example when the connection is unstable) it will attempt to reconnect and display a status text.
-
-**Important:** You must start a new file for every new seed you play. Using `⭐x0` files is **not** sufficient.
-Failing to use a new file may make some locations unavailable. However, this can be fixed without losing any progress by exiting and starting a new file.
 
 ### Playing offline
 
@@ -129,18 +138,6 @@ To use this batch file,  double-click it. A window will open. Type the five-digi
 Once you provide those two bits of information, the game will open. 
 - If the game only says `Connecting`, try again. Double-check the port number and slot name; even a single typo will cause your connection to fail.
 
-### Addendum - Deleting old saves
-
-Loading an old Mario save alongside a new seed is a bad idea, as it can cause locked doors and castle secret stars to already be unlocked / obtained. You should avoid opening a save that says "Stars x 0" as opposed to one that simply says "New".
-
-You can manually delete these old saves in-game before starting a new game, but that can be tedious. With a small edit to the batch files, you can delete these old saves automatically. Just add the line `del %AppData%\sm64ex\*.bin` to the batch file, above the `start` command. For example, here is `offline.bat` with the additional line:
-
-`del %AppData%\sm64ex\*.bin`
-
-`start sm64.us.f3dex2e.exe --sm64ap_file %1`
-
-This extra line deletes any previous save data before opening the game. Don't worry about lost stars or checks - the AP server (or in the case of offline, the `.save` file) keeps track of your star count, unlocked keys/caps/cannons, and which locations have already been checked, so you won't have to redo them. At worst you'll have to rewatch the door unlocking animations, and catch the rabbit Mips twice for his first star again if you haven't yet collected the second one.
-
 ## Installation Troubleshooting
 
 Start the game from the command line to view helpful messages regarding SM64EX.
@@ -166,8 +163,9 @@ The Japanese Version should have no problem displaying these.
 
 ### Toad does not have an item for me.
 
-This happens when you load an existing file that had already received an item from that toad.
+This happens on older builds when you load an existing file that had already received an item from that toad.
 To resolve this, exit and start from a `NEW` file. The server will automatically restore your progress.
+Alternatively, updating your build will prevent this issue in the future.
 
 ### What happens if I lose connection?
 

@@ -4,6 +4,7 @@ from ..roomEditor import RoomEditor
 from .. import entityData
 import os
 import bsdiff4
+import pkgutil
 
 def imageTo2bpp(filename):
     import PIL.Image
@@ -179,24 +180,9 @@ def noText(rom):
 
 def reduceMessageLengths(rom, rnd):
     # Into text from Marin. Got to go fast, so less text. (This intro text is very long)
-    rom.texts[0x01] = formatText(rnd.choice([
-        "Let's a go!",
-        "Remember, sword goes on A!",
-        "Avoid the heart piece of shame!",
-        "Marin? No, this is Zelda. Welcome to Hyrule",
-        "Why are you in my bed?",
-        "This is not a Mario game!",
-        "MuffinJets was here...",
-        "Remember, there are no bugs in LADX",
-        "#####, #####, you got to wake up!\nDinner is ready.",
-        "Go find the stepladder",
-        "Pizza power!",
-        "Eastmost penninsula is the secret",
-        "There is no cow level",
-        "You cannot lift rocks with your bear hands",
-        "Thank you, daid!",
-        "There, there now. Just relax. You've been asleep for almost nine hours now."
-    ]))
+    lines = pkgutil.get_data(__name__, "marin.txt").decode("unicode_escape").splitlines()
+    lines = [l for l in lines if l.strip()]
+    rom.texts[0x01] = formatText(rnd.choice(lines).strip())
 
     # Reduce length of a bunch of common texts
     rom.texts[0xEA] = formatText("You've got a Guardian Acorn!")

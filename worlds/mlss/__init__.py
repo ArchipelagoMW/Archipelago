@@ -1,13 +1,14 @@
+import logging
 import os
 import pkgutil
 import typing
 import settings
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from typing import List, Dict, Any
+from typing import Set, Dict, Any
 from .Locations import all_locations, location_table, bowsers, bowsersMini, hidden, coins
 from .Options import MLSSOptions
-from .Items import MLSSItem, itemList, item_frequencies, item_table
+from .Items import MLSSItem, itemList, item_frequencies, item_table, mlss_item_name_groups
 from .Names.LocationName import LocationName
 from .Client import MLSSClient
 from .Regions import create_regions, connect_regions
@@ -53,31 +54,38 @@ class MLSSWorld(World):
     options_dataclass = MLSSOptions
     options: MLSSOptions
     settings: typing.ClassVar[MLSSSettings]
+    item_name_groups = mlss_item_name_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    required_client_version = (0, 4, 5)
+    required_client_version = (0, 5, 0)
 
-    disabled_locations: List[str]
+    disabled_locations: Set[str]
 
     def generate_early(self) -> None:
-        self.disabled_locations = []
-        if self.options.chuckle_beans == 0:
-            self.disabled_locations += [location.name for location in all_locations if "Digspot" in location.name]
-        if self.options.castle_skip:
-            self.disabled_locations += [location.name for location in all_locations if "Bowser" in location.name]
-        if self.options.chuckle_beans == 1:
-            self.disabled_locations = [location.name for location in all_locations if location.id in hidden]
+        self.disabled_locations = set()
+        if self.options.goal == "emblem_hunt":
+            if self.options.emblems_amount < self.options.emblems_required:
+                self.options.emblems_amount.value = self.options.emblems_required.value
+                logging.warning(
+                    f"{self.player_name}'s number of emblems required is greater than the number of emblems available. "
+                    f"Changing to {self.options.emblems_required.value}.")
         if self.options.skip_minecart:
-            self.disabled_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
+            self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
         if self.options.disable_surf:
-            self.disabled_locations += [LocationName.SurfMinigame]
-        if self.options.harhalls_pants:
-            self.disabled_locations += [LocationName.HarhallsPants]
+            self.disabled_locations.update([LocationName.SurfMinigame])
+        if self.options.disable_harhalls_pants:
+            self.disabled_locations.update([LocationName.HarhallsPants])
+        if self.options.chuckle_beans == 0:
+            self.disabled_locations.update([location.name for location in all_locations if "Digspot" in location.name])
+        if self.options.chuckle_beans == 1:
+            self.disabled_locations.update([location.name for location in all_locations if location.id in hidden])
+        if self.options.castle_skip:
+            self.disabled_locations.update([location.name for location in bowsers + bowsersMini])
         if not self.options.coins:
-            self.disabled_locations += [location.name for location in all_locations if location in coins]
+            self.disabled_locations.update([location.name for location in coins])
 
     def create_regions(self) -> None:
-        create_regions(self, self.disabled_locations)
+        create_regions(self)
         connect_regions(self)
 
         item = self.create_item("Mushroom")
@@ -90,13 +98,15 @@ class MLSSWorld(World):
         self.get_location(LocationName.PantsShopStartingFlag1).place_locked_item(item)
         item = self.create_item("Chuckle Bean")
         self.get_location(LocationName.PantsShopStartingFlag2).place_locked_item(item)
+        item = MLSSItem("Victory", ItemClassification.progression, None, self.player)
+        self.get_location("Cackletta's Soul").place_locked_item(item)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
             "CastleSkip": self.options.castle_skip.value,
             "SkipMinecart": self.options.skip_minecart.value,
             "DisableSurf": self.options.disable_surf.value,
-            "HarhallsPants": self.options.harhalls_pants.value,
+            "HarhallsPants": self.options.disable_harhalls_pants.value,
             "ChuckleBeans": self.options.chuckle_beans.value,
             "DifficultLogic": self.options.difficult_logic.value,
             "Coins": self.options.coins.value,
@@ -109,9 +119,11 @@ class MLSSWorld(World):
         for item in itemList:
             if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
+                if item.itemName == "Beanstar Emblem":
+                    freq = (0 if self.options.goal != "emblem_hunt" else self.options.emblems_amount.value)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
-                if self.options.harhalls_pants and "Harhall's" in item.itemName:
+                if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
                     continue
                 required_items += [item.itemName for _ in range(freq)]
 
@@ -135,43 +147,21 @@ class MLSSWorld(World):
             filler_items += [item.itemName for _ in range(freq)]
 
         # And finally take as many fillers as we need to have the same amount of items and locations.
-        remaining = len(all_locations) - len(required_items) - 5
-        if self.options.castle_skip:
-            remaining -= len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0)
-        if self.options.skip_minecart and self.options.chuckle_beans == 2:
-            remaining -= 1
-        if self.options.disable_surf:
-            remaining -= 1
-        if self.options.harhalls_pants:
-            remaining -= 1
-        if self.options.chuckle_beans == 0:
-            remaining -= 192
-        if self.options.chuckle_beans == 1:
-            remaining -= 59
-        if not self.options.coins:
-            remaining -= len(coins)
-
+        remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 5
         self.multiworld.itempool += [
             self.create_item(filler_item_name) for filler_item_name in self.random.sample(filler_items, remaining)
         ]
 
     def set_rules(self) -> None:
         set_rules(self, self.disabled_locations)
-        if self.options.castle_skip:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                "PostJokes", "Region", self.player
-            )
-        else:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-                "Bowser's Castle Mini", "Region", self.player
-            )
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_item(self, name: str) -> MLSSItem:
         item = item_table[name]
         return MLSSItem(item.itemName, item.classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList)))
+        return self.random.choice(list(filter(lambda item: item.classification == ItemClassification.filler, itemList))).itemName
 
     def generate_output(self, output_directory: str) -> None:
         patch = MLSSProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])

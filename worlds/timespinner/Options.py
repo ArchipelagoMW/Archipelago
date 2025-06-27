@@ -60,6 +60,7 @@ class EnemyRando(Choice):
     option_scaled = 1
     option_unscaled = 2
     option_ryshia = 3
+    option_no_hell_spiders = 4
     alias_true = 1
 
 class DamageRando(Choice):
@@ -180,9 +181,16 @@ class DamageRandoOverrides(OptionDict):
     }
 
 class HpCap(Range):
-    "Sets the number that Lunais's HP maxes out at."
+    """Sets the number that Lunais's HP maxes out at."""
     display_name = "HP Cap"
     range_start = 1
+    range_end = 999
+    default = 999
+
+class AuraCap(Range):
+    """Sets the maximum Aura Lunais is allowed to have. Level 1 is 80. Djinn Inferno costs 45."""
+    display_name = "Aura Cap"
+    range_start = 45
     range_end = 999
     default = 999
 
@@ -359,12 +367,37 @@ class TrapChance(Range):
 class Traps(OptionList):
     """List of traps that may be in the item pool to find"""
     display_name = "Traps Types"
-    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" }
-    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap" ]
+    valid_keys = { "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" }
+    default = [ "Meteor Sparrow Trap", "Poison Trap", "Chaos Trap", "Neurotoxin Trap", "Bee Trap", "Throw Stun Trap" ]
 
 class PresentAccessWithWheelAndSpindle(Toggle):
     """When inverted, allows using the refugee camp warp when both the Timespinner Wheel and Spindle is acquired."""
     display_name = "Back to the future"
+
+class PrismBreak(Toggle):
+    """Adds 3 Laser Access items to the item pool to remove the lasers blocking the military hangar area
+    instead of needing to beat the Golden Idol, Aelana, and The Maw."""
+    display_name = "Prism Break"
+    
+class LockKeyAmadeus(Toggle):
+    """Lasers in Amadeus' Laboratory are disabled via items, rather than by de-powering the lab. Experiments will spawn in the lab."""
+    display_name = "Lock Key Amadeus"
+    
+class RiskyWarps(Toggle):
+    """Expanded free-warp eligible locations, including Azure Queen, Xarion, Amadeus' Laboratory, and Emperor's Tower."""
+    display_name = "Risky Warps"
+
+class PyramidStart(Toggle):
+    """Start in ???. Takes priority over Inverted. Additional chests in Dark Forest and Pyramid. Sandman door behaves as it does in Enter Sandman."""
+    display_name = "Pyramid Start"
+
+class GateKeep(Toggle):
+    """The castle drawbridge starts raised, and can be lowered via item."""
+    display_name = "Gate Keep"
+
+class RoyalRoadblock(Toggle):
+    """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
+    display_name = "Royal Roadblock"
 
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
@@ -379,9 +412,11 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     cantoran: Cantoran
     lore_checks: LoreChecks
     boss_rando: BossRando
+    enemy_rando: EnemyRando
     damage_rando: DamageRando
     damage_rando_overrides: DamageRandoOverrides
     hp_cap: HpCap
+    aura_cap: AuraCap
     level_cap: LevelCap
     extra_earrings_xp: ExtraEarringsXP
     boss_healing: BossHealing
@@ -400,6 +435,12 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     rising_tides_overrides: RisingTidesOverrides
     unchained_keys: UnchainedKeys
     back_to_the_future: PresentAccessWithWheelAndSpindle
+    prism_break: PrismBreak
+    lock_key_amadeus: LockKeyAmadeus
+    risky_warps: RiskyWarps
+    pyramid_start: PyramidStart
+    gate_keep: GateKeep
+    royal_roadblock: RoyalRoadblock
     trap_chance: TrapChance
     traps: Traps
 
@@ -417,13 +458,16 @@ class HiddenTraps(Traps):
     """List of traps that may be in the item pool to find"""
     visibility = Visibility.none
 
-class OptionsHider:
-    @classmethod
-    def hidden(cls, option: Type[Option[Any]]) -> Type[Option]:
-        new_option = AssembleOptions(f"{option}Hidden", option.__bases__, vars(option).copy())
-        new_option.visibility = Visibility.none
-        new_option.__doc__ = option.__doc__
-        return new_option
+class HiddenDeathLink(DeathLink):
+    """When you die, everyone who enabled death link dies. Of course, the reverse is true too."""
+    visibility = Visibility.none
+
+def hidden(option: Type[Option[Any]]) -> Type[Option]:
+    new_option = AssembleOptions(f"{option.__name__}Hidden", option.__bases__, vars(option).copy())
+    new_option.visibility = Visibility.none
+    new_option.__doc__ = option.__doc__
+    globals()[f"{option.__name__}Hidden"] = new_option
+    return new_option
     
 class HasReplacedCamelCase(Toggle):
     """For internal use will display a warning message if true"""
@@ -431,41 +475,42 @@ class HasReplacedCamelCase(Toggle):
 
 @dataclass
 class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
-    StartWithJewelryBox: OptionsHider.hidden(StartWithJewelryBox) # type: ignore
-    DownloadableItems: OptionsHider.hidden(DownloadableItems) # type: ignore
-    EyeSpy: OptionsHider.hidden(EyeSpy) # type: ignore
-    StartWithMeyef: OptionsHider.hidden(StartWithMeyef) # type: ignore
-    QuickSeed: OptionsHider.hidden(QuickSeed) # type: ignore
-    SpecificKeycards: OptionsHider.hidden(SpecificKeycards) # type: ignore
-    Inverted: OptionsHider.hidden(Inverted) # type: ignore
-    GyreArchives: OptionsHider.hidden(GyreArchives) # type: ignore
-    Cantoran: OptionsHider.hidden(Cantoran) # type: ignore
-    LoreChecks: OptionsHider.hidden(LoreChecks) # type: ignore
-    BossRando: OptionsHider.hidden(BossRando) # type: ignore
-    DamageRando: OptionsHider.hidden(DamageRando) # type: ignore
+    StartWithJewelryBox: hidden(StartWithJewelryBox) # type: ignore
+    DownloadableItems: hidden(DownloadableItems) # type: ignore
+    EyeSpy: hidden(EyeSpy) # type: ignore
+    StartWithMeyef: hidden(StartWithMeyef) # type: ignore
+    QuickSeed: hidden(QuickSeed) # type: ignore
+    SpecificKeycards: hidden(SpecificKeycards) # type: ignore
+    Inverted: hidden(Inverted) # type: ignore
+    GyreArchives: hidden(GyreArchives) # type: ignore
+    Cantoran: hidden(Cantoran) # type: ignore
+    LoreChecks: hidden(LoreChecks) # type: ignore
+    BossRando: hidden(BossRando) # type: ignore
+    EnemyRando: hidden(EnemyRando) # type: ignore
+    DamageRando: hidden(DamageRando) # type: ignore
     DamageRandoOverrides: HiddenDamageRandoOverrides
-    HpCap: OptionsHider.hidden(HpCap) # type: ignore
-    LevelCap: OptionsHider.hidden(LevelCap) # type: ignore
-    ExtraEarringsXP: OptionsHider.hidden(ExtraEarringsXP) # type: ignore
-    BossHealing: OptionsHider.hidden(BossHealing) # type: ignore
-    ShopFill: OptionsHider.hidden(ShopFill) # type: ignore
-    ShopWarpShards: OptionsHider.hidden(ShopWarpShards) # type: ignore
-    ShopMultiplier: OptionsHider.hidden(ShopMultiplier) # type: ignore
-    LootPool: OptionsHider.hidden(LootPool) # type: ignore
-    DropRateCategory: OptionsHider.hidden(DropRateCategory) # type: ignore
-    FixedDropRate: OptionsHider.hidden(FixedDropRate) # type: ignore
-    LootTierDistro: OptionsHider.hidden(LootTierDistro) # type: ignore
-    ShowBestiary: OptionsHider.hidden(ShowBestiary) # type: ignore
-    ShowDrops: OptionsHider.hidden(ShowDrops) # type: ignore
-    EnterSandman: OptionsHider.hidden(EnterSandman) # type: ignore
-    DadPercent: OptionsHider.hidden(DadPercent) # type: ignore
-    RisingTides: OptionsHider.hidden(RisingTides) # type: ignore
+    HpCap: hidden(HpCap) # type: ignore
+    LevelCap: hidden(LevelCap) # type: ignore
+    ExtraEarringsXP: hidden(ExtraEarringsXP) # type: ignore
+    BossHealing: hidden(BossHealing) # type: ignore
+    ShopFill: hidden(ShopFill) # type: ignore
+    ShopWarpShards: hidden(ShopWarpShards) # type: ignore
+    ShopMultiplier: hidden(ShopMultiplier) # type: ignore
+    LootPool: hidden(LootPool) # type: ignore
+    DropRateCategory: hidden(DropRateCategory) # type: ignore
+    FixedDropRate: hidden(FixedDropRate) # type: ignore
+    LootTierDistro: hidden(LootTierDistro) # type: ignore
+    ShowBestiary: hidden(ShowBestiary) # type: ignore
+    ShowDrops: hidden(ShowDrops) # type: ignore
+    EnterSandman: hidden(EnterSandman) # type: ignore
+    DadPercent: hidden(DadPercent) # type: ignore
+    RisingTides: hidden(RisingTides) # type: ignore
     RisingTidesOverrides: HiddenRisingTidesOverrides
-    UnchainedKeys: OptionsHider.hidden(UnchainedKeys) # type: ignore
-    PresentAccessWithWheelAndSpindle: OptionsHider.hidden(PresentAccessWithWheelAndSpindle) # type: ignore
-    TrapChance: OptionsHider.hidden(TrapChance) # type: ignore
+    UnchainedKeys: hidden(UnchainedKeys) # type: ignore
+    PresentAccessWithWheelAndSpindle: hidden(PresentAccessWithWheelAndSpindle) # type: ignore
+    TrapChance: hidden(TrapChance) # type: ignore
     Traps: HiddenTraps # type: ignore
-    DeathLink: OptionsHider.hidden(DeathLink) # type: ignore
+    DeathLink: HiddenDeathLink # type: ignore
     has_replaced_options: HasReplacedCamelCase
 
     def handle_backward_compatibility(self) -> None:
@@ -512,6 +557,10 @@ class BackwardsCompatiableTimespinnerOptions(TimespinnerOptions):
         if self.BossRando != BossRando.default and \
             self.boss_rando == BossRando.default:
             self.boss_rando.value = self.BossRando.value
+            self.has_replaced_options.value = Toggle.option_true
+        if self.EnemyRando != EnemyRando.default and \
+            self.enemy_rando == EnemyRando.default:
+            self.enemy_rando.value = self.EnemyRando.value
             self.has_replaced_options.value = Toggle.option_true
         if self.DamageRando != DamageRando.default and \
             self.damage_rando == DamageRando.default:
