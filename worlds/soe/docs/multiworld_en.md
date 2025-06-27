@@ -130,9 +130,7 @@ page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platfor
 
 ### Open the client
 
-Open ap-soeclient ([Evermizer Archipelago Client Page](http://evermizer.com/apclient)) in a modern browser. Do not
-switch tabs, open it in a new window if you want to use the browser while playing. Do not minimize the window with the
-client.
+Open ap-soeclient ([Evermizer Archipelago Client Page](http://evermizer.com/apclient)) in a modern browser.
 
 The client should automatically connect to SNI, the "SNES" status should change to green.
 

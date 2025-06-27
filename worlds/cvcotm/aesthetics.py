@@ -48,11 +48,17 @@ class OtherGameAppearancesInfo(TypedDict):
 
 
 other_game_item_appearances: Dict[str, Dict[str, OtherGameAppearancesInfo]] = {
-    # NOTE: Symphony of the Night is currently an unsupported world not in main.
+    # NOTE: Symphony of the Night and Harmony of Dissonance are custom worlds that are not core verified.
     "Symphony of the Night": {"Life Vessel": {"type": 0xE4,
                                               "appearance": 0x01},
                               "Heart Vessel": {"type": 0xE4,
                                                "appearance": 0x00}},
+
+    "Castlevania - Harmony of Dissonance": {"Life Max Up": {"type": 0xE4,
+                                                            "appearance": 0x01},
+                                            "Heart Max Up": {"type": 0xE4,
+                                                             "appearance": 0x00}},
+
     "Timespinner": {"Max HP": {"type": 0xE4,
                                "appearance": 0x01},
                     "Max Aura": {"type": 0xE4,
