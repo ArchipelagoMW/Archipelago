@@ -125,7 +125,6 @@ class Wargroove2Context(CommonContext):
         self.syncing = False
         self.awaiting_bridge = False
 
-        options = get_settings()
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         game_options = Wargroove2World.settings
 
