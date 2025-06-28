@@ -16,7 +16,7 @@ from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import get_modded_items, get_modded_locations, get_mod_guids, get_modded_shopsanity_locations
+from .mod_helper import get_modded_items, get_modded_locations, get_mod_titles, get_modded_shopsanity_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
@@ -406,10 +406,10 @@ class CrystalProjectWorld(World):
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
-        mod_guids = None
+        mod_titles = None
         slot_data_locations = []
         if options.UseMods:
-            mod_guids = get_mod_guids()
+            mod_titles = get_mod_titles()
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code, "Region": modded_location.region, "Name": modded_location.name, "Coordinates": modded_location.coordinates, "biomeId": modded_location.biomeId, "Rule": None })
             for shop in self.modded_shops:
@@ -435,6 +435,6 @@ class CrystalProjectWorld(World):
             "regionsanity": bool(self.options.regionsanity.value),
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
-            "modGuids": mod_guids,
+            "modTitles": mod_titles,
             "moddedLocations": slot_data_locations
         }

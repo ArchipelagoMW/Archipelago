@@ -27,6 +27,7 @@ class ModLocationData(NamedTuple):
 class ModDataModel(object):
     def __init__(self, json_data):
         self.ID = None
+        self.Title = None
         self.System = None
         self.Equipment = None
         self.Items = None
@@ -39,12 +40,12 @@ class IdsExcludedFromRandomization(NamedTuple):
     excluded_item_ids : List[int]
     excluded_job_ids : List[int]
 
-def get_mod_guids() -> List[str]:
-    guids: List[str] = []
+def get_mod_titles() -> List[str]:
+    titles: List[str] = []
     file_directory = get_mod_directory()
 
     if not os.path.isdir(file_directory):
-        return guids
+        return titles
 
     only_files = [f for f in listdir(file_directory) if
                   isfile(join(file_directory, f))]
@@ -52,9 +53,9 @@ def get_mod_guids() -> List[str]:
     for file in only_files:
         file_text = open(join(file_directory, file)).read()
         data = ModDataModel(file_text)
-        guids.append(data.ID)
+        titles.append(data.Title)
 
-    return guids
+    return titles
 
 def get_modded_items(player: int) -> List[Item]:
     items: List[Item] = []
