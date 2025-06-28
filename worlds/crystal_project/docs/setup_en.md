@@ -5,7 +5,7 @@
 - Crystal Project Installer from the
   [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
 
-- .Net 8.0 Desktop Runtime x64 or .Net 8.0 Runtime x64 (not the SDK!) is required to run the Crystal Project Archipelago Mod Installer: 
+- .Net 8.0 Desktop Runtime x64 (not the SDK, ASP.NET Core or generic Runtime!) is required to run the Crystal Project Archipelago Mod Installer: 
 https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 
 ## Recommended Installation Instructions
