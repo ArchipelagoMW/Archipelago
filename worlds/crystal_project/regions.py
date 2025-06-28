@@ -211,16 +211,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     connect_menu_region(world, options)
 
     fancy_add_exits(world, SPAWNING_MEADOWS, [DELENDE, MERCURY_SHRINE, POKO_POKO_DESERT, CONTINENTAL_TRAM, BEAURIOR_VOLCANO, YAMAGAWA_MA],
-                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) and options.obscureRoutes.value,
+                    {CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) and options.obscureRoutes.value == options.obscureRoutes.option_true,
                     MERCURY_SHRINE: lambda state: logic.has_vertical_movement(state),
-                    POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value,
+                    POKO_POKO_DESERT: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
                     BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state),
                     YAMAGAWA_MA: lambda state: logic.has_swimming(state) or logic.has_vertical_movement(state)})
     fancy_add_exits(world, DELENDE, [SPAWNING_MEADOWS, SOILED_DEN, THE_PALE_GROTTO, YAMAGAWA_MA, SEASIDE_CLIFFS, MERCURY_SHRINE, JADE_CAVERN, ANCIENT_RESERVOIR, GREENSHIRE_REPRISE, SALMON_PASS, PROVING_MEADOWS],
                     {JADE_CAVERN: lambda state: logic.has_golden_quintar(state),
                     ANCIENT_RESERVOIR: lambda state: logic.has_swimming(state),
                     SALMON_PASS: lambda state: logic.has_swimming(state),
-                    GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) or options.obscureRoutes.value,
+                    GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
                     PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state)})
     fancy_add_exits(world, MERCURY_SHRINE, [DELENDE, SEASIDE_CLIFFS, BEAURIOR_VOLCANO],
                     {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state)})
@@ -453,10 +453,15 @@ def combine_callables(callable1: Callable[[CollectionState], bool], callable2: C
     return lambda state, a=callable1, b=callable2: a(state) and b(state)
 
 def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                    rules: Dict[str, Callable[[CollectionState], bool]] = None):
+                    rules: Dict[str, Callable[[CollectionState], bool]] | None = None):
+    if rules is not None:
+        for region_rule in rules:
+            if not region_rule in exits:
+                raise Exception(f"A rule was defined for the entrance {region} -> {region_rule} but {region_rule} isn't in the list of exits from {region}")
+
     for region_exit in exits:
         if rules is None:
-            rules: Dict[str, Callable[[CollectionState], bool]] = {}
+            rules = {}
         if region_exit in rules:
             rules[region_exit] = combine_callables(rules[region_exit], rules_on_regions[region_exit])
         else:
