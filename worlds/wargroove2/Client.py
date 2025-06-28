@@ -6,14 +6,12 @@ import sys
 import asyncio
 import pkgutil
 import random
-import typing
 import Utils
 import json
 import logging
 import ModuleUpdate
 from typing import Tuple, List, Iterable, Dict, Any
 
-from settings import get_settings
 from . import Wargroove2World
 from .Items import item_table, faction_table, CommanderData, ItemData, item_id_name
 
