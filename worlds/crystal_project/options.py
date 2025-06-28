@@ -74,13 +74,13 @@ class IncludedRegions(Choice):
     This can be used to adjust the difficulty and length of your game.
 
     NOTE: Make sure to include the region that has the finish line of your chosen goal in it!
-    Example: if your goal is Astley, Expert is considered to have that finish line, so you can pick Expert or All.
+    Example: if your goal is Astley, Advanced is considered to have that finish line, so you can pick Advanced, Expert, or All.
 
     Beginner: Only regions up through the end of Skumparadise will have checks. Finish Line: Clamshells
 
-    Advanced: Regions up to Salmon Bay will have checks.
+    Advanced: Regions up to Salmon Bay will have checks. Finish Line: Astley (Note: Level Gating's Level Catch-Up Option is recommended for Astley on Advanced.)
 
-    Expert: Regions up to The Deep Sea will have checks. (Note: The Depths will not be included.) Finish Line: Astley
+    Expert: Regions up to The Deep Sea will have checks. (Note: The Depths will not be included.)
 
     All: Every region is included. Finish Line: True Astley
     """
