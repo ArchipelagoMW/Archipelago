@@ -49,7 +49,7 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
             museum_logic.can_find_museum_items.return_value = DisabledMuseumRule()
             museum_logic.can_complete_museum.return_value = DisabledMuseumRule()
             museum_logic.can_donate.return_value = DisabledMuseumRule()
-            # Allowing calls to museum rules since a lot of other logic depends on it, for minerals for instance.
+            # Allowing calls to can_find_museum_item since a lot of other logic depends on it, for minerals for instance.
             museum_logic.can_find_museum_item.return_value = true_
 
             regions = {region.name for region in self.multiworld.regions}
