@@ -7,6 +7,7 @@ from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
 from .locations import get_locations, get_shops, npc_index_offset, treasure_index_offset, crystal_index_offset, shop_index_offset
+from .unused_locations import get_unused_locations
 from .constants.biomes import get_region_by_id
 from .rules import CrystalProjectLogic
 import json
@@ -210,7 +211,7 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
                         has_add_inventory = not is_excluded
 
                         # Condition Type 5 is Check Inventory
-                        if has_add_inventory and condition['ConditionType'] == 5 and not condition['IsNegation']:
+                        if has_add_inventory and condition['ConditionType'] == 5 and condition['IsNegation']:
                             condition_rule = build_condition_rule(condition, world, player, options)
 
             # 8 is Add Inventory, this means it's a check
@@ -219,9 +220,10 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
                 has_add_inventory = not is_excluded
 
     if has_add_inventory:
-        item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
+        location_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
+        location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
-        if not item_in_pool:
+        if not location_in_pool and not location_unused:
             if not options is None:
                 logic = CrystalProjectLogic(player, options)
 
@@ -265,8 +267,7 @@ def build_shop_locations(location, excluded_ids, player: int, world: "CrystalPro
                         if condition['ConditionType'] == 5 and not condition['IsNegation']:
                             condition_rule = build_condition_rule(condition, world, player, options)
                         else:
-                            condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(
-                                state) and logic.has_vertical_movement(state)
+                            condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
                         location = ModLocationData(region, shop_name, id_with_offset, shop_item_id, coordinates, biome_id, condition_rule)
                         locations.append(location)
@@ -286,8 +287,10 @@ def build_treasure_location(location, excluded_ids, player, options):
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     is_excluded = is_item_at_location_excluded(location['TreasureData'], excluded_ids)
 
-    item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
-    if not item_in_pool and not is_excluded:
+    location_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
+    location_unused = any(location.code == id_with_offset for location in get_unused_locations())
+
+    if not location_in_pool and not location_unused and not is_excluded:
         logic = CrystalProjectLogic(player, options)
         condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
         location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, condition_rule)
@@ -308,8 +311,10 @@ def build_crystal_location(location, excluded_ids, player, options):
     job_id = location['CrystalData']['JobID']
     is_excluded = job_id in excluded_ids.excluded_job_ids
 
-    item_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
-    if not item_in_pool and not is_excluded:
+    location_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
+    location_unused = any(location.code == id_with_offset for location in get_unused_locations())
+
+    if not location_in_pool and not location_unused and not is_excluded:
         logic = CrystalProjectLogic(player, options)
         condition_rule = lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
         location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, condition_rule)
