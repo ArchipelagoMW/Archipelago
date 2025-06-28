@@ -99,11 +99,22 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
         data = obj._asdict()
         data["class"] = obj.__class__.__name__
         return data
-    if isinstance(obj, (tuple, list, set, frozenset)):
+    if isinstance(obj, (tuple, list, set)):
         return tuple(_scan_for_TypedTuples(o) for o in obj)
     if isinstance(obj, dict):
         return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
     return obj
+
+
+def convert_to_base_types(obj: typing.Any) -> typing.Any:
+    if isinstance(obj, (tuple, list, set)):
+        return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, dict):
+        return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
+    elif type(obj) in (str, int, float):
+        return obj
+    else:
+        raise Exception(f"Cannot handle {type(obj)}")
 
 
 _encode = JSONEncoder(

@@ -12,6 +12,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
+from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple
 from settings import get_settings
@@ -315,13 +316,13 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                         spheres.append(dict(current_sphere))
 
                 multidata = {
-                    "slot_data": slot_data,
+                    "slot_data": convert_to_base_types(slot_data),
                     "slot_info": slot_info,
                     "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
                     "locations": locations_data,
                     "checks_in_area": checks_in_area,
                     "server_options": baked_server_options,
-                    "er_hint_data": er_hint_data,
+                    "er_hint_data": convert_to_base_types(er_hint_data),
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,
                     "version": tuple(version_tuple),
