@@ -3,12 +3,12 @@ from typing import Dict, Set
 # auto-generated
 banlists: Dict[str, Dict[str, Set[str]]] = {
     "no_banlist": {
-        "Forbidden": {},
-        "Limited": {},
-        "Semi-Limited": {},
+        "Forbidden": set(),
+        "Limited": set(),
+        "Semi-Limited": set(),
     },
     "september_2003": {
-        "Forbidden": {},
+        "Forbidden": set(),
         "Limited": {
             "Vampire Lord",
             "Injection Fairy Lily",
@@ -299,9 +299,6 @@ banlists: Dict[str, Dict[str, Set[str]]] = {
     },
     "september_2005": {
         "Forbidden": {
-            "0x1386",
-            "0x1387",
-            "0x1388",
             "Chaos Emperor Dragon - Envoy of the End",
             "Black Luster Soldier - Envoy of the Beginning",
             "Sinister Serpent",
