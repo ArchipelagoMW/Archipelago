@@ -1,7 +1,8 @@
 import unittest
 
-from ..items import load_item_csv
+from ..items import load_item_csv, Group
 from ..locations import load_location_csv
+from ..strings.trap_names import all_traps
 from ..options import Mods
 
 
@@ -28,6 +29,11 @@ class TestCsvIntegrity(unittest.TestCase):
             for mod_name in mod_names:
                 if mod_name:
                     self.assertIn(mod_name, Mods.valid_keys)
+
+        with self.subTest("Test all traps are in string"):
+            traps = [item.name for item in items if Group.TRAP in item.groups and Group.DEPRECATED not in item.groups]
+            for trap in traps:
+                self.assertIn(trap, all_traps)
 
     def test_locations_integrity(self):
         locations = load_location_csv()
