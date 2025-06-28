@@ -1,6 +1,4 @@
-from typing import Dict
-
-from typing_extensions import NamedTuple
+from typing import Dict, NamedTuple
 
 
 class BoosterCard(NamedTuple):

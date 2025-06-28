@@ -1,8 +1,7 @@
-import typing
 from dataclasses import dataclass
 
 from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, Toggle, OptionDict, OptionCounter
-from worlds.yugioh06.card_data import get_all_valid_cards_set
+from .card_data import get_all_valid_cards_set
 
 
 class StructureDeck(Choice):
