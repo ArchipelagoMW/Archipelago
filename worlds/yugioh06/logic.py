@@ -1,8 +1,11 @@
 from BaseClasses import CollectionState
-from worlds.AutoWorld import World
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import Yugioh06World
 
 
-def yugioh06_difficulty(world, state: CollectionState, player: int, level: int):
+def yugioh06_difficulty(world: "Yugioh06World", state: CollectionState, player: int, level: int):
     total_beaters = len(world.progression_cards["Beaters"])
     total_monster_removal = len(world.progression_cards["Monster Removal"])
     total_backrow_removal = len(world.progression_cards["Backrow Removal"])
@@ -28,7 +31,7 @@ def yugioh06_difficulty(world, state: CollectionState, player: int, level: int):
                 state.has_all(world.progression_cards["Backrow Removal"], player))
 
 
-def get_cards_in_first_pack(world: World, criteria: str):
+def get_cards_in_first_pack(world: "Yugioh06World", criteria: str):
     cards_of_criteria = list(world.progression_cards[criteria])
     min_cards = len(cards_of_criteria) // 3
     cards_in_start = [c for c in world.progression_cards_in_start if c in cards_of_criteria]

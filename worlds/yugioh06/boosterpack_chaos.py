@@ -1,9 +1,10 @@
-from typing import Dict
-
-from worlds.AutoWorld import World
+from typing import Dict, TYPE_CHECKING
 from worlds.yugioh06.boosterpacks_data import booster_pack_data
 from worlds.yugioh06.logic import get_cards_in_first_pack
 from .card_data import cards
+
+if TYPE_CHECKING:
+    from . import Yugioh06World
 
 all_rarities = [
     "Common",
@@ -14,7 +15,7 @@ all_rarities = [
 ]
 
 
-def create_chaos_packs(world: World):
+def create_chaos_packs(world: "Yugioh06World"):
     beater_in_first_pack = get_cards_in_first_pack(world, "Beaters")
     monster_removal_in_first_pack = get_cards_in_first_pack(world, "Monster Removal")
     backrow_removal_in_first_pack = get_cards_in_first_pack(world, "Backrow Removal")

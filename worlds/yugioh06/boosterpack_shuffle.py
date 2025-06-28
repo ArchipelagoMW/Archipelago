@@ -1,8 +1,9 @@
-from typing import Dict
-
-from worlds.AutoWorld import World
+from typing import Dict, TYPE_CHECKING
 from worlds.yugioh06.boosterpacks_data import booster_pack_data
 from worlds.yugioh06.logic import get_cards_in_first_pack
+
+if TYPE_CHECKING:
+    from . import Yugioh06World
 
 all_cards_in_pool = {
     "4-Starred Ladybug of Doom": 2,
@@ -1894,7 +1895,7 @@ all_cards_in_pool = {
 }
 
 
-def create_shuffled_packs(world: World):
+def create_shuffled_packs(world: "Yugioh06World"):
     beater_in_first_pack = get_cards_in_first_pack(world, "Beaters")
     monster_removal_in_first_pack = get_cards_in_first_pack(world, "Monster Removal")
     backrow_removal_in_first_pack = get_cards_in_first_pack(world, "Backrow Removal")

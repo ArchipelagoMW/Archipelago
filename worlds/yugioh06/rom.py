@@ -6,14 +6,16 @@ import struct
 from settings import get_settings
 
 import Utils
+from typing import TYPE_CHECKING
 from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes
-
-from worlds.AutoWorld import World
 from . import Theme_Duels, Limited_Duels, cards
 from .boosterpack_contents import contents
 from .boosterpacks_data import booster_pack_data, reverse_rarities
 from .items import item_to_index
 from .rom_values import banlist_ids, structure_deck_selection
+
+if TYPE_CHECKING:
+    from . import Yugioh06World
 
 MD5Europe = "020411d3b08f5639eb8cb878283f84bf"
 MD5America = "b8a7c976b28172995fe9e465d654297a"
@@ -30,7 +32,7 @@ class YGO06ProcedurePatch(APProcedurePatch, APTokenMixin):
         return get_base_rom_bytes()
 
 
-def write_tokens(world: World, patch: YGO06ProcedurePatch):
+def write_tokens(world: "Yugioh06World", patch: YGO06ProcedurePatch):
     # set structure deck
     if not world.structure_deck:
         structure_deck = structure_deck_selection.get(world.options.structure_deck.value)
