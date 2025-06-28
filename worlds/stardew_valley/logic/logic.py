@@ -128,7 +128,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             self.registry.cooking_rules[recipe.meal] = can_cook_rule
 
         for recipe in all_crafting_recipes:
-            if recipe.mod_name and not self.content.is_enabled(recipe.mod_name):
+            if recipe.content_pack is not None and not self.content.are_all_enabled(recipe.content_pack):
                 continue
             can_craft_rule = self.crafting.can_craft(recipe)
             if recipe.item in self.registry.crafting_rules:

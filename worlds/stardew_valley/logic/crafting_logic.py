@@ -89,7 +89,7 @@ class CraftingLogic(BaseLogic):
             return self.logic.true_
         recipe_rules = []
         for recipe in all_crafting_recipes:
-            if recipe.mod_name and recipe.mod_name not in self.options.mods:
+            if recipe.content_pack is not None and not self.content.are_all_enabled(recipe.content_pack):
                 continue
             recipe_rules.append(self.can_craft(recipe))
         number = min(len(recipe_rules), number)
