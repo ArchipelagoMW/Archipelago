@@ -189,7 +189,7 @@ class Wargroove2Context(CommonContext):
             with open(destination, 'wb') as f:
                 f.write(file_data)
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+    def on_deathlink(self, data: Dict[str, Any]) -> None:
         with open(os.path.join(self.game_communication_path, "deathLinkReceive"), 'w+') as f:
             text = data.get("cause", "")
             if text:
