@@ -692,6 +692,13 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
