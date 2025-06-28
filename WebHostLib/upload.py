@@ -1,5 +1,5 @@
-import base64
 import json
+import pickle
 import typing
 import uuid
 import zipfile
@@ -14,7 +14,7 @@ import schema
 
 import MultiServer
 from NetUtils import SlotType
-from Utils import VersionException, __version__, restricted_dumps
+from Utils import VersionException, __version__
 from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
 from worlds.AutoWorld import data_package_checksum
@@ -68,7 +68,7 @@ def process_multidata(compressed_multidata, files={}):
                                     f"for game {game}.")
 
                 game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                    data=restricted_dumps(game_data))
+                                                    data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
@@ -91,7 +91,7 @@ def process_multidata(compressed_multidata, files={}):
                            game=slot_info.game))
         flush()  # commit slots
 
-    compressed_multidata = compressed_multidata[0:1] + zlib.compress(restricted_dumps(decompressed_multidata), 9)
+    compressed_multidata = compressed_multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
     return slots, compressed_multidata
 
 

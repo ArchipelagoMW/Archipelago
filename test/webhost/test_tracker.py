@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
+import pickle
 from typing import ClassVar
 from uuid import UUID, uuid4
 
 from flask import url_for
 
 from . import TestBase
-from Utils import restricted_dumps
 
 
 class TestTracker(TestBase):
@@ -39,7 +39,7 @@ class TestTracker(TestBase):
                 for game, game_data in multidata["datapackage"].items():
                     if not GameDataPackage.get(checksum=game_data["checksum"]):
                         GameDataPackage(checksum=game_data["checksum"],
-                                        data=restricted_dumps(game_data))
+                                        data=pickle.dumps(game_data))
                 # create an empty seed and a room from it
                 seed = Seed(multidata=self.data, owner=session["_id"])
                 room = Room(seed=seed, owner=session["_id"], tracker=self.tracker_uuid)
