@@ -383,10 +383,10 @@ class Wargroove2Context(CommonContext):
             ctx: Wargroove2Context
             unit_tracker: ItemTracker
             level_tracker: LevelTracker
-            level_1_Layout: GridLayout(cols=1)
-            level_2_Layout: GridLayout(cols=1)
-            level_3_Layout: GridLayout(cols=1)
-            level_4_Layout: GridLayout(cols=1)
+            level_1_Layout: GridLayout
+            level_2_Layout: GridLayout
+            level_3_Layout: GridLayout
+            level_4_Layout: GridLayout
             trigger_tracker: BoxLayout
             boost_tracker: BoxLayout
             commander_buttons: Dict[str, List[CommanderButton]]
