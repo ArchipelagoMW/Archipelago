@@ -160,6 +160,7 @@ class PhantomHourglassBoatRequriesSeaChart(Toggle):
 class PhantomHourglassFogSettings(Choice):
     """
     Choose when the fog exists in the NW Quadrant
+    WARNING! The game crashes if you exit out to the NW quadrant with the spirits out. Enter and exit the ghost ship to remove them
     - no_fog: there's no fog in the NW quadrant. You need all 3 spirits to find the ghost ship
     - vanilla_fog: fog exists until you defeat the ghost ship, you have to take the twisty route to NW
     - open_ghost_ship: fog exists until you beat the ghost ship, and you don't need the spirit items to find it.
@@ -176,7 +177,7 @@ class PhantomHourglassRandomizeHarrow(Toggle):
     Choose whether to randomize the rng hell checks on harrow island
     """
     display_name = "Randomize Harrow"
-    default = 1
+    default = 0
 
 class PhantomHourglassGhostShipInDungeonPool(Choice):
     """
@@ -206,6 +207,47 @@ class PhantomHourglassRandomizeMaskedBeedle(Toggle):
     auto_display_name = "masked_beedle"
     default = 0
 
+class PhantomHourglassDungeonHints(Choice):
+    """
+    Receive hints for your required dungeons
+    - false: no hints
+    - oshus: oshus gives dungeon hints
+    - totok: entering totok gives dungeon hints
+    """
+    display_name = "dungeon_hints"
+    option_false = 0
+    option_oshus = 1
+    option_totok = 2
+    default = 1
+
+class PhantomHourglassExcludeNonRequriedDungeons(Toggle):
+    """
+    Non-required dungeons won't have progression or useful items. Does not apply to TotOK.
+    """
+    display_name = "exclude_non_required_dungeons"
+    default = 1
+
+class PhantomHourglassHintSpiritIsland(Choice):
+    """
+    Get hints for spirit island upgrades on entering the shrine
+    - all: get hints for all upgrades
+    - level_two: only get hints for the 2nd level upgrades
+    - none: don't receive hints
+    """
+    display_name = "hint_spirit_island"
+    option_all = 0
+    option_level_two = 1
+    option_none = 2
+    default = 0
+
+class PhantomHourglassShopHints(Toggle):
+    """
+    Get hints for shop items you currently can buy
+    Includes island shops, Beedle, masked Beedle and Eddo
+    """
+    display_name = "hint_shops"
+    default = 1
+
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
     # Accessibility
@@ -214,6 +256,7 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     # Goal
     goal: PhantomHourglassGoal
     dungeons_required: PhantomHourglassDungeonsRequired
+    exclude_non_required_dungeons: PhantomHourglassExcludeNonRequriedDungeons
     bellum_access: PhantomHourglassBellumAccess
     ghost_ship_in_dungeon_pool: PhantomHourglassGhostShipInDungeonPool
     totok_in_dungeon_pool: PhantomHourglassTotokInDungeonPool
@@ -229,6 +272,11 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
     randomize_harrow: PhantomHourglassRandomizeHarrow
     randomize_masked_beedle: PhantomHourglassRandomizeMaskedBeedle
+
+    # Hint Options
+    dungeon_hints: PhantomHourglassDungeonHints
+    shop_hints: PhantomHourglassShopHints
+    spirit_island_hints: PhantomHourglassHintSpiritIsland
 
     # World Options
     fog_settings: PhantomHourglassFogSettings

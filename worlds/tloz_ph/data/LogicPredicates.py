@@ -336,6 +336,8 @@ def ph_beedle_shop(state, player, price):
             other_costs += 3000
     if ph_has_bombs(state, player):
         other_costs += 1000
+    if ph_option_randomize_masked_beedle(state, player):
+        other_costs += 1500
     return ph_has_rupees(state, player, price + other_costs)
 
 
@@ -433,6 +435,8 @@ def ph_beat_required_dungeons(state: CollectionState, player: int):
     return state.has_group("Current Metals", player,
                            state.multiworld.worlds[player].options.dungeons_required)
 
+def ph_option_randomize_masked_beedle(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.randomize_masked_beedle
 
 def ph_goal_option_phantom_door(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.bellum_access == "spawn_phantoms_on_b13"
@@ -615,6 +619,7 @@ def ph_totok_b9(state, player):
 def ph_totok_b9_phantom_kill(state, player):
     return any([
         ph_has_phantom_sword(state, player),
+        ph_clever_pots(state, player),
         all([
             ph_can_kill_phantoms_traps(state, player),
             any([

@@ -74,6 +74,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # B6
         ["totok b6", "totok b6 phantom chest", False, lambda state: ph_has_phantom_sword(state, player)],
         ["totok b6", "totok b6 bow chest", False, lambda state: ph_has_bow(state, player)],
+        ["totok b6", "totok b6 cc", False, lambda state: ph_has_sea_chart(state, player, "SW")],
         ["totok b6", "totok midway", False, lambda state: ph_has_triforce_crest(state, player)],
 
         # ============ TotOK Part 2 =====================
@@ -97,8 +98,9 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["totok b9", "totok b9 nw", False, None],
         ["totok b9", "totok b9 phantom", False, lambda state: ph_totok_b9_phantom_kill(state, player)],
         ["totok b9", "totok b9.5", False, lambda state: all([ph_has_totok_crystal(state, player, "Round"),
-                                                             ph_has_totok_crystal(state, player, "Triangle")])],
-        ["totok b9.5", "totok b10", False, lambda state: ph_totok_b9_phantom_kill(state, player)],
+                                                             ph_has_totok_crystal(state, player, "Triangle"),
+                                                             ph_totok_b9_phantom_kill(state, player)])],
+        ["totok b9.5", "totok b10", False, None],
         # B10
         ["totok b10", "totok b10 inner", False, lambda state: ph_has_explosives(state, player)],
         ["totok b10 inner", "totok b10 hammer", False, lambda state: ph_has_hammer(state, player)],
@@ -131,8 +133,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["sw ocean east", "beedle gem", False, lambda state: ph_beedle_shop(state, player, 500)],
         ["sw ocean east", "beedle bomb bag", False, lambda state: all([ph_beedle_shop(state, player, 500),
                                                                        ph_has_bombs(state, player)])],
-        ["sw ocean east", "masked ship gem", False, lambda state: ph_beedle_shop(state, player, 1000)],
-        ["sw ocean east", "masked ship hc", False, lambda state: ph_beedle_shop(state, player, 2500)],
+        ["sw ocean east", "masked ship gem", False, lambda state: ph_beedle_shop(state, player, 500)],
+        ["sw ocean east", "masked ship hc", False, lambda state: ph_beedle_shop(state, player, 500)],
 
         # ============ SW Ocean =================
 

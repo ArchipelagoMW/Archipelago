@@ -7,12 +7,13 @@ class TestGeneration(WorldTestBase):
     options = {
         "keysanity": "in_own_dungeon",
         "phantom_combat_difficulty": "require_weapon",
-        "logic": "normal",
+        "logic": "medium",
         "accessibility": "full",
-        "randomize_frogs": "randomize",
-        "dungeons_required": 6,
+        "randomize_frogs": "start_with",
+        "dungeons_required": 8,
         "goal": "beat_bellumbeck",
-        "ghost_ship_in_dungeon_pool": "cubus_sisters",
-        "totok_in_dungeon_pool": True,
+        "ghost_ship_in_dungeon_pool": "false",
+        "totok_in_dungeon_pool": False,
         "randomize_harrow": False,
+        "exclude_non_required_dungeons": True,
                }

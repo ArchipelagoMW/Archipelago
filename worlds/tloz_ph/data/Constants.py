@@ -25,7 +25,7 @@ STARTING_FLAGS = [
     [0x1B558E, 0x12],
     [0x1B558F, 0x04],
     [0x1B5590, 0x02],
-    [0x1B5591, 0xFE],
+    [0x1B5591, 0x7E],
     [0x1B5592, 0x04],
     [0x1B5593, 0xEA],
     [0x1B5594, 0x47],
@@ -51,7 +51,7 @@ STARTING_FLAGS = [
     [0x1B55A8, 0x1F],
     [0x1B55A9, 0x00],
     [0x1B55AA, 0x08],
-    [0x1B55AB, 0x40],
+    [0x1B55AB, 0x48],
     [0x1B55AC, 0x70],
     [0x1B55AD, 0x00],
     [0x1B55AE, 0x00],
@@ -92,7 +92,7 @@ STARTING_FROG_FLAGS = [
 ]
 
 FOG_SETTINGS_FLAGS = [
-    [[0x1B5582, 0xC0]],
+    [[0x1B5582, 0xC0], [0x1B55AB, 0x58]],
     [],
     [[0x1B557E, 0x3E]]
 ]
@@ -106,23 +106,23 @@ STAGE_FLAGS = {
          0x00,
          0x00,
          0x00],
-    37: [0xFE, 0xBE, 0xFB, 0xFF],  # TotOK
-    0: [0x82, 0x3C, 0x00, 0xC0],  # Sea
+    37: [0xFE, 0xBE, 0xFB, 0xAF],  # TotOK
+    0: [0x82, 0xFC, 0x66, 0xED],  # Sea
     13: [0xEC, 0x18, 0x17, 0x00],  # Ember
     28: [0x8E, 0xB9, 0x00, 0x00],  # ToF
     12: [0x34, 0x01, 0x00, 0x00],  # Molida
     14: [0x02, 0x02, 0x00, 0x00],  # Gusts
-    29: [0x00, 0x12, 0x00, 0x00],  # ToW
-    30: [0xFE, 0xBE, 0xFB, 0xFF],  # ToC
+    29: [0x00, 0x10, 0x00, 0x00],  # ToW
+    30: [0x0, 0x0, 0x2, 0x0],  # ToC
     41: [0xC2, 0x10, 0xED, 0x00],  # Ghost Ship
     16: [0x84, 0x13, 0x00, 0xE0],  # Goron Island
-    32: [0x10, 0x82, 0x30, 0xF0],  # Goron Temple
+    32: [0x00, 0x00, 0x30, 0xF0],  # Goron Temple
     15: [0x00, 0x3C, 0x00, 0x40],  # Isle of Frost
     31: [0x00, 0x00, 0xD0, 0x00],  # Temple of Ice
     21: [0xB6, 0x01, 0x00, 0x00],  # Isle of the Dead
     17: [0x12, 0x4C, 0x43, 0x00],  # Isle of ruins
-    18: [0x12, 0x4C, 0x43, 0x00],  # Isle of ruins
-    36: [0x70, 0x00, 0x00, 0x00],  # Bremeur's Temple
+    18: [0x10, 0x4C, 0x43, 0x00],  # Isle of ruins
+    36: [0x20, 0x00, 0x00, 0x00],  # Bremeur's Temple
     33: [0x00, 0x26, 0x00, 0x00],  # Mutoh's Temple
 }
 
@@ -212,7 +212,29 @@ ITEM_GROUPS = {
         "Ruto Crown",
         "Helmaroc Plume",
         "Regal Ring"
+    ],
+    "Ammo Refills": [
+        "Bomb Refill",
+        "Arrow Refill",
+        "Bombchu Refill"
     ]
+}
+
+LOCATION_GROUPS = {
+    "Mountain Passage": [
+        "Mountain Passage Chest 1",
+        "Mountain Passage Chest 2",
+        "Mountain Passage Key Drop",
+        "Mountain Passage Rat Key",
+    ],
+    "Temple of the Ocean King": [],
+    "Temple of Fire": [],
+    "Temple of Wind": [],
+    "Temple of Courage": [],
+    "Goron Temple": [],
+    "Temple of Ice": [],
+    "Mutoh's Temple": [],
+    "Ghost Ship": []
 }
 
 CUSTOM_METALS = {
@@ -376,13 +398,23 @@ HINTS_ON_SCENE = {
     0x500: {  # Beedle Shop
         "unique": ["Beedle Shop Wisdom Gem", "Masked Beedle Courage Gem", "Masked Beedle Heart Container"],
         "beedle": True  # TODO: make this modular, instead of hard coding item requirements
-    }
+    },
+    0xb0A: {  # Oshus Dungeon hints
+        "dungeon_hints": 1
+    },
+    0x2600: {  # TotOK Dungeon hints
+        "dungeon_hints": 2
+    },
+    0x1700: {
+        "sprit_island_hints": True
+    },
 }
 
 HINTS_ON_TRIGGER = {
     "Masked Beedle": ["Masked Beedle Courage Gem", "Masked Beedle Heart Container"]
 }
 
+# Ship sets
 SHIPS = [
     "S.S. Linebeck",
     "Bright Ship",
@@ -394,6 +426,15 @@ SHIPS = [
     "Dignified Ship",
     "Golden Ship",
 ]
+
+# Decode classification for humans
+CLASSIFICATION = {
+    1: "Progression",
+    2: "Useful",
+    4: "Trap",
+    9: "Prog Skip Balancing",
+    0: "Filler"
+                  }
 
 EQUIPPED_SHIP_PARTS_ADDR = [
     0x1BA544,

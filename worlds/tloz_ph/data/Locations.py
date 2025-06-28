@@ -126,7 +126,8 @@ LOCATIONS_DATA = {
         "region_id": "post tof",
         "stage_id": 11,
         "floor_id": 13,
-        "vanilla_item": "Ship Part"
+        "vanilla_item": "Ship Part",
+        'post_dungeon': "Temple of Fire"
     },
     "Mercay Oshus Item After Temple of Wind": {
         "region_id": "mercay oshus gem",
@@ -134,7 +135,8 @@ LOCATIONS_DATA = {
         "floor_id": 10,
         "vanilla_item": "Power Gem",
         "address": 0x1B55A5,
-        "value": 0x2
+        "value": 0x2,
+        'post_dungeon': "Temple of Wind"
     },
     "Mercay Oshus Phantom Sword": {
         "region_id": "mercay oshus phantom blade",
@@ -454,7 +456,7 @@ LOCATIONS_DATA = {
     },
     "TotOK B5 Chest": {
         "region_id": "totok b5 chest",
-        "vanilla_item": "Potion",
+        "vanilla_item": "Red Potion",
         "stage_id": 37,
         "floor_id": 6,
         "x_min": 0x6000,
@@ -479,7 +481,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B6 Courage Crest": {
-        "region_id": "totok b6",
+        "region_id": "totok b6 cc",
         "vanilla_item": "Nothing!",
         "item_override": "Courage Crest",
         "stage_id": 37,
@@ -606,7 +608,7 @@ LOCATIONS_DATA = {
     },
     "TotOK B10 Phantom Eye Chest": {
         "region_id": "totok b10 phantom eyes",
-        "vanilla_item": "Potion",
+        "vanilla_item": "Red Potion",
         "stage_id": 37,
         "floor_id": 0xE,
         "y": 0x1333,
@@ -666,7 +668,7 @@ LOCATIONS_DATA = {
         'dungeon': "Temple of the Ocean King"
     },
     "TotOK B12 Ghost Chest": {
-        "region_id": "totok b13",
+        "region_id": "totok b12",
         "vanilla_item": "Ship Part",
         "item_override": "NE Sea Chart",  # Lets the B13 chest be a dungeon reward
         "stage_id": 37,
@@ -829,7 +831,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xD,
         "floor_id": 10,
         "address": 0x1B557F,
-        "value": 0x20
+        "value": 0x20,
+        'post_dungeon': "Temple of Fire"
     },
     # Temple of Fire
     "Temple of Fire 1F Keese Chest": {
@@ -1012,7 +1015,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 11,
         "address": 0x1B55A2,
-        "value": 0x8
+        "value": 0x8,
+        'post_dungeon': "Temple of Courage"
     },
     "Molida Archery 2000": {
         "region_id": "molida archery",
@@ -1020,7 +1024,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 1,
         "address": 0x1B55A6,
-        "value": 0x10
+        "value": 0x10,
+        'post_dungeon': "Temple of Courage"
     },
 
     # ============= Temple of Courage ===========
@@ -1563,7 +1568,7 @@ LOCATIONS_DATA = {
         "region_id": "ghost ship b2",
         "stage_id": 0x29,
         "floor_id": 1,
-        "vanilla_item": "Potion",
+        "vanilla_item": "Red Potion",
         "x_min": -40000,
         "x_max": -30000,
         "dungeon": "Ghost Ship",
@@ -1581,7 +1586,7 @@ LOCATIONS_DATA = {
         "region_id": "ghost ship b3",
         "stage_id": 0x29,
         "floor_id": 2,
-        "vanilla_item": "Potion",
+        "vanilla_item": "Red Potion",
         "dungeon": "Ghost Ship",
     },
     "Ghost Ship Cubus Sisters Ghost Key": {
@@ -1635,7 +1640,8 @@ LOCATIONS_DATA = {
         "stage_id": 4,
         "floor_id": 0,
         "address": 0x1B5595,
-        "value": 0x80
+        "value": 0x80,
+        'post_dungeon': "Ghost Ship"
     },
 
     # ============= Goron Island ==============
@@ -1693,6 +1699,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Red Rupee (200)",
         "address": 0x1B5593,
         "value": 0x2,
+        'post_dungeon': "Goron Temple"
     },
 
     # ============= Goron Temple ==============
@@ -1866,7 +1873,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x0,
         "vanilla_item": "Bombchus (Progressive)",
         "address": 0x1B559F,
-        "value": 0x20
+        "value": 0x20,
+        'post_dungeon': "Goron Temple"
     },
     "Dee Ess Eye Brute Chest": {
         "region_id": "ds combat",
@@ -1971,7 +1979,7 @@ LOCATIONS_DATA = {
         "region_id": "toi 3f",
         "stage_id": 0x1F,
         "floor_id": 0x1,
-        "vanilla_item": "Potion",
+        "vanilla_item": "Yellow Potion",
         "z_max": -30000,
         "dungeon": "Temple of Ice",
     },
@@ -2003,7 +2011,7 @@ LOCATIONS_DATA = {
         "stage_id": 0x1F,
         "floor_id": 0x2,
         "x_max": -30000,
-        "vanilla_item": "Potion",
+        "vanilla_item": "Yellow Potion",
         "dungeon": "Temple of Ice",
     },
     "Temple of Ice B1 SE Chest": {
@@ -2035,7 +2043,7 @@ LOCATIONS_DATA = {
         "region_id": "toi b2 key",
         "stage_id": 0x1F,
         "floor_id": 0x5,
-        "vanilla_item": "Potion",
+        "vanilla_item": "Yellow Potion",
         "x_min": 30000,
         "dungeon": "Temple of Ice",
     },
@@ -2179,6 +2187,7 @@ LOCATIONS_DATA = {
         "stage_id": 0x12,
         "floor_id": 2,
         "y": 0x0,
+        "additional_rooms": [0x1102],
         "x_min": 55000,
         "x_max": 75000,
         "z_max": -75000
@@ -2188,6 +2197,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Wisdom Gem",
         "stage_id": 0x12,
         "floor_id": 2,
+        "additional_rooms": [0x1102],
         "y": 0x0,
         "z_min": -30000
     },
@@ -2196,6 +2206,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Courage Gem",
         "stage_id": 0x12,
         "floor_id": 2,
+        "additional_rooms": [0x1102],
         "y": 0x0,
         "x_min": 170000,
         "z_max": -75000
@@ -2203,8 +2214,9 @@ LOCATIONS_DATA = {
     "Isle of Ruins Outside Mutoh's Temple Chest": {
         "region_id": "ruins water",
         "vanilla_item": "Big Red Rupee (200)",
-        "stage_id": 0x12,
+        "stage_id": 0x11,
         "floor_id": 2,
+        "additional_rooms": [0x1202],
         "y": 0x0,
         "x_min": 80000,
         "x_max": 105000,
@@ -2335,8 +2347,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Gold Rupee (300)",
         "stage_id": 0x19,
         "floor_id": 0,
-        "address": 0x1B55A7,
-        "value": 0x2
+        "x_max": -50000,
+        "z_min": 50000
     },
 
     # Goals

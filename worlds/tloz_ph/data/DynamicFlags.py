@@ -121,16 +121,6 @@ DYNAMIC_FLAGS = {
         "has_items": [("Treasure Map #22", 1)],
         "set_if_true": [(0x1BA652, 0x8)]
     },
-    "Bannan Island Map": {
-        "on_scenes": [0x1002],
-        "not_has_locations": ["Bannan Island East Grapple Dig"],
-        "unset_if_true": [(0x1BA652, 0x10)]
-    },
-    "RESET Bannan Island Map": {
-        "on_scenes": [0x2, 0x1000, 0x1003],
-        "has_items": [("Treasure Map #16", 1)],
-        "set_if_true": [(0x1BA652, 0x10)]
-    },
     # TotoK 1F
     "TotoK Don't open key door": {
         "on_scenes": [0x2500],
@@ -178,7 +168,7 @@ DYNAMIC_FLAGS = {
     },
     "Mercay skip blow on map for Linebeck": {
         "on_scenes": [0xB03],
-        "unset_if_true": [(0x1B557D, 0x02)]
+        "unset_if_true": [(0x1B557D, 0x1d2)]
     },
     "Cannon Open Door": {
         "on_scenes": [0x130B],
@@ -382,6 +372,8 @@ DYNAMIC_FLAGS = {
     },
 
     # Fog
+
+
     "No fog add fog if spirits": {
         "on_scenes": [0x01],
         "not_last_scenes": [0x2903],
@@ -390,20 +382,67 @@ DYNAMIC_FLAGS = {
                       ("Spirit of Courage (Progressive)", 1)],
         "not_has_locations": ["Ghost Ship Rescue Tetra"],
         "has_slot_data": [("fog_settings", 0)],
-        "unset_if_true": [(0x1B5582, 0x80)],
+        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)],
     },
     "Remove fog on ghost ship if no fog": {
         "on_scenes": [0x2903],
         "has_slot_data": [("fog_settings", 0)],
-        "set_if_true": [(0x1B5582, 0x80)],
+        "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)],
     },
     "Spawn Spirits in fog": {
         "on_scenes": [0x1],
+        "not_last_scenes": [0x2903],
         "has_items": [("Spirit of Power (Progressive)", 1),
                       ("Spirit of Wisdom (Progressive)", 1),
                       ("Spirit of Courage (Progressive)", 1)],
         "not_has_locations": ["Ghost Ship Rescue Tetra"],
         "set_if_true": [(0x1B557E, 0x10)],
+    },
+    "Remove spirit flag on GS": {
+        "on_scenes": [0x2903],
+        "unset_if_true": [(0x1B557E, 0x10)]
+    },
+    "Respawn ghost ship": {
+        "on_scenes": [0x1],
+        "not_last_scenes": [0x2903, 0x400],
+        "has_locations": ["Ghost Ship Rescue Tetra"],
+        "any_not_has_locations": ["Ghost Ship B1 Entrance Chest",
+                                  "Ghost Ship B1 Second Sister Chest",
+                                  "Ghost Ship B2 Third Sister Left Chest",
+                                  "Ghost Ship B2 Third Sister Right Chest",
+                                  "Ghost Ship B2 Spike Chest",
+                                  "Ghost Ship B3 Chest",
+                                  "Ghost Ship Cubus Sisters Ghost Key",
+                                  "Ghost Ship Cubus Sisters Heart Container"],
+        "set_if_true": [(0x1B557E, 0x10)],
+        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+    },
+    "RESET Respawn ghost ship": {
+        "on_scenes": [0x1],
+        "has_locations": ["Ghost Ship B1 Entrance Chest",
+                          "Ghost Ship B1 Second Sister Chest",
+                          "Ghost Ship B2 Third Sister Left Chest",
+                          "Ghost Ship B2 Third Sister Right Chest",
+                          "Ghost Ship B2 Spike Chest",
+                          "Ghost Ship B3 Chest",
+                          "Ghost Ship Cubus Sisters Ghost Key",
+                          "Ghost Ship Cubus Sisters Heart Container",
+                          "Ghost Ship Rescue Tetra"],
+        "set_if_true": [(0x1B5582, 0x80), (0x1B557E, 0x10), (0x1B55AB, 0x10)]
+    },
+    "Yellow Guy moves after ghost ship": {
+        "on_scenes": [0xB03],
+        "unset_if_true": [(0x1B5582, 0x80)]
+    },
+    "RESET yellow guy fog to settings": {
+        "on_scenes": [0x0],
+        "has_slot_data": [("fog_settings", 0)],
+        "set_if_true": [(0x1B5582, 0x80)]
+    },
+    "RESET yellow guy beat gs": {
+        "on_scenes": [0x0],
+        "has_locations": ["Ghost Ship Rescue Tetra"],
+        "unset_if_true": [(0x1B5582, 0x80)]
     },
     "Spawn swift phantoms, despawn oshus on Molida": {
         "on_scenes": [0x2600, 0xC00],
@@ -421,54 +460,23 @@ DYNAMIC_FLAGS = {
         "not_has_locations": ["Ghost Ship Rescue Tetra"],
         "unset_if_true": [(0x1B557E, 0x10)]
     },
-    "Respawn ghost ship": {
-        "on_scenes": [0x1],
-        "not_last_scenes": [0x2903, 0x400],
-        "has_locations": ["Ghost Ship Rescue Tetra"],
-        "any_not_has_locations": ["Ghost Ship B1 Entrance Chest",
-                                  "Ghost Ship B1 Second Sister Chest",
-                                  "Ghost Ship B2 Third Sister Left Chest",
-                                  "Ghost Ship B2 Third Sister Right Chest",
-                                  "Ghost Ship B2 Spike Chest",
-                                  "Ghost Ship B3 Chest",
-                                  "Ghost Ship Cubus Sisters Ghost Key",
-                                  "Ghost Ship Cubus Sisters Heart Container"],
-        "set_if_true": [(0x1B557E, 0x10)],
-        "unset_if_true": [(0x1B5582, 0x80)]
-    },
-    "RESET Respawn ghost ship": {
-        "on_scenes": [0x1],
-        "has_locations": ["Ghost Ship B1 Entrance Chest",
-                          "Ghost Ship B1 Second Sister Chest",
-                          "Ghost Ship B2 Third Sister Left Chest",
-                          "Ghost Ship B2 Third Sister Right Chest",
-                          "Ghost Ship B2 Spike Chest",
-                          "Ghost Ship B3 Chest",
-                          "Ghost Ship Cubus Sisters Ghost Key",
-                          "Ghost Ship Cubus Sisters Heart Container",
-                          "Ghost Ship Rescue Tetra"],
-        "set_if_true": [(0x1B5582, 0x80), (0x1B557E, 0x10)]
-    },
-    "Yellow Guy moves after ghost ship": {
-        "on_scenes": [0xB03],
-        "unset_if_true": [(0x1B5582, 0x80)]
-    },
-    "RESET yellow guy fog to settings": {
-        "on_scenes": [0x0],
-        "has_slot_data": [("fog_settings", 0)],
-        "set_if_true": [(0x1B5582, 0x80)]
-    },
-    "RESET yellow guy beat gs": {
-        "on_scenes": [0x0],
-        "has_location": ["Ghost Ship Rescue Tetra"],
-        "set_if_true": [(0x1B5582, 0x80)]
-    },
 
     # Goron Chief
     "Beat goron temple goron chief": {
         "on_scenes": [0x100A],
         "not_has_locations": ["Goron Island Chief Post Dungeon Item"],
         "unset_if_true": [(0x1B5593, 0x2)]
+    },
+    "Beat goron temple goron chief metal": {
+        "on_scenes": [0x100A],
+        "not_has_locations": ["Goron Island Goron Quiz", "Goron Island Chief Post Dungeon Item"],
+        "has_locations": ["Goron Temple Dongorongo Dungeon Reward"],
+        "set_if_true": [(0x1B558B, 0x40)]
+    },
+    "RESET Beat goron temple goron chief metal": {
+        "on_scenes": [0x1003],
+        "not_has_items": [("Crimzonine", 1)],
+        "unset_if_true": [(0x1B558B, 0x40)]
     },
     "RESET Beat goron temple goron chief": {
         "on_scenes": [0x1003],
@@ -618,7 +626,7 @@ DYNAMIC_FLAGS = {
         "set_if_true": [(0x1B558B, 0x20)]
     },
     "Mutoh temple metals": {
-        "on_scenes": [0x2100],
+        "on_scenes": [0x2106, 0x2100],
         "unset_if_true": [(0x1B558B, 0x80)]
     },
     "RESET Mutoh temple metals": {
@@ -703,5 +711,16 @@ DYNAMIC_FLAGS = {
         "not_has_locations": ["Ocean SE Hoiger Howgendoogen Trade Quest Item"],
         "set_if_true": [(0x1B5590, 0x8)]
     },
+    # Ghost Ship HC
+    "Ghost Ship HC": {
+        "on_scenes": [0x2903],
+        "not_has_locations": ["Ghost Ship Cubus Sisters Heart Container"],
+        "unset_if_true": [(0x1B55AB, 0x8)]
+    },
+    "RESET Ghost Ship HC": {
+        "on_scenes": [0x1],
+        "set_if_true": [(0x1B55AB, 0x8)]
+    },
+
 }
 

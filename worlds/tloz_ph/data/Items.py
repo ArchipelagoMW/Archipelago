@@ -86,6 +86,7 @@ ITEMS_DATA = {
     },
     "Heart Container": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'address': 0x1BA388,
         'value': 4,
         'incremental': True,
@@ -93,6 +94,7 @@ ITEMS_DATA = {
     },
     "Sand of Hours": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'address': 0x1BA528,
         'value': "Sand",
         'incremental': True,
@@ -201,6 +203,7 @@ ITEMS_DATA = {
     },
     "Big Green Rupee (100)": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'address': 0x1BA53E,
         'value': 100,
         'incremental': True,
@@ -208,6 +211,7 @@ ITEMS_DATA = {
     },
     "Big Red Rupee (200)": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'address': 0x1BA53E,
         'value': 200,
         'incremental': True,
@@ -215,6 +219,7 @@ ITEMS_DATA = {
     },
     "Gold Rupee (300)": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'address': 0x1BA53E,
         'value': 300,
         'incremental': True,
@@ -253,57 +258,95 @@ ITEMS_DATA = {
         'classification': ItemClassification.filler,
         'dummy': True
     },
+    "Red Potion": {
+        'classification': ItemClassification.filler,
+        'value': 100
+    },
+    "Purple Potion": {
+        'classification': ItemClassification.filler,
+        'value': 100
+    },
+    "Yellow Potion": {
+        'classification': ItemClassification.filler,
+        'value': 200
+    },
     "Nothing!": {
         'classification': ItemClassification.filler,
         'dummy': True
+    },
+    "Bomb Refill": {
+        'classification': ItemClassification.filler,
+        "give_ammo": [10, 20, 30],
+        "address": 0x1BA6C0,
+        "refill": "Bombs (Progressive)"
+    },
+    "Arrow Refill": {
+        'classification': ItemClassification.filler,
+        "give_ammo": [20, 30, 50],
+        "address": 0x1BA6C2,
+        "refill": "Bow (Progressive)"
+    },
+    "Bombchu Refill": {
+        'classification': ItemClassification.filler,
+        "give_ammo": [10, 20, 30],
+        "address": 0x1BA6C6,
+        "refill": "Bombchus (Progressive)"
     },
 
     # ========= Treasure =============
 
     "Pink Coral": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AC,
         'incremental': True
     },
     "White Pearl Loop": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AD,
         'incremental': True
     },
     "Dark Pearl Loop": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AE,
         'incremental': True
     },
     "Zora Scale": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AF,
         'incremental': True
     },
     "Goron Amber": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B0,
         'incremental': True
     },
     "Ruto Crown": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B1,
         'incremental': True
     },
     "Helmaroc Plume": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B2,
         'incremental': True
     },
     "Regal Ring": {
         'classification': ItemClassification.progression_skip_balancing,
+        'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B3,
         'incremental': True
@@ -514,46 +557,55 @@ ITEMS_DATA = {
     "Boss Key (Temple of Fire)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True
     },
     "Boss Key (Temple of Wind)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': 0x1D,
         'dummy': True
     },
     "Boss Key (Temple of Courage)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True
     },
     "Boss Key (Goron Temple)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True
     },
     "Boss Key (Temple of Ice)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True
     },
     "Boss Key (Mutoh's Temple)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True
     },
     "Square Crystal (Temple of Courage)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True,
     },
     "Triangle Crystal (Ghost Ship)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True,
     },
     "Round Crystal (Ghost Ship)": {
         'classification': ItemClassification.progression,
         'force_vanilla': True,
+        'dungeon': True,
         'dummy': True,
     },
     "Round Crystal (Temple of the Ocean King)": {
@@ -691,34 +743,42 @@ ITEMS_DATA = {
     # Ships
     "Bright Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 1
     },
     "Iron Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 2
     },
     "Stone Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 3
     },
     "Vintage Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 4
     },
     "Demon Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 5
     },
     "Tropical Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 6
     },
     "Dignified Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 7
     },
     "Golden Ship": {
         'classification': ItemClassification.useful,
+        'backup_filler': True,
         'ship': 8
     },
 }

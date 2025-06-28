@@ -55,6 +55,7 @@ REGIONS = [
     "totok b6",
     "totok b6 phantom chest",
     "totok b6 bow chest",
+    "totok b6 cc",
     "totok midway",
 
     # TotOK 2
