@@ -117,12 +117,6 @@ flowchart LR
     %% Java Based Games
     subgraph Java
         JM[Mod with Archipelago.MultiClient.Java]
-        subgraph Minecraft
-            MCS[Minecraft Forge Server]
-            JMC[Any Java Minecraft Clients]
-            MCS <-- TCP --> JMC
-        end
-        JM <-- Forge Mod Loader --> MCS
     end
     AS <-- WebSockets --> JM
 
