@@ -220,8 +220,7 @@ base_game = BaseGameContentPack(
         Hats.witch_hat: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Gift.golden_pumpkin,)),),
         Hats.totem_mask: (Tag(ItemTag.HAT), TailoringSource(tailoring_items=(Consumable.rain_totem, Consumable.warp_totem_farm,
                                                                                   Consumable.warp_totem_mountains, Consumable.warp_totem_beach,
-                                                                                  Consumable.warp_totem_desert, Consumable.warp_totem_island,
-                                                                                  Consumable.treasure_totem)),),
+                                                                                  Consumable.warp_totem_desert, Consumable.treasure_totem)),),
 
         Hats.copper_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.copper)),),
         Hats.steel_pan_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.tool.has_pan(ToolMaterial.iron)),),

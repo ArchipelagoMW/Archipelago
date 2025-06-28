@@ -271,7 +271,7 @@ recycling_machine = skill_recipe(Machine.recycling_machine, Skill.fishing, 4, {M
 seed_maker = skill_recipe(Machine.seed_maker, Skill.farming, 9, {Material.wood: 25, Material.coal: 10, MetalBar.gold: 1})
 slime_egg_press = skill_recipe(Machine.slime_egg_press, Skill.combat, 6, {Material.coal: 25, Mineral.fire_quartz: 1, ArtisanGood.battery_pack: 1})
 slime_incubator = skill_recipe(Machine.slime_incubator, Skill.combat, 8, {MetalBar.iridium: 2, Loot.slime: 100})
-solar_panel = special_order_recipe(Machine.solar_panel, SpecialOrder.island_ingredients, {MetalBar.quartz: 10, MetalBar.iron: 5, MetalBar.gold: 5})
+solar_panel = special_order_recipe(Machine.solar_panel, SpecialOrder.island_ingredients, {MetalBar.quartz: 10, MetalBar.iron: 5, MetalBar.gold: 5})#, content_pack=ginger_island_content_pack.name) # If set this as a ginger island only recipe, the rule for battery packs will fail. It does OR on lightning rod and solar panel, even when GI is off
 
 tapper = skill_recipe(Machine.tapper, Skill.foraging, 4, {Material.wood: 40, MetalBar.copper: 2})
 
