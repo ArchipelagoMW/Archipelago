@@ -1,0 +1,1058 @@
+{
+  "Tallon Overworld": {
+    "transports": {
+      "Tallon Overworld North (Tallon Canyon)": "Chozo Ruins West (Main Plaza)",
+      "Tallon Overworld West (Root Cave)": "Magmoor Caverns East (Twin Fires)",
+      "Tallon Overworld East (Frigate Crash Site)": "Chozo Ruins East (Reflecting Pool, Save Station)",
+      "Tallon Overworld South (Great Tree Hall, Upper)": "Chozo Ruins South (Reflecting Pool, Far End)",
+      "Tallon Overworld South (Great Tree Hall, Lower)": "Phazon Mines East (Main Quarry)",
+      "Artifact Temple": "Crater Entry Point"
+    },
+    "rooms": {
+      "Landing Site": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Landing Site",
+            "currIncrease": 59
+          }
+        ]
+      },
+      "Gully": {},
+      "Canyon Cavern": {},
+      "Temple Hall": {},
+      "Alcove": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Alcove",
+            "currIncrease": 60
+          }
+        ]
+      },
+      "Waterfall Cavern": {},
+      "Tallon Canyon": {},
+      "Temple Security Station": {},
+      "Frigate Crash Site": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Frigate Crash Site",
+            "currIncrease": 61
+          }
+        ]
+      },
+      "Transport Tunnel A": {},
+      "Root Tunnel": {},
+      "Temple Lobby": {},
+      "Frigate Access Tunnel": {},
+      "Overgrown Cavern": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Overgrown Cavern",
+            "currIncrease": 62
+          }
+        ]
+      },
+      "Transport to Chozo Ruins West": {},
+      "Root Cave": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Root Cave",
+            "currIncrease": 63
+          }
+        ]
+      },
+      "Artifact Temple": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Artifact Temple",
+            "currIncrease": 64
+          }
+        ]
+      },
+      "Main Ventilation Shaft Section C": {},
+      "Transport Tunnel C": {},
+      "Transport Tunnel B": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Transport Tunnel B",
+            "currIncrease": 65
+          }
+        ]
+      },
+      "Arbor Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Arbor Chamber",
+            "currIncrease": 66
+          }
+        ]
+      },
+      "Main Ventilation Shaft Section B": {},
+      "Transport to Chozo Ruins East": {},
+      "Transport to Magmoor Caverns East": {},
+      "Main Ventilation Shaft Section A": {},
+      "Reactor Core": {},
+      "Reactor Access": {},
+      "Cargo Freight Lift to Deck Gamma": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Cargo Freight Lift to Deck Gamma",
+            "currIncrease": 67
+          }
+        ]
+      },
+      "Savestation": {},
+      "Deck Beta Transit Hall": {},
+      "Biohazard Containment": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Biohazard Containment",
+            "currIncrease": 68
+          }
+        ]
+      },
+      "Deck Beta Security Hall": {},
+      "Biotech Research Area 1": {},
+      "Deck Beta Conduit Hall": {},
+      "Connection Elevator to Deck Beta": {},
+      "Hydro Access Tunnel": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Hydro Access Tunnel",
+            "currIncrease": 69
+          }
+        ]
+      },
+      "Great Tree Hall": {},
+      "Great Tree Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Great Tree Chamber",
+            "currIncrease": 70
+          }
+        ]
+      },
+      "Transport Tunnel D": {},
+      "Life Grove Tunnel": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Life Grove Tunnel",
+            "currIncrease": 71
+          }
+        ]
+      },
+      "Transport Tunnel E": {},
+      "Transport to Chozo Ruins South": {},
+      "Life Grove": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Life Grove - Start",
+            "currIncrease": 72
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Life Grove - Underwater Spinner",
+            "currIncrease": 73
+          }
+        ]
+      },
+      "Transport to Phazon Mines East": {}
+    }
+  },
+  "Chozo Ruins": {
+    "transports": {
+      "Chozo Ruins West (Main Plaza)": "Tallon Overworld North (Tallon Canyon)",
+      "Chozo Ruins North (Sun Tower)": "Magmoor Caverns North (Lava Lake)",
+      "Chozo Ruins East (Reflecting Pool, Save Station)": "Tallon Overworld East (Frigate Crash Site)",
+      "Chozo Ruins South (Reflecting Pool, Far End)": "Tallon Overworld South (Great Tree Hall, Upper)"
+    },
+    "rooms": {
+      "Transport to Tallon Overworld North": {},
+      "Ruins Entrance": {},
+      "Main Plaza": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Main Plaza - Half-Pipe",
+            "currIncrease": 1
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Main Plaza - Grapple Ledge",
+            "currIncrease": 2
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Main Plaza - Tree",
+            "currIncrease": 3
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Main Plaza - Locked Door",
+            "currIncrease": 4
+          }
+        ]
+      },
+      "Ruined Fountain Access": {},
+      "Ruined Shrine Access": {},
+      "Nursery Access": {},
+      "Plaza Access": {},
+      "Piston Tunnel": {},
+      "Ruined Fountain": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Fountain",
+            "currIncrease": 5
+          }
+        ]
+      },
+      "Ruined Shrine": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Shrine - Plated Beetle",
+            "currIncrease": 6
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Shrine - Half-Pipe",
+            "currIncrease": 7
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Shrine - Lower Tunnel",
+            "currIncrease": 8
+          }
+        ]
+      },
+      "Eyon Tunnel": {},
+      "Vault": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Vault",
+            "currIncrease": 9
+          }
+        ]
+      },
+      "Training Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Training Chamber",
+            "currIncrease": 10
+          }
+        ]
+      },
+      "Arboretum Access": {},
+      "Meditation Fountain": {},
+      "Tower of Light Access": {},
+      "Ruined Nursery": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Nursery",
+            "currIncrease": 11
+          }
+        ]
+      },
+      "Vault Access": {},
+      "Training Chamber Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Training Chamber Access",
+            "currIncrease": 12
+          }
+        ]
+      },
+      "Arboretum": {},
+      "Magma Pool": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Magma Pool",
+            "currIncrease": 13
+          }
+        ]
+      },
+      "Tower of Light": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Tower of Light",
+            "currIncrease": 14
+          }
+        ]
+      },
+      "Save Station 1": {},
+      "North Atrium": {},
+      "Transport to Magmoor Caverns North": {},
+      "Sunchamber Lobby": {},
+      "Gathering Hall Access": {},
+      "Tower Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Tower Chamber",
+            "currIncrease": 15
+          }
+        ]
+      },
+      "Ruined Gallery": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Gallery - Missile Wall",
+            "currIncrease": 16
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Gallery - Tunnel",
+            "currIncrease": 17
+          }
+        ]
+      },
+      "Sun Tower": {},
+      "Transport Access North": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Transport Access North",
+            "currIncrease": 18
+          }
+        ]
+      },
+      "Sunchamber Access": {},
+      "Gathering Hall": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Gathering Hall",
+            "currIncrease": 19
+          }
+        ]
+      },
+      "Totem Access": {},
+      "Map Station": {},
+      "Sun Tower Access": {},
+      "Hive Totem": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Hive Totem",
+            "currIncrease": 20
+          }
+        ]
+      },
+      "Sunchamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Sunchamber - Flaahgra",
+            "currIncrease": 21
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Sunchamber - Ghosts",
+            "currIncrease": 22
+          }
+        ]
+      },
+      "Watery Hall Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Watery Hall Access",
+            "currIncrease": 23
+          }
+        ]
+      },
+      "Save Station 2": {},
+      "East Atrium": {},
+      "Watery Hall": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Watery Hall - Scan Puzzle",
+            "currIncrease": 24
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Watery Hall - Underwater",
+            "currIncrease": 25
+          }
+        ]
+      },
+      "Energy Core Access": {},
+      "Dynamo Access": {},
+      "Energy Core": {},
+      "Dynamo": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Dynamo - Lower",
+            "currIncrease": 26
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Dynamo - Spider Track",
+            "currIncrease": 27
+          }
+        ]
+      },
+      "Burn Dome Access": {},
+      "West Furnace Access": {},
+      "Burn Dome": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Burn Dome - Missile",
+            "currIncrease": 28
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Burn Dome - Incinerator Drone",
+            "currIncrease": 29
+          }
+        ]
+      },
+      "Furnace": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Furnace - Spider Tracks",
+            "currIncrease": 30
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Furnace - Inside Furnace",
+            "currIncrease": 31
+          }
+        ]
+      },
+      "East Furnace Access": {},
+      "Crossway Access West": {},
+      "Hall of the Elders": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Hall of the Elders",
+            "currIncrease": 32
+          }
+        ]
+      },
+      "Crossway": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Crossway",
+            "currIncrease": 33
+          }
+        ]
+      },
+      "Reflecting Pool Access": {},
+      "Elder Hall Access": {},
+      "Crossway Access South": {},
+      "Elder Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Elder Chamber",
+            "currIncrease": 34
+          }
+        ]
+      },
+      "Reflecting Pool": {},
+      "Save Station 3": {},
+      "Transport Access South": {},
+      "Antechamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Antechamber",
+            "currIncrease": 35
+          }
+        ]
+      },
+      "Transport to Tallon Overworld East": {},
+      "Transport to Tallon Overworld South": {}
+    }
+  },
+  "Magmoor Caverns": {
+    "transports": {
+      "Magmoor Caverns North (Lava Lake)": "Chozo Ruins North (Sun Tower)",
+      "Magmoor Caverns West (Monitor Station)": "Phendrana Drifts North (Phendrana Shorelines)",
+      "Magmoor Caverns East (Twin Fires)": "Tallon Overworld West (Root Cave)",
+      "Magmoor Caverns South (Magmoor Workstation, Save Station)": "Phendrana Drifts South (Quarantine Cave)",
+      "Magmoor Caverns South (Magmoor Workstation, Debris)": "Phazon Mines West (Phazon Processing Center)"
+    },
+    "rooms": {
+      "Transport to Chozo Ruins North": {},
+      "Burning Trail": {},
+      "Lake Tunnel": {},
+      "Save Station Magmoor A": {},
+      "Lava Lake": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Lava Lake",
+            "currIncrease": 91
+          }
+        ]
+      },
+      "Pit Tunnel": {},
+      "Triclops Pit": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Triclops Pit",
+            "currIncrease": 92
+          }
+        ]
+      },
+      "Monitor Tunnel": {},
+      "Storage Cavern": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Storage Cavern",
+            "currIncrease": 93
+          }
+        ]
+      },
+      "Monitor Station": {},
+      "Transport Tunnel A": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Transport Tunnel A",
+            "currIncrease": 94
+          }
+        ]
+      },
+      "Warrior Shrine": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Warrior Shrine",
+            "currIncrease": 95
+          }
+        ]
+      },
+      "Shore Tunnel": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Shore Tunnel",
+            "currIncrease": 96
+          }
+        ]
+      },
+      "Transport to Phendrana Drifts North": {},
+      "Fiery Shores": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Fiery Shores - Morph Track",
+            "currIncrease": 97
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Fiery Shores - Warrior Shrine Tunnel",
+            "currIncrease": 98
+          }
+        ]
+      },
+      "Transport Tunnel B": {},
+      "Transport to Tallon Overworld West": {},
+      "Twin Fires Tunnel": {},
+      "Twin Fires": {},
+      "North Core Tunnel": {},
+      "Geothermal Core": {},
+      "Plasma Processing": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Plasma Processing",
+            "currIncrease": 99
+          }
+        ]
+      },
+      "South Core Tunnel": {},
+      "Magmoor Workstation": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Magmoor Workstation",
+            "currIncrease": 100
+          }
+        ]
+      },
+      "Workstation Tunnel": {},
+      "Transport Tunnel C": {},
+      "Transport to Phazon Mines West": {},
+      "Transport to Phendrana Drifts South": {},
+      "Save Station Magmoor B": {}
+    }
+  },
+  "Phendrana Drifts": {
+    "transports": {
+      "Phendrana Drifts North (Phendrana Shorelines)": "Magmoor Caverns West (Monitor Station)",
+      "Phendrana Drifts South (Quarantine Cave)": "Magmoor Caverns South (Magmoor Workstation, Save Station)"
+    },
+    "rooms": {
+      "Transport to Magmoor Caverns West": {},
+      "Shoreline Entrance": {},
+      "Phendrana Shorelines": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Phendrana Shorelines - Behind Ice",
+            "currIncrease": 36
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Phendrana Shorelines - Spider Track",
+            "currIncrease": 37
+          }
+        ]
+      },
+      "Temple Entryway": {},
+      "Save Station B": {},
+      "Ruins Entryway": {},
+      "Plaza Walkway": {},
+      "Ice Ruins Access": {},
+      "Chozo Ice Temple": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Chozo Ice Temple",
+            "currIncrease": 38
+          }
+        ]
+      },
+      "Ice Ruins West": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ice Ruins West",
+            "currIncrease": 39
+          }
+        ]
+      },
+      "Ice Ruins East": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ice Ruins East - Behind Ice",
+            "currIncrease": 40
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Ice Ruins East - Spider Track",
+            "currIncrease": 41
+          }
+        ]
+      },
+      "Chapel Tunnel": {},
+      "Courtyard Entryway": {},
+      "Canyon Entryway": {},
+      "Chapel of the Elders": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Chapel of the Elders",
+            "currIncrease": 42
+          }
+        ]
+      },
+      "Ruined Courtyard": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ruined Courtyard",
+            "currIncrease": 43
+          }
+        ]
+      },
+      "Phendrana Canyon": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Phendrana Canyon",
+            "currIncrease": 44
+          }
+        ]
+      },
+      "Save Station A": {},
+      "Specimen Storage": {},
+      "Quarantine Access": {},
+      "Research Entrance": {},
+      "North Quarantine Tunnel": {},
+      "Map Station": {},
+      "Hydra Lab Entryway": {},
+      "Quarantine Cave": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Quarantine Cave",
+            "currIncrease": 45
+          }
+        ]
+      },
+      "Research Lab Hydra": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Research Lab Hydra",
+            "currIncrease": 46
+          }
+        ]
+      },
+      "South Quarantine Tunnel": {},
+      "Quarantine Monitor": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Quarantine Monitor",
+            "currIncrease": 47
+          }
+        ]
+      },
+      "Observatory Access": {},
+      "Transport to Magmoor Caverns South": {},
+      "Observatory": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Observatory",
+            "currIncrease": 48
+          }
+        ]
+      },
+      "Transport Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Transport Access",
+            "currIncrease": 49
+          }
+        ]
+      },
+      "West Tower Entrance": {},
+      "Save Station D": {},
+      "Frozen Pike": {},
+      "West Tower": {},
+      "Pike Access": {},
+      "Frost Cave Access": {},
+      "Hunter Cave Access": {},
+      "Control Tower": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Control Tower",
+            "currIncrease": 50
+          }
+        ]
+      },
+      "Research Core": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Research Core",
+            "currIncrease": 51
+          }
+        ]
+      },
+      "Frost Cave": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Frost Cave",
+            "currIncrease": 52
+          }
+        ]
+      },
+      "Hunter Cave": {},
+      "East Tower": {},
+      "Research Core Access": {},
+      "Save Station C": {},
+      "Upper Edge Tunnel": {},
+      "Lower Edge Tunnel": {},
+      "Chamber Access": {},
+      "Lake Tunnel": {},
+      "Aether Lab Entryway": {},
+      "Research Lab Aether": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Research Lab Aether - Tank",
+            "currIncrease": 53
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Research Lab Aether - Morph Track",
+            "currIncrease": 54
+          }
+        ]
+      },
+      "Phendrana's Edge": {},
+      "Gravity Chamber": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Gravity Chamber - Underwater",
+            "currIncrease": 55
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Gravity Chamber - Grapple Ledge",
+            "currIncrease": 56
+          }
+        ]
+      },
+      "Storage Cave": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Storage Cave",
+            "currIncrease": 57
+          }
+        ]
+      },
+      "Security Cave": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Security Cave",
+            "currIncrease": 58
+          }
+        ]
+      }
+    }
+  },
+  "Phazon Mines": {
+    "transports": {
+      "Phazon Mines East (Main Quarry)": "Tallon Overworld South (Great Tree Hall, Lower)",
+      "Phazon Mines West (Phazon Processing Center)": "Magmoor Caverns South (Magmoor Workstation, Debris)"
+    },
+    "rooms": {
+      "Transport to Tallon Overworld South": {},
+      "Quarry Access": {},
+      "Main Quarry": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Main Quarry",
+            "currIncrease": 74
+          }
+        ]
+      },
+      "Waste Disposal": {},
+      "Save Station Mines A": {},
+      "Security Access A": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Security Access A",
+            "currIncrease": 75
+          }
+        ]
+      },
+      "Ore Processing": {},
+      "Mine Security Station": {},
+      "Research Access": {},
+      "Storage Depot B": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Storage Depot B",
+            "currIncrease": 76
+          }
+        ]
+      },
+      "Elevator Access A": {},
+      "Security Access B": {},
+      "Storage Depot A": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Storage Depot A",
+            "currIncrease": 77
+          }
+        ]
+      },
+      "Elite Research": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Elite Research - Phazon Elite",
+            "currIncrease": 78
+          },
+          {
+            "type": "Unknown Item 1",
+            "name": "Elite Research - Laser",
+            "currIncrease": 79
+          }
+        ]
+      },
+      "Elevator A": {},
+      "Elite Control Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Elite Control Access",
+            "currIncrease": 80
+          }
+        ]
+      },
+      "Elite Control": {},
+      "Maintenance Tunnel": {},
+      "Ventilation Shaft": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Ventilation Shaft",
+            "currIncrease": 81
+          }
+        ]
+      },
+      "Phazon Processing Center": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Phazon Processing Center",
+            "currIncrease": 82
+          }
+        ]
+      },
+      "Omega Research": {},
+      "Transport Access": {},
+      "Processing Center Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Processing Center Access",
+            "currIncrease": 83
+          }
+        ]
+      },
+      "Map Station Mines": {},
+      "Dynamo Access": {},
+      "Transport to Magmoor Caverns South": {},
+      "Elite Quarters": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Elite Quarters",
+            "currIncrease": 84
+          }
+        ]
+      },
+      "Central Dynamo": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Central Dynamo",
+            "currIncrease": 85
+          }
+        ]
+      },
+      "Elite Quarters Access": {},
+      "Quarantine Access A": {},
+      "Save Station Mines B": {},
+      "Metroid Quarantine B": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Metroid Quarantine B",
+            "currIncrease": 86
+          }
+        ]
+      },
+      "Metroid Quarantine A": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Metroid Quarantine A",
+            "currIncrease": 87
+          }
+        ]
+      },
+      "Quarantine Access B": {},
+      "Save Station Mines C": {},
+      "Elevator Access B": {},
+      "Fungal Hall B": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Fungal Hall B",
+            "currIncrease": 88
+          }
+        ]
+      },
+      "Elevator B": {},
+      "Missile Station Mines": {},
+      "Phazon Mining Tunnel": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Phazon Mining Tunnel",
+            "currIncrease": 89
+          }
+        ]
+      },
+      "Fungal Hall Access": {
+        "pickups": [
+          {
+            "type": "Unknown Item 1",
+            "name": "Fungal Hall Access",
+            "currIncrease": 90
+          }
+        ]
+      },
+      "Fungal Hall A": {}
+    }
+  },
+  "Impact Crater": {
+    "transports": {
+      "Crater Entry Point": "Artifact Temple",
+      "Essence Dead Cutscene": "Credits"
+    },
+    "rooms": {
+      "Crater Entry Point": {},
+      "Crater Tunnel A": {},
+      "Phazon Core": {},
+      "Crater Missile Station": {},
+      "Crater Tunnel B": {},
+      "Phazon Infusion Chamber": {},
+      "Subchamber One": {},
+      "Subchamber Two": {},
+      "Subchamber Three": {},
+      "Subchamber Four": {},
+      "Subchamber Five": {},
+      "Metroid Prime Lair": {}
+    }
+  },
+  "End Cinema": {
+    "transports": {},
+    "rooms": {
+      "End Cinema": {}
+    }
+  }
+}
