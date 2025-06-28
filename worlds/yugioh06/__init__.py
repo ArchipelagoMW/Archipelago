@@ -219,6 +219,7 @@ class Yugioh06World(World):
                 total_amount += amount
                 if total_amount > 40:
                     logging.warning(f"{self.player} Starter Deck cards exceeded the maximum of 40")
+                    total_amount -= amount
                     break
                 if amount > 0:
                     self.starter_deck[card] = amount
@@ -264,8 +265,12 @@ class Yugioh06World(World):
             if total_amount < 40:
                 for card_name, w_amount in worst_deck.items():
                     card = cards[card_name]
-                    self.structure_deck[card] = w_amount
-                    total_amount += min(w_amount, 40 - total_amount)
+                    current_amount = 0
+                    if card in self.structure_deck:
+                        current_amount = self.structure_deck[card]
+                    # don't go over 40 cards and take into account that the worst cards could be in the custom deck
+                    self.structure_deck[card] = max(min(w_amount, 40 - total_amount), current_amount)
+                    total_amount += self.structure_deck[card] - current_amount
                     if total_amount >= 40:
                         break
         # set starting booster and opponent
