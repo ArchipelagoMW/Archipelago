@@ -111,7 +111,7 @@ def convert_to_base_types(obj: typing.Any) -> typing.Any:
         return tuple(convert_to_base_types(o) for o in obj)
     elif isinstance(obj, dict):
         return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
-    elif type(obj) in (str, int, float):
+    elif type(obj) in (str, int, float, bool):
         return obj
     else:
         raise Exception(f"Cannot handle {type(obj)}")
