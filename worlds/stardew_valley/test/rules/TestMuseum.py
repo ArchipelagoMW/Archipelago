@@ -20,7 +20,7 @@ class TestMuseumMilestones(SVTestBase):
         self.assert_rule_false(milestone_rule, self.multiworld.state)
 
 
-class TestMuseumsanityDisabledExcludesMuseumFromOtherSanities(SVTestBase):
+class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBase):
     options = {
         **presets.allsanity_mods_6_x_x(),
         options.Museumsanity.internal_name: options.Museumsanity.option_none
