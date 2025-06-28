@@ -41,11 +41,11 @@ def create_chaos_packs(world: World):
     for c in forced_placements:
         in_pack = world.random.choice(list(pack_data.keys()))
         if in_pack in packs:
-            secrets_in_pack = len([r for r in packs[in_pack].values() if r == "Secret Rare"])
-            ultras_in_pack = len([r for r in packs[in_pack].values() if r == "Ultra Rare"])
-            supers_in_pack = len([r for r in packs[in_pack].values() if r == "Super Rare"])
-            rares_in_pack = len([r for r in packs[in_pack].values() if r == "Rare"])
-            commons_in_pack = len([r for r in packs[in_pack].values() if r == "Common"])
+            secrets_in_pack = sum(1 for r in packs[in_pack].values() if r == "Secret Rare")
+            ultras_in_pack = sum(1 for r in packs[in_pack].values() if r == "Ultra Rare")
+            supers_in_pack = sum(1 for r in packs[in_pack].values() if r == "Super Rare")
+            rares_in_pack = sum(1 for r in packs[in_pack].values() if r == "Rare")
+            commons_in_pack = sum(1 for r in packs[in_pack].values() if r == "Common")
         else:
             secrets_in_pack = 0
             ultras_in_pack = 0
@@ -65,11 +65,11 @@ def create_chaos_packs(world: World):
     # choose the rest at random
     for in_pack, data in pack_data.items():
         if in_pack in packs:
-            secrets_in_pack = len([r for r in packs[in_pack].values() if r == "Secret Rare"])
-            ultras_in_pack = len([r for r in packs[in_pack].values() if r == "Ultra Rare"])
-            supers_in_pack = len([r for r in packs[in_pack].values() if r == "Super Rare"])
-            rares_in_pack = len([r for r in packs[in_pack].values() if r == "Rare"])
-            commons_in_pack = len([r for r in packs[in_pack].values() if r == "Common"])
+            secrets_in_pack = sum(1 for r in packs[in_pack].values() if r == "Secret Rare")
+            ultras_in_pack = sum(1 for r in packs[in_pack].values() if r == "Ultra Rare")
+            supers_in_pack = sum(1 for r in packs[in_pack].values() if r == "Super Rare")
+            rares_in_pack = sum(1 for r in packs[in_pack].values() if r == "Rare")
+            commons_in_pack = sum(1 for r in packs[in_pack].values() if r == "Common")
             cards_placed = len(packs[in_pack])
         else:
             secrets_in_pack = 0
