@@ -338,8 +338,6 @@ class Wargroove2Context(CommonContext):
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
-        from kivymd.uix.tab import MDTabsItem, MDTabsItemText
-        from kivy.uix.tabbedpanel import TabbedPanelItem
         from kivy.lang import Builder
         from kivy.uix.togglebutton import ToggleButton
         from kivy.uix.boxlayout import BoxLayout
