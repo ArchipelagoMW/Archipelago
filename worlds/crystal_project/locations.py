@@ -1489,7 +1489,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
-        #IDs here are specifically the monster IDs from Crystal Edit
+        #IDs here are specifically the spark IDs or NPC IDs for where you go to fight them from Crystal Edit
         #Summons
         #Not included: Pinga (unused)
         LocationData(SPAWNING_MEADOWS, "Spawning Meadows Boss - Shaku Summon", 477 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #(118, 109, 10) Monster ID: 102
