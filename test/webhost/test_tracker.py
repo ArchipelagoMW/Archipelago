@@ -1,6 +1,6 @@
 import os
-from pathlib import Path
 import pickle
+from pathlib import Path
 from typing import ClassVar
 from uuid import UUID, uuid4
 
