@@ -188,8 +188,9 @@ class AutopelagoWorld(World):
                     continue
                 dlc_games.remove(game_name)
                 for item in game_specific_nonprogression_items[game_name][category]:
-                    items[replacements_made] = item
-                    replacements_made += 1
+                    if item not in excluded_names:
+                        items[replacements_made] = item
+                        replacements_made += 1
 
         category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
                                                                                 generic_nonprogression_item_table}
