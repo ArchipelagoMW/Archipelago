@@ -64,7 +64,7 @@ item_table: Dict[str, ItemData] = {
     SAMURAI_JOB: ItemData(JOB, 20 + job_index_offset, ItemClassification.progression),
     ASSASSIN_JOB: ItemData(JOB, 19 + job_index_offset, ItemClassification.progression),
     VALKYRIE_JOB: ItemData(JOB, 15 + job_index_offset, ItemClassification.progression),
-    SUMMONER_JOB: ItemData(JOB, 21 + job_index_offset, ItemClassification.progression), #Required for summon fights if we add them to locations; only job checked by NPCs
+    SUMMONER_JOB: ItemData(JOB, 21 + job_index_offset, ItemClassification.progression), #Required for summon fights; only job checked by NPCs
     BEASTMASTER_JOB: ItemData(JOB, 23 + job_index_offset, ItemClassification.progression),
     WEAVER_JOB: ItemData(JOB, 16 + job_index_offset, ItemClassification.progression),
     MIMIC_JOB: ItemData(JOB, 22 + job_index_offset, ItemClassification.progression),

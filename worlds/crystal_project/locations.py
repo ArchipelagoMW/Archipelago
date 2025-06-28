@@ -1492,16 +1492,16 @@ def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData
         #IDs here are specifically the spark IDs or NPC IDs for where you go to fight them from Crystal Edit
         #Summons
         #Not included: Pinga (unused)
-        LocationData(SPAWNING_MEADOWS, "Spawning Meadows Boss - Shaku Summon", 477 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #(118, 109, 10) Monster ID: 102
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Niltsi Summon", 1109 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #376, 178, -345 (Capital Sequoia (Maze) map) Monster ID: 93
-        LocationData(SALMON_BAY, "Salmon Bay Boss - Guaba Summon", 1138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #-50, 91, -330 Monster ID: 94
-        LocationData(THE_UNDERCITY, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Tira Summon", 1132 + boss_index_offset, lambda state:  (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE) or state.can_reach(GANYMEDE_SHRINE)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
-        LocationData(LAKE_DELENDE, "Lake Delende Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
-        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Boss - Juses Summon", 1134 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
+        LocationData(SPAWNING_MEADOWS, "Spawning Meadows Boss - Shaku Summon", 477 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #(118, 109, 10) Monster ID: 102
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Boss - Niltsi Summon", 1109 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #376, 178, -345 (Capital Sequoia (Maze) map) Monster ID: 93
+        LocationData(SALMON_BAY, "Salmon Bay Boss - Guaba Summon", 1138 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #-50, 91, -330 Monster ID: 94
+        LocationData(THE_UNDERCITY, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and  (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE) or state.can_reach(GANYMEDE_SHRINE)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
+        LocationData(LAKE_DELENDE, "Lake Delende Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
+        LocationData(JIDAMBA_TANGLE, "Jidamba Tangle Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_swimming(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
-        LocationData(THE_DEEP_SEA, "The Deep Sea Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
+        LocationData(THE_DEEP_SEA, "The Deep Sea Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
 
         #Bosses
         #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
