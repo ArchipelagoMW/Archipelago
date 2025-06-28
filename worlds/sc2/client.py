@@ -1405,7 +1405,9 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
     shields_from_air_upgrade: int = 0
 
     for network_item in items:
-        name: str = lookup_id_to_name[network_item.item]
+        name = lookup_id_to_name.get(network_item.item)
+        if name is None:
+            continue
         item_data: ItemData = item_list[name]
 
         if item_data.type.flag_word < 0:
