@@ -20,6 +20,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
     NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType, ToolProgression, BackpackProgression, TrapDistribution, BundlePrice, \
     BundlePlando, BundlePerRoom
 from .options.forced_options import force_change_options_if_incompatible, force_change_options_if_banned
+from .options.jojapocalypse_options import JojaAreYouSure
 from .options.option_groups import sv_option_groups
 from .options.presets import sv_options_presets
 from .options.settings import StardewSettings
@@ -451,7 +452,8 @@ class StardewValleyWorld(World):
                 for i, item in enumerate(bundle.items):
                     bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
-        excluded_options = [BundleRandomization, BundlePrice, BundlePerRoom, NumberOfMovementBuffs, EnabledFillerBuffs, TrapDistribution, BundlePlando, JojaAreYouSure]
+        excluded_options = [BundleRandomization, BundlePrice, BundlePerRoom, NumberOfMovementBuffs,
+                            EnabledFillerBuffs, TrapDistribution, BundlePlando, JojaAreYouSure]
         excluded_option_names = [option.internal_name for option in excluded_options]
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names.extend(generic_option_names)
