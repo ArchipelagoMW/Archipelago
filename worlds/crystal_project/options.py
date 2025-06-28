@@ -119,6 +119,9 @@ class StartingJobQuantity(Range):
 class KillBossesMode(Toggle):
     """
     When enabled, defeating a boss will provide checks.
+
+    WARNING: If you have restricted the includedRegions to Beginner or Advanced, you'll be getting checks to complete level 50+ bosses in some of the early areas!
+    You may want to choose the Level Gating option level catch-up.  Without it you are signing up to either grind or fight the bosses underlevelled
     """
     display_name = "Kill Bosses Mode"
 

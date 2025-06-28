@@ -284,7 +284,12 @@ class CrystalProjectWorld(World):
             excluded_items.add(SAMURAI_JOB)
             excluded_items.add(ASSASSIN_JOB)
             excluded_items.add(VALKYRIE_JOB)
-            excluded_items.add(SUMMONER_JOB)
+            # Summoner job needs to be available if kill bosses mode is on.
+            #   If job rando is off and regions are beginner or advanced, then the summoner crystal would be missing.  Do not exclude in this context.
+            if not (self.options.includedRegions.value == self.options.includedRegions.option_beginner or
+                    self.options.includedRegions.value == self.options.includedRegions.option_advanced and
+                    self.options.killBossesMode.value == self.options.killBossesMode.option_true):
+                excluded_items.add(SUMMONER_JOB)
             excluded_items.add(BEASTMASTER_JOB)
             excluded_items.add(WEAVER_JOB)
             excluded_items.add(MIMIC_JOB)
