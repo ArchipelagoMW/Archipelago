@@ -116,8 +116,7 @@ def get_pool_core(world: "TWWWorld") -> tuple[list[str], list[str]]:
         progression_pool.remove("Progressive Sword")
     # Or, if it's swordless mode, remove all swords from the item pool.
     elif world.options.sword_mode == "swordless":
-        while "Progressive Sword" in useful_pool:
-            useful_pool.remove("Progressive Sword")
+        useful_pool = [item for item in useful_pool if item != "Progressive Sword"]
 
     # Assign useful and filler items to item pools in the world.
     world.random.shuffle(useful_pool)
