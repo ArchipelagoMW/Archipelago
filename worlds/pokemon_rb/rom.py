@@ -391,7 +391,7 @@ def generate_output(world: "PokemonRedBlueWorld", output_directory: str):
         write_bytes(rom_addresses["Option_Fix_Combat_Bugs_Heal_Effect"] + 1, 5)  # 5 bytes ahead
         write_bytes(rom_addresses["Option_Fix_Combat_Bugs_Heal_Stat_Modifiers"], 1)
 
-    if world.options.poke_doll_skip == "in_logic":
+    if world.options.poke_doll_skip:
         write_bytes(rom_addresses["Option_Silph_Scope_Skip"], 0x00)      # nop
         write_bytes(rom_addresses["Option_Silph_Scope_Skip"] + 1, 0x00)  # nop
         write_bytes(rom_addresses["Option_Silph_Scope_Skip"] + 2, 0x00)  # nop
