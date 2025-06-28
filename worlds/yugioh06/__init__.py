@@ -173,10 +173,10 @@ class Yugioh06World(World):
                                                        slot_data["progression_cards_in_start"]]
                     self.progression_cards_in_booster = [collection_id_to_name[cid] for cid in
                                                          slot_data["progression_cards_in_booster"]]
-                    for name, v in slot_data["progression_cards"].items():
+                    for name in slot_data["progression_cards"].keys():
                         self.progression_cards[name] = [collection_id_to_name[cid] for cid in
                                                         slot_data["progression_cards"][name]]
-                    for name, content in slot_data["booster_pack_contents"].items():
+                    for name in slot_data["booster_pack_contents"].keys():
                         con = {}
                         for cid in slot_data["booster_pack_contents"][name]:
                             con[collection_id_to_name[cid]] = "Common"
@@ -216,11 +216,6 @@ class Yugioh06World(World):
             total_amount = 0
             for name, amount in self.options.custom_starter_deck.value.items():
                 card = cards[name]
-                if amount > 3:
-                    logging.warning(
-                        f"{self.player} has too many {name} in their "
-                        f"Custom Starter Deck setting. Setting it to 3")
-                    amount = 3
                 total_amount += amount
                 if total_amount > 40:
                     logging.warning(f"{self.player} Starter Deck cards exceeded the maximum of 40")
@@ -260,11 +255,6 @@ class Yugioh06World(World):
             total_amount = 0
             for name, amount in self.options.custom_structure_deck.value.items():
                 card = cards[name]
-                if amount > 3:
-                    logging.warning(
-                        f"{self.player} has too many {name} in their "
-                        f"Custom Structure Deck setting. Setting it to 3")
-                    amount = 3
                 total_amount += amount
                 if total_amount > 80:
                     logging.warning(f"{self.player} Structure Deck cards exceeded the maximum of 80")
