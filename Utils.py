@@ -375,7 +375,7 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
-    import LttPAdjuster
+    from worlds.alttp import Adjuster
     adjuster_settings = Namespace()
     if game_name == LttPAdjuster.GAME_ALTTP:
         return LttPAdjuster.get_argparser().parse_known_args(args=[])[0]
