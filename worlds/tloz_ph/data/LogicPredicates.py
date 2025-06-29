@@ -447,7 +447,7 @@ def ph_option_triforce_crest(state, player):
 
 
 def ph_beat_required_dungeons(state: CollectionState, player: int):
-    # print(f"Dungeons required: {state.count_group("Current Metals", player)}/{state.multiworld.worlds[player].options.dungeons_required} {state.has_group("Current Metals", player,
+    # print(f"Dungeons required: {state.count_group('Current Metals', player)}/{state.multiworld.worlds[player].options.dungeons_required} {state.has_group("Current Metals", player,
     #                       state.multiworld.worlds[player].options.dungeons_required)}")
     return state.has_group("Current Metals", player,
                            state.multiworld.worlds[player].options.dungeons_required)

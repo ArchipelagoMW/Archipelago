@@ -262,7 +262,7 @@ class PhantomHourglassClient(BizHawkClient):
 
     # Boomerang is set to enable item menu, called on s+q to remove it again.
     async def boomerwatch(self, ctx) -> bool:
-        print(f"got item menu {await read_memory_value(ctx, *RAM_ADDRS["got_item_menu"])}")
+        print(f"got item menu {await read_memory_value(ctx, *RAM_ADDRS['got_item_menu'])}")
         if await read_memory_value(ctx, *RAM_ADDRS["got_item_menu"]) > 0:
             print("Reconnected, boomerwatching")
             # Check if boomerang has been received
@@ -532,7 +532,7 @@ class PhantomHourglassClient(BizHawkClient):
         if scene in self.scene_to_dynamic_flag:
             read_addr = set()
             set_bits, unset_bits = {}, {}
-            print(f"Flags on Scene: {[i["name"] for i in self.scene_to_dynamic_flag[scene]]}")
+            print(f"Flags on Scene: {[i['name'] for i in self.scene_to_dynamic_flag[scene]]}")
             for data in self.scene_to_dynamic_flag[scene]:
                 # Special case for having goal requirements
                 if "goal_requirement" in data:
@@ -546,27 +546,27 @@ class PhantomHourglassClient(BizHawkClient):
 
                 # Items, locations, slot data
                 if not check_items(data):
-                    print(f"{data["name"]} does not have item reqs")
+                    print(f"{data['name']} does not have item reqs")
                     continue
                 if not check_locations(data):
-                    print(f"{data["name"]} does not have location reqs")
+                    print(f"{data['name']} does not have location reqs")
                     continue
                 if not check_slot_data(data):
-                    print(f"{data["name"]} does not have slot data reqs")
+                    print(f"{data['name']} does not have slot data reqs")
                     continue
                 if not check_last_room(data):
-                    print(f"{data["name"]} came from wrong room {hex(self.last_scene)}")
+                    print(f"{data['name']} came from wrong room {hex(self.last_scene)}")
                     continue
 
                 # Create read/write lists
                 for a, v in data.get("set_if_true", []):
                     read_addr.add(a)
                     set_bits[a] = set_bits.get(a, 0) | v
-                    print(f"setting bit for {data["name"]}")
+                    print(f"setting bit for {data['name']}")
                 for a, v in data.get("unset_if_true", []):
                     read_addr.add(a)
                     unset_bits[a] = unset_bits.get(a, 0) | v
-                    print(f"unsetting bit for {data["name"]}")
+                    print(f"unsetting bit for {data['name']}")
 
             # Read all values for all dynamic flags in scene
             read_list = {a: (a, 1, "Main RAM") for a in read_addr}
@@ -639,8 +639,8 @@ class PhantomHourglassClient(BizHawkClient):
         read_list = {"dungeon": (key_address, 1, "Main RAM"),
                      "tracker": (key_data["address"], 1, "Main RAM")}
         key_values = await read_memory_values(ctx, read_list)
-        print(f"Base key value: {key_values["tracker"]}, filtered: {(key_values["tracker"] & key_data["filter"])}, "
-              f"divider: {key_data["value"]}")
+        print(f"Base key value: {key_values['tracker']}, filtered: {(key_values['tracker'] & key_data['filter'])}, "
+              f"divider: {key_data['value']}")
         new_keys = (((key_values["tracker"] & key_data["filter"]) // key_data["value"])
                     + key_values["dungeon"])
 
@@ -695,9 +695,9 @@ class PhantomHourglassClient(BizHawkClient):
 
                 print(f"Processing locs {loc_name}")
                 print(
-                    f"{location.get("x_max", 0x8FFFFFFF)} > {link_coords["x"]} > {location.get("x_min", -0x8FFFFFFF)}")
+                    f"{location.get('x_max', 0x8FFFFFFF)} > {link_coords['x']} > {location.get('x_min', -0x8FFFFFFF)}")
                 print(
-                    f"{location.get("z_max", 0x8FFFFFFF)} > {link_coords["z"]} > {location.get("z_min", -0x8FFFFFFF)}")
+                    f"{location.get('z_max', 0x8FFFFFFF)} > {link_coords['z']} > {location.get('z_min', -0x8FFFFFFF)}")
 
                 if (location.get("x_max", 0x8FFFFFFF) > link_coords["x"] > location.get("x_min", -0x8FFFFFFF) and
                         location.get("z_max", 0x8FFFFFFF) > link_coords["z"] > location.get("z_min", -0x8FFFFFFF) and
@@ -751,7 +751,7 @@ class PhantomHourglassClient(BizHawkClient):
                 # Items unique to that shop
                 if "unique" in hint_data:
                     locations = hint_data["unique"]
-                    print(f"scouting {hex(scene)} for {hint_data["unique"]}")
+                    print(f"scouting {hex(scene)} for {hint_data['unique']}")
                     [local_scouted_locations.add(self.location_name_to_id[loc]) for loc in locations]
 
                 # beedle items
@@ -786,7 +786,7 @@ class PhantomHourglassClient(BizHawkClient):
                     for loc in ctx.slot_data["required_dungeon_locations"]:
                         local_scouted_locations.add(self.location_name_to_id[loc])
 
-            print(f"Spirit hints {ctx.slot_data["spirit_island_hints"]}")
+            print(f"Spirit hints {ctx.slot_data['spirit_island_hints']}")
             # Hint Spirit Island
             if hint_data.get("spirit_island_hints", False):
                 forces = ["Power", "Wisdom", "Courage"]
