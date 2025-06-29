@@ -148,7 +148,8 @@ class PeakRegion(POYRegion):
                                                self.peak_id))
         if self.generate_time_attack:
             self.subregions.append(POYRegion(
-                self.name + " Time Attack", entry_requirements={"Pocketwatch": 1}, locations=[
+                self.name + " Time Attack", entry_requirements={"Pocketwatch": 1, "Progressive Crampons": 1},
+                locations=[
                     LocationData(self.name + ": Time Record", POYItemLocationType.TIMEATTACK_TIME, self.peak_id),
                     LocationData(self.name + ": Ropes Record", POYItemLocationType.TIMEATTACK_ROPES, self.peak_id),
                     LocationData(self.name + ": Holds Record", POYItemLocationType.TIMEATTACK_HOLDS, self.peak_id),
