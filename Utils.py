@@ -166,6 +166,10 @@ def home_path(*path: str) -> str:
                 os.symlink(home_path.cached_path, legacy_home_path)
             else:
                 os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -177,7 +181,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_macos and is_frozen()):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
@@ -226,7 +230,12 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
-        subprocess.call([open_command, filename])
+
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.call([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
@@ -708,12 +717,17 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _run_for_stdout(*args: str):
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
-
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
@@ -721,12 +735,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -760,21 +774,18 @@ def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_linux:
         # prefer native dialog
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+            return _run_for_stdout(kdialog, f"--title={title}", "--getexistingdirectory",
                        os.path.abspath(suggest) if suggest else ".")
         zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
             selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -801,9 +812,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -814,10 +822,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
+            return _run_for_stdout(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
         zenity = which("zenity")
         if zenity:
-            return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
+            return _run_for_stdout(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
     elif is_windows:
         import ctypes
