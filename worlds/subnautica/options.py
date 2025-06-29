@@ -129,6 +129,29 @@ class FillerItemsDistribution(ItemDict):
         return list(self.value.keys()), list(accumulate(self.value.values()))
 
 
+class PropulsionCannonLogic(Choice):
+    """This option controls whether you are expected to have a Propulsion Cannon for certain checks.
+    Strictly Required: Certain checks on the Aurora will be impossible to reach without a Propulsion Cannon.
+    Logically Required: Logic will not expect you to reach certain Aurora checks without a Propulsion Cannon.
+    Not Required: The Aurora is considered accessible without a Propulsion Cannon.
+    (Note: under Not Required, Aurora Lab and Ring checks require the Laser Cutter instead.)
+    Early Propulsion Cannon: Places the Propulsion Cannon fragments in or near the Safe Shallows (Sphere 1).
+    """
+    auto_display_name = True
+    display_name = "Propulsion Cannon Logic"
+    option_strict_requirement = 0
+    option_logic_requirement = 1
+    option_no_requirement = 2
+    option_early_propulsion_cannon = 3
+
+    def get_event_name(self) -> str:
+        return {
+            self.option_strict_requirement: "Strictly Required",
+            self.option_logic_requirement: "Logically Required",
+            self.option_no_requirement: "Not Required",
+            self.option_free_propulsion_cannon: "Early Propulsion Cannon",
+        }[self.value]
+
 @dataclass
 class SubnauticaOptions(PerGameCommonOptions):
     swim_rule: SwimRule
@@ -140,3 +163,4 @@ class SubnauticaOptions(PerGameCommonOptions):
     death_link: SubnauticaDeathLink
     start_inventory_from_pool: StartInventoryPool
     filler_items_distribution: FillerItemsDistribution
+    propulsion_cannon_logic: PropulsionCannonLogic
