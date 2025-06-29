@@ -359,6 +359,13 @@ def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
     excluded_job_ids = mod.System['Randomizer']['ExcludeJobIDs']
     excluded_equipment_ids = mod.System['Randomizer']['ExcludeEquipmentIDs']
 
+    if excluded_item_ids is None:
+        excluded_item_ids = []
+    if excluded_job_ids is None:
+        excluded_job_ids = []
+    if excluded_equipment_ids is None:
+        excluded_equipment_ids = []
+
     return IdsExcludedFromRandomization(excluded_equipment_ids, excluded_item_ids, excluded_job_ids)
 
 def is_item_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomization) -> bool:

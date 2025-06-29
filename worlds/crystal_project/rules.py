@@ -5,6 +5,7 @@ from .constants.mounts import *
 from .constants.teleport_stones import *
 from .constants.regions import *
 from .constants.region_passes import *
+from .constants.item_groups import *
 from .items import singleton_keys
 from BaseClasses import CollectionState
 
@@ -21,54 +22,9 @@ class CrystalProjectLogic:
     
     def get_job_count(self, state: CollectionState) -> int:
         count = 0
-        if state.has("Job - Warrior", self.player):
-            count += 1
-        if state.has("Job - Monk", self.player):
-            count += 1
-        if state.has("Job - Rogue", self.player):
-            count += 1
-        if state.has("Job - Cleric", self.player):
-            count += 1
-        if state.has("Job - Wizard", self.player):
-            count += 1
-        if state.has("Job - Warlock", self.player):
-            count += 1
-        if state.has("Job - Fencer", self.player):
-            count += 1
-        if state.has("Job - Shaman", self.player):
-            count += 1
-        if state.has("Job - Scholar", self.player):
-            count += 1
-        if state.has("Job - Aegis", self.player):
-            count += 1
-        if state.has("Job - Hunter", self.player):
-            count += 1
-        if state.has("Job - Chemist", self.player):
-            count += 1
-        if state.has("Job - Reaper", self.player):
-            count += 1
-        if state.has("Job - Ninja", self.player):
-            count += 1
-        if state.has("Job - Nomad", self.player):
-            count += 1
-        if state.has("Job - Dervish", self.player):
-            count += 1
-        if state.has("Job - Beatsmith", self.player):
-            count += 1
-        if state.has("Job - Samurai", self.player):
-            count += 1
-        if state.has("Job - Assassin", self.player):
-            count += 1
-        if state.has("Job - Valkyrie", self.player):
-            count += 1
-        if state.has("Job - Summoner", self.player):
-            count += 1
-        if state.has("Job - Beastmaster", self.player):
-            count += 1
-        if state.has("Job - Weaver", self.player):
-            count += 1
-        if state.has("Job - Mimic", self.player):
-            count += 1
+        for job in state.multiworld.worlds[self.player].item_name_groups[JOB]:
+            if state.has(job, self.player):
+                count += 1
 
         #subtract starting jobs
         return count - self.get_starting_job_count()

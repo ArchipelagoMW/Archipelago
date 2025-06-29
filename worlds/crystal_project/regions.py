@@ -55,7 +55,6 @@ region_levels_dictionary: Dict[str, Tuple[int, int]] = {
     BEAURIOR_VOLCANO: (37, 37),
     BEAURIOR_ROCK: (38, 40),
     LAKE_DELENDE: (40, 40),
-    #Todo: check if any sparks in Quintar Reserve attack you or stand in the way of check locations
     QUINTAR_RESERVE: (0, 0),
     DIONE_SHRINE: (0, 0),
     QUINTAR_MAUSOLEUM: (54, 56),
