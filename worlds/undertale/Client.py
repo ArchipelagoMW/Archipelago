@@ -370,7 +370,7 @@ async def process_undertale_cmd(ctx: UndertaleContext, cmd: str, args: dict):
     elif cmd == "Bounced":
         tags = args.get("tags", [])
         if "Online" in tags:
-            data = args.get("data", {})
+            data = args.get("../../data", {})
             if data["player"] != ctx.slot and data["player"] is not None:
                 filename = f"FRISK" + str(data["player"]) + ".playerspot"
                 with open(os.path.join(ctx.save_game_folder, filename), "w") as f:

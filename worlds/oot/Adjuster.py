@@ -191,7 +191,7 @@ def adjustGUI():
     window.mainloop()
 
 def set_icon(window):
-    logo = tk.PhotoImage(file=local_path('data', 'icon.png'))
+    logo = tk.PhotoImage(file=local_path('../../data', 'icon.png'))
     window.tk.call('wm', 'iconphoto', window._w, logo)
 
 def adjust(args):

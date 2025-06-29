@@ -82,7 +82,7 @@ class WargrooveContext(CommonContext):
             options = Utils.get_options()
             root_directory = os.path.join(options["wargroove_options"]["root_directory"])
             data_directory = os.path.join("lib", "worlds", "wargroove", "data")
-            dev_data_directory = os.path.join("worlds", "wargroove", "data")
+            dev_data_directory = os.path.join("..", "wargroove", "data")
             appdata_wargroove = os.path.expandvars(os.path.join("%APPDATA%", "Chucklefish", "Wargroove"))
             if not os.path.isfile(os.path.join(root_directory, "win64_bin", "wargroove64.exe")):
                 print_error_and_close("WargrooveClient couldn't find wargroove64.exe. "

@@ -362,7 +362,7 @@ def run_sprite_update():
 def update_sprites(task, on_finish=None):
     resultmessage = ""
     successful = True
-    sprite_dir = user_path("data", "sprites", "alttpr")
+    sprite_dir = user_path("../../data", "sprites", "alttpr")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
 
@@ -448,7 +448,7 @@ def update_sprites(task, on_finish=None):
 
 
 def set_icon(window):
-    logo = tk.PhotoImage(file=local_path('data', 'icon.png'))
+    logo = tk.PhotoImage(file=local_path('../../data', 'icon.png'))
     window.tk.call('wm', 'iconphoto', window._w, logo)
 
 
@@ -1154,11 +1154,11 @@ class SpriteSelector():
 
     @property
     def alttpr_sprite_dir(self):
-        return user_path("data", "sprites", "alttpr")
+        return user_path("../../data", "sprites", "alttpr")
 
     @property
     def custom_sprite_dir(self):
-        return user_path("data", "sprites", "custom")
+        return user_path("../../data", "sprites", "custom")
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:
