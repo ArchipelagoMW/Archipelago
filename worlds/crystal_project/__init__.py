@@ -408,7 +408,7 @@ class CrystalProjectWorld(World):
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
-        mod_titles = None
+        mod_titles: List[str] = []
         slot_data_locations = []
         if self.options.useMods:
             mod_titles = get_mod_titles()
