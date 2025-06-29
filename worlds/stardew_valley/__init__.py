@@ -465,7 +465,7 @@ class StardewValleyWorld(World):
             "randomized_entrances": self.randomized_entrances,
             "trash_bear_requests": self.trash_bear_requests,
             "modified_bundles": bundles,
-            "client_version": "6.0.0",
+            "client_version": "7.0.0",
         })
 
         return slot_data
