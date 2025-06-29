@@ -11,7 +11,7 @@ explorer_mode_options = {
     "extraClamshellsInPool":         10,
     "shopsanity":                    Shopsanity.option_disabled,
     "progressiveMountMode":          ProgressiveMountMode.option_false,
-    "levelGating":                   LevelGating.option_levels_catch_up,
+    "levelGating":                   LevelGating.option_level_catch_up,
     "progressiveLevelSize":          10,
     "maxLevel":                      99,
     "keyMode":                       KeyMode.option_vanilla_skelefree,

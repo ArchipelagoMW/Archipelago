@@ -51,9 +51,11 @@ def get_mod_titles() -> List[str]:
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         titles.append(data.Title)
+        file.close()
 
     return titles
 
@@ -68,7 +70,8 @@ def get_modded_items(player: int) -> List[Item]:
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -76,7 +79,7 @@ def get_modded_items(player: int) -> List[Item]:
             item_id = item['ID'] + equipment_index_offset
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
-            name = 'Equipment - ' + item['Name']
+            name = 'Equipment - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.useful, item_id, player)
@@ -86,7 +89,7 @@ def get_modded_items(player: int) -> List[Item]:
             item_id = item['ID'] + item_index_offset
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
-            name = 'Item - ' + item['Name']
+            name = 'Item - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
@@ -97,11 +100,13 @@ def get_modded_items(player: int) -> List[Item]:
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
             is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
-            name = 'Job - ' + item['Name']
+            name = 'Job - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not is_unselectable and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
                 items.append(mod_item)
+
+        file.close()
 
     return items
 
@@ -116,7 +121,8 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -140,6 +146,8 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
                 if location is not None:
                     locations.append(location)
 
+        file.close()
+
     return locations
 
 def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
@@ -154,7 +162,8 @@ def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", o
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -164,6 +173,8 @@ def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", o
             if entity_type == 0:
                 npc_locations = build_shop_locations(location, excluded_ids, player, world, options)
                 locations.extend(npc_locations)
+
+        file.close()
 
     return locations
 
