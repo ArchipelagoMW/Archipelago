@@ -1,4 +1,5 @@
 import dataclasses
+import importlib
 import operator
 from collections import defaultdict
 from collections.abc import Iterable, Mapping
@@ -7,11 +8,12 @@ from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, cast
 from typing_extensions import ClassVar, Never, Self, TypeVar, dataclass_transform, override
 
 from BaseClasses import Entrance
+from Options import Option
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState, Item, Location, MultiWorld, Region
     from NetUtils import JSONMessagePart
-    from Options import CommonOptions, Option
+    from Options import CommonOptions
     from worlds.AutoWorld import World
 else:
     World = object
@@ -333,6 +335,32 @@ class OptionFilter(Generic[T]):
     value: T
     operator: Operator = "eq"
 
+    def to_json(self) -> dict[str, Any]:
+        return {
+            "option": f"{self.option.__module__}.{self.option.__name__}",
+            "value": self.value,
+            "operator": self.operator,
+        }
+
+    @classmethod
+    def from_json(cls, data: dict[str, Any]) -> Self:
+        if "option" not in data or "value" not in data:
+            raise ValueError("Missing required value and/or option")
+
+        option_path = data["option"]
+        try:
+            option_mod_name, option_cls_name = option_path.rsplit(".", 1)
+            option_module = importlib.import_module(option_mod_name)
+            option = getattr(option_module, option_cls_name, None)
+        except (ValueError, ImportError) as e:
+            raise ValueError(f"Cannot parse option '{option_path}'") from e
+        if option is None or not issubclass(option, Option):
+            raise ValueError(f"Invalid option '{option_path}' returns type '{option}' instead of Option subclass")
+
+        value = data["value"]
+        operator = data.get("operator", "eq")
+        return cls(option=cast("type[Option[Any]]", option), value=value, operator=operator)
+
 
 def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> "Callable[..., int]":
     def __hash__(self: "Rule.Resolved") -> int:
@@ -410,14 +438,14 @@ class Rule(Generic[TWorld]):
             world.rule_ids[rule_hash] = instance
         return world.rule_ids[rule_hash]
 
-    def to_json(self) -> Mapping[str, Any]:
+    def to_json(self) -> dict[str, Any]:
         """Returns a JSON-serializable definition of this rule"""
         args = {
             field.name: getattr(self, field.name, None) for field in dataclasses.fields(self) if field.name != "options"
         }
-        args["options"] = [dataclasses.asdict(o) for o in self.options]
         return {
             "rule": self.__class__.__name__,
+            "options": [o.to_json() for o in self.options],
             "args": args,
         }
 
@@ -593,12 +621,11 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
         return world.simplify_rule(self.Resolved(tuple(children), player=world.player))
 
     @override
-    def to_json(self) -> Mapping[str, Any]:
-        return {
-            "rule": self.__class__.__name__,
-            "options": self.options,
-            "children": [c.to_json() for c in self.children],
-        }
+    def to_json(self) -> dict[str, Any]:
+        data = super().to_json()
+        del data["args"]
+        data["children"] = [c.to_json() for c in self.children]
+        return data
 
     @override
     @classmethod
@@ -732,12 +759,11 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
         return self.Resolved(self.child.resolve(world), player=world.player)
 
     @override
-    def to_json(self) -> Mapping[str, Any]:
-        return {
-            "rule": self.__class__.__name__,
-            "options": self.options,
-            "child": self.child.to_json(),
-        }
+    def to_json(self) -> dict[str, Any]:
+        data = super().to_json()
+        del data["args"]
+        data["child"] = self.child.to_json()
+        return data
 
     @override
     @classmethod
