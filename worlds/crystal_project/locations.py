@@ -66,7 +66,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(DELENDE, "Delende Chest - In front of camp", 263 + treasure_index_offset), #Money chest
         LocationData(DELENDE, "Delende Chest - In front of fish hatchery lower level", 210 + treasure_index_offset), #Money chest
         LocationData(DELENDE, "Delende Chest - Return from fish hatchery", 34 + treasure_index_offset), #Bracer chest
-        LocationData(DELENDE, "Delende Chest - Heart tarn", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state) and logic.has_glide(state)), #Chartreuse chest
+        LocationData(DELENDE, "Delende Chest - Looking for love in all the high places (glide to the heart tarn)", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state) and logic.has_glide(state)), #Chartreuse chest
         LocationData(DELENDE, "Delende Chest - Mushroom underpass", 262 + treasure_index_offset), #Cotton Hood chest
         LocationData(DELENDE, "Delende Chest - Fallen log parkour", 208 + treasure_index_offset), #Earring chest
         LocationData(DELENDE, "Delende Chest - Across river", 213 + treasure_index_offset), #Earring chest
@@ -1024,9 +1024,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
-        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding 1 down in the Quintar nest 1", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 1
-        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding 2 down in the Quintar nest 2", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 2
-        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding in sneaky Quintar nest north of Mausoleum", 2257 + npc_index_offset), #Shedding 3
+        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 1
+        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 2
+        LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset), #Shedding 3
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
         LocationData(QUINTAR_RESERVE, "Quintar Reserve NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
@@ -1322,7 +1322,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Descend into undersea vent where the flesh eaters live 2", 2767 + treasure_index_offset), #(872, 39, -517) Forgotten Key chest
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Crumbling shrine 2", 2290 + treasure_index_offset), #(838, 52, -357) Oven Mitt chest
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Ruins just south of Jidamba 2", 2937 + treasure_index_offset), #Paladin Wand chest
-        LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Cheeky sunroof NW of Jidamba", 2589 + treasure_index_offset), #(582, 47, -51) Rampart Key chest
+        LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Hidden tunnel in canyon W of cheeky sunroof NW of Jidamba", 2589 + treasure_index_offset), #(582, 47, -51) Rampart Key chest
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Locked sunken house off Jidamba with mighty arch 2", 2766 + treasure_index_offset, lambda state: logic.has_key(state, FORGOTTEN_KEY)), #(663, 54, 165) Soul Keeper chest
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Locked *wink* sunken house off Jidamba 1", 2768 + treasure_index_offset), #(649, 53, 195) Zether chest
         LocationData(THE_DEEP_SEA, "The Deep Sea Chest - Locked *wink* sunken house off Jidamba 2", 3726 + treasure_index_offset), #(646, 53, 196) Zether Pouch chest
