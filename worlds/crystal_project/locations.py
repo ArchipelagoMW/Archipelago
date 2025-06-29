@@ -318,8 +318,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
         #NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Lazy Guard 1", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Lazy Guard 2", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(419, 171, -289)
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Guard needs 6 non-starting jobs", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Guard needs 11 non-starting jobs", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(419, 171, -289)
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #(417, 171, -299) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
@@ -657,7 +657,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar West Stable Owner", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar East Stable Owner", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 15)), #(-166,93,56) Fixed Missable
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children. Needs 11 non-starting jobs", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(-166,93,56) Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has(WEST_LOOKOUT_TOKEN, player) and state.has(CENTRAL_LOOKOUT_TOKEN, player) and state.has(NORTH_LOOKOUT_TOKEN, player)),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
