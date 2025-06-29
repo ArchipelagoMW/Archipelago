@@ -358,16 +358,16 @@ class CrystalProjectWorld(World):
                 item = self.create_item(scholar_ability)
                 pool.append(item)
 
-        max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
-        for _ in range(self.get_total_clamshells(max_clamshells)):
-            item = self.set_classifications(CLAMSHELL)
-            pool.append(item)
-
         if self.options.useMods:
             modded_items = get_modded_items(self.player)
 
             for modded_item in modded_items:
                 pool.append(modded_item)
+
+        max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
+        for _ in range(self.get_total_clamshells(max_clamshells)):
+            item = self.set_classifications(CLAMSHELL)
+            pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
