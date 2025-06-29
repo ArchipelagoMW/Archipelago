@@ -235,7 +235,7 @@ def build_npc_location(location, excluded_ids, player: int, world: "CrystalProje
         location_in_pool = any(location.code == id_with_offset for location in get_locations(player, options))
         location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
-        if not location_in_pool and not location_unused:
+        if not location_in_pool and not location_unused and not coordinates == "0,0,0":
             if not options is None:
                 logic = CrystalProjectLogic(player, options)
 
