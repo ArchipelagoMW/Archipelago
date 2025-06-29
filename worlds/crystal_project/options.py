@@ -181,7 +181,7 @@ class LevelGating(Choice):
     option_none = 0
     option_level_passes = 1
     option_level_capped = 2
-    option_levels_catch_up = 3
+    option_level_catch_up = 3
     default = 1
 
 class ProgressiveLevelSize(Range):
