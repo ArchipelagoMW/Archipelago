@@ -79,7 +79,7 @@ def get_modded_items(player: int) -> List[Item]:
             item_id = item['ID'] + equipment_index_offset
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
-            name = 'Equipment - ' + item['Name']
+            name = 'Equipment - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.useful, item_id, player)
@@ -89,7 +89,7 @@ def get_modded_items(player: int) -> List[Item]:
             item_id = item['ID'] + item_index_offset
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
-            name = 'Item - ' + item['Name']
+            name = 'Item - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
@@ -100,7 +100,7 @@ def get_modded_items(player: int) -> List[Item]:
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
             is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
-            name = 'Job - ' + item['Name']
+            name = 'Job - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not is_unselectable and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
