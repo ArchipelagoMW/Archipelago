@@ -7,8 +7,6 @@ from .constants.regions import *
 from .constants.region_passes import *
 from .items import singleton_keys
 from BaseClasses import CollectionState
-from ..stardew_valley.stardew_rule import false_
-
 
 class CrystalProjectLogic:
     player: int
