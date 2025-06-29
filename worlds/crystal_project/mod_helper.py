@@ -178,6 +178,14 @@ def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", o
 
     return locations
 
+def assign_player_to_items(player: int, items: List[Item]) -> None:
+    for item in items:
+        item.player = player
+
+def assign_player_to_locations(player: int, locations: List[ModLocationData]) -> None:
+    for location in locations:
+        location.player = player
+
 def get_mod_directory() -> str:
     current_directory = getcwd()
     mod_directory = join(current_directory, 'crystal_project_mods')
