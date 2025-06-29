@@ -410,7 +410,7 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         mod_titles = None
         slot_data_locations = []
-        if options.UseMods:
+        if self.options.useMods:
             mod_titles = get_mod_titles()
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code, "Region": modded_location.region, "Name": modded_location.name, "Coordinates": modded_location.coordinates, "biomeId": modded_location.biomeId, "Rule": None })
