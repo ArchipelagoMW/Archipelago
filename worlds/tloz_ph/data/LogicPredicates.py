@@ -203,6 +203,22 @@ def ph_can_kill_bat(state: CollectionState, player: int):
         ph_has_boomerang(state, player)
     ])
 
+def ph_can_kill_blue_chu(state: CollectionState, player: int):
+    return any([
+        ph_has_bombs(state, player),  # Only place this is relevant is in "cave"
+        ph_has_bow(state, player),
+        ph_has_grapple(state, player),
+        ph_has_hammer(state, player),
+        ph_has_beam_sword(state, player),
+        all([
+            ph_has_sword(state, player),
+            any([
+                ph_has_boomerang(state, player),
+                ph_has_super_shield(state, player),
+            ])
+        ])
+    ])
+
 
 def ph_can_kill_bubble(state: CollectionState, player: int):
     return any([
@@ -311,6 +327,7 @@ def ph_can_farm_rupees(state: CollectionState, player: int):
                 ]),
                 state.has("_beat_toc", player),
                 state.has("_can_play_cannon_game", player),
+                state.has("_can_play_goron_race", player),
             ])
         ]),
         all([  # Can farm harrow (and chooses to play with harrow)
@@ -435,8 +452,10 @@ def ph_beat_required_dungeons(state: CollectionState, player: int):
     return state.has_group("Current Metals", player,
                            state.multiworld.worlds[player].options.dungeons_required)
 
+
 def ph_option_randomize_masked_beedle(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_masked_beedle
+
 
 def ph_goal_option_phantom_door(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.bellum_access == "spawn_phantoms_on_b13"
@@ -667,7 +686,6 @@ def ph_totok_bellum_staircase(state, player):
     return ph_beat_required_dungeons(state, player)
 
 
-
 def ph_can_beat_bellum(state, player):
     return all([
         ph_has_grapple(state, player),
@@ -687,12 +705,14 @@ def ph_can_beat_bellumbeck(state, player):
         ph_has_spirit(state, player, "Courage")
     ])
 
+
 def ph_bellumbeck_quick_finish(state, player):
     return all([
         ph_can_beat_bellumbeck(state, player),
         ph_beat_required_dungeons(state, player),
         ph_goal_option_spawn_bellumbeck(state, player)
     ])
+
 
 def ph_tof_3f(state, player):
     return all([
@@ -822,8 +842,39 @@ def ph_mutoh_water(state, player):
     ])
 
 
+def ph_toi_3f_boomerang(state, player):
+    return any([
+        ph_has_boomerang(state, player),
+        all([
+            ph_option_med_logic(state, player),
+            ph_has_bow(state, player)
+        ])
+    ])
+
+
+def ph_toi_b2(state, player):
+    return all([
+        ph_has_bow(state, player),
+        any([
+            ph_has_boomerang(state, player),
+            ph_option_med_logic(state, player)  # Can shoot switches if fast enough
+        ]),
+        any([
+            ph_toi_key_doors(state, player, 3, 2),
+            ph_can_hammer_clip(state, player)
+        ])
+    ])
+
+
 def ph_beat_ghost_ship(state: CollectionState, player):
     return state.has("_beat_ghost_ship", player)
+
+
+def ph_mercay_passage_rat(state, player):
+    return any([
+        ph_can_kill_bat(state, player),
+        ph_clever_pots(state, player)
+    ])
 
 
 def ph_temp_goal(state, player):

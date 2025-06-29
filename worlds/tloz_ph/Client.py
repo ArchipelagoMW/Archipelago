@@ -1,3 +1,4 @@
+import random
 import time
 from typing import TYPE_CHECKING, Set, Dict, Any
 
@@ -142,6 +143,9 @@ async def get_small_key_address(ctx):
     return await get_address_from_heap(ctx, offset=SMALL_KEY_OFFSET)
 
 
+
+
+
 class PhantomHourglassClient(BizHawkClient):
     game = "The Legend of Zelda - Phantom Hourglass"
     system = "NDS"
@@ -279,6 +283,11 @@ class PhantomHourglassClient(BizHawkClient):
         self.last_treasures = await read_memory_value(ctx, 0x1BA5AC, 8)
         print(f"Treasure Tracker! {split_bits(self.last_treasures, 8)}")
 
+    async def give_random_treasure(self, ctx):
+        address = 0x1BA5AC + random.randint(0, 7)
+        await write_memory_value(ctx, address, 1, incr=True)
+        await self.update_treasure_tracker(ctx)
+
     async def update_potion_tracker(self, ctx):
         read_list = {"left": (0x1BA5D8, 1, "Main RAM"),
                      "right": (0x1BA5D9, 1, "Main RAM")}
@@ -354,8 +363,6 @@ class PhantomHourglassClient(BizHawkClient):
                 self.removed_boomerang = False  # Catches stray item menu errors, only 1 read
                 self.save_slot = await read_memory_value(ctx, RAM_ADDRS["save_slot"][0])
                 self.get_ending_room(ctx)
-                await self.update_treasure_tracker(ctx)
-                await self.update_potion_tracker(ctx)
                 print(f"Started Game")
 
             # If new file, set up starting flags
@@ -387,6 +394,8 @@ class PhantomHourglassClient(BizHawkClient):
                 print(f"Entered new scene {hex(current_scene)}")
                 self.entering_dungeon = None
                 await self.load_local_locations(ctx, current_scene)
+                await self.update_potion_tracker(ctx)
+                await self.update_treasure_tracker(ctx)
 
                 # Start watch for stage fully loading
                 if current_stage != self.last_stage:
@@ -663,15 +672,12 @@ class PhantomHourglassClient(BizHawkClient):
 
         # If sent with a pre-proces kwarg
         if pre_process is not None:
+            self.receiving_location = True
             loc_id = self.location_name_to_id[pre_process]
             location = LOCATIONS_DATA[pre_process]
             vanilla_item = location.get("vanilla_item")
             if r or (loc_id not in local_checked_locations):
-                # Don't remove vanilla if you have it already
-                if (ITEMS_DATA[vanilla_item]["id"] not in [i.item for i in ctx.items_received]
-                        or "incremental" in ITEMS_DATA[vanilla_item]):
-                    self.last_vanilla_item = vanilla_item
-                self.receiving_location = True
+                await self.set_vanilla_item(ctx, location, loc_id)
                 local_checked_locations.add(loc_id)
             print(f"pre-processed {pre_process}, vanill {self.last_vanilla_item}")
         else:
@@ -703,9 +709,7 @@ class PhantomHourglassClient(BizHawkClient):
                             self.delay_pickup = [loc_name, location["delay_pickup"]]
                             break
                     local_checked_locations.add(loc_bytes)
-                    vanilla_item = ITEMS_DATA[location["vanilla_item"]]
-                    if vanilla_item["id"] not in [i.item for i in ctx.items_received] or "incremental" in vanilla_item:
-                        self.last_vanilla_item = location.get("vanilla_item")
+                    await self.set_vanilla_item(ctx, location, loc_bytes)
                     print(f"Got location {loc_name}! with vanilla {self.last_vanilla_item} id {loc_bytes}")
                     break
                 location = None
@@ -725,6 +729,20 @@ class PhantomHourglassClient(BizHawkClient):
                 "locations": list(self.local_checked_locations)
             }])
 
+    # Called during location processing to determine what vanilla item to remove
+    async def set_vanilla_item(self, ctx, location, loc_id):
+        item = location.get("vanilla_item", None)
+        item_data = ITEMS_DATA[item]
+        if item_data["id"] not in [i.item for i in ctx.items_received] or "incremental" in item_data:
+            self.last_vanilla_item = item
+            # Farmable locations don't remove vanilla
+            if "farmable" in location and loc_id in ctx.checked_locations:
+                if item == "Ship Part":
+                    await self.give_random_treasure(ctx)
+                else:
+                    self.last_vanilla_item = None
+                    # TODO: treasure tracker is not updated after getting farmable treasure
+
     async def process_scouted_locations(self, ctx: "BizHawkClientContext", scene):
         local_scouted_locations = set(ctx.locations_scouted)
         if scene in HINTS_ON_SCENE:
@@ -741,6 +759,9 @@ class PhantomHourglassClient(BizHawkClient):
                     read = await read_memory_value(ctx, 0x1BA644)
                     if read & 0x10:  # TODO: Hard coding this is stupid (bomb check)
                         local_scouted_locations.add(self.location_name_to_id["Beedle Shop Bomb Bag"])
+                    if ctx.slot_data["randomize_masked_beedle"]:
+                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Courage Gem"])
+                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Heart Container"])
 
                 # Items in all island shops
                 if hint_data.get("island_shop", False):
@@ -765,6 +786,7 @@ class PhantomHourglassClient(BizHawkClient):
                     for loc in ctx.slot_data["required_dungeon_locations"]:
                         local_scouted_locations.add(self.location_name_to_id[loc])
 
+            print(f"Spirit hints {ctx.slot_data["spirit_island_hints"]}")
             # Hint Spirit Island
             if hint_data.get("spirit_island_hints", False):
                 forces = ["Power", "Wisdom", "Courage"]

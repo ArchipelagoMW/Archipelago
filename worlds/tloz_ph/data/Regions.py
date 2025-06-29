@@ -13,6 +13,7 @@ REGIONS = [
     "mercay passage 1",
     "mercay passage 2",
     "mercay passage 3",
+    "mercay passage rat",
     "mercay oshus gem",
     "mercay oshus phantom blade",
     

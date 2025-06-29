@@ -219,6 +219,7 @@ class PhantomHourglassWorld(World):
         # Farmable minigame events
         self.create_event("bannan cannon game", "_can_play_cannon_game")
         self.create_event("harrow dig", "_can_play_harrow")
+        self.create_event("ds race", "_can_play_goron_race")
         # Goal
         self.create_event("goal", "_beaten_game")
 

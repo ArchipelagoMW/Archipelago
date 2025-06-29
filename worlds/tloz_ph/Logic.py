@@ -29,6 +29,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
             any([ph_can_cut_small_trees(state, player),
                 ph_has_small_keys(state, player, "Mountain Passage", 3)])],
         ["mercay island", "mercay passage 2", False, lambda state: ph_can_reach_MP2(state, player)],
+        ["mercay passage 2", "mercay passage rat", False, lambda state: ph_mercay_passage_rat(state, player)],
+
 
         # ========== TotOK ===================
         ["totok", "totok 1f chart chest", False, lambda state:
@@ -370,7 +372,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
             ph_has_range(state, player),
             ph_has_bombs(state, player)])],
         ["toi 3f", "toi 3f switch", False, lambda state: ph_has_explosives(state, player)],
-        ["toi 3f switch", "toi 3f boomerang", False, lambda state: ph_has_boomerang(state, player)],
+        ["toi 3f switch", "toi 3f boomerang", False, lambda state: ph_toi_3f_boomerang(state, player)],
         ["toi 3f", "toi 2f miniboss", False, lambda state: ph_toi_key_doors(state, player, 3, 1)],
         ["toi 2f miniboss", "toi side path", False, lambda state: ph_has_grapple(state, player)],
         ["toi", "toi side path", False, lambda state: all([
@@ -382,13 +384,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ])],
         ["toi b1", "toi b1 2", False, lambda state: ph_has_explosives(state, player)],
         ["toi b1 2", "toi b1 key", False, lambda state: ph_toi_key_doors(state, player, 3, 2)],
-        ["toi b1 2", "toi b2", False, lambda state: all([
-            ph_has_bow(state, player),
-            ph_has_boomerang(state, player),
-            ph_can_hammer_clip(state, player)])],
-        ["toi b1 key", "toi b2", False, lambda state: all([
-            ph_has_bow(state, player),
-            ph_has_boomerang(state, player)])],
+        ["toi b1 2", "toi b2", False, lambda state: ph_toi_b2(state, player)],
         ["toi b2", "toi bk chest", False, lambda state: ph_can_hammer_clip(state, player)],
         ["toi b2", "toi b2 key", False, lambda state: ph_has_small_keys(state, player, "Temple of Ice", 3)],
         ["toi b2 key", "toi bk chest", False, None],
@@ -399,7 +395,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["sw ocean", "ne ocean", False, lambda state: ph_has_frog_square(state, player)],
         ["se ocean", "ne ocean", False, lambda state: ph_has_sea_chart(state, player, "NE")],
         ["ne ocean", "ne ocean frog", False, lambda state: ph_has_cannon(state, player)],
-        ["ne ocean", "ne ocean combat", False, lambda state: ph_has_cave_damage(state, player)],
+        ["ne ocean", "ne ocean combat", False, lambda state: ph_can_kill_blue_chu(state, player)],
         ["ne ocean", "iotd", False, None],
         ["ne ocean", "maze", False, lambda state: ph_has_sword(state, player)],
         ["ne ocean", "ruins", False, lambda state: all([ph_has_regal_necklace(state, player),

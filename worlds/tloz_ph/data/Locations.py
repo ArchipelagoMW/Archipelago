@@ -28,8 +28,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "y": 0x1333,
         "vanilla_item": "Treasure Map #10",
-        "sram_addr": 0x000EB0,
-        "sram_value": 1
+        # "sram_addr": 0x000EB0,
+        # "sram_value": 1
     },
     "Mercay Cuccoo Chest": {
         "region_id": "mercay island",
@@ -111,8 +111,8 @@ LOCATIONS_DATA = {
         "y": 0x4CCD,
         "x_max": 0x00025000,
         "vanilla_item": "Treasure Map #12",
-        "sram_addr": 0x000EB0,
-        "sram_value": 0x08
+        # "sram_addr": 0x000EB0,  something's bugging with this
+        # "sram_value": 0x08
     },
     "Mercay Chartreuse Guy Item": {
         "region_id": "mercay yellow guy",
@@ -182,7 +182,7 @@ LOCATIONS_DATA = {
         "dungeon": "Mountain Passage"
     },
     "Mountain Passage Rat Key": {
-        "region_id": "mercay passage 2",
+        "region_id": "mercay passage rat",
         "vanilla_item": "Small Key (Mountain Passage)",
         "stage_id": 0x27,
         "floor_id": 1,
@@ -313,6 +313,7 @@ LOCATIONS_DATA = {
     "TotOK B1 Phantom Chest": {
         "region_id": "totok b1 phantom chest",
         "vanilla_item": "Treasure",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 1,
         "x_max": -50000,
@@ -334,6 +335,7 @@ LOCATIONS_DATA = {
     "TotOK B2 Phantom Chest": {
         "region_id": "totok b2 phantom chest",
         "vanilla_item": "Treasure",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 2,
         "z_min": 0x7000,
@@ -361,6 +363,7 @@ LOCATIONS_DATA = {
     "TotOK B3 Phantom Chest": {
         "region_id": "totok b3 phantom chest",
         "vanilla_item": "Treasure",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 3,
         "y": 0x1333,
@@ -432,6 +435,7 @@ LOCATIONS_DATA = {
     "TotOK B4 Phantom Chest": {
         "region_id": "totok b4 phantom chest",
         "vanilla_item": "Treasure",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 5,
         "x_max": -60000,
@@ -466,6 +470,7 @@ LOCATIONS_DATA = {
     "TotOK B6 Phantom Chest": {
         "region_id": "totok b6 phantom chest",
         "vanilla_item": "Treasure",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 7,
         "z_min": 0xA000,
@@ -517,6 +522,7 @@ LOCATIONS_DATA = {
     "TotOK B7 Phantom Chest": {
         "region_id": "totok b7 phantom",
         "vanilla_item": "Ship Part",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0xA,
         "x_max": -60000,
@@ -535,6 +541,7 @@ LOCATIONS_DATA = {
     "TotOK B8 Phantom Chest": {
         "region_id": "totok b7 phantom",
         "vanilla_item": "Ship Part",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0xB,
         "x_max": 50000,
@@ -567,6 +574,7 @@ LOCATIONS_DATA = {
     "TotOK B9 Phantom Chest": {
         "region_id": "totok b9 phantom",
         "vanilla_item": "Ship Part",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0xC,
         "x_max": -60000,
@@ -596,6 +604,7 @@ LOCATIONS_DATA = {
     "TotOK B10 Phantom Chest": {
         "region_id": "totok b10 phantom",
         "vanilla_item": "Big Green Rupee (100)",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0xE,
         "x_min": -40000,
@@ -633,6 +642,7 @@ LOCATIONS_DATA = {
     "TotOK B11 Phantom Chest": {
         "region_id": "totok b11 phantom",
         "vanilla_item": "Big Red Rupee (200)",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0x0F,
         "x_max": -50000,
@@ -679,6 +689,7 @@ LOCATIONS_DATA = {
     "TotOK B12 Phantom Chest": {
         "region_id": "totok b12 phantom",
         "vanilla_item": "Gold Rupee (300)",
+        "farmable": True,
         "stage_id": 37,
         "floor_id": 0x10,
         "x_min": -10000,
@@ -1439,7 +1450,9 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 0,
         "x_min": 82500,
-        "z_max": -25000
+        "z_max": -25000,
+        "sram_addr": 0x198,
+        "sram_value": 4
     },
     "Bannan Island East Grapple Chest West": {
         "region_id": "bannan east grapple",
@@ -1448,7 +1461,9 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "x_min": 60000,
         "x_max": 77500,
-        "z_max": -25000
+        "z_max": -25000,
+        "sram_addr": 0x198,
+        "sram_value": 2
     },
     "Bannan Island East Grapple Dig": {
         "region_id": "bannan east grapple dig",
@@ -1457,7 +1472,9 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "x_min": 77500,
         "x_max": 82500,
-        "z_max": -25000
+        "z_max": -25000,
+        "sram_addr": 0xEB0,
+        "sram_value": 8
     },
     "Bannan Island Cannon Game": {
         "region_id": "bannan cannon game",
@@ -1563,6 +1580,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Rupoor (-10)",
         "x_max": -40000,
         "dungeon": "Ghost Ship",
+        "sram_addr": 0xB14,
+        "sram_value": 1
     },
     "Ghost Ship B2 Third Sister Right Chest": {
         "region_id": "ghost ship b2",
@@ -1572,6 +1591,8 @@ LOCATIONS_DATA = {
         "x_min": -40000,
         "x_max": -30000,
         "dungeon": "Ghost Ship",
+        "sram_addr": 0xB14,
+        "sram_value": 4
     },
     "Ghost Ship B2 Spike Chest": {
         "region_id": "ghost ship b2",
@@ -1947,16 +1968,20 @@ LOCATIONS_DATA = {
         "stage_id": 0xF,
         "floor_id": 0x3,
         "vanilla_item": "Big Red Rupee (200)",
-        "x_max": 145000,
-        "y": 0x399A
+        "x_max": 150000,
+        "y": 0x399A,
+        "sram_addr": 0x544,
+        "sram_value": 2
     },
     "Isle of Frost Ice Field South Ledge East Chest": {
         "region_id": "iof grapple",
         "stage_id": 0xF,
         "floor_id": 0x3,
         "vanilla_item": "Red Rupee (20)",
-        "x_min": 145000,
-        "y": 0x399A
+        "x_min": 150000,
+        "y": 0x399A,
+        "sram_addr": 0x544,
+        "sram_value": 4
     },
     "Isle of Frost Ice Field SE Ledge Chest": {
         "region_id": "iof grapple",
@@ -1979,7 +2004,7 @@ LOCATIONS_DATA = {
         "region_id": "toi 3f",
         "stage_id": 0x1F,
         "floor_id": 0x1,
-        "vanilla_item": "Yellow Potion",
+        "vanilla_item": "Red Potion",
         "z_max": -30000,
         "dungeon": "Temple of Ice",
     },
@@ -2043,7 +2068,7 @@ LOCATIONS_DATA = {
         "region_id": "toi b2 key",
         "stage_id": 0x1F,
         "floor_id": 0x5,
-        "vanilla_item": "Yellow Potion",
+        "vanilla_item": "Purple Potion",
         "x_min": 30000,
         "dungeon": "Temple of Ice",
     },
@@ -2098,7 +2123,9 @@ LOCATIONS_DATA = {
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
-        "x_max": -4000
+        "x_max": -4000,
+        "sram_addr": 0x73C,
+        "sram_value": 4
     },
     "Isle of the Dead Rupoor Cave 2": {
         "region_id": "iotd rupoor",
@@ -2108,6 +2135,8 @@ LOCATIONS_DATA = {
         "z_max": -55000,
         "x_min": -4000,
         "x_max": 2000,
+        "sram_addr": 0x73C,
+        "sram_value": 2
     },
     "Isle of the Dead Rupoor Cave 3": {
         "region_id": "iotd rupoor",
@@ -2117,6 +2146,8 @@ LOCATIONS_DATA = {
         "z_max": -55000,
         "x_min": 2000,
         "x_max": 8000,
+        "sram_addr": 0x73C,
+        "sram_value": 1
     },
     "Isle of the Dead Rupoor Cave 4": {
         "region_id": "iotd rupoor",
@@ -2125,6 +2156,8 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "z_max": -55000,
         "x_min": 8000,
+        "sram_addr": 0x73C,
+        "sram_value": 1
     },
     "Isle of the Dead Face Cave Chest": {
         "region_id": "iotd cave",

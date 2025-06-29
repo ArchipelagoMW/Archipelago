@@ -372,8 +372,6 @@ DYNAMIC_FLAGS = {
     },
 
     # Fog
-
-
     "No fog add fog if spirits": {
         "on_scenes": [0x01],
         "not_last_scenes": [0x2903],
@@ -382,11 +380,13 @@ DYNAMIC_FLAGS = {
                       ("Spirit of Courage (Progressive)", 1)],
         "not_has_locations": ["Ghost Ship Rescue Tetra"],
         "has_slot_data": [("fog_settings", 0)],
-        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)],
+        "unset_if_true": [(0x1B5582, 0x80)],
+        "set_if_true": [(0x1B55AB, 0x10)]
     },
     "Remove fog on ghost ship if no fog": {
         "on_scenes": [0x2903],
         "has_slot_data": [("fog_settings", 0)],
+        "not_has_locations": ["Ghost Ship Rescue Tetra"],
         "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)],
     },
     "Spawn Spirits in fog": {
@@ -402,6 +402,11 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x2903],
         "unset_if_true": [(0x1B557E, 0x10)]
     },
+    "Remove fog on GS if saved tetra": {
+        "on_scenes": [0x2903],
+        "has_locations": ["Ghost Ship Rescue Tetra"],
+        "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+    },
     "Respawn ghost ship": {
         "on_scenes": [0x1],
         "not_last_scenes": [0x2903, 0x400],
@@ -414,8 +419,8 @@ DYNAMIC_FLAGS = {
                                   "Ghost Ship B3 Chest",
                                   "Ghost Ship Cubus Sisters Ghost Key",
                                   "Ghost Ship Cubus Sisters Heart Container"],
-        "set_if_true": [(0x1B557E, 0x10)],
-        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+        "set_if_true": [(0x1B557E, 0x10), (0x1B55AB, 0x10)],
+        "unset_if_true": [(0x1B5582, 0x80)]
     },
     "RESET Respawn ghost ship": {
         "on_scenes": [0x1],
@@ -583,7 +588,7 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x2, 0x3],
         "not_has_locations": ["Ocean Pirate Ambush Item"],
         "has_locations": ["Ghost Ship Rescue Tetra"],
-        "set_if_true": [(0x1B5582, 0x80)]
+        "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
     },
     # Zauz
     "Zauz remove phantom blade": {
@@ -720,6 +725,16 @@ DYNAMIC_FLAGS = {
     "RESET Ghost Ship HC": {
         "on_scenes": [0x1],
         "set_if_true": [(0x1B55AB, 0x8)]
+    },
+    # Vanilla frogs
+    "Frogs show glyph": {
+        "on_scenes": [0, 0x1],
+        "set_if_true": [(0x1B55A2, 0x40)]
+    },
+    "RESET Frogs show glyph": {
+        "on_scenes": [0x1A00],
+        "not_has_locations": ["Uncharted Island Cyclone Slate"],
+        "unset_if_true": [(0x1B55A2, 0x40)]
     },
 
 }

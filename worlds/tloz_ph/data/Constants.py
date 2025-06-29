@@ -396,7 +396,7 @@ HINTS_ON_SCENE = {
         "unique": ["Cannon Island Cannon", "Cannon Island Salvage Arm"]
     },
     0x500: {  # Beedle Shop
-        "unique": ["Beedle Shop Wisdom Gem", "Masked Beedle Courage Gem", "Masked Beedle Heart Container"],
+        "unique": ["Beedle Shop Wisdom Gem"],
         "beedle": True  # TODO: make this modular, instead of hard coding item requirements
     },
     0xb0A: {  # Oshus Dungeon hints
@@ -406,7 +406,7 @@ HINTS_ON_SCENE = {
         "dungeon_hints": 2
     },
     0x1700: {
-        "sprit_island_hints": True
+        "spirit_island_hints": True
     },
 }
 
