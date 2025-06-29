@@ -1,3 +1,4 @@
+import random
 import time
 from typing import TYPE_CHECKING, Set, Dict, Any
 
@@ -18,7 +19,7 @@ ROM_ADDRS = {
 }
 
 RAM_ADDRS = {
-    "game_state": (0x075E0D, 1, "Main RAM"),  # TODO find death variables
+    "game_state": (0x060C48, 1, "Main RAM"),  # TODO find death variables
     "is_dead": (0xC2EE, 1, "ARM7 System Bus"),
 
     "received_item_index": (0x1BA64C, 2, "Main RAM"),
@@ -67,7 +68,7 @@ read_keys_sea = ["shot_frog"]
 # Split up large values to write into smaller chunks
 def split_bits(value, size):
     ret = []
-    f = 0xFFFFFF00
+    f = 0xFFFFFFFFFFFFFF00
     for _ in range(size):
         ret.append(value & 0xFF)
         value = (value & f) >> 8
@@ -117,10 +118,13 @@ async def write_memory_value(ctx, address: int, value: int, domain="Main RAM", i
 
 
 # Write list of values starting from address
-async def write_memory_values(ctx, address: int, values: list, domain="Main RAM"):
-    prev = await read_memory_value(ctx, address, len(values), domain)
-    new_values = [old | new for old, new in zip(split_bits(prev, 4), values)]
-    print(f"values: {new_values}, old: {split_bits(prev, 4)}")
+async def write_memory_values(ctx, address: int, values: list, domain="Main RAM", overwrite = False):
+    if not overwrite:
+        prev = await read_memory_value(ctx, address, len(values), domain)
+        new_values = [old | new for old, new in zip(split_bits(prev, 4), values)]
+        print(f"values: {new_values}, old: {split_bits(prev, 4)}")
+    else:
+        new_values = values
     await bizhawk.write(ctx.bizhawk_ctx, [(address, new_values, domain)])
 
 
@@ -137,6 +141,9 @@ async def get_address_from_heap(ctx, pointer=POINTERS["ADDR_gMapManager"], offse
 # Get address for small key count in current stage
 async def get_small_key_address(ctx):
     return await get_address_from_heap(ctx, offset=SMALL_KEY_OFFSET)
+
+
+
 
 
 class PhantomHourglassClient(BizHawkClient):
@@ -174,6 +181,9 @@ class PhantomHourglassClient(BizHawkClient):
         self.watches = {}
         self.receiving_location = False
         self.last_vanilla_item = None
+        self.last_treasures = 0
+        self.last_ship_parts = []
+        self.last_potions = [0, 0]
 
         self.removed_boomerang = False
 
@@ -242,6 +252,11 @@ class PhantomHourglassClient(BizHawkClient):
         # Set Frog flags if not randomizing frogs
         if ctx.slot_data["randomize_frogs"] == 1:
             write_list += [(a, [v], "Main RAM") for a, v in STARTING_FROG_FLAGS]
+        # Set Fog Flags
+        fog_bits = FOG_SETTINGS_FLAGS[ctx.slot_data["fog_settings"]]
+        if len(fog_bits) > 0:
+            write_list += [(a, [v], "Main RAM") for a, v in fog_bits]
+
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
         self.removed_boomerang = False
 
@@ -263,6 +278,21 @@ class PhantomHourglassClient(BizHawkClient):
             return True
         else:
             return False
+
+    async def update_treasure_tracker(self, ctx):
+        self.last_treasures = await read_memory_value(ctx, 0x1BA5AC, 8)
+        print(f"Treasure Tracker! {split_bits(self.last_treasures, 8)}")
+
+    async def give_random_treasure(self, ctx):
+        address = 0x1BA5AC + random.randint(0, 7)
+        await write_memory_value(ctx, address, 1, incr=True)
+        await self.update_treasure_tracker(ctx)
+
+    async def update_potion_tracker(self, ctx):
+        read_list = {"left": (0x1BA5D8, 1, "Main RAM"),
+                     "right": (0x1BA5D9, 1, "Main RAM")}
+        reads = await read_memory_values(ctx, read_list)
+        self.last_potions = list(reads.values())
 
     def get_coord_address(self, at_sea=None) -> dict[str, tuple[int, int, str]]:
         at_sea = self.at_sea if at_sea is None else at_sea
@@ -318,15 +348,14 @@ class PhantomHourglassClient(BizHawkClient):
 
             # If player is not in-game, don't do anything else
             if not in_game or current_stage not in STAGES:
-                print(f"NOT IN GAME, {in_game}, {slot_memory}")
                 self.previous_game_state = False
-
-                current_stage = await read_memory_value(ctx, *RAM_ADDRS["stage"])
+                print("NOT IN GAME")
+                # Finished game?
                 if not ctx.finished_game:
                     await self.process_game_completion(ctx, current_stage)
                 return
 
-            # On entering game from main menu / cutscene / shop / stage transition
+            # On entering game from main menu
             if in_game and not self.previous_game_state:
                 self.just_entered_game = True
                 self.last_stage = None
@@ -336,10 +365,13 @@ class PhantomHourglassClient(BizHawkClient):
                 self.get_ending_room(ctx)
                 print(f"Started Game")
 
-                # If new file, set up starting flags
-                if slot_memory == 0:
+            # If new file, set up starting flags
+            if slot_memory == 0:
+                if await read_memory_value(ctx, 0x1b55a8) & 2:  # Check if watched intro cs
                     await self.set_starting_flags(ctx)
                     print(f"Set starting flags for slot {slot_memory}")
+                else:
+                    return
 
             # Get current scene
             current_room = read_result["room"]
@@ -360,9 +392,10 @@ class PhantomHourglassClient(BizHawkClient):
             # Process on new room
             if current_scene != self.last_scene:
                 print(f"Entered new scene {hex(current_scene)}")
-                self.last_scene = current_scene
                 self.entering_dungeon = None
                 await self.load_local_locations(ctx, current_scene)
+                await self.update_potion_tracker(ctx)
+                await self.update_treasure_tracker(ctx)
 
                 # Start watch for stage fully loading
                 if current_stage != self.last_stage:
@@ -375,17 +408,19 @@ class PhantomHourglassClient(BizHawkClient):
                 # Check if entering dungeon
                 if current_stage in DUNGEON_KEY_DATA and self.last_stage != current_stage:
                     self.entering_dungeon = current_stage
+                    self.entering_from = self.last_scene
                 else:
                     self.entering_from = current_scene  # stage and room
 
                 # Hard coded room stuff
 
                 # Yellow warp in TotOK saves keys
-                if self.entering_from is not None:
-                    if current_scene == 0x2509 and self.entering_from == 0x2507:  # TODO: set constants for these rooms
+                if self.last_scene is not None:
+                    if current_scene == 0x2509 and self.last_scene == 0x2507:  # TODO: set constants for these rooms
                         await self.write_totok_midway_keys(ctx)
 
                 self.last_stage = current_stage
+                self.last_scene = current_scene
                 await self.process_scouted_locations(ctx, current_scene)
 
             # Set stage flags when scene fully loaded
@@ -472,6 +507,11 @@ class PhantomHourglassClient(BizHawkClient):
             for loc in d.get("not_has_locations", []):
                 if self.location_name_to_id[loc] in ctx.checked_locations:
                     return False
+            if "any_not_has_locations" in d:
+                for loc in d.get("any_not_has_locations", []):
+                    if self.location_name_to_id[loc] not in ctx.checked_locations:
+                        return True
+                return False
             return True
 
         def check_slot_data(d):
@@ -479,6 +519,13 @@ class PhantomHourglassClient(BizHawkClient):
                 for slot, value in d["has_slot_data"]:
                     if ctx.slot_data.get(slot, None) != value:
                         return False
+            return True
+
+        # Came from particular location
+        def check_last_room(d):
+            for i in d.get("not_last_scenes", []):
+                if self.last_scene == i:
+                    return False
             return True
 
         # Loop dynamic flags in scene
@@ -490,9 +537,14 @@ class PhantomHourglassClient(BizHawkClient):
                 # Special case for having goal requirements
                 if "goal_requirement" in data:
                     if data["goal_requirement"]:
-                        data["has_items"] = data.get("has_items", []) + [(i, 1) for i in ctx.slot_data["boss_rewards"]]
-                    else:
-                        data["has_items"] = data.get("has_items", []) + [(i, 0) for i in ctx.slot_data["boss_rewards"]]
+                        data["has_items"] = data.get("has_items", [])
+                        boss_items = {}
+                        for boss_reward in ctx.slot_data["boss_rewards"]:
+                            boss_items[boss_reward] = boss_items.get(boss_reward, 0) + 1
+                        data["has_items"] += boss_items.items()
+                        print(f"Boss Items: {boss_items.items()}")
+
+                # Items, locations, slot data
                 if not check_items(data):
                     print(f"{data["name"]} does not have item reqs")
                     continue
@@ -502,7 +554,9 @@ class PhantomHourglassClient(BizHawkClient):
                 if not check_slot_data(data):
                     print(f"{data["name"]} does not have slot data reqs")
                     continue
-
+                if not check_last_room(data):
+                    print(f"{data["name"]} came from wrong room {hex(self.last_scene)}")
+                    continue
 
                 # Create read/write lists
                 for a, v in data.get("set_if_true", []):
@@ -545,10 +599,11 @@ class PhantomHourglassClient(BizHawkClient):
             if stage in DUNGEON_KEY_DATA:
                 # Change key read location if using TotOK midway
                 if self.entering_from == 0x2600 and scene_id == 0x2509:
-                    self.entering_dungeon = 372
+                    await self.update_key_count(ctx, 372)
                 elif stage != 0x25 or self.entering_from == 0x2600:  # Prevent regiving keys in TotoK
                     await self.update_key_count(ctx, self.entering_dungeon)
             self.new_stage_loading = None
+            self.entering_from = scene_id
             self.get_main_read_list(stage)
 
             if not self.removed_boomerang:
@@ -617,17 +672,16 @@ class PhantomHourglassClient(BizHawkClient):
 
         # If sent with a pre-proces kwarg
         if pre_process is not None:
+            self.receiving_location = True
             loc_id = self.location_name_to_id[pre_process]
             location = LOCATIONS_DATA[pre_process]
             vanilla_item = location.get("vanilla_item")
-            if r or (loc_id not in self.local_checked_locations and vanilla_item != pre_process):
-                self.last_vanilla_item = vanilla_item
-                self.receiving_location = True
+            if r or (loc_id not in local_checked_locations):
+                await self.set_vanilla_item(ctx, location, loc_id)
                 local_checked_locations.add(loc_id)
             print(f"pre-processed {pre_process}, vanill {self.last_vanilla_item}")
         else:
             # Get link's coords
-
             link_coords = await self.get_coords(ctx)
             print(link_coords)
 
@@ -655,9 +709,7 @@ class PhantomHourglassClient(BizHawkClient):
                             self.delay_pickup = [loc_name, location["delay_pickup"]]
                             break
                     local_checked_locations.add(loc_bytes)
-                    vanilla_item = ITEMS_DATA[location["vanilla_item"]]
-                    if vanilla_item["id"] not in [i.item for i in ctx.items_received] or "incremental" in vanilla_item:
-                        self.last_vanilla_item = location.get("vanilla_item")
+                    await self.set_vanilla_item(ctx, location, loc_bytes)
                     print(f"Got location {loc_name}! with vanilla {self.last_vanilla_item} id {loc_bytes}")
                     break
                 location = None
@@ -677,35 +729,73 @@ class PhantomHourglassClient(BizHawkClient):
                 "locations": list(self.local_checked_locations)
             }])
 
+    # Called during location processing to determine what vanilla item to remove
+    async def set_vanilla_item(self, ctx, location, loc_id):
+        item = location.get("vanilla_item", None)
+        item_data = ITEMS_DATA[item]
+        if item_data["id"] not in [i.item for i in ctx.items_received] or "incremental" in item_data:
+            self.last_vanilla_item = item
+            # Farmable locations don't remove vanilla
+            if "farmable" in location and loc_id in ctx.checked_locations:
+                if item == "Ship Part":
+                    await self.give_random_treasure(ctx)
+                else:
+                    self.last_vanilla_item = None
+                    # TODO: treasure tracker is not updated after getting farmable treasure
+
     async def process_scouted_locations(self, ctx: "BizHawkClientContext", scene):
         local_scouted_locations = set(ctx.locations_scouted)
-        if scene in SHOPS:
-            # Items unique to that shop
-            if "unique" in SHOPS[scene]:
-                locations = SHOPS[scene]["unique"]
-                [local_scouted_locations.add(self.location_name_to_id[loc]) for loc in locations]
+        if scene in HINTS_ON_SCENE:
+            hint_data = HINTS_ON_SCENE[scene]
+            if ctx.slot_data["shop_hints"]:
+                # Items unique to that shop
+                if "unique" in hint_data:
+                    locations = hint_data["unique"]
+                    print(f"scouting {hex(scene)} for {hint_data["unique"]}")
+                    [local_scouted_locations.add(self.location_name_to_id[loc]) for loc in locations]
 
-            if "beedle" in SHOPS[scene]:
-                read = await read_memory_value(ctx, 0x1BA644)
-                if read & 0x10:  # TODO: Hard coding this is stupid
-                    local_scouted_locations.add(self.location_name_to_id["Beedle Shop Bomb Bag"])
+                # beedle items
+                if "beedle" in hint_data:
+                    read = await read_memory_value(ctx, 0x1BA644)
+                    if read & 0x10:  # TODO: Hard coding this is stupid (bomb check)
+                        local_scouted_locations.add(self.location_name_to_id["Beedle Shop Bomb Bag"])
+                    if ctx.slot_data["randomize_masked_beedle"]:
+                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Courage Gem"])
+                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Heart Container"])
 
-            # Items in all island shops
-            if SHOPS[scene].get("island_shop", False):
-                has_bow, has_chus = False, False
-                for i in ctx.items_received:
-                    item = self.item_id_to_name[i.item]
-                    if item == "Bow (Progressive)":
-                        has_bow = True
-                    if item == "Bombchus (Progressive)":
-                        has_chus = True
+                # Items in all island shops
+                if hint_data.get("island_shop", False):
+                    has_bow, has_chus = False, False
+                    for i in ctx.items_received:
+                        item = self.item_id_to_name[i.item]
+                        if item == "Bow (Progressive)":
+                            has_bow = True
+                        if item == "Bombchus (Progressive)":
+                            has_chus = True
 
-                local_scouted_locations.add(self.location_name_to_id["Island Shop Power Gem"])
-                if has_bow:
-                    local_scouted_locations.add(self.location_name_to_id["Island Shop Quiver"])
-                    if has_chus:
-                        local_scouted_locations.add(self.location_name_to_id["Island Shop Bombchu Bag"])
-                        local_scouted_locations.add(self.location_name_to_id["Island Shop Heart Container"])
+                    local_scouted_locations.add(self.location_name_to_id["Island Shop Power Gem"])
+                    if has_bow:
+                        local_scouted_locations.add(self.location_name_to_id["Island Shop Quiver"])
+                        if has_chus:
+                            local_scouted_locations.add(self.location_name_to_id["Island Shop Bombchu Bag"])
+                            local_scouted_locations.add(self.location_name_to_id["Island Shop Heart Container"])
+
+            # Hint required dungeons
+            if "dungeon_hints" in hint_data:
+                if ctx.slot_data["dungeon_hints"] == hint_data["dungeon_hints"]:
+                    for loc in ctx.slot_data["required_dungeon_locations"]:
+                        local_scouted_locations.add(self.location_name_to_id[loc])
+
+            print(f"Spirit hints {ctx.slot_data["spirit_island_hints"]}")
+            # Hint Spirit Island
+            if hint_data.get("spirit_island_hints", False):
+                forces = ["Power", "Wisdom", "Courage"]
+                if ctx.slot_data["spirit_island_hints"] != 2:
+                    for i in forces:
+                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 2"])
+                if ctx.slot_data["spirit_island_hints"] == 0:
+                    for i in forces:
+                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 1"])
 
         # Send hints
         if self.local_scouted_locations != local_scouted_locations:
@@ -763,6 +853,14 @@ class PhantomHourglassClient(BizHawkClient):
                 write_list.append((data["address"], [new_value], "Main RAM"))
             else:
                 print(f"Too many keys for dungeon {item_data['dungeon']}")
+
+        # Handle ammo refills
+        elif "refill" in item_data:
+            refill_id = ITEMS_DATA[item_data["refill"]]["id"]
+            prog_received = sum([1 for i in ctx.items_received[:num_received_items] if i.item == refill_id]) - 1
+            if prog_received >= 0:
+                write_list.append((item_data["address"], [item_data["give_ammo"][prog_received]], "Main RAM"))
+
         elif "address" in item_data or "progressive" in item_data:
             # Handle progressive items (not to be confused with progression items)
             prog_received = 0
@@ -781,10 +879,10 @@ class PhantomHourglassClient(BizHawkClient):
             # Handle different writing operations
             if "incremental" in item_data:
                 # Sand of hours check
-                if item_data["value"] == "Sand":
+                if item_data.get("value") == "Sand":
                     value = ctx.slot_data["ph_time_increment"] * 3600
                 else:
-                    value = item_data["value"]
+                    value = item_data.get("value", 1)
 
                 item_value = prev_value + value
                 item_value = 0 if item_value <= 0 else item_value
@@ -811,37 +909,65 @@ class PhantomHourglassClient(BizHawkClient):
                     bit_prev = await read_memory_value(ctx, adr)
                     write_list.append((adr, [bit | bit_prev], "Main RAM"))
 
-        # Write the new item to memory!
+        # Set ship
+        elif "ship" in item_data:
+            for addr in EQUIPPED_SHIP_PARTS_ADDR:
+                write_list.append((addr, [item_data["ship"]], "Main RAM"))
 
+        # Write the new item to memory!
         print(f"Write list: {write_list}")
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
 
+        # If treasure, update treasure tracker
+        if "treasure" in item_data:
+            await self.update_treasure_tracker(ctx)
+        if "Potion" in item_name:
+            await self.update_potion_tracker(ctx)
+
     async def remove_vanilla_item(self, ctx, num_received_items):
         print(f"Removing vanilla item {self.last_vanilla_item}")
-        data = ITEMS_DATA[self.last_vanilla_item]
-        value = data.get('value', 1)
-        if "Small Key" in self.last_vanilla_item:
-            address = self.key_address = await get_small_key_address(ctx)
-        elif "progressive" in data:
-            write_list = []
-            index = sum([1 for i in ctx.items_received[:num_received_items] if i.item == data["id"]])
-            if index >= len(data["progressive"]):
-                return
-            address, value = data["progressive"][index]
-            if "give_ammo" in data:
-                ammo_v = data["give_ammo"][max(index - 1, 0)]
-                write_list.append((data["ammo_address"], [ammo_v], "Main RAM"))
-            if index == 2:
-                write_list.append((address, [1], "Main RAM"))
-            await bizhawk.write(ctx.bizhawk_ctx, write_list)
+        # Handle items from random pools
+        if self.last_vanilla_item == "Treasure":
+            treasure_write_list = split_bits(self.last_treasures, 8)
+            print(f"Treasure Write List: {treasure_write_list}")
+            await write_memory_values(ctx, 0x1BA5AC, treasure_write_list, overwrite=True)
+        elif self.last_vanilla_item == "Ship Part":
+            ship_write_list = ([1] + [0] * 8) * 8
+            await write_memory_values(ctx, 0x1BA564, ship_write_list, overwrite=True)
+        elif "Potion" in self.last_vanilla_item:
+            print(f"Pots {self.last_potions}")
+            if not all(self.last_potions):
+                await write_memory_values(ctx, 0x1BA5D8, self.last_potions, overwrite=True)
+            else:
+                # If you already have 2 potions, it gives rupees instead
+                await write_memory_value(ctx, 0x1BA53E, ITEMS_DATA[self.last_vanilla_item]["value"],
+                                         incr=False, size=2)
+        # Handle all other items
         else:
-            address = data["address"]
+            data = ITEMS_DATA[self.last_vanilla_item]
+            value = data.get('value', 1)
+            if "Small Key" in self.last_vanilla_item:
+                address = self.key_address = await get_small_key_address(ctx)
+            elif "progressive" in data:
+                write_list = []
+                index = sum([1 for i in ctx.items_received[:num_received_items] if i.item == data["id"]])
+                if index >= len(data["progressive"]):
+                    return
+                address, value = data["progressive"][index]
+                if "give_ammo" in data:
+                    ammo_v = data["give_ammo"][max(index - 1, 0)]
+                    write_list.append((data["ammo_address"], [ammo_v], "Main RAM"))
+                if index == 2:
+                    write_list.append((address, [1], "Main RAM"))
+                await bizhawk.write(ctx.bizhawk_ctx, write_list)
+            else:
+                address = data["address"]
 
-        if value == "Sand":
-            value = 3600
+            if value == "Sand":
+                value = 3600
 
-        await write_memory_value(ctx, address, value,
-                                 incr=data.get('incremental', None), unset=True)
+            await write_memory_value(ctx, address, value,
+                                     incr=data.get('incremental', None), unset=True, size=data.get("size", 1))
         self.last_vanilla_item = None
 
     async def process_game_completion(self, ctx: "BizHawkClientContext", current_scene: int):

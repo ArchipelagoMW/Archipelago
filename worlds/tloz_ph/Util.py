@@ -1,6 +1,6 @@
 from typing import Dict
 from .data import LOCATIONS_DATA, ITEMS_DATA, DYNAMIC_FLAGS
-from .data.Constants import SHOPS
+from .data.Constants import HINTS_ON_SCENE
 
 
 def build_location_room_to_watches() -> Dict[int, dict[str, dict]]:
@@ -13,11 +13,17 @@ def build_location_room_to_watches() -> Dict[int, dict[str, dict]]:
 
         # Build Island shops
         if "island_shop" in location:
-            for shop_id, shop in SHOPS.items():
+            for shop_id, shop in HINTS_ON_SCENE.items():
                 if shop_id not in location_room_to_watches:
                     location_room_to_watches[shop_id] = {}
                 if "island_shop" in shop:
                     location_room_to_watches[shop_id][loc_name] = location
+        # Add location to multiple rooms
+        if "additional_rooms" in location:
+            for room in location["additional_rooms"]:
+                if room not in location_room_to_watches:
+                    location_room_to_watches[room] = {}
+                location_room_to_watches[room][loc_name] = location
     return location_room_to_watches
 
 

@@ -7,13 +7,15 @@ REGIONS = [
     "mercay zora cave",
     "mercay zora cave south",
     "mercay freedle island",
-    "sw ocean",
     "mercay freedle gift",
     "mercay freedle tunnel chest",
     "mercay yellow guy",
     "mercay passage 1",
     "mercay passage 2",
     "mercay passage 3",
+    "mercay passage rat",
+    "mercay oshus gem",
+    "mercay oshus phantom blade",
     
     
     # Shop Regions
@@ -24,6 +26,8 @@ REGIONS = [
 
     "beedle gem",
     "beedle bomb bag",
+    "masked ship hc",
+    "masked ship gem",
 
 
     # TotOK
@@ -52,6 +56,7 @@ REGIONS = [
     "totok b6",
     "totok b6 phantom chest",
     "totok b6 bow chest",
+    "totok b6 cc",
     "totok midway",
 
     # TotOK 2
@@ -87,16 +92,15 @@ REGIONS = [
     "bellumbeck",
     "beat bellumbeck",
 
-
-    
-
     # SW Ocean
+    "sw ocean",
     "sw ocean east",
     "sw ocean west",
     "sw ocean crest salvage",
     "sw ocean frog x",
     "sw ocean frog phi",
     "sw ocean nyave",
+    "sw ocean nyave trade",
 
     # Cannon Island
     "cannon island",
@@ -154,6 +158,7 @@ REGIONS = [
     "toc before boss",
     "toc before boss chest",
     "toc crayk",
+    "post toc",
 
     # Spirit Island
     "spirit island",
@@ -165,6 +170,149 @@ REGIONS = [
     "spirit courage 1",
     "spirit courage 2",
 
+    # NW Ocean
+    "nw ocean",
+    "nw ocean frog n",
+    "porl",
+    "porl item",
+    "porl trade",
 
+    # Isle of Gust
+    "gust",
+    "gust combat",
+    "gust dig",
+
+    # Temple of Wind
+    "tow",
+    "tow b1",
+    "tow b2",
+    "tow b2 bombs",
+    "tow b2 dig",
+    "tow b2 key",
+    "tow bk chest",
+    "tow cyclok",
+    "post tow",
+
+    # Bannan Island
+    "bannan",
+    "bannan grapple",
+    "bannan dig",
+    "bannan east",
+    "bannan east grapple",
+    "bannan east grapple dig",
+    "bannan cannon game",
+    "bannan scroll",
+
+    # Zauz
+    "zauz",
+    "zauz dig",
+    "zauz crest",
+    "zauz blade",
+
+    # Uncharted
+    "uncharted",
+    "uncharted dig",
+    "uncharted cave",
+    "uncharted grapple",
+    
+    # Ghost Ship
+    "ghost ship",
+    "ghost ship barrel",
+    "ghost ship b2",
+    "ghost ship b3",
+    "ghost ship cubus",
+    "ghost ship tetra",
+    "spawn pirate ambush",
+
+    # SE Ocean
+    "se ocean",
+    "se ocean frogs",
+    "se ocean trade",
+    "pirate ambush",
+
+    # Goron Island
+    "goron",
+    "goron chus",
+    "goron grapple",
+    "goron quiz",
+    "goron north",
+    "goron outside temple",
+    "goron north bombchu",
+    "goron chief 2",
+
+    # Goron Temple
+    "gt",
+    "gt bow",
+    "gt b1",
+    "gt b2",
+    "gt b2 back",
+    "gt b3",
+    "gt bk chest",
+    "gt dongo",
+
+
+    # Harrow Island
+    "harrow",
+    "harrow dig",
+    "harrow dig 2",
+
+    # Dee Ess Island
+    "ds",
+    "ds dig",
+    "ds combat",
+    "ds race",
+
+    # Isle of Frost
+    "iof",
+    "iof grapple",
+    "iof dig",
+    "iof grapple dig",
+    "iof yook",
+
+    # Temple of Ice
+    "toi",
+    "toi 2f",
+    "toi 3f",
+    "toi 3f switch",
+    "toi 3f boomerang",
+    "toi 2f miniboss",
+    "toi side path",
+    "toi b1",
+    "toi b1 2",
+    "toi b1 key",
+    "toi b2",
+    "toi bk chest",
+    "toi b2 key",
+    "toi gleeok",
+
+    # NE Ocean
+
+    "ne ocean",
+    "ne ocean frog",
+    "ne ocean combat",
+
+    # Isle of the Dead
+    "iotd",
+    "iotd rupoor",
+    "iotd dig",
+    "iotd cave",
+
+    # Isle of Ruins
+    "ruins",
+    "ruins dig",
+    "ruins water",
+
+    # Mutoh's Temple
+    "mutoh",
+    "mutoh hammer",
+    "mutoh water",
+    "mutoh bk chest",
+    "mutoh eox",
+
+    # Maze Island
+    "maze",
+    "maze east",
+    "maze normal",
+    "maze expert",
 
 ]

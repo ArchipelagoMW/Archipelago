@@ -20,17 +20,21 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: ph_has_range(state, player)],
         ["mercay freedle island", "mercay freedle gift", False, lambda state: ph_has_sea_chart(state, player, "SE")],
         ["mercay island", "mercay yellow guy", False, lambda state: ph_has_courage_crest(state, player)],
+        ["post tow", "mercay oshus gem", False, None],
+        ["mercay island", "mercay oshus phantom blade", False, lambda state: ph_has_phantom_blade(state, player)],
 
         # ======== Mountain Passage =========
 
         ["mercay island", "mercay passage 1", False, lambda state:
-        any([ph_can_cut_small_trees(state, player),
-             ph_has_small_keys(state, player, "Mountain Passage", 3)])],
+            any([ph_can_cut_small_trees(state, player),
+                ph_has_small_keys(state, player, "Mountain Passage", 3)])],
         ["mercay island", "mercay passage 2", False, lambda state: ph_can_reach_MP2(state, player)],
+        ["mercay passage 2", "mercay passage rat", False, lambda state: ph_mercay_passage_rat(state, player)],
+
 
         # ========== TotOK ===================
         ["totok", "totok 1f chart chest", False, lambda state:
-        ph_has_small_keys(state, player, "Temple of the Ocean King", 1)],
+            ph_has_small_keys(state, player, "Temple of the Ocean King", 1)],
         # B1
         ["totok", "totok b1", False, lambda state: ph_has_spirit(state, player, "Power")],
         ["totok b1", "totok b1 eye chest", False, lambda state: all([ph_has_grapple(state, player),
@@ -52,7 +56,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["totok b3", "totok b3 phantom chest", False, lambda state: all([ph_can_kill_phantoms_traps(state, player),
                                                                          ph_has_grapple(state, player)])],
         ["totok b3", "totok b3 locked chest", False, lambda state:
-        ph_has_small_keys(state, player, "Temple of the Ocean King", 4)],
+            ph_has_small_keys(state, player, "Temple of the Ocean King", 4)],
         ["totok b3", "totok b3 bow chest", False, lambda state: ph_has_bow(state, player)],
         ["totok b3", "totok b3.5", False, lambda state: any([ph_has_grapple(state, player),
                                                              ph_has_force_gems(state, player)])],
@@ -63,8 +67,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["totok b4", "totok b4 key", False, lambda state: any([ph_has_explosives(state, player),
                                                                ph_can_boomerang_return(state, player)])],
         ["totok b4", "totok b5", False, lambda state: ph_totok_b5_key_logic(state, player)],
-        ["totok b5", "totok b5 chest", False, lambda state: all([ph_can_kill_bubble(state, player),
-                                                                 ph_has_mid_range(state, player)])],
+        ["totok b5", "totok b5 chest", False, lambda state: ph_totok_b5(state, player)],
         ["totok b5 chest", "totok b6", False, None],
         ["totok b4", "totok b5.5", False, lambda state: all([ph_totok_b5_key_logic(state, player),
                                                              ph_can_hit_bombchu_switches(state, player)])],
@@ -73,6 +76,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # B6
         ["totok b6", "totok b6 phantom chest", False, lambda state: ph_has_phantom_sword(state, player)],
         ["totok b6", "totok b6 bow chest", False, lambda state: ph_has_bow(state, player)],
+        ["totok b6", "totok b6 cc", False, lambda state: ph_has_sea_chart(state, player, "SW")],
         ["totok b6", "totok midway", False, lambda state: ph_has_triforce_crest(state, player)],
 
         # ============ TotOK Part 2 =====================
@@ -96,8 +100,9 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["totok b9", "totok b9 nw", False, None],
         ["totok b9", "totok b9 phantom", False, lambda state: ph_totok_b9_phantom_kill(state, player)],
         ["totok b9", "totok b9.5", False, lambda state: all([ph_has_totok_crystal(state, player, "Round"),
-                                                             ph_has_totok_crystal(state, player, "Triangle")])],
-        ["totok b9.5", "totok b10", False, lambda state: ph_totok_b9_phantom_kill(state, player)],
+                                                             ph_has_totok_crystal(state, player, "Triangle"),
+                                                             ph_totok_b9_phantom_kill(state, player)])],
+        ["totok b9.5", "totok b10", False, None],
         # B10
         ["totok b10", "totok b10 inner", False, lambda state: ph_has_explosives(state, player)],
         ["totok b10 inner", "totok b10 hammer", False, lambda state: ph_has_hammer(state, player)],
@@ -118,20 +123,20 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["totok", "bellum 1", False, lambda state: ph_totok_bellum_staircase(state, player)],
         ["bellum 1", "ghost ship fight", False, lambda state: ph_can_beat_bellum(state, player)],
         ["ghost ship fight", "bellumbeck", False, lambda state: ph_can_beat_ghost_ship_fight(state, player)],
-        ["bellumbeck", "beat bellumbeck", False, lambda state: ph_can_beat_bellumbeck(state, player)],
 
 
         # ============ Shops ====================
 
-        ["mercay island", "shop power gem", False, lambda state: ph_has_rupees(state, player, 500)],
+        ["mercay island", "shop power gem", False, lambda state: ph_can_buy_gem(state, player)],
         ["mercay island", "shop quiver", False, lambda state: ph_can_buy_quiver(state, player)],
         ["mercay island", "shop bombchu bag", False, lambda state: ph_can_buy_chu_bag(state, player)],
         ["mercay island", "shop heart container", False, lambda state: ph_can_buy_heart(state, player)],
 
-        ["sw ocean east", "beedle gem", False, lambda state: ph_has_rupees(state, player, 500)],
-        # TODO Calculate actual need
-        ["sw ocean east", "beedle bomb bag", False, lambda state: all([ph_has_rupees(state, player, 1000),
+        ["sw ocean east", "beedle gem", False, lambda state: ph_beedle_shop(state, player, 500)],
+        ["sw ocean east", "beedle bomb bag", False, lambda state: all([ph_beedle_shop(state, player, 500),
                                                                        ph_has_bombs(state, player)])],
+        ["sw ocean east", "masked ship gem", False, lambda state: ph_beedle_shop(state, player, 500)],
+        ["sw ocean east", "masked ship hc", False, lambda state: ph_beedle_shop(state, player, 500)],
 
         # ============ SW Ocean =================
 
@@ -143,6 +148,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["sw ocean west", "molida island", False, None],
         ["sw ocean west", "spirit island", False, None],
         ["sw ocean west", "sw ocean nyave", False, lambda state: ph_has_cave_damage(state, player)],
+        ["sw ocean nyave", "sw ocean nyave trade", False, lambda state: ph_has_guard_notebook(state, player)],
         ["sw ocean west", "sw ocean frog phi", False, lambda state: ph_has_cannon(state, player)],
         ["sw ocean east", "sw ocean frog x", False, lambda state: ph_has_cannon(state, player)],
 
@@ -170,7 +176,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # 3F
         ["tof 3f", "tof 3f key drop", False, lambda state: ph_has_boomerang(state, player)],
         ["tof 3f key drop", "tof 3f boss key", False, lambda state:
-        ph_has_small_keys(state, player, "Temple of Fire", 3)],  # All 3F checks need boomerang
+            ph_has_small_keys(state, player, "Temple of Fire", 3)],  # All 3F checks need boomerang
         ["tof 3f boss key", "tof blaaz", False, lambda state: all([
             ph_has_sword(state, player),
             ph_has_boss_key(state, player, "Temple of Fire")])],
@@ -186,7 +192,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["molida dig", "molida north", False, lambda state: ph_has_sun_key(state, player)],
         ["molida north", "molida north grapple", False, lambda state: ph_has_grapple(state, player)],
         ["molida north", "toc", False, lambda state: ph_can_enter_toc(state, player)],
-        ["toc crayk", "molida archery", False, None],
+        ["toc crayk", "post toc", False, None],
+        ["post toc", "molida archery", False, None],
 
         # =============== Temple of Courage ================
 
@@ -200,7 +207,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["toc 1f west", "toc map room", False, lambda state: ph_has_explosives(state, player)],
         ["toc 1f west", "toc 2f beamos", False, lambda state: ph_toc_key_doors(state, player, 3, 2)],
         ["toc 1f west", "toc b1 maze", False, lambda state:
-        ph_has_shape_crystal(state, player, "Temple of Courage", "Square")],
+            ph_has_shape_crystal(state, player, "Temple of Courage", "Square")],
         ["toc b1 grapple", "toc b1 maze", False, None],
         ["toc b1 maze", "toc south 1f", False, lambda state: all([
             ph_has_bow(state, player),
@@ -230,9 +237,201 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["spirit island", "spirit courage 1", False, lambda state: ph_has_spirit_gems(state, player, "Courage", 10)],
         ["spirit island", "spirit courage 2", False, lambda state: ph_has_spirit_gems(state, player, "Courage", 20)],
 
+        # ============ Ocean NW ===============
+        ["sw ocean west", "nw ocean", False, lambda state: ph_has_sea_chart(state, player, "NW")],
+        ["sw ocean east", "nw ocean", False, lambda state: ph_has_frog_n(state, player)],
+        ["nw ocean", "nw ocean frog n", False, lambda state: ph_has_cannon(state, player)],
+        ["nw ocean", "gust", False, None],
+        ["nw ocean", "bannan", False, None],
+        ["nw ocean", "zauz", False, None],
+        ["nw ocean", "uncharted", False, None],
+        ["nw ocean", "ghost ship", False, lambda state: ph_has_ghost_ship_access(state, player)],
+        ["nw ocean", "porl", False, None],
+        ["porl", "porl item", False, lambda state: ph_has_sword(state, player)],
+        ["porl", "porl trade", False, lambda state: ph_has_heros_new_clothes(state, player)],
+
+        # ================= Isle of Gust ====================
+
+        ["gust", "gust combat", False, lambda state: ph_has_cave_damage(state, player)],
+        ["gust", "gust dig", False, lambda state: ph_has_shovel(state, player)],
+        ["gust dig", "tow", False, None],
+
+        # ================= Temple of Wind ====================
+
+        ["tow", "tow b1", False, lambda state: any([
+            ph_can_hammer_clip(state, player),
+            ph_can_kill_bat(state, player)])],
+        ["tow b1", "tow b2", False, None],
+        ["tow b2", "tow b2 dig", False, lambda state: ph_has_shovel(state, player)],
+        ["tow b2", "tow b2 bombs", False, lambda state: ph_has_explosives(state, player)],
+        ["tow b2", "tow b2 key", False, lambda state: ph_has_small_keys(state, player, "Temple of Wind")],
+        ["tow b2", "tow bk chest", False, lambda state: ph_has_bombs(state, player)],
+        ["tow", "tow cyclok", False, lambda state: all([
+            ph_has_bombs(state, player),
+            ph_has_boss_key(state, player, "Temple of Wind")])],
+        ["tow cyclok", "post tow", False, None],
+
+
+        # ================= Bannan Island ====================
+
+        ["bannan", "bannan grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["bannan", "bannan dig", False, lambda state: ph_has_shovel(state, player)],
+        ["bannan", "bannan east", False, lambda state: ph_has_bombs(state, player)],
+        ["bannan east", "bannan east grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["bannan east grapple", "bannan east grapple dig", False, lambda state: ph_has_shovel(state, player)],
+        ["bannan east", "bannan cannon game", False, lambda state: ph_has_cannon(state, player)],
+        ["bannan", "bannan scroll", False, lambda state: ph_bannan_scroll(state, player)],
+
+        # ================= Zauz's Island ====================
+
+        ["zauz", "zauz dig", False, lambda state: ph_has_shovel(state, player)],
+        ["zauz", "zauz blade", False, None],
+        ["ghost ship tetra", "zauz crest", False, None],
+
+        # ================= Uncharted Island ====================
+
+        ["uncharted", "uncharted dig", False, lambda state: ph_has_shovel(state, player)],
+        ["uncharted", "uncharted cave", False, lambda state: ph_has_sword(state, player)],
+        ["uncharted cave", "uncharted grapple", False, lambda state: ph_has_grapple(state, player)],
+
+        # ================= Ghost Ship ====================
+
+        ["ghost ship", "ghost ship barrel", False, lambda state: ph_ghost_ship_barrel(state, player)],
+        ["ghost ship barrel", "ghost ship b2", False, lambda state:
+            ph_has_shape_crystal(state, player, "Ghost Ship", "Triangle")],
+        ["ghost ship b2", "ghost ship b3", False, None],
+        ["ghost ship b3", "ghost ship cubus", False, lambda state: ph_has_sword(state, player)],
+        ["ghost ship b2", "ghost ship tetra", False, lambda state: ph_has_ghost_key(state, player)],
+        ["ghost ship tetra", "spawn pirate ambush", False, None],
+
+        # ================= SE Ocean ====================
+
+        ["sw ocean", "se ocean", False, lambda state: all([
+            ph_has_sea_chart(state, player, "SE"),
+            ph_has_sea_chart(state, player, "SW")])],
+        ["se ocean", "se ocean frogs", False, lambda state: ph_has_cannon(state, player)],
+        ["se ocean", "goron", False, lambda state: ph_has_cannon(state, player)],
+        ["se ocean", "se ocean trade", False, lambda state: ph_has_kaleidoscope(state, player)],
+        ["se ocean", "iof", False, lambda state: ph_has_cannon(state, player)],
+        ["se ocean", "harrow", False, lambda state: ph_has_sword(state, player)],
+        ["se ocean", "ds", False, None],
+        ["se ocean", "pirate ambush", False, lambda state: ph_beat_ghost_ship(state, player)],
+
+        # ================= Goron Island ====================
+
+        ["goron", "goron chus", False, lambda state: ph_goron_chus(state, player)],
+        ["goron", "goron grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["goron chus", "goron quiz", False, None],
+        ["goron", "goron north", False, None],
+        ["goron north", "goron north bombchu", False, lambda state: ph_can_hit_bombchu_switches(state, player)],
+        ["goron north", "goron outside temple", False, lambda state: ph_has_explosives(state, player)],
+        ["goron", "goron outside temple", False, lambda state: ph_can_hammer_clip(state, player)],
+        ["goron outside temple", "goron north", False, lambda state: ph_has_bombs(state, player)],
+        ["goron outside temple", "gt", False, lambda state: ph_has_shovel(state, player)],
+        ["gt dongo", "goron chief 2", False, None],
+
+
+        # ================= Goron Temple ====================
+        ["gt", "gt bow", False, lambda state: ph_has_bow(state, player)],
+        ["gt", "gt b1", False, lambda state: ph_has_explosives(state, player)],
+        ["gt", "gt b2", False, lambda state: ph_can_hit_bombchu_switches(state, player)],
+        ["gt b2", "gt b3", False, None],
+        ["gt b2", "gt b2 back", False, lambda state: any([
+            ph_has_explosives(state, player),
+            ph_has_boomerang(state, player)])],
+        ["gt b2 back", "gt bk chest", False, lambda state: ph_has_chus(state, player)],
+        ["gt b2", "gt dongo", False, lambda state: all([
+            ph_has_chus(state, player),
+            ph_has_boss_key(state, player, "Goron Temple")])],
+
+        # ================= Harrow Island ====================
+
+        ["harrow", "harrow dig", False, lambda state: ph_has_shovel(state, player)],
+        ["harrow dig", "harrow dig 2", False, lambda state: ph_has_sea_chart(state, player, "NE")],
+
+        # ================= Dee Ess Island ====================
+
+        ["ds", "ds dig", False, lambda state: ph_has_shovel(state, player)],
+        ["ds", "ds combat", False, None],
+        ["gt dongo", "ds race", False, None],
+
+        # ================= Isle of Frost ====================
+
+        ["iof", "iof grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["iof", "iof dig", False, lambda state: ph_has_shovel(state, player)],
+        ["iof grapple", "iof grapple dig", False, lambda state: ph_has_shovel(state, player)],
+        ["iof", "iof yook", False, lambda state: ph_has_damage(state, player)],
+        ["iof yook", "toi", False, None],
+
+        # ================= Ice Temple ====================
+
+        ["toi", "toi 2f", False, lambda state: any([
+            ph_has_explosives(state, player),
+            ph_has_boomerang(state, player)])],
+        ["toi 2f", "toi 3f", False, lambda state: any([
+            ph_has_range(state, player),
+            ph_has_bombs(state, player)])],
+        ["toi 3f", "toi 3f switch", False, lambda state: ph_has_explosives(state, player)],
+        ["toi 3f switch", "toi 3f boomerang", False, lambda state: ph_toi_3f_boomerang(state, player)],
+        ["toi 3f", "toi 2f miniboss", False, lambda state: ph_toi_key_doors(state, player, 3, 1)],
+        ["toi 2f miniboss", "toi side path", False, lambda state: ph_has_grapple(state, player)],
+        ["toi", "toi side path", False, lambda state: all([
+            ph_can_hammer_clip(state, player),
+            ph_has_grapple(state, player)])],
+        ["toi side path", "toi b1", False, lambda state: any([
+            ph_has_explosives(state, player),
+            ph_has_hammer(state, player)
+        ])],
+        ["toi b1", "toi b1 2", False, lambda state: ph_has_explosives(state, player)],
+        ["toi b1 2", "toi b1 key", False, lambda state: ph_toi_key_doors(state, player, 3, 2)],
+        ["toi b1 2", "toi b2", False, lambda state: ph_toi_b2(state, player)],
+        ["toi b2", "toi bk chest", False, lambda state: ph_can_hammer_clip(state, player)],
+        ["toi b2", "toi b2 key", False, lambda state: ph_has_small_keys(state, player, "Temple of Ice", 3)],
+        ["toi b2 key", "toi bk chest", False, None],
+        ["toi b2", "toi gleeok", False, lambda state: ph_has_boss_key(state, player, "Temple of Ice")],
+
+        # ================= NE Ocean ====================
+
+        ["sw ocean", "ne ocean", False, lambda state: ph_has_frog_square(state, player)],
+        ["se ocean", "ne ocean", False, lambda state: ph_has_sea_chart(state, player, "NE")],
+        ["ne ocean", "ne ocean frog", False, lambda state: ph_has_cannon(state, player)],
+        ["ne ocean", "ne ocean combat", False, lambda state: ph_can_kill_blue_chu(state, player)],
+        ["ne ocean", "iotd", False, None],
+        ["ne ocean", "maze", False, lambda state: ph_has_sword(state, player)],
+        ["ne ocean", "ruins", False, lambda state: all([ph_has_regal_necklace(state, player),
+                                                        ph_has_cave_damage(state, player)])],
+        ["ne ocean", "pirate ambush", False, lambda state: ph_beat_ghost_ship(state, player)],
+
+        # ================= IotD ====================
+
+        ["iotd", "iotd rupoor", False, lambda state: ph_has_bombs(state, player)],
+        ["iotd", "iotd dig", False, lambda state: ph_has_shovel(state, player)],
+        ["iotd dig", "iotd cave", False, lambda state: ph_has_bombs(state, player)],
+
+        # ================= Isle of Ruins ====================
+
+        ["ruins", "ruins dig", False, lambda state: ph_has_shovel(state, player)],
+        ["ruins", "ruins water", False, lambda state: ph_has_kings_key(state, player)],
+        ["ruins water", "mutoh", False, None],
+
+        # ================= Mutoh's Temple ====================
+
+        ["mutoh", "mutoh hammer", False, lambda state: ph_has_hammer(state, player)],
+        ["mutoh hammer", "mutoh water", False, lambda state: ph_mutoh_water(state, player)],
+        ["mutoh water", "mutoh bk chest", False, lambda state: ph_has_small_keys(state, player, "Mutoh's Temple", 2)],
+        ["mutoh water", "mutoh eox", False, lambda state: ph_has_boss_key(state, player, "Mutoh's Temple")],
+
+
+        # ================= Maze Island ====================
+
+        ["maze", "maze east", False, lambda state: ph_has_explosives(state, player)],
+        ["maze", "maze normal", False, lambda state: ph_has_bow(state, player)],
+        ["maze", "maze expert", False, lambda state: ph_has_grapple(state, player)],
 
         # Goal stuff
-        ["sw ocean east", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],
+        ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],
+        ["sw ocean east", "bellumbeck", False, lambda state: ph_bellumbeck_quick_finish(state, player)],
+        ["bellumbeck", "beat bellumbeck", False, lambda state: ph_can_beat_bellumbeck(state, player)],
         ["beat bellumbeck", "goal", False, None],
 
     ]
