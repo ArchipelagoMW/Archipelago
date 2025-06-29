@@ -615,7 +615,7 @@ def ph_totok_b5_key_logic(state: CollectionState, player: int):
 
 
 def ph_has_totok_crystal(state: CollectionState, player: int, shape: str):
-    return state.has(f"{shape} Crystal ({"Temple of the Ocean King"})", player)
+    return state.has(f"{shape} Crystal (Temple of the Ocean King)", player)
 
 
 def ph_totok_b8_2_crystals(state, player):
