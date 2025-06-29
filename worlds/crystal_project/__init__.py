@@ -58,7 +58,10 @@ class CrystalProjectWorld(World):
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
             raise Exception(f"A modded item({modded_item.name}) with id {modded_item.code} tried to change the code of item_name_to_id and it can never change!")
         item_name_to_id[modded_item.name] = modded_item.code
-        item_name_groups.setdefault('MOD', set()).add(modded_item.name)
+        if 'Job' in modded_item.name:
+            item_name_groups.setdefault(JOB, set()).add(modded_item.name)
+        else:
+            item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
     modded_locations = get_modded_locations(-1, World, options)
 
@@ -153,8 +156,9 @@ class CrystalProjectWorld(World):
         if name in item_table:
             data = item_table[name]
             return Item(name, data.classification, data.code, self.player)
-
-        return Item(name, ItemClassification.filler, None, self.player)
+        else:
+            matches = [item for (index, item) in enumerate(get_modded_items(self.player)) if item.name == name]
+            return Item(matches[0].name, matches[0].classification, matches[0].code, self.player)
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())

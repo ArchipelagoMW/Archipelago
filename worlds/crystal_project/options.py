@@ -35,7 +35,9 @@ class NewWorldStoneJobQuantity(Range):
 
     We will validate this option at generation time and if it is higher than the number of jobs you can obtain, we will reduce it.
 
-    The maximum you can obtain is 24 minus the number of starting jobs you've selected, which is 18 if your jobRando is not set to full.
+    The maximum you can obtain without mods is 24 minus the number of starting jobs you've selected, which is 18 if your jobRando is not set to full.
+
+    If you enter a number here that exceeds what is possible, the count will automatically be decreased.
 
     If you choose None for jobRando and you have selected beginner or advanced for includedRegions this will also reduce the number of crystals available.
 
@@ -43,7 +45,7 @@ class NewWorldStoneJobQuantity(Range):
     """
     display_name = "Job count that locks the new world stone"
     range_start = 1
-    range_end = 23
+    range_end = 99
     default = 18
 
 class ClamshellGoalQuantity(Range):
