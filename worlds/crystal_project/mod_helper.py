@@ -1,4 +1,5 @@
 import os.path
+from operator import length_hint
 from os import listdir, getcwd
 from os.path import isfile, join
 from typing import Optional, Callable, TYPE_CHECKING
@@ -83,7 +84,9 @@ def get_modded_items(player: int) -> List[Item]:
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.useful, item_id, player)
-                items.append(mod_item)
+
+                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
+                    items.append(mod_item)
 
         for item in data.Items:
             item_id = item['ID'] + item_index_offset
@@ -93,7 +96,9 @@ def get_modded_items(player: int) -> List[Item]:
 
             if not item_in_pool and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
-                items.append(mod_item)
+
+                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
+                    items.append(mod_item)
 
         for item in data.Jobs:
             item_id = item['ID'] + job_index_offset
@@ -104,7 +109,9 @@ def get_modded_items(player: int) -> List[Item]:
 
             if not item_in_pool and not is_unselectable and not excluded:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
-                items.append(mod_item)
+
+                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
+                    items.append(mod_item)
 
         file.close()
 
