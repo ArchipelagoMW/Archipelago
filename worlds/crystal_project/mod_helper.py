@@ -51,9 +51,11 @@ def get_mod_titles() -> List[str]:
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         titles.append(data.Title)
+        file.close()
 
     return titles
 
@@ -68,7 +70,8 @@ def get_modded_items(player: int) -> List[Item]:
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -103,6 +106,8 @@ def get_modded_items(player: int) -> List[Item]:
                 mod_item = Item(name, ItemClassification.progression, item_id, player)
                 items.append(mod_item)
 
+        file.close()
+
     return items
 
 def get_modded_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
@@ -116,7 +121,8 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -140,6 +146,8 @@ def get_modded_locations(player: int, world: "CrystalProjectWorld", options: Cry
                 if location is not None:
                     locations.append(location)
 
+        file.close()
+
     return locations
 
 def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", options: CrystalProjectOptions) -> List[ModLocationData]:
@@ -154,7 +162,8 @@ def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", o
                   isfile(join(file_directory, f))]
 
     for file in only_files:
-        file_text = open(join(file_directory, file)).read()
+        file = (open(join(file_directory, file)))
+        file_text = file.read()
         data = ModDataModel(file_text)
         excluded_ids = get_excluded_ids(data)
 
@@ -164,6 +173,8 @@ def get_modded_shopsanity_locations(player: int, world: "CrystalProjectWorld", o
             if entity_type == 0:
                 npc_locations = build_shop_locations(location, excluded_ids, player, world, options)
                 locations.extend(npc_locations)
+
+        file.close()
 
     return locations
 
