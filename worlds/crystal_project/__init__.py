@@ -55,6 +55,8 @@ class CrystalProjectWorld(World):
     modded_items = get_modded_items(-1)
 
     for modded_item in modded_items:
+        if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
+            raise Exception(f"A modded item({modded_item.name}) with id {modded_item.code} tried to change the code of item_name_to_id and it can never change!")
         item_name_to_id[modded_item.name] = modded_item.code
         item_name_groups.setdefault('MOD', set()).add(modded_item.name)
 
