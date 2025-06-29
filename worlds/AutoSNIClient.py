@@ -123,14 +123,13 @@ class SnesData(Generic[_T_Enum]):
             self._ranges.append(_MemRead(r, d))
 
     def get(self, read: _T_Enum) -> bytes:
-        assert isinstance(read.value, Read)
+        assert isinstance(read.value, Read), read.value
         address = read.value.address
-        size = read.value.size
         index = bisect_right(self._ranges, address, key=lambda r: r.location.address) - 1
-        assert index >= 0, f"{self._ranges=} {read.value=}"
+        assert index >= 0, (self._ranges, read.value)
         mem_read = self._ranges[index]
         sub_index = address - mem_read.location.address
-        return mem_read.data[sub_index:sub_index + size]
+        return mem_read.data[sub_index:sub_index + read.value.size]
 
 
 class SnesReader(Generic[_T_Enum]):
