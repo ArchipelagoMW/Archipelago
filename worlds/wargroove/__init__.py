@@ -8,8 +8,16 @@ from .Locations import location_table
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components, launch_subprocess, Type
+
 from .Options import WargrooveOptions
 
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="WargrooveClient")
+
+
+components.append(Component("Wargroove Client", "Client", func=launch_client, component_type=Type.CLIENT))
 
 class WargrooveSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):

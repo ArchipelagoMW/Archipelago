@@ -28,6 +28,15 @@ from zilliandomizer.logic_components.locations import Location as ZzLocation, Re
 from zilliandomizer.options import Chars
 
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components, launch_subprocess, Type, SuffixIdentifier
+
+def launch_client():
+    from .client import launch
+    launch_subprocess(launch, name="ZillionClient")
+
+
+components.append(Component("Zillion Client", "Client", func=launch_client,
+                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apzl')))
 
 
 class ZillionSettings(settings.Group):

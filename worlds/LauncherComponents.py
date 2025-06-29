@@ -204,38 +204,11 @@ components: List[Component] = [
     Component('Generate', 'Generate', cli=True),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
-              file_identifier=SuffixIdentifier('.apladx')),
-    Component('LttP Adjuster', 'LttPAdjuster'),
-    # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
-              file_identifier=SuffixIdentifier('.apmc')),
-    # Ocarina of Time
-    Component('OoT Client', 'OoTClient',
-              file_identifier=SuffixIdentifier('.apz5')),
-    Component('OoT Adjuster', 'OoTAdjuster'),
-    # FF1
-    Component('FF1 Client', 'FF1Client'),
-    # TLoZ
-    Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
-    # ChecksFinder
-    Component('ChecksFinder Client', 'ChecksFinderClient'),
-    # Starcraft 2
-    Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
-    # Zillion
-    Component('Zillion Client', 'ZillionClient',
-              file_identifier=SuffixIdentifier('.apzl')),
-
-    #MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
 ]
 
 
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.png'),
     'discord': local_path('data', 'discord-mark-blue.png'),
 }

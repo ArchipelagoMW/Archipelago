@@ -4,10 +4,16 @@ from .Locations import ChecksFinderLocation, advancement_table
 from Options import PerGameCommonOptions
 from .Rules import set_rules, set_completion_rules
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import launch_subprocess, components, Component, Type
 
 client_version = 7
 
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="ChecksFinderClient")
 
+
+components.append(Component("ChecksFinder Client", "Client", func=launch_client, component_type=Type.CLIENT))
 class ChecksFinderWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",

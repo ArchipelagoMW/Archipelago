@@ -479,7 +479,7 @@ async def game_watcher(ctx: UndertaleContext):
         await asyncio.sleep(0.1)
 
 
-def main():
+def launch():
     Utils.init_logging("UndertaleClient", exception_logger="Client")
 
     async def _main():
