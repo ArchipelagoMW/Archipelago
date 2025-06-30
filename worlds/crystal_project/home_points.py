@@ -4,6 +4,9 @@ from typing import List, Optional
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
 from .constants.regions import *
+from .constants.keys import *
+from .constants.key_items import *
+from .constants.teleport_stones import *
 
 def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
@@ -40,11 +43,11 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(CAPITAL_SEQUOIA, "Training Grounds", 3057),
 
         LocationData(CAPITAL_JAIL, "Capital Jail Entrance", 643),
-        LocationData(CAPITAL_JAIL, "Capital Jail Dark Wing", 915),
+        LocationData(CAPITAL_JAIL, "Capital Jail Dark Wing", 915, lambda state: logic.has_key(state, DARK_WING_KEY)),
 
         LocationData(ROLLING_QUINTAR_FIELDS, "Quintar Enthusiast's House", 440),
         LocationData(ROLLING_QUINTAR_FIELDS, "Rent-A-Quintar", 462),
-        LocationData(ROLLING_QUINTAR_FIELDS, "Quintar Sanctum", 917),
+        LocationData(ROLLING_QUINTAR_FIELDS, "Quintar Sanctum", 917, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_vertical_movement(state)),
 
         LocationData(QUINTAR_SANCTUM, "Quintar Nameko", 968),
 
@@ -59,7 +62,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(CASTLE_SEQUOIA, "Castle Sequoia Foyer", 514),
 
-        LocationData(POKO_POKO_DESERT, "Labyrinth Encampment", 2712),
+        LocationData(POKO_POKO_DESERT, "Labyrinth Encampment", 2712, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)),
 
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar Port", 941),
         LocationData(SARA_SARA_BAZAAR, "Poko Poko West Gate", 3783),
@@ -69,39 +72,39 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SARA_SARA_BEACH_WEST, "Beach Bird's Nest", 2709, lambda state: logic.has_vertical_movement(state)),
 
         LocationData(BEAURIOR_VOLCANO, "Beaurior Rock", 1792),
-        LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Peak", 3037),
+        LocationData(BEAURIOR_VOLCANO, "Beaurior Volcano Peak", 3037, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
-        LocationData(BEAURIOR_ROCK, "Boss Room", 822),
+        LocationData(BEAURIOR_ROCK, "Boss Room", 822, lambda state: logic.has_key(state, SMALL_KEY, 4)),
 
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Entrance", 1124),
         LocationData(ANCIENT_RESERVOIR, "Main Reservoir Chamber", 1660),
 
-        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Port", 672),
-        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
-        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
-        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),
+        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
 
         LocationData(GANYMEDE_SHRINE, "Ganymede Shrine", 1573),
 
         LocationData(THE_UNDERCITY, "The Undercity", 1266),
 
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline", 1127),
-        LocationData(CAPITAL_PIPELINE, "East Capital Pipeline", 1420),
+        LocationData(CAPITAL_PIPELINE, "East Capital Pipeline", 1420, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)),
 
-        LocationData(TALL_TALL_HEIGHTS, "Sequoia Athenaeum", 2361),
+        LocationData(TALL_TALL_HEIGHTS, "Sequoia Athenaeum", 2361, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
         LocationData(TALL_TALL_HEIGHTS, "Ice Pass", 2413),
-        LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Souvenir Shop", 1260),
+        LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Souvenir Shop", 1260, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
         LocationData(TALL_TALL_HEIGHTS, "Land's End Cottage", 2564),
-        LocationData(TALL_TALL_HEIGHTS, "Slip Glide Ride Exit", 2743),
+        LocationData(TALL_TALL_HEIGHTS, "Slip Glide Ride Exit", 2743, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
         LocationData(TALL_TALL_HEIGHTS, "Ice Fisher's Hut", 3014),
-        LocationData(TALL_TALL_HEIGHTS, "Triton Shrine", 3018),
+        LocationData(TALL_TALL_HEIGHTS, "Triton Shrine", 3018, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)),
         LocationData(TALL_TALL_HEIGHTS, "Tall, Tall Heights", 3047),
 
-        LocationData(CASTLE_RAMPARTS, "East Ramparts", 1375),
-        LocationData(CASTLE_RAMPARTS, "West Ramparts", 1376),
+        LocationData(CASTLE_RAMPARTS, "East Ramparts", 1375, lambda state: logic.has_glide(state)),
+        LocationData(CASTLE_RAMPARTS, "West Ramparts", 1376, lambda state: logic.has_glide(state)),
 
         LocationData(SLIP_GLIDE_RIDE, "Slip Glide Ride Entrance", 1550),
 
@@ -114,7 +117,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(JIDAMBA_EACLANEYA, "Eaclaneya Entrance", 1402),
         LocationData(JIDAMBA_EACLANEYA, "Salmon Room", 2474),
 
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Core", 1739),
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Core", 1739, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)),
 
         LocationData(DIONE_SHRINE, "Flyer's Lookout", 2141),
 

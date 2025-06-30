@@ -280,9 +280,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Magic store attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Training ground parkour", 1390 + treasure_index_offset), #Craftwork Katana chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Behind Luxury store", 2651 + treasure_index_offset), #Craftwork Cap chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Fenix Syrup Pouch chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Lucky Briefs chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Lucky Socks chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Fenix Syrup Pouch chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Lucky Briefs chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Lucky Socks chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Inn attic by Master Monk", 2656 + treasure_index_offset), #Craftwork Vest chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - By Master Warrior atop the Luxury Store", 2655 + treasure_index_offset), #Craftwork Shield chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Atop library bookcases", 1392 + treasure_index_offset), #Craftwork Sword chest
@@ -318,8 +318,8 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #Todo NPCs Job Masters: Master Wizard ID 3569 (391, 168, -266); gives you Wizard Seal in exchange for job mastery
         #NPCs Blocker: Z14_ProgressionGate ID 3823 (403, 180, -367) requires 18 crystals; we think it"s an original-randomizer-only NPC blocking the way to the castle
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Guard needs 6 non-starting jobs", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Store Guard needs 11 non-starting jobs", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(419, 171, -289)
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Impress the Luxury Equipment Shop Bouncer with 6 jobs collected", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Impress the Luxury Equipment Shop Bouncer further with 11 jobs collected", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(419, 171, -289)
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #(417, 171, -299) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
@@ -656,7 +656,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         #NPCs
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar West Stable Owner", 1852 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Quintar East Stable Owner", 2234 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass; Fixed Missable
-        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children. Needs 11 non-starting jobs", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(-166,93,56) Fixed Missable
+        LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Ferry Ticket Agent grants Ferry Pass in case you hate children", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(-166,93,56) Fixed Missable
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has(WEST_LOOKOUT_TOKEN, player) and state.has(CENTRAL_LOOKOUT_TOKEN, player) and state.has(NORTH_LOOKOUT_TOKEN, player)),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
         LocationData(SARA_SARA_BAZAAR, "Sara Sara Bazaar NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset), #Ferry Pass
@@ -1091,7 +1091,7 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - East of the souvenir store", 2993 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Money chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Insignia Helm chest
         LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - East of the Athenaeum", 2565 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Potion Pouch chest
-        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - On the way to the Athenaeum", 2994 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Z-Potion chest
+        LocationData(TALL_TALL_HEIGHTS, "Tall Tall Heights Chest - A funny chest happened on the way to the Athenaeum", 2994 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Z-Potion chest
         LocationData(TALL_TALL_HEIGHTS, "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #1st Overpass (Cloudy Wind) Scrap
         LocationData(TALL_TALL_HEIGHTS, "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(45, 215, -465) Overpass (Outpost) Scrap
         LocationData(TALL_TALL_HEIGHTS, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap

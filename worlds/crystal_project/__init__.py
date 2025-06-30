@@ -16,7 +16,7 @@ from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import get_modded_items, get_modded_locations, get_mod_titles, get_modded_shopsanity_locations
+from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, get_modded_shopsanity_locations, assign_player_to_items, assign_player_to_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
@@ -111,14 +111,14 @@ class CrystalProjectWorld(World):
             locations.extend(shops)
 
         if self.options.useMods:
-            modded_locations = get_modded_locations(self.player, self, self.options)
-            for modded_location in modded_locations:
+            assign_player_to_locations(self.player, self.modded_locations)
+            for modded_location in self.modded_locations:
                 location = LocationData(modded_location.region, modded_location.name, modded_location.code, modded_location.rule)
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-            modded_shops = get_modded_shopsanity_locations(self.player, self, self.options)
-            for shop in modded_shops:
+            assign_player_to_locations(self.player, self.modded_shops)
+            for shop in self.modded_shops:
                 location = LocationData(shop.region, shop.name, shop.code, shop.rule)
                 locations.append(location)
 
@@ -157,7 +157,7 @@ class CrystalProjectWorld(World):
             data = item_table[name]
             return Item(name, data.classification, data.code, self.player)
         else:
-            matches = [item for (index, item) in enumerate(get_modded_items(self.player)) if item.name == name]
+            matches = [item for (index, item) in enumerate(self.modded_items) if item.name == name]
             return Item(matches[0].name, matches[0].classification, matches[0].code, self.player)
 
     def create_items(self) -> None:
@@ -365,9 +365,8 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if self.options.useMods:
-            modded_items = get_modded_items(self.player)
-
-            for modded_item in modded_items:
+            assign_player_to_items(self.player, self.modded_items)
+            for modded_item in self.modded_items:
                 pool.append(modded_item)
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
