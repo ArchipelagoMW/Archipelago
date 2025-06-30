@@ -1,0 +1,20 @@
+null:
+  progression_balancing: 50
+The Legend of Zelda - Phantom Hourglass:
+  plando_items: []
+  dungeon_hints: 'false'
+  shop_hints: 'false'
+  spirit_island_hints: none
+  ph_starting_time: 1
+  ph_time_increment: 1
+  remove_items_from_pool: {}
+  death_link: 'false'
+  local_items: []
+  non_local_items: []
+  start_inventory: {}
+  start_inventory_from_pool: {}
+  start_hints: []
+  start_location_hints: []
+  exclude_locations: []
+  priority_locations: []
+  item_links: []

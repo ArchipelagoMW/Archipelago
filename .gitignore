@@ -202,3 +202,11 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# Fuzz tools
+fuzz.py
+/fuzz_output
+
+# Test and reference worlds
+/worlds/tloz_oos
+/worlds/tloz_ph/test

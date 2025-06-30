@@ -9,7 +9,7 @@ from worlds.tloz_ph.data.Items import ITEMS_DATA
 class PhantomHourglassGoal(Choice):
     """
     The goal to accomplish in order to complete the seed.
-    - Triforce_door: Open the triforce door on TotOK B6
+    - Triforce_door: Open the triforce door on TotOK B6. Leftover from pre-alpha
     - beat_bellumbeck: beat bellumbeck on the ruins of the ghost ship
     """
     display_name = "Goal"
@@ -112,6 +112,7 @@ class PhantomHourglassDungeonsRequired(Range):
     range_start = 0
     range_end = 8
     default = 3
+
 
 
 class PhantomHourglassBellumAccess(Choice):

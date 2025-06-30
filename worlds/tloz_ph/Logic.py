@@ -432,7 +432,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],
         ["sw ocean east", "bellumbeck", False, lambda state: ph_bellumbeck_quick_finish(state, player)],
         ["bellumbeck", "beat bellumbeck", False, lambda state: ph_can_beat_bellumbeck(state, player)],
-        ["beat bellumbeck", "goal", False, None],
+        ["beat bellumbeck", "goal", False, lambda state: ph_option_goal_bellum(state, player)],
+        ["totok midway", "goal", False, lambda state: ph_option_goal_midway(state, player)]
 
     ]
 

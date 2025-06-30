@@ -178,8 +178,9 @@ class PhantomHourglassWorld(World):
         self.random.shuffle(implemented_dungeons)
         # Cap dungeons required if over the number of eligible dungeons
         dungeons_required = len(implemented_dungeons) if self.options.dungeons_required > len(implemented_dungeons) \
-            else self.options.dungeons_required
-        self.options.dungeons_required = dungeons_required
+            else self.options.dungeons_required.value
+        self.options.dungeons_required.value = dungeons_required
+        print(f"dungeons required {self.options.dungeons_required.value}")
         self.required_dungeons = implemented_dungeons[:dungeons_required]
 
         # Extend mcguffin list
@@ -308,7 +309,7 @@ class PhantomHourglassWorld(World):
             if 'dungeon' in ITEMS_DATA[item_name]:
                 # if dungeon is excluded, place keys in vanilla locations
                 dung = item_name.rsplit('(', 1)[1][:-1]
-                if dung in self.excluded_dungeons:
+                if self.options.exclude_non_required_dungeons and dung in self.excluded_dungeons:
                     print(f"Forcing {loc_name} with item {item_name} because excluded dungeon")
                     forced_item = self.create_item(item_name)
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
@@ -487,7 +488,7 @@ class PhantomHourglassWorld(World):
         slot_data = self.options.as_dict(*options)
         slot_data["boss_rewards"] = self.boss_reward_items_pool
         slot_data["required_dungeon_locations"] = self.boss_reward_location_names
-        print(slot_data)
+        print(f"Slot Data: {slot_data}")
         # TODO: Write UT connector for required dungeons
         return slot_data
 

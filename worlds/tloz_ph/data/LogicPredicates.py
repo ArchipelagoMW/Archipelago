@@ -489,6 +489,11 @@ def ph_option_fog_open(state: CollectionState, player: int):
 def ph_option_randomize_harrow(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_harrow
 
+def ph_option_goal_bellum(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.goal == "beat_bellumbeck"
+
+def ph_option_goal_midway(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.goal == "triforce_door"
 
 # ============= Key logic ==============
 
