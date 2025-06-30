@@ -190,7 +190,7 @@ class SohWorld(World):
             item_pool.append(self.create_item("Giant's Knife"))
             item_pool.append(self.create_item("Magic Bean Pack"))
 
-        filler_item_count: int = len(self.get_unfilled_locations()) - len(item_pool)
+        filler_item_count: int = len(self.multiworld.get_unfilled_locations()) - len(item_pool)
         item_pool += [self.create_item(self.get_filler_item_name()) for _ in range(filler_item_count)]
 
         self.multiworld.itempool += item_pool

@@ -485,7 +485,7 @@ def main(args: argparse.Namespace | dict | None = None):
 if __name__ == '__main__':
     init_logging('Launcher')
     Utils.freeze_support()
-    multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
+    # multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
         description='Archipelago Launcher',
         usage="[-h] [--update_settings] [Patch|Game|Component] [-- component args here]"
