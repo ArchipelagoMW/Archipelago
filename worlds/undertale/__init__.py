@@ -7,14 +7,16 @@ from worlds.generic.Rules import exclusion_rules
 from BaseClasses import Region, Entrance, Tutorial, Item
 from .Options import UndertaleOptions
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, launch, Type
+
 
 def launch_client():
     print('running undertale client')
-    from .Client import launch  # lazy import
-    launch_subprocess(launch, name="UndertaleClient")
+    from .Client import main  # lazy import
+    launch(main, name="UndertaleClient")
 
 components.append(Component(display_name="Undertale Client", component_type=Type.CLIENT, func=launch_client))
+
 
 def data_path(file_name: str):
     import pkgutil

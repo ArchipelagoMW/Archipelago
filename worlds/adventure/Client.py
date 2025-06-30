@@ -470,7 +470,7 @@ async def patch_and_run_game(patch_file, ctx):
     async_start(run_game(comp_path))
 
 
-def launch():
+def main():
 
     Utils.init_logging("AdventureClient")
 

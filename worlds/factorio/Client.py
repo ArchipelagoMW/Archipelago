@@ -528,7 +528,7 @@ server_settings = args.server_settings if args.server_settings \
 server_args = ("--rcon-port", rcon_port, "--rcon-password", rcon_password)
 
 
-def launch():
+def main():
     import colorama
     global executable, server_settings, server_args
     colorama.init()

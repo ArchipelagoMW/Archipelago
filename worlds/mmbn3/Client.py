@@ -338,7 +338,7 @@ def confirm_checksum():
     return CHECKSUM_BLUE == basemd5.hexdigest()
 
 
-def launch():
+def main():
     Utils.init_logging("MMBN3Client")
 
     async def main():

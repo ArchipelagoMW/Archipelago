@@ -8,7 +8,7 @@ import Utils
 import settings
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -21,11 +21,13 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 
+
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="FactorioClient")
+    from .Client import main
+    launch(main, name="FactorioClient")
 
 components.append(Component(display_name="Factorio Client", func=launch_client, component_type=Type.CLIENT))
+
 
 class FactorioSettings(settings.Group):
     class Executable(settings.UserFilePath):

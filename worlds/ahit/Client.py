@@ -238,7 +238,7 @@ async def proxy_loop(ctx: AHITContext):
         logger.info("Aborting AHIT Proxy Client due to errors")
 
 
-def launch():
+def main():
     async def main():
         parser = get_base_parser()
         args = parser.parse_args()

@@ -1624,7 +1624,7 @@ def get_location_offset(mission_id):
         else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
 
 
-def launch():
+def main():
     colorama.init()
     asyncio.run(main())
     colorama.deinit()

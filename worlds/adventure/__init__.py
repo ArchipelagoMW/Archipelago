@@ -19,12 +19,14 @@ from .Regions import create_regions
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, AdventureAutoCollectLocation
 from .Rules import set_rules
 
+
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="AdventureClient")
+    from .Client import main
+    launch(main, name="AdventureClient")
 
 components.append(Component(display_name='Adventure Client', func=launch_client, component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier('.apadvn')))
+
 
 class AdventureSettings(settings.Group):
     class RomFile(settings.UserFilePath):

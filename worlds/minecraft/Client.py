@@ -264,7 +264,7 @@ def is_correct_forge(forge_dir) -> bool:
     return False
 
 
-def launch():
+def main():
     Utils.init_logging("MinecraftClient")
     parser = argparse.ArgumentParser()
     parser.add_argument("apmc_file", default=None, nargs='?', help="Path to an Archipelago Minecraft data file (.apmc)")

@@ -36,22 +36,25 @@ from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from worlds.LauncherComponents import launch_subprocess, components, Component, Type, SuffixIdentifier
+from worlds.LauncherComponents import launch, components, Component, Type, SuffixIdentifier
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
 
-def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="OoTClient")
 
-def launch_adjuster():
-    from .Adjuster import launch
-    launch_subprocess(launch, name="OoTAdjuster")
+def launch_client():
+    from .Client import main
+    launch(main, name="OoTClient")
 
 components.append(Component(display_name="OoT Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apz5')))
 
+
+def launch_adjuster():
+    from .Adjuster import main
+    launch(main, name="OoTAdjuster")
+
 components.append(Component(display_name="OoT Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
+
 
 class OOTCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):

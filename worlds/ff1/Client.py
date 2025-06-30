@@ -233,7 +233,7 @@ async def nes_sync_task(ctx: FF1Context):
                 continue
 
 
-def launch():
+def main():
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("FF1Client")
 

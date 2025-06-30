@@ -5,7 +5,7 @@ from typing import List, Set, Iterable, Sequence, Dict, Callable, Union
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, launch, Type
 from . import ItemNames
 from .Items import StarcraftItem, filler_items, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
@@ -21,11 +21,13 @@ from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missi
 from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
 
+
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="StarCraft2Client")
+    from .Client import main
+    launch(main, name="StarCraft2Client")
 
 components.append(Component(display_name="Starcraft 2 Client", func=launch_client, component_type=Type.CLIENT))
+
 
 class Starcraft2WebWorld(WebWorld):
     setup_en = Tutorial(

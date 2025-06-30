@@ -700,7 +700,7 @@ async def main():
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
-def launch():
+def main():
     colorama.init()
     asyncio.run(main())
     colorama.deinit()

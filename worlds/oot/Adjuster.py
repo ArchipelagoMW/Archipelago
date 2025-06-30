@@ -248,5 +248,5 @@ def adjust(args):
             os.remove("ZOOTDEC.z64")
     return comp_path
 
-def launch():
+def main():
     main()

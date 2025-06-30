@@ -12,14 +12,13 @@ from .DeathWishRules import set_dw_rules, create_enemy_events, hit_list, bosses
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from worlds.generic.Rules import add_rule
 from typing import List, Dict, TextIO
-from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, icon_paths, launch, Type
 from Utils import local_path
 
 
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="AHITClient")
-
+    from .Client import main
+    launch(main, name="AHITClient")
 
 components.append(Component(display_name="A Hat in Time Client", func=launch_client, component_type=Type.CLIENT, icon='yatta'))
 

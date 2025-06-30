@@ -7,16 +7,19 @@ from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, 
 from .Locations import EventId, FF1Locations, generate_rule, CHAOS_TERMINATED_EVENT
 from .Options import FF1Options
 from ..AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, launch, Type
+
 
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="FF1Client")
+    from .Client import main
+    launch(main, name="FF1Client")
 
 components.append(Component(display_name="FF1 Client", func=launch_client, component_type=Type.CLIENT))
 
+
 class FF1Settings(settings.Group):
     display_msgs: bool = True
+
 
 class FF1Web(WebWorld):
     options_page = "https://finalfantasyrandomizer.com/"

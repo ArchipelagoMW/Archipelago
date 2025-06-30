@@ -7,7 +7,7 @@ from typing import Dict, Any
 
 from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification, Location
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type, SuffixIdentifier
+from worlds.LauncherComponents import Component, components, icon_paths, launch, Type, SuffixIdentifier
 
 from . import Constants
 from .Options import MinecraftOptions
@@ -18,14 +18,16 @@ from Utils import local_path
 
 client_version = 9
 
+
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="MinecraftClient")
+    from .Client import main
+    launch(main, name="MinecraftClient")
 
 components.append(Component(display_name="Minecraft Client", icon='mcicon', cli=True, component_type=Type.CLIENT,
                             func=launch_client, file_identifier=SuffixIdentifier('.apmc')))
 
 icon_paths['mcicon'] = local_path('data', 'mcicon.png')
+
 
 class MinecraftSettings(settings.Group):
     class ForgeDirectory(settings.OptionalUserFolderPath):

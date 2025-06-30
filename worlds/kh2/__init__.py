@@ -3,7 +3,7 @@ from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fast_fill
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
@@ -14,11 +14,13 @@ from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
 
+
 def launch_client():
-    from .Client import launch
-    launch_subprocess(launch, name="KH2Client")
+    from .Client import main
+    launch(main, name="KH2Client")
 
 components.append(Component(display_name="KH2 Client", func=launch_client, component_type=Type.CLIENT))
+
 
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
