@@ -32,8 +32,8 @@ from worlds.LauncherComponents import Component, components, launch, Type, Suffi
 
 
 def launch_client():
-    from .client import main
-    launch(main, name="ZillionClient")
+    from .client import launchermain
+    launch(launchermain, name="ZillionClient")
 
 components.append(Component(display_name="Zillion Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apzl')))
 

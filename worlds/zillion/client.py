@@ -515,7 +515,7 @@ async def main() -> None:
     await ctx.shutdown()
 
 
-def launch() -> None:
+def launchermain() -> None:
     colorama.init()
     asyncio.run(main())
     colorama.deinit()
