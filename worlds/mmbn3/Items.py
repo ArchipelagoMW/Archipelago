@@ -85,7 +85,7 @@ keyItemList: typing.List[ItemData] = [
 ]
 
 subChipList: typing.List[ItemData] = [
-    ItemData(0xB31018, ItemName.Unlocker, ItemClassification.useful, ItemType.SubChip,  117),
+    ItemData(0xB31018, ItemName.Unlocker, ItemClassification.progression, ItemType.SubChip,  117),
     ItemData(0xB31019, ItemName.Untrap,   ItemClassification.filler, ItemType.SubChip,  115),
     ItemData(0xB3101A, ItemName.LockEnmy, ItemClassification.filler, ItemType.SubChip,  116),
     ItemData(0xB3101B, ItemName.MiniEnrg, ItemClassification.filler, ItemType.SubChip,  112),
@@ -290,7 +290,9 @@ programList: typing.List[ItemData] = [
     ItemData(0xB31099, ItemName.WpnLV_plus_Yellow, ItemClassification.filler, ItemType.Program, 35, ProgramColor.Yellow),
     ItemData(0xB3109A, ItemName.Press,             ItemClassification.progression, ItemType.Program, 20, ProgramColor.White),
 
-    ItemData(0xB310B7, ItemName.UnderSht,          ItemClassification.useful, ItemType.Program, 30, ProgramColor.White)
+    ItemData(0xB310B7, ItemName.UnderSht,          ItemClassification.useful, ItemType.Program, 30, ProgramColor.White),
+    ItemData(0xB310E0, ItemName.Humor,             ItemClassification.progression, ItemType.Program, 45, ProgramColor.Pink),
+    ItemData(0xB310E1, ItemName.BlckMnd,           ItemClassification.progression, ItemType.Program, 46, ProgramColor.White)
 ]
 
 zennyList: typing.List[ItemData] = [
@@ -338,8 +340,29 @@ item_frequencies: typing.Dict[str, int] = {
     ItemName.zenny_800z: 2,
     ItemName.zenny_1000z: 2,
     ItemName.zenny_1200z: 2,
-    ItemName.bugfrag_01: 5,
+    ItemName.bugfrag_01: 10,
+    ItemName.bugfrag_10: 5
 }
+
+item_groups: typing.Dict[str, typing.Set[str]] = {
+    "Key Items": {loc.itemName for loc in keyItemList},
+    "Subchips": {loc.itemName for loc in subChipList},
+    "Programs": {loc.itemName for loc in programList},
+    "BattleChips": {loc.itemName for loc in chipList},
+    "Zenny": {loc.itemName for loc in zennyList},
+    "BugFrags": {loc.itemName for loc in bugFragList},
+    "Navi Chips": {
+        ItemName.Roll_R, ItemName.RollV2_R, ItemName.RollV3_R, ItemName.GutsMan_G, ItemName.GutsManV2_G,
+        ItemName.GutsManV3_G, ItemName.ProtoMan_B, ItemName.ProtoManV2_B, ItemName.ProtoManV3_B, ItemName.FlashMan_F,
+        ItemName.FlashManV2_F, ItemName.FlashManV3_F, ItemName.BeastMan_B, ItemName.BeastManV2_B, ItemName.BeastManV3_B,
+        ItemName.BubblMan_B, ItemName.BubblManV2_B, ItemName.BubblManV3_B, ItemName.DesertMan_D, ItemName.DesertManV2_D,
+        ItemName.DesertManV3_D, ItemName.PlantMan_P, ItemName.PlantManV2_P, ItemName.PlantManV3_P, ItemName.FlamMan_F,
+        ItemName.FlamManV2_F, ItemName.FlamManV3_F, ItemName.DrillMan_D, ItemName.DrillManV2_D, ItemName.DrillManV3_D,
+        ItemName.MetalMan_M, ItemName.MetalManV2_M, ItemName.MetalManV3_M, ItemName.KingMan_K, ItemName.KingManV2_K,
+        ItemName.KingManV3_K, ItemName.BowlMan_B, ItemName.BowlManV2_B, ItemName.BowlManV3_B
+    }
+}
+
 all_items: typing.List[ItemData] = keyItemList + subChipList + chipList + programList + zennyList + bugFragList
 item_table: typing.Dict[str, ItemData] = {item.itemName: item for item in all_items}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in all_items}
