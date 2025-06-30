@@ -17,7 +17,8 @@ def launch_client(*args) -> None:
     from .context import launch
     launch_component(launch, name="BizHawkClient", args=args)
 
-component = Component(display_name="BizHawk Client", component_type=Type.CLIENT, func=launch_client,
+
+component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
                       file_identifier=SuffixIdentifier(),
                       description="Open the BizHawk client, to play games using the Bizhawk emulator.")
 components.append(component)
