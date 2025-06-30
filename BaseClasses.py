@@ -166,7 +166,7 @@ class MultiWorld():
         self.save_and_quit_from_boss = True
         self.custom = False
         self.customitemarray = []
-        self.shuffle_ganon = True
+        self.shuffle_ganon = False
         self.spoiler = Spoiler(self)
         self.early_items = {player: {} for player in self.player_ids}
         self.local_early_items = {player: {} for player in self.player_ids}
