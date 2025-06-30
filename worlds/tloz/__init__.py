@@ -25,8 +25,8 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="Zelda1Client")
 
-components.append(Component("Zelda 1 Client", "Client", func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.aptloz')))
+components.append(Component(display_name="Zelda 1 Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.aptloz')))
 
 class TLoZSettings(settings.Group):
     class RomFile(settings.UserFilePath):

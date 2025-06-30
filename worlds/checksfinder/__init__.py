@@ -12,8 +12,8 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="ChecksFinderClient")
 
+components.append(Component(display_name="ChecksFinder Client", func=launch_client, component_type=Type.CLIENT))
 
-components.append(Component("ChecksFinder Client", "Client", func=launch_client, component_type=Type.CLIENT))
 class ChecksFinderWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",

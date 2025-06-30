@@ -17,8 +17,7 @@ def launch_client(*args) -> None:
     from .context import launch
     launch_subprocess(launch, name="BizHawkClient", args=args)
 
-
-component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
+component = Component(display_name="BizHawk Client", component_type=Type.CLIENT, func=launch_client,
                       file_identifier=SuffixIdentifier())
 components.append(component)
 

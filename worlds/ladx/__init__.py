@@ -38,8 +38,7 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="LinksAwakeningClient")
 
-components.append(Component("Links Awakening DX Client", "Client", func=launch_client,
-                            file_identifier=SuffixIdentifier('.apladx')))
+components.append(Component(display_name="Links Awakening DX Client", func=launch_client, file_identifier=SuffixIdentifier('.apladx')))
 
 class LinksAwakeningSettings(settings.Group):
     class RomFile(settings.UserFilePath):

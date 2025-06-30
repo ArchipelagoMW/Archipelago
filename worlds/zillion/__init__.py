@@ -34,10 +34,7 @@ def launch_client():
     from .client import launch
     launch_subprocess(launch, name="ZillionClient")
 
-
-components.append(Component("Zillion Client", "Client", func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apzl')))
-
+components.append(Component(display_name="Zillion Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apzl')))
 
 class ZillionSettings(settings.Group):
     class RomFile(settings.UserFilePath):

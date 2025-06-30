@@ -22,8 +22,8 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="MinecraftClient")
 
-components.append(Component("Minecraft Client", "Client", icon='mcicon', cli=True,
-                            component_type=Type.CLIENT, func=launch_client, file_identifier=SuffixIdentifier('.apmc')))
+components.append(Component(display_name="Minecraft Client", icon='mcicon', cli=True, component_type=Type.CLIENT,
+                            func=launch_client, file_identifier=SuffixIdentifier('.apmc')))
 
 icon_paths['mcicon'] = local_path('data', 'mcicon.png')
 

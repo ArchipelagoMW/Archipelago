@@ -49,10 +49,9 @@ def launch_adjuster():
     from .Adjuster import launch
     launch_subprocess(launch, name="OoTAdjuster")
 
-components.append(Component("OoT Client", "Client", func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apz5')))
+components.append(Component(display_name="OoT Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apz5')))
 
-components.append(Component("OoT Adjuster", "Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
+components.append(Component(display_name="OoT Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 
 class OOTCollectionState(metaclass=AutoLogicRegister):
     def init_mixin(self, parent: MultiWorld):

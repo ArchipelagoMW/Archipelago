@@ -11,14 +11,11 @@ from .Rules import set_rules
 from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
-
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="KH1 Client")
 
-
-components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
-
+components.append(Component(display_name="KH1 Client", func=launch_client, component_type=Type.CLIENT))
 
 class KH1Web(WebWorld):
     theme = "ocean"

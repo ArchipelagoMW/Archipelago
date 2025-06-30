@@ -25,9 +25,7 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="StarCraft2Client")
 
-
-components.append(Component("Starcraft 2 Client", "Client", func=launch_client,
-                            component_type=Type.CLIENT))
+components.append(Component(display_name="Starcraft 2 Client", func=launch_client, component_type=Type.CLIENT))
 
 class Starcraft2WebWorld(WebWorld):
     setup_en = Tutorial(

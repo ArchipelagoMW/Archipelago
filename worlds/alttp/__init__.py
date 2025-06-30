@@ -32,7 +32,7 @@ def launch_adjuster():
     from .Adjuster import launch
     launch_subprocess(launch, "LttPAdjuster")
 
-components.append(Component("LttP Adjuster", "Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
+components.append(Component(display_name="LttP Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 
 class ALTTPSettings(settings.Group):
     class RomFile(settings.SNESRomPath):

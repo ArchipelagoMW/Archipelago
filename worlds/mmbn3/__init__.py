@@ -23,10 +23,8 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="MMBN3Client")
 
-
-components.append(Component("MMBN3 Client", "Client", func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apbn3')))
-
+components.append(Component(display_name="MMBN3 Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apbn3')))
 
 class MMBN3Settings(settings.Group):
     class RomFile(settings.UserFilePath):

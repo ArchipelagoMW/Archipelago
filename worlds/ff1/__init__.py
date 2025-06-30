@@ -13,10 +13,10 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="FF1Client")
 
-components.append(Component("FF1 Client", "Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component(display_name="FF1 Client", func=launch_client, component_type=Type.CLIENT))
+
 class FF1Settings(settings.Group):
     display_msgs: bool = True
-
 
 class FF1Web(WebWorld):
     options_page = "https://finalfantasyrandomizer.com/"

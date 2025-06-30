@@ -16,8 +16,7 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="WargrooveClient")
 
-
-components.append(Component("Wargroove Client", "Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component(display_name="Wargroove Client", func=launch_client, component_type=Type.CLIENT))
 
 class WargrooveSettings(settings.Group):
     class RootDirectory(settings.UserFolderPath):

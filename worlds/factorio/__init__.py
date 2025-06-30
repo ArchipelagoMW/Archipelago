@@ -21,14 +21,11 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 
-
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="FactorioClient")
 
-
-components.append(Component("Factorio Client", "Client", func=launch_client, component_type=Type.CLIENT))
-
+components.append(Component(display_name="Factorio Client", func=launch_client, component_type=Type.CLIENT))
 
 class FactorioSettings(settings.Group):
     class Executable(settings.UserFilePath):

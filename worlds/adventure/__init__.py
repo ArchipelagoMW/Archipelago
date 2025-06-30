@@ -23,10 +23,8 @@ def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="AdventureClient")
 
-
-components.append(Component('Adventure Client', 'Client', func=launch_client,
-                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apadvn')))
-
+components.append(Component(display_name='Adventure Client', func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apadvn')))
 
 class AdventureSettings(settings.Group):
     class RomFile(settings.UserFilePath):

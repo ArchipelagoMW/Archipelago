@@ -14,14 +14,11 @@ from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
 
-
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="KH2Client")
 
-
-components.append(Component("KH2 Client", "KH2Client", func=launch_client, component_type=Type.CLIENT))
-
+components.append(Component(display_name="KH2 Client", func=launch_client, component_type=Type.CLIENT))
 
 class KingdomHearts2Web(WebWorld):
     tutorials = [Tutorial(
