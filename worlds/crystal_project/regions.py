@@ -377,15 +377,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, NORTHERN_STRETCH, [TALL_TALL_HEIGHTS, THE_OPEN_SEA],
                     {THE_OPEN_SEA: lambda state: logic.has_swimming(state),
                     TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, CASTLE_RAMPARTS, [TALL_TALL_HEIGHTS],
-                    {TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, CASTLE_RAMPARTS, [TALL_TALL_HEIGHTS, CASTLE_SEQUOIA],
+                    {TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement(state),
+                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, THE_CHALICE_OF_TAR, [TALL_TALL_HEIGHTS, QUINTAR_RESERVE],
                     {TALL_TALL_HEIGHTS: lambda state: logic.has_glide(state),
                     QUINTAR_RESERVE: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, FLYERS_CRAG, [OKIMOTO_NS, JIDAMBA_TANGLE],
                     {JIDAMBA_TANGLE: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, JIDAMBA_TANGLE, [THE_OPEN_SEA, JIDAMBA_EACLANEYA],
-                    {JIDAMBA_EACLANEYA: lambda state: logic.has_jidamba_keys(state),
+                    {JIDAMBA_EACLANEYA: lambda state: (logic.has_glide(state) or logic.has_swimming(state)) and logic.has_jidamba_keys(state),
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, JIDAMBA_EACLANEYA, [JIDAMBA_TANGLE, THE_OPEN_SEA],
                     {THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
