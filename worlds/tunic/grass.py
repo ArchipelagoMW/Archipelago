@@ -7767,8 +7767,10 @@ grass_location_name_to_id: Dict[str, int] = {name: location_base_id + 302 + inde
 
 grass_location_name_groups: Dict[str, Set[str]] = {}
 for loc_name, loc_data in grass_location_table.items():
-    loc_group_name = loc_name.split(" - ", 1)[0] + " Grass"
-    grass_location_name_groups.setdefault(loc_group_name, set()).add(loc_name)
+    area_name = loc_name.split(" - ", 1)[0]
+    # adding it to the normal location group and a grass-only one
+    grass_location_name_groups.setdefault(area_name, set()).add(loc_name)
+    grass_location_name_groups.setdefault(area_name + " Grass", set()).add(loc_name)
 
 
 def can_break_grass(state: CollectionState, world: "TunicWorld") -> bool:
@@ -7936,6 +7938,18 @@ def set_grass_location_rules(world: "TunicWorld") -> None:
     add_rule(world.get_location("West Garden - West Garden Grass (174) (-243.9, 0.5, 52.1)"), lambda state: state.has("Hero's Laurels", player))
     add_rule(world.get_location("West Garden - West Garden Grass (262) (-244.8, 0.5, 51.3)"), lambda state: state.has("Hero's Laurels", player))
     add_rule(world.get_location("West Garden - West Garden Grass (263) (-244.8, 0.5, 52.3)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (269) (-162.5, 2.0, 75.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (267) (-161.3, 2.0, 75.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (268) (-161.3, 2.0, 74.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (299) (-172.1, 2.0, 81.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (404) (-172.1, 2.0, 80.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (402) (-172.1, 2.0, 82.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (403) (-173.4, 2.0, 81.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (401) (-173.4, 2.0, 82.5)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (261) (-182.8, 2.0, 75.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (259) (-183.8, 2.0, 75.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (260) (-183.8, 2.0, 74.0)"), lambda state: state.has("Hero's Laurels", player))
+    add_rule(world.get_location("West Garden - West Garden Laurels Exit Grass (258) (-184.8, 2.0, 75.0)"), lambda state: state.has("Hero's Laurels", player))
     add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (991) (34.5, 8.3, 31.8)"), lambda state: state.has("Hero's Laurels", player))
     add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (992) (34.5, 8.0, 30.8)"), lambda state: state.has("Hero's Laurels", player))
     add_rule(world.get_location("Swamp - Back of Swamp Laurels Area Grass swamp (989) (35.5, 8.0, 30.8)"), lambda state: state.has("Hero's Laurels", player))

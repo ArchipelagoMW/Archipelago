@@ -1,7 +1,8 @@
 from functools import cached_property
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region
+from BaseClasses import CollectionState, Entrance, EntranceType, Item, ItemClassification, Location, Region
+from entrance_rando import ERPlacementState
 from .regions import LOCATIONS, MEGA_SHARDS
 from .shop import FIGURINES, SHOP_ITEMS
 
@@ -9,13 +10,8 @@ if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-class MessengerEntrance(Entrance):
-    world: "MessengerWorld | None" = None
-
-
 class MessengerRegion(Region):
-    parent: str
-    entrance_type = MessengerEntrance
+    parent: str | None
 
     def __init__(self, name: str, world: "MessengerWorld", parent: str | None = None) -> None:
         super().__init__(name, world.player, world.multiworld)
@@ -32,8 +28,9 @@ class MessengerRegion(Region):
                               for shop_loc in SHOP_ITEMS}
             self.add_locations(shop_locations, MessengerShopLocation)
         elif name == "The Craftsman's Corner":
-            self.add_locations({figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
-                               MessengerLocation)
+            self.add_locations(
+                {figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
+                MessengerLocation)
         elif name == "Tower HQ":
             locations.append("Money Wrench")
 
@@ -57,6 +54,7 @@ class MessengerLocation(Location):
 
 
 class MessengerShopLocation(MessengerLocation):
+
     @cached_property
     def cost(self) -> int:
         name = self.name.removeprefix("The Shop - ")

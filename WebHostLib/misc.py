@@ -35,6 +35,12 @@ def start_playing():
 @app.route('/games/<string:game>/info/<string:lang>')
 @cache.cached()
 def game_info(game, lang):
+    try:
+        world = AutoWorldRegister.world_types[game]
+        if lang not in world.web.game_info_languages:
+            raise KeyError("Sorry, this game's info page is not available in that language yet.")
+    except KeyError:
+        return abort(404)
     return render_template('gameInfo.html', game=game, lang=lang, theme=get_world_theme(game))
 
 
@@ -52,6 +58,12 @@ def games():
 @app.route('/tutorial/<string:game>/<string:file>/<string:lang>')
 @cache.cached()
 def tutorial(game, file, lang):
+    try:
+        world = AutoWorldRegister.world_types[game]
+        if lang not in [tut.link.split("/")[1] for tut in world.web.tutorials]:
+            raise KeyError("Sorry, the tutorial is not available in that language yet.")
+    except KeyError:
+        return abort(404)
     return render_template("tutorial.html", game=game, file=file, lang=lang, theme=get_world_theme(game))
 
 

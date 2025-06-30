@@ -30,13 +30,12 @@ from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-from settings import get_settings
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
+from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections, PlandoItems
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
-from worlds.LauncherComponents import launch, components, Component, Type, SuffixIdentifier
+from worlds.LauncherComponents import launch as launch_componenent, components, Component, Type, SuffixIdentifier
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.
 i_o_limiter = threading.Semaphore(2)
@@ -44,14 +43,14 @@ i_o_limiter = threading.Semaphore(2)
 
 def launch_client():
     from .Client import main
-    launch(main, name="OoTClient")
+    launch_componenent(main, name="OoTClient")
 
 components.append(Component(display_name="OoT Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apz5')))
 
 
 def launch_adjuster():
-    from .Adjuster import main
-    launch(main, name="OoTAdjuster")
+    from .Adjuster import launch
+    launch_componenent(launch, name="OoTAdjuster")
 
 components.append(Component(display_name="OoT Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 
@@ -115,14 +114,15 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
-    setup_es = Tutorial(
-        setup.tutorial_name,
-        setup.description,
-        "Español",
-        "setup_es.md",
-        "setup/es",
-        setup.authors
-    )
+    # Very out of date, requires updating to match current
+    # setup_es = Tutorial(
+    #     setup.tutorial_name,
+    #     setup.description,
+    #     "Español",
+    #     "setup_es.md",
+    #     "setup/es",
+    #     setup.authors
+    # )
 
     setup_fr = Tutorial(
         setup.tutorial_name,
@@ -142,8 +142,9 @@ class OOTWeb(WebWorld):
         ["Held_der_Zeit"]
     )
 
-    tutorials = [setup, setup_es, setup_fr, setup_de]
+    tutorials = [setup, setup_fr, setup_de]
     option_groups = oot_option_groups
+    game_info_languages = ["en", "de"]
 
 
 class OOTWorld(World):
@@ -216,7 +217,8 @@ class OOTWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom = Rom(file=get_settings()['oot_options']['rom_file'])
+        oot_settings = OOTWorld.settings
+        rom = Rom(file=oot_settings.rom_file)
 
 
     # Option parsing, handling incompatible options, building useful-item table
@@ -232,6 +234,8 @@ class OOTWorld(World):
             elif isinstance(result, VerifyKeys):
                 option_value = result.value
             elif isinstance(result, PlandoConnections):
+                option_value = result.value
+            elif isinstance(result, PlandoItems):
                 option_value = result.value
             else:
                 option_value = result.current_key
@@ -1100,7 +1104,8 @@ class OOTWorld(World):
             self.hint_rng = self.random
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
-            rom = Rom(file=get_settings()['oot_options']['rom_file'])
+            oot_settings = OOTWorld.settings
+            rom = Rom(file=oot_settings.rom_file)
             try:
                 if self.hints != 'none':
                     buildWorldGossipHints(self)

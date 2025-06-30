@@ -7,9 +7,7 @@ Currently, the following games are supported:
 
 * The Legend of Zelda: A Link to the Past
 * Factorio
-* Minecraft
 * Subnautica
-* Slay the Spire
 * Risk of Rain 2
 * The Legend of Zelda: Ocarina of Time
 * Timespinner
@@ -63,7 +61,6 @@ Currently, the following games are supported:
 * TUNIC
 * Kirby's Dream Land 3
 * Celeste 64
-* Zork Grand Inquisitor
 * Castlevania 64
 * A Short Hike
 * Yoshi's Island
@@ -80,6 +77,11 @@ Currently, the following games are supported:
 * Saving Princess
 * Castlevania: Circle of the Moon
 * Inscryption
+* Civilization VI
+* The Legend of Zelda: The Wind Waker
+* Jak and Daxter: The Precursor Legacy
+* Super Mario Land 2: 6 Golden Coins
+* shapez
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

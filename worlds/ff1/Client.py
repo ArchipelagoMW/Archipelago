@@ -1,139 +1,159 @@
-import asyncio
-import copy
-import json
-import time
-from asyncio import StreamReader, StreamWriter
-from typing import List
+import logging
+from collections import deque
+from typing import TYPE_CHECKING
+
+from NetUtils import ClientStatus
+
+import worlds._bizhawk as bizhawk
+from worlds._bizhawk.client import BizHawkClient
+
+if TYPE_CHECKING:
+    from worlds._bizhawk.context import BizHawkClientContext
 
 
-import Utils
-from Utils import async_start
-from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
-    get_base_parser
-
-SYSTEM_MESSAGE_ID = 0
-
-CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_ff1.lua"
-CONNECTION_REFUSED_STATUS = "Connection Refused. Please start your emulator and make sure connector_ff1.lua is running"
-CONNECTION_RESET_STATUS = "Connection was reset. Please restart your emulator, then restart connector_ff1.lua"
-CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
-CONNECTION_CONNECTED_STATUS = "Connected"
-CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
-
-DISPLAY_MSGS = True
+base_id = 7000
+logger = logging.getLogger("Client")
 
 
-class FF1CommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
+rom_name_location = 0x07FFE3
+locations_array_start = 0x200
+locations_array_length = 0x100
+items_obtained = 0x03
+gp_location_low = 0x1C
+gp_location_middle = 0x1D
+gp_location_high = 0x1E
+weapons_arrays_starts = [0x118, 0x158, 0x198, 0x1D8]
+armors_arrays_starts = [0x11C, 0x15C, 0x19C, 0x1DC]
+status_a_location = 0x102
+status_b_location = 0x0FC
+status_c_location = 0x0A3
 
-    def _cmd_nes(self):
-        """Check NES Connection State"""
-        if isinstance(self.ctx, FF1Context):
-            logger.info(f"NES Status: {self.ctx.nes_status}")
+key_items = ["Lute", "Crown", "Crystal", "Herb", "Key", "Tnt", "Adamant", "Slab", "Ruby", "Rod",
+             "Floater", "Chime", "Tail", "Cube", "Bottle", "Oxyale", "EarthOrb", "FireOrb", "WaterOrb", "AirOrb"]
 
-    def _cmd_toggle_msgs(self):
-        """Toggle displaying messages in EmuHawk"""
-        global DISPLAY_MSGS
-        DISPLAY_MSGS = not DISPLAY_MSGS
-        logger.info(f"Messages are now {'enabled' if DISPLAY_MSGS  else 'disabled'}")
+consumables = ["Shard", "Tent", "Cabin", "House", "Heal", "Pure", "Soft"]
+
+weapons = ["WoodenNunchucks", "SmallKnife", "WoodenRod", "Rapier", "IronHammer", "ShortSword", "HandAxe", "Scimitar",
+           "IronNunchucks", "LargeKnife", "IronStaff", "Sabre", "LongSword", "GreatAxe", "Falchon", "SilverKnife",
+           "SilverSword", "SilverHammer", "SilverAxe", "FlameSword", "IceSword", "DragonSword", "GiantSword",
+           "SunSword", "CoralSword", "WereSword", "RuneSword", "PowerRod", "LightAxe", "HealRod", "MageRod", "Defense",
+           "WizardRod", "Vorpal", "CatClaw", "ThorHammer", "BaneSword", "Katana", "Xcalber", "Masamune"]
+
+armor = ["Cloth", "WoodenArmor", "ChainArmor", "IronArmor", "SteelArmor", "SilverArmor", "FlameArmor", "IceArmor",
+         "OpalArmor", "DragonArmor", "Copper", "Silver", "Gold", "Opal", "WhiteShirt", "BlackShirt", "WoodenShield",
+         "IronShield", "SilverShield", "FlameShield", "IceShield", "OpalShield", "AegisShield", "Buckler", "ProCape",
+         "Cap", "WoodenHelm", "IronHelm", "SilverHelm", "OpalHelm", "HealHelm", "Ribbon", "Gloves", "CopperGauntlets",
+         "IronGauntlets", "SilverGauntlets", "ZeusGauntlets", "PowerGauntlets", "OpalGauntlets", "ProRing"]
+
+gold_items = ["Gold10", "Gold20", "Gold25", "Gold30", "Gold55", "Gold70", "Gold85", "Gold110", "Gold135", "Gold155",
+              "Gold160", "Gold180", "Gold240", "Gold255", "Gold260", "Gold295", "Gold300", "Gold315", "Gold330",
+              "Gold350", "Gold385", "Gold400", "Gold450", "Gold500", "Gold530", "Gold575", "Gold620", "Gold680",
+              "Gold750", "Gold795", "Gold880", "Gold1020", "Gold1250", "Gold1455", "Gold1520", "Gold1760", "Gold1975",
+              "Gold2000", "Gold2750", "Gold3400", "Gold4150", "Gold5000", "Gold5450", "Gold6400", "Gold6720",
+              "Gold7340", "Gold7690", "Gold7900", "Gold8135", "Gold9000", "Gold9300", "Gold9500", "Gold9900",
+              "Gold10000", "Gold12350", "Gold13000", "Gold13450", "Gold14050", "Gold14720", "Gold15000", "Gold17490",
+              "Gold18010", "Gold19990", "Gold20000", "Gold20010", "Gold26000", "Gold45000", "Gold65000"]
+
+extended_consumables = ["FullCure", "Phoenix", "Blast", "Smoke",
+                        "Refresh", "Flare", "Black", "Guard",
+                        "Quick", "HighPotion", "Wizard", "Cloak"]
+
+ext_consumables_lookup = {"FullCure": "Ext1", "Phoenix": "Ext2", "Blast": "Ext3", "Smoke": "Ext4",
+                          "Refresh": "Ext1", "Flare": "Ext2", "Black": "Ext3", "Guard": "Ext4",
+                          "Quick": "Ext1", "HighPotion": "Ext2", "Wizard": "Ext3", "Cloak": "Ext4"}
+
+ext_consumables_locations = {"Ext1": 0x3C, "Ext2": 0x3D, "Ext3": 0x3E, "Ext4": 0x3F}
 
 
-class FF1Context(CommonContext):
-    command_processor = FF1CommandProcessor
-    game = 'Final Fantasy'
-    items_handling = 0b111  # full remote
+movement_items = ["Ship", "Bridge", "Canal", "Canoe"]
 
-    def __init__(self, server_address, password):
-        super().__init__(server_address, password)
-        self.nes_streams: (StreamReader, StreamWriter) = None
-        self.nes_sync_task = None
-        self.messages = {}
-        self.locations_array = None
-        self.nes_status = CONNECTION_INITIAL_STATUS
-        self.awaiting_rom = False
-        self.display_msgs = True
+no_overworld_items = ["Sigil", "Mark"]
 
-    async def server_auth(self, password_requested: bool = False):
-        if password_requested and not self.password:
-            await super(FF1Context, self).server_auth(password_requested)
-        if not self.auth:
-            self.awaiting_rom = True
-            logger.info('Awaiting connection to NES to get Player information')
+
+class FF1Client(BizHawkClient):
+    game = "Final Fantasy"
+    system = "NES"
+
+    weapons_queue: deque[int]
+    armor_queue: deque[int]
+    consumable_stack_amounts: dict[str, int] | None
+
+    def __init__(self) -> None:
+        self.wram = "RAM"
+        self.sram = "WRAM"
+        self.rom = "PRG ROM"
+        self.consumable_stack_amounts = None
+        self.weapons_queue = deque()
+        self.armor_queue = deque()
+        self.guard_character = 0x00
+
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+        try:
+            # Check ROM name/patch version
+            rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(rom_name_location, 0x0D, self.rom)]))[0])
+            rom_name = rom_name.decode("ascii")
+            if rom_name != "FINAL FANTASY":
+                return False  # Not a Final Fantasy 1 ROM
+        except bizhawk.RequestFailedError:
+            return False  # Not able to get a response, say no for now
+
+        ctx.game = self.game
+        ctx.items_handling = 0b111
+        ctx.want_slot_data = True
+        # Resetting these in case of switching ROMs
+        self.consumable_stack_amounts = None
+        self.weapons_queue = deque()
+        self.armor_queue = deque()
+
+        return True
+
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        if ctx.server is None:
             return
 
-        await self.send_connect()
+        if ctx.slot is None:
+            return
+        try:
+            self.guard_character = await self.read_sram_value(ctx, status_a_location)
+            # If the first character's name starts with a 0 value, we're at the title screen/character creation.
+            # In that case, don't allow any read/writes.
+            # We do this by setting the guard to 1 because that's neither a valid character nor the initial value.
+            if self.guard_character == 0:
+                self.guard_character = 0x01
 
-    def _set_message(self, msg: str, msg_id: int):
-        if DISPLAY_MSGS:
-            self.messages[time.time(), msg_id] = msg
+            if self.consumable_stack_amounts is None:
+                self.consumable_stack_amounts = {}
+                self.consumable_stack_amounts["Shard"] = 1
+                other_consumable_amounts = await self.read_rom(ctx, 0x47400, 10)
+                self.consumable_stack_amounts["Tent"] = other_consumable_amounts[0] + 1
+                self.consumable_stack_amounts["Cabin"] = other_consumable_amounts[1] + 1
+                self.consumable_stack_amounts["House"] = other_consumable_amounts[2] + 1
+                self.consumable_stack_amounts["Heal"] = other_consumable_amounts[3] + 1
+                self.consumable_stack_amounts["Pure"] = other_consumable_amounts[4] + 1
+                self.consumable_stack_amounts["Soft"] = other_consumable_amounts[5] + 1
+                self.consumable_stack_amounts["Ext1"] = other_consumable_amounts[6] + 1
+                self.consumable_stack_amounts["Ext2"] = other_consumable_amounts[7] + 1
+                self.consumable_stack_amounts["Ext3"] = other_consumable_amounts[8] + 1
+                self.consumable_stack_amounts["Ext4"] = other_consumable_amounts[9] + 1
 
-    def on_package(self, cmd: str, args: dict):
-        if cmd == 'Connected':
-            async_start(parse_locations(self.locations_array, self, True))
-        elif cmd == 'Print':
-            msg = args['text']
-            if ': !' not in msg:
-                self._set_message(msg, SYSTEM_MESSAGE_ID)
+            await self.location_check(ctx)
+            await self.received_items_check(ctx)
+            await self.process_weapons_queue(ctx)
+            await self.process_armor_queue(ctx)
 
-    def on_print_json(self, args: dict):
-        if self.ui:
-            self.ui.print_json(copy.deepcopy(args["data"]))
-        else:
-            text = self.jsontotextparser(copy.deepcopy(args["data"]))
-            logger.info(text)
-        relevant = args.get("type", None) in {"Hint", "ItemSend"}
-        if relevant:
-            item = args["item"]
-            # goes to this world
-            if self.slot_concerns_self(args["receiving"]):
-                relevant = True
-            # found in this world
-            elif self.slot_concerns_self(item.player):
-                relevant = True
-            # not related
-            else:
-                relevant = False
-            if relevant:
-                item = args["item"]
-                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
-                self._set_message(msg, item.item)
+        except bizhawk.RequestFailedError:
+            # The connector didn't respond. Exit handler and return to main loop to reconnect
+            pass
 
-    def run_gui(self):
-        from kvui import GameManager
-
-        class FF1Manager(GameManager):
-            logging_pairs = [
-                ("Client", "Archipelago")
-            ]
-            base_title = "Archipelago Final Fantasy 1 Client"
-
-        self.ui = FF1Manager(self)
-        self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
-
-
-def get_payload(ctx: FF1Context):
-    current_time = time.time()
-    return json.dumps(
-        {
-            "items": [item.item for item in ctx.items_received],
-            "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
-                         if key[0] > current_time - 10}
-        }
-    )
-
-
-async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bool):
-    if locations_array == ctx.locations_array and not force:
-        return
-    else:
-        # print("New values")
-        ctx.locations_array = locations_array
+    async def location_check(self, ctx: "BizHawkClientContext"):
+        locations_data = await self.read_sram_values_guarded(ctx, locations_array_start, locations_array_length)
+        if locations_data is None:
+            return
         locations_checked = []
-        if len(locations_array) > 0xFE and locations_array[0xFE] & 0x02 != 0 and not ctx.finished_game:
+        if len(locations_data) > 0xFE and locations_data[0xFE] & 0x02 != 0 and not ctx.finished_game:
             await ctx.send_msgs([
                 {"cmd": "StatusUpdate",
-                 "status": 30}
+                 "status": ClientStatus.CLIENT_GOAL}
             ])
             ctx.finished_game = True
         for location in ctx.missing_locations:
@@ -147,121 +167,162 @@ async def parse_locations(locations_array: List[int], ctx: FF1Context, force: bo
                 # Location is an NPC
                 index -= 0x200
                 flag = 0x02
-
-            # print(f"Location: {ctx.location_names[location]}")
-            # print(f"Index: {str(hex(index))}")
-            # print(f"value: {locations_array[index] & flag != 0}")
-            if locations_array[index] & flag != 0:
+            if locations_data[index] & flag != 0:
                 locations_checked.append(location)
-        if locations_checked:
-            # print([ctx.location_names[location] for location in locations_checked])
-            await ctx.send_msgs([
-                {"cmd": "LocationChecks",
-                 "locations": locations_checked}
-            ])
+
+        found_locations = await ctx.check_locations(locations_checked)
+        for location in found_locations:
+            ctx.locations_checked.add(location)
+            location_name = ctx.location_names.lookup_in_game(location)
+            logger.info(
+                f'New Check: {location_name} ({len(ctx.locations_checked)}/'
+                f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
 
 
-async def nes_sync_task(ctx: FF1Context):
-    logger.info("Starting nes connector. Use /nes for status information")
-    while not ctx.exit_event.is_set():
-        error_status = None
-        if ctx.nes_streams:
-            (reader, writer) = ctx.nes_streams
-            msg = get_payload(ctx).encode()
-            writer.write(msg)
-            writer.write(b'\n')
-            try:
-                await asyncio.wait_for(writer.drain(), timeout=1.5)
-                try:
-                    # Data will return a dict with up to two fields:
-                    # 1. A keepalive response of the Players Name (always)
-                    # 2. An array representing the memory values of the locations area (if in game)
-                    data = await asyncio.wait_for(reader.readline(), timeout=5)
-                    data_decoded = json.loads(data.decode())
-                    # print(data_decoded)
-                    if ctx.game is not None and 'locations' in data_decoded:
-                        # Not just a keep alive ping, parse
-                        async_start(parse_locations(data_decoded['locations'], ctx, False))
-                    if not ctx.auth:
-                        ctx.auth = ''.join([chr(i) for i in data_decoded['playerName'] if i != 0])
-                        if ctx.auth == '':
-                            logger.info("Invalid ROM detected. No player name built into the ROM. Please regenerate"
-                                        "the ROM using the same link but adding your slot name")
-                        if ctx.awaiting_rom:
-                            await ctx.server_auth(False)
-                except asyncio.TimeoutError:
-                    logger.debug("Read Timed Out, Reconnecting")
-                    error_status = CONNECTION_TIMING_OUT_STATUS
-                    writer.close()
-                    ctx.nes_streams = None
-                except ConnectionResetError as e:
-                    logger.debug("Read failed due to Connection Lost, Reconnecting")
-                    error_status = CONNECTION_RESET_STATUS
-                    writer.close()
-                    ctx.nes_streams = None
-            except TimeoutError:
-                logger.debug("Connection Timed Out, Reconnecting")
-                error_status = CONNECTION_TIMING_OUT_STATUS
-                writer.close()
-                ctx.nes_streams = None
-            except ConnectionResetError:
-                logger.debug("Connection Lost, Reconnecting")
-                error_status = CONNECTION_RESET_STATUS
-                writer.close()
-                ctx.nes_streams = None
-            if ctx.nes_status == CONNECTION_TENTATIVE_STATUS:
-                if not error_status:
-                    logger.info("Successfully Connected to NES")
-                    ctx.nes_status = CONNECTION_CONNECTED_STATUS
+    async def received_items_check(self, ctx: "BizHawkClientContext") -> None:
+        assert self.consumable_stack_amounts, "shouldn't call this function without reading consumable_stack_amounts"
+        write_list: list[tuple[int, list[int], str]] = []
+        items_received_count = await self.read_sram_value_guarded(ctx, items_obtained)
+        if items_received_count is None:
+            return
+        if items_received_count < len(ctx.items_received):
+            current_item = ctx.items_received[items_received_count]
+            current_item_id = current_item.item
+            current_item_name = ctx.item_names.lookup_in_game(current_item_id, ctx.game)
+            if current_item_name in key_items:
+                location = current_item_id - 0xE0
+                write_list.append((location, [1], self.sram))
+            elif current_item_name in movement_items:
+                location = current_item_id - 0x1E0
+                if current_item_name != "Canal":
+                    write_list.append((location, [1], self.sram))
                 else:
-                    ctx.nes_status = f"Was tentatively connected but error occured: {error_status}"
-            elif error_status:
-                ctx.nes_status = error_status
-                logger.info("Lost connection to nes and attempting to reconnect. Use /nes for status updates")
-        else:
-            try:
-                logger.debug("Attempting to connect to NES")
-                ctx.nes_streams = await asyncio.wait_for(asyncio.open_connection("localhost", 52980), timeout=10)
-                ctx.nes_status = CONNECTION_TENTATIVE_STATUS
-            except TimeoutError:
-                logger.debug("Connection Timed Out, Trying Again")
-                ctx.nes_status = CONNECTION_TIMING_OUT_STATUS
-                continue
-            except ConnectionRefusedError:
-                logger.debug("Connection Refused, Trying Again")
-                ctx.nes_status = CONNECTION_REFUSED_STATUS
-                continue
+                    write_list.append((location, [0], self.sram))
+            elif current_item_name in no_overworld_items:
+                if current_item_name == "Sigil":
+                    location = 0x28
+                else:
+                    location = 0x12
+                write_list.append((location, [1], self.sram))
+            elif current_item_name in gold_items:
+                gold_amount = int(current_item_name[4:])
+                current_gold_value = await self.read_sram_values_guarded(ctx, gp_location_low, 3)
+                if current_gold_value is None:
+                    return
+                current_gold = int.from_bytes(current_gold_value, "little")
+                new_gold = min(gold_amount + current_gold, 999999)
+                lower_byte = new_gold % (2 ** 8)
+                middle_byte = (new_gold // (2 ** 8)) % (2 ** 8)
+                upper_byte = new_gold // (2 ** 16)
+                write_list.append((gp_location_low, [lower_byte], self.sram))
+                write_list.append((gp_location_middle, [middle_byte], self.sram))
+                write_list.append((gp_location_high, [upper_byte], self.sram))
+            elif current_item_name in consumables:
+                location = current_item_id - 0xE0
+                current_value = await self.read_sram_value_guarded(ctx, location)
+                if current_value is None:
+                    return
+                amount_to_add = self.consumable_stack_amounts[current_item_name]
+                new_value = min(current_value + amount_to_add, 99)
+                write_list.append((location, [new_value], self.sram))
+            elif current_item_name in extended_consumables:
+                ext_name = ext_consumables_lookup[current_item_name]
+                location = ext_consumables_locations[ext_name]
+                current_value = await self.read_sram_value_guarded(ctx, location)
+                if current_value is None:
+                    return
+                amount_to_add = self.consumable_stack_amounts[ext_name]
+                new_value = min(current_value + amount_to_add, 99)
+                write_list.append((location, [new_value], self.sram))
+            elif current_item_name in weapons:
+                self.weapons_queue.appendleft(current_item_id - 0x11B)
+            elif current_item_name in armor:
+                self.armor_queue.appendleft(current_item_id - 0x143)
+            write_list.append((items_obtained, [items_received_count + 1], self.sram))
+            write_successful = await self.write_sram_values_guarded(ctx, write_list)
+            if write_successful:
+                await bizhawk.display_message(ctx.bizhawk_ctx, f"Received {current_item_name}")
+
+    async def process_weapons_queue(self, ctx: "BizHawkClientContext"):
+        empty_slots = deque()
+        char1_slots = await self.read_sram_values_guarded(ctx, weapons_arrays_starts[0], 4)
+        char2_slots = await self.read_sram_values_guarded(ctx, weapons_arrays_starts[1], 4)
+        char3_slots = await self.read_sram_values_guarded(ctx, weapons_arrays_starts[2], 4)
+        char4_slots = await self.read_sram_values_guarded(ctx, weapons_arrays_starts[3], 4)
+        if char1_slots is None or char2_slots is None or char3_slots is None or char4_slots is None:
+            return
+        for i, slot in enumerate(char1_slots):
+            if slot == 0:
+                empty_slots.appendleft(weapons_arrays_starts[0] + i)
+        for i, slot in enumerate(char2_slots):
+            if slot == 0:
+                empty_slots.appendleft(weapons_arrays_starts[1] + i)
+        for i, slot in enumerate(char3_slots):
+            if slot == 0:
+                empty_slots.appendleft(weapons_arrays_starts[2] + i)
+        for i, slot in enumerate(char4_slots):
+            if slot == 0:
+                empty_slots.appendleft(weapons_arrays_starts[3] + i)
+        while len(empty_slots) > 0 and len(self.weapons_queue) > 0:
+            current_slot = empty_slots.pop()
+            current_weapon = self.weapons_queue.pop()
+            await self.write_sram_guarded(ctx, current_slot, current_weapon)
+
+    async def process_armor_queue(self, ctx: "BizHawkClientContext"):
+        empty_slots = deque()
+        char1_slots = await self.read_sram_values_guarded(ctx, armors_arrays_starts[0], 4)
+        char2_slots = await self.read_sram_values_guarded(ctx, armors_arrays_starts[1], 4)
+        char3_slots = await self.read_sram_values_guarded(ctx, armors_arrays_starts[2], 4)
+        char4_slots = await self.read_sram_values_guarded(ctx, armors_arrays_starts[3], 4)
+        if char1_slots is None or char2_slots is None or char3_slots is None or char4_slots is None:
+            return
+        for i, slot in enumerate(char1_slots):
+            if slot == 0:
+                empty_slots.appendleft(armors_arrays_starts[0] + i)
+        for i, slot in enumerate(char2_slots):
+            if slot == 0:
+                empty_slots.appendleft(armors_arrays_starts[1] + i)
+        for i, slot in enumerate(char3_slots):
+            if slot == 0:
+                empty_slots.appendleft(armors_arrays_starts[2] + i)
+        for i, slot in enumerate(char4_slots):
+            if slot == 0:
+                empty_slots.appendleft(armors_arrays_starts[3] + i)
+        while len(empty_slots) > 0 and len(self.armor_queue) > 0:
+            current_slot = empty_slots.pop()
+            current_armor = self.armor_queue.pop()
+            await self.write_sram_guarded(ctx, current_slot, current_armor)
 
 
-def main():
-    # Text Mode to use !hint and such with games that have no text entry
-    Utils.init_logging("FF1Client")
+    async def read_sram_value(self, ctx: "BizHawkClientContext", location: int):
+        value = ((await bizhawk.read(ctx.bizhawk_ctx, [(location, 1, self.sram)]))[0])
+        return int.from_bytes(value, "little")
 
-    options = Utils.get_options()
-    DISPLAY_MSGS = options["ffr_options"]["display_msgs"]
+    async def read_sram_values_guarded(self, ctx: "BizHawkClientContext", location: int, size: int):
+        value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
+                                           [(location, size, self.sram)],
+                                           [(status_a_location, [self.guard_character], self.sram)])
+        if value is None:
+            return None
+        return value[0]
 
-    async def main(args):
-        ctx = FF1Context(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-        ctx.nes_sync_task = asyncio.create_task(nes_sync_task(ctx), name="NES Sync")
+    async def read_sram_value_guarded(self, ctx: "BizHawkClientContext", location: int):
+        value = await bizhawk.guarded_read(ctx.bizhawk_ctx,
+                                           [(location, 1, self.sram)],
+                                           [(status_a_location, [self.guard_character], self.sram)])
+        if value is None:
+            return None
+        return int.from_bytes(value[0], "little")
 
-        await ctx.exit_event.wait()
-        ctx.server_address = None
+    async def read_rom(self, ctx: "BizHawkClientContext", location: int, size: int):
+        return (await bizhawk.read(ctx.bizhawk_ctx, [(location, size, self.rom)]))[0]
 
-        await ctx.shutdown()
+    async def write_sram_guarded(self, ctx: "BizHawkClientContext", location: int, value: int):
+        return await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                           [(location, [value], self.sram)],
+                                           [(status_a_location, [self.guard_character], self.sram)])
 
-        if ctx.nes_sync_task:
-            await ctx.nes_sync_task
-
-
-    import colorama
-
-    parser = get_base_parser()
-    args = parser.parse_args()
-    colorama.init()
-
-    asyncio.run(main(args))
-    colorama.deinit()
+    async def write_sram_values_guarded(self, ctx: "BizHawkClientContext", write_list):
+        return await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                           write_list,
+                                           [(status_a_location, [self.guard_character], self.sram)])

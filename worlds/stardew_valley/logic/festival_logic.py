@@ -1,22 +1,7 @@
-from typing import Union
-
-from .action_logic import ActionLogicMixin
-from .animal_logic import AnimalLogicMixin
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .fishing_logic import FishingLogicMixin
-from .gift_logic import GiftLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogicMixin
-from .museum_logic import MuseumLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
 from ..options import FestivalLocations
 from ..stardew_rule import StardewRule
+from ..strings.animal_product_names import AnimalProduct
 from ..strings.book_names import Book
 from ..strings.craftable_names import Fishing
 from ..strings.crop_names import Fruit, Vegetable
@@ -35,8 +20,7 @@ class FestivalLogicMixin(BaseLogicMixin):
         self.festival = FestivalLogic(*args, **kwargs)
 
 
-class FestivalLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, FestivalLogicMixin, ArtisanLogicMixin, AnimalLogicMixin, MoneyLogicMixin, TimeLogicMixin,
-SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, RelationshipLogicMixin, FishingLogicMixin, MuseumLogicMixin, GiftLogicMixin]]):
+class FestivalLogic(BaseLogic):
 
     def initialize_rules(self):
         self.registry.festival_rules.update({
@@ -154,18 +138,37 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
         if self.options.festival_locations != FestivalLocations.option_hard:
             return self.logic.true_
 
-        animal_rule = self.logic.animal.has_animal(Generic.any)
+        # Other animal products are not counted in the animal product category
+        good_animal_products = [
+            AnimalProduct.duck_egg, AnimalProduct.duck_feather, AnimalProduct.egg, AnimalProduct.goat_milk, AnimalProduct.golden_egg, AnimalProduct.large_egg,
+            AnimalProduct.large_goat_milk, AnimalProduct.large_milk, AnimalProduct.milk, AnimalProduct.ostrich_egg, AnimalProduct.rabbit_foot,
+            AnimalProduct.void_egg, AnimalProduct.wool
+        ]
+        if AnimalProduct.ostrich_egg not in self.content.game_items:
+            # When ginger island is excluded, ostrich egg is not available
+            good_animal_products.remove(AnimalProduct.ostrich_egg)
+        animal_rule = self.logic.has_any(*good_animal_products)
+
         artisan_rule = self.logic.artisan.can_keg(Generic.any) | self.logic.artisan.can_preserves_jar(Generic.any)
-        cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)  # Salads at the bar are good enough
-        fish_rule = self.logic.skill.can_fish(difficulty=50)
-        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))  # Hazelnut always available since the grange display is in fall
-        mineral_rule = self.logic.action.can_open_geode(Generic.any)  # More than half the minerals are good enough
+
+        # Salads at the bar are good enough
+        cooking_rule = self.logic.money.can_spend_at(Region.saloon, 220)
+
+        fish_rule = self.logic.fishing.can_fish_anywhere(50)
+
+        # Hazelnut always available since the grange display is in fall
+        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods))
+
+        # More than half the minerals are good enough
+        mineral_rule = self.logic.action.can_open_geode(Generic.any)
+
         good_fruits = (fruit
                        for fruit in
                        (Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
                         Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit)
                        if fruit in self.content.game_items)
         fruit_rule = self.logic.has_any(*good_fruits)
+
         good_vegetables = (vegeteable
                            for vegeteable in
                            (Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
@@ -173,11 +176,10 @@ SkillLogicMixin, RegionLogicMixin, ActionLogicMixin, MonsterLogicMixin, Relation
                            if vegeteable in self.content.game_items)
         vegetable_rule = self.logic.has_any(*good_vegetables)
 
-        return animal_rule & artisan_rule & cooking_rule & fish_rule & \
-            forage_rule & fruit_rule & mineral_rule & vegetable_rule
+        return animal_rule & artisan_rule & cooking_rule & fish_rule & forage_rule & fruit_rule & mineral_rule & vegetable_rule
 
     def can_win_fishing_competition(self) -> StardewRule:
-        return self.logic.skill.can_fish(difficulty=60)
+        return self.logic.fishing.can_fish(60)
 
     def has_all_rarecrows(self) -> StardewRule:
         rules = []
