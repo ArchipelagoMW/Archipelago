@@ -109,7 +109,7 @@ not_the_bees_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.not_the_bees,
 sappy_items = [golden_pumpkin, magic_rock_candy, pearl, prismatic_shard, rabbit_foot, stardrop_tea]
 sappy_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.sappy, sappy_items, 4, 4)
 
-honorable_items = [stone.as_amount(1), prismatic_shard.as_amount(10)]
+honorable_items = [stone.as_amount(1), prismatic_shard.as_amount(1)]
 honorable_bundle = FixedPriceBundleTemplate(CCRoom.boiler_room, MemeBundleName.honorable, honorable_items, 2, 1)
 
 caffeinated_items = [coffee_bean.as_amount(500)]
