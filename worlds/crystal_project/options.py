@@ -15,13 +15,13 @@ class Goal(Choice):
     """
     Choose what is required to complete the game.
     
-    Checking the first sign in the Spawning Meadows will tell you the selected goal.
+    Checking the first sign in the Spawning Meadows will tell you the selected goal. A goal items counter is displayed on the in-game party screen in the menu.
     
-    Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs.
+    Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs (starting Jobs don't count).
 
     True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit. Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
     
-    Clamshells: Collect enough clamshells for the clam lover.
+    Clamshells: Collect enough clamshells for Mañana Man in Seaside Cliffs.
     """
     display_name = "Goal"
     option_astley = 0
@@ -33,17 +33,13 @@ class NewWorldStoneJobQuantity(Range):
     """
     If your goal is Astley, select how many Jobs you need to find before being sent the New World Stone for the final fight.
 
-    We will validate this option at generation time and if it is higher than the number of jobs you can obtain, we will reduce it.
+    This option is validated at generation time, and if it is higher than the number of jobs you can obtain, it will be capped to what is possible. By default, the maximum you can obtain is 18.
 
-    The maximum you can obtain without mods is 24 minus the number of starting jobs you've selected, which is 18 if your jobRando is not set to full.
+    Picking Job Rando: Full and decreasing the Starting Job Quantity will increase the maximum by that much. It will also increase if you enable mods that give you more.
 
-    If you enter a number here that exceeds what is possible, the count will automatically be decreased.
-
-    If you choose None for jobRando and you have selected beginner or advanced for includedRegions this will also reduce the number of crystals available.
-
-    The maximum number for jobRando None and beginner is 4, and jobRando None and advanced is 11.
+    Picking Job Rando: None and Included Regions: Beginner or Advanced will reduce the maximum number available to 4 or 11, respectively.
     """
-    display_name = "Job count that locks the new world stone"
+    display_name = "Job count that locks the New World Stone"
     range_start = 1
     range_end = 99
     default = 18
@@ -51,7 +47,8 @@ class NewWorldStoneJobQuantity(Range):
 class ClamshellGoalQuantity(Range):
     """
     If your goal is Clamshells, select how many you need to win.
-    (This setting does nothing if your goal is not Clamshells. 3 Clamshells are placed in your pool and the Mañana Man asks for 2. Don't worry, he's cool with it.)
+
+    (If your goal is not Clamshells, this setting does nothing. 3 Clamshells will be placed in your pool and the Mañana Man will ask for 2. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
     range_start = 1
@@ -60,9 +57,10 @@ class ClamshellGoalQuantity(Range):
     
 class ExtraClamshellsInPool(Range):
     """
-    If your goal is Clamshells, pick how many more Clamshells than your goal value that you want in the item pool.
-    This option makes it so you don't have to find every single Clamshell in your pool to win.
-    (This setting does nothing if your goal is not Clamshells.)
+    If your goal is Clamshells, pick how many more Clamshells than your goal value to have in the item pool.
+    This option makes it so that you don't have to find every single Clamshell in your pool to win.
+
+    (If your goal is not Clamshells, this setting does nothing.)
     """
     display_name = "Extra Clamshells in the pool"
     range_start = 0
@@ -95,13 +93,11 @@ class IncludedRegions(Choice):
 
 class JobRando(Choice):
     """
-    Full means your starting jobs are randomized and the rest of the vanilla jobs are added to the item pool.
+    None: all Jobs are at their normal crystal locations in the vanilla game.
 
-    Adjust the Starting Job Quantity setting below for how many random jobs you start with.
+    Crystal: all vanilla Jobs normally received from crystals are chucked into the item pool.
 
-    Crystal means all vanilla jobs normally received from crystals are chucked into the item pool.
-
-    None means all jobs are where they normally are in the vanilla game.
+    Full: your starting jobs are randomized, and the rest of the vanilla Jobs are added to the item pool. Adjust the Starting Job Quantity (see below) for how many random Jobs you start with.
     """
     display_name = "Job Rando"
     option_none = 0
@@ -111,7 +107,7 @@ class JobRando(Choice):
 
 class StartingJobQuantity(Range):
     """
-    Select how many starting jobs you'll get.  Only does anything if JobRando is set to Full.
+    Select how many Jobs you start with. (This setting only does anything if JobRando is set to Full.)
     """
     display_name = "Starting Job Quantity"
     range_start = 1
@@ -122,8 +118,8 @@ class KillBossesMode(Toggle):
     """
     When enabled, defeating a boss will provide checks.
 
-    WARNING: If you have restricted the includedRegions to Beginner or Advanced, you'll be getting checks to complete level 50+ bosses in some of the early areas!
-    You may want to choose the Level Gating option level catch-up.  Without it you are signing up to either grind or fight the bosses underlevelled
+    WARNING: If you restrict the Included Regions to Beginner or Advanced, checks will require defeating level 50+ bosses in some of the early areas!
+    You may want to set the Level Gating option to Level Catch-Up.  Without it, you are signing up to either grind or fight the bosses under-leveled.
     """
     display_name = "Kill Bosses Mode"
 
@@ -131,7 +127,7 @@ class Shopsanity(Choice):
     """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
 
-    Choosing "enabled and hint" will automatically create a hint for any item available in your stores after you have visited the store for the first time, 
+    Choosing "enabled and hint" will automatically create a hint for any item available in a store after you have visited it for the first time,
     letting other players in the multiworld know you've seen their item.
     """
     display_name = "Shopsanity"
@@ -143,14 +139,14 @@ class Shopsanity(Choice):
 class Regionsanity(Toggle):
     """
     Nothing I have tried has been able to drive the citizens of Sequoia to collect enough crystals!
-    Adventurers have had TOO MUCH freedom!  From now on you will adventure where I tell you to.
+    Adventurers have had TOO MUCH freedom!  From now on, you will adventure where I tell you to.
     Unless you have a pass from ME, you won't be able to do any adventuring!
     - Grandmaster
 
-    When enabled, the grandmaster will not permit you to interact with any locations/checks
-        in a region without receiving his "official permission" (i.e. "Item - Spawning Meadows Pass").
-    However, the Overpass and Underpass are regions of lawlessness where the Grandmaster has no authority ;)
-    You're also still allowed to use the save points, we won't tell
+    When enabled, the grandmaster will not permit you to interact with anything in a region
+    without receiving his "official permission" (i.e. "Item - Spawning Meadows Pass").
+    However, the Overpass and Underpass are regions of lawlessness where the Grandmaster has no authority! ;)
+    (You're also still allowed to use the save points, we won't tell.)
 
     You will start the game with a pass for one reachable region.
     """
@@ -159,13 +155,20 @@ class Regionsanity(Toggle):
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
     """
-    When enabled, all the mounts will arrive in the same order every game (Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina)
-    When disabled, there are 4 different items, Progressive Quintar Flute, Progressive Salmon Violin, Ibek Bell, and Owl Drum which are randomized."""
+    When enabled, all mount items are combined into a Progressive Mount Instrument and will be received in the approximate order you would receive them in the vanilla game every time:
+       Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina
+
+    When disabled, different mount types are separated:
+       Progressive Quintar Flute (Quintar Pass -> Quintar Flute -> Quintar Ocarina),
+       Progressive Salmon Violin (Salmon Violin -> Salmon Cello),
+       Ibek Bell,
+       and Owl Drum.
+    """
     display_name = "Progressive Mount Mode"
 
 class LevelGating(Choice):
     """
-    When enabled, the party's level is considered for Archipelago logic, and level items are added to the item pool. This won't stop you from beating the game at level 3.
+    When enabled, the party's level is considered for Archipelago logic, and Progressive Level items are added to the pool. (This won't stop you from beating the game at level 3. ^_^)
 
     None: Level gating is disabled. No Progressive Levels in the pool.
 
@@ -188,14 +191,14 @@ class LevelGating(Choice):
 
 class ProgressiveLevelSize(Range):
     """
-    If level gating is on, Progressive Levels will be added to your item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
+    If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
 
-    For example, if Level Item Size is 6, the three Level Gating options would behave like this:
+    For example, if Progressive Level Size is 6, the three Level Gating options would behave like this:
        Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
        Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
        Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
 
-    This setting will not increase your party's starting level (3) or maximum level (default 60 - see Max Level option).
+    This setting will only increase your party's starting level (3 by default) if you pick Level Catch-Up.
     """
     display_name = "Progressive Level Size"
     range_start = 3
@@ -204,7 +207,7 @@ class ProgressiveLevelSize(Range):
 
 class MaxLevel(Range):
     """
-    This allows your party to level past the default max level of 60. If level gating is on, increasing this number will also put more level items in your pool.
+    This allows your party to level past the default maximum level of 60. If Level Gating is on, increasing this number will also put more Progressive Levels in your pool.
     """
     display_name = "Max Level"
     range_start = 60
@@ -213,21 +216,19 @@ class MaxLevel(Range):
 
 class EasyLeveling(Toggle):
     """
-    When enabled, characters will not receive reduced exp for being dead or for being a higher level than the fought enemy.
+    When enabled, characters will not receive reduced experience for being dead or for being a higher level than the fought enemy.
     """
     display_name = "Easy Leveling"
 
 class KeyMode(Choice):
     """
-    Choose how keys behave.
-
     Skeleton Key: Only the Skeleton Key, which can open any locked door, will be in your item pool.
 
-    Key Ring: One check will give all keys needed to complete one dungeon. The Skeleton Key will still be in the pool.
+    Key Ring: Keys for individual dungeons will be grouped into Key Rings. Each Key Ring will give all keys needed to complete one dungeon. The Skeleton Key will still be in the pool.
 
     Vanilla: All vanilla keys will be in the item pool.
 
-    Skelefree: Same as the named mode but removes the skeleton key.
+    Skelefree: Same as the named mode, but removes the Skeleton Key.
     """
     display_name = "Key Mode"
     option_skeleton = 0
@@ -256,7 +257,7 @@ class StartWithTreasureFinder(DefaultOnToggle):
     """
     When enabled, the player will start with the Treasure Finder in their inventory. When disabled, it will be in the item pool.
 
-    Note: Having the Treasure Finder is required for the in-game minimap to display nearby checks.
+    NOTE: Having the Treasure Finder is required for the in-game minimap to display nearby checks.
     """
     display_name = "Begin with Treasure Finder"
 
@@ -270,26 +271,43 @@ class StartWithMaps(DefaultOnToggle):
 
 class IncludeSummonAbilities(DefaultOnToggle):
     """
-    When enabled, Summon abilities can be found anywhere; when disabled, they will be in the regular spot.
+    When enabled, Summons are added to the item pool.
+
+    Note: It is not recommended to turn this off with Job Rando: Full and a low number of starting Jobs. You don't want to get stuck with just a Summoner who can only summon Pinga! (I'm sorry, Pinga.)
     """
-    display_name = "Include Summoner Abilities in the item pool"
+    display_name = "Include Summons in the item pool"
     
 class IncludeScholarAbilities(DefaultOnToggle):
     """
-    When enabled, Scholar abilities can be found anywhere. They can still be learned as normal from enemies.
+    When enabled, Scholar abilities are added to the item pool. They can still be learned as normal from enemies.
     """
     display_name = "Include Scholar Abilities in the item pool"
 
 #"""Bonus Fun"""
 class RandomizeMusic(Toggle):
     """
-    When enabled, music will be randomized upon connecting to the AP World.
+    When enabled, music will be randomized upon connecting to the AP World. (This toggles the base game's Randomize Music function.)
     """
     display_name = "Randomize Music"
 
 class UseMods(Toggle):
     """
-    When enabled, on generate the crystal_project_mods folder in the archipelago directory will be read and items and locations will be created from the mod jsons.
+    WARNING: This setting is very in beta right now! Enabling it is not recommended for multiworlds that do not allow releasing items.
+
+    When enabled, items and locations added by other Crystal Project mods will be added to the item and location pools at generation.
+
+    Multiworld host instructions:
+    1. In order to select the mods you'd like to include, make a folder named "crystal_project_mods" inside your root Archipelago directory.
+    2. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>\steamapps\workshop\content\1637730) and find the individual folders for the mods you'd like to include.
+    3. Inside each mod's folder is a mod json. Copy that json to the crystal_project_mods folder you made inside the Archipelago directory.
+
+    NOTE: When this setting is on, all Crystal Project players in the multiworld with this setting enabled MUST use the same mods.
+
+    The in-game tracking will use special icons for modded locations that will not display their accessibility (as we can only guess at how accessible they are based on coordinates, and would prefer the tracking to be as accurate as possible).
+
+    When disabled, only base game locations and items will be randomized. You can still use other mods - at your own risk, adventurer - they just won't add checks.
+
+    The game will warn you if you open a game with mods that don't match the mods used to generate the multiworld. It will warn you even if this setting is disabled for you, if you start playing with mods.
     """
     display_name = "Use Mods"
 
