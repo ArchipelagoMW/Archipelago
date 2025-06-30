@@ -1099,6 +1099,23 @@ class GameManager(ThemedApp):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
 
+    def clear_chat(self, which_log: str = "All") -> bool:
+        if which_log == "All":
+            for panel in self.ctx.ui.log_panels.values():
+                if isinstance(panel, UILog):
+                    panel.clear()
+            return True
+        elif which_log == self.tabs.default_tab_text:
+            self.ctx.ui.log_panels["All"].clear()
+            return True
+        else:
+            target_panel = self.ctx.ui.log_panels.get(which_log)
+            if target_panel is None:
+                return False
+            if isinstance(target_panel, UILog):
+                self.ctx.ui.log_panels[which_log].clear()
+            return True
+
     # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
     def open_settings(self, *largs):
         pass
@@ -1145,6 +1162,11 @@ class UILog(MDRecycleView):
     def clean_old(self):
         if len(self.data) > self.messages:
             self.data.pop(0)
+
+    def clear(self):
+        """Clears the log to appear visibly empty"""
+        # Clearing the data causes AssertionErrors related to sizing RecycleView. An empty element fixes this.
+        self.data = [{'text': ''}]
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
