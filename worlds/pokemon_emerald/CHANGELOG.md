@@ -1,3 +1,28 @@
+# 2.4.1
+
+### Fixes
+
+- Fixed handling of shuffle option for badges/HMs in the case that the player sets those items to nonlocal or uses
+plando to put an item in one of those locations, or in the case that fill gets itself stuck on these items and has to
+retry.
+
+# 2.4.0
+
+### Features
+
+- New option `free_fly_blacklist` limits which cities can show up as a free fly location.
+- Spoiler log and hint text for maps where a species can be found now use human-friendly labels.
+- Added many item and location groups based on item type, location type, and location geography.
+- Dexsanity locations for species which evolve via item use (Fire Stone, Metal Coat, etc.) now contribute those items to
+the randomized item pool instead of Great Balls.
+- Rock smash encounters are now randomized according to your wild pokemon randomization option. These encounters are
+_not_ used for logical access (the seed will never require you to catch something through one of these encounters).
+
+### Fixes
+
+- Now excludes the location "Navel Rock Top - Hidden Item Sacred Ash" if your goal is Champion and you didn't randomize
+event tickets.
+
 # 2.3.0
 
 ### Features
