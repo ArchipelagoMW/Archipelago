@@ -370,18 +370,21 @@ def build_condition_rule(condition, world: "CrystalProjectWorld", player: int, o
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
 def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
-    excluded_item_ids = mod.System['Randomizer']['ExcludeItemIDs']
-    excluded_job_ids = mod.System['Randomizer']['ExcludeJobIDs']
-    excluded_equipment_ids = mod.System['Randomizer']['ExcludeEquipmentIDs']
+    if mod.System is not None and mod.System["Randomizer"] is not None:
+        excluded_item_ids = mod.System['Randomizer']['ExcludeItemIDs']
+        excluded_job_ids = mod.System['Randomizer']['ExcludeJobIDs']
+        excluded_equipment_ids = mod.System['Randomizer']['ExcludeEquipmentIDs']
 
-    if excluded_item_ids is None:
-        excluded_item_ids = []
-    if excluded_job_ids is None:
-        excluded_job_ids = []
-    if excluded_equipment_ids is None:
-        excluded_equipment_ids = []
+        if excluded_item_ids is None:
+            excluded_item_ids = []
+        if excluded_job_ids is None:
+            excluded_job_ids = []
+        if excluded_equipment_ids is None:
+            excluded_equipment_ids = []
 
-    return IdsExcludedFromRandomization(excluded_equipment_ids, excluded_item_ids, excluded_job_ids)
+        return IdsExcludedFromRandomization(excluded_equipment_ids, excluded_item_ids, excluded_job_ids)
+    else:
+        return IdsExcludedFromRandomization([], [], [])
 
 def is_item_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomization) -> bool:
     loot_type = data['LootType']
