@@ -22,9 +22,9 @@ from worlds.generic.Rules import add_rule
 from worlds.LauncherComponents import Component, components, launch, Type, SuffixIdentifier
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import main
-    launch(main, name="Zelda1Client")
+    launch(main, name="Zelda1Client", args=args)
 
 components.append(Component(display_name="Zelda 1 Client", func=launch_client, component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier('.aptloz')))

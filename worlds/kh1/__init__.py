@@ -12,9 +12,9 @@ from .Presets import kh1_option_presets
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import main
-    launch_component(main, name="KH1 Client")
+    launch_component(main, name="KH1 Client", args=args)
 
 components.append(Component(display_name="KH1 Client", func=launch_client, component_type=Type.CLIENT))
 

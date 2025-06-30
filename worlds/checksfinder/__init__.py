@@ -9,9 +9,9 @@ from worlds.LauncherComponents import launch, components, Component, Type
 client_version = 7
 
 
-def launch_client():
+def launch_client(*args: str):
     from .Client import main
-    launch(main, name="ChecksFinderClient")
+    launch(main, name="ChecksFinderClient", args=args)
 
 components.append(Component(display_name="ChecksFinder Client", func=launch_client, component_type=Type.CLIENT))
 
