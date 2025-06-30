@@ -455,28 +455,9 @@ def link_entrances(world, player):
             entrances_must_exits.append('Pyramid Entrance')
             doors.extend(['Ganons Tower', 'Pyramid Entrance'])
 
-        early_access_doors = list(LW_Early_Access_Doors)
-        world.random.shuffle(early_access_doors)
-        early_access_holes = list(LW_Early_Access_Drops)
-        world.random.shuffle(early_access_holes)
-
         world.random.shuffle(hole_entrances)
         world.random.shuffle(hole_targets)
         world.random.shuffle(entrances)
-
-        if world.worlds[player].options.prevent_early_connectors:
-            connect_two_way(world, 'Sanctuary', 'Sanctuary Exit', player) # unshuffle
-            doors.remove('Sanctuary')
-            caves.remove('Sanctuary Exit')
-            for hole in early_access_holes:
-                if hole in hole_entrances:
-                    hole_entrances.remove(hole)
-                    hole_entrances.insert(0, hole)
-            sw_hole_targets = ['Sewer Drop', 'Skull Woods First Section (Left)', 'Skull Woods First Section (Right)', 'Skull Woods First Section (Top)']
-            for hole_target in sw_hole_targets:
-                if hole_target in hole_targets:
-                    hole_targets.remove(hole_target)
-                    hole_targets.append(hole_target)
 
         # fill up holes
         for hole in hole_entrances:
@@ -487,23 +468,11 @@ def link_entrances(world, player):
             # must connect front of hyrule castle to do escape
             connect_entrance(world, 'Hyrule Castle Entrance (South)', 'Hyrule Castle Exit (South)', player)
             connect_exit(world, 'Hyrule Castle Exit (South)', 'Hyrule Castle Entrance (South)', player)
-            if world.worlds[player].options.prevent_early_connectors:
-                connect_entrance(world, 'Hyrule Castle Entrance (East)', 'Hyrule Castle Exit (East)', player)
-                connect_exit(world, 'Hyrule Castle Exit (East)', 'Hyrule Castle Entrance (East)', player)
-                connect_entrance(world, 'Hyrule Castle Entrance (West)', 'Hyrule Castle Exit (West)', player)
-                connect_exit(world, 'Hyrule Castle Exit (West)', 'Hyrule Castle Entrance (West)', player)
-            else:
-                caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
+            caves.append(('Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
         else:
             doors.append('Hyrule Castle Entrance (South)')
             entrances.append('Hyrule Castle Entrance (South)')
             caves.append(('Hyrule Castle Exit (South)', 'Hyrule Castle Exit (West)', 'Hyrule Castle Exit (East)'))
-
-        if world.worlds[player].options.prevent_early_connectors:
-            for door in early_access_doors:
-                if door in doors:
-                    doors.remove(door)
-                    doors.insert(0, door)
 
         # now let's deal with mandatory reachable stuff
         def extract_reachable_exit(cavelist):
@@ -1866,48 +1835,6 @@ def plando_connect(world, player: int):
         else:
             mark_dark_world_regions(world, player)
 
-
-LW_Early_Access_Doors = ['Elder House (East)',
-                         'Elder House (West)',
-                         'Two Brothers House (East)',
-                         'Eastern Palace',
-                         'Hyrule Castle Entrance (South)',
-                         'Hyrule Castle Secret Entrance Stairs',
-                         'Blinds Hideout',
-                         'Lake Hylia Fairy',
-                         'Desert Fairy',
-                         'Chicken House',
-                         'Aginahs Cave',
-                         'Sahasrahlas Hut',
-                         'Cave Shop (Lake Hylia)',
-                         'Blacksmiths Hut',
-                         'Sick Kids House',
-                         'Lost Woods Gamble',
-                         'Fortune Teller (Light)',
-                         'Snitch Lady (East)',
-                         'Snitch Lady (West)',
-                         'Bush Covered House',
-                         'Tavern (Front)',
-                         'Kakariko Shop',
-                         'Good Bee Cave',
-                         'Library',
-                         'Potion Shop',
-                         'Dam',
-                         'Lumberjack House',
-                         'Lake Hylia Fortune Teller',
-                         'Sanctuary',
-                         'Lumberjack Tree Cave',
-                         'North Fairy Cave',
-                         'Bat Cave Cave',
-                         'Kakariko Well Cave',
-                         'Lost Woods Hideout Stump',
-                         'Kakariko Gamble Game',
-                         'Long Fairy Cave']
-
-LW_Early_Access_Drops = ['Lost Woods Hideout Drop',
-                         'North Fairy Cave Drop',
-                         'Kakariko Well Drop',
-                         'Hyrule Castle Secret Entrance Drop']
 
 LW_Dungeon_Entrances = ['Desert Palace Entrance (South)',
                         'Desert Palace Entrance (West)',

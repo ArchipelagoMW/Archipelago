@@ -528,10 +528,6 @@ class BomblessStart(Toggle):
     """Start with a max of 0 bombs available, requiring Bomb Upgrade items in order to use bombs"""
     display_name = "Bombless Start"
 
-class PreventEarlyConnectors(Toggle):
-    """Prevent sphere 1 doors from leading to new areas"""
-    display_name = "Prevent Early Connectors"
-
 
 # Might be a decent idea to split "Bow" into its own option with choices of
 # Defer to Progressive Option (default), Progressive, Non-Progressive, Bow + Silvers, Retro
@@ -797,7 +793,6 @@ class ALTTPOptions(PerGameCommonOptions):
     shop_price_modifier: ShopPriceModifier
     shuffle_capacity_upgrades: ShuffleCapacityUpgrades
     bombless_start: BomblessStart
-    prevent_early_connectors: PreventEarlyConnectors
     shuffle_prizes: ShufflePrizes
     tile_shuffle: TileShuffle
     misery_mire_medallion: MiseryMireMedallion
