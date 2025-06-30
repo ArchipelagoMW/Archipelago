@@ -16,6 +16,15 @@ from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
 from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
+from worlds.LauncherComponents import Component, components, launch, Type, SuffixIdentifier
+
+
+def launch_client():
+    from .Client import main
+    launch(main, name="MMBN3Client")
+
+components.append(Component(display_name="MMBN3 Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apbn3')))
 
 
 class MMBN3Settings(settings.Group):

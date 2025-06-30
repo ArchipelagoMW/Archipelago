@@ -13,11 +13,10 @@ from worlds.LauncherComponents import Component, components, Type, launch as lau
 
 
 def launch_client():
-    from .Client import launch
-    launch_component(launch, name="KH1 Client")
+    from .Client import main
+    launch_component(main, name="KH1 Client")
 
-
-components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
+components.append(Component(display_name="KH1 Client", func=launch_client, component_type=Type.CLIENT))
 
 
 class KH1Web(WebWorld):
@@ -245,7 +244,7 @@ class KH1World(World):
 
     def connect_entrances(self):
         connect_entrances(self.multiworld, self.player)
-    
+
     def generate_early(self):
         value_names = ["Reports to Open End of the World", "Reports to Open Final Rest Door", "Reports in Pool"]
         initial_report_settings = [self.options.required_reports_eotw.value, self.options.required_reports_door.value, self.options.reports_in_pool.value]
