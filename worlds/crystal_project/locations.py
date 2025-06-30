@@ -330,13 +330,12 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin skulking in store alley", 565 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin on gender change bench porch", 1095 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin enjoying inn hospitality", 946 + npc_index_offset),
-        # Progressive Location: 5 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
+        # Progressive Location: 4 checks on the Penguin Keeper, must add a progressive location in the C# app every time you use one of these.
         # The original check that corresponds to the npc id should be last so that when it completes it stops showing up on your minimap.
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 3 Lost Penguins to Penguin Keeper", 50531 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 3)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 6)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 9)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 12)),
-        #Next seven checks can be acquired by either Owl, Ibek, Quintar, or Gaea Stone; vanilla game expects Gaea Stone so that's the logic we're using
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has(GAEA_STONE, player)),
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has(DIGESTED_HEAD, player, 3)), #name is ca69011a in Crystal Edit whyy lmao
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Lost Penguin wandering Magic Store rooftop garden", 573 + npc_index_offset),
