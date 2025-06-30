@@ -280,9 +280,9 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Magic store attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Training ground parkour", 1390 + treasure_index_offset), #Craftwork Katana chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Behind Luxury store", 2651 + treasure_index_offset), #Craftwork Cap chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Fenix Syrup Pouch chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Lucky Briefs chest
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #Lucky Socks chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 1", 1533 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Fenix Syrup Pouch chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 2", 1532 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Lucky Briefs chest
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Locked in Luxury Store storage 3", 1531 + treasure_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #Lucky Socks chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Inn attic by Master Monk", 2656 + treasure_index_offset), #Craftwork Vest chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - By Master Warrior atop the Luxury Store", 2655 + treasure_index_offset), #Craftwork Shield chest
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia Chest - Atop library bookcases", 1392 + treasure_index_offset), #Craftwork Sword chest
