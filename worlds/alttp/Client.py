@@ -10,7 +10,7 @@ import Utils
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
 
-from . import Shops, Regions, Adjuster
+from . import Shops, Regions
 from .Rom import ROM_PLAYER_LIMIT
 
 snes_logger = logging.getLogger("SNES")
