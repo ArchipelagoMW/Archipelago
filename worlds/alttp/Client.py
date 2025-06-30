@@ -685,7 +685,7 @@ def get_alttp_settings(romfile: str):
             last_settings.world = None
 
             if last_settings.sprite_pool:
-                from worlds.alttp.Adjuster import AdjusterWorld
+                from .Adjuster import AdjusterWorld
                 last_settings.world = AdjusterWorld(getattr(last_settings, "sprite_pool"))
 
             adjusted = True
