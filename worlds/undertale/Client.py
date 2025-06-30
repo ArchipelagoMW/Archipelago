@@ -509,4 +509,4 @@ def launch():
 if __name__ == "__main__":
     parser = get_base_parser(description="Undertale Client, for text interfacing.")
     args = parser.parse_args()
-    main()
+    launch()
