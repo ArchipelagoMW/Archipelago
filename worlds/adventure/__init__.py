@@ -8,7 +8,7 @@ import settings
 from BaseClasses import Item, ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch, Type
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
 from .Locations import location_table, base_location_id, LocationData, get_random_room_in_regions
 from .Offsets import static_item_data_location, items_ram_start, static_item_element_size, item_position_table, \

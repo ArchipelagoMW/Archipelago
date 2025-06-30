@@ -679,6 +679,7 @@ def get_alttp_settings(romfile: str):
             choice = 'yes'
 
         if 'yes' in choice:
+            import Adjuster
             from .Rom import get_base_rom_path
             last_settings.rom = romfile
             last_settings.baserom = get_base_rom_path()
@@ -689,7 +690,7 @@ def get_alttp_settings(romfile: str):
                 last_settings.world = AdjusterWorld(getattr(last_settings, "sprite_pool"))
 
             adjusted = True
-            _, adjustedromfile = LttPAdjuster.adjust(last_settings)
+            _, adjustedromfile = Adjuster.adjust(last_settings)
 
             if hasattr(last_settings, "world"):
                 delattr(last_settings, "world")
