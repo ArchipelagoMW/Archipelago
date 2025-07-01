@@ -129,14 +129,13 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ship Part",
         'post_dungeon': "Temple of Fire"
     },
-    "Mercay Oshus Item After Temple of Wind": {
+    "Mercay Oshus Force Gem": {
         "region_id": "mercay oshus gem",
         "stage_id": 11,
         "floor_id": 10,
         "vanilla_item": "Power Gem",
         "address": 0x1B55A5,
-        "value": 0x2,
-        'post_dungeon': "Temple of Wind"
+        "value": 0x2
     },
     "Mercay Oshus Phantom Sword": {
         "region_id": "mercay oshus phantom blade",
@@ -1277,8 +1276,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Heart Container",
         "stage_id": 7,
         "floor_id": 0,
-        "address": 0x1B5591,
-        "value": 0x80
+        "address": 0x1B55A4,
+        "value": 0x40
     },
     # ============ Isle of Gust ============
     "Isle of Gust Hideout Chest": {
@@ -1473,7 +1472,7 @@ LOCATIONS_DATA = {
         "x_min": 77500,
         "x_max": 82500,
         "z_max": -25000,
-        "sram_addr": 0xEB0,
+        "sram_addr": 0x22B0,
         "sram_value": 8
     },
     "Bannan Island Cannon Game": {
@@ -1540,7 +1539,8 @@ LOCATIONS_DATA = {
         "floor_id": 0xA,
         "address": 0x1B55AB,
         "conditional": True,
-        "value": 0x10
+        "value": 0x10,
+        "post_dungeon": "Ghost Ship"
     },
     "Zauz's Island Phantom Blade": {
         "region_id": "zauz blade",
@@ -2193,12 +2193,20 @@ LOCATIONS_DATA = {
         "x_max": -200000,
         "z_max": -40000
     },
+    "Isle of Ruins Bonk Tree": {
+        "region_id": "ruins",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x11,
+        "floor_id": 1,
+        "additional_rooms": [0x1201],
+        "y": 0x4CCD,
+    },
     "Isle of Ruins Doyland's Item": {
         "region_id": "ruins",
         "vanilla_item": "King's Key",
         "stage_id": 0x22,
         "floor_id": 1,
-        "address": 0x1BA649,
+        "address": 0x1B5585,
         "value": 0x4
     },
     "Isle of Ruins Lower Water Cave Chest": {

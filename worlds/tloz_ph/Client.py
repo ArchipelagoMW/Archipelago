@@ -104,7 +104,8 @@ async def write_memory_value(ctx, address: int, value: int, domain="Main RAM", i
         write_value = 0 if write_value <= 0 else write_value
     else:
         if unset:
-            print(f"Unseting bit with filter {hex(~value)}")
+            print(f"Unseting bit {hex(address)} {hex(value)} with filter {hex(~value)} from prev {hex(prev)} "
+                  f"for result {hex(prev & (~value))}")
             write_value = prev & (~value)
         else:
             write_value = prev | value
@@ -118,7 +119,7 @@ async def write_memory_value(ctx, address: int, value: int, domain="Main RAM", i
 
 
 # Write list of values starting from address
-async def write_memory_values(ctx, address: int, values: list, domain="Main RAM", overwrite = False):
+async def write_memory_values(ctx, address: int, values: list, domain="Main RAM", overwrite=False):
     if not overwrite:
         prev = await read_memory_value(ctx, address, len(values), domain)
         new_values = [old | new for old, new in zip(split_bits(prev, 4), values)]
@@ -141,9 +142,6 @@ async def get_address_from_heap(ctx, pointer=POINTERS["ADDR_gMapManager"], offse
 # Get address for small key count in current stage
 async def get_small_key_address(ctx):
     return await get_address_from_heap(ctx, offset=SMALL_KEY_OFFSET)
-
-
-
 
 
 class PhantomHourglassClient(BizHawkClient):
@@ -528,6 +526,16 @@ class PhantomHourglassClient(BizHawkClient):
                     return False
             return True
 
+        # Read a dict of addresses to see if they match value
+        async def check_bits(d):
+            if "check_bits" in d:
+                r_list = {addr: (addr, 1, "Main RAM") for addr, _ in d["check_bits"].items()}
+                values = await read_memory_values(ctx, r_list)
+                for addr, p in values.items():
+                    if not (p & d["check_bits"][addr]):
+                        return False
+            return True
+
         # Loop dynamic flags in scene
         if scene in self.scene_to_dynamic_flag:
             read_addr = set()
@@ -556,6 +564,9 @@ class PhantomHourglassClient(BizHawkClient):
                     continue
                 if not check_last_room(data):
                     print(f"{data['name']} came from wrong room {hex(self.last_scene)}")
+                    continue
+                if not await check_bits(data):
+                    print(f"{data['name']} is missing bits")
                     continue
 
                 # Create read/write lists
@@ -667,7 +678,8 @@ class PhantomHourglassClient(BizHawkClient):
 
     # Called when checking location!
     async def process_checked_locations(self, ctx: "BizHawkClientContext", pre_process: str = None, r=False):
-        local_checked_locations = set(ctx.checked_locations)
+        local_checked_locations = set()
+        all_checked_locations = ctx.checked_locations
         location = None
 
         # If sent with a pre-proces kwarg
@@ -676,7 +688,7 @@ class PhantomHourglassClient(BizHawkClient):
             loc_id = self.location_name_to_id[pre_process]
             location = LOCATIONS_DATA[pre_process]
             vanilla_item = location.get("vanilla_item")
-            if r or (loc_id not in local_checked_locations):
+            if r or (loc_id not in all_checked_locations):
                 await self.set_vanilla_item(ctx, location, loc_id)
                 local_checked_locations.add(loc_id)
             print(f"pre-processed {pre_process}, vanill {self.last_vanilla_item}")
@@ -721,19 +733,21 @@ class PhantomHourglassClient(BizHawkClient):
                 await write_memory_value(ctx, addr, bit)
 
         # Send locations
-        if self.local_checked_locations != local_checked_locations:
-            self.local_checked_locations = local_checked_locations
+        # print(f"Local locations: {local_checked_locations} in \n{all_checked_locations}")
+        if any([i not in all_checked_locations for i in local_checked_locations]):
             print(f"Sending Locations: {local_checked_locations}")
             await ctx.send_msgs([{
                 "cmd": "LocationChecks",
-                "locations": list(self.local_checked_locations)
+                "locations": list(local_checked_locations)
             }])
 
     # Called during location processing to determine what vanilla item to remove
     async def set_vanilla_item(self, ctx, location, loc_id):
         item = location.get("vanilla_item", None)
         item_data = ITEMS_DATA[item]
-        if item_data["id"] not in [i.item for i in ctx.items_received] or "incremental" in item_data:
+        print(f"Setting vanilla for {item_data}")
+        if ("incremental" in item_data or "progressive" in item_data or
+                item_data["id"] not in [i.item for i in ctx.items_received]):
             self.last_vanilla_item = item
             # Farmable locations don't remove vanilla
             if "farmable" in location and loc_id in ctx.checked_locations:
@@ -741,7 +755,6 @@ class PhantomHourglassClient(BizHawkClient):
                     await self.give_random_treasure(ctx)
                 else:
                     self.last_vanilla_item = None
-                    # TODO: treasure tracker is not updated after getting farmable treasure
 
     async def process_scouted_locations(self, ctx: "BizHawkClientContext", scene):
         local_scouted_locations = set(ctx.locations_scouted)
@@ -866,8 +879,8 @@ class PhantomHourglassClient(BizHawkClient):
             prog_received = 0
             if "progressive" in item_data:
                 prog_received = sum([1 for i in ctx.items_received[:num_received_items] if i.item == next_item])
-                prog_received = len(item_data["progressive"])-1 if prog_received > len(
-                    item_data["progressive"])-1 else prog_received
+                prog_received = len(item_data["progressive"]) - 1 if prog_received > len(
+                    item_data["progressive"]) - 1 else prog_received
                 item_address, item_value = item_data["progressive"][prog_received]
             else:
                 item_address = item_data["address"]

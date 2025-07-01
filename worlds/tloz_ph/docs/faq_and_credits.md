@@ -1,5 +1,8 @@
 # FAQ and Credits for The Legend of Zelda: Phantom Hourglass for Archipelago
 
+- [Latest Release](https://github.com/carrotinator/Archipelago/releases)
+- [Setup Guide](https://github.com/carrotinator/Archipelago/blob/a7bff1f0d688dac7b889877acd37bd8b2d548a63/worlds/tloz_ph/docs/setup.md)
+
 ## What is this?
 This is an Archipelago Randomizer for Zelda: Phantom Hourglass that doesn't use modding or romhacking to function. All randomization 
 is done by reading and writing active memory with a lua script connected to the client. This means that item models and 
@@ -25,19 +28,37 @@ This version of the randomizer was made by me, Carrotinator. But it wouldn't hav
 
 ### What is currently implemented?
 
-Just the SW quadrant, including islands, dungeons, frogs
+The whole game!
+Things not implemented:
+- Salvage
+- Fish
+- Post
+- Any kind of entrance rando
+
+### Is there a tracker?
+
+[Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases) is supported.  
+Kizugaya/Kirito who made the [twilight princess poptracker](https://github.com/Kizugaya/TPRAP_poptracker) has started
+working on a [poptracker](https://github.com/black-sliver/PopTracker) pack for phantom hourglass. More info coming soon!
 
 ### My game crashed/I quit without saving
 
-The client should give you back your missing items when you reenter the game. It can take a while if you're missing a lot of items, and there's not really any indicator for it.
+The client should give you back your missing items when you reenter the game. It can take a while if you're missing a 
+lot of items, and there's not really any indicator for it.
 
 ### I collected some locations while the client wasn't connected
 
-There is a backup system that reads savedata for missing checks when you enter a room. To trigger this, save and reenter the room with the locations in question. So far this is only implemented for save slot 1 and the overworld checks on Mercay Island, and some problematic checks like big rupees that can despawn or fall in the sea. I'm planning to add all locations in bulk once I've implemented the whole game.
+There is a backup system that reads savedata for missing checks when you enter a room. To trigger this, save and 
+reenter the room with the locations in question. So far this is only implemented for save slot 1 and the overworld 
+checks on Mercay Island, and some problematic checks like big rupees that can despawn or fall in the sea. I'm planning 
+to add all locations in bulk soon.
+
+This is also implemented for some problematic locations that are close together.
 
 ### I softlocked. How do I warp to start?
 
-There is so far no proper implementation, but you can freeze certain values in the cheat menu to change where an entrance takes you.
+Some known softlock locations have fixes.
+There is so far no implemented warp to start, but you can freeze certain values in the bizhawk cheat menu to change where an entrance takes you.
 You want to freeze `0x1B2E94` in `Main RAM` at `0xB` for Mercay, and probably also set your room id `0x1B2E98`, floor number `0x1B2EA6` and entrance id `0x1B2EA7`to `0` to avoid pesky crashes
 
 ### How do small keys work in Temple of the Ocean King?

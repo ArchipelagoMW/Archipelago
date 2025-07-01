@@ -203,6 +203,7 @@ def ph_can_kill_bat(state: CollectionState, player: int):
         ph_has_boomerang(state, player)
     ])
 
+
 def ph_can_kill_blue_chu(state: CollectionState, player: int):
     return any([
         ph_has_bombs(state, player),  # Only place this is relevant is in "cave"
@@ -220,6 +221,15 @@ def ph_can_kill_blue_chu(state: CollectionState, player: int):
     ])
 
 
+def ph_can_kill_eye_brute(state: CollectionState, player: int):
+    return any([
+        ph_option_med_logic(state, player),
+        ph_has_hammer(state, player),
+        ph_has_bow(state, player),
+        ph_has_chus(state, player)
+    ])
+
+
 def ph_can_kill_bubble(state: CollectionState, player: int):
     return any([
         ph_has_hammer(state, player),
@@ -233,6 +243,13 @@ def ph_can_kill_bubble(state: CollectionState, player: int):
                 ph_has_super_shield(state, player)  # This is the one logical use for shield!!!
             ])
         ])
+    ])
+
+
+def ph_totok_phantom_steal_object(state, player):
+    return any([
+        ph_clever_pots(state, player),
+        ph_can_kill_bat(state, player)
     ])
 
 
@@ -291,6 +308,19 @@ def ph_spiral_wall_switches(state: CollectionState, player: int):
         ph_has_hammer(state, player),
         ph_has_explosives(state, player)
     ])
+
+def ph_quick_switches(state, player):
+    return any([
+        ph_has_boomerang(state, player),
+        all([
+            ph_has_bow(state, player),
+            ph_option_med_logic(state, player)
+        ])
+    ])
+
+
+def ph_can_cut_small_trees(state: CollectionState, player: int):
+    return any([ph_has_sword(state, player), ph_has_explosives(state, player)])
 
 
 # ================ Rupee States ==================
@@ -396,6 +426,14 @@ def ph_option_keysanity(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.keysanity == "anywhere"
 
 
+def ph_option_keys_vanilla(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.keysanity == "vanilla"
+
+
+def ph_option_keys_in_own_dungeon(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.keysanity in ["in_own_dungeon", "vanilla"]
+
+
 def ph_option_phantoms_hard(state: CollectionState, player: int):
     return all([state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon"],
                 ph_has_grapple(state, player)])
@@ -489,11 +527,19 @@ def ph_option_fog_open(state: CollectionState, player: int):
 def ph_option_randomize_harrow(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_harrow
 
+
 def ph_option_goal_bellum(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.goal == "beat_bellumbeck"
 
+
 def ph_option_goal_midway(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.goal == "triforce_door"
+
+
+# For doing sneaky stuff with universal tracker UT
+def ph_is_ut(state: CollectionState, player: int):
+    return getattr(state.multiworld, "generation_is_fake", False)
+
 
 # ============= Key logic ==============
 
@@ -505,6 +551,13 @@ def ph_has_boss_key(state: CollectionState, player: int, dung_name: str):
     return state.has(f"Boss Key ({dung_name})", player)
 
 
+def ph_has_boss_key_simple(state: CollectionState, player: int, dung_name: str):
+    return any([
+        ph_has_boss_key(state, player, dung_name),
+        ph_is_ut(state, player)
+    ])
+
+
 def ph_has_force_gems(state, player, floor=3, count=3):
     return state.has(f"Force Gem (B{floor})", player, count)
 
@@ -513,32 +566,17 @@ def ph_has_shape_crystal(state: CollectionState, player: int, dung_name: str, sh
     return state.has(f"{shape} Crystal ({dung_name})", player)
 
 
-# ============= Location states ========
-
-def ph_can_cut_small_trees(state: CollectionState, player: int):
-    return any([ph_has_sword(state, player), ph_has_explosives(state, player)])
-
-
-# Handles keylocking due to lack of locations
-def ph_can_reach_MP2(state: CollectionState, player: int):
-    return any([
-        all([
-            ph_option_keysanity(state, player),
-            ph_has_small_keys(state, player, "Mountain Passage", 2)
-        ]),
-        all([
-            not ph_option_keysanity(state, player),
-            ph_has_small_keys(state, player, "Mountain Passage")
-        ])
+def ph_ut_small_key_vanilla_location(state, player):
+    return all([
+        ph_is_ut(state, player),
+        ph_option_keys_vanilla(state, player)
     ])
 
 
-def ph_totok_b5(state: CollectionState, player: int):
+def ph_ut_small_key_own_dungeon(state, player):
     return all([
-        ph_can_kill_bubble(state, player),
-        any([
-            ph_has_mid_range(state, player),
-            ph_clever_bombs(state, player)])
+        ph_is_ut(state, player),
+        ph_option_keys_in_own_dungeon(state, player)
     ])
 
 
@@ -593,6 +631,18 @@ def ph_can_arrow_despawn(state: CollectionState, player: int):
     ])
 
 
+# ====== Specific locations =============
+
+# TotOK
+def ph_totok_b1_all_checks_ut(state, player):
+    return all([
+        ph_ut_small_key_own_dungeon(state, player),
+        ph_has_spirit(state, player, "Power"),
+        ph_has_bow(state, player),
+        ph_has_grapple(state, player),
+        ph_can_kill_phantoms(state, player),
+    ])
+
 def ph_totok_b2_key(state: CollectionState, player: int):
     return any([ph_can_boomerang_return(state, player),
                 all([ph_can_hit_switches(state, player),
@@ -604,18 +654,55 @@ def ph_totok_b2_key(state: CollectionState, player: int):
                 ])
 
 
-def ph_boat_access(state, player):
+def ph_totok_b2_all_checks_ut(state, player):
+    return all([
+        ph_totok_b1_all_checks_ut(state, player),
+        ph_has_phantom_sword(state, player)
+    ])
+
+def ph_totok_b4_all_checks_ut(state, player):
+    return all([
+        ph_totok_b2_all_checks_ut(state, player),
+        ph_has_spirit(state, player, "Wisdom"),
+        any([
+            ph_has_explosives(state, player),
+            ph_can_hammer_clip(state, player),
+            ph_can_boomerang_return(state, player)
+        ])
+    ])
+
+def ph_totok_b4_access(state, player):
     return any([
-        not ph_option_boat_requires_sea_chart(state, player),
-        ph_has_sea_chart(state, player, "SW")
+        ph_has_grapple(state, player),
+        ph_has_force_gems(state, player),
+        all([
+            ph_is_ut(state, player),
+            ph_has_small_keys(state, player, "Temple of the Ocean King", 4)
+        ])
+    ])
+
+
+def ph_totok_b5(state: CollectionState, player: int):
+    return all([
+        ph_can_kill_bubble(state, player),
+        any([
+            ph_has_mid_range(state, player),
+            ph_clever_bombs(state, player)])
     ])
 
 
 def ph_totok_b5_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
     return any([
-        all([ph_has_small_keys(state, player, "Temple of the Ocean King", 4), ph_has_grapple(state, player)]),
+        # Grapple Shortcut
+        all([
+            ph_has_small_keys(state, player, "Temple of the Ocean King", 4),
+            ph_has_grapple(state, player)
+        ]),
+        # Force Gems
         ph_has_small_keys(state, player, "Temple of the Ocean King", 5),
+        # UT
+        ph_totok_b4_all_checks_ut(state, player)
     ])
 
 
@@ -624,10 +711,21 @@ def ph_has_totok_crystal(state: CollectionState, player: int, shape: str):
 
 
 def ph_totok_b8_2_crystals(state, player):
+    return any([
+        all([
+            ph_has_explosives(state, player),
+            ph_has_totok_crystal(state, player, "Round"),
+            ph_has_totok_crystal(state, player, "Triangle")
+        ]),
+        ph_totok_b8_crystals_ut(state, player)
+    ])
+
+
+def ph_totok_b8_crystals_ut(state, player):
     return all([
-        ph_has_explosives(state, player),
-        ph_has_totok_crystal(state, player, "Round"),
-        ph_has_totok_crystal(state, player, "Triangle")
+        ph_is_ut(state, player),
+        ph_can_hit_switches(state, player),  # Covers Round Crystal, and also triangle,
+        ph_has_explosives(state, player)  # For placing triangle switch
     ])
 
 
@@ -636,35 +734,96 @@ def ph_totok_b9(state, player):
         ph_can_hit_bombchu_switches(state, player),
         all([
             ph_has_explosives(state, player),
-            ph_has_totok_crystal(state, player, "Triangle")])
+            any([
+                ph_has_totok_crystal(state, player, "Triangle"),
+                ph_totok_b8_crystals_ut(state, player)
+            ])])
+    ])
+
+
+def ph_totok_b9_crystals_ut(state, player):
+    return all([
+        ph_is_ut(state, player),
+        ph_can_hit_switches(state, player),  # Covers Round Crystal, and also triangle,
+        ph_totok_b9_phantom_square(state, player)  # For placing triangle switch
+    ])
+
+
+def ph_totok_b9_phantom_square(state, player):
+    return any([
+        ph_totok_b9_phantom_kill(state, player),
+        ph_totok_phantom_steal_object(state, player),
     ])
 
 
 def ph_totok_b9_phantom_kill(state, player):
     return any([
         ph_has_phantom_sword(state, player),
-        ph_clever_pots(state, player),
         all([
             ph_can_kill_phantoms_traps(state, player),
             any([
                 ph_has_hammer(state, player),
-                all([ph_has_bow(state, player), ph_has_boomerang(state, player)])
+                all([
+                    ph_has_bow(state, player),
+                    ph_has_boomerang(state, player)])
             ])])
     ])
 
 
+def ph_totok_b95(state, player):
+    return any([
+        all([
+            ph_has_totok_crystal(state, player, "Round"),
+            ph_has_totok_crystal(state, player, "Triangle"),
+            ph_totok_b9_phantom_square(state, player)
+        ]),
+        ph_totok_b9_crystals_ut(state, player)
+    ])
+
+def ph_totok_b10_all_checks_ut(state, player):
+    return all([
+        ph_totok_b4_all_checks_ut(state, player),
+        ph_has_triforce_crest(state, player),
+        ph_has_sea_chart(state, player, "SW"),
+        ph_has_hammer(state, player),
+        ph_has_explosives(state, player),
+        ph_has_shovel(state, player)
+    ])
+
 def ph_totok_b10_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
     return any([
-        all([ph_has_small_keys(state, player, "Temple of the Ocean King", 5), ph_has_grapple(state, player)]),
+        all([
+            ph_has_small_keys(state, player, "Temple of the Ocean King", 5),
+            ph_has_grapple(state, player)
+        ]),
         ph_has_small_keys(state, player, "Temple of the Ocean King", 6),
+        # UT
+        ph_totok_b10_all_checks_ut(state, player)
     ])
 
 
 def ph_totok_b12(state: CollectionState, player: int):
     return any([
         ph_has_hammer(state, player),
-        ph_has_shovel(state, player)
+        all([
+            ph_has_shovel(state, player),
+            any([
+                ph_clever_pots(state, player),
+                ph_has_mid_range(state, player),
+                ph_has_explosives(state, player)
+            ])
+        ])
+    ])
+
+
+def ph_totok_b12_force_gems(state, player):
+    return any([
+        all([
+            ph_has_force_gems(state, player, 12, 2),
+            ph_totok_phantom_steal_object(state, player)  # Redundant since bombs are needed to get here
+        ]),
+        ph_is_ut(state, player)
     ])
 
 
@@ -679,6 +838,334 @@ def ph_totok_b13_door(state: CollectionState, player: int):
         ])
     ])
 
+
+# Overworld
+
+def ph_boat_access(state, player):
+    return any([
+        not ph_option_boat_requires_sea_chart(state, player),
+        ph_has_sea_chart(state, player, "SW")
+    ])
+
+
+# Handles keylocking due to lack of locations
+def ph_can_reach_MP2(state: CollectionState, player: int):
+    return any([
+        all([
+            ph_option_keysanity(state, player),
+            ph_has_small_keys(state, player, "Mountain Passage", 2)
+        ]),
+        all([
+            ph_option_keys_in_own_dungeon(state, player),
+            ph_can_cut_small_trees(state, player),
+            any([
+                ph_has_small_keys(state, player, "Mountain Passage"),
+                ph_is_ut(state, player)
+            ])
+        ])
+    ])
+
+
+def ph_mercay_passage_rat(state, player):
+    return any([
+        ph_can_kill_bat(state, player),
+        ph_clever_pots(state, player)
+    ])
+
+
+def ph_bannan_scroll(state, player):
+    return all([
+        ph_has_wood_heart(state, player),
+        ph_has_cannon(state, player),
+        ph_has_sea_chart(state, player, "SE"),
+    ])
+
+
+def ph_salvage_courage_crest(state: CollectionState, player: int):
+    return all([
+        ph_has_courage_crest(state, player),
+        ph_has_salvage(state, player),
+        # The sea monster is disabled, otherwise add cannon to reqs
+    ])
+
+
+def ph_can_enter_ocean_sw_west(state, player):
+    return any([
+        ph_has_cannon(state, player),
+        ph_has_frog_phi(state, player),  # Includes return data, and NW way back
+    ])
+
+
+# Tof
+
+def ph_tof_3f(state, player):
+    return all([
+        any([
+            ph_has_small_keys(state, player, "Temple of Fire", 2),
+            ph_ut_small_key_own_dungeon(state, player)]),
+        any([
+            ph_has_boomerang(state, player),
+            ph_has_hammer(state, player),
+            ph_clever_bombs(state, player)
+        ])
+    ])
+
+
+# Wind
+
+def ph_wind_temple_key_ut(state, player):
+    return all([
+        ph_has_shovel(state, player),
+        any([
+            all([
+                ph_has_bombs(state, player),
+                ph_ut_small_key_own_dungeon(state, player)]),
+            ph_ut_small_key_own_dungeon(state, player)
+        ])
+    ])
+
+
+# Toc
+
+def ph_can_enter_toc(state, player):
+    return all([
+        ph_has_damage(state, player),
+        any([
+            ph_has_boomerang(state, player),
+            ph_has_bow(state, player)
+        ])
+    ])
+
+
+def ph_toc_key_door_1(state, player):
+    return any([
+        ph_toc_key_doors(state, player, 3, 1),
+        # UT Keys
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_ut_small_key_own_dungeon(state, player),
+            any([
+                ph_has_explosives(state, player),
+                ph_option_keys_vanilla(state, player)
+            ])
+        ]),
+    ])
+
+
+def ph_toc_key_door_2(state, player):
+    return any([
+        ph_toc_key_doors(state, player, 3, 2),
+        # UT stuff
+        all([
+            ph_option_not_glitched_logic(state, player),
+            any([
+                # Keys in own dungeon
+                all([
+                    ph_ut_small_key_own_dungeon(state, player),
+                    ph_has_explosives(state, player),
+                    ph_has_grapple(state, player),
+                    ph_has_bow(state, player)
+                ]),
+                # Keys vanilla
+                all([
+                    ph_ut_small_key_vanilla_location(state, player),
+                    any([
+                        ph_has_explosives(state, player),
+                        all([
+                            ph_has_bow(state, player),
+                            ph_has_grapple(state, player)
+                        ])
+                    ])
+                ])
+            ])
+        ])
+    ])
+
+
+def ph_toc_key_door_3(state, player):
+    return any([
+        ph_has_small_keys(state, player, "Temple of Courage", 3),
+        # UT
+        all([
+            ph_ut_small_key_own_dungeon(state, player),
+            ph_has_bow(state, player),
+            ph_has_explosives(state, player)
+        ]),
+        all([
+            ph_ut_small_key_vanilla_location(state, player),
+            any([
+                ph_can_hammer_clip(state, player),
+                all([
+                    ph_has_bow(state, player),
+                    any([
+                        ph_has_grapple(state, player),
+                        ph_has_explosives(state, player),
+                    ])
+                ])
+            ])
+        ])
+    ])
+
+
+def ph_toc_key_doors(state, player, glitched: int, not_glitched: int):
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Courage", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Courage", not_glitched)
+        ])
+    ])
+
+
+def ph_toc_final_switch_state(state, player):
+    return any([
+        ph_has_bow(state, player),
+        ph_toc_key_doors(state, player, 2, 1)
+    ])
+
+
+# Ghost Ship
+
+def ph_has_ghost_ship_access(state, player):
+    return any([
+        all([
+            ph_has_spirit(state, player, "Power"),
+            ph_has_spirit(state, player, "Wisdom"),
+            ph_has_spirit(state, player, "Courage"),
+            ph_option_fog_vanilla(state, player)
+        ]),
+        ph_option_fog_open(state, player)
+    ])
+
+
+def ph_ghost_ship_barrel(state, player):
+    return any([
+        ph_has_bombs(state, player),
+        ph_has_hammer(state, player),
+        ph_has_boomerang(state, player),
+        ph_has_grapple(state, player)
+    ])
+
+
+def ph_beat_ghost_ship(state: CollectionState, player):
+    return state.has("_beat_ghost_ship", player)
+
+
+# Goron
+
+def ph_goron_chus(state, player):
+    return all([
+        ph_has_shovel(state, player),
+        ph_has_mid_range(state, player)
+    ])
+
+
+# Toi
+
+def ph_toi_3f_boomerang(state, player):
+    return ph_quick_switches(state, player)
+
+
+def ph_toi_b2(state, player):
+    return all([
+        ph_has_bow(state, player),
+        ph_quick_switches(state, player),
+        any([
+            ph_toi_key_doors(state, player, 3, 2),
+            ph_can_hammer_clip(state, player)
+        ])
+    ])
+
+def ph_toi_key_door_1_ut(state, player):
+    return any([
+        ph_toi_all_key_doors_ut(state, player),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            any([
+                ph_ut_small_key_vanilla_location(state, player),
+                all([
+                    ph_ut_small_key_own_dungeon(state, player),
+                    ph_has_explosives(state, player)
+                ])
+            ]),
+        ])
+    ])
+
+def ph_toi_all_key_doors_ut(state, player):
+    return all([
+        ph_ut_small_key_own_dungeon(state, player),
+        ph_has_grapple(state, player),
+        ph_has_explosives(state, player),
+        ph_has_bow(state, player),
+        ph_quick_switches(state, player)
+    ])
+
+def ph_toi_key_doors(state, player, glitched: int, not_glitched: int=None):
+    not_glitched = glitched if not_glitched is None else not_glitched
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Ice", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Temple of Ice", not_glitched)
+        ])
+    ])
+
+def ph_toi_key_door_2(state, player):
+    return any([
+        ph_toi_key_doors(state, player, 3, 2),
+        # UT
+        ph_toi_all_key_doors_ut(state, player),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_ut_small_key_own_dungeon(state, player),
+            ph_quick_switches(state, player)
+        ])
+    ])
+
+
+def ph_toi_key_door_3(state, player):
+    return any([
+        ph_toi_key_doors(state, player, 3),
+        # UT
+        ph_toi_all_key_doors_ut(state, player),
+    ])
+
+
+# Mutoh's
+
+def ph_mutoh_water(state, player):
+    return any([
+        all([
+            any([
+                ph_mutoh_key_doors(state, player, 2, 1),
+                ph_ut_small_key_own_dungeon(state, player)  # This should account for all chests
+            ]),
+            ph_has_bow(state, player),
+        ]),
+        ph_can_arrow_despawn(state, player)
+    ])
+
+
+def ph_mutoh_key_doors(state, player, glitched: int, not_glitched: int):
+    return any([
+        all([
+            ph_option_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Mutoh's Temple", glitched)
+        ]),
+        all([
+            ph_option_not_glitched_logic(state, player),
+            ph_has_small_keys(state, player, "Mutoh's Temple", not_glitched)
+        ])
+    ])
+
+
+# Goal Stuff
 
 def ph_totok_blue_warp(state: CollectionState, player: int):
     return all([
@@ -716,169 +1203,6 @@ def ph_bellumbeck_quick_finish(state, player):
         ph_can_beat_bellumbeck(state, player),
         ph_beat_required_dungeons(state, player),
         ph_goal_option_spawn_bellumbeck(state, player)
-    ])
-
-
-def ph_tof_3f(state, player):
-    return all([
-        ph_has_small_keys(state, player, "Temple of Fire", 2),
-        any([
-            ph_has_boomerang(state, player),
-            ph_has_hammer(state, player),
-            ph_clever_bombs(state, player)
-        ])
-    ])
-
-
-def ph_salvage_courage_crest(state: CollectionState, player: int):
-    return all([
-        ph_has_courage_crest(state, player),
-        ph_has_salvage(state, player),
-        # The sea monster is disabled, otherwise add cannon to reqs
-    ])
-
-
-def ph_can_enter_ocean_sw_west(state, player):
-    return any([
-        ph_has_cannon(state, player),
-        ph_has_frog_phi(state, player),  # Includes return data, and NW way back
-    ])
-
-
-def ph_can_enter_toc(state, player):
-    return all([
-        ph_has_damage(state, player),
-        any([
-            ph_has_boomerang(state, player),
-            ph_has_bow(state, player)
-        ])
-    ])
-
-
-def ph_toc_key_doors(state, player, glitched: int, not_glitched: int):
-    return any([
-        all([
-            ph_option_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Temple of Courage", glitched)
-        ]),
-        all([
-            ph_option_not_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Temple of Courage", not_glitched)
-        ])
-    ])
-
-
-def ph_toi_key_doors(state, player, glitched: int, not_glitched: int):
-    return any([
-        all([
-            ph_option_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Temple of Ice", glitched)
-        ]),
-        all([
-            ph_option_not_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Temple of Ice", not_glitched)
-        ])
-    ])
-
-
-def ph_mutoh_key_doors(state, player, glitched: int, not_glitched: int):
-    return any([
-        all([
-            ph_option_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Mutoh's Temple", glitched)
-        ]),
-        all([
-            ph_option_not_glitched_logic(state, player),
-            ph_has_small_keys(state, player, "Mutoh's Temple", not_glitched)
-        ])
-    ])
-
-
-def ph_has_ghost_ship_access(state, player):
-    return any([
-        all([
-            ph_has_spirit(state, player, "Power"),
-            ph_has_spirit(state, player, "Wisdom"),
-            ph_has_spirit(state, player, "Courage"),
-            ph_option_fog_vanilla(state, player)
-        ]),
-        ph_option_fog_open(state, player)
-    ])
-
-
-def ph_ghost_ship_barrel(state, player):
-    return any([
-        ph_has_bombs(state, player),
-        ph_has_hammer(state, player),
-        ph_has_boomerang(state, player),
-        ph_has_grapple(state, player)
-    ])
-
-
-def ph_toc_final_switch_state(state, player):
-    return any([
-        ph_has_bow(state, player),
-        ph_toc_key_doors(state, player, 2, 1)
-    ])
-
-
-def ph_goron_chus(state, player):
-    return all([
-        ph_has_shovel(state, player),
-        ph_has_mid_range(state, player)
-    ])
-
-
-def ph_bannan_scroll(state, player):
-    return all([
-        ph_has_wood_heart(state, player),
-        ph_has_cannon(state, player),
-        ph_has_sea_chart(state, player, "SE"),
-    ])
-
-
-def ph_mutoh_water(state, player):
-    return any([
-        all([
-            ph_mutoh_key_doors(state, player, 2, 1),
-            ph_has_bow(state, player),
-        ]),
-        ph_can_arrow_despawn(state, player)
-    ])
-
-
-def ph_toi_3f_boomerang(state, player):
-    return any([
-        ph_has_boomerang(state, player),
-        all([
-            ph_option_med_logic(state, player),
-            ph_has_bow(state, player)
-        ])
-    ])
-
-
-def ph_toi_b2(state, player):
-    return all([
-        ph_has_bow(state, player),
-        any([
-            ph_has_boomerang(state, player),
-            ph_option_med_logic(state, player)  # Can shoot switches if fast enough
-        ]),
-        any([
-            ph_toi_key_doors(state, player, 3, 2),
-            ph_can_hammer_clip(state, player)
-        ])
-    ])
-
-
-def ph_beat_ghost_ship(state: CollectionState, player):
-    return state.has("_beat_ghost_ship", player)
-
-
-def ph_mercay_passage_rat(state, player):
-    return any([
-        ph_can_kill_bat(state, player),
-        ph_clever_pots(state, player)
     ])
 
 
