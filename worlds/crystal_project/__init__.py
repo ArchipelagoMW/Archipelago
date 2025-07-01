@@ -11,12 +11,13 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
-from .locations import get_locations, get_bosses, get_shops, LocationData
+from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, get_modded_shopsanity_locations, assign_player_to_items, assign_player_to_locations
+from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
+    get_modded_shopsanity_locations, assign_player_to_items, assign_player_to_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
@@ -49,8 +50,10 @@ class CrystalProjectWorld(World):
     location_name_to_id = {location.name: location.code for location in get_locations(-1, options)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, options)}
     shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, options)}
+    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completions(-1, options)}
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
+    location_name_to_id.update(region_completion_name_to_id)
     item_name_groups = get_item_names_per_category()
     modded_items = get_modded_items(-1)
 
@@ -109,6 +112,10 @@ class CrystalProjectWorld(World):
         if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
+
+        if self.options.regionsanity.value != self.options.shopsanity.option_disabled:
+            region_completions = get_region_completions(self.player, self.options)
+            locations.extend(region_completions)
 
         if self.options.useMods:
             assign_player_to_locations(self.player, self.modded_locations)
