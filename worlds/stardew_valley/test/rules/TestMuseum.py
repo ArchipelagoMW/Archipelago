@@ -3,9 +3,9 @@ from unittest.mock import patch
 
 from ..bases import SVTestBase
 from ..options import presets
-from ... import options, StardewLogic
+from ... import options, StardewLogic, StardewRule
 from ...logic.museum_logic import MuseumLogic
-from ...stardew_rule import false_, true_
+from ...stardew_rule import true_, LiteralStardewRule
 
 
 class TestMuseumMilestones(SVTestBase):
@@ -20,6 +20,19 @@ class TestMuseumMilestones(SVTestBase):
         self.assert_rule_false(milestone_rule, self.multiworld.state)
 
 
+class DisabledMuseumRule(LiteralStardewRule):
+    value = False
+
+    def __or__(self, other) -> StardewRule:
+        return other
+
+    def __and__(self, other) -> StardewRule:
+        return self
+
+    def __repr__(self):
+        return "Disabled Museum Rule"
+
+
 class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBase):
     options = {
         **presets.allsanity_mods_6_x_x(),
@@ -29,14 +42,14 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
     def test_museum_donations_are_never_required_in_any_locations(self):
         with patch("worlds.stardew_valley.logic.museum_logic.MuseumLogic") as MockMuseumLogic:
             museum_logic: MuseumLogic = MockMuseumLogic.return_value
-            museum_logic.can_donate_museum_items.return_value = false_
-            museum_logic.can_donate_museum_artifacts.return_value = false_
-            museum_logic.can_find_museum_artifacts.return_value = false_
-            museum_logic.can_find_museum_minerals.return_value = false_
-            museum_logic.can_find_museum_items.return_value = false_
-            museum_logic.can_complete_museum.return_value = false_
-            museum_logic.can_donate.return_value = false_
-            # Allowing calls to can_find_museum_item since a lot of other logic depends on it, for minerals for instance.
+            museum_logic.can_donate_museum_items.return_value = DisabledMuseumRule()
+            museum_logic.can_donate_museum_artifacts.return_value = DisabledMuseumRule()
+            museum_logic.can_find_museum_artifacts.return_value = DisabledMuseumRule()
+            museum_logic.can_find_museum_minerals.return_value = DisabledMuseumRule()
+            museum_logic.can_find_museum_items.return_value = DisabledMuseumRule()
+            museum_logic.can_complete_museum.return_value = DisabledMuseumRule()
+            museum_logic.can_donate.return_value = DisabledMuseumRule()
+            # Allowing calls to museum rules since a lot of other logic depends on it, for minerals for instance.
             museum_logic.can_find_museum_item.return_value = true_
 
             regions = {region.name for region in self.multiworld.regions}
