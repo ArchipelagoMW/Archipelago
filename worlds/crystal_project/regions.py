@@ -81,6 +81,7 @@ region_levels_dictionary: Dict[str, Tuple[int, int]] = {
     CASTLE_SEQUOIA: (56, 59),
     THE_OLD_WORLD: (0, 0),
     THE_NEW_WORLD: (60, 60),
+    MODDED_ZONE: (30, 30),
 }
 
 rules_on_regions: Dict[str, Callable[[CollectionState], bool]] = {}
@@ -202,10 +203,20 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_region(world, player, locations_per_region, THE_NEW_WORLD, excluded),
     ]
 
+    if options.useMods:
+        excluded = False
+    else:
+        excluded = True
+
+    modded_regions = [
+        create_region(world, player, locations_per_region, MODDED_ZONE, excluded),
+    ]
+
     multiworld.regions += beginner_regions
     multiworld.regions += advanced_regions
     multiworld.regions += expert_regions
     multiworld.regions += end_game_regions
+    multiworld.regions += modded_regions
 
     connect_menu_region(world, options)
 
@@ -411,6 +422,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     # regions without connections don't get parsed by Jsonifier
     fancy_add_exits(world, THE_NEW_WORLD, [MENU])
     fancy_add_exits(world, THE_OLD_WORLD, [MENU])
+    fancy_add_exits(world, MODDED_ZONE, [MENU])
 
 def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
@@ -473,7 +485,7 @@ def fancy_add_exits(self, region: str, exits: Union[Iterable[str], Dict[str, Opt
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
-    fancy_add_exits(world, MENU, [SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD],
+    fancy_add_exits(world, MENU, [SPAWNING_MEADOWS, CAPITAL_SEQUOIA, MERCURY_SHRINE, SALMON_RIVER, POKO_POKO_DESERT, GANYMEDE_SHRINE, DIONE_SHRINE, TALL_TALL_HEIGHTS, LANDS_END, JIDAMBA_TANGLE, NEPTUNE_SHRINE, THE_OLD_WORLD, THE_NEW_WORLD, MODDED_ZONE],
                     {CAPITAL_SEQUOIA: lambda state: state.has(GAEA_STONE, world.player),
                     MERCURY_SHRINE: lambda state: state.has(MERCURY_STONE, world.player),
                     SALMON_RIVER: lambda state: state.has(POSEIDON_STONE, world.player),
