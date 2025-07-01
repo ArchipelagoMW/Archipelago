@@ -75,6 +75,20 @@ def get_item_name_to_id_dict() -> dict:
     return item_dict
 
 
+karmic_transformers = {
+    "Karmic Returner": ItemData(0xc8, ItemClassification.filler),
+    "Karmic Transformer 1": ItemData(0x5b, ItemClassification.filler),
+    "Karmic Transformer 2": ItemData(0xc9, ItemClassification.filler),
+    "Karmic Transformer 3": ItemData(0x79, ItemClassification.filler),
+    "Karmic Transformer 4": ItemData(0xcf, ItemClassification.filler),
+    "Karmic Transformer 5": ItemData(0xcb, ItemClassification.filler),
+    "Karmic Transformer 6": ItemData(0xca, ItemClassification.filler),
+    "Karmic Transformer 7": ItemData(0x7b, ItemClassification.filler),
+    "Karmic Transformer 8": ItemData(0x7a, ItemClassification.filler),
+    "Karmic Transformer 9": ItemData(0x7c, ItemClassification.filler),
+
+}
+
 okami_items = {
 
     # Equips
@@ -184,7 +198,7 @@ okami_items = {
     "Cat Statue": ItemData(0xbf, ItemClassification.filler),
     "Sapphire Tassels": ItemData(0xc0, ItemClassification.filler),
     "Emerald Tassels": ItemData(0xc1, ItemClassification.filler),
-    "Turqoise Tassels": ItemData(0xc2, ItemClassification.filler),
+    "Turquoise Tassels": ItemData(0xc2, ItemClassification.filler),
     "Agate Tassels": ItemData(0xc3, ItemClassification.filler),
     "Amber Tassels": ItemData(0xc4, ItemClassification.filler),
     "Cat's Eye Tassels": ItemData(0xc5, ItemClassification.filler),
@@ -195,7 +209,19 @@ okami_items = {
 junk_weights = {
     "Holy Bone S": 1,
     "Demon Fang": 2,
-    "White porcelain pot": 1
+    "White porcelain pot": 1,
+
+    # Set junk_weight to 0 so additional copies won't be placed if there's space for them
+    "Karmic Returner": 0,
+    "Karmic Transformer 2":0,
+    "Karmic Transformer 6":0,
+    "Karmic Transformer 5":0,
+    "Karmic Transformer 4":0,
+    "Karmic Transformer 3":0,
+    "Karmic Transformer 8":0,
+    "Karmic Transformer 7":0,
+    "Karmic Transformer 9":0,
+    "Karmic Transformer 1":0,
 }
 # For items that need to appear more than once, I'll put the right numbers, but keep them commented to not flood
 # the item pool while there aren't enough locations to place them

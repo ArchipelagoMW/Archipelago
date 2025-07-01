@@ -37,7 +37,11 @@ def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
     match tier:
         case 1:
-            return state.has_group('divine_instrument', world.player, 1)
+            return (state.has_group('divine_instrument_tier_1', world.player, 1) or
+                    state.has_group('divine_instrument_tier_2', world.player, 1) or
+                    state.has_group('divine_instrument_tier_3', world.player, 1) or
+                    state.has_group('divine_instrument_tier_4', world.player, 1) or
+                    state.has_group('divine_instrument_tier_5', world.player, 1))
         case 2:
             return (state.has_group('divine_instrument_tier_2', world.player, 1) or
                     state.has_group('divine_instrument_tier_3', world.player, 1) or

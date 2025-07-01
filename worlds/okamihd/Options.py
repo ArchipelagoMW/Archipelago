@@ -22,9 +22,16 @@ class BuriedChestsByNight(Toggle):
     default = 1
 
 
-class StartWithDivineInstrument(Toggle):
-    """Start with a Divine Instrument"""
-    display_name = "Start with a Divine Instrument"
+class KarmicTransformers(Choice):
+    """Karmic Transformers are Cosmetic items that changes Amaterasu's appearance:
+
+    Excluded: Won't appear
+    Precollected: You'll start with them already collected
+    In item pool: They will be placed in item pool. You'll start with the Karmic Returner"""
+    display_name = "Karmic Transformers Placement"
+    option_excluded = 0
+    option_precollected = 1
+    option_in_item_pool = 2
     default = 1
 
 class OpenGameStart(Toggle):
@@ -55,7 +62,7 @@ class OpenGameStart(Toggle):
 @dataclass
 class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
-    StartWithDivineInstrument: StartWithDivineInstrument
+    KarmicTransformers: KarmicTransformers
     OpenGameStart: OpenGameStart
 #    PraiseSanity:PraiseSanity
 
@@ -63,7 +70,7 @@ class OkamiOptions(PerGameCommonOptions):
 okami_option_groups: Dict[str, List[Any]] = {
     "General Options": [
         BuriedChestsByNight,
-        StartWithDivineInstrument,
+        KarmicTransformers,
         OpenGameStart
         #PraiseSanity
         ],
@@ -72,7 +79,7 @@ okami_option_groups: Dict[str, List[Any]] = {
 
 slot_data_options = {
     "BuriedChestsByNight",
-    "StartWithDivineInstrument",
+    "KarmicTransformers",
     "OpenGameStart"
 #    "PraiseSanity"
 }
