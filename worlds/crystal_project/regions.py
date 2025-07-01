@@ -237,7 +237,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     MERCURY_SHRINE: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, DRAFT_SHAFT_CONDUIT, [SEASIDE_CLIFFS, SOILED_DEN],
                     {SOILED_DEN: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, YAMAGAWA_MA, [SPAWNING_MEADOWS, DELENDE, LAKE_DELENDE])
+    fancy_add_exits(world, YAMAGAWA_MA, [SPAWNING_MEADOWS, DELENDE, LAKE_DELENDE],
+                    {LAKE_DELENDE: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true})
     fancy_add_exits(world, PROVING_MEADOWS, [DELENDE, THE_PALE_GROTTO, SKUMPARADISE, THE_OPEN_SEA],
                     {SKUMPARADISE: lambda state: logic.has_jobs(state, 3),
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
