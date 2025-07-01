@@ -298,7 +298,7 @@ class UseMods(Toggle):
 
     Multiworld host instructions:
     1. In order to select the mods you'd like to include, make a folder named "crystal_project_mods" inside your root Archipelago directory.
-    2. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>\steamapps\workshop\content\1637730) and find the individual folders for the mods you'd like to include.
+    2. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>/steamapps/workshop/content/1637730) and find the individual folders for the mods you'd like to include.
     3. Inside each mod's folder is a mod json. Copy that json to the crystal_project_mods folder you made inside the Archipelago directory.
 
     NOTE: When this setting is on, all Crystal Project players in the multiworld with this setting enabled MUST use the same mods.
