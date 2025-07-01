@@ -17,7 +17,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, assign_player_to_items, build_condition_rule
+    get_modded_shopsanity_locations, build_condition_rule
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -370,9 +370,9 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if self.options.useMods:
-            assign_player_to_items(self.player, self.modded_items)
             for modded_item in self.modded_items:
-                pool.append(modded_item)
+                item = self.create_item(modded_item.name)
+                pool.append(item)
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         for _ in range(self.get_total_clamshells(max_clamshells)):

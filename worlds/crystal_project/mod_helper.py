@@ -192,10 +192,6 @@ def get_mod_directory() -> str:
 
     return mod_directory
 
-def assign_player_to_items(player: int, items: List[Item]) -> None:
-    for item in items:
-        item.player = player
-
 def build_npc_location(location, excluded_ids) -> Optional[ModLocationData]:
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
