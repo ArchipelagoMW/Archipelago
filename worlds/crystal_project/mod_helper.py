@@ -339,10 +339,11 @@ def build_crystal_location(location, excluded_ids):
 
 def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Callable[[CollectionState], bool]]:
     logic = CrystalProjectLogic(world.player, world.options)
-    loot_type = None
     if condition is not None:
         loot_type = condition['Data']['LootType']
         loot_id = condition['Data']['LootValue']
+    else:
+        return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
     if loot_type == 1:
         archipelago_loot_id = loot_id + item_index_offset
