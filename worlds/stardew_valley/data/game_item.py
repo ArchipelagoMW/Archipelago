@@ -2,7 +2,7 @@ import enum
 from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import List, Iterable, Set, ClassVar, Tuple, Mapping, Callable, Any
+from typing import Iterable, ClassVar, Mapping, Callable, Any
 
 from ..stardew_rule.protocol import StardewRule
 
@@ -31,18 +31,23 @@ class ItemTag(enum.Enum):
 
 @dataclass(frozen=True)
 class Source(ABC):
-    add_tags: ClassVar[Tuple[ItemTag]] = ()
+    add_tags: ClassVar[tuple[ItemTag]] = ()
 
-    other_requirements: Tuple[Requirement, ...] = field(kw_only=True, default_factory=tuple)
+    other_requirements: tuple[Requirement, ...] = field(kw_only=True, default=())
 
     @property
-    def requirement_tags(self) -> Mapping[str, Tuple[ItemTag, ...]]:
+    def requirement_tags(self) -> Mapping[str, tuple[ItemTag, ...]]:
         return DEFAULT_REQUIREMENT_TAGS
+
+    @property
+    def all_requirements(self) -> Iterable[Requirement]:
+        """Returns all requirements that are not directly part of the source."""
+        return self.other_requirements
 
 
 @dataclass(frozen=True, kw_only=True)
 class GenericSource(Source):
-    regions: Tuple[str, ...] = ()
+    regions: tuple[str, ...] = ()
     """No region means it's available everywhere."""
 
 
@@ -54,7 +59,7 @@ class CustomRuleSource(Source):
 
 class Tag(Source):
     """Not a real source, just a way to add tags to an item. Will be removed from the item sources during unpacking."""
-    tag: Tuple[ItemTag, ...]
+    tag: tuple[ItemTag, ...]
 
     def __init__(self, *tag: ItemTag):
         self.tag = tag  # noqa
@@ -67,8 +72,8 @@ class Tag(Source):
 @dataclass(frozen=True)
 class GameItem:
     name: str
-    sources: List[Source] = field(default_factory=list)
-    tags: Set[ItemTag] = field(default_factory=set)
+    sources: list[Source] = field(default_factory=list)
+    tags: set[ItemTag] = field(default_factory=set)
 
     def add_sources(self, sources: Iterable[Source]):
         self.sources.extend(source for source in sources if type(source) is not Tag)

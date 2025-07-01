@@ -578,12 +578,12 @@ def extend_secrets_locations(randomized_locations: List[LocationData], options: 
     randomized_locations.extend(filtered_locations)
 
 
-def extend_hats_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+def extend_hats_locations(randomized_locations: List[LocationData], content: StardewContent):
     hatsanity = content.features.hatsanity
     if not hatsanity.is_enabled:
         return
 
-    for hat_name, hat in content.hats.items():
+    for hat in content.hats.values():
         if not hatsanity.is_included(hat):
             continue
 
@@ -640,7 +640,8 @@ def extend_endgame_locations(randomized_locations: List[LocationData], options: 
     endgame_locations = []
     endgame_locations.extend(locations_by_tag[LocationTags.ENDGAME_LOCATIONS])
 
-    endgame_locations = [location for location in endgame_locations if LocationTags.REQUIRES_FRIENDSANITY_MARRIAGE not in location.tags or has_friendsanity_marriage]
+    endgame_locations = [location for location in endgame_locations if
+                         LocationTags.REQUIRES_FRIENDSANITY_MARRIAGE not in location.tags or has_friendsanity_marriage]
     endgame_locations = [location for location in endgame_locations if LocationTags.REQUIRES_FRIENDSANITY not in location.tags or has_friendsanity]
     endgame_locations = filter_disabled_locations(options, content, endgame_locations)
     randomized_locations.extend(endgame_locations)
@@ -698,7 +699,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_walnutsanity_locations(randomized_locations, options)
     extend_movies_locations(randomized_locations, options, content)
     extend_secrets_locations(randomized_locations, options, content)
-    extend_hats_locations(randomized_locations, options, content)
+    extend_hats_locations(randomized_locations, content)
     extend_eatsanity_locations(randomized_locations, options, content)
     extend_endgame_locations(randomized_locations, options, content)
 

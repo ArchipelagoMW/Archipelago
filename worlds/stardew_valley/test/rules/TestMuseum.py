@@ -35,7 +35,7 @@ class DisabledMuseumRule(LiteralStardewRule):
 
 class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBase):
     options = {
-        **presets.allsanity_mods_6_x_x(),
+        **presets.allsanity_mods_7_x_x(),
         options.Museumsanity.internal_name: options.Museumsanity.option_none
     }
 
@@ -49,8 +49,10 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
             museum_logic.can_find_museum_items.return_value = DisabledMuseumRule()
             museum_logic.can_complete_museum.return_value = DisabledMuseumRule()
             museum_logic.can_donate.return_value = DisabledMuseumRule()
-            # Allowing calls to can_find_museum_item since a lot of other logic depends on it, for minerals for instance.
+            # Allowing calls to museum rules since a lot of other logic depends on it, for minerals for instance.
             museum_logic.can_find_museum_item.return_value = true_
+            museum_logic.has_any_gem.return_value = true_
+            museum_logic.has_all_gems.return_value = true_
 
             regions = {region.name for region in self.multiworld.regions}
             self.world.logic = StardewLogic(self.player, self.world.options, self.world.content, regions)
