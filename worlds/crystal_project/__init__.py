@@ -148,7 +148,7 @@ class CrystalProjectWorld(World):
             # check what regions we can access without just getting told none because we have no passes
             all_passes_state: CollectionState = CollectionState(self.multiworld)
             for region_pass in self.item_name_groups[PASS]:
-                all_passes_state.collect(self.create_item(region_pass))
+                all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
             for region in self.get_regions():
                 if region.can_reach(all_passes_state) and region.name != MENU:
                     if len(region.locations) > 2:
