@@ -674,41 +674,41 @@ def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationD
 
         #Sara Sara Beach East
         # Treasure chests
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach Chest - Glittering in the sun at Ibek Cave exit 1", 1083 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tincture Pouch chest
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach Chest - Glittering in the sun at Ibek Cave exit 2", 1085 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tonic Pouch chest
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach Chest - How dare you stand where he stood?", 1084 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Money chest
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East Chest - Glittering in the sun at Ibek Cave exit 1", 1083 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tincture Pouch chest
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East Chest - Glittering in the sun at Ibek Cave exit 2", 1085 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tonic Pouch chest
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East Chest - How dare you stand where he stood?", 1084 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Money chest
 
         # NPCs
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Silver
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset),  # Ore
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset),  # Ore
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ingot
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset),  # Ingot
-        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach NPC - Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ore
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset),  # Dust
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Silver
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset),  # Ore
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset),  # Ore
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ingot
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset),  # Ingot
+        LocationData(SARA_SARA_BEACH_EAST, "Sara Sara Beach East NPC - Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ore
 
         #Regionsanity Meta Location
         LocationData(SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_EAST + " Region Completion", 6026 + regionsanity_index_offset, regionsanity=True),
 
         #Sara Sara Beach West
         #Treasure chests
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach Chest - South of Beach Birds Nest", 154 + treasure_index_offset), #Ether chest
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach Chest - Across the palms above the dust", 1509 + treasure_index_offset), #Potion chest
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach Chest - Beach cave", 2718 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Blank Pages chest
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - South of Beach Birds Nest", 154 + treasure_index_offset), #Ether chest
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Across the palms above the dust", 1509 + treasure_index_offset), #Potion chest
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Beach cave", 2718 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Blank Pages chest
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game
 
         #NPCs
         #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Cross my palms with Silver", 2693 + npc_index_offset), #Dust
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver south of Beach Birds Nest", 2694 + npc_index_offset), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
-        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Cross my palms with Silver", 2693 + npc_index_offset), #Dust
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver south of Beach Birds Nest", 2694 + npc_index_offset), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
+        LocationData(SARA_SARA_BEACH_WEST, "Sara Sara Beach West NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
 
         #Regionsanity Meta Location
         LocationData(SARA_SARA_BEACH_WEST, SARA_SARA_BEACH_WEST + " Region Completion", 6027 + regionsanity_index_offset, regionsanity=True),
@@ -1520,7 +1520,7 @@ def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData
         LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 217
         LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)), #Monster ID: 63
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Final Sky Arena Fight: Arachlea", 1366 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 252 (SkyArenaRegistrar)
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Final Sky Arena Fight: Arachlea", 1366 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 252 (SkyArenaRegistrar)
         LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)), #Monster ID: 145
         LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)), #Monster ID: 144
         LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)), #Monster ID: 146
@@ -1983,8 +1983,8 @@ def get_shops(player: int, options: CrystalProjectOptions) -> List[LocationData]
 
         #Zones (End-Game)
         #The New World
-        LocationData(THE_NEW_WORLD, "New World Shrine Shop - Attendant 1", 11877 + shop_index_offset),
-        LocationData(THE_NEW_WORLD, "New World Shrine Shop - Attendant 2", 21877 + shop_index_offset),
+        LocationData(THE_NEW_WORLD, "The New World Shrine Shop - Attendant 1", 11877 + shop_index_offset),
+        LocationData(THE_NEW_WORLD, "The New World Shrine Shop - Attendant 2", 21877 + shop_index_offset),
     ]
 
     return location_table
