@@ -56,17 +56,14 @@ class RuleWorldMixin(World):
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
         """Returns the world-registered or default rule with the given name"""
-        custom_rule_classes = CustomRuleRegister.custom_rules.get(cls.game, {})
-        if name not in DEFAULT_RULES and name not in custom_rule_classes:
-            raise ValueError(f"Rule {name} not found")
-        return custom_rule_classes.get(name) or DEFAULT_RULES[name]
+        return CustomRuleRegister.get_rule_cls(cls.game, name)
 
     @classmethod
-    def rule_from_json(cls, data: Mapping[str, Any]) -> "Rule[Self]":
-        """Create a rule instance from a json loaded mapping"""
+    def rule_from_dict(cls, data: Mapping[str, Any]) -> "Rule[Self]":
+        """Create a rule instance from a serialized dict representation"""
         name = data.get("rule", "")
         rule_class = cls.get_rule_cls(name)
-        return rule_class.from_json(data)
+        return rule_class.from_dict(data, cls)
 
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         """Returns a resolved rule registered with the caching system for this world"""
@@ -263,7 +260,7 @@ class RuleWorldMixin(World):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().collect(state, item)
         if changed and getattr(self, "rule_item_dependencies", None):
-            player_results: dict[int, bool] = state.rule_cache[self.player]
+            player_results = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
             for rule_id in rule_ids:
@@ -277,8 +274,8 @@ class RuleWorldMixin(World):
         if not changed:
             return changed
 
+        player_results = state.rule_cache[self.player]
         if getattr(self, "rule_item_dependencies", None):
-            player_results: dict[int, bool] = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
             for rule_id in rule_ids:
@@ -288,19 +285,19 @@ class RuleWorldMixin(World):
         if getattr(self, "rule_region_dependencies", None):
             for rule_ids in self.rule_region_dependencies.values():
                 for rule_id in rule_ids:
-                    state.rule_cache[self.player].pop(rule_id, None)
+                    player_results.pop(rule_id, None)
 
         # clear all location dependent caches as they may have lost region access
         if getattr(self, "rule_location_dependencies", None):
             for rule_ids in self.rule_location_dependencies.values():
                 for rule_id in rule_ids:
-                    state.rule_cache[self.player].pop(rule_id, None)
+                    player_results.pop(rule_id, None)
 
         # clear all entrance dependent caches as they may have lost region access
         if getattr(self, "rule_entrance_dependencies", None):
             for rule_ids in self.rule_entrance_dependencies.values():
                 for rule_id in rule_ids:
-                    state.rule_cache[self.player].pop(rule_id, None)
+                    player_results.pop(rule_id, None)
 
         return changed
 
@@ -308,7 +305,7 @@ class RuleWorldMixin(World):
     def reached_region(self, state: "CollectionState", region: "Region") -> None:
         super().reached_region(state, region)
         if getattr(self, "rule_region_dependencies", None):
-            player_results: dict[int, bool] = state.rule_cache[self.player]
+            player_results = state.rule_cache[self.player]
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)
 
@@ -324,6 +321,14 @@ OPERATORS = {
     "le": operator.le,
     "contains": operator.contains,
 }
+operator_strings = {
+    "eq": "==",
+    "ne": "!=",
+    "gt": ">",
+    "lt": "<",
+    "ge": ">=",
+    "le": "<=",
+}
 
 T = TypeVar("T")
 TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
@@ -335,7 +340,8 @@ class OptionFilter(Generic[T]):
     value: T
     operator: Operator = "eq"
 
-    def to_json(self) -> dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
+        """Returns a JSON compatible dict representation of this option filter"""
         return {
             "option": f"{self.option.__module__}.{self.option.__name__}",
             "value": self.value,
@@ -343,7 +349,8 @@ class OptionFilter(Generic[T]):
         }
 
     @classmethod
-    def from_json(cls, data: dict[str, Any]) -> Self:
+    def from_dict(cls, data: dict[str, Any]) -> Self:
+        """Returns a new OptionFilter instance from a dict representation"""
         if "option" not in data or "value" not in data:
             raise ValueError("Missing required value and/or option")
 
@@ -360,6 +367,16 @@ class OptionFilter(Generic[T]):
         value = data["value"]
         operator = data.get("operator", "eq")
         return cls(option=cast("type[Option[Any]]", option), value=value, operator=operator)
+
+    @classmethod
+    def multiple_from_dict(cls, data: Iterable[dict[str, Any]]) -> "tuple[OptionFilter[Any], ...]":
+        """Returns a tuple of OptionFilters instances from an iterable of dict representations"""
+        return tuple(cls.from_dict(o) for o in data)
+
+    @override
+    def __str__(self) -> str:
+        op = operator_strings.get(self.operator, self.operator)
+        return f"{self.option.__name__} {op} {self.value}"
 
 
 def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> "Callable[..., int]":
@@ -378,8 +395,13 @@ def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> "Callable[..., i
 
 @dataclass_transform(frozen_default=True, field_specifiers=(dataclasses.field, dataclasses.Field))
 class CustomRuleRegister(type):
+    """A metaclass to contain world custom rules and automatically convert resolved rules to frozen dataclasses"""
+
     custom_rules: ClassVar[dict[str, dict[str, type["Rule[Any]"]]]] = {}
+    """A mapping of game name to mapping of rule name to rule class"""
+
     rule_name: str = "Rule"
+    """The string name of a rule, must be unique per game"""
 
     def __new__(
         cls,
@@ -397,6 +419,14 @@ class CustomRuleRegister(type):
         new_cls.rule_name = rule_name
         return dataclasses.dataclass(frozen=True)(new_cls)
 
+    @classmethod
+    def get_rule_cls(cls, game_name: str, rule_name: str) -> "type[Rule[Any]]":
+        """Returns the world-registered or default rule with the given name"""
+        custom_rule_classes = cls.custom_rules.get(game_name, {})
+        if rule_name not in DEFAULT_RULES and rule_name not in custom_rule_classes:
+            raise ValueError(f"Rule '{rule_name}' for game '{game_name}' not found")
+        return custom_rule_classes.get(rule_name) or DEFAULT_RULES[rule_name]
+
 
 @dataclasses.dataclass()
 class Rule(Generic[TWorld]):
@@ -404,6 +434,13 @@ class Rule(Generic[TWorld]):
 
     options: "Iterable[OptionFilter[Any]]" = dataclasses.field(default=(), kw_only=True)
     """An iterable of OptionFilters to restrict what options are required for this rule to be active"""
+
+    game_name: ClassVar[str]
+    """The name of the game this rule belongs to, default rules belong to 'Archipelago'"""
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.options, tuple):
+            self.options = tuple(self.options)
 
     def _passes_options(self, options: "CommonOptions") -> bool:
         """Tests if the given world options pass the requirements for this rule"""
@@ -438,20 +475,22 @@ class Rule(Generic[TWorld]):
             world.rule_ids[rule_hash] = instance
         return world.rule_ids[rule_hash]
 
-    def to_json(self) -> dict[str, Any]:
-        """Returns a JSON-serializable definition of this rule"""
+    def to_dict(self) -> dict[str, Any]:
+        """Returns a JSON compatible dict representation of this rule"""
         args = {
             field.name: getattr(self, field.name, None) for field in dataclasses.fields(self) if field.name != "options"
         }
         return {
-            "rule": self.__class__.__name__,
-            "options": [o.to_json() for o in self.options],
+            "rule": self.__class__.__qualname__,
+            "options": [o.to_dict() for o in self.options],
             "args": args,
         }
 
     @classmethod
-    def from_json(cls, data: Mapping[str, Any]) -> Self:
-        return cls(**data.get("args", {}))
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
+        """Returns a new instance of this rule from a serialized dict representation"""
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(**data.get("args", {}), options=options)
 
     def __and__(self, other: "Rule[Any]") -> "Rule[TWorld]":
         """Combines two rules into an And rule"""
@@ -496,6 +535,7 @@ class Rule(Generic[TWorld]):
         elif cls.__module__ != "rule_builder":
             # TODO: test to make sure this works on frozen
             raise TypeError("You cannot define custom rules for the base Archipelago world")
+        cls.game_name = game
 
     class Resolved(metaclass=CustomRuleRegister):
         """A resolved rule for a given world that can be used as an access rule"""
@@ -507,9 +547,6 @@ class Rule(Generic[TWorld]):
 
         cacheable: bool = dataclasses.field(repr=False, default=True, kw_only=True)
         """If this rule should be cached in the state"""
-
-        rule_name: ClassVar[str] = "Rule"
-        """The name of this rule for hashing purposes"""
 
         always_true: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
@@ -621,16 +658,18 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
         return world.simplify_rule(self.Resolved(tuple(children), player=world.player))
 
     @override
-    def to_json(self) -> dict[str, Any]:
-        data = super().to_json()
+    def to_dict(self) -> dict[str, Any]:
+        data = super().to_dict()
         del data["args"]
-        data["children"] = [c.to_json() for c in self.children]
+        data["children"] = [c.to_dict() for c in self.children]
         return data
 
     @override
     @classmethod
-    def from_json(cls, data: Mapping[str, Any]) -> Self:
-        return cls(*data.get("children", []), options=data.get("options", ()))
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
+        children = [world_cls.rule_from_dict(c) for c in data.get("children", ())]
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(*children, options=options)
 
     @override
     def __str__(self) -> str:
@@ -759,19 +798,20 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
         return self.Resolved(self.child.resolve(world), player=world.player)
 
     @override
-    def to_json(self) -> dict[str, Any]:
-        data = super().to_json()
+    def to_dict(self) -> dict[str, Any]:
+        data = super().to_dict()
         del data["args"]
-        data["child"] = self.child.to_json()
+        data["child"] = self.child.to_dict()
         return data
 
     @override
     @classmethod
-    def from_json(cls, data: Mapping[str, Any]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
         child = data.get("child")
         if child is None:
             raise ValueError("Child rule cannot be None")
-        return cls(child, options=data.get("options", ()))
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(world_cls.rule_from_dict(child), options=options)
 
     @override
     def __str__(self) -> str:
@@ -899,6 +939,14 @@ class HasAll(Rule[TWorld], game="Archipelago"):
         return self.Resolved(self.item_names, player=world.player)
 
     @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
+        args = {**data.get("args", {})}
+        item_names = args.pop("item_names", ())
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(*item_names, **args, options=options)
+
+    @override
     def __str__(self) -> str:
         items = ", ".join(self.item_names)
         options = f", options={self.options}" if self.options else ""
@@ -978,7 +1026,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return f"Has all of ({items})"
 
 
-@dataclasses.dataclass()
+@dataclasses.dataclass(init=False)
 class HasAny(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least one of the given items"""
 
@@ -996,6 +1044,14 @@ class HasAny(Rule[TWorld], game="Archipelago"):
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
+        args = {**data.get("args", {})}
+        item_names = args.pop("item_names", ())
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(*item_names, **args, options=options)
 
     @override
     def __str__(self) -> str:
@@ -1264,7 +1320,7 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
             return f"Has any of ({items})"
 
 
-@dataclasses.dataclass()
+@dataclasses.dataclass(init=False)
 class HasFromList(Rule[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of the given items"""
 
@@ -1288,6 +1344,14 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, self.count, player=world.player)
+
+    @override
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any], world_cls: "type[RuleWorldMixin]") -> Self:
+        args = {**data.get("args", {})}
+        item_names = args.pop("item_names", ())
+        options = OptionFilter.multiple_from_dict(data.get("options", ()))
+        return cls(*item_names, **args, options=options)
 
     @override
     def __str__(self) -> str:
@@ -1369,7 +1433,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             return f"Has {self.count} items from ({items})"
 
 
-@dataclasses.dataclass()
+@dataclasses.dataclass(init=False)
 class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
     """A rule that checks if the player has at least `count` of the given items, ignoring duplicates of the same item"""
 
@@ -1403,7 +1467,7 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
     def __str__(self) -> str:
         count = f", count={self.count}" if self.count > 1 else ""
         options = f", options={self.options}" if self.options else ""
-        return f"{self.__class__.__name__}(item_name_group={self.item_name_group}{count}{options})"
+        return f"{self.__class__.__name__}({self.item_name_group}{count}{options})"
 
     class Resolved(Rule.Resolved):
         item_name_group: str

@@ -201,50 +201,115 @@ class MyRule(Rule["MyWorld"], game="My Game"):
 
 The default `CanReachEntrance` rule defines this function already.
 
-### JSON serialization
+## Serialization
 
-The rule builder is intended to be written first in Python for optimization and type safety. To export the rules to a client or tracker, there is a default JSON serializer implementation for all rules. By default the rules will export with the following format:
+The rule builder is intended to be written first in Python for optimization and type safety. To facilitate exporting the rules to a client or tracker, rules have a `to_dict` method that returns a JSON-compatible dict. Since the location and entrance logic structure varies greatly from world to world, the actual JSON dumping is left up to the world dev.
 
-```json
+The dict contains a `rule` key with the name of the rule, an `options` key with the rule's list of option filters, and an `args` key that contains any other arguments the individual rule has. For example, this is what a simple `Has` rule would look like:
+
+```python
 {
-    "rule": "<name of rule>",
+    "rule": "Has",
+    "options": [],
     "args": {
-        "options": {...},
-        "<field>": <value> // for each field the rule defines
-    }
+        "item_name": "Some item",
+        "count": 1,
+    },
 }
 ```
 
-The `And` and `Or` rules have a slightly different format:
+For `And` and `Or` rules, instead of an `args` key, they have a `children` key containing a list of their child rules in the same serializable format:
 
-```json
+```python
 {
     "rule": "And",
-    "options": {...},
+    "options": [],
     "children": [
-        {<each serialized rule>}
+        ...,  # each serialized rule
     ]
 }
 ```
 
-To define a custom format, override the `to_json` function:
+A full example is as follows:
 
 ```python
-class MyRule(Rule, game="My Game"):
-    def to_json(self) -> Mapping[str, Any]:
+rule = And(
+    Has("a", options=[OptionFilter(ToggleOption, 0)]),
+    Or(Has("b", count=2), CanReachRegion("c"), options=[OptionFilter(ToggleOption, 1)]),
+)
+assert rule.to_dict() == {
+    "rule": "And",
+    "options": [],
+    "children": [
+        {
+            "rule": "Has",
+            "options": [
+                {
+                    "option": "worlds.my_world.options.ToggleOption",
+                    "value": 0,
+                    "operator": "eq",
+                },
+            ],
+            "args": {
+                "item_name": "a",
+                "count": 1,
+            },
+        },
+        {
+            "rule": "Or",
+            "options": [
+                {
+                    "option": "worlds.my_world.options.ToggleOption",
+                    "value": 1,
+                    "operator": "eq",
+                },
+            ],
+            "children": [
+                {
+                    "rule": "Has",
+                    "options": [],
+                    "args": {
+                        "item_name": "b",
+                        "count": 2,
+                    },
+                },
+                {
+                    "rule": "CanReachRegion",
+                    "options": [],
+                    "args": {
+                        "region_name": "c",
+                    },
+                },
+            ],
+        },
+    ],
+}
+```
+
+### Custom serialization
+
+To define a different format for your custom rules, override the `to_dict` function:
+
+```python
+class BasicLogicRule(Rule, game="My Game"):
+    items = ("one", "two")
+
+    def to_dict(self) -> dict[str, Any]:
+        # Return whatever format works best for you
         return {
-            "rule": "my_rule",
-            "custom_logic": [...]
+            "logic": "basic",
+            "items": self.items,
         }
 ```
 
-If your logic has been done in custom JSON first, you can define a `from_json` class method on your rules to parse it correctly:
+If your logic has been done in custom JSON first, you can define a `from_dict` class method on your rules to parse it correctly:
 
 ```python
-class MyRule(Rule, game="My Game"):
+class BasicLogicRule(Rule, game="My Game"):
     @classmethod
-    def from_json(cls, data: Mapping[str, Any]) -> Self:
-        return cls(data.get("custom_logic"))
+    def from_dict(cls, data: Mapping[str, Any]) -> Self:
+        items = data.get("items", ())
+        return cls(*items)
 ```
 
 ## Rule explanations

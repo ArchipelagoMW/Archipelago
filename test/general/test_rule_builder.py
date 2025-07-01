@@ -1,6 +1,6 @@
 import unittest
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from typing_extensions import override
 
@@ -469,3 +469,153 @@ class TestRules(unittest.TestCase):
         self.assertTrue(resolved_rule.test(self.state))
         self.state.remove(items[1])
         self.assertFalse(resolved_rule.test(self.state))
+
+
+class TestSerialization(unittest.TestCase):
+    maxDiff: int | None = None
+
+    rule: ClassVar[Rule[Any]] = And(
+        Or(
+            Has("i1", count=4),
+            HasFromList("i2", "i3", "i4", count=2),
+            HasAnyCount({"i5": 2, "i6": 3}),
+            options=[OptionFilter(ToggleOption, 0)],
+        ),
+        Or(
+            HasAll("i7", "i8"),
+            HasAllCounts({"i9": 1, "i10": 5}, options=[OptionFilter(ToggleOption, 1, operator="ne")]),
+            CanReachRegion("r1"),
+            HasGroup("g1"),
+        ),
+        And(
+            HasAny("i11", "i12"),
+            CanReachLocation("l1", "r2"),
+            HasFromListUnique("i13", "i14"),
+            options=[
+                OptionFilter(ToggleOption, ToggleOption.option_false),
+                OptionFilter(ChoiceOption, ChoiceOption.option_second, "ge"),
+            ],
+        ),
+        CanReachEntrance("e1"),
+        HasGroupUnique("g2", count=5),
+    )
+
+    rule_dict: ClassVar[dict[str, Any]] = {
+        "rule": "And",
+        "options": [],
+        "children": [
+            {
+                "rule": "Or",
+                "options": [
+                    {
+                        "option": "test.general.test_rule_builder.ToggleOption",
+                        "value": 0,
+                        "operator": "eq",
+                    },
+                ],
+                "children": [
+                    {
+                        "rule": "Has",
+                        "options": [],
+                        "args": {"item_name": "i1", "count": 4},
+                    },
+                    {
+                        "rule": "HasFromList",
+                        "options": [],
+                        "args": {"item_names": ("i2", "i3", "i4"), "count": 2},
+                    },
+                    {
+                        "rule": "HasAnyCount",
+                        "options": [],
+                        "args": {"item_counts": {"i5": 2, "i6": 3}},
+                    },
+                ],
+            },
+            {
+                "rule": "Or",
+                "options": [],
+                "children": [
+                    {
+                        "rule": "HasAll",
+                        "options": [],
+                        "args": {"item_names": ("i7", "i8")},
+                    },
+                    {
+                        "rule": "HasAllCounts",
+                        "options": [
+                            {
+                                "option": "test.general.test_rule_builder.ToggleOption",
+                                "value": 1,
+                                "operator": "ne",
+                            },
+                        ],
+                        "args": {"item_counts": {"i9": 1, "i10": 5}},
+                    },
+                    {
+                        "rule": "CanReachRegion",
+                        "options": [],
+                        "args": {"region_name": "r1"},
+                    },
+                    {
+                        "rule": "HasGroup",
+                        "options": [],
+                        "args": {"item_name_group": "g1", "count": 1},
+                    },
+                ],
+            },
+            {
+                "rule": "And",
+                "options": [
+                    {
+                        "option": "test.general.test_rule_builder.ToggleOption",
+                        "value": 0,
+                        "operator": "eq",
+                    },
+                    {
+                        "option": "test.general.test_rule_builder.ChoiceOption",
+                        "value": 1,
+                        "operator": "ge",
+                    },
+                ],
+                "children": [
+                    {
+                        "rule": "HasAny",
+                        "options": [],
+                        "args": {"item_names": ("i11", "i12")},
+                    },
+                    {
+                        "rule": "CanReachLocation",
+                        "options": [],
+                        "args": {"location_name": "l1", "parent_region_name": "r2", "skip_indirect_connection": False},
+                    },
+                    {
+                        "rule": "HasFromListUnique",
+                        "options": [],
+                        "args": {"item_names": ("i13", "i14"), "count": 1},
+                    },
+                ],
+            },
+            {
+                "rule": "CanReachEntrance",
+                "options": [],
+                "args": {"entrance_name": "e1", "parent_region_name": ""},
+            },
+            {
+                "rule": "HasGroupUnique",
+                "options": [],
+                "args": {"item_name_group": "g2", "count": 5},
+            },
+        ],
+    }
+
+    def test_serialize(self) -> None:
+        serialized_rule = self.rule.to_dict()
+        self.assertDictEqual(serialized_rule, self.rule_dict)
+
+    def test_deserialize(self) -> None:
+        multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=(), seed=0)
+        world = multiworld.worlds[1]
+        assert isinstance(world, RuleBuilderWorld)
+
+        deserialized_rule = world.rule_from_dict(self.rule_dict)
+        self.assertEqual(deserialized_rule, self.rule, str(deserialized_rule))
