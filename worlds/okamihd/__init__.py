@@ -1,7 +1,8 @@
 import random
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, item_frequencies, \
-    create_brush_techniques_items, get_item_name_to_id_dict, create_divine_instrument_items, karmic_transformers
+    create_brush_techniques_items, get_item_name_to_id_dict, create_divine_instrument_items, karmic_transformers, \
+    progressive_weapons
 from .Regions import create_regions
 from .Locations import is_location_valid, get_total_locations, get_location_names, okami_events
 from .Rules import set_rules
@@ -85,10 +86,23 @@ class OkamiWorld(World):
 
         di = None
 
-        # Get a random tier 1 divine instrument to start with.
-        di = random.choice(list(world.item_name_groups.get('divine_instrument_tier_1')))
-        world.push_precollected(
-            OkamiItem(di, ItemClassification.progression, get_item_name_to_id_dict()[di], world.player))
+        if not world.options.ProgressiveWeapons:
+            # Get a random tier 1 divine instrument to start with.
+            di = random.choice(list(world.item_name_groups.get('divine_instrument_tier_1')))
+            world.push_precollected(
+                OkamiItem(di, ItemClassification.progression, get_item_name_to_id_dict()[di], world.player))
+        else:
+            #FIXME
+            di_name = random.choice(progressive_weapons.keys())
+            di = progressive_weapons[di_name]
+            world.push_precollected(OkamiItem(di_name,ItemClassification.progression,di.code,world.player))
+            for (progressive_waepon_name,progressive_weapon) in progressive_weapons:
+                if di_name==progressive_waepon_name:
+                    count=4
+                else:
+                    count=5
+                for i in range(count):
+                    itempool += [OkamiItem(di_name, di.classification, di.code, world.player)]
 
         match world.options.KarmicTransformers:
             case KarmicTransformers.option_precollected:
@@ -127,7 +141,6 @@ class OkamiWorld(World):
                                                       world.player)
 
         itempool += create_brush_techniques_items(world)
-        itempool += create_divine_instrument_items(world, di)
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)

@@ -21,6 +21,10 @@ class BuriedChestsByNight(Toggle):
     display_name = "Buried chests by night"
     default = 1
 
+class ProgressiveWeapons(Toggle):
+    """With this option you'll find progressive weapons for each type instead of every weapon being in the item pool."""
+    display_name="Progressive Weapons"
+    default = 0
 
 class KarmicTransformers(Choice):
     """Karmic Transformers are Cosmetic items that changes Amaterasu's appearance:
@@ -64,6 +68,7 @@ class OkamiOptions(PerGameCommonOptions):
     BuriedChestsByNight: BuriedChestsByNight
     KarmicTransformers: KarmicTransformers
     OpenGameStart: OpenGameStart
+    ProgressiveWeapons:ProgressiveWeapons
 #    PraiseSanity:PraiseSanity
 
 
@@ -71,7 +76,8 @@ okami_option_groups: Dict[str, List[Any]] = {
     "General Options": [
         BuriedChestsByNight,
         KarmicTransformers,
-        OpenGameStart
+        OpenGameStart,
+        ProgressiveWeapons
         #PraiseSanity
         ],
 
@@ -80,6 +86,7 @@ okami_option_groups: Dict[str, List[Any]] = {
 slot_data_options = {
     "BuriedChestsByNight",
     "KarmicTransformers",
-    "OpenGameStart"
+    "OpenGameStart",
+    "ProgressiveWeapons"
 #    "PraiseSanity"
 }

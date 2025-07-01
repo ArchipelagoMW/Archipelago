@@ -74,6 +74,11 @@ def get_item_name_to_id_dict() -> dict:
         item_dict[d.item_name] = d.code
     return item_dict
 
+progressive_weapons={
+    "Progressive Mirror":ItemData(0x300,ItemClassification.progression),
+    "Progressive Rosary":ItemData(0x301,ItemClassification.progression),
+    "Progressive Sword":ItemData(0x302,ItemClassification.progression),
+}
 
 karmic_transformers = {
     "Karmic Returner": ItemData(0xc8, ItemClassification.filler),
@@ -86,7 +91,6 @@ karmic_transformers = {
     "Karmic Transformer 7": ItemData(0x7b, ItemClassification.filler),
     "Karmic Transformer 8": ItemData(0x7a, ItemClassification.filler),
     "Karmic Transformer 9": ItemData(0x7c, ItemClassification.filler),
-
 }
 
 okami_items = {
