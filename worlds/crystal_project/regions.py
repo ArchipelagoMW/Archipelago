@@ -96,11 +96,14 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
+    rules_on_regions[MODDED_ZONE] = lambda state: True
 
     for region in region_levels_dictionary:
         if world.options.regionsanity.value == world.options.regionsanity.option_true:
             rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0])
                                                                             and state.has(region_name_to_pass_dict[lambda_region], player))
+
+            rules_on_regions[MODDED_ZONE] = combine_callables(rules_on_regions[MODDED_ZONE], rules_on_regions[region])
         else:
             rules_on_regions[region] = lambda state, lambda_region = region: (logic.is_area_in_level_range(state, region_levels_dictionary[lambda_region][0]))
 
