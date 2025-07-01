@@ -17,10 +17,10 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, assign_player_to_items, assign_player_to_locations
+    get_modded_shopsanity_locations, assign_player_to_items, build_condition_rule
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
+from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -55,7 +55,7 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(shop_name_to_id)
     location_name_to_id.update(region_completion_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = get_modded_items(-1)
+    modded_items = get_modded_items()
 
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
@@ -66,12 +66,12 @@ class CrystalProjectWorld(World):
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
-    modded_locations = get_modded_locations(-1, World, options)
+    modded_locations = get_modded_locations()
 
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = get_modded_shopsanity_locations(-1, World, options)
+    modded_shops = get_modded_shopsanity_locations()
 
     for modded_shop in modded_shops:
         location_name_to_id[modded_shop.name] = modded_shop.code
@@ -118,15 +118,13 @@ class CrystalProjectWorld(World):
             locations.extend(region_completions)
 
         if self.options.useMods:
-            assign_player_to_locations(self.player, self.modded_locations)
             for modded_location in self.modded_locations:
-                location = LocationData(modded_location.region, modded_location.name, modded_location.code, modded_location.rule)
+                location = LocationData(modded_location.region, modded_location.name, modded_location.code, build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-            assign_player_to_locations(self.player, self.modded_shops)
             for shop in self.modded_shops:
-                location = LocationData(shop.region, shop.name, shop.code, shop.rule)
+                location = LocationData(shop.region, shop.name, shop.code, build_condition_rule(shop.rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -448,5 +446,5 @@ class CrystalProjectWorld(World):
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
             "modTitles": mod_titles,
-            "moddedLocations": slot_data_locations
+            "moddedLocations": slot_data_locations,
         }

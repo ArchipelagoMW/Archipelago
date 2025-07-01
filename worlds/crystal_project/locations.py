@@ -23,7 +23,7 @@ boss_index_offset = 1000000
 shop_index_offset = 10000000
 regionsanity_index_offset = 100000000
 
-def get_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
+def get_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -1363,7 +1363,7 @@ def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData
         ]
     return location_table
 
-def get_shops(player: int, options: CrystalProjectOptions) -> List[LocationData]:
+def get_shops(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #Zones (Beginner)
