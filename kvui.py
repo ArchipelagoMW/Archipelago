@@ -60,7 +60,10 @@ from kivymd.uix.dialog import MDDialog, MDDialogHeadlineText, MDDialogSupporting
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.tab.tab import MDTabsSecondary, MDTabsItem, MDTabsItemText, MDTabsCarousel
+from kivymd.uix.navigationbar import MDNavigationBar, MDNavigationItem
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.screenmanager import MDScreenManager
+
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.menu.menu import MDDropdownTextItem
 from kivymd.uix.dropdownitem import MDDropDownItem, MDDropDownItemText
@@ -726,6 +729,10 @@ class MessageBox(Popup):
         self.height += max(0, label.height - 18)
 
 
+class MDNavigationItemBase(MDNavigationItem):
+    text = StringProperty(None)
+
+
 class ButtonsPrompt(MDDialog):
     def __init__(self, title: str, text: str, response: typing.Callable[[str], None],
                  *prompts: str, **kwargs) -> None:
@@ -766,58 +773,34 @@ class ButtonsPrompt(MDDialog):
         )
 
 
-class ClientTabs(MDTabsSecondary):
-    carousel: MDTabsCarousel
-    lock_swiping = True
+class MDScreenManagerBase(MDScreenManager):
+    current_tab: MDNavigationItemBase
+    local_screen_names: list[str]
 
-    def __init__(self, *args, **kwargs):
-        self.carousel = MDTabsCarousel(lock_swiping=True, anim_move_duration=0.2)
-        super().__init__(*args, MDDivider(size_hint_y=None, height=dp(1)), self.carousel, **kwargs)
-        self.size_hint_y = 1
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.local_screen_names = []
 
-    def _check_panel_height(self, *args):
-        self.ids.tab_scroll.height = dp(38)
-
-    def update_indicator(
-        self, x: float = 0.0, w: float = 0.0, instance: MDTabsItem = None
-    ) -> None:
-        def update_indicator(*args):
-            indicator_pos = (0, 0)
-            indicator_size = (0, 0)
-
-            item_text_object = self._get_tab_item_text_icon_object()
-
-            if item_text_object:
-                indicator_pos = (
-                    instance.x + dp(12),
-                    self.indicator.pos[1]
-                    if not self._tabs_carousel
-                    else self._tabs_carousel.height,
-                )
-                indicator_size = (
-                    instance.width - dp(24),
-                    self.indicator_height,
-                )
-
-            Animation(
-                pos=indicator_pos,
-                size=indicator_size,
-                d=0 if not self.indicator_anim else self.indicator_duration,
-                t=self.indicator_transition,
-            ).start(self.indicator)
-
-        if not instance:
-            self.indicator.pos = (x, self.indicator.pos[1])
-            self.indicator.size = (w, self.indicator_height)
+    def add_widget(self, widget: Widget, *args, **kwargs) -> None:
+        super().add_widget(widget, *args, **kwargs)
+        if "index" in kwargs:
+            self.local_screen_names.insert(kwargs["index"], widget.name)
         else:
-            Clock.schedule_once(update_indicator)
+            self.local_screen_names.append(widget.name)
 
-    def remove_tab(self, tab, content=None):
-        if content is None:
-            content = tab.content
-        self.ids.container.remove_widget(tab)
-        self.carousel.remove_widget(content)
-        self.on_size(self, self.size)
+    def switch_screens(self, new_tab: MDNavigationItemBase) -> None:
+        """
+        Called whenever the user clicks a tab to switch to a different screen.
+
+        :param new_tab: The new screen to switch to's tab.
+        """
+        name = new_tab.text
+        if self.local_screen_names.index(name) > self.local_screen_names.index(self.current_screen.name):
+            self.transition.direction = "left"
+        else:
+            self.transition.direction = "right"
+        self.current = name
+        self.current_tab = new_tab
 
 
 class CommandButton(MDButton, MDTooltip):
@@ -844,6 +827,9 @@ class GameManager(ThemedApp):
 
     main_area_container: MDGridLayout
     """ subclasses can add more columns beside the tabs """
+
+    tabs: MDNavigationBar
+    screens: MDScreenManagerBase
 
     def __init__(self, ctx: context_type):
         self.title = self.base_title
@@ -874,7 +860,7 @@ class GameManager(ThemedApp):
     @property
     def tab_count(self):
         if hasattr(self, "tabs"):
-            return max(1, len(self.tabs.tab_list))
+            return max(1, len(self.tabs.children))
         return 1
 
     def on_start(self):
@@ -914,30 +900,30 @@ class GameManager(ThemedApp):
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = ClientTabs(pos_hint={"center_x": 0.5, "center_y": 0.5})
-        self.tabs.add_widget(MDTabsItem(MDTabsItemText(text="All" if len(self.logging_pairs) > 1 else "Archipelago")))
-        self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
-                                                                             for logger_name, name in
-                                                                             self.logging_pairs))
-        self.tabs.carousel.add_widget(self.tabs.default_tab_content)
+        self.screens = MDScreenManagerBase(pos_hint={"center_x": 0.5})
+        self.tabs = MDNavigationBar(orientation="horizontal", size_hint_y=None, height=dp(40), set_bars_color=True)
+        # bind the method to the bar for back compatibility
+        self.tabs.remove_tab = self.remove_client_tab
+        self.screens.current_tab = self.add_client_tab(
+            "All" if len(self.logging_pairs) > 1 else "Archipelago",
+            UILog(*(logging.getLogger(logger_name) for logger_name, name in self.logging_pairs)),
+        )
+        self.log_panels["All"] = self.screens.current_tab.content
+        self.screens.current_tab.active = True
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
             self.log_panels[display_name] = UILog(bridge_logger)
             if len(self.logging_pairs) > 1:
-                panel = MDTabsItem(MDTabsItemText(text=display_name))
-                panel.content = self.log_panels[display_name]
-                # show Archipelago tab if other logging is present
-                self.tabs.carousel.add_widget(panel.content)
-                self.tabs.add_widget(panel)
+                self.add_client_tab(display_name, self.log_panels[display_name])
 
-        hint_panel = self.add_client_tab("Hints", HintLayout())
         self.hint_log = HintLog(self.json_to_kivy_parser)
+        hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
-        hint_panel.content.add_widget(self.hint_log)
 
-        self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
+        self.main_area_container = MDGridLayout(size_hint_y=1, cols=1)
         self.main_area_container.add_widget(self.tabs)
+        self.main_area_container.add_widget(self.screens)
 
         self.grid.add_widget(self.main_area_container)
 
@@ -974,25 +960,61 @@ class GameManager(ThemedApp):
 
         return self.container
 
-    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> Widget:
-        """Adds a new tab to the client window with a given title, and provides a given Widget as its content.
-         Returns the new tab widget, with the provided content being placed on the tab as content."""
-        new_tab = MDTabsItem(MDTabsItemText(text=title))
+    def add_client_tab(self, title: str, content: Widget, index: int = -1) -> MDNavigationItemBase:
+        """
+        Adds a new tab to the client window with a given title, and provides a given Widget as its content.
+        Returns the new tab widget, with the provided content being placed on the tab as content.
+
+        :param title: The title of the tab.
+        :param content: The Widget to be added as content for this tab's new MDScreen. Will also be added to the
+         returned tab as tab.content.
+        :param index: The index to insert the tab at. Defaults to -1, meaning the tab will be appended to the end.
+
+        :return: The new tab.
+        """
+        if self.tabs.children:
+            self.tabs.add_widget(MDDivider(orientation="vertical"))
+        new_tab = MDNavigationItemBase(text=title)
         new_tab.content = content
-        if -1 < index <= len(self.tabs.carousel.slides):
-            new_tab.bind(on_release=self.tabs.set_active_item)
-            new_tab._tabs = self.tabs
-            self.tabs.ids.container.add_widget(new_tab, index=index)
-            self.tabs.carousel.add_widget(new_tab.content, index=len(self.tabs.carousel.slides) - index)
+        new_screen = MDScreen(name=title)
+        new_screen.add_widget(content)
+        if -1 < index <= len(self.tabs.children):
+            remapped_index = len(self.tabs.children) - index
+            self.tabs.add_widget(new_tab, index=remapped_index)
+            self.screens.add_widget(new_screen, index=index)
         else:
             self.tabs.add_widget(new_tab)
-            self.tabs.carousel.add_widget(new_tab.content)
+            self.screens.add_widget(new_screen)
         return new_tab
 
+    def remove_client_tab(self, tab: MDNavigationItemBase) -> None:
+        """
+        Called to remove a tab and its screen.
+
+        :param tab: The tab to remove.
+        """
+        tab_index = self.tabs.children.index(tab)
+        # if the tab is currently active we need to swap before removing it
+        if tab == self.screens.current_tab:
+            if not tab_index:
+                # account for the divider
+                swap_index = tab_index + 2
+            else:
+                swap_index = tab_index - 2
+            self.tabs.children[swap_index].on_release()
+            # self.screens.switch_screens(self.tabs.children[swap_index])
+        # get the divider to the left if we can
+        if not tab_index:
+            divider_index = tab_index + 1
+        else:
+            divider_index = tab_index - 1
+        self.tabs.remove_widget(self.tabs.children[divider_index])
+        self.tabs.remove_widget(tab)
+        self.screens.remove_widget(self.screens.get_screen(tab.text))
+
     def update_texts(self, dt):
-        for slide in self.tabs.carousel.slides:
-            if hasattr(slide, "fix_heights"):
-                slide.fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        if hasattr(self.screens.current_tab.content, "fix_heights"):
+            getattr(self.screens.current_tab.content, "fix_heights")()
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
