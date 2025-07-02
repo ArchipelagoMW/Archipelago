@@ -133,6 +133,27 @@ class SnesData(Generic[_T_Enum]):
 
 
 class SnesReader(Generic[_T_Enum]):
+    """
+    how to use:
+    ```
+    from enum import Enum
+    from worlds.AutoSNIClient import Read, SNIClient, SnesReader
+
+    class MyGameMemory(Enum):
+        game_mode = Read(WRAM_START + 0x0998, 1)
+        send_queue = Read(SEND_QUEUE_START, 8 * 127)
+        ...
+
+    snes_reader = SnesReader(MyGameMemory)
+
+    snes_data = await snes_reader.read(ctx)
+    if snes_data is None:
+        snes_logger.info("error reading from snes")
+        return
+
+    game_mode = snes_data.get(MyGameMemory.game_mode)
+    ```
+    """
     _ranges: Sequence[Read]
     """ sorted by address """
 
