@@ -2,10 +2,14 @@
 
 ## Required Software
 
-* Archipelago 0.6.1+
-* Bizhawk 2.10+
+* [Archipelago 0.6.1+](https://archipelago.gg/tutorial/Archipelago/setup/en)
+* [Bizhawk 2.10+](https://github.com/TASEmulators/BizHawk)
 * Legally acquired Phantom Hourglass EU rom (US support coming soon)
-* Latest tloz_ph.apworld
+* [Latest tloz_ph.apworld](https://github.com/carrotinator/Archipelago/releases)
+
+## Recommended Software
+
+* [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases)
 
 ## Setup
 

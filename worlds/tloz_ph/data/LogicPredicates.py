@@ -223,7 +223,7 @@ def ph_can_kill_blue_chu(state: CollectionState, player: int):
 
 def ph_can_kill_eye_brute(state: CollectionState, player: int):
     return any([
-        ph_option_med_logic(state, player),
+        ph_option_hard_logic(state, player),
         ph_has_hammer(state, player),
         ph_has_bow(state, player),
         ph_has_chus(state, player)
@@ -293,7 +293,7 @@ def ph_can_hit_spin_switches(state: CollectionState, player: int):
     return any([
         ph_has_sword(state, player),
         all([
-            ph_option_med_logic(state, player),
+            ph_option_hard_logic(state, player),
             any([
                 ph_has_explosives(state, player),
                 ph_has_boomerang(state, player)
@@ -309,12 +309,13 @@ def ph_spiral_wall_switches(state: CollectionState, player: int):
         ph_has_explosives(state, player)
     ])
 
+
 def ph_quick_switches(state, player):
     return any([
         ph_has_boomerang(state, player),
         all([
             ph_has_bow(state, player),
-            ph_option_med_logic(state, player)
+            ph_option_hard_logic(state, player)
         ])
     ])
 
@@ -414,12 +415,12 @@ def ph_option_normal_logic(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.logic == "normal"
 
 
-def ph_option_med_logic(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.logic in ["medium", "glitched"]
+def ph_option_hard_logic(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.logic in ["hard", "glitched"]
 
 
 def ph_option_not_glitched_logic(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.logic in ["medium", "normal"]
+    return state.multiworld.worlds[player].options.logic in ["hard", "normal"]
 
 
 def ph_option_keysanity(state: CollectionState, player: int):
@@ -460,16 +461,16 @@ def ph_option_phantoms_sword_only(state: CollectionState, player: int):
 
 
 def ph_clever_pots(state: CollectionState, player: int):
-    return ph_option_med_logic(state, player)
+    return ph_option_hard_logic(state, player)
 
 
 def ph_can_hit_switches(state: CollectionState, player: int):
-    return any([ph_option_med_logic(state, player), ph_can_kill_bat(state, player)])
+    return any([ph_option_hard_logic(state, player), ph_can_kill_bat(state, player)])
 
 
 def ph_clever_bombs(state: CollectionState, player: int):
     return all([ph_has_bombs(state, player),
-                ph_option_med_logic(state, player)])
+                ph_option_hard_logic(state, player)])
 
 
 def ph_option_randomize_frogs(state: CollectionState, player: int):
@@ -643,10 +644,11 @@ def ph_totok_b1_all_checks_ut(state, player):
         ph_can_kill_phantoms(state, player),
     ])
 
+
 def ph_totok_b2_key(state: CollectionState, player: int):
     return any([ph_can_boomerang_return(state, player),
                 all([ph_can_hit_switches(state, player),
-                     any([ph_option_med_logic(state, player),
+                     any([ph_option_hard_logic(state, player),
                           ph_has_explosives(state, player),
                           ph_can_hit_tricky_switches(state, player)
                           ])
@@ -660,6 +662,7 @@ def ph_totok_b2_all_checks_ut(state, player):
         ph_has_phantom_sword(state, player)
     ])
 
+
 def ph_totok_b4_all_checks_ut(state, player):
     return all([
         ph_totok_b2_all_checks_ut(state, player),
@@ -670,6 +673,7 @@ def ph_totok_b4_all_checks_ut(state, player):
             ph_can_boomerang_return(state, player)
         ])
     ])
+
 
 def ph_totok_b4_access(state, player):
     return any([
@@ -780,6 +784,7 @@ def ph_totok_b95(state, player):
         ph_totok_b9_crystals_ut(state, player)
     ])
 
+
 def ph_totok_b10_all_checks_ut(state, player):
     return all([
         ph_totok_b4_all_checks_ut(state, player),
@@ -789,6 +794,7 @@ def ph_totok_b10_all_checks_ut(state, player):
         ph_has_explosives(state, player),
         ph_has_shovel(state, player)
     ])
+
 
 def ph_totok_b10_key_logic(state: CollectionState, player: int):
     # TODO: Does not take into account force gem shuffling
@@ -897,6 +903,12 @@ def ph_can_enter_ocean_sw_west(state, player):
 
 
 # Tof
+
+def ph_tof_1f_key_ut(state, player):
+    return all([
+        ph_ut_small_key_own_dungeon(state, player),
+        ph_can_kill_bat(state, player)
+    ])
 
 def ph_tof_3f(state, player):
     return all([
@@ -1079,6 +1091,7 @@ def ph_toi_b2(state, player):
         ])
     ])
 
+
 def ph_toi_key_door_1_ut(state, player):
     return any([
         ph_toi_all_key_doors_ut(state, player),
@@ -1094,6 +1107,7 @@ def ph_toi_key_door_1_ut(state, player):
         ])
     ])
 
+
 def ph_toi_all_key_doors_ut(state, player):
     return all([
         ph_ut_small_key_own_dungeon(state, player),
@@ -1103,7 +1117,8 @@ def ph_toi_all_key_doors_ut(state, player):
         ph_quick_switches(state, player)
     ])
 
-def ph_toi_key_doors(state, player, glitched: int, not_glitched: int=None):
+
+def ph_toi_key_doors(state, player, glitched: int, not_glitched: int = None):
     not_glitched = glitched if not_glitched is None else not_glitched
     return any([
         all([
@@ -1115,6 +1130,7 @@ def ph_toi_key_doors(state, player, glitched: int, not_glitched: int=None):
             ph_has_small_keys(state, player, "Temple of Ice", not_glitched)
         ])
     ])
+
 
 def ph_toi_key_door_2(state, player):
     return any([

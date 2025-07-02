@@ -181,7 +181,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["tof 1f", "tof 1f keese", False, lambda state: ph_can_kill_bat(state, player)],
         ["tof 1f", "tof 1f maze", False, lambda state: any([
             ph_has_small_keys(state, player, "Temple of Fire", 1),
-            ph_ut_small_key_own_dungeon(state, player)])],
+            ph_tof_1f_key_ut(state, player)])],
         ["tof 1f maze", "tof 2f", False, lambda state: ph_can_hit_spin_switches(state, player)],
         # 2F
         ["tof 2f", "tof 1f west", False, lambda state: ph_has_short_range(state, player)],

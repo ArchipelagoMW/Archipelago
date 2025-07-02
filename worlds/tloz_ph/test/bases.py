@@ -7,7 +7,7 @@ class TestGeneration(WorldTestBase):
     options = {
         "keysanity": "in_own_dungeon",
         "phantom_combat_difficulty": "require_traps",
-        "logic": "normal",
+        "logic": "hard",
         "accessibility": "items",
         "randomize_frogs": "start_with",
         "dungeons_required": 0,

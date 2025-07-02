@@ -616,6 +616,31 @@ DYNAMIC_FLAGS = {
         "has_items": [("Phantom Blade", 1)],
         "set_if_true": [(0x1B5592, 0x20)]
     },
+    "Zauz remove triforce crest": {
+        "on_scenes": [0x160A],
+        "not_has_locations": ["Ghost Ship Rescue Tetra"],
+        "unset_if_true": [(0x1B55AB, 0x10), (0x1B5580, 2), (0x1B5582, 0x80)]
+    },
+    "Zauz add triforce crest": {
+        "on_scenes": [0x160A],
+        "has_locations": ["Ghost Ship Rescue Tetra"],
+        "set_if_true": [(0x1B55AB, 0x10), (0x1B5580, 2), (0x1B5582, 0x80)]
+    },
+    "RESET Zauz remove triforce crest": {
+        "on_scenes": [0x1600],
+        "has_items": [("Triforce Crest", 1)],
+        "set_if_true": [(0x1B5580, 2)]
+    },
+    "RESET add triforce crest": {
+        "on_scenes": [0x1600],
+        "has_items": [("Triforce Crest", 0)],
+        "unset_if_true": [(0x1B5580, 2)]
+    },
+    "RESET Zauz remove triforce crest fog": {
+        "on_scenes": [0x1600],
+        "has_slot_data": [("fog_settings", 0)],
+        "set_if_true": [(0x1B55AB, 0x10), (0x1B5582, 0x80)]
+    },
     # Jolene
     "Remove Jolene": {
         "on_scenes": [0x0],

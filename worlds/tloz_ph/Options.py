@@ -58,7 +58,7 @@ class PhantomHourglassLogic(Choice):
     """
     display_name = "logic"
     option_normal = 0
-    option_medium = 1
+    option_hard = 1
     option_glitched = 2
     default = 0
 

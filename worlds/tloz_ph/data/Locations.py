@@ -176,6 +176,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Small Key (Mountain Passage)",
         "stage_id": 0x27,
         "floor_id": 0,
+        "z_max": 70000,
         "sram_addr": 0x230,
         "sram_value": 2,
         "dungeon": "Mountain Passage"
@@ -1472,8 +1473,8 @@ LOCATIONS_DATA = {
         "x_min": 77500,
         "x_max": 82500,
         "z_max": -25000,
-        "sram_addr": 0x22B0,
-        "sram_value": 8
+        # "sram_addr": 0x22B0,
+        # "sram_value": 8
     },
     "Bannan Island Cannon Game": {
         "region_id": "bannan cannon game",

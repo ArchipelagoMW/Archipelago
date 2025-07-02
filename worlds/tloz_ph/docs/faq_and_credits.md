@@ -41,6 +41,13 @@ Things not implemented:
 Kizugaya/Kirito who made the [twilight princess poptracker](https://github.com/Kizugaya/TPRAP_poptracker) has started
 working on a [poptracker](https://github.com/black-sliver/PopTracker) pack for phantom hourglass. More info coming soon!
 
+### My ship is slow. How do i go faster?
+
+There are multiple ways of doing this, but my favorite is to create a cheat in bizhawk for address `021FA0A4` in 
+`ARM7 system bus`, and set to any speed value. Default max speed is ``0x0080``.  My favorite is `0x0200`, or 4x speed.
+Note that this forces a max speed, and makes turning weird- you'll need to toggle it on and off to do things precisely.
+
+
 ### My game crashed/I quit without saving
 
 The client should give you back your missing items when you reenter the game. It can take a while if you're missing a 
@@ -57,7 +64,7 @@ This is also implemented for some problematic locations that are close together.
 
 ### I softlocked. How do I warp to start?
 
-Some known softlock locations have fixes.
+Some known softlock locations have fixes, check your inventory for temporary items.
 There is so far no implemented warp to start, but you can freeze certain values in the bizhawk cheat menu to change where an entrance takes you.
 You want to freeze `0x1B2E94` in `Main RAM` at `0xB` for Mercay, and probably also set your room id `0x1B2E98`, floor number `0x1B2EA6` and entrance id `0x1B2EA7`to `0` to avoid pesky crashes
 
