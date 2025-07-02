@@ -11,16 +11,28 @@ from ..AutoWorld import World, WebWorld
 
 
 class SM64Web(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up SM64EX for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["N00byKing"]
-    )]
+    )
 
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["GreenMarco"]
+    )
+
+
+    tutorials =[setup_en, setup_es]
     option_groups = sm64_options_groups
+    game_info_languages = ["en", "es"]
 
 
 class SM64World(World):
