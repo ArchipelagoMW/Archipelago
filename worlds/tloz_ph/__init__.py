@@ -501,7 +501,7 @@ class PhantomHourglassWorld(World):
     # UT stuff
     def interpret_slot_data(self, slot_data: dict[str, any]) -> None:
         # Excluded dungeons depend on seed
-        print(f"UT Excluding: {slot_data["locations_to_exclude"]}")
+        # print(f"UT Excluding: {slot_data['locations_to_exclude']}")
         for location in slot_data["locations_to_exclude"]:
             self.multiworld.get_location(location, self.player).progress_type = LocationProgressType.EXCLUDED
 
