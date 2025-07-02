@@ -214,7 +214,7 @@ class RequiredLuckyEmblemsEotW(Range):
     If End of the World Unlock is set to "Lucky Emblems", determines the number of Lucky Emblems required.
     """
     display_name = "Lucky Emblems to Open End of the World"
-    default = 4
+    default = 7
     range_start = 0
     range_end = 13
 
@@ -223,7 +223,7 @@ class RequiredLuckyEmblemsDoor(Range):
     If Final Rest Door Key is set to "Lucky Emblems", determines the number of Lucky Emblems required.
     """
     display_name = "Lucky Emblems to Open Final Rest Door"
-    default = 4
+    default = 10
     range_start = 0
     range_end = 13
 
@@ -232,7 +232,7 @@ class LuckyEmblemsInPool(Range):
     Determines the number of Lucky Emblems in the item pool.
     """
     display_name = "Lucky Emblems in Pool"
-    default = 4
+    default = 13
     range_start = 0
     range_end = 13
 
@@ -638,7 +638,7 @@ class WarpAnywhere(Toggle):
     """
     display_name = "WarpAnywhere"
 
-class RandomizePartyMemberStartingAccessories(Toggle):
+class RandomizePartyMemberStartingAccessories(DefaultOnToggle):
     """
     If on, the 10 accessories that some party members (Aladdin, Ariel, Jack, Peter Pan, Beast) start with are randomized.
     10 random accessories will be distributed amongst any party member aside from Sora in their starting equipment.

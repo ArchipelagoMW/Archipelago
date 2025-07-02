@@ -281,7 +281,7 @@ class KH1World(World):
                     "jungle_slider": bool(self.options.jungle_slider),
                     "keyblades_unlock_chests": bool(self.options.keyblades_unlock_chests),
                     "level_checks": int(self.options.level_checks.value),
-                    "logic_difficulty": str(self.options.logic_difficulty),
+                    "logic_difficulty": str(self.options.logic_difficulty.current_key),
                     "materials_in_pool": int(self.options.materials_in_pool.value),
                     "max_ap_cost": int(self.options.max_ap_cost.value),
                     "min_ap_cost": int(self.options.min_ap_cost.value),
