@@ -1,9 +1,10 @@
+from enum import Enum
 import logging
 import asyncio
 import time
 
 from NetUtils import ClientStatus, color
-from worlds.AutoSNIClient import SNIClient
+from worlds.AutoSNIClient import Read, SNIClient, SnesReader
 from .Rom import SM_ROM_MAX_PLAYERID
 
 snes_logger = logging.getLogger("SNES")
@@ -35,12 +36,22 @@ SM_DEATH_LINK_ACTIVE_ADDR = ROM_START + 0x277F04    # 1 byte
 SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277F06    # 1 byte
 
 
+class SMMemory(Enum):
+    game_mode = Read(WRAM_START + 0x0998, 1)
+    health = Read(WRAM_START + 0x09C2, 2)
+    send_queue = Read(SM_SEND_QUEUE_START, 8 * 127)
+    send_queue_r_count = Read(SM_SEND_QUEUE_RCOUNT, 4)
+    recv_queue_w_count = Read(SM_RECV_QUEUE_WCOUNT, 2)
+
+
 class SMSNIClient(SNIClient):
     game = "Super Metroid"
     patch_suffix = [".apsm", ".apm3"]
 
+    snes_reader = SnesReader(SMMemory)
+
     async def deathlink_kill_player(self, ctx):
-        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import DeathState, snes_buffered_write, snes_flush_writes
         snes_buffered_write(ctx, WRAM_START + 0x09C2, bytes([1, 0]))  # set current health to 1 (to prevent saving with 0 energy)
         snes_buffered_write(ctx, WRAM_START + 0x0A50, bytes([255])) # deal 255 of damage at next opportunity
         if not ctx.death_link_allow_survive:
@@ -49,12 +60,14 @@ class SMSNIClient(SNIClient):
         await snes_flush_writes(ctx)
         await asyncio.sleep(1)
 
-        gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        health = await snes_read(ctx, WRAM_START + 0x09C2, 2)
-        if health is not None:
-            health = health[0] | (health[1] << 8)
-        if not gamemode or gamemode[0] in SM_DEATH_MODES or (
-                ctx.death_link_allow_survive and health is not None and health > 0):
+        snes_data = await self.snes_reader.read(ctx)
+        if snes_data is None:
+            return
+
+        gamemode = snes_data.get(SMMemory.game_mode)
+        health = int.from_bytes(snes_data.get(SMMemory.health), "little")
+        if gamemode[0] in SM_DEATH_MODES or (
+                ctx.death_link_allow_survive and health > 0):
             ctx.death_state = DeathState.dead
 
 
@@ -88,31 +101,34 @@ class SMSNIClient(SNIClient):
 
 
     async def game_watcher(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_buffered_write, snes_flush_writes
         if ctx.server is None or ctx.slot is None:
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
 
-        gamemode = await snes_read(ctx, WRAM_START + 0x0998, 1)
-        if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
+        snes_data = await self.snes_reader.read(ctx)
+        if snes_data is None:
+            return
+
+        gamemode = snes_data.get(SMMemory.game_mode)
+        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
             currently_dead = gamemode[0] in SM_DEATH_MODES
             await ctx.handle_deathlink_state(currently_dead)
-        if gamemode is not None and gamemode[0] in SM_ENDGAME_MODES:
+        if gamemode[0] in SM_ENDGAME_MODES:
             if not ctx.finished_game:
                 await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 ctx.finished_game = True
             return
 
-        data = await snes_read(ctx, SM_SEND_QUEUE_RCOUNT, 4)
-        if data is None:
-            return
+        data = snes_data.get(SMMemory.send_queue_r_count)
 
         recv_index = data[0] | (data[1] << 8)
         recv_item = data[2] | (data[3] << 8) # this is actually SM_SEND_QUEUE_WCOUNT
 
+        send_queue = snes_data.get(SMMemory.send_queue)
         while (recv_index < recv_item):
             item_address = recv_index * 8
-            message = await snes_read(ctx, SM_SEND_QUEUE_START + item_address, 8)
+            message = send_queue[item_address: item_address + 8]
             item_index = (message[4] | (message[5] << 8)) >> 3
 
             recv_index += 1
@@ -128,9 +144,7 @@ class SMSNIClient(SNIClient):
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
-        data = await snes_read(ctx, SM_RECV_QUEUE_WCOUNT, 2)
-        if data is None:
-            return
+        data = snes_data.get(SMMemory.recv_queue_w_count)
 
         item_out_ptr = data[0] | (data[1] << 8)
 
