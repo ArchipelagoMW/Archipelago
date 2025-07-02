@@ -25,7 +25,7 @@ class TestQuestsLogic(SVTestBase):
 class TestQuestsOverrideBySecretNotesLogic(SVTestBase):
     options = {
         QuestLocations.internal_name: 0,
-        Secretsanity.internal_name: frozenset(SecretsanityOptionName.secret_notes),
+        Secretsanity.internal_name: frozenset([SecretsanityOptionName.secret_notes]),
     }
 
     def test_giant_stump_requires_one_raccoon(self):
