@@ -2,7 +2,7 @@ import os.path
 from operator import length_hint
 from os import listdir, getcwd
 from os.path import isfile, join
-from typing import Optional, Callable, TYPE_CHECKING
+from typing import Optional, Callable, TYPE_CHECKING, Dict
 from BaseClasses import Item, ItemClassification, CollectionState
 from typing import List, NamedTuple
 from .options import CrystalProjectOptions
@@ -105,7 +105,9 @@ def get_modded_items() -> List[Item]:
             item_id = item['ID'] + job_index_offset
             item_in_pool = any(data.code == item_id for name, data in item_table.items())
             excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
-            is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
+            is_unselectable = False
+            if 'IsUnselectableJob' in item and 'IsUnselectableSubJob' in item:
+                is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
             name = 'Job - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not is_unselectable and not excluded:
@@ -118,8 +120,9 @@ def get_modded_items() -> List[Item]:
 
     return items
 
-def get_modded_locations() -> List[ModLocationData]:
-    locations: List[ModLocationData] = []
+def get_modded_locations() -> Dict[str, ModLocationData]:
+    locations: Dict[str, ModLocationData] = {}
+    location_codes: List[int] = []
     file_directory = get_mod_directory()
 
     if not os.path.isdir(file_directory):
@@ -139,27 +142,30 @@ def get_modded_locations() -> List[ModLocationData]:
             #Entity type 0 is NPC
             if entity_type == 0:
                 location = build_npc_location(location, excluded_ids)
-                if location is not None:
-                    locations.append(location)
+                if location is not None and not location.name in locations and not location.code in location_codes:
+                    locations[location.name] = location
+                    location_codes.append(location.code)
 
             #Entity type 5 is Treasure
             if entity_type == 5:
                 location = build_treasure_location(location, excluded_ids)
-                if location is not None:
-                    locations.append(location)
+                if location is not None and not location.name in locations and not location.code in location_codes:
+                    locations[location.name] = location
+                    location_codes.append(location.code)
 
             # Entity type 6 is Crystal
             if entity_type == 6:
                 location = build_crystal_location(location, excluded_ids)
-                if location is not None:
-                    locations.append(location)
+                if location is not None and not location.name in locations and not location.code in location_codes:
+                    locations[location.name] = location
+                    location_codes.append(location.code)
 
         file.close()
 
     return locations
 
-def get_modded_shopsanity_locations() -> List[ModLocationData]:
-    locations: List[ModLocationData] = []
+def get_modded_shopsanity_locations() -> Dict[str, ModLocationData]:
+    locations: Dict[str, ModLocationData] = {}
 
     file_directory = get_mod_directory()
 
@@ -180,7 +186,7 @@ def get_modded_shopsanity_locations() -> List[ModLocationData]:
             # Entity type 0 is NPC
             if entity_type == 0:
                 npc_locations = build_shop_locations(location, excluded_ids)
-                locations.extend(npc_locations)
+                locations.update(npc_locations)
 
         file.close()
 
@@ -250,8 +256,9 @@ def build_npc_location(location, excluded_ids) -> Optional[ModLocationData]:
 
     return None
 
-def build_shop_locations(location, excluded_ids) -> List[ModLocationData]:
-    locations: List[ModLocationData] = []
+def build_shop_locations(location, excluded_ids) -> Dict[str, ModLocationData]:
+    locations: Dict[str, ModLocationData] = {}
+    location_codes: List[int] = []
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
     region = get_region_by_id(biome_id)
@@ -284,7 +291,9 @@ def build_shop_locations(location, excluded_ids) -> List[ModLocationData]:
                             rule_condition = None
 
                         location = ModLocationData(region, shop_name, id_with_offset, shop_item_id, coordinates, biome_id, rule_condition)
-                        locations.append(location)
+                        if not location.name in locations and not location.code in location_codes:
+                            locations[location.name] = location
+                            location_codes.append(location.code)
 
                     id_offset += 10000
 

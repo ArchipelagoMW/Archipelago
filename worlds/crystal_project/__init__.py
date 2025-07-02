@@ -69,12 +69,12 @@ class CrystalProjectWorld(World):
     modded_locations = get_modded_locations()
 
     for modded_location in modded_locations:
-        location_name_to_id[modded_location.name] = modded_location.code
+        location_name_to_id[modded_locations[modded_location].name] = modded_locations[modded_location].code
 
     modded_shops = get_modded_shopsanity_locations()
 
     for modded_shop in modded_shops:
-        location_name_to_id[modded_shop.name] = modded_shop.code
+        location_name_to_id[modded_shops[modded_shop].name] = modded_shops[modded_shop].code
 
     web = CrystalProjectWeb()
 
@@ -119,12 +119,18 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_location in self.modded_locations:
-                location = LocationData(modded_location.region, modded_location.name, modded_location.code, build_condition_rule(modded_location.rule_condition, self))
+                location = LocationData(self.modded_locations[modded_location].region,
+                                        self.modded_locations[modded_location].name,
+                                        self.modded_locations[modded_location].code,
+                                        build_condition_rule(self.modded_locations[modded_location].rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
-                location = LocationData(shop.region, shop.name, shop.code, build_condition_rule(shop.rule_condition, self))
+                location = LocationData(self.modded_shops[shop].region,
+                                        self.modded_shops[shop].name,
+                                        self.modded_shops[shop].code,
+                                        build_condition_rule(self.modded_shops[shop].rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -148,7 +154,7 @@ class CrystalProjectWorld(World):
             for region_pass in self.item_name_groups[PASS]:
                 all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
             for region in self.get_regions():
-                if region.can_reach(all_passes_state) and region.name != MENU:
+                if region.can_reach(all_passes_state) and region.name != MENU and region.name != MODDED_ZONE:
                     if len(region.locations) > 2:
                         initially_reachable_regions.append(region)
             self.starter_region = self.random.choice(initially_reachable_regions).name
@@ -421,12 +427,21 @@ class CrystalProjectWorld(World):
         if self.options.useMods:
             mod_titles = get_mod_titles()
             for modded_location in self.modded_locations:
-                slot_data_locations.append({"Id": modded_location.offsetless_code, "Region": modded_location.region, "Name": modded_location.name, "Coordinates": modded_location.coordinates, "biomeId": modded_location.biomeId, "Rule": None })
+                slot_data_locations.append({"Id": self.modded_locations[modded_location].offsetless_code,
+                                            "Region": self.modded_locations[modded_location].region,
+                                            "Name": self.modded_locations[modded_location].name,
+                                            "Coordinates": self.modded_locations[modded_location].coordinates,
+                                            "biomeId": self.modded_locations[modded_location].biomeId,
+                                            "Rule": None })
             for shop in self.modded_shops:
-                slot_data_locations.append({ "Id": shop.offsetless_code, "Region": shop.region, "Name": shop.name, "Coordinates": shop.coordinates, "BiomeId": shop.biomeId, "Rule": None })
+                slot_data_locations.append({ "Id": self.modded_shops[shop].offsetless_code,
+                                             "Region": self.modded_shops[shop].region,
+                                             "Name": self.modded_shops[shop].name,
+                                             "Coordinates": self.modded_shops[shop].coordinates,
+                                             "BiomeId": self.modded_shops[shop].biomeId,
+                                             "Rule": None })
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
-
         return {
             "apworld_version": self.apworld_version,
             "goal": self.options.goal.value,

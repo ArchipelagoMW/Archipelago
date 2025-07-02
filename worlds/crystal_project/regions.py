@@ -438,7 +438,7 @@ def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[Lo
 def create_region(world: "CrystalProjectWorld", player: int, locations_per_region: Dict[str, List[LocationData]], name: str, excluded: bool) -> Region:
     region = Region(name, player, world.multiworld)
 
-    regionsanity_location: Location | None = None
+    region_completion: Location | None = None
 
     #if the region isn't part of the multiworld, we still make the region so that all the exits still work,
         #but we also don't fill it with locations
@@ -449,12 +449,13 @@ def create_region(world: "CrystalProjectWorld", player: int, locations_per_regio
                 location = create_location(player, location_data, region)
                 region.locations.append(location)
                 if location_data.regionsanity:
-                    regionsanity_location = location
+                    region_completion = location
 
-    if world.options.regionsanity.value == world.options.regionsanity.option_true and regionsanity_location is not None:
+    # This is for the region completion location
+    if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion is not None:
         for location in region.locations:
-            if location != regionsanity_location:
-                regionsanity_location.access_rule = combine_callables(regionsanity_location.access_rule, location.access_rule)
+            if location != region_completion:
+                region_completion.access_rule = combine_callables(region_completion.access_rule, location.access_rule)
 
     return region
 
