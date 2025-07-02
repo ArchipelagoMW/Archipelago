@@ -1,12 +1,15 @@
 """
 "Dynamic Flag Name": {
     "on_scenes": list[int],
-    "has_items": list[tuple[str, int]],         item_name, count (0 for none)
+    "not_last_scenes": list[int]
+    "has_items": list[tuple[str, int]],         item_name, min count (0 for not have item)
     "has_locations": list[str],
     "not_has_locations": list[str],
-    "set_if_true": list[tuple[int, int]],       adress, value
-    "unset_if_true": list[tuple[int, int]],     adress, value
+    "any_not_has_locations": list[str],
+    "set_if_true": list[tuple[int, int]],       address, value
+    "unset_if_true": list[tuple[int, int]],     address, value
     "has_slot_data": list[list[str, any]]       slot_data, ==value
+    "goal_requirement": bool                    checks dungeon requirement if true
 }
 """
 DYNAMIC_FLAGS = {
@@ -262,6 +265,7 @@ DYNAMIC_FLAGS = {
         "not_has_locations": ["Temple of Courage Crayk Dungeon Reward"],
         "unset_if_true": [(0x1B557F, 0x80)]
     },
+    # Courage Crest Room
     "Courage Creset room not salvaged it": {
         "on_scenes": [0x2508],
         "has_locations": ["Ocean SW Salvage Courage Crest"],
@@ -281,6 +285,11 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x2600, 0x2507],
         "has_items": [("Courage Crest", 1)],
         "set_if_true": [(0x1B558C, 0x04)]
+    },
+    "Courage Crest room remove crest if not got it": {
+        "on_scenes": [0x2600, 0x2507],
+        "has_items": [("Courage Crest", 0)],
+        "unset_if_true": [(0x1B558C, 0x04)]
     },
 
     # Endgame
@@ -474,8 +483,8 @@ DYNAMIC_FLAGS = {
     },
     "Beat goron temple goron chief metal": {
         "on_scenes": [0x100A],
-        "not_has_locations": ["Goron Island Goron Quiz", "Goron Island Chief Post Dungeon Item"],
-        "has_locations": ["Goron Temple Dongorongo Dungeon Reward"],
+        "not_has_locations": ["Goron Island Chief Post Dungeon Item"],
+        "has_locations": ["Goron Temple Dongorongo Dungeon Reward", "Goron Island Goron Quiz"],
         "set_if_true": [(0x1B558B, 0x40)]
     },
     "RESET Beat goron temple goron chief metal": {
@@ -590,6 +599,12 @@ DYNAMIC_FLAGS = {
         "has_locations": ["Ghost Ship Rescue Tetra"],
         "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
     },
+    "SE despawn pirate ship": {
+        "on_scenes": [0x2, 0x3],
+        "not_has_locations": ["Ghost Ship Rescue Tetra"],
+        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+    },
+
     # Zauz
     "Zauz remove phantom blade": {
         "on_scenes": [0x160A],
@@ -600,6 +615,31 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x1600],
         "has_items": [("Phantom Blade", 1)],
         "set_if_true": [(0x1B5592, 0x20)]
+    },
+    "Zauz remove triforce crest": {
+        "on_scenes": [0x160A],
+        "not_has_locations": ["Ghost Ship Rescue Tetra"],
+        "unset_if_true": [(0x1B55AB, 0x10), (0x1B5580, 2), (0x1B5582, 0x80)]
+    },
+    "Zauz add triforce crest": {
+        "on_scenes": [0x160A],
+        "has_locations": ["Ghost Ship Rescue Tetra"],
+        "set_if_true": [(0x1B55AB, 0x10), (0x1B5580, 2), (0x1B5582, 0x80)]
+    },
+    "RESET Zauz remove triforce crest": {
+        "on_scenes": [0x1600],
+        "has_items": [("Triforce Crest", 1)],
+        "set_if_true": [(0x1B5580, 2)]
+    },
+    "RESET add triforce crest": {
+        "on_scenes": [0x1600],
+        "has_items": [("Triforce Crest", 0)],
+        "unset_if_true": [(0x1B5580, 2)]
+    },
+    "RESET Zauz remove triforce crest fog": {
+        "on_scenes": [0x1600],
+        "has_slot_data": [("fog_settings", 0)],
+        "set_if_true": [(0x1B55AB, 0x10), (0x1B5582, 0x80)]
     },
     # Jolene
     "Remove Jolene": {
@@ -654,7 +694,7 @@ DYNAMIC_FLAGS = {
     "Block Oshus Gem": {
         "on_scenes": [0xB0A],
         "not_has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
-        "unset_if_true": [(0x1B55A0, 0x4)]
+        "unset_if_true": [(0x1B55A0, 0x4), (0x1B557D, 0x2)]
     },
     "RESET Block Oshus Gem": {
         "on_scenes": [0xB00],
@@ -665,12 +705,16 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0xB0A],
         "not_has_locations": ["Mercay Oshus Item After Temple of Wind"],
         "has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
-        "set_if_true": [(0x1B55A0, 0x4)]
+        "set_if_true": [(0x1B55A0, 0x4), (0x1B557D, 0x2)]
     },
-    "RESET Oshus Gem": {
+    "RESET Oshus Gem hourglass": {
         "on_scenes": [0xB00],
         "not_has_locations": ["TotOK Phantom Hourglass"],
         "unset_if_true": [(0x1B55A0, 0x4)]
+    },
+    "RESET Oshus Gem chart": {
+        "on_scenes": [0xB00],
+        "unset_if_true": [(0x1B557D, 0x2)]
     },
     # Trade Quest
     "PoRL Trade Quest": {
@@ -736,6 +780,60 @@ DYNAMIC_FLAGS = {
         "not_has_locations": ["Uncharted Island Cyclone Slate"],
         "unset_if_true": [(0x1B55A2, 0x40)]
     },
-
+    # Mountain Passage anti-softlock
+    "Give Anti-softlock bombs": {
+        "on_scenes": [0xB01],
+        "not_last_scenes": [0xB00, 0x2600, 0xB02, 0xB10],
+        "has_items": [("Bombs (Progressive)", 0)],
+        "set_if_true": [(0x1BA644, 0x10), (0x1BA6C0, 1)]
+    },
+    "RESET Anti-softlock bombs": {
+        "on_scenes": [0xB00, 0x2700],
+        "has_items": [("Bombs (Progressive)", 0)],
+        "unset_if_true": [(0x1BA644, 0x10)]
+    },
+    # Doyland
+    "Doyland has lowered water": {
+        "on_scenes": [0x2201],
+        "check_bits": {0x1B5582: 0x4},
+        "unset_if_true": [(0x1B5582, 0x4)],
+        "set_if_true": [(0x1B5590, 0x02)]  # Water state memory
+    },
+    "Doyland memory bit": {
+        "on_scenes": [0x2200],
+        "not_last_scenes": [0x2201],
+        "unset_if_true": [(0x1B5590, 0x02)],  # Memory of water
+    },
+    "RESET Doyland has lowered water": {
+        "on_scenes": [0x2200],
+        "not_last_scenes": [0x1102, 0x1202],
+        "check_bits": {0x1B5590: 0x02},  # Memory of water level
+        "set_if_true": [(0x1B5582, 0x4)],  # Water level
+        "unset_if_true": [(0x1B5590, 0x02)],
+    },
+    "RESET Doyland memory bit": {
+        "on_scenes": [0x1102, 0x1202],
+        "set_if_true": [(0x1B5590, 0x02)],  # Memory of water
+    },
+    "Ice Field pre-dungeon": {
+        "on_scenes": [0xF03],
+        "not_has_locations": ["Temple of Ice Dungeon Reward"],
+        "unset_bits": [(0x1B558B, 0x20)]
+    },
+    "Ice Field post-dungeon": {
+        "on_scenes": [0xF03],
+        "has_locations": ["Temple of Ice Dungeon Reward"],
+        "set_bits": [(0x1B558B, 0x20)]
+    },
+    "RESET Ice Field pre-dungeon": {
+        "on_scenes": [0xF13, 0xF01],
+        "has_items": [("Azurine", 1)],
+        "set_bits": [(0x1B558B, 0x20)]
+    },
+    "RESET Ice Field post-dungeon": {
+        "on_scenes": [0xF13, 0xF01],
+        "has_items": [("Azurine", 0)],
+        "unset_bits": [(0x1B558B, 0x20)]
+    },
 }
 

@@ -256,6 +256,7 @@ def oos_can_beat_required_golden_beasts(state: CollectionState, player: int):
     return beast_count >= state.multiworld.worlds[player].options.golden_beasts_requirement.value
 
 
+
 # Various item predicates ###########################################
 
 def oos_has_rupees(state: CollectionState, player: int, amount: int):

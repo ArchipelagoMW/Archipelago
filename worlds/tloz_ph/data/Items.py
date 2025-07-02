@@ -274,19 +274,19 @@ ITEMS_DATA = {
         'classification': ItemClassification.filler,
         'dummy': True
     },
-    "Bomb Refill": {
+    "Refill: Bombs": {
         'classification': ItemClassification.filler,
         "give_ammo": [10, 20, 30],
         "address": 0x1BA6C0,
         "refill": "Bombs (Progressive)"
     },
-    "Arrow Refill": {
+    "Refill: Arrows": {
         'classification': ItemClassification.filler,
         "give_ammo": [20, 30, 50],
         "address": 0x1BA6C2,
         "refill": "Bow (Progressive)"
     },
-    "Bombchu Refill": {
+    "Refill: Bombchus": {
         'classification': ItemClassification.filler,
         "give_ammo": [10, 20, 30],
         "address": 0x1BA6C6,
@@ -295,56 +295,56 @@ ITEMS_DATA = {
 
     # ========= Treasure =============
 
-    "Pink Coral": {
+    "Treasure: Pink Coral": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AC,
         'incremental': True
     },
-    "White Pearl Loop": {
+    "Treasure: White Pearl Loop": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AD,
         'incremental': True
     },
-    "Dark Pearl Loop": {
+    "Treasure: Dark Pearl Loop": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AE,
         'incremental': True
     },
-    "Zora Scale": {
+    "Treasure: Zora Scale": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5AF,
         'incremental': True
     },
-    "Goron Amber": {
+    "Treasure: Goron Amber": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B0,
         'incremental': True
     },
-    "Ruto Crown": {
+    "Treasure: Ruto Crown": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B1,
         'incremental': True
     },
-    "Helmaroc Plume": {
+    "Treasure: Helmaroc Plume": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
         'address': 0x1BA5B2,
         'incremental': True
     },
-    "Regal Ring": {
+    "Treasure: Regal Ring": {
         'classification': ItemClassification.progression_skip_balancing,
         'backup_filler': True,
         'treasure': True,
@@ -741,42 +741,42 @@ ITEMS_DATA = {
     },
 
     # Ships
-    "Bright Ship": {
+    "Ship: Bright Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 1
     },
-    "Iron Ship": {
+    "Ship: Iron Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 2
     },
-    "Stone Ship": {
+    "Ship: Stone Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 3
     },
-    "Vintage Ship": {
+    "Ship: Vintage Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 4
     },
-    "Demon Ship": {
+    "Ship: Demon Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 5
     },
-    "Tropical Ship": {
+    "Ship: Tropical Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 6
     },
-    "Dignified Ship": {
+    "Ship: Dignified Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 7
     },
-    "Golden Ship": {
+    "Ship: Golden Ship": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 8

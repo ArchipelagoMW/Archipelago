@@ -13,7 +13,7 @@ STARTING_FLAGS = [
     [0x1B5582, 0x40],
     [0x1B5583, 0xAB],
     [0x1B5584, 0xFF],
-    [0x1B5585, 0xFF],
+    [0x1B5585, 0xFB],
     [0x1B5586, 0x2F],
     [0x1B5587, 0xFC],
     [0x1B5588, 0x3B],
@@ -204,19 +204,19 @@ ITEM_GROUPS = {
         "Additional Rare Metal",
     ],
     "Treasure Items": [
-        "Pink Coral",
-        "White Pearl Loop",
-        "Dark Pearl Loop",
-        "Zora Scale",
-        "Goron Amber",
-        "Ruto Crown",
-        "Helmaroc Plume",
-        "Regal Ring"
+        "Treasure: Pink Coral",
+        "Treasure: White Pearl Loop",
+        "Treasure: Dark Pearl Loop",
+        "Treasure: Zora Scale",
+        "Treasure: Goron Amber",
+        "Treasure: Ruto Crown",
+        "Treasure: Helmaroc Plume",
+        "Treasure: Regal Ring"
     ],
     "Ammo Refills": [
-        "Bomb Refill",
-        "Arrow Refill",
-        "Bombchu Refill"
+        "Refill: Bombs",
+        "Refill: Arrows",
+        "Refill: Bombchus"
     ]
 }
 
@@ -405,7 +405,7 @@ HINTS_ON_SCENE = {
     0x2600: {  # TotOK Dungeon hints
         "dungeon_hints": 2
     },
-    0x1700: {
+    0x1701: {
         "spirit_island_hints": True
     },
 }
@@ -417,14 +417,14 @@ HINTS_ON_TRIGGER = {
 # Ship sets
 SHIPS = [
     "S.S. Linebeck",
-    "Bright Ship",
-    "Iron Ship",
-    "Stone Ship",
-    "Vintage Ship",
-    "Demon Ship",
-    "Tropical Ship",
-    "Dignified Ship",
-    "Golden Ship",
+    "Ship: Bright Ship",
+    "Ship: Iron Ship",
+    "Ship: Stone Ship",
+    "Ship: Vintage Ship",
+    "Ship: Demon Ship",
+    "Ship: Tropical Ship",
+    "Ship: Dignified Ship",
+    "Ship: Golden Ship",
 ]
 
 # Decode classification for humans

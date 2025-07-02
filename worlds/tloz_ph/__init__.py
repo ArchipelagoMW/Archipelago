@@ -89,6 +89,7 @@ class PhantomHourglassWorld(World):
         self.boss_reward_location_names = []
         self.dungeon_name_groups = {}
         self.locations_to_exclude = set()
+        self.ut_locations_to_exclude = set()
         self.extra_filler_items = []
         self.excluded_dungeons = []
 
@@ -190,8 +191,6 @@ class PhantomHourglassWorld(World):
             boss_reward_pool.append("Additional Rare Metal")
         self.boss_reward_items_pool = boss_reward_pool[:self.options.dungeons_required]
 
-        # For dungeons not required, change their item to filler
-
     def create_events(self):
         # Create events for required dungeons
         if "Temple of Fire" in self.required_dungeons:
@@ -227,8 +226,8 @@ class PhantomHourglassWorld(World):
     def exclude_locations_automatically(self):
         locations_to_exclude = set()
 
-        # If non required dungeons need to be excluded, do it if conditions are met
-        if self.options.exclude_non_required_dungeons:
+        # If non required dungeons need to be excluded, and not UT
+        if self.options.exclude_non_required_dungeons and not getattr(self.multiworld, "generation_is_fake", False):
             always_include = ["Temple of the Ocean King", "Mountain Passage"]
             if self.options.ghost_ship_in_dungeon_pool == "false":
                 always_include.append("Ghost Ship")
@@ -241,6 +240,7 @@ class PhantomHourglassWorld(World):
                 print(f"Excluding: {self.dungeon_name_groups[dungeon]}")
                 locations_to_exclude.update(self.dungeon_name_groups[dungeon])
 
+            self.ut_locations_to_exclude = locations_to_exclude.copy()
             # Unexclude locations that have vanilla small keys/dung items cause in excluded dungeons, keys are vanilla
             for location in locations_to_exclude.copy():
                 if ("Small Key" in LOCATIONS_DATA[location]["vanilla_item"] or
@@ -477,7 +477,7 @@ class PhantomHourglassWorld(World):
 
     def fill_slot_data(self) -> dict:
         options = ["goal", "dungeons_required", "bellum_access",
-                   "ghost_ship_in_dungeon_pool",
+                   "ghost_ship_in_dungeon_pool", "exclude_non_required_dungeons",
                    "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
                    "keysanity", "randomize_frogs", "randomize_triforce_crest", "randomize_harrow",
                    "randomize_masked_beedle",
@@ -486,13 +486,22 @@ class PhantomHourglassWorld(World):
                    "ph_starting_time", "ph_time_increment",
                    "death_link"]
         slot_data = self.options.as_dict(*options)
+        slot_data["excluded_dungeons"] = self.excluded_dungeons
+        slot_data["locations_to_exclude"] = self.ut_locations_to_exclude
         slot_data["boss_rewards"] = self.boss_reward_items_pool
         slot_data["required_dungeon_locations"] = self.boss_reward_location_names
         print(f"Slot Data: {slot_data}")
-        # TODO: Write UT connector for required dungeons
         return slot_data
 
     def write_spoiler(self, spoiler_handle):
         spoiler_handle.write(f"\n\nRequired Dungeons ({self.multiworld.player_name[self.player]}):\n")
         for dung in self.required_dungeons:
             spoiler_handle.write(f"\t- {dung}\n")
+
+    # UT stuff
+    def interpret_slot_data(self, slot_data: dict[str, any]) -> None:
+        # Excluded dungeons depend on seed
+        print(f"UT Excluding: {slot_data["locations_to_exclude"]}")
+        for location in slot_data["locations_to_exclude"]:
+            self.multiworld.get_location(location, self.player).progress_type = LocationProgressType.EXCLUDED
+
