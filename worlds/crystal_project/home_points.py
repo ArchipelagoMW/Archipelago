@@ -79,13 +79,13 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Entrance", 1124),
         LocationData(ANCIENT_RESERVOIR, "Main Reservoir Chamber", 1660),
 
-        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player) or state.can_reach(QUINTAR_RESERVE, player)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player) or state.can_reach(QUINTAR_RESERVE, player)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Port", 672),
-        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
-        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE)),
-        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
-        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE) or state.can_reach(QUINTAR_RESERVE)),
+        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player) or state.can_reach(QUINTAR_RESERVE, player)),
+        LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE, player)),
+        LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player) or state.can_reach(QUINTAR_RESERVE, player)),
+        LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player) or state.can_reach(QUINTAR_RESERVE, player)),
 
         LocationData(GANYMEDE_SHRINE, "Ganymede Shrine", 1573),
 
