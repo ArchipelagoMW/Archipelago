@@ -49,10 +49,15 @@ class RegionNames(StrEnum):
     CURSED_AGATA_FOREST="Cursed Agata Forest"
     AGATA_FOREST_WAKA="Agata Forest (Pre-waka fight)"
     AGATA_FOREST="Agata Forest"
+    ### INTERIORS
+    FAWNS_HOUSE="Madame Fawn's House"
 
     ## TUSTA RUINS
     ###
-    TSUTA_RUINS="Tsuta Ruins"
-
+    TSUTA_RUINS_1F_MAIN_PART="Tsuta Ruins (1F - Main Part)"
+    TSUTA_RUINS_MUSHROOMS="Tsuta Ruins (Mushrooms)"
+    TSUTA_RUINS_LEFT_SIDE= "Tsuta Ruins (Left Side)"
+    TSUTA_RUINS_DEVIL_GATES="Tsuta Ruins (Devil Gates)"
+    TSUTA_RUINS_CENTRAL_STATUE="Tsuta Ruins(Inside central Statue)"
     ## TAKA PASS
-    CURSED_TAKA_PASS="Curesd Taka pass"
+    CURSED_TAKA_PASS="Curesd Taka Pass"
