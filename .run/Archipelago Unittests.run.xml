@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Archipelago Unittests" type="tests" factoryName="Unittests">
-    <module name="Archipelago" />
+    <module name="ArchipelagoMainMLSS" />
+    <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SDK_HOME" value="" />

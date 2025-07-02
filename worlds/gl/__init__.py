@@ -160,6 +160,7 @@ class GauntletLegendsWorld(World):
         required_items = []
         precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
         skipped_items = set()
+        item_required_count = len([location for location in self.get_locations() if location.item is None])
         if self.options.infinite_keys:
             skipped_items.add("Key")
         if self.options.permanent_speed:
@@ -179,6 +180,7 @@ class GauntletLegendsWorld(World):
                      and item_.item_name not in skipped_items]:
             freq = item_frequencies.get(item.item_name, 1)
             required_items += [item.item_name for _ in range(freq)]
+            item_required_count -= freq
 
         self.multiworld.itempool += [self.create_item(item_name) for item_name in required_items]
 
@@ -192,36 +194,28 @@ class GauntletLegendsWorld(World):
             freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
             if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
                 freq = item_frequencies.get(item.item_name, 1)
-
-            if self.options.traps_frequency == "large" and ItemClassification.trap in item.progression:
+            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency >= 50:
                 freq *= 2
-            elif self.options.traps_frequency == "extreme" and ItemClassification.trap in item.progression:
-                freq *= 5
 
-            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency != "normal":
-                freq *= 2
-            if ItemClassification.trap in item.progression:
-                if self.options.max_difficulty_toggle:
-                    freq *= (self.options.max_difficulty_value.value / 4)
-                    freq = freq.__floor__()
-            if item.item_name == "Death":
-                for i in range(freq):
-                    self.death.append(self.create_item(item.item_name))
+            filler_items += [item.item_name for _ in range(freq)]
+            self.random.shuffle(filler_items)
+
+        traps_frequency = (len(self.get_locations()) * (self.options.traps_frequency / 100))
+        if self.options.traps_choice == "all_active":
+            traps_frequency //= 2
+        if self.options.traps_choice == "only_death" or self.options.traps_choice == "all_active":
+            self.death += [self.create_item("Death") for _ in range(traps_frequency)]
+            item_required_count -= traps_frequency
+        if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "all_active":
+            self.multiworld.itempool += [self.create_item("Poison Fruit") for _ in range(traps_frequency)]
+            item_required_count -= traps_frequency
+
+        for i in range(item_required_count):
+            if i < item_required_count // 2:
+                self.items.append(self.create_item(filler_items.pop()))
             else:
-                filler_items += [item.item_name for _ in range(freq)]
+                self.multiworld.itempool.append(self.create_item(filler_items.pop()))
 
-        remaining = len(list(self.get_locations())) - len(required_items) - len(self.death) - (2 if not self.options.infinite_keys else 0)
-        if self.options.obelisks == 0:
-            remaining -= 7
-        if self.options.mirror_shards == 0:
-            remaining -= 4
-        self.random.shuffle(filler_items)
-        for item in filler_items[:remaining]:
-            self.items.append(self.create_item(item))
-        self.random.shuffle(self.items)
-        for i in range((len(self.items) * 0.5).__floor__()):
-            self.multiworld.itempool.append(self.items[i])
-            del self.items[i]
 
     def set_rules(self) -> None:
         set_rules(self)

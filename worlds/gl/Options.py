@@ -124,7 +124,7 @@ class TrapsChoice(Choice):
     default = 0
 
 
-class TrapsFrequency(Choice):
+class TrapsFrequency(Range):
     """
     Choose the frequency of traps added into the item pool
     Normal: 75 of each selected trap are added into the item pool.
@@ -133,10 +133,9 @@ class TrapsFrequency(Choice):
     """
 
     display_name = "Trap Frequency"
-    option_normal = 0
-    option_large = 1
-    option_extreme = 2
-    default = 0
+    range_start = 1
+    range_end = 90
+    default = 10
 
 
 class UnlockCharacterOne(Choice):

@@ -76,6 +76,9 @@ item_list: typing.List[ItemData] = [
     ItemData(77780059, "Town Obelisk 2", ItemClassification.progression),
     ItemData(77780060, "Castle Obelisk 1", ItemClassification.progression),
     ItemData(77780061, "Castle Obelisk 2", ItemClassification.progression),
+]
+
+traps = [
     ItemData(77780062, "Death", ItemClassification.trap),
     ItemData(77780063, "Poison Fruit", ItemClassification.trap),
 ]
