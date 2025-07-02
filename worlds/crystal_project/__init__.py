@@ -190,8 +190,8 @@ class CrystalProjectWorld(World):
             if total_clamshell_quantity > max_clamshells:
                 percent_goal_clamshells = self.options.clamshellGoalQuantity.value / total_clamshell_quantity
                 self.options.clamshellGoalQuantity.value = int(percent_goal_clamshells * max_clamshells)
-                if self.options.clamshellGoalQuantity.value < 1:
-                    self.options.clamshellGoalQuantity.value = 1
+                if self.options.clamshellGoalQuantity.value < 2:
+                    self.options.clamshellGoalQuantity.value = 2
                 self.options.extraClamshellsInPool.value = int(max_clamshells - self.options.clamshellGoalQuantity.value)
 
                 # Log the change to player settings
@@ -202,6 +202,35 @@ class CrystalProjectWorld(World):
 
                 total_clamshell_quantity = self.options.clamshellGoalQuantity.value + self.options.extraClamshellsInPool.value
         return total_clamshell_quantity
+
+    def get_total_progressive_levels(self, max_progressive_levels: int) -> int:
+        # this formula is how we can do ceiling division in Python
+        progressive_levels = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
+        #don't forget to -1
+        if progressive_levels > max_progressive_levels:
+            potential_progressive_level_size = -(self.options.maxLevel.value // -max_progressive_levels)
+            potential_max_level = self.options.maxLevel.value
+
+            if potential_progressive_level_size > self.options.progressiveLevelSize.range_end:
+                potential_progressive_level_size = self.options.progressiveLevelSize.range_end
+                potential_max_level = max_progressive_levels * potential_progressive_level_size
+                if potential_max_level < self.options.maxLevel.range_start:
+                    potential_max_level = self.options.maxLevel.range_start
+
+            if self.options.maxLevel.value > potential_max_level:
+                message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
+                           f"Reduced max_level to {potential_max_level} and increased progressive_level_size to {potential_progressive_level_size}.")
+                logging.getLogger().info(message)
+                self.options.maxLevel.value = potential_max_level
+            else:
+                message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
+                           f"Increased progressive_level_size to {potential_progressive_level_size}.")
+                logging.getLogger().info(message)
+
+                self.options.progressiveLevelSize.value = potential_progressive_level_size
+
+        progressive_levels = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
+        return progressive_levels
 
     #making randomized scholar ability pool
     def get_optional_scholar_abilities(self, count: int):
@@ -373,10 +402,10 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if not self.options.levelGating.value == self.options.levelGating.option_none:
-            #this formula is how we can do ceiling division in Python
-            progressive_levels_in_pool = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
+            #guarantee space for 2 clamshells, one on the following line and one because you start with 1 progressive level already
+            max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 1
             #players start with one
-            for _ in range (progressive_levels_in_pool - 1):
+            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - 1):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 

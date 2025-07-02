@@ -51,7 +51,7 @@ class ClamshellGoalQuantity(Range):
     (If your goal is not Clamshells, this setting does nothing. 3 Clamshells will be placed in your pool and the Mañana Man will ask for 2. Don't worry, he's cool with it.)
     """
     display_name = "Clamshells needed to win"
-    range_start = 1
+    range_start = 2
     range_end = 99
     default = 13
     
