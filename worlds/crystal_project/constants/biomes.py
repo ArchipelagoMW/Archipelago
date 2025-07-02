@@ -188,4 +188,4 @@ def get_region_by_id(region_id: int) -> str:
     if region_id in OLD_WORLD_IDS:
         return THE_OLD_WORLD
 
-    return MENU
+    return MODDED_ZONE

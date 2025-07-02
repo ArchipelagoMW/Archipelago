@@ -11,15 +11,16 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     region_name_to_pass_dict
-from .locations import get_locations, get_bosses, get_shops, LocationData
+from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, get_modded_shopsanity_locations, assign_player_to_items, assign_player_to_locations
+from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
+    get_modded_shopsanity_locations, build_condition_rule
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
+from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -49,10 +50,12 @@ class CrystalProjectWorld(World):
     location_name_to_id = {location.name: location.code for location in get_locations(-1, options)}
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, options)}
     shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, options)}
+    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completions(-1, options)}
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
+    location_name_to_id.update(region_completion_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = get_modded_items(-1)
+    modded_items = get_modded_items()
 
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
@@ -63,12 +66,12 @@ class CrystalProjectWorld(World):
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
-    modded_locations = get_modded_locations(-1, World, options)
+    modded_locations = get_modded_locations()
 
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = get_modded_shopsanity_locations(-1, World, options)
+    modded_shops = get_modded_shopsanity_locations()
 
     for modded_shop in modded_shops:
         location_name_to_id[modded_shop.name] = modded_shop.code
@@ -110,16 +113,18 @@ class CrystalProjectWorld(World):
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
+        if self.options.regionsanity.value != self.options.shopsanity.option_disabled:
+            region_completions = get_region_completions(self.player, self.options)
+            locations.extend(region_completions)
+
         if self.options.useMods:
-            assign_player_to_locations(self.player, self.modded_locations)
             for modded_location in self.modded_locations:
-                location = LocationData(modded_location.region, modded_location.name, modded_location.code, modded_location.rule)
+                location = LocationData(modded_location.region, modded_location.name, modded_location.code, build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-            assign_player_to_locations(self.player, self.modded_shops)
             for shop in self.modded_shops:
-                location = LocationData(shop.region, shop.name, shop.code, shop.rule)
+                location = LocationData(shop.region, shop.name, shop.code, build_condition_rule(shop.rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -141,7 +146,7 @@ class CrystalProjectWorld(World):
             # check what regions we can access without just getting told none because we have no passes
             all_passes_state: CollectionState = CollectionState(self.multiworld)
             for region_pass in self.item_name_groups[PASS]:
-                all_passes_state.collect(self.create_item(region_pass))
+                all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
             for region in self.get_regions():
                 if region.can_reach(all_passes_state) and region.name != MENU:
                     if len(region.locations) > 2:
@@ -365,9 +370,9 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if self.options.useMods:
-            assign_player_to_items(self.player, self.modded_items)
             for modded_item in self.modded_items:
-                pool.append(modded_item)
+                item = self.create_item(modded_item.name)
+                pool.append(item)
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         for _ in range(self.get_total_clamshells(max_clamshells)):
@@ -441,5 +446,5 @@ class CrystalProjectWorld(World):
             "startingJobs": self.get_job_id_list(),
             "includedRegions": self.included_regions,
             "modTitles": mod_titles,
-            "moddedLocations": slot_data_locations
+            "moddedLocations": slot_data_locations,
         }
