@@ -107,10 +107,14 @@ class MoneyLogic(BaseLogic):
             return self.can_spend_walnut(amount)
         if currency == MemeCurrency.code or currency == MemeCurrency.energy or currency == MemeCurrency.blood:
             return self.logic.true_
-        if (currency == MemeCurrency.clic or currency == MemeCurrency.steps) and amount < 100:
+        if currency == MemeCurrency.clic and amount < 100:
             return self.logic.true_
-        if currency == MemeCurrency.clic or currency == MemeCurrency.steps or currency == MemeCurrency.time:
+        if currency == MemeCurrency.steps and amount < 6000:
+            return self.logic.true_
+        if currency == MemeCurrency.clic or currency == MemeCurrency.time:
             return self.logic.time.has_lived_months(1)
+        if currency == MemeCurrency.steps:
+            return self.logic.time.has_lived_months(amount // 5000)
         if currency == MemeCurrency.cookies:
             return self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
