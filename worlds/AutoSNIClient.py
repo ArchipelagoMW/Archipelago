@@ -14,6 +14,8 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
+SNES_READ_CHUNK_SIZE = 4096
+
 component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"),
                       description="A client for connecting to SNES consoles via Super Nintendo Interface.")
 components.append(component)
@@ -193,8 +195,23 @@ class SnesReader(Generic[_T_Enum]):
 
         reads: list[tuple[Read, bytes]] = []
         for r in self._ranges:
-            response = await snes_read(ctx, r.address, r.size)
-            if response is None:
-                return None
-            reads.append((r, response))
+            if r.size < SNES_READ_CHUNK_SIZE:  # most common
+                response = await snes_read(ctx, r.address, r.size)
+                if response is None:
+                    return None
+                reads.append((r, response))
+            else:  # big read
+                # Problems were reported with big reads,
+                # so we chunk it into smaller pieces.
+                read_so_far = 0
+                collection: list[bytes] = []
+                while read_so_far < r.size:
+                    remaining_size = r.size - read_so_far
+                    chunk_size = min(SNES_READ_CHUNK_SIZE, remaining_size)
+                    response = await snes_read(ctx, r.address + read_so_far, chunk_size)
+                    if response is None:
+                        return None
+                    collection.append(response)
+                    read_so_far += chunk_size
+                reads.append((r, b"".join(collection)))
         return SnesData(reads)
