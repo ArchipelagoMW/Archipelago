@@ -1,6 +1,5 @@
 # hadolint global ignore=SC1090,SC1091
-
-ARG ARCHITECTURE=$(uname -m)
+ARG ARCHITECTURE
 
 #Source
 FROM scratch AS release
@@ -21,6 +20,7 @@ RUN if [ "$ARCHITECTURE" = "x86_64" ]; then \
 
 #Archipelago
 FROM python:3.12-slim AS archipelago
+LABEL org.opencontainers.image.source https://github.com/a-priestley/Archipelago
 ENV VIRTUAL_ENV=/opt/venv
 ENV PYTHONUNBUFFERED=1
 WORKDIR /app
