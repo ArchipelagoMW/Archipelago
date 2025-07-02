@@ -156,5 +156,5 @@ def get_traps(options: StardewValleyOptions) -> list[ItemData]:
     return [
         trap
         for trap in items_by_group[Group.TRAP]
-        if options.trap_distribution.get(trap.name, 0) > 0
+        if trap.name not in options.trap_distribution or options.trap_distribution[trap.name] > 0
     ]
