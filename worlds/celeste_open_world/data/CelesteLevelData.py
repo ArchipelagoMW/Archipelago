@@ -103,7 +103,7 @@ all_doors: dict[str, Door] = {
     "1a_9_west": Door("1a_9_west", "1a_9", DoorDirection.down, False, True),
     "1a_9_east": Door("1a_9_east", "1a_9", DoorDirection.right, False, False),
 
-    "1a_9b_west": Door("1a_9b_west", "1a_9b", DoorDirection.left, False, True),
+    "1a_9b_west": Door("1a_9b_west", "1a_9b", DoorDirection.left, False, False),
     "1a_9b_north-west": Door("1a_9b_north-west", "1a_9b", DoorDirection.up, False, False),
     "1a_9b_east": Door("1a_9b_east", "1a_9b", DoorDirection.right, False, False),
     "1a_9b_north-east": Door("1a_9b_north-east", "1a_9b", DoorDirection.up, False, False),
@@ -1957,9 +1957,9 @@ all_doors: dict[str, Door] = {
     "7b_b-02_east": Door("7b_b-02_east", "7b_b-02", DoorDirection.right, False, False),
 
     "7b_b-03_bottom": Door("7b_b-03_bottom", "7b_b-03", DoorDirection.left, False, False),
-    "7b_b-03_top": Door("7b_b-03_top", "7b_b-03", DoorDirection.right, False, False),
+    "7b_b-03_top": Door("7b_b-03_top", "7b_b-03", DoorDirection.up, False, False),
 
-    "7b_c-01_west": Door("7b_c-01_west", "7b_c-01", DoorDirection.left, False, True),
+    "7b_c-01_west": Door("7b_c-01_west", "7b_c-01", DoorDirection.down, False, True),
     "7b_c-01_east": Door("7b_c-01_east", "7b_c-01", DoorDirection.up, False, False),
 
     "7b_c-00_west": Door("7b_c-00_west", "7b_c-00", DoorDirection.down, False, True),
@@ -2241,7 +2241,7 @@ all_doors: dict[str, Door] = {
     "10a_intro-03-space_west": Door("10a_intro-03-space_west", "10a_intro-03-space", DoorDirection.down, False, True),
     "10a_intro-03-space_east": Door("10a_intro-03-space_east", "10a_intro-03-space", DoorDirection.right, False, False),
 
-    "10a_a-00_west": Door("10a_a-00_west", "10a_a-00", DoorDirection.left, False, True),
+    "10a_a-00_west": Door("10a_a-00_west", "10a_a-00", DoorDirection.left, False, False),
     "10a_a-00_east": Door("10a_a-00_east", "10a_a-00", DoorDirection.right, False, False),
 
     "10a_a-01_west": Door("10a_a-01_west", "10a_a-01", DoorDirection.left, False, False),
@@ -2427,7 +2427,7 @@ all_doors: dict[str, Door] = {
     "10b_g-06_west": Door("10b_g-06_west", "10b_g-06", DoorDirection.left, False, False),
     "10b_g-06_east": Door("10b_g-06_east", "10b_g-06", DoorDirection.right, False, False),
 
-    "10b_h-00b_west": Door("10b_h-00b_west", "10b_h-00b", DoorDirection.left, False, True),
+    "10b_h-00b_west": Door("10b_h-00b_west", "10b_h-00b", DoorDirection.left, False, False),
     "10b_h-00b_east": Door("10b_h-00b_east", "10b_h-00b", DoorDirection.down, False, False),
 
     "10b_h-00_west": Door("10b_h-00_west", "10b_h-00", DoorDirection.up, False, False),
@@ -3894,7 +3894,7 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "5b_d-02_west---5b_d-02_east": RegionConnection("5b_d-02_west", "5b_d-02_east", [[ItemName.theo_crystal, ItemName.springs, ItemName.dash_switches, ItemName.seekers, ], ]),
 
-    "5b_d-03_west---5b_d-03_east": RegionConnection("5b_d-03_west", "5b_d-03_east", [[ItemName.theo_crystal, ItemName.springs, ItemName.coins, ], ]),
+    "5b_d-03_west---5b_d-03_east": RegionConnection("5b_d-03_west", "5b_d-03_east", [[ItemName.theo_crystal, ItemName.springs, ItemName.swap_blocks, ItemName.coins, ], ]),
 
     "5b_d-04_west---5b_d-04_east": RegionConnection("5b_d-04_west", "5b_d-04_east", [[ItemName.theo_crystal, ItemName.springs, ItemName.dash_refills, ], ]),
 
@@ -4645,7 +4645,8 @@ all_region_connections: dict[str, RegionConnection] = {
 
     "9a_d-10c_west---9a_d-10c_east": RegionConnection("9a_d-10c_west", "9a_d-10c_east", [[ItemName.feathers, ItemName.core_toggles, ], ]),
 
-    "9a_d-11_west---9a_d-11_east": RegionConnection("9a_d-11_west", "9a_d-11_east", [[ItemName.core_blocks, ItemName.core_toggles, ItemName.blue_cassette_blocks, ItemName.pink_cassette_blocks, ], ]),
+    "9a_d-11_west---9a_d-11_center": RegionConnection("9a_d-11_west", "9a_d-11_center", [[ItemName.core_blocks, ItemName.core_toggles, ItemName.blue_cassette_blocks, ItemName.pink_cassette_blocks, ], ]),
+    "9a_d-11_center---9a_d-11_east": RegionConnection("9a_d-11_center", "9a_d-11_east", []),
 
     "9a_space_west---9a_space_goal": RegionConnection("9a_space_west", "9a_space_goal", []),
 
@@ -5079,7 +5080,7 @@ all_locations: dict[str, LevelLocation] = {
     "3a_roof06_strawberry_1": LevelLocation("3a_roof06_strawberry_1", "Celestial Resort A - Room roof06 Strawberry 1", "3a_roof06_west", LocationType.strawberry, []),
     "3a_roof06_strawberry_2": LevelLocation("3a_roof06_strawberry_2", "Celestial Resort A - Room roof06 Strawberry 2", "3a_roof06_west", LocationType.strawberry, []),
     "3a_roof07_clear": LevelLocation("3a_roof07_clear", "Celestial Resort A - Level Clear", "3a_roof07_main", LocationType.level_clear, []),
-    "3a_roof07_golden": LevelLocation("3a_roof07_golden", "Celestial Resort A - Golden Strawberry", "3a_roof07_main", LocationType.golden_strawberry, [[ItemName.dream_blocks, ItemName.coins, ItemName.dash_refills, ], ]),
+    "3a_roof07_golden": LevelLocation("3a_roof07_golden", "Celestial Resort A - Golden Strawberry", "3a_roof07_main", LocationType.golden_strawberry, [["Celestial Resort A - Front Door Key", "Celestial Resort A - Hallway Key 1", "Celestial Resort A - Hallway Key 2", "Celestial Resort A - Huge Mess Key", "Celestial Resort A - Presidential Suite Key", ItemName.sinking_platforms, ItemName.dash_refills, ItemName.brown_clutter, ItemName.green_clutter, ItemName.pink_clutter, ItemName.coins, ItemName.moving_platforms, ItemName.springs, ], ]),
 
     "3b_back_binoculars": LevelLocation("3b_back_binoculars", "Celestial Resort B - Room back Binoculars", "3b_back_east", LocationType.binoculars, []),
     "3b_12_binoculars": LevelLocation("3b_12_binoculars", "Celestial Resort B - Room 12 Binoculars", "3b_12_west", LocationType.binoculars, []),
@@ -5185,7 +5186,7 @@ all_locations: dict[str, LevelLocation] = {
     "5b_b-02_key_2": LevelLocation("5b_b-02_key_2", "Mirror Temple B - Central Chamber Key 2", "5b_b-02_south-east", LocationType.key, []),
     "5b_b-09_binoculars": LevelLocation("5b_b-09_binoculars", "Mirror Temple B - Room b-09 Binoculars", "5b_b-09_bottom", LocationType.binoculars, []),
     "5b_d-05_clear": LevelLocation("5b_d-05_clear", "Mirror Temple B - Level Clear", "5b_d-05_goal", LocationType.level_clear, []),
-    "5b_d-05_golden": LevelLocation("5b_d-05_golden", "Mirror Temple B - Golden Strawberry", "5b_d-05_goal", LocationType.golden_strawberry, [[ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.theo_crystal, ItemName.dash_refills, ItemName.springs, ItemName.coins, ItemName.swap_blocks, ], ]),
+    "5b_d-05_golden": LevelLocation("5b_d-05_golden", "Mirror Temple B - Golden Strawberry", "5b_d-05_goal", LocationType.golden_strawberry, [["Mirror Temple B - Central Chamber Key 1", "Mirror Temple B - Central Chamber Key 2", ItemName.pink_cassette_blocks, ItemName.blue_cassette_blocks, ItemName.theo_crystal, ItemName.dash_refills, ItemName.springs, ItemName.coins, ItemName.swap_blocks, ], ]),
 
     "5c_02_binoculars": LevelLocation("5c_02_binoculars", "Mirror Temple C - Room 02 Binoculars", "5c_02_west", LocationType.binoculars, []),
     "5c_02_clear": LevelLocation("5c_02_clear", "Mirror Temple C - Level Clear", "5c_02_goal", LocationType.level_clear, []),
@@ -5291,6 +5292,7 @@ all_locations: dict[str, LevelLocation] = {
     "9a_c-02_strawberry": LevelLocation("9a_c-02_strawberry", "Core A - Room c-02 Strawberry", "9a_c-02_west", LocationType.strawberry, [[ItemName.core_blocks, ItemName.core_toggles, ItemName.dash_refills, ItemName.bumpers, ], ]),
     "9a_c-03b_strawberry": LevelLocation("9a_c-03b_strawberry", "Core A - Room c-03b Strawberry", "9a_c-03b_south", LocationType.strawberry, [[ItemName.core_toggles, ], ]),
     "9a_d-06_strawberry": LevelLocation("9a_d-06_strawberry", "Core A - Room d-06 Strawberry", "9a_d-06_bottom", LocationType.strawberry, [[ItemName.dash_refills, ItemName.core_blocks, ], ]),
+    "9a_d-11_cassette": LevelLocation("9a_d-11_cassette", "Core A - Cassette", "9a_d-11_center", LocationType.cassette, []),
     "9a_space_clear": LevelLocation("9a_space_clear", "Core A - Level Clear", "9a_space_goal", LocationType.level_clear, []),
     "9a_space_golden": LevelLocation("9a_space_golden", "Core A - Golden Strawberry", "9a_space_goal", LocationType.golden_strawberry, [[ItemName.dash_refills, ItemName.springs, ItemName.coins, ItemName.bumpers, ItemName.feathers, ItemName.badeline_boosters, ItemName.core_blocks, ItemName.core_toggles, ItemName.fire_ice_balls, ItemName.blue_cassette_blocks, ItemName.pink_cassette_blocks, ], ]),
 
@@ -7575,6 +7577,7 @@ all_regions: dict[str, PreRegion] = {
     "9a_d-10c_east": PreRegion("9a_d-10c_east", "9a_d-10c", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "9a_d-10c_east"], [loc for _, loc in all_locations.items() if loc.region_name == "9a_d-10c_east"]),
 
     "9a_d-11_west": PreRegion("9a_d-11_west", "9a_d-11", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "9a_d-11_west"], [loc for _, loc in all_locations.items() if loc.region_name == "9a_d-11_west"]),
+    "9a_d-11_center": PreRegion("9a_d-11_center", "9a_d-11", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "9a_d-11_center"], [loc for _, loc in all_locations.items() if loc.region_name == "9a_d-11_center"]),
     "9a_d-11_east": PreRegion("9a_d-11_east", "9a_d-11", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "9a_d-11_east"], [loc for _, loc in all_locations.items() if loc.region_name == "9a_d-11_east"]),
 
     "9a_space_west": PreRegion("9a_space_west", "9a_space", [reg_con for _, reg_con in all_region_connections.items() if reg_con.source_name == "9a_space_west"], [loc for _, loc in all_locations.items() if loc.region_name == "9a_space_west"]),

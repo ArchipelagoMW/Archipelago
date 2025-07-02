@@ -85,8 +85,8 @@ class CelesteOpenWorld(World):
 
         self.active_levels.add(self.goal_area)
         if self.goal_area == "10c":
-            self.active_levels.add("10b")
             self.active_levels.add("10a")
+            self.active_levels.add("10b")
         elif self.goal_area == "10b":
             self.active_levels.add("10a")
 
@@ -118,7 +118,7 @@ class CelesteOpenWorld(World):
         goal_area_location_count: int = sum(goal_area_option_to_display_name[self.options.goal_area] in loc.name for loc in self.get_locations())
 
         # Goal Items
-        goal_item_loc: Location = self.multiworld.get_location(goal_area_to_location_name[self.goal_area], self.player)
+        goal_item_loc: Location = self.get_location(goal_area_to_location_name[self.goal_area])
         goal_item_loc.place_locked_item(self.create_item(ItemName.house_keys))
         location_count -= 1
 
@@ -332,7 +332,7 @@ class CelesteOpenWorld(World):
     # Useful Debugging tools, kept around for later.
     #@classmethod
     #def stage_assert_generate(cls, _multiworld: MultiWorld) -> None:
-    #    with open("./worlds/celeste/data/IDs.txt", "w") as f:
+    #    with open("./worlds/celeste_open_world/data/IDs.txt", "w") as f:
     #        print("Items:", file=f)
     #        for name in sorted(CelesteOpenWorld.item_name_to_id, key=CelesteOpenWorld.item_name_to_id.get):
     #            id = CelesteOpenWorld.item_name_to_id[name]

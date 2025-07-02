@@ -1704,7 +1704,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": true
+                            "closes_behind": false
                         },
                         {
                             "name": "north-west",
@@ -10365,7 +10365,7 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "dream_blocks", "coins", "dash_refills" ] ]
+                                    "rule": [ [ "Front Door Key", "Hallway Key 1", "Hallway Key 2", "Huge Mess Key", "Presidential Suite Key", "sinking_platforms", "dash_refills", "brown_clutter", "green_clutter", "pink_clutter", "coins", "moving_platforms", "springs" ] ]
                                 }
                             ]
                         }
@@ -21582,7 +21582,7 @@
                             "connections": [
                                 {
                                     "dest": "east",
-                                    "rule": [ [ "theo_crystal", "springs", "coins" ] ]
+                                    "rule": [ [ "theo_crystal", "springs", "swap_blocks", "coins" ] ]
                                 }
                             ]
                         },
@@ -21668,7 +21668,7 @@
                                     "name": "golden",
                                     "display_name": "Golden Strawberry",
                                     "type": "golden_strawberry",
-                                    "rule": [ [ "pink_cassette_blocks", "blue_cassette_blocks", "theo_crystal", "dash_refills", "springs", "coins", "swap_blocks" ] ]
+                                    "rule": [ [ "Central Chamber Key 1", "Central Chamber Key 2", "pink_cassette_blocks", "blue_cassette_blocks", "theo_crystal", "dash_refills", "springs", "coins", "swap_blocks" ] ]
                                 }
                             ]
                         }
@@ -32056,7 +32056,7 @@
                         },
                         {
                             "name": "top",
-                            "direction": "right",
+                            "direction": "up",
                             "blocked": false,
                             "closes_behind": false
                         }
@@ -32084,7 +32084,7 @@
                     "doors": [
                         {
                             "name": "west",
-                            "direction": "left",
+                            "direction": "down",
                             "blocked": false,
                             "closes_behind": true
                         },
@@ -34633,8 +34633,25 @@
                             "name": "west",
                             "connections": [
                                 {
-                                    "dest": "east",
+                                    "dest": "center",
                                     "rule": [ [ "core_blocks", "core_toggles", "blue_cassette_blocks", "pink_cassette_blocks" ] ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "center",
+                            "connections": [
+                                {
+                                    "dest": "east",
+                                    "rule": []
+                                }
+                            ],
+                            "locations": [
+                                {
+                                    "name": "cassette",
+                                    "display_name": "Cassette",
+                                    "type": "cassette",
+                                    "rule": []
                                 }
                             ]
                         },
@@ -36248,7 +36265,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": true
+                            "closes_behind": false
                         },
                         {
                             "name": "east",
@@ -39006,7 +39023,7 @@
                             "name": "west",
                             "direction": "left",
                             "blocked": false,
-                            "closes_behind": true
+                            "closes_behind": false
                         },
                         {
                             "name": "east",

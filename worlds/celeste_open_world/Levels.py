@@ -1,5 +1,4 @@
 from __future__ import annotations
-from copy import deepcopy
 from enum import IntEnum
 
 from BaseClasses import CollectionState
@@ -93,8 +92,8 @@ class PreRegion:
     def __init__(self, name: str, room_name: str, connections: list[RegionConnection], locations: list[LevelLocation]):
         self.name = name
         self.room_name = room_name
-        self.connections = deepcopy(connections)
-        self.locations = deepcopy(locations)
+        self.connections = connections.copy()
+        self.locations = locations.copy()
 
         for loc in self.locations:
             loc.region = self
@@ -110,7 +109,7 @@ class RegionConnection:
     def __init__(self, source_name: str, destination_name: str, possible_access: list[list[str]] = []):
         self.source_name = source_name
         self.destination_name = destination_name
-        self.possible_access = deepcopy(possible_access)
+        self.possible_access = possible_access.copy()
 
 
 class LevelLocation:
@@ -126,7 +125,7 @@ class LevelLocation:
         self.display_name = display_name
         self.region_name = region_name
         self.loc_type = loc_type
-        self.possible_access = deepcopy(possible_access)
+        self.possible_access = possible_access.copy()
 
 class Room:
     level_name: str
@@ -141,8 +140,8 @@ class Room:
         self.level_name = level_name
         self.name = name
         self.display_name = display_name
-        self.regions = deepcopy(regions)
-        self.doors = deepcopy(doors)
+        self.regions = regions.copy()
+        self.doors = doors.copy()
         self.checkpoint = checkpoint
         self.checkpoint_region = checkpoint_region
 
@@ -187,8 +186,8 @@ class Level:
     def __init__(self, name: str, display_name: str, rooms: list[Room], room_connections: list[RoomConnection]):
         self.name = name
         self.display_name = display_name
-        self.rooms = deepcopy(rooms)
-        self.room_connections = deepcopy(room_connections)
+        self.rooms = rooms.copy()
+        self.room_connections = room_connections.copy()
 
 
 def load_logic_data() -> dict[str, Level]:

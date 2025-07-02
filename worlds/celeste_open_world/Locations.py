@@ -253,7 +253,7 @@ def generate_location_groups() -> dict[str, list[str]]:
         "Rooms": [name for name, id in location_data_table.items() if id >= location_id_offsets[LocationType.room_enter]],
     }
 
-    for _, level in level_data.items():
+    for level in level_data.values():
         location_groups.update({level.display_name: [loc_name for loc_name, id in location_data_table.items() if level.display_name in loc_name]})
 
     return location_groups
