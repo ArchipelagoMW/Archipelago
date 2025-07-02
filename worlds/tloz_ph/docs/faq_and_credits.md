@@ -1,7 +1,7 @@
 # FAQ and Credits for The Legend of Zelda: Phantom Hourglass for Archipelago
 
 - [Latest Release](https://github.com/carrotinator/Archipelago/releases)
-- [Setup Guide](https://github.com/carrotinator/Archipelago/blob/a7bff1f0d688dac7b889877acd37bd8b2d548a63/worlds/tloz_ph/docs/setup.md)
+- [Setup Guide](https://github.com/carrotinator/Archipelago/blob/main/worlds/tloz_ph/docs/setup.md)
 
 ## What is this?
 This is an Archipelago Randomizer for Zelda: Phantom Hourglass that doesn't use modding or romhacking to function. All randomization 
