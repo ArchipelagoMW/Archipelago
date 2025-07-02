@@ -135,18 +135,16 @@ class SnesData(Generic[_T_Enum]):
 class SnesReader(Generic[_T_Enum]):
     _ranges: Sequence[Read]
     """ sorted by address """
-    _ctx: "SNIContext"
 
-    def __init__(self, reads: type[_T_Enum], ctx: "SNIContext") -> None:
+    def __init__(self, reads: type[_T_Enum]) -> None:
         self._ranges = self._make_ranges(reads)
-        self._ctx = ctx
 
     @staticmethod
     def _make_ranges(reads: type[enum.Enum]) -> Sequence[Read]:
 
         unprocessed_reads: list[Read] = []
         for e in reads:
-            assert isinstance(e.value, Read), f"{reads.__name__} {e=} {type(e.value)=}"
+            assert isinstance(e.value, Read), (reads.__name__, e, e.value)
             unprocessed_reads.append(e.value)
         unprocessed_reads.sort()
 
@@ -165,7 +163,7 @@ class SnesReader(Generic[_T_Enum]):
         logging.debug(f"{len(ranges)=} {max(r.size for r in ranges)=}")
         return ranges
 
-    async def read(self) -> SnesData[_T_Enum] | None:
+    async def read(self, ctx: "SNIContext") -> SnesData[_T_Enum] | None:
         """
         returns `None` if reading fails,
         otherwise returns the data for the registered `Enum`
@@ -174,7 +172,7 @@ class SnesReader(Generic[_T_Enum]):
 
         reads: list[tuple[Read, bytes]] = []
         for r in self._ranges:
-            response = await snes_read(self._ctx, r.address, r.size)
+            response = await snes_read(ctx, r.address, r.size)
             if response is None:
                 return None
             reads.append((r, response))
