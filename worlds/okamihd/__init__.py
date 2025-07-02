@@ -1,11 +1,12 @@
 import random
 from BaseClasses import Item, ItemClassification, Tutorial, Location, MultiWorld
 from .Items import item_table, create_item, create_multiple_items, create_junk_items, item_frequencies, \
-    create_brush_techniques_items, get_item_name_to_id_dict, create_divine_instrument_items
+    create_brush_techniques_items, get_item_name_to_id_dict, create_divine_instrument_items, karmic_transformers, \
+    progressive_weapons
 from .Regions import create_regions
 from .Locations import is_location_valid, get_total_locations, get_location_names, okami_events
 from .Rules import set_rules
-from .Options import create_option_groups, OkamiOptions, slot_data_options
+from .Options import create_option_groups, OkamiOptions, slot_data_options, KarmicTransformers
 from worlds.AutoWorld import World, WebWorld, CollectionState
 from typing import List, Dict, TextIO
 from Utils import local_path
@@ -13,9 +14,10 @@ from .Types import OkamiItem
 from .Enums.DivineInstruments import DivineInstruments
 from .Enums.RegionNames import RegionNames
 
+
 # TODO: Replace
 class OkamiWebWolrd(WebWorld):
-    theme = "partyTime"
+    theme = "grassFlowers"
     option_groups = create_option_groups()
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
@@ -83,11 +85,33 @@ class OkamiWorld(World):
         itempool: List[Item] = []
 
         di = None
-        if world.options.StartWithDivineInstrument:
-            # Get a random divine instrument.
-            di = random.choice(list(world.item_name_groups.get('divine_instrument')))
+
+        if not world.options.ProgressiveWeapons:
+            # Get a random tier 1 divine instrument to start with.
+            di = random.choice(list(world.item_name_groups.get('divine_instrument_tier_1')))
             world.push_precollected(
                 OkamiItem(di, ItemClassification.progression, get_item_name_to_id_dict()[di], world.player))
+        else:
+            (di_name,di) = random.choice(list(progressive_weapons.items()))
+            world.push_precollected(OkamiItem(di_name,ItemClassification.progression,di.code,world.player))
+            for (progressive_waepon_name,progressive_weapon) in progressive_weapons.items():
+                if di_name==progressive_waepon_name:
+                    count=4
+                else:
+                    count=5
+                for i in range(count):
+                    itempool += [OkamiItem(di_name, di.classification, di.code, world.player)]
+
+        match world.options.KarmicTransformers:
+            case KarmicTransformers.option_precollected:
+                for (k_name,k) in karmic_transformers.items():
+                    world.push_precollected(OkamiItem(k_name,k.classification,k.code,world.player))
+            case KarmicTransformers.option_in_item_pool:
+                for (k_name, k) in karmic_transformers.items():
+                    if k_name=="Karmic Returner":
+                        world.push_precollected(OkamiItem(k_name, k.classification, k.code, world.player))
+                    else:
+                        itempool+=[OkamiItem(k_name, k.classification, k.code, world.player)]
 
         # Event Items Creation
         for name in RegionNames:
@@ -99,8 +123,8 @@ class OkamiWorld(World):
                         precollected_item_event_state = event_data.precollected(world.options)
 
                         if precollected_item_event_state:
-                        # With the current options this event is unlocked at the start, so we create a precollected item
-                        # Classification probably doesn't matter much for precollected items I'd guess
+                            # With the current options this event is unlocked at the start, so we create a precollected item
+                            # Classification probably doesn't matter much for precollected items I'd guess
                             world.push_precollected(
                                 OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player))
                         # If it's precollected, no need to add it to the itempool
@@ -111,10 +135,10 @@ class OkamiWorld(World):
                                 is_event_item_state = event_data.is_event_item(world.options)
                             if is_event_item_state:
                                 # With the current options this event becomes its own item, so we need to add it to the item pool
-                                itempool += OkamiItem(event_name, ItemClassification.progression, event_data.id, world.player)
+                                itempool += OkamiItem(event_name, ItemClassification.progression, event_data.id,
+                                                      world.player)
 
         itempool += create_brush_techniques_items(world)
-        itempool += create_divine_instrument_items(world, di)
         for name in item_table.keys():
             item_type: ItemClassification = item_table.get(name).classification
             itempool += create_multiple_items(world, name, item_frequencies.get(name, 1), item_type)
@@ -124,7 +148,19 @@ class OkamiWorld(World):
 
     # Probably has to be a better way to do this.
     item_name_groups = {
-        "divine_instrument": [DivineInstruments.DIVINE_RETRIBUTION.value.item_name,
-                              DivineInstruments.DEVOUT_BEADS.value.item_name,
-                              DivineInstruments.TSUMUGARI.value.item_name]
+        "divine_instrument_tier_1": [DivineInstruments.DIVINE_RETRIBUTION.value.item_name,
+                                     DivineInstruments.DEVOUT_BEADS.value.item_name,
+                                     DivineInstruments.TSUMUGARI.value.item_name],
+        "divine_instrument_tier_2": [DivineInstruments.SNARLING_BEAST.value.item_name,
+                                     DivineInstruments.LIFE_BEADS.value.item_name,
+                                     DivineInstruments.SEVEN_STRIKE.value.item_name],
+        "divine_instrument_tier_3": [DivineInstruments.INFINITY_JUDGE.value.item_name,
+                                     DivineInstruments.EXORCISM_BEADS.value.item_name,
+                                     DivineInstruments.BLADE_OF_KUSANAGI.value.item_name],
+        "divine_instrument_tier_4": [DivineInstruments.TRINITY_MIRROR.value.item_name,
+                                     DivineInstruments.RESURRECTION_BEADS.value.item_name,
+                                     DivineInstruments.EIGHT_WONDER.value.item_name],
+        "divine_instrument_tier_5": [DivineInstruments.SOLAR_FLARE.value.item_name,
+                                     DivineInstruments.TUNDRA_BEADS.value.item_name,
+                                     DivineInstruments.THUNDER_EDGE.value.item_name]
     }

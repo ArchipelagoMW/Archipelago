@@ -7,7 +7,7 @@ from BaseClasses import Location, Entrance, Region
 from typing import TYPE_CHECKING, List, Callable, Union, Dict
 
 if TYPE_CHECKING:
-    from . import OkamiWorld
+    from . import OkamiWorld, progressive_weapons
 
 
 def has_power_slash_level(state: CollectionState, world: "OkamiWorld", level: int) -> bool:
@@ -35,23 +35,36 @@ def has_portable_ice_source(state: CollectionState, world: "OkamiWorld") -> bool
 
 
 def has_divine_instrument_tier(tier: int, state: CollectionState, world: "OkamiWorld") -> bool:
-    match tier:
-        case 1:
-            return state.has_group('divine_instrument', world.player, 1)
-        case 2:
-            return (state.has_group('divine_instrument_tier_2', world.player, 1) or
-                    state.has_group('divine_instrument_tier_3', world.player, 1) or
-                    state.has_group('divine_instrument_tier_4', world.player, 1) or
-                    state.has_group('divine_instrument_tier_5', world.player, 1))
-        case 3:
-            return (state.has_group('divine_instrument_tier_3', world.player, 1) or
-                    state.has_group('divine_instrument_tier_4', world.player, 1) or
-                    state.has_group('divine_instrument_tier_5', world.player, 1))
-        case 4:
-            return (state.has_group('divine_instrument_tier_4', world.player, 1) or
-                    state.has_group('divine_instrument_tier_5', world.player, 1))
-        case 5:
-            return state.has_group('divine_instrument_tier_5', world.player, 1)
+    if not world.options.ProgressiveWeapons:
+        match tier:
+            case 1:
+                return (state.has_group('divine_instrument_tier_1', world.player, 1) or
+                        state.has_group('divine_instrument_tier_2', world.player, 1) or
+                        state.has_group('divine_instrument_tier_3', world.player, 1) or
+                        state.has_group('divine_instrument_tier_4', world.player, 1) or
+                        state.has_group('divine_instrument_tier_5', world.player, 1))
+            case 2:
+                return (state.has_group('divine_instrument_tier_2', world.player, 1) or
+                        state.has_group('divine_instrument_tier_3', world.player, 1) or
+                        state.has_group('divine_instrument_tier_4', world.player, 1) or
+                        state.has_group('divine_instrument_tier_5', world.player, 1))
+            case 3:
+                return (state.has_group('divine_instrument_tier_3', world.player, 1) or
+                        state.has_group('divine_instrument_tier_4', world.player, 1) or
+                        state.has_group('divine_instrument_tier_5', world.player, 1))
+            case 4:
+                return (state.has_group('divine_instrument_tier_4', world.player, 1) or
+                        state.has_group('divine_instrument_tier_5', world.player, 1))
+            case 5:
+                return state.has_group('divine_instrument_tier_5', world.player, 1)
+    else:
+        return state.has_any_count(
+            {
+                "Progressive Mirror":tier,
+                "Progressive Rosary":tier,
+                "Progressive Sword":tier
+            },
+        world.player)
 
 
 def apply_event_or_location_rules(loc: Location, name: str, data: LocData | EventData, world: "OkamiWorld"):
@@ -93,12 +106,12 @@ def apply_event_or_location_rules(loc: Location, name: str, data: LocData | Even
 def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorld"):
     if data.needs_swim:
         add_rule(etr, lambda state: (
-                # Disable bc we won't randomize merchants yet
-                #state.has("Water Tablet", world.player) or
-                #TODO: add event here to buy the water table from its unrandomized location at the emperor's as an alternative way
-                # to get this OR place locked water tablet at a standard location
-                state.has(
-            BrushTechniques.GREENSPROUT_WATERLILY.value.item_name, world.player)))
+            # Disable bc we won't randomize merchants yet
+            # state.has("Water Tablet", world.player) or
+            # TODO: add event here to buy the water table from its unrandomized location at the emperor's as an alternative way
+            # to get this OR place locked water tablet at a standard location
+            state.has(
+                BrushTechniques.GREENSPROUT_WATERLILY.value.item_name, world.player)))
 
     for e in data.has_events:
         add_rule(etr, lambda state: state.has(e, world.player))
@@ -106,7 +119,7 @@ def apply_exit_rules(etr: Entrance, name: str, data: ExitData, world: "OkamiWorl
 
 def set_rules(world: "OkamiWorld"):
     world.multiworld.completion_condition[world.player] = lambda state: state.has(
-         "Agata Forest - Open Ruins Door", world.player)
+        "Agata Forest - Open Ruins Door", world.player)
     return
     # set_specific_rules(world)
 

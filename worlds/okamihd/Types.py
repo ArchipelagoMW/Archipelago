@@ -14,7 +14,7 @@ class OkamiItem(Item):
 
 
 class ItemData(NamedTuple):
-    code: Optional[int]
+    code: int
     classification: ItemClassification
 
 class LocData(NamedTuple):

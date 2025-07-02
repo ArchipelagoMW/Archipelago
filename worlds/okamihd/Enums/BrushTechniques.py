@@ -28,21 +28,21 @@ class BrushTechniques(Enum):
     WATERSPROUT = BrushTechniqueData(0x107, "Watersprout")
     CRESCENT = BrushTechniqueData(0x108, "Crescent", item_classification=ItemClassification.progression)
     GALESTROM = BrushTechniqueData(0x109, "Galestrom")
-    INFERNO = BrushTechniqueData(0x110, "Inferno")
-    VEIL_OF_MIST = BrushTechniqueData(0x111, "Veil of Mist")
-    CATWALK = BrushTechniqueData(0x112, "Cawalk")
-    THUNDERSTORM = BrushTechniqueData(0x113, "Thunderstorm")
-    BLIZZARD = BrushTechniqueData(0x114, "Blizzard")
+    INFERNO = BrushTechniqueData(0x10a, "Inferno")
+    VEIL_OF_MIST = BrushTechniqueData(0x10b, "Veil of Mist")
+    CATWALK = BrushTechniqueData(0x10c, "Catwalk")
+    THUNDERSTORM = BrushTechniqueData(0x10d, "Thunderstorm")
+    BLIZZARD = BrushTechniqueData(0x10e, "Blizzard")
     ## UPGRADES/SECRET
-    # MIST_WARP = BrushTechniqueData(0x115, "Mist Warp")
-    # FIREBURST = BrushTechniqueData(0x116, "Fireburst")
-    # WHIRLWIND = BrushTechniqueData(0x117, "Whirlwind")
-    # DELUGE = BrushTechniqueData(0x118, "Deluge")
-    # FOUNTAIN = BrushTechniqueData(0x119, "Fountain")
-    # THUNDERBOLT = BrushTechniqueData(0x120, "Thunderbolt")
+    MIST_WARP = BrushTechniqueData(0x10f, "Mist Warp")
+    FIREBURST = BrushTechniqueData(0x110, "Fireburst")
+    WHIRLWIND = BrushTechniqueData(0x111, "Whirlwind")
+    DELUGE = BrushTechniqueData(0x112, "Deluge")
+    FOUNTAIN = BrushTechniqueData(0x113, "Fountain")
+    THUNDERBOLT = BrushTechniqueData(0x114, "Thunderbolt")
     ## VERY SECRET ONE
     ## I think this is the only "optional" one, every other one is required at least to clear its tutorial ?
-    # ICESTORM = BrushTechniqueData(0x121, "Icestorm", item_classification=ItemClassification.filler)
+    ICESTORM = BrushTechniqueData(0x115, "Icestorm", item_classification=ItemClassification.filler)
 
     @staticmethod
     def list():
