@@ -92,11 +92,9 @@ class OkamiWorld(World):
             world.push_precollected(
                 OkamiItem(di, ItemClassification.progression, get_item_name_to_id_dict()[di], world.player))
         else:
-            #FIXME
-            di_name = random.choice(progressive_weapons.keys())
-            di = progressive_weapons[di_name]
+            (di_name,di) = random.choice(list(progressive_weapons.items()))
             world.push_precollected(OkamiItem(di_name,ItemClassification.progression,di.code,world.player))
-            for (progressive_waepon_name,progressive_weapon) in progressive_weapons:
+            for (progressive_waepon_name,progressive_weapon) in progressive_weapons.items():
                 if di_name==progressive_waepon_name:
                     count=4
                 else:

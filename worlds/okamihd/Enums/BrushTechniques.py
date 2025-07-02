@@ -30,7 +30,7 @@ class BrushTechniques(Enum):
     GALESTROM = BrushTechniqueData(0x109, "Galestrom")
     INFERNO = BrushTechniqueData(0x10a, "Inferno")
     VEIL_OF_MIST = BrushTechniqueData(0x10b, "Veil of Mist")
-    CATWALK = BrushTechniqueData(0x10c, "Cawalk")
+    CATWALK = BrushTechniqueData(0x10c, "Catwalk")
     THUNDERSTORM = BrushTechniqueData(0x10d, "Thunderstorm")
     BLIZZARD = BrushTechniqueData(0x10e, "Blizzard")
     ## UPGRADES/SECRET
