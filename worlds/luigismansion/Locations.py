@@ -52,7 +52,7 @@ class LMLocation(Location):
 # require Boo Radar
 
 # Base Chests / Locations
-BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
+BASE_0_LOCATION_TABLE: dict[str, LMLocationData] = {
     # Give item on Altar lights turning on
     "Luigi's Courage": LMLocationData("Foyer", 708, "KingdomHearts", 0, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803CDFDC, bit_position=1, ram_byte_size=2)]),
@@ -133,7 +133,7 @@ FREESTANDING_KEY_TABLE = {
         update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21)]),
 }
 
-BASE_LOCATION_TABLE = {**BASE_LOCATION_TABLE, **FREESTANDING_KEY_TABLE}
+BASE_LOCATION_TABLE = {**BASE_0_LOCATION_TABLE, **FREESTANDING_KEY_TABLE}
 
 # Adds all the chests that are spawned after clearing a room of ghosts.
 CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
