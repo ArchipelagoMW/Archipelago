@@ -201,6 +201,10 @@ def write_bosses(world, rom) -> None:
     if world.options.safe_final_boss:
         while world.boss_list[25] in hard_final_bosses:
             i = world.random.randrange(len(world.boss_list))
+            if (world.boss_list[i] == "Diamond Dog" and not world.options.decouple_diamond_dog) or (
+                world.boss_list[i] == "Giygas (4)" and not world.options.boss_shuffle_add_giygas
+            ):
+                continue
             world.boss_list[25], world.boss_list[i] = world.boss_list[i], world.boss_list[25]
 
 

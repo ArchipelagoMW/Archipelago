@@ -50,10 +50,11 @@ Character Locations:
 
 ## Which items can be in another player's world?
 
-Any shuffled item can be in other players' worlds.
+Items you can find for EarthBound include PSI for Poo, characters, teleport destinations, money, and just about any regular or key item.
+A few new key items have been added to replace certain plot flags.
 
 ## What does another world's item look like in EarthBound?
-When collecting an item for another player, the item and player are identified as the receiver. If Shopsanity is enable, items for other players
+When collecting an item for another player, the item and player are identified as the receiver. If Shopsanity is enabled, items for other players
 in shops will display the player they are for below the shop window. When attempting to purchase an item for another player, the full name of the item and its receiver
 will be displayed to confirm. If the 'Presents Match Contents' option is enabled, presents will display the Archipelago symbol if they contain an item for another player.
 
@@ -77,5 +78,41 @@ The location of the Hint Man will be marked on your map, viewable at all times w
 Skip Sandwiches (And Skip Sandwich DXs) have been replaced with an item called the Repel Sandwich (and Repel Superwich).
 Repel Sandwiches will prevent normal enemies from spawning for a short time. The help text can tell you more.
 
-## Run Button ##
+## Is there a run button? ##
 You can hold down the Y button to run.
+
+## I returned to Moonside after beating the Mani-Mani statue and now I can't leave! ##
+Check behind the cafe counter as you would in Fourside. A sparkle indicates the general area.
+
+## How do I get to the undeground prison in Threed? ##
+Use the Bad Key Machine on the door from the outside.
+
+## How do I get from Onett to Twoson? ##
+The captain at the Police Station might be convinced to remove the barricade...
+
+## How do I get rid of the ghosts in the road tunnels? ##
+The ghosts will vanish after Master Belch is defeated, irregardless of anything else.
+
+## How do I get back to Andonuts's Lab after using the Sky Runner? ##
+You can either go back to the underground prison or talk to Bubble Monkey, regardless of if you have helped him before.
+
+## My game automatically rolls credits after getting to Lumine Hall, but I need to get to the Lost Underworld##
+Once you defeat the boss of Lumine Hall, the Lost Underworld teleport is automatically unlocked. You will need to leave and warp there, though.
+
+## Community Suggestions ##
+Community suggestions for certain things are being accepted. You can find submissions below.
+
+## Lumine Hall Text Scroll ##
+https://docs.google.com/forms/d/e/1FAIpQLSff7FR0mxtQcZ3d87BoZcRMggBxqGYk2fwmY_ibVnR1sXXQWw/viewform
+
+## Window Flavor Colors ##
+https://docs.google.com/forms/d/e/1FAIpQLSd17Bp4NYGHJqadaYprKaEXFW4EgbUYSPKxGoyufhArb1BbYw/viewform
+
+## Joke Hints ##
+https://docs.google.com/forms/d/e/1FAIpQLScHWK0wHPCmDgHYh8juTrntsyVqEdzYWGCScLdEs21oZCa2mQ/viewform
+
+## Equipment Randomizer ##
+https://docs.google.com/forms/d/e/1FAIpQLSdy-aczL4LmMDirbeD-s5N6u8ae0G2BSrhGfCxOqFhZa_x48A/viewform
+
+## Enemy Randomizer ##
+https://docs.google.com/forms/d/e/1FAIpQLSdF0aFoIwCO7t7OpaObTE_b6dAgLpXC2_8fS-SjdgJDjAQJ6A/viewform
