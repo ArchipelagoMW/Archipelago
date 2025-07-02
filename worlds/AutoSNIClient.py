@@ -5,7 +5,7 @@ from bisect import bisect_right
 from dataclasses import dataclass
 import enum
 import logging
-from typing import (TYPE_CHECKING, Any, ClassVar, Dict, Generic, Iterable, List,
+from typing import (TYPE_CHECKING, Any, ClassVar, Dict, Generic, Iterable,
                     NamedTuple, Optional, Sequence, Tuple, TypeGuard, TypeVar, Union)
 
 
