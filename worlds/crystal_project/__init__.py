@@ -361,14 +361,6 @@ class CrystalProjectWorld(World):
                     item = self.set_classifications(name)
                     pool.append(item)
 
-        if not self.options.levelGating.value == self.options.levelGating.option_none:
-            #this formula is how we can do ceiling division in Python
-            progressive_levels_in_pool = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
-            #players start with one
-            for _ in range (progressive_levels_in_pool - 1):
-                item = self.set_classifications(PROGRESSIVE_LEVEL)
-                pool.append(item)
-
         #7 spells randomly chosen from the entire pool (they have Reverse Polarity as default to merc Gran)
         if self.options.includedRegions == self.options.includedRegions.option_beginner:
             for scholar_ability in self.get_optional_scholar_abilities(7):
@@ -378,6 +370,14 @@ class CrystalProjectWorld(World):
         if self.options.useMods:
             for modded_item in self.modded_items:
                 item = self.create_item(modded_item.name)
+                pool.append(item)
+
+        if not self.options.levelGating.value == self.options.levelGating.option_none:
+            #this formula is how we can do ceiling division in Python
+            progressive_levels_in_pool = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
+            #players start with one
+            for _ in range (progressive_levels_in_pool - 1):
+                item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
