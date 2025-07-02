@@ -15147,6 +15147,7 @@ LDA $1A
 JSL goto_bank_c2
 
 .Return:
+STZ $AA96
 PLD
 RTS
 
@@ -15194,6 +15195,7 @@ LDY #$A579
 LDA $1A
 JSL goto_bank_c2
 .Return:
+STZ $AA96
 PLD
 RTS
 
