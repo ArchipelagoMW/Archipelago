@@ -166,10 +166,10 @@ okami_items = {
     "White porcelain pot": ItemData(0xA0, ItemClassification.filler),
     "Traveler's Charm": ItemData(0x70, ItemClassification.filler),
     "Holy Bone M": ItemData(0x8e, ItemClassification.filler),
-    "Feedbag (Meat)": ItemData(0x8e, ItemClassification.filler),
-    "Feedbag (Herbs)": ItemData(0x8e, ItemClassification.filler),
-    "Feedbag (Seeds)": ItemData(0x8e, ItemClassification.filler),
-    "Feedbag (Fish)": ItemData(0x8e, ItemClassification.filler),
+    "Feedbag (Meat)": ItemData(0x90, ItemClassification.filler),
+    "Feedbag (Herbs)": ItemData(0x91, ItemClassification.filler),
+    "Feedbag (Seeds)": ItemData(0x92, ItemClassification.filler),
+    "Feedbag (Fish)": ItemData(0x93, ItemClassification.filler),
     "Steel Fist Sake": ItemData(0x99, ItemClassification.filler),
     "Steel Soul Sake": ItemData(0x9a, ItemClassification.filler),
     "Godly Charm": ItemData(0x9b, ItemClassification.filler),
@@ -207,7 +207,7 @@ okami_items = {
     "Amber Tassels": ItemData(0xc4, ItemClassification.filler),
     "Cat's Eye Tassels": ItemData(0xc5, ItemClassification.filler),
     "Amethyst Tassels": ItemData(0xc6, ItemClassification.filler),
-    "Jade Tassels": ItemData(0xc7, ItemClassification.filler),
+    "Jade Tassels": ItemData(0xc7, ItemClassification.filler)
 }
 
 junk_weights = {
@@ -225,7 +225,7 @@ junk_weights = {
     "Karmic Transformer 8":0,
     "Karmic Transformer 7":0,
     "Karmic Transformer 9":0,
-    "Karmic Transformer 1":0,
+    "Karmic Transformer 1":0
 }
 # For items that need to appear more than once, I'll put the right numbers, but keep them commented to not flood
 # the item pool while there aren't enough locations to place them
