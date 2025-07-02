@@ -571,8 +571,10 @@ def extend_secrets_locations(randomized_locations: List[LocationData], options: 
     if SecretsanityOptionName.secret_notes in options.secretsanity:
         locations.extend(locations_by_tag[LocationTags.SECRET_NOTE])
         for location_dupe in locations_by_tag[LocationTags.REPLACES_PREVIOUS_LOCATION]:
+            second_part_of_name = location_dupe.name.split(":")[-1]
             for location in randomized_locations:
-                if location.name in location_dupe.name:
+                second_part_of_dupe_name = location.name.split(":")[-1]
+                if second_part_of_name == second_part_of_dupe_name:
                     randomized_locations.remove(location)
     filtered_locations = filter_disabled_locations(options, content, locations)
     randomized_locations.extend(filtered_locations)
