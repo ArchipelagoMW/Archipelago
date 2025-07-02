@@ -44,11 +44,20 @@ class SMMemory(Enum):
     recv_queue_w_count = Read(SM_RECV_QUEUE_WCOUNT, 2)
 
 
+class ConnectMemory(Enum):
+    rom_name = Read(SM_ROMNAME_START, ROMNAME_SIZE)
+    remote = Read(SM_REMOTE_ITEM_FLAG_ADDR, 1)
+    death_link = Read(SM_DEATH_LINK_ACTIVE_ADDR, 1)
+
+
 class SMSNIClient(SNIClient):
     game = "Super Metroid"
     patch_suffix = [".apsm", ".apm3"]
 
     snes_reader = SnesReader(SMMemory)
+    """ for everything except `validate_rom` """
+    connect_reader = SnesReader(ConnectMemory)
+    """ for `validate_rom` """
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes
@@ -72,10 +81,12 @@ class SMSNIClient(SNIClient):
 
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        snes_data = await self.connect_reader.read(ctx)
+        if snes_data is None:
+            return False
 
-        rom_name = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
-        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[2] not in b"1234567890":
+        rom_name = snes_data.get(ConnectMemory.rom_name)
+        if rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[2] not in b"1234567890":
             return False
 
         ctx.game = self.game
@@ -85,17 +96,16 @@ class SMSNIClient(SNIClient):
         if romVersion < 30:
             ctx.items_handling = 0b001 # full local
         else:
-            item_handling = await snes_read(ctx, SM_REMOTE_ITEM_FLAG_ADDR, 1)
-            ctx.items_handling = 0b001 if item_handling is None else item_handling[0]
+            item_handling = snes_data.get(ConnectMemory.remote)
+            ctx.items_handling = item_handling[0]
 
         ctx.rom = rom_name
 
-        death_link = await snes_read(ctx, SM_DEATH_LINK_ACTIVE_ADDR, 1)
+        death_link = snes_data.get(ConnectMemory.death_link)
 
-        if death_link:
-            ctx.allow_collect = bool(death_link[0] & 0b100)
-            ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
-            await ctx.update_death_link(bool(death_link[0] & 0b1))
+        ctx.allow_collect = bool(death_link[0] & 0b100)
+        ctx.death_link_allow_survive = bool(death_link[0] & 0b10)
+        await ctx.update_death_link(bool(death_link[0] & 0b1))
 
         return True
 
