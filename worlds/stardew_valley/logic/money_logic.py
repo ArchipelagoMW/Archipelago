@@ -34,24 +34,25 @@ class MoneyLogic(BaseLogic):
         clint_rule = self.logic.region.can_reach_all(Region.blacksmith, Region.mines_floor_5)
         robin_rule = self.logic.region.can_reach_all(Region.carpenter, Region.secret_woods)
         shipping_rule = self.logic.shipping.can_use_shipping_bin
+        farming_rule = self.logic.farming.can_plant_and_grow_item(Season.not_winter)
 
         if amount <= 2500:
             selling_any_rule = pierre_rule | willy_rule | clint_rule | robin_rule | shipping_rule
             return selling_any_rule
 
         if amount <= 5000:
-            selling_all_rule = (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
+            selling_all_rule = (pierre_rule & farming_rule) | (pierre_rule & willy_rule & clint_rule & robin_rule) | shipping_rule
             return selling_all_rule
 
         if amount <= 10000:
-            return shipping_rule
+            return shipping_rule & farming_rule
 
         seed_rules = self.logic.region.can_reach(Region.pierre_store)
         if amount <= 40000:
-            return shipping_rule & seed_rules
+            return shipping_rule & seed_rules & farming_rule
 
         percent_progression_items_needed = min(90, amount // 20000)
-        return shipping_rule & seed_rules & HasProgressionPercent(self.player, percent_progression_items_needed)
+        return shipping_rule & seed_rules & farming_rule & HasProgressionPercent(self.player, percent_progression_items_needed)
 
     @cache_self1
     def can_spend(self, amount: int) -> StardewRule:
