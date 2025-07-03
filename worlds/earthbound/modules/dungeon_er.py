@@ -9,7 +9,7 @@ class EBDungeonDoor:
     address: int
     copyaddress: int
     direction: int
-    is_script: Optional[bool] = False # Script warps invert the x and y coordinate
+    is_script: bool = False # Script warps invert the x and y coordinate
 
 
 def shuffle_dungeons(world) -> None:
