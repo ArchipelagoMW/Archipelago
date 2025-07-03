@@ -88,7 +88,7 @@ def initialize_bosses(world) -> None:
         "Giygas (4)"
     ]
 
-    world.boss_slots: Dict[str, SlotInfo] = {
+    world.boss_slots = {
         "Frank": SlotInfo([0x0F9338],
                           [0x066111, 0x066198, 0x0661AC],
                           [0x065F11, 0x065F20, 0x066482, 0x0660C5, 0x0746E2, 0x074BC1, 0x074E1D],
