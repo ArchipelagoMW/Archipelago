@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 from .Arrays import item_dict, local_levels, skipped_local_locations
-from .Items import GLItem, item_frequencies, item_list, item_table, obelisks, mirror_shards
+from .Items import GLItem, item_frequencies, item_list, item_table, obelisks, mirror_shards, traps
 from .Locations import LocationData, all_locations, location_table
 from .Options import GLOptions
 from .Regions import connect_regions, create_regions
@@ -160,7 +160,7 @@ class GauntletLegendsWorld(World):
         required_items = []
         precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
         skipped_items = set()
-        item_required_count = len([location for location in self.get_locations() if location.item is None])
+        item_required_count = len(self.multiworld.get_unfilled_locations(self.player))
         if self.options.infinite_keys:
             skipped_items.add("Key")
         if self.options.permanent_speed:
@@ -200,7 +200,7 @@ class GauntletLegendsWorld(World):
             filler_items += [item.item_name for _ in range(freq)]
             self.random.shuffle(filler_items)
 
-        traps_frequency = (len(self.get_locations()) * (self.options.traps_frequency / 100))
+        traps_frequency = int(len(self.get_locations()) * (self.options.traps_frequency / 100))
         if self.options.traps_choice == "all_active":
             traps_frequency //= 2
         if self.options.traps_choice == "only_death" or self.options.traps_choice == "all_active":
@@ -227,11 +227,29 @@ class GauntletLegendsWorld(World):
         # A percentage of all items will be placed locally, all deaths will be placed locally
         local_item_count = len(self.items) + len(self.death)
         local_locations = []
+        unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
+        unfilled_names = {location.name for location in unfilled_locations}
+
         for level in local_levels:
-            level = [location for location in level if location.name not in self.disabled_locations and location.name not in skipped_local_locations]
+            level = [location for location in level if
+                     location.name in unfilled_names and location.name not in skipped_local_locations]
             self.random.shuffle(level)
             for i in range(min(len(level), (local_item_count // len(local_levels)) + 3)):
                 local_locations.append(self.get_location(level[i].name))
+
+        # If we don't have enough locations, add more from remaining unfilled locations
+        if len(local_locations) < local_item_count:
+            used_location_names = {loc.name for loc in local_locations}
+            remaining_unfilled = [loc for loc in unfilled_locations
+                                  if loc.name not in used_location_names
+                                  and loc.name not in skipped_local_locations]
+            self.random.shuffle(remaining_unfilled)
+
+            needed = local_item_count - len(local_locations)
+            for i in range(min(needed, len(remaining_unfilled))):
+                local_locations.append(remaining_unfilled[i])
+
+        # Only slice if we have more than needed
         local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)

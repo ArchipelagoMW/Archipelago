@@ -138,5 +138,5 @@ mirror_shards = [
     "Plague Fiend Mirror Shard"
 ]
 
-item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list}
+item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list + traps}
 items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list}
