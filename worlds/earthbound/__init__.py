@@ -107,6 +107,8 @@ class EarthBoundWorld(World):
         self.uncommon_gear = []
         self.rare_gear = []
         self.get_all_spheres = threading.Event()
+        self.boss_list: List[str] = []
+        self.starting_region = int
 
         self.common_items = [
             "Cookie",
