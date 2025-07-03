@@ -6,7 +6,7 @@ class ItemData(NamedTuple):
     category: str
     code: Optional[int]
     classification: ItemClassification
-    amount: Optional[int] = 1
+    amount: int = 1
 
 
 item_table: Dict[str, ItemData] = {
