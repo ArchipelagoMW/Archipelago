@@ -2,9 +2,8 @@ import os
 import typing
 import threading
 import pkgutil
-
-
 from typing import List, Set, Dict, TextIO
+
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
