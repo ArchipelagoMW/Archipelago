@@ -96,7 +96,7 @@ def get_modded_items() -> List[Item]:
             name = 'Item - ' + item['Name'] + ' - ' + str(item_id)
 
             if not item_in_pool and not excluded:
-                mod_item = Item(name, ItemClassification.progression, item_id, empty_player_value)
+                mod_item = Item(name, ItemClassification.filler, item_id, empty_player_value)
 
                 if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
                     items.append(mod_item)
@@ -119,6 +119,30 @@ def get_modded_items() -> List[Item]:
         file.close()
 
     return items
+
+def update_item_classification(item: Item, rule_condition, world: "CrystalProjectWorld") -> None:
+    for condition in rule_condition:
+        if condition is not None:
+            loot_type = condition['Data']['LootType']
+            loot_id = condition['Data']['LootValue']
+        else:
+            continue
+
+        if loot_type == 1:
+            archipelago_loot_id = loot_id + item_index_offset
+        elif loot_type == 2:
+            archipelago_loot_id = loot_id + equipment_index_offset
+        else:
+            continue
+
+        if archipelago_loot_id in world.item_id_to_name:
+            item_name = world.item_id_to_name[archipelago_loot_id]
+            if item.name == item_name:
+                item.classification = ItemClassification.progression
+        else:
+            continue
+
+    return None
 
 def get_modded_locations() -> Dict[str, ModLocationData]:
     locations: Dict[str, ModLocationData] = {}

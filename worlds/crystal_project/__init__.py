@@ -17,7 +17,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule
+    get_modded_shopsanity_locations, build_condition_rule, update_item_classification
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -398,6 +398,9 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_item in self.modded_items:
+                combined_locations: List[ModLocationData] = list(self.modded_locations.values())
+                combined_locations.extend(list(self.modded_shops.values()))
+                update_item_classification(modded_item, [location.rule_condition for location in combined_locations], self)
                 item = self.create_item(modded_item.name)
                 pool.append(item)
 
