@@ -1099,10 +1099,6 @@ class GameManager(ThemedApp):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
 
-    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
-    def open_settings(self, *largs):
-        pass
-
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
