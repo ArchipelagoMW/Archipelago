@@ -48,6 +48,7 @@ class GpsTracker:
     entrances_by_name: typing.Dict[str, Entrance] = {}
     needs_found_entrances: bool = False
     needs_slot_data: bool = True
+    is_transitioning: bool = False
 
     def __init__(self, gameboy) -> None:
         self.gameboy = gameboy
@@ -101,10 +102,11 @@ class GpsTracker:
         transition_scroll_y = await self.read_byte(Consts.transition_scroll_y)
         transition_sequence = await self.read_byte(Consts.transition_sequence)
         motion_state = await self.read_byte(Consts.link_motion_state)
-        if (transition_state != 0
+        self.is_transitioning = (transition_state != 0
             or transition_target_x != transition_scroll_x
             or transition_target_y != transition_scroll_y
-            or transition_sequence != 0x04):
+            or transition_sequence != 0x04)
+        if self.is_transitioning:
             return
 
         indoors = await self.read_byte(Consts.indoor_flag)
