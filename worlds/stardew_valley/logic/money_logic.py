@@ -81,7 +81,7 @@ class MoneyLogic(BaseLogic):
         item_rules = []
         if source.items_price is not None:
             for price, item in source.items_price:
-                item_rules.append(self.logic.has(item) & self.logic.grind.can_grind_item(price, item))
+                item_rules.append(self.logic.grind.can_grind_item(price, item))
 
         region_rule = self.logic.region.can_reach(source.shop_region)
 

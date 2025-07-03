@@ -72,10 +72,12 @@ class GrindLogic(BaseLogic):
                                self.logic.time.has_lived_months(quantity // 1000))
 
     def can_grind_item(self, quantity: int, item: str | None = None) -> StardewRule:
+        if item is None:
+            return self.logic.grind.can_grind_medium_item(quantity)
+
         if item in EASY_ITEMS:
             return self.logic.grind.can_grind_easy_item(quantity) & self.logic.has(item)
-        else:
-            return self.logic.grind.can_grind_medium_item(quantity) & self.logic.has(item)
+        return self.logic.grind.can_grind_medium_item(quantity) & self.logic.has(item)
 
     @cache_self1
     def can_grind_medium_item(self, quantity: int) -> StardewRule:
