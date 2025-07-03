@@ -17,7 +17,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule
+    get_modded_shopsanity_locations, build_condition_rule, update_item_classification
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -40,7 +40,7 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.6.0"
+    apworld_version = "0.6.1"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
@@ -155,7 +155,7 @@ class CrystalProjectWorld(World):
                 all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
             for region in self.get_regions():
                 if region.can_reach(all_passes_state) and region.name != MENU and region.name != MODDED_ZONE:
-                    if len(region.locations) > 2:
+                    if len(region.locations) > 3:
                         initially_reachable_regions.append(region)
             self.starter_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
@@ -398,6 +398,9 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_item in self.modded_items:
+                combined_locations: List[ModLocationData] = list(self.modded_locations.values())
+                combined_locations.extend(list(self.modded_shops.values()))
+                update_item_classification(modded_item, [location.rule_condition for location in combined_locations], self)
                 item = self.create_item(modded_item.name)
                 pool.append(item)
 
