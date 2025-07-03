@@ -376,7 +376,7 @@ class EarthBoundWorld(World):
 
             hint_data[self.player] = dungeon_mapping
 
-    def fill_slot_data(self) -> Dict[str, List[int]]:
+    def fill_slot_data(self) -> Dict[str, typing.Any]:
         return {
             "starting_area": self.start_location,
             "pizza_logic": self.options.monkey_caves_mode.value,
