@@ -346,8 +346,11 @@ class KH2Context(CommonContext):
                 # self.locations_checked = set()
             elif os.path.exists(self.kh2_seed_save_path_join):
                 with open(self.kh2_seed_save_path_join) as f:
-                    self.kh2_seed_save = json.load(f)
-                    if self.kh2_seed_save is None:
+                    try:
+                        self.kh2_seed_save = json.load(f)
+                    except json.decoder.JSONDecodeError:
+                        self.kh2_seed_save = None
+                    if self.kh2_seed_save is None or self.kh2_seed_save == {}:
                         self.kh2_seed_save = {
                             "Levels":        {
                                 "SoraLevel":   0,
