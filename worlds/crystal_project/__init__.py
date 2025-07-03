@@ -40,7 +40,7 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.6.0"
+    apworld_version = "0.6.1"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
@@ -155,7 +155,7 @@ class CrystalProjectWorld(World):
                 all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
             for region in self.get_regions():
                 if region.can_reach(all_passes_state) and region.name != MENU and region.name != MODDED_ZONE:
-                    if len(region.locations) > 2:
+                    if len(region.locations) > 3:
                         initially_reachable_regions.append(region)
             self.starter_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
