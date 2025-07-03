@@ -6,7 +6,7 @@ import random
 import tempfile
 import zipfile
 from collections import Counter
-from typing import Any, Dict, List, Optional, Union, Set
+from typing import Any
 
 from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
@@ -23,8 +23,8 @@ from .models import Generation, STATE_ERROR, STATE_QUEUED, Seed, UUID
 from .upload import upload_zip_to_db
 
 
-def get_meta(options_source: dict, race: bool = False) -> Dict[str, Union[List[str], Dict[str, Any]]]:
-    plando_options: Set[str] = set()
+def get_meta(options_source: dict, race: bool = False) -> dict[str, list[str] | dict[str, Any]]:
+    plando_options: set[str] = set()
     for substr in ("bosses", "items", "connections", "texts"):
         if options_source.get(f"plando_{substr}", substr in GeneratorOptions.plando_options):
             plando_options.add(substr)
@@ -73,7 +73,7 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
-def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any]):
+def start_generation(options: dict[str, dict | str], meta: dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
     if any(type(result) == str for result in results.values()):
@@ -104,9 +104,9 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         return redirect(url_for("view_seed", seed=seed_id))
 
 
-def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=None, sid=None):
-    if not meta:
-        meta: Dict[str, Any] = {}
+def gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None):
+    if meta is None:
+        meta = {}
 
     meta.setdefault("server_options", {}).setdefault("hint_cost", 10)
     race = meta.setdefault("generator_options", {}).setdefault("race", False)
