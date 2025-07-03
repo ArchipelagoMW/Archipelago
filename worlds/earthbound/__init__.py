@@ -20,7 +20,7 @@ from .modules.hint_data import setup_hints
 from .game_data.text_data import spoiler_psi, spoiler_starts, spoiler_badges
 from .Client import EarthBoundClient
 from .Rules import set_location_rules
-from .Rom import patch_rom, get_base_rom_path, EBProcPatch, valid_hashes
+from .Rom import patch_rom, EBProcPatch, valid_hashes
 from .game_data.static_location_data import location_ids, location_groups
 from .modules.equipamizer import EBArmor, EBWeapon
 from .modules.boss_shuffle import BossData, SlotInfo
