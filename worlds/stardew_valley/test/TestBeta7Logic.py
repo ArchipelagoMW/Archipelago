@@ -1,6 +1,7 @@
 from worlds.stardew_valley import BackpackProgression, ToolProgression
 from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations
+from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity
+from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName
 from worlds.stardew_valley.test.bases import SVTestBase
 
 
@@ -143,3 +144,76 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
         self.assert_can_reach_location(gathering_location)
         self.remove(axe)
         self.assert_cannot_reach_location(gathering_location)
+
+
+class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
+    options = {
+        SkillProgression: SkillProgression.option_progressive_with_masteries,
+        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        Secretsanity: frozenset([SecretsanityOptionName.fishing]),
+    }
+
+    def test_pyramid_decal_requires_level_1(self):
+        pyramid_decal_location = "Pyramid Decal"
+        items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
+        self.collect_by_name(items_required)
+        items_to_test = [self.create_item(item) for item in ["Bus Repair", "Fishing Level"]]
+        self.collect(items_to_test)
+        self.assert_can_reach_location(pyramid_decal_location)
+        for item in items_to_test:
+            with self.subTest(f"{pyramid_decal_location} Requires {item.name}"):
+                self.remove(item)
+                self.assert_cannot_reach_location(pyramid_decal_location)
+                self.collect(item)
+                self.assert_can_reach_location(pyramid_decal_location)
+
+    def test_foliage_print_requires_level_4(self):
+        foliage_print_location = "Foliage Print"
+        items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
+        items_required.extend(["Fishing Level"] * 3)
+        self.collect_by_name(items_required)
+        items_to_test = [self.create_item(item) for item in ["Boat Repair", "Island North Turtle", "Fishing Level"]]
+        self.collect(items_to_test)
+        self.assert_can_reach_location(foliage_print_location)
+        for item in items_to_test:
+            with self.subTest(f"I{foliage_print_location} Requires {item.name}"):
+                self.remove(item)
+                self.assert_cannot_reach_location(foliage_print_location)
+                self.collect(item)
+                self.assert_can_reach_location(foliage_print_location)
+
+    def test_iridium_krobus_requires_level_15(self):
+        iridium_krobus_location = "Iridium Krobus"
+        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Boots", "Combat Level",
+                          "Mining Level", "Progressive Watering Can", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
+        items_required.append("Spring")
+        items_required.extend(["Fishing Level"] * 9)
+        self.collect_by_name(items_required)
+        items_to_test = [self.create_item(item) for item in ["Bus Repair", "Boat Repair", "Island North Turtle", "Qi Walnut Room", "Fishing Level"]]
+        self.collect(items_to_test)
+        self.assert_can_reach_location(iridium_krobus_location)
+        for item in items_to_test:
+            with self.subTest(f"{iridium_krobus_location} Requires {item.name}"):
+                self.remove(item)
+                self.assert_cannot_reach_location(iridium_krobus_location)
+                self.collect(item)
+                self.assert_can_reach_location(iridium_krobus_location)
+
+
+class TestArtifactSpotDonationsRequireHoe(SVTestBase):
+    options = {
+        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        Museumsanity: Museumsanity.option_all,
+    }
+
+    def test_pyramid_decal_requires_level_1(self):
+        artifact_spot_artifacts = ["Chipped Amphora", "Ancient Doll", "Rusty Spoon", "Chicken Statue", "Prehistoric Tool"]
+        self.collect_lots_of_money(0.5)
+        hoe = self.collect("Progressive Hoe")
+        for artifact in artifact_spot_artifacts:
+            with self.subTest(f"Artifact: {artifact}"):
+                artifact_location = f"Museumsanity: {artifact}"
+                self.assert_cannot_reach_location(artifact_location)
+                self.collect(hoe)
+                self.assert_can_reach_location(artifact_location)
+                self.remove(hoe)
