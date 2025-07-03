@@ -66,7 +66,7 @@ class EarthBoundWorld(World):
     data_version = 1
     required_client_version = (0, 5, 0)
 
-    item_name_to_id = {item: item_table[item].code for item in item_table}
+    item_name_to_id = {item: item_table[item].code for item in item_table if item_table[item].code}
     location_name_to_id = location_ids
     item_name_groups = get_item_names_per_category()
     location_name_groups = location_groups
