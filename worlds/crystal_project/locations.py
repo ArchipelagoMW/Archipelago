@@ -1189,7 +1189,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Putt Putt Crab mows the lawn", 3437 + npc_index_offset), #(54, 52, 200) Crab 13
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
-        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
+        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Undersea Crab People Crab Retirement Home south of Salmon Race start", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden Quintar but faster than royal salmon) Z35_SpeedOcto
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot
