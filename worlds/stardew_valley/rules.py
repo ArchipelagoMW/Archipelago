@@ -1071,8 +1071,8 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
     set_location_rule(multiworld, player, "Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
     set_location_rule(multiworld, player, "Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
-    set_location_rule(multiworld, player, "Purchase Joja Furniture Catalogue", logic.money.can_spend_at(Region.movie_theater, 25_000)) # Place it in theater region, because it won't be available during the broken jojamart in-between state
-    set_location_rule(multiworld, player, "Purchase Junimo Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
+    set_location_rule(multiworld, player, "Purchase Joja Furniture Catalogue", logic.action.can_speak_junimo() & logic.money.can_spend_at(Region.movie_theater, 25_000))
+    set_location_rule(multiworld, player, "Purchase Junimo Catalogue", logic.action.can_speak_junimo() & logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
     set_location_rule(multiworld, player, "Purchase Retro Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 110_000))
     # set_location_rule(multiworld, player, "Find Trash Catalogue", logic) # No need, the region is enough
     set_location_rule(multiworld, player, "Purchase Wizard Catalogue", logic.money.can_spend_at(Region.sewer, 150_000))
