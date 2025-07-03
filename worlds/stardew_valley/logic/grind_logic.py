@@ -18,7 +18,7 @@ PERCENT_REQUIRED_FOR_MAX_MEDIUM_ITEM = 24
 EASY_ITEMS = {Material.wood, Material.stone, Material.fiber, Material.sap}
 MIN_EASY_ITEMS = 300
 MAX_EASY_ITEMS = 2997
-PERCENT_REQUIRED_FOR_MAX_EASY_ITEM = 6
+PERCENT_REQUIRED_FOR_MAX_EASY_ITEM = 8
 
 
 class GrindLogicMixin(BaseLogicMixin):
@@ -73,9 +73,9 @@ class GrindLogic(BaseLogic):
 
     def can_grind_item(self, quantity: int, item: str | None = None) -> StardewRule:
         if item in EASY_ITEMS:
-            return self.logic.grind.can_grind_easy_item(quantity)
+            return self.logic.grind.can_grind_easy_item(quantity) & self.logic.has(item)
         else:
-            return self.logic.grind.can_grind_medium_item(quantity)
+            return self.logic.grind.can_grind_medium_item(quantity) & self.logic.has(item)
 
     @cache_self1
     def can_grind_medium_item(self, quantity: int) -> StardewRule:
