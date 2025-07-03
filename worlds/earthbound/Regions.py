@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 class EBLocation(Location):
     game: str = "EarthBound"
 
-    def __init__(self, player: int, name: str = " ", address: int = None, parent=None):
+    def __init__(self, player: int, name: str = " ", address: Optional[int] = None, parent=None):
         super().__init__(player, name, address, parent)
 
 
