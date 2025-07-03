@@ -11,7 +11,7 @@ import settings
 from .Items import get_item_names_per_category, item_table
 from .Locations import get_locations
 from .Regions import init_areas
-from .Options import EBOptions, eb_option_groups, StartingCharacter
+from .Options import EBOptions, eb_option_groups
 from .setup_game import setup_gamevars, place_static_items
 from .modules.enemy_data import initialize_enemies
 from .modules.flavor_data import create_flavors
