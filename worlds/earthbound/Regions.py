@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import List, Dict, TYPE_CHECKING, Optional
 from BaseClasses import Region, Location
 from .Locations import LocationData
 from .Options import MagicantMode
