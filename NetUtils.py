@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 import typing
 import enum
 import warnings
@@ -84,7 +84,7 @@ class NetworkSlot(typing.NamedTuple):
     name: str
     game: str
     type: SlotType
-    group_members: typing.Union[typing.List[int], typing.Tuple] = ()  # only populated if type == group
+    group_members: Sequence[int] = ()  # only populated if type == group
 
 
 class NetworkItem(typing.NamedTuple):
