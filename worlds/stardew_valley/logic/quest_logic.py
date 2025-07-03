@@ -18,7 +18,7 @@ from ..strings.quest_names import Quest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.special_item_names import SpecialItem
-from ..strings.tool_names import Tool
+from ..strings.tool_names import Tool, FishingRod
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
 
@@ -134,3 +134,19 @@ class QuestLogic(BaseLogic):
         number_per_month = 7
         number_monts = number // number_per_month
         return self.logic.time.has_lived_months(number_monts)
+
+    def can_do_item_delivery_quest(self) -> StardewRule:
+        return self.logic.region.can_reach(Region.town)
+
+    def can_do_gathering_quest(self) -> StardewRule:
+        return self.logic.region.can_reach_all(*(Region.town, Region.forest)) & \
+               self.logic.region.can_reach_any(*(Region.mines_floor_20, Region.quarry, Region.skull_cavern_25)) & \
+               self.logic.tool.has_tool(Tool.axe) & \
+               self.logic.tool.has_tool(Tool.pickaxe)
+
+    def can_do_fishing_quest(self) -> StardewRule:
+        return self.logic.region.can_reach_all(*(Region.town, Region.beach)) & \
+               self.logic.tool.has_fishing_rod(FishingRod.bamboo)
+
+    def can_do_slaying_quest(self) -> StardewRule:
+        return self.logic.region.can_reach_all(*(Region.town, Region.mines_floor_20))

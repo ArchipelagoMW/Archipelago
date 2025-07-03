@@ -589,33 +589,33 @@ def set_help_wanted_quests_rules(logic: StardewLogic, multiworld, player, world_
         quest_number_in_set = i % 7
         if quest_number_in_set < 4:
             quest_number = set_number * 4 + quest_number_in_set + 1
-            set_help_wanted_delivery_rule(multiworld, player, month_rule, quest_number)
+            set_help_wanted_delivery_rule(logic, multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 4:
-            set_help_wanted_fishing_rule(multiworld, player, month_rule, quest_number)
+            set_help_wanted_fishing_rule(logic, multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 5:
-            set_help_wanted_slay_monsters_rule(multiworld, player, month_rule, quest_number)
+            set_help_wanted_slay_monsters_rule(logic, multiworld, player, month_rule, quest_number)
         elif quest_number_in_set == 6:
-            set_help_wanted_gathering_rule(multiworld, player, month_rule, quest_number)
+            set_help_wanted_gathering_rule(logic, multiworld, player, month_rule, quest_number)
 
 
-def set_help_wanted_delivery_rule(multiworld, player, month_rule, quest_number):
+def set_help_wanted_delivery_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {item_delivery} {quest_number}"
-    set_rule(multiworld.get_location(location_name, player), month_rule)
+    set_rule(multiworld.get_location(location_name, player), logic.quest.can_do_item_delivery_quest() & month_rule)
 
 
-def set_help_wanted_gathering_rule(multiworld, player, month_rule, quest_number):
+def set_help_wanted_gathering_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {gathering} {quest_number}"
-    set_rule(multiworld.get_location(location_name, player), month_rule)
+    set_rule(multiworld.get_location(location_name, player), logic.quest.can_do_gathering_quest() & month_rule)
 
 
-def set_help_wanted_fishing_rule(multiworld, player, month_rule, quest_number):
+def set_help_wanted_fishing_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {fishing} {quest_number}"
-    set_rule(multiworld.get_location(location_name, player), month_rule)
+    set_rule(multiworld.get_location(location_name, player), logic.quest.can_do_fishing_quest() & month_rule)
 
 
-def set_help_wanted_slay_monsters_rule(multiworld, player, month_rule, quest_number):
+def set_help_wanted_slay_monsters_rule(logic: StardewLogic, multiworld, player, month_rule, quest_number):
     location_name = f"{help_wanted_prefix} {slay_monsters} {quest_number}"
-    set_rule(multiworld.get_location(location_name, player), month_rule)
+    set_rule(multiworld.get_location(location_name, player), logic.quest.can_do_slaying_quest() & month_rule)
 
 
 def set_fishsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int):

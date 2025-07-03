@@ -48,9 +48,8 @@ class GrindLogic(BaseLogic):
 
     def can_grind_prize_tickets(self, quantity: int) -> StardewRule:
         claiming_rule = self.logic.region.can_reach(Region.mayor_house)
-        return self.logic.and_(claiming_rule, self.logic.has(Currency.prize_ticket),
-                               # Assuming two per month if the player does not grind it.
-                               self.logic.time.has_lived_months(quantity // 2))
+        help_wanted_rules = self.logic.quest.can_complete_help_wanteds(quantity * 3)
+        return self.logic.and_(claiming_rule, self.logic.has(Currency.prize_ticket), help_wanted_rules)
 
     def can_grind_fishing_treasure_chests(self, quantity: int) -> StardewRule:
         return self.logic.and_(self.logic.has(WaterChest.fishing_chest),
