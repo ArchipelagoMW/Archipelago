@@ -408,7 +408,6 @@ class SohWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
-            "death_link": self.options.death_link.value,
             "shuffle_dungeon_rewards": self.options.shuffle_dungeon_rewards.value,
             "gcbk_setting": self.options.gcbk_setting.value,
             "gcbk_rewards_required": self.options.gcbk_rewards_required.value,

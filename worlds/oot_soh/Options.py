@@ -1,13 +1,6 @@
 from dataclasses import dataclass
 from Options import Choice, Toggle, Range, PerGameCommonOptions, StartInventoryPool
 
-
-class DeathLink(Toggle):
-    """
-    You die, others die. Others die, you die!
-    """
-    display_name = "Death Link"
-
 class ShuffleDungeonRewards(Choice):
     """
     Shuffle dungeon rewards to be vanilla, shuffled between dungeons, or anywhere. If not turned on, dungeon rewards will be on their vanilla location.
@@ -152,7 +145,6 @@ class ShuffleFish(Choice):
 
 @dataclass
 class SohOptions(PerGameCommonOptions):
-    death_link: DeathLink
     shuffle_dungeon_rewards: ShuffleDungeonRewards
     gcbk_setting: GanonsCastleBossKeySetting
     gcbk_rewards_required: GanonsCastleBossKeyRewardsRequired
