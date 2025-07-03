@@ -137,7 +137,7 @@ def initialize_bosses(world) -> None:
         "Giygas (4)": SlotInfo([0x09C2BF, 0x09C2E5], [0x2EF0A9], [0x2EF09F], [])
     }
 
-    world.boss_info: Dict[str, BossData] = {
+    world.boss_info = {
         "Frank": BossData(0x0099, 0xEEEEBC, 0xEEEEBC, 0x01C0, 0x83, 0x64),
         "Frankystein Mark II": BossData(0x0191, 0xEEEF0A, 0xEEEEF6, 0x01C1, 0x82, 0x66),
         "Titanic Ant": BossData(0x0139, 0xEEEF1E, 0xEEEF16, 0x01C2, 0x25, 0x67),
