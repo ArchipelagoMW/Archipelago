@@ -6,12 +6,11 @@ from ..strings.region_names import Region
 
 main_outside_area = {Region.menu, Region.stardew_valley, Region.farm_house, Region.farm, Region.town, Region.beach, Region.mountain, Region.forest,
                      Region.bus_stop, Region.backwoods, Region.bus_tunnel, Region.tunnel_entrance}
-always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.mines, Region.hospital, Region.carpenter, Region.alex_house,
-                                                     Region.ranch, Region.farm_cave, Region.wizard_tower, Region.tent,
+always_accessible_regions_with_non_progression_er = {*main_outside_area, Region.hospital, Region.carpenter, Region.alex_house,
+                                                     Region.ranch, Region.farm_cave, Region.tent,
                                                      Region.pierre_store, Region.saloon, Region.blacksmith, Region.trailer, Region.museum, Region.mayor_house,
                                                      Region.haley_house, Region.sam_house, Region.jojamart, Region.fish_shop}
-always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er, Region.pantry, Region.crafts_room,
-                                        Region.fish_tank, Region.boiler_room, Region.vault, Region.bulletin_board}
+always_accessible_regions_without_er = {*always_accessible_regions_with_non_progression_er}
 
 always_regions_by_setting = {EntranceRandomization.option_disabled: always_accessible_regions_without_er,
                              EntranceRandomization.option_pelican_town: always_accessible_regions_without_er,

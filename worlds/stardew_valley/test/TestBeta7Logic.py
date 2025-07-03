@@ -119,7 +119,7 @@ class TestGatheringQuestsWithStartingToolsRequiresMinesAccess(SVTestBase):
         QuestLocations: 7,
     }
 
-    def test_beach_bridge_requires_axe(self):
+    def test_gathering_quest_requires_landslide(self):
         gathering_location = "Help Wanted: Gathering 1"
         self.assert_cannot_reach_location(gathering_location)
         self.collect("Landslide Removed")
@@ -132,7 +132,7 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
         QuestLocations: 7,
     }
 
-    def test_beach_bridge_requires_axe(self):
+    def test_gathering_quest_requires_landslide_axe_and_pickaxe(self):
         gathering_location = "Help Wanted: Gathering 1"
         axe = self.create_item("Progressive Axe")
         self.assert_cannot_reach_location(gathering_location)

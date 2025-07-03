@@ -140,7 +140,7 @@ class QuestLogic(BaseLogic):
 
     def can_do_gathering_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.forest)) & \
-               self.logic.region.can_reach_any(*(Region.mines_floor_20, Region.quarry, Region.skull_cavern_25)) & \
+               self.logic.region.can_reach_any(*(Region.mines, Region.quarry, Region.skull_cavern_25)) & \
                self.logic.tool.has_tool(Tool.axe) & \
                self.logic.tool.has_tool(Tool.pickaxe)
 
