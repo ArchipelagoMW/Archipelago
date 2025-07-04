@@ -467,7 +467,8 @@ class ExcludeOverpoweredItems(Toggle):
     If turned on, a curated list of very strong items are excluded.
     These items were selected for promoting repetitive strategies, or for providing a lot of power in a boring way.
     Recommended off for players looking for a challenge or for repeat playthroughs.
-    Locked Items may override these exclusions, but Unexcluded Items will not.
+    Excluding an OP item overrides the exclusion from this item rather than add to it.
+    OP items may be unexcluded or locked with Unexcluded Items or Locked Items options.
     """
     display_name = "Exclude Overpowered Items"
 
