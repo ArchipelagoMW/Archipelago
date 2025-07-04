@@ -184,7 +184,8 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
     def test_pyramid_decal_requires_level_1(self):
         pyramid_decal_location = "Pyramid Decal"
         items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
-        self.collect_by_name(items_required)
+        for item in items_required:
+            self.collect(item)
         items_to_test = [self.create_item(item) for item in ["Bus Repair", "Fishing Level"]]
         self.collect(items_to_test)
         self.assert_can_reach_location(pyramid_decal_location)
@@ -199,7 +200,8 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
         foliage_print_location = "Foliage Print"
         items_required = ["Progressive Fishing Rod", "Shipping Bin"] * 5
         items_required.extend(["Fishing Level"] * 3)
-        self.collect_by_name(items_required)
+        for item in items_required:
+            self.collect(item)
         items_to_test = [self.create_item(item) for item in ["Boat Repair", "Island North Turtle", "Fishing Level"]]
         self.collect(items_to_test)
         self.assert_can_reach_location(foliage_print_location)
@@ -212,11 +214,12 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
 
     def test_iridium_krobus_requires_level_15(self):
         iridium_krobus_location = "Iridium Krobus"
-        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Boots", "Combat Level",
+        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level",
                           "Mining Level", "Progressive Watering Can", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
         items_required.append("Spring")
         items_required.extend(["Fishing Level"] * 9)
-        self.collect_by_name(items_required)
+        for item in items_required:
+            self.collect(item)
         items_to_test = [self.create_item(item) for item in ["Bus Repair", "Boat Repair", "Island North Turtle", "Qi Walnut Room", "Fishing Level"]]
         self.collect(items_to_test)
         self.assert_can_reach_location(iridium_krobus_location)

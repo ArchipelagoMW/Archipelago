@@ -965,15 +965,15 @@ def set_secrets_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, 
         if world_options.farm_type == FarmType.option_beach:
             set_location_rule(multiworld, player, "'Boat'", logic.fishing.can_fish_at(Region.farm))
         if content.is_enabled(ginger_island_content_pack):
-            set_location_rule(multiworld, player, "Foliage Print", logic.fishing.can_fish_at(Region.island_north))
+            set_location_rule(multiworld, player, "Foliage Print", logic.fishing.can_fish_with_cast_distance(Region.island_north, 5))
             set_location_rule(multiworld, player, "Frog Hat", logic.fishing.can_fish_at(Region.gourmand_frog_cave))
             set_location_rule(multiworld, player, "Gourmand Statue", logic.fishing.can_fish_at(Region.pirate_cove))
             set_location_rule(multiworld, player, "'Physics 101'", logic.fishing.can_fish_at(Region.volcano_floor_10))
             set_location_rule(multiworld, player, "Lifesaver", logic.fishing.can_fish_at(Region.boat_tunnel))
             set_location_rule(multiworld, player, "Squirrel Figurine", logic.fishing.can_fish_at(Region.volcano_secret_beach))
         set_location_rule(multiworld, player, "Decorative Trash Can", logic.fishing.can_fish_at(Region.town))
-        set_location_rule(multiworld, player, "Iridium Krobus", logic.fishing.can_fish_at(Region.forest))
-        set_location_rule(multiworld, player, "Pyramid Decal", logic.fishing.can_fish_at(Region.desert))
+        set_location_rule(multiworld, player, "Iridium Krobus", logic.fishing.can_fish_with_cast_distance(Region.forest, 7))
+        set_location_rule(multiworld, player, "Pyramid Decal", logic.fishing.can_fish_with_cast_distance(Region.desert, 4))
         set_location_rule(multiworld, player, "'Vista'", logic.fishing.can_fish_at(Region.railroad))
         set_location_rule(multiworld, player, "Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
 

@@ -5,9 +5,13 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
 from ..stardew_rule import StardewRule, true_, True_, False_
+from ..strings.currency_names import Currency
+from ..strings.food_names import Meal
+from ..strings.ingredient_names import Ingredient
+from ..strings.metal_names import Mineral
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
-from ..strings.region_names import Region
+from ..strings.region_names import Region, LogicRegion
 from ..strings.skill_names import Skill, all_mod_skills, all_vanilla_skills
 from ..strings.tool_names import ToolMaterial, Tool, FishingRod
 from ..strings.wallet_item_names import Wallet
@@ -64,9 +68,20 @@ class SkillLogic(BaseLogic):
             return true_
 
         if self.content.features.skill_progression.is_progressive:
+            if level > 10:
+                if skill == Skill.fishing:
+                    return self.logic.received(f"{skill} Level", 10) & self.has_all_fishing_buffs_available()
+                raise f"Cannot reach level {level} {skill}"
             return self.logic.received(f"{skill} Level", level)
 
         return self.logic.skill.can_earn_level(skill, level)
+
+    def has_all_fishing_buffs_available(self) -> StardewRule:
+        seafoam_pudding_rule = self.logic.has(Meal.seafoam_pudding) & self.logic.has(Ingredient.qi_seasoning)
+        rod_rule = self.logic.tool.has_fishing_rod(FishingRod.advanced_iridium)
+        enchant_rule = self.logic.region.can_reach(Region.volcano_floor_10) & self.logic.has(Mineral.prismatic_shard) & self.logic.has(Currency.cinder_shard)
+        chef_rule = self.logic.region.can_reach(LogicRegion.desert_festival)
+        return seafoam_pudding_rule & rod_rule & enchant_rule & chef_rule
 
     def has_previous_level(self, skill: str, level: int) -> StardewRule:
         assert level > 0, "There is no level before level 0."

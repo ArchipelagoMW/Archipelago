@@ -48,6 +48,19 @@ class FishingLogic(BaseLogic):
     def can_fish_at(self, region: str) -> StardewRule:
         return self.logic.fishing.can_fish() & self.logic.region.can_reach(region)
 
+    def can_fish_with_cast_distance(self, region: str, distance: int) -> StardewRule:
+        if distance >= 7:
+            required_levels = 15
+        elif distance >= 6:
+            required_levels = 8
+        elif distance >= 5:
+            required_levels = 4
+        elif distance >= 4:
+            required_levels = 1
+        else:
+            required_levels = 0
+        return self.logic.fishing.can_fish_at(region) & self.logic.skill.has_level(Skill.fishing, required_levels)
+
     @cache_self1
     def can_fish(self, difficulty: int = 0) -> StardewRule:
         skill_required = min(10, max(0, int((difficulty / 10) - 1)))
