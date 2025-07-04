@@ -1,4 +1,5 @@
 from .base_logic import BaseLogicMixin, BaseLogic
+from ..options import FarmType
 from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill, ModSkill
@@ -15,6 +16,8 @@ class AbilityLogic(BaseLogic):
 
     def can_mine_stone(self) -> StardewRule:
         can_reach_any_mining_region = self.logic.region.can_reach_any(Region.mines, Region.skull_cavern, Region.volcano, Region.quarry_mine)
+        if self.options.farm_type in [FarmType.option_hill_top, FarmType.option_four_corners]:
+            can_reach_any_mining_region = can_reach_any_mining_region | self.logic.region.can_reach(Region.farm)
         return self.logic.tool.has_tool(Tool.pickaxe) & can_reach_any_mining_region
 
     def can_mine_perfectly(self) -> StardewRule:

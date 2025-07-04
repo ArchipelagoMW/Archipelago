@@ -13,6 +13,7 @@ class TestBuildingLogic(SVTestBase):
         location = "Coop Blueprint"
         self.assert_cannot_reach_location(location)
 
+        self.collect("Landslide Removed")
         self.collect_lots_of_money()
         self.assert_can_reach_location(location)
 
@@ -20,6 +21,7 @@ class TestBuildingLogic(SVTestBase):
         location = "Big Coop Blueprint"
         self.assert_cannot_reach_location(location)
 
+        self.collect("Landslide Removed")
         self.collect_lots_of_money()
         self.assert_cannot_reach_location(location)
 
@@ -30,6 +32,7 @@ class TestBuildingLogic(SVTestBase):
         location = "Deluxe Coop Blueprint"
         self.assert_cannot_reach_location(location)
 
+        self.collect("Landslide Removed")
         self.collect_lots_of_money()
         self.assert_cannot_reach_location(location)
 
@@ -43,6 +46,7 @@ class TestBuildingLogic(SVTestBase):
         location = "Big Shed Blueprint"
         self.assert_cannot_reach_location(location)
 
+        self.collect("Landslide Removed")
         self.collect_lots_of_money()
         self.assert_cannot_reach_location(location)
 
