@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, TYPE_CHECKING
+from typing import NamedTuple, TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
 
@@ -16,7 +16,7 @@ class TunicLocationData(NamedTuple):
 
 bell_location_base_id = 509342400 + 11000
 
-bell_location_table: Dict[str, TunicLocationData] = {
+bell_location_table: dict[str, TunicLocationData] = {
     "Forest Belltower - Ring the East Bell": TunicLocationData("Forest Belltower", "Forest Belltower Upper"),
     "Overworld - [West] Ring the West Bell": TunicLocationData("Overworld", "Overworld Belltower at Bell"),
 }

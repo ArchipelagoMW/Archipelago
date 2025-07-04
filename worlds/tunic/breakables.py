@@ -1,10 +1,12 @@
+from enum import IntEnum
 from typing import TYPE_CHECKING, NamedTuple
 
-from enum import IntEnum
 from BaseClasses import CollectionState, Region
 from worlds.generic.Rules import set_rule
+
 from .rules import has_sword, has_melee
 from .er_rules import can_shop
+
 if TYPE_CHECKING:
     from . import TunicWorld
 

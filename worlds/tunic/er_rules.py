@@ -1,15 +1,17 @@
-from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
-from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from typing import FrozenSet, TYPE_CHECKING
+
 from BaseClasses import Region, CollectionState
+from worlds.generic.Rules import set_rule, add_rule, forbid_item
+
 from .bells import set_bell_location_rules
+from .combat_logic import has_combat_reqs
+from .er_data import Portal, get_portal_outlet_region
 from .fuses import set_fuse_location_rules, has_fuses
+from .grass import set_grass_location_rules
+from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip, bomb_walls)
-from .er_data import Portal, get_portal_outlet_region
-from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
-from .combat_logic import has_combat_reqs
-from .grass import set_grass_location_rules
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -73,12 +75,12 @@ def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
     return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
 
 
-def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_pairs: Dict[Portal, Portal]) -> None:
+def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_pairs: dict[Portal, Portal]) -> None:
     player = world.player
     options = world.options
 
     # input scene destination tag, returns portal's name and paired portal's outlet region or region
-    def get_portal_info(portal_sd: str) -> Tuple[str, str]:
+    def get_portal_info(portal_sd: str) -> tuple[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal1.name, get_portal_outlet_region(portal2, world)
@@ -87,7 +89,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         raise Exception(f"No matches found in get_portal_info for {portal_sd}")
 
     # input scene destination tag, returns paired portal's name and region
-    def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
+    def get_paired_portal(portal_sd: str) -> tuple[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal2.name, portal2.region
@@ -1280,7 +1282,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                 non_ow_ls_list.extend(hard_ls)
 
         # create the ls elevation regions
-        ladder_regions: Dict[str, Region] = {}
+        ladder_regions: dict[str, Region] = {}
         for name in ow_ladder_groups.keys():
             ladder_regions[name] = Region(name, player, world.multiworld)
 

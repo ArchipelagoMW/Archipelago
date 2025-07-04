@@ -1,8 +1,10 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from worlds.generic.Rules import set_rule, forbid_item, add_rule
 from BaseClasses import CollectionState
+from worlds.generic.Rules import set_rule, forbid_item, add_rule
+
 from .options import LadderStorage, IceGrappling, HexagonQuestAbilityUnlockType
+
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -33,7 +35,7 @@ bomb_walls = ["East Forest - Bombable Wall", "Eastern Vault Fortress - [East Win
               "Quarry - [West] Upper Area Bombable Wall", "Ruined Atoll - [Northwest] Bombable Wall"]
 
 
-def randomize_ability_unlocks(world: "TunicWorld") -> Dict[str, int]:
+def randomize_ability_unlocks(world: "TunicWorld") -> dict[str, int]:
     random = world.random
     options = world.options
 

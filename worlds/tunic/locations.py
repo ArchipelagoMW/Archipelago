@@ -1,20 +1,20 @@
-from typing import Dict, NamedTuple, Set, Optional, List
+from typing import NamedTuple
 
-from .grass import grass_location_table
+from .bells import bell_location_table
 from .breakables import breakable_location_table
 from .fuses import fuse_location_table
-from .bells import bell_location_table
+from .grass import grass_location_table
 
 
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
-    location_group: Optional[str] = None
+    location_group: str | None = None
 
 
 location_base_id = 509342400
 
-location_table: Dict[str, TunicLocationData] = {
+location_table: dict[str, TunicLocationData] = {
     "Beneath the Well - [Powered Secret Room] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Back"),
     "Beneath the Well - [Entryway] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
     "Beneath the Well - [Third Room] Beneath Platform Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
@@ -319,13 +319,13 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Effigy Relic": TunicLocationData("West Garden", "Hero Relic - West Garden"),
 }
 
-hexagon_locations: Dict[str, str] = {
+hexagon_locations: dict[str, str] = {
     "Red Questagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
     "Green Questagon": "Librarian - Hexagon Green",
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+standard_location_name_to_id: dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
 
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)
@@ -333,7 +333,7 @@ all_locations.update(breakable_location_table)
 all_locations.update(fuse_location_table)
 all_locations.update(bell_location_table)
 
-location_name_groups: Dict[str, Set[str]] = {}
+location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in location_table.items():
     loc_group_name = loc_name.split(" - ", 1)[0]
     location_name_groups.setdefault(loc_group_name, set()).add(loc_name)

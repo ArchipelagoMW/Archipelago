@@ -1,4 +1,4 @@
-from typing import NamedTuple, Dict, TYPE_CHECKING, List
+from typing import NamedTuple, TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule
@@ -60,7 +60,7 @@ library_lab_fuse = "Library Lab Fuse"
 
 fuse_location_base_id = 509342400 + 10000
 
-fuse_location_table: Dict[str, TunicLocationData] = {
+fuse_location_table: dict[str, TunicLocationData] = {
     "Overworld - [Southeast] Activate Fuse": TunicLocationData("Overworld", "Overworld"),
     "Swamp - [Central] Activate Fuse": TunicLocationData("Swamp", "Swamp Mid"),
     "Swamp - [Outside Cathedral] Activate Fuse": TunicLocationData("Swamp", "Swamp Mid"),
@@ -87,7 +87,7 @@ fuse_location_table: Dict[str, TunicLocationData] = {
 }
 
 # for fuse locations and reusing event names to simplify er_rules
-fuse_activation_reqs: Dict[str, List[str]] = {
+fuse_activation_reqs: dict[str, list[str]] = {
     swamp_fuse_2: [swamp_fuse_1],
     swamp_fuse_3: [swamp_fuse_1, swamp_fuse_2],
     fortress_exterior_fuse_2: [fortress_exterior_fuse_1],

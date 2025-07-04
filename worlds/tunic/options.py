@@ -1,11 +1,13 @@
-import logging
 from dataclasses import dataclass
-from typing import Dict, Any, TYPE_CHECKING
 from decimal import Decimal, ROUND_HALF_UP
+import logging
+from typing import Any, TYPE_CHECKING
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
                      PerGameCommonOptions, OptionGroup, Removed, Visibility, NamedRange)
+
 from .er_data import portal_mapping
+
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -434,7 +436,7 @@ tunic_option_groups = [
     ]),
 ]
 
-tunic_option_presets: Dict[str, Dict[str, Any]] = {
+tunic_option_presets: dict[str, dict[str, Any]] = {
     "Sync": {
         "ability_shuffling": True,
     },

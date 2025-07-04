@@ -1,5 +1,5 @@
-from typing import Dict, NamedTuple, List, Optional, TYPE_CHECKING
 from enum import IntEnum
+from typing import NamedTuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -36,7 +36,7 @@ class Portal(NamedTuple):
         return self.destination + ", " + self.scene() + self.tag
 
 
-portal_mapping: List[Portal] = [
+portal_mapping: list[Portal] = [
     Portal(name="Stick House Entrance", region="Overworld",
            destination="Sword Cave", tag="_", direction=Direction.north),
     Portal(name="Windmill Entrance", region="Overworld",
@@ -535,7 +535,7 @@ portal_mapping: List[Portal] = [
 class RegionInfo(NamedTuple):
     game_scene: str  # the name of the scene in the actual game
     dead_end: int = 0  # if a region has only one exit
-    outlet_region: Optional[str] = None
+    outlet_region: str | None = None
     is_fake_region: bool = False
 
 
@@ -553,7 +553,7 @@ class DeadEnd(IntEnum):
 
 
 # key is the AP region name. "Fake" in region info just means the mod won't receive that info at all
-tunic_er_regions: Dict[str, RegionInfo] = {
+tunic_er_regions: dict[str, RegionInfo] = {
     "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),
     "Overworld": RegionInfo("Overworld Redux"),  # main overworld, the central area
     "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats, is_fake_region=True),  # main overworld holy cross checks
@@ -789,7 +789,7 @@ bell_shuffle = "Bell Shuffle"
 # LS# refers to ladder storage difficulties
 # LS rules are used for region connections here regardless of whether you have being knocked out of the air in logic
 # this is because it just means you can reach the entrances in that region via ladder storage
-traversal_requirements: Dict[str, Dict[str, List[List[str]]]] = {
+traversal_requirements: dict[str, dict[str, list[list[str]]]] = {
     "Overworld": {
         "Overworld Beach":
             [],
