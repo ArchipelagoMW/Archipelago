@@ -206,10 +206,10 @@ class TestArtifactSpotDonationsRequireHoe(SVTestBase):
         Museumsanity: Museumsanity.option_all,
     }
 
-    def test_pyramid_decal_requires_level_1(self):
+    def test_artifact_spot_requires_hoe(self):
         artifact_spot_artifacts = ["Chipped Amphora", "Ancient Doll", "Rusty Spoon", "Chicken Statue", "Prehistoric Tool"]
         self.collect_lots_of_money(0.5)
-        hoe = self.collect("Progressive Hoe")
+        hoe = self.create_item("Progressive Hoe")
         for artifact in artifact_spot_artifacts:
             with self.subTest(f"Artifact: {artifact}"):
                 artifact_location = f"Museumsanity: {artifact}"

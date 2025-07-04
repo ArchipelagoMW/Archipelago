@@ -133,7 +133,11 @@ class QuestLogic(BaseLogic):
     def can_complete_help_wanteds(self, number: int) -> StardewRule:
         number_per_month = 7
         number_monts = number // number_per_month
-        return self.logic.time.has_lived_months(number_monts)
+        if number <= 7:
+            return self.logic.time.has_lived_months(number_monts)
+        return self.logic.time.has_lived_months(number_monts) &\
+               self.can_do_item_delivery_quest() & self.can_do_gathering_quest() &\
+               self.can_do_fishing_quest() & self.can_do_slaying_quest()
 
     def can_do_item_delivery_quest(self) -> StardewRule:
         return self.logic.region.can_reach(Region.town)
