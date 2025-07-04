@@ -101,7 +101,7 @@ class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
         ToolProgression: ToolProgression.option_progressive,
     }
 
-    def test_beach_bridge_requires_axe(self):
+    def test_grim_reaper_requires_weapon(self):
         grim_reaper_location = "Grim Reaper statue"
         self.assert_cannot_reach_location(grim_reaper_location)
         self.collect("Bridge Repair")
@@ -115,7 +115,7 @@ class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTest
         ToolProgression: ToolProgression.option_progressive_no_tool_start,
     }
 
-    def test_beach_bridge_requires_axe(self):
+    def test_grim_reaper_requires_weapon_and_pickaxe(self):
         grim_reaper_location = "Grim Reaper statue"
         self.assert_cannot_reach_location(grim_reaper_location)
         self.collect("Bridge Repair")

@@ -119,6 +119,7 @@ def set_rules(world):
 
 
 def set_isolated_locations_rules(logic: StardewLogic, multiworld, player, trash_bear_requests: Dict[str, List[str]]):
+    set_location_rule(multiworld, player, "Beach Bridge Repair", logic.grind.can_grind_item(300, "Wood"))
     set_location_rule(multiworld, player, "Galaxy Sword Shrine", logic.has("Prismatic Shard"))
     set_location_rule(multiworld, player, "Krobus Stardrop", logic.money.can_spend(20000))
     set_location_rule(multiworld, player, "Demetrius's Breakthrough", logic.money.can_have_earned_total(25000))
