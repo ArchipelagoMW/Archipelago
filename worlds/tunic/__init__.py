@@ -130,7 +130,7 @@ class TunicWorld(World):
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: Dict[str, Any]
     ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
-    tracker_world = ut_stuff.tracker_world
+    tracker_world: ClassVar = ut_stuff.tracker_world
 
     def generate_early(self) -> None:
         try:
