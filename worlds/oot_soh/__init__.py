@@ -353,8 +353,9 @@ class SohWorld(World):
             region.add_exits(region_data_table[region_name].connecting_regions)
 
         # Keep Weird Egg and Zelda's Letter in their vanilla location until we add shuffles for them
-        self.get_location("HC Malon Egg").place_locked_item(self.create_item("Weird Egg"))
-        self.get_location("HC Zeldas Letter").place_locked_item(self.create_item("Zelda's Letter"))
+        # Entirely disabled for now because we're forcing on Skip Child Zelda
+        #self.get_location("HC Malon Egg").place_locked_item(self.create_item("Weird Egg"))
+        #self.get_location("HC Zeldas Letter").place_locked_item(self.create_item("Zelda's Letter"))
 
         # Create a dictionary mapping blue warp rewards to their vanilla items
         dungeon_reward_item_mapping = {
