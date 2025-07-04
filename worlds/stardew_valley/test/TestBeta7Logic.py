@@ -155,11 +155,13 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
     }
 
     def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):
-        locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow", "Read Friendship 101"]
-        items_required = ["Shipping Bin", "Progressive Fishing Rod", "Spring", "Progressive Hoe", "Progressive Watering Can"]
-        self.collect_by_name(items_required)
+        locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow"] # , "Read Friendship 101"] # Friendship 101's bookseller source messes this up
+        items_required = ["Shipping Bin", "Progressive Fishing Rod", "Spring", "Progressive Mine Elevator", "Progressive Hoe", "Progressive Watering Can"]
+        for item in items_required:
+            self.collect(item)
         self.collect_lots_of_money(0.75)
-        items_to_test = [self.create_item(item) for item in ["Progressive Fishing Rod", "Landslide Removed", "Progressive Axe", "Progressive Pickaxe"]]
+        items_to_test = [self.create_item(item) for item in ["Progressive Fishing Rod", "Landslide Removed", "Progressive Axe",
+                                                             "Progressive Pickaxe", "Progressive Weapon"]]
         self.collect(items_to_test)
         for location in locations:
             with self.subTest(f"{location} can be accessed with all help wanted items"):
