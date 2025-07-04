@@ -510,9 +510,9 @@ class OpenRCT2World(World):
             add_rule(self.multiworld.get_region("Victory", self.player).entrances[0],
                      lambda state, selected_prereq=ride: state.has(selected_prereq, self.player))
 
-        if self.options.unique_rides_placement.value == 1:
+        if self.options.unique_rides_placement == "local":
             self.options.local_items.value.update(self.unique_rides)
-        elif self.options.unique_rides_placement.value == 2:
+        elif self.options.unique_rides_placement == "remote":
             self.options.non_local_items.value.update(self.unique_rides)
 
 
