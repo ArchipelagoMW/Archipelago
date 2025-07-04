@@ -2,8 +2,8 @@ import unittest
 
 from .bases import SVTestBase
 from .. import SeasonRandomization
-from ..options import ExcludeGingerIsland, Eatsanity, Chefsanity
-from ..strings.ap_names.ap_option_names import EatsanityOptionName
+from ..options import ExcludeGingerIsland, Eatsanity, Chefsanity, QuestLocations, Secretsanity
+from ..strings.ap_names.ap_option_names import EatsanityOptionName, SecretsanityOptionName
 
 
 class SVEatsanityTestBase(SVTestBase):
@@ -286,6 +286,8 @@ class TestEatsanityPoisonousFish(SVEatsanityTestBase):
 
 class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
     options = {
+        QuestLocations: -1,
+        Secretsanity: frozenset([]),
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Eatsanity: frozenset({EatsanityOptionName.artisan, EatsanityOptionName.poisonous}),
     }
@@ -319,7 +321,7 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
 
     def test_need_lots_of_things_for_iridium_snake_milk(self):
         location = self.world.get_location(f"Drink Iridium Snake Milk")
-        required_items = ["Wizard Invitation", "Desert Obelisk", "Magnifying Glass", "Skull Key", "Progressive House", *["Progressive Pickaxe"]*2,
+        required_items = ["Wizard Invitation", "Desert Obelisk", "Winter", "Skull Key", "Progressive House", *["Progressive Pickaxe"]*2,
                           *["Progressive Weapon"]*4, *["Mining Level"]*8, *["Combat Level"]*8]
         unique_items = list(set(required_items))
         required_items = [self.create_item(item) for item in required_items]
@@ -332,6 +334,21 @@ class TestEatsanityPoisonousArtisan(SVEatsanityTestBase):
                 self.remove(item_to_remove)
                 self.assert_cannot_reach_location(location)
                 self.collect(item_to_remove)
+
+
+class TestEatsanityPoisonousWithQuests(SVEatsanityTestBase):
+    options = {
+        QuestLocations: 0,
+        Secretsanity: frozenset([SecretsanityOptionName.secret_notes]),
+        ExcludeGingerIsland: ExcludeGingerIsland.option_false,
+        Eatsanity: frozenset({EatsanityOptionName.artisan, EatsanityOptionName.poisonous}),
+    }
+
+    def test_need_only_iridium_snake_milk_to_drink_it(self):
+        location = self.world.get_location(f"Drink Iridium Snake Milk")
+        self.assert_cannot_reach_location(location)
+        self.collect("Iridium Snake Milk")
+        self.assert_can_reach_location(location)
 
 
 class TestEatsanityEnzymeEffects(SVEatsanityTestBase):

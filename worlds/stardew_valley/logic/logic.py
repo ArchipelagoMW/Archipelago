@@ -85,7 +85,6 @@ from ..strings.material_names import Material
 from ..strings.metal_names import Ore, MetalBar, Mineral, Fossil
 from ..strings.monster_drop_names import Loot
 from ..strings.monster_names import Monster
-from ..strings.quest_names import Quest
 from ..strings.region_names import Region, LogicRegion
 from ..strings.season_names import Season
 from ..strings.seed_names import Seed, TreeSeed
@@ -158,7 +157,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             "Magic Rock Candy": self.region.can_reach(Region.desert) & self.has("Prismatic Shard"),
             "Muscle Remedy": self.money.can_spend_at(Region.hospital, 1000),
             "Stardrop": self.received("Stardrop"),
-            "Iridium Snake Milk": self.quest.can_complete_quest(Quest.cryptic_note) & self.region.can_reach(Region.skull_cavern_100),
+            "Iridium Snake Milk": self.quest.can_drink_snake_milk(),
             # self.has(Ingredient.vinegar)),
             # self.received("Deluxe Fertilizer Recipe") & self.has(MetalBar.iridium) & self.has(SVItem.sap),
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.emily, 3) & self.has(Forageable.leek) & self.has(Forageable.dandelion) &

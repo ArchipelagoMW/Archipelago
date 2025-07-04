@@ -2,6 +2,7 @@ from typing import Dict
 
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..stardew_rule import StardewRule, Has, True_
+from ..strings.ap_names.ap_option_names import SecretsanityOptionName
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
@@ -154,3 +155,8 @@ class QuestLogic(BaseLogic):
 
     def can_do_slaying_quest(self) -> StardewRule:
         return self.logic.region.can_reach_all(*(Region.town, Region.mines_floor_10))
+
+    def can_drink_snake_milk(self) -> StardewRule:
+        if self.options.quest_locations.has_story_quests() or SecretsanityOptionName.secret_notes in self.options.secretsanity:
+            return self.logic.received(Wallet.iridium_snake_milk)
+        return self.logic.quest.can_complete_quest(Quest.cryptic_note) & self.logic.region.can_reach(Region.skull_cavern_100)
