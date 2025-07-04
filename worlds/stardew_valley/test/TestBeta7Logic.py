@@ -104,6 +104,7 @@ class TestGrimReaperWithStartingToolsRequiresQuarryAndWeapon(SVTestBase):
     def test_grim_reaper_requires_weapon(self):
         grim_reaper_location = "Grim Reaper statue"
         self.assert_cannot_reach_location(grim_reaper_location)
+        self.collect("Landslide Removed")
         self.collect("Bridge Repair")
         self.assert_cannot_reach_location(grim_reaper_location)
         self.collect("Progressive Weapon")
@@ -118,6 +119,7 @@ class TestGrimRepairWithoutStartingToolsRequiresQuarryAndPickaxeAndWeapon(SVTest
     def test_grim_reaper_requires_weapon_and_pickaxe(self):
         grim_reaper_location = "Grim Reaper statue"
         self.assert_cannot_reach_location(grim_reaper_location)
+        self.collect("Mountain Shortcuts")
         self.collect("Bridge Repair")
         self.assert_cannot_reach_location(grim_reaper_location)
         self.collect("Progressive Weapon")
