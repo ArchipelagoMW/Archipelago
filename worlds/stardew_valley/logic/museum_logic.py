@@ -1,3 +1,5 @@
+import math
+
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
 from .. import options
@@ -27,7 +29,9 @@ class MuseumLogic(BaseLogic):
     @cache_self1
     def can_find_museum_item(self, item: MuseumItem) -> StardewRule:
         if item.artifact_spot_locations:
-            artifact_spot_rule = self.logic.and_(*[self.logic.tool.can_use_tool_at(Tool.hoe, ToolMaterial.basic, spot) for spot in item.artifact_spot_locations])
+            number_locations = len(item.artifact_spot_locations)
+            number_required_locations = math.ceil(number_locations / 2)
+            artifact_spot_rule = self.logic.count(number_required_locations, *[self.logic.tool.can_use_tool_at(Tool.hoe, ToolMaterial.basic, spot) for spot in item.artifact_spot_locations])
         else:
             artifact_spot_rule = False_()
         if item.geodes:

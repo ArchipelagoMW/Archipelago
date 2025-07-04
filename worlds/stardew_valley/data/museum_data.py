@@ -168,7 +168,7 @@ class Artifact:
                                        geodes=WaterChest.fishing_chest)
     palm_fossil = create_artifact("Palm Fossil", 10.2,
                                   (Region.dig_site, Region.desert, Region.forest, Region.beach))
-    trilobite = create_artifact("Trilobite", 7.4, (Region.dig_site, Region.desert, Region.forest, Region.beach))
+    trilobite = create_artifact(Fossil.trilobite, 7.4, (Region.dig_site, Region.desert, Region.forest, Region.beach))
 
 
 class Mineral:

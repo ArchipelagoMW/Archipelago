@@ -2,6 +2,7 @@ from .assertion import WorldAssertMixin
 from .bases import SVTestBase
 from .. import options, items_by_group, Group
 from ..options import TrapDistribution
+from ..strings.ap_names.ap_option_names import EatsanityOptionName
 
 default_distribution = {trap.name: TrapDistribution.default_weight for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
 threshold_difference = 2
@@ -61,6 +62,8 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
+        options.Eatsanity.internal_name: frozenset([EatsanityOptionName.shop, EatsanityOptionName.fish, EatsanityOptionName.artisan, EatsanityOptionName.crops, EatsanityOptionName.cooking, EatsanityOptionName.poisonous]),
+        options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
         options.Mods.internal_name: frozenset(options.Mods.valid_keys),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
         options.TrapDistribution.internal_name: {"Nudge Trap": 100, "Bark Trap": 1, "Meow Trap": 1000, "Shuffle Trap": 0}

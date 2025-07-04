@@ -9,14 +9,14 @@ from ...mods.mod_data import ModNames
 from ...strings.ap_names.mods.mod_items import ModBooks
 from ...strings.craftable_names import ModMachine
 from ...strings.fish_names import ModTrash
-from ...strings.metal_names import all_artifacts, all_fossils
+from ...strings.metal_names import all_artifacts, all_fossils, Fossil
 from ...strings.skill_names import ModSkill
 
 
 def source_display_items(item: str, content: StardewContent):
     wood_display = f"Wooden Display: {item}"
     hardwood_display = f"Hardwood Display: {item}"
-    if item == "Trilobite":
+    if item == Fossil.trilobite:
         wood_display = f"Wooden Display: Trilobite Fossil"
         hardwood_display = f"Hardwood Display: Trilobite Fossil"
     content.source_item(wood_display, MachineSource(item=str(item), machine=ModMachine.preservation_chamber))

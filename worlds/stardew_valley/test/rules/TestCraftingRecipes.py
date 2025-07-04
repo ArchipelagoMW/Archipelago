@@ -19,6 +19,7 @@ class TestCraftsanityLogic(SVTestBase):
         self.collect([self.create_item("Progressive Fishing Rod")] * 4)
         self.collect([self.create_item("Progressive Sword")] * 4)
         self.collect([self.create_item("Progressive Mine Elevator")] * 24)
+        self.collect([self.create_item("Progressive Pan")] * 4)
         self.collect([self.create_item("Mining Level")] * 10)
         self.collect([self.create_item("Combat Level")] * 10)
         self.collect([self.create_item("Fishing Level")] * 10)
