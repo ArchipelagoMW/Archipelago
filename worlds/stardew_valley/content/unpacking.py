@@ -74,6 +74,10 @@ def register_pack(content: StardewContent, pack: ContentPack):
         content.skills[skill.name] = skill
     pack.skill_hook(content)
 
+    for hat in pack.hat_sources:
+        content.hats[hat.name] = hat
+    pack.hat_source_hook(content)
+
     # register_quests
 
     # ...
