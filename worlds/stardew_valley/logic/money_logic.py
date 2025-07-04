@@ -148,7 +148,7 @@ class MoneyLogic(BaseLogic):
                 return self.logic.time.has_lived_months(amount)
             return self.logic.false_
 
-        return self.logic.has(currency) & self.logic.grind.can_grind_item(amount)
+        return self.logic.grind.can_grind_item(amount, currency)
 
     # Should be cached
     def can_trade_at(self, region: str, currency: str, amount: int) -> StardewRule:
