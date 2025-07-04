@@ -1,12 +1,14 @@
-from worlds.stardew_valley import BackpackProgression, ToolProgression
+from worlds.stardew_valley import BackpackProgression, ToolProgression, SeasonRandomization
 from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity
+from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity, Cropsanity
 from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName
 from worlds.stardew_valley.test.bases import SVTestBase
 
 
-class TestAvailableBackpacks(SVTestBase):
+class TestAvailableBackpacksSize1(SVTestBase):
     options = {
+        SeasonRandomization: SeasonRandomization.option_disabled,
+        Cropsanity: Cropsanity.option_disabled,
         BackpackProgression: BackpackProgression.option_progressive,
         BackpackSize: 1,
         ToolProgression: ToolProgression.option_progressive_no_tool_start,
@@ -14,12 +16,16 @@ class TestAvailableBackpacks(SVTestBase):
     }
 
     def test_can_purchase_correct_number_of_backpacks(self):
-        backpack_names = ["Small Pack", "Large Pack", "Premium Pack", "Deluxe Pack"]
+        backpack_names = ["Small Pack", "Large Pack", "Deluxe Pack", "Premium Pack"]
         backpack_location_names = []
         for backpack_name in backpack_names:
             for i in range(1, 13):
                 backpack_location_names.append(f"{backpack_name} {i}")
 
+        items_required = ["Shipping Bin", "Progressive Hoe", "Progressive Watering Can"]
+        for item in items_required:
+            self.collect(item)
+        self.collect_lots_of_money(0.15)
         number_owned_backpacks = self.multiworld.state.prog_items[self.player]["Progressive Backpack"]
         while number_owned_backpacks < 48:
             number_available = number_owned_backpacks + 1
@@ -35,6 +41,8 @@ class TestAvailableBackpacks(SVTestBase):
 
 class TestAvailableBackpacksSize4(SVTestBase):
     options = {
+        SeasonRandomization: SeasonRandomization.option_disabled,
+        Cropsanity: Cropsanity.option_disabled,
         BackpackProgression: BackpackProgression.option_progressive,
         BackpackSize: 4,
         ToolProgression: ToolProgression.option_progressive_no_tool_start,
@@ -42,11 +50,16 @@ class TestAvailableBackpacksSize4(SVTestBase):
     }
 
     def test_can_purchase_correct_number_of_backpacks(self):
-        backpack_names = ["Small Pack", "Large Pack", "Premium Pack", "Deluxe Pack"]
+        backpack_names = ["Small Pack", "Large Pack", "Deluxe Pack", "Premium Pack"]
         backpack_location_names = []
         for backpack_name in backpack_names:
             for i in range(1, 4):
                 backpack_location_names.append(f"{backpack_name} {i}")
+
+        items_required = ["Shipping Bin", "Progressive Hoe", "Progressive Watering Can"]
+        for item in items_required:
+            self.collect(item)
+        self.collect_lots_of_money(0.15)
 
         number_owned_backpacks = self.multiworld.state.prog_items[self.player]["Progressive Backpack"]
         while number_owned_backpacks * 4 < 48:

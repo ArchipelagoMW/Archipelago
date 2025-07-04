@@ -27,7 +27,7 @@ from .mods.mod_data import ModNames
 from .options import SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, StardewValleyOptions, Walnutsanity
 from .options.options import FarmType, Moviesanity, Eatsanity, Friendsanity, ExcludeGingerIsland, \
-    IncludeEndgameLocations
+    IncludeEndgameLocations, ToolProgression
 from .stardew_rule import And, StardewRule, true_
 from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .stardew_rule.rule_explain import explain
@@ -696,7 +696,8 @@ def set_backpack_rules(logic: StardewLogic, multiworld: MultiWorld, player: int,
         return
 
     num_per_tier = world_options.backpack_size.count_per_tier()
-    backpack_tier_names = Backpack.get_purchasable_tiers(content.is_enabled(ModNames.big_backpack))
+    start_without_tools = world_options.tool_progression & ToolProgression.value_no_starting_tools
+    backpack_tier_names = Backpack.get_purchasable_tiers(content.is_enabled(ModNames.big_backpack), start_without_tools)
     previous_backpacks = 0
     for tier in backpack_tier_names:
         for i in range(1, num_per_tier + 1):
