@@ -46,4 +46,4 @@ class AbilityLogic(BaseLogic):
 
     def can_scythe_vines(self) -> StardewRule:
         can_reach_any_vine_region = self.logic.region.can_reach_any(Region.forest, Region.railroad)
-        return self.logic.tool.has_scythe() & can_reach_any_vine_region
+        return self.logic.tool.has_scythe() & can_reach_any_vine_region & self.logic.season.has_any_not_winter()
