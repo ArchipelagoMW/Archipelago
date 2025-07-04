@@ -6,6 +6,7 @@ from ...strings.bundle_names import BundleName
 
 class TestBundlesLogic(SVTestBase):
     options = {
+        options.SeasonRandomization: SeasonRandomization.option_disabled,
         options.BundleRandomization: BundleRandomization.option_vanilla,
         options.BundlePrice: options.BundlePrice.default,
     }
@@ -21,6 +22,7 @@ class TestBundlesLogic(SVTestBase):
 
 class TestRemixedBundlesLogic(SVTestBase):
     options = {
+        options.SeasonRandomization: SeasonRandomization.option_disabled,
         options.BundleRandomization: BundleRandomization.option_remixed,
         options.BundlePrice: options.BundlePrice.default,
         options.BundlePlando: frozenset({BundleName.sticky})
