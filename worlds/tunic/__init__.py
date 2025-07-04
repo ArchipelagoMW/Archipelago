@@ -1,3 +1,4 @@
+from collections import Counter
 from dataclasses import fields
 from typing import Dict, List, Any, Tuple, TypedDict, ClassVar, Union, Set, TextIO
 from logging import warning
@@ -110,6 +111,7 @@ class TunicWorld(World):
     # for the local_fill option
     fill_items: List[TunicItem]
     fill_locations: List[Location]
+    backup_locations: List[Location]
     amount_to_local_fill: int
 
     # so we only loop the multiworld locations once
@@ -487,6 +489,7 @@ class TunicWorld(World):
                                   f"This is likely due to excess plando or priority locations.")
             self.random.shuffle(viable_locations)
             self.fill_locations = viable_locations[:self.amount_to_local_fill]
+            self.backup_locations = viable_locations[self.amount_to_local_fill:]
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
@@ -497,24 +500,81 @@ class TunicWorld(World):
             non_grass_fill: List[TunicItem] = []
             grass_fill_locations: List[Location] = []
             non_grass_fill_locations: List[Location] = []
+            backup_grass_locations: List[Location] = []
+            backup_non_grass_locations: List[Location] = []
             for world in tunic_fill_worlds:
                 if world.options.grass_randomizer:
                     grass_fill.extend(world.fill_items)
                     grass_fill_locations.extend(world.fill_locations)
+                    backup_grass_locations.extend(world.backup_locations)
                 else:
                     non_grass_fill.extend(world.fill_items)
                     non_grass_fill_locations.extend(world.fill_locations)
+                    backup_non_grass_locations.extend(world.backup_locations)
 
             multiworld.random.shuffle(grass_fill)
             multiworld.random.shuffle(non_grass_fill)
             multiworld.random.shuffle(grass_fill_locations)
             multiworld.random.shuffle(non_grass_fill_locations)
+            multiworld.random.shuffle(backup_grass_locations)
+            multiworld.random.shuffle(backup_non_grass_locations)
+
+            # these are slots that filled in TUNIC locations during pre_fill
+            out_of_spec_worlds = set()
 
             for filler_item in grass_fill:
-                grass_fill_locations.pop().place_locked_item(filler_item)
+                loc_to_fill = grass_fill_locations.pop()
+                try:
+                    loc_to_fill.place_locked_item(filler_item)
+                except Exception:
+                    out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                    for loc in backup_grass_locations:
+                        if not loc.item:
+                            loc.place_locked_item(filler_item)
+                            break
+                        else:
+                            out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                    else:
+                        raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
+                                        "world filling TUNIC locations during pre_fill.\n"
+                                        "Archipelago does not allow us to place items into the item pool after "
+                                        "create_items, so we cannot recover from this issue.\n"
+                                        f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
+                                        f"Please let the world dev(s) for the listed world(s) know that there is an "
+                                        f"issue there.\n"
+                                        "As a workaround, you can try setting the local_filler option lower for "
+                                        "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
+                                        "try generating again, as it may not happen every generation.")
 
             for filler_item in non_grass_fill:
                 non_grass_fill_locations.pop().place_locked_item(filler_item)
+                loc_to_fill = non_grass_fill_locations.pop()
+                try:
+                    loc_to_fill.place_locked_item(filler_item)
+                except Exception:
+                    out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                    for loc in backup_non_grass_locations:
+                        if not loc.item:
+                            loc.place_locked_item(filler_item)
+                            break
+                        else:
+                            out_of_spec_worlds.add(multiworld.worlds[loc_to_fill.item.player].game)
+                    else:
+                        raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
+                                        "world filling TUNIC locations during pre_fill.\n"
+                                        "Archipelago does not allow us to place items into the item pool after "
+                                        "create_items, so we cannot recover from this issue.\n"
+                                        f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
+                                        f"Please let the world dev(s) for the listed world(s) know that there is an "
+                                        f"issue there.\n"
+                                        "As a workaround, you can try setting the local_filler option lower for "
+                                        "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
+                                        "try generating again, as it may not happen every generation.")
+            if out_of_spec_worlds:
+                warning("TUNIC: At least one other world has filled TUNIC locations during pre_fill. This may "
+                        "cause issues for games that rely on placing items in their own world during pre_fill.\n"
+                        f"This is likely being caused by the following world(s): {out_of_spec_worlds}.\n"
+                        "Please let the world dev(s) for the listed world(s) know that there is an issue there.")
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
