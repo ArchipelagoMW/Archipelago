@@ -15,7 +15,7 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
 
 ## Optional Software
 
-- [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/coveleski/rb_tracker/releases/latest), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
+- [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/palex00/rb_tracker/releases/latest), for use with [PopTracker](https://github.com/black-sliver/PopTracker/releases)
 
 
 ## Configuring BizHawk
@@ -109,7 +109,7 @@ server uses password, type in the bottom textfield `/connect <address>:<port> [p
 
 Pokémon Red and Blue has a fully functional map tracker that supports auto-tracking.
 
-1. Download [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/coveleski/rb_tracker/releases/latest) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
+1. Download [Pokémon Red and Blue Archipelago Map Tracker](https://github.com/palex00/rb_tracker/releases/latest) and [PopTracker](https://github.com/black-sliver/PopTracker/releases).
 2. Open PopTracker, and load the Pokémon Red and Blue pack. 
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 

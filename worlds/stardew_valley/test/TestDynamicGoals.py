@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
-from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestBase
 from .. import options, StardewItem
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation

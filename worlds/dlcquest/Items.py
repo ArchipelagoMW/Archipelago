@@ -98,14 +98,14 @@ def create_trap_items(world, world_options: Options.DLCQuestOptions, trap_needed
     return traps
 
 
-def create_items(world, world_options: Options.DLCQuestOptions, locations_count: int, random: Random):
+def create_items(world, world_options: Options.DLCQuestOptions, locations_count: int, excluded_items: list[str], random: Random):
     created_items = []
     if world_options.campaign == Options.Campaign.option_basic or world_options.campaign == Options.Campaign.option_both:
-        create_items_basic(world_options, created_items, world)
+        create_items_basic(world_options, created_items, world, excluded_items)
 
     if (world_options.campaign == Options.Campaign.option_live_freemium_or_die or
             world_options.campaign == Options.Campaign.option_both):
-        create_items_lfod(world_options, created_items, world)
+        create_items_lfod(world_options, created_items, world, excluded_items)
 
     trap_items = create_trap_items(world, world_options, locations_count - len(created_items), random)
     created_items += trap_items
@@ -113,8 +113,12 @@ def create_items(world, world_options: Options.DLCQuestOptions, locations_count:
     return created_items
 
 
-def create_items_lfod(world_options, created_items, world):
+def create_items_lfod(world_options, created_items, world, excluded_items):
     for item in items_by_group[Group.Freemium]:
+        if item.name in excluded_items:
+            excluded_items.remove(item)
+            continue
+
         if item.has_any_group(Group.DLC):
             created_items.append(world.create_item(item))
         if item.has_any_group(Group.Item) and world_options.item_shuffle == Options.ItemShuffle.option_shuffled:
@@ -128,8 +132,12 @@ def create_items_lfod(world_options, created_items, world):
         create_coin(world_options, created_items, world, 889, 200, Group.Freemium)
 
 
-def create_items_basic(world_options, created_items, world):
+def create_items_basic(world_options, created_items, world, excluded_items):
     for item in items_by_group[Group.DLCQuest]:
+        if item.name in excluded_items:
+            excluded_items.remove(item.name)
+            continue
+
         if item.has_any_group(Group.DLC):
             created_items.append(world.create_item(item))
         if item.has_any_group(Group.Item) and world_options.item_shuffle == Options.ItemShuffle.option_shuffled:

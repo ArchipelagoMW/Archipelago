@@ -73,7 +73,7 @@ things to keep in mind:
 
 * To run the game itself, just run `launchmod_darksouls3.bat` under Proton.
 
-[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+[.NET Runtime]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 [WINE]: https://www.winehq.org/
 
 ## Troubleshooting

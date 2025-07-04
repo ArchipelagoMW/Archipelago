@@ -1,31 +1,18 @@
 import math
-import typing
 from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
-from .building_logic import BuildingLogicMixin
-from .gift_logic import GiftLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .time_logic import TimeLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_, true_
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
+from ..strings.building_names import Building
 from ..strings.generic_names import Generic
 from ..strings.gift_names import Gift
-from ..strings.quest_names import ModQuest
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
-
-if typing.TYPE_CHECKING:
-    from ..mods.logic.mod_logic import ModLogicMixin
-else:
-    ModLogicMixin = object
 
 possible_kids = ("Cute Baby", "Ugly Baby")
 
@@ -43,8 +30,7 @@ class RelationshipLogicMixin(BaseLogicMixin):
         self.relationship = RelationshipLogic(*args, **kwargs)
 
 
-class RelationshipLogic(BaseLogic[Union[RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin,
-ReceivedLogicMixin, HasLogicMixin, ModLogicMixin]]):
+class RelationshipLogic(BaseLogic):
 
     def can_date(self, npc: str) -> StardewRule:
         return self.logic.relationship.has_hearts(npc, 8) & self.logic.has(Gift.bouquet)
@@ -63,7 +49,7 @@ ReceivedLogicMixin, HasLogicMixin, ModLogicMixin]]):
         if not self.content.features.friendsanity.is_enabled:
             return self.logic.relationship.can_reproduce(number_children)
 
-        return self.logic.received_n(*possible_kids, count=number_children) & self.logic.building.has_house(2)
+        return self.logic.received_n(*possible_kids, count=number_children) & self.logic.building.has_building(Building.kids_room)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         assert number_children >= 0, "Can't have a negative amount of children."
@@ -71,7 +57,7 @@ ReceivedLogicMixin, HasLogicMixin, ModLogicMixin]]):
             return True_()
 
         baby_rules = [self.logic.relationship.can_get_married(),
-                      self.logic.building.has_house(2),
+                      self.logic.building.has_building(Building.kids_room),
                       self.logic.relationship.has_hearts_with_any_bachelor(12),
                       self.logic.relationship.has_children(number_children - 1)]
 

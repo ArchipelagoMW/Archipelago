@@ -8,17 +8,20 @@ from schema import Schema, Optional, And, Or, SchemaError
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool, PerGameCommonOptions, OptionGroup
 
+
 # schema helpers
 class FloatRange:
     def __init__(self, low, high):
         self._low = low
         self._high = high
 
-    def validate(self, value):
+    def validate(self, value) -> float:
         if not isinstance(value, (float, int)):
             raise SchemaError(f"should be instance of float or int, but was {value!r}")
         if not self._low <= value <= self._high:
             raise SchemaError(f"{value} is not between {self._low} and {self._high}")
+        return float(value)
+
 
 LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 

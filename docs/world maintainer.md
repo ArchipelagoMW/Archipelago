@@ -65,5 +65,5 @@ date, voting members and final result in the commit message.
 
 ## Handling of Unmaintained Worlds
 
-As long as worlds are known to work for the most part, they can stay included. Once a world becomes broken it shall be
-moved from `worlds/` to `worlds_disabled/`.
+As long as worlds are known to work for the most part, they can stay included. Once the world becomes broken, it shall 
+be deleted.

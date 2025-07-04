@@ -9,8 +9,9 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Mapping, NamedTuple,
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
+import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -54,12 +55,21 @@ class HasNameAndPlayer(Protocol):
     player: int
 
 
+@dataclasses.dataclass
+class PlandoItemBlock:
+    player: int
+    from_pool: bool
+    force: bool | Literal["silent"]
+    worlds: set[int] = dataclasses.field(default_factory=set)
+    items: list[str] = dataclasses.field(default_factory=list)
+    locations: list[str] = dataclasses.field(default_factory=list)
+    resolved_locations: list[Location] = dataclasses.field(default_factory=list)
+    count: dict[str, int] = dataclasses.field(default_factory=dict)
+
+
 class MultiWorld():
     debug_types = False
     player_name: Dict[int, str]
-    plando_texts: List[Dict[str, str]]
-    plando_items: List[List[Dict[str, Any]]]
-    plando_connections: List
     worlds: Dict[int, "AutoWorld.World"]
     groups: Dict[int, Group]
     regions: RegionManager
@@ -82,6 +92,8 @@ class MultiWorld():
     start_hints: Dict[int, Options.StartHints]
     start_location_hints: Dict[int, Options.StartLocationHints]
     item_links: Dict[int, Options.ItemLinks]
+
+    plando_item_blocks: Dict[int, List[PlandoItemBlock]]
 
     game: Dict[int, str]
 
@@ -160,13 +172,12 @@ class MultiWorld():
         self.local_early_items = {player: {} for player in self.player_ids}
         self.indirect_connections = {}
         self.start_inventory_from_pool: Dict[int, Options.StartInventoryPool] = {}
+        self.plando_item_blocks = {}
 
         for player in range(1, players + 1):
             def set_player_attr(attr: str, val) -> None:
                 self.__dict__.setdefault(attr, {})[player] = val
-            set_player_attr('plando_items', [])
-            set_player_attr('plando_texts', {})
-            set_player_attr('plando_connections', [])
+            set_player_attr('plando_item_blocks', [])
             set_player_attr('game', "Archipelago")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
@@ -223,7 +234,7 @@ class MultiWorld():
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
             option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
-                                         f"Please use `self.options.{option_key}` instead.")
+                                         f"Please use `self.options.{option_key}` instead.", True)
             option.update(getattr(args, option_key, {}))
             setattr(self, option_key, option)
 
@@ -427,7 +438,8 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False) -> CollectionState:
+    def get_all_state(self, use_cache: bool, allow_partial_entrances: bool = False,
+                      collect_pre_fill_items: bool = True, perform_sweep: bool = True) -> CollectionState:
         cached = getattr(self, "_all_state", None)
         if use_cache and cached:
             return cached.copy()
@@ -436,11 +448,13 @@ class MultiWorld():
 
         for item in self.itempool:
             self.worlds[item.player].collect(ret, item)
-        for player in self.player_ids:
-            subworld = self.worlds[player]
-            for item in subworld.get_pre_fill_items():
-                subworld.collect(ret, item)
-        ret.sweep_for_advancements()
+        if collect_pre_fill_items:
+            for player in self.player_ids:
+                subworld = self.worlds[player]
+                for item in subworld.get_pre_fill_items():
+                    subworld.collect(ret, item)
+        if perform_sweep:
+            ret.sweep_for_advancements()
 
         if use_cache:
             self._all_state = ret
@@ -545,7 +559,9 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
+    def can_beat_game(self,
+                      starting_state: Optional[CollectionState] = None,
+                      locations: Optional[Iterable[Location]] = None) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -554,7 +570,9 @@ class MultiWorld():
             state = CollectionState(self)
             if self.has_beaten_game(state):
                 return True
-        prog_locations = {location for location in self.get_locations() if location.item
+
+        base_locations = self.get_locations() if locations is None else locations
+        prog_locations = {location for location in base_locations if location.item
                           and location.item.advancement and location not in state.locations_checked}
 
         while prog_locations:
@@ -616,7 +634,7 @@ class MultiWorld():
         locations: Set[Location] = set()
         events: Set[Location] = set()
         for location in self.get_filled_locations():
-            if type(location.item.code) is int:
+            if type(location.item.code) is int and type(location.address) is int:
                 locations.add(location)
             else:
                 events.add(location)
@@ -723,6 +741,7 @@ class CollectionState():
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
     def __init__(self, parent: MultiWorld, allow_partial_entrances: bool = False):
+        assert parent.worlds, "CollectionState created without worlds initialized in parent"
         self.prog_items = {player: Counter() for player in parent.get_all_ids()}
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
@@ -999,6 +1018,17 @@ class CollectionState():
 
         return changed
 
+    def add_item(self, item: str, player: int, count: int = 1) -> None:
+        """
+        Adds the item to state.
+
+        :param item: The item to be added.
+        :param player: The player the item is for.
+        :param count: How many of the item to add.
+        """
+        assert count > 0
+        self.prog_items[player][item] += count
+
     def remove(self, item: Item):
         changed = self.multiworld.worlds[item.player].remove(self, item)
         if changed:
@@ -1006,6 +1036,33 @@ class CollectionState():
             self.reachable_regions[item.player] = set()
             self.blocked_connections[item.player] = set()
             self.stale[item.player] = True
+
+    def remove_item(self, item: str, player: int, count: int = 1) -> None:
+        """
+        Removes the item from state.
+
+        :param item: The item to be removed.
+        :param player: The player the item is for.
+        :param count: How many of the item to remove.
+        """
+        assert count > 0
+        self.prog_items[player][item] -= count
+        if self.prog_items[player][item] < 1:
+            del (self.prog_items[player][item])
+
+    def set_item(self, item: str, player: int, count: int) -> None:
+        """
+        Sets the item in state equal to the provided count.
+
+        :param item: The item to modify.
+        :param player: The player the item is for.
+        :param count: How many of the item to now have.
+        """
+        assert count >= 0
+        if count == 0:
+            del (self.prog_items[player][item])
+        else:
+            self.prog_items[player][item] = count
 
 
 class EntranceType(IntEnum):
@@ -1022,9 +1079,6 @@ class Entrance:
     connected_region: Optional[Region] = None
     randomization_group: int
     randomization_type: EntranceType
-    # LttP specific, TODO: should make a LttPEntrance
-    addresses = None
-    target = None
 
     def __init__(self, player: int, name: str = "", parent: Optional[Region] = None,
                  randomization_group: int = 0, randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
@@ -1043,10 +1097,8 @@ class Entrance:
 
         return False
 
-    def connect(self, region: Region, addresses: Any = None, target: Any = None) -> None:
+    def connect(self, region: Region) -> None:
         self.connected_region = region
-        self.target = target
-        self.addresses = addresses
         region.entrances.append(self)
 
     def is_valid_source_transition(self, er_state: "ERPlacementState") -> bool:
@@ -1105,6 +1157,9 @@ class Region:
 
         def __len__(self) -> int:
             return self._list.__len__()
+
+        def __iter__(self):
+            return iter(self._list)
 
         # This seems to not be needed, but that's a bit suspicious.
         # def __del__(self):
@@ -1200,6 +1255,48 @@ class Region:
         for location, address in locations.items():
             self.locations.append(location_type(self.player, location, address, self))
 
+    def add_event(
+        self,
+        location_name: str,
+        item_name: str | None = None,
+        rule: Callable[[CollectionState], bool] | None = None,
+        location_type: type[Location] | None = None,
+        item_type: type[Item] | None = None,
+        show_in_spoiler: bool = True,
+    ) -> Item:
+        """
+        Adds an event location/item pair to the region.
+
+        :param location_name: Name for the event location.
+        :param item_name: Name for the event item. If not provided, defaults to location_name.
+        :param rule: Callable to determine access for this event location within its region.
+        :param location_type: Location class to create the event location with. Defaults to BaseClasses.Location.
+        :param item_type: Item class to create the event item with. Defaults to BaseClasses.Item.
+        :param show_in_spoiler: Will be passed along to the created event Location's show_in_spoiler attribute.
+        :return: The created Event Item
+        """
+        if location_type is None:
+            location_type = Location
+
+        if item_name is None:
+            item_name = location_name
+
+        if item_type is None:
+            item_type = Item
+
+        event_location = location_type(self.player, location_name, None, self)
+        event_location.show_in_spoiler = show_in_spoiler
+        if rule is not None:
+            event_location.access_rule = rule
+
+        event_item = item_type(item_name, ItemClassification.progression, None, self.player)
+
+        event_location.place_locked_item(event_item)
+
+        self.locations.append(event_location)
+
+        return event_item
+
     def connect(self, connecting_region: Region, name: Optional[str] = None,
                 rule: Optional[Callable[[CollectionState], bool]] = None) -> Entrance:
         """
@@ -1240,8 +1337,8 @@ class Region:
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
         :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
-        created entrances will be named "self.name -> connecting_region"
-        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+                      created entrances will be named "self.name -> connecting_region"
+        :param rules: rules for the exits from this region. format is {"connecting_region": rule}
         """
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
@@ -1309,9 +1406,6 @@ class Location:
     def __repr__(self):
         multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
         return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
-
-    def __hash__(self):
-        return hash((self.name, self.player))
 
     def __lt__(self, other: Location):
         return (self.player, self.name) < (other.player, other.name)
@@ -1416,6 +1510,10 @@ class Item:
     def flags(self) -> int:
         return self.classification.as_flag()
 
+    @property
+    def is_event(self) -> bool:
+        return self.code is None
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Item):
             return NotImplemented
@@ -1509,21 +1607,19 @@ class Spoiler:
 
         # in the second phase, we cull each sphere such that the game is still beatable,
         # reducing each range of influence to the bare minimum required inside it
-        restore_later: Dict[Location, Item] = {}
+        required_locations = {location for sphere in collection_spheres for location in sphere}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
             to_delete: Set[Location] = set()
             for location in sphere:
-                # we remove the item at location and check if game is still beatable
+                # we remove the location from required_locations to sweep from, and check if the game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
                               location.item.player)
-                old_item = location.item
-                location.item = None
-                if multiworld.can_beat_game(state_cache[num]):
+                required_locations.remove(location)
+                if multiworld.can_beat_game(state_cache[num], required_locations):
                     to_delete.add(location)
-                    restore_later[location] = old_item
                 else:
                     # still required, got to keep it around
-                    location.item = old_item
+                    required_locations.add(location)
 
             # cull entries in spheres for spoiler walkthrough at end
             sphere -= to_delete
@@ -1540,7 +1636,7 @@ class Spoiler:
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
                 precollected_items.remove(item)
                 multiworld.state.remove(item)
-                if not multiworld.can_beat_game():
+                if not multiworld.can_beat_game(multiworld.state, required_locations):
                     # Add the item back into `precollected_items` and collect it into `multiworld.state`.
                     multiworld.push_precollected(item)
                 else:
@@ -1582,9 +1678,6 @@ class Spoiler:
             self.create_paths(state, collection_spheres)
 
         # repair the multiworld again
-        for location, item in restore_later.items():
-            location.item = item
-
         for item in removed_precollected:
             multiworld.push_precollected(item)
 

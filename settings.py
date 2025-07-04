@@ -10,9 +10,10 @@ import sys
 import types
 import typing
 import warnings
+from collections.abc import Iterator, Sequence
 from enum import IntEnum
 from threading import Lock
-from typing import cast, Any, BinaryIO, ClassVar, Dict, Iterator, List, Optional, TextIO, Tuple, Union, TypeVar
+from typing import cast, Any, BinaryIO, ClassVar, TextIO, TypeVar, Union
 
 __all__ = [
     "get_settings", "fmt_doc", "no_gui",
@@ -23,7 +24,7 @@ __all__ = [
 
 no_gui = False
 skip_autosave = False
-_world_settings_name_cache: Dict[str, str] = {}  # TODO: cache on disk and update when worlds change
+_world_settings_name_cache: dict[str, str] = {}  # TODO: cache on disk and update when worlds change
 _world_settings_name_cache_updated = False
 _lock = Lock()
 
@@ -53,7 +54,7 @@ def fmt_doc(cls: type, level: int) -> str:
 
 
 class Group:
-    _type_cache: ClassVar[Optional[Dict[str, Any]]] = None
+    _type_cache: ClassVar[dict[str, Any] | None] = None
     _dumping: bool = False
     _has_attr: bool = False
     _changed: bool = False
@@ -106,7 +107,7 @@ class Group:
                                         self.__dict__.values()))
 
     @classmethod
-    def get_type_hints(cls) -> Dict[str, Any]:
+    def get_type_hints(cls) -> dict[str, Any]:
         """Returns resolved type hints for the class"""
         if cls._type_cache is None:
             if not cls.__annotations__ or not isinstance(next(iter(cls.__annotations__.values())), str):
@@ -124,10 +125,10 @@ class Group:
             return self[key]
         return default
 
-    def items(self) -> List[Tuple[str, Any]]:
+    def items(self) -> list[tuple[str, Any]]:
         return [(key, getattr(self, key)) for key in self]
 
-    def update(self, dct: Dict[str, Any]) -> None:
+    def update(self, dct: dict[str, Any]) -> None:
         assert isinstance(dct, dict), f"{self.__class__.__name__}.update called with " \
                                       f"{dct.__class__.__name__} instead of dict."
 
@@ -196,7 +197,7 @@ class Group:
                         warnings.warn(f"{self.__class__.__name__}.{k} "
                                       f"assigned from incompatible type {type(v).__name__}")
 
-    def as_dict(self, *args: str, downcast: bool = True) -> Dict[str, Any]:
+    def as_dict(self, *args: str, downcast: bool = True) -> dict[str, Any]:
         return {
             name: _to_builtin(cast(object, getattr(self, name))) if downcast else getattr(self, name)
             for name in self if not args or name in args
@@ -211,7 +212,7 @@ class Group:
         f.write(f"{indent}{yaml_line}")
 
     @classmethod
-    def _dump_item(cls, name: Optional[str], attr: object, f: TextIO, level: int) -> None:
+    def _dump_item(cls, name: str | None, attr: object, f: TextIO, level: int) -> None:
         """Write a group, dict or sequence item to f, where attr can be a scalar or a collection"""
 
         # lazy construction of yaml Dumper to avoid loading Utils early
@@ -223,7 +224,7 @@ class Group:
                     def represent_mapping(self, tag: str, mapping: Any, flow_style: Any = None) -> MappingNode:
                         from yaml import ScalarNode
                         res: MappingNode = super().represent_mapping(tag, mapping, flow_style)
-                        pairs = cast(List[Tuple[ScalarNode, Any]], res.value)
+                        pairs = cast(list[tuple[ScalarNode, Any]], res.value)
                         for k, v in pairs:
                             k.style = None  # remove quotes from keys
                         return res
@@ -329,9 +330,9 @@ class Path(str):
     """Marks the file as required and opens a file browser when missing"""
     is_exe: bool = False
     """Special cross-platform handling for executables"""
-    description: Optional[str] = None
+    description: str | None = None
     """Title to display when browsing for the file"""
-    copy_to: Optional[str] = None
+    copy_to: str | None = None
     """If not None, copy to AP folder instead of linking it"""
 
     @classmethod
@@ -339,7 +340,7 @@ class Path(str):
         """Overload and raise to validate input files from browse"""
         pass
 
-    def browse(self: T, **kwargs: Any) -> Optional[T]:
+    def browse(self: T, **kwargs: Any) -> T | None:
         """Opens a file browser to search for the file"""
         raise NotImplementedError(f"Please use a subclass of Path for {self.__class__.__name__}")
 
@@ -369,12 +370,12 @@ class _LocalPath(str):
 class FilePath(Path):
     # path to a file
 
-    md5s: ClassVar[List[Union[str, bytes]]] = []
+    md5s: ClassVar[list[str | bytes]] = []
     """MD5 hashes for default validator."""
 
     def browse(self: T,
-               filetypes: Optional[typing.Sequence[typing.Tuple[str, typing.Sequence[str]]]] = None, **kwargs: Any)\
-            -> Optional[T]:
+               filetypes: Sequence[tuple[str, Sequence[str]]] | None = None, **kwargs: Any)\
+            -> T | None:
         from Utils import open_filename, is_windows
         if not filetypes:
             if self.is_exe:
@@ -439,7 +440,7 @@ class FilePath(Path):
 class FolderPath(Path):
     # path to a folder
 
-    def browse(self: T, **kwargs: Any) -> Optional[T]:
+    def browse(self: T, **kwargs: Any) -> T | None:
         from Utils import open_directory
         res = open_directory(f"Select {self.description or self.__class__.__name__}", self)
         if res:
@@ -597,16 +598,16 @@ class ServerOptions(Group):
         OFF = 0
         ON = 1
 
-    host: Optional[str] = None
+    host: str | None = None
     port: int = 38281
-    password: Optional[str] = None
-    multidata: Optional[str] = None
-    savefile: Optional[str] = None
+    password: str | None = None
+    multidata: str | None = None
+    savefile: str | None = None
     disable_save: bool = False
     loglevel: str = "info"
     logtime: bool = False
-    server_password: Optional[ServerPassword] = None
-    disable_item_cheat: Union[DisableItemCheat, bool] = False
+    server_password: ServerPassword | None = None
+    disable_item_cheat: DisableItemCheat | bool = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
     hint_cost: HintCost = HintCost(10)
     release_mode: ReleaseMode = ReleaseMode("auto")
@@ -702,7 +703,7 @@ does nothing if not found
         """
 
     sni_path: SNIPath = SNIPath("SNI")
-    snes_rom_start: Union[SnesRomStart, bool] = True
+    snes_rom_start: SnesRomStart | bool = True
 
 
 class BizHawkClientOptions(Group):
@@ -721,7 +722,7 @@ class BizHawkClientOptions(Group):
         """
 
     emuhawk_path: EmuHawkPath = EmuHawkPath(None)
-    rom_start: Union[RomStart, bool] = True
+    rom_start: RomStart | bool = True
 
 
 # Top-level group with lazy loading of worlds
@@ -733,7 +734,7 @@ class Settings(Group):
     sni_options: SNIOptions = SNIOptions()
     bizhawkclient_options: BizHawkClientOptions = BizHawkClientOptions()
 
-    _filename: Optional[str] = None
+    _filename: str | None = None
 
     def __getattribute__(self, key: str) -> Any:
         if key.startswith("_") or key in self.__class__.__dict__:
@@ -787,7 +788,7 @@ class Settings(Group):
 
         return super().__getattribute__(key)
 
-    def __init__(self, location: Optional[str]):  # change to PathLike[str] once we drop 3.8?
+    def __init__(self, location: str | None):  # change to PathLike[str] once we drop 3.8?
         super().__init__()
         if location:
             from Utils import parse_yaml
@@ -821,7 +822,7 @@ class Settings(Group):
             import atexit
             atexit.register(autosave)
 
-    def save(self, location: Optional[str] = None) -> None:  # as above
+    def save(self, location: str | None = None) -> None:  # as above
         from Utils import parse_yaml
         location = location or self._filename
         assert location, "No file specified"
@@ -854,7 +855,7 @@ class Settings(Group):
         super().dump(f, level)
 
     @property
-    def filename(self) -> Optional[str]:
+    def filename(self) -> str | None:
         return self._filename
 
 
@@ -867,7 +868,7 @@ def get_settings() -> Settings:
         if not res:
             from Utils import user_path, local_path
             filenames = ("options.yaml", "host.yaml")
-            locations: List[str] = []
+            locations: list[str] = []
             if os.path.join(os.getcwd()) != local_path():
                 locations += filenames  # use files from cwd only if it's not the local_path
             locations += [user_path(filename) for filename in filenames]

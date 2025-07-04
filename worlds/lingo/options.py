@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from schema import And, Schema
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionDict, \
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool, OptionCounter, \
     OptionGroup
 from .items import TRAP_ITEMS
 
@@ -222,13 +222,14 @@ class TrapPercentage(Range):
     default = 20
 
 
-class TrapWeights(OptionDict):
+class TrapWeights(OptionCounter):
     """Specify the distribution of traps that should be placed into the pool.
 
     If you don't want a specific type of trap, set the weight to zero.
     """
     display_name = "Trap Weights"
-    schema = Schema({trap_name: And(int, lambda n: n >= 0) for trap_name in TRAP_ITEMS})
+    valid_keys = TRAP_ITEMS
+    min = 0
     default = {trap_name: 1 for trap_name in TRAP_ITEMS}
 
 

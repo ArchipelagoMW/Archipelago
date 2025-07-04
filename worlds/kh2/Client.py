@@ -34,7 +34,7 @@ class KH2Context(CommonContext):
         self.growthlevel = None
         self.kh2connected = False
         self.kh2_finished_game = False
-        self.serverconneced = False
+        self.serverconnected = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_data_package = {}
@@ -47,6 +47,8 @@ class KH2Context(CommonContext):
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
         self.sending = []
+        self.slot_name = None
+        self.disconnect_from_server = False
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
             "itemIndex":  -1,
@@ -185,11 +187,20 @@ class KH2Context(CommonContext):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
         await self.get_username()
-        await self.send_connect()
+        # if slot name != first time login or previous name
+        # and seed name is none or saved seed name
+        if not self.slot_name and not self.kh2seedname:
+            await self.send_connect()
+        elif self.slot_name == self.auth and self.kh2seedname:
+            await self.send_connect()
+        else:
+            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot: {self.slot_name}")
+            self.serverconnected = False
+            self.disconnect_from_server = True
 
     async def connection_closed(self):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -197,7 +208,8 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
+        self.locations_checked = []
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, 'w') as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -239,7 +251,15 @@ class KH2Context(CommonContext):
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "RoomInfo":
-            self.kh2seedname = args['seed_name']
+            if not self.kh2seedname:
+                self.kh2seedname = args['seed_name']
+            elif self.kh2seedname != args['seed_name']:
+                self.disconnect_from_server = True
+                self.serverconnected = False
+                self.kh2connected = False
+                logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
+                return
+
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, self.kh2_seed_save_path)
 
@@ -338,7 +358,7 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
+            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item, item.location))
@@ -370,12 +390,14 @@ class KH2Context(CommonContext):
             if not self.kh2:
                 self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                 self.get_addresses()
-
+#
         except Exception as e:
             if self.kh2connected:
                 self.kh2connected = False
             logger.info("Game is not open.")
-        self.serverconneced = True
+
+        self.serverconnected = True
+        self.slot_name = self.auth
 
     def data_package_kh2_cache(self, loc_to_id, item_to_id):
         self.kh2_loc_name_to_id = loc_to_id
@@ -493,23 +515,38 @@ class KH2Context(CommonContext):
 
     async def give_item(self, item, location):
         try:
-            # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites
-            #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
+            # sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
             while not self.lookup_id_to_item:
                 await asyncio.sleep(0.5)
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
-            # itemcode = self.kh2_item_name_to_id[itemname]
             if itemdata.ability:
                 if location in self.all_weapon_location_id:
                     return
+                # growth have reserved ability slots because of how the goa handles them
                 if itemname in {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}:
                     self.kh2_seed_save_cache["AmountInvo"]["Growth"][itemname] += 1
                     return
 
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Ability"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname] = []
-                    #  appending the slot that the ability should be in
+                #  appending the slot that the ability should be in
+                # abilities have a limit amount of slots.
+                # we start from the back going down to not mess with stuff.
+                # Front of Invo
+                # Sora:   Save+24F0+0x54 : 0x2546
+                # Donald: Save+2604+0x54 : 0x2658
+                # Goofy:  Save+2718+0x54 : 0x276C
+                # Back of Invo. Sora has 6 ability slots that are reserved
+                # Sora:   Save+24F0+0x54+0x92 : 0x25D8
+                # Donald: Save+2604+0x54+0x9C : 0x26F4
+                # Goofy:  Save+2718+0x54+0x9C : 0x2808
+                # seed has 2 scans in sora's abilities
+                # recieved second scan
+                # if len(seed_save(Scan:[ability slot 52]) < (2)amount of that ability they should have from slot data
+                # ability_slot = back of inventory that isnt taken
+                # add ability_slot to seed_save(Scan[]) so now its Scan:[ability slot 52,50]
+                # decrease back of inventory since its ability_slot is already taken
                 if len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
                     if itemname in self.sora_ability_set:
@@ -528,18 +565,21 @@ class KH2Context(CommonContext):
                     if ability_slot in self.front_ability_slots:
                         self.front_ability_slots.remove(ability_slot)
 
+            # if itemdata in {bitmask} all the forms,summons and a few other things are bitmasks
             elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
                 # if memaddr is in a bitmask location in memory
                 if itemname not in self.kh2_seed_save_cache["AmountInvo"]["Bitmask"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Bitmask"].append(itemname)
 
+            # if itemdata in {magic}
             elif itemdata.memaddr in {0x3594, 0x3595, 0x3596, 0x3597, 0x35CF, 0x35D0}:
-                # if memaddr is in magic addresses
                 self.kh2_seed_save_cache["AmountInvo"]["Magic"][itemname] += 1
 
+            # equipment is a list instead of dict because you can only have 1 currently
             elif itemname in self.all_equipment:
                 self.kh2_seed_save_cache["AmountInvo"]["Equipment"].append(itemname)
 
+            # weapons are done differently since you can only have one and has to check it differently
             elif itemname in self.all_weapons:
                 if itemname in self.keyblade_set:
                     self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Sora"].append(itemname)
@@ -548,9 +588,11 @@ class KH2Context(CommonContext):
                 else:
                     self.kh2_seed_save_cache["AmountInvo"]["Weapon"]["Goofy"].append(itemname)
 
+            # TODO: this can just be removed and put into the else below it
             elif itemname in self.stat_increase_set:
                 self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][itemname] += 1
             else:
+                # "normal" items. They have a unique byte reserved for how many they have
                 if itemname in self.kh2_seed_save_cache["AmountInvo"]["Amount"]:
                     self.kh2_seed_save_cache["AmountInvo"]["Amount"][itemname] += 1
                 else:
@@ -930,7 +972,7 @@ def finishedGame(ctx: KH2Context):
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
         try:
-            if ctx.kh2connected and ctx.serverconneced:
+            if ctx.kh2connected and ctx.serverconnected:
                 ctx.sending = []
                 await asyncio.create_task(ctx.checkWorldLocations())
                 await asyncio.create_task(ctx.checkLevels())
@@ -944,13 +986,19 @@ async def kh2_watcher(ctx: KH2Context):
                 if ctx.sending:
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
-            elif not ctx.kh2connected and ctx.serverconneced:
-                logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
+            elif not ctx.kh2connected and ctx.serverconnected:
+                logger.info("Game Connection lost. trying to reconnect.")
                 ctx.kh2 = None
-                while not ctx.kh2connected and ctx.serverconneced:
-                    await asyncio.sleep(15)
-                    ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                    ctx.get_addresses()
+                while not ctx.kh2connected and ctx.serverconnected:
+                    try:
+                        ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
+                        ctx.get_addresses()
+                        logger.info("Game Connection Established.")
+                    except Exception as e:
+                        await asyncio.sleep(5)
+            if ctx.disconnect_from_server:
+                ctx.disconnect_from_server = False
+                await ctx.disconnect()
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False

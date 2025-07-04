@@ -1,5 +1,5 @@
-from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestBase
 from .. import options
 
 

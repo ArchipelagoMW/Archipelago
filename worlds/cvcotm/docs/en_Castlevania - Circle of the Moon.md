@@ -3,7 +3,7 @@
 ## Quick Links
 - [Setup](/tutorial/Castlevania%20-%20Circle%20of%20the%20Moon/setup/en)
 - [Options Page](/games/Castlevania%20-%20Circle%20of%20the%20Moon/player-options)
-- [PopTracker Pack](https://github.com/sassyvania/Circle-of-the-Moon-Rando-AP-Map-Tracker-/releases/latest)
+- [PopTracker Pack](https://github.com/BowserCrusher/Circle-of-the-Moon-AP-Tracker/releases/latest)
 - [Repo for the original, standalone CotMR](https://github.com/calm-palm/cotm-randomizer)
 - [Web version of the above randomizer](https://rando.circleofthemoon.com/)
 - [A more in-depth guide to CotMR's nuances](https://docs.google.com/document/d/1uot4BD9XW7A--A8ecgoY8mLK_vSoQRpY5XCkzgas87c/view?usp=sharing)

@@ -1,21 +1,6 @@
-from typing import Dict, Union
+from typing import Dict
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .building_logic import BuildingLogicMixin
-from .combat_logic import CombatLogicMixin
-from .cooking_logic import CookingLogicMixin
-from .fishing_logic import FishingLogicMixin
-from .has_logic import HasLogicMixin
-from .mine_logic import MineLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
-from .wallet_logic import WalletLogicMixin
 from ..stardew_rule import StardewRule, Has, True_
 from ..strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ..strings.artisan_good_names import ArtisanGood
@@ -43,9 +28,7 @@ class QuestLogicMixin(BaseLogicMixin):
         self.quest = QuestLogic(*args, **kwargs)
 
 
-class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMixin, MineLogicMixin, RegionLogicMixin, RelationshipLogicMixin, ToolLogicMixin,
-                                 FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillLogicMixin, WalletLogicMixin, QuestLogicMixin,
-                                 BuildingLogicMixin, TimeLogicMixin]]):
+class QuestLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
@@ -56,7 +39,7 @@ class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMi
             Quest.raising_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.coop),
             Quest.feeding_animals: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.building.has_building(Building.silo),
             Quest.advancement: self.logic.quest.can_complete_quest(Quest.getting_started) & self.logic.has(Craftable.scarecrow),
-            Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.skill.can_fish(),
+            Quest.archaeology: self.logic.tool.has_tool(Tool.hoe) | self.logic.mine.can_mine_in_the_mines_floor_1_40() | self.logic.fishing.can_fish_chests,
             Quest.rat_problem: self.logic.region.can_reach_all((Region.town, Region.community_center)),
             Quest.meet_the_wizard: self.logic.quest.can_complete_quest(Quest.rat_problem),
             Quest.forging_ahead: self.logic.has(Ore.copper) & self.logic.has(Machine.furnace),
@@ -103,8 +86,10 @@ class QuestLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, MoneyLogicMi
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
             Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
                 NPC.krobus),
-            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp),
-            Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
+            Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp)
+                                  # Void mayo can be fished at 5% chance in the witch swamp while the quest is active. It drops a lot after the quest.
+                                  & (self.logic.has(ArtisanGood.void_mayonnaise) | self.logic.fishing.can_fish()),
+            Quest.magic_ink: self.logic.region.can_reach(Region.witch_hut) & self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &
                                     self.logic.relationship.can_meet(NPC.sandy) & self.logic.relationship.can_meet(NPC.george) &
                                     self.logic.relationship.can_meet(NPC.wizard) & self.logic.relationship.can_meet(NPC.willy),

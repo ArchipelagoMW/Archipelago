@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Set
+from typing import TYPE_CHECKING, Set, Optional
 from .locations import BASE_ID, get_location_names_to_ids
 from .items import cvcotm_item_info, MAJORS_CLASSIFICATIONS
 from .locations import cvcotm_location_info
@@ -91,6 +91,7 @@ class CastlevaniaCotMClient(BizHawkClient):
     patch_suffix = ".apcvcotm"
     sent_initial_packets: bool
     self_induced_death: bool
+    time_of_sent_death: Optional[float]
     local_checked_locations: Set[int]
     client_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
     killed_dracula_2: bool
@@ -139,6 +140,7 @@ class CastlevaniaCotMClient(BizHawkClient):
         self.sent_initial_packets = False
         self.local_checked_locations = set()
         self.self_induced_death = False
+        self.time_of_sent_death = None
         self.client_set_events = {flag_name: False for flag, flag_name in EVENT_FLAG_MAP.items()}
         self.killed_dracula_2 = False
         self.won_battle_arena = False
@@ -156,14 +158,16 @@ class CastlevaniaCotMClient(BizHawkClient):
             return
         if ctx.slot is None:
             return
-        if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+        if "DeathLink" in args["tags"] and args["data"]["time"] != self.time_of_sent_death:
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
+                # If the other game sent a death with a blank string for the cause, use the default death message.
                 if cause == "":
                     cause = f"{args['data']['source']} killed you without a word!"
                 if len(cause) > ITEM_NAME_LIMIT + PLAYER_NAME_LIMIT:
                     cause = cause[:ITEM_NAME_LIMIT + PLAYER_NAME_LIMIT]
             else:
+                # If the other game sent a death with no cause at all, use the default death message.
                 cause = f"{args['data']['source']} killed you without a word!"
 
             # Highlight the player that killed us in the game's orange text.
@@ -259,7 +263,12 @@ class CastlevaniaCotMClient(BizHawkClient):
                 else:
                     area_of_death = DEATHLINK_AREA_NAMES[area]
 
+                # Send the death.
                 await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished in {area_of_death}. Dracula has won!")
+
+                # Record the time in which the death was sent so when we receive the packet we can tell it wasn't our
+                # own death. ctx.on_deathlink overwrites it later, so it MUST be grabbed now.
+                self.time_of_sent_death = ctx.last_death_link
 
             # Update the Dracula II and Battle Arena events already being done on past separate sessions for if the
             # player is running the Battle Arena and Dracula goal.

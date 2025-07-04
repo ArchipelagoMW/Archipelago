@@ -7,9 +7,9 @@ config file.
 
 ## What is considered a location check in ChecksFinder?
 
-Location checks in are completed when the player finds a spot on a board that has the archipelago logo. The bottom of
-the screen has a number next to the archipelago logo, that number is how many you can find so far. You can only get as 
-many checks as you have gained items, plus five to start with being available.
+Location checks get cleared when you open all non-bomb cells in a board. The bottom
+of the screen has a number next to the Archipelago logo that displays how many location checks are left to be sent with
+your current inventory. You can only get as many checks as you have gained items plus five checks to start with.
 
 ## When the player receives an item, what happens?
 

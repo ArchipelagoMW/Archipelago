@@ -4,7 +4,6 @@ from typing import BinaryIO, Optional
 import Utils
 from worlds.Files import APDeltaPatch
 
-
 USHASH = '6e9c94511d04fac6e0a1e582c170be3a'
 
 
@@ -20,9 +19,9 @@ class SoEDeltaPatch(APDeltaPatch):
 
 
 def get_base_rom_path(file_name: Optional[str] = None) -> str:
-    options = Utils.get_options()
     if not file_name:
-        file_name = options["soe_options"]["rom_file"]
+        from . import SoEWorld
+        file_name = SoEWorld.settings.rom_file
     if not file_name:
         raise ValueError("Missing soe_options -> rom_file from host.yaml")
     if not os.path.exists(file_name):

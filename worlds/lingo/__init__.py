@@ -3,7 +3,7 @@ Archipelago init file for Lingo
 """
 from logging import warning
 
-from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Tutorial, Location, LocationProgressType
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from .datatypes import Room, RoomEntrance
@@ -80,10 +80,6 @@ class LingoWorld(World):
             for item in self.player_logic.real_items:
                 state.collect(self.create_item(item), True)
 
-            # Exception to the above: a forced good item is not considered a "real item", but needs to be here anyway.
-            if self.player_logic.forced_good_item != "":
-                state.collect(self.create_item(self.player_logic.forced_good_item), True)
-
             all_locations = self.multiworld.get_locations(self.player)
             state.sweep_for_advancements(locations=all_locations)
 
@@ -104,11 +100,6 @@ class LingoWorld(World):
 
     def create_items(self):
         pool = [self.create_item(name) for name in self.player_logic.real_items]
-
-        if self.player_logic.forced_good_item != "":
-            new_item = self.create_item(self.player_logic.forced_good_item)
-            location_obj = self.multiworld.get_location("Second Room - Good Luck", self.player)
-            location_obj.place_locked_item(new_item)
 
         item_difference = len(self.player_logic.real_locations) - len(pool)
         if item_difference:
@@ -138,7 +129,7 @@ class LingoWorld(World):
 
                 trap_counts = {name: int(weight * traps / total_weight)
                                for name, weight in self.options.trap_weights.items()}
-                
+
                 trap_difference = traps - sum(trap_counts.values())
                 if trap_difference > 0:
                     allowed_traps = [name for name in TRAP_ITEMS if self.options.trap_weights[name] > 0]
@@ -169,12 +160,36 @@ class LingoWorld(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
+    def place_good_item(self, progitempool: list[Item], fill_locations: list[Location]):
+        if len(self.player_logic.good_item_options) == 0:
+            return
+
+        good_location = self.get_location("Second Room - Good Luck")
+        if good_location.progress_type == LocationProgressType.EXCLUDED or good_location not in fill_locations:
+            return
+
+        good_items = list(filter(lambda progitem: progitem.player == self.player and
+                                                  progitem.name in self.player_logic.good_item_options, progitempool))
+
+        if len(good_items) == 0:
+            return
+
+        good_item = self.random.choice(good_items)
+        good_location.place_locked_item(good_item)
+
+        progitempool.remove(good_item)
+        fill_locations.remove(good_location)
+
+    def fill_hook(self, progitempool: list[Item], usefulitempool: list[Item], filleritempool: list[Item],
+                  fill_locations: list[Location]):
+        self.place_good_item(progitempool, fill_locations)
+
     def fill_slot_data(self):
         slot_options = [
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
             "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
             "early_color_hallways", "pilgrimage_allows_roof_access", "pilgrimage_allows_paintings", "shuffle_sunwarps",
-            "group_doors", "speed_boost_mode"
+            "group_doors", "speed_boost_mode", "shuffle_postgame"
         ]
 
         slot_data = {

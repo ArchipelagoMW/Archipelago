@@ -1,14 +1,5 @@
-from typing import Union
-
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
-from .combat_logic import CombatLogicMixin
-from .cooking_logic import CookingLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .skill_logic import SkillLogicMixin
-from .tool_logic import ToolLogicMixin
 from .. import options
 from ..stardew_rule import StardewRule, True_
 from ..strings.performance_names import Performance
@@ -23,8 +14,7 @@ class MineLogicMixin(BaseLogicMixin):
         self.mine = MineLogic(*args, **kwargs)
 
 
-class MineLogic(BaseLogic[Union[HasLogicMixin, MineLogicMixin, RegionLogicMixin, ReceivedLogicMixin, CombatLogicMixin, ToolLogicMixin,
-SkillLogicMixin, CookingLogicMixin]]):
+class MineLogic(BaseLogic):
     # Regions
     def can_mine_in_the_mines_floor_1_40(self) -> StardewRule:
         return self.logic.region.can_reach(Region.mines_floor_5)

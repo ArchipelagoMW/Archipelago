@@ -5,7 +5,7 @@ from typing import Dict, Any, TYPE_CHECKING
 from decimal import Decimal, ROUND_HALF_UP
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility, NamedRange)
 from .er_data import portal_mapping
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -147,12 +147,40 @@ class EntranceRando(TextChoice):
 
 class FixedShop(Toggle):
     """
-    Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
-    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
-    Has no effect if Entrance Rando is not enabled.
+    This option has been superseded by the Entrance Layout option.
+    If enabled, it will override the Entrance Layout option.
+    This is kept to keep older yamls working, and will be removed at a later date.
     """
+    visibility = Visibility.none
     internal_name = "fixed_shop"
     display_name = "Fewer Shops in Entrance Rando"
+
+
+class EntranceLayout(Choice):
+    """
+    Decide how the Entrance Randomizer chooses how to pair the entrances.
+    Standard: Entrances are randomly connected. There are 6 shops in the pool with this option.
+    Fixed Shop: Forces the Windmill entrance to lead to a shop, and removes the other shops from the pool.
+    Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
+    Direction Pairs: Entrances facing opposite directions are paired together. There are 8 shops in the pool with this option.
+    Note: For seed groups, if one player in a group chooses Fixed Shop and another chooses Direction Pairs, it will error out.
+    Either of these options will override Standard within a seed group.
+    """
+    internal_name = "entrance_layout"
+    display_name = "Entrance Layout"
+    option_standard = 0
+    option_fixed_shop = 1
+    option_direction_pairs = 2
+    default = 0
+
+
+class Decoupled(Toggle):
+    """
+    Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
+    Note: For seed groups, all players in the group must have this option enabled or disabled.
+    """
+    internal_name = "decoupled"
+    display_name = "Decoupled Entrances"
 
 
 class LaurelsLocation(Choice):
@@ -210,13 +238,22 @@ class LocalFill(NamedRange):
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
-    - entrance: "Entrance Name"
-      exit: "Exit Name"
+    - entrance: Entrance Name
+      exit: Exit Name
+      direction: Direction
       percentage: 100
+    Direction must be one of entrance, exit, or both, and defaults to both if omitted.
+    Direction entrance means the entrance leads to the exit. Direction exit means the exit leads to the entrance.
+    If you do not have Decoupled enabled, you do not need the direction line, as it will only use both.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
+    If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
+    Shop Portal 1-6 are South portals, and Shop Portal 7-8 are West portals.
+    This option does nothing if Entrance Rando is disabled.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    shops = {f"Shop Portal {i + 1}" for i in range(500)}
+    entrances = {portal.name for portal in portal_mapping}.union(shops)
+    exits = {portal.name for portal in portal_mapping}.union(shops)
 
     duplicate_exits = True
 
@@ -295,6 +332,16 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 class LogicRules(Choice):
     """
     This option has been superseded by the individual trick options.
@@ -329,6 +376,7 @@ class TunicOptions(PerGameCommonOptions):
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
+
     fool_traps: FoolTraps
     laurels_location: LaurelsLocation
 
@@ -343,7 +391,9 @@ class TunicOptions(PerGameCommonOptions):
     local_fill: LocalFill
 
     entrance_rando: EntranceRando
-    fixed_shop: FixedShop
+    entrance_layout: EntranceLayout
+    decoupled: Decoupled
+    plando_connections: TunicPlandoConnections
 
     combat_logic: CombatLogic
     lanternless: Lanternless
@@ -352,10 +402,11 @@ class TunicOptions(PerGameCommonOptions):
     ice_grappling: IceGrappling
     ladder_storage: LadderStorage
     ladder_storage_without_items: LadderStorageWithoutItems
+      
+    all_random: HiddenAllRandom
 
-    plando_connections: TunicPlandoConnections
-
-    logic_rules: LogicRules
+    fixed_shop: FixedShop  # will be removed at a later date
+    logic_rules: Removed  # fully removed in the direction pairs update
 
 
 tunic_option_groups = [
@@ -372,8 +423,14 @@ tunic_option_groups = [
         LaurelsZips,
         IceGrappling,
         LadderStorage,
-        LadderStorageWithoutItems
-    ])
+        LadderStorageWithoutItems,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        EntranceRando,
+        EntranceLayout,
+        Decoupled,
+        TunicPlandoConnections,
+    ]),
 ]
 
 tunic_option_presets: Dict[str, Dict[str, Any]] = {

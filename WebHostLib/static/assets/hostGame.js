@@ -6,6 +6,4 @@ window.addEventListener('load', () => {
     document.getElementById('file-input').addEventListener('change', () => {
         document.getElementById('host-game-form').submit();
     });
-
-    adjustFooterHeight();
 });

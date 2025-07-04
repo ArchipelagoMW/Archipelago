@@ -11,7 +11,7 @@ from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
-    FestivalLocations, BuildingProgression, ElevatorProgression, BackpackProgression, FarmType
+    FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest, Quest
@@ -261,6 +261,19 @@ def extend_baby_locations(randomized_locations: List[LocationData]):
     randomized_locations.extend(baby_locations)
 
 
+def extend_building_locations(randomized_locations: List[LocationData], content: StardewContent):
+    building_progression = content.features.building_progression
+    if not building_progression.is_progressive:
+        return
+
+    for building in content.farm_buildings.values():
+        if building.name in building_progression.starting_buildings:
+            continue
+
+        location_name = building_progression.to_location_name(building.name)
+        randomized_locations.append(location_table[location_name])
+
+
 def extend_festival_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
     if options.festival_locations == FestivalLocations.option_disabled:
         return
@@ -485,10 +498,7 @@ def create_locations(location_collector: StardewLocationCollector,
             if skill_progression.is_mastery_randomized(skill):
                 randomized_locations.append(location_table[skill.mastery_name])
 
-    if options.building_progression & BuildingProgression.option_progressive:
-        for location in locations_by_tag[LocationTags.BUILDING_BLUEPRINT]:
-            if location.mod_name is None or location.mod_name in options.mods:
-                randomized_locations.append(location_table[location.name])
+    extend_building_locations(randomized_locations, content)
 
     if options.arcade_machine_locations != ArcadeMachineLocations.option_disabled:
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE_VICTORY])

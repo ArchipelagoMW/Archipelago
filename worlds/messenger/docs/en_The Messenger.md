@@ -1,6 +1,7 @@
 # The Messenger
 
 ## Quick Links
+
 - [Setup](/tutorial/The%20Messenger/setup/en)
 - [Options Page](/games/The%20Messenger/player-options)
 - [Courier Github](https://github.com/Brokemia/Courier)
@@ -26,6 +27,7 @@ obtained. You'll be forced to do sections of the game in different ways with you
 ## Where can I find items?
 
 You can find items wherever items can be picked up in the original game. This includes:
+
 * Shopkeeper dialog where the player originally gains movement items
 * Quest Item pickups
 * Music Box notes
@@ -42,6 +44,7 @@ group of items. Hinting for a group will choose a random item from the group tha
 for it.
 
 The groups you can use for The Messenger are:
+
 * Notes - This covers the music notes
 * Keys - An alternative name for the music notes
 * Crest - The Sun and Moon Crests
@@ -64,16 +67,29 @@ The groups you can use for The Messenger are:
   be entered in game.
 
 ## Known issues
+
 * Ruxxtin Coffin cutscene will sometimes not play correctly, but will still reward the item
 * If you receive the Magic Firefly while in Quillshroom Marsh, The De-curse Queen cutscene will not play. You can exit
   to Searing Crags and re-enter to get it to play correctly.
 * Teleporting back to HQ, then returning to the same level you just left through a Portal can cause Ninja to run left
   and enter a different portal than the one entered by the player or lead to other incorrect inputs, causing a soft lock
 * Text entry menus don't accept controller input
-* In power seal hunt mode, the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
-  chest will not work.
 
 ## What do I do if I have a problem?
 
 If you believe something happened that isn't intended, please get the `log.txt` from the folder of your game
 installation and send a bug report either on GitHub or the [Archipelago Discord Server](http://archipelago.gg/discord)
+
+## FAQ
+
+* The tracker says I can get some checks in Howling Grotto, but I can't defeat the Emerald Golem. How do I get there?
+    * Due to the way the vanilla game handles bosses and level transitions, if you die to him, the room will be unlocked,
+      and you can leave.
+* I have the money wrench. Why won't the shopkeeper let me enter the sink?
+    * The money wrench is both an item you must find or receive from another player and a location check, which you must
+      purchase from the Artificer, as in vanilla.
+* How do I unfreeze Manfred? Where is the monk?
+    * The monk will only appear near Manfred after you cleanse the Queen of Quills with the fairy (magic firefly).
+* I have all the power seals I need to win, but nothing is happening when I open the chest.
+    * Due to how the level loading code works, I am currently unable to teleport you out of HQ at will; you must enter the
+      shop from within a level.

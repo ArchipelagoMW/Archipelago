@@ -1,4 +1,4 @@
-from . import SVTestBase
+from .bases import SVTestBase
 from .. import options
 
 

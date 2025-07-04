@@ -238,10 +238,10 @@ async def proxy_loop(ctx: AHITContext):
         logger.info("Aborting AHIT Proxy Client due to errors")
 
 
-def launch():
+def launch(*launch_args: str):
     async def main():
         parser = get_base_parser()
-        args = parser.parse_args()
+        args = parser.parse_args(launch_args)
 
         ctx = AHITContext(args.connect, args.password)
         logger.info("Starting A Hat in Time proxy server")

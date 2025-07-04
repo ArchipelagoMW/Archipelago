@@ -11,7 +11,7 @@ from BaseClasses import ItemClassification as IC
 from BaseClasses import MultiWorld, Region, Tutorial
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
-from worlds.Files import APContainer, AutoPatchRegister
+from worlds.Files import APPlayerContainer
 from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
 
@@ -51,7 +51,7 @@ components.append(
 icon_paths["The Wind Waker"] = "ap:worlds.tww/assets/icon.png"
 
 
-class TWWContainer(APContainer, metaclass=AutoPatchRegister):
+class TWWContainer(APPlayerContainer):
     """
     This class defines the container file for The Wind Waker.
     """
@@ -462,7 +462,7 @@ class TWWWorld(World):
             "Seed": multiworld.seed_name,
             "Slot": player,
             "Name": self.player_name,
-            "Options": self.options.as_dict(*self.options_dataclass.type_hints),
+            "Options": self.options.get_output_dict(),
             "Required Bosses": self.boss_reqs.required_boss_item_locations,
             "Locations": {},
             "Entrances": {},
@@ -586,7 +586,7 @@ class TWWWorld(World):
 
         :return: A dictionary to be sent to the client when it connects to the server.
         """
-        slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
+        slot_data = self.options.get_slot_data_dict()
 
         # Add entrances to `slot_data`. This is the same data that is written to the .aptww file.
         entrances = {

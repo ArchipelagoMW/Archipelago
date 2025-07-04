@@ -11,8 +11,13 @@ found in the [general test directory](/test/general).
 ## Defining World Tests
 
 In order to run tests from your world, you will need to create a `test` package within your world package. This can be
-done by creating a `test` directory with a file named `__init__.py` inside it inside your world. By convention, a base
-for your world tests can be created in this file that you can then import into other modules.
+done by creating a `test` directory inside your world with an (empty) `__init__.py` inside it. By convention, a base
+for your world tests can be created in `bases.py` or any file that does not start with `test`, that you can then import
+into other modules. All tests should be defined in files named `test_*.py` (all lower case) and be member functions
+(named `test_*`) of classes (named `Test*` or `*Test`) that inherit from `unittest.TestCase` or a test base.
+
+Defining anything inside `test/__init__.py` is deprecated. Defining TestBase there was previously the norm; however,
+it complicates test discovery because some worlds also put actual tests into `__init__.py`.
 
 ### WorldTestBase
 
@@ -21,7 +26,7 @@ interactions in the world interact as expected, you will want to use the [WorldT
 comes with the basics for test setup as well as a few preloaded tests that most worlds might want to check on varying
 options combinations.
 
-Example `/worlds/<my_game>/test/__init__.py`:
+Example `/worlds/<my_game>/test/bases.py`:
 
 ```python
 from test.bases import WorldTestBase
@@ -49,7 +54,7 @@ with `test_`.
 Example `/worlds/<my_game>/test/test_chest_access.py`:
 
 ```python
-from . import MyGameTestBase
+from .bases import MyGameTestBase
 
 
 class TestChestAccess(MyGameTestBase):
@@ -119,8 +124,12 @@ variable to keep all the benefits of the test framework while not running the ma
 #### Using Pycharm
 
 In PyCharm, running all tests can be done by right-clicking the root test directory and selecting Run 'Archipelago Unittests'. 
-Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, edit the run configuration, 
-and set the working directory to the Archipelago directory which contains all the project files. 
+If you have never previously run ModuleUpdate.py, then you will need to do this once before the tests will run. 
+You can run ModuleUpdate.py by right-clicking ModuleUpdate.py and selecting `Run 'ModuleUpdate'`. 
+After running ModuleUpdate.py you may still get a `ModuleNotFoundError: No module named 'flask'` for the webhost tests. 
+If this happens, run WebHost.py by right-clicking it and selecting `Run 'WebHost'`. Make sure to press enter when prompted. 
+Unless you configured PyCharm to use pytest as a test runner, you may get import failures. To solve this, 
+edit the run configuration, and set the working directory to the Archipelago directory which contains all the project files. 
 
 If you only want to run your world's defined tests, repeat the steps for the test directory within your world.
 Your working directory should be the directory of your world in the worlds directory and the script should be the 

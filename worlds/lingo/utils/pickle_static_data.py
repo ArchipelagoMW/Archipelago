@@ -58,8 +58,7 @@ def hash_file(path):
 
 
 def load_static_data(ll1_path, ids_path):
-    global PAINTING_EXITS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, \
-        DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS, PANEL_DOOR_ITEM_IDS, PANEL_GROUP_ITEM_IDS
+    global PAINTING_EXITS
 
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
     with open(ids_path, "r") as file:
@@ -128,7 +127,7 @@ def load_static_data(ll1_path, ids_path):
 
 
 def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomEntrance:
-    global PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS
+    global PAINTING_ENTRANCES
 
     entrance_type = EntranceType.NORMAL
     if "painting" in door_obj and door_obj["painting"]:
@@ -139,6 +138,8 @@ def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomE
         entrance_type = EntranceType.WARP
     elif source_room == "Crossroads" and room_name == "Roof":
         entrance_type = EntranceType.CROSSROADS_ROOF_ACCESS
+    elif "static_painting" in door_obj and door_obj["static_painting"]:
+        entrance_type = EntranceType.STATIC_PAINTING
 
     if "painting" in door_obj and door_obj["painting"]:
         PAINTING_EXIT_ROOMS.add(room_name)
@@ -175,8 +176,6 @@ def process_entrance(source_room, doors, room_obj):
 
 
 def process_panel_door(room_name, panel_door_name, panel_door_data):
-    global PANEL_DOORS_BY_ROOM, PANEL_DOOR_BY_PANEL_BY_ROOM
-
     panels: List[RoomAndPanel] = list()
     for panel in panel_door_data["panels"]:
         if isinstance(panel, dict):
@@ -215,8 +214,6 @@ def process_panel_door(room_name, panel_door_name, panel_door_data):
 
 
 def process_panel(room_name, panel_name, panel_data):
-    global PANELS_BY_ROOM
-
     # required_room can either be a single room or a list of rooms.
     if "required_room" in panel_data:
         if isinstance(panel_data["required_room"], list):
@@ -310,8 +307,6 @@ def process_panel(room_name, panel_name, panel_data):
 
 
 def process_door(room_name, door_name, door_data):
-    global DOORS_BY_ROOM
-
     # The item name associated with a door can be explicitly specified in the configuration. If it is not, it is
     # generated from the room and door name.
     if "item_name" in door_data:
@@ -409,8 +404,6 @@ def process_door(room_name, door_name, door_data):
 
 
 def process_painting(room_name, painting_data):
-    global PAINTINGS, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
-
     # Read in information about this painting and store it in an object.
     painting_id = painting_data["id"]
 
@@ -468,8 +461,6 @@ def process_painting(room_name, painting_data):
 
 
 def process_sunwarp(room_name, sunwarp_data):
-    global SUNWARP_ENTRANCES, SUNWARP_EXITS
-
     if sunwarp_data["direction"] == "enter":
         SUNWARP_ENTRANCES[sunwarp_data["dots"] - 1] = room_name
     else:
@@ -477,8 +468,6 @@ def process_sunwarp(room_name, sunwarp_data):
 
 
 def process_progressive_door(room_name, progression_name, progression_doors):
-    global PROGRESSIVE_ITEMS, PROGRESSIVE_DOORS_BY_ROOM
-
     # Progressive items are configured as a list of doors.
     PROGRESSIVE_ITEMS.add(progression_name)
 
@@ -497,8 +486,6 @@ def process_progressive_door(room_name, progression_name, progression_doors):
 
 
 def process_progressive_panel(room_name, progression_name, progression_panel_doors):
-    global PROGRESSIVE_ITEMS, PROGRESSIVE_PANELS_BY_ROOM
-
     # Progressive items are configured as a list of panel doors.
     PROGRESSIVE_ITEMS.add(progression_name)
 
@@ -517,8 +504,6 @@ def process_progressive_panel(room_name, progression_name, progression_panel_doo
 
 
 def process_room(room_name, room_data):
-    global ALL_ROOMS
-
     room_obj = Room(room_name, [])
 
     if "entrances" in room_data:

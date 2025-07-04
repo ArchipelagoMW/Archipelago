@@ -51,10 +51,9 @@ requires:
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:
     {%- if option.__doc__ %}
-    # {{ option.__doc__
+    # {{ cleandoc(option.__doc__)
         | trim
-        | replace('\n\n', '\n    \n')
-        | replace('\n    ', '\n# ')
+        | replace('\n', '\n# ')
         | indent(4, first=False)
       }}
     {%- endif -%}

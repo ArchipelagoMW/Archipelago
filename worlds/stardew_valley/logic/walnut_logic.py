@@ -1,12 +1,6 @@
 from functools import cached_property
-from typing import Union
 
-from .ability_logic import AbilityLogicMixin
 from .base_logic import BaseLogic, BaseLogicMixin
-from .combat_logic import CombatLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
 from ..options import ExcludeGingerIsland, Walnutsanity
 from ..stardew_rule import StardewRule, False_, True_
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
@@ -24,8 +18,7 @@ class WalnutLogicMixin(BaseLogicMixin):
         self.walnut = WalnutLogic(*args, **kwargs)
 
 
-class WalnutLogic(BaseLogic[Union[WalnutLogicMixin, ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, CombatLogicMixin,
-AbilityLogicMixin]]):
+class WalnutLogic(BaseLogic):
 
     def has_walnut(self, number: int) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:

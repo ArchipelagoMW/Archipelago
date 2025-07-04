@@ -365,18 +365,14 @@ request_handlers = {
     ["PREFERRED_CORES"] = function (req)
         local res = {}
         local preferred_cores = client.getconfig().PreferredCores
+        local systems_enumerator = preferred_cores.Keys:GetEnumerator()
 
         res["type"] = "PREFERRED_CORES_RESPONSE"
         res["value"] = {}
-        res["value"]["NES"] = preferred_cores.NES
-        res["value"]["SNES"] = preferred_cores.SNES
-        res["value"]["GB"] = preferred_cores.GB
-        res["value"]["GBC"] = preferred_cores.GBC
-        res["value"]["DGB"] = preferred_cores.DGB
-        res["value"]["SGB"] = preferred_cores.SGB
-        res["value"]["PCE"] = preferred_cores.PCE
-        res["value"]["PCECD"] = preferred_cores.PCECD
-        res["value"]["SGX"] = preferred_cores.SGX
+
+        while systems_enumerator:MoveNext() do
+            res["value"][systems_enumerator.Current] = preferred_cores[systems_enumerator.Current]
+        end
 
         return res
     end,
