@@ -41,7 +41,7 @@ from .strings.backpack_tiers import Backpack
 from .strings.building_names import Building, WizardBuilding
 from .strings.bundle_names import CCRoom
 from .strings.calendar_names import Weekday
-from .strings.craftable_names import Bomb, Furniture, Consumable
+from .strings.craftable_names import Bomb, Furniture, Consumable, Craftable
 from .strings.crop_names import Fruit, Vegetable
 from .strings.currency_names import Currency
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \
@@ -278,6 +278,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.mountain_lake_to_outside_adventure_guild_shortcut, logic.received("Mountain Shortcuts"))
 
     set_entrance_rule(multiworld, player, Entrance.feed_trash_bear, logic.received("Trash Bear Arrival"))
+    set_entrance_rule(multiworld, player, Entrance.enter_shorts_maze, logic.has(Craftable.staircase))
 
 
 def set_dangerous_mine_rules(logic, multiworld, player, content: StardewContent):
@@ -309,6 +310,7 @@ def set_bedroom_entrance_rules(logic, multiworld, player, content: StardewConten
     set_entrance_rule(multiworld, player, Entrance.enter_elliott_house, logic.relationship.has_hearts(NPC.elliott, 2))
     set_entrance_rule(multiworld, player, Entrance.enter_sunroom, logic.relationship.has_hearts(NPC.caroline, 2))
     set_entrance_rule(multiworld, player, Entrance.enter_wizard_basement, logic.relationship.has_hearts(NPC.wizard, 4))
+    set_entrance_rule(multiworld, player, Entrance.enter_lewis_bedroom, logic.relationship.has_hearts(NPC.lewis, 4))
     if content.is_enabled(ModNames.alec):
         set_entrance_rule(multiworld, player, AlecEntrance.petshop_to_bedroom, (logic.relationship.has_hearts(ModNPC.alec, 2) | logic.mod.magic.can_blink()))
     if content.is_enabled(ModNames.lacey):

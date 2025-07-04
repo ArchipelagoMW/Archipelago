@@ -111,6 +111,7 @@ class Region:
     bathhouse_entrance = "Bathhouse Entrance"
     locker_room = "Locker Room"
     public_bath = "Public Bath"
+    lewis_bedroom = "Lewis's Bedroom"
     purple_shorts_maze = "Purple Shorts Maze"
     jotpk_world_1 = "JotPK World 1"
     jotpk_world_2 = "JotPK World 2"
