@@ -546,7 +546,6 @@ class TunicWorld(World):
                                         "try generating again, as it may not happen every generation.")
 
             for filler_item in non_grass_fill:
-                non_grass_fill_locations.pop().place_locked_item(filler_item)
                 loc_to_fill = non_grass_fill_locations.pop()
                 try:
                     loc_to_fill.place_locked_item(filler_item)
