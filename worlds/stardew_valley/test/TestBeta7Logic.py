@@ -1,6 +1,6 @@
 from worlds.stardew_valley import BackpackProgression, ToolProgression
 from worlds.stardew_valley.mods.mod_data import ModNames
-from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity
+from worlds.stardew_valley.options import BackpackSize, Mods, QuestLocations, SkillProgression, Secretsanity, Museumsanity, Booksanity, Hatsanity
 from worlds.stardew_valley.strings.ap_names.ap_option_names import SecretsanityOptionName
 from worlds.stardew_valley.test.bases import SVTestBase
 
@@ -146,6 +146,32 @@ class TestGatheringQuestsWithoutStartingToolsRequiresMinesAndAxeAndPickaxe(SVTes
         self.assert_cannot_reach_location(gathering_location)
 
 
+class TestPrizeTicketAndHelpWanted(SVTestBase):
+    options = {
+        ToolProgression: ToolProgression.option_progressive_no_tool_start,
+        QuestLocations: 7,
+        Booksanity: Booksanity.option_all,
+        Hatsanity: Hatsanity.option_post_perfection,
+    }
+
+    def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):
+        locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow", "Read Friendship 101"]
+        items_required = ["Shipping Bin", "Progressive Fishing Rod"]
+        self.collect_by_name(items_required)
+        self.collect_lots_of_money(0.75)
+        items_to_test = [self.create_item(item) for item in ["Progressive Fishing Rod", "Landslide Removed", "Progressive Axe", "Progressive Pickaxe"]]
+        self.collect(items_to_test)
+        for location in locations:
+            with self.subTest(f"{location} can be accessed with all help wanted items"):
+                self.assert_can_reach_location(location)
+            for item in items_to_test:
+                self.remove(item)
+                with self.subTest(f"{location} Requires {item.name}"):
+                    self.assert_cannot_reach_location(location)
+                self.collect(item)
+                self.assert_can_reach_location(location)
+
+
 class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
     options = {
         SkillProgression: SkillProgression.option_progressive_with_masteries,
@@ -209,6 +235,7 @@ class TestArtifactSpotDonationsRequireHoe(SVTestBase):
     def test_artifact_spot_requires_hoe(self):
         artifact_spot_artifacts = ["Chipped Amphora", "Ancient Doll", "Rusty Spoon", "Chicken Statue", "Prehistoric Tool"]
         self.collect_lots_of_money(0.5)
+        self.collect("Traveling Merchant Metal Detector", 2)
         hoe = self.create_item("Progressive Hoe")
         for artifact in artifact_spot_artifacts:
             with self.subTest(f"Artifact: {artifact}"):
