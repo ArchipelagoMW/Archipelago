@@ -5,6 +5,7 @@ from ...data.craftable_data import all_crafting_recipes_by_name
 
 class TestCraftsanityLogic(SVTestBase):
     options = {
+        options.SeasonRandomization.internal_name: options.SeasonRandomization.option_disabled,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
         options.BuildingProgression.internal_name: options.BuildingProgression.option_progressive,
         options.Cropsanity.internal_name: options.Cropsanity.option_enabled,
