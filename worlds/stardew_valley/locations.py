@@ -591,7 +591,7 @@ def extend_hats_locations(randomized_locations: List[LocationData], content: Sta
     for hat in content.hats.values():
         if not hatsanity.is_included(hat):
             continue
-        if not content.features.museumsanity.is_enabled and hat.name in museum_hats:
+        if not content.features.museumsanity.is_enabled and hat in museum_hats:
             continue
 
         randomized_locations.append(location_table[hat.to_location_name()])
