@@ -156,7 +156,7 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
 
     def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):
         locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow", "Read Friendship 101"]
-        items_required = ["Shipping Bin", "Progressive Fishing Rod"]
+        items_required = ["Shipping Bin", "Progressive Fishing Rod", "Spring", "Progressive Hoe", "Progressive Watering Can"]
         self.collect_by_name(items_required)
         self.collect_lots_of_money(0.75)
         items_to_test = [self.create_item(item) for item in ["Progressive Fishing Rod", "Landslide Removed", "Progressive Axe", "Progressive Pickaxe"]]
