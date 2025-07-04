@@ -108,7 +108,7 @@ def initialize_bosses(world) -> None:
         "Mini Barf": SlotInfo([0x0FB0B4], [], [], [0x2F9515]),
         "Master Belch": SlotInfo([0x0FB7CF],
                                  [0x09E64D, 0x09E690, 0x2EEED7, 0x08EF21, 0x08EF38],
-                                 [0x2F6296, 0x2F62B3, 0x2F6910, 0x2F6973],
+                                 [0x2F6297, 0x2F62B3, 0x2F6910, 0x2F6973],
                                  [0x068558]),
         "Trillionage Sprout": SlotInfo([], [], [], [0x068422]),
         "Guardian Digger": SlotInfo([0x0FC11B, 0x0FC0B5, 0x0FC12C, 0x0FC0D7, 0x0FC0C6],
