@@ -214,13 +214,15 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
 
     def test_iridium_krobus_requires_level_15(self):
         iridium_krobus_location = "Iridium Krobus"
-        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level",
-                          "Mining Level", "Progressive Watering Can", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
-        items_required.append("Spring")
+        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level", "Progressive House",
+                          "Mining Level", "Progressive Watering Can", "Progressive Hoe", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
+        items_required.extend(["Spring", "Summer", "Fall", "Winter"])
         items_required.extend(["Fishing Level"] * 9)
         for item in items_required:
             self.collect(item)
-        items_to_test = [self.create_item(item) for item in ["Bus Repair", "Boat Repair", "Island North Turtle", "Qi Walnut Room", "Fishing Level"]]
+        self.collect_lots_of_money(0.6)
+        items_to_test = [self.create_item(item) for item in ["Bus Repair", "Fish Pond", "Qi Walnut Room", "Boat Repair", "Island West Turtle",
+                                                             "Island North Turtle", "Fishing Level", "Skull Key"]]
         self.collect(items_to_test)
         self.assert_can_reach_location(iridium_krobus_location)
         for item in items_to_test:
