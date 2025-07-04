@@ -103,6 +103,8 @@ The list of possible bounty locations that get added with this setting enabled:
 - Level 50 (Depending on choice of level checks.)
 - Level 99 (Depending on choice of level checks.)
 
+For those who only want the casual bounty locations, you can effectively disable the normal bounty locations by excluding the "General Bounties" location group.
+
 <h2 style="text-transform:none";>Quality of life:</h2>
 
 
