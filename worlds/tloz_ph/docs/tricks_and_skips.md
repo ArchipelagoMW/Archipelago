@@ -6,6 +6,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - [Mercay out of bounds](https://www.youtube.com/watch?v=IcyfYE68LUQ). (Not in logic yet)
 
 ## TotOK
+- Phantom hourglass time is not yet in logic, I've started planning for it but it's a ways away.
 - Kill b1 phantoms with
   - Phantom Sword (all settings)
   - Bow or (Sword + 2 Spirits of Power) or Hammer (Kill phantoms with stun)
