@@ -1,5 +1,5 @@
 from ..bases import SVTestBase
-from ... import options
+from ... import options, SeasonRandomization
 from ...options import BundleRandomization
 from ...strings.bundle_names import BundleName
 
