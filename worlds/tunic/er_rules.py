@@ -1,78 +1,21 @@
 from typing import FrozenSet, TYPE_CHECKING
 
-from BaseClasses import Region, CollectionState
+from BaseClasses import Region
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
 
 from .bells import set_bell_location_rules
 from .combat_logic import has_combat_reqs
+from .constants import *
 from .er_data import Portal, get_portal_outlet_region
 from .fuses import set_fuse_location_rules, has_fuses
 from .grass import set_grass_location_rules
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
+from .logic_helpers import (has_ability, has_ladder, has_melee, has_sword, has_lantern, has_mask,
+                            can_shop, can_get_past_bushes, laurels_zip, has_ice_grapple_logic, can_ladder_storage)
 from .options import IceGrappling, LadderStorage, CombatLogic
-from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
-                    laurels_zip, bomb_walls)
 
 if TYPE_CHECKING:
     from . import TunicWorld
-
-laurels = "Hero's Laurels"
-grapple = "Magic Orb"
-ice_dagger = "Magic Dagger"
-fire_wand = "Magic Wand"
-gun = "Gun"
-lantern = "Lantern"
-fairies = "Fairy"
-coins = "Golden Coin"
-prayer = "Pages 24-25 (Prayer)"
-holy_cross = "Pages 42-43 (Holy Cross)"
-icebolt = "Pages 52-53 (Icebolt)"
-key = "Key"
-house_key = "Old House Key"
-vault_key = "Fortress Vault Key"
-mask = "Scavenger Mask"
-red_hexagon = "Red Questagon"
-green_hexagon = "Green Questagon"
-blue_hexagon = "Blue Questagon"
-gold_hexagon = "Gold Questagon"
-
-swamp_fuse_1 = "Swamp Fuse 1"
-swamp_fuse_2 = "Swamp Fuse 2"
-swamp_fuse_3 = "Swamp Fuse 3"
-cathedral_elevator_fuse = "Cathedral Elevator Fuse"
-quarry_fuse_1 = "Quarry Fuse 1"
-quarry_fuse_2 = "Quarry Fuse 2"
-ziggurat_miniboss_fuse = "Ziggurat Miniboss Fuse"
-ziggurat_teleporter_fuse = "Ziggurat Teleporter Fuse"
-fortress_exterior_fuse_1 = "Fortress Exterior Fuse 1"
-fortress_exterior_fuse_2 = "Fortress Exterior Fuse 2"
-fortress_courtyard_upper_fuse = "Fortress Courtyard Upper Fuse"
-fortress_courtyard_lower_fuse = "Fortress Courtyard Fuse"
-beneath_the_vault_fuse = "Beneath the Vault Fuse"  # event needs to be renamed probably
-fortress_candles_fuse = "Fortress Candles Fuse"
-fortress_door_left_fuse = "Fortress Door Left Fuse"
-fortress_door_right_fuse = "Fortress Door Right Fuse"
-west_furnace_fuse = "West Furnace Fuse"
-west_garden_fuse = "West Garden Fuse"
-atoll_northeast_fuse = "Atoll Northeast Fuse"
-atoll_northwest_fuse = "Atoll Northwest Fuse"
-atoll_southeast_fuse = "Atoll Southeast Fuse"
-atoll_southwest_fuse = "Atoll Southwest Fuse"
-library_lab_fuse = "Library Lab Fuse"
-
-
-def has_ladder(ladder: str, state: CollectionState, world: "TunicWorld") -> bool:
-    return not world.options.shuffle_ladders or state.has(ladder, world.player)
-
-
-def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
-    return has_sword(state, world.player) and state.can_reach_region("Shop", world.player)
-
-
-# for the ones that are not early bushes where ER can screw you over a bit
-def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
-    # add in glass cannon + stick for grass rando
-    return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
 
 
 def set_er_region_rules(world: "TunicWorld", regions: dict[str, Region], portal_pairs: dict[Portal, Portal]) -> None:

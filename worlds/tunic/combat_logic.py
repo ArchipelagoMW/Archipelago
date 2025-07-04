@@ -1,9 +1,11 @@
-from typing import NamedTuple
-from enum import IntEnum
 from collections import defaultdict
+from enum import IntEnum
+from typing import NamedTuple
+
 from BaseClasses import CollectionState
-from .rules import has_sword, has_melee
 from worlds.AutoWorld import LogicMixin
+
+from .logic_helpers import has_sword, has_melee
 
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla

@@ -2,6 +2,7 @@ from typing import NamedTuple
 
 from .bells import bell_location_table
 from .breakables import breakable_location_table
+from .constants import base_id
 from .fuses import fuse_location_table
 from .grass import grass_location_table
 
@@ -11,8 +12,6 @@ class TunicLocationData(NamedTuple):
     er_region: str  # entrance rando region
     location_group: str | None = None
 
-
-location_base_id = 509342400
 
 location_table: dict[str, TunicLocationData] = {
     "Beneath the Well - [Powered Secret Room] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Back"),
@@ -325,7 +324,7 @@ hexagon_locations: dict[str, str] = {
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-standard_location_name_to_id: dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+standard_location_name_to_id: dict[str, int] = {name: base_id + index for index, name in enumerate(location_table)}
 
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)

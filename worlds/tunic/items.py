@@ -3,6 +3,8 @@ from typing import NamedTuple
 
 from BaseClasses import ItemClassification as IC
 
+from .constants import base_id
+
 
 class TunicItemData(NamedTuple):
     classification: IC
@@ -12,8 +14,6 @@ class TunicItemData(NamedTuple):
     # classification if combat logic is on
     combat_ic: None | IC = None
 
-
-item_base_id = 509342400
 
 item_table: dict[str, TunicItemData] = {
     "Firecracker x2": TunicItemData(IC.filler, 3, 0, "Bombs"),
@@ -244,7 +244,7 @@ combat_items: list[str] = [name for name, data in item_table.items()
                            if data.combat_ic and IC.progression in data.combat_ic]
 combat_items.extend(["Stick", "Sword", "Sword Upgrade", "Magic Wand", "Hero's Laurels", "Gun"])
 
-item_name_to_id: dict[str, int] = {name: item_base_id + data.item_id_offset for name, data in item_table.items()}
+item_name_to_id: dict[str, int] = {name: base_id + data.item_id_offset for name, data in item_table.items()}
 
 filler_items: list[str] = [name for name, data in item_table.items() if data.classification == IC.filler and name != "Grass"]
 

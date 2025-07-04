@@ -2,7 +2,8 @@ from typing import NamedTuple, TYPE_CHECKING
 
 from worlds.generic.Rules import set_rule
 
-from .rules import has_melee
+from .constants import base_id
+from .logic_helpers import has_melee
 
 
 if TYPE_CHECKING:
@@ -14,13 +15,12 @@ class TunicLocationData(NamedTuple):
     er_region: str
 
 
-bell_location_base_id = 509342400 + 11000
-
 bell_location_table: dict[str, TunicLocationData] = {
     "Forest Belltower - Ring the East Bell": TunicLocationData("Forest Belltower", "Forest Belltower Upper"),
     "Overworld - [West] Ring the West Bell": TunicLocationData("Overworld", "Overworld Belltower at Bell"),
 }
 
+bell_location_base_id = base_id + 11000
 bell_location_name_to_id: dict[str, int] = {name: bell_location_base_id + index
                                             for index, name in enumerate(bell_location_table)}
 

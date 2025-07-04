@@ -3,7 +3,8 @@ from typing import NamedTuple, TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import set_rule, add_rule
 
-from .rules import has_sword, has_melee
+from .constants import base_id
+from .logic_helpers import has_sword, has_melee
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -14,8 +15,6 @@ class TunicLocationData(NamedTuple):
     er_region: str  # entrance rando region
     location_group: str | None = None
 
-
-location_base_id = 509342400
 
 grass_location_table: dict[str, TunicLocationData] = {
     "Overworld - Overworld Grass (576) (7.0, 4.0, -223.0)": TunicLocationData("Overworld", "Overworld"),
@@ -7765,7 +7764,8 @@ excluded_grass_locations = {
     "Overworld - East Overworld Bush (64) (56.0, 44.0, -107.0)",
 }
 
-grass_location_name_to_id: dict[str, int] = {name: location_base_id + 302 + index for index, name in enumerate(grass_location_table)}
+grass_base_id = base_id + 302
+grass_location_name_to_id: dict[str, int] = {name: grass_base_id + index for index, name in enumerate(grass_location_table)}
 
 grass_location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in grass_location_table.items():
