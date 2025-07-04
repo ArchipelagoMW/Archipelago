@@ -175,6 +175,52 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("Unreadied.")
         async_start(self.ctx.send_msgs([{"cmd": "StatusUpdate", "status": state}]), name="send StatusUpdate")
 
+    def _cmd_hide_completed_hints(self, enable: str = "") -> bool:
+        """Toggle hiding of completed hints in the text client. Use 'on' or 'off' to set explicitly."""
+        if not hasattr(self.ctx, 'ui') or not self.ctx.ui:
+            self.output("UI not available.")
+            return False
+        
+        hint_log = getattr(self.ctx.ui, 'hint_log', None)
+        if not hint_log:
+            self.output("Hint log not available.")
+            return False
+        
+        if enable.lower() == "on":
+            new_state = True
+        elif enable.lower() == "off":
+            new_state = False
+        else:
+            new_state = not hint_log.hide_completed_hints
+        
+        hint_log.toggle_hint_visibility(hide_completed=new_state)
+        status = "enabled" if new_state else "disabled"
+        self.output(f"Hiding completed hints {status}.")
+        return True
+
+    def _cmd_hide_external_items(self, enable: str = "") -> bool:
+        """Toggle hiding of items found outside your game in the text client. Use 'on' or 'off' to set explicitly."""
+        if not hasattr(self.ctx, 'ui') or not self.ctx.ui:
+            self.output("UI not available.")
+            return False
+        
+        hint_log = getattr(self.ctx.ui, 'hint_log', None)
+        if not hint_log:
+            self.output("Hint log not available.")
+            return False
+        
+        if enable.lower() == "on":
+            new_state = True
+        elif enable.lower() == "off":
+            new_state = False
+        else:
+            new_state = not hint_log.hide_external_items
+        
+        hint_log.toggle_hint_visibility(hide_external=new_state)
+        status = "enabled" if new_state else "disabled"
+        self.output(f"Hiding external items {status}.")
+        return True
+
     def default(self, raw: str):
         """The default message parser to be used when parsing any messages that do not match a command"""
         raw = self.ctx.on_user_say(raw)
