@@ -9,6 +9,7 @@ import subprocess
 import sys
 import sysconfig
 import threading
+import urllib.error
 import urllib.request
 import warnings
 import zipfile
@@ -152,7 +153,7 @@ try:
         signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
                     r'/tr http://timestamp.digicert.com/ ')
         print("Using signtool")
-except (ConnectionError, TimeoutError) as e:
+except (ConnectionError, TimeoutError, urllib.error.URLError) as e:
     pass
 
 
