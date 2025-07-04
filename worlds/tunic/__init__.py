@@ -511,20 +511,18 @@ class TunicWorld(World):
             multiworld.random.shuffle(non_grass_fill_locations)
 
             for filler_item in grass_fill:
-                loc_to_fill = grass_fill_locations.pop()
-                # the if statement is to counteract people filling other people's locations in pre_fill
-                # they shouldn't be doing that, but I'd rather just put the filler in the item pool than crash gen
-                if loc_to_fill.item:
+                try:
+                    grass_fill_locations.pop().place_locked_item(filler_item)
+                except Exception:
+                    # the try except is to counteract people filling other people's locations in pre_fill
+                    # they shouldn't be doing that, but I'd rather just put the filler in the item pool than crash gen
                     multiworld.itempool.append(filler_item)
-                else:
-                    loc_to_fill.place_locked_item(filler_item)
 
             for filler_item in non_grass_fill:
-                loc_to_fill = non_grass_fill_locations.pop()
-                if loc_to_fill.item:
+                try:
+                    non_grass_fill_locations.pop().place_locked_item(filler_item)
+                except Exception:
                     multiworld.itempool.append(filler_item)
-                else:
-                    loc_to_fill.place_locked_item(filler_item)
 
     def create_regions(self) -> None:
         self.tunic_portal_pairs = {}
