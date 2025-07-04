@@ -1185,3 +1185,24 @@ class TestItemFiltering(Sc2SetupTestBase):
         itempool = [item.name for item in self.multiworld.itempool]
 
         self.assertNotIn(item_names.ROGUE_FORCES, itempool)
+    
+    def test_unexcluded_items_applies_over_op_items(self) -> None:
+        world_options = {
+            'mission_order': MissionOrder.option_grid,
+            'maximum_campaign_size': MaximumCampaignSize.range_end,
+            'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
+            'unexcluded_items': [item_names.SOA_TIME_STOP],
+            'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        self.assertNotIn(
+            item_groups.overpowered_items[0],
+            itempool,
+            f"OP item {item_groups.overpowered_items[0]} in the item pool when exclude_overpowered_items was true"
+        )
+        self.assertIn(
+            item_names.SOA_TIME_STOP,
+            itempool,
+            f"{item_names.SOA_TIME_STOP} was not unexcluded by unexcluded_items when exclude_overpowered_items was true"
+        )
