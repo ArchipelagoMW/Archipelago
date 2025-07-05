@@ -7,7 +7,8 @@ import shutil
 import subprocess
 import time
 import queue
-from typing import Dict, Optional
+from typing import Dict, Optional, Set
+import json
 import zipfile
 
 import bsdiff4
@@ -15,7 +16,7 @@ import colorama
 
 from NetUtils import ClientStatus, NetworkItem, NetworkPlayer
 from settings import get_settings
-from worlds.tits_the_3rd.locations import get_location_id
+from worlds.tits_the_3rd.locations import get_location_id, MIN_CRAFT_LOCATION_ID, MAX_CRAFT_LOCATION_ID, craft_location_id_to_character_id_and_level_threshold
 from worlds.tits_the_3rd.items import get_item_id
 from worlds.tits_the_3rd.names.location_name import LocationName
 from worlds.tits_the_3rd.names.item_name import ItemName
@@ -49,6 +50,7 @@ class TitsThe3rdContext(CommonContext):
         self.last_received_item_index = -1
         self.non_local_locations: Dict[int, tuple] = dict()
         self.non_local_locations_initiated = False
+        self.slot_data = None
 
         self.items_to_be_sent_notification = queue.Queue()
         self.player_name_to_game: Dict[str, str] = dict()
@@ -136,6 +138,69 @@ class TitsThe3rdContext(CommonContext):
         with open(lb_ark_folder / "player.txt", "w") as player_id_file:
             player_id_file.write(f"{self.auth}-{self.seed_name}")
 
+        # t_magic modifications
+        subprocess.run([
+            os.path.join(game_dir, "factoria.exe"),
+            "--output",
+            os.path.join(lb_ark_folder, "ED6_DT22"),
+            os.path.join(game_dir, "ED6_DT22.dir"),
+        ], check=True)
+
+        if self.slot_data["old_craft_id_to_new_craft_stats"]:
+            try:
+                t_magic_path = os.path.join(lb_ark_folder, "ED6_DT22", "t_magic._dt")
+                if not "T_MAGIC_Converter.exe" in files_in_game_dir:
+                    raise Exception("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from <link>") #TODO: add link
+                t_magic_converter_path = os.path.join(game_dir, "T_MAGIC_Converter.exe")
+                try:
+                    subprocess.run([
+                        t_magic_converter_path,
+                        t_magic_path,
+                    ], check=True)
+                except subprocess.CalledProcessError as err:
+                    raise Exception(f"Error running t_magic_converter: {err}")
+                t_magic_json_output_path = os.path.join(game_dir, "output", "t_magic.json")
+                with open(t_magic_json_output_path, "r") as t_magic_json_file:
+                    t_magic_json = json.load(t_magic_json_file)
+                    new_t_magic_json = {"Data": []}
+                    for ability in t_magic_json["Data"]:
+                        if str(ability["ID"]) in self.slot_data["old_craft_id_to_new_craft_stats"]:
+                            new_id = self.slot_data["old_craft_id_to_new_craft_stats"][str(ability["ID"])]
+                            ability["ID"] = int(new_id)
+                        new_t_magic_json["Data"].append(ability)
+                    with open(t_magic_json_output_path, "w") as t_magic_json_file:
+                        json.dump(new_t_magic_json, t_magic_json_file)
+                try:
+                    subprocess.run([
+                        t_magic_converter_path,
+                        t_magic_json_output_path
+                    ], check=True)
+                except subprocess.CalledProcessError as err:
+                    raise Exception(f"Error running t_magic_converter: {err}")
+                shutil.move(os.path.join(game_dir, "output", "t_magic._dt"), os.path.join(lb_ark_folder, "ED6_DT22", "t_magic._dt"))
+            except Exception as err:
+                logger.error(f"Error running t_magic_converter: {err}")
+                raise err
+            finally:
+                output_dir = os.path.join(game_dir, "output")
+                if os.path.exists(output_dir):
+                    shutil.rmtree(output_dir)
+        try:
+            t_crtget_path = os.path.join(lb_ark_folder, "ED6_DT22", "t_crfget._dt")
+            with open(t_crtget_path, "rb") as f:
+                data = bytearray(f.read())
+            pos = 0x28
+            while pos < len(data):
+                value = int.from_bytes(data[pos:pos+2], "little", signed=False)
+                if value != 0xFFFF:
+                    data[pos:pos+2] = (999).to_bytes(2, "little", signed=False)
+                pos += 4
+            with open(t_crtget_path, "wb") as f:
+                f.write(data)
+        except Exception as err:
+            logger.error(f"Error modifying t_crfget: {err}")
+            raise err
+
         return True
 
     def reset_client_state(self):
@@ -155,6 +220,8 @@ class TitsThe3rdContext(CommonContext):
         self.non_local_locations = dict()
         self.non_local_locations_initiated = False
         self.player_name_to_game = dict()
+        self.slot_data = None
+        self.next_craft_idx = {name: 0 for name in CHARACTER_ID_TO_NAME.values()}
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -173,6 +240,7 @@ class TitsThe3rdContext(CommonContext):
             self.world_player_identifier = (hashlib.sha256(self.world_player_identifier.encode()).digest())[:4]
             self.location_ids = set(args["missing_locations"] + args["checked_locations"])
             self.locations_checked = set(args["checked_locations"])
+            self.slot_data = args["slot_data"]
 
             games = set()
             for player in [NetworkPlayer(*player) for player in args["players"]]:
@@ -234,6 +302,14 @@ class TitsThe3rdContext(CommonContext):
             if item_id is None or item_id >= 500000:
                 result = True
             # Unlock location
+            elif (get_item_id(ItemName.craft_min_id) <= item_id <= get_item_id(ItemName.craft_max_id)): # Craft get
+                craft_idx = 0
+                for past_item in self.items_received[:self.last_received_item_index + 1]:
+                    if past_item.item == item_id:
+                        craft_idx += 1
+                character_id = item_id - get_item_id(ItemName.craft_min_id)
+                craft_id = self.slot_data["craft_get_order"][self.game_interface.CHARACTER_ID_TO_NAME[character_id]][craft_idx]
+                result = self.game_interface.give_craft(character_id, craft_id)
             elif get_item_id(ItemName.area_min_id) <= item_id <= get_item_id(ItemName.area_max_id):
                 result = self.game_interface.unlock_area(item_id - get_item_id(ItemName.area_min_id))
             # Unlock character
@@ -285,21 +361,33 @@ class TitsThe3rdContext(CommonContext):
             await asyncio.sleep(1)
             logger.info("Received initial data from server!")
 
+    async def check_location(self, location_id: int):
+        if not self.game_interface.should_send_and_recieve_items(self.world_player_identifier):
+            return
+        if location_id == get_location_id(LocationName.grancel_castle_queens_bedroom):
+            # Chapter 1 boss defeated
+            self.finished_game = True
+            await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        self.locations_checked.add(location_id)
+        await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
+        if location_id in self.non_local_locations:
+            self.items_to_be_sent_notification.put(location_id)
+
     async def check_for_locations(self):
         for location_id in self.location_ids:
             if location_id in self.locations_checked:
                 continue
+            if (
+                MIN_CRAFT_LOCATION_ID <= location_id <= MAX_CRAFT_LOCATION_ID
+                and location_id in craft_location_id_to_character_id_and_level_threshold
+            ):
+                character_id, level_threshold = craft_location_id_to_character_id_and_level_threshold[location_id]
+                if not self.game_interface.has_character(character_id):
+                    continue
+                if self.game_interface.read_character_level(character_id) >= level_threshold:
+                    await self.check_location(location_id)
             if self.game_interface.read_flag(location_id):
-                if not self.game_interface.should_send_and_recieve_items(self.world_player_identifier):
-                    return
-                if location_id == get_location_id(LocationName.grancel_castle_queens_bedroom):
-                    # Chapter 1 boss defeated
-                    self.finished_game = True
-                    await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                self.locations_checked.add(location_id)
-                await self.send_msgs([{"cmd": "LocationChecks", "locations": self.locations_checked}])
-                if location_id in self.non_local_locations:
-                    self.items_to_be_sent_notification.put(location_id)
+                await self.check_location(location_id)
 
 
 async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
@@ -336,6 +424,7 @@ async def tits_the_3rd_watcher(ctx: TitsThe3rdContext):
         try:
             if ctx.exit_event.is_set():
                 break
+
             if ctx.game_interface.should_send_and_recieve_items(ctx.world_player_identifier):
                 await ctx.check_for_locations()
 

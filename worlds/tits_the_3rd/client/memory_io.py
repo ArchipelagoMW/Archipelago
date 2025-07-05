@@ -53,7 +53,10 @@ class TitsThe3rdMemoryIO():
     OFFSET_FLAG_0: int = 0x2AD491C
     OFFSET_WPID: int = OFFSET_FLAG_0 + (9504 // 8) # Flag 9504 - 9536
     FLAG_SHOULD_WRITE_WPID: int = 9496
+    FLAG_HAS_CHARACTER_ARRAY: int = 9670
     OFFSET_ITEMS_RECEIVED_INDEX = OFFSET_FLAG_0 + (1024 // 8)
+    OFFSET_CHARACTER_LEVEL: int = 0x2ACD11C
+    CHARACTER_LEVEL_OFFSET_INTERVAL: int = 0x3C
     CHARACTER_ID_TO_NAME = {
         0: "estelle",
         1: "joshua",
@@ -328,6 +331,19 @@ class TitsThe3rdMemoryIO():
         self.tits_the_3rd_mem.write_bytes(self.tits_the_3rd_mem.base_address + flag_byte_offset, byte_data, 1)
         return self.read_flag(flag_number) == value
 
+    def has_character(self, character_id: int) -> bool:
+        """
+        Returns True if the character is in the party.
+        """
+        return self.read_flag(character_id + self.FLAG_HAS_CHARACTER_ARRAY)
+
+    def read_character_level(self, character_id: int) -> int:
+        """
+        Read the level of a provided character.
+        """
+        offset = self.OFFSET_CHARACTER_LEVEL + (character_id * self.CHARACTER_LEVEL_OFFSET_INTERVAL)
+        return self._read_int(offset, "little")
+
     def write_world_player_identifier(self, wpid: bytes) -> bool:
         """
         This identifier is used to validate that the player is
@@ -416,6 +432,19 @@ class TitsThe3rdMemoryIO():
         self.tits_the_3rd_mem.write_bytes(address + 45, item_id.to_bytes(2, "little"), 2)
         self.tits_the_3rd_mem.write_bytes(address + 48, bytes(f"{amount:02d}", encoding="utf8"), 2)
         self.call_scena(self.scena_functions["give_item"])
+        return True
+
+    def give_craft(self, character_id: int, craft_id: int):
+        """Function to give a craft to the player in game"""
+        address = self.get_scena_offset(b"AP Craft Unlock Notification")
+        if address is None:
+            return False
+        self.tits_the_3rd_mem.write_bytes(address + 30, character_id.to_bytes(1, "little"), 1) # char 1 byte
+        self.tits_the_3rd_mem.write_bytes(address + 31, craft_id.to_bytes(2, "little"), 2) # craft id 4 bytes
+        message = f"Progressive Craft for {self.CHARACTER_ID_TO_NAME[character_id]}!"
+        message = message.ljust(34)
+        self.tits_the_3rd_mem.write_bytes(address + 55, bytes(message, encoding="utf8"), 34)
+        self.call_scena(self.scena_functions["give_craft"])
         return True
 
     def give_mira(self, amount: int):

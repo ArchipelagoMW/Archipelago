@@ -97,6 +97,10 @@
             {
                 "functionNumber": 23,
                 "functionName": "unlock_renne"
+            },
+            {
+                "functionNumber": 37,
+                "functionName": "give_craft"
             }
         ]
     }

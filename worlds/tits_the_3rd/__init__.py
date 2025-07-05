@@ -2,7 +2,7 @@
 This module servies as an entrypoint into the Trails in the Sky the 3rd AP world.
 """
 from copy import deepcopy
-from typing import ClassVar, Counter, Dict, Set
+from typing import ClassVar, Counter, Dict, Set, Any
 
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, Type
@@ -21,14 +21,15 @@ from .items import (
     default_chest_pool,
     default_character_quartz_pool,
     default_character_to_location,
+    default_craft_pool,
 )
-from .locations import create_locations, location_groups, location_table, default_sealing_stone_quartz
-from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions
+from .locations import create_locations, craft_locations, location_groups, location_table
+from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions, CraftShuffle, CraftPlacement
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
 from .web import TitsThe3rdWeb
 from .tables import location_list
-
+from .crafts.craft_randomizer import shuffle_crafts_main
 
 def launch_client():
     """Launch a Trails in the Sky the 3rd client instance"""
@@ -167,6 +168,40 @@ class TitsThe3rdWorld(World):
 
         return itempool
 
+    def _set_default_craft_locations(self, location_names: Set[str], item_name: ItemName) -> None:
+        for location_name in location_names:
+            self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(item_name))
+
+    def pre_fill(self) -> None:
+    #    Crafts
+        if self.options.craft_placement == CraftPlacement.option_default:
+            self._set_default_craft_locations(location_names=location_groups["Estelle Crafts"], item_name=ItemName.estelle_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Joshua Crafts"], item_name=ItemName.joshua_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Scherazard Crafts"], item_name=ItemName.scherazard_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Olivier Crafts"], item_name=ItemName.olivier_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Kloe Crafts"], item_name=ItemName.kloe_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Agate Crafts"], item_name=ItemName.agate_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Tita Crafts"], item_name=ItemName.tita_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Zin Crafts"], item_name=ItemName.zin_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Kevin Crafts"], item_name=ItemName.kevin_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Anelace Crafts"], item_name=ItemName.anelace_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Josette Crafts"], item_name=ItemName.josette_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Richard Crafts"], item_name=ItemName.richard_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Mueller Crafts"], item_name=ItemName.mueller_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Julia Crafts"], item_name=ItemName.julia_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Ries Crafts"], item_name=ItemName.ries_progressive_craft)
+            self._set_default_craft_locations(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
+        elif self.options.craft_placement == CraftPlacement.option_crafts:
+            craft_items = []
+            for item_name, quantity in default_craft_pool.items():
+                for _ in range(quantity):
+                    craft_items.append(self.create_item(item_name))
+            remaining_craft_locations = list(craft_locations.keys())
+            for item in craft_items:
+                location_name = self.multiworld.random.choice(remaining_craft_locations)
+                self.multiworld.get_location(location_name, self.player).place_locked_item(item)
+                remaining_craft_locations.remove(location_name)
+
     def create_items(self) -> None:
         itempool = deepcopy(default_item_pool)
         """Define items for Trails in the Sky the 3rd AP"""
@@ -206,6 +241,12 @@ class TitsThe3rdWorld(World):
 
         # Setup all the playable characters stuffs
         itempool = self.setup_characters(itempool)
+
+        # Add craft items to item pool.
+        # If crafts are shuffled amongst each other, or default, this was placed in prefill.
+        if self.options.craft_placement == CraftPlacement.option_anywhere:
+            itempool.update(default_craft_pool)
+
         # Generate filler here
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         itempool.update([self.get_filler_item_name() for _ in range(total_locations - itempool.total())])
@@ -217,6 +258,18 @@ class TitsThe3rdWorld(World):
     def set_rules(self) -> None:
         """Set remaining rules."""
         self.multiworld.completion_condition[self.player] = lambda _: True
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        # Note: if craft shuffle is on, event get crafts will a random progressive craft.
+        # If craft shuffle is off, event get crafts will be the normal crafts.
+        #   For these, craft_get_order will be ignored.
+        # This behaviour is handled by the client.
+        # craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
+        craft_get_order = shuffle_crafts_main(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
+        return {
+            "default_event_crafts": not self.options.craft_shuffle,
+            "craft_get_order": craft_get_order,
+        }
 
     def get_filler_item_name(self):
         filler_item_name = self.multiworld.random.choice(filler_items)

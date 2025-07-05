@@ -83,26 +83,81 @@ class ItemName:
     higher_elements_sepith_500 = "Higher Elements Sepith (500)"
 
     # Characters
-    kevin = "Kevin"
-    kevin_spoiler = "Male Default Character"
-    ries = "Ries"
-    ries_spoiler = "Female Default Character"
+    estelle = "Estelle"
+    estelle_spoiler = "Chapter 5 First Character"
+    joshua = "Joshua"
+    joshua_spoiler = "Chapter 2 Third Character"
+    scherazard = "Scherazard"
+    scherazard_spoiler = "Chapter 4 Third Character"
+    olivier = "Olivier"
+    olivier_spoiler = "Chapter 4 Second Character"
+    kloe = "Kloe"
+    kloe_spoiler = "Chapter 3 First Character"
+    agate = "Agate"
+    agate_spoiler = "Chapter 4 Fourth Character"
     tita = "Tita"
     tita_spoiler = "Chapter 1 First Character"
+    zin = "Zin"
+    zin_spoiler = "Chapter 4 First Character"
+    kevin = "Kevin"
+    kevin_spoiler = "Male Default Character"
+    anelace = "Anelace"
+    anelace_spoiler = "Chapter 4 Third Character"
+    josette = "Josette"
+    josette_spoiler = "Chapter 2 Second Character"
+    richard = "Richard"
+    richard_spoiler = "Chapter 5 Second Character"
+    mueller = "Mueller"
+    mueller_spoiler = "Chapter 2 First Character"
     julia = "Julia"
     julia_spoiler = "Chapter 1 Second Character"
+    ries = "Ries"
+    ries_spoiler = "Female Default Character"
+    renne = "Renne"
+    renne_spoiler = "Chapter 5 Third Character"
 
     original_to_spoiler_mapping = {
-        kevin: kevin_spoiler,
-        ries: ries_spoiler,
+        estelle: estelle_spoiler,
+        joshua: joshua_spoiler,
+        scherazard: scherazard_spoiler,
+        olivier: olivier_spoiler,
+        kloe: kloe_spoiler,
+        agate: agate_spoiler,
         tita: tita_spoiler,
+        zin: zin_spoiler,
+        kevin: kevin_spoiler,
+        anelace: anelace_spoiler,
+        josette: josette_spoiler,
+        richard: richard_spoiler,
+        mueller: mueller_spoiler,
         julia: julia_spoiler,
+        ries: ries_spoiler,
+        renne: renne_spoiler,
     }
 
-    # Location Unlock
+
+    # Area Unlock
     jade_corridor_unlock_1 = "Area Expansion: Jade Corridor 1"
     jade_corridor_unlock_2 = "Area Expansion: Jade Corridor 2"
     jade_corridor_arseille_unlock = "Area Expansion: Arseille"
+
+    # Craft Unlock
+    estelle_progressive_craft = "Estelle's Progressive Craft"
+    joshua_progressive_craft = "Joshua's Progressive Craft"
+    scherazard_progressive_craft = "Scherazard's Progressive Craft"
+    olivier_progressive_craft = "Olivier's Progressive Craft"
+    kloe_progressive_craft = "Kloe's Progressive Craft"
+    agate_progressive_craft = "Agate's Progressive Craft"
+    tita_progressive_craft = "Tita's Progressive Craft"
+    zin_progressive_craft = "Zin's Progressive Craft"
+    kevin_progressive_craft = "Kevin's Progressive Craft"
+    anelace_progressive_craft = "Anelace's Progressive Craft"
+    josette_progressive_craft = "Josette's Progressive Craft"
+    richard_progressive_craft = "Richard's Progressive Craft"
+    mueller_progressive_craft = "Mueller's Progressive Craft"
+    julia_progressive_craft = "Julia's Progressive Craft"
+    ries_progressive_craft = "Ries's Progressive Craft"
+    renne_progressive_craft = "Renne's Progressive Craft"
 
     # Key Item
     bennu_defeat = "Bennu Defeated (Victory)"
@@ -120,3 +175,5 @@ class ItemName:
     area_max_id = "Location Max ID"
     recipe_min_id = "Recipe Min ID"
     recipe_max_id = "Recipe Max ID"
+    craft_min_id = "Craft Min ID"
+    craft_max_id = "Craft Max ID"
