@@ -3,6 +3,7 @@ from .constants.mounts import *
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
+from .constants.maps import *
 from .constants.regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
@@ -382,8 +383,11 @@ class CrystalProjectWorld(World):
                         self.options.goal.value == self.options.goal.option_true_astley and
                         name == THE_OLD_WORLD_PASS):
                     amount = 1
-                # adds true Astley goal required items if they don't already exist
-                if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE):
+                # adds Astley goal required item if it doesn't already exist (aka the map!)
+                if self.options.goal.value == self.options.goal.option_astley and name == THE_NEW_WORLD_MAP:
+                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
+                # adds true Astley goal required items if they don't already exist (including maps!)
+                if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE or name == THE_OLD_WORLD_MAP or name == THE_NEW_WORLD_MAP):
                     amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
 
                 for _ in range(amount):

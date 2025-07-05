@@ -279,8 +279,8 @@ item_table: Dict[str, ItemData] = {
     EUROPA_STONE: ItemData(TELEPORT_STONE, 64 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to Jidamba Tangle, Expert Regions
     DIONE_STONE: ItemData(TELEPORT_STONE, 166 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to above Quintar Reserve, Expert Regions
     NEPTUNE_STONE: ItemData(TELEPORT_STONE, 208 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Teleport to The Deep Sea, Expert Regions
-    NEW_WORLD_STONE: ItemData(TELEPORT_STONE, 140 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
-    OLD_WORLD_STONE: ItemData(TELEPORT_STONE, 253 + item_index_offset, ItemClassification.progression), #End-Game Regions (not excluded by region bc affected by player goals)
+    NEW_WORLD_STONE: ItemData(TELEPORT_STONE, 140 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1), #End-Game Regions (Astley & True Astley goals hand it to the player directly instead of from the item pool)
+    OLD_WORLD_STONE: ItemData(TELEPORT_STONE, 253 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1), #End-Game Regions (True Astley goal hands it to the player directly instead of from the item pool)
 
     #Weapons
     #Swords
@@ -964,8 +964,8 @@ item_table: Dict[str, ItemData] = {
     THE_SEQUOIA_MAP: ItemData(MAP, 111 + item_index_offset, ItemClassification.useful, 0, 0, 0, 1),
     THE_DEPTHS_MAP: ItemData(MAP, 195 + item_index_offset, ItemClassification.useful, 0, 0, 0, 1),
     CASTLE_SEQUOIA_MAP: ItemData(MAP, 209 + item_index_offset, ItemClassification.useful, 0, 0, 0, 1),
-    THE_OLD_WORLD_MAP: ItemData(MAP, 254 + item_index_offset, ItemClassification.useful), #in Beginner bc of True Astley goal
-    THE_NEW_WORLD_MAP: ItemData(MAP, 125 + item_index_offset, ItemClassification.useful), #in Beginner bc of Astley goal
+    THE_OLD_WORLD_MAP: ItemData(MAP, 254 + item_index_offset, ItemClassification.useful, 0, 0, 0, 1), #if player is on True Astley goal, get_item_pool in init adds this if you didn't pick to include End-Game Regions
+    THE_NEW_WORLD_MAP: ItemData(MAP, 125 + item_index_offset, ItemClassification.useful, 0, 0, 0, 1), #if player is on Astley/True Astley goal, get_item_pool in init adds this if you didn't pick to include End-Game Regions
 
     # Teleport Shards
     "Item - Gaea Shard": ItemData(TELEPORT_SHARD, 22 + item_index_offset, ItemClassification.useful, 0),
