@@ -273,7 +273,7 @@ async def game_watcher(ctx: KH1Context):
         await asyncio.sleep(0.1)
 
 
-def launch():
+def main():
     async def main(args):
         ctx = KH1Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")

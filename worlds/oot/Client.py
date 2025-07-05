@@ -314,7 +314,7 @@ async def patch_and_run_game(apz5_file):
     async_start(run_game(comp_path))
 
 
-if __name__ == '__main__':
+def main():
 
     Utils.init_logging("OoTClient")
 

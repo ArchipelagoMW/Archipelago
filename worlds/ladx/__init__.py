@@ -13,6 +13,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, launch, SuffixIdentifier
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -33,6 +34,13 @@ from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptio
 from .Rom import LADXDeltaPatch, get_base_rom_path
 
 DEVELOPER_MODE = False
+
+
+def launch_client():
+    from .Client import main
+    launch(main, name="LinksAwakeningClient")
+
+components.append(Component(display_name="Links Awakening DX Client", func=launch_client, file_identifier=SuffixIdentifier('.apladx')))
 
 
 class LinksAwakeningSettings(settings.Group):
