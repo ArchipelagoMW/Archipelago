@@ -13,10 +13,27 @@ COPY --from=release /release/Enemizer.zip .
 
 # No release for arm architecture. Skip.
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
-    apk add unzip=6.0-r15 --no-cache; \
-    unzip -u Enemizer.zip -d EnemizerCLI; \
+    apk add unzip=6.0-r15 --no-cache && \
+    unzip -u Enemizer.zip -d EnemizerCLI && \
     chmod -R 777 EnemizerCLI; \
     else touch EnemizerCLI; fi
+
+# Cython builder stage
+FROM python:3.12 AS cython-builder
+
+WORKDIR /build
+
+# Copy and install requirements first (better caching)
+COPY requirements.txt WebHostLib/requirements.txt
+
+RUN pip install --no-cache-dir -r \
+    WebHostLib/requirements.txt \
+    setuptools
+
+COPY _speedups.pyx .
+COPY intset.h .
+
+RUN cythonize -b -i _speedups.pyx
 
 # Archipelago
 FROM python:3.12-slim AS archipelago
@@ -27,37 +44,42 @@ WORKDIR /app
 
 # Install requirements
 # hadolint ignore=DL3008
-RUN apt-get update; \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git \
     gcc=4:12.2.0-3 \
     libc6-dev \
     libtk8.6=8.6.13-2 \
     g++=4:12.2.0-3 \
-    curl; \
-    apt-get clean; \
+    curl && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Create and activate venv
+RUN python -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+# Copy and install requirements first (better caching)
+COPY WebHostLib/requirements.txt WebHostLib/requirements.txt
+
+RUN pip install --no-cache-dir -r \
+    WebHostLib/requirements.txt \
+    gunicorn==23.0.0
 
 COPY . .
 
-# Create and activate venv
-RUN python -m venv $VIRTUAL_ENV; \
-    . $VIRTUAL_ENV/bin/activate
+COPY --from=cython-builder /build/*.so ./
 
-# hadolint ignore=DL3042
-RUN pip install -r WebHostLib/requirements.txt \
-    gunicorn==23.0.0; \
-    python ModuleUpdate.py -y
-
-RUN cythonize -i _speedups.pyx
+# Run ModuleUpdate
+RUN python ModuleUpdate.py -y
 
 # Purge unneeded packages
-RUN apt-get purge \
+RUN apt-get purge -y \
     git \
     gcc \
     libc6-dev \
-    g++; \
-    apt-get autoremove
+    g++ && \
+    apt-get autoremove -y
 
 # Copy necessary components
 COPY --from=enemizer /release/EnemizerCLI /tmp/EnemizerCLI

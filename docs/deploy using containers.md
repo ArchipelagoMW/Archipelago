@@ -11,6 +11,7 @@ What you'll need:
  * A container runtime engine such as:
    * [Docker](https://www.docker.com/)
    * [Podman](https://podman.io/)
+     * For running with rootless podman, you need to ensure all ports used are usable rootless, by default ports less than 1024 are root only. See [the official tutorial](https://github.com/containers/podman/blob/main/docs/tutorials/rootless_tutorial.md) for details.
 
 Starting from the root repository directory, the standalone Archipelago image can be built and run with the command:
 `docker build -t archipelago .`
