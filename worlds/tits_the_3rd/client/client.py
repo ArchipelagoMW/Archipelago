@@ -9,6 +9,7 @@ import time
 import queue
 from typing import Dict, Optional, Set
 import json
+import tempfile
 import zipfile
 
 import bsdiff4
@@ -106,15 +107,26 @@ class TitsThe3rdContext(CommonContext):
         with zipfile.ZipFile(zip_buffer, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
             for file in sorted(os.listdir(scena_base_folder)):
                 if file.endswith("._sn"):
-                    zip_file.write(scena_base_folder / file, arcname=file)
+                    zip_file.write(scena_base_folder / file, arcname=f"sn/{file}")
 
         zip_buffer.seek(0)
         patch = load_file("data/tits3rd_basepatch.bsdiff4")
         output_data = bsdiff4.patch(zip_buffer.read(), patch)
         output_buffer = io.BytesIO(output_data)
-        with zipfile.ZipFile(output_buffer, "r") as output_file:
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with zipfile.ZipFile(output_buffer, "r") as output_file:
+                output_file.extractall(temp_dir)
+
             os.makedirs(scena_game_mod_folder, exist_ok=True)
-            output_file.extractall(scena_game_mod_folder)
+
+            sn_folder = os.path.join(temp_dir, "sn")
+            if not os.path.exists(sn_folder):
+                raise Exception("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+
+            for file_name in os.listdir(sn_folder):
+                source_path = os.path.join(sn_folder, file_name)
+                shutil.move(source_path, scena_game_mod_folder)
 
         # Create custom item table
         os.makedirs(dt_game_mod_folder, exist_ok=True)
