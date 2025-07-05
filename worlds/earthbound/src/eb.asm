@@ -9102,10 +9102,10 @@ ORG $C7CB74
 db $C7, $00
 
 ORG $D7A90C
-db $5F
+db $EC
 
 ORG $D68463
-db $FF
+;db $FF
 
 ORG $C8A8E3
 dd CheckForRubyPoo
@@ -15269,6 +15269,7 @@ BEQ .skip_vram_load
 CMP $0785
 BEQ .skip_vram_load ;If the enemy is already loaded, don't load it into a new slot
 REP #$20
+JSR refresh_all_enemy_sprites ;Enemy sprites get cleared by things like PSI; they will corrupt if not refreshed
 LDA #$0090
 LDY #$005E
 INC $0780
@@ -15287,6 +15288,51 @@ TDC
 ADC #$FFE2
 TCD
 JML $C2EEF5
+
+refresh_all_enemy_sprites:
+LDA $AAB2
+STA $B5F5
+LDA $AAB4
+STA $B5F3
+STZ $AAB4
+STZ $AAB2
+LDA #$0000
+PHA
+.LoadNext:
+TAX
+LDA $0782,X
+AND #$00FF
+JSR get_enemy_sprite
+LDY #$EAE9
+JSL goto_bank_c2
+PLA
+INC
+CMP $B5F3
+BEQ .Done
+PHA
+BRA .LoadNext
+
+.Done:
+LDA $B5F5
+STA $AAB2
+LDA $B5F3
+STA $AAB4
+RTS
+
+get_enemy_sprite:
+TAX
+LDA #$0000
+.CheckNext:
+CPX #$0000
+BEQ .done
+DEX
+CLC
+ADC #$005E
+BRA .CheckNext
+.done:
+TAX
+LDA $D595A5,X
+RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ORG $C28FC8
