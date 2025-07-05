@@ -99,6 +99,12 @@ You can either go back to the underground prison or talk to Bubble Monkey, regar
 ## My game automatically rolls credits after getting to Lumine Hall, but I need to get to the Lost Underworld##
 Once you defeat the boss of Lumine Hall, the Lost Underworld teleport is automatically unlocked. You will need to leave and warp there, though.
 
+## How do I get into the Tenda Camp in the Lost Underworld? ##
+Bring them Tendakraut. They tend to notice it if you walk up to the gate with it already in your inventory.
+
+## I started as Jeff. Can I teleport? ##
+Jeff starts with an item called the "Warp pad", which is an inventory item that functions as Teleport. It can safely be tucked into Key Item storage.
+
 ## Community Suggestions ##
 Community suggestions for certain things are being accepted. You can find submissions below.
 
