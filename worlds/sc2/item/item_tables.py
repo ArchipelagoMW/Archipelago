@@ -1219,7 +1219,7 @@ item_table = {
                  parent=parent_names.BANELING_SOURCE),
     item_names.BANELING_RAPID_METAMORPH:
         ItemData(233 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 3, SC2Race.ZERG,
-                 parent=parent_names.MORPH_SOURCE_ZERGLING),
+                 parent=item_names.ZERGLING_BANELING_ASPECT),
     item_names.MUTALISK_SEVERING_GLAIVE:
         ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, ZergItemType.Mutation_2, 4, SC2Race.ZERG, classification=ItemClassification.progression, parent=item_names.MUTALISK),
     item_names.MUTALISK_AERODYNAMIC_GLAIVE_SHAPE:
