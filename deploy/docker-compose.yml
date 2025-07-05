@@ -20,6 +20,9 @@ services:
     # Expose on host network for access to dynamically mapped ports
     network_mode: host
 
+    # No Healthcheck in place yet for multiworld
+    healthcheck:
+      test: ["NONE"]
   web:
     # Use image build by multiworld service
     image: archipelago-base
