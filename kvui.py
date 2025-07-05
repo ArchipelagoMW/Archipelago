@@ -1207,6 +1207,10 @@ class HintLog(MDRecycleView):
     data: list[typing.Any]
     sort_key: str = ""
     reversed: bool = True
+    # Hint visibility filtering properties
+    hide_completed_hints: bool = False
+    hide_external_items: bool = False
+    _original_hints: list = None  # Store original hints for filtering
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -1214,11 +1218,17 @@ class HintLog(MDRecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
-        if not hints:  # Fix the scrolling looking visually wrong in some edge cases
+        # Store original hints for filtering
+        self._original_hints = hints
+        
+        # Apply filters
+        filtered_hints = self.apply_filters(hints)
+        
+        if not filtered_hints:  # Fix the scrolling looking visually wrong in some edge cases
             self.scroll_y = 1.0
         data = []
         ctx = MDApp.get_running_app().ctx
-        for hint in hints:
+        for hint in filtered_hints:
             if not hint.get("status"): # Allows connecting to old servers
                 hint["status"] = HintStatus.HINT_FOUND if hint["found"] else HintStatus.HINT_UNSPECIFIED
             hint_status_node = self.parser.handle_node({"type": "color",
@@ -1254,6 +1264,38 @@ class HintLog(MDRecycleView):
             data[i]["striped"] = True
         data.insert(0, self.header)
         self.data = data
+
+    def filter_completed_hints(self, hints):
+        """Filter out completed hints if hide_completed_hints is True"""
+        if not self.hide_completed_hints:
+            return hints
+        return [hint for hint in hints if not hint.get("found", False)]
+
+    def filter_external_items(self, hints):
+        """Filter out external items if hide_external_items is True"""
+        if not self.hide_external_items:
+            return hints
+        
+        ctx = MDApp.get_running_app().ctx
+        return [hint for hint in hints if ctx.slot_concerns_self(hint["receiving_player"])]
+
+    def toggle_hint_visibility(self, hide_completed=None, hide_external=None):
+        """Toggle hint visibility settings and refresh display"""
+        if hide_completed is not None:
+            self.hide_completed_hints = hide_completed
+        if hide_external is not None:
+            self.hide_external_items = hide_external
+        
+        # Refresh with current hints if available
+        if self._original_hints is not None:
+            self.refresh_hints(self._original_hints)
+
+    def apply_filters(self, hints):
+        """Apply all active filters to the hints list"""
+        filtered_hints = hints
+        filtered_hints = self.filter_completed_hints(filtered_hints)
+        filtered_hints = self.filter_external_items(filtered_hints)
+        return filtered_hints
 
     @staticmethod
     def hint_sorter(element: dict) -> str:
