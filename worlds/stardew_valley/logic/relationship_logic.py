@@ -156,7 +156,7 @@ class RelationshipLogic(BaseLogic):
         return self.logic.and_(*[self.can_meet(npc) for npc in npcs])
 
     def can_meet_any(self, *npcs: str) -> StardewRule:
-        return self.logic.or_(*[self.can_meet(npc) for npc in npcs])
+        return self.logic.or_(*(self.can_meet(npc) for npc in npcs))
 
     # Should be cached
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:

@@ -108,6 +108,7 @@ def set_rules(world):
     set_isolated_locations_rules(logic, multiworld, player, trash_bear_requests)
     set_traveling_merchant_day_rules(logic, multiworld, player)
     set_arcade_machine_rules(logic, multiworld, player, world_options)
+    set_movie_rules(logic, multiworld, player, world_options, world_content)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
     set_hatsanity_rules(all_location_names, logic, multiworld, player, world_options, world_content)
     set_eatsanity_rules(all_location_names, logic, multiworld, player, world_options)
@@ -910,11 +911,13 @@ def set_movie_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, wo
     if moviesanity <= Moviesanity.option_none:
         return
 
-    if moviesanity >= Moviesanity.option_all_movies_loved:
+    if moviesanity >= Moviesanity.option_all_movies:
         watch_prefix = "Watch "
         for movie_location in locations.locations_by_tag[LocationTags.MOVIE]:
             movie_name = movie_location.name[len(watch_prefix):]
-            if moviesanity == Moviesanity.option_all_movies_loved or moviesanity == Moviesanity.option_all_movies_and_all_snacks:
+            if moviesanity == Moviesanity.option_all_movies:
+                rule = logic.movie.can_watch_movie(movie_name)
+            elif moviesanity == Moviesanity.option_all_movies_loved or moviesanity == Moviesanity.option_all_movies_and_all_snacks:
                 rule = logic.movie.can_watch_movie_with_loving_npc(movie_name)
             else:
                 rule = logic.movie.can_watch_movie_with_loving_npc_and_snack(movie_name)

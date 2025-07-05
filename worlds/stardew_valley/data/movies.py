@@ -92,3 +92,8 @@ class SnackName:
                                                 NPC.george, NPC.gus, NPC.jas, NPC.jodi, NPC.kent, NPC.lewis, NPC.linus, NPC.marnie, NPC.pam,
                                                 NPC.pierre, NPC.robin, NPC.sandy, NPC.vincent, NPC.willy, NPC.wizard])
     truffle_popcorn = snack("Truffle Popcorn", SnackCategory.salty, [NPC.caroline, NPC.elliott, NPC.gus])
+
+
+# For some unknown reason, Leo doesn't love ANY snack
+npc_snacks[NPC.leo] = []
+
