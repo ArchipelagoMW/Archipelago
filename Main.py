@@ -12,6 +12,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
+from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple
 from settings import get_settings
@@ -333,6 +334,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "race_mode": int(multiworld.is_race),
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
+
+                for key in ("slot_data", "er_hint_data"):
+                    multidata[key] = convert_to_base_types(multidata[key])
 
                 multidata = zlib.compress(pickle.dumps(multidata), 9)
 
