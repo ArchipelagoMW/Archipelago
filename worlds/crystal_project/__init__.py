@@ -96,7 +96,7 @@ class CrystalProjectWorld(World):
         if self.options.startWithTreasureFinder.value:
             self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
 
-        if self.options.startWithMaps.value:
+        if self.options.startWithMaps.value == self.options.startWithMaps.option_true:
             for map_name in self.item_name_groups[MAP]:
                 self.multiworld.push_precollected(self.create_item(map_name))
 
@@ -265,25 +265,25 @@ class CrystalProjectWorld(World):
         if self.options.levelGating.value == self.options.levelGating.option_none:
             excluded_items.add(PROGRESSIVE_LEVEL)
 
-        if self.options.startWithTreasureFinder:
+        if self.options.startWithTreasureFinder.value == self.options.startWithTreasureFinder.option_true:
             excluded_items.add(TREASURE_FINDER)
 
-        if self.options.startWithMaps:
+        if self.options.startWithMaps.value == self.options.startWithMaps.option_true:
             for map_name in self.item_name_groups[MAP]:
                 excluded_items.add(map_name)
 
-        if self.options.goal == self.options.goal.option_astley:
+        if self.options.goal.value == self.options.goal.option_astley:
             excluded_items.add(NEW_WORLD_STONE)
 
-        if self.options.goal == self.options.goal.option_true_astley:
+        if self.options.goal.value == self.options.goal.option_true_astley:
             excluded_items.add(NEW_WORLD_STONE)
             excluded_items.add(OLD_WORLD_STONE)
 
-        if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
+        if self.options.includeSummonAbilities.value == self.options.includeSummonAbilities.option_false:
             for summon in self.item_name_groups[SUMMON]:
                 excluded_items.add(summon)
 
-        if self.options.includeScholarAbilities == self.options.includeScholarAbilities.option_false:
+        if self.options.includeScholarAbilities.value == self.options.includeScholarAbilities.option_false:
             for scholar_ability in self.item_name_groups[SCHOLAR_ABILITY]:
                 excluded_items.add(scholar_ability)
 
