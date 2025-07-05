@@ -1708,7 +1708,7 @@ LOCATIONS_DATA = {
         "x_max": 50000
     },
     "Goron Island North Spike Chest": {
-        "region_id": "goron north",
+        "region_id": "goron outside temple",
         "stage_id": 0x10,
         "floor_id": 0x1,
         "vanilla_item": "Power Gem",
@@ -1863,6 +1863,16 @@ LOCATIONS_DATA = {
         "y": 0,
         "x_max": -25000,
         "z_min": 45000
+    },
+    "Dee Ess Blow in Microphone Chest": {
+        "region_id": "ds",
+        "stage_id": 0x1B,
+        "floor_id": 0x0,
+        "vanilla_item": "Gold Rupee (300)",
+        "y": 0,
+        "x_max": -15000,
+        "z_min": 10000,
+        "z_max": 30000,
     },
     "Dee Ess Left Speakers Dig SSW": {
         "region_id": "ds dig",

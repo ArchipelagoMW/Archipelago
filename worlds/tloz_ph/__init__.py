@@ -261,10 +261,11 @@ class PhantomHourglassWorld(World):
         if name in self.extra_filler_items:
             self.extra_filler_items.remove(name)
             classification = ItemClassification.filler
+        if name == "Swordsman's Scroll" and self.options.logic == "glitched":
+            classification = ItemClassification.progression
 
         ap_code = self.item_name_to_id[name]
-        if classification == ItemClassification.filler:
-            print(f"Created item {name} as {CLASSIFICATION[classification]}")
+        print(f"Created item {name} as {CLASSIFICATION[classification]}")
         return Item(name, classification, ap_code, self.player)
 
     def build_item_pool_dict(self):
