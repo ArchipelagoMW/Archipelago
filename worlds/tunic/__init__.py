@@ -536,11 +536,11 @@ class TunicWorld(World):
                     else:
                         raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
                                         "world filling TUNIC locations during pre_fill.\n"
-                                        "Archipelago does not allow us to place items into the item pool after "
-                                        "create_items, so we cannot recover from this issue.\n"
                                         f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
                                         f"Please let the world dev(s) for the listed world(s) know that there is an "
                                         f"issue there.\n"
+                                        "Archipelago does not allow us to place items into the item pool after "
+                                        "create_items, so we cannot recover from this issue.\n"
                                         "As a workaround, you can try setting the local_filler option lower for "
                                         "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
                                         "try generating again, as it may not happen every generation.")
@@ -560,11 +560,11 @@ class TunicWorld(World):
                     else:
                         raise Exception("TUNIC: Could not fulfill local_filler option. This issue is caused by another "
                                         "world filling TUNIC locations during pre_fill.\n"
-                                        "Archipelago does not allow us to place items into the item pool after "
-                                        "create_items, so we cannot recover from this issue.\n"
                                         f"This is likely caused by the following world(s): {out_of_spec_worlds}.\n"
                                         f"Please let the world dev(s) for the listed world(s) know that there is an "
                                         f"issue there.\n"
+                                        "Archipelago does not allow us to place items into the item pool after "
+                                        "create_items, so we cannot recover from this issue.\n"
                                         "As a workaround, you can try setting the local_filler option lower for "
                                         "TUNIC slots with Breakable Shuffle or Grass Rando enabled. You may be able to "
                                         "try generating again, as it may not happen every generation.")
