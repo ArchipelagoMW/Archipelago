@@ -2445,7 +2445,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000031, 0x00000004],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Pachirisu"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Pachirisu"]
             )
         ],
@@ -2471,10 +2471,9 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000002f, 0x00000005],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Munchlax"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Tropius Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Munchlax"],
-                is_special_exception=True
             )
         ]
     ),
@@ -2486,9 +2485,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000017],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Tropius"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Tropius"],
-                is_special_exception=True
             )
         ],
     ),
@@ -2500,8 +2498,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000002d, 0x00000002],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Turtwig"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Bonsly Unlock"], UNLOCK_ITEMS["Pachirisu Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Turtwig"]
             )
         ],
@@ -2514,8 +2512,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000f],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Bonsly"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Sudowoodo Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Bonsly"]
             ),
             PokemonLocation(
@@ -2545,7 +2543,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000001a],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Sudowoodo"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Sudowoodo"]
             ),
             PokemonLocation(
@@ -2566,8 +2564,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000003],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Buneary"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Lotad Unlock"], UNLOCK_ITEMS["Shinx Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Buneary"]
             )
         ],
@@ -2580,13 +2578,23 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000010, 0x0000002c],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Shinx"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Shinx"]
             )
         ],
     ),
     FRIENDSHIP_ITEMS["Mankey"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x80375314, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375314, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=meadow_zone_stage_id,
+                pokemon_ids=[0x00000011],
+                friendship_items_to_block=[],
+                locationId=FRIENDSHIP_ITEMS["Mankey"]
+            )
+        ],
     ),
     FRIENDSHIP_ITEMS["Spearow"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x803753C8, memory_range=MemoryRange.BYTE, value=0x80),
@@ -2596,7 +2604,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000027, 0x00000013],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Spearow"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Spearow"]
             )
         ],
@@ -2609,8 +2617,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000001d],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Croagunk"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Scyther Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Croagunk"]
             )
         ],
@@ -2626,7 +2634,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000021, 0x00000009, 0x00000028, 0x00000029],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Lotad"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Lotad"]
             )
         ],
@@ -2639,7 +2647,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000006],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Treecko"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Treecko"]
             )
         ],
@@ -2652,8 +2660,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000a],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Caterpie"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Butterfree Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Caterpie"]
             )
         ],
@@ -2666,7 +2674,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000002e, 0x00000016],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Butterfree"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Butterfree"]
             )
         ]
@@ -2679,7 +2687,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000007],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Chimchar"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Chimchar"]
             ),
             PokemonLocation(
@@ -2708,8 +2716,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000025, 0x00000012],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Aipom"]],
-                unlock_items_to_block=[UNLOCK_ITEMS["Ambipom Unlock"]],
+                friendship_items_to_block=[],
+                unlock_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Aipom"]
             ),
             PokemonLocation(
@@ -2731,7 +2739,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000019],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Ambipom"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Ambipom"]
             ),
             PokemonLocation(
@@ -2752,7 +2760,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000b],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Weedle"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Weedle"]
             )
         ]
@@ -2765,7 +2773,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000e],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Shroomish"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Shroomish"]
             )
         ]
@@ -2778,7 +2786,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000008],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Magikarp"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Magikarp"]
             )
         ]
@@ -2791,7 +2799,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000d],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Oddish"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Oddish"]
             )
         ]
@@ -2804,9 +2812,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000001C],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Leafeon"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Leafeon"],
-                is_special_exception=True
             )
         ]
     ),
@@ -2818,11 +2825,8 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000000c],
-                unlock_items_to_block=[UNLOCK_ITEMS["Bidoof Unlock"],
-                                       UNLOCK_ITEMS["Bidoof Unlock 2"],
-                                       UNLOCK_ITEMS["Bidoof Unlock 3"],
-                                       UNLOCK_ITEMS["Bidoof Unlock 3"]],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Bidoof"]],
+                unlock_items_to_block=[],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Bidoof"]
             )
         ]
@@ -2835,7 +2839,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000023, 0x00000024, 0x0000002a, 0x00000015, 0x00000026],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Starly"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Starly"]
             ),
             PokemonLocation(  # Beach Zone
@@ -2864,7 +2868,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000014],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Torterra"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Torterra"]
             )
         ]
@@ -2877,7 +2881,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x00000018],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Bibarel"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Bibarel"]
             )
         ]
@@ -2890,7 +2894,7 @@ POKEMON_STATES = {
                                        memory_range=MemoryRange.BYTE),
                 zone_id=meadow_zone_stage_id,
                 pokemon_ids=[0x0000001b],
-                friendship_items_to_block=[FRIENDSHIP_ITEMS["Scyther"]],
+                friendship_items_to_block=[],
                 locationId=FRIENDSHIP_ITEMS["Scyther"]
             )
         ]
@@ -5203,7 +5207,6 @@ UNLOCKS: dict[int, UnlockState] = {
                     value=0x02
                 ),
                 locationId=UNLOCK_ITEMS["Caterpie Unlock"],
-                is_blocked_until_location=True,
                 zone_id=meadow_zone_stage_id
             )
         ],
@@ -5295,7 +5298,6 @@ UNLOCKS: dict[int, UnlockState] = {
                 value=0x04
             ),
             locationId=UNLOCK_ITEMS["Weedle Unlock"],
-            is_blocked_until_location=True,
             zone_id=meadow_zone_stage_id
         )],
     ),
@@ -5314,7 +5316,6 @@ UNLOCKS: dict[int, UnlockState] = {
                 value=0x20
             ),
             locationId=UNLOCK_ITEMS["Shroomish Unlock"],
-            is_blocked_until_location=True,
             zone_id=meadow_zone_stage_id
         )],
 
@@ -5335,7 +5336,6 @@ UNLOCKS: dict[int, UnlockState] = {
                     value=0x80
                 ),
                 locationId=UNLOCK_ITEMS["Magikarp Unlock"],
-                is_blocked_until_location=True,
                 zone_id=meadow_zone_stage_id
             )
         ],
@@ -6320,28 +6320,3 @@ berry_item_checks = {
     BERRIES["50 Berries"]: [(0x8037AEDE, 0x32)],
     BERRIES["100 Berries"]: [(0x8037AEDE, 0x64)],
 }
-
-logic_adresses = [
-    # clean up pokemon id
-    (0x8004faa0, 0x3d808037),
-    (0x8004faa4, 0x38600000),
-    (0x8004faa8, 0x906CDC20),
-    (0x8004faac, 0x4e800020),
-
-    # Friendship trigger logic
-    (0x80126508, 0x98030001),
-    # unlock trigger logic
-    (0x8018397c, 0x90047fff),
-    (0x80183970, 0x38600000),
-
-    # find out pokemon id
-    (0x80026664, 0x3ca08037),
-    (0x80026668, 0x9085dc20),
-    (0x8002666c, 0x4e800020),
-
-    # prism trigger logic
-    (0x801261e0, 0x90037fff),
-
-    # deactivate power level up
-    (0x801268f4, 0x60000000)
-]

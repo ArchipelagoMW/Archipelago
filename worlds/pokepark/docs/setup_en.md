@@ -6,6 +6,7 @@
 - Dolphin
 - Dolphin Memory Engine
 - Pokepark JP Game File [R8AJ01]
+- [pokeparkrando Patcher](https://github.com/Mekurushi/pokeparkrando/releases/latest)
 
 ## Installation
 
@@ -24,6 +25,7 @@
 
 ## Playing a Game
 
-1. Launch the Pokepark game through Dolphin.
-2. Start the Pokepark Archipelago client and connect while at the main menu.
-3. If you begin in the Gathering Zone (Treehouse), everything has been set up correctly.
+1. Patch the Pokepark Iso with the Pokeparkrando Patcher.
+2. Launch the patched Pokepark Iso with Dolphin.
+3. Start the Pokepark Archipelago client and connect while at the main menu.
+4. If you begin in the Gathering Zone (Treehouse), everything has been set up correctly.

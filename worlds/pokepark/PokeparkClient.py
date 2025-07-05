@@ -13,7 +13,6 @@ from worlds.pokepark.adresses import \
 from worlds.pokepark.dme_helper import write_memory
 from worlds.pokepark.watcher.location_state_watcher import location_state_watcher
 from worlds.pokepark.watcher.location_watcher import location_watcher
-from worlds.pokepark.watcher.logic_watcher import logic_watcher
 from worlds.pokepark.watcher.world_state_watcher import state_watcher
 
 ModuleUpdate.update()
@@ -279,7 +278,6 @@ def main(connect=None, password=None):
         progression_watcher = asyncio.create_task(
             game_watcher(ctx), name="PokeparkProgressionWatcher")
         loc_watch = asyncio.create_task(location_watcher(ctx))
-        logic_watch = asyncio.create_task(logic_watcher(ctx))
         state_watch = asyncio.create_task(state_watcher(ctx))
         location_state_watch = asyncio.create_task(location_state_watcher(ctx))
 
@@ -292,11 +290,6 @@ def main(connect=None, password=None):
             await loc_watch
         except Exception as e:
             logger.exception(f"Exception in location_watcher: {str(e)}")
-
-        try:
-            await logic_watch
-        except Exception as e:
-            logger.exception(f"Exception in logic_watcher: {str(e)}")
 
         try:
             await state_watch

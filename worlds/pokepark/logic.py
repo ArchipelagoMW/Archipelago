@@ -3566,6 +3566,13 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
+        Location(name="Mankey",
+                 id=FRIENDSHIP_ITEMS["Mankey"],
+                 requirements=Requirements(
+                     powers=PowerRequirement.can_battle
+                 )),
+    )
+    meadow_zone_overworld.friendship_locations.append(
         Location(name="Spearow",
                  id=FRIENDSHIP_ITEMS["Spearow"],
                  requirements=Requirements(
@@ -3600,7 +3607,6 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  requirements=Requirements(
                      unlock_names=["Caterpie Unlock"],
                      powers=PowerRequirement.can_play_catch,
-                     can_reach_locations=["Meadow Zone - Overworld - Caterpie Tree Dash"]
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
@@ -3640,9 +3646,6 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  requirements=Requirements(
                      unlock_names=["Weedle Unlock"],
                      powers=PowerRequirement.can_dash_overworld,
-                     # generation tweak so battle and unlock location are reachable
-                     can_reach_locations=["Meadow Zone - Overworld - Weedle Tree Dash"]
-
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
@@ -3651,7 +3654,6 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  requirements=Requirements(
                      unlock_names=["Shroomish Unlock"],
                      powers=PowerRequirement.can_play_catch,
-                     can_reach_locations=["Meadow Zone - Overworld - Shroomish Crate Dash"]
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
@@ -3660,7 +3662,6 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  requirements=Requirements(
                      unlock_names=["Magikarp Unlock"],
                      powers=PowerRequirement.can_play_catch,
-                     can_reach_locations=["Meadow Zone - Overworld - Magikarp electrocuted"]
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(

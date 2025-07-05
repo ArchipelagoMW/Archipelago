@@ -17,10 +17,6 @@ The following locations are affected:
 
 | Zone         | Friendship Location | Unlock Location                          |
 |--------------|---------------------|------------------------------------------|
-| Meadow Zone  | Caterpie            | Caterpie Tree Dash                       |
-| Meadow Zone  | Weedle              | Weedle Tree Dash                         |
-| Meadow Zone  | Magikarp            | Magikarp electrocuted                    |
-| Meadow Zone  | Shroomish           | Shroomish Crate Dash                     |
 | Beach Zone   | Krabby              | Bottle Recycling 2 - Pokemon Unlock      |
 | Beach Zone   | Corpish             | Bottle Recycling 4 - Pokemon Unlock      |
 | Cavern Zone  | Magnemite 1         | Magnemite Crate Dash Entrance Area       |
@@ -55,15 +51,20 @@ that the friendship location has been checked.
 
 ## Known Issues / Limitations
 
-- Patching the game file is being considered as an alternative approach.
 - The first time completing the Prisma Shard goal in a minigame will cause the player to be ejected, which is required
   to check the Prisma location.
 - Tracker is currently missing.
 - Item classifications are heavily focused on progression items.
-- Tutorial popups have not yet been removed.
 - Minigames and friendships still reward Berries (currency). This is intentional for now, as removing it leads
   potentially to
   excessive grinding.
+
+## Future
+
+- Adding configuration options for battle count Pokemon (e.g Scyther) and friendship count Pokemon (e.g Leafeon)
+- Adding more event Pokemon as Locations
+- Visualizing closed Zone Gates
+- Creating own Zone Unlock for Magma Zone
 
 
 
