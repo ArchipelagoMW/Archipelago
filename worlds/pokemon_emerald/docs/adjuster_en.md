@@ -51,7 +51,7 @@ Sprite Pack/
 <u>Note:</u> If sprites contain several frames, then said frames must be vertical: a `64x64px` sprite with `2`
 frames will require a `64x128px` sprite.
 
-<u><b>Warning:</b></u> All sprites used in sprite packs must be <u>Indexed PNG</u> files. Some pixel editing
+<u>**Warning:**</u> All sprites used in sprite packs must be <u>Indexed PNG</u> files. Some pixel editing
 programs such as <u>Aseprite</u> allow you to make those easily instead of standard PNG files.
 
 Different types of folder exists: mainly Pokémon folders, and Player folders.
@@ -272,7 +272,7 @@ screen in your team. The sprite can't be flipped if the option is ticked, otherw
 format `<move>: <level>`, with `<move>` a known Pokémon move from this generation, and `<level>` a number between 1
 and 100.
 
-<u><b>Warning:</b></u> Some of these values may overwrite randomization options selected in Archipelago: if the
+<u>**Warning:**</u> Some of these values may overwrite randomization options selected in Archipelago: if the
 Pokémon's base stats or level up move pool have been randomized, the adjuster will replace the randomized values
 with its values.
 
