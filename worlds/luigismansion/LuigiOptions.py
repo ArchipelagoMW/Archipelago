@@ -179,7 +179,8 @@ class HintDistribution(Choice):
     default = 0
 
 class PickupAnim(DefaultOnToggle):
-    """Turn on Luigi's pickup animations"""
+    """Turn on Luigi's pickup animations.
+    Set this to false if you want to turn these animations off."""
     display_name = "Enable Pickup Animation"
     internal_name = "enable_pickup_animation"
 
@@ -336,7 +337,8 @@ class DoorRando(Toggle):
 
 
 class LuigiFearAnim(DefaultOnToggle):
-    """Turn on Luigi being scared by ghosts if they spawn close to him"""
+    """Turn on Luigi being scared by ghosts if they spawn close to him.
+    Set this to false if you want to turn it off"""
     display_name = "Enable Fear Animation"
     internal_name = "enable_fear_animation"
 
