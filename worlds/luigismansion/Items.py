@@ -295,7 +295,7 @@ RECV_ITEMS_IGNORE: list[int] = [8127]
 # List of health related items, which are used to not exceed max health
 HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
 
-ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap"]
+ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap", "Paralyze Trap", "Chaos Control Trap"]
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
 BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
 GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap"]
