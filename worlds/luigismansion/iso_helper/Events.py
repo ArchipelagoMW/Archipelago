@@ -182,7 +182,7 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
     if hint_distribution_choice == 1:
         for portrait_name in PORTRAIT_HINTS:
             jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+            joke_hint = random.choice(str.splitlines(jokes)).replace("{BreakHere}", "\n")
             csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
     else:
         for portrait_name, portrait_hint in all_hints.items():
@@ -240,7 +240,7 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
             case_type = "DisabledHint"
         case 1:
             jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+            joke_hint = random.choice(str.splitlines(jokes))
             csv_lines = csv_lines.replace("{JokeText}", joke_hint)
             case_type = "JokeHint"
         case _:
@@ -326,7 +326,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 case_type = "DisabledHint"
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-                joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+                joke_hint = random.choice(str.splitlines(jokes))
                 csv_lines = csv_lines.replace("{JokeText}", joke_hint)
                 case_type = "JokeHint"
             case _:
