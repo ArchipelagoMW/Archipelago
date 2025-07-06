@@ -5,8 +5,8 @@ import json
 from pkgutil import get_data
 
 from gclib.rarc import RARC
-from .JMP_Field_Header import JMPFieldHeader
-from .Helper_Functions import StringByteFunction as sbf
+from worlds.luigismansion.iso_helper.JMP_Field_Header import JMPFieldHeader
+from worlds.luigismansion.Helper_Functions import StringByteFunction as sbf
 
 IMPORTANT_HEADER_BYTE_LENGTH = 16
 FIELD_DATA_BYTE_LENGTH = 12
