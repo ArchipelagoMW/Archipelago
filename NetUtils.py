@@ -106,7 +106,10 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     return obj
 
 
-def convert_to_base_types(obj: typing.Any) -> typing.Any:
+_base_types = str | int | bool | float | None
+
+
+def convert_to_base_types(obj: typing.Any) -> _base_types | tuple[_base_types, ...] | dict[_base_types, _base_types]:
     if isinstance(obj, (tuple, list, set, frozenset)):
         return tuple(convert_to_base_types(o) for o in obj)
     elif isinstance(obj, dict):
