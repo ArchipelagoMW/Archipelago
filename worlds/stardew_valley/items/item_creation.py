@@ -266,8 +266,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
     items.append(item_factory(Wallet.club_card))
     items.append(item_factory(Wallet.magnifying_glass))
-    if options.include_endgame_locations == IncludeEndgameLocations.option_true:
-        items.append(item_factory(Wallet.magic_ink))
+    items.append(item_factory(Wallet.magic_ink))
     if ModNames.sve in content.registered_packs:
         items.append(item_factory(Wallet.bears_knowledge))
     else:
