@@ -84,7 +84,8 @@ class CrystalProjectWorld(World):
         self.starter_region: str = ""
         self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
-        self.statically_placed_jobs:int = 0
+        self.statically_placed_jobs: int = 0
+        self.starting_progressive_levels: int = 1
 
     def generate_early(self):
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
@@ -101,7 +102,15 @@ class CrystalProjectWorld(World):
                 self.multiworld.push_precollected(self.create_item(map_name))
 
         if not self.options.levelGating.value == self.options.levelGating.option_none:
-            self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
+            #3 is Spawning Meadows' level
+            starting_level_so_you_can_do_anything = 3 + self.options.levelComparedToEnemies.value
+            if starting_level_so_you_can_do_anything < 3:
+                starting_level_so_you_can_do_anything = 3
+
+            # Players start with at least 1 Progressive Level, but we add more if their Level Compared to Enemies setting is positive
+            self.starting_progressive_levels = ((starting_level_so_you_can_do_anything - 1) // self.options.progressiveLevelSize.value) + 1
+            for _ in range(self.starting_progressive_levels):
+                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
@@ -411,8 +420,8 @@ class CrystalProjectWorld(World):
         if not self.options.levelGating.value == self.options.levelGating.option_none:
             #guarantee space for 2 clamshells, one on the following line and one because you start with 1 progressive level already
             max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 1
-            #players start with one
-            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - 1):
+            #players start with one or more, depending on their Level Compared to Enemies setting
+            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - self.starting_progressive_levels):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 
