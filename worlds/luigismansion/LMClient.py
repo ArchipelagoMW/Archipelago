@@ -79,7 +79,7 @@ RECV_ITEM_NAME_ADDR = 0x804DE1F8
 RECV_ITEM_LOC_ADDR = 0x804DE220
 RECV_ITEM_SENDER_ADDR = 0x804DE240
 RECV_MAX_STRING_LENGTH = 24
-RECV_LINE_STRING_LENGTH = 27
+RECV_LINE_STRING_LENGTH = 26
 FRAME_AVG_COUNT = 30
 
 # This is the flag address we use to determine if Luigi is currently in an Event.
@@ -737,18 +737,23 @@ async def give_player_items(ctx: LMContext):
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             item_name_display = lm_item_name[:RECV_MAX_STRING_LENGTH].replace("&", "")
-            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+            short_item_name = sbf.string_to_bytes_with_limit(item_name_display, RECV_LINE_STRING_LENGTH)
+            dme.write_bytes(RECV_ITEM_NAME_ADDR, short_item_name + b'\x00')
 
             if item.player == ctx.slot:
-                loc_name_display = ctx.location_names.lookup_in_game(item.location)
+                loc_name_retr = ctx.location_names.lookup_in_game(item.location)
             else:
-                loc_name_display = ctx.location_names.lookup_in_slot(item.location, item.player)
-            loc_name_display = loc_name_display[:SLOT_NAME_STR_LENGTH].replace("&", "")
-            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+                loc_name_retr = ctx.location_names.lookup_in_slot(item.location, item.player)
+            loc_name_display = loc_name_retr[:SLOT_NAME_STR_LENGTH].replace("&", "")
+            loc_name_bytes = sbf.string_to_bytes_with_limit(loc_name_display, RECV_LINE_STRING_LENGTH)
+            dme.write_bytes(RECV_ITEM_LOC_ADDR, loc_name_bytes + b'\x00')
 
-            recv_name_display = ctx.player_names[item.player].replace("&", "")
-            recv_name_display = recv_name_display[:SLOT_NAME_STR_LENGTH] + "'s Game"
-            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+            recv_full_player_name = ctx.player_names[item.player]
+            recv_name_repl = recv_full_player_name.replace("&", "")
+            short_recv_name = sbf.string_to_bytes_with_limit(recv_name_repl, SLOT_NAME_STR_LENGTH)
+            recv_name_display = short_recv_name.decode("utf-8") + "'s Game"
+            dme.write_bytes(RECV_ITEM_SENDER_ADDR,
+                sbf.string_to_bytes_with_limit(recv_name_display, RECV_LINE_STRING_LENGTH) + b'\x00')
 
             dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
             await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16)/FRAME_AVG_COUNT)
