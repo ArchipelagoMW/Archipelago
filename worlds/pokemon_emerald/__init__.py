@@ -68,6 +68,7 @@ class PokemonEmeraldWebWorld(WebWorld):
         ["Tsukino"]
     )
 
+    # Add this doc file when the adjuster is merged
     adjuster_en = Tutorial(
         "Usage Guide",
         "A guide to use the Pokemon Gen 3 Adjuster with Pokemon Emerald.",
@@ -77,7 +78,7 @@ class PokemonEmeraldWebWorld(WebWorld):
         ["RhenaudTheLukark"]
     )
 
-    tutorials = [setup_en, setup_es, setup_sv, adjuster_en]
+    tutorials = [setup_en, setup_es, setup_sv]
     option_groups = OPTION_GROUPS
 
 
