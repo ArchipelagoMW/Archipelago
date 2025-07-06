@@ -104,7 +104,7 @@ class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
         self.collect("Island Resort")
         self.collect("Dig Site Bridge")
         self.collect("Progressive House")
-        self.collect("Progressive Pan")
+        self.collect("Progressive Pan", 4)
         self.collect("Progressive Fishing Rod")
         self.collect("Progressive Watering Can")
         self.collect("Progressive Pickaxe", 4)
