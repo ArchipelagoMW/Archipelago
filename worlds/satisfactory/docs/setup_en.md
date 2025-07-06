@@ -33,19 +33,11 @@ The Player Settings page on the website
 allows you to configure your personal settings and export a config file from them.
 Satisfactory player settings page: [Satisfactory Settings Page](/games/Satisfactory/player-settings)
 
-> ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
-> Manually construct a yaml yourself from the one pinned in the Discord:
-> <https://discord.com/channels/731205301247803413/1018853131859267656>
-
 ### Verifying Your Config File
 
 If you would like to validate your config file to make sure it works,
 you may do so on the YAML Validator page.
 YAML Validator page: [Yaml Validation Page](/mysterycheck)
-
-> ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
-> Manually construct a yaml yourself from the one pinned in the Discord:
-> <https://discord.com/channels/731205301247803413/1018853131859267656>
 
 ### Starting Inventory
 
@@ -64,13 +56,7 @@ to spawn the items you desire.
 Advanced users can utilize the
 [Weighted Options Page](/weighted-options)
 and [Plando](/tutorial/Archipelago/plando)
-to futher customize their experience.
-
-> ⚠ Pre-Release Note: The above links do not work because it would go to the live Archipelago site.
-> See these links instead:
->
-> - <https://archipelago.gg/tutorial/Archipelago/advanced_settings/en>
-> - <https://archipelago.gg/tutorial/Archipelago/plando/en>
+to further customize their experience.
 
 ## Prepare to Host Your Own Satisfactory Game
 
@@ -130,10 +116,6 @@ desktop shortcuts, Steam, Epic. etc. will all launch the game with mods still lo
 You may also wish to install some of the suggested mods mentioned on the
 [Archipelago Info page for Satisfactory](/games/Satisfactory/info/en#additional-mods).
 
-> ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
-> Use this link instead:
-> <https://github.com/Jarno458/Archipelago/blob/Satisfactory/worlds/satisfactory/docs/en_Satisfactory.md#additional-mods>
-
 ### Creating a New World
 
 After you have installed the mods, launch the game via the Mod Manager or via your preferred method.
@@ -156,11 +138,7 @@ Within the Advanced Game Settings menus,
 you may wish to switch the "Keep Inventory" setting to "Keep Everything" to avoid dropping items on death,
 although this will never lock you out of progression.
 
-> Note: Satisfactory dedicated servers do not currently have a user interface for the Mod Savegame Setting system.
-> and [the starting inventory feature does not currently work on dedicated servers](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/105).
-> If you are setting up a dedicated server as your Satisfactory Server, to work around these limitations,
-> create the save locally in your Satisfactory Client first,
-> then upload the save file to your Satisfactory Server using the [Server Manager](https://satisfactory.wiki.gg/wiki/Dedicated_servers#Loading_a_save_file).
+> note: [the starting inventory feature currently gets send to the portal on dedicated servers](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/105).
 
 ### Verifying Connection Success
 
@@ -172,21 +150,7 @@ For more information about the commands you can use, see the [Commands Guide](/t
 Note that Archipelago commands are not prefixed with `!` inside of Satisfactory.
 You may wish to use the Text Client to run commands since Satisfactory's in game chat is not very user friendly.
 
-> ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
-> Use this link instead:
-> <https://archipelago.gg/tutorial/Archipelago/commands/en>
-
 Check out the HUB to get started!
-
-> ⚠ IMPORTANT: Check your HUB immediately upon joining to ensure your save file has been set up correctly!
-> Make sure that you see multiple HUB milestones from Archipelago in Tier 1 and Tier 2.
-> If you don't, ensure your connection details are correct.
-> If that doesn't work, contact us on the Archipelago discord.
-> See more information about this bug on the [GitHub issue tracker](https://github.com/Jarno458/SatisfactoryArchipelagoMod/issues/120).
-
-<!-- ## Other Settings
-
-TODO implement filter_item_sends and bridge_chat_out mentioned in the Factorio guide? -->
 
 ## Troubleshooting
 

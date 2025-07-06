@@ -7,10 +7,6 @@
 The [player settings page for this game](../player-options)
 contains all the options you need to configure and export a config file.
 
-> ⚠ Pre-Release Note: The above link does not work because it would go to the live Archipelago site.
-> Manually construct a yaml yourself from the one pinned in the Discord:
-> <https://discord.com/channels/731205301247803413/1018853131859267656>
-
 ## What does randomization do to this game?
 
 In Satisfactory, the HUB Milestones and MAM Research Nodes are shuffled,
@@ -199,13 +195,8 @@ when you install it using the Satisfactory Mod Manager:
 
 The following mods are known to work with Archipelago:
 
-<!-- Nog's Chat currently broken -->
-<!-- - [Nog's Chat](https://ficsit.app/mod/NogsChat) - Easily repeat past chat messages, improving the user experience of running Archipelago commands in the game's chat window. -->
 - [TFIT - FICSIT Information Tool](https://ficsit.app/mod/TFIT) - View how many Sink Points items are worth and how points-profitable recipes are. Helpful for the AWESOME Sink goals.
 - [Faster Manual Crafting Redux](https://ficsit.app/mod/FasterManualCraftingRedux) - Reduce the early game manual crafting grind with a manual crafting speed that ramps up as you craft larger batches at once.
-<!-- TODO Test these  -->
-<!-- - [Infinite Zoop](https://ficsit.app/mod/InfiniteZoop) - Adds a research tree in the MAM where you can improve your Zoop capacity. Also enables multi-row & column Wall and Foundation construction.  -->
-<!-- - [Nog's Research](https://ficsit.app/mod/NogsResearch/) - Queue Milestones and MAM Nodes for automatic research in the style of Factorio's research queue. Queue type might need to be changed to soft class reference to save CL schematics. -->
 
 The following mods have been used successfully by other players but have not been thoroughly tested with Archipelago:
 
