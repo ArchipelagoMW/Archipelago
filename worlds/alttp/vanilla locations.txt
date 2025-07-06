@@ -1,0 +1,257 @@
+default_connections = [
+    ("Hyrule Castle Secret Entrance Exit", "Hyrule Castle Courtyard"),
+    ('Kakariko Well Exit', 'Light World'),
+    ('Bat Cave Exit', 'Light World'),
+    ('Elder House Exit (East)', 'Light World'),
+    ('Elder House Exit (West)', 'Light World'),
+    ('North Fairy Cave Exit', 'Light World'),
+    ('Lumberjack Tree Exit', 'Light World'),
+    ('Lost Woods Hideout Exit', 'Light World'),
+    ('Two Brothers House Exit (East)', 'Light World'),
+    ('Two Brothers House Exit (West)', 'Maze Race Ledge'),
+    ('Sanctuary Exit', 'Light World'),
+    ('Old Man Cave Exit (West)', 'Light World'),
+    ('Old Man Cave Exit (East)', 'Death Mountain'),
+    ('Old Man House Exit (Bottom)', 'Death Mountain'),
+    ('Old Man House Exit (Top)', 'Death Mountain'),
+    ('Death Mountain Return Cave Exit (West)', 'Death Mountain Return Ledge'),
+    ('Death Mountain Return Cave Exit (East)', 'Death Mountain'),
+    ('Spectacle Rock Cave Exit', 'Death Mountain'),
+    ('Spectacle Rock Cave Exit (Top)', 'Death Mountain'),
+    ('Spectacle Rock Cave Exit (Peak)', 'Death Mountain'),
+    ('Fairy Ascension Cave Exit (Bottom)', 'Fairy Ascension Plateau'),
+    ('Spiral Cave Exit', 'East Death Mountain (Bottom)'),
+    ('Spiral Cave Exit (Top)', 'Spiral Cave Ledge'),
+    ('Bumper Cave Exit (Top)', 'Bumper Cave Ledge'),
+    ('Bumper Cave Exit (Bottom)', 'West Dark World'),
+    ('Superbunny Cave Exit (Top)', 'Dark Death Mountain (Top)'),
+    ('Superbunny Cave Exit (Bottom)', 'Dark Death Mountain (East Bottom)'),
+    ('Hookshot Cave Exit (South)', 'Dark Death Mountain (Top)'),
+    ('Hookshot Cave Exit (North)', 'Death Mountain Floating Island (Dark World)'),
+    ('Pyramid Exit', 'Pyramid Ledge'),
+    ('Paradox Cave Exit (Bottom)', 'East Death Mountain (Bottom)'),
+    ('Paradox Cave Exit (Middle)', 'East Death Mountain (Bottom)'),
+    ('Paradox Cave Exit (Top)', 'East Death Mountain (Top)'),
+    ('Fairy Ascension Cave Exit (Top)', 'Fairy Ascension Ledge'),
+    ('Desert Palace Exit (South)', 'Desert Palace Stairs'),
+    ('Desert Palace Exit (West)', 'Desert Ledge'),
+    ('Desert Palace Exit (East)', 'Desert Palace Lone Stairs'),
+    ('Desert Palace Exit (North)', 'Desert Palace Entrance (North) Spot'),
+    ('Eastern Palace Exit', 'Light World'),
+    ('Tower of Hera Exit', 'Death Mountain (Top)'),
+    ('Hyrule Castle Exit (South)', 'Hyrule Castle Courtyard'),
+    ('Hyrule Castle Exit (West)', 'Hyrule Castle Ledge'),
+    ('Hyrule Castle Exit (East)', 'Hyrule Castle Ledge'),
+    ('Thieves Town Exit', 'West Dark World'),
+    ('Skull Woods First Section Exit', 'Skull Woods Forest'),
+    ('Skull Woods Second Section Exit (East)', 'Skull Woods Forest'),
+    ('Skull Woods Second Section Exit (West)', 'Skull Woods Forest (West)'),
+    ('Skull Woods Final Section Exit', 'Skull Woods Forest (West)'),
+    ('Ice Palace Exit', 'Dark Lake Hylia Central Island'),
+    ('Misery Mire Exit', 'Dark Desert'),
+    ('Palace of Darkness Exit', 'East Dark World'),
+    ('Swamp Palace Exit', 'South Dark World'),
+    ('Turtle Rock Exit (Front)', 'Dark Death Mountain (Top)'),
+    ('Turtle Rock Ledge Exit (West)', 'Dark Death Mountain Ledge'),
+    ('Turtle Rock Ledge Exit (East)', 'Dark Death Mountain Ledge'),
+    ('Turtle Rock Isolated Ledge Exit', 'Dark Death Mountain Isolated Ledge'),
+    ('Ganons Tower Exit', 'Dark Death Mountain (Top)'),
+    ('Agahnims Tower Exit', 'Hyrule Castle Ledge'),
+
+    //flipper
+    ('Capacity Upgrade', 'Capacity Upgrade'),
+    ('Waterfall of Wishing', 'Waterfall of Wishing'),
+    
+    //nothing
+    ('Hyrule Castle Entrance (South)', 'Hyrule Castle'),
+    ("Blinds Hideout", "Blinds Hideout"),
+    ('Dam', 'Dam'),
+    ('Lumberjack House', 'Lumberjack House'),
+    ("Hyrule Castle Secret Entrance Drop", "Hyrule Castle Secret Entrance"),
+    ("Hyrule Castle Secret Entrance Stairs", "Hyrule Castle Secret Entrance"),
+    ('Lake Hylia Fairy', 'Lake Hylia Healer Fairy'),
+    ('Lake Hylia Fortune Teller', 'Lake Hylia Fortune Teller'),
+    ('Desert Fairy', 'Desert Healer Fairy'),
+    ('Tavern North', 'Tavern'),
+    ('Chicken House', 'Chicken House'),
+    ('Aginahs Cave', 'Aginahs Cave'),
+    ('Sahasrahlas Hut', 'Sahasrahlas Hut'),
+    ('Cave Shop (Lake Hylia)', 'Cave Shop (Lake Hylia)'),
+    ('Kakariko Well Drop', 'Kakariko Well (top)'),
+    ('Kakariko Well Cave', 'Kakariko Well (bottom)'),
+    ('Blacksmiths Hut', 'Blacksmiths Hut'),
+    ('Bat Cave Cave', 'Bat Cave (left)'),
+    ('Sick Kids House', 'Sick Kids House'),
+    ('Elder House (East)', 'Elder House'),
+    ('Elder House (West)', 'Elder House'),
+    ('North Fairy Cave Drop', 'North Fairy Cave'),
+    ('North Fairy Cave', 'North Fairy Cave'),
+    ('Lost Woods Gamble', 'Lost Woods Gamble'),
+    ('Fortune Teller (Light)', 'Fortune Teller (Light)'),
+    ('Snitch Lady (East)', 'Snitch Lady (East)'),
+    ('Snitch Lady (West)', 'Snitch Lady (West)'),
+    ('Bush Covered House', 'Bush Covered House'),
+    ('Tavern (Front)', 'Tavern (Front)'),
+    ('Kakariko Shop', 'Kakariko Shop'),
+    ('Lost Woods Hideout Drop', 'Lost Woods Hideout (top)'),
+    ('Lost Woods Hideout Stump', 'Lost Woods Hideout (bottom)'),
+    ('Lumberjack Tree Cave', 'Lumberjack Tree (bottom)'),
+    ('Long Fairy Cave', 'Long Fairy Cave'),
+    ('Good Bee Cave', 'Good Bee Cave'),
+    ('Library', 'Library'),
+    ('Kakariko Gamble Game', 'Kakariko Gamble Game'),
+    ('Potion Shop', 'Potion Shop'),
+    ('Two Brothers House (East)', 'Two Brothers House'),
+    ('Sanctuary', 'Sanctuary'),
+    ('Eastern Palace', 'Eastern Palace'),
+    
+    //pegasus boots
+    ('Bonk Fairy (Light)', 'Bonk Fairy (Light)'),
+    ('Bonk Rock Cave', 'Bonk Rock Cave'),
+
+    //bomb
+    ('Light Hype Fairy', 'Swamp Healer Fairy'),
+    ('Light World Bomb Hut', 'Light World Bomb Hut'),
+    ('Ice Rod Cave', 'Ice Rod Cave'),
+    ('Mini Moldorm Cave', 'Mini Moldorm Cave'),
+    
+    //hammer
+    ('Bat Cave Drop', 'Bat Cave (right)'),
+
+    //aga1
+    ('Lumberjack Tree Tree', 'Lumberjack Tree (top)'),
+
+
+    
+    //glove
+    ('20 Rupee Cave', '20 Rupee Cave'),
+    ('50 Rupee Cave', '50 Rupee Cave'),
+    ('Two Brothers House (West)', 'Two Brothers House'),
+    ('Sanctuary Grave', 'Sewer Drop'),
+    ('Old Man Cave (West)', 'Old Man Cave'),
+
+
+//Death Mountain West
+    //nothing
+    ('Old Man Cave (East)', 'Old Man Cave'),
+    ('Old Man House (Bottom)', 'Old Man House'),
+    ('Old Man House (Top)', 'Old Man House Back'),
+    ('Death Mountain Return Cave (East)', 'Death Mountain Return Cave'),
+    ('Spectacle Rock Cave Peak', 'Spectacle Rock Cave (Peak)'),
+    ('Spectacle Rock Cave (Bottom)', 'Spectacle Rock Cave (Bottom)'),
+    ('Spectacle Rock Cave', 'Spectacle Rock Cave (Top)'),
+    //mirror
+    ('Tower of Hera', 'Tower of Hera (Bottom)'),
+
+//Death Mountain East
+    //top
+    ('Paradox Cave (Top)', 'Paradox Cave'),
+    //a
+    ('Fairy Ascension Cave (Top)', 'Fairy Ascension Cave (Top)'),
+    //b
+    ('Spiral Cave', 'Spiral Cave (Top)'),
+    //bottom
+    ('Paradox Cave (Bottom)', 'Paradox Cave Front'),
+    ('Paradox Cave (Middle)', 'Paradox Cave'),
+    ('Hookshot Fairy', 'Hookshot Fairy'),
+    ('Spiral Cave (Bottom)', 'Spiral Cave (Bottom)'),
+    //bottom-glove 2
+    ('Fairy Ascension Cave (Bottom)', 'Fairy Ascension Cave (Bottom)'),
+
+//Hyrule Castle Ledge
+    ('Hyrule Castle Entrance (West)', 'Hyrule Castle'),
+    ('Hyrule Castle Entrance (East)', 'Hyrule Castle'),
+    //sword 2 || cape
+    ('Agahnims Tower', 'Agahnims Tower'),
+
+
+//only self
+    ('Turtle Rock Isolated Ledge Entrance', 'Turtle Rock (Eye Bridge)'),
+    ('Desert Palace Entrance (East)', 'Desert Palace Main (Outer)'),
+    ('Pyramid Entrance', 'Bottom of Pyramid'),
+    //|| mirror
+    ('Mimic Cave', 'Mimic Cave'),
+    ('Cave 45', 'Cave 45'),
+    ('Graveyard Cave', 'Graveyard Cave'),
+    //|| mirror+location
+    ('Death Mountain Return Cave (West)', 'Death Mountain Return Cave'),
+    //|| mirror - also requires glove 1
+    ('Checkerboard Cave', 'Checkerboard Cave'),
+    //|| book
+    ('Desert Palace Entrance (South)', 'Desert Palace Main (Inner)'),
+    //||glove 2 - also requires pegasus boots
+    ('Kings Grave', 'Kings Grave'),
+    //||mirror+glove
+    ('Desert Palace Entrance (North)', 'Desert Palace North'),
+    //|| mirror
+    ('Desert Palace Entrance (West)', 'Desert Palace Main (Outer)'),
+
+
+
+    //special crystals
+    ('Pyramid Fairy', 'Pyramid Fairy'),
+
+//north dark world
+    ('East Dark World Hint', 'East Dark World Hint'),
+
+
+//south dark world
+    ('Big Bomb Shop', 'Big Bomb Shop'),
+
+//east dark world
+    ('Palace of Darkness Hint', 'Palace of Darkness Hint'),
+    ('Dark Lake Hylia Fairy', 'Dark Lake Hylia Healer Fairy'),
+    ('Dark Lake Hylia Shop', 'Dark Lake Hylia Shop'),
+    //flippers
+    ('Dark Lake Hylia Ledge Fairy', 'Dark Lake Hylia Ledge Healer Fairy'),
+    ('Dark Lake Hylia Ledge Spike Cave', 'Dark Lake Hylia Ledge Spike Cave'),
+    ('Dark Lake Hylia Ledge Hint', 'Dark Lake Hylia Ledge Hint'),
+
+    ('Hype Cave', 'Hype Cave'),
+    ('Bonk Fairy (Dark)', 'Bonk Fairy (Dark)'),
+    ('Brewery', 'Brewery'),
+    ('C-Shaped House', 'C-Shaped House'),
+    ('Chest Game', 'Chest Game'),
+    ('Dark World Hammer Peg Cave', 'Dark World Hammer Peg Cave'),
+    ('Bumper Cave (Bottom)', 'Bumper Cave'),
+    ('Bumper Cave (Top)', 'Bumper Cave'),
+    ('Red Shield Shop', 'Red Shield Shop'),
+    ('Dark Sanctuary Hint', 'Dark Sanctuary Hint'),
+    ('Fortune Teller (Dark)', 'Fortune Teller (Dark)'),
+    ('Village of Outcasts Shop', 'Village of Outcasts Shop'),
+    ('Dark World Lumberjack Shop', 'Dark World Lumberjack Shop'),
+    ('Dark World Potion Shop', 'Dark World Potion Shop'),
+    ('Archery Game', 'Archery Game'),
+    ('Mire Shed', 'Mire Shed'),
+    ('Dark Desert Hint', 'Dark Desert Hint'),
+    ('Dark Desert Fairy', 'Dark Desert Healer Fairy'),
+    ('Spike Cave', 'Spike Cave'),
+    ('Hookshot Cave', 'Hookshot Cave'),
+    ('Superbunny Cave (Top)', 'Superbunny Cave (Top)'),
+    ('Cave Shop (Dark Death Mountain)', 'Cave Shop (Dark Death Mountain)'),
+    ('Dark Death Mountain Fairy', 'Dark Death Mountain Healer Fairy'),
+    ('Superbunny Cave (Bottom)', 'Superbunny Cave (Bottom)'),
+    ('Hookshot Cave Back Entrance', 'Hookshot Cave (Upper)'),
+
+    ('Pyramid Hole', 'Pyramid'),
+
+    ('Thieves Town', 'Thieves Town (Entrance)'),
+    ('Skull Woods First Section Hole (East)', 'Skull Woods First Section (Right)'),
+    ('Skull Woods First Section Hole (West)', 'Skull Woods First Section (Left)'),
+    ('Skull Woods First Section Hole (North)', 'Skull Woods First Section (Top)'),
+    ('Skull Woods First Section Door', 'Skull Woods First Section'),
+    ('Skull Woods Second Section Hole', 'Skull Woods Second Section (Drop)'),
+    ('Skull Woods Second Section Door (East)', 'Skull Woods Second Section'),
+    ('Skull Woods Second Section Door (West)', 'Skull Woods Second Section'),
+    ('Skull Woods Final Section', 'Skull Woods Final Section (Entrance)'),
+    ('Ice Palace', 'Ice Palace (Entrance)'),
+    ('Misery Mire', 'Misery Mire (Entrance)'),
+    ('Palace of Darkness', 'Palace of Darkness (Entrance)'),
+    ('Swamp Palace', 'Swamp Palace (Entrance)'),
+
+    ('Turtle Rock', 'Turtle Rock (Entrance)'),
+    ('Dark Death Mountain Ledge (West)', 'Turtle Rock (Second Section)'),
+    ('Dark Death Mountain Ledge (East)', 'Turtle Rock (Big Chest)'),
+
+    ('Ganons Tower', 'Ganons Tower (Entrance)'),
+]
