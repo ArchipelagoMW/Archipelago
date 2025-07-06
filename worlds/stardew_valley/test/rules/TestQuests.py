@@ -42,7 +42,7 @@ class TestRaisingAnimalsQuest(SVTestBase):
         QuestLocations.internal_name: 0,
     }
 
-    def test_giant_stump_requires_one_raccoon(self):
+    def test_only_raising_animals_on_standard(self):
         location_names = [location.name for location in self.multiworld.get_locations()]
         self.assertIn("Quest: Raising Animals", location_names)
         self.assertNotIn("Quest: Feeding Animals", location_names)
@@ -54,7 +54,7 @@ class TestFeedingAnimalsQuest(SVTestBase):
         QuestLocations.internal_name: 0,
     }
 
-    def test_giant_stump_requires_one_raccoon(self):
+    def test_only_feeding_animals_on_meadowlands(self):
         location_names = [location.name for location in self.multiworld.get_locations()]
         self.assertNotIn("Quest: Raising Animals", location_names)
         self.assertIn("Quest: Feeding Animals", location_names)
