@@ -1,7 +1,9 @@
 from .bases import CrystalProjectTestBase
+from ..constants.key_items import *
 from ..constants.keys import *
 from ..constants.mounts import *
 from ..constants.regions import *
+from BaseClasses import CollectionState
 
 
 class TestLevelGatingOff(CrystalProjectTestBase):
@@ -165,6 +167,30 @@ class TestMaxLevelIncrease(CrystalProjectTestBase):
         self.assertFalse(self.can_reach_region(THE_DEPTHS))
         self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_region(THE_DEPTHS))
+
+class TestMaxLevelDecrease(CrystalProjectTestBase):
+    options = {
+        "levelGating": 1,
+        "maxLevel": 3,
+        "progressiveMountMode": 0,
+        "keyMode": 0,
+        "killBossesMode": 1
+    }
+
+    # you can do everything at level 3 B)
+    def test_region_above_level_60(self):
+        self.collect_mounts()
+        self.collect(self.get_item_by_name(SKELETON_KEY))
+        # The Depths: 63
+        self.assertTrue(self.can_reach_region(THE_DEPTHS))
+
+    def test_number_of_progressive_levels_in_pool(self):
+        # 0 Progressive Levels in the pool
+        self.assertTrue(len(self.get_items_by_name(PROGRESSIVE_LEVEL)) == 0)
+        decreased_max_level_state: CollectionState = CollectionState(self.multiworld)
+        # only 1 pre-collected Progressive Level
+        self.assertTrue(decreased_max_level_state.has(PROGRESSIVE_LEVEL, self.player, 1))
+        self.assertFalse(decreased_max_level_state.has(PROGRESSIVE_LEVEL, self.player, 2))
 
 class TestProgressiveLevelSize(CrystalProjectTestBase):
     options = {

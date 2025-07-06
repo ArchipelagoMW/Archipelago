@@ -106,7 +106,8 @@ class CrystalProjectWorld(World):
             starting_level_so_you_can_do_anything = 3 + self.options.levelComparedToEnemies.value
             if starting_level_so_you_can_do_anything < 3:
                 starting_level_so_you_can_do_anything = 3
-
+            elif starting_level_so_you_can_do_anything > self.options.maxLevel.value:
+                starting_level_so_you_can_do_anything = self.options.maxLevel.value
             # Players start with at least 1 Progressive Level, but we add more if their Level Compared to Enemies setting is positive
             self.starting_progressive_levels = ((starting_level_so_you_can_do_anything - 1) // self.options.progressiveLevelSize.value) + 1
             for _ in range(self.starting_progressive_levels):
