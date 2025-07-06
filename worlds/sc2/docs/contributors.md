@@ -29,6 +29,8 @@ code contributors also reported bugs and participated in beta testing.
 * GiantGrantGames (@GiantGrantGames) - Trireme
 * Phaneros (@MatthewMarinets)- Skirmisher
 * Durygathn - Dawnbringer
+* 7thAce (@7thAce) - Intercessor
+* Panicmoon (@panicmoon.bsky.social‬) - Skylord
 
 ## Maintenance of 2024 release
 * Ziktofel (@Ziktofel)
