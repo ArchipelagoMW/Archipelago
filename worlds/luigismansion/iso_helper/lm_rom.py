@@ -16,17 +16,15 @@ class InvalidCleanISOError(Exception):
     Exception raised for when user has an issue with their provided Luigi's Mansion ISO.
 
     Attributes:
-        value -- input value which caused the error
-        message -- explanation of the error
+        message -- Explanation of the error
     """
 
-    def __init__(self, value, message="Invalid Clean ISO provided"):
-        self.value = value
+    def __init__(self, message="Invalid Clean ISO provided"):
         self.message = message
         super().__init__(self.message)
 
     def __str__(self):
-        return f"InvalidCleanISOError: {self.message} (Value: {self.value})"
+        return f"InvalidCleanISOError: {self.message}"
 
 class LuigisMansionUSAProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Luigi's Mansion"
