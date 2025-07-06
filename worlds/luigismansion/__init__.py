@@ -2,6 +2,7 @@ import copy
 import math
 import os
 import threading
+import logging
 from dataclasses import fields
 from typing import ClassVar
 
@@ -16,7 +17,6 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
 from worlds.generic.Rules import add_item_rule, add_rule
 from Options import OptionGroup
-from CommonClient import logger
 
 # Relative Imports
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE, \
@@ -28,7 +28,7 @@ from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
 
-
+logger = logging.getLogger("Luigi's Mansion")
 def run_client(*args):
     logger.info("Running LM Client")
     from .LMClient import main  # lazy import
