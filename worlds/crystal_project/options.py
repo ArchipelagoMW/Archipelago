@@ -225,9 +225,11 @@ class ProgressiveLevelSize(Range):
 class MaxLevel(Range):
     """
     This allows your party to level past the default maximum level of 60. If Level Gating is on, increasing this number will also put more Progressive Levels in your pool.
+
+    Set it below 60 at your own risk <3
     """
     display_name = "Max Level"
-    range_start = 60
+    range_start = 3
     range_end = 99
     default = 60
 
