@@ -36,9 +36,8 @@ def run_client(*args):
 
 
 components.append(
-    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"),
-              icon="archiboolego")
-)
+    Component("LM Client", func=run_client, component_type=Type.CLIENT,
+        file_identifier=SuffixIdentifier(".aplm"), icon="archiboolego"))
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
 
