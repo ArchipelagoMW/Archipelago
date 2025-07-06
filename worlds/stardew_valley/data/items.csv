@@ -550,7 +550,7 @@ id,name,classification,groups,content_packs
 624,Luck Enzyme,useful,"EATSANITY_ENZYME",
 625,Farming Enzyme,useful,"EATSANITY_ENZYME",
 626,Foraging Enzyme,useful,"EATSANITY_ENZYME",
-627,Fishing Enzyme,useful,"EATSANITY_ENZYME",
+627,Fishing Enzyme,progression,"EATSANITY_ENZYME",
 628,Mining Enzyme,useful,"EATSANITY_ENZYME",
 629,Magnetism Enzyme,useful,"EATSANITY_ENZYME",
 630,Defense Enzyme,useful,"EATSANITY_ENZYME",

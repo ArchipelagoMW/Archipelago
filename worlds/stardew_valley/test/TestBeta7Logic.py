@@ -170,7 +170,7 @@ class TestPrizeTicketAndHelpWanted(SVTestBase):
     }
 
     def test_prize_tickets_requires_all_help_wanteds_help_wanted(self):
-        locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow"] # , "Read Friendship 101"] # Friendship 101's bookseller source messes this up
+        locations = ["Wear Sports Cap", "Wear Chicken Mask", "Wear Polka Bow"]  # , "Read Friendship 101"] # Friendship 101's bookseller source messes this up
         items_required = ["Shipping Bin", "Progressive Fishing Rod", "Spring", "Progressive Mine Elevator", "Progressive Hoe", "Progressive Watering Can"]
         for item in items_required:
             self.collect(item)
@@ -229,23 +229,34 @@ class TestSecretFishingRequiresFishingLevelsForDistance(SVTestBase):
 
     def test_iridium_krobus_requires_level_15(self):
         iridium_krobus_location = "Iridium Krobus"
-        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level", "Progressive House",
+        items_required = ["Progressive Sword", "Progressive Pickaxe", "Progressive Footwear", "Combat Level", "Progressive House", "Landslide Removed", "Progressive Mine Elevator",
                           "Mining Level", "Progressive Watering Can", "Progressive Hoe", "Progressive Fishing Rod", "50 Qi Gems", "Shipping Bin"] * 10
-        items_required.extend(["Spring", "Summer", "Fall", "Winter"])
+        self.remove_one_by_name("Spring")
+        items_required.extend(["Summer", "Fall", "Winter"])
         items_required.extend(["Fishing Level"] * 9)
         for item in items_required:
             self.collect(item)
         self.collect_lots_of_money(0.6)
-        items_to_test = [self.create_item(item) for item in ["Bus Repair", "Fish Pond", "Qi Walnut Room", "Boat Repair", "Island West Turtle",
-                                                             "Island North Turtle", "Fishing Level", "Skull Key"]]
-        self.collect(items_to_test)
-        self.assert_can_reach_location(iridium_krobus_location)
-        for item in items_to_test:
-            with self.subTest(f"{iridium_krobus_location} Requires {item.name}"):
-                self.remove(item)
-                self.assert_cannot_reach_location(iridium_krobus_location)
-                self.collect(item)
+        groups_of_items_to_test = {"Quality Seafoam Pudding": [self.create_item(item) for item in
+                                                               ["Fish Pond", "Qi Walnut Room", "Boat Repair", "Island West Turtle", "Fishing Level"]],
+                                   "Enchanted Rod and Seafoam Pudding": [self.create_item(item) for item in
+                                                                         ["Bus Repair", "Fish Pond", "Boat Repair", "Island North Turtle", "Fishing Level",
+                                                                          "Skull Key"]],
+                                   "Desert Chef and Escargot": [self.create_item(item) for item in
+                                                                ["Bus Repair", "Fishing Level", "Garlic Seeds", "Spring"]],
+                                   }
+        for item_group_to_test in groups_of_items_to_test:
+            items_to_test = groups_of_items_to_test[item_group_to_test]
+            with self.subTest(f"{iridium_krobus_location} Requires {item_group_to_test}"):
+                self.collect(items_to_test)
                 self.assert_can_reach_location(iridium_krobus_location)
+            for item in items_to_test:
+                with self.subTest(f"{iridium_krobus_location} Requires {item_group_to_test} [{item.name}]"):
+                    self.remove(item)
+                    self.assert_cannot_reach_location(iridium_krobus_location)
+                    self.collect(item)
+                    self.assert_can_reach_location(iridium_krobus_location)
+            self.remove(items_to_test)
 
 
 class TestArtifactSpotDonationsRequireHoe(SVTestBase):

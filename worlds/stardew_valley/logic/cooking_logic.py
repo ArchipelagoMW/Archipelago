@@ -25,10 +25,12 @@ class CookingLogic(BaseLogic):
         return self.logic.building.has_building(Building.kitchen) | self.logic.skill.has_level(Skill.foraging, 9)
 
     # Should be cached
-    def can_cook(self, recipe: CookingRecipe = None) -> StardewRule:
+    def can_cook(self, recipe: CookingRecipe | str = None) -> StardewRule:
         cook_rule = self.logic.region.can_reach(LogicRegion.kitchen)
         if recipe is None:
             return cook_rule
+        if isinstance(recipe, str):
+            recipe = next(filter(lambda x: x.meal == recipe, all_cooking_recipes))
 
         recipe_rule = self.logic.cooking.knows_recipe(recipe.source, recipe.meal)
         ingredients_rule = self.logic.has_all(*sorted(recipe.ingredients))
