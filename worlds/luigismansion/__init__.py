@@ -16,6 +16,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess, icon_paths
 from worlds.generic.Rules import add_item_rule, add_rule
 from Options import OptionGroup
+from CommonClient import logger
 
 # Relative Imports
 from .Items import ITEM_TABLE, LMItem, get_item_names_per_category, filler_items, ALL_ITEMS_TABLE, BOO_ITEM_TABLE, \
@@ -29,7 +30,7 @@ from . import Rules
 
 
 def run_client(*args):
-    print("Running LM Client")
+    logger.info("Running LM Client")
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
