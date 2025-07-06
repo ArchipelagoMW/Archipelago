@@ -17,7 +17,7 @@ yaml.SafeLoader.add_constructor(
 
 from .iso_helper.DOL_Updater import update_dol_offsets
 from .iso_helper.Update_GameUSA import update_game_usa
-from worlds.luigismansion.iso_helper.JMP_Info_File import JMPInfoFile
+from .iso_helper.JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
