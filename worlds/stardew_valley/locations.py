@@ -724,9 +724,9 @@ def filter_deprecated_locations(locations: Iterable[LocationData]) -> Iterable[L
 def filter_animals_quest(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # On Meadowlands, "Feeding Animals" replaces "Raising Animals"
     if options.farm_type == FarmType.option_meadowlands:
-        return (location for location in locations if location.name != Quest.raising_animals)
+        return (location for location in locations if location.name != f"Quest: {Quest.raising_animals}")
     else:
-        return (location for location in locations if location.name != Quest.feeding_animals)
+        return (location for location in locations if location.name != f"Quest: {Quest.feeding_animals}")
 
 
 def filter_farm_exclusives(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
