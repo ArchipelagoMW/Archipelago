@@ -194,9 +194,9 @@ class TestLevelComparedToEnemiesIncrease(CrystalProjectTestBase):
 
     def test_region_accessibility(self):
         self.collect_mounts()
-        # Ancient Reservoir Min Level = 33; +5; player starts with 1 Progressive Level; Progressive Level size 6 (default)
+        # Ancient Reservoir Min Level = 33; +5; player starts with 2 Progressive Levels b/c Spawning Meadows level is 3+5 = 8 and Progressive Level size is 6
         self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
-        self.collect_progressive_levels(5)
+        self.collect_progressive_levels(4)
         self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
         self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_region(ANCIENT_RESERVOIR))
@@ -204,10 +204,10 @@ class TestLevelComparedToEnemiesIncrease(CrystalProjectTestBase):
     def test_region_above_level_60(self):
         self.collect_mounts()
         self.collect(self.get_item_by_name(SKELETON_KEY))
-        # Default starting level expectation: 6; 1 Progressive Level in starting inventory; Progressive Level Size 6
+        # Default starting level expectation: 6; player starts with 2 Progressive Levels b/c Spawning Meadows level is 3+5 = 8 and Progressive Level Size is 6
 
         # The Depths: 63
-        self.collect_progressive_levels(9)
+        self.collect_progressive_levels(8)
         self.assertFalse(self.can_reach_region(THE_DEPTHS))
         self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_region(THE_DEPTHS))
