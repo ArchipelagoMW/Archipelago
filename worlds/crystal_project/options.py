@@ -189,6 +189,23 @@ class LevelGating(Choice):
     option_level_catch_up = 3
     default = 1
 
+class LevelComparedToEnemies(Range):
+    """
+    If Level Gating is on, this option changes what level you're expected to fight enemies. Set it higher if you want to be a higher level than enemies when you enter a region, or lower if you want to be lower.
+
+    For example, if this is set to 5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 17 (or for Level Capped, max level 17) for that region.
+    If it's set to -5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 7 (or for Level Capped, max level 7) for that region.
+
+    Default is 0, or on-level for the enemy level of a region.
+
+    Note: Remember to increase your Max Level (see below) if you want regions with high-level enemies to still be lower level than you.
+    """
+    display_name = "Level compared to enemies"
+    range_start = -10
+    range_end = 10
+    default = 0
+
+
 class ProgressiveLevelSize(Range):
     """
     If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
@@ -326,6 +343,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     includedRegions: IncludedRegions
     progressiveMountMode: ProgressiveMountMode
     levelGating: LevelGating
+    levelComparedToEnemies: LevelComparedToEnemies
     progressiveLevelSize: ProgressiveLevelSize
     maxLevel: MaxLevel
     easyLeveling: EasyLeveling
@@ -342,7 +360,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, EasyLeveling, KeyMode, ObscureRoutes],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [RandomizeMusic, UseMods]
 }

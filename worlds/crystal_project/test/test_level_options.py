@@ -181,3 +181,63 @@ class TestProgressiveLevelSize(CrystalProjectTestBase):
         self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
         self.collect_progressive_levels(1)
         self.assertTrue(self.can_reach_region(ANCIENT_RESERVOIR))
+
+class TestLevelComparedToEnemiesIncrease(CrystalProjectTestBase):
+    options = {
+        "levelGating": 1,
+        "levelComparedToEnemies": 5,
+        "maxLevel": 62,
+        "progressiveMountMode": 0,
+        "keyMode": 0,
+        "killBossesMode": 1
+    }
+
+    def test_region_accessibility(self):
+        self.collect_mounts()
+        # Ancient Reservoir Min Level = 33; +5; player starts with 1 Progressive Level; Progressive Level size 6 (default)
+        self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
+        self.collect_progressive_levels(5)
+        self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
+        self.collect_progressive_levels(1)
+        self.assertTrue(self.can_reach_region(ANCIENT_RESERVOIR))
+
+    def test_region_above_level_60(self):
+        self.collect_mounts()
+        self.collect(self.get_item_by_name(SKELETON_KEY))
+        # Default starting level expectation: 6; 1 Progressive Level in starting inventory; Progressive Level Size 6
+
+        # The Depths: 63
+        self.collect_progressive_levels(9)
+        self.assertFalse(self.can_reach_region(THE_DEPTHS))
+        self.collect_progressive_levels(1)
+        self.assertTrue(self.can_reach_region(THE_DEPTHS))
+
+class TestLevelComparedToEnemiesDecrease(CrystalProjectTestBase):
+    options = {
+        "levelGating": 1,
+        "levelComparedToEnemies": -5,
+        "maxLevel": 62,
+        "progressiveMountMode": 0,
+        "keyMode": 0,
+        "killBossesMode": 1
+    }
+
+    def test_region_accessibility(self):
+        self.collect_mounts()
+        # Ancient Reservoir Min Level = 33; -5; player starts with 1 Progressive Level; Progressive Level size 6 (default)
+        self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
+        self.collect_progressive_levels(3)
+        self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR))
+        self.collect_progressive_levels(1)
+        self.assertTrue(self.can_reach_region(ANCIENT_RESERVOIR))
+
+    def test_region_above_level_60(self):
+        self.collect_mounts()
+        self.collect(self.get_item_by_name(SKELETON_KEY))
+        # Default starting level expectation: 6; 1 Progressive Level in starting inventory; Progressive Level Size 6
+
+        # The Depths: 63
+        self.collect_progressive_levels(8)
+        self.assertFalse(self.can_reach_region(THE_DEPTHS))
+        self.collect_progressive_levels(1)
+        self.assertTrue(self.can_reach_region(THE_DEPTHS))

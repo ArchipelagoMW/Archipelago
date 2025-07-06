@@ -490,6 +490,7 @@ class CrystalProjectWorld(World):
             "obscureRoutes": bool(self.options.obscureRoutes.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": self.options.levelGating.value,
+            "levelComparedToEnemies": self.options.levelComparedToEnemies.value,
             "progressiveLevelSize": self.options.progressiveLevelSize.value,
             "maxLevel": self.options.maxLevel.value,
             "shopsanity": self.options.shopsanity.value,
