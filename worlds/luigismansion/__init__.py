@@ -30,7 +30,7 @@ from . import Rules
 
 logger = logging.getLogger("Luigi's Mansion")
 def run_client(*args):
-    logger.info("Running LM Client")
+    logger.info("Starting LM Client")
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
