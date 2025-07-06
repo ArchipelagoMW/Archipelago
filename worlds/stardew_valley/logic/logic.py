@@ -248,7 +248,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fossil.fossilized_ribs: self.region.can_reach(Region.island_south) & self.tool.has_tool(Tool.hoe) & self.received("Open Professor Snail Cave"),
             Fossil.fossilized_skull: self.action.can_open_geode(Geode.golden_coconut),
             Fossil.fossilized_spine: self.fishing.can_fish_at(Region.dig_site),
-            Fossil.fossilized_tail: self.action.can_pan_at(Region.dig_site, ToolMaterial.copper),
+            Fossil.fossilized_tail: self.action.can_pan_at(Region.dig_site, ToolMaterial.iridium),
             Fossil.mummified_bat: self.region.can_reach(Region.volcano_floor_10),
             Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_scythe(),
             Fossil.snake_skull: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.hoe),
