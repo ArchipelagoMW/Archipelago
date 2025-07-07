@@ -17,7 +17,8 @@ ITEMS_DATA = {
 
     "Sword (Progressive)": {
         'classification': ItemClassification.progression,
-        'progressive': [[0x1BA644, 1], [0x1BA648, 32]]
+        'progressive': [[0x1BA644, 1], [0x1BA648, 32]],
+        'set_bit': [(0x1BA644, 1)]  # Means that sending sword if sword breaks gives the base layer
     },
     "Shield": {
         'classification': ItemClassification.progression,

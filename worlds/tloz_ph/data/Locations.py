@@ -1,4 +1,4 @@
-from .Constants import *
+
 
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
@@ -1864,16 +1864,6 @@ LOCATIONS_DATA = {
         "x_max": -25000,
         "z_min": 45000
     },
-    "Dee Ess Blow in Microphone Chest": {
-        "region_id": "ds",
-        "stage_id": 0x1B,
-        "floor_id": 0x0,
-        "vanilla_item": "Gold Rupee (300)",
-        "y": 0,
-        "x_max": -15000,
-        "z_min": 10000,
-        "z_max": 30000,
-    },
     "Dee Ess Left Speakers Dig SSW": {
         "region_id": "ds dig",
         "stage_id": 0x1B,
@@ -2463,6 +2453,18 @@ LOCATIONS_DATA = {
         "value": 0x10
     },
 
+    # ==== New checks at bottom to preserve id ordering
+    "Dee Ess Blow in Microphone Chest": {
+        "region_id": "ds",
+        "stage_id": 0x1B,
+        "floor_id": 0x0,
+        "vanilla_item": "Gold Rupee (300)",
+        "y": 0,
+        "x_max": -15000,
+        "z_min": 10000,
+        "z_max": 30000,
+    },
+
 
 
 }
@@ -2470,3 +2472,6 @@ LOCATIONS_DATA = {
 for i, name in enumerate(LOCATIONS_DATA):
     LOCATIONS_DATA[name]["id"] = i+1
 
+if __name__ == "__main__":
+    for location, data in LOCATIONS_DATA.items():
+        print(f"{location} | {data['region_id']} | id: {data['id']} | stage: {data['stage_id']} | room: {data['floor_id']}")
