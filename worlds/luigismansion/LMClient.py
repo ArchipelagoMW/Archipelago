@@ -2,12 +2,12 @@ import asyncio
 import os
 import time
 import traceback
+from sys import platform, path
+from shutil import copy
 
 import NetUtils
 import Utils
 from typing import Any
-
-import dolphin_memory_engine as dme
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
@@ -26,6 +26,23 @@ try:
     tracker_loaded = True
 except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
+
+# Load the external dependencies based on OS
+temp_bool = False #TODO remove after testing as an APWorld that is generated from a draft in GitHub
+if temp_bool:
+    is_linux = platform.startswith("linux")
+    is_windows = platform in ("win32", "cygwin", "msys")
+    lib_path = ""
+    parent_current_dir = os.path.dirname(os.getcwd())
+    if not (is_linux or is_windows):
+        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+    if is_windows:
+        lib_path = "lib-windows.zip"
+    elif is_linux:
+        lib_path = "lib-linux.zip"
+    copy(lib_path, parent_current_dir)
+    path.append(os.path.join(parent_current_dir,lib_path))
+import dolphin_memory_engine as dme
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
