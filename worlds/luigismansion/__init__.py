@@ -27,21 +27,24 @@ from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
 
+CLIENT_VERSION = "0.4.10"
+
+import logging
+logger = logging.getLogger("Luigi's Mansion")
+
 
 def run_client(*args):
-    print("Running LM Client")
+    logger.info("Starting LM Client v" + CLIENT_VERSION)
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
 
 components.append(
-    Component("LM Client", func=run_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".aplm"),
-              icon="archiboolego")
+    Component("LM Client", func=run_client, component_type=Type.CLIENT,
+        file_identifier=SuffixIdentifier(".aplm"), icon="archiboolego")
 )
 
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
-
-CLIENT_VERSION = "0.4.10"
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
