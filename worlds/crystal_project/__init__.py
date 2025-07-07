@@ -110,9 +110,10 @@ class CrystalProjectWorld(World):
                     self.options.killBossesMode.value = slot_data["killBossesMode"]
                     self.options.shopsanity.value = slot_data["shopsanity"]
                     self.options.regionsanity.value = slot_data["regionsanity"]
-                    self.options.includedRegions.value = slot_data["includedRegions"]
+                    self.options.includedRegions.value = slot_data["includedRegionsOption"]
                     self.options.progressiveMountMode.value = slot_data["progressiveMountMode"]
                     self.options.levelGating.value = slot_data["levelGating"]
+                    self.options.levelComparedToEnemies.value = slot_data["levelComparedToEnemies"]
                     self.options.progressiveLevelSize.value = slot_data["progressiveLevelSize"]
                     self.options.maxLevel.value = slot_data["maxLevel"]
                     self.options.keyMode.value = slot_data["keyMode"]
@@ -122,7 +123,7 @@ class CrystalProjectWorld(World):
                     # self.options.obscureRoutes.value = slot_data["modTitles"]
                     # self.options.obscureRoutes.value = slot_data["moddedLocations"]
 
-                    # list of options we still need to get to work with yamlless UT using re-gen-passthrough
+                    # list of options we may still need to get to work with yamlless UT using re-gen-passthrough
                         # possibly also starting region for regionsanity, need to see if just having the seed is enough
                     # "startingJobs": self.get_job_id_list(),
                     # "modTitles": mod_titles,
@@ -228,14 +229,23 @@ class CrystalProjectWorld(World):
 
         self.multiworld.itempool += pool
 
+    NON_CLAM_GOAL_CLAMSHELLS_GOAL = 2
+    NON_CLAM_GOAL_CLAMSHELLS_TOTAL = 3
+
     def get_goal_clamshells(self) -> int:
-        goal_clamshell_quantity = 2
+        goal_clamshell_quantity = self.NON_CLAM_GOAL_CLAMSHELLS_GOAL
         if self.options.goal.value == self.options.goal.option_clamshells:
             goal_clamshell_quantity = self.options.clamshellGoalQuantity.value
         return goal_clamshell_quantity
 
+    def get_extra_clamshells(self) -> int:
+        extra_clamshells = self.NON_CLAM_GOAL_CLAMSHELLS_TOTAL
+        if self.options.goal.value == self.options.goal.option_clamshells:
+            extra_clamshells = self.options.extraClamshellsInPool.value
+        return extra_clamshells
+
     def get_total_clamshells(self, max_clamshells: int) -> int:
-        total_clamshell_quantity = 3
+        total_clamshell_quantity = self.NON_CLAM_GOAL_CLAMSHELLS_TOTAL
         if self.options.goal.value == self.options.goal.option_clamshells:
             total_clamshell_quantity = self.options.clamshellGoalQuantity.value + self.options.extraClamshellsInPool.value
             # If the player's options ask to put more clamshells in the pool than there is room, reduce their options proportionally so they fit
@@ -534,21 +544,29 @@ class CrystalProjectWorld(World):
             "apworld_version": self.apworld_version,
             "goal": self.options.goal.value,
             "clamshellGoalQuantity": self.get_goal_clamshells(),
+            "extraClamshellsInPool": self.get_extra_clamshells(),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
-            "startWithMaps": bool(self.options.startWithMaps.value),
+            "jobRando": self.options.jobRando.value,
+            "startingJobQuantity": self.options.startingJobQuantity.value,
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
+            "startingJobs": self.get_job_id_list(),
             "killBossesMode" : bool(self.options.killBossesMode.value),
-            "easyLeveling": bool(self.options.easyLeveling.value),
-            "obscureRoutes": bool(self.options.obscureRoutes.value),
-            "randomizeMusic": bool(self.options.randomizeMusic.value),
+            "shopsanity": self.options.shopsanity.value,
+            "regionsanity": bool(self.options.regionsanity.value),
+            "includedRegions": self.included_regions,
+            "includedRegionsOption": self.options.includedRegions.value,
+            "progressiveMountMode": self.options.progressiveMountMode.value,
             "levelGating": self.options.levelGating.value,
             "levelComparedToEnemies": self.options.levelComparedToEnemies.value,
             "progressiveLevelSize": self.options.progressiveLevelSize.value,
             "maxLevel": self.options.maxLevel.value,
-            "shopsanity": self.options.shopsanity.value,
-            "regionsanity": bool(self.options.regionsanity.value),
-            "startingJobs": self.get_job_id_list(),
-            "includedRegions": self.included_regions,
+            "easyLeveling": bool(self.options.easyLeveling.value),
+            "keyMode": self.options.keyMode.value,
+            "obscureRoutes": bool(self.options.obscureRoutes.value),
+            "startWithMaps": bool(self.options.startWithMaps.value),
+            "includeSummonAbilities": self.options.includeSummonAbilities.value,
+            "includeScholarAbilities": self.options.includeScholarAbilities.value,
+            "randomizeMusic": bool(self.options.randomizeMusic.value),
             "modTitles": mod_titles,
             "moddedLocations": slot_data_locations,
         }
