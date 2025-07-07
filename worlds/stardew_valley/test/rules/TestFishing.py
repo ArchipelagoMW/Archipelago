@@ -19,7 +19,7 @@ class TestNeedRegionToCatchFish(SVTestBase):
         fish_and_items = {
             Fish.crimsonfish: ["Beach Bridge"],
             Fish.void_salmon: ["Railroad Boulder Removed", "Dark Talisman"],
-            Fish.woodskip: ["Landslide Removed", "Progressive Axe", "Progressive Axe", "Progressive Weapon"],  # For the ores to get the axe upgrades
+            Fish.woodskip: ["Progressive Axe", "Progressive Axe"],
             Fish.mutant_carp: ["Rusty Key"],
             Fish.slimejack: ["Railroad Boulder Removed", "Rusty Key"],
             Fish.lionfish: [Transportation.boat_repair],
@@ -27,8 +27,8 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.stingray: [Transportation.boat_repair, "Island Resort"],
             Fish.ghostfish: ["Landslide Removed", "Progressive Weapon"],
             Fish.stonefish: ["Landslide Removed", "Progressive Weapon"],
-            Fish.ice_pip: ["Landslide Removed", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe"],
-            Fish.lava_eel: ["Landslide Removed", "Progressive Weapon", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe", "Progressive Pickaxe"],
+            Fish.ice_pip: ["Landslide Removed", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe"],
+            Fish.lava_eel: ["Landslide Removed", "Progressive Weapon", "Progressive Weapon", "Progressive Weapon", "Progressive Pickaxe", "Progressive Pickaxe"],
             Fish.sandfish: [Transportation.bus_repair],
             Fish.scorpion_carp: ["Wizard Invitation", "Desert Obelisk"],
             # Starting the extended family quest requires having caught all the legendaries before, so they all have the rules of every other legendary
@@ -39,24 +39,22 @@ class TestNeedRegionToCatchFish(SVTestBase):
             Fish.ms_angler: ["Beach Bridge", "Wizard Invitation", "Island Obelisk", "Island West Turtle", "Qi Walnut Room", "Rusty Key"],
         }
         self.collect("Progressive Fishing Rod", 4)
-        self.original_state = self.multiworld.state.copy()
+        self.collect_all_the_money()
         for fish in fish_and_items:
             with self.subTest(f"Region rules for {fish}"):
-                self.collect_all_the_money()
                 item_names = fish_and_items[fish]
                 location = f"Fishsanity: {fish}"
                 self.assert_cannot_reach_location(location)
-                items = []
-                for item_name in item_names:
-                    items.append(self.collect(item_name))
+                items = [self.create_item(item_name) for item_name in item_names]
+                for item in items:
+                    self.collect(item)
                 with self.subTest(f"{fish} can be reached with {item_names}"):
                     self.assert_can_reach_location(location)
                 for item_required in items:
-                    self.multiworld.state = self.original_state.copy()
                     with self.subTest(f"{fish} requires {item_required.name}"):
-                        for item_to_collect in items:
-                            if item_to_collect.name != item_required.name:
-                                self.collect(item_to_collect)
+                        self.remove(item_required)
                         self.assert_cannot_reach_location(location)
-
-            self.multiworld.state = self.original_state.copy()
+                        self.collect(item_required)
+                        self.assert_can_reach_location(location)
+                for item in items:
+                    self.remove(item)
