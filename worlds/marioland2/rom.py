@@ -12,10 +12,10 @@ from .music_data import overworld_music_data, level_music_tracks
 from .sprites import sprite_name_to_id
 
 
-def randomize_music(patch, random, overworld_areas):
+def randomize_music(patch, random):
     # overworld
     overworld_music_data_addresses = {
-        v.address: v.track for k, v in overworld_music_data.items() if k in overworld_areas
+        v.address: v.track for k, v in overworld_music_data.items()
     }
     randomized_overworld_tracks = list(overworld_music_data_addresses.values())
     random.shuffle(randomized_overworld_tracks)
@@ -66,7 +66,7 @@ def generate_output(self, output_directory: str):
         i += 1
 
     if self.options.randomize_music:
-        randomize_music(patch, random, self.options.randomize_music_overworld)
+        randomize_music(patch, random)
 
     if self.options.shuffle_golden_coins:
         patch.write_bytes(rom_addresses["Coin_Shuffle"], 0x40)
