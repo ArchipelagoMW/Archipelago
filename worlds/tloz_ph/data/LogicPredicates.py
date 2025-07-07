@@ -631,6 +631,26 @@ def ph_can_arrow_despawn(state: CollectionState, player: int):
         ph_option_glitched_logic(state, player)
     ])
 
+def ph_can_bcl(state, player):
+    # Bombchu Camera Lock
+    return all([
+        ph_has_chus(state, player),
+        ph_option_glitched_logic(state, player)
+    ])
+
+def ph_can_sword_glitch(state, player):
+    return all([
+        ph_has_sword(state, player),
+        ph_option_glitched_logic(state, player)
+    ])
+
+def ph_can_sword_scroll_clip(state, player):
+    return all([
+        ph_has_sword(state, player),
+        state.has("Swordsman's Scroll", player),
+        ph_option_glitched_logic(state, player)
+    ])
+
 
 # ====== Specific locations =============
 
@@ -863,7 +883,10 @@ def ph_can_reach_MP2(state: CollectionState, player: int):
         ]),
         all([
             ph_option_keys_in_own_dungeon(state, player),
-            ph_can_cut_small_trees(state, player),
+            any([
+                ph_can_cut_small_trees(state, player),
+                ph_option_glitched_logic(state, player)  # SW in back entrance / reversse cuccoo jump
+            ]),
             any([
                 ph_has_small_keys(state, player, "Mountain Passage"),
                 ph_is_ut(state, player)
@@ -1087,7 +1110,8 @@ def ph_toi_b2(state, player):
         ph_quick_switches(state, player),
         any([
             ph_toi_key_doors(state, player, 3, 2),
-            ph_can_hammer_clip(state, player)
+            ph_can_hammer_clip(state, player),
+            ph_can_bcl(state, player)
         ])
     ])
 

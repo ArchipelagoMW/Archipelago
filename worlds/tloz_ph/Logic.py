@@ -14,7 +14,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["mercay island", "mercay dig spot", False, lambda state: ph_has_shovel(state, player)],
         ["mercay island", "mercay zora cave", False, lambda state: ph_has_explosives(state, player)],
         ["mercay zora cave", "mercay zora cave south", False, lambda state: ph_has_bow(state, player)],
-        ["mercay island", "sw ocean", False, lambda state: ph_has_sea_chart(state, player, "SW")],
+        ["mercay island", "mercay zora cave south", False, lambda state: ph_can_sword_scroll_clip(state, player)],
         ["mercay island", "totok", False, None],
         ["mercay island", "mercay freedle island", False, lambda state: ph_has_explosives(state, player)],
         ["mercay freedle island", "mercay freedle tunnel chest", False, lambda state: ph_has_range(state, player)],
@@ -23,12 +23,15 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["post tow", "mercay oshus gem", False, None],
         ["mercay island", "mercay oshus phantom blade", False, lambda state: ph_has_phantom_blade(state, player)],
         ["mercay oshus phantom blade", "mercay oshus gem", False, None],
+        ["mercay island", "sw ocean", False, lambda state: ph_has_sea_chart(state, player, "SW")],
 
         # ======== Mountain Passage =========
 
         ["mercay island", "mercay passage 1", False, lambda state:
             any([ph_can_cut_small_trees(state, player),
-                ph_has_small_keys(state, player, "Mountain Passage", 3)])],
+                ph_has_small_keys(state, player, "Mountain Passage", 3),
+                ph_option_glitched_logic(state, player)  # Savewarp in back entrance / reverse cuccoo jump
+                 ])],
         ["mercay island", "mercay passage 2", False, lambda state: ph_can_reach_MP2(state, player)],
         ["mercay passage 2", "mercay passage rat", False, lambda state: ph_mercay_passage_rat(state, player)],
 
@@ -173,7 +176,9 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # =============== Isle of Ember ================
 
         ["ember island", "ember island dig", False, lambda state: ph_has_shovel(state, player)],
-        ["ember island", "ember island grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["ember island", "ember island grapple", False, lambda state: any([
+            ph_has_grapple(state, player),
+            ph_can_sword_glitch(state, player)])],
         ["ember island", "tof 1f", False, None],
 
         # =============== Temple of Fire =================
@@ -216,7 +221,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["toc", "toc bomb alcove", False, lambda state: ph_has_explosives(state, player)],
         ["toc", "toc b1", False, lambda state: ph_toc_key_door_1(state, player)],
         ["toc", "toc hammer clips", False, lambda state: ph_can_hammer_clip(state, player)],
-        ["toc b1", "toc b1 grapple", False, lambda state: ph_has_grapple(state, player)],
+        ["toc b1", "toc b1 grapple", False, lambda state: any([ph_has_grapple(state, player),
+                                                               ph_can_boomerang_return(state, player)])],
         ["toc b1", "toc 1f west", False, lambda state: ph_has_explosives(state, player)],
         ["toc b1 grapple", "toc 1f west", False, lambda state: ph_has_bow(state, player)],
         ["toc hammer clips", "toc 1f west", False, None],

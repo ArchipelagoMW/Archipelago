@@ -49,7 +49,6 @@ def add_items_from_filler(item_pool_dict: dict, filler_item_count: int, item: st
 def add_additional_spirit_gems(item_pool_dict: dict, filler_item_count: int):
     def add_gems(gem: str, filler_count: int):
         gems = 20 - item_pool_dict[gem]
-        print(f"Processing {gem}: adding {gems}")
         if filler_count >= gems:
             filler_count -= gems
             item_pool_dict[gem] = 20
@@ -94,7 +93,6 @@ class PhantomHourglassWorld(World):
         self.excluded_dungeons = []
 
     def generate_early(self):
-        print("GENERATING EARLY")
         self.pick_required_dungeons()
         self.restrict_non_local_items()
 
@@ -103,6 +101,7 @@ class PhantomHourglassWorld(World):
         # to be placed locally (e.g. dungeon items with keysanity off)
         if not self.options.keysanity == "anywhere":
             self.options.non_local_items.value -= self.item_name_groups["Small Keys"]
+        self.options.non_local_items.value -= set(self.boss_reward_items_pool)
 
     def create_location(self, region_name: str, location_name: str, local: bool):
         region = self.multiworld.get_region(region_name, self.player)
@@ -141,7 +140,6 @@ class PhantomHourglassWorld(World):
         location = Location(self.player, region_name + ".event", None, region)
         region.locations.append(location)
         location.place_locked_item(Item(event_item_name, ItemClassification.progression, None, self.player))
-        print(f"Created Event for {event_item_name} at {region_name}")
 
     def location_is_active(self, location_name, location_data):
         if not location_data.get("conditional", False):
@@ -181,7 +179,6 @@ class PhantomHourglassWorld(World):
         dungeons_required = len(implemented_dungeons) if self.options.dungeons_required > len(implemented_dungeons) \
             else self.options.dungeons_required.value
         self.options.dungeons_required.value = dungeons_required
-        print(f"dungeons required {self.options.dungeons_required.value}")
         self.required_dungeons = implemented_dungeons[:dungeons_required]
 
         # Extend mcguffin list
@@ -231,13 +228,10 @@ class PhantomHourglassWorld(World):
             always_include = ["Temple of the Ocean King", "Mountain Passage"]
             if self.options.ghost_ship_in_dungeon_pool == "false":
                 always_include.append("Ghost Ship")
-            print(f"required dungeons {self.required_dungeons}")
             excluded_dungeons = [d for d in DUNGEON_NAMES
                                  if d not in self.required_dungeons + always_include]
-            print(f"excluded dungeons {excluded_dungeons}")
             self.excluded_dungeons = excluded_dungeons
             for dungeon in excluded_dungeons:
-                print(f"Excluding: {self.dungeon_name_groups[dungeon]}")
                 locations_to_exclude.update(self.dungeon_name_groups[dungeon])
 
             self.ut_locations_to_exclude = locations_to_exclude.copy()
@@ -261,10 +255,10 @@ class PhantomHourglassWorld(World):
         if name in self.extra_filler_items:
             self.extra_filler_items.remove(name)
             classification = ItemClassification.filler
+        if name == "Swordsman's Scroll" and self.options.logic == "glitched":
+            classification = ItemClassification.progression
 
         ap_code = self.item_name_to_id[name]
-        if classification == ItemClassification.filler:
-            print(f"Created item {name} as {CLASSIFICATION[classification]}")
         return Item(name, classification, ap_code, self.player)
 
     def build_item_pool_dict(self):
@@ -274,26 +268,24 @@ class PhantomHourglassWorld(World):
         rupee_item_count = 0
         boss_reward_item_count = self.options.dungeons_required
         for loc_name, loc_data in LOCATIONS_DATA.items():
-            print(f"New Location: {loc_name}")
+            # print(f"New Location: {loc_name}")
             if not self.location_is_active(loc_name, loc_data):
-                print(f"{loc_name} is not active")
+                # print(f"{loc_name} is not active")
                 continue
             # If no defined vanilla item, fill with filler
             if "vanilla_item" not in loc_data:
-                print(f"{loc_name} has no defined vanilla item")
+                # print(f"{loc_name} has no defined vanilla item")
                 filler_item_count += 1
                 continue
 
             item_name = loc_data.get("item_override", loc_data["vanilla_item"])
             if item_name in removed_item_quantities and removed_item_quantities[item_name] > 0:
                 # If item was put in the "remove_items_from_pool" option, replace it with a random filler item
-                print(f"{item_name} @ {loc_name} was removed from pool")
                 removed_item_quantities[item_name] -= 1
                 filler_item_count += 1
                 continue
             if item_name == "Filler Item":
                 filler_item_count += 1
-                print(f"added filler item @ {loc_name}")
                 continue
             if self.options.keysanity == "vanilla":
                 # Place small key in vanilla location
@@ -302,7 +294,6 @@ class PhantomHourglassWorld(World):
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(key_item)
                     continue
             if "force_vanilla" in loc_data and loc_data["force_vanilla"]:
-                print(f"Forcing {loc_name} with item {item_name}")
                 forced_item = self.create_item(item_name)
                 self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                 continue
@@ -310,7 +301,6 @@ class PhantomHourglassWorld(World):
                 # if dungeon is excluded, place keys in vanilla locations
                 dung = item_name.rsplit('(', 1)[1][:-1]
                 if self.options.exclude_non_required_dungeons and dung in self.excluded_dungeons:
-                    print(f"Forcing {loc_name} with item {item_name} because excluded dungeon")
                     forced_item = self.create_item(item_name)
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                     continue
@@ -322,26 +312,22 @@ class PhantomHourglassWorld(World):
             if item_name == "Rare Metal":  # Change rare metals to filler items for unrequired dungeons
                 if boss_reward_item_count <= 0:
                     filler_item_count += 1
-                    print(f"added filler item @ {loc_name}")
                     continue
                 item_name = self.boss_reward_items_pool[boss_reward_item_count - 1]
                 boss_reward_item_count -= 1
             if item_name == "Triforce Crest" and not self.options.randomize_triforce_crest:
                 filler_item_count += 1
-                print(f"added filler item @ {loc_name}")
                 continue
             if (item_name in ["Treasure", "Ship Part", "Nothing!", "Potion", "Red Potion", "Purple Potion",
                               "Yellow Potion", "Power Gem", "Wisdom Gem", "Courage Gem", "Heart Container"]
                     or "Treasure Map" in item_name):
                 filler_item_count += 1
-                print(f"added filler item @ {loc_name}")
                 continue
 
             item_pool_dict[item_name] = item_pool_dict.get(item_name, 0) + 1
 
         # Fill filler count with consistent amounts of items, when filler count is empty it won't add any more items
         # so add progression items first
-        print(f"Finished making item dict from locations, filler count {filler_item_count}")
         add_items = [("Wisdom Gem", 20), ("Power Gem", 20), ("Courage Gem", 20), ("Heart Container", 13)]
         for i, count in add_items:
             item_pool_dict, filler_item_count = add_items_from_filler(item_pool_dict, filler_item_count, i, count)
@@ -380,8 +366,6 @@ class PhantomHourglassWorld(World):
                 filler_count += count
 
         extra_item_count = len(self.locations_to_exclude) - filler_count + 20
-        print(f"Excluded locations: {len(self.locations_to_exclude)}, filler items: {filler_count}, "
-              f"extra items {extra_item_count}, eligible items: {len(extra_items_list)}")
         if extra_item_count > 0:
             self.random.shuffle(extra_items_list)
             self.extra_filler_items = extra_items_list[:extra_item_count]
@@ -406,7 +390,6 @@ class PhantomHourglassWorld(World):
         for item in confined_dungeon_items:
             items.remove(item)
         self.pre_fill_items.extend(confined_dungeon_items)
-        print(f"Filtered pre fill items {self.pre_fill_items}")
 
     def pre_fill_boss_rewards(self):
         boss_reward_location_names = [DUNGEON_TO_BOSS_ITEM_LOCATION[dung_name] for dung_name in self.required_dungeons]
@@ -423,11 +406,10 @@ class PhantomHourglassWorld(World):
         # Remove from the all_state the items we're about to place
         for item in boss_reward_items:
             self.pre_fill_items.remove(item)
+
         collection_state = self.multiworld.get_all_state(False)
         # Perform a prefill to place confined items inside locations of this dungeon
         self.random.shuffle(boss_reward_locations)
-        print(f"Removing items {boss_reward_items}")
-        print(f"Filling locations {boss_reward_locations}")
         fill_restrictive(self.multiworld, collection_state, boss_reward_locations, boss_reward_items,
                          single_player_placement=True, lock=True, allow_excluded=True)
 
@@ -458,8 +440,6 @@ class PhantomHourglassWorld(World):
             collection_state = self.multiworld.get_all_state(False)
             # Perform a prefill to place confined items inside locations of this dungeon
             self.random.shuffle(dungeon_locations)
-            print(f"Removing items {confined_dungeon_items}")
-            print(f"Filling locations {dungeon_locations}")
             fill_restrictive(self.multiworld, collection_state, dungeon_locations, confined_dungeon_items,
                              single_player_placement=True, lock=True, allow_excluded=True)
 
@@ -490,7 +470,6 @@ class PhantomHourglassWorld(World):
         slot_data["locations_to_exclude"] = self.ut_locations_to_exclude
         slot_data["boss_rewards"] = self.boss_reward_items_pool
         slot_data["required_dungeon_locations"] = self.boss_reward_location_names
-        print(f"Slot Data: {slot_data}")
         return slot_data
 
     def write_spoiler(self, spoiler_handle):

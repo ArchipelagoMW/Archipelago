@@ -437,7 +437,8 @@ class PhantomHourglassClient(BizHawkClient):
                         self.watches.pop(loc_name)
 
             # Check if link is getting location
-            if getting_location and not self.receiving_location and self.locations_in_scene is not None:
+            if getting_location and not self.receiving_location and self.locations_in_scene is not None \
+                    and self.new_stage_loading is None:
                 self.receiving_location = True
                 print("Receiving Item")
                 await self.process_checked_locations(ctx, None)

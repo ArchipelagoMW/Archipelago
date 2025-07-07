@@ -417,8 +417,8 @@ DYNAMIC_FLAGS = {
         "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
     },
     "Respawn ghost ship": {
-        "on_scenes": [0x1],
-        "not_last_scenes": [0x2903, 0x400],
+        "on_scenes": [0x1],  # NW quadrant
+        "not_last_scenes": [0x2903, 0x400],  # from ghost ship
         "has_locations": ["Ghost Ship Rescue Tetra"],
         "any_not_has_locations": ["Ghost Ship B1 Entrance Chest",
                                   "Ghost Ship B1 Second Sister Chest",
@@ -428,8 +428,8 @@ DYNAMIC_FLAGS = {
                                   "Ghost Ship B3 Chest",
                                   "Ghost Ship Cubus Sisters Ghost Key",
                                   "Ghost Ship Cubus Sisters Heart Container"],
-        "set_if_true": [(0x1B557E, 0x10), (0x1B55AB, 0x10)],
-        "unset_if_true": [(0x1B5582, 0x80)]
+        "set_if_true": [(0x1B557E, 0x10), (0x1B55AB, 0x10)],  # Spawn spirits, remove fog
+        "unset_if_true": [(0x1B5582, 0x80)]  # Respawn ghost ship
     },
     "RESET Respawn ghost ship": {
         "on_scenes": [0x1],
@@ -661,7 +661,7 @@ DYNAMIC_FLAGS = {
         "has_items": [("Crimzonine", 1)],
         "set_if_true": [(0x1B558B, 0x40)]
     },
-    "Tce temple metals": {
+    "Ice temple metals": {
         "on_scenes": [0x1F00],
         "unset_if_true": [(0x1B558B, 0x20)]
     },
@@ -703,7 +703,7 @@ DYNAMIC_FLAGS = {
     },
     "Oshus Gem": {
         "on_scenes": [0xB0A],
-        "not_has_locations": ["Mercay Oshus Item After Temple of Wind"],
+        "not_has_locations": ["Mercay Oshus Force Gem"],
         "has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
         "set_if_true": [(0x1B55A0, 0x4), (0x1B557D, 0x2)]
     },
@@ -816,22 +816,22 @@ DYNAMIC_FLAGS = {
         "set_if_true": [(0x1B5590, 0x02)],  # Memory of water
     },
     "Ice Field pre-dungeon": {
-        "on_scenes": [0xF03],
+        "on_scenes": [0xF03, 0xF01],
         "not_has_locations": ["Temple of Ice Dungeon Reward"],
         "unset_bits": [(0x1B558B, 0x20)]
     },
     "Ice Field post-dungeon": {
-        "on_scenes": [0xF03],
+        "on_scenes": [0xF03, 0xF01],
         "has_locations": ["Temple of Ice Dungeon Reward"],
         "set_bits": [(0x1B558B, 0x20)]
     },
     "RESET Ice Field pre-dungeon": {
-        "on_scenes": [0xF13, 0xF01],
+        "on_scenes": [0xF13, 0x1F00],
         "has_items": [("Azurine", 1)],
         "set_bits": [(0x1B558B, 0x20)]
     },
     "RESET Ice Field post-dungeon": {
-        "on_scenes": [0xF13, 0xF01],
+        "on_scenes": [0xF13, 0x1F00],
         "has_items": [("Azurine", 0)],
         "unset_bits": [(0x1B558B, 0x20)]
     },
