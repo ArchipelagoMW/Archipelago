@@ -39,6 +39,7 @@ class SpecialItemsLogic(BaseLogic):
         return self.logic.has(Forageable.secret_note) & self.logic.region.can_reach(Region.town)
 
     def has_advanced_tv_remote(self) -> StardewRule:
+        george_rule = self.logic.relationship.has_hearts(NPC.george, 10)
         if ginger_island_content_pack.name in self.content.registered_packs:
-            return self.logic.relationship.has_hearts(NPC.george, 10)
-        return self.logic.quest.can_complete_quest(Quest.the_pirates_wife) & self.logic.relationship.can_meet(NPC.george)
+            return george_rule
+        return self.logic.quest.can_complete_quest(Quest.the_pirates_wife) & george_rule
