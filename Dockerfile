@@ -56,8 +56,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Create and activate venv
-RUN python -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN python -m venv $VIRTUAL_ENV; \
+    . $VIRTUAL_ENV/bin/activate
 
 # Copy and install requirements first (better caching)
 COPY WebHostLib/requirements.txt WebHostLib/requirements.txt
