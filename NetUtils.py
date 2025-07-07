@@ -119,8 +119,6 @@ def convert_to_base_types(obj: typing.Any) -> _base_types:
     # unwrap simple types to their base, such as StrEnum
     elif isinstance(obj, str):
         return str(obj)
-    elif isinstance(obj, bool):
-        return bool(obj)
     elif isinstance(obj, int):
         return int(obj)
     elif isinstance(obj, float):
