@@ -1,2 +1,2 @@
-gclib[speedups] @ git+https://github.com/LagoLunatic/gclib.git@4ddebd0a9717dca67684fe1cc55a86da9265e6b7
+gclib[speedups] @ git+https://github.com/LagoLunatic/gclib.git@abae309e05a8de4c2642e903611e65b4b124e1ce
 
