@@ -750,7 +750,9 @@ async def give_player_items(ctx: LMContext):
 
             recv_full_player_name = ctx.player_names[item.player]
             recv_name_repl = recv_full_player_name.replace("&", "")
+            # We try to check the received player's name is under the slot length first.
             short_recv_name = sbf.string_to_bytes_with_limit(recv_name_repl, SLOT_NAME_STR_LENGTH)
+            # Then we can re-combine it with 's Game to stay under te max char limit.
             recv_name_display = short_recv_name.decode("utf-8") + "'s Game"
             dme.write_bytes(RECV_ITEM_SENDER_ADDR,
                 sbf.string_to_bytes_with_limit(recv_name_display, RECV_LINE_STRING_LENGTH) + b'\x00')
