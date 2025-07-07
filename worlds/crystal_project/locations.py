@@ -513,12 +513,14 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Salmon Pass
         #Treasure chests
-        LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset), #Paypirbak chest
-        LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset), #Fenix Juice chest
+        # 2 chests on the east side that either require the ability to get to Greenshire Reprise and cross it or hop the bridge (also you need the 5 jobs bc the rental quintar comes from Capital Sequoia)
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Paypirbak chest
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Fenix Juice chest
+        # 1 chest on the west side that either requires crossing the bridge or hoofing it from Salmon River
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or state.can_reach(SALMON_RIVER, player=player)),  # Fenix Juice chest
 
         #Salmon River
         #Treasure chests
-        LocationData(SALMON_RIVER, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset), #Fenix Juice chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Hop on chest once you have become frogger", 1264 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Atop river island crown", 1297 + treasure_index_offset), #Bloodbind chest
         LocationData(SALMON_RIVER, "Salmon River Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest

@@ -299,8 +299,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     SALMON_RIVER: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
                     DELENDE: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SALMON_RIVER, [SALMON_PASS, SALMON_BAY, TALL_TALL_HEIGHTS],
-                    {SALMON_PASS: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
-                    SALMON_BAY: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state),
+                    {SALMON_BAY: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state),
                     TALL_TALL_HEIGHTS: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, POKO_POKO_DESERT, [SARA_SARA_BAZAAR, ANCIENT_RESERVOIR, LAKE_DELENDE, SALMON_BAY, ANCIENT_LABYRINTH],
                     {ANCIENT_RESERVOIR: lambda state: logic.has_key(state, PYRAMID_KEY),
