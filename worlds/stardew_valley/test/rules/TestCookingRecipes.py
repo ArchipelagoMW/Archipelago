@@ -7,7 +7,7 @@ from ...data.recipe_data import all_cooking_recipes
 class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandContentPack(SVTestBase):
     options = {
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true,
-        options.Mods: frozenset(options.Mods.valid_keys)
+        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
     }
 
     def test_recipe_without_content_pack_contains_only_pure_vanilla_ingredients(self):
@@ -17,7 +17,7 @@ class TestRecipeContainingGingerIslandIngredientsAreTaggedWithGingerIslandConten
         logic = self.world.logic
 
         for recipe in all_cooking_recipes:
-            if recipe.content_pack is ginger_island_content_pack.name:
+            if recipe.content_pack is ginger_island_content_pack.name or recipe.content_pack not in self.world.options.mods:
                 continue
 
             with self.subTest(recipe.meal):

@@ -18,7 +18,7 @@ class TestTrapDifficultyCanRemoveAllTraps(WorldAssertMixin, SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
     }
 
@@ -40,7 +40,7 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
     }
 
@@ -71,7 +71,7 @@ class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
         options.Secretsanity.internal_name: frozenset(options.Secretsanity.valid_keys),
         options.Hatsanity.internal_name: options.Hatsanity.option_post_perfection,
         options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
         options.TrapDistribution.internal_name: {"Nudge Trap": 100, "Bark Trap": 1, "Meow Trap": 1000, "Shuffle Trap": 0}
     }

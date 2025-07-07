@@ -1,16 +1,17 @@
-from ...strings.ap_names.mods.mod_items import ModBooks
 from ..bases import SVTestBase
-from ...options import ExcludeGingerIsland, Booksanity, Shipsanity, Mods
+from ...options import ExcludeGingerIsland, Booksanity, Shipsanity, Mods, all_mods_except_invalid_combinations
+from ...strings.ap_names.mods.mod_items import ModBooks
 
 ModSkillBooks = [ModBooks.digging_like_worms]
 ModPowerBooks = []
+
 
 class TestModBooksanityNone(SVTestBase):
     options = {
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_none,
-        Mods: frozenset(Mods.valid_keys)
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_no_mod_power_books_locations(self):
@@ -51,7 +52,7 @@ class TestModBooksanityPowers(SVTestBase):
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power,
-        Mods: frozenset(Mods.valid_keys)
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_all_modp_ower_books_locations(self):
@@ -92,7 +93,7 @@ class TestBooksanityPowersAndSkills(SVTestBase):
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_power_skill,
-        Mods: frozenset(Mods.valid_keys)
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_all_mod_power_books_locations(self):
@@ -133,7 +134,7 @@ class TestBooksanityAll(SVTestBase):
         ExcludeGingerIsland: ExcludeGingerIsland.option_false,
         Shipsanity: Shipsanity.option_everything,
         Booksanity: Booksanity.option_all,
-        Mods: frozenset(Mods.valid_keys)
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_digging_like_worms_require_2_levels(self):

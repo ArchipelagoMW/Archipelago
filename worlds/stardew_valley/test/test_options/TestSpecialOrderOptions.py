@@ -1,5 +1,5 @@
 from ...locations import locations_by_tag, LocationTags, location_table
-from ...options import ExcludeGingerIsland, SpecialOrderLocations, ArcadeMachineLocations, Mods
+from ...options import ExcludeGingerIsland, SpecialOrderLocations, ArcadeMachineLocations, Mods, all_mods_except_invalid_combinations
 from ...strings.special_order_names import SpecialOrder
 from ...test.bases import SVTestCase, solo_multiworld
 
@@ -17,7 +17,7 @@ class TestSpecialOrders(SVTestCase):
     def test_given_board_only_then_no_qi_order_in_pool(self):
         world_options = {
             SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board,
-            Mods.internal_name: frozenset(Mods.valid_keys),
+            Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
         }
         with solo_multiworld(world_options) as (multi_world, _):
 
@@ -34,7 +34,7 @@ class TestSpecialOrders(SVTestCase):
             SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
             ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories,
             ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
-            Mods.internal_name: frozenset(Mods.valid_keys),
+            Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
         }
         with solo_multiworld(world_options) as (multi_world, _):
 

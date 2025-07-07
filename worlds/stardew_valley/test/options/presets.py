@@ -84,13 +84,13 @@ def allsanity_no_mods_6_x_x():
 
 def allsanity_mods_6_x_x_exclude_disabled():
     allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods)})
+    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
     return allsanity
 
 
 def allsanity_mods_6_x_x():
     allsanity = allsanity_no_mods_6_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.all_mods)})
+    allsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
     return allsanity
 
 
@@ -183,13 +183,13 @@ def allsanity_no_mods_7_x_x():
 
 def allsanity_mods_7_x_x():
     allsanity = allsanity_no_mods_7_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.Mods.valid_keys)})
+    allsanity.update({options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations)})
     return allsanity
 
 
 def allsanity_mods_7_x_x_exclude_disabled():
     allsanity = allsanity_no_mods_7_x_x()
-    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods)})
+    allsanity.update({options.Mods.internal_name: frozenset(options.enabled_mods_except_invalid_combinations)})
     return allsanity
 
 

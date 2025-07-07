@@ -8,5 +8,6 @@ from .options import (StardewValleyOption, Goal, FarmType, StartingMoney, Profit
                       Secretsanity, Hatsanity, IncludeEndgameLocations, NumberOfMovementBuffs, EnabledFillerBuffs, ExcludeGingerIsland,
                       TrapDifficulty, MultipleDaySleepEnabled, MultipleDaySleepCost, ExperienceMultiplier,
                       FriendshipMultiplier, DebrisMultiplier, BackpackSize, QuickStart, Gifting, Mods,
-                      BundlePlando, StardewValleyOptions, enabled_mods, disabled_mods, all_mods,
+                      BundlePlando, StardewValleyOptions,
+                      enabled_mods, enabled_mods_except_invalid_combinations, all_mods_except_invalid_combinations, disabled_mods, all_mods,
                       TrapDistribution, TrapItems, StardewValleyOptions)

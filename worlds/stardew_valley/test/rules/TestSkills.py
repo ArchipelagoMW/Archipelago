@@ -1,6 +1,6 @@
 from ..bases import SVTestBase
 from ... import HasProgressionPercent, StardewLogic
-from ...options import ToolProgression, SkillProgression, Mods
+from ...options import ToolProgression, SkillProgression, Mods, all_mods_except_invalid_combinations
 from ...strings.skill_names import all_skills, all_vanilla_skills, Skill
 
 
@@ -25,7 +25,7 @@ class TestSkillProgressionVanilla(SVTestBase):
 class TestSkillProgressionProgressive(SVTestBase):
     options = {
         SkillProgression.internal_name: SkillProgression.option_progressive,
-        Mods.internal_name: frozenset(Mods.valid_keys),
+        Mods.internal_name: frozenset(all_mods_except_invalid_combinations),
     }
 
     def test_all_skill_levels_require_previous_level(self):

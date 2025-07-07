@@ -42,7 +42,7 @@ class TestVanillaRegionsConnectionsWithoutGingerIsland(unittest.TestCase):
 class TestModsConnections(unittest.TestCase):
     options = {
         options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_false,
-        options.Mods: frozenset(options.Mods.valid_keys)
+        options.Mods: frozenset(options.all_mods_except_invalid_combinations),
     }
     content = create_content(fill_dataclass_with_default(options))
     all_regions_by_name = create_all_regions(content.registered_packs)

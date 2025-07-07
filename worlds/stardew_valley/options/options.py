@@ -6,7 +6,7 @@ from typing import Protocol, ClassVar
 from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, OptionList, \
     Visibility, Removed, OptionCounter
 from .jojapocalypse_options import Jojapocalypse, JojaStartPrice, JojaEndPrice, JojaPricingPattern, JojaPurchasesForMembership, JojaAreYouSure
-from ..mods.mod_data import ModNames
+from ..mods.mod_data import ModNames, invalid_mod_combinations
 from ..strings.ap_names.ap_option_names import BuffOptionName, WalnutsanityOptionName, SecretsanityOptionName, EatsanityOptionName
 from ..strings.bundle_names import all_cc_bundle_names, MemeBundleName
 from ..strings.trap_names import all_traps
@@ -1002,6 +1002,16 @@ disabled_mods = {ModNames.deepwoods, ModNames.magic,
                  ModNames.boarding_house}
 
 enabled_mods = all_mods.difference(disabled_mods)
+all_mods_except_invalid_combinations = set(all_mods)
+for mod_combination in invalid_mod_combinations:
+    priority_mod = mod_combination[0]
+    if priority_mod not in all_mods_except_invalid_combinations:
+        continue
+    for mod in mod_combination:
+        if mod == priority_mod:
+            continue
+        all_mods_except_invalid_combinations.remove(mod)
+enabled_mods_except_invalid_combinations = all_mods_except_invalid_combinations.difference(disabled_mods)
 
 
 class Mods(OptionSet):
