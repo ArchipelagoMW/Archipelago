@@ -109,7 +109,8 @@ class LuigisMansionRandomizer:
         with open(self.clean_iso_path, "rb") as f:
             magic = fs.try_read_str(f, 0, 4)
             game_id = fs.try_read_str(f, 0, 6)
-        print("Magic: " + str(magic) + "; Game ID: " + str(game_id))
+        logger.info("ISO Magic code: " + magic)
+        logger.info("ISO Game ID: " + game_id)
         if magic == "CISO":
             raise InvalidCleanISOError(f"The provided ISO is in CISO format. The {RANDOMIZER_NAME} randomizer " +
                                        "only supports ISOs in ISO format.")
