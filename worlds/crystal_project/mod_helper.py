@@ -216,7 +216,7 @@ def get_modded_locations() -> List[ExpandedModLocationData]:
 
             # Entity type 6 is Crystal
             if entity_type == 6:
-                location = build_crystal_location(location, entity_ids_in_use, excluded_ids)
+                location = build_crystal_location(data.ID, location, entity_ids_in_use, excluded_ids)
                 if location is not None:
                     locations.append(location)
                     entity_ids_in_use.append(location.offsetless_code)

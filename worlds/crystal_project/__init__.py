@@ -106,6 +106,7 @@ class CrystalProjectWorld(World):
                     self.options.extraClamshellsInPool.value = slot_data["extraClamshellsInPool"]
                     self.options.newWorldStoneJobQuantity.value = slot_data["jobGoalAmount"]
                     self.options.jobRando.value = slot_data["jobRando"]
+                    self.starting_jobs = slot_data["startingJobsForUT"]
                     self.options.startingJobQuantity.value = slot_data["startingJobQuantity"]
                     self.options.killBossesMode.value = slot_data["killBossesMode"]
                     self.options.shopsanity.value = slot_data["shopsanity"]
@@ -120,19 +121,16 @@ class CrystalProjectWorld(World):
                     self.options.obscureRoutes.value = slot_data["obscureRoutes"]
                     self.options.includeSummonAbilities.value = slot_data["includeSummonAbilities"]
                     self.options.includeScholarAbilities.value = slot_data["includeScholarAbilities"]
-                    # self.options.obscureRoutes.value = slot_data["modTitles"]
-                    # self.options.obscureRoutes.value = slot_data["moddedLocations"]
-
-                    # list of options we may still need to get to work with yamlless UT using re-gen-passthrough
-                        # possibly also starting region for regionsanity, need to see if just having the seed is enough
-                    # "startingJobs": self.get_job_id_list(),
-                    # "modTitles": mod_titles,
-                    # "moddedLocations": slot_data_locations,
-            return
+                    self.options.useMods.value = slot_data["useMods"]
+                    # self.modded_locations = slot_data["moddedLocationsForUT"]
+                    # self.modded_shops = slot_data["moddedShopsForUT"]
+                    self.starter_region = slot_data["starter_region"]
 
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
 
-        self.starting_jobs = get_starting_jobs(self)
+        # Checks if starting jobs is empty and if so fills it.  If this is UT re-gen it won't be empty
+        if not self.starting_jobs:
+            self.starting_jobs = get_starting_jobs(self)
         for job in self.starting_jobs:
             self.multiworld.push_precollected(self.create_item(job))
 
@@ -200,17 +198,19 @@ class CrystalProjectWorld(World):
 
         # pick one region to give a starting pass to and then save that later
         if self.options.regionsanity.value == self.options.regionsanity.option_true:
-            initially_reachable_regions = []
-            # Generate a collection state that is a copy of the current state but also has all the passes so we can
-            # check what regions we can access without just getting told none because we have no passes
-            all_passes_state: CollectionState = CollectionState(self.multiworld)
-            for region_pass in self.item_name_groups[PASS]:
-                all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
-            for region in self.get_regions():
-                if region.can_reach(all_passes_state) and region.name != MENU and region.name != MODDED_ZONE:
-                    if len(region.locations) > 3:
-                        initially_reachable_regions.append(region)
-            self.starter_region = self.random.choice(initially_reachable_regions).name
+            # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
+            if self.starter_region == "":
+                initially_reachable_regions = []
+                # Generate a collection state that is a copy of the current state but also has all the passes so we can
+                # check what regions we can access without just getting told none because we have no passes
+                all_passes_state: CollectionState = CollectionState(self.multiworld)
+                for region_pass in self.item_name_groups[PASS]:
+                    all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
+                for region in self.get_regions():
+                    if region.can_reach(all_passes_state) and region.name != MENU and region.name != MODDED_ZONE:
+                        if len(region.locations) > 3:
+                            initially_reachable_regions.append(region)
+                self.starter_region = self.random.choice(initially_reachable_regions).name
             # logging.getLogger().info("Starting region is " + self.starter_region)
             self.origin_region_name = self.starter_region
             self.multiworld.push_precollected(self.create_item(region_name_to_pass_dict[self.starter_region]))
@@ -547,6 +547,7 @@ class CrystalProjectWorld(World):
             "extraClamshellsInPool": self.get_extra_clamshells(),
             "jobGoalAmount": self.options.newWorldStoneJobQuantity.value,
             "jobRando": self.options.jobRando.value,
+            "startingJobsForUT": self.starting_jobs,
             "startingJobQuantity": self.options.startingJobQuantity.value,
             "randomizeStartingJobs": bool(self.options.jobRando.value == self.options.jobRando.option_full),
             "startingJobs": self.get_job_id_list(),
@@ -567,6 +568,10 @@ class CrystalProjectWorld(World):
             "includeSummonAbilities": self.options.includeSummonAbilities.value,
             "includeScholarAbilities": self.options.includeScholarAbilities.value,
             "randomizeMusic": bool(self.options.randomizeMusic.value),
+            "useMods": self.options.useMods.value,
             "modTitles": mod_titles,
             "moddedLocations": slot_data_locations,
+            # "moddedLocationsForUT": self.modded_locations,
+            # "moddedShopsForUT": self.modded_shops,
+            "starter_region": self.starter_region, # stored for UT re-gen
         }
