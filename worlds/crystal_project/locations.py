@@ -293,7 +293,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Home Point Stone duck", 560 + npc_index_offset), #Home Point Stone (403, 161, -265) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Impress the Luxury Equipment Shop Bouncer with 6 jobs collected", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Impress the Luxury Equipment Shop Bouncer further with 11 jobs collected", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(419, 171, -289)
-        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY)), #(417, 171, -299) Fixed Missable
+        LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Luxury Key Thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #(417, 171, -299) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Courtyard Chloe", 1661 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
         LocationData(CAPITAL_SEQUOIA, "Capital Sequoia NPC - Sparkling in the fountain", 2584 + npc_index_offset), #Plug Lure
@@ -513,12 +513,14 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Salmon Pass
         #Treasure chests
-        LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset), #Paypirbak chest
-        LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset), #Fenix Juice chest
+        # 2 chests on the east side that either require the ability to get to Greenshire Reprise and cross it or hop the bridge (also you need the 5 jobs bc the rental quintar comes from Capital Sequoia)
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Riverbank among yellow flowers", 2700 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Paypirbak chest
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Admiring the hidden waterfall", 419 + treasure_index_offset, lambda state: (state.can_reach(GREENSHIRE_REPRISE, player=player) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) and logic.has_jobs(state, 5)) or logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Fenix Juice chest
+        # 1 chest on the west side that either requires crossing the bridge or hoofing it from Salmon River
+        LocationData(SALMON_PASS, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or state.can_reach(SALMON_RIVER, player=player)),  # Fenix Juice chest
 
         #Salmon River
         #Treasure chests
-        LocationData(SALMON_RIVER, "Salmon Pass Chest - Across a bridge and around through a tunnel", 2420 + treasure_index_offset), #Fenix Juice chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Hop on chest once you have become frogger", 1264 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Atop river island crown", 1297 + treasure_index_offset), #Bloodbind chest
         LocationData(SALMON_RIVER, "Salmon River Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
@@ -1189,7 +1191,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Putt Putt Crab mows the lawn", 3437 + npc_index_offset), #(54, 52, 200) Crab 13
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - King of the middle of nowhere ocean crab", 3438 + npc_index_offset), #(52, 76, -616) Crab 14
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
-        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Crab people crab people", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
+        LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Undersea Crab People Crab Retirement Home south of Salmon Race start", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden Quintar but faster than royal salmon) Z35_SpeedOcto
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
         LocationData(THE_DEEP_SEA, "The Deep Sea NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot

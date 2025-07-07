@@ -89,6 +89,8 @@ class CrystalProjectLogic:
             return state.has(OLD_WORLD_STONE, self.player)
 
     def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
+        min_level = min_level + self.options.levelComparedToEnemies.value
+
         if min_level > self.options.maxLevel.value:
             min_level = self.options.maxLevel.value
 

@@ -3,6 +3,7 @@ from .constants.mounts import *
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
+from .constants.maps import *
 from .constants.regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
@@ -17,7 +18,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule, update_item_classification
+    get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -69,12 +70,12 @@ class CrystalProjectWorld(World):
     modded_locations = get_modded_locations()
 
     for modded_location in modded_locations:
-        location_name_to_id[modded_locations[modded_location].name] = modded_locations[modded_location].code
+        location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = get_modded_shopsanity_locations()
+    modded_shops = get_modded_shopsanity_locations([ModIncrementedIdData(location.unmodified_code, location.offsetless_code, location.mod_guid) for (index, location) in enumerate(modded_locations)])
 
     for modded_shop in modded_shops:
-        location_name_to_id[modded_shops[modded_shop].name] = modded_shops[modded_shop].code
+        location_name_to_id[modded_shop.name] = modded_shop.code
 
     web = CrystalProjectWeb()
 
@@ -91,7 +92,8 @@ class CrystalProjectWorld(World):
         self.starter_region: str = ""
         self.starting_jobs: List[str] = []
         self.included_regions: List[str] = []
-        self.statically_placed_jobs:int = 0
+        self.statically_placed_jobs: int = 0
+        self.starting_progressive_levels: int = 1
 
     def generate_early(self):
         # implement .yaml-less Universal Tracker support
@@ -136,12 +138,21 @@ class CrystalProjectWorld(World):
         if self.options.startWithTreasureFinder.value:
             self.multiworld.push_precollected(self.create_item(TREASURE_FINDER))
 
-        if self.options.startWithMaps.value:
+        if self.options.startWithMaps.value == self.options.startWithMaps.option_true:
             for map_name in self.item_name_groups[MAP]:
                 self.multiworld.push_precollected(self.create_item(map_name))
 
         if not self.options.levelGating.value == self.options.levelGating.option_none:
-            self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
+            #3 is Spawning Meadows' level
+            starting_level_so_you_can_do_anything = 3 + self.options.levelComparedToEnemies.value
+            if starting_level_so_you_can_do_anything < 3:
+                starting_level_so_you_can_do_anything = 3
+            elif starting_level_so_you_can_do_anything > self.options.maxLevel.value:
+                starting_level_so_you_can_do_anything = self.options.maxLevel.value
+            # Players start with at least 1 Progressive Level, but we add more if their Level Compared to Enemies setting is positive
+            self.starting_progressive_levels = ((starting_level_so_you_can_do_anything - 1) // self.options.progressiveLevelSize.value) + 1
+            for _ in range(self.starting_progressive_levels):
+                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_regions(self) -> None:
         locations = get_locations(self.player, self.options)
@@ -160,18 +171,18 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_location in self.modded_locations:
-                location = LocationData(self.modded_locations[modded_location].region,
-                                        self.modded_locations[modded_location].name,
-                                        self.modded_locations[modded_location].code,
-                                        build_condition_rule(self.modded_locations[modded_location].rule_condition, self))
+                location = LocationData(modded_location.region,
+                                        modded_location.name,
+                                        modded_location.code,
+                                        build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
-                location = LocationData(self.modded_shops[shop].region,
-                                        self.modded_shops[shop].name,
-                                        self.modded_shops[shop].code,
-                                        build_condition_rule(self.modded_shops[shop].rule_condition, self))
+                location = LocationData(shop.region,
+                                        shop.name,
+                                        shop.code,
+                                        build_condition_rule(shop.rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -305,25 +316,25 @@ class CrystalProjectWorld(World):
         if self.options.levelGating.value == self.options.levelGating.option_none:
             excluded_items.add(PROGRESSIVE_LEVEL)
 
-        if self.options.startWithTreasureFinder:
+        if self.options.startWithTreasureFinder.value == self.options.startWithTreasureFinder.option_true:
             excluded_items.add(TREASURE_FINDER)
 
-        if self.options.startWithMaps:
+        if self.options.startWithMaps.value == self.options.startWithMaps.option_true:
             for map_name in self.item_name_groups[MAP]:
                 excluded_items.add(map_name)
 
-        if self.options.goal == self.options.goal.option_astley:
+        if self.options.goal.value == self.options.goal.option_astley:
             excluded_items.add(NEW_WORLD_STONE)
 
-        if self.options.goal == self.options.goal.option_true_astley:
+        if self.options.goal.value == self.options.goal.option_true_astley:
             excluded_items.add(NEW_WORLD_STONE)
             excluded_items.add(OLD_WORLD_STONE)
 
-        if self.options.includeSummonAbilities == self.options.includeSummonAbilities.option_false:
+        if self.options.includeSummonAbilities.value == self.options.includeSummonAbilities.option_false:
             for summon in self.item_name_groups[SUMMON]:
                 excluded_items.add(summon)
 
-        if self.options.includeScholarAbilities == self.options.includeScholarAbilities.option_false:
+        if self.options.includeScholarAbilities.value == self.options.includeScholarAbilities.option_false:
             for scholar_ability in self.item_name_groups[SCHOLAR_ABILITY]:
                 excluded_items.add(scholar_ability)
 
@@ -423,8 +434,11 @@ class CrystalProjectWorld(World):
                         self.options.goal.value == self.options.goal.option_true_astley and
                         name == THE_OLD_WORLD_PASS):
                     amount = 1
-                # adds true Astley goal required items if they don't already exist
-                if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE):
+                # adds Astley goal required item if it doesn't already exist (aka the map!)
+                if self.options.goal.value == self.options.goal.option_astley and name == THE_NEW_WORLD_MAP:
+                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
+                # adds true Astley goal required items if they don't already exist (including maps!)
+                if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE or name == THE_OLD_WORLD_MAP or name == THE_NEW_WORLD_MAP):
                     amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
 
                 for _ in range(amount):
@@ -438,9 +452,10 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if self.options.useMods:
+            combined_locations: List[ModLocationData] = self.modded_locations
+            combined_locations.extend(self.modded_shops)
+
             for modded_item in self.modded_items:
-                combined_locations: List[ModLocationData] = list(self.modded_locations.values())
-                combined_locations.extend(list(self.modded_shops.values()))
                 update_item_classification(modded_item, [location.rule_condition for location in combined_locations], self)
                 item = self.create_item(modded_item.name)
                 pool.append(item)
@@ -448,8 +463,8 @@ class CrystalProjectWorld(World):
         if not self.options.levelGating.value == self.options.levelGating.option_none:
             #guarantee space for 2 clamshells, one on the following line and one because you start with 1 progressive level already
             max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 1
-            #players start with one
-            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - 1):
+            #players start with one or more, depending on their Level Compared to Enemies setting
+            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - self.starting_progressive_levels):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
 
@@ -500,18 +515,18 @@ class CrystalProjectWorld(World):
         if self.options.useMods:
             mod_titles = get_mod_titles()
             for modded_location in self.modded_locations:
-                slot_data_locations.append({"Id": self.modded_locations[modded_location].offsetless_code,
-                                            "Region": self.modded_locations[modded_location].region,
-                                            "Name": self.modded_locations[modded_location].name,
-                                            "Coordinates": self.modded_locations[modded_location].coordinates,
-                                            "biomeId": self.modded_locations[modded_location].biomeId,
+                slot_data_locations.append({"Id": modded_location.offsetless_code,
+                                            "Region": modded_location.region,
+                                            "Name": modded_location.name,
+                                            "Coordinates": modded_location.coordinates,
+                                            "biomeId": modded_location.biomeId,
                                             "Rule": None })
             for shop in self.modded_shops:
-                slot_data_locations.append({ "Id": self.modded_shops[shop].offsetless_code,
-                                             "Region": self.modded_shops[shop].region,
-                                             "Name": self.modded_shops[shop].name,
-                                             "Coordinates": self.modded_shops[shop].coordinates,
-                                             "BiomeId": self.modded_shops[shop].biomeId,
+                slot_data_locations.append({ "Id": shop.offsetless_code,
+                                             "Region": shop.region,
+                                             "Name": shop.name,
+                                             "Coordinates": shop.coordinates,
+                                             "BiomeId": shop.biomeId,
                                              "Rule": None })
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
@@ -527,6 +542,7 @@ class CrystalProjectWorld(World):
             "obscureRoutes": bool(self.options.obscureRoutes.value),
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "levelGating": self.options.levelGating.value,
+            "levelComparedToEnemies": self.options.levelComparedToEnemies.value,
             "progressiveLevelSize": self.options.progressiveLevelSize.value,
             "maxLevel": self.options.maxLevel.value,
             "shopsanity": self.options.shopsanity.value,
