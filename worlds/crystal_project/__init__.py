@@ -78,6 +78,14 @@ class CrystalProjectWorld(World):
 
     web = CrystalProjectWeb()
 
+    # This is how we tell the Universal Tracker we want to use re_gen_passthrough
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        return slot_data
+
+    # and this is how we tell Universal Tracker we don't need the yaml
+    ut_can_gen_without_yaml = True
+
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
         self.starter_region: str = ""
@@ -86,6 +94,39 @@ class CrystalProjectWorld(World):
         self.statically_placed_jobs:int = 0
 
     def generate_early(self):
+        # implement .yaml-less Universal Tracker support
+        if hasattr(self.multiworld, "generation_is_fake"):
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                if "Crystal Project" in self.multiworld.re_gen_passthrough:
+                    slot_data = self.multiworld.re_gen_passthrough["Crystal Project"]
+                    self.options.goal.value = slot_data["goal"]
+                    self.options.clamshellGoalQuantity.value = slot_data["clamshellGoalQuantity"]
+                    self.options.extraClamshellsInPool.value = slot_data["extraClamshellsInPool"]
+                    self.options.newWorldStoneJobQuantity.value = slot_data["jobGoalAmount"]
+                    self.options.jobRando.value = slot_data["jobRando"]
+                    self.options.startingJobQuantity.value = slot_data["startingJobQuantity"]
+                    self.options.killBossesMode.value = slot_data["killBossesMode"]
+                    self.options.shopsanity.value = slot_data["shopsanity"]
+                    self.options.regionsanity.value = slot_data["regionsanity"]
+                    self.options.includedRegions.value = slot_data["includedRegions"]
+                    self.options.progressiveMountMode.value = slot_data["progressiveMountMode"]
+                    self.options.levelGating.value = slot_data["levelGating"]
+                    self.options.progressiveLevelSize.value = slot_data["progressiveLevelSize"]
+                    self.options.maxLevel.value = slot_data["maxLevel"]
+                    self.options.keyMode.value = slot_data["keyMode"]
+                    self.options.obscureRoutes.value = slot_data["obscureRoutes"]
+                    self.options.includeSummonAbilities.value = slot_data["includeSummonAbilities"]
+                    self.options.includeScholarAbilities.value = slot_data["includeScholarAbilities"]
+                    # self.options.obscureRoutes.value = slot_data["modTitles"]
+                    # self.options.obscureRoutes.value = slot_data["moddedLocations"]
+
+                    # list of options we still need to get to work with yamlless UT using re-gen-passthrough
+                        # possibly also starting region for regionsanity, need to see if just having the seed is enough
+                    # "startingJobs": self.get_job_id_list(),
+                    # "modTitles": mod_titles,
+                    # "moddedLocations": slot_data_locations,
+            return
+
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
 
         self.starting_jobs = get_starting_jobs(self)

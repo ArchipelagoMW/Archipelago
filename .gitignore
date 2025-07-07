@@ -65,6 +65,7 @@ Output Logs/
 /data/user.kv
 /datapackage
 /custom_worlds
+fuzz.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -202,3 +203,6 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
+
+# Crystal Project Mods Folder
+crystal_project_mods/
