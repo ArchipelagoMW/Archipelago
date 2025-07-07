@@ -25,6 +25,22 @@ class ModLocationData(NamedTuple):
     biomeId: int
     rule_condition: str | None
 
+class ExpandedModLocationData(NamedTuple):
+    region: str
+    name: str
+    code: int
+    offsetless_code: int
+    unmodified_code: int
+    mod_guid:str
+    coordinates: str
+    biomeId: int
+    rule_condition: str | None
+
+class ModIncrementedIdData(NamedTuple):
+    original_id: int
+    new_id: int
+    mod_guid: str
+
 class ModDataModel(object):
     def __init__(self, json_data):
         self.ID = None
@@ -63,6 +79,10 @@ def get_mod_titles() -> List[str]:
 def get_modded_items() -> List[Item]:
     empty_player_value = -1
     items: List[Item] = []
+    #prefill with items created by the Achipelago mod which isn't read by this process
+    equipment_ids_in_use: List[int] = []
+    item_ids_in_use: List[int] = []
+    job_ids_in_use: List[int] = []
     file_directory = get_mod_directory()
 
     if not os.path.isdir(file_directory):
@@ -78,43 +98,59 @@ def get_modded_items() -> List[Item]:
         excluded_ids = get_excluded_ids(data)
 
         for item in data.Equipment:
-            item_id = item['ID'] + equipment_index_offset
-            item_in_pool = any(data.code == item_id for name, data in item_table.items())
-            excluded = any(equipment_id == item['ID'] for equipment_id in excluded_ids.excluded_equipment_ids)
-            name = 'Equipment - ' + item['Name'] + ' - ' + str(item_id)
+            item_id = item['ID']
+            excluded = any(item_id == excluded_id for excluded_id in excluded_ids.excluded_equipment_ids)
 
-            if not item_in_pool and not excluded:
-                mod_item = Item(name, ItemClassification.useful, item_id, empty_player_value)
+            if excluded:
+                continue
 
-                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
-                    items.append(mod_item)
+            next_id = get_next_mod_id(item_id, equipment_ids_in_use)
+            offset_id = next_id + equipment_index_offset
+            item_in_pool = any(offset_id == data.code for name, data in item_table.items())
+            name = 'Equipment - ' + item['Name'] + ' - ' + str(offset_id)
+
+            if not item_in_pool:
+                mod_item = Item(name, ItemClassification.useful, offset_id, empty_player_value)
+                items.append(mod_item)
+                equipment_ids_in_use.append(next_id)
 
         for item in data.Items:
-            item_id = item['ID'] + item_index_offset
-            item_in_pool = any(data.code == item_id for name, data in item_table.items())
-            excluded = any(item_id == item['ID'] for item_id in excluded_ids.excluded_item_ids)
-            name = 'Item - ' + item['Name'] + ' - ' + str(item_id)
+            item_id = item['ID']
+            excluded = any(item_id == excluded_id for excluded_id in excluded_ids.excluded_item_ids)
 
-            if not item_in_pool and not excluded:
-                mod_item = Item(name, ItemClassification.filler, item_id, empty_player_value)
+            if excluded:
+                continue
 
-                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
-                    items.append(mod_item)
+            next_id = get_next_mod_id(item_id, item_ids_in_use)
+            offset_id = next_id + item_index_offset
+            item_in_pool = any(offset_id == data.code for name, data in item_table.items())
+            name = 'Item - ' + item['Name'] + ' - ' + str(offset_id)
+
+            if not item_in_pool:
+                mod_item = Item(name, ItemClassification.filler, offset_id, empty_player_value)
+                items.append(mod_item)
+                item_ids_in_use.append(next_id)
 
         for item in data.Jobs:
-            item_id = item['ID'] + job_index_offset
-            item_in_pool = any(data.code == item_id for name, data in item_table.items())
-            excluded = any(job_id == item['ID'] for job_id in excluded_ids.excluded_job_ids)
+            item_id = item['ID']
+            excluded = any(item_id == excluded_id for excluded_id in excluded_ids.excluded_job_ids)
+
+            if excluded:
+                continue
+
+            next_id = get_next_mod_id(item_id, job_ids_in_use)
+            offset_id = next_id + job_index_offset
+            item_in_pool = any(offset_id == data.code for name, data in item_table.items())
+
             is_unselectable = False
             if 'IsUnselectableJob' in item and 'IsUnselectableSubJob' in item:
                 is_unselectable = item['IsUnselectableJob'] and item['IsUnselectableSubJob']
-            name = 'Job - ' + item['Name'] + ' - ' + str(item_id)
+            name = 'Job - ' + item['Name'] + ' - ' + str(offset_id)
 
-            if not item_in_pool and not is_unselectable and not excluded:
-                mod_item = Item(name, ItemClassification.progression, item_id, empty_player_value)
-
-                if length_hint([item for (index, item) in enumerate(items) if item.code == mod_item.code]) == 0:
-                    items.append(mod_item)
+            if not item_in_pool and not is_unselectable:
+                mod_item = Item(name, ItemClassification.progression, offset_id, empty_player_value)
+                items.append(mod_item)
+                job_ids_in_use.append(next_id)
 
         file.close()
 
@@ -144,9 +180,10 @@ def update_item_classification(item: Item, rule_condition, world: "CrystalProjec
 
     return None
 
-def get_modded_locations() -> Dict[str, ModLocationData]:
-    locations: Dict[str, ModLocationData] = {}
-    location_codes: List[int] = []
+def get_modded_locations() -> List[ExpandedModLocationData]:
+    locations: List[ExpandedModLocationData] = []
+    #Prefilled with Archipelago mod ids
+    entity_ids_in_use: List[int] = []
     file_directory = get_mod_directory()
 
     if not os.path.isdir(file_directory):
@@ -165,31 +202,34 @@ def get_modded_locations() -> Dict[str, ModLocationData]:
             entity_type = location['EntityType']
             #Entity type 0 is NPC
             if entity_type == 0:
-                location = build_npc_location(location, excluded_ids)
-                if location is not None and not location.name in locations and not location.code in location_codes:
-                    locations[location.name] = location
-                    location_codes.append(location.code)
+                location = build_npc_location(data.ID, location, entity_ids_in_use, excluded_ids)
+                if location is not None:
+                    locations.append(location)
+                    entity_ids_in_use.append(location.offsetless_code)
 
             #Entity type 5 is Treasure
             if entity_type == 5:
-                location = build_treasure_location(location, excluded_ids)
-                if location is not None and not location.name in locations and not location.code in location_codes:
-                    locations[location.name] = location
-                    location_codes.append(location.code)
+                location = build_treasure_location(data.ID, location, entity_ids_in_use, excluded_ids)
+                if location is not None:
+                    locations.append(location)
+                    entity_ids_in_use.append(location.offsetless_code)
 
             # Entity type 6 is Crystal
             if entity_type == 6:
-                location = build_crystal_location(location, excluded_ids)
-                if location is not None and not location.name in locations and not location.code in location_codes:
-                    locations[location.name] = location
-                    location_codes.append(location.code)
+                location = build_crystal_location(location, entity_ids_in_use, excluded_ids)
+                if location is not None:
+                    locations.append(location)
+                    entity_ids_in_use.append(location.offsetless_code)
 
         file.close()
 
     return locations
 
-def get_modded_shopsanity_locations() -> Dict[str, ModLocationData]:
-    locations: Dict[str, ModLocationData] = {}
+def get_modded_shopsanity_locations(incremented_ids: List[ModIncrementedIdData]) -> List[ModLocationData]:
+    locations: List[ModLocationData] = []
+    entity_ids_in_use: List[int] = []
+    for incremented_id in incremented_ids:
+        entity_ids_in_use.append(incremented_id.new_id)
 
     file_directory = get_mod_directory()
 
@@ -209,8 +249,8 @@ def get_modded_shopsanity_locations() -> Dict[str, ModLocationData]:
             entity_type = location['EntityType']
             # Entity type 0 is NPC
             if entity_type == 0:
-                npc_locations = build_shop_locations(location, excluded_ids)
-                locations.update(npc_locations)
+                npc_locations = build_shop_locations(data.ID, location, incremented_ids, entity_ids_in_use, excluded_ids)
+                locations.extend(npc_locations)
 
         file.close()
 
@@ -222,13 +262,14 @@ def get_mod_directory() -> str:
 
     return mod_directory
 
-def build_npc_location(location, excluded_ids) -> Optional[ModLocationData]:
+def build_npc_location(mod_guid, location, entity_ids_in_use, excluded_ids) -> Optional[ExpandedModLocationData]:
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
     region = get_region_by_id(biome_id)
     item_id = location['ID']
-    id_with_offset = item_id + npc_index_offset
-    name = region + ' NPC - Modded NPC ' + str(item_id)
+    next_id = get_next_mod_id(item_id, entity_ids_in_use)
+    id_with_offset = next_id + npc_index_offset
+    name = region + ' NPC - Modded NPC ' + str(next_id)
     coord = location['Coord']
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     has_add_inventory = False
@@ -275,20 +316,26 @@ def build_npc_location(location, excluded_ids) -> Optional[ModLocationData]:
         location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
         if not location_in_pool and not location_unused and not coordinates == "0,0,0":
-            location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, rule_condition)
+            location = ExpandedModLocationData(region, name, id_with_offset, next_id, item_id, mod_guid, coordinates, biome_id, rule_condition)
             return location
 
     return None
 
-def build_shop_locations(location, excluded_ids) -> Dict[str, ModLocationData]:
-    locations: Dict[str, ModLocationData] = {}
+def build_shop_locations(mod_guid, location, incremented_ids: List[ModIncrementedIdData], entity_ids_in_use, excluded_ids) -> List[ModLocationData]:
+    locations: List[ModLocationData] = []
     location_codes: List[int] = []
     options: CrystalProjectOptions
     biome_id = location['BiomeID']
     region = get_region_by_id(biome_id)
     item_id = location['ID']
+    new_id = get_next_mod_id(item_id, entity_ids_in_use)
     coord = location['Coord']
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
+
+    for incremented_id in incremented_ids:
+        if incremented_id.original_id == item_id and mod_guid == incremented_id.mod_guid:
+            #we already incremented this id when creating other types of locations
+            new_id = incremented_id.new_id
 
     pages = location['NpcData']['Pages']
     for page in pages:
@@ -301,7 +348,7 @@ def build_shop_locations(location, excluded_ids) -> Dict[str, ModLocationData]:
                 id_offset = 10000
 
                 for shop_item in stock:
-                    shop_item_id = item_id + id_offset
+                    shop_item_id = new_id + id_offset
                     id_with_offset = shop_item_id + shop_index_offset
                     shop_name = region + ' Shop - Modded Shop ' + str(shop_item_id)
                     shop_item_excluded = is_item_at_location_excluded(shop_item, excluded_ids)
@@ -315,21 +362,22 @@ def build_shop_locations(location, excluded_ids) -> Dict[str, ModLocationData]:
                             rule_condition = None
 
                         location = ModLocationData(region, shop_name, id_with_offset, shop_item_id, coordinates, biome_id, rule_condition)
-                        if not location.name in locations and not location.code in location_codes:
-                            locations[location.name] = location
+                        if not location.code in location_codes:
+                            locations.append(location)
                             location_codes.append(location.code)
 
                     id_offset += 10000
 
     return locations
 
-def build_treasure_location(location, excluded_ids):
+def build_treasure_location(mod_guid, location, entity_ids_in_use, excluded_ids):
     #Chests always add an item and never have conditions, so nice and easy
     biome_id = location['BiomeID']
     region = get_region_by_id(biome_id)
     item_id = location['ID']
-    id_with_offset = item_id + treasure_index_offset
-    name = region + ' Chest - Modded Chest ' + str(item_id)
+    next_id = get_next_mod_id(item_id, entity_ids_in_use)
+    id_with_offset = next_id + treasure_index_offset
+    name = region + ' Chest - Modded Chest ' + str(next_id)
     coord = location['Coord']
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     is_excluded = is_item_at_location_excluded(location['TreasureData'], excluded_ids)
@@ -338,19 +386,19 @@ def build_treasure_location(location, excluded_ids):
     location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
     if not location_in_pool and not location_unused and not is_excluded:
-        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, None)
-
+        location = ExpandedModLocationData(region, name, id_with_offset, next_id, item_id, mod_guid, coordinates, biome_id, None)
         return location
 
     return None
 
-def build_crystal_location(location, excluded_ids):
+def build_crystal_location(mod_guid, location, entity_ids_in_use, excluded_ids):
     # Crystals always add a job and never have conditions, so nice and easy
     biome_id = location['BiomeID']
     region = get_region_by_id(biome_id)
     item_id = location['ID']
-    id_with_offset = item_id + crystal_index_offset
-    name = region + ' Crystal - Modded Job ' + str(item_id)
+    next_id = get_next_mod_id(item_id, entity_ids_in_use)
+    id_with_offset = next_id + crystal_index_offset
+    name = region + ' Crystal - Modded Job ' + str(next_id)
     coord = location['Coord']
     coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
     job_id = location['CrystalData']['JobID']
@@ -360,7 +408,7 @@ def build_crystal_location(location, excluded_ids):
     location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
     if not location_in_pool and not location_unused and not is_excluded:
-        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, None)
+        location = ExpandedModLocationData(region, name, id_with_offset, next_id, item_id, mod_guid, coordinates, biome_id, None)
 
         return location
 
@@ -403,6 +451,12 @@ def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
         return IdsExcludedFromRandomization(excluded_equipment_ids, excluded_item_ids, excluded_job_ids)
     else:
         return IdsExcludedFromRandomization([], [], [])
+
+def get_next_mod_id(base_mod_id: int, ids_in_use: List[int]) -> int:
+    while base_mod_id in ids_in_use:
+        base_mod_id += 1
+
+    return base_mod_id
 
 def is_item_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomization) -> bool:
     loot_type = data['LootType']

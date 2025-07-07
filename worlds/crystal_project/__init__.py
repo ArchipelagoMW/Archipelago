@@ -17,7 +17,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule, update_item_classification
+    get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -69,12 +69,12 @@ class CrystalProjectWorld(World):
     modded_locations = get_modded_locations()
 
     for modded_location in modded_locations:
-        location_name_to_id[modded_locations[modded_location].name] = modded_locations[modded_location].code
+        location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = get_modded_shopsanity_locations()
+    modded_shops = get_modded_shopsanity_locations([ModIncrementedIdData(location.unmodified_code, location.offsetless_code, location.mod_guid) for (index, location) in enumerate(modded_locations)])
 
     for modded_shop in modded_shops:
-        location_name_to_id[modded_shops[modded_shop].name] = modded_shops[modded_shop].code
+        location_name_to_id[modded_shop.name] = modded_shop.code
 
     web = CrystalProjectWeb()
 
@@ -119,18 +119,18 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_location in self.modded_locations:
-                location = LocationData(self.modded_locations[modded_location].region,
-                                        self.modded_locations[modded_location].name,
-                                        self.modded_locations[modded_location].code,
-                                        build_condition_rule(self.modded_locations[modded_location].rule_condition, self))
+                location = LocationData(modded_location.region,
+                                        modded_location.name,
+                                        modded_location.code,
+                                        build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
-                location = LocationData(self.modded_shops[shop].region,
-                                        self.modded_shops[shop].name,
-                                        self.modded_shops[shop].code,
-                                        build_condition_rule(self.modded_shops[shop].rule_condition, self))
+                location = LocationData(shop.region,
+                                        shop.name,
+                                        shop.code,
+                                        build_condition_rule(shop.rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -397,9 +397,10 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if self.options.useMods:
+            combined_locations: List[ModLocationData] = self.modded_locations
+            combined_locations.extend(self.modded_shops)
+
             for modded_item in self.modded_items:
-                combined_locations: List[ModLocationData] = list(self.modded_locations.values())
-                combined_locations.extend(list(self.modded_shops.values()))
                 update_item_classification(modded_item, [location.rule_condition for location in combined_locations], self)
                 item = self.create_item(modded_item.name)
                 pool.append(item)
@@ -459,18 +460,18 @@ class CrystalProjectWorld(World):
         if self.options.useMods:
             mod_titles = get_mod_titles()
             for modded_location in self.modded_locations:
-                slot_data_locations.append({"Id": self.modded_locations[modded_location].offsetless_code,
-                                            "Region": self.modded_locations[modded_location].region,
-                                            "Name": self.modded_locations[modded_location].name,
-                                            "Coordinates": self.modded_locations[modded_location].coordinates,
-                                            "biomeId": self.modded_locations[modded_location].biomeId,
+                slot_data_locations.append({"Id": modded_location.offsetless_code,
+                                            "Region": modded_location.region,
+                                            "Name": modded_location.name,
+                                            "Coordinates": modded_location.coordinates,
+                                            "biomeId": modded_location.biomeId,
                                             "Rule": None })
             for shop in self.modded_shops:
-                slot_data_locations.append({ "Id": self.modded_shops[shop].offsetless_code,
-                                             "Region": self.modded_shops[shop].region,
-                                             "Name": self.modded_shops[shop].name,
-                                             "Coordinates": self.modded_shops[shop].coordinates,
-                                             "BiomeId": self.modded_shops[shop].biomeId,
+                slot_data_locations.append({ "Id": shop.offsetless_code,
+                                             "Region": shop.region,
+                                             "Name": shop.name,
+                                             "Coordinates": shop.coordinates,
+                                             "BiomeId": shop.biomeId,
                                              "Rule": None })
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
