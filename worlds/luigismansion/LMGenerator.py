@@ -1,6 +1,9 @@
 import hashlib
 import os
 import yaml
+from sys import platform, path
+from importlib import resources
+from shutil import copytree
 
 from collections import Counter
 from CommonClient import logger
@@ -22,6 +25,23 @@ from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
 
+try:
+    import dolphin_memory_engine as dme
+except ImportError:
+    # Load the external dependencies based on OS
+    is_linux = platform.startswith("linux")
+    is_windows = platform in ("win32", "cygwin", "msys")
+    lib_path = ""
+    if not (is_linux or is_windows):
+        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+    if is_windows:
+        lib_path = "lib-windows"
+    elif is_linux:
+        lib_path = "lib-linux"
+    parent_current_dir = resources.files(__name__)
+    copytree(lib_path, parent_current_dir.name)
+    path.append(parent_current_dir.joinpath(lib_path).name)
+    import dolphin_memory_engine as dme
 from gclib import fs_helpers as fs
 from gclib.gcm import GCM
 from gclib.dol import DOL
