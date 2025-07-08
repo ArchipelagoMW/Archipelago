@@ -641,7 +641,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Really elaborate crystal rafters", 1123 + treasure_index_offset), #Red Coat chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Crystal gutters", 1122 + treasure_index_offset), #Red Cap chest
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Tucked on ledge by aqueduct", 1982 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Resist Shifter chest
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Tucked on ledge by aqueduct", 1982 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state)), #Resist Shifter chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - East Switch Room", 2977 + treasure_index_offset), #Ether Pouch chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Eastern nyoom room", 2056 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind aqueduct grate", 2703 + treasure_index_offset), #Potion Pouch chest
