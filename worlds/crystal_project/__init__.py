@@ -17,7 +17,7 @@ from .presets import crystal_project_options_presets
 from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
-from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
+from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
     get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld

@@ -16,6 +16,17 @@ import json
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
+class ModDataModel(object):
+    def __init__(self, json_data):
+        self.ID = None
+        self.Title = None
+        self.System = None
+        self.Equipment = None
+        self.Items = None
+        self.Jobs = None
+        self.Entities = None
+        self.__dict__ = json.loads(json_data)
+
 class ModLocationData(NamedTuple):
     region: str
     name: str
@@ -29,17 +40,6 @@ class ModIncrementedIdData(NamedTuple):
     original_id: int
     new_id: int
     mod_guid: str
-
-class ModDataModel(object):
-    def __init__(self, json_data):
-        self.ID = None
-        self.Title = None
-        self.System = None
-        self.Equipment = None
-        self.Items = None
-        self.Jobs = None
-        self.Entities = None
-        self.__dict__ = json.loads(json_data)
 
 class IdsExcludedFromRandomization(NamedTuple):
     excluded_equipment_ids : List[int]
@@ -124,25 +124,6 @@ def get_mod_info() -> List[ModInfoModel]:
         file.close()
 
     return data
-
-def get_mod_titles() -> List[str]:
-    titles: List[str] = []
-    file_directory = get_mod_directory()
-
-    if not os.path.isdir(file_directory):
-        return titles
-
-    only_files = [f for f in listdir(file_directory) if
-                  isfile(join(file_directory, f))]
-
-    for file_name in only_files:
-        file = (open(join(file_directory, file_name)))
-        file_text = file.read()
-        data = ModDataModel(file_text)
-        titles.append(data.Title)
-        file.close()
-
-    return titles
 
 def get_modded_items(mod_info: List[ModInfoModel]) -> List[Item]:
     empty_player_value = -1
