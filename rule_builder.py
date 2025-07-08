@@ -940,6 +940,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
+            # match state.has_all
             return True_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
@@ -1047,7 +1048,8 @@ class HasAny(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
-            return True_().resolve(world)
+            # match state.has_any
+            return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
@@ -1150,6 +1152,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_counts) == 0:
+            # match state.has_all_counts
             return True_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
@@ -1248,7 +1251,8 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_counts) == 0:
-            return True_().resolve(world)
+            # match state.has_any_count
+            return False_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
@@ -1344,12 +1348,11 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
-        if len(self.item_names) < self.count:
-            return False_().resolve(world)
         if len(self.item_names) == 0:
-            return True_().resolve(world)
+            # match state.has_from_list
+            return False_().resolve(world)
         if len(self.item_names) == 1:
-            return Has(self.item_names[0]).resolve(world)
+            return Has(self.item_names[0], self.count).resolve(world)
         return self.Resolved(self.item_names, self.count, player=world.player)
 
     @override
@@ -1448,6 +1451,15 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
         super().__init__(options=options)
         self.item_names: tuple[str, ...] = tuple(sorted(set(item_names)))
         self.count: int = count
+
+    @override
+    def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
+        if len(self.item_names) == 0 or len(self.item_names) < self.count:
+            # match state.has_from_list_unique
+            return False_().resolve(world)
+        if len(self.item_names) == 1:
+            return Has(self.item_names[0]).resolve(world)
+        return self.Resolved(self.item_names, self.count, player=world.player)
 
     class Resolved(HasFromList.Resolved):
         @override

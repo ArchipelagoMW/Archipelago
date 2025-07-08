@@ -109,6 +109,17 @@ rule = Or(
 )
 ```
 
+### Disabling caching
+
+If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You can disable the caching system entirely by setting the `rule_caching_enabled` class property to `False` on your world:
+
+```python
+class MyWorld(RuleWorldMixin, World):
+    rule_caching_enabled = False
+```
+
+You'll have to benchmark your own world to see if it should be disabled or not.
+
 ## Defining custom rules
 
 You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate to provide your world as a type argument to add correct type checking to the `_instantiate` method.
@@ -148,7 +159,7 @@ class MyRule(Rule["MyWorld"], game="My Game"):
             return {self.item_name: {id(self)}}
 ```
 
-The default `Has`, `HasAll`, and `HasAny` rules define this function already.
+All of the default `Has*` rules define this function already.
 
 ### Region dependencies
 
