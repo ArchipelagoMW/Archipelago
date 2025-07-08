@@ -184,10 +184,10 @@ item_table: Dict[str, ItemData] = {
     # Progressive Level is used for all level gating options: Progressive Level Pass, Progressive Level Cap, and Progressive Level Catch-Up
     PROGRESSIVE_LEVEL: ItemData(ITEM, 500 + item_index_offset, ItemClassification.progression, 0),
     HOMEPOINT_UNLOCK: ItemData(ITEM, 800 + item_index_offset, ItemClassification.filler, 0),
-    SPECIAL_SHOUDU_STEW: ItemData(ITEM, 796 + item_index_offset, ItemClassification.progression, 0, 1),
-    SPECIAL_MILK: ItemData(ITEM, 797 + item_index_offset, ItemClassification.progression, 0, 1),
-    SPECIAL_FRESH_SALMON: ItemData(ITEM, 798 + item_index_offset, ItemClassification.progression, 0, 1),
-    SPECIAL_ROTTEN_SALMON: ItemData(ITEM, 799 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_SHOUDU_STEW: ItemData(ITEM, 229 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_MILK: ItemData(ITEM, 230 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_FRESH_SALMON: ItemData(ITEM, 231 + item_index_offset, ItemClassification.progression, 0, 1),
+    SPECIAL_ROTTEN_SALMON: ItemData(ITEM, 232 + item_index_offset, ItemClassification.progression, 0, 1),
     DEITY_EYE: ItemData(ITEM, 176 + item_index_offset, ItemClassification.progression, 0, 0, 0, 4), #Used for true astley win con and fighting Gabriel in Kill Bosses mode
     STEM_WARD: ItemData(ITEM, 177 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1), #Used for true astley win con and fighting Gabriel in Kill Bosses mode
     PROOF_OF_MERIT: ItemData(ITEM, 191 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified
