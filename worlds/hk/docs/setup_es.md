@@ -10,7 +10,7 @@
 1. Ejecuta Lumafly y asegurate de localizar la carpeta de instalación de Hollow Knight
 2. Instala el mod de Archipiélago haciendo click en cualquiera de los siguientes:
     * Haz clic en uno de los enlaces de abajo para permitir Lumafly para instalar los mods. Lumafly pedirá 
-    confirmación.
+      confirmación.
         * [Archipiélago y dependencias solamente](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago)
         * [Archipelago con rando essentials](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago/Archipelago%20Map%20Mod/RecentItemsDisplay/DebugMod/RandoStats/Additional%20Timelines/CompassAlwaysOn/AdditionalMaps/)
           (incluye Archipelago Map Mod, RecentItemsDisplay, DebugMod, RandoStats, AdditionalTimelines, CompassAlwaysOn,
@@ -29,12 +29,12 @@
         4. Abre en Hollow Knight, luego Content y copia la ruta de archivos que esta en la barra de navegación.
     * En Steam:
         1. Si instalaste Hollow Knight en algún otro disco que no sea el predeterminado, ya sabrás donde se encuentra 
-        el juego, ve a esa carpeta, abrela y copia la ruta de archivos que se encuentra en la barra de navegación.
+           el juego, ve a esa carpeta, abrela y copia la ruta de archivos que se encuentra en la barra de navegación.
             * En Windows, la ruta predeterminada suele ser:`C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight`
             * En linux/Steam Deck suele ser: ~/.local/share/Steam/steamapps/common/Hollow Knight
             * En Mac suele ser: ~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app
 2. Ejecuta Lumafly como administrador y, cuando te pregunte por la ruta de instalación, pega la ruta que copeaste 
-anteriormente.
+   anteriormente.
 
 ## Configuración de tu fichero YAML
 ### ¿Qué es un YAML y por qué necesito uno?
@@ -52,10 +52,10 @@ de Archipelago para generar un YAML usando una interfaz gráfica.
 3. Elige el modo **Archipelago** en la selección de modos de partida.
 4. Introduce la configuración correcta para tu servidor de Archipelago.
 5. Pulsa **Iniciar** para iniciar la partida. El juego se quedará con la pantalla en negro unos segundos mientras 
-coloca todos los objetos.
+   coloca todos los objetos.
 6. El juego debera comenzar y ya estaras dentro del servidor.
     * Si estas esperando a que termine un contador/timer, procura presionar el boton Start cuando el contador/timer 
-    termine.
+      termine.
     * Otra manera es pausar el juego y esperar a que el contador/timer termine cuando ingreses a la partida.
 
 ## Consejos y otros comandos
