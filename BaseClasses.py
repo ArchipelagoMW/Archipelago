@@ -9,7 +9,7 @@ from argparse import Namespace
 from collections import Counter, deque
 from collections.abc import Collection, MutableSequence
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Final, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
+from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
                     Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING)
 import dataclasses
 
