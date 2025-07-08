@@ -32,11 +32,27 @@ class LuigisMansionUSAProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = ".aplm"
     result_file_ending = ".iso"
 
+    procedure = [
+        ("apply_aplm", ["patch.aplm"])
+    ]
+
     @classmethod
     def get_source_data(cls) -> bytes:
-        with open(get_settings().luigismansion_options.iso_file, "rb") as infile:
-            base_rom_bytes = bytes(infile.read())
-        return base_rom_bytes
+        return get_settings().luigismansion_options.iso_file.encode()
+
+    @classmethod
+    def patch(cls, target: str) -> None:
+        pass
+        # TODO Potentially pass the GCM here and allow it to create the ISO output, where target is output file path
+
+
+class LuigisMansionAPPatchExtension(APPatchExtension):
+    game = "Luigi's Mansion"
+
+    @staticmethod
+    def apply_yaml(caller: LuigisMansionUSAProcedurePatch, rom_path_bytes: bytes, patch_yaml_path: str):
+      rom_path = rom_path_bytes.decode()
+      caller.patch(rom_path, patch_yaml_path)
 
 def verify_base_rom():
     base_md5 = md5()

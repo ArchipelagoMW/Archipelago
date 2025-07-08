@@ -889,6 +889,8 @@ class LMWorld(World):
                 output_data["Locations"][location.name] = item_info
 
         # Output the plando details to file
+        # TODO update this to be an output file created by the APPatch itself. Then it could be written to the container
+        #   and later retreived for updated. See CV64 for more details.
         file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
         with open(file_path, "w") as f:
             f.write(yaml.dump(output_data, sort_keys=False, Dumper=Dumper))
