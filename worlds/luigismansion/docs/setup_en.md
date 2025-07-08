@@ -72,8 +72,7 @@ to continue later.
 ### Obtain your patch file and create your ROM
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.aplm` extension.
+the host will provide you with either a link to download your patch file, or with an APLM patch file that they have extracted from the zip. 
 
 Put your patch file on your desktop or somewhere convenient. Open the ArchipelagoLauncher.exe and click `Open Patch`. 
 This should automatically launch the client, and will also create your ISO in the same place as your patch file. On first time patching, you will be prompted 
