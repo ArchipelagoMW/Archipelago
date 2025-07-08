@@ -220,7 +220,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         return multiworld
 
     output = tempfile.TemporaryDirectory()
-    with output as temp_dir:
+    with (output as temp_dir):
         output_players = [player for player in multiworld.player_ids if AutoWorld.World.generate_output.__code__
                           is not multiworld.worlds[player].generate_output.__code__]
         with concurrent.futures.ThreadPoolExecutor(len(output_players) + 2) as pool:
@@ -276,10 +276,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
                 locations_data: dict[int, dict[int, tuple[int, int, int]]] = {player: {} for player in multiworld.player_ids}
                 for location in multiworld.get_filled_locations():
-                    if type(location.address) == int:
-                        assert location.item.code is not None, "item code None should be event, " \
-                                                               "location.address should then also be None. Location: " \
-                                                               f" {location}, Item: {location.item}"
+                    if type(location.address) is int:
+                        assert type(location.item.code) is int, ("Location with int address should have "
+                                                                 "item with int address. "
+                                                                 f"Location: {location}, Item: {location.item}")
                         assert location.address not in locations_data[location.player], (
                             f"Locations with duplicate address. {location} and "
                             f"{locations_data[location.player][location.address]}")
