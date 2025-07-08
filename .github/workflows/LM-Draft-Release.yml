@@ -95,7 +95,7 @@ jobs:
           path: worlds/luigismansion/lib-linux
 
       - name: Compress Directory
-        run: Compress-Archive -Path ./worlds/luigismansion/* -DestinationPath ./luigismansion.apworld
+        run: Compress-Archive -Path ./worlds/luigismansion -DestinationPath ./luigismansion.apworld
         shell: pwsh 
       
       - uses: actions/upload-artifact@v4
