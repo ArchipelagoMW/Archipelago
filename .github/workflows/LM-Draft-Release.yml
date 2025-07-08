@@ -79,10 +79,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Create Local Windows Lib Folder
         run: mkdir worlds/luigismansion/lib-windows
       - name: Create Local Linux Lib Folder
         run: mkdir worlds/luigismansion/lib-linux
+      
       - uses: actions/download-artifact@v4
         with:
           name: lib-windows
@@ -91,16 +93,15 @@ jobs:
         with:
           name: lib-linux
           path: worlds/luigismansion/lib-linux
-      - name: Creates the LM APWorld
-        id: apworld
-        uses: Eijebong/ap-actions/package-apworld@main
-        with:
-          path: worlds/luigismansion
+
+      - name: Compress Directory
+        run: Compress-Archive -Path ./worlds/luigismansion/* -DestinationPath ./luigismansion.apworld
+        shell: pwsh 
       
       - uses: actions/upload-artifact@v4
         with:
           name: apworld
-          path: ${{ steps.apworld.outputs.apworld }}
+          path: luigismansion.apworld
 
   publish:
     runs-on: ubuntu-latest
