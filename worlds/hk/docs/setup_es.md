@@ -14,10 +14,10 @@
         * [Archipiélago y dependencias solamente](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago)
         * [Archipelago con rando essentials](https://themulhima.github.io/Lumafly/commands/download/?mods=Archipelago/Archipelago%20Map%20Mod/RecentItemsDisplay/DebugMod/RandoStats/Additional%20Timelines/CompassAlwaysOn/AdditionalMaps/)
           (incluye Archipelago Map Mod, RecentItemsDisplay, DebugMod, RandoStats, AdditionalTimelines, CompassAlwaysOn,
-        y AdditionalMaps).
-    * Haz clic en el botón "Instalar" situado junto a la entrada del mod "Archipiélago". Si lo deseas, instala también
-    "Archipelago Map Mod" para utilizarlo como rastreador en el juego.
-    Si lo requieres (Y recomiendo hacerlo) busca e instala Archipelago Map Mod para usar un tracker in-game
+          y AdditionalMaps).
+    * Haz clic en el botón "Instalar" situado junto a la entrada del mod "Archipiélago". Si lo deseas, instala también 
+      "Archipelago Map Mod" para utilizarlo como rastreador en el juego.
+      Si lo requieres (Y recomiendo hacerlo) busca e instala Archipelago Map Mod para usar un tracker in-game
 3. Ejecuta el juego desde el apartado de inicio haciendo click en el botón Launch with Mods
 
 ## Que hago si Lumafly no encontro la ruta de instalación de mi juego?
