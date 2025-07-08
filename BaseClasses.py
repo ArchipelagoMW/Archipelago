@@ -21,7 +21,6 @@ import Utils
 
 if TYPE_CHECKING:
     from entrance_rando import ERPlacementState
-    from rule_builder import Rule
     from worlds import AutoWorld
 
 
