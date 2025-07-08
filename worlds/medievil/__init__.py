@@ -16,7 +16,7 @@ class MedievilWeb(WebWorld):
     theme = "stone"
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Archipelago Spyro 3 randomizer on your computer.",
+        "A guide to setting up the Archipelago Medievil randomizer on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
