@@ -28,20 +28,18 @@ except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
 
 # Load the external dependencies based on OS
-temp_bool = False #TODO remove after testing as an APWorld that is generated from a draft in GitHub
-if temp_bool:
-    is_linux = platform.startswith("linux")
-    is_windows = platform in ("win32", "cygwin", "msys")
-    lib_path = ""
-    parent_current_dir = os.path.dirname(os.getcwd())
-    if not (is_linux or is_windows):
-        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-    if is_windows:
-        lib_path = "lib-windows.zip"
-    elif is_linux:
-        lib_path = "lib-linux.zip"
-    copy(lib_path, parent_current_dir)
-    path.append(os.path.join(parent_current_dir,lib_path))
+is_linux = platform.startswith("linux")
+is_windows = platform in ("win32", "cygwin", "msys")
+lib_path = ""
+parent_current_dir = os.path.dirname(os.getcwd())
+if not (is_linux or is_windows):
+    raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+if is_windows:
+    lib_path = "lib-windows"
+elif is_linux:
+    lib_path = "lib-linux"
+copy(lib_path, parent_current_dir)
+path.append(os.path.join(parent_current_dir,lib_path))
 import dolphin_memory_engine as dme
 
 CONNECTION_REFUSED_GAME_STATUS = (
