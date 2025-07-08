@@ -3,7 +3,8 @@ import os
 import time
 import traceback
 from sys import platform, path
-from shutil import copy
+from importlib import resources
+from shutil import copytree
 
 import NetUtils
 import Utils
@@ -34,15 +35,15 @@ except ImportError:
     is_linux = platform.startswith("linux")
     is_windows = platform in ("win32", "cygwin", "msys")
     lib_path = ""
-    parent_current_dir = os.path.dirname(os.getcwd())
     if not (is_linux or is_windows):
         raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
     if is_windows:
         lib_path = "lib-windows"
     elif is_linux:
         lib_path = "lib-linux"
-    copy(lib_path, parent_current_dir)
-    path.append(os.path.join(parent_current_dir,lib_path))
+    parent_current_dir = resources.files(__name__)
+    copytree(lib_path, parent_current_dir.name)
+    path.append(parent_current_dir.joinpath(lib_path).name)
     import dolphin_memory_engine as dme
 
 CONNECTION_REFUSED_GAME_STATUS = (
