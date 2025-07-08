@@ -2,16 +2,17 @@ import asyncio
 import os
 import time
 import traceback
+from sys import platform, path
+from importlib import resources
+from typing import Any
 
 import NetUtils
 import Utils
-from typing import Any
-
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
+import dolphin_memory_engine as dme
 
 from . import CLIENT_VERSION
-from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
@@ -24,8 +25,6 @@ try:
     tracker_loaded = True
 except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
-
-    import dolphin_memory_engine as dme
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
@@ -162,8 +161,27 @@ def save_patched_iso(output_data):
     directory_to_iso, file = os.path.split(output_data)
     file_name = os.path.splitext(file)[0]
 
-    if iso_path:
-        LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
+    # Load the external dependencies based on OS
+    is_linux = platform.startswith("linux")
+    is_windows = platform in ("win32", "cygwin", "msys")
+    lib_path = ""
+    if not (is_linux or is_windows):
+        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+    if is_windows:
+        lib_path = "lib-windows"
+    elif is_linux:
+        lib_path = "lib-linux"
+
+    # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
+    # the with block ends.
+    with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
+        logger.info("Temp Resource Path: " + str(resource_lib_path))
+        path.append(str(resource_lib_path))
+
+        # Use our randomize function to patch the file into an ISO.
+        from .LMGenerator import LuigisMansionRandomizer
+        if iso_path:
+            LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
