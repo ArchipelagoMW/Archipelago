@@ -648,7 +648,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 1st at west waterfall base", 2704 + treasure_index_offset), #Defense Shifter chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 2nd at west waterfall base", 1145 + treasure_index_offset), #Money chest
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - I saw red vent in the eastern stairwell", 2701 + treasure_index_offset), #Grim Scythe chest
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - I saw Red vent in the eastern stairwell", 2701 + treasure_index_offset), #Grim Scythe chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Goat snack for later", 2915 + treasure_index_offset), #Ancient Reservoir map chest
         LocationData(ANCIENT_RESERVOIR, "Underpass Chest - Waterway nook between Gran & Ancient Reservoir", 3541 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(64, 98, -111) 1st Underpass Scrap on main map
 
