@@ -32,7 +32,7 @@ class LocationData(NamedTuple):
     name: str
     code: Optional[int]
     type: LocationType
-    rule: Optional[Callable[[Any], bool]] = Location.default_access_rule
+    rule: Optional[Callable[[Any], bool]] = Location.access_rule
 
 
 def get_location_types(world: World, inclusion_type: LocationInclusion) -> Set[LocationType]:
@@ -1623,7 +1623,7 @@ def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
     for i, location_data in enumerate(location_table):
         # Removing all item-based logic on No Logic
         if logic_level == RequiredTactics.option_no_logic:
-            location_data = location_data._replace(rule=Location.default_access_rule)
+            location_data = location_data._replace(rule=Location.access_rule)
             location_table[i] = location_data
         # Generating Beat event locations
         if location_data.name.endswith((": Victory", ": Defeat")):

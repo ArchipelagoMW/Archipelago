@@ -72,7 +72,7 @@ class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMu
     item_name_groups: ClassVar[dict[str, set[str]]] = {"Group 1": {"Item 1", "Item 2", "Item 3"}}
     hidden: ClassVar[bool] = True
     options_dataclass: "ClassVar[type[PerGameCommonOptions]]" = RuleBuilderOptions
-    options: RuleBuilderOptions  # type: ignore # pyright: ignore[reportIncompatibleVariableOverride]
+    options: RuleBuilderOptions  # pyright: ignore[reportIncompatibleVariableOverride]
     origin_region_name: str = "Region 1"
 
     @override
@@ -268,42 +268,42 @@ class TestCaching(unittest.TestCase):
     def test_item_cache_busting(self) -> None:
         entrance = self.world.get_entrance("Region 1 -> Region 2")
         self.assertFalse(entrance.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(entrance.resolved_rule)])
+        self.assertFalse(self.state.rule_cache[1][id(entrance.access_rule)])
 
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item directly needed
-        self.assertNotIn(id(entrance.resolved_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(entrance.access_rule), self.state.rule_cache[1])
         self.assertTrue(entrance.can_reach(self.state))
 
     def test_region_cache_busting(self) -> None:
         location = self.world.get_location("Location 2")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.resolved_rule)])
+        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for region 2 access
         # cache gets cleared during the can_reach
         self.assertTrue(location.can_reach(self.state))
-        self.assertTrue(self.state.rule_cache[1][id(location.resolved_rule)])
+        self.assertTrue(self.state.rule_cache[1][id(location.access_rule)])
 
     def test_location_cache_busting(self) -> None:
         location = self.world.get_location("Location 5")
         self.state.collect(self.world.create_item("Item 1"))  # access to region 2
         self.state.collect(self.world.create_item("Item 3"))  # access to region 3
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.resolved_rule)])
+        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 2"))  # clears cache, item only needed for location 2 access
-        self.assertNotIn(id(location.resolved_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
     def test_entrance_cache_busting(self) -> None:
         location = self.world.get_location("Location 6")
         self.state.collect(self.world.create_item("Item 2"))  # item directly needed for location rule
         self.assertFalse(location.can_reach(self.state))  # populates cache
-        self.assertFalse(self.state.rule_cache[1][id(location.resolved_rule)])
+        self.assertFalse(self.state.rule_cache[1][id(location.access_rule)])
 
         self.state.collect(self.world.create_item("Item 1"))  # clears cache, item only needed for entrance access
-        self.assertNotIn(id(location.resolved_rule), self.state.rule_cache[1])
+        self.assertNotIn(id(location.access_rule), self.state.rule_cache[1])
         self.assertTrue(location.can_reach(self.state))
 
 
@@ -324,64 +324,64 @@ class TestRules(unittest.TestCase):
     def test_true(self) -> None:
         rule = True_()
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
 
     def test_false(self) -> None:
         rule = False_()
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has(self) -> None:
         rule = Has("Item 1")
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item = self.world.create_item("Item 1")
         self.state.collect(item)
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(item)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_all(self) -> None:
         rule = HasAll("Item 1", "Item 2")
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item1 = self.world.create_item("Item 1")
         self.state.collect(item1)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item2 = self.world.create_item("Item 2")
         self.state.collect(item2)
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(item1)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_any(self) -> None:
         item_names = ("Item 1", "Item 2")
         rule = HasAny(*item_names)
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
         for item_name in item_names:
             item = self.world.create_item(item_name)
             self.state.collect(item)
-            self.assertTrue(resolved_rule.test(self.state))
+            self.assertTrue(resolved_rule(self.state))
             self.state.remove(item)
-            self.assertFalse(resolved_rule.test(self.state))
+            self.assertFalse(resolved_rule(self.state))
 
     def test_has_all_counts(self) -> None:
         rule = HasAllCounts({"Item 1": 1, "Item 2": 2})
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item1 = self.world.create_item("Item 1")
         self.state.collect(item1)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item2 = self.world.create_item("Item 2")
         self.state.collect(item2)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
         item2 = self.world.create_item("Item 2")
         self.state.collect(item2)
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(item2)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_any_count(self) -> None:
         item_counts = {"Item 1": 1, "Item 2": 2}
@@ -391,17 +391,17 @@ class TestRules(unittest.TestCase):
         for item_name, count in item_counts.items():
             item = self.world.create_item(item_name)
             for _ in range(count):
-                self.assertFalse(resolved_rule.test(self.state))
+                self.assertFalse(resolved_rule(self.state))
                 self.state.collect(item)
-            self.assertTrue(resolved_rule.test(self.state))
+            self.assertTrue(resolved_rule(self.state))
             self.state.remove(item)
-            self.assertFalse(resolved_rule.test(self.state))
+            self.assertFalse(resolved_rule(self.state))
 
     def test_has_from_list(self) -> None:
         item_names = ("Item 1", "Item 2", "Item 3")
         rule = HasFromList(*item_names, count=2)
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
         items: list[Item] = []
         for i, item_name in enumerate(item_names):
@@ -409,19 +409,19 @@ class TestRules(unittest.TestCase):
             self.state.collect(item)
             items.append(item)
             if i == 0:
-                self.assertFalse(resolved_rule.test(self.state))
+                self.assertFalse(resolved_rule(self.state))
             else:
-                self.assertTrue(resolved_rule.test(self.state))
+                self.assertTrue(resolved_rule(self.state))
 
         for i in range(2):
             self.state.remove(items[i])
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_from_list_unique(self) -> None:
         item_names = ("Item 1", "Item 1", "Item 2")
         rule = HasFromListUnique(*item_names, count=2)
         resolved_rule = self.world.resolve_rule(rule)
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
         items: list[Item] = []
         for i, item_name in enumerate(item_names):
@@ -429,14 +429,14 @@ class TestRules(unittest.TestCase):
             self.state.collect(item)
             items.append(item)
             if i < 2:
-                self.assertFalse(resolved_rule.test(self.state))
+                self.assertFalse(resolved_rule(self.state))
             else:
-                self.assertTrue(resolved_rule.test(self.state))
+                self.assertTrue(resolved_rule(self.state))
 
         self.state.remove(items[0])
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(items[1])
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_group(self) -> None:
         rule = HasGroup("Group 1", count=2)
@@ -444,14 +444,14 @@ class TestRules(unittest.TestCase):
 
         items: list[Item] = []
         for item_name in ("Item 1", "Item 2"):
-            self.assertFalse(resolved_rule.test(self.state))
+            self.assertFalse(resolved_rule(self.state))
             item = self.world.create_item(item_name)
             self.state.collect(item)
             items.append(item)
 
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(items[0])
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
     def test_has_group_unique(self) -> None:
         rule = HasGroupUnique("Group 1", count=2)
@@ -459,16 +459,16 @@ class TestRules(unittest.TestCase):
 
         items: list[Item] = []
         for item_name in ("Item 1", "Item 1", "Item 2"):
-            self.assertFalse(resolved_rule.test(self.state))
+            self.assertFalse(resolved_rule(self.state))
             item = self.world.create_item(item_name)
             self.state.collect(item)
             items.append(item)
 
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(items[0])
-        self.assertTrue(resolved_rule.test(self.state))
+        self.assertTrue(resolved_rule(self.state))
         self.state.remove(items[1])
-        self.assertFalse(resolved_rule.test(self.state))
+        self.assertFalse(resolved_rule(self.state))
 
 
 class TestSerialization(unittest.TestCase):

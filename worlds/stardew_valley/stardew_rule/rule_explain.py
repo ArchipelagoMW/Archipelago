@@ -127,7 +127,7 @@ def _(rule: Reach, state: CollectionState, expected: bool, explored_spots: Set[T
                 access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
             else:
                 access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
-        elif spot.access_rule == Location.default_access_rule:
+        elif spot.access_rule == Location.access_rule:
             # Sometime locations just don't have an access rule and all the relevant logic is in the parent region.
             access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
 
@@ -140,7 +140,7 @@ def _(rule: Reach, state: CollectionState, expected: bool, explored_spots: Set[T
                 access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
             else:
                 access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", rule.player)]
-        elif spot.access_rule == Entrance.default_access_rule:
+        elif spot.access_rule == Entrance.access_rule:
             # Sometime entrances just don't have an access rule and all the relevant logic is in the parent region.
             access_rules = [Reach(spot.parent_region.name, "Region", rule.player)]
 

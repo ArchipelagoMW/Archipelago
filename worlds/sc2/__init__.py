@@ -222,7 +222,7 @@ def assign_starter_items(world: World, excluded_items: Set[str], locked_location
     if starter_unit == StarterUnit.option_off:
         starter_mission_locations = [location.name for location in location_cache
                                      if location.parent_region.name == first_mission
-                                     and location.access_rule == Location.default_access_rule]
+                                     and location.access_rule == Location.access_rule]
         if not starter_mission_locations:
             # Force early unit if first mission is impossible without one
             starter_unit = StarterUnit.option_any_starter_unit

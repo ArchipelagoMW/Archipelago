@@ -46,6 +46,7 @@ class RuleWorldMixin(World):
     item = Item("Currency x500"), rule = Has("Currency", count=1000), item_mapping = {"Currency x500": "Currency"}"""
 
     rule_caching_enabled: ClassVar[bool] = True
+    """Enable or disable the rule result caching system"""
 
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
@@ -96,11 +97,11 @@ class RuleWorldMixin(World):
                 location = self.get_location(location_name)
             except KeyError:
                 continue
-            if location.resolved_rule is None:
+            if not isinstance(location.access_rule, Rule.Resolved):
                 continue
-            for item_name in location.resolved_rule.item_dependencies():
+            for item_name in location.access_rule.item_dependencies():
                 self.rule_item_dependencies[item_name] |= rule_ids
-            for region_name in location.resolved_rule.region_dependencies():
+            for region_name in location.access_rule.region_dependencies():
                 self.rule_region_dependencies[region_name] |= rule_ids
 
         for entrance_name, rule_ids in self.rule_entrance_dependencies.items():
@@ -108,11 +109,11 @@ class RuleWorldMixin(World):
                 entrance = self.get_entrance(entrance_name)
             except KeyError:
                 continue
-            if entrance.resolved_rule is None:
+            if not isinstance(entrance.access_rule, Rule.Resolved):
                 continue
-            for item_name in entrance.resolved_rule.item_dependencies():
+            for item_name in entrance.access_rule.item_dependencies():
                 self.rule_item_dependencies[item_name] |= rule_ids
-            for region_name in entrance.resolved_rule.region_dependencies():
+            for region_name in entrance.access_rule.region_dependencies():
                 self.rule_region_dependencies[region_name] |= rule_ids
 
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
@@ -146,7 +147,7 @@ class RuleWorldMixin(World):
     def set_completion_rule(self, rule: "Rule[Self]") -> None:
         """Set the completion rule for this world"""
         resolved_rule = self.resolve_rule(rule)
-        self.multiworld.completion_condition[self.player] = resolved_rule.test
+        self.multiworld.completion_condition[self.player] = resolved_rule
         self.completion_rule = resolved_rule
 
     def simplify_rule(self, rule: "Rule.Resolved") -> "Rule.Resolved":
@@ -477,7 +478,9 @@ class Rule(Generic[TWorld]):
 
         instance = self._instantiate(world)
         if not world.rule_caching_enabled:
+            # skip the caching logic entirely
             object.__setattr__(instance, "cacheable", False)
+            object.__setattr__(instance, "__call__", instance._evaluate)  # pyright: ignore[reportPrivateUsage]
         rule_hash = hash(instance)
         if rule_hash not in world.rule_ids:
             world.rule_ids[rule_hash] = instance
@@ -562,25 +565,21 @@ class Rule(Generic[TWorld]):
         always_false: ClassVar[bool] = False
         """Whether this rule always evaluates to True, used to short-circuit logic"""
 
-        def _evaluate(self, state: "CollectionState") -> bool:
-            """Calculate this rule's result with the given state"""
-            ...
-
-        def evaluate(self, state: "CollectionState") -> bool:
-            """Evaluate this rule's result with the given state and cache the result if applicable"""
-            result = self._evaluate(state)
-            if self.cacheable:
-                state.rule_cache[self.player][id(self)] = result
-            return result
-
-        def test(self, state: "CollectionState") -> bool:
+        def __call__(self, state: "CollectionState") -> bool:
             """Evaluate this rule's result with the given state, using the cached value if possible"""
             cached_result = None
             if self.cacheable:
                 cached_result = state.rule_cache[self.player].get(id(self))
             if cached_result is not None:
                 return cached_result
-            return self.evaluate(state)
+            result = self._evaluate(state)
+            if self.cacheable:
+                state.rule_cache[self.player][id(self)] = result
+            return result
+
+        def _evaluate(self, state: "CollectionState") -> bool:
+            """Calculate this rule's result with the given state"""
+            ...
 
         def item_dependencies(self) -> dict[str, set[int]]:
             """Returns a mapping of item name to set of object ids, used for cache invalidation"""
@@ -739,7 +738,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
-                if not rule.test(state):
+                if not rule(state):
                     return False
             return True
 
@@ -770,7 +769,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
             for rule in self.children:
-                if rule.test(state):
+                if rule(state):
                     return True
             return False
 
@@ -905,7 +904,7 @@ class Has(Rule[TWorld], game="Archipelago"):
 
         @override
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
-            verb = "Missing " if state and not self.test(state) else "Has "
+            verb = "Missing " if state and not self(state) else "Has "
             messages: list[JSONMessagePart] = [{"type": "text", "text": verb}]
             if self.count > 1:
                 messages.append({"type": "color", "color": "cyan", "text": str(self.count)})
@@ -917,7 +916,7 @@ class Has(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            prefix = "Has" if self.test(state) else "Missing"
+            prefix = "Has" if self(state) else "Missing"
             count = f"{self.count}x " if self.count > 1 else ""
             return f"{prefix} {count}{self.item_name}"
 
@@ -1022,7 +1021,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
                 return str(self)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
-            prefix = "Has all" if self.test(state) else "Missing some"
+            prefix = "Has all" if self(state) else "Missing some"
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
             infix = "; " if found and missing else ""
@@ -1129,7 +1128,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
                 return str(self)
             found = [item for item in self.item_names if state.has(item, self.player)]
             missing = [item for item in self.item_names if item not in found]
-            prefix = "Has some" if self.test(state) else "Missing all"
+            prefix = "Has some" if self(state) else "Missing all"
             found_str = f"Found: {', '.join(found)}" if found else ""
             missing_str = f"Missing: {', '.join(missing)}" if missing else ""
             infix = "; " if found and missing else ""
@@ -1230,7 +1229,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
                 return str(self)
             found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
             missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
-            prefix = "Has all" if self.test(state) else "Missing some"
+            prefix = "Has all" if self(state) else "Missing some"
             found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
             missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
             infix = "; " if found and missing else ""
@@ -1316,7 +1315,7 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
                 return str(self)
             found = [(item, count) for item, count in self.item_counts if state.has(item, self.player, count)]
             missing = [(item, count) for item, count in self.item_counts if (item, count) not in found]
-            prefix = "Has some" if self.test(state) else "Missing all"
+            prefix = "Has some" if self(state) else "Missing all"
             found_str = f"Found: {', '.join([f'{item} x{count}' for item, count in found])}" if found else ""
             missing_str = f"Missing: {', '.join([f'{item} x{count}' for item, count in missing])}" if missing else ""
             infix = "; " if found and missing else ""
@@ -1602,7 +1601,7 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             if state is None:
                 verb = "Can reach"
-            elif self.test(state):
+            elif self(state):
                 verb = "Reached"
             else:
                 verb = "Cannot reach"
@@ -1615,7 +1614,7 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            prefix = "Reached" if self.test(state) else "Cannot reach"
+            prefix = "Reached" if self(state) else "Cannot reach"
             return f"{prefix} location {self.location_name}"
 
         @override
@@ -1652,7 +1651,7 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             if state is None:
                 verb = "Can reach"
-            elif self.test(state):
+            elif self(state):
                 verb = "Reached"
             else:
                 verb = "Cannot reach"
@@ -1665,7 +1664,7 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            prefix = "Reached" if self.test(state) else "Cannot reach"
+            prefix = "Reached" if self(state) else "Cannot reach"
             return f"{prefix} region {self.region_name}"
 
         @override
@@ -1718,7 +1717,7 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
         def explain_json(self, state: "CollectionState | None" = None) -> "list[JSONMessagePart]":
             if state is None:
                 verb = "Can reach"
-            elif self.test(state):
+            elif self(state):
                 verb = "Reached"
             else:
                 verb = "Cannot reach"
@@ -1731,7 +1730,7 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
         def explain_str(self, state: "CollectionState | None" = None) -> str:
             if state is None:
                 return str(self)
-            prefix = "Reached" if self.test(state) else "Cannot reach"
+            prefix = "Reached" if self(state) else "Cannot reach"
             return f"{prefix} entrance {self.entrance_name}"
 
         @override
