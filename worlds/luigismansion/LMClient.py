@@ -27,20 +27,23 @@ try:
 except ImportError:
     from CommonClient import ClientCommandProcessor, CommonContext
 
-# Load the external dependencies based on OS
-is_linux = platform.startswith("linux")
-is_windows = platform in ("win32", "cygwin", "msys")
-lib_path = ""
-parent_current_dir = os.path.dirname(os.getcwd())
-if not (is_linux or is_windows):
-    raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-if is_windows:
-    lib_path = "lib-windows"
-elif is_linux:
-    lib_path = "lib-linux"
-copy(lib_path, parent_current_dir)
-path.append(os.path.join(parent_current_dir,lib_path))
-import dolphin_memory_engine as dme
+try:
+    import dolphin_memory_engine as dme
+except ImportError:
+    # Load the external dependencies based on OS
+    is_linux = platform.startswith("linux")
+    is_windows = platform in ("win32", "cygwin", "msys")
+    lib_path = ""
+    parent_current_dir = os.path.dirname(os.getcwd())
+    if not (is_linux or is_windows):
+        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+    if is_windows:
+        lib_path = "lib-windows"
+    elif is_linux:
+        lib_path = "lib-linux"
+    copy(lib_path, parent_current_dir)
+    path.append(os.path.join(parent_current_dir,lib_path))
+    import dolphin_memory_engine as dme
 
 CONNECTION_REFUSED_GAME_STATUS = (
     "Dolphin failed to connect. Please load a randomized ROM for LM. Trying again in 5 seconds..."
