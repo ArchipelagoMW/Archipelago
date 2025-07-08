@@ -139,4 +139,4 @@ mirror_shards = [
 ]
 
 item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list + traps}
-items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list}
+items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list + traps}

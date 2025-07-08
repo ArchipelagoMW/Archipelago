@@ -28,7 +28,7 @@ def get_base_rom_as_bytes() -> bytes:
     """
     try:
         from . import GauntletLegendsWorld
-        GauntletLegendsWorld.settings.rom_file.validate()
+        GauntletLegendsWorld.settings.rom_file.validate(GauntletLegendsWorld.settings.rom_file)
         with open(GauntletLegendsWorld.settings.rom_file, "rb") as infile:
             base_rom_bytes = bytes(infile.read())
     except Exception:
