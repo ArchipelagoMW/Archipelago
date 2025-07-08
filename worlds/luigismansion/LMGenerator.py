@@ -26,7 +26,11 @@ from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
 
 try:
-    import dolphin_memory_engine as dme
+    from gclib import fs_helpers as fs
+    from gclib.gcm import GCM
+    from gclib.dol import DOL
+    from gclib.rarc import RARC
+    from gclib.yaz0_yay0 import Yay0
 except ImportError:
     # Load the external dependencies based on OS
     is_linux = platform.startswith("linux")
@@ -41,12 +45,11 @@ except ImportError:
     parent_current_dir = resources.files(__name__)
     copytree(lib_path, parent_current_dir.name)
     path.append(parent_current_dir.joinpath(lib_path).name)
-    import dolphin_memory_engine as dme
-from gclib import fs_helpers as fs
-from gclib.gcm import GCM
-from gclib.dol import DOL
-from gclib.rarc import RARC
-from gclib.yaz0_yay0 import Yay0
+    from gclib import fs_helpers as fs
+    from gclib.gcm import GCM
+    from gclib.dol import DOL
+    from gclib.rarc import RARC
+    from gclib.yaz0_yay0 import Yay0
 
 RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
