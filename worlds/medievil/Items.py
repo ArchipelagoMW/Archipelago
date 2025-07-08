@@ -43,8 +43,6 @@ class MedievilItem(Item):
 
     @staticmethod
     def get_name_to_id() -> dict:
-        # Base ID for Medievil items. This ensures unique IDs within Archipelago.
-        # This aligns with the 9901000 - 9909900 range seen in your logs.
         base_id = 9901000 
         # Create a dictionary mapping item names to their unique Archipelago IDs.
         return {item_data.name: (base_id + item_data.m_code) 
@@ -86,8 +84,9 @@ _all_items: List[MedievilItemData] = [
     ("Copper Shield Charge (100)", 23, MedievilItemCategory.FILLER, False),
     ("Silver Shield Charge (50)", 24, MedievilItemCategory.FILLER, False),
     ("Silver Shield Charge (100)", 25, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False), # Ensure unique m_code for each item
+    ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False),
     ("Gold Shield Charge (100)", 27, MedievilItemCategory.FILLER, False),
+    
     # Level_End is typically a progression item as it signifies advancing a stage
     ("Level_End", 28, MedievilItemCategory.LEVEL_END, True) 
 ]
