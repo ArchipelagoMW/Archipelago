@@ -76,25 +76,21 @@ jobs:
 
   package:
     needs: [windows-deps, linux-deps]
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Navigate into LM World folder
-        run: cd worlds/luigismansion
       - name: Create Local Windows Lib Folder
-        run: mkdir worlds/luigismansion/tmp-windows-lib
+        run: mkdir worlds/luigismansion/lib-windows
       - name: Create Local Linux Lib Folder
-        run: mkdir tmp-linux-lib
+        run: mkdir worlds/luigismansion/lib-linux
       - uses: actions/download-artifact@v4
         with:
           name: lib-windows
-          path: tmp-windows-lib
+          path: worlds/luigismansion/lib-windows
       - uses: actions/download-artifact@v4
         with:
           name: lib-linux
-          path: tmp-linux-lib
-      - name: Navigate back to main folder
-        run: cd ../../
+          path: worlds/luigismansion/lib-linux
       - name: Creates the LM APWorld
         id: apworld
         uses: Eijebong/ap-actions/package-apworld@main
