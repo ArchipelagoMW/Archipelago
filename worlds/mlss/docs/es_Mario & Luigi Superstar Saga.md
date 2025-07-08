@@ -33,7 +33,7 @@ En total, esto requiere
 - La Rosa de Peasley
 - El Broche de judía
 - Las 3 Frutas Chuckola
-- La Tarjeta de socio o La Copa roja
+- La Tarjeta de socio o La Copa Roja
 
 ## ¿Qué objetos y ubicaciones se pueden randomizar?
 
@@ -41,7 +41,7 @@ Ubicaciones en las que se pueden encontrar objetos:
 - Todos los Bloques de Objetos y Bloques de Monedas
 - Todos los puntos de exavación de Chuckle Beans
 - Todos los objetos de las tiendas
-- Todos los objetos de las tiendas de Insignias y Pantalones
+- Todos los objetos de las tiendas de Medallas y Pantalones
 - Todos los cafés y sus recompensas
 - Todas las recompensas de los minijuegos
 - Todos los objetos de eventos
