@@ -45,6 +45,8 @@ class RuleWorldMixin(World):
     Useful when there are multiple versions of a collected item but the logic only uses one. For example:
     item = Item("Currency x500"), rule = Has("Currency", count=1000), item_mapping = {"Currency x500": "Currency"}"""
 
+    rule_caching_enabled: ClassVar[bool] = True
+
     def __init__(self, multiworld: "MultiWorld", player: int) -> None:
         super().__init__(multiworld, player)
         self.rule_ids = {}
@@ -68,14 +70,15 @@ class RuleWorldMixin(World):
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         """Returns a resolved rule registered with the caching system for this world"""
         resolved_rule = rule.resolve(self)
-        for item_name, rule_ids in resolved_rule.item_dependencies().items():
-            self.rule_item_dependencies[item_name] |= rule_ids
-        for region_name, rule_ids in resolved_rule.region_dependencies().items():
-            self.rule_region_dependencies[region_name] |= rule_ids
-        for location_name, rule_ids in resolved_rule.location_dependencies().items():
-            self.rule_location_dependencies[location_name] |= rule_ids
-        for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
-            self.rule_entrance_dependencies[entrance_name] |= rule_ids
+        if self.rule_caching_enabled:
+            for item_name, rule_ids in resolved_rule.item_dependencies().items():
+                self.rule_item_dependencies[item_name] |= rule_ids
+            for region_name, rule_ids in resolved_rule.region_dependencies().items():
+                self.rule_region_dependencies[region_name] |= rule_ids
+            for location_name, rule_ids in resolved_rule.location_dependencies().items():
+                self.rule_location_dependencies[location_name] |= rule_ids
+            for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
+                self.rule_entrance_dependencies[entrance_name] |= rule_ids
         return resolved_rule
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
@@ -85,6 +88,9 @@ class RuleWorldMixin(World):
 
     def register_dependencies(self) -> None:
         """Register all rules that depend on locations with that location's dependencies"""
+        if not self.rule_caching_enabled:
+            return
+
         for location_name, rule_ids in self.rule_location_dependencies.items():
             try:
                 location = self.get_location(location_name)
@@ -259,7 +265,7 @@ class RuleWorldMixin(World):
     @override
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().collect(state, item)
-        if changed and getattr(self, "rule_item_dependencies", None):
+        if changed and self.rule_caching_enabled and getattr(self, "rule_item_dependencies", None):
             player_results = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
@@ -271,7 +277,7 @@ class RuleWorldMixin(World):
     @override
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         changed = super().remove(state, item)
-        if not changed:
+        if not changed or not self.rule_caching_enabled:
             return changed
 
         player_results = state.rule_cache[self.player]
@@ -304,7 +310,7 @@ class RuleWorldMixin(World):
     @override
     def reached_region(self, state: "CollectionState", region: "Region") -> None:
         super().reached_region(state, region)
-        if getattr(self, "rule_region_dependencies", None):
+        if self.rule_caching_enabled and getattr(self, "rule_region_dependencies", None):
             player_results = state.rule_cache[self.player]
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)
@@ -470,6 +476,8 @@ class Rule(Generic[TWorld]):
             return False_.Resolved(player=world.player)
 
         instance = self._instantiate(world)
+        if not world.rule_caching_enabled:
+            object.__setattr__(instance, "cacheable", False)
         rule_hash = hash(instance)
         if rule_hash not in world.rule_ids:
             world.rule_ids[rule_hash] = instance
