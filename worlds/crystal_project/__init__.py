@@ -18,7 +18,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_mod_titles, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData
+    get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -56,7 +56,9 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(shop_name_to_id)
     location_name_to_id.update(region_completion_name_to_id)
     item_name_groups = get_item_names_per_category()
-    modded_items = get_modded_items()
+
+    mod_info = get_mod_info()
+    modded_items = get_modded_items(mod_info)
 
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
@@ -67,12 +69,12 @@ class CrystalProjectWorld(World):
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
-    modded_locations = get_modded_locations()
+    modded_locations = get_modded_locations(mod_info)
 
     for modded_location in modded_locations:
         location_name_to_id[modded_location.name] = modded_location.code
 
-    modded_shops = get_modded_shopsanity_locations([ModIncrementedIdData(location.unmodified_code, location.offsetless_code, location.mod_guid) for (index, location) in enumerate(modded_locations)])
+    modded_shops = get_modded_shopsanity_locations(mod_info)
 
     for modded_shop in modded_shops:
         location_name_to_id[modded_shop.name] = modded_shop.code
@@ -523,7 +525,9 @@ class CrystalProjectWorld(World):
         mod_titles: List[str] = []
         slot_data_locations = []
         if self.options.useMods:
-            mod_titles = get_mod_titles()
+            for mod in self.mod_info:
+                mod_titles.append(mod.mod_name)
+
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code,
                                             "Region": modded_location.region,
