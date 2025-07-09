@@ -266,7 +266,7 @@ like entrance randomization in logic.
 
 Regions have a list called `exits`, containing `Entrance` objects representing transitions to other regions.
 
-There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L298-L299)),
+There must be one special region (Called "Menu" by default, but configurable using [origin_region_name](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/AutoWorld.py#L310-L311)),
 from which the logic unfolds. AP assumes that a player will always be able to return to this starting region by resetting the game ("Save and quit").
 
 ### Entrances
@@ -533,7 +533,7 @@ In addition, the following methods can be implemented and are called in this ord
   called to modify item placement before, during, and after the regular fill process; all finishing before
   `generate_output`. Any items that need to be placed during `pre_fill` should not exist in the itempool, and if there
   are any items that need to be filled this way, but need to be in state while you fill other items, they can be
-  returned from `get_prefill_items`.
+  returned from `get_pre_fill_items`.
 * `generate_output(self, output_directory: str)`
   creates the output files if there is output to be generated. When this is called,
   `self.multiworld.get_locations(self.player)` has all locations for the player, with attribute `item` pointing to the
