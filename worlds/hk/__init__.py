@@ -160,7 +160,7 @@ class HKWeb(WebWorld):
         "Español",
         "setup_es.md",
         "setup/es",
-        ["GreenMarco","Panto UwUr"]
+        ["GreenMarco", "Panto UwUr"]
     )
 
     tutorials = [setup_en, setup_pt_br, setup_es]
