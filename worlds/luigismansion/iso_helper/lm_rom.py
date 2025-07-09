@@ -1,10 +1,14 @@
-from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin, APTokenTypes
+from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 from settings import get_settings, Settings
 from Utils import user_path
-from CommonClient import logger
 
 from hashlib import md5
 from os import path as os_path
+import yaml
+from yaml import CDumper as Dumper
+import logging
+
+logger = logging.getLogger("Luigi's Mansion")
 
 from gclib import fs_helpers as fs
 
@@ -26,7 +30,7 @@ class InvalidCleanISOError(Exception):
     def __str__(self):
         return f"InvalidCleanISOError: {self.message}"
 
-class LuigisMansionUSAProcedurePatch(APProcedurePatch, APTokenMixin):
+class LMUSAAPProcedurePatch(APProcedurePatch, APTokenMixin):
     game = "Luigi's Mansion"
     hash = [LM_USA_MD5]
     patch_file_ending = ".aplm"
@@ -38,6 +42,7 @@ class LuigisMansionUSAProcedurePatch(APProcedurePatch, APTokenMixin):
 
     @classmethod
     def get_source_data(cls) -> bytes:
+        print(get_settings().luigismansion_options.iso_file)
         return get_settings().luigismansion_options.iso_file.encode()
 
     @classmethod
@@ -45,12 +50,17 @@ class LuigisMansionUSAProcedurePatch(APProcedurePatch, APTokenMixin):
         pass
         # TODO Potentially pass the GCM here and allow it to create the ISO output, where target is output file path
 
+# TODO review to see if we can make our patch files not binary
+def write_patch(patch: LMUSAAPProcedurePatch, options_data: dict) -> None:
+    """ Writes our custom yaml file / APLM file to the AP Container, to later be retrieved during patching. """
+    patch.write_file("patch.aplm", yaml.dump(options_data, sort_keys=False, Dumper=Dumper).encode())
+
 
 class LuigisMansionAPPatchExtension(APPatchExtension):
     game = "Luigi's Mansion"
 
     @staticmethod
-    def apply_yaml(caller: LuigisMansionUSAProcedurePatch, rom_path_bytes: bytes, patch_yaml_path: str):
+    def apply_yaml(caller: LMUSAAPProcedurePatch, rom_path_bytes: bytes, patch_yaml_path: str):
       rom_path = rom_path_bytes.decode()
       caller.patch(rom_path, patch_yaml_path)
 
