@@ -838,9 +838,6 @@ async def give_player_items(ctx: LMContext):
 def main(output_data: Optional[str] = None, connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
 
-    if output_data:
-        save_patched_iso(output_data)
-
     async def _main(connect, password):
         ctx = LMContext(connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
