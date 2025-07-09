@@ -16,7 +16,7 @@ import json
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
-MAX_SUPPORTED_EDITOR_VERSION: int = 31
+MAX_SUPPORTED_EDITOR_VERSION: int = 30
 
 class ModDataModel(object):
     def __init__(self, json_data):
