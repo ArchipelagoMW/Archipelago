@@ -1,3 +1,4 @@
+# Python related Imports
 import copy
 import math
 import os
@@ -6,6 +7,7 @@ import logging
 from dataclasses import fields
 from typing import ClassVar
 
+# AP Related Imports
 import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
@@ -26,6 +28,7 @@ from .Regions import *
 from . import Rules
 from .iso_helper.lm_rom import LMUSAAPProcedurePatch, write_patch
 
+
 CLIENT_VERSION = "0.4.10"
 logger = logging.getLogger("Luigi's Mansion")
 
@@ -34,11 +37,12 @@ def run_client(*args):
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
+# Adds the launcher for our component and our client logo.
 components.append(
     Component("LM Client", func=run_client, component_type=Type.CLIENT,
         file_identifier=SuffixIdentifier(".aplm"), icon="archiboolego"))
-
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
+
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
