@@ -835,7 +835,7 @@ async def give_player_items(ctx: LMContext):
         await wait_for_next_loop(0.5)
 
 
-def main(output_data: Optional[str] = None, connect=None, password=None):
+def main(connect=None, password=None):
     Utils.init_logging("Luigi's Mansion Client")
 
     async def _main(connect, password):
