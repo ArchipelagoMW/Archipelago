@@ -118,7 +118,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_shipsanity_items(item_factory, options, items)
     create_booksanity_items(item_factory, content, items)
     create_movie_items(item_factory, options, items)
-    create_secrets_items(item_factory, options, items)
+    create_secrets_items(item_factory, content, options, items)
     create_eatsanity_enzyme_items(item_factory, options, items)
     create_endgame_locations_items(item_factory, options, items)
 
@@ -530,20 +530,22 @@ def create_movie_items(item_factory: StardewItemFactory, options: StardewValleyO
     items.extend(item_factory(item) for item in items_by_group[Group.MOVIESANITY])
 
 
-def create_secrets_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_secrets_items(item_factory: StardewItemFactory, content: StardewContent, options: StardewValleyOptions, items: List[Item]):
     if not options.secretsanity:
         return
-
+    secret_items = []
     if SecretsanityOptionName.easy in options.secretsanity:
-        items.extend(item_factory(item) for item in items_by_group[Group.EASY_SECRET])
+        secret_items.extend(items_by_group[Group.EASY_SECRET])
     if SecretsanityOptionName.fishing in options.secretsanity:
-        items.extend(item_factory(item) for item in items_by_group[Group.FISHING_SECRET])
+        secret_items.extend(items_by_group[Group.FISHING_SECRET])
     # if SecretsanityOptionName.difficult in options.secretsanity:
     #     items.extend(item_factory(item) for item in items_by_group[Group.DIFFICULT_SECRET])
     if SecretsanityOptionName.secret_notes in options.secretsanity:
-        items.extend(item_factory(item) for item in items_by_group[Group.SECRET_NOTES_SECRET])
+        secret_items.extend(items_by_group[Group.SECRET_NOTES_SECRET])
         if options.quest_locations.has_no_story_quests():
-            items.append(item_factory(Wallet.iridium_snake_milk))
+            secret_items.append(Wallet.iridium_snake_milk)
+    filtered_secret_items = remove_excluded(list(secret_items), content, options)
+    items.extend([item_factory(item) for item in filtered_secret_items])
 
 
 def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
