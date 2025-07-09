@@ -1221,10 +1221,10 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - Dungeon East sneaky hole in wall", 1274 + treasure_index_offset), #(-186, 125, -316) F2 Money chest
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - Dungeon West sneaky hole in wall", 2412 + treasure_index_offset), #(-190, 125, -316) F2 Archmage Vest chest
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B1 Searching for greener pastures", 1738 + treasure_index_offset), #(-209, 87, -311) F3 Vita Crown chest
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-185, 63, -363) F4 Judgement chest
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player)), #(-162, 63, -336) F4 Zether Pouch chest
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-185, 38, -301) F6 Ancient Labyrinth map chest
-        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)), #(-219, 27, -350) F7 Mirror Shield chest
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B2 North weird rebar hallway", 2924 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-185, 63, -363) F4 Judgement chest
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B2 East weird rebar hallway", 2926 + treasure_index_offset, lambda state: state.has(ANCIENT_TABLET_B, player) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-162, 63, -336) F4 Zether Pouch chest
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - B4 Tar pit platform", 3649 + treasure_index_offset, lambda state: (state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-185, 38, -301) F6 Ancient Labyrinth map chest
+        LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth Chest - Dog-headed dogshit boss", 2591 + treasure_index_offset, lambda state: (state.has(ANCIENT_TABLET_B, player) and state.has(ANCIENT_TABLET_C, player)) or options.obscureRoutes.value == options.obscureRoutes.option_true), #(-219, 27, -350) F7 Mirror Shield chest
 
         #NPCs
         LocationData(ANCIENT_LABYRINTH, "Ancient Labyrinth NPC - Dungeon East sneaky hole in wall Diamond", 2881 + npc_index_offset), #(-186, 125, -300) F2 Ingot

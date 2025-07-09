@@ -305,7 +305,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {ANCIENT_RESERVOIR: lambda state: logic.has_key(state, PYRAMID_KEY),
                     LAKE_DELENDE: lambda state: logic.has_vertical_movement(state),
                     SALMON_BAY: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
-                    ANCIENT_LABYRINTH: lambda state: state.has(ANCIENT_TABLET_A, player) and logic.has_vertical_movement(state) and logic.has_glide(state)})
+                    ANCIENT_LABYRINTH: lambda state: (state.has(ANCIENT_TABLET_A, player) or options.obscureRoutes.value == options.obscureRoutes.option_true) and logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, SARA_SARA_BAZAAR, [POKO_POKO_DESERT, SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_WEST, SHOUDU_PROVINCE, THE_OPEN_SEA, CONTINENTAL_TRAM],
                     {SARA_SARA_BEACH_WEST: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR),
                     SHOUDU_PROVINCE: lambda state: state.has(FERRY_PASS, world.player),
