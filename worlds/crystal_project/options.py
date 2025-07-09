@@ -199,6 +199,7 @@ class LevelComparedToEnemies(Range):
     Default is 0, or on-level for the enemy level of a region.
 
     Note: Remember to increase your Max Level (see below) if you want regions with high-level enemies to still be lower level than you.
+    Note #2: Spark color changes: red at -10 levels, orange at -5, green at +3, and grey +10. (Though enemies can be 3-5 levels above the min enemy level for a region.)
     """
     display_name = "Level compared to enemies"
     range_start = -10
