@@ -1,5 +1,5 @@
+import logging
 import os.path
-from operator import length_hint
 from os import listdir, getcwd
 from os.path import isfile, join
 from typing import Optional, Callable, TYPE_CHECKING
@@ -16,10 +16,13 @@ import json
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
 
+MAX_SUPPORTED_EDITOR_VERSION: int = 31
+
 class ModDataModel(object):
     def __init__(self, json_data):
         self.ID = None
         self.Title = None
+        self.EditorVersion = None
         self.System = None
         self.Equipment = None
         self.Items = None
@@ -77,50 +80,56 @@ def get_mod_info() -> List[ModInfoModel]:
         file = (open(join(file_directory, file_name)))
         file_text = file.read()
         file_data = ModDataModel(file_text)
-        excluded_ids = get_excluded_ids(file_data)
 
-        shifted_equipment_ids: List[ModIncrementedIdData] = []
-        for item in file_data.Equipment:
-            item_id = item['ID']
+        if file_data.EditorVersion <= MAX_SUPPORTED_EDITOR_VERSION:
+            excluded_ids = get_excluded_ids(file_data)
 
-            #Biggest vanilla ID is 590, we only want non-vanilla items
-            if item_id > 590:
-                next_id = get_next_mod_id(item_id, equipment_ids_in_use)
-                shifted_equipment_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
-                equipment_ids_in_use.append(next_id)
+            shifted_equipment_ids: List[ModIncrementedIdData] = []
+            for item in file_data.Equipment:
+                item_id = item['ID']
 
-        shifted_item_ids: List[ModIncrementedIdData] = []
-        for item in file_data.Items:
-            item_id = item['ID']
+                #Biggest vanilla ID is 590, we only want non-vanilla items
+                if item_id > 590:
+                    next_id = get_next_mod_id(item_id, equipment_ids_in_use)
+                    shifted_equipment_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
+                    equipment_ids_in_use.append(next_id)
 
-            #Biggest vanilla ID is 228
-            if item_id > 228:
-                next_id = get_next_mod_id(item_id, item_ids_in_use)
-                shifted_item_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
-                item_ids_in_use.append(next_id)
+            shifted_item_ids: List[ModIncrementedIdData] = []
+            for item in file_data.Items:
+                item_id = item['ID']
 
-        shifted_job_ids: List[ModIncrementedIdData] = []
-        for item in file_data.Jobs:
-            item_id = item['ID']
+                #Biggest vanilla ID is 228
+                if item_id > 228:
+                    next_id = get_next_mod_id(item_id, item_ids_in_use)
+                    shifted_item_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
+                    item_ids_in_use.append(next_id)
 
-            #Biggest vanilla ID is 23
-            if item_id > 23:
-                next_id = get_next_mod_id(item_id, job_ids_in_use)
-                shifted_job_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
-                job_ids_in_use.append(next_id)
+            shifted_job_ids: List[ModIncrementedIdData] = []
+            for item in file_data.Jobs:
+                item_id = item['ID']
 
-        shifted_entity_ids: List[ModIncrementedIdData] = []
-        for item in file_data.Entities:
-            item_id = item['ID']
+                #Biggest vanilla ID is 23
+                if item_id > 23:
+                    next_id = get_next_mod_id(item_id, job_ids_in_use)
+                    shifted_job_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
+                    job_ids_in_use.append(next_id)
 
-            #Biggest vanilla ID is 4999
-            if item_id > 4999:
-                next_id = get_next_mod_id(item_id, entity_ids_in_use)
-                shifted_entity_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
-                entity_ids_in_use.append(next_id)
+            shifted_entity_ids: List[ModIncrementedIdData] = []
+            for item in file_data.Entities:
+                item_id = item['ID']
 
-        data.append(ModInfoModel(file_data.ID, file_data.Title, order_loaded, file_data, shifted_equipment_ids, shifted_item_ids, shifted_job_ids, shifted_entity_ids, excluded_ids))
-        order_loaded = order_loaded + 1
+                #Biggest vanilla ID is 4999
+                if item_id > 4999:
+                    next_id = get_next_mod_id(item_id, entity_ids_in_use)
+                    shifted_entity_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
+                    entity_ids_in_use.append(next_id)
+
+            data.append(ModInfoModel(file_data.ID, file_data.Title, order_loaded, file_data, shifted_equipment_ids, shifted_item_ids, shifted_job_ids, shifted_entity_ids, excluded_ids))
+            order_loaded = order_loaded + 1
+        else:
+            message = f"Mod {file_data.Title} was skipped because the editor version was {file_data.EditorVersion}. Archipelago currently only supports mods with editor version {MAX_SUPPORTED_EDITOR_VERSION} or lower."
+            logging.getLogger().info(message)
+
         file.close()
 
     return data
