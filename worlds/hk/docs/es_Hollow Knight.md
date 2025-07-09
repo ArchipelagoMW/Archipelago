@@ -2,7 +2,8 @@
 
 ## ¿Dónde está la página de opciones?
 
-La [página de opciones de jugador para este juego](../player-options) contiene todas las opciones que necesitas para configurar y exportar un archivo de configuración.
+La [página de opciones de jugador para este juego](../player-options) contiene todas las opciones que necesitas para
+configurar y exportar un archivo de configuración.
 
 ## ¿Qué se randomiza en este juego?
 
