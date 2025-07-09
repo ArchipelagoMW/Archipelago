@@ -543,7 +543,7 @@ def create_secrets_items(item_factory: StardewItemFactory, content: StardewConte
     if SecretsanityOptionName.secret_notes in options.secretsanity:
         secret_items.extend(items_by_group[Group.SECRET_NOTES_SECRET])
         if options.quest_locations.has_no_story_quests():
-            secret_items.append(Wallet.iridium_snake_milk)
+            secret_items.append(item_table[Wallet.iridium_snake_milk])
     filtered_secret_items = remove_excluded(list(secret_items), content, options)
     items.extend([item_factory(item) for item in filtered_secret_items])
 
