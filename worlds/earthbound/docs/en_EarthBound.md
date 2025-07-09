@@ -66,59 +66,59 @@ will play.
 ## My inventory is full and there's items I can't find!
 You can press R at any time on the overworld to access a pocket storage menu that allows you to store, withdraw from storage, and toss unnessecary items within one menu.
 
-## What about Escargo Express? ##
+## What about Escargo Express?
 Escargo Express's item storage has been replaced with a cross-game gift delivery system. From any phone, you can call Escargo Express to receive or send Gift items to other players.
 In order for players to be eligible, they have to have gifting enabled. Your gift inbox can hold 69 gifted items at a time, and up to 10 items can be queued to be sent to other players.
 
-## Hints? ##
+## Hints?
 In most major towns, you can find a helpful Hint Man who will give hints about your game... for a price.
 The location of the Hint Man will be marked on your map, viewable at all times with X.
 
-## Repel Sandwiches? ##
+## Repel Sandwiches?
 Skip Sandwiches (And Skip Sandwich DXs) have been replaced with an item called the Repel Sandwich (and Repel Superwich).
 Repel Sandwiches will prevent normal enemies from spawning for a short time. The help text can tell you more.
 
-## Is there a run button? ##
+## Is there a run button?
 You can hold down the Y button to run.
 
-## I returned to Moonside after beating the Mani-Mani statue and now I can't leave! ##
+## I returned to Moonside after beating the Mani-Mani statue and now I can't leave!
 Check behind the cafe counter as you would in Fourside. A sparkle indicates the general area.
 
-## How do I get to the undeground prison in Threed? ##
+## How do I get to the undeground prison in Threed?
 Use the Bad Key Machine on the door from the outside.
 
-## How do I get from Onett to Twoson? ##
+## How do I get from Onett to Twoson?
 The captain at the Police Station might be convinced to remove the barricade...
 
-## How do I get rid of the ghosts in the road tunnels? ##
+## How do I get rid of the ghosts in the road tunnels?
 The ghosts will vanish after Master Belch is defeated, irregardless of anything else.
 
-## How do I get back to Andonuts's Lab after using the Sky Runner? ##
+## How do I get back to Andonuts's Lab after using the Sky Runner?
 You can either go back to the underground prison or talk to Bubble Monkey, regardless of if you have helped him before.
 
-## My game automatically rolls credits after getting to Lumine Hall, but I need to get to the Lost Underworld##
+## My game automatically rolls credits after getting to Lumine Hall, but I need to get to the Lost Underworld
 Once you defeat the boss of Lumine Hall, the Lost Underworld teleport is automatically unlocked. You will need to leave and warp there, though.
 
-## How do I get into the Tenda Camp in the Lost Underworld? ##
+## How do I get into the Tenda Camp in the Lost Underworld?
 Bring them Tendakraut. They tend to notice it if you walk up to the gate with it already in your inventory.
 
-## I started as Jeff. Can I teleport? ##
+## I started as Jeff. Can I teleport?
 Jeff starts with an item called the "Warp pad", which is an inventory item that functions as Teleport. It can safely be tucked into Key Item storage.
 
-## Community Suggestions ##
+## Community Suggestions
 Community suggestions for certain things are being accepted. You can find submissions below.
 
-## Lumine Hall Text Scroll ##
+## Lumine Hall Text Scroll
 https://docs.google.com/forms/d/e/1FAIpQLSff7FR0mxtQcZ3d87BoZcRMggBxqGYk2fwmY_ibVnR1sXXQWw/viewform
 
-## Window Flavor Colors ##
+## Window Flavor Colors
 https://docs.google.com/forms/d/e/1FAIpQLSd17Bp4NYGHJqadaYprKaEXFW4EgbUYSPKxGoyufhArb1BbYw/viewform
 
-## Joke Hints ##
+## Joke Hints
 https://docs.google.com/forms/d/e/1FAIpQLScHWK0wHPCmDgHYh8juTrntsyVqEdzYWGCScLdEs21oZCa2mQ/viewform
 
-## Equipment Randomizer ##
+## Equipment Randomizer
 https://docs.google.com/forms/d/e/1FAIpQLSdy-aczL4LmMDirbeD-s5N6u8ae0G2BSrhGfCxOqFhZa_x48A/viewform
 
-## Enemy Randomizer ##
+## Enemy Randomizer
 https://docs.google.com/forms/d/e/1FAIpQLSdF0aFoIwCO7t7OpaObTE_b6dAgLpXC2_8fS-SjdgJDjAQJ6A/viewform
