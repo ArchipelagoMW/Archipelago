@@ -314,5 +314,6 @@ REGIONS = [
     "maze east",
     "maze normal",
     "maze expert",
+    "maze dig",
 
 ]

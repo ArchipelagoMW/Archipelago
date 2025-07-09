@@ -493,9 +493,16 @@ class PhantomHourglassClient(BizHawkClient):
                         if has_item.item == ITEMS_DATA[want_item[0]]["id"]:
                             counter[i] += 1
                 for item, count_have in zip(d["has_items"], counter):
-                    item, count_want = item
-                    if (count_want == 0 and count_have != 0) or (count_want > 0 and count_have < count_want):
-                        return False
+                    item, count_want, *operation = item
+                    if not operation:
+                        if (count_want == 0 and count_have != 0) or (count_want > 0 and count_have < count_want):
+                            return False
+                    elif operation[0] == "has_exact":
+                        if count_want != count_have:
+                            return False
+                    elif operation[0] == "not_has":
+                        if count_have >= count_want:
+                            return False
             return True
 
         # Check location conditions

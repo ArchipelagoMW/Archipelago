@@ -463,6 +463,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["maze", "maze east", False, lambda state: ph_has_explosives(state, player)],
         ["maze", "maze normal", False, lambda state: ph_has_bow(state, player)],
         ["maze normal", "maze expert", False, lambda state: ph_has_grapple(state, player)],
+        ["maze", "maze dig", False, lambda state: ph_has_shovel(state, player)],
 
         # Goal stuff
         ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],

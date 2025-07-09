@@ -750,6 +750,7 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "x_max": -30000,
         "z_max": -15000,
+        "x_min": -50000,
         "y": 0x1333,
     },
     "Cannon Island Cave Chest": {
@@ -771,12 +772,13 @@ LOCATIONS_DATA = {
         "stage_id": 0x13,
         "floor_id": 0,
         "y": 0x1333,
-        "x_min": 0,
+        "x_min": 27000,
         "z_min": 12300,
+        "z_max": 37000,
         "sram_addr": 0x0006DC,
         "sram_value": 0x1
     },
-    "Cannon Island Dig": {
+    "Cannon Island East Dig": {
         "region_id": "cannon island dig",
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0x13,
@@ -943,6 +945,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0xC,
         "floor_id": 0,
+        "z_max": 58000,
         "y": 0
     },
     "Molida Cave Wayfarer Hideaway Chest": {
@@ -952,7 +955,8 @@ LOCATIONS_DATA = {
         "floor_id": 10,
         "y": 0,
         "x_max": -25000,
-        "z_min": 25000
+        "z_min": 25000,
+        "x_min": 40000
     },
     "Molida Cave Grapple Chest": {
         "region_id": "molida grapple",
@@ -996,7 +1000,7 @@ LOCATIONS_DATA = {
         "x_max": -18000,
         "z_min": -30000
     },
-    "Molida Island Cuccoo Dig": {
+    "Molida Island Cuccoo Grapple Tree Dig": {
         "region_id": "molida cuccoo dig",
         "vanilla_item": "Treasure Map #20",
         "stage_id": 0xC,
@@ -1855,7 +1859,7 @@ LOCATIONS_DATA = {
 
     # ============= Dee Ess Island ==============
 
-    "Dee Ess Start Button Dig": {
+    "Dee Ess Menu Button Dig": {
         "region_id": "ds dig",
         "stage_id": 0x1B,
         "floor_id": 0x0,
@@ -2358,7 +2362,9 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "y": 0,
-        "x_min": 40000
+        "x_min": 40000,
+        "z_max": 24000,
+        "z_min": -26000
     },
     "Maze Island Beginner": {
         "region_id": "maze",
@@ -2464,8 +2470,59 @@ LOCATIONS_DATA = {
         "z_min": 10000,
         "z_max": 30000,
     },
-
-
+    "Cannon Island SE Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x1333,
+        "x_max": 27000,
+        "z_min": 37000
+    },
+    "Maze Island SE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 80000,
+        "z_min": 70000
+    },
+    "Maze Island NE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 40000,
+        "z_max": -60000
+    },
+    "Maze Island NW Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_max": -15000,
+        "z_max": -60000
+    },
+    "Cannon Island Bee Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "x_max": -50000,
+        "y": 0x1333,
+    },
+    "Molida Island Cuccoo Grapple Small Island Dig": {
+        "region_id": "molida cuccoo dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0xC,
+        "floor_id": 0,
+        "z_min": 58000,
+        "y": 0,
+        "x_min": 40000
+    },
 
 }
 
