@@ -885,17 +885,10 @@ class LMWorld(World):
                     item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
                 output_data["Locations"][location.name] = item_info
 
-        # Outputs the plando details to our expected output file
-        # Also creates the APLM yaml file from the output data dictionary.
-        lm_patch = LMUSAAPProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
-        write_patch(lm_patch, output_data)
-
-        # Create the output path based on the current player + expected patch file ending.
-        rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
-                                                  f"{lm_patch.patch_file_ending}")
-
-        # Write the expected output file path to the AP.zip that is maintained / created by Files.py#APContainer.write
-        lm_patch.write(rom_path)
+        # Output the plando details to file
+        file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
+        with open(file_path, "w") as f:
+            f.write(yaml.dump(output_data, sort_keys=False, Dumper=Dumper))
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):

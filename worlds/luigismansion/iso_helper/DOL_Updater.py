@@ -57,7 +57,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
         dol.data.write(bytes.fromhex("4848D061"))
 
     # Turn on/off pickup animations
-    if pickup_anim_enabled == 1:
+    if pickup_anim_enabled:
         keys_and_others_val = "02"
         gem_val = "06"
         hat_val = "06"
@@ -89,7 +89,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.write(bytes.fromhex(elem_val))
 
     # Turn on/off luigi scare animations
-    if fear_anim_enabled == 1:
+    if fear_anim_enabled:
         scare_val = [0x44]
     else:
         scare_val = [0x00]

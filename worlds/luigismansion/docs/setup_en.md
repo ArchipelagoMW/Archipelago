@@ -13,7 +13,7 @@
 2. Download and install the Dolphin Gamecube/Wii Emulator from the link above, making sure to install the most recent version.
 Run the emulator at least once to make sure it is working.
 
-3. Unzip the APworld from the downloads. Place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
+3. Acquire the most recent APWorld from the [Releases page](https://github.com/BootsinSoots/Archipelago/releases/latest) and place the luigismansion.apworld in the custom_worlds folder of your Archipelago install
 
 4. **DO NOT SKIP THIS STEP. Download the lib.zip from the releases page and unpack it. Place the contents of the /lib from what you unzipped into the /lib folder of your Archipelago install.**
 5. **DID YOU DO STEP 4 YET??**
@@ -72,8 +72,7 @@ to continue later.
 ### Obtain your patch file and create your ROM
 
 When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.aplm` extension.
+the host will provide you with either a link to download your patch file, or with an APLM patch file that they have extracted from the zip. 
 
 Put your patch file on your desktop or somewhere convenient. Open the ArchipelagoLauncher.exe and click `Open Patch`. 
 This should automatically launch the client, and will also create your ISO in the same place as your patch file. On first time patching, you will be prompted 

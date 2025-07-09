@@ -2,18 +2,17 @@ import asyncio
 import os
 import time
 import traceback
+from sys import platform, path
+from importlib import resources
+from typing import Any
 
 import NetUtils
 import Utils
-from typing import Any
-
-import dolphin_memory_engine as dme
-
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from settings import get_settings, Settings
+import dolphin_memory_engine as dme
 
 from . import CLIENT_VERSION
-from .LMGenerator import LuigisMansionRandomizer
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
@@ -79,7 +78,7 @@ RECV_ITEM_NAME_ADDR = 0x804DE1F8
 RECV_ITEM_LOC_ADDR = 0x804DE220
 RECV_ITEM_SENDER_ADDR = 0x804DE240
 RECV_MAX_STRING_LENGTH = 24
-RECV_LINE_STRING_LENGTH = 27
+RECV_LINE_STRING_LENGTH = 26
 FRAME_AVG_COUNT = 30
 
 # This is the flag address we use to determine if Luigi is currently in an Event.
@@ -162,8 +161,27 @@ def save_patched_iso(output_data):
     directory_to_iso, file = os.path.split(output_data)
     file_name = os.path.splitext(file)[0]
 
-    if iso_path:
-        LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
+    # Load the external dependencies based on OS
+    is_linux = platform.startswith("linux")
+    is_windows = platform in ("win32", "cygwin", "msys")
+    lib_path = ""
+    if not (is_linux or is_windows):
+        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+    if is_windows:
+        lib_path = "lib-windows"
+    elif is_linux:
+        lib_path = "lib-linux"
+
+    # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
+    # the with block ends.
+    with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
+        logger.info("Temp Resource Path: " + str(resource_lib_path))
+        path.append(str(resource_lib_path))
+
+        # Use our randomize function to patch the file into an ISO.
+        from .LMGenerator import LuigisMansionRandomizer
+        if iso_path:
+            LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
@@ -737,18 +755,25 @@ async def give_player_items(ctx: LMContext):
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
 
             item_name_display = lm_item_name[:RECV_MAX_STRING_LENGTH].replace("&", "")
-            dme.write_bytes(RECV_ITEM_NAME_ADDR, sbf.string_to_bytes(item_name_display, RECV_LINE_STRING_LENGTH))
+            short_item_name = sbf.string_to_bytes_with_limit(item_name_display, RECV_LINE_STRING_LENGTH)
+            dme.write_bytes(RECV_ITEM_NAME_ADDR, short_item_name + b'\x00')
 
             if item.player == ctx.slot:
-                loc_name_display = ctx.location_names.lookup_in_game(item.location)
+                loc_name_retr = ctx.location_names.lookup_in_game(item.location)
             else:
-                loc_name_display = ctx.location_names.lookup_in_slot(item.location, item.player)
-            loc_name_display = loc_name_display[:SLOT_NAME_STR_LENGTH].replace("&", "")
-            dme.write_bytes(RECV_ITEM_LOC_ADDR, sbf.string_to_bytes(loc_name_display, RECV_LINE_STRING_LENGTH))
+                loc_name_retr = ctx.location_names.lookup_in_slot(item.location, item.player)
+            loc_name_display = loc_name_retr[:SLOT_NAME_STR_LENGTH].replace("&", "")
+            loc_name_bytes = sbf.string_to_bytes_with_limit(loc_name_display, RECV_LINE_STRING_LENGTH)
+            dme.write_bytes(RECV_ITEM_LOC_ADDR, loc_name_bytes + b'\x00')
 
-            recv_name_display = ctx.player_names[item.player].replace("&", "")
-            recv_name_display = recv_name_display[:SLOT_NAME_STR_LENGTH] + "'s Game"
-            dme.write_bytes(RECV_ITEM_SENDER_ADDR, sbf.string_to_bytes(recv_name_display, RECV_LINE_STRING_LENGTH))
+            recv_full_player_name = ctx.player_names[item.player]
+            recv_name_repl = recv_full_player_name.replace("&", "")
+            # We try to check the received player's name is under the slot length first.
+            short_recv_name = sbf.string_to_bytes_with_limit(recv_name_repl, SLOT_NAME_STR_LENGTH)
+            # Then we can re-combine it with 's Game to stay under te max char limit.
+            recv_name_display = short_recv_name.decode("utf-8") + "'s Game"
+            dme.write_bytes(RECV_ITEM_SENDER_ADDR,
+                sbf.string_to_bytes_with_limit(recv_name_display, RECV_LINE_STRING_LENGTH) + b'\x00')
 
             dme.write_word(RECV_ITEM_DISPLAY_TIMER_ADDR, int(RECV_DEFAULT_TIMER_IN_HEX, 16))
             await wait_for_next_loop(int(RECV_DEFAULT_TIMER_IN_HEX, 16)/FRAME_AVG_COUNT)

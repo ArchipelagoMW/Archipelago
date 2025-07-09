@@ -5,6 +5,12 @@ import yaml
 from collections import Counter
 from CommonClient import logger
 
+from gclib import fs_helpers as fs
+from gclib.gcm import GCM
+from gclib.dol import DOL
+from gclib.rarc import RARC
+from gclib.yaz0_yay0 import Yay0
+
 def counter_constructor(loader, node):
     args = loader.construct_sequence(node)
     return Counter(*args)
@@ -14,19 +20,12 @@ yaml.SafeLoader.add_constructor(
     'tag:yaml.org,2002:python/object/apply:collections.Counter',
     counter_constructor
 )
-
 from .iso_helper.DOL_Updater import update_dol_offsets
 from .iso_helper.Update_GameUSA import update_game_usa
 from .iso_helper.JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
-
-from gclib import fs_helpers as fs
-from gclib.gcm import GCM
-from gclib.dol import DOL
-from gclib.rarc import RARC
-from gclib.yaz0_yay0 import Yay0
 
 RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
@@ -109,7 +108,8 @@ class LuigisMansionRandomizer:
         with open(self.clean_iso_path, "rb") as f:
             magic = fs.try_read_str(f, 0, 4)
             game_id = fs.try_read_str(f, 0, 6)
-        print("Magic: " + str(magic) + "; Game ID: " + str(game_id))
+        logger.info("ISO Magic code: " + magic)
+        logger.info("ISO Game ID: " + game_id)
         if magic == "CISO":
             raise InvalidCleanISOError(f"The provided ISO is in CISO format. The {RANDOMIZER_NAME} randomizer " +
                                        "only supports ISOs in ISO format.")
@@ -218,8 +218,8 @@ class LuigisMansionRandomizer:
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 0 else False
-        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 0 else False
+        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
+        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 1 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
