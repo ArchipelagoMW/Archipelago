@@ -3,7 +3,6 @@ import copy
 import math
 import os
 import threading
-import logging
 from dataclasses import fields
 from typing import ClassVar
 
@@ -30,10 +29,9 @@ from .iso_helper.lm_rom import LMUSAAPProcedurePatch, write_patch
 
 
 CLIENT_VERSION = "0.4.10"
-logger = logging.getLogger()
 
 def run_client(*args):
-    logger.info("Starting LM Client v" + CLIENT_VERSION)
+    print("Starting LM Client v" + CLIENT_VERSION)
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 

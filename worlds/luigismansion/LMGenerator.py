@@ -1,11 +1,9 @@
-import hashlib
 import os
 import yaml
 
 from collections import Counter
 from CommonClient import logger
 
-from gclib import fs_helpers as fs
 from gclib.gcm import GCM
 from gclib.dol import DOL
 from gclib.rarc import RARC
@@ -50,10 +48,6 @@ class LuigisMansionRandomizer:
 
         with open(os.path.abspath(ap_output_data)) as stream:
             self.output_data = yaml.safe_load(stream)
-
-        # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
-        logger.info("Verifying if the provided ISO is a valid copy of Luigi's Mansion USA edition.")
-        self.__verify_supported_version()
 
         # After verifying, this will also read the entire iso, including system files and their content
         self.gcm = GCM(self.clean_iso_path)
@@ -101,43 +95,6 @@ class LuigisMansionRandomizer:
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
-
-    # Verify if the provided ISO file is a valid file extension and contains a valid Game ID.
-    # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
-    def __verify_supported_version(self):
-        with open(self.clean_iso_path, "rb") as f:
-            magic = fs.try_read_str(f, 0, 4)
-            game_id = fs.try_read_str(f, 0, 6)
-        logger.info("ISO Magic code: " + magic)
-        logger.info("ISO Game ID: " + game_id)
-        if magic == "CISO":
-            raise InvalidCleanISOError(f"The provided ISO is in CISO format. The {RANDOMIZER_NAME} randomizer " +
-                                       "only supports ISOs in ISO format.")
-        if game_id != "GLME01":
-            if game_id and game_id.startswith("GLM"):
-                raise InvalidCleanISOError(f"Invalid version of {RANDOMIZER_NAME}. " +
-                                           "Only the North American version is supported by this randomizer.")
-            else:
-                raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a " +
-                                           "%s ISO (North American version)." % RANDOMIZER_NAME)
-        self.__verify_correct_clean_iso_md5()
-
-    # Verify the MD5 hash matches the expectation of a USA-based ISO.
-    # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
-    def __verify_correct_clean_iso_md5(self):
-        md5 = hashlib.md5()
-        with open(self.clean_iso_path, "rb") as f:
-            while True:
-                chunk = f.read(1024 * 1024)
-                if not chunk:
-                    break
-                md5.update(chunk)
-
-        integer_md5 = int(md5.hexdigest(), 16)
-        if integer_md5 != CLEAN_LUIGIS_MANSION_ISO_MD5:
-            raise InvalidCleanISOError(
-                f"Invalid vanilla {RANDOMIZER_NAME} ISO. Your ISO may be corrupted.\n" +
-                f"Correct ISO MD5 hash: {CLEAN_LUIGIS_MANSION_ISO_MD5:x}\nYour ISO's MD5 hash: {integer_md5:x}")
 
     # Get an ARC / RARC / SZP file from within the ISO / ROM
     def get_arc(self, arc_path):

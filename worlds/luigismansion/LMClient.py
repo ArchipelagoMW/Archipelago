@@ -1,15 +1,11 @@
 import asyncio
-import os
 import time
 import traceback
-from sys import platform, path
-from importlib import resources
 from typing import Any
 
 import NetUtils
 import Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from settings import get_settings, Settings
 import dolphin_memory_engine as dme
 
 from . import CLIENT_VERSION
@@ -146,42 +142,6 @@ async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr
         dme.write_bytes(addr, curr_value)
     else:
         dme.write_bytes(dme.follow_pointers(addr, ram_offset), curr_value)
-
-def get_base_rom_path(file_name: str = "") -> str:
-    options: Settings = get_settings()
-    if not file_name:
-        file_name = options["luigismansion_options"]["iso_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.user_path(file_name)
-    return file_name
-
-
-def save_patched_iso(output_data):
-    iso_path = get_base_rom_path()
-    directory_to_iso, file = os.path.split(output_data)
-    file_name = os.path.splitext(file)[0]
-
-    # Load the external dependencies based on OS
-    is_linux = platform.startswith("linux")
-    is_windows = platform in ("win32", "cygwin", "msys")
-    lib_path = ""
-    if not (is_linux or is_windows):
-        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-    if is_windows:
-        lib_path = "lib-windows"
-    elif is_linux:
-        lib_path = "lib-linux"
-
-    # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
-    # the with block ends.
-    with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
-        logger.info("Temp Resource Path: " + str(resource_lib_path))
-        path.append(str(resource_lib_path))
-
-        # Use our randomize function to patch the file into an ISO.
-        from .LMGenerator import LuigisMansionRandomizer
-        if iso_path:
-            LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
 
 
 class LMCommandProcessor(ClientCommandProcessor):
@@ -835,8 +795,12 @@ async def give_player_items(ctx: LMContext):
         await wait_for_next_loop(0.5)
 
 
-def main(lm_connect=None, lm_password=None):
+def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
+
+    if output_data:
+        from Patch import create_rom_file
+        create_rom_file(output_data)
 
     async def _main(connect, password):
         ctx = LMContext(connect, password)
