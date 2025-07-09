@@ -386,9 +386,9 @@ def extend_situational_quest_locations(randomized_locations: List[LocationData],
         return
     if ModNames.distant_lands in content.registered_packs:
         if ModNames.alecto in content.registered_packs:
-            randomized_locations.append(location_table[ModQuest.WitchOrder])
+            randomized_locations.append(location_table[f"Quest: {ModQuest.WitchOrder}"])
         else:
-            randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
+            randomized_locations.append(location_table[f"Quest: {ModQuest.CorruptedCropsTask}"])
 
 
 def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
