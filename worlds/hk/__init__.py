@@ -164,6 +164,7 @@ class HKWeb(WebWorld):
     )
 
     tutorials = [setup_en, setup_pt_br, setup_es]
+    game_info_languages = ["en", "es"]
 
     bug_report_page = "https://github.com/Ijwu/Archipelago.HollowKnight/issues/new?assignees=&labels=bug%2C+needs+investigation&template=bug_report.md&title="
 
