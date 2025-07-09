@@ -835,7 +835,7 @@ async def give_player_items(ctx: LMContext):
         await wait_for_next_loop(0.5)
 
 
-def main(connect=None, password=None):
+def main(lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
 
     async def _main(connect, password):
@@ -869,7 +869,7 @@ def main(connect=None, password=None):
     import colorama
 
     colorama.just_fix_windows_console()
-    asyncio.run(_main(connect, password))
+    asyncio.run(_main(lm_connect, lm_password))
     colorama.deinit()
 
 
