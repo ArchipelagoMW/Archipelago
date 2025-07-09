@@ -3,8 +3,8 @@
 ## Software requerido
 * Descarga y descomprime Lumafly Mod manager desde el [sitio web de Lumafly](https://themulhima.github.io/Lumafly/)
 * Tener una copia legal de Hollow Knight.
-    *Las versiones de Steam, GOG y Xbox Game Pass son compatibles
-    *Las versiones de Windows, Mac y Linux (Incluyendo Steam Deck) son compatibles
+    * Las versiones de Steam, GOG y Xbox Game Pass son compatibles
+    * Las versiones de Windows, Mac y Linux (Incluyendo Steam Deck) son compatibles
 
 ## Instalación del mod de Archipelago con Lumafly
 1. Ejecuta Lumafly y asegurate de localizar la carpeta de instalación de Hollow Knight
