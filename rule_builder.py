@@ -40,6 +40,12 @@ class RuleWorldMixin(World):
     completion_rule: "Rule.Resolved | None" = None
     """The resolved rule used for the completion condition of this world"""
 
+    true_rule: "Rule.Resolved"
+    """A pre-initialized rule for this world that always returns True"""
+
+    false_rule: "Rule.Resolved"
+    """A pre-initialized rule for this world that always returns False"""
+
     item_mapping: ClassVar[dict[str, str]] = {}
     """A mapping of actual item name to logical item name.
     Useful when there are multiple versions of a collected item but the logic only uses one. For example:
@@ -55,6 +61,8 @@ class RuleWorldMixin(World):
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
         self.rule_entrance_dependencies = defaultdict(set)
+        self.true_rule = self.get_cached_rule(True_.Resolved(player=self.player))
+        self.false_rule = self.get_cached_rule(False_.Resolved(player=self.player))
 
     @classmethod
     def get_rule_cls(cls, name: str) -> "type[Rule[Self]]":
@@ -71,16 +79,31 @@ class RuleWorldMixin(World):
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         """Returns a resolved rule registered with the caching system for this world"""
         resolved_rule = rule.resolve(self)
-        if self.rule_caching_enabled:
-            for item_name, rule_ids in resolved_rule.item_dependencies().items():
-                self.rule_item_dependencies[item_name] |= rule_ids
-            for region_name, rule_ids in resolved_rule.region_dependencies().items():
-                self.rule_region_dependencies[region_name] |= rule_ids
-            for location_name, rule_ids in resolved_rule.location_dependencies().items():
-                self.rule_location_dependencies[location_name] |= rule_ids
-            for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
-                self.rule_entrance_dependencies[entrance_name] |= rule_ids
+        resolved_rule = self.get_cached_rule(resolved_rule)
+        return self.simplify_rule(resolved_rule)
+
+    def get_cached_rule(self, resolved_rule: "Rule.Resolved") -> "Rule.Resolved":
+        if not self.rule_caching_enabled:
+            # skip the caching logic entirely
+            object.__setattr__(resolved_rule, "cacheable", False)
+            object.__setattr__(resolved_rule, "__call__", resolved_rule._evaluate)  # pyright: ignore[reportPrivateUsage]
+        rule_hash = hash(resolved_rule)
+        if rule_hash in self.rule_ids:
+            return self.rule_ids[rule_hash]
+        self.rule_ids[rule_hash] = resolved_rule
         return resolved_rule
+
+    def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
+        if not self.rule_caching_enabled:
+            return
+        for item_name, rule_ids in resolved_rule.item_dependencies().items():
+            self.rule_item_dependencies[item_name] |= rule_ids
+        for region_name, rule_ids in resolved_rule.region_dependencies().items():
+            self.rule_region_dependencies[region_name] |= rule_ids
+        for location_name, rule_ids in resolved_rule.location_dependencies().items():
+            self.rule_location_dependencies[location_name] |= rule_ids
+        for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
+            self.rule_entrance_dependencies[entrance_name] |= rule_ids
 
     def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: "Entrance") -> None:
         """Register indirect connections for this entrance based on the rule's dependencies"""
@@ -119,6 +142,7 @@ class RuleWorldMixin(World):
     def set_rule(self, spot: "Location | Entrance", rule: "Rule[Self]") -> None:
         """Resolve and set a rule on a location or entrance"""
         resolved_rule = self.resolve_rule(rule)
+        self.register_rule_dependencies(resolved_rule)
         spot.access_rule = resolved_rule
         if self.explicit_indirect_conditions and isinstance(spot, Entrance):
             self.register_rule_connections(resolved_rule, spot)
@@ -136,6 +160,7 @@ class RuleWorldMixin(World):
             resolved_rule = self.resolve_rule(rule)
             if resolved_rule.always_false:
                 return None
+            self.register_rule_dependencies(resolved_rule)
 
         entrance = from_region.connect(to_region, name)
         if resolved_rule:
@@ -147,6 +172,7 @@ class RuleWorldMixin(World):
     def set_completion_rule(self, rule: "Rule[Self]") -> None:
         """Set the completion rule for this world"""
         resolved_rule = self.resolve_rule(rule)
+        self.register_rule_dependencies(resolved_rule)
         self.multiworld.completion_condition[self.player] = resolved_rule
         self.completion_rule = resolved_rule
 
@@ -165,7 +191,7 @@ class RuleWorldMixin(World):
         true_rule: Rule.Resolved | None = None
 
         while children_to_process:
-            child = children_to_process.pop(0)
+            child = self.simplify_rule(children_to_process.pop(0))
             if child.always_false:
                 # false always wins
                 return child
@@ -188,7 +214,7 @@ class RuleWorldMixin(World):
                 clauses.append(child)
 
         if not clauses and not items:
-            return true_rule or False_.Resolved(player=rule.player)
+            return true_rule or self.false_rule
 
         has_cls = cast("type[Has[Self]]", self.get_rule_cls("Has"))
         has_all_cls = cast("type[HasAll[Self]]", self.get_rule_cls("HasAll"))
@@ -197,12 +223,12 @@ class RuleWorldMixin(World):
             if count == 1:
                 has_all_items.append(item)
             else:
-                clauses.append(has_cls.Resolved(item, count, player=rule.player))
+                clauses.append(self.get_cached_rule(has_cls.Resolved(item, count, player=rule.player)))
 
         if len(has_all_items) == 1:
-            clauses.append(has_cls.Resolved(has_all_items[0], player=rule.player))
+            clauses.append(self.get_cached_rule(has_cls.Resolved(has_all_items[0], player=rule.player)))
         elif len(has_all_items) > 1:
-            clauses.append(has_all_cls.Resolved(tuple(has_all_items), player=rule.player))
+            clauses.append(self.get_cached_rule(has_all_cls.Resolved(tuple(has_all_items), player=rule.player)))
 
         if len(clauses) == 1:
             return clauses[0]
@@ -218,7 +244,7 @@ class RuleWorldMixin(World):
         items: dict[str, int] = {}
 
         while children_to_process:
-            child = children_to_process.pop(0)
+            child = self.simplify_rule(children_to_process.pop(0))
             if child.always_true:
                 # true always wins
                 return child
@@ -239,7 +265,7 @@ class RuleWorldMixin(World):
                 clauses.append(child)
 
         if not clauses and not items:
-            return False_.Resolved(player=rule.player)
+            return self.false_rule
 
         has_cls = cast("type[Has[Self]]", self.get_rule_cls("Has"))
         has_any_cls = cast("type[HasAny[Self]]", self.get_rule_cls("HasAny"))
@@ -248,12 +274,12 @@ class RuleWorldMixin(World):
             if count == 1:
                 has_any_items.append(item)
             else:
-                clauses.append(has_cls.Resolved(item, count, player=rule.player))
+                clauses.append(self.get_cached_rule(has_cls.Resolved(item, count, player=rule.player)))
 
         if len(has_any_items) == 1:
-            clauses.append(has_cls.Resolved(has_any_items[0], player=rule.player))
+            clauses.append(self.get_cached_rule(has_cls.Resolved(has_any_items[0], player=rule.player)))
         elif len(has_any_items) > 1:
-            clauses.append(has_any_cls.Resolved(tuple(has_any_items), player=rule.player))
+            clauses.append(self.get_cached_rule(has_any_cls.Resolved(tuple(has_any_items), player=rule.player)))
 
         if len(clauses) == 1:
             return clauses[0]
@@ -474,17 +500,8 @@ class Rule(Generic[TWorld]):
     def resolve(self, world: "TWorld") -> "Resolved":
         """Resolve a rule with the given world"""
         if not self._passes_options(world.options):
-            return False_.Resolved(player=world.player)
-
-        instance = self._instantiate(world)
-        if not world.rule_caching_enabled:
-            # skip the caching logic entirely
-            object.__setattr__(instance, "cacheable", False)
-            object.__setattr__(instance, "__call__", instance._evaluate)  # pyright: ignore[reportPrivateUsage]
-        rule_hash = hash(instance)
-        if rule_hash not in world.rule_ids:
-            world.rule_ids[rule_hash] = instance
-        return world.rule_ids[rule_hash]
+            return world.false_rule
+        return self._instantiate(world)
 
     def to_dict(self) -> dict[str, Any]:
         """Returns a JSON compatible dict representation of this rule"""
@@ -661,8 +678,8 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
-        children = [c.resolve(world) for c in self.children]
-        return world.simplify_rule(self.Resolved(tuple(children), player=world.player))
+        children = [world.resolve_rule(c) for c in self.children]
+        return self.Resolved(tuple(children), player=world.player)
 
     @override
     def to_dict(self) -> dict[str, Any]:
@@ -802,7 +819,7 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
-        return self.Resolved(self.child.resolve(world), player=world.player)
+        return self.Resolved(world.resolve_rule(self.child), player=world.player)
 
     @override
     def to_dict(self) -> dict[str, Any]:
@@ -829,7 +846,7 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
 
         @override
         def _evaluate(self, state: "CollectionState") -> bool:
-            return self.child._evaluate(state)
+            return self.child(state)
 
         @override
         def item_dependencies(self) -> dict[str, set[int]]:
@@ -941,7 +958,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
             # match state.has_all
-            return True_().resolve(world)
+            return world.true_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
@@ -1049,7 +1066,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
             # match state.has_any
-            return False_().resolve(world)
+            return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player)
@@ -1139,7 +1156,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
         @override
         def __str__(self) -> str:
             items = ", ".join(self.item_names)
-            return f"Has all of ({items})"
+            return f"Has any of ({items})"
 
 
 @dataclasses.dataclass()
@@ -1153,7 +1170,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_counts) == 0:
             # match state.has_all_counts
-            return True_().resolve(world)
+            return world.true_rule
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
@@ -1252,7 +1269,7 @@ class HasAnyCount(HasAllCounts[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_counts) == 0:
             # match state.has_any_count
-            return False_().resolve(world)
+            return world.false_rule
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
@@ -1350,7 +1367,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0:
             # match state.has_from_list
-            return False_().resolve(world)
+            return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0], self.count).resolve(world)
         return self.Resolved(self.item_names, self.count, player=world.player)
@@ -1456,7 +1473,7 @@ class HasFromListUnique(HasFromList[TWorld], game="Archipelago"):
     def _instantiate(self, world: "TWorld") -> "Rule.Resolved":
         if len(self.item_names) == 0 or len(self.item_names) < self.count:
             # match state.has_from_list_unique
-            return False_().resolve(world)
+            return world.false_rule
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, self.count, player=world.player)
