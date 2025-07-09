@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from . import HatInTimeWorld
 
 
-MIN_FIRST_SPHERE_LOCATIONS = 30
+MIN_FIRST_SPHERE_LOCATIONS = 1
 
 
 # ChapterIndex: region
@@ -698,57 +698,6 @@ def is_valid_act_combo(world: "HatInTimeWorld", entrance_act: Region,
 
 
 def is_valid_first_act(world: "HatInTimeWorld", act: Region) -> bool:
-    if act.name not in guaranteed_first_acts:
-        return False
-
-    if world.options.ActRandomizer == ActRandomizer.option_light and "Time Rift" in act.name:
-        return False
-
-    # If there's only a single level in the starting chapter, only allow Mafia Town or Subcon Forest levels
-    start_chapter = world.options.StartingChapter
-    if start_chapter == ChapterIndex.ALPINE or start_chapter == ChapterIndex.SUBCON:
-        if "Time Rift" in act.name:
-            return False
-
-        if act_chapters[act.name] != "Mafia Town" and act_chapters[act.name] != "Subcon Forest":
-            return False
-
-    if act.name in purple_time_rifts and not world.options.ShuffleStorybookPages:
-        return False
-
-    diff = get_difficulty(world)
-    # Not completable without Umbrella?
-    if world.options.UmbrellaLogic:
-        # Needs to be at least moderate to cross the big dweller wall
-        if act.name == "Queen Vanessa's Manor" and diff < Difficulty.MODERATE:
-            return False
-        elif act.name == "Heating Up Mafia Town":  # Straight up impossible
-            return False
-
-    # Need to be able to hover
-    if act.name == "Your Contract has Expired":
-        if diff < Difficulty.EXPERT or world.options.ShuffleSubconPaintings and world.options.NoPaintingSkips:
-            return False
-
-    if act.name == "Dead Bird Studio":
-        # No umbrella logic = moderate, umbrella logic = expert.
-        if diff < Difficulty.MODERATE or world.options.UmbrellaLogic and diff < Difficulty.EXPERT:
-            return False
-    elif act.name == "Dead Bird Studio Basement" and (diff < Difficulty.EXPERT or world.options.FinaleShuffle):
-        return False
-    elif act.name == "Rock the Boat" and (diff < Difficulty.MODERATE or world.options.FinaleShuffle):
-        return False
-    elif act.name == "The Subcon Well" and diff < Difficulty.MODERATE:
-        return False
-    elif act.name == "Contractual Obligations" and world.options.ShuffleSubconPaintings:
-        return False
-
-    if world.options.ShuffleSubconPaintings and "Time Rift" not in act.name \
-       and act_chapters.get(act.name, "") == "Subcon Forest":
-        # Only allow Subcon levels if painting skips are allowed
-        if diff < Difficulty.MODERATE or world.options.NoPaintingSkips:
-            return False
-
     return True
 
 
