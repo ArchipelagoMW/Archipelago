@@ -30,7 +30,7 @@ from .iso_helper.lm_rom import LMUSAAPProcedurePatch, write_patch
 
 
 CLIENT_VERSION = "0.4.10"
-logger = logging.getLogger("Luigi's Mansion")
+logger = logging.getLogger()
 
 def run_client(*args):
     logger.info("Starting LM Client v" + CLIENT_VERSION)

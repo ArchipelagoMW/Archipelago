@@ -8,7 +8,7 @@ import yaml
 from yaml import CDumper as Dumper
 import logging
 
-logger = logging.getLogger("Luigi's Mansion")
+logger = logging.getLogger()
 
 from gclib import fs_helpers as fs
 
