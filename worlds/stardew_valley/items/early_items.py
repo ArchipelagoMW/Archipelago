@@ -13,7 +13,8 @@ from ..strings.tv_channel_names import Channel
 from ..strings.wallet_item_names import Wallet
 
 early_candidate_rate = 4
-always_early_candidates = [Region.greenhouse, Transportation.desert_obelisk, Wallet.rusty_key, "Landslide Removed", "Community Center Key", "Wizard Invitation"]
+always_early_candidates = [Region.greenhouse, Transportation.desert_obelisk, Wallet.rusty_key,
+                           "Landslide Removed", "Forest Magic", "Community Center Key", "Wizard Invitation"]
 seasons = [Season.spring, Season.summer, Season.fall, Season.winter]
 
 
