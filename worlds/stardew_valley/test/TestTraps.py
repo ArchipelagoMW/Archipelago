@@ -1,3 +1,5 @@
+import unittest
+
 from .assertion import WorldAssertMixin
 from .bases import SVTestBase
 from .. import options, items_by_group, Group
