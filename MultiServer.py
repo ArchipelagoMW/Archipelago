@@ -458,8 +458,12 @@ class Context:
         self.generator_version = Version(*decoded_obj["version"])
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})
         self.minimum_client_versions = {}
+        if self.generator_version < Version(0, 6, 2):
+            min_version = Version(0, 1, 6)
+        else:
+            min_version = min_client_version
         for player, version in clients_ver.items():
-            self.minimum_client_versions[player] = max(Version(*version), min_client_version)
+            self.minimum_client_versions[player] = max(Version(*version), min_version)
 
         self.slot_info = decoded_obj["slot_info"]
         self.games = {slot: slot_info.game for slot, slot_info in self.slot_info.items()}
@@ -1826,7 +1830,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.clients[team][slot].append(client)
             client.version = args['version']
             client.tags = args['tags']
-            client.no_locations = "TextOnly" in client.tags or "Tracker" in client.tags
+            client.no_locations = bool(client.tags & _non_game_messages.keys())
             # set NoText for old PopTracker clients that predate the tag to save traffic
             client.no_text = "NoText" in client.tags or ("PopTracker" in client.tags and client.version < (0, 5, 1))
             connected_packet = {
@@ -1900,7 +1904,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
                 old_tags = client.tags
                 client.tags = args["tags"]
                 if set(old_tags) != set(client.tags):
-                    client.no_locations = 'TextOnly' in client.tags or 'Tracker' in client.tags
+                    client.no_locations = bool(client.tags & _non_game_messages.keys())
                     client.no_text = "NoText" in client.tags or (
                         "PopTracker" in client.tags and client.version < (0, 5, 1)
                     )
@@ -1990,9 +1994,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             ctx.save()
             for slot in concerning_slots:
                 ctx.on_changed_hints(client.team, slot)
-        
+
         elif cmd == 'StatusUpdate':
-            update_client_status(ctx, client, args["status"])
+            if client.no_locations and args["status"] == ClientStatus.CLIENT_GOAL:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "cmd",
+                                              "text": "Trackers can't register Goal Complete",
+                                              "original_cmd": cmd}])
+            else:
+                update_client_status(ctx, client, args["status"])
 
         elif cmd == 'Say':
             if "text" not in args or type(args["text"]) is not str or not args["text"].isprintable():
