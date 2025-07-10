@@ -522,11 +522,11 @@ class CrystalProjectWorld(World):
     # This is data that needs to be readable from within the modded version of the game.
     # Example job rando makes the crystals behave differently, so the game needs to know about it.
     def fill_slot_data(self) -> Dict[str, Any]:
-        mod_titles: List[str] = []
+        mod_info = []
         slot_data_locations = []
         if self.options.useMods:
             for mod in self.mod_info:
-                mod_titles.append(mod.mod_name)
+                mod_info.append({ "Id": mod.mod_id, "Name": mod.mod_name, "LoadOrder": mod.load_order })
 
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code,
@@ -573,7 +573,7 @@ class CrystalProjectWorld(World):
             "includeScholarAbilities": self.options.includeScholarAbilities.value,
             "randomizeMusic": bool(self.options.randomizeMusic.value),
             "useMods": self.options.useMods.value,
-            "modTitles": mod_titles,
+            "modInfo": mod_info,
             "moddedLocations": slot_data_locations,
             # "moddedLocationsForUT": self.modded_locations,
             # "moddedShopsForUT": self.modded_shops,
