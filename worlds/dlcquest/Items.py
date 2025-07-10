@@ -101,20 +101,19 @@ def create_trap_items(world, world_options: Options.DLCQuestOptions, trap_needed
 def create_items(world, world_options: Options.DLCQuestOptions, locations_count: int, excluded_items: list[str], random: Random):
     created_items = []
     if world_options.campaign == Options.Campaign.option_basic or world_options.campaign == Options.Campaign.option_both:
-        create_items_basic(world_options, created_items, world, excluded_items)
+        create_items_campaign(world_options, created_items, world, excluded_items, Group.DLCQuest, 825, 250)
 
     if (world_options.campaign == Options.Campaign.option_live_freemium_or_die or
             world_options.campaign == Options.Campaign.option_both):
-        create_items_lfod(world_options, created_items, world, excluded_items)
+        create_items_campaign(world_options, created_items, world, excluded_items, Group.Freemium, 889, 200)
 
     trap_items = create_trap_items(world, world_options, locations_count - len(created_items), random)
     created_items += trap_items
 
     return created_items
 
-
-def create_items_lfod(world_options, created_items, world, excluded_items):
-    for item in items_by_group[Group.Freemium]:
+def create_items_campaign(world_options, created_items, world, excluded_items, group, total_coins, required_coins):
+    for item in items_by_group[group]:
         if item.name in excluded_items:
             excluded_items.remove(item.name)
             continue
@@ -127,9 +126,9 @@ def create_items_lfod(world_options, created_items, world, excluded_items):
                 created_items.append(world.create_item(item))
     if world_options.coinsanity == Options.CoinSanity.option_coin:
         if world_options.coinbundlequantity == -1:
-            create_coin_piece(created_items, world, 889, 200, Group.Freemium)
+            create_coin_piece(created_items, world, total_coins, required_coins, group)
             return
-        create_coin(world_options, created_items, world, 889, 200, Group.Freemium)
+        create_coin(world_options, created_items, world, total_coins, required_coins, group)
 
 
 def create_items_basic(world_options, created_items, world, excluded_items):
