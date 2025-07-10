@@ -735,6 +735,10 @@ class MonopolyMode(OpenRCT2Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
+class Fireworks(OpenRCT2OnToggle):
+    """Have an explosive firework display on victory! Strongly discouraged if you intend to keep playing after victory or if you expect to have a huge park."""
+    display_name = "Fireworks"
+
 class IncludeGamespeedItems(OpenRCT2OnToggle):
     """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
     display_name = "Include Gamespeed Items"
@@ -820,7 +824,8 @@ openrct2_option_groups = [
         LocalityOfUniqueRides,
         ParkRatingObjective,
         PayOffLoan,
-        MonopolyMode
+        MonopolyMode,
+        Fireworks
     ]),
     OptionGroup("Rules", [
         SelectedDifficultGuestGeneration,
@@ -915,6 +920,7 @@ class openRCT2Options(PerGameCommonOptions):
     park_rating_objective: ParkRatingObjective
     pay_off_loan: PayOffLoan
     monopoly_mode: MonopolyMode
+    fireworks: Fireworks
     include_gamespeed_items: IncludeGamespeedItems
     # park rules. Depending on the option, these may affect which items are created
     difficult_guest_generation: SelectedDifficultGuestGeneration
