@@ -175,7 +175,7 @@ class MedievilWorld(World):
 
         # Instantiate MedievilItem, passing its name, determined classification,
         # its game-specific m_code, and the player ID.
-        return MedievilItem(name, item_classification, item_data.m_code, self.player)
+        return MedievilItem(name, item_classification, MedievilItem.get_name_to_id()[name], self.player)
 
 # Also ensure your base_id in MedievilWorld is consistent with Items.py:
 # base_id = 9901000 

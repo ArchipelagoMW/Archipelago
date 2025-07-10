@@ -7,7 +7,8 @@ from BaseClasses import Item, ItemClassification # ItemClassification is used fo
 class MedievilItemCategory(IntEnum):
     FILLER = 0
     PROGRESSION = 1
-    FUN = 2
+    WEAPON = 2
+    FUN = 3
     LEVEL_END = 4
     SKIP = 5
 
@@ -86,9 +87,36 @@ _all_items: List[MedievilItemData] = [
     ("Silver Shield Charge (100)", 25, MedievilItemCategory.FILLER, False),
     ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False),
     ("Gold Shield Charge (100)", 27, MedievilItemCategory.FILLER, False),
+    ("Health Vial Small (50)", 28, MedievilItemCategory.FILLER, False),
+    ("Health Vial Medium (150)", 29, MedievilItemCategory.FILLER, False),
+    ("Health Vial Large (300)", 30, MedievilItemCategory.FILLER, False),
     
+    # list of weapons
+    ("Small Sword", 31, MedievilItemCategory.WEAPON, False),
+    ("BroadSword", 32, MedievilItemCategory.WEAPON, False),
+    ("Magic Sword", 33, MedievilItemCategory.WEAPON, False),
+    ("Club", 34, MedievilItemCategory.WEAPON, False),
+    ("Hammer", 35, MedievilItemCategory.WEAPON, False),
+    ("Daggers", 36, MedievilItemCategory.WEAPON, False),    
+    ("Axe", 37, MedievilItemCategory.WEAPON, False),
+    ("Chicken Drumsticks", 38, MedievilItemCategory.WEAPON, False),
+    ("Crossbow", 39, MedievilItemCategory.WEAPON, False),
+    ("Longbow", 40, MedievilItemCategory.WEAPON, False),
+    ("Fire Longbow", 41, MedievilItemCategory.WEAPON, False),
+    ("Magic Longbow", 42, MedievilItemCategory.WEAPON, False),
+    ("Spear", 43, MedievilItemCategory.WEAPON, False),
+    ("Lightning", 44, MedievilItemCategory.WEAPON, False),
+    ("Good Lightning", 45, MedievilItemCategory.WEAPON, False),
+    ("Copper Shield", 46, MedievilItemCategory.WEAPON, False),
+    ("Silver Shield", 47, MedievilItemCategory.WEAPON, False),
+    ("Gold Shield", 48, MedievilItemCategory.WEAPON, False),
+    ("Dragon Armour", 49, MedievilItemCategory.WEAPON, False),
+
+    # Progression items    
+    ("Life Bottle", 50, MedievilItemCategory.PROGRESSION, False),
+
     # Level_End is typically a progression item as it signifies advancing a stage
-    ("Level_End", 28, MedievilItemCategory.LEVEL_END, True) 
+    ("Level_End", 99, MedievilItemCategory.LEVEL_END, True) 
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
