@@ -56,18 +56,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal1.name, get_portal_outlet_region(portal2, world)
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not (options.decoupled and options.entrance_rando):
                 return portal2.name, get_portal_outlet_region(portal1, world)
-        raise Exception("No matches found in get_portal_info")
+        raise Exception(f"No matches found in get_portal_info for {portal_sd}")
 
     # input scene destination tag, returns paired portal's name and region
     def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal2.name, portal2.region
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not (options.decoupled and options.entrance_rando):
                 return portal1.name, portal1.region
-        raise Exception("no matches found in get_paired_portal")
+        raise Exception(f"No matches found in get_paired_portal for {portal_sd}")
 
     regions["Menu"].connect(
         connecting_region=regions["Overworld"])
@@ -381,9 +381,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Tunnel Turret"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({grapple, laurels}, player))
+
+    # always have access to Overworld, so connecting back isn't needed
+    # regions["Overworld Tunnel Turret"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: state.has_any({grapple, laurels}, player))
 
     cube_entrance = regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
@@ -1053,11 +1055,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
-    # zig skip region only gets made if entrance rando and fewer shops are on
-    if options.entrance_rando and options.fixed_shop:
-        regions["Zig Skip Exit"].connect(
-            connecting_region=regions["Rooted Ziggurat Lower Front"])
-
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room"])
     regions["Rooted Ziggurat Portal Room"].connect(
@@ -1226,14 +1223,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                              and has_sword(state, player))))
 
     if options.ladder_storage:
-        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene_destination() == portal_sd:
-                    return portal1.name, get_portal_outlet_region(portal2, world)
-                if portal2.scene_destination() == portal_sd:
-                    return portal2.name, get_portal_outlet_region(portal1, world)
-            raise Exception("no matches found in get_paired_region")
-
         # connect ls elevation regions to their destinations
         def ls_connect(origin_name: str, portal_sdt: str) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)

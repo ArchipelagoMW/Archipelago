@@ -1,7 +1,7 @@
 from collections import Counter
 
+from ..bases import SVTestBase
 from ...options import Museumsanity
-from .. import SVTestBase
 
 
 class TestMuseumMilestones(SVTestBase):
