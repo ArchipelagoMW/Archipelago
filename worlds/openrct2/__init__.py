@@ -1,6 +1,7 @@
 import math
 from typing import TextIO
 from Utils import local_path
+from random import choice as random_message #I know this looks wrong, but it's only used to randomly select a message for the launcher!
 
 import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region, Location, Tutorial
@@ -39,6 +40,11 @@ def launch_client() -> None:  # Shoutout to Serpent.ai for the launcher code!
     from .Client import main
     LauncherComponents.launch_subprocess(main, name="OpenRCT2Client")
 
+messages = ["OpenRCT2 is a really good value!", "OpenRCT2 looks too intense for me!", "I want to go on something "
+    "more thrilling than OpenRCT2.","Just looking at OpenRCT2 makes me feel sick.","I'm not paying that much to "
+    "go on OpenRCT2!", "I want to go home.", "Help! I'm drowning!", "OpenRCT2 was great!", "I've been queuing for "
+    "OpenRCT2 for ages!", "I'm not paying that much to go on OpenRCT2!","I'm not going on OpenRCT2 - it isn't safe.",
+    "I'm not paying that much to use the bathroom!", "OpenRCT2 has crashed!", "OpenRCT2 has broken down."]
 
 LauncherComponents.components.append(
     LauncherComponents.Component(
@@ -47,7 +53,9 @@ LauncherComponents.components.append(
         component_type=LauncherComponents.Type.CLIENT,
         # OpenRCT2 icon credit to the OpenRCT2 team: 
         # https://github.com/OpenRCT2/OpenRCT2/blob/develop/resources/logo/icon_x96.png
-        icon='openrct2icon' 
+        icon='openrct2icon',
+        description="Open the OpenRCT2 client to connect your game to the multiworld!\n"
+            + random_message(messages)
     )
 )
 
@@ -574,7 +582,7 @@ class OpenRCT2World(World):
         # print(self.location_prices)
         slot_data = self.options.as_dict("difficulty", "scenario_length", "scenario", "death_link", "randomization_range",
         "stat_rerolls", "randomize_park_values", "ignore_ride_stat_changes", "visibility", "preferred_intensity", 
-        "all_rides_and_scenery_base", "all_rides_and_scenery_expansion")
+        "all_rides_and_scenery_base", "all_rides_and_scenery_expansion", "fireworks")
         slot_data["objectives"] = objectives
         slot_data["rules"] = self.rules
         slot_data["seed"] = seed
