@@ -26,10 +26,7 @@
                     <td>{{ patch.game }}</td>
                     <td>
                         {% if patch.data %}
-                            {% if patch.game == "Minecraft" %}
-                            <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
-                                Download APMC File...</a>
-                            {% elif patch.game == "VVVVVV" and room.seed.slots|length == 1 %}
+                            {% if patch.game == "VVVVVV" and room.seed.slots|length == 1 %}
                             <a href="{{ url_for("download_slot_file", room_id=room.id, player_id=patch.player_id) }}" download>
                                 Download APV6 File...</a>
                             {% elif patch.game == "Super Mario 64" and room.seed.slots|length == 1 %}
