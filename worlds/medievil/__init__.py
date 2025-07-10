@@ -125,6 +125,7 @@ class MedievilWorld(World):
     def create_items(self):
         # Calculate the number of randomized locations that need an item.
         # These are locations that are not locked events and have an Archipelago address.
+        
         randomized_location_count = 0 
         for location in self.multiworld.get_locations(self.player):
             if not location.locked and location.address is not None:
@@ -166,7 +167,7 @@ class MedievilWorld(World):
         # Determine the Archipelago ItemClassification based on MedievilItemData.
         item_classification: ItemClassification
 
-        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.LEVEL_END:
+        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.WEAPON or item_data.category == MedievilItemCategory.LEVEL_END:
             item_classification = ItemClassification.progression
         elif item_data.category == MedievilItemCategory.FUN:
             item_classification = ItemClassification.useful # Use 'useful' for non-progression, non-filler items
@@ -174,7 +175,8 @@ class MedievilWorld(World):
             item_classification = ItemClassification.filler
 
         # Instantiate MedievilItem, passing its name, determined classification,
-        # its game-specific m_code, and the player ID.
+        # its game-specific m_code, and the player ID.        
+
         return MedievilItem(name, item_classification, MedievilItem.get_name_to_id()[name], self.player)
 
 # Also ensure your base_id in MedievilWorld is consistent with Items.py:

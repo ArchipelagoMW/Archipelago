@@ -51,9 +51,12 @@ class MedievilItem(Item):
 
 
 key_item_names = {
-    # Add names of items here that should always be considered progression,
-    # even if their category isn't MedievilItemCategory.PROGRESSION.
-    # E.g., "Chalice", "Dragon Gem"
+    "Life Bottle 1",
+    "Life Bottle 2",
+    "Life Bottle 3",
+    "Life Bottle 4",
+    "Life Bottle 5",
+    "Level_End"
 }
 
 
@@ -85,36 +88,40 @@ _all_items: List[MedievilItemData] = [
     ("Copper Shield Charge (100)", 23, MedievilItemCategory.FILLER, False),
     ("Silver Shield Charge (50)", 24, MedievilItemCategory.FILLER, False),
     ("Silver Shield Charge (100)", 25, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False),
+    ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False), # this is going to be a problem with actual gold. Needs rewording
     ("Gold Shield Charge (100)", 27, MedievilItemCategory.FILLER, False),
-    ("Health Vial Small (50)", 28, MedievilItemCategory.FILLER, False),
-    ("Health Vial Medium (150)", 29, MedievilItemCategory.FILLER, False),
-    ("Health Vial Large (300)", 30, MedievilItemCategory.FILLER, False),
+    ("Health Vial (50)", 28, MedievilItemCategory.FILLER, False),
+    ("Health Vial (150)", 29, MedievilItemCategory.FILLER, False),
+    ("Health Vial (300)", 30, MedievilItemCategory.FILLER, False),
     
     # list of weapons
-    ("Small Sword", 31, MedievilItemCategory.WEAPON, False),
-    ("BroadSword", 32, MedievilItemCategory.WEAPON, False),
-    ("Magic Sword", 33, MedievilItemCategory.WEAPON, False),
-    ("Club", 34, MedievilItemCategory.WEAPON, False),
-    ("Hammer", 35, MedievilItemCategory.WEAPON, False),
-    ("Daggers", 36, MedievilItemCategory.WEAPON, False),    
-    ("Axe", 37, MedievilItemCategory.WEAPON, False),
-    ("Chicken Drumsticks", 38, MedievilItemCategory.WEAPON, False),
-    ("Crossbow", 39, MedievilItemCategory.WEAPON, False),
-    ("Longbow", 40, MedievilItemCategory.WEAPON, False),
-    ("Fire Longbow", 41, MedievilItemCategory.WEAPON, False),
-    ("Magic Longbow", 42, MedievilItemCategory.WEAPON, False),
-    ("Spear", 43, MedievilItemCategory.WEAPON, False),
-    ("Lightning", 44, MedievilItemCategory.WEAPON, False),
-    ("Good Lightning", 45, MedievilItemCategory.WEAPON, False),
-    ("Copper Shield", 46, MedievilItemCategory.WEAPON, False),
-    ("Silver Shield", 47, MedievilItemCategory.WEAPON, False),
-    ("Gold Shield", 48, MedievilItemCategory.WEAPON, False),
-    ("Dragon Armour", 49, MedievilItemCategory.WEAPON, False),
+    ("Small Sword (Equipment)", 31, MedievilItemCategory.WEAPON, False),
+    ("BroadSword (Equipment)", 32, MedievilItemCategory.WEAPON, False),
+    ("Magic Sword (Equipment)", 33, MedievilItemCategory.WEAPON, False),
+    ("Club (Equipment)", 34, MedievilItemCategory.WEAPON, False),
+    ("Hammer (Equipment)", 35, MedievilItemCategory.WEAPON, False),
+    ("Daggers (Equipment)", 36, MedievilItemCategory.WEAPON, False),    
+    ("Axe (Equipment)", 37, MedievilItemCategory.WEAPON, False),
+    ("Chicken Drumsticks (Equipment)", 38, MedievilItemCategory.WEAPON, False),
+    ("Crossbow (Equipment)", 39, MedievilItemCategory.WEAPON, False),
+    ("Longbow (Equipment)", 40, MedievilItemCategory.WEAPON, False),
+    ("Fire Longbow (Equipment)", 41, MedievilItemCategory.WEAPON, False),
+    ("Magic Longbow (Equipment)", 42, MedievilItemCategory.WEAPON, False),
+    ("Spear (Equipment)", 43, MedievilItemCategory.WEAPON, False),
+    ("Lightning (Equipment)", 44, MedievilItemCategory.WEAPON, False),
+    ("Good Lightning (Equipment)", 45, MedievilItemCategory.WEAPON, False),
+    ("Copper Shield (Equipment)", 46, MedievilItemCategory.WEAPON, False),
+    ("Silver Shield (Equipment)", 47, MedievilItemCategory.WEAPON, False),
+    ("Gold Shield (Equipment)", 48, MedievilItemCategory.WEAPON, False),
+    ("Dragon Armour (Equipment)", 49, MedievilItemCategory.WEAPON, False),
 
     # Progression items    
-    ("Life Bottle", 50, MedievilItemCategory.PROGRESSION, False),
-
+    ("Life Bottle 1", 50, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle 2", 51, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle 3", 52, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle 4", 53, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle 5", 54, MedievilItemCategory.PROGRESSION, True),
+    
     # Level_End is typically a progression item as it signifies advancing a stage
     ("Level_End", 99, MedievilItemCategory.LEVEL_END, True) 
 ]
@@ -153,11 +160,21 @@ def BuildItemPool(count: int, options) -> List[str]:
                 item_pool_names.append(item_name)
             else:
                 print(f"Warning: Guaranteed item '{item_name}' not found in item_dictionary. Skipping.")
+                
+    progression_and_weapon_items = [
+        item_data.name for item_data in _all_items
+        if item_data.progression or item_data.category == MedievilItemCategory.WEAPON
+    ]
+    
+    for item_name in progression_and_weapon_items:
+        if item_name not in item_pool_names and len(item_pool_names) < count:
+            item_pool_names.append(item_name)
     
     # Populate the rest of the pool with random filler items
     # Prioritize items marked as FILLER.
     filler_item_names = [item_data.name for item_data in _all_items 
                          if item_data.category == MedievilItemCategory.FILLER]
+    
 
     for _ in range(count - len(item_pool_names)):
         if filler_item_names:

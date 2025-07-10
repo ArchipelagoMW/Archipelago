@@ -43,9 +43,47 @@ class MedievilLocation(Location):
         self.item = item
         self.locked = True
         item.location = self
-
+# don't forget you need minimum number of locations to be the max of the progression items
 location_tables = {
 "MainWorld": [
+    MedievilLocationData(f"Adding Tons of locations for filler1",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler2",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler3",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler4",f"Level_End",MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler5",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler6",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler7",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler8",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler9",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons of locations for filler0",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"1Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"2Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"3Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"4Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"5Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"6Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"7Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"8Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"9Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"0Adding Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding1 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding2 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding3 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding4 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding5 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding6 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding7 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding8 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding9 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding0 Tons of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons1 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons2 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons3 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons4 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons5 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons6 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons7 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
+    MedievilLocationData(f"Adding Tons8 of locations for filler",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
     MedievilLocationData(f"Dan's Crypt: Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),    
     MedievilLocationData(f"The Graveyard Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
     MedievilLocationData(f"Return to the Graveyard Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),
@@ -67,7 +105,7 @@ location_tables = {
     MedievilLocationData(f"Ghost Ship Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
     MedievilLocationData(f"The Entrance Hall Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
     MedievilLocationData(f"The Time Device Cleared",f"Level_End" ,MedievilLocationCategory.LEVEL_END),     
-    MedievilLocationData(f"Zaroks Lair Cleared",f"Level_End" ,MedievilLocationCategory.PROGRESSION),                              
+    MedievilLocationData(f"Zaroks Lair Cleared",f"Level_End" ,MedievilLocationCategory.PROGRESSION),                      
 ]
 }
 
