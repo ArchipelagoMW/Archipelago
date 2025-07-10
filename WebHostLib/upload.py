@@ -63,12 +63,13 @@ def process_multidata(compressed_multidata, files={}):
                 game_data = games_package_schema.validate(game_data)
                 game_data = {key: value for key, value in sorted(game_data.items())}
                 game_data["checksum"] = data_package_checksum(game_data)
-                game_data_package = GameDataPackage(checksum=game_data["checksum"],
-                                                    data=pickle.dumps(game_data))
                 if original_checksum != game_data["checksum"]:
                     raise Exception(f"Original checksum {original_checksum} != "
                                     f"calculated checksum {game_data['checksum']} "
                                     f"for game {game}.")
+
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
@@ -118,9 +119,9 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         # AP Container
         elif handler:
             data = zfile.open(file, "r").read()
-            patch = handler(BytesIO(data))
-            patch.read()
-            files[patch.player] = data
+            with zipfile.ZipFile(BytesIO(data)) as container:
+                player = json.loads(container.open("archipelago.json").read())["player"]
+            files[player] = data
 
         # Spoiler
         elif file.filename.endswith(".txt"):
@@ -134,11 +135,6 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-        # Minecraft
-        elif file.filename.endswith(".apmc"):
-            data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            files[metadata["player_id"]] = data
 
         # Factorio
         elif file.filename.endswith(".zip"):
@@ -192,6 +188,8 @@ def uploads():
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
+                        except Exception as e:
+                            flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                         else:
                             if res is str:
                                 return res

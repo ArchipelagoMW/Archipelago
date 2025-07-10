@@ -3,9 +3,20 @@
 ## Required Software
 - Archipelago Build of Celeste 64 from: [Celeste 64 Archipelago Releases Page](https://github.com/PoryGoneDev/Celeste64/releases/)
 
+## Optional Software
+- Celeste 64 Tracker
+	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
+	- Celeste 64 Archipelago PopTracker pack from: [Celeste 64 AP Tracker Releases Page](https://github.com/PoryGone/Celeste-64-AP-Tracker/releases/)
+
 ## Installation Procedures (Windows)
 
 1. Download the above release and extract it.
+
+## Installation Procedures (Linux and Steam Deck)
+
+1. Download the above release and extract it.
+
+2. Add Celeste64.exe to Steam as a Non-Steam Game. In the properties for it on Steam, set it to use Proton as the compatibility tool. Launch the game through Steam in order to run it.
 
 ## Joining a MultiWorld Game
 
@@ -23,10 +34,8 @@ An Example `AP.json` file:
 
 ```
 {
-	"Url": "archipelago:12345",
+	"Url": "archipelago.gg:12345",
 	"SlotName": "Maddy",
 	"Password": ""
 }
 ```
-
-

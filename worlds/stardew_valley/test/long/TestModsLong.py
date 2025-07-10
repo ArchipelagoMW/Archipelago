@@ -1,53 +1,84 @@
 import unittest
-from itertools import combinations, product
+from itertools import combinations
+from typing import ClassVar
 
 from BaseClasses import get_seed
-from .option_names import all_option_choices
-from .. import SVTestCase
+from test.param import classvar_matrix
 from ..assertion import WorldAssertMixin, ModAssertMixin
+from ..bases import skip_long_tests, SVTestCase, solo_multiworld
+from ..options.option_names import all_option_choices
 from ... import options
-from ...mods.mod_data import all_mods, ModNames
+from ...mods.mod_data import ModNames
+from ...options.options import all_mods
 
-assert unittest
 
-
-class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
-
-    def test_given_mod_pairs_when_generate_then_basic_checks(self):
-        if self.skip_long_tests:
-            return
-
-        for mod_pair in combinations(all_mods, 2):
-            world_options = {
-                options.Mods: frozenset(mod_pair)
-            }
-
-            with self.solo_world_sub_test(f"Mods: {mod_pair}", world_options, world_caching=False) as (multiworld, _):
-                self.assert_basic_checks(multiworld)
-                self.assert_stray_mod_items(list(mod_pair), multiworld)
-
-    def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
-        if self.skip_long_tests:
-            return
-
-        for mod, (option, value) in product(all_mods, all_option_choices):
-            world_options = {
-                option: value,
-                options.Mods: mod
-            }
-
-            with self.solo_world_sub_test(f"{option.internal_name}: {value}, Mod: {mod}", world_options, world_caching=False) as (multiworld, _):
-                self.assert_basic_checks(multiworld)
-                self.assert_stray_mod_items(mod, multiworld)
-
-    # @unittest.skip
+@unittest.skip
+class TestTroubleshootMods(WorldAssertMixin, ModAssertMixin, SVTestCase):
     def test_troubleshoot_option(self):
-        seed = get_seed(45949559493817417717)
+        seed = get_seed(78709133382876990000)
+
         world_options = {
-            options.ElevatorProgression: options.ElevatorProgression.option_vanilla,
-            options.Mods: ModNames.deepwoods
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.Mods: ModNames.sve
         }
 
         with self.solo_world_sub_test(world_options=world_options, seed=seed, world_caching=False) as (multiworld, _):
             self.assert_basic_checks(multiworld)
             self.assert_stray_mod_items(world_options[options.Mods], multiworld)
+
+
+if skip_long_tests():
+    raise unittest.SkipTest("Long tests disabled")
+
+
+@classvar_matrix(mod_pair=combinations(sorted(all_mods), 2))
+class TestGenerateModsPairs(WorldAssertMixin, ModAssertMixin, SVTestCase):
+    mod_pair: ClassVar[tuple[str, str]]
+
+    def test_given_mod_pairs_when_generate_then_basic_checks(self):
+        world_options = {
+            options.Mods.internal_name: frozenset(self.mod_pair)
+        }
+
+        with solo_multiworld(world_options, world_caching=False) as (multiworld, _):
+            self.assert_basic_checks(multiworld)
+            self.assert_stray_mod_items(list(self.mod_pair), multiworld)
+
+
+@classvar_matrix(mod=all_mods, option_and_choice=all_option_choices)
+class TestGenerateModAndOptionChoice(WorldAssertMixin, ModAssertMixin, SVTestCase):
+    mod: ClassVar[str]
+    option_and_choice: ClassVar[tuple[str, str]]
+
+    def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
+        option, choice = self.option_and_choice
+
+        world_options = {
+            option: choice,
+            options.Mods.internal_name: self.mod
+        }
+
+        with solo_multiworld(world_options, world_caching=False) as (multiworld, _):
+            self.assert_basic_checks(multiworld)
+            self.assert_stray_mod_items(self.mod, multiworld)
+
+
+@classvar_matrix(goal=options.Goal.options.keys(), option_and_choice=all_option_choices)
+class TestGenerateAllGoalAndAllOptionWithAllModsWithoutQuest(WorldAssertMixin, ModAssertMixin, SVTestCase):
+    goal = ClassVar[str]
+    option_and_choice = ClassVar[tuple[str, str]]
+
+    def test_given_no_quest_all_mods_when_generate_with_all_goals_then_basic_checks(self):
+        option, choice = self.option_and_choice
+        if option == options.QuestLocations.internal_name:
+            self.skipTest("QuestLocations are disabled")
+
+        world_options = {
+            options.Goal.internal_name: self.goal,
+            option: choice,
+            options.QuestLocations.internal_name: -1,
+            options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        }
+
+        with solo_multiworld(world_options, world_caching=False) as (multiworld, _):
+            self.assert_basic_checks(multiworld)

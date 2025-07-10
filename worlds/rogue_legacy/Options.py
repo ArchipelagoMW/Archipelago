@@ -1,6 +1,6 @@
-from typing import Dict
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from dataclasses import dataclass
 
 
 class StartingGender(Choice):
@@ -175,13 +175,21 @@ class NumberOfChildren(Range):
     default = 3
 
 
-class AdditionalNames(OptionSet):
+class AdditionalLadyNames(OptionSet):
     """
     Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
     of names your children can have. The first value will also be your initial character's name depending on Starting
     Gender.
     """
-    display_name = "Additional Names"
+    display_name = "Additional Lady Names"
+
+class AdditionalSirNames(OptionSet):
+    """
+    Set of additional names your potential offspring can have. If Allow Default Names is disabled, this is the only list
+    of names your children can have. The first value will also be your initial character's name depending on Starting
+    Gender.
+    """
+    display_name = "Additional Sir Names"
 
 
 class AllowDefaultNames(DefaultOnToggle):
@@ -336,42 +344,44 @@ class AvailableClasses(OptionSet):
     The upgraded form of your starting class will be available regardless.
     """
     display_name = "Available Classes"
-    default = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    default = frozenset(
+        {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
+    )
     valid_keys = {"Knight", "Mage", "Barbarian", "Knave", "Shinobi", "Miner", "Spellthief", "Lich", "Dragon", "Traitor"}
 
 
-rl_options: Dict[str, type(Option)] = {
-    "starting_gender": StartingGender,
-    "starting_class": StartingClass,
-    "available_classes": AvailableClasses,
-    "new_game_plus": NewGamePlus,
-    "fairy_chests_per_zone": FairyChestsPerZone,
-    "chests_per_zone": ChestsPerZone,
-    "universal_fairy_chests": UniversalFairyChests,
-    "universal_chests": UniversalChests,
-    "vendors": Vendors,
-    "architect": Architect,
-    "architect_fee": ArchitectFee,
-    "disable_charon": DisableCharon,
-    "require_purchasing": RequirePurchasing,
-    "progressive_blueprints": ProgressiveBlueprints,
-    "gold_gain_multiplier": GoldGainMultiplier,
-    "number_of_children": NumberOfChildren,
-    "free_diary_on_generation": FreeDiaryOnGeneration,
-    "khidr": ChallengeBossKhidr,
-    "alexander": ChallengeBossAlexander,
-    "leon": ChallengeBossLeon,
-    "herodotus": ChallengeBossHerodotus,
-    "health_pool": HealthUpPool,
-    "mana_pool": ManaUpPool,
-    "attack_pool": AttackUpPool,
-    "magic_damage_pool": MagicDamageUpPool,
-    "armor_pool": ArmorUpPool,
-    "equip_pool": EquipUpPool,
-    "crit_chance_pool": CritChanceUpPool,
-    "crit_damage_pool": CritDamageUpPool,
-    "allow_default_names": AllowDefaultNames,
-    "additional_lady_names": AdditionalNames,
-    "additional_sir_names": AdditionalNames,
-    "death_link": DeathLink,
-}
+@dataclass
+class RLOptions(PerGameCommonOptions):
+    starting_gender: StartingGender
+    starting_class: StartingClass
+    available_classes: AvailableClasses
+    new_game_plus: NewGamePlus
+    fairy_chests_per_zone: FairyChestsPerZone
+    chests_per_zone: ChestsPerZone
+    universal_fairy_chests: UniversalFairyChests
+    universal_chests: UniversalChests
+    vendors: Vendors
+    architect: Architect
+    architect_fee: ArchitectFee
+    disable_charon: DisableCharon
+    require_purchasing: RequirePurchasing
+    progressive_blueprints: ProgressiveBlueprints
+    gold_gain_multiplier: GoldGainMultiplier
+    number_of_children: NumberOfChildren
+    free_diary_on_generation: FreeDiaryOnGeneration
+    khidr: ChallengeBossKhidr
+    alexander: ChallengeBossAlexander
+    leon: ChallengeBossLeon
+    herodotus: ChallengeBossHerodotus
+    health_pool: HealthUpPool
+    mana_pool: ManaUpPool
+    attack_pool: AttackUpPool
+    magic_damage_pool: MagicDamageUpPool
+    armor_pool: ArmorUpPool
+    equip_pool: EquipUpPool
+    crit_chance_pool: CritChanceUpPool
+    crit_damage_pool: CritDamageUpPool
+    allow_default_names: AllowDefaultNames
+    additional_lady_names: AdditionalLadyNames
+    additional_sir_names: AdditionalSirNames
+    death_link: DeathLink

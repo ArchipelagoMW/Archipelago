@@ -9,12 +9,22 @@ class DeepWoodsItem:
 
 
 class SkillLevel:
+    cooking = "Cooking Level"
+    binning = "Binning Level"
+    magic = "Magic Level"
+    socializing = "Socializing Level"
     luck = "Luck Level"
     archaeology = "Archaeology Level"
 
 
 class SVEQuestItem:
     aurora_vineyard_tablet = "Aurora Vineyard Tablet"
+    """Triggers the apparition of the bundle tablet in the Aurora Vineyard, so you can do the Aurora Vineyard quest.
+    This aim to break dependencies on completing the Community Center.
+    """
+    aurora_vineyard_reclamation = "Aurora Vineyard Reclamation"
+    """Triggers the unlock of the Aurora Vineyard basement, so you can meet Apples.
+    """
     iridium_bomb = "Iridium Bomb"
     void_soul = "Void Spirit Peace Agreement"
     kittyfish_spell = "Kittyfish Spell"
@@ -25,8 +35,10 @@ class SVEQuestItem:
     fable_reef_portal = "Fable Reef Portal"
     grandpa_shed = "Grandpa's Shed"
 
-    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, kittyfish_spell, scarlett_job_offer, morgan_schooling, grandpa_shed]
-    sve_quest_items_ginger_island: List[str] = [marlon_boat_paddle, fable_reef_portal]
+    sve_always_quest_items: list[str] = [kittyfish_spell, scarlett_job_offer, morgan_schooling, aurora_vineyard_tablet, ]
+    sve_always_quest_items_ginger_island: list[str] = [fable_reef_portal, ]
+    sve_quest_items: list[str] = [iridium_bomb, void_soul, grandpa_shed, aurora_vineyard_reclamation, ]
+    sve_quest_items_ginger_island: list[str] = [marlon_boat_paddle, ]
 
 
 class SVELocation:
@@ -47,4 +59,3 @@ class SVERunes:
     nexus_wizard = "Nexus: Wizard Runes"
 
     nexus_items: List[str] = [nexus_farm, nexus_wizard, nexus_spring, nexus_aurora, nexus_guild, nexus_junimo, nexus_outpost]
-

@@ -1,13 +1,13 @@
 import yaml
 import os
 import zipfile
+import Utils
 from copy import deepcopy
 from .Regions import object_id_table
-from Utils import __version__
 from worlds.Files import APPatch
 import pkgutil
 
-settings_template = yaml.load(pkgutil.get_data(__name__, "data/settings.yaml"), yaml.Loader)
+settings_template = Utils.parse_yaml(pkgutil.get_data(__name__, "data/settings.yaml"))
 
 
 def generate_output(self, output_directory):
@@ -21,7 +21,7 @@ def generate_output(self, output_directory):
             item_name = "".join(item_name.split(" "))
         else:
             if item.advancement or item.useful or (item.trap and
-                                                   self.multiworld.per_slot_randoms[self.player].randint(0, 1)):
+                                                   self.random.randint(0, 1)):
                 item_name = "APItem"
             else:
                 item_name = "APItemFiller"
@@ -46,60 +46,60 @@ def generate_output(self, output_directory):
     options = deepcopy(settings_template)
     options["name"] = self.multiworld.player_name[self.player]
     option_writes = {
-        "enemies_density": cc(self.multiworld.enemies_density[self.player]),
+        "enemies_density": cc(self.options.enemies_density),
         "chests_shuffle": "Include",
-        "shuffle_boxes_content": self.multiworld.brown_boxes[self.player] == "shuffle",
+        "shuffle_boxes_content": self.options.brown_boxes == "shuffle",
         "npcs_shuffle": "Include",
         "battlefields_shuffle": "Include",
-        "logic_options": cc(self.multiworld.logic[self.player]),
-        "shuffle_enemies_position": tf(self.multiworld.shuffle_enemies_position[self.player]),
-        "enemies_scaling_lower": cc(self.multiworld.enemies_scaling_lower[self.player]),
-        "enemies_scaling_upper": cc(self.multiworld.enemies_scaling_upper[self.player]),
-        "bosses_scaling_lower": cc(self.multiworld.bosses_scaling_lower[self.player]),
-        "bosses_scaling_upper": cc(self.multiworld.bosses_scaling_upper[self.player]),
-        "enemizer_attacks": cc(self.multiworld.enemizer_attacks[self.player]),
-        "leveling_curve": cc(self.multiworld.leveling_curve[self.player]),
-        "battles_quantity": cc(self.multiworld.battlefields_battles_quantities[self.player]) if
-                               self.multiworld.battlefields_battles_quantities[self.player].value < 5 else
+        "logic_options": cc(self.options.logic),
+        "shuffle_enemies_position": tf(self.options.shuffle_enemies_position),
+        "enemies_scaling_lower": cc(self.options.enemies_scaling_lower),
+        "enemies_scaling_upper": cc(self.options.enemies_scaling_upper),
+        "bosses_scaling_lower": cc(self.options.bosses_scaling_lower),
+        "bosses_scaling_upper": cc(self.options.bosses_scaling_upper),
+        "enemizer_attacks": cc(self.options.enemizer_attacks),
+        "leveling_curve": cc(self.options.leveling_curve),
+        "battles_quantity": cc(self.options.battlefields_battles_quantities) if
+                               self.options.battlefields_battles_quantities.value < 5 else
                                "RandomLow" if
-                               self.multiworld.battlefields_battles_quantities[self.player].value == 5 else
+                               self.options.battlefields_battles_quantities.value == 5 else
                                "RandomHigh",
-        "shuffle_battlefield_rewards": tf(self.multiworld.shuffle_battlefield_rewards[self.player]),
+        "shuffle_battlefield_rewards": tf(self.options.shuffle_battlefield_rewards),
         "random_starting_weapon": True,
-        "progressive_gear": tf(self.multiworld.progressive_gear[self.player]),
-        "tweaked_dungeons": tf(self.multiworld.tweak_frustrating_dungeons[self.player]),
-        "doom_castle_mode": cc(self.multiworld.doom_castle_mode[self.player]),
-        "doom_castle_shortcut": tf(self.multiworld.doom_castle_shortcut[self.player]),
-        "sky_coin_mode": cc(self.multiworld.sky_coin_mode[self.player]),
-        "sky_coin_fragments_qty": cc(self.multiworld.shattered_sky_coin_quantity[self.player]),
+        "progressive_gear": tf(self.options.progressive_gear),
+        "tweaked_dungeons": tf(self.options.tweak_frustrating_dungeons),
+        "doom_castle_mode": cc(self.options.doom_castle_mode),
+        "doom_castle_shortcut": tf(self.options.doom_castle_shortcut),
+        "sky_coin_mode": cc(self.options.sky_coin_mode),
+        "sky_coin_fragments_qty": cc(self.options.shattered_sky_coin_quantity),
         "enable_spoilers": False,
-        "progressive_formations": cc(self.multiworld.progressive_formations[self.player]),
-        "map_shuffling": cc(self.multiworld.map_shuffle[self.player]),
-        "crest_shuffle": tf(self.multiworld.crest_shuffle[self.player]),
-        "enemizer_groups": cc(self.multiworld.enemizer_groups[self.player]),
-        "shuffle_res_weak_type": tf(self.multiworld.shuffle_res_weak_types[self.player]),
-        "companion_leveling_type": cc(self.multiworld.companion_leveling_type[self.player]),
-        "companion_spellbook_type": cc(self.multiworld.companion_spellbook_type[self.player]),
-        "starting_companion": cc(self.multiworld.starting_companion[self.player]),
+        "progressive_formations": cc(self.options.progressive_formations),
+        "map_shuffling": cc(self.options.map_shuffle),
+        "crest_shuffle": tf(self.options.crest_shuffle),
+        "enemizer_groups": cc(self.options.enemizer_groups),
+        "shuffle_res_weak_type": tf(self.options.shuffle_res_weak_types),
+        "companion_leveling_type": cc(self.options.companion_leveling_type),
+        "companion_spellbook_type": cc(self.options.companion_spellbook_type),
+        "starting_companion": cc(self.options.starting_companion),
         "available_companions": ["Zero", "One", "Two",
-                                 "Three", "Four"][self.multiworld.available_companions[self.player].value],
-        "companions_locations": cc(self.multiworld.companions_locations[self.player]),
-        "kaelis_mom_fight_minotaur": tf(self.multiworld.kaelis_mom_fight_minotaur[self.player]),
+                                 "Three", "Four"][self.options.available_companions.value],
+        "companions_locations": cc(self.options.companions_locations),
+        "kaelis_mom_fight_minotaur": tf(self.options.kaelis_mom_fight_minotaur),
     }
 
     for option, data in option_writes.items():
         options["Final Fantasy Mystic Quest"][option][data] = 1
 
-    rom_name = f'MQ{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
+    rom_name = f'MQ{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed_name:11}'[:21]
     self.rom_name = bytearray(rom_name,
                               'utf8')
     self.rom_name_available_event.set()
 
     setup = {"version": "1.5", "name": self.multiworld.player_name[self.player], "romname": rom_name, "seed":
-             hex(self.multiworld.per_slot_randoms[self.player].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
+             hex(self.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
-    if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
+    if self.options.sky_coin_mode == "shattered_sky_coin":
         starting_items.append("SkyCoin")
 
     file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")

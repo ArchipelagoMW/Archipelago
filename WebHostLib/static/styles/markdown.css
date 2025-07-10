@@ -23,21 +23,21 @@
 
 .markdown a{}
 
-.markdown h1{
+.markdown h1, .markdown details summary.h1{
     font-size: 52px;
     font-weight: normal;
     font-family: LondrinaSolid-Regular, sans-serif;
     text-transform: uppercase;
-    cursor: pointer;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     text-shadow: 1px 1px 4px #000000;
 }
 
-.markdown h2{
+.markdown h2, .markdown details summary.h2{
     font-size: 38px;
     font-weight: normal;
     font-family: LondrinaSolid-Light, sans-serif;
-    cursor: pointer;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     margin-top: 20px;
     margin-bottom: 0.5rem;
@@ -45,40 +45,49 @@
     text-shadow: 1px 1px 2px #000000;
 }
 
-.markdown h3{
+.markdown h3, .markdown details summary.h3{
     font-size: 26px;
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     text-align: left;
-    cursor: pointer;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
     width: 100%;
     margin-bottom: 0.5rem;
 }
 
-.markdown h4{
+.markdown h4, .markdown details summary.h4{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 24px;
-    cursor: pointer;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
     margin-bottom: 24px;
 }
 
-.markdown h5{
+.markdown h5, .markdown details summary.h5{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 22px;
-    cursor: pointer;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
 }
 
-.markdown h6{
+.markdown h6, .markdown details summary.h6{
     font-family: LexendDeca-Regular, sans-serif;
     text-transform: none;
     font-size: 20px;
-    cursor: pointer;;
+    cursor: pointer; /* TODO: remove once we drop showdown.js */
 }
 
-.markdown h4, .markdown h5,.markdown h6{
+.markdown h4, .markdown h5, .markdown h6{
     margin-bottom: 0.5rem;
+}
+
+.markdown h1 > a,
+.markdown h2 > a,
+.markdown h3 > a,
+.markdown h4 > a,
+.markdown h5 > a,
+.markdown h6 > a {
+    color: inherit;
 }
 
 .markdown ul{

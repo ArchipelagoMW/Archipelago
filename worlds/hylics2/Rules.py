@@ -132,8 +132,7 @@ def set_rules(hylics2world):
     extra = hylics2world.options.extra_items_in_logic
     party = hylics2world.options.party_shuffle
     medallion = hylics2world.options.medallion_shuffle
-    random_start = hylics2world.options.random_start
-    start_location = hylics2world.start_location
+    start_location = hylics2world.options.start_location
 
     # Afterlife
     add_rule(world.get_location("Afterlife: TV", player),
@@ -499,7 +498,7 @@ def set_rules(hylics2world):
         add_rule(i, lambda state: enter_hylemxylem(state, player))
 
     # random start logic (default)
-    if not random_start or random_start and start_location == "Waynehouse":
+    if start_location == "waynehouse":
         # entrances
         for i in world.get_region("Viewax", player).entrances:
             add_rule(i, lambda state: (
@@ -514,7 +513,7 @@ def set_rules(hylics2world):
             add_rule(i, lambda state: airship(state, player))
 
     # random start logic (Viewax's Edifice)
-    elif random_start and start_location == "Viewax's Edifice":
+    elif start_location == "viewaxs_edifice":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: (
                 air_dash(state, player)
@@ -544,8 +543,8 @@ def set_rules(hylics2world):
         for i in world.get_region("Sage Labyrinth", player).entrances:
             add_rule(i, lambda state: airship(state, player))
 
-    # random start logic (TV Island)
-    elif random_start and start_location == "TV Island":
+    # start logic (TV Island)
+    elif start_location == "tv_island":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
         for i in world.get_region("New Muldul", player).entrances:
@@ -563,8 +562,8 @@ def set_rules(hylics2world):
         for i in world.get_region("Sage Labyrinth", player).entrances:
             add_rule(i, lambda state: airship(state, player))
 
-    # random start logic (Shield Facility)
-    elif random_start and start_location == "Shield Facility":
+    # start logic (Shield Facility)
+    elif start_location == "shield_facility":
         for i in world.get_region("Waynehouse", player).entrances:
             add_rule(i, lambda state: airship(state, player))
         for i in world.get_region("New Muldul", player).entrances:

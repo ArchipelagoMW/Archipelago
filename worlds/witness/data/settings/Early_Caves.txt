@@ -4,3 +4,7 @@ Caves Shortcuts
 Remove Items:
 Caves Mountain Shortcut (Door)
 Caves Swamp Shortcut (Door)
+
+Forbidden Doors:
+0x021D7 (Caves Mountain Shortcut Panel)
+0x17CF2 (Caves Swamp Shortcut Panel)

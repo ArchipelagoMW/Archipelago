@@ -34,8 +34,6 @@ class V6World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 1
-
     area_connections: typing.Dict[int, int]
     area_cost_map: typing.Dict[int,int]
 
@@ -51,12 +49,14 @@ class V6World(World):
         self.area_cost_map = {}
         set_rules(self.multiworld, self.options, self.player, self.area_connections, self.area_cost_map)
 
-    def create_item(self, name: str) -> Item:
-        return V6Item(name, ItemClassification.progression, item_table[name], self.player)
+    def create_item(self, name: str, classification: ItemClassification = ItemClassification.filler) -> Item:
+        return V6Item(name, classification, item_table[name], self.player)
 
     def create_items(self):
-        trinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range(0,20)]
-        self.multiworld.itempool += trinkets
+        progtrinkets = [self.create_item("Trinket " + str(i+1).zfill(2), ItemClassification.progression) for i in range(0, (4 * self.options.door_cost.value))]
+        filltrinkets = [self.create_item("Trinket " + str(i+1).zfill(2)) for i in range((4 * self.options.door_cost.value), 20)]
+        self.multiworld.itempool += progtrinkets
+        self.multiworld.itempool += filltrinkets
 
     def generate_basic(self):
         musiclist_o = [1,2,3,4,9,12]
