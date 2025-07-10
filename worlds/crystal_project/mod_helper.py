@@ -304,9 +304,13 @@ def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData],
                 actions_false = action['Data']['ConditionActionsFalse']
 
                 for action_true in actions_true:
-                    # 8 is Add Inventory, this means it's a check
-                    if action_true['ActionType'] == 8:
-                        is_excluded = is_item_at_location_excluded(action_true['Data'], excluded_ids)
+                    # 8 is Add Inventory 74 is Add Job, this means it's a check
+                    if action_true['ActionType'] == 8 or action_true['ActionType'] == 74:
+                        if action_true['ActionType'] == 8:
+                            is_excluded = is_item_at_location_excluded(action_true['Data'], excluded_ids)
+                        else:
+                            is_excluded = is_job_at_location_excluded(action_true['Data'], excluded_ids)
+
                         has_add_inventory = not is_excluded
 
                         # Condition Type 5 is Check Inventory
@@ -314,18 +318,26 @@ def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData],
                             rule_condition = condition
 
                 for action_false in actions_false:
-                    # 8 is Add Inventory, this means it's a check
-                    if action_false['ActionType'] == 8:
-                        is_excluded = is_item_at_location_excluded(action_false['Data'], excluded_ids)
+                    # 8 is Add Inventory 74 is Add Job, this means it's a check
+                    if action_false['ActionType'] == 8 or action_false['ActionType'] == 74:
+                        if action_false['ActionType'] == 8:
+                            is_excluded = is_item_at_location_excluded(action_false['Data'], excluded_ids)
+                        else:
+                            is_excluded = is_job_at_location_excluded(action_false['Data'], excluded_ids)
+
                         has_add_inventory = not is_excluded
 
                         # Condition Type 5 is Check Inventory
                         if has_add_inventory and condition['ConditionType'] == 5 and condition['IsNegation']:
                             rule_condition = condition
 
-            # 8 is Add Inventory, this means it's a check
-            if action['ActionType'] == 8:
-                is_excluded = is_item_at_location_excluded(action['Data'], excluded_ids)
+            # 8 is Add Inventory 74 is Add Job, this means it's a check
+            if action['ActionType'] == 8 or action['ActionType'] == 74:
+                if action['ActionType'] == 8:
+                    is_excluded = is_item_at_location_excluded(action['Data'], excluded_ids)
+                else:
+                    is_excluded = is_job_at_location_excluded(action['Data'], excluded_ids)
+
                 has_add_inventory = not is_excluded
 
     if has_add_inventory:
@@ -333,7 +345,7 @@ def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData],
         location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
         if not location_in_pool and not location_unused and not coordinates == "0,0,0":
-            location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, rule_condition)
+            location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, rule_condition)
             return location
 
     return None
@@ -407,7 +419,7 @@ def build_treasure_location(location, shifted_entity_ids: List[ModIncrementedIdD
     location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
     if not location_in_pool and not location_unused and not is_excluded:
-        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, None)
+        location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, None)
         return location
 
     return None
@@ -434,7 +446,7 @@ def build_crystal_location(location, shifted_entity_ids: List[ModIncrementedIdDa
     location_unused = any(location.code == id_with_offset for location in get_unused_locations())
 
     if not location_in_pool and not location_unused and not is_excluded:
-        location = ModLocationData(region, name, id_with_offset, item_id, coordinates, biome_id, None)
+        location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, None)
 
         return location
 
@@ -495,3 +507,7 @@ def is_item_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomizatio
         return item_id in excluded_ids.excluded_equipment_ids
 
     return False
+
+def is_job_at_location_excluded(data, excluded_ids: IdsExcludedFromRandomization) -> bool:
+    job_id = data['Value']
+    return job_id in excluded_ids.excluded_job_ids
