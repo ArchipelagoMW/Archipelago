@@ -43,7 +43,7 @@ class GamesPackage(TypedDict, total=False):
 
 class DataPackage(TypedDict):
     games: Dict[str, GamesPackage]
-    dynamic: Dict[str, GamesPackage]
+    dynamic: dict[str, GamesPackage]
 
 
 @dataclasses.dataclass(order=True)
