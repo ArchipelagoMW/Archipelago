@@ -110,8 +110,10 @@ _base_types = str | int | bool | float | None | tuple["_base_types", ...] | dict
 
 
 def convert_to_base_types(obj: typing.Any) -> _base_types:
-    if isinstance(obj, (tuple, list, set, frozenset)):
+    if isinstance(obj, (tuple, list)):
         return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, (set, frozenset)):
+        return frozenset(convert_to_base_types(o) for o in obj)
     elif isinstance(obj, dict):
         return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
     elif obj is None or type(obj) in (str, int, float, bool):

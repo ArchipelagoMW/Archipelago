@@ -14,6 +14,8 @@ from pony.orm import commit, db_session
 from BaseClasses import get_seed, seeddigits
 from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
+from NetUtils import convert_to_base_types
+from Options import Option
 from Utils import __version__
 from WebHostLib import app
 from settings import ServerOptions, GeneratorOptions
@@ -73,6 +75,22 @@ def generate(race=False):
     return render_template("generate.html", race=race, version=__version__)
 
 
+def dump_options(gen_options: dict[str, dict]) -> bytes:
+    data = {}
+
+    for name, options in gen_options.items():
+        values = {}
+        for key, obj in vars(options).items():
+            if isinstance(obj, Option):
+                obj.value = convert_to_base_types(obj.value)
+
+            values[key] = obj
+
+        data[name] = values
+
+    return pickle.dumps(data)
+
+
 def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any]):
     results, gen_options = roll_options(options, set(meta["plando_options"]))
 
@@ -84,7 +102,7 @@ def start_generation(options: Dict[str, Union[dict, str]], meta: Dict[str, Any])
         return redirect(url_for(request.endpoint, **(request.view_args or {})))
     elif len(gen_options) >= app.config["JOB_THRESHOLD"]:
         gen = Generation(
-            options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+            options=dump_options(gen_options),
             # convert to json compatible
             meta=json.dumps(meta),
             state=STATE_QUEUED,

@@ -8,7 +8,7 @@ from pony.orm import commit
 
 from WebHostLib import app
 from WebHostLib.check import get_yaml_data, roll_options
-from WebHostLib.generate import get_meta
+from WebHostLib.generate import get_meta, dump_options
 from WebHostLib.models import Generation, STATE_QUEUED, Seed, STATE_ERROR
 from . import api_endpoints
 
@@ -56,7 +56,7 @@ def generate_api():
                     "detail": results}, 400
         else:
             gen = Generation(
-                options=pickle.dumps({name: vars(options) for name, options in gen_options.items()}),
+                options=dump_options(gen_options),
                 # convert to json compatible
                 meta=json.dumps(meta), state=STATE_QUEUED,
                 owner=session["_id"])
