@@ -62,16 +62,16 @@ key_item_names = {
 
 _all_items: List[MedievilItemData] = [
     # (name, m_code, category, is_progression)
-    ("Gold (50)", 0, MedievilItemCategory.FILLER, False), # m_codes should be unique and ideally sequential for offsets
-    ("Gold (100)", 1, MedievilItemCategory.FILLER, False),
-    ("Gold (150)", 2, MedievilItemCategory.FILLER, False),
-    ("Daggers (10)", 3, MedievilItemCategory.FILLER, False),
-    ("Daggers (20)", 4, MedievilItemCategory.FILLER, False),
-    ("Broadsword Energy (20)", 5, MedievilItemCategory.FILLER, False),
-    ("Broadsword Energy (50)", 6, MedievilItemCategory.FILLER, False),
-    ("Club Energy (20)", 7, MedievilItemCategory.FILLER, False),
-    ("Club Energy (50)", 8, MedievilItemCategory.FILLER, False),
-    ("Chicken Drumsticks (10)", 9, MedievilItemCategory.FILLER, False),
+    ("Gold Coins (50)", 0, MedievilItemCategory.FILLER, False), # m_codes should be unique and ideally sequential for offsets
+    ("Gold Coins (100)", 1, MedievilItemCategory.FILLER, False),
+    ("Gold Coins (150)", 2, MedievilItemCategory.FILLER, False),
+    ("Dagger Ammo (10)", 3, MedievilItemCategory.FILLER, False),
+    ("Dagger Ammo (20)", 4, MedievilItemCategory.FILLER, False),
+    ("Broadsword Charge (20)", 5, MedievilItemCategory.FILLER, False),
+    ("Broadsword Charge (50)", 6, MedievilItemCategory.FILLER, False),
+    ("Club Charge (20)", 7, MedievilItemCategory.FILLER, False),
+    ("Club Charge (50)", 8, MedievilItemCategory.FILLER, False),
+    ("Chicken Drumsticks Ammo (10)", 9, MedievilItemCategory.FILLER, False),
     ("Crossbow Ammo (20)", 10, MedievilItemCategory.FILLER, False),
     ("Crossbow Ammo (50)", 11, MedievilItemCategory.FILLER, False),
     ("Longbow Ammo (20)", 12, MedievilItemCategory.FILLER, False),
@@ -84,12 +84,12 @@ _all_items: List[MedievilItemData] = [
     ("Spear Ammo (50)", 19, MedievilItemCategory.FILLER, False),
     ("Lightning Charge (30)", 20, MedievilItemCategory.FILLER, False),
     ("Lightning Charge (50)", 21, MedievilItemCategory.FILLER, False),
-    ("Copper Shield Charge (50)", 22, MedievilItemCategory.FILLER, False),
-    ("Copper Shield Charge (100)", 23, MedievilItemCategory.FILLER, False),
-    ("Silver Shield Charge (50)", 24, MedievilItemCategory.FILLER, False),
-    ("Silver Shield Charge (100)", 25, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Charge (50)", 26, MedievilItemCategory.FILLER, False), # this is going to be a problem with actual gold. Needs rewording
-    ("Gold Shield Charge (100)", 27, MedievilItemCategory.FILLER, False),
+    ("Copper Shield Ammo (50)", 22, MedievilItemCategory.FILLER, False),
+    ("Copper Shield Ammo (100)", 23, MedievilItemCategory.FILLER, False),
+    ("Silver Shield Ammo (50)", 24, MedievilItemCategory.FILLER, False),
+    ("Silver Shield Ammo (100)", 25, MedievilItemCategory.FILLER, False),
+    ("Gold Shield Ammo (50)", 26, MedievilItemCategory.FILLER, False), # this is going to be a problem with actual gold. Needs rewording
+    ("Gold Shield Ammo (100)", 27, MedievilItemCategory.FILLER, False),
     ("Health Vial (50)", 28, MedievilItemCategory.FILLER, False),
     ("Health Vial (150)", 29, MedievilItemCategory.FILLER, False),
     ("Health Vial (300)", 30, MedievilItemCategory.FILLER, False),
