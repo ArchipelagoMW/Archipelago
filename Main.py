@@ -11,6 +11,7 @@ import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
 from Fill import FillError, balance_multiworld_progression, distribute_items_restrictive, flood_items, \
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
+from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
 from Utils import __version__, output_path, restricted_dumps, version_tuple
 from settings import get_settings
@@ -333,7 +334,10 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 }
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
-                multidata = zlib.compress(restricted_dumps(multidata), 9)
+                for key in ("slot_data", "er_hint_data"):
+                    multidata[key] = convert_to_base_types(multidata[key])
+
+                multidata = zlib.compress(pickle.dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format
