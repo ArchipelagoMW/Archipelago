@@ -677,6 +677,7 @@ poptracker_data: dict[str, int] = {
     "Barrels/Back Room Barrel 4": 509350584,
 }
 
+
 # for setting up the poptracker integration
 tracker_world = {
     "map_page_maps": ["maps/maps_pop.json"],
