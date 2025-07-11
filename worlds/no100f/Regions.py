@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, TYPE_CHECKING
 
 from . import NO100FOptions
 from .Locations import NO100FLocation, location_table, \
@@ -8,9 +8,12 @@ from .names import ConnectionNames, LevelNames, RegionNames, LocationNames
 
 from BaseClasses import MultiWorld, Region, Entrance
 
+if TYPE_CHECKING:
+    from . import NightOf100FrightsWorld
 
-def create_region(world: MultiWorld, player: int, name: str, locations=None, exits=None) -> Region:
-    ret = Region(name, player, world)
+
+def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None) -> Region:
+    ret = Region(name, player, multiworld)
     if locations:
         for location in locations:
             loc_id = location_table[location]

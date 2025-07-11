@@ -1,4 +1,4 @@
-#RAM Instruction to .iso Instruction:  RAM ADDRESS - 0x8000 0000 + 0x1B000
+# RAM Instruction to .iso Instruction:  RAM ADDRESS - 0x8000 0000 + 0x1B000
 AP_SAVE_LOAD = {
     # ignore cheats, hold L+R and press (x/y/b) for funny
     0xc73ec: 0x60000000,  # nop
@@ -70,20 +70,20 @@ AP_SAVE_LOAD = {
 }
 
 UPGRADE_REWARD_FIX = {
-    0x6a2f4: 0x60000000, # nop	#Nullifies Upgrade Collection
-    0x6a2fc: 0x60000000, # nop
-    0x6a304: 0x60000000, # nop
-    0x6a5bc: 0x60000000, # nop
-    0x6a5c0: 0x60000000, # nop
-    0x6a5cc: 0x60000000, # nop
+    0x6a2f4: 0x60000000,  # nop	#Nullifies Upgrade Collection
+    0x6a2fc: 0x60000000,  # nop
+    0x6a304: 0x60000000,  # nop
+    0x6a5bc: 0x60000000,  # nop
+    0x6a5c0: 0x60000000,  # nop
+    0x6a5cc: 0x60000000,  # nop
 
-    0x6a394: 0x60000000, # nop # Nullifies Gum/Soap Ammo Collection
-    0x6a3a8: 0x60000000, # nop
-    0x6a3b4: 0x60000000, # nop
+    0x6a394: 0x60000000,  # nop # Nullifies Gum/Soap Ammo Collection
+    0x6a3a8: 0x60000000,  # nop
+    0x6a3b4: 0x60000000,  # nop
 }
 
 MONSTER_TOKEN_FIX = {
-    0x6a420: 0x60000000, # nop
+    0x6a420: 0x60000000,  # nop
 }
 
 SNACK_REWARD_FIX = {

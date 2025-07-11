@@ -9,7 +9,7 @@
 
 ### What is a config file and why do I need one?
 
-YAML Files will tell the generator what your player name is, what game you're playing, and what different settings you want to use.
+YAML Files will tell the generator what your player name is, what game you're playing, and what different options you want to use.
 
 YAML Files for NO100F can be found and generated on this page: [Scooby-Doo! Night of 100 Frights Options Page](/games/Scooby-Doo!%20Night%20of%20100%20Frights/player-options)
 

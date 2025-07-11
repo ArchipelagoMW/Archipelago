@@ -1,12 +1,11 @@
 from dataclasses import dataclass
 
-from Options import Toggle, DeathLink, Range, Choice, PerGameCommonOptions
+from Options import Toggle, DeathLink, Range, Choice, PerGameCommonOptions, StartInventoryPool, DefaultOnToggle
 
 
-class IncludeMonsterTokens(Toggle):
+class IncludeMonsterTokens(DefaultOnToggle):
     """Include Monster Tokens as AP Locations/Items"""
     display_name = "Include Monster Tokens"
-    default = 1
 
 
 class IncludeKeys(Choice):
@@ -17,17 +16,17 @@ class IncludeKeys(Choice):
     option_keyrings = 2
     default = 0
 
+
 class IncludeWarpGates(Toggle):
     """Include Warp Gates as AP Locations/Items
     Additionally, to offset issues with snack gates, you will start with 400 Scooby Snacks
     """
     display_name = "Include Warp Gates"
-    default = 0
+
 
 class IncludeSnacks(Toggle):
     """Include Snacks as AP Locations/Items"""
     display_name = "Include Snacks"
-    default = 0
 
 
 class CompletionGoal(Choice):
@@ -41,8 +40,8 @@ class CompletionGoal(Choice):
     5 = Snacks/Bosses
     6 = Snacks/Tokens
     7 = Bosses/Tokens/Snacks
-    For Non-Vanilla options, Mastermind still needs to be defeated - you just can't fight him until the goal has been met
-    Snack Clear Conditions will only work with Snacksanity Enabled
+    For Non-Vanilla options, Mastermind still needs to be defeated - you just can't fight him
+    until the goal has been met Snack Clear Conditions will only work with Snacksanity Enabled
     """
     display_name = "Completion Goal"
     option_vanilla = 0
@@ -55,12 +54,14 @@ class CompletionGoal(Choice):
     option_bosses_tokens_snacks = 7
     default = 0
 
+
 class BossesCount(Range):
     """Sets the number of bosses needed if Boss Completion Goal is being used"""
     display_name = "Boss Kills Count"
     range_start = 1
     range_end = 3
     default = 3
+
 
 class MonsterTokensCount(Range):
     """Sets the number of tokens needed if Token Completion Goal is being used"""
@@ -69,39 +70,43 @@ class MonsterTokensCount(Range):
     range_end = 21
     default = 21
 
+
 class SnackCount(Range):
     """Sets the number of tokens needed if Token Completion Goal is being used"""
     display_name = "Snack Count"
     range_start = 1
     range_end = 5287
     default = 850
+
+
 class AdvancedLogic(Toggle):
     """Changes generation to expect certain tricks to be performed, intended for experienced players"""
     display_name = "Advanced Logic"
     default = 0
+
 
 class ExpertLogic(Toggle):
     """Changes generation to expect certain tricks to be performed, intended for even MORE experienced players"""
     display_name = "Expert Logic"
     default = 0
 
+
 class CreepyEarly(Toggle):
-    """Changes generation to expect certain tricks to be performed (CREEPY EARLY [GCN]), intended for less sane players"""
+    """Changes generation to expect certain tricks to be performed (CREEPY EARLY [GCN]),
+    intended for less sane players"""
     display_name = "Creepy Early"
     default = 0
 
-class NoLogic(Toggle):
-    """Disables all item Logic | USE AT YOUR OWN RISK"""
-    display_name = "Disable Logic"
-    default = 0
 
 class Speedster(Toggle):
     """For Fun Setting, permanently makes scooby move at mach speed"""
     display_name = "Speedster"
     default = 0
 
+
 @dataclass
 class NO100FOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     include_monster_tokens: IncludeMonsterTokens
     include_keys: IncludeKeys
     include_warpgates: IncludeWarpGates
@@ -114,5 +119,4 @@ class NO100FOptions(PerGameCommonOptions):
     advanced_logic: AdvancedLogic
     expert_logic: ExpertLogic
     creepy_early: CreepyEarly
-    no_logic: NoLogic
     speedster: Speedster
