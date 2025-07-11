@@ -1,6 +1,8 @@
 import asyncio
 import os.path
 import shutil
+import subprocess
+import sys
 import time
 import traceback
 import zipfile
@@ -9604,7 +9606,11 @@ async def patch_and_run_game(ctx: NO100FContext, patch_file):
         await NO100FContainer.apply_binary_changes(zipfile.ZipFile(patch_file, 'r'), result_path)
 
         logger.info('--patching success--')
-        os.startfile(result_path)
+        if sys.platform == "win32":
+            os.startfile(result_path)
+        else:
+            opener = "open" if sys.platform == "darwin" else "xdg-open"
+            subprocess.call([opener, result_path])
 
     except Exception as msg:
         logger.info(msg, extra={'compact_gui': True})
@@ -9630,7 +9636,11 @@ def main(connect=None, password=None, patch_file=None):
                 logger.info("apNO100F file supplied, beginning patching process...")
                 ctx.patch_task = asyncio.create_task(patch_and_run_game(ctx, patch_file), name="PatchGame")
             elif ext == NO100FContainer.result_file_ending:
-                os.startfile(patch_file)
+                if sys.platform == "win32":
+                    os.startfile(patch_file)
+                else:
+                    opener = "open" if sys.platform == "darwin" else "xdg-open"
+                    subprocess.call([opener, patch_file])
             else:
                 logger.warning(f"Unknown patch file extension {ext}")
 
