@@ -2,6 +2,7 @@ import collections
 import concurrent.futures
 import logging
 import os
+import pickle
 import tempfile
 import time
 import zipfile
@@ -13,7 +14,7 @@ from Fill import FillError, balance_multiworld_progression, distribute_items_res
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
-from Utils import __version__, output_path, restricted_dumps, version_tuple
+from Utils import __version__, output_path, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
