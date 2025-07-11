@@ -2,45 +2,31 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) v0.5.1 or higher. Make sure to install the Generator.
-- [This AP world](https://github.com/vgm5/Night_Of_100_Frights_ap_world/releases)
-- Microsoft .NET Framework 4.8 or higher
 - [Dolphin](https://dolphin-emu.org/download/)
 - Your US Version of Night of 100 Frights Revision 0 (The original 1.0 release), probably named ``Scooby-Doo! Night of 100 Frights.iso``.
-
-## Installation Procedures
-
-- Place ``no100f.apworld`` in ``custom_worlds/`` of your AP installation.
-- Place the included ``.pyd`` files and the ``dolphin_memory_engine`` folder into ``lib/`` of your AP installation. (Depending on your version of AP this might be different depending on which version of python is being used, the default file in the dolphin_memory_engine folder should be the correct one for the current release of AP, the other files are for backwards compatibility for any user using a non python 3.12 setup)
-- Place the Uncompressed ISO in the root folder of your AP installation and make sure it's named ``Scooby-Doo! Night of 100 Frights.iso``.  (Using an invalid version of the game [Rev1 or Compressed .ciso] will likely result in the necessary game patches breaking)
-
-Note: If you have previously setup the Wind Waker AP and you get exceptions relation to the Dolphine Memory Engine/DME .pyd files you may need to just clear the entire folder and just use the .pyds included with this release.
-
-For more information about .apworlds
-see [here](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/apworld%20specification.md)
 
 ## Create a Config (.yaml) File
 
 ### What is a config file and why do I need one?
 
-See the guide on setting up a basic YAML at the Archipelago setup
-guide: [Basic Multiworld Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup/en)
+YAML Files will tell the generator what your player name is, what game you're playing, and what different settings you want to use.
 
-### Where do I get a config file?
-
-A default yaml is included in the download. Alternative you can use the Web Host when running from source.
-
-### Verifying your config file
-
-If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](https://archipelago.gg/mysterycheck)
+YAML Files for NO100F can be found and generated on this page: [Scooby-Doo! Night of 100 Frights Options Page](/games/Scooby-Doo!%20Night%20of%20100%20Frights/player-options)
 
 ## Joining a MultiWorld Game
 
-Start ``ArchipelagoLauncher.exe`` and choose ``NO100F Client``. You will be asked to provide a ``.apno100f`` patch file so
-choose your patch file. The client will then open, patch and attempt to open the resulting ``.gcm`` ISO file. Patching
-can take a while and the client will become unresponsive while patching. You can also select a ``.gcm`` directly to just
-open it without patching or just click cancel, if you don't want to patch or open any ISO.
+First and foremost, your Night of 100 Frights ISO must be placed at the root of your Archipelago installation
+
+The multiworld host will provide you a link to download your apno100f file or a zip file containing everyone's files. The
+apno100f file should be named `AP_XXXXX_P#_<name>_.apno100f`, where `#` is your player ID, `<name>` is your player name, and
+`XXXXX` is the room ID. The host should also provide you with the room's server name and port number - and potentially a password if the host has set one.
+
+Start ``ArchipelagoLauncher.exe`` and choose ``NO100F Client``. You will be asked to provide a ``.apno100f`` patch file. 
+Once you have selected one the client will then open, and attempt to create a .gcm based on the provided patch file, and then open the resulting ``.gcm`` ISO file. Patching
+can take a while and the client will become unresponsive while patching. 
+
+If you already generated the ``.gcm`` file on a previous run of the ``NO100F Client`` then you can opt to not select a file,
+the client will begin running as normal and you will just need to manually open the ``.gcm`` in Dolphin
 
 ### Connect to the Client
 

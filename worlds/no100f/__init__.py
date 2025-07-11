@@ -10,7 +10,7 @@ from typing import TextIO
 import Utils
 from BaseClasses import Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier
+from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
 from worlds.Files import APPlayerContainer, AutoPatchRegister
 from . import Patches
 from .Events import create_events
@@ -31,8 +31,15 @@ def run_client():
     p.start()
 
 
-components.append(Component("Scooby-Doo! NO100F Client", func=run_client, component_type=Type.CLIENT,
-                            file_identifier=SuffixIdentifier('.apno100f')))
+components.append(
+    Component("Scooby-Doo! NO100F Client",
+                            func=run_client,
+                            component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apno100f'),
+                            icon="Scooby-Doo! Night of 100 Frights",
+    )
+)
+icon_paths["Scooby-Doo! Night of 100 Frights"] = "ap:worlds.no100f/Assets/icon.png"
 
 NO100F_HASH = "6f078c687c81e26b8e81127ba4b747ba"
 
@@ -194,7 +201,7 @@ def validate_hash(file_name: str = ""):
 class NO100FWeb(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the integration for Archipelago multiworld games.",
+        "A guide to playing the Scooby-Doo! Night of 100 Frights Randomizer.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -205,7 +212,11 @@ class NO100FWeb(WebWorld):
 
 class NightOf100FrightsWorld(World):
     """
-    Scooby-Doo! Night of 100 Frights
+    Scooby-Doo! Night of 100 Frights is a MetroidVania 3D Platformer game made by Heavy Iron Studios and published by THQ.
+
+    The Mystery Gang are invited to the Mystic Manor by Holly, but shortly after arriving Scooby-Doo gets separated from the rest of the crew,
+    Scooby must navigate a wide variety of levels to collect new inventions and scooby snacks so that he can explore new areas and look
+    for his friends, while he fights off his old foes along the way.
     """
     game = "Scooby-Doo! Night of 100 Frights"
     options_dataclass = NO100FOptions
