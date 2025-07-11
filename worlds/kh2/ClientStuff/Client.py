@@ -343,7 +343,6 @@ class KH2Context(CommonContext):
                 }
                 with open(self.kh2_seed_save_path_join, 'wt') as f:
                     pass
-                # self.locations_checked = set()
             elif os.path.exists(self.kh2_seed_save_path_join):
                 with open(self.kh2_seed_save_path_join) as f:
                     try:
@@ -364,8 +363,6 @@ class KH2Context(CommonContext):
                             # Item: Amount of them sold
                             "SoldEquipment": dict(),
                         }
-                    # self.locations_checked = set(self.kh2_seed_save_cache["LocationsChecked"])
-            # self.serverconneced = True
 
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
@@ -383,14 +380,14 @@ class KH2Context(CommonContext):
             self.locations_checked = set(args["checked_locations"])
 
         if cmd == "ReceivedItems":
-            # 0x2546
-            # 0x2658
-            # 0x276A
+            # Sora   Front of Ability List:0x2546
+            # Donald Front of Ability List:0x2658
+            # Goofy  Front of Ability List:0x276A
             start_index = args["index"]
             if start_index == 0:
                 self.kh2_seed_save_cache = {
                     "itemIndex":  -1,
-                    # back of soras invo is 0x25E2. Growth should be moved there
+                    #  back of soras invo is 0x25E2. Growth should be moved there
                     #  Character: [back of invo, front of invo]
                     "SoraInvo":   [0x25D8, 0x2546],
                     "DonaldInvo": [0x26F4, 0x2658],
@@ -451,11 +448,12 @@ class KH2Context(CommonContext):
             if args["type"] == "ItemSend":
                 item = args["item"]
                 networkItem = NetworkItem(*item)
+                itemId = networkItem.item
                 receiverID = args["receiving"]
                 senderID = networkItem.player
-                # checking if sender is the kh2 player and you arent sending yourself the item
-                if receiverID == self.slot and senderID != self.slot:  #item is sent to you and is not from yourself
-                    itemName = self.item_names[networkItem.item]
+                # checking if sender is the kh2 player, and you aren't sending yourself the item
+                if receiverID == self.slot and senderID != self.slot:  # item is sent to you and is not from yourself
+                    itemName = self.item_names.lookup_in_game(itemId)
                     playerName = self.player_names[networkItem.player]  # player that sent you the item
                     totalLength = len(itemName) + len(playerName)
                     if self.client_settings["send_popup_type"] == "Info":  # no restrictions on size here
@@ -482,7 +480,7 @@ class KH2Context(CommonContext):
                         self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
 
                 if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
-                    itemName = self.item_names[networkItem.item]
+                    itemName = self.item_names.lookup_in_game(itemId)
                     playerName = self.player_names[receiverID]
                     totalLength = len(itemName) + len(playerName)
                     if self.client_settings["send_popup_type"] == "Info":
