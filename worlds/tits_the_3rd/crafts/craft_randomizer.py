@@ -5,6 +5,7 @@ from typing import Dict, List
 import signal
 
 from pprint import pprint
+from copy import deepcopy
 
 # TODO: delete me
 AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -32,7 +33,7 @@ def _get_character_to_craft_get_order(characters: List[Character]) -> dict[str, 
     The order of the craft_id is the default order based on level acquired.
     """
     character_to_craft_get_order = {}
-    for character in characters:
+    for character in default_characters:
         craft_id_to_level_acquired = {}
         crafts = character.crafts
 
@@ -45,7 +46,7 @@ def _get_character_to_craft_get_order(characters: List[Character]) -> dict[str, 
         # Sort crafts by level acquired and extract just the craft IDs
         sorted_craft_ids = sorted(craft_id_to_level_acquired.items(), key=lambda x: x[1])
 
-        character_to_craft_get_order[character.name] = [craft_id for craft_id, _ in sorted_craft_ids]
+        character_to_craft_get_order[character.name.lower()] = [craft_id for craft_id, _ in sorted_craft_ids]
     return character_to_craft_get_order
 
 def _shuffle_craft_get_order(character_to_craft_get_order: Dict[str, List[int]], rng: Random) -> Dict[str, List[int]]:
@@ -138,10 +139,24 @@ def _shuffle_crafts(characters: List[Character], rng: Random):
     _fix_size_constraints(characters, rng)
     return characters
 
+def _get_old_craft_id_to_new_craft_id(characters: List[Character]) -> Dict[int, int]:
+    old_craft_id_to_new_craft_id = {}
+    for idx, character in enumerate(characters):
+        default_character = default_characters[idx]
+        for idx, old_craft in enumerate(default_character.fixed_normal_crafts):
+            old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.fixed_normal_crafts[idx].base_craft_id
+        for idx, old_craft in enumerate(default_character.fixed_scrafts):
+            old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.fixed_scrafts[idx].base_craft_id
+        for idx, old_craft in enumerate(default_character.upgradable_normal_crafts):
+            old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.upgradable_normal_crafts[idx].base_craft_id
+        for idx, old_craft in enumerate(default_character.upgradable_scrafts):
+            old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.upgradable_scrafts[idx].base_craft_id
+    return old_craft_id_to_new_craft_id
 
 def shuffle_crafts_main(craft_shuffle: bool, rng: Random):
-    characters = default_characters
+    characters = deepcopy(default_characters)
     characters = _shuffle_crafts(characters, rng)
+    old_craft_id_to_new_craft_id = _get_old_craft_id_to_new_craft_id(characters)
     character_to_craft_get_order = _get_character_to_craft_get_order(characters)
     character_to_craft_get_order = _shuffle_craft_get_order(character_to_craft_get_order, rng)
-    return character_to_craft_get_order
+    return character_to_craft_get_order, old_craft_id_to_new_craft_id

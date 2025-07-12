@@ -2,4 +2,6 @@ tmp*
 backup*
 calmare.exe
 factoria.exe
+AS_Converter.exe
+T_MAGIC_Converter.exe
 dev_util/dev_config.json

@@ -265,10 +265,14 @@ class TitsThe3rdWorld(World):
         #   For these, craft_get_order will be ignored.
         # This behaviour is handled by the client.
         # craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
-        craft_get_order = shuffle_crafts_main(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
+        craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts_main(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
+        from pprint import pprint
+        pprint(craft_get_order)
+        pprint(old_craft_id_to_new_craft_stats)
         return {
             "default_event_crafts": not self.options.craft_shuffle,
             "craft_get_order": craft_get_order,
+            "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_stats,
         }
 
     def get_filler_item_name(self):

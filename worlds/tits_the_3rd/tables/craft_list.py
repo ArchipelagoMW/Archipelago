@@ -7,6 +7,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=165,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Taunt (Estelle)",
@@ -14,6 +15,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=564,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Taunt (Joshua)",
@@ -21,6 +23,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=676,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Heaven's Kiss",
@@ -28,6 +31,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=90,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=382,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Fox Tail",
@@ -35,6 +39,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=98,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=591,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Quick Draw 2",
@@ -42,6 +47,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=549,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Kaempfer 2",
@@ -49,6 +55,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=632,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Wild Rage 2",
@@ -56,6 +63,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=349,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Smoke Cannon 2",
@@ -63,6 +71,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=768,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Orbal Gear",
@@ -70,6 +79,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=999,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=422,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Taunt (Zin)",
@@ -77,6 +87,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=724,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="True Distend",
@@ -84,6 +95,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=792,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Sacrifice Arrow",
@@ -91,6 +103,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=416,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Gorgon Arrow",
@@ -98,6 +111,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=116,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=409,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Fallen Leaves",
@@ -105,6 +119,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=1249,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Petal Dance",
@@ -112,6 +127,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=356,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Whirlwind Dance",
@@ -119,6 +135,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=98,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=2218,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Stampede",
@@ -126,6 +143,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=722,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Anchor Flail",
@@ -133,6 +151,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=766,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Plunder",
@@ -140,6 +159,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=94,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=642,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Orbal Bomb",
@@ -147,6 +167,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=111,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=742,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Ragna Bind",
@@ -154,6 +175,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=1094,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Mirage Edge",
@@ -161,6 +183,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=917,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Attack Orders",
@@ -168,6 +191,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=94,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=257,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Holy Blessing",
@@ -175,6 +199,7 @@ fixed_normal_craft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_NORMAL_CRAFT,
         animation_size_bytes=265,
+        base_as_function_name="FUN13",
     )
 ]
 
@@ -188,6 +213,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=112,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=379,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="True Hard Break",
@@ -198,6 +224,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=127,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=498,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="True Hurricane",
@@ -208,6 +235,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=95,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1225,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="True Dual Strike",
@@ -218,6 +246,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=95,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=475,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="True Flicker",
@@ -228,6 +257,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=110,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=498,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="True Cloak & Dagger",
@@ -238,6 +268,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=115,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=557,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Evil Eye EX",
@@ -248,6 +279,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=128,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=543,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Sylphen Whip 2",
@@ -258,6 +290,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=115,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=314,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Bind Whip 2",
@@ -268,6 +301,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=120,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=376,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Sniper Shot 2",
@@ -278,6 +312,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=105,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=443,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Happy Trigger 2",
@@ -288,6 +323,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=116,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=466,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Sturm 2",
@@ -298,6 +334,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=118,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1513,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Flame Smash 2",
@@ -308,6 +345,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=115,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=480,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Draguna Edge 2",
@@ -318,6 +356,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=102,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=591,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Spiral Edge 2",
@@ -328,6 +367,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=128,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=450,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Vital Cannon 2",
@@ -338,6 +378,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=113,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=781,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="True Composure",
@@ -348,6 +389,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=110,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1024,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="True Smite",
@@ -358,6 +400,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=120,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=515,
+        base_as_function_name="FUN14",
     ),
     Craft(
         base_craft_name="Thunder God Kick",
@@ -368,6 +411,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=128,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1234,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Crossgear Rage",
@@ -378,6 +422,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=95,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=703,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Sacred Breath",
@@ -388,6 +433,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=109,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=370,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Mortal Punishment",
@@ -398,6 +444,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=126,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=977,
+        base_as_function_name="FUN15",
     ),
     Craft(
         base_craft_name="Eight-Leaf Blitz",
@@ -408,6 +455,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=118,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=2905,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Swordwind Slash",
@@ -418,6 +466,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=128,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=691,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Luminous Ogre Slash",
@@ -428,6 +477,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=114,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=715,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Luminous Wheel",
@@ -438,6 +488,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=103,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=577,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Luminous Divider",
@@ -448,6 +499,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=128,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=943,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Hound Gale",
@@ -458,6 +510,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=116,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1376,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Blade Dancer",
@@ -468,6 +521,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=127,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=1627,
+        base_as_function_name="FUN13",
     ),
     Craft(
         base_craft_name="Lanzenreiter",
@@ -478,6 +532,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=112,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=969,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Mirageberg",
@@ -488,6 +543,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=126,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=366,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Arc Fencer",
@@ -498,6 +554,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=119,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=699,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Thousand Sparrows",
@@ -508,6 +565,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=127,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=864,
+        base_as_function_name="FUN12",
     ),
     Craft(
         base_craft_name="Calamity Throw",
@@ -518,6 +576,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=124,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=463,
+        base_as_function_name="FUN11",
     ),
     Craft(
         base_craft_name="Blood Circle",
@@ -528,6 +587,7 @@ upgradable_normal_craft_table = [
         upgraded_craft_level_acquired=110,
         category=CraftCategory.UPGRADABLE_NORMAL_CRAFT,
         animation_size_bytes=603,
+        base_as_function_name="FUN12",
     ),
 ]
 
@@ -538,6 +598,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1155,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="True Barrage",
@@ -545,6 +606,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=2083,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="True Sever",
@@ -552,6 +614,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1526,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="True Black Fang",
@@ -559,6 +622,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=952,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Sadist Whip 2",
@@ -566,6 +630,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=90,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1695,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Howling Bullet 2",
@@ -573,6 +638,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1393,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Sanctus Nova",
@@ -580,6 +646,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1200,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Beat Down 2",
@@ -587,6 +654,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1613,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Final Break 2",
@@ -594,6 +662,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1094,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Cannon Impulse 2",
@@ -601,6 +670,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1637,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="True Disable",
@@ -608,6 +678,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1978,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="True Aural Blast",
@@ -615,6 +686,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1374,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Grail Sphere",
@@ -622,6 +694,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1172,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Afterglow Smasher",
@@ -629,6 +702,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1259,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Sakura Morning Moon",
@@ -636,6 +710,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=120,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=2822,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Rennede",
@@ -643,6 +718,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=1,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=1422,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Pater-Mater",
@@ -650,6 +726,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=999,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=3712,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Heavenly Strike",
@@ -657,6 +734,7 @@ fixed_scraft_table = [
         base_craft_level_acquired=999,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=3147,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Heavenly Sphere",
@@ -664,6 +742,23 @@ fixed_scraft_table = [
         base_craft_level_acquired=122,
         category=CraftCategory.FIXED_SCRAFT,
         animation_size_bytes=3035,
+        base_as_function_name="FUN1C",
+    ),
+    Craft(
+        base_craft_name="Spear of Loa",
+        base_craft_id=271,
+        base_craft_level_acquired=999,
+        category=CraftCategory.FIXED_SCRAFT,
+        animation_size_bytes=2042,
+        base_as_function_name="FUN1C",
+    ),
+    Craft(
+        base_craft_name="Spear of Ur",
+        base_craft_id=299,
+        base_craft_level_acquired=999,
+        category=CraftCategory.FIXED_SCRAFT,
+        animation_size_bytes=2556,
+        base_as_function_name="FUN1D",
     ),
 ]
 
@@ -677,6 +772,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=120,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=2978,
+        base_as_function_name="FUN1D",
     ),
     Craft(
         base_craft_name="Phantom Raid",
@@ -687,6 +783,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=125,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=3205,
+        base_as_function_name="FUN1D",
     ),
     Craft(
         base_craft_name="Judgment Card",
@@ -697,6 +794,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=122,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=2786,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Requiem Hearts",
@@ -707,6 +805,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=124,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=1801,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Lichtkreis 2",
@@ -717,6 +816,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=124,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=577,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Dragon Dive",
@@ -727,6 +827,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=125,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=2275,
+        base_as_function_name="FUN1D",
     ),
     Craft(
         base_craft_name="Satellite Beam",
@@ -737,6 +838,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=124,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=1836,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Wrath of Genbu",
@@ -747,16 +849,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=122,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=1711,
-    ),
-    Craft(
-        base_craft_name="Spear of Loa",
-        upgraded_craft_name="Spear of Loa 2",
-        base_craft_id=271,
-        upgraded_craft_id=299,
-        base_craft_level_acquired=999,
-        upgraded_craft_level_acquired=999,
-        category=CraftCategory.UPGRADABLE_SCRAFT,
-        animation_size_bytes=2042,
+        base_as_function_name="FUN1D",
     ),
     Craft(
         base_craft_name="True Piercing Wave",
@@ -767,6 +860,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=123,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=1490,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Bobcat",
@@ -777,6 +871,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=999,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=6596,
+        base_as_function_name="FUN1C",
     ),
     Craft(
         base_craft_name="Righteous Witness",
@@ -787,6 +882,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=124,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=1777,
+        base_as_function_name="FUN1B",
     ),
     Craft(
         base_craft_name="Trinity Kleis",
@@ -797,6 +893,7 @@ upgradable_scraft_table = [
         upgraded_craft_level_acquired=123,
         category=CraftCategory.UPGRADABLE_SCRAFT,
         animation_size_bytes=3061,
+        base_as_function_name="FUN1B",
     ),
 ]
 
@@ -1052,10 +1149,10 @@ default_characters = [
         ],
         fixed_scrafts=[
             base_craft_name_to_obj["Grail Sphere"],
-        ],
-        upgradable_scrafts=[
             base_craft_name_to_obj["Spear of Loa"],
+            base_craft_name_to_obj["Spear of Ur"],
         ],
+        upgradable_scrafts=[],
         chain_crafts=[
             Craft(
                 base_craft_name="Chain 3",

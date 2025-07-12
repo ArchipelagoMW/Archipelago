@@ -24,6 +24,7 @@ from worlds.tits_the_3rd.names.item_name import ItemName
 from worlds.tits_the_3rd.util import load_file
 from worlds.tits_the_3rd.dt_utils import items as dt_items
 
+from .animation_writer import AnimationWriter
 from .memory_io import TitsThe3rdMemoryIO
 from CommonClient import (
     CommonContext,
@@ -75,10 +76,14 @@ class TitsThe3rdContext(CommonContext):
         lb_ark_folder = game_dir / "data"
         scena_base_folder = lb_ark_folder / "ED6_DT21_BASE"
         scena_game_mod_folder = lb_ark_folder / "ED6_DT21"
+        as_base_folder = lb_ark_folder / "ED6_DT30_BASE"
+        as_temp_folder = lb_ark_folder / "ED6_DT30_TEMP"
+        as_game_mod_folder = lb_ark_folder / "ED6_DT30"
         dt_base_folder = lb_ark_folder / "ED6_DT22_BASE"
         dt_game_mod_folder = lb_ark_folder / "ED6_DT22"
         os.makedirs(lb_ark_folder, exist_ok=True)
-        if "player.txt" in os.listdir(lb_ark_folder):
+        # if "player.txt" in os.listdir(lb_ark_folder):
+        if False:
             with open(lb_ark_folder / "player.txt") as player_id_file:
                 if player_id_file.read() == f"{self.auth}-{self.seed_name}":
                     logger.info("Player has not changed. Skip installing patch")
@@ -90,6 +95,12 @@ class TitsThe3rdContext(CommonContext):
         if os.path.exists(dt_game_mod_folder):  # Remove previously installed mod for a clean install
             shutil.rmtree(dt_game_mod_folder)
 
+        if os.path.exists(as_game_mod_folder):  # Remove previously installed mod for a clean install
+            shutil.rmtree(as_game_mod_folder)
+
+        if os.path.exists(as_temp_folder):
+            shutil.rmtree(as_temp_folder)
+
         if not "factoria.exe" in files_in_game_dir:
             raise Exception("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
 
@@ -100,6 +111,10 @@ class TitsThe3rdContext(CommonContext):
 
         if not os.path.exists(dt_base_folder):
             factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{dt_base_folder}" "{game_dir / "ED6_DT22.dir"}"'
+            subprocess.run(factoria_command, shell=True)
+
+        if not os.path.exists(as_base_folder):
+            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{as_base_folder}" "{game_dir / "ED6_DT30.dir"}"'
             subprocess.run(factoria_command, shell=True)
 
         # Patch the game scena scripts
@@ -119,6 +134,8 @@ class TitsThe3rdContext(CommonContext):
                 output_file.extractall(temp_dir)
 
             os.makedirs(scena_game_mod_folder, exist_ok=True)
+            os.makedirs(as_temp_folder, exist_ok=True)
+            os.makedirs(as_game_mod_folder, exist_ok=True)
 
             sn_folder = os.path.join(temp_dir, "sn")
             if not os.path.exists(sn_folder):
@@ -127,6 +144,14 @@ class TitsThe3rdContext(CommonContext):
             for file_name in os.listdir(sn_folder):
                 source_path = os.path.join(sn_folder, file_name)
                 shutil.move(source_path, scena_game_mod_folder)
+
+            as_folder = os.path.join(temp_dir, "as")
+            if not os.path.exists(as_folder):
+                raise Exception("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+
+            for file_name in os.listdir(as_folder):
+                source_path = os.path.join(as_folder, file_name)
+                shutil.move(source_path, as_temp_folder)
 
         # Create custom item table
         os.makedirs(dt_game_mod_folder, exist_ok=True)
@@ -158,7 +183,7 @@ class TitsThe3rdContext(CommonContext):
             os.path.join(game_dir, "ED6_DT22.dir"),
         ], check=True)
 
-        if self.slot_data["old_craft_id_to_new_craft_stats"]:
+        if self.slot_data["old_craft_id_to_new_craft_id"]:
             try:
                 t_magic_path = os.path.join(lb_ark_folder, "ED6_DT22", "t_magic._dt")
                 if not "T_MAGIC_Converter.exe" in files_in_game_dir:
@@ -171,15 +196,20 @@ class TitsThe3rdContext(CommonContext):
                     ], check=True)
                 except subprocess.CalledProcessError as err:
                     raise Exception(f"Error running t_magic_converter: {err}")
+                from pprint import pprint
                 t_magic_json_output_path = os.path.join(game_dir, "output", "t_magic.json")
+                new_craft_id_to_old_craft_id = {v: k for k, v in self.slot_data["old_craft_id_to_new_craft_id"].items()}
+                pprint(new_craft_id_to_old_craft_id)
+                pprint(self.slot_data["craft_get_order"])
                 with open(t_magic_json_output_path, "r") as t_magic_json_file:
                     t_magic_json = json.load(t_magic_json_file)
                     new_t_magic_json = {"Data": []}
                     for ability in t_magic_json["Data"]:
-                        if str(ability["ID"]) in self.slot_data["old_craft_id_to_new_craft_stats"]:
-                            new_id = self.slot_data["old_craft_id_to_new_craft_stats"][str(ability["ID"])]
-                            ability["ID"] = int(new_id)
-                        new_t_magic_json["Data"].append(ability)
+                        ability_copy = ability.copy()
+                        if int(ability_copy["ID"]) in new_craft_id_to_old_craft_id:
+                            new_id = int(new_craft_id_to_old_craft_id[int(ability_copy["ID"])])
+                            ability_copy["ID"] = new_id
+                        new_t_magic_json["Data"].append(ability_copy)
                     with open(t_magic_json_output_path, "w") as t_magic_json_file:
                         json.dump(new_t_magic_json, t_magic_json_file)
                 try:
@@ -211,6 +241,39 @@ class TitsThe3rdContext(CommonContext):
                 f.write(data)
         except Exception as err:
             logger.error(f"Error modifying t_crfget: {err}")
+            raise err
+        try:
+            animation_writer = AnimationWriter(as_temp_folder)
+            for old_craft_id, new_craft_id in self.slot_data["old_craft_id_to_new_craft_id"].items():
+                animation_writer.write_animation(int(new_craft_id), int(old_craft_id))
+        except Exception as err:
+            logger.error(f"Error writing craft animation: {err}")
+        if not "AS_Converter.exe" in files_in_game_dir:
+            raise Exception("AS_Converter.exe not found. Please install AS_Converter from <link>") #TODO: add link
+        as_converter_path = os.path.join(game_dir, "AS_Converter.exe")
+        try:
+            subprocess.run([
+                as_converter_path,
+                os.path.join(as_temp_folder),
+                os.path.join(game_dir, "outbin"),
+            ], check=True)
+        except Exception as err:
+            logger.error(f"Error running AS_Converter: {err}")
+            raise err
+        try:
+            for file_name in os.listdir(as_base_folder):
+                source_path = os.path.join(as_base_folder, file_name)
+                dest_path = os.path.join(as_game_mod_folder, file_name)
+                if os.path.isfile(source_path):
+                    shutil.copy2(source_path, dest_path)
+            for file_name in os.listdir("outbin"):
+                source_path = os.path.join("outbin", file_name)
+                dest_path = os.path.join(as_game_mod_folder, file_name.lower())
+                if os.path.isfile(source_path):
+                    shutil.copy2(source_path, dest_path)
+            shutil.rmtree("outbin")
+        except Exception as err:
+            logger.error(f"Error moving files from as_base_folder to as_game_mod_folder: {err}")
             raise err
 
         return True

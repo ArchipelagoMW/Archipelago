@@ -28,6 +28,12 @@ class Craft:
     base_craft_level_acquired: int
     category: CraftCategory
     animation_size_bytes: int
+    base_as_function_name: Optional[str] = attrs.field(
+        default=None,
+        validator=attrs.validators.optional(
+            attrs.validators.instance_of(str)
+        )
+    )
 
     upgraded_craft_name: Optional[str] = attrs.field(
         default=None,
@@ -75,6 +81,12 @@ class Craft:
     def validate_upgraded_craft_level_acquired(self, _, value):
         """Validate that upgraded_craft_level_acquired is populated for upgradable crafts and not populated for non-upgradable crafts."""
         self._validate_upgraded_field("upgraded_craft_level_acquired", value)
+
+    @base_as_function_name.validator
+    def validate_base_as_function_name(self, _, value):
+        """Validate that base_as_function_name is populated for fixed crafts and not populated for upgradable crafts."""
+        if not value and self.category != CraftCategory.CHAIN_CRAFT:
+            raise ValueError("base_as_function_name must not be populated.")
 
 @attrs.define
 class Character:
