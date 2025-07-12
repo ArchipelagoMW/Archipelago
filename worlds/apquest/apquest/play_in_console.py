@@ -60,7 +60,9 @@ def render_to_console(game: Game) -> None:
 
 
 if __name__ == "__main__":
-    game = Game()
+    hard_mode = input("Do you want to play hard mode? (Y/N)").lower().strip() in ("y", "yes")
+
+    game = Game(hard_mode)
     game.gameboard.fill_default_location_content()
 
     def input_and_rerender(input_key: Input) -> None:

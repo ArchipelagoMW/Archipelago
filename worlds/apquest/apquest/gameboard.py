@@ -70,7 +70,7 @@ class Gameboard:
         return tuple(graphics)
 
 
-def create_gameboard() -> Gameboard:
+def create_gameboard(hard_mode: bool) -> Gameboard:
     boss_door = ButtonDoor()
     boss_door_button = Button(boss_door)
 
@@ -82,8 +82,8 @@ def create_gameboard() -> Gameboard:
     bottom_right_room_left_chest = Chest(Location.BOTTOM_RIGHT_ROOM_LEFT_CHEST)
     bottom_right_room_right_chest = Chest(Location.BOTTOM_RIGHT_ROOM_RIGHT_CHEST)
 
-    normal_enemy = EnemyWithLoot(Location.ENEMY_DROP)
-    boss = FinalBoss()
+    normal_enemy = EnemyWithLoot(2 if hard_mode else 1, Location.ENEMY_DROP)
+    boss = FinalBoss(5 if hard_mode else 3)
 
     gameboard = (
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),

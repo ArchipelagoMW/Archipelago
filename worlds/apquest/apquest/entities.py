@@ -168,13 +168,14 @@ class Enemy(Entity, InteractableMixin):
     solid = True
 
     current_health: int
+    max_health: int
 
-    max_health: ClassVar[int] = 2
     dead: bool = False
 
     enemy_graphic: ClassVar[Graphic] = Graphic.NORMAL_ENEMY
 
-    def __init__(self) -> None:
+    def __init__(self, max_health: int) -> None:
+        self.max_health = max_health
         self.respawn()
 
     def die(self) -> None:
@@ -207,8 +208,8 @@ class Enemy(Entity, InteractableMixin):
 
 
 class EnemyWithLoot(Enemy, LocationMixin):
-    def __init__(self, location: Location) -> None:
-        super().__init__()
+    def __init__(self, max_health: int, location: Location) -> None:
+        super().__init__(max_health)
         self.location = location
 
     def die(self) -> None:
@@ -237,8 +238,6 @@ class EnemyWithLoot(Enemy, LocationMixin):
 
 
 class FinalBoss(Enemy):
-    max_health = 5
-
     enemy_graphic = Graphic.BOSS
 
     def interact(self, player: "Player") -> None:

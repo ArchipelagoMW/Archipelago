@@ -93,9 +93,9 @@ class Game:
 
     queued_events: list[Event]
 
-    def __init__(self) -> None:
+    def __init__(self, hard_mode: bool) -> None:
         self.queued_events = []
-        self.gameboard = create_gameboard()
+        self.gameboard = create_gameboard(hard_mode)
         self.player = Player(self.gameboard)
 
     def render(self) -> tuple[tuple[Graphic, ...], ...]:
