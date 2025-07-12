@@ -61,101 +61,56 @@ class TitsThe3rdContext(CommonContext):
 
     def init_game_interface(self):
         logger.info("Initiating Game Interface")
-        if not self.install_game_mod():
-            raise Exception("Error Installing Game Mod")
+        self.install_game_mod()
         logger.info("Finish installing game mod")
-        # self.install_dt_patch() #TODO: implement this when we actually have something for this
         self.game_interface = TitsThe3rdMemoryIO(self.exit_event)
 
-    def install_game_mod(self):
-        game_dir = Path(get_settings().tits_the_3rd_options.game_installation_path)
-        files_in_game_dir = os.listdir(game_dir)
-        if not "ed6_win3_DX9.exe" in files_in_game_dir:
-            raise Exception("Incorrect game directory")
+    def _clean_previous_mod_install(self, lib_ark_dir):
+        if os.path.exists(lib_ark_dir):
+            shutil.rmtree(lib_ark_dir)
+        os.makedirs(lib_ark_dir, exist_ok=False)
 
-        lb_ark_folder = game_dir / "data"
-        scena_base_folder = lb_ark_folder / "ED6_DT21_BASE"
-        scena_game_mod_folder = lb_ark_folder / "ED6_DT21"
-        as_base_folder = lb_ark_folder / "ED6_DT30_BASE"
-        as_temp_folder = lb_ark_folder / "ED6_DT30_TEMP"
-        as_game_mod_folder = lb_ark_folder / "ED6_DT30"
-        dt_base_folder = lb_ark_folder / "ED6_DT22_BASE"
-        dt_game_mod_folder = lb_ark_folder / "ED6_DT22"
-        os.makedirs(lb_ark_folder, exist_ok=True)
-        # if "player.txt" in os.listdir(lb_ark_folder):
-        if False:
-            with open(lb_ark_folder / "player.txt") as player_id_file:
-                if player_id_file.read() == f"{self.auth}-{self.seed_name}":
-                    logger.info("Player has not changed. Skip installing patch")
-                    return True
+    def _apply_patch(self, game_dir) -> io.BytesIO:
+        """
+        Applies the patch to the base game's files.
+        Returns a buffer (the patch output, in zip format)
+        """
+        if not "factoria.exe" in os.listdir(game_dir):
+            raise FileNotFoundError("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
 
-        if os.path.exists(scena_game_mod_folder):  # Remove previously installed mod for a clean install
-            shutil.rmtree(scena_game_mod_folder)
+        # The patch is applied onto files derrived from the base game's files.
+        with tempfile.TemporaryDirectory() as scena_base_folder:
+            factoria_command = f'"{os.path.join(game_dir, "factoria.exe")}" --output "{scena_base_folder}" "{os.path.join(game_dir, "ED6_DT21.dir")}"'
+            subprocess.run(factoria_command, shell=True, check=True)
 
-        if os.path.exists(dt_game_mod_folder):  # Remove previously installed mod for a clean install
-            shutil.rmtree(dt_game_mod_folder)
-
-        if os.path.exists(as_game_mod_folder):  # Remove previously installed mod for a clean install
-            shutil.rmtree(as_game_mod_folder)
-
-        if os.path.exists(as_temp_folder):
-            shutil.rmtree(as_temp_folder)
-
-        if not "factoria.exe" in files_in_game_dir:
-            raise Exception("factoria.exe not found. Please install factoria from https://github.com/Aureole-Suite/Factoria/releases/tag/v1.0")
-
-        # Create the base game folders
-        if not os.path.exists(scena_base_folder):
-            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{scena_base_folder}" "{game_dir / "ED6_DT21.dir"}"'
-            subprocess.run(factoria_command, shell=True)
-
-        if not os.path.exists(dt_base_folder):
-            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{dt_base_folder}" "{game_dir / "ED6_DT22.dir"}"'
-            subprocess.run(factoria_command, shell=True)
-
-        if not os.path.exists(as_base_folder):
-            factoria_command = f'"{game_dir/ "factoria.exe"}" --output "{as_base_folder}" "{game_dir / "ED6_DT30.dir"}"'
-            subprocess.run(factoria_command, shell=True)
-
-        # Patch the game scena scripts
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
-            for file in sorted(os.listdir(scena_base_folder)):
-                if file.endswith("._sn"):
-                    zip_file.write(scena_base_folder / file, arcname=f"sn/{file}")
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+                for file in sorted(os.listdir(scena_base_folder)):
+                    if file.endswith("._sn"):
+                        zip_file.write(os.path.join(scena_base_folder, file), arcname=f"sn/{file}")
 
         zip_buffer.seek(0)
         patch = load_file("data/tits3rd_basepatch.bsdiff4")
         output_data = bsdiff4.patch(zip_buffer.read(), patch)
         output_buffer = io.BytesIO(output_data)
+        return output_buffer
 
-        with tempfile.TemporaryDirectory() as temp_dir:
-            with zipfile.ZipFile(output_buffer, "r") as output_file:
-                output_file.extractall(temp_dir)
+    def _setup_scena_game_mod_folder(self, game_dir, patch_output_dir) -> None:
+        """
+        Given the game directory and the patch output directory, this function will set up the scena mods in the ED6_DT21 folder.
+        """
+        scena_game_mod_folder = os.path.join(game_dir, "data", "ED6_DT21")
+        os.makedirs(scena_game_mod_folder, exist_ok=False)
+        patch_scena_folder = os.path.join(patch_output_dir, "sn")
+        if not os.path.exists(patch_scena_folder):
+            raise FileNotFoundError("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+        for file_name in os.listdir(patch_scena_folder):
+            source_path = os.path.join(patch_scena_folder, file_name)
+            shutil.move(source_path, scena_game_mod_folder)
+        return
 
-            os.makedirs(scena_game_mod_folder, exist_ok=True)
-            os.makedirs(as_temp_folder, exist_ok=True)
-            os.makedirs(as_game_mod_folder, exist_ok=True)
-
-            sn_folder = os.path.join(temp_dir, "sn")
-            if not os.path.exists(sn_folder):
-                raise Exception("SN folder not found in patch output! Please contact the maintainer of the mod in the discord.")
-
-            for file_name in os.listdir(sn_folder):
-                source_path = os.path.join(sn_folder, file_name)
-                shutil.move(source_path, scena_game_mod_folder)
-
-            as_folder = os.path.join(temp_dir, "as")
-            if not os.path.exists(as_folder):
-                raise Exception("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
-
-            for file_name in os.listdir(as_folder):
-                source_path = os.path.join(as_folder, file_name)
-                shutil.move(source_path, as_temp_folder)
-
-        # Create custom item table
-        os.makedirs(dt_game_mod_folder, exist_ok=True)
-        game_items, game_items_text = dt_items.parse_item_table(dt_base_folder / "t_item2._dt", dt_base_folder / "t_ittxt2._dt")
+    def _setup_item_table(self, dt_game_mod_folder, dt_base_folder) -> None:
+        game_items, game_items_text = dt_items.parse_item_table(os.path.join(dt_base_folder, "t_item2._dt"), os.path.join(dt_base_folder, "t_ittxt2._dt"))
         last_item = game_items.pop()
         last_text = game_items_text.pop()
 
@@ -169,66 +124,78 @@ class TitsThe3rdContext(CommonContext):
         game_items.append(last_item)
         game_items_text.append(last_text)
 
-        dt_items.write_item_table(dt_game_mod_folder / "t_item2._dt", game_items)
-        dt_items.write_item_text_table(dt_game_mod_folder / "t_ittxt2._dt", game_items_text)
+        dt_items.write_item_table(os.path.join(dt_game_mod_folder, "t_item2._dt"), game_items)
+        dt_items.write_item_text_table(os.path.join(dt_game_mod_folder, "t_ittxt2._dt"), game_items_text)
 
-        with open(lb_ark_folder / "player.txt", "w") as player_id_file:
-            player_id_file.write(f"{self.auth}-{self.seed_name}")
+    def _setup_t_magic_table(self, game_dir, dt_game_mod_folder, dt_base_folder) -> None:
+        if not self.slot_data["old_craft_id_to_new_craft_id"]:
+            return  # No craft changes, we can use the default table
+        if not "T_MAGIC_Converter.exe" in os.listdir(game_dir):
+            raise FileNotFoundError("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from https://github.com/akatatsu27/FalcomToolsCollection/releases/tag/T_MAGIC")
 
-        # t_magic modifications
-        subprocess.run([
-            os.path.join(game_dir, "factoria.exe"),
-            "--output",
-            os.path.join(lb_ark_folder, "ED6_DT22"),
-            os.path.join(game_dir, "ED6_DT22.dir"),
-        ], check=True)
-
-        if self.slot_data["old_craft_id_to_new_craft_id"]:
+        try:
+            t_magic_path = os.path.join(dt_base_folder, "t_magic._dt")
+            t_magic_converter_path = os.path.join(game_dir, "T_MAGIC_Converter.exe")
             try:
-                t_magic_path = os.path.join(lb_ark_folder, "ED6_DT22", "t_magic._dt")
-                if not "T_MAGIC_Converter.exe" in files_in_game_dir:
-                    raise Exception("T_MAGIC_Converter.exe not found. Please install T_MAGIC_Converter from <link>") #TODO: add link
-                t_magic_converter_path = os.path.join(game_dir, "T_MAGIC_Converter.exe")
-                try:
-                    subprocess.run([
-                        t_magic_converter_path,
-                        t_magic_path,
-                    ], check=True)
-                except subprocess.CalledProcessError as err:
-                    raise Exception(f"Error running t_magic_converter: {err}")
-                from pprint import pprint
-                t_magic_json_output_path = os.path.join(game_dir, "output", "t_magic.json")
-                new_craft_id_to_old_craft_id = {v: k for k, v in self.slot_data["old_craft_id_to_new_craft_id"].items()}
-                pprint(new_craft_id_to_old_craft_id)
-                pprint(self.slot_data["craft_get_order"])
-                with open(t_magic_json_output_path, "r") as t_magic_json_file:
+                subprocess.run([
+                    t_magic_converter_path,
+                    t_magic_path,
+                ], check=True)
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError(f"Error running T_MAGIC_Converter: {err}") from err
+            t_magic_json_output_path = os.path.join(game_dir, "output", "t_magic.json")
+            if not os.path.exists(t_magic_json_output_path):
+                raise FileNotFoundError("t_magic.json not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
+
+            # Build the new t_magic contents
+            try:
+                # If X is the key, and Y is the value, this mapping says that the new t_magic should have a craft with the properties of the craft with ID X, but with the ID of Y.
+                craft_properties_of_id_to_craft_id = {v: k for k, v in self.slot_data["old_craft_id_to_new_craft_id"].items()}
+                with open(t_magic_json_output_path, "r", encoding="utf-8") as t_magic_json_file:
                     t_magic_json = json.load(t_magic_json_file)
                     new_t_magic_json = {"Data": []}
                     for ability in t_magic_json["Data"]:
-                        ability_copy = ability.copy()
-                        if int(ability_copy["ID"]) in new_craft_id_to_old_craft_id:
-                            new_id = int(new_craft_id_to_old_craft_id[int(ability_copy["ID"])])
-                            ability_copy["ID"] = new_id
-                        new_t_magic_json["Data"].append(ability_copy)
-                    with open(t_magic_json_output_path, "w") as t_magic_json_file:
+                        if int(ability["ID"]) in craft_properties_of_id_to_craft_id:
+                            craft_properties = ability.copy()
+                            craft_id = int(craft_properties_of_id_to_craft_id[int(craft_properties["ID"])])
+                            del craft_properties["ID"]
+                            new_craft = {**craft_properties, "ID": craft_id}
+                            new_t_magic_json["Data"].append(new_craft)
+                        else:
+                            new_t_magic_json["Data"].append(ability)
+                    with open(t_magic_json_output_path, "w", encoding="utf-8") as t_magic_json_file:
                         json.dump(new_t_magic_json, t_magic_json_file)
-                try:
-                    subprocess.run([
-                        t_magic_converter_path,
-                        t_magic_json_output_path
-                    ], check=True)
-                except subprocess.CalledProcessError as err:
-                    raise Exception(f"Error running t_magic_converter: {err}")
-                shutil.move(os.path.join(game_dir, "output", "t_magic._dt"), os.path.join(lb_ark_folder, "ED6_DT22", "t_magic._dt"))
             except Exception as err:
-                logger.error(f"Error running t_magic_converter: {err}")
-                raise err
-            finally:
-                output_dir = os.path.join(game_dir, "output")
-                if os.path.exists(output_dir):
-                    shutil.rmtree(output_dir)
+                raise RuntimeError(f"Error building new t_magic: {err}") from err
+
+            # Write the new t_magic file
+            try:
+                subprocess.run([
+                    t_magic_converter_path,
+                    t_magic_json_output_path
+                ], check=True)
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError(f"Error running t_magic_converter: {err}") from err
+
+            t_magic_dt_output_path = os.path.join(game_dir, "output", "t_magic._dt")
+            if not os.path.exists(t_magic_dt_output_path):
+                raise FileNotFoundError("t_magic._dt not found in output directory after running T_MAGIC_Converter.exe. Please contact the maintainer of the mod in the discord.")
+            shutil.move(t_magic_dt_output_path, os.path.join(dt_game_mod_folder, "t_magic._dt"))
+        finally:
+            # Cleanup any t_magic_converter artifacts
+            output_dir = os.path.join(game_dir, "output")
+            if os.path.exists(output_dir):
+                shutil.rmtree(output_dir)
+
+    def _setup_t_crfget_table(self, dt_game_mod_folder, dt_base_folder) -> None:
+        """
+        Set all crafts to be achieved at level 999. The game client will manually give crafts.
+        This is true even if crafts locations are not randomized (for consistency).
+        """
+        t_crtget_path = os.path.join(dt_base_folder, "t_crfget._dt")
+        if not os.path.exists(t_crtget_path):
+            raise FileNotFoundError("t_crfget._dt not found in base directory. Please contact the maintainer of the mod in the discord.")
         try:
-            t_crtget_path = os.path.join(lb_ark_folder, "ED6_DT22", "t_crfget._dt")
             with open(t_crtget_path, "rb") as f:
                 data = bytearray(f.read())
             pos = 0x28
@@ -240,41 +207,88 @@ class TitsThe3rdContext(CommonContext):
             with open(t_crtget_path, "wb") as f:
                 f.write(data)
         except Exception as err:
-            logger.error(f"Error modifying t_crfget: {err}")
-            raise err
+            raise RuntimeError(f"Error modifying t_crfget: {err}") from err
+        shutil.move(t_crtget_path, os.path.join(dt_game_mod_folder, "t_crfget._dt"))
+
+    def _setup_data_table_game_mod_folder(self, game_dir) -> None:
+        data_table_game_mod_folder = os.path.join(game_dir, "data", "ED6_DT22")
+        with tempfile.TemporaryDirectory() as data_table_base_folder:
+            factoria_command = f'"{os.path.join(game_dir, "factoria.exe")}" --output "{data_table_base_folder}" "{os.path.join(game_dir, "ED6_DT22.dir")}"'
+            subprocess.run(factoria_command, shell=True, check=True)
+
+            os.makedirs(data_table_game_mod_folder, exist_ok=False)
+            self._setup_item_table(data_table_game_mod_folder, data_table_base_folder)
+            self._setup_t_magic_table(game_dir, data_table_game_mod_folder, data_table_base_folder)
+            self._setup_t_crfget_table(data_table_game_mod_folder, data_table_base_folder)
+
+    def _setup_as_game_mod_folder(self, game_dir, patch_output_dir) -> None:
+        if not self.slot_data["old_craft_id_to_new_craft_id"]:
+            return  # No craft changes, we can use the default animations.
+        if not "AS_Converter.exe" in os.listdir(game_dir):
+            raise FileNotFoundError("AS_Converter.exe not found. Please install AS_Converter from <link>") #TODO: add link
+        if os.path.exists("outbin"):
+            raise RuntimeError("outbin folder already exists. Cannot patch without overwriting contents. Please delete the outbin folder and try again.")
+
+        as_game_mod_folder = os.path.join(game_dir, "data", "ED6_DT30")
+        os.makedirs(as_game_mod_folder, exist_ok=False)
+
+        as_patch_output_folder = os.path.join(patch_output_dir, "as")
+        if not os.path.exists(as_patch_output_folder):
+            raise FileNotFoundError("AS folder not found in patch output! Please contact the maintainer of the mod in the discord.")
+
         try:
-            animation_writer = AnimationWriter(as_temp_folder)
-            for old_craft_id, new_craft_id in self.slot_data["old_craft_id_to_new_craft_id"].items():
-                animation_writer.write_animation(int(new_craft_id), int(old_craft_id))
+            animation_writer = AnimationWriter(as_patch_output_folder)
+            for destination_craft_id, source_craft_id in self.slot_data["old_craft_id_to_new_craft_id"].items():
+                # Take the animation from source craft, and give it to the destination craft.
+                animation_writer.write_animation(int(source_craft_id), int(destination_craft_id))
         except Exception as err:
-            logger.error(f"Error writing craft animation: {err}")
-        if not "AS_Converter.exe" in files_in_game_dir:
-            raise Exception("AS_Converter.exe not found. Please install AS_Converter from <link>") #TODO: add link
+            raise RuntimeError(f"Error writing craft animation: {err}") from err
+
         as_converter_path = os.path.join(game_dir, "AS_Converter.exe")
         try:
-            subprocess.run([
-                as_converter_path,
-                os.path.join(as_temp_folder),
-                os.path.join(game_dir, "outbin"),
-            ], check=True)
-        except Exception as err:
-            logger.error(f"Error running AS_Converter: {err}")
-            raise err
-        try:
-            for file_name in os.listdir(as_base_folder):
-                source_path = os.path.join(as_base_folder, file_name)
-                dest_path = os.path.join(as_game_mod_folder, file_name)
-                if os.path.isfile(source_path):
-                    shutil.copy2(source_path, dest_path)
+            try:
+                subprocess.run([
+                    as_converter_path,
+                    os.path.join(as_patch_output_folder),
+                ], check=True)
+            except subprocess.CalledProcessError as err:
+                raise RuntimeError(f"Error running AS_Converter: {err}") from err
+
             for file_name in os.listdir("outbin"):
                 source_path = os.path.join("outbin", file_name)
                 dest_path = os.path.join(as_game_mod_folder, file_name.lower())
                 if os.path.isfile(source_path):
                     shutil.copy2(source_path, dest_path)
+        finally:
             shutil.rmtree("outbin")
-        except Exception as err:
-            logger.error(f"Error moving files from as_base_folder to as_game_mod_folder: {err}")
-            raise err
+
+    def install_game_mod(self):
+        game_dir = Path(get_settings().tits_the_3rd_options.game_installation_path)
+        files_in_game_dir = os.listdir(game_dir)
+        if not "ed6_win3_DX9.exe" in files_in_game_dir:
+            raise FileNotFoundError(f"ed6_win3_DX9.exe not found in game directory {game_dir}. Please configure the correct game directory in the settings.")
+
+        lb_ark_folder = os.path.join(game_dir, "data")
+        os.makedirs(lb_ark_folder, exist_ok=True)
+
+        if "player.txt" in os.listdir(lb_ark_folder):
+            with open(os.path.join(lb_ark_folder, "player.txt"), "r", encoding="utf-8") as player_id_file:
+                if player_id_file.read() == f"{self.auth}-{self.seed_name}":
+                    logger.info("Player has not changed. Skip installing patch")
+                    return True
+
+        self._clean_previous_mod_install(lb_ark_folder)
+
+        with tempfile.TemporaryDirectory() as patch_output_dir:
+            patch_zip_bytes = self._apply_patch(game_dir)
+            with zipfile.ZipFile(patch_zip_bytes, "r") as patch_zip_file:
+                patch_zip_file.extractall(patch_output_dir)
+            self._setup_scena_game_mod_folder(game_dir, patch_output_dir)
+            self._setup_data_table_game_mod_folder(game_dir)
+            self._setup_as_game_mod_folder(game_dir, patch_output_dir)
+
+        with open(os.path.join(lb_ark_folder, "player.txt"), "w", encoding="utf-8") as player_id_file:
+            player_id_file.write(f"{self.auth}-{self.seed_name}")
 
         return True
 
