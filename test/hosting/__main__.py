@@ -63,12 +63,12 @@ if __name__ == "__main__":
     spacer = '=' * 80
 
     with TemporaryDirectory() as tempdir:
-        multis = [["Clique"], ["Temp World"], ["Clique", "Temp World"]]
+        multis = [["VVVVVV"], ["Temp World"], ["VVVVVV", "Temp World"]]
         p1_games = []
         data_paths = []
         rooms = []
 
-        copy_world("Clique", "Temp World")
+        copy_world("VVVVVV", "Temp World")
         try:
             for n, games in enumerate(multis, 1):
                 print(f"Generating [{n}] {', '.join(games)}")
@@ -101,7 +101,7 @@ if __name__ == "__main__":
                         with Client(host.address, game, "Player1") as client:
                             local_data_packages = client.games_packages
                             local_collected_items = len(client.checked_locations)
-                            if collected_items < 2:  # Clique only has 2 Locations
+                            if collected_items < 2:  # Don't collect anything on the last iteration
                                 client.collect_any()
                             # TODO: Ctrl+C test here as well
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
                         with Client(host.address, game, "Player1") as client:
                             web_data_packages = client.games_packages
                             web_collected_items = len(client.checked_locations)
-                            if collected_items < 2:  # Clique only has 2 Locations
+                            if collected_items < 2:  # Don't collect anything on the last iteration
                                 client.collect_any()
                             if collected_items == 1:
                                 sleep(1)  # wait for the server to collect the item

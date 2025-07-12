@@ -63,7 +63,6 @@ non_apworlds: set[str] = {
     "Adventure",
     "ArchipIDLE",
     "Archipelago",
-    "Clique",
     "Lufia II Ancient Cave",
     "Meritous",
     "Ocarina of Time",

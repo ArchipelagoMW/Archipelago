@@ -125,10 +125,8 @@ flowchart LR
         NM[Mod with Archipelago.MultiClient.Net]
         subgraph FNA/XNA
             TS[Timespinner]
-            RL[Rogue Legacy]
         end
         NM <-- TsRandomizer --> TS
-        NM <-- RogueLegacyRandomizer --> RL
         subgraph Unity
             ROR[Risk of Rain 2]
             SN[Subnautica]
