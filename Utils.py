@@ -413,13 +413,23 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    uuid = persistent_load().get("client", {}).get("uuid", None)
+    common_path = cache_path("common.json")
+    if os.path.exists(common_path):
+        with open(common_path) as f:
+            common_file = json.load(f)
+            uuid = common_file.get("uuid", None)
+    else:
+        common_file = {}
+        uuid = None
+
     if uuid:
         return uuid
 
-    import uuid
-    uuid = uuid.getnode()
-    persistent_store("client", "uuid", uuid)
+    from uuid import uuid4
+    uuid = str(uuid4())
+    common_file["uuid"] = uuid
+    with open(common_path, "w") as f:
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
