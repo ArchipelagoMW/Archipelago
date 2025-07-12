@@ -260,7 +260,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.building.has_building(Building.fish_pond)),
             Geode.omni: self.count(2, *(self.mine.can_mine_in_the_mines_floor_81_120(), self.region.can_reach_all((Region.desert, Region.oasis, Region.sewer)), self.tool.has_pan(ToolMaterial.iron), (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)), (self.region.can_reach_all((Region.island_west, Region.island_north,)) & self.has(Consumable.treasure_totem)))),
             Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
-            Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
+            Gift.golden_pumpkin: self.received(Gift.golden_pumpkin) & (self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove)),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & self.has(Consumable.rain_totem),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: (self.has(Fish.blobfish) & self.building.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
