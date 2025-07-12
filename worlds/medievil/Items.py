@@ -8,9 +8,10 @@ class MedievilItemCategory(IntEnum):
     FILLER = 0
     PROGRESSION = 1
     WEAPON = 2
-    FUN = 3
-    LEVEL_END = 4
-    SKIP = 5
+    CHALICE = 3
+    FUN = 4
+    LEVEL_END = 5
+    SKIP = 6
 
 
 class MedievilItemData(NamedTuple):
@@ -51,11 +52,15 @@ class MedievilItem(Item):
 
 
 key_item_names = {
-    "Life Bottle 1",
-    "Life Bottle 2",
-    "Life Bottle 3",
-    "Life Bottle 4",
-    "Life Bottle 5",
+    "Life Bottle: Dan's Crypt",
+    "Life Bottle: The Graveyard",
+    "Life Bottle: Hall of Heroes (Canny Tim)",
+    "Life Bottle: Dan's Crypt - Behind Wall",
+    "Life Bottle: Scarecrow Fields",
+    "Life Bottle: Pools of the Ancient Dead",
+    "Life Bottle: Hall of Heroes (Ravenhooves The Archer )",
+    "Life Bottle: Hall of Heroes (Dirk Steadfast)",
+    "Life Bottle: The Time Device",
     "Level_End"
 }
 
@@ -96,7 +101,7 @@ _all_items: List[MedievilItemData] = [
     
     # list of weapons
     ("Small Sword (Equipment)", 31, MedievilItemCategory.WEAPON, False),
-    ("BroadSword (Equipment)", 32, MedievilItemCategory.WEAPON, False),
+    ("Broadsword (Equipment)", 32, MedievilItemCategory.WEAPON, False),
     ("Magic Sword (Equipment)", 33, MedievilItemCategory.WEAPON, False),
     ("Club (Equipment)", 34, MedievilItemCategory.WEAPON, False),
     ("Hammer (Equipment)", 35, MedievilItemCategory.WEAPON, False),
@@ -116,11 +121,22 @@ _all_items: List[MedievilItemData] = [
     ("Dragon Armour (Equipment)", 49, MedievilItemCategory.WEAPON, False),
 
     # Progression items    
-    ("Life Bottle 1", 50, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle 2", 51, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle 3", 52, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle 4", 53, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle 5", 54, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Dan's Crypt", 50, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: The Graveyard", 51, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Hall of Heroes (Canny Tim)", 52, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Dan's Crypt - Behind Wall", 53, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Scarecrow Fields", 54, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Pools of the Ancient Dead", 54, MedievilItemCategory.PROGRESSION, True),    
+    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer )", 54, MedievilItemCategory.PROGRESSION, True),    
+    ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 54, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: The Time Device", 54, MedievilItemCategory.PROGRESSION, True),
+    
+    # Chalice
+    ("Chalice of Souls", 88, MedievilItemCategory.CHALICE, False),
+    
+    
+    # runes will go here once added
+    
     
     # Level_End is typically a progression item as it signifies advancing a stage
     ("Level_End", 99, MedievilItemCategory.LEVEL_END, True) 
@@ -171,7 +187,6 @@ def BuildItemPool(count: int, options) -> List[str]:
             item_pool_names.append(item_name)
     
     # Populate the rest of the pool with random filler items
-    # Prioritize items marked as FILLER.
     filler_item_names = [item_data.name for item_data in _all_items 
                          if item_data.category == MedievilItemCategory.FILLER]
     

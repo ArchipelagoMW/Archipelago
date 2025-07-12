@@ -56,6 +56,9 @@ class MedievilWorld(World):
 
     def generate_early(self):
         self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END),
+        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE),
+        self.enabled_location_categories.add(MedievilLocationCategory.FUN),
+        self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION),
 
     def create_regions(self):
         # Create Regions
@@ -65,10 +68,6 @@ class MedievilWorld(World):
             "MainWorld"
         ]})
         
-        
-        # no connections
-        
-        # Connect Regions
         def create_connection(from_region: str, to_region: str):
             connection = Entrance(self.player, f"{to_region}", regions[from_region])
             regions[from_region].exits.append(connection)
@@ -81,12 +80,8 @@ class MedievilWorld(World):
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
-        #print("location table size: " + str(len(location_table)))
         for location in location_table:
-            #print("Creating location: " + location.name)
             if location.category in self.enabled_location_categories:
-            # if location.category in self.enabled_location_categories:
-                #print("Adding location: " + location.name + " with default item " + location.default_item)
                 new_location = MedievilLocation(
                     self.player,
                     location.name,
@@ -96,11 +91,8 @@ class MedievilWorld(World):
                     new_region
                 )
             else:
-                # Replace non-randomized progression items with events
+
                 event_item = self.create_item(location.default_item)
-                #if event_item.classification != ItemClassification.progression:
-                #    continue
-                #print("Adding Location: " + location.name + " as an event with default item " + location.default_item)
                 new_location = MedievilLocation(
                     self.player,
                     location.name,
@@ -111,7 +103,6 @@ class MedievilWorld(World):
                 )
                 event_item.code = None
                 new_location.place_locked_item(event_item)
-                #print("Placing event: " + event_item.name + " in location: " + location.name)
 
             new_region.locations.append(new_location)
         print("created " + str(len(new_region.locations)) + " locations")
@@ -120,11 +111,7 @@ class MedievilWorld(World):
         return new_region
 
 
-# In your __init__.py file, inside the MedievilWorld class
-
     def create_items(self):
-        # Calculate the number of randomized locations that need an item.
-        # These are locations that are not locked events and have an Archipelago address.
         
         randomized_location_count = 0 
         for location in self.multiworld.get_locations(self.player):
@@ -136,12 +123,8 @@ class MedievilWorld(World):
         # Call BuildItemPool to get a list of item NAMES (strings)
         item_names_to_add = BuildItemPool(randomized_location_count, self.options)
         
-        # Now, create actual MedievilItem instances from these names
         generated_items: List[Item] = []
         for item_name in item_names_to_add:
-            # Use self.create_item to instantiate a proper MedievilItem object.
-            # This method handles assigning the correct ItemClassification and ensures
-            # the 'advancement' attribute is set by the BaseClasses.Item constructor.
             new_item = self.create_item(item_name)
             generated_items.append(new_item)
             
@@ -155,8 +138,6 @@ class MedievilWorld(World):
             print(item.name)
 
     def create_item(self, name: str) -> Item:
-        # This method is crucial for creating Archipelago Item instances.
-        # It looks up the item's data to determine its properties.
         item_data = item_dictionary.get(name)
         
         if not item_data:
@@ -167,42 +148,20 @@ class MedievilWorld(World):
         # Determine the Archipelago ItemClassification based on MedievilItemData.
         item_classification: ItemClassification
 
-        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.WEAPON or item_data.category == MedievilItemCategory.LEVEL_END:
+        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.LEVEL_END:
             item_classification = ItemClassification.progression
-        elif item_data.category == MedievilItemCategory.FUN:
-            item_classification = ItemClassification.useful # Use 'useful' for non-progression, non-filler items
+        elif item_data.category == MedievilItemCategory.FUN or item_data.category == MedievilItemCategory.WEAPON or item_data.category == MedievilItemCategory.CHALICE:
+            item_classification = ItemClassification.useful
         else: # Default for FILLER or other categories not explicitly useful/progression
             item_classification = ItemClassification.filler
 
-        # Instantiate MedievilItem, passing its name, determined classification,
-        # its game-specific m_code, and the player ID.        
-
         return MedievilItem(name, item_classification, MedievilItem.get_name_to_id()[name], self.player)
 
-# Also ensure your base_id in MedievilWorld is consistent with Items.py:
-# base_id = 9901000 
-
-# In generate_early, correct the comma if present:
-# self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END)
-
-
     def get_filler_item_name(self) -> str:
-        return "Gold (50)"
+        return "Gold (50)" # this clearly needs looked into
     
-    # def set_rules(self) -> None:   
-        
-        # def is_level_completed(self, level, entrance, state):
-        #     #print("Checking if level is completed: " + level)
-        #     level_table = location_tables[level]
-        #     #print("Level table size: " + str(len(level_table)))
-        #     lock_location = level_table[0].name    
-        #     #print("Lock location: " + lock_location)   
-        #     reachable = state.can_reach_location(lock_location, self.player)
-        #     return reachable
-        
-        # set_rule(self.multiworld.get_entrance("Molten Crater", self.player), lambda state: state.has(is_level_completed(self,"Cloud Spires","Buzz", state)))  
-            
-                
+    
+                    
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
