@@ -399,6 +399,14 @@ class RoyalRoadblock(Toggle):
     """The Royal Towers entrance door requires a royal orb (Plasma Orb, Plasma Geyser, or Royal Ring) to enter."""
     display_name = "Royal Roadblock"
 
+class PureTorcher(Toggle):
+    """All lanterns contain checks. (Except tutorial)"""
+    display_name = "Pure Torcher"
+
+class FindTheFlame(Toggle):
+    """Lanterns in 'Pure Torcher' will not break without new item 'Cube of Bodie'."""
+    display_name = "Find the Flame"
+
 @dataclass
 class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     start_with_jewelry_box: StartWithJewelryBox
@@ -441,6 +449,8 @@ class TimespinnerOptions(PerGameCommonOptions, DeathLinkMixin):
     pyramid_start: PyramidStart
     gate_keep: GateKeep
     royal_roadblock: RoyalRoadblock
+    pure_torcher: PureTorcher
+    find_the_flame: FindTheFlame
     trap_chance: TrapChance
     traps: Traps
 

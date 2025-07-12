@@ -208,7 +208,11 @@ item_table: Dict[str, ItemData] = {
     'Lab Access Research': ItemData('Lab Access', 1337196, progression=True),
     'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
     'Drawbridge Key': ItemData('Key', 1337198, progression=True),
-    # 1337199 - 1337248 Reserved
+    'Cube of Bodie': ItemData('Relic', 1337199, progression=True),
+    'Spider Trap': ItemData('Trap', 1337200),
+    'Lights Out Trap': ItemData('Trap', 1337201),
+    'Palm Punch Trap': ItemData('Trap', 1337202),
+    # 1337203 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
 
@@ -261,7 +265,8 @@ starter_progression_items: Tuple[str, ...] = (
     'Lightwall',
     'Modern Warp Beacon',
     'Timeworn Warp Beacon',
-    'Mysterious Warp Beacon'
+    'Mysterious Warp Beacon',
+    'Cube of Bodie'
 )
 
 pyramid_start_starter_progression_items: Tuple[str, ...] = (
@@ -272,7 +277,8 @@ pyramid_start_starter_progression_items: Tuple[str, ...] = (
     'Lightwall',
     'Modern Warp Beacon',
     'Timeworn Warp Beacon',
-    'Mysterious Warp Beacon'
+    'Mysterious Warp Beacon',
+    'Cube of Bodie'
 )
 
 filler_items: Tuple[str, ...] = (
