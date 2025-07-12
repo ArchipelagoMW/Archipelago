@@ -29,7 +29,7 @@ graphic_to_char = {
     Graphic.SHIELD: "X",
     Graphic.SWORD: "S",
     Graphic.HEALTH_UPGRADE: "H",
-    Graphic.CONFETTI_CANNON: "?"
+    Graphic.CONFETTI_CANNON: "?",
 }
 
 
