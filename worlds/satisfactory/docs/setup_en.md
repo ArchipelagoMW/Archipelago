@@ -31,12 +31,13 @@ This guide uses the following terms to refer to the software:
 
 - **Archipelago Server** - The central Archipelago server, which connects all games to each other.
 - **Archipelago Client** - The desktop application used by many Archipelago games as middleware. Satisfactory does NOT require this software, unless you would like to generate a world locally.
+- **Archipelago (Satisfactory) mod** - The Satisfactory mod which implements Archipelago in-game functionality and connectivity.
+  All Satisfactory hosts and clients must have this mod installed.
 - **Satisfactory Host** - The Satisfactory instance which will be used to host the game.
   This could be a Satisfactory Client using Singleplayer or host-and-play multiplayer, or it could be a Satisfactory dedicated server.
   It must be supplied with the Archipelago Server connection details.
   *Any number of Satisfactory Clients may connect to this server.*
 - **Satisfactory Client** - The Satisfactory instance (game client) with which additional players can use to connect to the same Satisfactory world.
-  They must also have the Archipelago mod installed, but require no configuration and do not need to provide Archipelago Server connection details.
 
 ### What a Playable State Looks Like
 
