@@ -1387,5 +1387,5 @@ class ToolTips(object):
             cls.after_id = None
 
 
-if __name__ == '__main__':
+def launch():
     main()
