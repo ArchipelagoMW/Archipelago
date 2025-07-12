@@ -7,7 +7,7 @@ from BaseClasses import Item, ItemClassification, CollectionState
 from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
-from .locations import get_locations, get_shops, npc_index_offset, treasure_index_offset, crystal_index_offset, shop_index_offset
+from .locations import get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
 from .unused_locations import get_unused_locations
 from .constants.biomes import get_region_by_id
 from .rules import CrystalProjectLogic
@@ -28,6 +28,9 @@ class ModDataModel(object):
         self.Items = None
         self.Jobs = None
         self.Entities = None
+        self.Sparks = None
+        self.Troops = None
+        self.Monsters = None
         self.__dict__ = json.loads(json_data)
 
 class ModLocationData(NamedTuple):
@@ -58,6 +61,8 @@ class ModInfoModel(NamedTuple):
     shifted_item_ids: List[ModIncrementedIdData]
     shifted_job_ids: List[ModIncrementedIdData]
     shifted_entity_ids: List[ModIncrementedIdData]
+    shifted_spark_ids: List[ModIncrementedIdData]
+    boss_troop_ids: List[int]
     excluded_ids: IdsExcludedFromRandomization
 
 def get_mod_info() -> List[ModInfoModel]:
@@ -74,6 +79,7 @@ def get_mod_info() -> List[ModInfoModel]:
     item_ids_in_use: List[int] = [229, 230, 231, 232]
     job_ids_in_use: List[int] = []
     entity_ids_in_use: List[int] = [5000, 5001, 5002, 5003]
+    spark_ids_in_use: List[int] = []
     order_loaded = 1
 
     for file_name in only_files:
@@ -124,7 +130,29 @@ def get_mod_info() -> List[ModInfoModel]:
                     shifted_entity_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
                     entity_ids_in_use.append(next_id)
 
-            data.append(ModInfoModel(file_data.ID, file_data.Title, order_loaded, file_data, shifted_equipment_ids, shifted_item_ids, shifted_job_ids, shifted_entity_ids, excluded_ids))
+            shifted_spark_ids: List[ModIncrementedIdData] = []
+            for item in file_data.Sparks:
+                item_id = item['ID']
+
+                #Biggest vanilla ID is 224
+                if item_id > 224:
+                    next_id = get_next_mod_id(item_id, spark_ids_in_use)
+                    shifted_spark_ids.append(ModIncrementedIdData(item_id, next_id, file_data.ID))
+                    spark_ids_in_use.append(next_id)
+
+            boss_monster_ids: List[int] = []
+            boss_troop_ids: List[int] = []
+
+            for monster in file_data.Monsters:
+                if monster['IsBoss']:
+                    boss_monster_ids.append(monster['ID'])
+
+            for troop in file_data.Troops:
+                for monster in troop['Members']:
+                    if monster['MonsterID'] in boss_monster_ids:
+                        boss_troop_ids.append(troop['ID'])
+
+            data.append(ModInfoModel(file_data.ID, file_data.Title, order_loaded, file_data, shifted_equipment_ids, shifted_item_ids, shifted_job_ids, shifted_entity_ids, shifted_spark_ids, boss_troop_ids, excluded_ids))
             order_loaded = order_loaded + 1
         else:
             message = f"Mod {file_data.Title} was skipped because the editor version was {file_data.EditorVersion}. Archipelago currently only supports mods with editor version {MAX_SUPPORTED_EDITOR_VERSION} or lower."
@@ -267,6 +295,65 @@ def get_modded_shopsanity_locations(mod_info: List[ModInfoModel]) -> List[ModLoc
                 locations.extend(npc_locations)
 
     return locations
+
+def get_modded_bosses(mod_info: List[ModInfoModel]) -> List[ModLocationData]:
+    locations: List[ModLocationData] = []
+
+    for mod in mod_info:
+        for location in mod.data_model.Entities:
+            entity_type = location['EntityType']
+
+            #Entity type 0 is NPC
+            if entity_type == 0:
+                location = build_boss_npc(location, mod.boss_troop_ids, mod.shifted_entity_ids)
+                if location is not None:
+                    locations.append(location)
+
+            #Entity type 2 is Spark
+            if entity_type == 2:
+                location = build_spark_location(location, mod.shifted_spark_ids)
+                if location is not None:
+                    locations.append(location)
+
+    return locations
+
+def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]:
+    removed_locations: List[ModLocationData] = []
+    vanilla_locations = get_locations(-1, None)
+    vanilla_bosses = get_bosses(-1, None)
+    vanilla_shops = get_shops(-1, None)
+
+    for mod in mod_info:
+        for location in mod.data_model.Entities:
+            location_id = location['ID']
+            biome_id = location['BiomeID']
+            region = get_region_by_id(biome_id)
+            has_no_npc_info = location['NpcData'] is None or not location['NpcData']['Pages']
+
+            if has_no_npc_info and location['SignData'] is None and location['SparkData'] is None and location['DoorData'] is None and location['HomePointData'] is None and location['TreasureData'] is None and location['CrystalData'] is None and location['MarkerData'] is None:
+                treasure_id = location_id + treasure_index_offset
+                npc_id = location_id + npc_index_offset
+                crystal_id = location_id + crystal_index_offset
+                boss_id = location_id + boss_index_offset
+                shop_id = location_id + shop_index_offset
+
+                for vanilla_location in vanilla_locations:
+                    if vanilla_location.code == treasure_id:
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+                    if vanilla_location.code == npc_id:
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+                    if vanilla_location.code == crystal_id:
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+
+                for boss in vanilla_bosses:
+                    if boss.code == boss_id:
+                        removed_locations.append(ModLocationData(region, boss.name, boss.code, boss.code, '0,0,0', biome_id, None))
+
+                for shop in vanilla_shops:
+                    if shop.code == shop_id:
+                        removed_locations.append(ModLocationData(region, shop.name, shop.code, shop.code, '0,0,0', biome_id, None))
+
+    return removed_locations
 
 def get_mod_directory() -> str:
     current_directory = getcwd()
@@ -448,6 +535,104 @@ def build_crystal_location(location, shifted_entity_ids: List[ModIncrementedIdDa
     if not location_in_pool and not location_unused and not is_excluded:
         location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, None)
 
+        return location
+
+    return None
+
+def build_boss_npc(location, boss_troop_ids: List[int], shifted_entity_ids: List[ModIncrementedIdData]) -> Optional[ModLocationData]:
+    options: CrystalProjectOptions
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+    troop_id = None
+
+    new_id = item_id
+    for incremented_id in shifted_entity_ids:
+        if incremented_id.original_id == item_id:
+            new_id = incremented_id.new_id
+
+    id_with_offset = new_id + boss_index_offset
+    name = region + ' Boss - Modded Boss ' + str(new_id)
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
+    has_battle = False
+    rule_condition = None
+
+    pages = location['NpcData']['Pages']
+    for page in pages:
+        actions = page['Actions']
+
+        for action in actions:
+            # 3 is Condition, conditions can have sub actions so check those
+            if action['ActionType'] == 3:
+                condition = action['Data']['Condition']
+                actions_true = action['Data']['ConditionActionsTrue']
+                actions_false = action['Data']['ConditionActionsFalse']
+
+                for action_true in actions_true:
+                    # 27 is Battle
+                    if action_true['ActionType'] == 27:
+                        troop_id = action_true['Data']['TroopID']
+                        has_battle = True
+
+                        # Condition Type 5 is Check Inventory
+                        if has_battle and condition['ConditionType'] == 5 and not condition['IsNegation']:
+                            rule_condition = condition
+
+                for action_false in actions_false:
+                    # 8 is Add Inventory 74 is Add Job, this means it's a check
+                    if action_false['ActionType'] == 27:
+                        troop_id = action_false['Data']['TroopID']
+                        has_battle = True
+
+                        # Condition Type 5 is Check Inventory
+                        if has_battle and condition['ConditionType'] == 5 and condition['IsNegation']:
+                            rule_condition = condition
+
+            # 27 is battle
+            if action['ActionType'] == 27:
+                troop_id = action['Data']['TroopID']
+                has_battle = True
+
+    if has_battle:
+        is_boss = troop_id in boss_troop_ids
+        location_in_pool = any(location.code == id_with_offset for location in get_bosses(-1, None))
+
+        if is_boss and not location_in_pool:
+            location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, rule_condition)
+            return location
+
+    return None
+
+def build_spark_location(location, shifted_spark_ids: List[ModIncrementedIdData]) -> Optional[ModLocationData]:
+    if not location['SparkData']:
+        return None
+
+    is_unique = location['SparkData']['IsUnique']
+
+    if not is_unique:
+        #not a boss
+        return None
+
+    options: CrystalProjectOptions
+    biome_id = location['BiomeID']
+    region = get_region_by_id(biome_id)
+    item_id = location['ID']
+
+    new_id = item_id
+    for incremented_id in shifted_spark_ids:
+        if incremented_id.original_id == item_id:
+            new_id = incremented_id.new_id
+
+    id_with_offset = new_id + boss_index_offset
+    name = region + ' Boss - Modded Boss ' + str(new_id)
+    coord = location['Coord']
+    coordinates = str(coord['X']) + ',' + str(coord['Y']) + ',' + str(coord['Z'])
+
+    location_in_pool = any(location.code == id_with_offset for location in get_bosses(-1, None))
+
+    if not location_in_pool:
+        location = ModLocationData(region, name, id_with_offset, new_id, coordinates, biome_id, None)
         return location
 
     return None

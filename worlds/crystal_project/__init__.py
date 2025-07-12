@@ -18,7 +18,7 @@ from .regions import init_areas
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info
+    get_modded_shopsanity_locations, get_modded_bosses, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info, get_removed_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
@@ -78,6 +78,16 @@ class CrystalProjectWorld(World):
 
     for modded_shop in modded_shops:
         location_name_to_id[modded_shop.name] = modded_shop.code
+
+    modded_bosses = get_modded_bosses(mod_info)
+
+    for modded_boss in modded_bosses:
+        location_name_to_id[modded_boss.name] = modded_boss.code
+
+    removed_locations = get_removed_locations(mod_info)
+
+    for removed_location in removed_locations:
+        del location_name_to_id[removed_location.name]
 
     web = CrystalProjectWeb()
 
@@ -184,6 +194,14 @@ class CrystalProjectWorld(World):
                                         shop.name,
                                         shop.code,
                                         build_condition_rule(shop.rule_condition, self))
+                locations.append(location)
+
+        if self.options.useMods and self.options.killBossesMode.value == self.options.killBossesMode.option_true:
+            for modded_location in self.modded_bosses:
+                location = LocationData(modded_location.region,
+                                        modded_location.name,
+                                        modded_location.code,
+                                        build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
 
         init_areas(self, locations, self.options)
@@ -524,6 +542,7 @@ class CrystalProjectWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         mod_info = []
         slot_data_locations = []
+        slot_data_removed_locations = []
         if self.options.useMods:
             for mod in self.mod_info:
                 mod_info.append({ "Id": mod.mod_id, "Name": mod.mod_name, "LoadOrder": mod.load_order })
@@ -542,6 +561,13 @@ class CrystalProjectWorld(World):
                                              "Coordinates": shop.coordinates,
                                              "BiomeId": shop.biomeId,
                                              "Rule": None })
+            for location in self.removed_locations:
+                slot_data_removed_locations.append({"Id": location.offsetless_code,
+                                            "Region": location.region,
+                                            "Name": location.name,
+                                            "Coordinates": location.coordinates,
+                                            "biomeId": location.biomeId,
+                                            "Rule": None})
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
         return {
@@ -575,6 +601,7 @@ class CrystalProjectWorld(World):
             "useMods": self.options.useMods.value,
             "modInfo": mod_info,
             "moddedLocations": slot_data_locations,
+            "removedLocations": slot_data_removed_locations,
             # "moddedLocationsForUT": self.modded_locations,
             # "moddedShopsForUT": self.modded_shops,
             "starter_region": self.starter_region, # stored for UT re-gen

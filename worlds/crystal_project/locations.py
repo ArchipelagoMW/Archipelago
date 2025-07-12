@@ -1304,7 +1304,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
     return location_table
 
-def get_bosses(player: int, options: CrystalProjectOptions) -> List[LocationData]:
+def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #IDs here are specifically the spark IDs or NPC IDs for where you go to fight them from Crystal Edit
