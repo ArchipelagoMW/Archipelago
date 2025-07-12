@@ -25,7 +25,7 @@ from .Hints import get_hints_by_option, ALWAYS_HINT, PORTRAIT_HINTS
 from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
-from .iso_helper.lm_rom import LMUSAAPProcedurePatch, write_patch
+from .iso_helper.lm_rom import LMPlayerContainer
 
 
 CLIENT_VERSION = "0.4.10"
@@ -888,16 +888,14 @@ class LMWorld(World):
                 output_data["Locations"][location.name] = item_info
 
         # Outputs the plando details to our expected output file
-        # Also creates the APLM yaml file from the output data dictionary.
-        lm_patch = LMUSAAPProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
-        write_patch(lm_patch, output_data)
-
         # Create the output path based on the current player + expected patch file ending.
-        rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
-                                                  f"{lm_patch.patch_file_ending}")
-
-        # Write the expected output file path to the AP.zip that is maintained / created by Files.py#APContainer.write
-        lm_patch.write(rom_path)
+        patch_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+            f"{LMPlayerContainer.patch_file_ending}")
+        # Create a zip (container) that will contain all the necessary output files for us to use during patching.
+        lm_container = LMPlayerContainer(output_data, patch_path, self.multiworld.get_out_file_name_base(self.player),
+            self.player_name, self.multiworld.player_name[self.player], self.player)
+        # Write the expected output zip container to the Generated Seed folder.
+        lm_container.write()
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
