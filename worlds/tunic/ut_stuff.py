@@ -681,7 +681,7 @@ poptracker_data: dict[str, int] = {
 # for setting up the poptracker integration
 tracker_world = {
     "map_page_maps": ["maps/maps_pop.json"],
-    "map_page_locations": ["locations/locations_pop_er.json"],
+    "map_page_locations": ["locations/locations_pop_er.json", "locations/locations_breakables.json"],
     "map_page_setting_key": "Slot:{player}:Current Map",
     "map_page_index": map_page_index,
     "external_pack_key": "ut_poptracker_path",
