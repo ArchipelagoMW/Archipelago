@@ -57,7 +57,6 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
@@ -74,9 +73,6 @@ non_apworlds: set[str] = {
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -368,6 +364,8 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
+        from worlds.Files import APWorldContainer
+        from Utils import version
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
@@ -378,11 +376,17 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 world_directory = self.libfolder / "worlds" / file_name
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
                 # which should be ok
-                with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
+                zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
+                apworld = APWorldContainer(str(zip_path))
+                apworld.minimum_ap_version = version
+                apworld.maximum_ap_version = version
+                apworld.game = worldtype.game
+                with zipfile.ZipFile(zip_path, "x", zipfile.ZIP_DEFLATED,
                                      compresslevel=9) as zf:
                     for path in world_directory.rglob("*.*"):
                         relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
                         zf.write(path, relative_path)
+                    zf.writestr("archipelago.json", json.dumps(apworld.get_manifest()))
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
