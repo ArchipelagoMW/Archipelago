@@ -1,13 +1,8 @@
 import random
-import typing
+from collections import deque
 
-from worlds.Files import APTokenTypes
-
-from .rom_addresses import rom_addresses
-
-if typing.TYPE_CHECKING:
-    from .rom import PokemonBlueProcedurePatch, PokemonRedProcedurePatch
-
+region_names = ["Rock Tunnel 1F-NE", "Rock Tunnel 1F-S", "Rock Tunnel 1F-NW",
+                "Rock Tunnel B1F-W", "Rock Tunnel B1F-E"]
 
 layout1F = [
     [20, 22, 32, 34, 20, 25, 22, 32, 34, 20, 25, 25, 25, 22, 20, 25, 22,  2,  2,  2],
@@ -56,13 +51,100 @@ disallowed2F = [[16, 2], [17, 2], [18, 2], [15, 5], [15, 6], [10, 10], [11, 10],
                 [13, 15], [13, 16], [1, 12], [1, 10], [3, 5], [3, 6], [5, 6], [5, 7], [5, 8], [1, 2], [1, 3], [1, 4],
                 [11, 1]]
 
+# Definitions for Rock Tunnel 1F
+warps_1f = {
+    (7, 1): "Rock Tunnel 1F-NE 1",
+    (7, 16): "Rock Tunnel 1F-S 1",
+    (2, 1): "Rock Tunnel 1F-NW 1",
+    (8, 5): "Rock Tunnel 1F-NW 2",
+    (18, 1): "Rock Tunnel 1F-NE 2",
+    (18, 8): "Rock Tunnel 1F-S 2"
+}
+objects_1f = {
+    (3, 2): "Rock Tunnel 1F - Hiker 1",
+    (2, 8): "Rock Tunnel 1F - Hiker 2",
+    (8, 7): "Rock Tunnel 1F - Hiker 3",
+    (11, 4): "Rock Tunnel 1F - PokeManiac",
+    (18, 10): "Rock Tunnel 1F - Jr. Trainer F 1",
+    (11, 12): "Rock Tunnel 1F - Jr. Trainer F 2",
+    (16, 12): "Rock Tunnel 1F - Jr. Trainer F 3"
+}
 
-def randomize_rock_tunnel(patch: "PokemonRedProcedurePatch | PokemonBlueProcedurePatch", random: random.Random):
+# Definitions for Rock Tunnel B1F
+warps_b1f = {
+    (11, 5): "Rock Tunnel B1F-W 1",
+    (1, 1): "Rock Tunnel B1F-W 2",
+    (13, 1): "Rock Tunnel B1F-E 2",
+    (16, 12): "Rock Tunnel B1F-E 1"
+}
+objects_b1f = {
+    # Trainers
+    (5, 6): "Rock Tunnel B1F - Jr. Trainer F 2",
+    (3, 5): "Rock Tunnel B1F - Hiker 3",
+    (1, 2): "Rock Tunnel B1F - PokeManiac 3",
+    (10, 10): "Rock Tunnel B1F - PokeManiac 2",
+    (15, 5): "Rock Tunnel B1F - Hiker 2",
+    (7, 14): "Rock Tunnel B1F - Jr. Trainer F 1",
+    (16, 2): "Rock Tunnel B1F - Hiker 1",
+    (13, 15): "Rock Tunnel B1F - PokeManiac 1",
+    # Extra Key Items
+    (1, 15): "Rock Tunnel B1F - Southwest Item",
+    (1, 12): "Rock Tunnel B1F - West Item",
+    (1, 10): "Rock Tunnel B1F - Northwest Item",
+    (11, 1): "Rock Tunnel B1F - North Item"
+}
+
+
+def bfs_search(layout, start, warps, objects):
+    visited = set()
+    queue = deque([start])
+    found_warps = set()
+    found_objects = []
+
+    while queue:
+        x, y = queue.popleft()
+        if (x, y) in visited or layout[y][x] not in {1, 62, 40}:
+            continue
+        visited.add((x, y))
+
+        if (x, y) in warps and (x, y) != start:
+            found_warps.add(warps[(x, y)])
+        if (x, y) in objects:
+            found_objects.append(objects[(x, y)])
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            nx, ny = x + dx, y + dy
+            if 0 <= ny < len(layout) and 0 <= nx < len(layout[0]):
+                queue.append((nx, ny))
+
+    return [warps[start]] + list(found_warps), found_objects
+
+
+def find_regions(layout, warps, objects):
+    regions = []
+    used_warps = set()
+
+    for coord, warp_name in warps.items():
+        if warp_name in used_warps:
+            continue
+        region_warps, region_objects = bfs_search(layout, coord, warps, objects)
+
+        assert len(region_warps) == 2, "Error with randomized Rock Tunnel, incorrect number of warps per region."
+
+        used_warps.update(region_warps)
+        regions.append({
+            "warps": region_warps,
+            "objects": region_objects
+        })
+
+    return regions
+
+
+def randomize_rock_tunnel(random: random.Random):
     seed = random.randint(0, 999999999999999999)
     random.seed(seed)
 
     map1f = [row.copy() for row in layout1F]
-    map2f = [row.copy() for row in layout2F]
+    mapb1f = [row.copy() for row in layout2F]
 
     current_map = map1f
 
@@ -168,7 +250,7 @@ def randomize_rock_tunnel(patch: "PokemonRedProcedurePatch | PokemonBlueProcedur
         else:
             wide(1, random.choice([5, 6, 7, 9]))
 
-    current_map = map2f
+    current_map = mapb1f
 
     if 3 in remaining:
         c = random.choice([entrance_c, exit_c])
@@ -335,9 +417,11 @@ def randomize_rock_tunnel(patch: "PokemonRedProcedurePatch | PokemonBlueProcedur
         x = random.randint(1, 18)
         current_map = map1f
         check_addable_block(map1f, disallowed1F)
-        current_map = map2f
-        check_addable_block(map2f, disallowed2F)
+        current_map = mapb1f
+        check_addable_block(mapb1f, disallowed2F)
 
-    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_Tunnel1F"], bytes([b for row in map1f for b in row]))
-    patch.write_token(APTokenTypes.WRITE, rom_addresses["Map_Rock_TunnelB1F"], bytes([b for row in map2f for b in row]))
-    return seed
+    region_data = (find_regions(map1f, warps_1f, objects_1f)
+                   + find_regions(mapb1f, warps_b1f, objects_b1f))
+    regions = {region_name: data for region_name, data in zip(region_names, region_data)}
+
+    return regions, seed, bytes([b for row in map1f for b in row]), bytes([b for row in mapb1f for b in row])
