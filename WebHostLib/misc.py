@@ -12,10 +12,14 @@ from . import app, cache
 from .models import Seed, Room, Command, UUID, uuid4
 
 
-def get_world_theme(game_name: str):
+def get_world_theme(game_name: str) -> str:
+    available = ["dirt", "grass", "grassFlowers", "ice", "jungle", "ocean", "partyTime", "stone"]
+    chosen_theme = ""
     if game_name in AutoWorldRegister.world_types:
-        return AutoWorldRegister.world_types[game_name].web.theme
-    return 'grass'
+        chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
+    if chosen_theme in available:
+        return chosen_theme
+    return "grass"
 
 
 @app.errorhandler(404)
