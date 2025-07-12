@@ -540,6 +540,10 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
+    def reached_region(self, state: "CollectionState", region: "Region") -> None:
+        """Called when a region is newly reachable by the state."""
+        pass
+
     # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
