@@ -193,12 +193,15 @@ collection_events = {
     "VWXYZ-Dragon Catapult Cannon and the fusion materials": None,
     "Gate Guardian and its pieces": None,
     "Dark Scorpion Combination and its required cards": None,
+    "Exodia": None,
     "Can Exodia Win": None,
     "Can Yata Lock": None,
     "Can Stall with Monsters": None,
     "Can Stall with ST": None,
     "Can Last Turn Win": None,
     "Has Back-row removal": None,
+    "Can Gain LP Every Turn": None,
+    "Can Self Mill": None
 }
 
 
