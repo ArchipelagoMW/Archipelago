@@ -8,6 +8,7 @@ from .constants.keys import *
 from .constants.key_items import *
 from .constants.regions import *
 from .constants.teleport_stones import *
+from .constants.region_passes import *
 
 if TYPE_CHECKING:
     from . import CrystalProjectWorld
@@ -267,7 +268,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol
                     CASTLE_SEQUOIA: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, JOJO_SEWERS, [CAPITAL_SEQUOIA, BOOMER_SOCIETY, THE_PALE_GROTTO, CAPITAL_JAIL, QUINTAR_NEST],
-                    {CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state),
+                    {BOOMER_SOCIETY: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false or logic.has_swimming(state),
+                    CAPITAL_JAIL: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     QUINTAR_NEST: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS) or logic.has_swimming(state))})
     fancy_add_exits(world, BOOMER_SOCIETY, [JOJO_SEWERS, GREENSHIRE_REPRISE])
@@ -309,7 +311,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     ANCIENT_LABYRINTH: lambda state: (state.has(ANCIENT_TABLET_A, player) or options.obscureRoutes.value == options.obscureRoutes.option_true) and logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, SARA_SARA_BAZAAR, [POKO_POKO_DESERT, SARA_SARA_BEACH_EAST, SARA_SARA_BEACH_WEST, SHOUDU_PROVINCE, THE_OPEN_SEA, CONTINENTAL_TRAM],
                     {SARA_SARA_BEACH_WEST: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR),
-                    SHOUDU_PROVINCE: lambda state: state.has(FERRY_PASS, world.player),
+                    SHOUDU_PROVINCE: lambda state: state.has(FERRY_PASS, player),
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state),
                     CONTINENTAL_TRAM: lambda state: logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)})
     fancy_add_exits(world, SARA_SARA_BEACH_EAST, [SARA_SARA_BAZAAR, THE_OPEN_SEA, IBEK_CAVE, BEAURIOR_VOLCANO],
@@ -346,10 +348,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     SHOUDU_PROVINCE: lambda state: logic.has_vertical_movement(state),
                     COBBLESTONE_CRAG: lambda state: logic.has_horizontal_movement(state)})
     fancy_add_exits(world, SHOUDU_PROVINCE, [SARA_SARA_BAZAAR, SHOUDU_WATERFRONT, GANYMEDE_SHRINE, THE_UNDERCITY, QUINTAR_RESERVE],
-                    {SARA_SARA_BAZAAR: lambda state: state.has(FERRY_PASS, world.player),
+                    {SARA_SARA_BAZAAR: lambda state: state.has(FERRY_PASS, player),
                     GANYMEDE_SHRINE: lambda state: logic.has_vertical_movement(state),
                     THE_UNDERCITY: lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state),
-                    QUINTAR_RESERVE: lambda state: logic.has_vertical_movement(state) and state.has(ELEVATOR_PART, world.player, 10)})
+                    QUINTAR_RESERVE: lambda state: logic.has_vertical_movement(state) and state.has(ELEVATOR_PART, player, 10)})
     fancy_add_exits(world, THE_UNDERCITY, [SHOUDU_PROVINCE, THE_OPEN_SEA],
                     {THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, GANYMEDE_SHRINE, [SHOUDU_PROVINCE])
@@ -364,7 +366,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {QUINTAR_MAUSOLEUM: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, DIONE_SHRINE, [QUINTAR_RESERVE, EASTERN_CHASM, JIDAMBA_TANGLE, THE_CHALICE_OF_TAR],
                     {JIDAMBA_TANGLE: lambda state: logic.has_glide(state),
-                    THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, world.player),
+                    THE_CHALICE_OF_TAR: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player),
                     EASTERN_CHASM: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_MAUSOLEUM, [QUINTAR_RESERVE, QUINTAR_SANCTUM],
                     {QUINTAR_RESERVE: lambda state: logic.has_swimming(state),
@@ -374,7 +376,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     THE_OPEN_SEA: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, TALL_TALL_HEIGHTS, [SALMON_RIVER, GREENSHIRE_REPRISE, LANDS_END, SEQUOIA_ATHENAEUM, NORTHERN_STRETCH, CASTLE_RAMPARTS, THE_CHALICE_OF_TAR, THE_PALE_GROTTO, NORTHERN_CAVE],
                     {LANDS_END: lambda state: logic.has_vertical_movement(state),
-                    SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, world.player) and state.has(VIRIDIAN_BOOK, world.player) and state.has(CERULEAN_BOOK, world.player),
+                    SEQUOIA_ATHENAEUM: lambda state: state.has(VERMILLION_BOOK, player) and state.has(VIRIDIAN_BOOK, player) and state.has(CERULEAN_BOOK, player),
                     NORTHERN_STRETCH: lambda state: logic.has_glide(state),
                     CASTLE_RAMPARTS: lambda state: logic.has_vertical_movement(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
