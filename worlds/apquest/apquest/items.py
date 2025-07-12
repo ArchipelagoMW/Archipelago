@@ -5,10 +5,11 @@ from graphics import Graphic
 
 
 class Item(Enum):
-    KEY = (1,)
-    SWORD = (2,)
-    SHIELD = (3,)
-    HEALTH_UPGRADE = (4,)
+    KEY = 1
+    SWORD = 2
+    SHIELD = 3
+    HEALTH_UPGRADE = 4
+    CONFETTI_CANNON = 5
 
 
 ITEM_TO_GRAPHIC = defaultdict(
@@ -18,5 +19,6 @@ ITEM_TO_GRAPHIC = defaultdict(
         Item.SWORD: Graphic.SWORD,
         Item.SHIELD: Graphic.SHIELD,
         Item.HEALTH_UPGRADE: Graphic.HEALTH_UPGRADE,
+        Item.CONFETTI_CANNON: Graphic.CONFETTI_CANNON,
     },
 )

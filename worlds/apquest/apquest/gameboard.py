@@ -21,6 +21,7 @@ from locations import DEFAULT_CONTENT, Location
 if TYPE_CHECKING:
     from game import Player
 
+
 class Gameboard:
     gameboard: tuple[tuple[Entity, ...], ...]
 
@@ -78,7 +79,8 @@ def create_gameboard() -> Gameboard:
     top_middle_chest = Chest(Location.TOP_MIDDLE_CHEST)
     left_room_chest = Chest(Location.TOP_LEFT_CHEST)
     bottom_left_chest = Chest(Location.BOTTOM_LEFT_CHEST)
-    bottom_right_chest = Chest(Location.BOTTOM_RIGHT_CHEST)
+    bottom_right_room_left_chest = Chest(Location.BOTTOM_RIGHT_ROOM_LEFT_CHEST)
+    bottom_right_room_right_chest = Chest(Location.BOTTOM_RIGHT_ROOM_RIGHT_CHEST)
 
     normal_enemy = EnemyWithLoot(Location.ENEMY_DROP)
     boss = FinalBoss()
@@ -103,8 +105,8 @@ def create_gameboard() -> Gameboard:
         (Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
         (Wall(), key_door, Wall(), Wall(), Empty(), Empty(), Empty(), Empty(), Empty(), normal_enemy, Empty()),
         (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
-        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Wall(), Wall(), Wall()),
-        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
+        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Wall(), Wall(), Wall(), Wall()),
+        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Empty()),
         (
             Empty(),
             bottom_left_chest,
@@ -112,13 +114,13 @@ def create_gameboard() -> Gameboard:
             Empty(),
             Empty(),
             Empty(),
-            Empty(),
             Bush(),
             Empty(),
-            bottom_right_chest,
+            bottom_right_room_left_chest,
+            bottom_right_room_right_chest,
             Empty(),
         ),
-        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty()),
+        (Empty(), Empty(), Empty(), Empty(), Empty(), Empty(), Wall(), Empty(), Empty(), Empty(), Empty()),
     )
 
     return Gameboard(gameboard)

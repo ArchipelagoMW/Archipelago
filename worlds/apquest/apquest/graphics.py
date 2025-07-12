@@ -25,3 +25,5 @@ class Graphic(Enum):
     SWORD = 32
     SHIELD = 33
     HEALTH_UPGRADE = 34
+
+    CONFETTI_CANNON = 40

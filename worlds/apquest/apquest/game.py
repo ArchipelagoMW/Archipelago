@@ -2,6 +2,7 @@ from collections import Counter
 from enum import Enum
 
 from entities import InteractableMixin
+from events import ConfettiFired, Event
 from gameboard import Gameboard, create_gameboard
 from graphics import Graphic
 from items import Item
@@ -20,6 +21,7 @@ class Input(Enum):
     RIGHT = 3
     DOWN = 4
     ACTION = 5
+    CONFETTI = 6
 
 
 class Player:
@@ -89,7 +91,10 @@ class Game:
     player: Player
     gameboard: Gameboard
 
+    queued_events: list[Event]
+
     def __init__(self) -> None:
+        self.queued_events = []
         self.gameboard = create_gameboard()
         self.player = Player(self.gameboard)
 
@@ -115,6 +120,11 @@ class Game:
         if isinstance(entity, InteractableMixin):
             entity.interact(self.player)
 
+    def attempt_fire_confetti_cannon(self) -> None:
+        if self.player.has_item(Item.CONFETTI_CANNON):
+            self.player.remove_item(Item.CONFETTI_CANNON)
+            self.queued_events.append(ConfettiFired(self.player.current_x, self.player.current_y))
+
     def input(self, input_key: Input) -> None:
         if input_key == Input.LEFT:
             self.attempt_player_movement(Direction.LEFT)
@@ -134,6 +144,10 @@ class Game:
 
         if input_key == Input.ACTION:
             self.attempt_interact()
+            return
+
+        if input_key == Input.CONFETTI:
+            self.attempt_fire_confetti_cannon()
             return
 
         raise ValueError(f"Don't know input {input_key}")

@@ -1,10 +1,12 @@
+from events import ConfettiFired
+
 try:
     from pynput import keyboard
     from pynput.keyboard import Key, KeyCode
 except ImportError:
     raise ImportError("In order to play APQuest from console, you have to install pynput.")
 
-from game import Game, Input, Player
+from game import Game, Input
 from graphics import Graphic
 from items import ITEM_TO_GRAPHIC
 
@@ -27,10 +29,14 @@ graphic_to_char = {
     Graphic.SHIELD: "X",
     Graphic.SWORD: "S",
     Graphic.HEALTH_UPGRADE: "H",
+    Graphic.CONFETTI_CANNON: "?"
 }
 
 
-def render_to_console(player: Player, rendered_graphics: tuple[tuple[Graphic, ...], ...]) -> None:
+def render_to_console(game: Game) -> None:
+    player = game.player
+    rendered_graphics = game.render()
+
     print(f"Health: {player.current_health}/{player.max_health}")
 
     inventory = []
@@ -44,6 +50,11 @@ def render_to_console(player: Player, rendered_graphics: tuple[tuple[Graphic, ..
     if player.has_won:
         print("VICTORY!!!")
 
+    while game.queued_events:
+        next_event = game.queued_events.pop(0)
+        if isinstance(next_event, ConfettiFired):
+            print("Confetti fired! You feel motivated :)")
+
     for row in rendered_graphics:
         print(" ".join(graphic_to_char[graphic] for graphic in row))
 
@@ -54,13 +65,9 @@ if __name__ == "__main__":
 
     def input_and_rerender(input_key: Input) -> None:
         game.input(input_key)
-        rendered_graphics = game.render()
-        render_to_console(game.player, rendered_graphics)
+        render_to_console(game)
 
     def on_press(key: Key | KeyCode | None) -> None:
-        if not isinstance(key, Key):
-            return
-
         if key == keyboard.KeyCode.from_char("w"):
             input_and_rerender(Input.UP)
         if key == keyboard.KeyCode.from_char("s"):
@@ -71,9 +78,10 @@ if __name__ == "__main__":
             input_and_rerender(Input.RIGHT)
         if key == Key.space:
             input_and_rerender(Input.ACTION)
+        if key == keyboard.KeyCode.from_char("c"):
+            input_and_rerender(Input.CONFETTI)
 
-    render = game.render()
-    render_to_console(game.player, render)
+    render_to_console(game)
 
     with keyboard.Listener(on_press=on_press) as listener:
         while True:
