@@ -554,13 +554,24 @@ class CrystalProjectWorld(World):
                                             "Coordinates": modded_location.coordinates,
                                             "biomeId": modded_location.biomeId,
                                             "Rule": None })
-            for shop in self.modded_shops:
-                slot_data_locations.append({ "Id": shop.offsetless_code,
-                                             "Region": shop.region,
-                                             "Name": shop.name,
-                                             "Coordinates": shop.coordinates,
-                                             "BiomeId": shop.biomeId,
-                                             "Rule": None })
+            if self.options.shopsanity != self.options.shopsanity.option_disabled:
+                for shop in self.modded_shops:
+                    slot_data_locations.append({ "Id": shop.offsetless_code,
+                                                 "Region": shop.region,
+                                                 "Name": shop.name,
+                                                 "Coordinates": shop.coordinates,
+                                                 "BiomeId": shop.biomeId,
+                                                 "Rule": None })
+
+            if self.options.killBossesMode == self.options.killBossesMode.option_true:
+                for boss in self.modded_bosses:
+                    slot_data_locations.append({ "Id": boss.offsetless_code,
+                                                 "Region": boss.region,
+                                                 "Name": boss.name,
+                                                 "Coordinates": boss.coordinates,
+                                                 "BiomeId": boss.biomeId,
+                                                 "Rule": None })
+
             for location in self.removed_locations:
                 slot_data_removed_locations.append({"Id": location.offsetless_code,
                                             "Region": location.region,
