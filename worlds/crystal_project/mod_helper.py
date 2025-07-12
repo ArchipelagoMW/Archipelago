@@ -339,19 +339,19 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
 
                 for vanilla_location in vanilla_locations:
                     if vanilla_location.code == treasure_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == npc_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
                     if vanilla_location.code == crystal_id:
-                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, vanilla_location.code, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
 
                 for boss in vanilla_bosses:
                     if boss.code == boss_id:
-                        removed_locations.append(ModLocationData(region, boss.name, boss.code, boss.code, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
 
                 for shop in vanilla_shops:
                     if shop.code == shop_id:
-                        removed_locations.append(ModLocationData(region, shop.name, shop.code, shop.code, '0,0,0', biome_id, None))
+                        removed_locations.append(ModLocationData(region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
 
     return removed_locations
 
