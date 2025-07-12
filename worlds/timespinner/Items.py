@@ -265,8 +265,7 @@ starter_progression_items: Tuple[str, ...] = (
     'Lightwall',
     'Modern Warp Beacon',
     'Timeworn Warp Beacon',
-    'Mysterious Warp Beacon',
-    'Cube of Bodie'
+    'Mysterious Warp Beacon'
 )
 
 pyramid_start_starter_progression_items: Tuple[str, ...] = (
@@ -277,8 +276,7 @@ pyramid_start_starter_progression_items: Tuple[str, ...] = (
     'Lightwall',
     'Modern Warp Beacon',
     'Timeworn Warp Beacon',
-    'Mysterious Warp Beacon',
-    'Cube of Bodie'
+    'Mysterious Warp Beacon'
 )
 
 filler_items: Tuple[str, ...] = (
