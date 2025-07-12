@@ -242,8 +242,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {JADE_CAVERN: lambda state: logic.has_golden_quintar(state),
                     THE_PALE_GROTTO: lambda state: logic.has_swimming(state),
                     DRAFT_SHAFT_CONDUIT: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, THE_PALE_GROTTO, [DELENDE, PROVING_MEADOWS, JOJO_SEWERS, TALL_TALL_HEIGHTS, SALMON_PASS],
-                    {JOJO_SEWERS: lambda state: logic.has_swimming(state),
+    fancy_add_exits(world, THE_PALE_GROTTO, [DELENDE, SOILED_DEN, PROVING_MEADOWS, JOJO_SEWERS, TALL_TALL_HEIGHTS, SALMON_PASS],
+                    {SOILED_DEN: lambda state: logic.has_swimming(state),
+                    JOJO_SEWERS: lambda state: logic.has_swimming(state),
                     TALL_TALL_HEIGHTS: lambda state: logic.has_swimming(state),
                     SALMON_PASS: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, SEASIDE_CLIFFS, [DELENDE, DRAFT_SHAFT_CONDUIT, THE_OPEN_SEA, MERCURY_SHRINE, BEAURIOR_VOLCANO],
