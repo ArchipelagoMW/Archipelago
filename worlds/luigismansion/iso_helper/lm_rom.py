@@ -78,7 +78,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
         except ImportError:
             # Load the external dependencies based on OS
-            logger.info("Loading required dependencies for Luigi's Mansion, including GClib...")
+            logger.info("Missing dependencies detected for Luigi's Mansion, attempting to load local copy...")
             is_linux = platform.startswith("linux")
             is_windows = platform in ("win32", "cygwin", "msys")
             lib_path = ""
@@ -91,7 +91,9 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
             # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
             # the with block ends.
-            with resources.as_file(resources.files(MAIN_PKG_NAME).joinpath(lib_path)) as resource_lib_path:
+            parent_dir = os_path.abspath(__name__).parent
+            logger.info("Parent Dir: " + parent_dir)
+            with resources.as_file(resources.files(parent_dir).joinpath(lib_path)) as resource_lib_path:
                 logger.info("Temp Resource Path: " + str(resource_lib_path))
                 path.append(str(resource_lib_path))
 
