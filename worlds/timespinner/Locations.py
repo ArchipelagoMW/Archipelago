@@ -285,6 +285,35 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
     # 1337250 - 1337781 Torch checks
     if not options or options.pure_torcher:
         location_table += (
+            LocationData('Lower lake desolation', 'Lake Desolation (Lower): Not  So Secret Lantern', 1337250, lambda state: logic.can_break_walls(state) and logic.can_break_lanterns(state)),
+            LocationData('Lower lake desolation', 'Lake Desolation (Lower): Middle Room Lantern 1', 1337256, logic.can_break_lanterns),
+            LocationData('Lower lake desolation', 'Lake Desolation (Lower): Middle Room Lantern 2', 1337257, logic.can_break_lanterns),
+            LocationData('Lower lake desolation', 'Lake Desolation (Lower): Timespinner Wheel Lantern 1', 1337258, logic.can_break_lanterns),
+            LocationData('Lower lake desolation', 'Lake Desolation (Lower): Timespinner Wheel Lantern 2', 1337259, logic.can_break_lanterns),
+
+            LocationData('Upper lake desolation)', 'Lake Desolation (Upper): Upper Left Room Lantern 1', 1337251, logic.can_break_lanterns),
+            LocationData('Upper lake desolation)', 'Lake Desolation (Upper): Upper Left Room Lantern 2', 1337252, logic.can_break_lanterns),
+            LocationData('Upper lake desolation)', 'Lake Desolation (Upper): Oxygen Recovery Lantern', 1337253, logic.can_break_lanterns),
+            LocationData('Upper lake desolation)', 'Lake Desolation (Upper): Upper Right Room Lantern 1', 1337254, logic.can_break_lanterns),
+            LocationData('Upper lake desolation)', 'Lake Desolation (Upper): Double jump Cave Lantern', 1337255, logic.can_break_lanterns),
+
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 1', 1337773, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 2', 1337774, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 3', 1337775, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 4', 1337776, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 5', 1337777, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 6', 1337778, logic.can_break_lanterns),
+            LocationData('Eastern lake desolation', 'Lake Desolation: Metropolis Bridge Lantern 7', 1337779, logic.can_break_lanterns),
+
+            LocationData('Forest', 'Forest: Rats Lantern', 1337498, logic.can_break_lanterns),
+            LocationData('Forest', 'Forest: Ramparts Bridge Lantern 1', 1337499, logic.can_break_lanterns),
+            LocationData('Forest', 'Forest: Ramparts Bridge Lantern 2', 1337500, logic.can_break_lanterns),
+            LocationData('Forest', 'Forest: Ramparts Bridge Lantern 3', 1337501, logic.can_break_lanterns),
+            LocationData('Forest', 'Forest: Batcave Lantern', 1337502, logic.can_break_lanterns),
+            LocationData('Forest', 'Forest: Lantern Before Broken Bridge', 1337503, logic.can_break_lanterns),
+            LocationData('Left Side forest Caves', 'Forest: Lantern Past Signpost', 1337497, logic.can_break_lanterns),
+            LocationData('Left Side forest Caves', 'Forest: Lantern After Broken Bridge', 1337504, logic.can_break_lanterns),
+            LocationData('Left Side forest Caves', 'Forest: Left Caves Lantern', 1337505, logic.can_break_lanterns),
 
             LocationData('Emperors tower (courtyard)', 'Emperor\'s Tower: Courtyard Lantern 1', 1337314, logic.can_break_lanterns),
             LocationData('Emperors tower (courtyard)', 'Emperor\'s Tower: Courtyard Lantern 2', 1337316, logic.can_break_lanterns),
