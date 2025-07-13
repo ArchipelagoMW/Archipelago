@@ -209,9 +209,9 @@ item_table: Dict[str, ItemData] = {
     'Lab Access Dynamo': ItemData('Lab Access', 1337197, progression=True),
     'Drawbridge Key': ItemData('Key', 1337198, progression=True),
     'Cube of Bodie': ItemData('Relic', 1337199, progression=True),
-    'Spider Trap': ItemData('Trap', 1337200),
-    'Lights Out Trap': ItemData('Trap', 1337201),
-    'Palm Punch Trap': ItemData('Trap', 1337202),
+    'Spider Trap': ItemData('Trap', 1337200, trap=True),
+    'Lights Out Trap': ItemData('Trap', 1337201, trap=True),
+    'Palm Punch Trap': ItemData('Trap', 1337202, trap=True),
     # 1337203 - 1337248 Reserved
     'Max Sand': ItemData('Stat', 1337249, 14)
 }
