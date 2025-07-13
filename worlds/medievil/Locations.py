@@ -101,7 +101,7 @@ location_tables = {
     MedievilLocationData("The Time Device: Chalice","Chalice of Souls",42,MedievilLocationCategory.CHALICE),     
     
     
-    # remove all these bloody level ends that you defaulted. 
+    # to do: remove all these bloody level ends that you defaulted. 
     
     # Skills
     MedievilLocationData("Daring Dash: Skill","Level_End",43,MedievilLocationCategory.FUN),
@@ -158,7 +158,51 @@ location_tables = {
     MedievilLocationData("Life Bottle: Pools of the Ancient Dead","Level_End",88,MedievilLocationCategory.FUN),
     MedievilLocationData("Life Bottle: Hall of Heroes (Ravenhooves The Archer)","Level_End",89,MedievilLocationCategory.FUN),
     MedievilLocationData("Life Bottle: Hall of Heroes (Dirk Steadfast)","Level_End",90,MedievilLocationCategory.FUN),
-    MedievilLocationData("Life Bottle: The Time Device","Level_End",91,MedievilLocationCategory.FUN)
+    MedievilLocationData("Life Bottle: The Time Device","Level_End",91,MedievilLocationCategory.FUN),
+    
+    # Runes
+    MedievilLocationData("Chaos Rune: The Graveyard","Level_End",92,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: The Hilltop Mausoleum","Level_End",93,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: Scarecrow Fields","Level_End",94,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: The Lake","Level_End",95,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: Pumpkin Gorge","Level_End",96,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: Sleeping Village","Level_End",97,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: Pools of the Ancient Dead","Level_End",98,MedievilLocationCategory.PROGRESSION),    
+    MedievilLocationData("Chaos Rune: Asylum Grounds","Level_End",99,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: The Haunted Ruins","Level_End",100,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: Ghost Ship","Level_End",101,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Chaos Rune: The Time Device","Level_End",102,MedievilLocationCategory.PROGRESSION),
+
+    MedievilLocationData("Earth Rune: The Graveyard","Level_End",103,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: The Hilltop Mausoleum","Level_End",104,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: Scarecrow Fields","Level_End",105,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: The Crystal Caves","Level_End",106,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: The Lake","Level_End",107,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: Pumpkin Gorge","Level_End",108,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: Sleeping Village","Level_End",109,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: Inside the Asylum","Level_End",110,MedievilLocationCategory.PROGRESSION),    
+    MedievilLocationData("Earth Rune: Enchanted Earth","Level_End",111,MedievilLocationCategory.PROGRESSION),    
+    MedievilLocationData("Earth Rune: The Haunted Ruins","Level_End",112,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: The Entrance Hall","Level_End",113,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Earth Rune: The Time Device","Level_End",114,MedievilLocationCategory.PROGRESSION),
+
+    MedievilLocationData("Moon Rune: The Hilltop Mausoleum","Level_End",115,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Moon Rune: Scarecrow Fields","Level_End",116,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Moon Rune: Pumpkin Gorge","Level_End",117,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Moon Rune: Ghost Ship","Level_End",118,MedievilLocationCategory.PROGRESSION),    
+    MedievilLocationData("Moon Rune: The Time Device","Level_End",119,MedievilLocationCategory.PROGRESSION),
+
+    MedievilLocationData("Star Rune: Return to the Graveyard","Level_End",120,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Star Rune: Dan's Crypt","Level_End",121,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Star Rune: The Crystal Caves","Level_End",122,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Star Rune: The Lake","Level_End",123,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Star Rune: Enchanted Earth","Level_End",124,MedievilLocationCategory.PROGRESSION), 
+    MedievilLocationData("Star Rune: The Gallows Gauntlet","Level_End",125,MedievilLocationCategory.PROGRESSION),    
+    MedievilLocationData("Star Rune: Ghost Ship","Level_End",126,MedievilLocationCategory.PROGRESSION),
+
+    MedievilLocationData("Time Rune: The Lake","Level_End",127,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Time Rune: Pumpkin Gorge","Level_End",128,MedievilLocationCategory.PROGRESSION),
+    MedievilLocationData("Time Rune: The Time Device","Level_End",129,MedievilLocationCategory.PROGRESSION), 
 ]
 }
 

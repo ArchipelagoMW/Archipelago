@@ -61,13 +61,14 @@ key_item_names = {
     "Life Bottle: Hall of Heroes (Ravenhooves The Archer )",
     "Life Bottle: Hall of Heroes (Dirk Steadfast)",
     "Life Bottle: The Time Device",
+    "Daring Dash: Skill"
     "Level_End"
 }
 
 
 _all_items: List[MedievilItemData] = [
-    # (name, m_code, category, is_progression)
-    ("Gold Coins (50)", 0, MedievilItemCategory.FILLER, False), # m_codes should be unique and ideally sequential for offsets
+    # Filler Items
+    ("Gold Coins (50)", 0, MedievilItemCategory.FILLER, False),
     ("Gold Coins (100)", 1, MedievilItemCategory.FILLER, False),
     ("Gold Coins (150)", 2, MedievilItemCategory.FILLER, False),
     ("Dagger Ammo (10)", 3, MedievilItemCategory.FILLER, False),
@@ -93,7 +94,7 @@ _all_items: List[MedievilItemData] = [
     ("Copper Shield Ammo (100)", 23, MedievilItemCategory.FILLER, False),
     ("Silver Shield Ammo (50)", 24, MedievilItemCategory.FILLER, False),
     ("Silver Shield Ammo (100)", 25, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Ammo (50)", 26, MedievilItemCategory.FILLER, False), # this is going to be a problem with actual gold. Needs rewording
+    ("Gold Shield Ammo (50)", 26, MedievilItemCategory.FILLER, False),
     ("Gold Shield Ammo (100)", 27, MedievilItemCategory.FILLER, False),
     ("Health Vial (50)", 28, MedievilItemCategory.FILLER, False),
     ("Health Vial (150)", 29, MedievilItemCategory.FILLER, False),
@@ -131,15 +132,87 @@ _all_items: List[MedievilItemData] = [
     ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 54, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Time Device", 54, MedievilItemCategory.PROGRESSION, True),
     
+    ("Daring Dash: Skill","Level_End",60,MedievilItemCategory.PROGRESSION, True),    
+    
     # Chalice
     ("Chalice of Souls", 88, MedievilItemCategory.CHALICE, False),
     
+    # Key Inventory Items
+    ("Dragon Gem: Pumpkin Gorge", 89, MedievilItemCategory.PROGRESSION, True),
+    ("Dragon Gem: Inside the Asylum", 90, MedievilItemCategory.PROGRESSION, True),
+    ("King Peregrine's Crown", 91, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 1", 92, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 2", 93, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 3", 94, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 4", 95, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 5", 96, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 6", 97, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 7", 98, MedievilItemCategory.PROGRESSION, True),
+    ("Soul Helmet 8", 99, MedievilItemCategory.PROGRESSION, True),
+    ("Witches Talisman", 100, MedievilItemCategory.PROGRESSION, True),
+    ("Safe Key", 101, MedievilItemCategory.PROGRESSION, True),
+    ("Shadow Artefact", 102, MedievilItemCategory.PROGRESSION, True),
+    ("Crucifix", 103, MedievilItemCategory.PROGRESSION, True),
+    ("Landlords Bust", 104, MedievilItemCategory.PROGRESSION, True),
+    ("Crucifix Cast", 105, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 1", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 2", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 3", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 4", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 5", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 6", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Amber Piece 7", 106, MedievilItemCategory.PROGRESSION, True),
+    ("Harvester Parts", 107, MedievilItemCategory.PROGRESSION, True),
+    ("Skull Key", 108, MedievilItemCategory.PROGRESSION, True),
+    ("Sheet Music", 109, MedievilItemCategory.PROGRESSION, True),
     
-    # runes will go here once added
+    # Runes
     
+    ("Chaos Rune: The Graveyard", 110, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: The Hilltop Mausoleum", 111, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: Scarecrow Fields", 112, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: The Lake", 113, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: Pumpkin Gorge", 114, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: Sleeping Village", 115, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: Pools of the Ancient Dead", 116, MedievilItemCategory.PROGRESSION, True),    
+    ("Chaos Rune: Asylum Grounds", 117, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: The Haunted Ruins", 118, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: Ghost Ship", 119, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: The Time Device", 120, MedievilItemCategory.PROGRESSION, True),
+
+    ("Earth Rune: The Graveyard", 121, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Hilltop Mausoleum", 122, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: Scarecrow Fields", 123, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Crystal Caves", 124, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Lake", 125, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: Pumpkin Gorge", 126, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: Sleeping Village", 127, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: Inside the Asylum", 128, MedievilItemCategory.PROGRESSION, True),    
+    ("Earth Rune: Enchanted Earth", 129, MedievilItemCategory.PROGRESSION, True),    
+    ("Earth Rune: The Haunted Ruins", 130, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Entrance Hall", 131, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Time Device", 132, MedievilItemCategory.PROGRESSION, True),
+
+    ("Moon Rune: The Hilltop Mausoleum", 133, MedievilItemCategory.PROGRESSION, True),
+    ("Moon Rune: Scarecrow Fields", 134, MedievilItemCategory.PROGRESSION, True),
+    ("Moon Rune: Pumpkin Gorge", 135, MedievilItemCategory.PROGRESSION, True),
+    ("Moon Rune: Ghost Ship", 136, MedievilItemCategory.PROGRESSION, True),    
+    ("Moon Rune: The Time Device", 137, MedievilItemCategory.PROGRESSION, True),
+
+    ("Star Rune: Return to the Graveyard", 138, MedievilItemCategory.PROGRESSION, True),
+    ("Star Rune: Dan's Crypt", 139, MedievilItemCategory.PROGRESSION, True),
+    ("Star Rune: The Crystal Caves", 140, MedievilItemCategory.PROGRESSION, True),
+    ("Star Rune: The Lake", 141, MedievilItemCategory.PROGRESSION, True),
+    ("Star Rune: Enchanted Earth", 142, MedievilItemCategory.PROGRESSION, True), 
+    ("Star Rune: The Gallows Gauntlet", 143, MedievilItemCategory.PROGRESSION, True),    
+    ("Star Rune: Ghost Ship", 144, MedievilItemCategory.PROGRESSION, True),
+
+    ("Time Rune: The Lake", 145, MedievilItemCategory.PROGRESSION, True),
+    ("Time Rune: Pumpkin Gorge", 146, MedievilItemCategory.PROGRESSION, True),
+    ("Time Rune: The Time Device", 147, MedievilItemCategory.PROGRESSION, True),
     
     # Level_End is typically a progression item as it signifies advancing a stage
-    ("Level_End", 99, MedievilItemCategory.LEVEL_END, True) 
+    ("Level_End", 1001, MedievilItemCategory.LEVEL_END, True) 
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
