@@ -52,6 +52,8 @@ class MedievilItem(Item):
 
 
 key_item_names = {
+    # life bottles
+    
     "Life Bottle: Dan's Crypt",
     "Life Bottle: The Graveyard",
     "Life Bottle: Hall of Heroes (Canny Tim)",
@@ -61,7 +63,82 @@ key_item_names = {
     "Life Bottle: Hall of Heroes (Ravenhooves The Archer )",
     "Life Bottle: Hall of Heroes (Dirk Steadfast)",
     "Life Bottle: The Time Device",
+    
+    # skills 
     "Daring Dash: Skill"
+    
+    # Inventory Key Items
+    
+    "Dragon Gem: Pumpkin Gorge",
+    "Dragon Gem: Inside the Asylum",
+    "King Peregrine's Crown",
+    "Soul Helmet 1",
+    "Soul Helmet 2",
+    "Soul Helmet 3",
+    "Soul Helmet 4",
+    "Soul Helmet 5",
+    "Soul Helmet 6",
+    "Soul Helmet 7",
+    "Soul Helmet 8",
+    "Witches Talisman", 
+    "Safe Key", 
+    "Shadow Artefact", 
+    "Crucifix", 
+    "Landlords Bust", 
+    "Crucifix Cast", 
+    "Amber Piece 1", 
+    "Amber Piece 2", 
+    "Amber Piece 3", 
+    "Amber Piece 4", 
+    "Amber Piece 5", 
+    "Amber Piece 6", 
+    "Amber Piece 7", 
+    "Harvester Parts", 
+    "Skull Key", 
+    "Sheet Music", 
+    
+    # Runes 
+    
+    "Chaos Rune: The Graveyard", 
+    "Chaos Rune: The Hilltop Mausoleum", 
+    "Chaos Rune: Scarecrow Fields", 
+    "Chaos Rune: The Lake", 
+    "Chaos Rune: Pumpkin Gorge", 
+    "Chaos Rune: Sleeping Village", 
+    "Chaos Rune: Pools of the Ancient Dead",
+    "Chaos Rune: Asylum Grounds", 
+    "Chaos Rune: The Haunted Ruins", 
+    "Chaos Rune: Ghost Ship", 
+    "Chaos Rune: The Time Device", 
+    "Earth Rune: The Graveyard", 
+    "Earth Rune: The Hilltop Mausoleum", 
+    "Earth Rune: Scarecrow Fields", 
+    "Earth Rune: The Crystal Caves", 
+    "Earth Rune: The Lake", 
+    "Earth Rune: Pumpkin Gorge", 
+    "Earth Rune: Sleeping Village", 
+    "Earth Rune: Inside the Asylum",
+    "Earth Rune: Enchanted Earth", 
+    "Earth Rune: The Haunted Ruins", 
+    "Earth Rune: The Entrance Hall", 
+    "Earth Rune: The Time Device", 
+    "Moon Rune: The Hilltop Mausoleum", 
+    "Moon Rune: Scarecrow Fields", 
+    "Moon Rune: Pumpkin Gorge", 
+    "Moon Rune: Ghost Ship", 
+    "Moon Rune: The Time Device", 
+    "Star Rune: Return to the Graveyard", 
+    "Star Rune: Dan's Crypt", 
+    "Star Rune: The Crystal Caves", 
+    "Star Rune: The Lake", 
+    "Star Rune: Enchanted Earth", 
+    "Star Rune: The Gallows Gauntlet",
+    "Star Rune: Ghost Ship", 
+    "Time Rune: The Lake", 
+    "Time Rune: Pumpkin Gorge", 
+    "Time Rune: The Time Device",
+    
+    # level end
     "Level_End"
 }
 
