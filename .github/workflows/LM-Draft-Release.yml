@@ -81,18 +81,18 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Create Local Windows Lib Folder
-        run: mkdir worlds/luigismansion/lib-windows
+        run: mkdir worlds/luigismansion/iso_helper/lib-windows
       - name: Create Local Linux Lib Folder
-        run: mkdir worlds/luigismansion/lib-linux
+        run: mkdir worlds/luigismansion/iso_helper/lib-linux
       
       - uses: actions/download-artifact@v4
         with:
           name: lib-windows
-          path: worlds/luigismansion/lib-windows
+          path: worlds/luigismansion/iso_helper/lib-windows
       - uses: actions/download-artifact@v4
         with:
           name: lib-linux
-          path: worlds/luigismansion/lib-linux
+          path: worlds/luigismansion/iso_helper/lib-linux
 
       - name: Compress Directory
         run: Compress-Archive -Path ./worlds/luigismansion -DestinationPath ./luigismansion.apworld
