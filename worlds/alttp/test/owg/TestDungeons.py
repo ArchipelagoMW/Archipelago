@@ -5,9 +5,9 @@ class TestDungeons(TestVanillaOWG):
 
     def testFirstDungeonChests(self):
         self.run_location_tests([
-            ["Hyrule Castle - Map Chest", True, []],
-            ["Hyrule Castle - Map Guard Key Drop", False, []],
-            ["Hyrule Castle - Map Guard Key Drop", True, ['Progressive Sword']],
+            ["Hyrule Castle - First Basement Chest", True, []],
+            ["Hyrule Castle - First Guard Key Drop", False, []],
+            ["Hyrule Castle - First Guard Key Drop", True, ['Progressive Sword']],
 
             ["Sanctuary", True, []],
 
@@ -15,12 +15,12 @@ class TestDungeons(TestVanillaOWG):
             ["Sewers - Secret Room - Left", True, ['Pegasus Boots', 'Progressive Glove']],
             ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
 
-            ["Eastern Palace - Compass Chest", True, []],
+            ["Eastern Palace - Skeleton Ambush Chest", True, []],
 
-            ["Desert Palace - Map Chest", False, []],
-            ["Desert Palace - Map Chest", True, ['Pegasus Boots']],
-            ["Desert Palace - Map Chest", True, ['Book of Mudora']],
-            ["Desert Palace - Map Chest", True, ['Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror']],
+            ["Desert Palace - Wide Room Chest", False, []],
+            ["Desert Palace - Wide Room Chest", True, ['Pegasus Boots']],
+            ["Desert Palace - Wide Room Chest", True, ['Book of Mudora']],
+            ["Desert Palace - Wide Room Chest", True, ['Flute', 'Progressive Glove', 'Progressive Glove', 'Magic Mirror']],
 
             ["Desert Palace - Boss", False, []],
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
@@ -63,9 +63,9 @@ class TestDungeons(TestVanillaOWG):
             ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Hammer', 'Progressive Glove']],
             ["Swamp Palace - Entrance", True, ['Magic Mirror', 'Moon Pearl', 'Flippers', 'Progressive Glove', 'Progressive Glove']],
 
-            ["Skull Woods - Compass Chest", False, []],
-            ["Skull Woods - Compass Chest", True, ['Magic Mirror', 'Pegasus Boots']],
-            ["Skull Woods - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Skull Woods - Pit Trap Chest", False, []],
+            ["Skull Woods - Pit Trap Chest", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Skull Woods - Pit Trap Chest", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
@@ -74,26 +74,26 @@ class TestDungeons(TestVanillaOWG):
             #["Skull Woods - Big Chest", True, ['Magic Mirror', 'Pegasus Boots', 'Big Key (Skull Woods)']],
             ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots', 'Big Key (Skull Woods)']],
 
-            ["Skull Woods - Big Key Chest", False, []],
-            ["Skull Woods - Big Key Chest", True, ['Magic Mirror', 'Pegasus Boots']],
-            ["Skull Woods - Big Key Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Skull Woods - Middle Section Chest", False, []],
+            ["Skull Woods - Middle Section Chest", True, ['Magic Mirror', 'Pegasus Boots']],
+            ["Skull Woods - Middle Section Chest", True, ['Moon Pearl', 'Pegasus Boots']],
 
             ["Skull Woods - Bridge Room", False, []],
             ["Skull Woods - Bridge Room", False, [], ['Moon Pearl']],
             ["Skull Woods - Bridge Room", False, [], ['Fire Rod']],
             ["Skull Woods - Bridge Room", True, ['Moon Pearl', 'Pegasus Boots', 'Fire Rod']],
 
-            ["Thieves' Town - Map Chest", False, []],
-            ["Thieves' Town - Map Chest", False, [], ['Moon Pearl']],
-            ["Thieves' Town - Map Chest", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Thieves' Town - Entryway Floor Chest", False, []],
+            ["Thieves' Town - Entryway Floor Chest", False, [], ['Moon Pearl']],
+            ["Thieves' Town - Entryway Floor Chest", True, ['Moon Pearl', 'Pegasus Boots']],
 
-            ["Ice Palace - Compass Chest", False, []],
-            ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos']],
-            ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Pengator Chest", False, []],
+            ["Ice Palace - Pengator Chest", False, [], ['Fire Rod', 'Bombos']],
+            ["Ice Palace - Pengator Chest", False, [], ['Fire Rod', 'Progressive Sword']],
+            ["Ice Palace - Pengator Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
+            ["Ice Palace - Pengator Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Pengator Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Fire Rod']],
+            ["Ice Palace - Pengator Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Moon Pearl']],
@@ -101,13 +101,13 @@ class TestDungeons(TestVanillaOWG):
             ["Misery Mire - Bridge Chest", False, [], ['Progressive Sword']],
             ["Misery Mire - Bridge Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Ether', 'Progressive Sword']],
 
-            ["Turtle Rock - Compass Chest", False, []],
-            ["Turtle Rock - Compass Chest", False, [], ['Cane of Somaria']],
+            ["Turtle Rock - Spiky Trap Room", False, []],
+            ["Turtle Rock - Spiky Trap Room", False, [], ['Cane of Somaria']],
             #todo: does clip require sword?
-            #["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
-            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            #["Turtle Rock - Spiky Trap Room", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Spiky Trap Room", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
+            ["Turtle Rock - Spiky Trap Room", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake']],
+            ["Turtle Rock - Spiky Trap Room", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
 
             ["Turtle Rock - Chain Chomps", False, []],
             #todo: does clip require sword?
