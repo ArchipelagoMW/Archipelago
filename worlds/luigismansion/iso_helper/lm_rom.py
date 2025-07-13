@@ -91,7 +91,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
             # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
             # the with block ends.
-            parent_dir = os_path.abspath(__name__).parent
+            parent_dir = os_path.dirname(os_path.abspath(__name__))
             logger.info("Parent Dir: " + parent_dir)
             with resources.as_file(resources.files(parent_dir).joinpath(lib_path)) as resource_lib_path:
                 logger.info("Temp Resource Path: " + str(resource_lib_path))
