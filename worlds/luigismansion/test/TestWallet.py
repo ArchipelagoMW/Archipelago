@@ -15,9 +15,9 @@ class _MockCurrency(Currency):
         return self.current_amount
 
 class TEST_DATA:
-    def get_test_currencies() -> dict[int, _MockCurrency]:
+    def get_test_currencies() -> dict[str, _MockCurrency]:
         return {
-            CURRENCY_NAME.COINS:         _MockCurrency(CURRENCY_NAME.COINS,        0x01, 5000,     0),
+            CURRENCY_NAME.COINS:        _MockCurrency(CURRENCY_NAME.COINS,        0x01, 5000,     0),
             CURRENCY_NAME.BILLS:        _MockCurrency(CURRENCY_NAME.BILLS,        0x02, 20000,    0),
             CURRENCY_NAME.GOLD_BARS:    _MockCurrency(CURRENCY_NAME.GOLD_BARS,    0x03, 100000,   0),
             CURRENCY_NAME.SAPPHIRE:     _MockCurrency(CURRENCY_NAME.SAPPHIRE,     0x04, 500000,   0),
