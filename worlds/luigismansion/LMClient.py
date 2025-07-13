@@ -1,17 +1,11 @@
-import asyncio
-import os
-import time
-import traceback
-from sys import platform, path
-from importlib import resources
+import asyncio, time, traceback
 from typing import Any
 
-import NetUtils
-import Utils
+import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from settings import get_settings, Settings
 import dolphin_memory_engine as dme
 
+from .iso_helper.lm_rom import LMUSAAPPatch
 from . import CLIENT_VERSION
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
@@ -147,46 +141,14 @@ async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr
     else:
         dme.write_bytes(dme.follow_pointers(addr, ram_offset), curr_value)
 
-def get_base_rom_path(file_name: str = "") -> str:
-    options: Settings = get_settings()
-    if not file_name:
-        file_name = options["luigismansion_options"]["iso_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.user_path(file_name)
-    return file_name
-
-
-def save_patched_iso(output_data):
-    iso_path = get_base_rom_path()
-    directory_to_iso, file = os.path.split(output_data)
-    file_name = os.path.splitext(file)[0]
-
-    # Load the external dependencies based on OS
-    is_linux = platform.startswith("linux")
-    is_windows = platform in ("win32", "cygwin", "msys")
-    lib_path = ""
-    if not (is_linux or is_windows):
-        raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-    if is_windows:
-        lib_path = "lib-windows"
-    elif is_linux:
-        lib_path = "lib-linux"
-
-    # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
-    # the with block ends.
-    with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
-        logger.info("Temp Resource Path: " + str(resource_lib_path))
-        path.append(str(resource_lib_path))
-
-        # Use our randomize function to patch the file into an ISO.
-        from .LMGenerator import LuigisMansionRandomizer
-        if iso_path:
-            LuigisMansionRandomizer(iso_path, str(os.path.join(directory_to_iso, file_name + ".iso")), output_data)
-
 
 class LMCommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
+    def __init__(self, ctx: CommonContext, server_address: str = None):
+        if server_address:
+            super().__init__(ctx, server_address=server_address)
+        else:
+            super().__init__(ctx)
+
 
     def _cmd_dolphin(self):
         """Prints the current Dolphin status to the client."""
@@ -835,14 +797,25 @@ async def give_player_items(ctx: LMContext):
         await wait_for_next_loop(0.5)
 
 
-def main(output_data: Optional[str] = None, connect=None, password=None):
+def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
+    logger.info("Starting LM Client v" + CLIENT_VERSION)
+    server_address: str = ""
 
     if output_data:
-        save_patched_iso(output_data)
+        lm_usa_patch = LMUSAAPPatch()
+        try:
+            lm_usa_manifest = lm_usa_patch.read_contents(output_data)
+            server_address = lm_usa_manifest["server"]
+            asyncio.run(lm_usa_patch.patch(output_data))
+        except Exception as ex:
+            logger.error("Unable to patch your Luigi's Mansion ROM as expected. Additional details:\n" + str(ex))
+            Utils.messagebox("Cannot Patch Luigi's Mansion", "Unable to patch your Luigi's Mansion ROM as " +
+                "expected. Additional details:\n" + str(ex), True)
+
 
     async def _main(connect, password):
-        ctx = LMContext(connect, password)
+        ctx = LMContext(server_address if server_address else connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
         # Runs Universal Tracker's internal generator
@@ -872,7 +845,7 @@ def main(output_data: Optional[str] = None, connect=None, password=None):
     import colorama
 
     colorama.just_fix_windows_console()
-    asyncio.run(_main(connect, password))
+    asyncio.run(_main(lm_connect, lm_password))
     colorama.deinit()
 
 

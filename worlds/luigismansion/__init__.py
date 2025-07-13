@@ -1,3 +1,4 @@
+# Python related Imports
 import copy
 import math
 import os
@@ -5,9 +6,7 @@ import threading
 from dataclasses import fields
 from typing import ClassVar
 
-import yaml
-from yaml import CDumper as Dumper
-
+# AP Related Imports
 import Options
 import settings
 from BaseClasses import Tutorial, Item, ItemClassification, MultiWorld
@@ -26,25 +25,21 @@ from .Hints import get_hints_by_option, ALWAYS_HINT, PORTRAIT_HINTS
 from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
+from .iso_helper.lm_rom import LMPlayerContainer
+
 
 CLIENT_VERSION = "0.4.10"
 
-import logging
-logger = logging.getLogger("Luigi's Mansion")
-
-
 def run_client(*args):
-    logger.info("Starting LM Client v" + CLIENT_VERSION)
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
-
+# Adds the launcher for our component and our client logo.
 components.append(
     Component("LM Client", func=run_client, component_type=Type.CLIENT,
-        file_identifier=SuffixIdentifier(".aplm"), icon="archiboolego")
-)
-
+        file_identifier=SuffixIdentifier(".aplm"), icon="archiboolego"))
 icon_paths["archiboolego"] = f"ap:{__name__}/data/archiboolego.png"
+
 
 class LuigisMansionSettings(settings.Group):
     class ISOFile(settings.UserFilePath):
@@ -891,10 +886,15 @@ class LMWorld(World):
                     item_info = {"name": "Nothing", "game": "Luigi's Mansion", "classification": "filler"}
                 output_data["Locations"][location.name] = item_info
 
-        # Output the plando details to file
-        file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.aplm")
-        with open(file_path, "w") as f:
-            f.write(yaml.dump(output_data, sort_keys=False, Dumper=Dumper))
+        # Outputs the plando details to our expected output file
+        # Create the output path based on the current player + expected patch file ending.
+        patch_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+            f"{LMPlayerContainer.patch_file_ending}")
+        # Create a zip (container) that will contain all the necessary output files for us to use during patching.
+        lm_container = LMPlayerContainer(output_data, patch_path, self.multiworld.get_out_file_name_base(self.player),
+            self.multiworld.player_name[self.player], self.player)
+        # Write the expected output zip container to the Generated Seed folder.
+        lm_container.write()
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
