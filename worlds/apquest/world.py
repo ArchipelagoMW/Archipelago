@@ -2,28 +2,25 @@
 from collections.abc import Mapping
 from typing import Any
 
-from worlds.AutoWorld import WebWorld, World
+from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules
-from .options import APQuestOptions, option_groups, option_presets
+from .options import APQuestOptions
+from .web_world import APQuestWebWorld
 
-
-class APQuestWebWorld(WebWorld):
-    game = "APQuest"
-
-    option_groups = option_groups
-    options_presets = option_presets
 
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.
 # You could have all your world code in just this one class, but for readability and better structure,
 # this implementation choses to split up the world functionality over a few different files, each covering one topic.
-# These files are: regions.py, rules.py, items.py, options.py.
-# regions.py covers re
+# These files are: regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
 # It is recommended that you read these in that specific order, then come back to the world class.
 class APQuestWorld(World):
     game = "APQuest"
+
+    # The WebWorld is a definition class that governs how this world will be displayed on the website.
+    web = APQuestWebWorld()
 
     # This is how we associate the options defined in our options.py with our world.
     options: APQuestOptions
