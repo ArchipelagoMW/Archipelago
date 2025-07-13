@@ -130,6 +130,7 @@ class RelationshipLogic(BaseLogic):
 
         elif npc == NPC.leo:
             rules.append(self.logic.received("Island North Turtle"))
+            rules.append(self.logic.region.can_reach(Region.leo_hut))
 
         elif npc == ModNPC.lance:
             rules.append(self.logic.region.can_reach(Region.volcano_floor_10))
