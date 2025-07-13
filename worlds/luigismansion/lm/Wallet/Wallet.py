@@ -6,7 +6,7 @@ _RANK_REQ_AMTS = [0, 5000000, 20000000, 40000000, 50000000, 60000000, 70000000, 
 class Wallet:
     """Manages Luigi's currencies including adding/removing currencies during a run. It also manages the randomizer check 'rank_requirement'."""
 
-    def __init__(self, currencies: dict[int, Currency] = CURRENCIES):
+    def __init__(self, currencies: dict[str, Currency] = CURRENCIES):
         self._currencies = currencies
         self.rank_requirement = 0
 
