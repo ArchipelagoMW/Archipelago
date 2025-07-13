@@ -150,6 +150,7 @@ def create_regions_and_locations(world: MultiWorld, player: int, options: Timesp
     connect(world, player, 'Caves of Banishment (upper)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (upper)', lambda state: logic.has_doublejump(state) if not flooded.flood_maw else state.has('Water Mask', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Sirens)', lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) )
+    connect(world, player, 'Caves of Banishment (Maw)', 'Caves of Banishment (Flooded)', lambda state: flooded.flood_maw or state.has('Water Mask', player))
     connect(world, player, 'Caves of Banishment (Maw)', 'Space time continuum', logic.has_teleport)
     connect(world, player, 'Caves of Banishment (Sirens)', 'Forest')
     connect(world, player, 'Castle Ramparts', 'Forest')
