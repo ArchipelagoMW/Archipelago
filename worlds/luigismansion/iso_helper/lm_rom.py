@@ -36,6 +36,8 @@ class LMPlayerContainer(APPlayerContainer):
     compression_method = zipfile.ZIP_DEFLATED
     patch_file_ending = ".aplm"
 
+    procedure = ["custom"]
+
     def __init__(self, player_choices: dict, patch_path: str, base_path:str, player_name: str, player: int,
         server: str = ""):
         self.output_data = player_choices
@@ -43,8 +45,20 @@ class LMPlayerContainer(APPlayerContainer):
         super().__init__(patch_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        opened_zipfile.writestr("patch.aplm", yaml.dump(self.output_data, sort_keys=False, Dumper=Dumper))
+        opened_zipfile.writestr("patch.aplm", yaml.dump(self.output_data,sort_keys=False,Dumper=Dumper))
         super().write_contents(opened_zipfile)
+
+    def get_manifest(self) -> dict[str, Any]:
+        manifest = super().get_manifest()
+        manifest.update({
+            "server": self.server,  # allow immediate connection to server in multiworld. Empty string otherwise
+            "player": self.player,
+            "player_name": self.player_name,
+            "game": self.game,
+            "procedure": self.procedure
+        })
+        return manifest
+
 
 class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
     game = RANDOMIZER_NAME
