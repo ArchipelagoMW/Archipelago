@@ -318,7 +318,7 @@ full_game_craft_pool: Counter[str] = Counter(
 # This is purely while we only have part of the AP world complete.
 chapter_1_craft_pool: Counter[str] = Counter(
     {
-        ItemName.tita_progressive_craft: 6,
+        ItemName.tita_progressive_craft: 5,
         ItemName.kevin_progressive_craft: 7,
         ItemName.julia_progressive_craft: 5,
         ItemName.ries_progressive_craft: 4,

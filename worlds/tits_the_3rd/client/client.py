@@ -189,9 +189,11 @@ class TitsThe3rdContext(CommonContext):
 
     def _setup_t_crfget_table(self, dt_game_mod_folder, dt_base_folder) -> None:
         """
-        Set all crafts to be achieved at level 999. The game client will manually give crafts.
-        This is true even if crafts locations are not randomized (for consistency).
+        If crafts are set as items by AP, set all crafts to be achieved at level 999. The game client will manually give crafts.
+        Otherwise don't modify this table, crafts will be given by the game itself.
         """
+        if self.slot_data["default_crfget"]:
+            return
         t_crtget_path = os.path.join(dt_base_folder, "t_crfget._dt")
         if not os.path.exists(t_crtget_path):
             raise FileNotFoundError("t_crfget._dt not found in base directory. Please contact the maintainer of the mod in the discord.")

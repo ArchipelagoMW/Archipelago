@@ -1,11 +1,9 @@
 import os
 import sys
-from random import Random
-from typing import Dict, List
-import signal
-
-from pprint import pprint
 from copy import deepcopy
+from random import Random
+from typing import Dict, List, Optional
+
 
 # TODO: delete me
 AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -20,6 +18,7 @@ from worlds.tits_the_3rd.tables.craft_list import (
     upgradable_normal_craft_table,
     upgradable_scraft_table,
 )
+from worlds.tits_the_3rd.options import TitsThe3rdOptions, CraftPlacement
 
 def _get_character_to_craft_get_order(characters: List[Character]) -> dict[str, List[Dict[int, int]]]:
     """
@@ -153,10 +152,23 @@ def _get_old_craft_id_to_new_craft_id(characters: List[Character]) -> Dict[int, 
             old_craft_id_to_new_craft_id[old_craft.base_craft_id] = character.upgradable_scrafts[idx].base_craft_id
     return old_craft_id_to_new_craft_id
 
-def shuffle_crafts_main(craft_shuffle: bool, rng: Random):
+def shuffle_crafts_main(options: TitsThe3rdOptions, rng: Random) -> tuple[Optional[Dict[str, List[int]]], Optional[Dict[int, int]]]:
+    """
+    Note that even if characters have their default crafts, if locations are shuffled, the craft get order will be randomized.
+    (e.g. A character may get a late game craft for their first craft and vice versa).
+    Note that progressive crafts are always given in order (e.g. Lanzenreiter will always be before Lanzenreiter 2)
+
+    This returns a tuple of:
+    - character_to_craft_get_order: A dictionary of character name to a list of craft IDs in the order they will be given.
+    - old_craft_id_to_new_craft_id: The craft shuffle mapping.
+    """
+    if options.craft_placement == CraftPlacement.option_default and not options.craft_shuffle:
+        return None, None
     characters = deepcopy(default_characters)
-    characters = _shuffle_crafts(characters, rng)
-    old_craft_id_to_new_craft_id = _get_old_craft_id_to_new_craft_id(characters)
+    old_craft_id_to_new_craft_id = None
+    if options.craft_shuffle:
+        characters = _shuffle_crafts(characters, rng)
+        old_craft_id_to_new_craft_id = _get_old_craft_id_to_new_craft_id(characters)
     character_to_craft_get_order = _get_character_to_craft_get_order(characters)
     character_to_craft_get_order = _shuffle_craft_get_order(character_to_craft_get_order, rng)
     return character_to_craft_get_order, old_craft_id_to_new_craft_id

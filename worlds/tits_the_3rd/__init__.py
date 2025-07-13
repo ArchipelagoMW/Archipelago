@@ -76,7 +76,7 @@ class TitsThe3rdWorld(World):
         """Define regions and locations for Trails in the Sky the 3rd AP"""
         create_regions(self.multiworld, self.player)
         connect_regions(self.multiworld, self.player)
-        create_locations(self.multiworld, self.player, self.options.name_spoiler_option)
+        create_locations(self.multiworld, self.player, self.options)
 
     def setup_characters(self, itempool: Counter[str]) -> Counter[str]:
         # Randomize starting characters here
@@ -173,8 +173,10 @@ class TitsThe3rdWorld(World):
             self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(item_name))
 
     def pre_fill(self) -> None:
-    #    Crafts
-        if self.options.craft_placement == CraftPlacement.option_default:
+        # Crafts
+        if self.options.craft_placement == CraftPlacement.option_default and self.options.craft_shuffle:
+            # Crafts are at their default locations, but which craft is given is randomized.
+            # (E.g. Estelle may get Dual Strike when she levels up)
             self._set_default_craft_locations(location_names=location_groups["Estelle Crafts"], item_name=ItemName.estelle_progressive_craft)
             self._set_default_craft_locations(location_names=location_groups["Joshua Crafts"], item_name=ItemName.joshua_progressive_craft)
             self._set_default_craft_locations(location_names=location_groups["Scherazard Crafts"], item_name=ItemName.scherazard_progressive_craft)
@@ -192,6 +194,7 @@ class TitsThe3rdWorld(World):
             self._set_default_craft_locations(location_names=location_groups["Ries Crafts"], item_name=ItemName.ries_progressive_craft)
             self._set_default_craft_locations(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
         elif self.options.craft_placement == CraftPlacement.option_crafts:
+            # Crafts are shuffled amongst each other (e.g. levelling up as character X may give a craft for character Y)
             craft_items = []
             for item_name, quantity in default_craft_pool.items():
                 for _ in range(quantity):
@@ -243,7 +246,7 @@ class TitsThe3rdWorld(World):
         itempool = self.setup_characters(itempool)
 
         # Add craft items to item pool.
-        # If crafts are shuffled amongst each other, or default, this was placed in prefill.
+        # If crafts are shuffled amongst each other, or placed as their default locations, this was placed in prefill.
         if self.options.craft_placement == CraftPlacement.option_anywhere:
             itempool.update(default_craft_pool)
 
@@ -260,19 +263,16 @@ class TitsThe3rdWorld(World):
         self.multiworld.completion_condition[self.player] = lambda _: True
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        # Note: if craft shuffle is on, event get crafts will a random progressive craft.
-        # If craft shuffle is off, event get crafts will be the normal crafts.
+        # Note: if craft shuffle is on, event get crafts will be a random progressive craft.
+        # If craft shuffle is off, event get crafts will be the default craft.
         #   For these, craft_get_order will be ignored.
         # This behaviour is handled by the client.
-        # craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
-        craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts_main(self.options.craft_shuffle, self.multiworld.per_slot_randoms[self.player])
-        from pprint import pprint
-        pprint(craft_get_order)
-        pprint(old_craft_id_to_new_craft_stats)
+        craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts_main(self.options, self.random)
         return {
-            "default_event_crafts": not self.options.craft_shuffle,
             "craft_get_order": craft_get_order,
             "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_stats,
+            "default_event_crafts": not self.options.craft_shuffle,
+            "default_crfget": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
         }
 
     def get_filler_item_name(self):

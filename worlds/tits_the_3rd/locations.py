@@ -7,6 +7,7 @@ from .names.location_name import LocationName
 from .names.region_name import RegionName
 from .names.item_name import ItemName
 from .tables.location_list import location_table, LocationData
+from .options import TitsThe3rdOptions, CraftPlacement
 
 MIN_CRAFT_LOCATION_ID = 100000
 MAX_CRAFT_LOCATION_ID = 100000 + 10000
@@ -39,7 +40,7 @@ def create_location(multiworld: MultiWorld, player: int, location_name: str, rul
     region.locations.append(location)
 
 
-def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = False):
+def create_locations(multiworld: MultiWorld, player: int, options: TitsThe3rdOptions):
     """
     Define AP locations for Trails in the Sky the 3rd.
     Assumes regions have already been created.
@@ -49,13 +50,15 @@ def create_locations(multiworld: MultiWorld, player: int, spoiler_mode: bool = F
         player: The player number.
     """
     for location_name in location_table:
+        if location_table[location_name].check_type == "Craft" and options.craft_placement == CraftPlacement.option_default and not options.craft_shuffle:
+            continue
         rule = None
         if location_table[location_name].item_requirements:
             rule = lambda state: all(
                 state.has(item_name, quantity, player)
                 for item_name, quantity in location_table[location_name].item_requirements
             )
-        if spoiler_mode & (location_table[location_name].spoiler_name != ""):
+        if options.name_spoiler_option & (location_table[location_name].spoiler_name != ""):
             create_location(multiworld, player, location_table[location_name].spoiler_name, rule)
         else:
             create_location(multiworld, player, location_name, rule)
