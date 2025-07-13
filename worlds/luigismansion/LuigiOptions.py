@@ -102,9 +102,9 @@ class BananaTrapWeight(Range):
 
 
 class NothingWeight(Range):
-    """Set the weight for how often nothing is chosen as filler."""
-    display_name = "'Nothing' Weight"
-    internal_name = "mothing_weight"
+    """Set the weight for how often dust is chosen as filler."""
+    display_name = "Dust Weight"
+    internal_name = "dust_weight"
     range_start = 0
     range_end = 100
     default = 40
@@ -619,6 +619,6 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     poss_trap_weight: PossTrapWeight
     bonk_trap_weight: BonkTrapWeight
     ghost_weight: GhostTrapWeight
-    nothing_weight: NothingWeight
+    dust_weight: NothingWeight
     heart_weight: HeartWeight
     start_inventory_from_pool: StartInventoryPool
