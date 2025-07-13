@@ -114,6 +114,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             cache[arg] = res
             return res
 
+    wrap.__defaults__ = function.__defaults__
+
     return wrap
 
 
@@ -137,8 +139,11 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+        if globals().get("__file__") and os.path.isfile(__file__):
             # we are running in a normal Python environment
+            local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
+        elif hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+            # we are running in a normal Python environment, but AP was imported weirdly
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
             # pray
@@ -161,6 +166,10 @@ def home_path(*path: str) -> str:
                 os.symlink(home_path.cached_path, legacy_home_path)
             else:
                 os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
+        os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
         home_path.cached_path = local_path()  # this will generate the same exceptions we got previously
@@ -172,7 +181,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_macos and is_frozen()):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
@@ -221,7 +230,12 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
-        subprocess.call([open_command, filename])
+
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.call([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
@@ -427,6 +441,9 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by OptionCounter
+        if module == "collections" and name == "Counter":
+            return collections.Counter
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
                                              "SlotType", "NetworkSlot", "HintStatus"}:
@@ -532,6 +549,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
         if add_timestamp:
             stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
@@ -630,6 +649,8 @@ def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit:
     import jellyfish
 
     def get_fuzzy_ratio(word1: str, word2: str) -> float:
+        if word1 == word2:
+            return 1.01
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
@@ -650,8 +671,10 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
     picks = get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
-        if picks[0][1] == 100:
+        if picks[0][1] == 101:
             return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] == 100:
+            return picks[0][0], True, "Case Insensitive Perfect Match"
         elif picks[0][1] < 75:
             return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
@@ -694,12 +717,17 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _run_for_stdout(*args: str):
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
-
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
@@ -707,12 +735,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -746,21 +774,18 @@ def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args
 
 
 def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_linux:
         # prefer native dialog
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+            return _run_for_stdout(kdialog, f"--title={title}", "--getexistingdirectory",
                        os.path.abspath(suggest) if suggest else ".")
         zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
             selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -787,9 +812,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -800,10 +822,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
+            return _run_for_stdout(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
         zenity = which("zenity")
         if zenity:
-            return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
+            return _run_for_stdout(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
     elif is_windows:
         import ctypes

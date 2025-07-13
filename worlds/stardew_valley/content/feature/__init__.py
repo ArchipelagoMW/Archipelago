@@ -1,4 +1,5 @@
 from . import booksanity
+from . import building_progression
 from . import cropsanity
 from . import fishsanity
 from . import friendsanity

@@ -52,11 +52,11 @@ Outside Tutorial Vault (Outside Tutorial):
 158651 - 0x03481 (Vault Box) - True - True
 
 Outside Tutorial Path To Outpost (Outside Tutorial) - Outside Tutorial Outpost - 0x0A170:
-158011 - 0x0A171 (Outpost Entry Panel) - True - Dots & Full Dots
+158011 - 0x0A171 (Outpost Entry Panel) - True - Full Dots
 Door - 0x0A170 (Outpost Entry) - 0x0A171
 
 Outside Tutorial Outpost (Outside Tutorial) - Outside Tutorial - 0x04CA3:
-158012 - 0x04CA4 (Outpost Exit Panel) - True - Dots & Black/White Squares & Full Dots
+158012 - 0x04CA4 (Outpost Exit Panel) - True - Black/White Squares & Full Dots
 Door - 0x04CA3 (Outpost Exit) - 0x04CA4
 158600 - 0x17CFB (Discard) - True - Triangles
 
@@ -136,12 +136,12 @@ Door - 0x18269 (Upper) - 0x1C349
 159000 - 0x0332B (Glass Factory Black Line Reflection EP) - True - True
 
 Symmetry Island Upper (Symmetry Island):
-158065 - 0x00A52 (Laser Yellow 1) - True - Symmetry & Colored Dots
-158066 - 0x00A57 (Laser Yellow 2) - 0x00A52 - Symmetry & Colored Dots
-158067 - 0x00A5B (Laser Yellow 3) - 0x00A57 - Symmetry & Colored Dots
-158068 - 0x00A61 (Laser Blue 1) - 0x00A52 - Symmetry & Colored Dots
-158069 - 0x00A64 (Laser Blue 2) - 0x00A61 & 0x00A57 - Symmetry & Colored Dots
-158070 - 0x00A68 (Laser Blue 3) - 0x00A64 & 0x00A5B - Symmetry & Colored Dots
+158065 - 0x00A52 (Laser Yellow 1) - True - Colored Dots
+158066 - 0x00A57 (Laser Yellow 2) - 0x00A52 - Colored Dots
+158067 - 0x00A5B (Laser Yellow 3) - 0x00A57 - Colored Dots
+158068 - 0x00A61 (Laser Blue 1) - 0x00A52 - Colored Dots
+158069 - 0x00A64 (Laser Blue 2) - 0x00A61 & 0x00A57 - Colored Dots
+158070 - 0x00A68 (Laser Blue 3) - 0x00A64 & 0x00A5B - Colored Dots
 158700 - 0x0360D (Laser Panel) - 0x00A68 - True
 Laser - 0x00509 (Laser) - 0x0360D
 159001 - 0x03367 (Glass Factory Black Line EP) - True - True
@@ -157,7 +157,7 @@ Desert Obelisk (Desert) - Entry - True:
 159709 - 0x00359 (Obelisk) - True - True
 
 Desert Outside (Desert) - Main Island - True - Desert Light Room - 0x09FEE - Desert Vault - 0x03444:
-158652 - 0x0CC7B (Vault Panel) - True - Dots & Shapers & Rotated Shapers & Negative Shapers & Full Dots
+158652 - 0x0CC7B (Vault Panel) - True - Shapers & Rotated Shapers & Negative Shapers & Full Dots
 Door - 0x03444 (Vault Door) - 0x0CC7B
 158602 - 0x17CE7 (Discard) - True - Triangles
 158076 - 0x00698 (Surface 1) - True - True
@@ -335,13 +335,13 @@ Quarry Boathouse Upper Middle (Quarry Boathouse) - Quarry Boathouse Upper Back -
 Quarry Boathouse Upper Back (Quarry Boathouse) - Quarry Boathouse Upper Middle - 0x3865F:
 158155 - 0x38663 (Second Barrier Panel) - True - True
 Door - 0x3865F (Second Barrier) - 0x38663
-158156 - 0x021B5 (Back First Row 1) - True - Stars & Stars + Same Colored Symbol & Eraser
-158157 - 0x021B6 (Back First Row 2) - 0x021B5 - Stars & Stars + Same Colored Symbol & Eraser
-158158 - 0x021B7 (Back First Row 3) - 0x021B6 - Stars & Stars + Same Colored Symbol & Eraser
-158159 - 0x021BB (Back First Row 4) - 0x021B7 - Stars & Stars + Same Colored Symbol & Eraser
-158160 - 0x09DB5 (Back First Row 5) - 0x021BB - Stars & Stars + Same Colored Symbol & Eraser
-158161 - 0x09DB1 (Back First Row 6) - 0x09DB5 - Stars & Stars + Same Colored Symbol & Eraser
-158162 - 0x3C124 (Back First Row 7) - 0x09DB1 - Stars & Stars + Same Colored Symbol & Eraser
+158156 - 0x021B5 (Back First Row 1) - True - Stars + Same Colored Symbol & Eraser
+158157 - 0x021B6 (Back First Row 2) - 0x021B5 - Stars + Same Colored Symbol & Eraser
+158158 - 0x021B7 (Back First Row 3) - 0x021B6 - Stars + Same Colored Symbol & Eraser
+158159 - 0x021BB (Back First Row 4) - 0x021B7 - Stars + Same Colored Symbol & Eraser
+158160 - 0x09DB5 (Back First Row 5) - 0x021BB - Stars + Same Colored Symbol & Eraser
+158161 - 0x09DB1 (Back First Row 6) - 0x09DB5 - Stars + Same Colored Symbol & Eraser
+158162 - 0x3C124 (Back First Row 7) - 0x09DB1 - Stars + Same Colored Symbol & Eraser
 158163 - 0x09DB3 (Back First Row 8) - 0x3C124 - Stars & Eraser & Shapers
 158164 - 0x09DB4 (Back First Row 9) - 0x09DB3 - Stars & Eraser & Shapers
 158165 - 0x275FA (Hook Control) - True - Shapers & Eraser
@@ -421,7 +421,7 @@ Door - 0x01A0E (Hedge Maze 4 Exit) - 0x01A0F
 
 Keep 2nd Pressure Plate (Keep) - Keep 3rd Pressure Plate - True:
 158199 - 0x0A3B9 (Reset Pressure Plates 2) - True - True
-158200 - 0x01BE9 (Pressure Plates 2) - 0x0A3B9 - Stars & Stars + Same Colored Symbol & Black/White Squares
+158200 - 0x01BE9 (Pressure Plates 2) - 0x0A3B9 - Stars + Same Colored Symbol & Black/White Squares
 Door - 0x01BEA (Pressure Plates 2 Exit) - 0x01BE9
 
 Keep 3rd Pressure Plate (Keep) - Keep 4th Pressure Plate - 0x01CD5:
@@ -441,7 +441,7 @@ Keep Tower (Keep) - Keep - 0x04F8F:
 158206 - 0x0361B (Tower Shortcut Panel) - True - True
 Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - True
-158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Shapers & Black/White Squares & Colored Squares & Stars & Stars + Same Colored Symbol & Dots
+158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Shapers & Black/White Squares & Colored Squares & Stars + Same Colored Symbol & Dots
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
 159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
@@ -537,11 +537,11 @@ Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
 158223 - 0x079DF (Triple Exit) - 0x28938 - True
-158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Dots & Full Dots
-158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Dots & Full Dots
-158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Dots & Full Dots
-158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Dots & Full Dots
-158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Dots & Full Dots
+158235 - 0x2899C (Wooden Roof Lower Row 1) - True - Rotated Shapers & Full Dots
+158236 - 0x28A33 (Wooden Roof Lower Row 2) - 0x2899C - Shapers & Full Dots
+158237 - 0x28ABF (Wooden Roof Lower Row 3) - 0x28A33 - Shapers & Rotated Shapers & Full Dots
+158238 - 0x28AC0 (Wooden Roof Lower Row 4) - 0x28ABF - Rotated Shapers & Full Dots
+158239 - 0x28AC1 (Wooden Roof Lower Row 5) - 0x28AC0 - Rotated Shapers & Full Dots
 Door - 0x034F5 (Wooden Roof Stairs) - 0x28AC1
 158225 - 0x28998 (RGB House Entry Panel) - True - Stars & Rotated Shapers
 Door - 0x28A61 (RGB House Entry) - 0x28998
@@ -575,7 +575,7 @@ Town Red Rooftop (Town):
 158224 - 0x28B39 (Tall Hexagonal) - 0x079DF - True
 
 Town Wooden Rooftop (Town):
-158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Dots & Eraser & Full Dots
+158240 - 0x28AD9 (Wooden Rooftop) - 0x28AC1 - Rotated Shapers & Eraser & Full Dots
 
 Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
@@ -934,29 +934,29 @@ Treehouse Second Purple Bridge (Treehouse) - Treehouse Left Orange Bridge - 0x17
 158368 - 0x17DC6 (Second Purple Bridge 7) - 0x17D91 - Stars & Colored Squares
 
 Treehouse Left Orange Bridge (Treehouse) - Treehouse Laser Room Front Platform - 0x17DDB - Treehouse Laser Room Back Platform - 0x17DDB - Treehouse Burned House - 0x17DDB:
-158376 - 0x17DB3 (Left Orange Bridge 1) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
-158377 - 0x17DB5 (Left Orange Bridge 2) - 0x17DB3 - Stars & Black/White Squares & Stars + Same Colored Symbol
-158378 - 0x17DB6 (Left Orange Bridge 3) - 0x17DB5 - Stars & Black/White Squares & Stars + Same Colored Symbol
-158379 - 0x17DC0 (Left Orange Bridge 4) - 0x17DB6 - Stars & Black/White Squares & Stars + Same Colored Symbol
-158380 - 0x17DD7 (Left Orange Bridge 5) - 0x17DC0 - Stars & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
-158381 - 0x17DD9 (Left Orange Bridge 6) - 0x17DD7 - Stars & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
-158382 - 0x17DB8 (Left Orange Bridge 7) - 0x17DD9 - Stars & Black/White Squares & Colored Squares & Stars + Same Colored Symbol
-158383 - 0x17DDC (Left Orange Bridge 8) - 0x17DB8 - Stars & Colored Squares & Stars + Same Colored Symbol
-158384 - 0x17DD1 (Left Orange Bridge 9 & Directional) - 0x17DDC - Stars & Colored Squares & Stars + Same Colored Symbol
-158385 - 0x17DDE (Left Orange Bridge 10) - 0x17DD1 - Stars & Colored Squares & Stars + Same Colored Symbol
-158386 - 0x17DE3 (Left Orange Bridge 11) - 0x17DDE - Stars & Colored Squares & Stars + Same Colored Symbol
-158387 - 0x17DEC (Left Orange Bridge 12) - 0x17DE3 - Stars & Black/White Squares & Stars + Same Colored Symbol
-158388 - 0x17DAE (Left Orange Bridge 13) - 0x17DEC - Stars & Black/White Squares & Stars + Same Colored Symbol
-158389 - 0x17DB0 (Left Orange Bridge 14) - 0x17DAE - Stars & Black/White Squares & Stars + Same Colored Symbol
-158390 - 0x17DDB (Left Orange Bridge 15) - 0x17DB0 - Stars & Black/White Squares & Stars + Same Colored Symbol
+158376 - 0x17DB3 (Left Orange Bridge 1) - True - Black/White Squares & Stars + Same Colored Symbol
+158377 - 0x17DB5 (Left Orange Bridge 2) - 0x17DB3 - Black/White Squares & Stars + Same Colored Symbol
+158378 - 0x17DB6 (Left Orange Bridge 3) - 0x17DB5 - Black/White Squares & Stars + Same Colored Symbol
+158379 - 0x17DC0 (Left Orange Bridge 4) - 0x17DB6 - Black/White Squares & Stars + Same Colored Symbol
+158380 - 0x17DD7 (Left Orange Bridge 5) - 0x17DC0 - Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+158381 - 0x17DD9 (Left Orange Bridge 6) - 0x17DD7 - Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+158382 - 0x17DB8 (Left Orange Bridge 7) - 0x17DD9 - Black/White Squares & Colored Squares & Stars + Same Colored Symbol
+158383 - 0x17DDC (Left Orange Bridge 8) - 0x17DB8 - Colored Squares & Stars + Same Colored Symbol
+158384 - 0x17DD1 (Left Orange Bridge 9 & Directional) - 0x17DDC - Colored Squares & Stars + Same Colored Symbol
+158385 - 0x17DDE (Left Orange Bridge 10) - 0x17DD1 - Colored Squares & Stars + Same Colored Symbol
+158386 - 0x17DE3 (Left Orange Bridge 11) - 0x17DDE - Colored Squares & Stars + Same Colored Symbol
+158387 - 0x17DEC (Left Orange Bridge 12) - 0x17DE3 - Black/White Squares & Stars + Same Colored Symbol
+158388 - 0x17DAE (Left Orange Bridge 13) - 0x17DEC - Black/White Squares & Stars + Same Colored Symbol
+158389 - 0x17DB0 (Left Orange Bridge 14) - 0x17DAE - Black/White Squares & Stars + Same Colored Symbol
+158390 - 0x17DDB (Left Orange Bridge 15) - 0x17DB0 - Black/White Squares & Stars + Same Colored Symbol
 
 Treehouse Green Bridge (Treehouse) - Treehouse Green Bridge Front House - 0x17E61 - Treehouse Green Bridge Left House - 0x17E61:
 158369 - 0x17E3C (Green Bridge 1) - True - Stars & Shapers
 158370 - 0x17E4D (Green Bridge 2) - 0x17E3C - Stars & Shapers
 158371 - 0x17E4F (Green Bridge 3) - 0x17E4D - Stars & Shapers & Rotated Shapers
 158372 - 0x17E52 (Green Bridge 4 & Directional) - 0x17E4F - Stars & Rotated Shapers
-158373 - 0x17E5B (Green Bridge 5) - 0x17E52 - Stars & Shapers & Stars + Same Colored Symbol
-158374 - 0x17E5F (Green Bridge 6) - 0x17E5B - Stars & Shapers & Negative Shapers & Stars + Same Colored Symbol
+158373 - 0x17E5B (Green Bridge 5) - 0x17E52 - Shapers & Stars + Same Colored Symbol
+158374 - 0x17E5F (Green Bridge 6) - 0x17E5B - Shapers & Negative Shapers & Stars + Same Colored Symbol
 158375 - 0x17E61 (Green Bridge 7) - 0x17E5F - Stars & Shapers & Rotated Shapers
 
 Treehouse Green Bridge Front House (Treehouse):
@@ -1005,7 +1005,7 @@ Mountainside Vault (Mountainside):
 Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
 158406 - 0x09F7F (Box Short) - 7 Lasers + Redirect - True
-158407 - 0x17C34 (Mountain Entry Panel) - 0x09F7F - Stars & Black/White Squares & Stars + Same Colored Symbol
+158407 - 0x17C34 (Mountain Entry Panel) - 0x09F7F - Black/White Squares & Stars + Same Colored Symbol
 158800 - 0xFFF00 (Box Long) - 11 Lasers + Redirect & 0x17C34 - True
 159300 - 0x001A3 (River Shape EP) - True - True
 159320 - 0x3370E (Arch Black EP) - True - True
@@ -1023,11 +1023,11 @@ Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneW
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Dots
 158412 - 0x09E69 (Right Row 4) - 0x09E72 - Black/White Squares & Dots
 158413 - 0x09E7B (Right Row 5) - 0x09E69 - Black/White Squares & Dots
-158414 - 0x09E73 (Left Row 1) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
-158415 - 0x09E75 (Left Row 2) - 0x09E73 - Stars & Black/White Squares & Stars + Same Colored Symbol
+158414 - 0x09E73 (Left Row 1) - True - Black/White Squares & Stars + Same Colored Symbol
+158415 - 0x09E75 (Left Row 2) - 0x09E73 - Black/White Squares & Stars + Same Colored Symbol
 158416 - 0x09E78 (Left Row 3) - 0x09E75 - Shapers
 158417 - 0x09E79 (Left Row 4) - 0x09E78 - Shapers & Rotated Shapers
-158418 - 0x09E6C (Left Row 5) - 0x09E79 - Stars & Black/White Squares & Stars + Same Colored Symbol
+158418 - 0x09E6C (Left Row 5) - 0x09E79 - Black/White Squares & Stars + Same Colored Symbol
 158419 - 0x09E6F (Left Row 6) - 0x09E6C - Stars & Rotated Shapers & Shapers
 158420 - 0x09E6B (Left Row 7) - 0x09E6F - Stars & Dots
 158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
@@ -1044,10 +1044,10 @@ Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
 Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Beyond Bridge - 0x09E86 - Mountain Floor 2 Above The Abyss - True - Mountain Pink Bridge EP - TrueOneWay:
-158426 - 0x09FD3 (Near Row 1) - True - Stars & Colored Squares & Stars + Same Colored Symbol
-158427 - 0x09FD4 (Near Row 2) - 0x09FD3 - Stars & Colored Squares & Stars + Same Colored Symbol
-158428 - 0x09FD6 (Near Row 3) - 0x09FD4 - Stars & Colored Squares & Stars + Same Colored Symbol
-158429 - 0x09FD7 (Near Row 4) - 0x09FD6 - Stars & Colored Squares & Stars + Same Colored Symbol & Shapers
+158426 - 0x09FD3 (Near Row 1) - True - Colored Squares & Stars + Same Colored Symbol
+158427 - 0x09FD4 (Near Row 2) - 0x09FD3 - Colored Squares & Stars + Same Colored Symbol
+158428 - 0x09FD6 (Near Row 3) - 0x09FD4 - Colored Squares & Stars + Same Colored Symbol
+158429 - 0x09FD7 (Near Row 4) - 0x09FD6 - Colored Squares & Stars + Same Colored Symbol & Shapers
 158430 - 0x09FD8 (Near Row 5) - 0x09FD7 - Symmetry & Colored Dots
 Door - 0x09FFB (Staircase Near) - 0x09FD8
 
@@ -1055,19 +1055,19 @@ Mountain Floor 2 Above The Abyss (Mountain Floor 2) - Mountain Floor 2 Elevator 
 Door - 0x09EDD (Elevator Room Entry) - 0x09ED8 & 0x09E86
 
 Mountain Floor 2 Light Bridge Room Near (Mountain Floor 2):
-158431 - 0x09E86 (Light Bridge Controller Near) - True - Stars & Stars + Same Colored Symbol & Rotated Shapers & Eraser
+158431 - 0x09E86 (Light Bridge Controller Near) - True - Stars + Same Colored Symbol & Rotated Shapers & Eraser
 
 Mountain Floor 2 Beyond Bridge (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Far - 0x09E07 - Mountain Pink Bridge EP - TrueOneWay - Mountain Floor 2 - 0x09ED8:
 158432 - 0x09FCC (Far Row 1) - True - Dots
 158433 - 0x09FCE (Far Row 2) - 0x09FCC - Black/White Squares
 158434 - 0x09FCF (Far Row 3) - 0x09FCE - Stars
 158435 - 0x09FD0 (Far Row 4) - 0x09FCF - Rotated Shapers
-158436 - 0x09FD1 (Far Row 5) - 0x09FD0 - Stars & Colored Squares & Stars + Same Colored Symbol
+158436 - 0x09FD1 (Far Row 5) - 0x09FD0 - Colored Squares & Stars + Same Colored Symbol
 158437 - 0x09FD2 (Far Row 6) - 0x09FD1 - Shapers
 Door - 0x09E07 (Staircase Far) - 0x09FD2
 
 Mountain Floor 2 Light Bridge Room Far (Mountain Floor 2):
-158438 - 0x09ED8 (Light Bridge Controller Far) - True - Stars & Stars + Same Colored Symbol & Rotated Shapers & Eraser
+158438 - 0x09ED8 (Light Bridge Controller Far) - True - Stars + Same Colored Symbol & Rotated Shapers & Eraser
 
 Mountain Floor 2 Elevator Room (Mountain Floor 2) - Mountain Floor 2 Elevator - TrueOneWay:
 158613 - 0x17F93 (Elevator Discard) - True - Triangles
@@ -1095,7 +1095,7 @@ Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
-158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
+158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Full Dots
 158525 - 0x33961 (Right Pillar 4) - 0x09E5A - Dots & Symmetry
 158526 - 0x0383D (Left Pillar 1) - True - Dots
 158527 - 0x0383F (Left Pillar 2) - 0x0383D - Black/White Squares
@@ -1127,16 +1127,16 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
-158454 - 0x00190 (Blue Tunnel Right First 1) - True - Dots & Triangles & Full Dots
-158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Dots & Triangles & Full Dots
-158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Dots & Triangles & Full Dots
-158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Dots & Triangles & Full Dots
+158454 - 0x00190 (Blue Tunnel Right First 1) - True - Triangles & Full Dots
+158455 - 0x00558 (Blue Tunnel Right First 2) - 0x00190 - Triangles & Full Dots
+158456 - 0x00567 (Blue Tunnel Right First 3) - 0x00558 - Triangles & Full Dots
+158457 - 0x006FE (Blue Tunnel Right First 4) - 0x00567 - Triangles & Full Dots
 158458 - 0x01A0D (Blue Tunnel Left First 1) - True - Symmetry & Triangles
 158459 - 0x008B8 (Blue Tunnel Left Second 1) - True - Black/White Squares & Triangles
 158460 - 0x00973 (Blue Tunnel Left Second 2) - 0x008B8 - Stars & Triangles
-158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Stars & Triangles & Stars + Same Colored Symbol
-158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Stars & Black/White Squares & Stars + Same Colored Symbol & Triangles
-158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Stars & Black/White Squares & Stars + Same Colored Symbol & Colored Squares
+158461 - 0x0097B (Blue Tunnel Left Second 3) - 0x00973 - Triangles & Stars + Same Colored Symbol
+158462 - 0x0097D (Blue Tunnel Left Second 4) - 0x0097B - Black/White Squares & Stars + Same Colored Symbol & Triangles
+158463 - 0x0097E (Blue Tunnel Left Second 5) - 0x0097D - Black/White Squares & Stars + Same Colored Symbol & Colored Squares
 158464 - 0x00994 (Blue Tunnel Right Second 1) - True - Rotated Shapers & Triangles
 158465 - 0x334D5 (Blue Tunnel Right Second 2) - 0x00994 - Rotated Shapers & Triangles
 158466 - 0x00995 (Blue Tunnel Right Second 3) - 0x334D5 - Rotated Shapers & Triangles
@@ -1146,40 +1146,40 @@ Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x01
 158470 - 0x018A0 (Blue Tunnel Right Third 1) - True - Shapers & Symmetry
 158471 - 0x00A72 (Blue Tunnel Left Fourth 1) - True - Shapers & Negative Shapers
 158472 - 0x32962 (First Floor Left) - True - Rotated Shapers
-158473 - 0x32966 (First Floor Grounded) - True - Stars & Black/White Squares & Stars + Same Colored Symbol
+158473 - 0x32966 (First Floor Grounded) - True - Black/White Squares & Stars + Same Colored Symbol
 158474 - 0x01A31 (First Floor Middle) - True - Colored Squares
-158475 - 0x00B71 (First Floor Right) - True - Colored Squares & Stars & Stars + Same Colored Symbol & Eraser
+158475 - 0x00B71 (First Floor Right) - True - Colored Squares & Stars + Same Colored Symbol & Eraser
 158478 - 0x288EA (First Wooden Beam) - True - Shapers
 158479 - 0x288FC (Second Wooden Beam) - True - Black/White Squares & Shapers & Rotated Shapers
 158480 - 0x289E7 (Third Wooden Beam) - True - Stars & Black/White Squares
 158481 - 0x288AA (Fourth Wooden Beam) - True - Stars & Shapers
-158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Dots & Negative Shapers & Full Dots
-158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Dots & Full Dots
-158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Dots & Full Dots
-158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Dots & Black/White Squares & Stars + Same Colored Symbol & Stars & Full Dots
-158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Dots & Full Dots
-158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Dots & Full Dots
-158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots & Invisible Dots
-158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots & Invisible Dots
-158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots & Invisible Dots
-158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Dots & Invisible Dots
-158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Dots & Invisible Dots
-158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Dots & Invisible Dots
-158494 - 0x0006A (Right Upstairs Left Row 7) - 0x00089 - Dots & Invisible Dots
-158495 - 0x0006C (Right Upstairs Left Row 8) - 0x0006A - Dots & Invisible Dots
-158496 - 0x00027 (Right Upstairs Right Row 1) - True - Dots & Invisible Dots & Symmetry
-158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Dots & Invisible Dots & Symmetry
-158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Dots & Invisible Dots & Symmetry
+158482 - 0x17FB9 (Left Upstairs Single) - True - Shapers & Negative Shapers & Full Dots
+158483 - 0x0A16B (Left Upstairs Left Row 1) - True - Full Dots
+158484 - 0x0A2CE (Left Upstairs Left Row 2) - 0x0A16B - Stars & Full Dots
+158485 - 0x0A2D7 (Left Upstairs Left Row 3) - 0x0A2CE - Black/White Squares & Stars + Same Colored Symbol & Full Dots
+158486 - 0x0A2DD (Left Upstairs Left Row 4) - 0x0A2D7 - Shapers & Full Dots
+158487 - 0x0A2EA (Left Upstairs Left Row 5) - 0x0A2DD - Rotated Shapers & Full Dots
+158488 - 0x0008F (Right Upstairs Left Row 1) - True - Dots
+158489 - 0x0006B (Right Upstairs Left Row 2) - 0x0008F - Dots
+158490 - 0x0008B (Right Upstairs Left Row 3) - 0x0006B - Dots
+158491 - 0x0008C (Right Upstairs Left Row 4) - 0x0008B - Dots
+158492 - 0x0008A (Right Upstairs Left Row 5) - 0x0008C - Dots
+158493 - 0x00089 (Right Upstairs Left Row 6) - 0x0008A - Dots
+158494 - 0x0006A (Right Upstairs Left Row 7) - 0x00089 - Dots
+158495 - 0x0006C (Right Upstairs Left Row 8) - 0x0006A - Dots
+158496 - 0x00027 (Right Upstairs Right Row 1) - True - Dots & Symmetry
+158497 - 0x00028 (Right Upstairs Right Row 2) - 0x00027 - Dots & Symmetry
+158498 - 0x00029 (Right Upstairs Right Row 3) - 0x00028 - Dots & Symmetry
 158476 - 0x09DD5 (Lone Pillar) - True - Triangles
 Door - 0x019A5 (Pillar Door) - 0x09DD5
-158449 - 0x021D7 (Mountain Shortcut Panel) - True - Triangles & Stars & Stars + Same Colored Symbol
+158449 - 0x021D7 (Mountain Shortcut Panel) - True - Triangles & Stars + Same Colored Symbol
 Door - 0x2D73F (Mountain Shortcut Door) - 0x021D7
 158450 - 0x17CF2 (Swamp Shortcut Panel) - True - Triangles
 Door - 0x2D859 (Swamp Shortcut Door) - 0x17CF2
 159341 - 0x3397C (Skylight EP) - True - True
 
 Caves Path to Challenge (Caves) - Challenge - 0x0A19A:
-158477 - 0x0A16E (Challenge Entry Panel) - True - Stars & Shapers & Stars + Same Colored Symbol
+158477 - 0x0A16E (Challenge Entry Panel) - True - Shapers & Stars + Same Colored Symbol
 Door - 0x0A19A (Challenge Entry) - 0x0A16E
 
 ==Challenge==
