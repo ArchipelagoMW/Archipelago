@@ -1,5 +1,4 @@
-import os
-import yaml
+import os, yaml
 
 from collections import Counter
 from CommonClient import logger
@@ -33,7 +32,7 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None, debug_flag=False):
+    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data: bytes, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         self.debug = debug_flag
         self.clean_iso_path = clean_iso_path
@@ -46,8 +45,7 @@ class LuigisMansionRandomizer:
         except IOError:
             raise Exception("'" + randomized_output_file_path + "' is currently in use by another program.")
 
-        with open(os.path.abspath(ap_output_data)) as stream:
-            self.output_data = yaml.safe_load(stream)
+        self.output_data = yaml.safe_load(ap_output_data)
 
         # After verifying, this will also read the entire iso, including system files and their content
         self.gcm = GCM(self.clean_iso_path)

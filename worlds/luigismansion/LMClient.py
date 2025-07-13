@@ -1,13 +1,11 @@
-import asyncio
-import time
-import traceback
+import asyncio, time, traceback
 from typing import Any
 
-import NetUtils
-import Utils
+import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 import dolphin_memory_engine as dme
 
+from .iso_helper.lm_rom import LMUSAAPPatch
 from . import CLIENT_VERSION
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
@@ -145,8 +143,12 @@ async def write_bytes_and_validate(addr: int, ram_offset: list[str] | None, curr
 
 
 class LMCommandProcessor(ClientCommandProcessor):
-    def __init__(self, ctx: CommonContext):
-        super().__init__(ctx)
+    def __init__(self, ctx: CommonContext, server_address: str = None):
+        if server_address:
+            super().__init__(ctx, server_address=server_address)
+        else:
+            super().__init__(ctx)
+
 
     def _cmd_dolphin(self):
         """Prints the current Dolphin status to the client."""
@@ -797,13 +799,17 @@ async def give_player_items(ctx: LMContext):
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
+    logger.info("Starting LM Client v" + CLIENT_VERSION)
+    server_address: str = ""
 
     if output_data:
-        from Patch import create_rom_file
-        create_rom_file(output_data)
+        lm_usa_patch = LMUSAAPPatch()
+        lm_usa_manifest = lm_usa_patch.read_contents(output_data)
+        server_address = lm_usa_manifest["server"]
+        asyncio.run(lm_usa_patch.patch(output_data))
 
     async def _main(connect, password):
-        ctx = LMContext(connect, password)
+        ctx = LMContext(server_address if server_address else connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
 
         # Runs Universal Tracker's internal generator

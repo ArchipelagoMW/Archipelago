@@ -1,13 +1,12 @@
-from worlds.Files import APPatchExtension, AutoPatchExtensionRegister, APAutoPatchInterface, APPlayerContainer, \
-    APProcedurePatch
+from worlds.Files import APPatch, APPlayerContainer, AutoPatchRegister
 from settings import get_settings, Settings
 from Utils import user_path
 
 from hashlib import md5
+from typing import Any
 from os import path as os_path
-import yaml
+import yaml, json, logging
 from yaml import CDumper as Dumper
-import logging
 from sys import platform, path
 from importlib import resources
 import zipfile
@@ -47,31 +46,24 @@ class LMPlayerContainer(APPlayerContainer):
         opened_zipfile.writestr("patch.aplm", yaml.dump(self.output_data, sort_keys=False, Dumper=Dumper))
         super().write_contents(opened_zipfile)
 
-class LMUSAAPPatchInterface(APAutoPatchInterface):
+class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
     game = RANDOMIZER_NAME
     hash = LM_USA_MD5
-    files: dict[str, bytes]
     patch_file_ending = ".aplm"
     result_file_ending = ".iso"
-    patch_file = "patch.aplm"
 
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        return cls.get_base_rom_path().encode()
+    procedure = ["custom"]
 
-    @classmethod
-    def get_file(cls, file: str) -> bytes:
-        """ Retrieves a file from the patch container."""
-        if file not in cls.files:
-            cls.read(cls())
-        return cls.files[file]
+    def __init__(self, *args: Any, **kwargs: Any):
+        super(LMUSAAPPatch, self).__init__(*args, **kwargs)
 
-    @classmethod
-    def patch(cls, target: str) -> None:
-        cls.files = {}
+    async def patch(self, aplm_patch: str) -> None:
         # Get the AP Path for the base ROM
-        lm_clean_iso = cls.get_base_rom_path()
+        lm_clean_iso = self.get_base_rom_path()
         logger.info("Provided Luigi's Mansion ISO Path was: " + lm_clean_iso)
+
+        base_path = os_path.splitext(aplm_patch)[0]
+        output_file = base_path + self.result_file_ending
 
         # Load the external dependencies based on OS
         logger.info("Loading required dependencies for Luigi's Mansion, including GClib...")
@@ -92,14 +84,22 @@ class LMUSAAPPatchInterface(APAutoPatchInterface):
             path.append(str(resource_lib_path))
 
             # Verify we have a clean rom of the game first
-            cls.verify_base_rom(lm_clean_iso)
+            self.verify_base_rom(lm_clean_iso)
 
             # Use our randomize function to patch the file into an ISO.
             from ..LMGenerator import LuigisMansionRandomizer
-            print(cls.patch_file)
-            lm_out_data = cls.get_file(cls.patch_file)
-            LuigisMansionRandomizer(lm_clean_iso, target, lm_out_data)
+            with zipfile.ZipFile(aplm_patch, "r") as zf:
+                aplm_bytes = zf.read("patch.aplm")
+            LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
 
+    def read_contents(self, aplm_patch: str) -> dict[str, Any]:
+        with zipfile.ZipFile(aplm_patch, "r") as zf:
+            with zf.open("archipelago.json", "r") as f:
+                manifest = json.load(f)
+        if manifest["compatible_version"] > self.version:
+            raise Exception(f"File (version: {manifest['compatible_version']}) too new "
+                            f"for this handler (version: {self.version})")
+        return manifest
 
     @classmethod
     def get_base_rom_path(cls) -> str:
@@ -129,8 +129,8 @@ class LMUSAAPPatchInterface(APAutoPatchInterface):
         # Verify that the file has the right has first, as the wrong file could have been loaded.
         md5_conv = int(base_md5.hexdigest(), 16)
         if md5_conv != LM_USA_MD5:
-            raise InvalidCleanISOError(f"Invalid vanilla {RANDOMIZER_NAME} ISO.\nYour ISO may be corrupted or your MD5 " +
-                                       f"hashes do not match.\nCorrect ISO MD5 hash: {LM_USA_MD5:x}\nYour ISO's MD5 hash: {md5_conv}")
+            raise InvalidCleanISOError(f"Invalid vanilla {RANDOMIZER_NAME} ISO.\nYour ISO may be corrupted or your " +
+                f"MD5 hashes do not match.\nCorrect ISO MD5 hash: {LM_USA_MD5:x}\nYour ISO's MD5 hash: {md5_conv}")
 
         # Verify if the provided ISO file is a valid file extension and contains a valid Game ID.
         # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
