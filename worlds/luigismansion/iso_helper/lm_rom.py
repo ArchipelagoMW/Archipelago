@@ -65,24 +65,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         base_path = os_path.splitext(aplm_patch)[0]
         output_file = base_path + self.result_file_ending
 
-        # Load the external dependencies based on OS
-        logger.info("Loading required dependencies for Luigi's Mansion, including GClib...")
-        is_linux = platform.startswith("linux")
-        is_windows = platform in ("win32", "cygwin", "msys")
-        lib_path = ""
-        if not (is_linux or is_windows):
-            raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-        if is_windows:
-            lib_path = "lib-windows"
-        elif is_linux:
-            lib_path = "lib-linux"
-
-        # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
-        # the with block ends.
-        with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
-            logger.info("Temp Resource Path: " + str(resource_lib_path))
-            path.append(str(resource_lib_path))
-
+        try:
             # Verify we have a clean rom of the game first
             self.verify_base_rom(lm_clean_iso)
 
@@ -91,6 +74,33 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             with zipfile.ZipFile(aplm_patch, "r") as zf:
                 aplm_bytes = zf.read("patch.aplm")
             LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
+        except ImportError:
+            # Load the external dependencies based on OS
+            logger.info("Loading required dependencies for Luigi's Mansion, including GClib...")
+            is_linux = platform.startswith("linux")
+            is_windows = platform in ("win32", "cygwin", "msys")
+            lib_path = ""
+            if not (is_linux or is_windows):
+                raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
+            if is_windows:
+                lib_path = "lib-windows"
+            elif is_linux:
+                lib_path = "lib-linux"
+
+            # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
+            # the with block ends.
+            with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
+                logger.info("Temp Resource Path: " + str(resource_lib_path))
+                path.append(str(resource_lib_path))
+
+                # Verify we have a clean rom of the game first
+                self.verify_base_rom(lm_clean_iso)
+
+                # Use our randomize function to patch the file into an ISO.
+                from ..LMGenerator import LuigisMansionRandomizer
+                with zipfile.ZipFile(aplm_patch, "r") as zf:
+                    aplm_bytes = zf.read("patch.aplm")
+                LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
