@@ -373,6 +373,18 @@ class VoidTradeAgeLimit(Choice):
     default = option_30_minutes
 
 
+class VoidTradeWorkers(Toggle):
+    """
+    If enabled, you are able to send and receive workers via Void Trade.
+
+    Sending workers is a cheap way to get a lot of units from other players,
+    at the cost of reducing the strength of received units for other players.
+
+    Receiving workers allows you to build units of other races, but potentially skips large parts of your multiworld progression.
+    """
+    display_name = "Allow Workers in Void Trade"
+
+
 class MaxUpgradeLevel(Range):
     """Controls the maximum number of weapon/armor upgrades that can be found or unlocked."""
     display_name = "Maximum Upgrade Level"
@@ -1338,6 +1350,7 @@ class Starcraft2Options(PerGameCommonOptions):
     required_tactics: RequiredTactics
     enable_void_trade: EnableVoidTrade
     void_trade_age_limit: VoidTradeAgeLimit
+    void_trade_workers: VoidTradeWorkers
     ensure_generic_items: EnsureGenericItems
     min_number_of_upgrades: MinNumberOfUpgrades
     max_number_of_upgrades: MaxNumberOfUpgrades
@@ -1500,6 +1513,7 @@ option_groups = [
         TakeOverAIAllies,
         EnableVoidTrade,
         VoidTradeAgeLimit,
+        VoidTradeWorkers,
         GrantStoryTech,
         CustomMissionOrder,
     ]),

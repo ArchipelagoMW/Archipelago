@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 
 """
 This file is for handling SC2 data read via the bot
@@ -27,3 +27,12 @@ normalized_unit_types: Dict[str, str] = {
     "AP_ReaperResourceEfficiency": "AP_Reaper",
     "AP_MercReaperResourceEfficiency": "AP_MercReaper",
 }
+
+worker_units: List[str] = [
+    "AP_SCV",
+    "AP_MULE", # Mules can't currently build (or be traded due to timed life), this is future proofing just in case
+    "AP_Drone",
+    "AP_SISCV", # Infested SCV
+    "AP_Probe",
+    "AP_ElderProbe",
+]
