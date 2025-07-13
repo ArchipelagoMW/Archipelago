@@ -254,7 +254,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
             in_dungeon_player_ids = {item.player for item in in_dungeon_items}
             all_state_base = CollectionState(multiworld)
             for item in multiworld.itempool:
-                multiworld.worlds[item.player].collect(all_state_base, item)
+                all_state_base.collect(item, prevent_sweep=True)
             pre_fill_items = []
             for player in in_dungeon_player_ids:
                 pre_fill_items += multiworld.worlds[player].get_pre_fill_items()
@@ -265,7 +265,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
                     # `pre_fill_items` should be a subset of `in_dungeon_items`, but just in case.
                     pass
             for item in pre_fill_items:
-                multiworld.worlds[item.player].collect(all_state_base, item)
+                all_state_base.collect(item, prevent_sweep=True)
             all_state_base.sweep_for_advancements()
 
             # Remove the completion condition so that minimal-accessibility words place keys correctly.

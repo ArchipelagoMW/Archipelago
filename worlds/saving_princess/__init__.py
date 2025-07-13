@@ -12,7 +12,7 @@ from .Constants import *
 
 def launch_client(*args: str):
     from .Client import launch
-    launch_subprocess(launch(*args), name=CLIENT_NAME)
+    launch_subprocess(launch, name=CLIENT_NAME, args=args)
 
 
 components.append(

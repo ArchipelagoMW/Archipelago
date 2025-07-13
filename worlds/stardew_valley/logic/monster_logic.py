@@ -20,7 +20,7 @@ class MonsterLogicMixin(BaseLogicMixin):
         self.monster = MonsterLogic(*args, **kwargs)
 
 
-class MonsterLogic(BaseLogic[Union[HasLogicMixin, MonsterLogicMixin, RegionLogicMixin, CombatLogicMixin, TimeLogicMixin]]):
+class MonsterLogic(BaseLogic):
 
     @cached_property
     def all_monsters_by_name(self):

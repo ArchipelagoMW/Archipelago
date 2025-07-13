@@ -455,7 +455,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
             if "Pink Paw Station Thug" in key and is_location_valid(world, key):
                 set_rule(world.multiworld.get_location(key, world.player), lambda state: True)
 
-        # Moderate: clear Rush Hour without Hookshot
+        # Moderate: clear Rush Hour without Hookshot or Dweller Mask
         set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
                  lambda state: state.has("Metro Ticket - Pink", world.player)
                  and state.has("Metro Ticket - Yellow", world.player)

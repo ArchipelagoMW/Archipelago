@@ -1,13 +1,12 @@
 import re
 import shutil
 from pathlib import Path
-from typing import Dict
 
 
 __all__ = ["copy", "delete"]
 
 
-_new_worlds: Dict[str, str] = {}
+_new_worlds: dict[str, str] = {}
 
 
 def copy(src: str, dst: str) -> None:
@@ -31,7 +30,7 @@ def copy(src: str, dst: str) -> None:
     _new_worlds[dst] = str(dst_folder)
     with open(dst_folder / "__init__.py", "r", encoding="utf-8-sig") as f:
         contents = f.read()
-    contents = re.sub(r'game\s*=\s*[\'"]' + re.escape(src) + r'[\'"]', f'game = "{dst}"', contents)
+    contents = re.sub(r'game\s*(:\s*[a-zA-Z\[\]]+)?\s*=\s*[\'"]' + re.escape(src) + r'[\'"]', f'game = "{dst}"', contents)
     with open(dst_folder / "__init__.py", "w", encoding="utf-8") as f:
         f.write(contents)
 

@@ -49,7 +49,6 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     multiworld.game = {player: world_type.game for player, world_type in enumerate(worlds, 1)}
     multiworld.player_name = {player: f"Tester{player}" for player in multiworld.player_ids}
     multiworld.set_seed(seed)
-    multiworld.state = CollectionState(multiworld)
     args = Namespace()
     for player, world_type in enumerate(worlds, 1):
         for key, option in world_type.options_dataclass.type_hints.items():
@@ -57,6 +56,7 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
             updated_options[player] = option.from_any(option.default)
             setattr(args, key, updated_options)
     multiworld.set_options(args)
+    multiworld.state = CollectionState(multiworld)
     for step in steps:
         call_all(multiworld, step)
     return multiworld

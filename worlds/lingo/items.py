@@ -34,12 +34,32 @@ ITEMS_BY_GROUP: Dict[str, List[str]] = {}
 
 TRAP_ITEMS: List[str] = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
 
+PROGUSEFUL_ITEMS: List[str] = [
+    "Crossroads - Roof Access",
+    "Black",
+    "Red",
+    "Blue",
+    "Yellow",
+    "Purple",
+    "Sunwarps",
+    "Tenacious Entrance Panels",
+    "The Tenacious - Black Palindromes (Panels)",
+    "Hub Room - RAT (Panel)",
+    "Outside The Wanderer - WANDERLUST (Panel)",
+    "Orange Tower Panels"
+]
+
+
+def get_prog_item_classification(item_name: str):
+    if item_name in PROGUSEFUL_ITEMS:
+        return ItemClassification.progression | ItemClassification.useful
+    else:
+        return ItemClassification.progression
+
 
 def load_item_data():
-    global ALL_ITEM_TABLE, ITEMS_BY_GROUP
-
     for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
-        ALL_ITEM_TABLE[color] = ItemData(get_special_item_id(color), ItemClassification.progression,
+        ALL_ITEM_TABLE[color] = ItemData(get_special_item_id(color), get_prog_item_classification(color),
                                          ItemType.COLOR, False, [])
         ITEMS_BY_GROUP.setdefault("Colors", []).append(color)
 
@@ -53,16 +73,16 @@ def load_item_data():
                 door_groups.add(door.door_group)
 
             ALL_ITEM_TABLE[door.item_name] = \
-                ItemData(get_door_item_id(room_name, door_name), ItemClassification.progression, ItemType.NORMAL,
-                         door.has_doors, door.painting_ids)
+                ItemData(get_door_item_id(room_name, door_name), get_prog_item_classification(door.item_name),
+                         ItemType.NORMAL, door.has_doors, door.painting_ids)
             ITEMS_BY_GROUP.setdefault("Doors", []).append(door.item_name)
 
             if door.item_group is not None:
                 ITEMS_BY_GROUP.setdefault(door.item_group, []).append(door.item_name)
 
     for group in door_groups:
-        ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
-                                         ItemClassification.progression, ItemType.NORMAL, True, [])
+        ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group), get_prog_item_classification(group),
+                                         ItemType.NORMAL, True, [])
         ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
 
     panel_groups: Set[str] = set()
@@ -72,11 +92,12 @@ def load_item_data():
                 panel_groups.add(panel_door.panel_group)
 
             ALL_ITEM_TABLE[panel_door.item_name] = ItemData(get_panel_door_item_id(room_name, panel_door_name),
-                                                            ItemClassification.progression, ItemType.NORMAL, False, [])
+                                                            get_prog_item_classification(panel_door.item_name),
+                                                            ItemType.NORMAL, False, [])
             ITEMS_BY_GROUP.setdefault("Panels", []).append(panel_door.item_name)
 
     for group in panel_groups:
-        ALL_ITEM_TABLE[group] = ItemData(get_panel_group_item_id(group), ItemClassification.progression,
+        ALL_ITEM_TABLE[group] = ItemData(get_panel_group_item_id(group), get_prog_item_classification(group),
                                          ItemType.NORMAL, False, [])
         ITEMS_BY_GROUP.setdefault("Panels", []).append(group)
 
@@ -101,7 +122,7 @@ def load_item_data():
 
     for item_name in PROGRESSIVE_ITEMS:
         ALL_ITEM_TABLE[item_name] = ItemData(get_progressive_item_id(item_name),
-                                             ItemClassification.progression, ItemType.NORMAL, False, [])
+                                             get_prog_item_classification(item_name), ItemType.NORMAL, False, [])
 
 
 # Initialize the item data at module scope.

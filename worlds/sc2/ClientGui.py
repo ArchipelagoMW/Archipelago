@@ -5,12 +5,11 @@ from NetUtils import JSONMessagePart
 from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.tabbedpanel import TabbedPanelItem
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.uix.floatlayout import FloatLayout
+from kivymd.uix.tooltip import MDTooltip
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 
@@ -26,30 +25,22 @@ class HoverableButton(HoverBehavior, Button):
     pass
 
 
-class MissionButton(HoverableButton):
+class MissionButton(HoverableButton, MDTooltip):
     tooltip_text = StringProperty("Test")
 
     def __init__(self, *args, **kwargs):
-        super(HoverableButton, self).__init__(*args, **kwargs)
-        self.layout = FloatLayout()
-        self.popuplabel = ServerToolTip(text=self.text, markup=True)
-        self.popuplabel.padding = [5, 2, 5, 2]
-        self.layout.add_widget(self.popuplabel)
+        super(HoverableButton, self).__init__(**kwargs)
+        self._tooltip = ServerToolTip(text=self.text, markup=True)
+        self._tooltip.padding = [5, 2, 5, 2]
 
     def on_enter(self):
-        self.popuplabel.text = self.tooltip_text
+        self._tooltip.text = self.tooltip_text
 
-        if self.ctx.current_tooltip:
-            App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
-
-        if self.tooltip_text == "":
-            self.ctx.current_tooltip = None
-        else:
-            App.get_running_app().root.add_widget(self.layout)
-            self.ctx.current_tooltip = self.layout
+        if self.tooltip_text != "":
+            self.display_tooltip()
 
     def on_leave(self):
-        self.ctx.ui.clear_tooltip()
+        self.remove_tooltip()
 
     @property
     def ctx(self) -> SC2Context:

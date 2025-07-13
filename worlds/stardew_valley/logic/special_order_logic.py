@@ -1,22 +1,6 @@
-from typing import Dict, Union
+from typing import Dict
 
-from .ability_logic import AbilityLogicMixin
-from .arcade_logic import ArcadeLogicMixin
-from .artisan_logic import ArtisanLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .cooking_logic import CookingLogicMixin
-from .has_logic import HasLogicMixin
-from .mine_logic import MineLogicMixin
-from .money_logic import MoneyLogicMixin
-from .monster_logic import MonsterLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .shipping_logic import ShippingLogicMixin
-from .skill_logic import SkillLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..content.vanilla.ginger_island import ginger_island_content_pack
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..stardew_rule import StardewRule, Has, false_
@@ -44,10 +28,7 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
         self.special_order = SpecialOrderLogic(*args, **kwargs)
 
 
-class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
-ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
-MineLogicMixin, CookingLogicMixin,
-AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
+class SpecialOrderLogic(BaseLogic):
 
     def initialize_rules(self):
         self.update_rules({
@@ -61,7 +42,7 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
             SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.shipping.can_use_shipping_bin,
-            SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
+            SpecialOrder.community_cleanup: self.logic.fishing.can_crab_pot_anywhere,
             SpecialOrder.the_strong_stuff: self.logic.has(ArtisanGood.specific_juice(Vegetable.potato)),
             SpecialOrder.pierres_prime_produce: self.logic.ability.can_farm_perfectly(),
             SpecialOrder.robins_project: self.logic.relationship.can_meet(NPC.robin) & self.logic.ability.can_chop_perfectly() &

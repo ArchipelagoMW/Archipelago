@@ -1,7 +1,11 @@
 import unittest
+from argparse import Namespace
+from typing import Type
 
-from BaseClasses import CollectionState
-from worlds.AutoWorld import AutoWorldRegister, call_all
+from BaseClasses import CollectionState, MultiWorld
+from Fill import distribute_items_restrictive
+from Options import ItemLinks
+from worlds.AutoWorld import AutoWorldRegister, World, call_all
 from . import setup_solo_multiworld
 
 
@@ -83,6 +87,47 @@ class TestBase(unittest.TestCase):
                 multiworld = setup_solo_multiworld(world_type)
                 for item in multiworld.itempool:
                     self.assertIn(item.name, world_type.item_name_to_id)
+    
+    def test_item_links(self) -> None:
+        """
+        Tests item link creation by creating a multiworld of 2 worlds for every game and linking their items together.
+        """
+        def setup_link_multiworld(world: Type[World], link_replace: bool) -> None:
+            multiworld = MultiWorld(2)
+            multiworld.game = {1: world.game, 2: world.game}
+            multiworld.player_name = {1: "Linker 1", 2: "Linker 2"}
+            multiworld.set_seed()
+            item_link_group = [{
+                "name": "ItemLinkTest",
+                "item_pool": ["Everything"],
+                "link_replacement": link_replace,
+                "replacement_item": None,
+            }]
+            args = Namespace()
+            for name, option in world.options_dataclass.type_hints.items():
+                setattr(args, name, {1: option.from_any(option.default), 2: option.from_any(option.default)})
+            setattr(args, "item_links",
+                    {1: ItemLinks.from_any(item_link_group), 2: ItemLinks.from_any(item_link_group)})
+            multiworld.set_options(args)
+            multiworld.set_item_links()
+            # groups get added to state during its constructor so this has to be after item links are set
+            multiworld.state = CollectionState(multiworld)
+            gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic")
+            for step in gen_steps:
+                call_all(multiworld, step)
+            # link the items together and attempt to fill
+            multiworld.link_items()
+            multiworld._all_state = None
+            call_all(multiworld, "pre_fill")
+            distribute_items_restrictive(multiworld)
+            call_all(multiworld, "post_fill")
+            self.assertTrue(multiworld.can_beat_game(CollectionState(multiworld)), f"seed = {multiworld.seed}")
+
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Can generate with link replacement", game=game_name):
+                setup_link_multiworld(world_type, True)
+            with self.subTest("Can generate without link replacement", game=game_name):
+                setup_link_multiworld(world_type, False)
 
     def test_itempool_not_modified(self):
         """Test that worlds don't modify the itempool after `create_items`"""

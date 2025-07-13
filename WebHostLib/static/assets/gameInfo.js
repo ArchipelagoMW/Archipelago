@@ -23,7 +23,6 @@ window.addEventListener('load', () => {
         showdown.setOption('strikethrough', true);
         showdown.setOption('literalMidWordUnderscores', true);
         gameInfo.innerHTML += (new showdown.Converter()).makeHtml(results);
-        adjustHeaderWidth();
 
         // Reset the id of all header divs to something nicer
         for (const header of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {

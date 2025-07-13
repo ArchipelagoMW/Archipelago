@@ -42,6 +42,7 @@ class TimespinnerWorld(World):
     topology_present = True
     web = TimespinnerWebWorld()
     required_client_version = (0, 4, 2)
+    ut_can_gen_without_yaml = True
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {location.name: location.code for location in get_location_datas(-1, None, None)}

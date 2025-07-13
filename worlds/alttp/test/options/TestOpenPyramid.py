@@ -23,7 +23,7 @@ class GoalPyramidTest(PyramidTestBase):
     }
 
     def testCrystalsGoalAccess(self):
-        self.multiworld.goal[1].value = 1  # crystals
+        self.multiworld.worlds[1].options.goal.value = 1  # crystals
         self.assertFalse(self.can_reach_entrance("Pyramid Hole"))
         self.collect_by_name(["Hammer", "Progressive Glove", "Moon Pearl"])
         self.assertTrue(self.can_reach_entrance("Pyramid Hole"))

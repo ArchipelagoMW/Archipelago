@@ -6,7 +6,7 @@ from Options import Choice, DefaultOnToggle, NamedRange, OptionGroup, PerGameCom
 
 from zilliandomizer.options import (
     Options as ZzOptions, char_to_gun, char_to_jump, ID,
-    VBLR as ZzVBLR, Chars, ItemCounts as ZzItemCounts
+    VBLR as ZzVBLR, Chars, ItemCounts as ZzItemCounts,
 )
 from zilliandomizer.options.parsing import validate as zz_validate
 
@@ -23,7 +23,7 @@ class ZillionContinues(NamedRange):
     display_name = "continues"
     special_range_names = {
         "vanilla": 3,
-        "infinity": 21
+        "infinity": 21,
     }
 
 
@@ -247,7 +247,7 @@ class ZillionStartingCards(NamedRange):
     range_end = 10
     display_name = "starting cards"
     special_range_names = {
-        "vanilla": 0
+        "vanilla": 0,
     }
 
 
@@ -315,8 +315,8 @@ class ZillionOptions(PerGameCommonOptions):
 z_option_groups = [
     OptionGroup("item counts", [
         ZillionIDCardCount, ZillionBreadCount, ZillionOpaOpaCount, ZillionZillionCount,
-        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount
-    ])
+        ZillionFloppyDiskCount, ZillionScopeCount, ZillionRedIDCardCount,
+    ]),
 ]
 
 
@@ -361,7 +361,7 @@ def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
         "Zillion": options.zillion_count,
         "Floppy Disk": options.floppy_disk_count,
         "Scope": options.scope_count,
-        "Red ID Card": options.red_id_card_count
+        "Red ID Card": options.red_id_card_count,
     })
     minimums = Counter({
         "ID Card": 0,
@@ -370,7 +370,7 @@ def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
         "Zillion": guns_required,
         "Floppy Disk": floppy_req.value,
         "Scope": 0,
-        "Red ID Card": 1
+        "Red ID Card": 1,
     })
     for key in minimums:
         item_counts[key] = max(minimums[key], item_counts[key])
@@ -426,7 +426,7 @@ def validate(options: ZillionOptions) -> tuple[ZzOptions, Counter[str]]:
         bool(options.early_scope.value),
         True,  # balance defense
         starting_cards.value,
-        map_gen
+        map_gen,
     )
     zz_validate(zz_op)
     return zz_op, item_counts

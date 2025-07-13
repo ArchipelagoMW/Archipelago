@@ -106,6 +106,27 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     return obj
 
 
+_base_types = str | int | bool | float | None | tuple["_base_types", ...] | dict["_base_types", "base_types"]
+
+
+def convert_to_base_types(obj: typing.Any) -> _base_types:
+    if isinstance(obj, (tuple, list, set, frozenset)):
+        return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, dict):
+        return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
+    elif obj is None or type(obj) in (str, int, float, bool):
+        return obj
+    # unwrap simple types to their base, such as StrEnum
+    elif isinstance(obj, str):
+        return str(obj)
+    elif isinstance(obj, int):
+        return int(obj)
+    elif isinstance(obj, float):
+        return float(obj)
+    else:
+        raise Exception(f"Cannot handle {type(obj)}")
+
+
 _encode = JSONEncoder(
     ensure_ascii=False,
     check_circular=False,
