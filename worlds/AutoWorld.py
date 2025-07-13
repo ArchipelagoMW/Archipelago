@@ -97,7 +97,7 @@ class AutoWorldRegister(type):
                     or dct["game"] == "A Link to the Past"
                     or dct["game"] == "Timespinner"
                     # these two are easy to miss since they're only required by the CI-only hosting/__main__.py test
-                    or dct["game"] == "Clique" or dct["game"] == "Temp World"):
+                    or dct["game"] == "VVVVVV" or dct["game"] == "Temp World"):
                 AutoWorldRegister.world_types[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
