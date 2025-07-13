@@ -132,7 +132,7 @@ _all_items: List[MedievilItemData] = [
     ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 54, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Time Device", 54, MedievilItemCategory.PROGRESSION, True),
     
-    ("Daring Dash: Skill","Level_End",60,MedievilItemCategory.PROGRESSION, True),    
+    ("Daring Dash: Skill",60,MedievilItemCategory.PROGRESSION, True),    
     
     # Chalice
     ("Chalice of Souls", 88, MedievilItemCategory.CHALICE, False),
@@ -212,7 +212,7 @@ _all_items: List[MedievilItemData] = [
     ("Time Rune: The Time Device", 147, MedievilItemCategory.PROGRESSION, True),
     
     # Level_End is typically a progression item as it signifies advancing a stage
-    ("Level_End", 1001, MedievilItemCategory.LEVEL_END, True) 
+    ("Level_End", 999, MedievilItemCategory.LEVEL_END, True) 
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
