@@ -263,7 +263,7 @@ key_rules = [
         ConnectionNames.c005_c006: lambda player: lambda state: (state.has(ItemNames.Cavein_Key, player, 4) or state.has(ItemNames.Cavein_KeyRing, player, 1)) and state.has(ItemNames.PlungerPower, player, 1),
 
         # Passage
-        ConnectionNames.p002_s001: lambda player: lambda state: (state.has(ItemNames.Creepy2_Key, player, 5) or state.has(ItemNames.Creepy2_KeyRing, player, 1)) and state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1),
+        ConnectionNames.p002_s001: lambda player: lambda state: (state.has(ItemNames.Creepy2_Key, player, 5) or state.has(ItemNames.Creepy2_KeyRing, player, 1)) and state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1),
         ConnectionNames.p002_p003: lambda player: lambda state: (state.has(ItemNames.Creepy2_Key, player, 5) or state.has(ItemNames.Creepy2_KeyRing, player, 1)) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1),
         ConnectionNames.p003_p004: lambda player: lambda state: (state.has(ItemNames.Creepy3_Key, player, 3) or state.has(ItemNames.Creepy3_KeyRing, player, 1)) and state.has(ItemNames.GumPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1),
         ConnectionNames.p004_p005: lambda player: lambda state: (state.has(ItemNames.Gusts1_Key, player, 1) or state.has(ItemNames.Gusts1_KeyRing, player, 1))and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PlungerPower, player, 1),
@@ -2716,7 +2716,7 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
         add_rule(multiworld.get_entrance(ConnectionNames.p003_p004, player), lambda state: state.has(ItemNames.GumPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.p004_p005, player), lambda state: state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PlungerPower, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.p005_b001, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 2))
-        add_rule(multiworld.get_entrance(ConnectionNames.p002_s001, player), lambda state: state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1)),
+        add_rule(multiworld.get_entrance(ConnectionNames.p002_s001, player), lambda state: state.has(ItemNames.SoapPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.HelmetPower, player, 1) and state.has(ItemNames.PoundPower, player, 1)),
 
     if ItemNames.Warps not in allowed_loc_types:
         # Warps, but not accessible logically
