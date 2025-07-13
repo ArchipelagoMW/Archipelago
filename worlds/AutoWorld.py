@@ -382,7 +382,7 @@ class World(metaclass=AutoWorldRegister):
     def create_items(self) -> None:
         """
         Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
-        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
+        to the MultiWorld after this step. If items need to be placed during pre_fill use `get_pre_fill_items`.
         """
         pass
 
