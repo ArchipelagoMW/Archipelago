@@ -629,7 +629,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Rejoined Hallway Lantern 3', 1337693, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Rejoined Hallway Lantern 4', 1337694, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Rejoined Hallway Lantern 5', 1337695, logic.can_break_lanterns),
-            LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Rejoined Hallway Lantern 6', 1337697, logic.can_break_lanterns),
+            LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Rejoined Hallway Lantern 6', 1337737, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Lower Fork Start Lantern 1', 1337696, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Lower Fork Start Lantern 2', 1337697, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Post-Fork Room Lantern 1', 1337698, logic.can_break_lanterns),
