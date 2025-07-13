@@ -3,6 +3,7 @@ from typing import NamedTuple, Dict, Set, Optional
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from .Helper_Functions import LMRamData
+from ..smw.Locations import dragon_coin_location_table
 
 
 class LMItemData(NamedTuple):
@@ -271,7 +272,10 @@ trap_filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x804DDE7C, ram_byte_size=4, item_count=6)]), # value of 6
     "Ghost": LMItemData("Trap", 126, IC.trap,
         update_ram_addr=[LMRamData(0x804DDA50, ram_byte_size=4, item_count=1)]),
-
+    # "Fear Trap": LMItemData("Trap", 143, IC.trap, update_ram_addr=), #Crawling
+    # "Drag Trap": LMItemData("Trap", 144, IC.trap, update_ram_addr=),
+    # "Spooky Time": LMItemData("Trap", 145, IC.trap, update_ram_addr=),
+    # "Squash Trap": LMItemData("Trap", 146, IC.trap, update_ram_addr=),
 }
 
 filler_items = {**other_filler_items,
