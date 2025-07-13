@@ -2,7 +2,7 @@ from .bundle_data import all_bundle_items_by_name
 from .meme_bundles_data.capitalist_bundle import capitalist_items
 from .remixed_bundles import *
 from ...bundles.bundle import BureaucracyBundleTemplate, RecursiveBundleTemplate, FixedPriceCurrencyBundleTemplate, \
-    FixedPriceBundleTemplate, FixedPriceDeepBundleTemplate, FixedMultiplierBundleTemplate
+    FixedPriceBundleTemplate, FixedPriceDeepBundleTemplate, FixedMultiplierBundleTemplate, FixedSlotsBundleTemplate
 from ...strings.bundle_names import MemeBundleName
 from ...strings.currency_names import MemeCurrency
 from ...strings.flower_names import all_flowers
@@ -144,7 +144,7 @@ journalist_items = [*all_simple_items]
 journalist_bundle = FixedPriceBundleTemplate(CCRoom.bulletin_board, MemeBundleName.journalist, journalist_items, 1, 1)
 
 trap_items = [BundleItem(MemeItem.trap)]
-trap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.trap, trap_items, 5, 5)
+trap_bundle = FixedSlotsBundleTemplate(CCRoom.bulletin_board, MemeBundleName.trap, trap_items, 4, 4)
 
 off_your_back_items = [BundleItem(MemeItem.worn_hat), BundleItem(MemeItem.worn_shirt), BundleItem(MemeItem.worn_pants),
                        BundleItem(MemeItem.worn_boots), BundleItem(MemeItem.worn_left_ring), BundleItem(MemeItem.worn_right_ring)]
@@ -168,7 +168,7 @@ fruit_items = [tomato, pumpkin, summer_squash, eggplant, hot_pepper]
 fruit_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.fruit, fruit_items, 5, 5)
 
 reverse_items = [*all_simple_items]
-reverse_bundle = BundleTemplate(CCRoom.crafts_room, MemeBundleName.reverse, reverse_items, 4, 4)
+reverse_bundle = FixedSlotsBundleTemplate(CCRoom.crafts_room, MemeBundleName.reverse, reverse_items, 4, 4)
 
 bundle_items = [*all_simple_items]
 bundle_bundle = RecursiveBundleTemplate(CCRoom.fish_tank, MemeBundleName.bundle, bundle_items, 16, 16, 4)

@@ -120,6 +120,30 @@ class FixedPriceBundleTemplate(BundleTemplate):
         return Bundle(self.room, self.name, chosen_items, self.number_required_items)
 
 
+# This type of bundle will always match the number of slots and the number of items
+class FixedSlotsBundleTemplate(BundleTemplate):
+
+    def __init__(self, room: str, name: str, items: List[BundleItem], number_possible_items: int,
+                 number_required_items: int):
+        super().__init__(room, name, items, number_possible_items, number_required_items)
+
+    def create_bundle(self, random: Random, content: StardewContent, options: StardewValleyOptions) -> Bundle:
+        try:
+            number_required, price_multiplier = get_bundle_final_prices(options.bundle_price, self.number_required_items, False)
+            filtered_items = [item for item in self.items if item.can_appear(content, options)]
+            number_items = len(filtered_items)
+            number_chosen_items = number_required
+            if number_chosen_items > number_items:
+                chosen_items = filtered_items + random.choices(filtered_items, k=number_chosen_items - number_items)
+            else:
+                chosen_items = random.sample(filtered_items, number_chosen_items)
+            chosen_items = [item.as_amount(min(999, max(1, math.floor(item.amount * price_multiplier)))) for item in chosen_items]
+            return Bundle(self.room, self.name, chosen_items, number_required)
+        except Exception as e:
+            raise Exception(f"Failed at creating bundle '{self.name}'. Error: {e}")
+
+
+
 class CurrencyBundleTemplate(BundleTemplate):
     item: BundleItem
 
