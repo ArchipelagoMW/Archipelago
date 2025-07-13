@@ -563,7 +563,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         elif panic_method == "start_inventory":
             fill_restrictive(multiworld, maximum_exploration_state, defaultlocations, progitempool, swap=False,
                              allow_partial=True, name="Progression", single_player_placement=single_player,
-                             allow_nonprogression_filled_locations=True)n
+                             allow_nonprogression_filled_locations=True)
             if progitempool:
                 for item in progitempool:
                     logging.debug(f"Moved {item} to start_inventory to prevent fill failure.")
