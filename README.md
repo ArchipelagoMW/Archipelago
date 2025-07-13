@@ -14,7 +14,6 @@ Currently, the following games are supported:
 * Super Metroid
 * Secret of Evermore
 * Final Fantasy
-* Rogue Legacy
 * VVVVVV
 * Raft
 * Super Mario 64
@@ -41,7 +40,6 @@ Currently, the following games are supported:
 * The Messenger
 * Kingdom Hearts 2
 * The Legend of Zelda: Link's Awakening DX
-* Clique
 * Adventure
 * DLC Quest
 * Noita
