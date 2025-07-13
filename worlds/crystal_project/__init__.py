@@ -86,9 +86,6 @@ class CrystalProjectWorld(World):
 
     removed_locations = get_removed_locations(mod_info)
 
-    for removed_location in removed_locations:
-        del location_name_to_id[removed_location.name]
-
     web = CrystalProjectWeb()
 
     # This is how we tell the Universal Tracker we want to use re_gen_passthrough
@@ -203,6 +200,12 @@ class CrystalProjectWorld(World):
                                         modded_location.code,
                                         build_condition_rule(modded_location.rule_condition, self))
                 locations.append(location)
+
+        if self.options.useMods:
+            for removed_location in self.removed_locations:
+                for location in locations:
+                    if location.name == removed_location.name:
+                        locations.remove(location)
 
         init_areas(self, locations, self.options)
 
