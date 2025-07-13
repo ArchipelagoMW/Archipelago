@@ -183,10 +183,6 @@ class NO100FContainer(APPlayerContainer, metaclass=AutoPatchRegister):
         return True
 
 
-def get_filler_item_name(self) -> str:
-    return self.random.choice("Scooby Snack", "Scooby Snack Box")
-
-
 def get_base_rom_path(file_name: str = "") -> str:
     if not file_name:
         file_name = "Scooby-Doo! Night of 100 Frights.iso"
@@ -290,6 +286,9 @@ class NightOf100FrightsWorld(World):
 
     def create_items(self):
         self.multiworld.itempool += self.get_items()
+
+    def get_filler_item_name(self) -> str:
+        return self.random.choice(["Scooby Snack", "Scooby Snack Box"])
 
     def set_rules(self):
         create_events(self.multiworld, self.player)
