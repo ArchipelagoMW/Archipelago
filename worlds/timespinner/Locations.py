@@ -387,7 +387,6 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers (Right): Base Lantern 1', 1337495, logic.can_break_lanterns),
             LocationData('Varndagroth tower right (lower)', 'Varndagroth Towers (Right): Base Lantern 2', 1337496, logic.can_break_lanterns),
 
-
             LocationData('Forest', 'Forest: Rats Lantern', 1337498, logic.can_break_lanterns),
             LocationData('Forest', 'Forest: Ramparts Bridge Lantern 1', 1337499, logic.can_break_lanterns),
             LocationData('Forest', 'Forest: Ramparts Bridge Lantern 2', 1337500, logic.can_break_lanterns),
@@ -397,6 +396,24 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Left Side forest Caves', 'Forest: Lantern Past Signpost', 1337497, logic.can_break_lanterns),
             LocationData('Left Side forest Caves', 'Forest: Lantern After Broken Bridge', 1337504, logic.can_break_lanterns),
             LocationData('Left Side forest Caves', 'Forest: Left Caves Lantern', 1337505, logic.can_break_lanterns),
+
+            LocationData('Military Fortress', 'Military Fortress: Entrance Lantern 1', 1337260, logic.can_break_lanterns),
+            LocationData('Military Fortress', 'Military Fortress: Entrance Lantern 2', 1337261, logic.can_break_lanterns),
+            LocationData('Military Fortress', 'Military Fortress: Bombing Room Lower Lantern 1', 1337264, logic.can_break_lanterns),
+            LocationData('Military Fortress', 'Military Fortress: Bombing Room Lower Lantern 2', 1337266, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Bombing Room Upper Lantern 1', 1337263, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Bombing Room Upper Lantern 2', 1337265, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Left Bridge Lantern 1', 1337267, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Left Bridge Lantern 2', 1337268, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Left Bridge Lantern 3', 1337269, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Middle Room Lantern 1', 1337270, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Middle Room Lantern 2', 1337271, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Right Bridge Lantern 1', 1337274, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Right Bridge Lantern 2', 1337275, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Right Bridge Lantern 3', 1337276, logic.can_break_lanterns),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Spike Room Lantern 1', 1337262, lambda state: logic.can_break_lanterns(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Spike Room Lantern 2', 1337272, lambda state: logic.can_break_lanterns(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
+            LocationData('Military Fortress (hangar)', 'Military Fortress: Pedestal Lantern', 1337273, lambda state: logic.can_break_lanterns(state) and (state.has('Water Mask', player) if flooded.flood_lab else (logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state)))),
 
             LocationData('Lab Entrance', 'Lab: Intro Hallway Lantern', 1337294, logic.can_break_lanterns),
             LocationData('Main Lab', 'Lab: Coffee Lantern 1', 1337305, logic.can_break_lanterns),
