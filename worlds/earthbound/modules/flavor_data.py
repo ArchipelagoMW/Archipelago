@@ -52,8 +52,8 @@ random_flavors = [
     "Bubblegum flavor",
     "Orange flavor",
     "Toilet flavor",
-    "Lemonade",
-    "Garlic"
+    "Lemonade flavor",
+    "Garlic flavor"
 ]
 
 
