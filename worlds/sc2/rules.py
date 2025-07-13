@@ -776,6 +776,20 @@ class SC2Logic:
             or state.has_all((item_names.SWARM_QUEEN_DEEP_TUNNEL, item_names.OVERLORD_OVERSEER_ASPECT), self.player)  # Deep tunnel to a creep tumor
         )
 
+    def zerg_has_infested_scv(self, state: CollectionState) -> bool:
+        return (
+            state.has_any((
+                item_names.INFESTED_MARINE,
+                item_names.INFESTED_BUNKER,
+                item_names.INFESTED_DIAMONDBACK,
+                item_names.INFESTED_SIEGE_TANK,
+                item_names.INFESTED_BANSHEE,
+                item_names.BULLFROG,
+                item_names.INFESTED_LIBERATOR,
+                item_names.INFESTED_MISSILE_TURRET,
+            ), self.player)
+        )
+
     def zerg_very_hard_mission_weapon_armor_level(self, state: CollectionState) -> bool:
         return self.zerg_army_weapon_armor_upgrade_min_level(state) >= self.get_very_hard_required_upgrade_level()
 
@@ -2102,6 +2116,7 @@ class SC2Logic:
             or not self.zergling_hydra_roach_start(state)
             or not self.zerg_common_unit(state)
             or not self.zerg_competent_anti_air(state)
+            or not self.zerg_repair_odin(state)
         ):
             return False
         if power_rating >= 7 and self.zerg_competent_comp(state):
@@ -2118,8 +2133,9 @@ class SC2Logic:
 
     def zerg_repair_odin(self, state: CollectionState):
         return (
-                state.has_all({item_names.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION, item_names.SWARM_QUEEN}, self.player)
-                or (self.advanced_tactics and state.has(item_names.SWARM_QUEEN, self.player))
+            self.zerg_has_infested_scv(state)
+            or state.has_all({item_names.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION, item_names.SWARM_QUEEN}, self.player)
+            or (self.advanced_tactics and state.has(item_names.SWARM_QUEEN, self.player))
         )
 
     def protoss_repair_odin(self, state: CollectionState):
@@ -2131,7 +2147,7 @@ class SC2Logic:
                 in [SpearOfAdunPassiveAbilityPresence.option_protoss, SpearOfAdunPassiveAbilityPresence.option_everywhere]
                 and state.has(item_names.RECONSTRUCTION_BEAM, self.player)
             )
-            or (self.advanced_tactics and state.has(item_names.SHIELD_BATTERY, self.player))
+            or (self.advanced_tactics and state.has_all({item_names.SHIELD_BATTERY, item_names.KHALAI_INGENUITY}, self.player))
         )
 
     def terran_in_utter_darkness_requirement(self, state: CollectionState) -> bool:
