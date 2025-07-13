@@ -133,10 +133,8 @@ FREESTANDING_KEY_TABLE = {
         update_ram_addr=[LMRamData(0x803D33A6, bit_position=6, in_game_room_id=21)]),
 }
 
-BASE_LOCATION_TABLE = {**BASE_LOCATION_TABLE, **FREESTANDING_KEY_TABLE}
-
 # Adds all the chests that are spawned after clearing a room of ghosts.
-CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
+CLEAR_GHOST_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Butler Clear Chest": LMLocationData("Butler's Room", 8, "Chest", 0, ["Fire Element Medal", "Shivers Spawn"],
         update_ram_addr=[LMRamData(0x803CDF50, bit_position=2, in_game_room_id=0, ram_byte_size=2)]),
     "Guest Room Clear Chest": LMLocationData("Guest Room", 46, "Chest", 17, ["Water Element Medal"],
@@ -178,6 +176,8 @@ CLEAR_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Pipe Room Clear Chest": LMLocationData("Pipe Room", 64, "Chest", 35, ["Ice Element Medal"],
         update_ram_addr=[LMRamData(0x803CDFD4, bit_position=2, in_game_room_id=68, ram_byte_size=2)]),
 }
+
+CLEAR_LOCATION_TABLE = {**CLEAR_GHOST_LOCATION_TABLE, **FREESTANDING_KEY_TABLE}
 
 # Ghost Affected Clear Chests. Rules applied to region entrances
 ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {

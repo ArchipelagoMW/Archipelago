@@ -299,13 +299,13 @@ RECV_ITEMS_IGNORE: list[int] = [8127]
 # List of health related items, which are used to not exceed max health
 HEALTH_RELATED_ITEMS: list[int] = [8128, 8129]
 
-ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap"]
+ICE_TRAP_EQUIV = ["Freeze Trap", "Frozen Trap", "Ice Trap", "Paralyze Trap", "Chaos Control Trap"]
 BOMB_EQUIV = ["TNT Barrel Trap", "Bomb", "Fire Trap"]
 BANANA_TRAP_EQUIV = ["Stun Trap", "Banana Trap", "Thwimp Trap", "Hiccup Trap", "Push Trap"]
 GHOST_EQUIV = ["OmoTrap", "Ghost", "Bee Trap", "Police Trap", "Nut Trap", "Army Trap"]
-POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom"]
-BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap"]
-POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap"]
+POISON_MUSH_EQUIV = [ "Tiny Trap", "Poison Mushroom", "Iron Boots Trap"]
+BONK_EQUIV = ["Spring Trap", "Damage Trap", "Bonk Trap", "Jumping Jacks Trap"]
+POSSESION_EQUIV = ["Poison Trap", "Possession Trap", "Laughter Trap", "My Turn! Trap"]
 
 trap_id_list = [8125, 8126, 8130, 8131, 8132, 8141, 8142]
 ACCEPTED_TRAPS = ICE_TRAP_EQUIV+BOMB_EQUIV+BANANA_TRAP_EQUIV+GHOST_EQUIV+POISON_MUSH_EQUIV+BONK_EQUIV+POSSESION_EQUIV
