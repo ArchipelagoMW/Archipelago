@@ -1,5 +1,8 @@
 from ..bases import SVTestBase
+from ..options.presets import allsanity_mods_7_x_x
+from ... import locations_by_tag
 from ...data.hats_data import Hats
+from ...locations import LocationTags
 from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity, Eatsanity, Cooksanity, Fishsanity, Craftsanity
 
 
@@ -66,4 +69,16 @@ class TestNoHatsLogic(SVTestBase):
         self.assertTrue("Cone Hat" in item_pool)
         self.assertTrue("Mummy Mask" in item_pool)
 
+
+class TestHatLocations(SVTestBase):
+    options = allsanity_mods_7_x_x()
+
+    def test_all_hat_locations_are_added(self):
+        location_names = [location.name for location in self.multiworld.get_locations()]
+        for hat_location in locations_by_tag[LocationTags.HATSANITY]:
+            with self.subTest(hat_location.name):
+                if hat_location.name == "Wear Panda Hat":
+                    self.assertNotIn(hat_location.name, location_names, "The Panda Hat cannot be obtained on the standard edition of the game")
+                else:
+                    self.assertIn(hat_location.name, location_names)
 

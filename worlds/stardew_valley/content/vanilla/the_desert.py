@@ -64,6 +64,8 @@ the_desert = ContentPack(
                                                               RegionRequirement(Region.skull_cavern_100), RegionRequirement(LogicRegion.desert_festival),)),),
         Hats.abigails_bow: (Tag(ItemTag.HAT), ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
                                                               other_requirements=(MeetRequirement(NPC.abigail),)),),
+        Hats.tricorn: (Tag(ItemTag.HAT), ShopSource(price=100, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival,
+                                                              other_requirements=(MeetRequirement(NPC.elliott),)),),
         Hats.blue_bow: (Tag(ItemTag.HAT), ShopSource(price=60, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
         Hats.dark_velvet_bow: (Tag(ItemTag.HAT), ShopSource(price=75, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
         Hats.mummy_mask: (Tag(ItemTag.HAT), ShopSource(price=120, currency=Currency.calico_egg, shop_region=LogicRegion.desert_festival),),
