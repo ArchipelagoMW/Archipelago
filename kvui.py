@@ -921,9 +921,11 @@ class GameManager(ThemedApp):
         hint_panel = self.add_client_tab("Hints", HintLayout(self.hint_log))
         self.log_panels["Hints"] = hint_panel.content
 
-        self.main_area_container = MDGridLayout(size_hint_y=1, cols=1)
-        self.main_area_container.add_widget(self.tabs)
-        self.main_area_container.add_widget(self.screens)
+        self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
+        tab_container = MDGridLayout(size_hint_y=1, cols=1)
+        tab_container.add_widget(self.tabs)
+        tab_container.add_widget(self.screens)
+        self.main_area_container.add_widget(tab_container)
 
         self.grid.add_widget(self.main_area_container)
 
