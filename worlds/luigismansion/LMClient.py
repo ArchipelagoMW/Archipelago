@@ -804,10 +804,13 @@ def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
 
     if output_data:
         lm_usa_patch = LMUSAAPPatch()
-        lm_usa_manifest = lm_usa_patch.read_contents(output_data)
-        server_address = lm_usa_manifest["server"]
-        asyncio.run(lm_usa_patch.patch(output_data))
-
+        try:
+            lm_usa_manifest = lm_usa_patch.read_contents(output_data)
+            server_address = lm_usa_manifest["server"]
+            asyncio.run(lm_usa_patch.patch(output_data))
+        except Exception as ex:
+            Utils.messagebox("Luigi's Patch Error", "Unable to patch your Luigi's Mansion ROM as expected. " +
+                "Additional details:\n" + str(ex), True)
     async def _main(connect, password):
         ctx = LMContext(server_address if server_address else connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
