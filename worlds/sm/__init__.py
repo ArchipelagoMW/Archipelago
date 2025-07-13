@@ -17,7 +17,7 @@ logger = logging.getLogger("Super Metroid")
 
 from .Options import SMOptions
 from .Client import SMSNIClient
-from .Rom import get_base_rom_path, SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMDeltaPatch, get_sm_symbols
+from .Rom import SM_ROM_MAX_PLAYERID, SM_ROM_PLAYERDATA_COUNT, SMProcedurePatch, get_sm_symbols
 import Utils
 
 from .variaRandomizer.logic.smboolmanager import SMBoolManager
@@ -40,7 +40,7 @@ class SMSettings(settings.Group):
         """File name of the v1.0 J rom"""
         description = "Super Metroid (JU) ROM"
         copy_to = "Super Metroid (JU).sfc"
-        md5s = [SMDeltaPatch.hash]
+        md5s = [SMProcedurePatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -120,17 +120,11 @@ class SMWorld(World):
         self.locations = {}
         super().__init__(world, player)
 
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
-
     def generate_early(self):
         Logic.factory('vanilla')
 
         dummy_rom_file = Utils.user_path(SMSettings.RomFile.copy_to)  # actual rom set in generate_output
-        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player)
+        self.variaRando = VariaRandomizer(self.options, dummy_rom_file, self.player, self.multiworld.seed, self.random)
         self.multiworld.state.smbm[self.player] = SMBoolManager(self.player, self.variaRando.maxDifficulty)
 
         # keeps Nothing items local so no player will ever pickup Nothing
@@ -320,11 +314,11 @@ class SMWorld(World):
         raise KeyError(f"Item {name} for {self.player_name} is invalid.")
 
     def get_filler_item_name(self) -> str:
-        if self.multiworld.random.randint(0, 100) < self.options.minor_qty.value:
+        if self.random.randint(0, 100) < self.options.minor_qty.value:
             power_bombs = self.options.power_bomb_qty.value
             missiles = self.options.missile_qty.value
             super_missiles = self.options.super_qty.value
-            roll = self.multiworld.random.randint(1, power_bombs + missiles + super_missiles)
+            roll = self.random.randint(1, power_bombs + missiles + super_missiles)
             if roll <= power_bombs:
                 return "Power Bomb"
             elif roll <= power_bombs + missiles:
@@ -346,8 +340,8 @@ class SMWorld(World):
                     else:
                         nonChozoLoc.append(loc)
 
-            self.multiworld.random.shuffle(nonChozoLoc)
-            self.multiworld.random.shuffle(chozoLoc)
+            self.random.shuffle(nonChozoLoc)
+            self.random.shuffle(chozoLoc)
             missingCount = len(self.NothingPool) - len(nonChozoLoc)
             locations = nonChozoLoc
             if (missingCount > 0):
@@ -802,23 +796,19 @@ class SMWorld(World):
         romPatcher.end()
 
     def generate_output(self, output_directory: str):
-        self.variaRando.args.rom = get_base_rom_path()
-        outfilebase = self.multiworld.get_out_file_name_base(self.player)
-        outputFilename = os.path.join(output_directory, f"{outfilebase}.sfc")
-
         try:
-            self.variaRando.PatchRom(outputFilename, self.APPrePatchRom, self.APPostPatchRom)
-            self.write_crc(outputFilename)
+            patcher = self.variaRando.PatchRom(self.APPrePatchRom, self.APPostPatchRom)
             self.rom_name = self.romName
+
+            patch = SMProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+            patch.write_tokens(patcher.romFile.getPatchDict())
+            rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                      f"{patch.patch_file_ending}")
+            patch.write(rom_path)
+            
         except:
             raise
-        else:
-            patch = SMDeltaPatch(os.path.splitext(outputFilename)[0] + SMDeltaPatch.patch_file_ending, player=self.player,
-                                 player_name=self.multiworld.player_name[self.player], patched_path=outputFilename)
-            patch.write()
         finally:
-            if os.path.exists(outputFilename):
-                os.unlink(outputFilename)
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
 
     def checksum_mirror_sum(self, start, length, mask = 0x800000):

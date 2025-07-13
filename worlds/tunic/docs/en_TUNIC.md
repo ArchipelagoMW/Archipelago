@@ -83,11 +83,13 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops you can plando.
+- You can plando up to 500 additional shops in Decoupled. You should not do this.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
 
 ## Is there anything else I should know?
-You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
-You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
-You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- You can go to [The TUNIC Randomizer Website](https://rando.tunic.run/) for a list of randomizer features as well as some helpful tips.
+- You can use the Fairy Seeking Spell (ULU RDR) to locate the nearest unchecked location.
+- You can use the Entrance Seeking Spell (RDR ULU) to locate the nearest unused entrance.
+- Death Link can be toggled in game, and it can be set to receive traps instead of deaths.
+- Trap Link can be toggled in-game as well, which makes it so other players with Trap Link enabled will share the effects of traps with you, and vice versa. Trap Link functions cross-game, but only with other games that have Trap Link implemented, and only some traps can be shared, depending on the game.

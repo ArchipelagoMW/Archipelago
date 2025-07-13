@@ -1,12 +1,13 @@
 from typing import Dict, FrozenSet, Tuple, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
+from BaseClasses import Region, CollectionState
 from .options import IceGrappling, LadderStorage, CombatLogic
 from .rules import (has_ability, has_sword, has_melee, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage,
                     laurels_zip, bomb_walls)
 from .er_data import Portal, get_portal_outlet_region
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
 from .combat_logic import has_combat_reqs
-from BaseClasses import Region, CollectionState
+from .grass import set_grass_location_rules
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -55,18 +56,18 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal1.name, get_portal_outlet_region(portal2, world)
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not (options.decoupled and options.entrance_rando):
                 return portal2.name, get_portal_outlet_region(portal1, world)
-        raise Exception("No matches found in get_portal_info")
+        raise Exception(f"No matches found in get_portal_info for {portal_sd}")
 
     # input scene destination tag, returns paired portal's name and region
     def get_paired_portal(portal_sd: str) -> Tuple[str, str]:
         for portal1, portal2 in portal_pairs.items():
             if portal1.scene_destination() == portal_sd:
                 return portal2.name, portal2.region
-            if portal2.scene_destination() == portal_sd:
+            if portal2.scene_destination() == portal_sd and not (options.decoupled and options.entrance_rando):
                 return portal1.name, portal1.region
-        raise Exception("no matches found in get_paired_portal")
+        raise Exception(f"No matches found in get_paired_portal for {portal_sd}")
 
     regions["Menu"].connect(
         connecting_region=regions["Overworld"])
@@ -380,9 +381,11 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Tunnel Turret"].connect(
-        connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({grapple, laurels}, player))
+
+    # always have access to Overworld, so connecting back isn't needed
+    # regions["Overworld Tunnel Turret"].connect(
+    #     connecting_region=regions["Overworld"],
+    #     rule=lambda state: state.has_any({grapple, laurels}, player))
 
     cube_entrance = regions["Overworld"].connect(
         connecting_region=regions["Cube Cave Entrance Region"],
@@ -555,7 +558,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Entry Point"])
 
-    # ice grapple through the wall, get the little secret sound to trigger
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
         rule=lambda state: has_ladder("Ladder in Dark Tomb", state, world)
@@ -577,10 +579,23 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     wg_after_to_before_terry = regions["West Garden after Terry"].connect(
         connecting_region=regions["West Garden before Terry"])
 
-    regions["West Garden after Terry"].connect(
-        connecting_region=regions["West Garden South Checkpoint"])
-    wg_checkpoint_to_after_terry = regions["West Garden South Checkpoint"].connect(
+    wg_after_terry_to_west_combat = regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden West Combat"])
+    regions["West Garden West Combat"].connect(
         connecting_region=regions["West Garden after Terry"])
+
+    wg_checkpoint_to_west_combat = regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden West Combat"])
+    regions["West Garden West Combat"].connect(
+        connecting_region=regions["West Garden South Checkpoint"])
+
+    # if not laurels, it goes through the west combat region instead
+    regions["West Garden after Terry"].connect(
+        connecting_region=regions["West Garden South Checkpoint"],
+        rule=lambda state: state.has(laurels, player))
+    regions["West Garden South Checkpoint"].connect(
+        connecting_region=regions["West Garden after Terry"],
+        rule=lambda state: state.has(laurels, player))
 
     wg_checkpoint_to_dagger = regions["West Garden South Checkpoint"].connect(
         connecting_region=regions["West Garden at Dagger House"])
@@ -676,7 +691,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     atoll_statue = regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(prayer, state, world)
-        and (has_ladder("Ladders in South Atoll", state, world)
+        and ((has_ladder("Ladders in South Atoll", state, world)
+              and state.has_any((laurels, grapple), player)
+              and (has_sword(state, player) or state.has_any((fire_wand, gun), player)))
              # shoot fuse and have the shot hit you mid-LS
              or (can_ladder_storage(state, world) and state.has(fire_wand, player)
                  and options.ladder_storage >= LadderStorage.option_hard)))
@@ -842,16 +859,21 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
 
-    btv_front_to_main = regions["Beneath the Vault Ladder Exit"].connect(
+    regions["Beneath the Vault Ladder Exit"].connect(
+        connecting_region=regions["Beneath the Vault Entry Spot"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+    regions["Beneath the Vault Entry Spot"].connect(
+        connecting_region=regions["Beneath the Vault Ladder Exit"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+
+    btv_front_to_main = regions["Beneath the Vault Entry Spot"].connect(
         connecting_region=regions["Beneath the Vault Main"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world)
-        and has_lantern(state, world)
+        rule=lambda state: has_lantern(state, world)
         # there's some boxes in the way
         and (has_melee(state, player) or state.has_any((gun, grapple, fire_wand, laurels), player)))
     # on the reverse trip, you can lure an enemy over to break the boxes if needed
     regions["Beneath the Vault Main"].connect(
-        connecting_region=regions["Beneath the Vault Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, world))
+        connecting_region=regions["Beneath the Vault Entry Spot"])
 
     regions["Beneath the Vault Main"].connect(
         connecting_region=regions["Beneath the Vault Back"])
@@ -977,7 +999,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         rule=lambda state: has_ice_grapple_logic(True, IceGrappling.option_hard, state, world))
 
     monastery_front_to_back = regions["Monastery Front"].connect(
-        connecting_region=regions["Monastery Back"])
+        connecting_region=regions["Monastery Back"],
+        rule=lambda state: has_sword(state, player) or state.has(fire_wand, player)
+        or laurels_zip(state, world))
     # laurels through the gate, no setup needed
     regions["Monastery Back"].connect(
         connecting_region=regions["Monastery Front"],
@@ -1031,11 +1055,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
-    # zig skip region only gets made if entrance rando and fewer shops are on
-    if options.entrance_rando and options.fixed_shop:
-        regions["Zig Skip Exit"].connect(
-            connecting_region=regions["Rooted Ziggurat Lower Front"])
-
     regions["Rooted Ziggurat Portal"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room"])
     regions["Rooted Ziggurat Portal Room"].connect(
@@ -1063,6 +1082,7 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
     swamp_mid_to_cath = regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
         rule=lambda state: (has_ability(prayer, state, world)
+                            and (has_sword(state, player))
                             and (state.has(laurels, player)
                                  # blam yourself in the face with a wand shot off the fuse
                                  or (can_ladder_storage(state, world) and state.has(fire_wand, player)
@@ -1203,14 +1223,6 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
                              and has_sword(state, player))))
 
     if options.ladder_storage:
-        def get_portal_info(portal_sd: str) -> Tuple[str, str]:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene_destination() == portal_sd:
-                    return portal1.name, get_portal_outlet_region(portal2, world)
-                if portal2.scene_destination() == portal_sd:
-                    return portal2.name, get_portal_outlet_region(portal1, world)
-            raise Exception("no matches found in get_paired_region")
-
         # connect ls elevation regions to their destinations
         def ls_connect(origin_name: str, portal_sdt: str) -> None:
             p_name, paired_region_name = get_portal_info(portal_sdt)
@@ -1373,9 +1385,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         # need to fight through the rudelings and turret, or just laurels from near the windmill
         set_rule(ow_to_well_entry,
                  lambda state: state.has(laurels, player)
-                 or has_combat_reqs("East Forest", state, player))
+                 or has_combat_reqs("Before Well", state, player))
         set_rule(ow_tunnel_beach,
-                 lambda state: has_combat_reqs("East Forest", state, player))
+                 lambda state: has_combat_reqs("Before Well", state, player))
 
         add_rule(atoll_statue,
                  lambda state: has_combat_reqs("Ruined Atoll", state, player))
@@ -1402,11 +1414,15 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(wg_after_to_before_terry,
                  lambda state: state.has_any({laurels, ice_dagger}, player)
                  or has_combat_reqs("West Garden", state, player))
-        # laurels through, probably to the checkpoint, or just fight
-        set_rule(wg_checkpoint_to_after_terry,
-                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
-        set_rule(wg_checkpoint_to_before_boss,
+
+        set_rule(wg_after_terry_to_west_combat,
                  lambda state: has_combat_reqs("West Garden", state, player))
+        set_rule(wg_checkpoint_to_west_combat,
+                 lambda state: has_combat_reqs("West Garden", state, player))
+
+        # maybe a little too generous? probably fine though
+        set_rule(wg_checkpoint_to_before_boss,
+                 lambda state: state.has(laurels, player) or has_combat_reqs("West Garden", state, player))
 
         add_rule(btv_front_to_main,
                  lambda state: has_combat_reqs("Beneath the Vault", state, player))
@@ -1450,12 +1466,12 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
         set_rule(cath_entry_to_elev,
                  lambda state: options.entrance_rando
                  or has_ice_grapple_logic(False, IceGrappling.option_medium, state, world)
-                 or (has_ability(prayer, state, world) and has_combat_reqs("Cathedral", state, player)))
+                 or (has_ability(prayer, state, world) and has_combat_reqs("Swamp", state, player)))
 
         set_rule(cath_entry_to_main,
-                 lambda state: has_combat_reqs("Cathedral", state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
         set_rule(cath_elev_to_main,
-                 lambda state: has_combat_reqs("Cathedral", state, player))
+                 lambda state: has_combat_reqs("Swamp", state, player))
 
         # for spots where you can go into and come out of an entrance to reset enemy aggro
         if world.options.entrance_rando:
@@ -1527,6 +1543,9 @@ def set_er_region_rules(world: "TunicWorld", regions: Dict[str, Region], portal_
 
 def set_er_location_rules(world: "TunicWorld") -> None:
     player = world.player
+
+    if world.options.grass_randomizer:
+        set_grass_location_rules(world)
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 
@@ -1675,7 +1694,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
     # Beneath the Vault
     set_rule(world.get_location("Beneath the Fortress - Bridge"),
-             lambda state: has_melee(state, player) or state.has_any({laurels, fire_wand}, player))
+             lambda state: has_lantern(state, world) and
+                           (has_melee(state, player) or state.has_any((laurels, fire_wand, ice_dagger, gun), player)))
 
     # Quarry
     set_rule(world.get_location("Quarry - [Central] Above Ladder Dash Chest"),
@@ -1812,13 +1832,13 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if world.options.combat_logic == CombatLogic.option_on:
         combat_logic_to_loc("Overworld - [Northeast] Flowers Holy Cross", "Garden Knight")
         combat_logic_to_loc("Overworld - [Northwest] Chest Near Quarry Gate", "Before Well", dagger=True)
-        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "Garden Knight", dagger=True)
+        combat_logic_to_loc("Overworld - [Northeast] Chest Above Patrol Cave", "West Garden", dagger=True)
         combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret", "Overworld", dagger=True)
         combat_logic_to_loc("Overworld - [Southwest] West Beach Guarded By Turret 2", "Overworld")
-        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "East Forest", dagger=True)
-        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "East Forest", dagger=True)
-        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "East Forest", dagger=True)
-        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "East Forest", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Bombable Wall Near Fountain", "Before Well", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Fountain Holy Cross", "Before Well", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] South Chest Near Guard", "Before Well", dagger=True)
+        combat_logic_to_loc("Overworld - [Southwest] Tunnel Guarded By Turret", "Before Well", dagger=True)
         combat_logic_to_loc("Overworld - [Northwest] Chest Near Turret", "Before Well")
 
         add_rule(world.get_location("Hourglass Cave - Hourglass Chest"),
@@ -1852,11 +1872,8 @@ def set_er_location_rules(world: "TunicWorld") -> None:
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Faeries", "West Garden")
         combat_logic_to_loc("West Garden - [Central Lowlands] Chest Beneath Save Point", "West Garden")
         combat_logic_to_loc("West Garden - [West Highlands] Upper Left Walkway", "West Garden")
-
-        # with combat logic on, I presume the player will want to be able to see to avoid the spiders
-        set_rule(world.get_location("Beneath the Fortress - Bridge"),
-                 lambda state: has_lantern(state, world)
-                 and (state.has_any({laurels, fire_wand, "Gun"}, player) or has_melee(state, player)))
+        combat_logic_to_loc("West Garden - [Central Highlands] Holy Cross (Blue Lines)", "West Garden")
+        combat_logic_to_loc("West Garden - [Central Highlands] Behind Guard Captain", "West Garden")
 
         combat_logic_to_loc("Eastern Vault Fortress - [West Wing] Candles Holy Cross", "Eastern Vault Fortress",
                             dagger=True)
@@ -1905,4 +1922,4 @@ def set_er_location_rules(world: "TunicWorld") -> None:
 
         # zip through the rubble to sneakily grab this chest, or just fight to it
         add_rule(world.get_location("Cathedral - [1F] Near Spikes"),
-                 lambda state: laurels_zip(state, world) or has_combat_reqs("Cathedral", state, player))
+                 lambda state: laurels_zip(state, world) or has_combat_reqs("Swamp", state, player))

@@ -6,7 +6,7 @@ id,name,classification,groups,mod_name
 18,Greenhouse,progression,COMMUNITY_REWARD,
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,
 20,Minecarts Repair,useful,COMMUNITY_REWARD,
-21,Bus Repair,progression,COMMUNITY_REWARD,
+21,Bus Repair,progression,"COMMUNITY_REWARD,DESERT_TRANSPORTATION",
 22,Progressive Movie Theater,"progression,trap",COMMUNITY_REWARD,
 23,Stardrop,progression,,
 24,Progressive Backpack,progression,,
@@ -63,8 +63,8 @@ id,name,classification,groups,mod_name
 77,Combat Level,progression,SKILL_LEVEL_UP,
 78,Earth Obelisk,progression,WIZARD_BUILDING,
 79,Water Obelisk,progression,WIZARD_BUILDING,
-80,Desert Obelisk,progression,WIZARD_BUILDING,
-81,Island Obelisk,progression,"WIZARD_BUILDING,GINGER_ISLAND",
+80,Desert Obelisk,progression,"WIZARD_BUILDING,DESERT_TRANSPORTATION",
+81,Island Obelisk,progression,"WIZARD_BUILDING,GINGER_ISLAND,ISLAND_TRANSPORTATION",
 82,Junimo Hut,useful,WIZARD_BUILDING,
 83,Gold Clock,progression,WIZARD_BUILDING,
 84,Progressive Coop,progression,BUILDING,
@@ -242,7 +242,7 @@ id,name,classification,groups,mod_name
 257,Peach Sapling,progression,"RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 258,Banana Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
 259,Mango Sapling,progression,"GINGER_ISLAND,RESOURCE_PACK,RESOURCE_PACK_USEFUL,CROPSANITY",
-260,Boat Repair,progression,GINGER_ISLAND,
+260,Boat Repair,progression,"GINGER_ISLAND,ISLAND_TRANSPORTATION",
 261,Open Professor Snail Cave,progression,GINGER_ISLAND,
 262,Island North Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
 263,Island West Turtle,progression,"GINGER_ISLAND,WALNUT_PURCHASE",
@@ -509,6 +509,7 @@ id,name,classification,groups,mod_name
 561,Fishing Bar Size Bonus,filler,PLAYER_BUFF,
 562,Quality Bonus,filler,PLAYER_BUFF,
 563,Glow Bonus,filler,PLAYER_BUFF,
+564,Pet Bowl,progression,BUILDING,
 4001,Burnt Trap,trap,TRAP,
 4002,Darkness Trap,trap,TRAP,
 4003,Frozen Trap,trap,TRAP,
@@ -747,7 +748,7 @@ id,name,classification,groups,mod_name
 5208,Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5209,Stone Chest,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5210,Quality Bobber,filler,RESOURCE_PACK,
-5211,Mini-Obelisk,filler,"EXACTLY_TWO,RESOURCE_PACK",
+5211,Mini-Obelisk,filler,"AT_LEAST_TWO,RESOURCE_PACK",
 5212,Monster Musk,filler,RESOURCE_PACK,
 5213,Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5214,Quality Sprinkler,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -759,7 +760,7 @@ id,name,classification,groups,mod_name
 5220,Lightning Rod,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5221,Resource Pack: 5000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5222,Resource Pack: 10000 Money,useful,"BASE_RESOURCE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
-5223,Junimo Chest,filler,"EXACTLY_TWO,RESOURCE_PACK",
+5223,Junimo Chest,filler,"AT_LEAST_TWO,RESOURCE_PACK",
 5224,Horse Flute,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5225,Pierre's Missing Stocklist,useful,"MAXIMUM_ONE,RESOURCE_PACK,RESOURCE_PACK_USEFUL",
 5226,Hopper,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",
@@ -928,6 +929,7 @@ id,name,classification,groups,mod_name
 10518,Aurora Vineyard Tablet,progression,,Stardew Valley Expanded
 10519,Scarlett's Job Offer,progression,,Stardew Valley Expanded
 10520,Morgan's Schooling,progression,,Stardew Valley Expanded
+10521,Aurora Vineyard Reclamation,progression,,Stardew Valley Expanded
 10601,Magic Elixir Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 10602,Travel Core Recipe,progression,CRAFTSANITY,Magic
 10603,Haste Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
