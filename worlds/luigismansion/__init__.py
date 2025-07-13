@@ -31,7 +31,6 @@ from .iso_helper.lm_rom import LMPlayerContainer
 CLIENT_VERSION = "0.4.10"
 
 def run_client(*args):
-    print("Starting LM Client v" + CLIENT_VERSION)
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
 
