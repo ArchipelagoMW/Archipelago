@@ -36,8 +36,8 @@ class LMPlayerContainer(APPlayerContainer):
     compression_method = zipfile.ZIP_DEFLATED
     patch_file_ending = ".aplm"
 
-    def __init__(self, player_choices: dict, patch_path: str, base_path:str, player_name: str, server: str,
-            player: int):
+    def __init__(self, player_choices: dict, patch_path: str, base_path:str, player_name: str, player: int,
+        server: str = ""):
         self.output_data = player_choices
         self.file_path = base_path
         super().__init__(patch_path, player, player_name, server)
