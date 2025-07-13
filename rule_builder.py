@@ -343,9 +343,11 @@ class RuleWorldMixin(World):
                 player_results.pop(rule_id, None)
 
 
+TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
+
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
 
-OPERATORS = {
+OPERATORS: dict[Operator, Callable[..., bool]] = {
     "eq": operator.eq,
     "ne": operator.ne,
     "gt": operator.gt,
@@ -354,7 +356,7 @@ OPERATORS = {
     "le": operator.le,
     "contains": operator.contains,
 }
-operator_strings = {
+operator_strings: dict[Operator, str] = {
     "eq": "==",
     "ne": "!=",
     "gt": ">",
@@ -364,7 +366,6 @@ operator_strings = {
 }
 
 T = TypeVar("T")
-TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
 
 
 @dataclasses.dataclass(frozen=True)
@@ -380,6 +381,20 @@ class OptionFilter(Generic[T]):
             "value": self.value,
             "operator": self.operator,
         }
+
+    def check(self, options: "CommonOptions") -> bool:
+        """Tests the given options dataclass to see if it passes this option filter"""
+        option_name = next(
+            (name for name, cls in options.__class__.type_hints.items() if cls is self.option),
+            None,
+        )
+        if option_name is None:
+            raise ValueError(f"Cannot find option {self.option.__name__} in options class {options.__class__.__name__}")
+        opt = cast("Option[Any] | None", getattr(options, option_name, None))
+        if opt is None:
+            raise ValueError(f"Invalid option: {option_name}")
+
+        return OPERATORS[self.operator](opt.value, self.value)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
@@ -475,32 +490,15 @@ class Rule(Generic[TWorld]):
         if not isinstance(self.options, tuple):
             self.options = tuple(self.options)
 
-    def _passes_options(self, options: "CommonOptions") -> bool:
-        """Tests if the given world options pass the requirements for this rule"""
-        for option_filter in self.options:
-            option_name = next(
-                (name for name, cls in options.__class__.type_hints.items() if cls is option_filter.option),
-                None,
-            )
-            if option_name is None:
-                raise ValueError(f"Cannot find option: {option_filter.option.__name__}")
-            opt = cast("Option[Any] | None", getattr(options, option_name, None))
-            if opt is None:
-                raise ValueError(f"Invalid option: {option_name}")
-
-            if not OPERATORS[option_filter.operator](opt.value, option_filter.value):
-                return False
-
-        return True
-
     def _instantiate(self, world: "TWorld") -> "Resolved":
         """Create a new resolved rule for this world"""
         return self.Resolved(player=world.player)
 
     def resolve(self, world: "TWorld") -> "Resolved":
         """Resolve a rule with the given world"""
-        if not self._passes_options(world.options):
-            return world.false_rule
+        for option_filter in self.options:
+            if not option_filter.check(world.options):
+                return world.false_rule
         return self._instantiate(world)
 
     def to_dict(self) -> dict[str, Any]:
