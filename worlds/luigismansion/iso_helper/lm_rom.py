@@ -12,6 +12,7 @@ from importlib import resources
 import zipfile
 
 logger = logging.getLogger()
+MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
 RANDOMIZER_NAME = "Luigi's Mansion"
 LM_USA_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494
@@ -90,7 +91,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
             # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
             # the with block ends.
-            with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
+            with resources.as_file(resources.files(MAIN_PKG_NAME).joinpath(lib_path)) as resource_lib_path:
                 logger.info("Temp Resource Path: " + str(resource_lib_path))
                 path.append(str(resource_lib_path))
 
