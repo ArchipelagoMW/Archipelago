@@ -441,6 +441,10 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by OptionCounter
+        # necessary because the actual Options class instances are pickled when transfered to WebHost generation pool
+        if module == "collections" and name == "Counter":
+            return collections.Counter
         # used by MultiServer -> savegame/multidata
         if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
                                              "SlotType", "NetworkSlot", "HintStatus"}:
