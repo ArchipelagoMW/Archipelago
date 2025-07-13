@@ -5,7 +5,7 @@ import NetUtils, Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 import dolphin_memory_engine as dme
 
-from .iso_helper.lm_rom import LMUSAAPPatch
+from .iso_helper import lm_rom
 from . import CLIENT_VERSION
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
@@ -803,7 +803,7 @@ def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     server_address: str = ""
 
     if output_data:
-        lm_usa_patch = LMUSAAPPatch()
+        lm_usa_patch = lm_rom.LMUSAAPPatch()
         try:
             lm_usa_manifest = lm_usa_patch.read_contents(output_data)
             server_address = lm_usa_manifest["server"]
