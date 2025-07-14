@@ -33,6 +33,15 @@ class ItemGroups(IntFlag):
     ConveyorMk6 = 1 << 28
     NeverExclude = 1 << 29
 
+# Workaround for Python 3.10 support. Iterating Flag instances was only added in Python 3.11.
+if getattr(ItemGroups.Parts, "__iter__", None) is None:
+    def __iter__(self: ItemGroups):
+        for flag in ItemGroups:
+            if flag in self:
+                yield flag
+    ItemGroups.__iter__ = __iter__  # type: ignore
+    del __iter__
+
 
 class ItemData(NamedTuple):
     """Represents an item in the pool, it could be a resource bundle, production recipe, trap, etc."""
