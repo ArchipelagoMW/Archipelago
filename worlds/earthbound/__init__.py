@@ -7,6 +7,7 @@ from typing import List, Set, Dict, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from Fill import fill_restrictive
 from worlds.AutoWorld import World, WebWorld
+import collections
 import settings
 from .Items import get_item_names_per_category, item_table
 from .Locations import get_locations
@@ -262,19 +263,15 @@ class EarthBoundWorld(World):
         }
 
         max_count = max_counts[self.starting_character]
-        for item_name, amount in self.options.start_inventory.items():
+        total_start_inventory = collections.Counter()
+        total_start_inventory = self.options.start_inventory.value + self.options.start_inventory_from_pool.value
+        for item_name, amount in total_start_inventory.items():
             if item_name in item_id_table:
                 local_space_count += amount
                 if local_space_count > max_count and not self.options.remote_items:
                     player = self.multiworld.get_player_name(self.player)
                     raise OptionError(f"{player}: starting inventory cannot place more than {max_count} items into 'Goods' for {self.starting_character}. Attempted to place {local_space_count} Goods items.")
 
-        for item_name, amount in self.options.start_inventory_from_pool.items():
-            if item_name in item_id_table:
-                local_space_count += amount
-                if local_space_count > max_count and not self.options.remote_items:
-                    player = self.multiworld.get_player_name(self.player)
-                    raise OptionError(f"{player}: starting inventory cannot place more than {max_count} items into 'Goods' for {self.starting_character}. Attempted to place {local_space_count} Goods items.")
         setup_gamevars(self)
         create_flavors(self)
         initialize_enemies(self)

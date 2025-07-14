@@ -180,6 +180,7 @@ def make_default_traits(traits: List[str], name: str) -> list:
 
 
 def create_gift(name, value, traits) -> EarthBoundGift:
+    """Create a Gift with the specified tag and values."""
     return EarthBoundGift(name, value, make_default_traits(traits, name))
 
 

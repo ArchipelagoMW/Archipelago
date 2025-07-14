@@ -15,6 +15,8 @@ class EnemyStatCopy:
 
 
 def randomize_enemy_stats(world, rom) -> None:
+    """Randomizes enemy stats. It does not actually randomize them, rather it gives enemies the stats of a random other enemy.
+       Enemies have a 19% chance to have PP."""
     stat_copies = {}
     for enemy in world.enemies:
         if enemy not in excluded_enemies:

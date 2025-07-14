@@ -27,6 +27,8 @@ battle_songs = [
 
 
 def randomize_enemy_attributes(world, rom) -> None:
+    """Randomizes various attributes of enemies. This includes the name,
+       gender, sprite, color, etc. Data can be found in enemy_attributes."""
     taken_names = []
     for enemy in world.enemies:
         if enemy not in excluded_enemies and " (" not in enemy:
@@ -130,6 +132,7 @@ def randomize_enemy_attributes(world, rom) -> None:
 
 
 def get_weakness(element, species) -> int:
+    """Returns a weakness to given element, given the enemy's base species."""
     if species in weakness_table[element]:
         weakness = weakness_table[element][species]
     else:

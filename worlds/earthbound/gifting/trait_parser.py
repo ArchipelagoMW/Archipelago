@@ -399,6 +399,11 @@ gift_by_quality = {
 
 
 def trait_interpreter(gift) -> int:
+    """Converts received gifts into in-game items.
+       If the item name perfectly matches an in-game item, that item will be received.
+       If any of the traits can be scaled i.e. a healing item, the gift will be converted into an item of roughly that value.
+       If any of the traits are not scaled, but are in the secondary trait list i.e. a food item, it will be converted into a random appropriate item.
+       If none of the traits are applicable, return a random consumable."""
     item = None
     trait_list = []
     got_trait = False

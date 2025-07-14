@@ -83,12 +83,12 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
             create_region(world, player, locations_per_region, "Endgame")
         ])
     multiworld.regions += regions
-    connect_menu_region(world)
 
 def connect_area_exits(world):
     multiworld = world.multiworld
     player = world.player
 
+    connect_menu_region(world)
     arcade_connection = world.dungeon_connections["Arcade"]
     giant_step_connection = world.dungeon_connections["Giant Step"]
     lilliput_steps_connection = world.dungeon_connections["Lilliput Steps"]

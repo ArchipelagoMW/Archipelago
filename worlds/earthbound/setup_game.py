@@ -8,6 +8,8 @@ from .modules.dungeon_er import shuffle_dungeons
 
 
 def setup_gamevars(world) -> None:
+    """Initialize or roll most world variables"""
+    
     world.slime_pile_wanted_item = world.random.choice([
         "Cookie",
         "Bag of Fries",
@@ -154,6 +156,8 @@ def setup_gamevars(world) -> None:
         ])
 
     world.multiworld.push_precollected(world.create_item(world.starting_character))
+    if world.options.random_start_location:
+        world.multiworld.push_precollected(world.create_item(world.starting_teleport))
 
     valid_starts = 14
     if world.options.magicant_mode != 00:
@@ -430,6 +434,9 @@ def setup_gamevars(world) -> None:
 
 
 def place_static_items(world) -> None:
+    """Places all locked items. Some are events. Some are filler items that
+       need to be placed depending on certain settings."""
+
     world.get_location("Belch Defeated").place_locked_item(world.create_item("Threed Tunnels Clear"))
     world.get_location("Dungeon Man Submarine").place_locked_item(world.create_item("Submarine to Deep Darkness"))
     world.get_location("Any ATM").place_locked_item(world.create_item("ATM Access"))
@@ -469,9 +476,6 @@ def place_static_items(world) -> None:
     if world.options.magicant_mode == 2:
         world.get_location("+1 Sanctuary").place_locked_item(world.create_item("Magicant Unlock"))
         world.get_location("Magicant - Ness's Nightmare").place_locked_item(world.create_item("Alternate Goal"))
-
-    if world.options.random_start_location:
-        world.multiworld.push_precollected(world.create_item(world.starting_teleport))
 
     if not world.options.monkey_caves_mode:
         world.get_location("Monkey Caves - 1F Right Chest").place_locked_item(world.create_item("Wet Towel"))

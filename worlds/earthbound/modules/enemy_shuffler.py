@@ -484,6 +484,7 @@ can_walkthrough = [
 
 
 def shuffle_enemies(world) -> None:
+    """Shuffles the global enemy table."""
     world.acting_enemy_list = {}
     shuffled_enemies = base_enemy_table.copy()
     if world.options.enemy_shuffle:
@@ -493,6 +494,7 @@ def shuffle_enemies(world) -> None:
 
 
 def apply_enemy_shuffle(world, rom) -> None:
+    """Writes the shuffled enemy table into ROM."""
     rom.write_bytes(0x10d54d, bytearray([enemy_ids[world.acting_enemy_list["Spiteful Crow"]]]))
     rom.write_bytes(0x10d551, bytearray([enemy_ids[world.acting_enemy_list["Runaway Dog"]]]))
     rom.write_bytes(0x10d555, bytearray([enemy_ids[world.acting_enemy_list["Coil Snake"]]]))

@@ -133,6 +133,7 @@ locations_with_item_requirements = [
 
 
 def calculate_scaling(world) -> None:
+    """Calculates the individual scaled level of each region/major area."""
     arcade = world.dungeon_connections["Arcade"]
     giant_step = world.dungeon_connections["Giant Step"]
     lilliput_steps = world.dungeon_connections["Lilliput Steps"]

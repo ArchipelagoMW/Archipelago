@@ -314,6 +314,7 @@ vanilla_flavor_pointers = {
 
 
 def create_flavors(world) -> None:
+    """Shuffle flavors (textbox palettes). Vanilla flavors are copied from the ROM itself and not stored here."""
     world.flavor_text = []
     world.flavor_pointer = [0x01F72B, 0x01F746, 0x01F761, 0x01F77C]
     flavor_num = 0
