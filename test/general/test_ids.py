@@ -65,8 +65,6 @@ class TestIDs(unittest.TestCase):
     def test_duplicate_location_ids(self):
         """Test that a game doesn't have location id overlap within its own datapackage"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
-            self.maxDiff = None
-
             with self.subTest(game=gamename):
                 len_location_id_to_name = len(world_type.location_id_to_name)
                 len_location_name_to_id = len(world_type.location_name_to_id)
