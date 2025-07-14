@@ -1,3 +1,4 @@
+import logging
 import os
 import pkgutil
 import typing
@@ -7,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from typing import Set, Dict, Any
 from .Locations import all_locations, location_table, bowsers, bowsersMini, hidden, coins
 from .Options import MLSSOptions
-from .Items import MLSSItem, itemList, item_frequencies, item_table
+from .Items import MLSSItem, itemList, item_frequencies, item_table, mlss_item_name_groups
 from .Names.LocationName import LocationName
 from .Client import MLSSClient
 from .Regions import create_regions, connect_regions
@@ -53,6 +54,7 @@ class MLSSWorld(World):
     options_dataclass = MLSSOptions
     options: MLSSOptions
     settings: typing.ClassVar[MLSSSettings]
+    item_name_groups = mlss_item_name_groups
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 5, 0)
@@ -61,6 +63,12 @@ class MLSSWorld(World):
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
+        if self.options.goal == "emblem_hunt":
+            if self.options.emblems_amount < self.options.emblems_required:
+                self.options.emblems_amount.value = self.options.emblems_required.value
+                logging.warning(
+                    f"{self.player_name}'s number of emblems required is greater than the number of emblems available. "
+                    f"Changing to {self.options.emblems_required.value}.")
         if self.options.skip_minecart:
             self.disabled_locations.update([LocationName.HoohooMountainBaseMinecartCaveDigspot])
         if self.options.disable_surf:
@@ -111,6 +119,8 @@ class MLSSWorld(World):
         for item in itemList:
             if item.classification != ItemClassification.filler and item.classification != ItemClassification.skip_balancing:
                 freq = item_frequencies.get(item.itemName, 1)
+                if item.itemName == "Beanstar Emblem":
+                    freq = (0 if self.options.goal != "emblem_hunt" else self.options.emblems_amount.value)
                 if item in precollected:
                     freq = max(freq - precollected.count(item), 0)
                 if self.options.disable_harhalls_pants and "Harhall's" in item.itemName:
@@ -138,7 +148,6 @@ class MLSSWorld(World):
 
         # And finally take as many fillers as we need to have the same amount of items and locations.
         remaining = len(all_locations) - len(required_items) - len(self.disabled_locations) - 5
-
         self.multiworld.itempool += [
             self.create_item(filler_item_name) for filler_item_name in self.random.sample(filler_items, remaining)
         ]

@@ -8,6 +8,7 @@ from worlds.AutoWorld import LogicMixin
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
 class AreaStats(NamedTuple):
+    """Attack, Defense, Potion, HP, SP, MP, Flasks, Equipment, is_boss"""
     att_level: int
     def_level: int
     potion_level: int  # all 3 are before your first bonfire after getting the upgrade page, third costs 1k
@@ -21,6 +22,7 @@ class AreaStats(NamedTuple):
 
 # the vanilla upgrades/equipment you would have
 area_data: Dict[str, AreaStats] = {
+    # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
     "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Sword"]),
     "Before Well": AreaStats(1, 1, 1, 1, 1, 1, 3, ["Sword", "Shield"]),
@@ -41,7 +43,7 @@ area_data: Dict[str, AreaStats] = {
     "Rooted Ziggurat": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"]),
     "Boss Scavenger": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "Swamp": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
-    "Cathedral": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"]),
+    # Cathedral has the same requirements as Swamp
     # marked as boss because the garden knights can't get hurt by stick
     "Gauntlet": AreaStats(1, 1, 1, 1, 1, 1, 6, ["Sword", "Shield", "Magic"], is_boss=True),
     "The Heir": AreaStats(5, 5, 3, 5, 3, 3, 6, ["Sword", "Shield", "Magic", "Laurels"], is_boss=True),
@@ -49,8 +51,10 @@ area_data: Dict[str, AreaStats] = {
 
 
 # these are used for caching which areas can currently be reached in state
+# Gauntlet does not have exclusively higher stat requirements, so it will be checked separately
 boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
-non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss]
+# Swamp does not have exclusively higher stat requirements, so it will be checked separately
+non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
 
 
 class CombatState(IntEnum):
@@ -89,6 +93,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     elif area_name in non_boss_areas:
         area_list = non_boss_areas
     else:
+        # this is to check Swamp and Gauntlet on their own
         area_list = [area_name]
 
     if met_combat_reqs:
@@ -114,88 +119,89 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
     extra_att_needed = 0
     extra_def_needed = 0
     extra_mp_needed = 0
-    has_magic = state.has_any({"Magic Wand", "Gun"}, player)
-    stick_bool = False
-    sword_bool = False
+    has_magic = state.has_any(("Magic Wand", "Gun"), player)
+    sword_bool = has_sword(state, player)
+    stick_bool = sword_bool or has_melee(state, player)
+    equipment = data.equipment.copy()
     for item in data.equipment:
         if item == "Stick":
-            if not has_melee(state, player):
+            if not stick_bool:
                 if has_magic:
+                    equipment.remove("Stick")
+                    if "Magic" not in equipment:
+                        equipment.append("Magic")
                     # magic can make up for the lack of stick
                     extra_mp_needed += 2
-                    extra_att_needed -= 16
+                    extra_att_needed -= 32
                 else:
                     return False
-            else:
-                stick_bool = True
 
         elif item == "Sword":
-            if not has_sword(state, player):
+            if not sword_bool:
                 # need sword for bosses
                 if data.is_boss:
                     return False
-                if has_magic:
-                    # +4 mp pretty much makes up for the lack of sword, at least in Quarry
-                    extra_mp_needed += 4
-                    # stick is a backup plan, and doesn't scale well, so let's require a little less
-                    extra_att_needed -= 2
-                elif has_melee(state, player):
+                if stick_bool:
+                    equipment.remove("Sword")
+                    equipment.append("Stick")
                     # may revise this later based on feedback
                     extra_att_needed += 3
                     extra_def_needed += 2
+                    # this is for when it changes over to the magic-only state if it needs to later
+                    extra_mp_needed += 4
                 else:
                     return False
-            else:
-                sword_bool = True
 
+        # just increase the stat requirement, we'll check for shield when calculating defense
         elif item == "Shield":
-            if not state.has("Shield", player):
-                extra_def_needed += 2
+            equipment.remove("Shield")
+            extra_def_needed += 2
+
         elif item == "Laurels":
             if not state.has("Hero's Laurels", player):
-                # these are entirely based on vibes
-                extra_att_needed += 2
-                extra_def_needed += 3
+                # require Laurels for the Heir
+                return False
+
         elif item == "Magic":
             if not has_magic:
+                equipment.remove("Magic")
                 extra_att_needed += 2
                 extra_def_needed += 2
-                extra_mp_needed -= 16
+                extra_mp_needed -= 32
+
     modified_stats = AreaStats(data.att_level + extra_att_needed, data.def_level + extra_def_needed, data.potion_level,
-                               data.hp_level, data.sp_level, data.mp_level + extra_mp_needed, data.potion_count)
-    if not has_required_stats(modified_stats, state, player):
+                               data.hp_level, data.sp_level, data.mp_level + extra_mp_needed, data.potion_count,
+                               equipment, data.is_boss)
+    if has_required_stats(modified_stats, state, player):
+        return True
+    else:
         # we may need to check if you would have the required stats if you were missing a weapon
-        # it's kinda janky, but these only get hit in less than once per 100 generations, so whatever
-        if sword_bool and "Sword" in data.equipment and "Magic" in data.equipment:
-            # we need to check if you would have the required stats if you didn't have melee
-            equip_list = [item for item in data.equipment if item != "Sword"]
-            more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
-                                            data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
-                                            equip_list)
+        if sword_bool and "Sword" in equipment and has_magic:
+            # we need to check if you would have the required stats if you didn't have the sword
+            equip_list = [item for item in equipment if item != "Sword"]
+            if "Magic" not in equip_list:
+                equip_list.append("Magic")
+            more_modified_stats = AreaStats(modified_stats.att_level - 32, modified_stats.def_level,
+                                            modified_stats.potion_level, modified_stats.hp_level,
+                                            modified_stats.sp_level, modified_stats.mp_level + 4,
+                                            modified_stats.potion_count, equip_list, data.is_boss)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
 
-            # and we need to check if you would have the required stats if you didn't have magic
-            equip_list = [item for item in data.equipment if item != "Magic"]
-            more_modified_stats = AreaStats(data.att_level + 2, data.def_level + 2, data.potion_level,
-                                            data.hp_level, data.sp_level, data.mp_level - 16, data.potion_count,
-                                            equip_list)
-            if check_combat_reqs("none", state, player, more_modified_stats):
-                return True
-            return False
-
-        elif stick_bool and "Stick" in data.equipment and "Magic" in data.equipment:
+        elif stick_bool and "Stick" in equipment and has_magic:
             # we need to check if you would have the required stats if you didn't have the stick
-            equip_list = [item for item in data.equipment if item != "Stick"]
-            more_modified_stats = AreaStats(data.att_level - 16, data.def_level, data.potion_level,
-                                            data.hp_level, data.sp_level, data.mp_level + 4, data.potion_count,
-                                            equip_list)
+            equip_list = [item for item in equipment if item != "Stick"]
+            if "Magic" not in equip_list:
+                equip_list.append("Magic")
+            more_modified_stats = AreaStats(modified_stats.att_level - 32, modified_stats.def_level,
+                                            modified_stats.potion_level, modified_stats.hp_level,
+                                            modified_stats.sp_level, modified_stats.mp_level + 2,
+                                            modified_stats.potion_count, equip_list, data.is_boss)
             if check_combat_reqs("none", state, player, more_modified_stats):
                 return True
-            return False
         else:
             return False
-    return True
+        return False
 
 
 # check if you have the required stats, and the money to afford them
@@ -203,72 +209,63 @@ def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_d
 # but that's fine -- it's already pretty generous to begin with
 def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> bool:
     money_required = 0
-    player_att = 0
+    att_required = data.att_level
+    player_att, att_offerings = get_att_level(state, player)
 
-    # check if we actually need the stat before checking state
-    if data.att_level > 1:
-        player_att, att_offerings = get_att_level(state, player)
-        if player_att < data.att_level:
-            return False
+    # if you have 2 more attack than needed, we can forego needing mp
+    if data.mp_level > 1 and "Magic" in data.equipment:
+        if player_att < data.att_level + 2:
+            player_mp, mp_offerings = get_mp_level(state, player)
+            if player_mp < data.mp_level:
+                return False
+            else:
+                extra_mp = player_mp - data.mp_level
+                paid_mp = max(0, mp_offerings - extra_mp)
+                # mp costs 300 for the first, +50 for each additional
+                money_per_mp = 300
+                for _ in range(paid_mp):
+                    money_required += money_per_mp
+                    money_per_mp += 50
         else:
-            extra_att = player_att - data.att_level
-            paid_att = max(0, att_offerings - extra_att)
-            # attack upgrades cost 100 for the first, +50 for each additional
-            money_per_att = 100
-            for _ in range(paid_att):
-                money_required += money_per_att
-                money_per_att += 50
+            att_required += 2
+
+    if player_att < att_required:
+        return False
+    else:
+        extra_att = player_att - att_required
+        paid_att = max(0, att_offerings - extra_att)
+        # attack upgrades cost 100 for the first, +50 for each additional
+        money_per_att = 100
+        for _ in range(paid_att):
+            money_required += money_per_att
+            money_per_att += 50
 
     # adding defense and sp together since they accomplish similar things: making you take less damage
     if data.def_level + data.sp_level > 2:
         player_def, def_offerings = get_def_level(state, player)
         player_sp, sp_offerings = get_sp_level(state, player)
-        if player_def + player_sp < data.def_level + data.sp_level:
+        req_stats = data.def_level + data.sp_level
+        if player_def + player_sp < req_stats:
             return False
         else:
             free_def = player_def - def_offerings
             free_sp = player_sp - sp_offerings
-            paid_stats = data.def_level + data.sp_level - free_def - free_sp
-            sp_to_buy = 0
-
-            if paid_stats <= 0:
-                # if you don't have to pay for any stats, you don't need money for these upgrades
-                def_to_buy = 0
-            elif paid_stats <= def_offerings:
-                # get the amount needed to buy these def offerings
-                def_to_buy = paid_stats
+            if free_sp + free_def >= req_stats:
+                # you don't need to buy upgrades
+                pass
             else:
-                def_to_buy = def_offerings
-                sp_to_buy = max(0, paid_stats - def_offerings)
-
-            # if you have to buy more than 3 def, it's cheaper to buy 1 extra sp
-            if def_to_buy > 3 and sp_offerings > 0:
-                def_to_buy -= 1
-                sp_to_buy += 1
-            # def costs 100 for the first, +50 for each additional
-            money_per_def = 100
-            for _ in range(def_to_buy):
-                money_required += money_per_def
-                money_per_def += 50
-            # sp costs 200 for the first, +200 for each additional
-            money_per_sp = 200
-            for _ in range(sp_to_buy):
-                money_required += money_per_sp
-                money_per_sp += 200
-
-    # if you have 2 more attack than needed, we can forego needing mp
-    if data.mp_level > 1 and player_att < data.att_level + 2:
-        player_mp, mp_offerings = get_mp_level(state, player)
-        if player_mp < data.mp_level:
-            return False
-        else:
-            extra_mp = player_mp - data.mp_level
-            paid_mp = max(0, mp_offerings - extra_mp)
-            # mp costs 300 for the first, +50 for each additional
-            money_per_mp = 300
-            for _ in range(paid_mp):
-                money_required += money_per_mp
-                money_per_mp += 50
+                # we need to pick the cheapest option that gets us above the stats we need
+                # first number is def, second number is sp
+                upgrade_options: set[tuple[int, int]] = set()
+                stats_to_buy = req_stats - free_def - free_sp
+                for paid_def in range(0, min(def_offerings + 1, stats_to_buy + 1)):
+                    sp_required = stats_to_buy - paid_def
+                    if sp_offerings >= sp_required:
+                        if sp_required < 0:
+                            break
+                        upgrade_options.add((paid_def, stats_to_buy - paid_def))
+                costs = [calc_def_sp_cost(defense, sp) for defense, sp in upgrade_options]
+                money_required += min(costs)
 
     req_effective_hp = calc_effective_hp(data.hp_level, data.potion_level, data.potion_count)
     player_potion, potion_offerings = get_potion_level(state, player)
@@ -279,53 +276,30 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
         return False
     else:
         # need a way to determine which of potion offerings or hp offerings you can reduce
-        # your level if you didn't pay for offerings
         free_potion = player_potion - potion_offerings
         free_hp = player_hp - hp_offerings
-        paid_hp_count = 0
-        paid_potion_count = 0
         if calc_effective_hp(free_hp, free_potion, player_potion_count) >= req_effective_hp:
             # you don't need to buy upgrades
             pass
-        # if you have no potions, or no potion upgrades, you only need to check your hp upgrades
-        elif player_potion_count == 0 or potion_offerings == 0:
-            # check if you have enough hp at each paid hp offering
-            for i in range(hp_offerings):
-                paid_hp_count = i + 1
-                if calc_effective_hp(paid_hp_count, 0, player_potion_count) > req_effective_hp:
-                    break
         else:
-            for i in range(potion_offerings):
-                paid_potion_count = i + 1
-                if calc_effective_hp(free_hp, free_potion + paid_potion_count, player_potion_count) > req_effective_hp:
-                    break
-                for j in range(hp_offerings):
-                    paid_hp_count = j + 1
-                    if (calc_effective_hp(free_hp + paid_hp_count, free_potion + paid_potion_count, player_potion_count)
-                            > req_effective_hp):
+            # we need to pick the cheapest option that gets us above the amount of effective HP we need
+            # first number is hp, second number is potion
+            upgrade_options: set[tuple[int, int]] = set()
+            # filter out exclusively worse options
+            lowest_hp_added = hp_offerings + 1
+            for paid_potion in range(0, potion_offerings + 1):
+                # check quantities of hp offerings for each potion offering
+                for paid_hp in range(0, lowest_hp_added):
+                    if (calc_effective_hp(free_hp + paid_hp, free_potion + paid_potion, player_potion_count)
+                            >= req_effective_hp):
+                        upgrade_options.add((paid_hp, paid_potion))
+                        lowest_hp_added = paid_hp
                         break
-        # hp costs 200 for the first, +50 for each additional
-        money_per_hp = 200
-        for _ in range(paid_hp_count):
-            money_required += money_per_hp
-            money_per_hp += 50
 
-        # potion costs 100 for the first, 300 for the second, 1,000 for the third, and +200 for each additional
-        # currently we assume you will not buy past the second potion upgrade, but we might change our minds later
-        money_per_potion = 100
-        for _ in range(paid_potion_count):
-            money_required += money_per_potion
-            if money_per_potion == 100:
-                money_per_potion = 300
-            elif money_per_potion == 300:
-                money_per_potion = 1000
-            else:
-                money_per_potion += 200
+            costs = [calc_hp_potion_cost(hp, potion) for hp, potion in upgrade_options]
+            money_required += min(costs)
 
-    if money_required > get_money_count(state, player):
-        return False
-
-    return True
+    return get_money_count(state, player) >= money_required
 
 
 # returns a tuple of your max attack level, the number of attack offerings
@@ -336,7 +310,8 @@ def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
     if sword_level >= 3:
         att_upgrades += min(2, sword_level - 2)
     # attack falls off, can just cap it at 8 for simplicity
-    return min(8, 1 + att_offerings + att_upgrades), att_offerings
+    return (min(8, 1 + att_offerings + att_upgrades)
+            + (1 if state.has("Hero's Laurels", player) else 0), att_offerings)
 
 
 # returns a tuple of your max defense level, the number of defense offerings
@@ -344,7 +319,9 @@ def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
     def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
     return (min(8, 1 + def_offerings
-                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player)),
+                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+            + (2 if state.has("Shield", player) else 0)
+            + (2 if state.has("Hero's Laurels", player) else 0),
             def_offerings)
 
 
@@ -408,6 +385,46 @@ def get_money_count(state: CollectionState, player: int) -> int:
     return money
 
 
+def calc_hp_potion_cost(hp_upgrades: int, potion_upgrades: int) -> int:
+    money = 0
+
+    # hp costs 200 for the first, +50 for each additional
+    money_per_hp = 200
+    for _ in range(hp_upgrades):
+        money += money_per_hp
+        money_per_hp += 50
+
+    # potion costs 100 for the first, 300 for the second, 1,000 for the third, and +200 for each additional
+    # currently we assume you will not buy past the second potion upgrade, but we might change our minds later
+    money_per_potion = 100
+    for _ in range(potion_upgrades):
+        money += money_per_potion
+        if money_per_potion == 100:
+            money_per_potion = 300
+        elif money_per_potion == 300:
+            money_per_potion = 1000
+        else:
+            money_per_potion += 200
+
+    return money
+
+
+def calc_def_sp_cost(def_upgrades: int, sp_upgrades: int) -> int:
+    money = 0
+
+    money_per_def = 100
+    for _ in range(def_upgrades):
+        money += money_per_def
+        money_per_def += 50
+
+    money_per_sp = 200
+    for _ in range(sp_upgrades):
+        money += money_per_sp
+        money_per_sp += 200
+
+    return money
+
+
 class TunicState(LogicMixin):
     tunic_need_to_reset_combat_from_collect: Dict[int, bool]
     tunic_need_to_reset_combat_from_remove: Dict[int, bool]
@@ -420,3 +437,5 @@ class TunicState(LogicMixin):
         self.tunic_need_to_reset_combat_from_remove = defaultdict(lambda: False)
         # the per-player, per-area state of combat checking -- unchecked, failed, or succeeded
         self.tunic_area_combat_state = defaultdict(lambda: defaultdict(lambda: CombatState.unchecked))
+        # a copy_mixin was intentionally excluded because the empty state from init_mixin
+        # will always be appropriate for recalculating the logic cache

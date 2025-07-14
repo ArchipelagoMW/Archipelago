@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 project(ap-cpp-tests)
 
 enable_testing()
@@ -7,8 +7,8 @@ find_package(GTest REQUIRED)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     add_definitions("/source-charset:utf-8")
-    set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+    # set(CMAKE_CXX_FLAGS_DEBUG "/MDd") # this is the default
+    # set(CMAKE_CXX_FLAGS_RELEASE "/MD") # this is the default
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # enable static analysis for gcc
     add_compile_options(-fanalyzer -Werror)

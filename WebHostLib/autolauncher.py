@@ -9,7 +9,7 @@ from threading import Event, Thread
 from typing import Any
 from uuid import UUID
 
-from pony.orm import db_session, select, commit
+from pony.orm import db_session, select, commit, PrimaryKey
 
 from Utils import restricted_loads
 from .locker import Locker, AlreadyRunningException
@@ -36,12 +36,21 @@ def handle_generation_failure(result: BaseException):
         logging.exception(e)
 
 
+def _mp_gen_game(gen_options: dict, meta: dict[str, Any] | None = None, owner=None, sid=None) -> PrimaryKey | None:
+    from setproctitle import setproctitle
+
+    setproctitle(f"Generator ({sid})")
+    res = gen_game(gen_options, meta=meta, owner=owner, sid=sid)
+    setproctitle(f"Generator (idle)")
+    return res
+
+
 def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
     try:
         meta = json.loads(generation.meta)
         options = restricted_loads(generation.options)
         logging.info(f"Generating {generation.id} for {len(options)} players")
-        pool.apply_async(gen_game, (options,),
+        pool.apply_async(_mp_gen_game, (options,),
                          {"meta": meta,
                           "sid": generation.id,
                           "owner": generation.owner},
@@ -55,6 +64,10 @@ def launch_generator(pool: multiprocessing.pool.Pool, generation: Generation):
 
 
 def init_generator(config: dict[str, Any]) -> None:
+    from setproctitle import setproctitle
+
+    setproctitle("Generator (idle)")
+
     try:
         import resource
     except ModuleNotFoundError:
