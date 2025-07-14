@@ -3,7 +3,7 @@ Archipelago init file for Pokepark
 """
 from BaseClasses import ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import components, Component, launch_subprocess
+from worlds.LauncherComponents import components, Component, launch_subprocess, Type
 from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
     REGION_UNLOCK, VICTORY
 from .locations import ALL_LOCATIONS_TABLE, REGIONS
@@ -206,19 +206,5 @@ def launch_client():
     launch_subprocess(main, name="Pokepark client")
 
 
-def add_client_to_launcher() -> None:
-    version = "0.2.1"
-    found = False
-    for c in components:
-        if c.display_name == "Pokepark Client":
-            found = True
-            if getattr(c, "version", 0) < version:
-                c.version = version
-                c.func = launch_client
-                return
-    if not found:
-        components.append(Component("Pokepark Client", "PokeparkClient",
-                                    func=launch_client))
-
-
-add_client_to_launcher()
+components.append(Component("Pokepark Client", "PokeparkClient",
+                            func=launch_client, component_type=Type.CLIENT))
