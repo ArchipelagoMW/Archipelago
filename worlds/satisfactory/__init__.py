@@ -11,7 +11,6 @@ from .CriticalPathCalculator import CriticalPathCalculator
 from .Web import SatisfactoryWebWorld
 from ..AutoWorld import World
 from NetUtils import Hint
-from BaseClasses import ItemClassification
 
 
 class SatisfactoryWorld(World):

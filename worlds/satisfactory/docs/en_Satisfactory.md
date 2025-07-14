@@ -146,7 +146,7 @@ the rest are filler or useful.
 
 ## Where do I run Archipelago commands?
 
-You can use the game's build-in chat menu.
+You can use the game's built-in chat menu.
 Check the game's keybinding options to see how to open it.
 Run the `/help` command to list all available commands.
 Note that Archipelago commands are *not* prefixed with `!` inside of Satisfactory.
