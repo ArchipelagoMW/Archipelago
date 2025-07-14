@@ -1,5 +1,5 @@
 from random import Random
-from typing import Callable, Optional
+from typing import Callable
 
 from BaseClasses import Location, LocationProgressType, Region
 from .data.strings import CATEGORY, LOCATIONS, REGIONS, OPTIONS, GOALS, OTHER, SHAPESANITY
@@ -540,7 +540,7 @@ def addshapesanity_ut(shapesanity_names: list[str], add_alias: Callable[[str, st
 class ShapezLocation(Location):
     game = OTHER.game_name
 
-    def __init__(self, player: int, name: str, address: Optional[int], region: Region,
+    def __init__(self, player: int, name: str, address: int | None, region: Region,
                  progress_type: LocationProgressType):
         super(ShapezLocation, self).__init__(player, name, address, region)
         self.progress_type = progress_type
