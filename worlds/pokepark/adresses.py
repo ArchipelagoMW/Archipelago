@@ -29,6 +29,7 @@ haunted_zone_mansion_stage_id = 0x12BFC90
 haunted_zone_mansion_loadscreen_stage_id = 0x12BF6DC
 granite_zone_stage_id = 0x152FDB8
 flower_zone_stage_id = 0xBCE04C
+skygarden_stage_id = 0xC2CD28
 main_menu_stage_id = 0x6FC360
 main_menu2_stage_id = 0x93BEA0
 main_menu3_stage_id = 0x2A080
@@ -82,7 +83,8 @@ valid_stage_ids = [
     rotom_minigame_stage_id,
     absol_minigame_stage_id,
     salamence_minigame_stage_id,
-    rayquaza_minigame_stage_id
+    rayquaza_minigame_stage_id,
+    skygarden_stage_id
 ]
 
 LOADSCREEN_TO_ZONE = {
@@ -738,15 +740,47 @@ QUEST_LOCATIONS = [
         check_mask=0b00000010
     ),
     QuestLocation(
-        locationId=QuestLocationIds.MEW_CHALLENGE_END.value,
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE1.value,
         location=MemoryAddress(
-            base_address=0x8037AEC2,
+            base_address=0x80375032,
             memory_range=MemoryRange.BYTE,
-            value=0b00000001),
-        check_mask=0b00000001
+            value=0b00000100),
+        check_mask=0b00000100
     ),
     QuestLocation(
-        locationId=QuestLocationIds.COMPLETE_PRISMA.value,
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE1.value,
+        location=MemoryAddress(
+            base_address=0x80375032,
+            memory_range=MemoryRange.BYTE,
+            value=0b00000110),
+        check_mask=0b00000110
+    ),
+    QuestLocation(
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE1.value,
+        location=MemoryAddress(
+            base_address=0x80375032,
+            memory_range=MemoryRange.BYTE,
+            value=0b00001000),
+        check_mask=0b00001000
+    ),
+    QuestLocation(
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE2.value,
+        location=MemoryAddress(
+            base_address=0x80375032,
+            memory_range=MemoryRange.BYTE,
+            value=0b00000110),
+        check_mask=0b00000110
+    ),
+    QuestLocation(
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE2.value,
+        location=MemoryAddress(
+            base_address=0x80375032,
+            memory_range=MemoryRange.BYTE,
+            value=0b00001000),
+        check_mask=0b00001000
+    ),
+    QuestLocation(
+        locationId=QuestLocationIds.COMPLETE_PRISMA_STAGE3.value,
         location=MemoryAddress(
             base_address=0x80375032,
             memory_range=MemoryRange.BYTE,
@@ -2985,6 +3019,14 @@ POKEMON_STATES = {
                 pokemon_ids=[0x0000000d],
                 friendship_items_to_block=[FRIENDSHIP_ITEMS["Mudkip"]],
                 locationId=FRIENDSHIP_ITEMS["Mudkip"]
+            ),
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x8037556C, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=ice_zone_stage_id,
+                pokemon_ids=[0x00000003],
+                friendship_items_to_block=[FRIENDSHIP_ITEMS["Mudkip"]],
+                locationId=OverworldPokemonLocationIds.MUDKIP_ICE.value
             )
         ]
     ),
@@ -4881,7 +4923,17 @@ POKEMON_STATES = {
         ]
     ),
     FRIENDSHIP_ITEMS["Mew"]: PokemonStateInfo(
-        item=MemoryAddress(base_address=0x80375F08, memory_range=MemoryRange.BYTE, value=0x80)
+        item=MemoryAddress(base_address=0x80375F08, memory_range=MemoryRange.BYTE, value=0x80),
+        locations=[
+            PokemonLocation(
+                location=MemoryAddress(base_address=0x80375F08, offset=0x0001, value=0x80,
+                                       memory_range=MemoryRange.BYTE),
+                zone_id=skygarden_stage_id,
+                pokemon_ids=[0x00000001],
+                friendship_items_to_block=[],
+                locationId=QuestLocationIds.MEW_CHALLENGE_END.value
+            ),
+        ]
     ),
     FRIENDSHIP_ITEMS["Jirachi"]: PokemonStateInfo(
         item=MemoryAddress(base_address=0x80375EE0, memory_range=MemoryRange.BYTE, value=0x80)
@@ -5531,7 +5583,6 @@ UNLOCKS: dict[int, UnlockState] = {
                     value=0x01
                 ),
                 locationId=UNLOCK_ITEMS["Krabby Unlock"],
-                is_blocked_until_location=True,
                 zone_id=beach_zone_stage_id
             )
         ],
@@ -5552,7 +5603,6 @@ UNLOCKS: dict[int, UnlockState] = {
                 value=0x08
             ),
             locationId=UNLOCK_ITEMS["Corphish Unlock"],
-            is_blocked_until_location=True,
             zone_id=beach_zone_stage_id
         )],
     ),

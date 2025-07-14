@@ -17,8 +17,6 @@ The following locations are affected:
 
 | Zone         | Friendship Location | Unlock Location                          |
 |--------------|---------------------|------------------------------------------|
-| Beach Zone   | Krabby              | Bottle Recycling 2 - Pokemon Unlock      |
-| Beach Zone   | Corpish             | Bottle Recycling 4 - Pokemon Unlock      |
 | Cavern Zone  | Magnemite 1         | Magnemite Crate Dash Entrance Area       |
 | Cavern Zone  | Magnemite 2         | Magnemite Crate Dash Magma Zone Entrance |
 | Cavern Zone  | Magnemite 3         | Magnemite Crate Dash Magma Zone Entrance |
@@ -65,6 +63,7 @@ that the friendship location has been checked.
 - Adding more event Pokemon as Locations
 - Visualizing closed Zone Gates
 - Creating own Zone Unlock for Magma Zone
+- Model Randomization
 
 
 

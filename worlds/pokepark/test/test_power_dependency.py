@@ -1,6 +1,4 @@
 from . import PokeparkTest
-from .. import REGIONS
-from ..logic import PowerRequirement
 
 
 class TestPowerItemDependenciesWithoutStartPower(PokeparkTest):

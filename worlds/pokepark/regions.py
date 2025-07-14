@@ -37,20 +37,27 @@ WORLD_STATE_REQUIREMENT_CHECKS: Dict[WorldStateRequirement, Callable] = {
             state.has("Beach Zone Unlock", world.player) or
             state.has("Ice Zone Unlock", world.player) or
             state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player)
+            state.has("Haunted Zone Unlock", world.player) or
+            state.has("Granite Zone & Flower Zone Unlock", world.player) or
+            state.has("Skygarden Unlock", world.player)
 
     ),
     WorldStateRequirement.beach_zone_or_higher: lambda state, world: (
             state.has("Beach Zone Unlock", world.player) or
             state.has("Ice Zone Unlock", world.player) or
             state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player)
+            state.has("Haunted Zone Unlock", world.player) or
+            state.has("Granite Zone & Flower Zone Unlock",
+                      world.player) or
+            state.has("Skygarden Unlock", world.player)
 
     ),
     WorldStateRequirement.ice_zone_or_higher: lambda state, world: (
             state.has("Ice Zone Unlock", world.player) or
             state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player)
+            state.has("Haunted Zone Unlock", world.player) or
+            state.has("Granite Zone & Flower Zone Unlock", world.player) or
+            state.has("Skygarden Unlock", world.player)
 
     ),
     WorldStateRequirement.cavern_and_magma_zone_or_higher: lambda state, world: (
@@ -100,8 +107,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Pachirisu", world.player) or
             state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Buneary", world.player) or
             state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Croagunk", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Mew", world.player))
+            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Mew", world.player)
     ),
 
     MinigameRequirement.venusaur_vine_swing_any: lambda state, world: (
@@ -120,8 +126,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Chimchar", world.player) or
             state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Treecko", world.player) or
             state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pachirisu", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Jirachi", world.player))
+            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Jirachi", world.player)
     ),
     MinigameRequirement.venusaur_vine_swing_all: lambda state, world: (
             state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pikachu", world.player) and
@@ -156,8 +161,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Spearow", world.player) or
             state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Starly", world.player) or
             state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Wingull", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Latias", world.player))
+            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Latias", world.player)
     ),
     MinigameRequirement.pelipper_circuit_all: lambda state, world: (
             state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pikachu", world.player) and
@@ -192,8 +196,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Corsola", world.player) or
             state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Piplup", world.player) or
             state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Lotad", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Manaphy", world.player))
+            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Manaphy", world.player)
 
     ),
     MinigameRequirement.gyarados_aqua_all: lambda state, world: (
@@ -229,8 +232,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Piplup", world.player) or
             state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Quagsire", world.player) or
             state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Spheal", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Suicune", world.player))
+            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Suicune", world.player)
 
     ),
     MinigameRequirement.empoleon_slide_all: lambda state, world: (
@@ -265,8 +267,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Gible", world.player) or
             state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Chimchar", world.player) or
             state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Magby", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Metagross", world.player))
+            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Metagross", world.player)
     ),
     MinigameRequirement.bastiodon_panel_all: lambda state, world: (
             state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Pikachu", world.player) and
@@ -301,8 +302,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Torkoal", world.player) or
             state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Baltoy", world.player) or
             state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Bonsly", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Heatran", world.player))
+            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Heatran", world.player)
     ),
     MinigameRequirement.rhyperior_bumper_all: lambda state, world: (
             state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Pikachu", world.player) and
@@ -337,8 +337,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Camerupt", world.player) or
             state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Bastiodon", world.player) or
             state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Mawile", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Groudon", world.player))
+            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Groudon", world.player)
 
     ),
     MinigameRequirement.blaziken_boulder_all: lambda state, world: (
@@ -374,8 +373,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Electabuzz", world.player) or
             state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Chimchar", world.player) or
             state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Croagunk", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Celebi", world.player))
+            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Celebi", world.player)
 
     ),
     MinigameRequirement.tangrowth_swing_all: lambda state, world: (
@@ -412,8 +410,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Duskull", world.player) or
             state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Misdreavus", world.player) or
             state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Krabby", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Darkrai", world.player))
+            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Darkrai", world.player)
 
     ),
     MinigameRequirement.dusknoir_slam_all: lambda state, world: (
@@ -455,8 +452,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Elekid", world.player) or
             state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mr. Mime", world.player) or
             state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Baltoy", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Rotom", world.player))
+            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Rotom", world.player)
     ),
     MinigameRequirement.rotom_shoot_all: lambda state, world: (
             state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Pikachu", world.player) and
@@ -498,8 +494,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Mareep", world.player) or
             state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Eevee", world.player) or
             state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Vulpix", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Shaymin", world.player))
+            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Shaymin", world.player)
     ),
     MinigameRequirement.absol_hurdle_all: lambda state, world: (
             state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Pikachu", world.player) and
@@ -534,8 +529,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Granite Zone - Salamence's Sky Race - Taillow", world.player) or
             state.can_reach_location("Granite Zone - Salamence's Sky Race - Murkrow", world.player) or
             state.can_reach_location("Granite Zone - Salamence's Sky Race - Zubat", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Granite Zone - Salamence's Sky Race - Latios", world.player))
+            state.can_reach_location("Granite Zone - Salamence's Sky Race - Latios", world.player)
     ),
     MinigameRequirement.salamence_air_all: lambda state, world: (
             state.can_reach_location("Granite Zone - Salamence's Sky Race - Pikachu", world.player) and
@@ -570,8 +564,7 @@ MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
             state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Totodile", world.player) or
             state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Chikorita", world.player) or
             state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mime Jr.", world.player) or
-            (world.options.goal == world.options.goal.option_aftergame and
-             state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Deoxys", world.player))
+            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Deoxys", world.player)
 
     ),
     MinigameRequirement.rayquaza_balloon_all: lambda state, world: (
@@ -639,11 +632,8 @@ def create_region(region: PokeparkRegion, world: "PokeparkWorld"):
             if new_location.name == "Skygarden - Overworld - Mew Challenge completed":
                 event_item = world.create_item("Victory")
                 new_location.place_locked_item(event_item)
-            if new_location.name == "Magma Zone - Overworld - Blaziken":
-                event_item = world.create_item("Skygarden Unlock")
-                new_location.place_locked_item(event_item)
         if world.options.goal == world.options.goal.option_aftergame:
-            if new_location.name == "Skygarden - Overworld - Completing Prisma":
+            if new_location.name == "Skygarden - Overworld - Completed Prisma Full":
                 event_item = world.create_item("Victory")
                 new_location.place_locked_item(event_item)
 
@@ -666,7 +656,7 @@ def create_regions(world: "PokeparkWorld"):
         "Menu": Region("Menu", world.player, world.multiworld)
     }
 
-    CREATEDREGIONS = generate_regions(world)
+    CREATEDREGIONS = generate_regions()
 
     for region in CREATEDREGIONS:
         regions[region.name] = create_region(region, world)

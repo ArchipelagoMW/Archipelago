@@ -8,7 +8,7 @@ from worlds.pokepark.LocationIds import MinigameLocationIds, QuestLocationIds, O
 from worlds.pokepark.items import UNLOCK_ITEMS, PRISM_ITEM
 
 if TYPE_CHECKING:
-    from . import PokeparkWorld
+    pass
 
 
 class PowerRequirement(Enum):
@@ -95,92 +95,90 @@ class PokeparkRegion:
     parent_regions: list[str] = field(default_factory=lambda: ["Menu"])
 
 
-def generate_regions(world: "PokeparkWorld", get_all_locations: bool = False):
+def generate_regions():
     all_regions: list[PokeparkRegion] = []
 
-    treehouse = generate_treehouse_region(world, get_all_locations)
+    treehouse = generate_treehouse_region()
     all_regions.append(treehouse)
 
-    meadow_zone_overworld_region = generate_meadow_zone_overworld_region(world, get_all_locations)
+    meadow_zone_overworld_region = generate_meadow_zone_overworld_region()
     all_regions.append(meadow_zone_overworld_region)
 
-    meadow_zone_bulbasaur_minigame_region = generate_meadow_zone_bulbasaur_minigame_region(world, get_all_locations)
+    meadow_zone_bulbasaur_minigame_region = generate_meadow_zone_bulbasaur_minigame_region()
     all_regions.append(meadow_zone_bulbasaur_minigame_region)
 
-    meadow_zone_venusaur_minigame_region = generate_meadow_zone_venusaur_minigame_region(world, get_all_locations)
+    meadow_zone_venusaur_minigame_region = generate_meadow_zone_venusaur_minigame_region()
     all_regions.append(meadow_zone_venusaur_minigame_region)
 
-    beach_zone_overworld_region = generate_beach_zone_overworld_region(world, get_all_locations)
+    beach_zone_overworld_region = generate_beach_zone_overworld_region()
     all_regions.append(beach_zone_overworld_region)
 
-    beach_zone_pelipper_minigame_region = generate_beach_zone_pelipper_minigame_region(world, get_all_locations)
+    beach_zone_pelipper_minigame_region = generate_beach_zone_pelipper_minigame_region()
     all_regions.append(beach_zone_pelipper_minigame_region)
 
-    beach_zone_gyarados_minigame_region = generate_beach_zone_gyarados_minigame_region(world, get_all_locations)
+    beach_zone_gyarados_minigame_region = generate_beach_zone_gyarados_minigame_region()
     all_regions.append(beach_zone_gyarados_minigame_region)
 
-    ice_zone_overworld_region = generate_ice_zone_overworld_region(world, get_all_locations)
+    ice_zone_overworld_region = generate_ice_zone_overworld_region()
     all_regions.append(ice_zone_overworld_region)
 
-    ice_zone_overworld_lower_lift_region = generate_ice_zone_overworld_lower_lift_region(world, get_all_locations)
+    ice_zone_overworld_lower_lift_region = generate_ice_zone_overworld_lower_lift_region()
     all_regions.append(ice_zone_overworld_lower_lift_region)
 
-    ice_zone_empoleon_minigame_region = generate_ice_zone_empoleon_minigame_region(world, get_all_locations)
+    ice_zone_empoleon_minigame_region = generate_ice_zone_empoleon_minigame_region()
     all_regions.append(ice_zone_empoleon_minigame_region)
 
-    cavern_zone_overworld_region = generate_cavern_zone_overworld_region(world, get_all_locations)
+    cavern_zone_overworld_region = generate_cavern_zone_overworld_region()
     all_regions.append(cavern_zone_overworld_region)
 
-    cavern_zone_bastiodon_minigame_region = generate_cavern_zone_bastiodon_minigame_region(world, get_all_locations)
+    cavern_zone_bastiodon_minigame_region = generate_cavern_zone_bastiodon_minigame_region()
     all_regions.append(cavern_zone_bastiodon_minigame_region)
 
-    magma_zone_overworld_region = generate_magma_zone_overworld_region(world, get_all_locations)
+    magma_zone_overworld_region = generate_magma_zone_overworld_region()
     all_regions.append(magma_zone_overworld_region)
 
-    magma_zone_rhyperior_minigame_region = generate_magma_zone_rhyperior_minigame_region(world, get_all_locations)
+    magma_zone_rhyperior_minigame_region = generate_magma_zone_rhyperior_minigame_region()
     all_regions.append(magma_zone_rhyperior_minigame_region)
 
-    magma_zone_blaziken_minigame_region = generate_magma_zone_blaziken_minigame_region(world, get_all_locations)
+    magma_zone_blaziken_minigame_region = generate_magma_zone_blaziken_minigame_region()
     all_regions.append(magma_zone_blaziken_minigame_region)
 
-    haunted_zone_overworld_region = generate_haunted_zone_overworld_region(world, get_all_locations)
+    haunted_zone_overworld_region = generate_haunted_zone_overworld_region()
     all_regions.append(haunted_zone_overworld_region)
 
-    haunted_zone_tangrowth_minigame_region = generate_haunted_zone_tangrowth_minigame_region(world, get_all_locations)
+    haunted_zone_tangrowth_minigame_region = generate_haunted_zone_tangrowth_minigame_region()
     all_regions.append(haunted_zone_tangrowth_minigame_region)
 
-    haunted_zone_overworld_mansion_region = generate_haunted_zone_overworld_mansion_region(world, get_all_locations)
+    haunted_zone_overworld_mansion_region = generate_haunted_zone_overworld_mansion_region()
     all_regions.append(haunted_zone_overworld_mansion_region)
 
-    haunted_zone_mansion_dusknoir_minigame_region = generate_haunted_zone_mansion_dusknoir_minigame_region(world,
-                                                                                                           get_all_locations)
+    haunted_zone_mansion_dusknoir_minigame_region = generate_haunted_zone_mansion_dusknoir_minigame_region()
     all_regions.append(haunted_zone_mansion_dusknoir_minigame_region)
 
-    haunted_zone_mansion_rotom_minigame_region = generate_haunted_zone_mansion_rotom_minigame_region(world,
-                                                                                                     get_all_locations)
+    haunted_zone_mansion_rotom_minigame_region = generate_haunted_zone_mansion_rotom_minigame_region()
     all_regions.append(haunted_zone_mansion_rotom_minigame_region)
 
-    granite_zone_overworld_region = generate_granite_zone_overworld_region(world, get_all_locations)
+    granite_zone_overworld_region = generate_granite_zone_overworld_region()
     all_regions.append(granite_zone_overworld_region)
 
-    granite_zone_absol_minigame_region = generate_granite_zone_absol_minigame_region(world, get_all_locations)
+    granite_zone_absol_minigame_region = generate_granite_zone_absol_minigame_region()
     all_regions.append(granite_zone_absol_minigame_region)
 
-    granite_zone_salamence_minigame_region = generate_granite_zone_salamence_minigame_region(world, get_all_locations)
+    granite_zone_salamence_minigame_region = generate_granite_zone_salamence_minigame_region()
     all_regions.append(granite_zone_salamence_minigame_region)
 
-    flower_zone_overworld_region = generate_flower_zone_overworld_region(world, get_all_locations)
+    flower_zone_overworld_region = generate_flower_zone_overworld_region()
     all_regions.append(flower_zone_overworld_region)
 
-    flower_zone_rayquaza_minigame_region = generate_flower_zone_rayquaza_minigame_region(world, get_all_locations)
+    flower_zone_rayquaza_minigame_region = generate_flower_zone_rayquaza_minigame_region()
     all_regions.append(flower_zone_rayquaza_minigame_region)
 
-    skygarden_overworld_region = generate_skygarden_overworld_region(world, get_all_locations)
+    skygarden_overworld_region = generate_skygarden_overworld_region()
     all_regions.append(skygarden_overworld_region)
     return all_regions
 
 
-def generate_skygarden_overworld_region(world, get_all_locations: bool = False):
+def generate_skygarden_overworld_region():
     skygarden_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Skygarden - Overworld",
                        display="Skygarden - Overworld",
@@ -225,19 +223,31 @@ def generate_skygarden_overworld_region(world, get_all_locations: bool = False):
 
                  )),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        skygarden_overworld_region.quest_locations.append(
-            Location(name="Completing Prisma",
-                     id=QuestLocationIds.COMPLETE_PRISMA.value,
-                     requirements=Requirements(
-                         friendcount=193,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    skygarden_overworld_region.quest_locations.append(
+        Location(name="Completed Prisma Stage 1",
+                 id=QuestLocationIds.COMPLETE_PRISMA_STAGE1.value,
+                 requirements=Requirements(
+                     friendcount=100
+                 )),
+    )
+    skygarden_overworld_region.quest_locations.append(
+        Location(name="Completed Prisma Stage 2",
+                 id=QuestLocationIds.COMPLETE_PRISMA_STAGE2.value,
+                 requirements=Requirements(
+                     friendcount=150
+                 )),
+    )
+    skygarden_overworld_region.quest_locations.append(
+        Location(name="Completed Prisma Full",
+                 id=QuestLocationIds.COMPLETE_PRISMA_STAGE3.value,
+                 requirements=Requirements(
+                     friendcount=193
+                 )),
+    )
     return skygarden_overworld_region
 
 
-def generate_flower_zone_rayquaza_minigame_region(world, get_all_locations: bool = False):
+def generate_flower_zone_rayquaza_minigame_region():
     flower_zone_rayquaza_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Flower Zone - Rayquaza's Balloon Panic",
                        display="Flower Zone - Rayquaza's Balloon Panic",
@@ -340,27 +350,24 @@ def generate_flower_zone_rayquaza_minigame_region(world, get_all_locations: bool
                  requirements=Requirements(
                      friendship_names=["Mime Jr."])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        flower_zone_rayquaza_minigame_region.minigame_location.append(
-            Location(name="Deoxys",
-                     id=MinigameLocationIds.DEOXYS_BALLOON.value,
-                     requirements=Requirements(
-                         friendship_names=["Deoxys"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        flower_zone_rayquaza_minigame_region.friendship_locations.append(
-            Location(name="Deoxys Unlock",
-                     id=FRIENDSHIP_ITEMS["Deoxys"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.rayquaza_balloon_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    flower_zone_rayquaza_minigame_region.minigame_location.append(
+        Location(name="Deoxys",
+                 id=MinigameLocationIds.DEOXYS_BALLOON.value,
+                 requirements=Requirements(
+                     friendship_names=["Deoxys"],
+                 )),
+    )
+    flower_zone_rayquaza_minigame_region.friendship_locations.append(
+        Location(name="Deoxys Unlock",
+                 id=FRIENDSHIP_ITEMS["Deoxys"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.rayquaza_balloon_all,
+                 )),
+    )
     return flower_zone_rayquaza_minigame_region
 
 
-def generate_flower_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_flower_zone_overworld_region():
     flower_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Flower Zone - Overworld",
                        display="Flower Zone - Overworld",
@@ -431,7 +438,7 @@ def generate_flower_zone_overworld_region(world, get_all_locations: bool = False
     return flower_zone_overworld_region
 
 
-def generate_granite_zone_salamence_minigame_region(world, get_all_locations: bool = False):
+def generate_granite_zone_salamence_minigame_region():
     granite_zone_salamence_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Granite Zone - Salamence's Sky Race",
                        display="Granite Zone - Salamence's Sky Race",
@@ -538,27 +545,24 @@ def generate_granite_zone_salamence_minigame_region(world, get_all_locations: bo
                  requirements=Requirements(
                      friendship_names=["Zubat"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        granite_zone_salamence_minigame_region.minigame_location.append(
-            Location(name="Latios",
-                     id=MinigameLocationIds.LATIOS_SKY.value,
-                     requirements=Requirements(
-                         friendship_names=["Latios"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        granite_zone_salamence_minigame_region.friendship_locations.append(
-            Location(name="Latios Unlock",
-                     id=FRIENDSHIP_ITEMS["Latios"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.salamence_air_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    granite_zone_salamence_minigame_region.minigame_location.append(
+        Location(name="Latios",
+                 id=MinigameLocationIds.LATIOS_SKY.value,
+                 requirements=Requirements(
+                     friendship_names=["Latios"],
+                 )),
+    )
+    granite_zone_salamence_minigame_region.friendship_locations.append(
+        Location(name="Latios Unlock",
+                 id=FRIENDSHIP_ITEMS["Latios"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.salamence_air_all,
+                 )),
+    )
     return granite_zone_salamence_minigame_region
 
 
-def generate_granite_zone_absol_minigame_region(world, get_all_locations: bool = False):
+def generate_granite_zone_absol_minigame_region():
     granite_zone_absol_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Granite Zone - Absol's Hurdle Bounce",
                        display="Granite Zone - Absol's Hurdle Bounce",
@@ -659,27 +663,24 @@ def generate_granite_zone_absol_minigame_region(world, get_all_locations: bool =
                  requirements=Requirements(
                      friendship_names=["Vulpix"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        granite_zone_absol_minigame_region.minigame_location.append(
-            Location(name="Shaymin",
-                     id=MinigameLocationIds.SHAYMIN_HURDLE.value,
-                     requirements=Requirements(
-                         friendship_names=["Shaymin"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        granite_zone_absol_minigame_region.friendship_locations.append(
-            Location(name="Shaymin Unlock",
-                     id=FRIENDSHIP_ITEMS["Shaymin"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.absol_hurdle_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    granite_zone_absol_minigame_region.minigame_location.append(
+        Location(name="Shaymin",
+                 id=MinigameLocationIds.SHAYMIN_HURDLE.value,
+                 requirements=Requirements(
+                     friendship_names=["Shaymin"],
+                 )),
+    )
+    granite_zone_absol_minigame_region.friendship_locations.append(
+        Location(name="Shaymin Unlock",
+                 id=FRIENDSHIP_ITEMS["Shaymin"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.absol_hurdle_all,
+                 )),
+    )
     return granite_zone_absol_minigame_region
 
 
-def generate_granite_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_granite_zone_overworld_region():
     granite_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Granite Zone - Overworld",
                        display="Granite Zone - Overworld",
@@ -831,7 +832,7 @@ def generate_granite_zone_overworld_region(world, get_all_locations: bool = Fals
     return granite_zone_overworld_region
 
 
-def generate_haunted_zone_mansion_rotom_minigame_region(world, get_all_locations: bool = False):
+def generate_haunted_zone_mansion_rotom_minigame_region():
     haunted_zone_mansion_rotom_minigame_region: PokeparkRegion = PokeparkRegion(
         name="Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up",
         display="Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up",
@@ -934,27 +935,24 @@ def generate_haunted_zone_mansion_rotom_minigame_region(world, get_all_locations
                  requirements=Requirements(
                      friendship_names=["Baltoy"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        haunted_zone_mansion_rotom_minigame_region.minigame_location.append(
-            Location(name="Rotom",
-                     id=MinigameLocationIds.ROTOM_SHOOT.value,
-                     requirements=Requirements(
-                         friendship_names=["Rotom"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        haunted_zone_mansion_rotom_minigame_region.friendship_locations.append(
-            Location(name="Rotom Unlock",
-                     id=FRIENDSHIP_ITEMS["Rotom"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.rotom_shoot_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    haunted_zone_mansion_rotom_minigame_region.minigame_location.append(
+        Location(name="Rotom",
+                 id=MinigameLocationIds.ROTOM_SHOOT.value,
+                 requirements=Requirements(
+                     friendship_names=["Rotom"],
+                 )),
+    )
+    haunted_zone_mansion_rotom_minigame_region.friendship_locations.append(
+        Location(name="Rotom Unlock",
+                 id=FRIENDSHIP_ITEMS["Rotom"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.rotom_shoot_all,
+                 )),
+    )
     return haunted_zone_mansion_rotom_minigame_region
 
 
-def generate_haunted_zone_mansion_dusknoir_minigame_region(world, get_all_locations: bool = False):
+def generate_haunted_zone_mansion_dusknoir_minigame_region():
     haunted_zone_mansion_dusknoir_minigame_region: PokeparkRegion = PokeparkRegion(
         name="Haunted Zone - Mansion - Dusknoir's Speed Slam",
         display="Haunted Zone - Mansion - Dusknoir's Speed Slam",
@@ -1057,27 +1055,24 @@ def generate_haunted_zone_mansion_dusknoir_minigame_region(world, get_all_locati
                  requirements=Requirements(
                      friendship_names=["Krabby"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        haunted_zone_mansion_dusknoir_minigame_region.minigame_location.append(
-            Location(name="Darkrai",
-                     id=MinigameLocationIds.DARKRAI_SLAM.value,
-                     requirements=Requirements(
-                         friendship_names=["Darkrai"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        haunted_zone_mansion_dusknoir_minigame_region.friendship_locations.append(
-            Location(name="Darkrai Unlock",
-                     id=FRIENDSHIP_ITEMS["Darkrai"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.dusknoir_slam_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    haunted_zone_mansion_dusknoir_minigame_region.minigame_location.append(
+        Location(name="Darkrai",
+                 id=MinigameLocationIds.DARKRAI_SLAM.value,
+                 requirements=Requirements(
+                     friendship_names=["Darkrai"],
+                 )),
+    )
+    haunted_zone_mansion_dusknoir_minigame_region.friendship_locations.append(
+        Location(name="Darkrai Unlock",
+                 id=FRIENDSHIP_ITEMS["Darkrai"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.dusknoir_slam_all,
+                 )),
+    )
     return haunted_zone_mansion_dusknoir_minigame_region
 
 
-def generate_haunted_zone_overworld_mansion_region(world, get_all_locations: bool = False):
+def generate_haunted_zone_overworld_mansion_region():
     haunted_zone_overworld_mansion_region: PokeparkRegion = (
         PokeparkRegion(name="Haunted Zone - Overworld - Mansion",
                        display="Haunted Zone - Overworld - Mansion",
@@ -1257,7 +1252,7 @@ def generate_haunted_zone_overworld_mansion_region(world, get_all_locations: boo
     return haunted_zone_overworld_mansion_region
 
 
-def generate_haunted_zone_tangrowth_minigame_region(world, get_all_locations: bool = False):
+def generate_haunted_zone_tangrowth_minigame_region():
     haunted_zone_tangrowth_minigame_region: PokeparkRegion = PokeparkRegion(
         name="Haunted Zone - Tangrowth's Swing-Along",
         display="Haunted Zone - Tangrowth's Swing-Along",
@@ -1358,27 +1353,24 @@ def generate_haunted_zone_tangrowth_minigame_region(world, get_all_locations: bo
                  requirements=Requirements(
                      friendship_names=["Croagunk"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        haunted_zone_tangrowth_minigame_region.minigame_location.append(
-            Location(name="Celebi",
-                     id=MinigameLocationIds.CELEBI_SWING.value,
-                     requirements=Requirements(
-                         friendship_names=["Celebi"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        haunted_zone_tangrowth_minigame_region.friendship_locations.append(
-            Location(name="Celebi Unlock",
-                     id=FRIENDSHIP_ITEMS["Celebi"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.tangrowth_swing_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    haunted_zone_tangrowth_minigame_region.minigame_location.append(
+        Location(name="Celebi",
+                 id=MinigameLocationIds.CELEBI_SWING.value,
+                 requirements=Requirements(
+                     friendship_names=["Celebi"],
+                 )),
+    )
+    haunted_zone_tangrowth_minigame_region.friendship_locations.append(
+        Location(name="Celebi Unlock",
+                 id=FRIENDSHIP_ITEMS["Celebi"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.tangrowth_swing_all,
+                 )),
+    )
     return haunted_zone_tangrowth_minigame_region
 
 
-def generate_haunted_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_haunted_zone_overworld_region():
     haunted_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Haunted Zone - Overworld",
                        display="Haunted Zone - Overworld",
@@ -1489,7 +1481,7 @@ def generate_haunted_zone_overworld_region(world, get_all_locations: bool = Fals
     return haunted_zone_overworld_region
 
 
-def generate_magma_zone_blaziken_minigame_region(world, get_all_locations: bool = False):
+def generate_magma_zone_blaziken_minigame_region():
     magma_zone_blaziken_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Magma Zone - Blaziken's Boulder Bash",
                        display="Magma Zone - Blaziken's Boulder Bash",
@@ -1590,27 +1582,24 @@ def generate_magma_zone_blaziken_minigame_region(world, get_all_locations: bool 
                  requirements=Requirements(
                      friendship_names=["Mawile"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        magma_zone_blaziken_minigame_region.minigame_location.append(
-            Location(name="Groudon",
-                     id=MinigameLocationIds.GROUDON_BOULDER.value,
-                     requirements=Requirements(
-                         friendship_names=["Groudon"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        magma_zone_blaziken_minigame_region.friendship_locations.append(
-            Location(name="Groudon Unlock",
-                     id=FRIENDSHIP_ITEMS["Groudon"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.blaziken_boulder_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    magma_zone_blaziken_minigame_region.minigame_location.append(
+        Location(name="Groudon",
+                 id=MinigameLocationIds.GROUDON_BOULDER.value,
+                 requirements=Requirements(
+                     friendship_names=["Groudon"],
+                 )),
+    )
+    magma_zone_blaziken_minigame_region.friendship_locations.append(
+        Location(name="Groudon Unlock",
+                 id=FRIENDSHIP_ITEMS["Groudon"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.blaziken_boulder_all,
+                 )),
+    )
     return magma_zone_blaziken_minigame_region
 
 
-def generate_magma_zone_rhyperior_minigame_region(world, get_all_locations: bool = False):
+def generate_magma_zone_rhyperior_minigame_region():
     magma_zone_rhyperior_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Magma Zone - Rhyperior's Bumper Burn",
                        display="Magma Zone - Rhyperior's Bumper Burn",
@@ -1714,28 +1703,25 @@ def generate_magma_zone_rhyperior_minigame_region(world, get_all_locations: bool
                  requirements=Requirements(
                      friendship_names=["Bonsly"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        magma_zone_rhyperior_minigame_region.minigame_location.append(
-            Location(name="Heatran",
-                     id=MinigameLocationIds.HEATRAN_BUMPER.value,
-                     requirements=Requirements(
-                         friendship_names=["Heatran"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        magma_zone_rhyperior_minigame_region.friendship_locations.append(
-            Location(name="Heatran Unlock",
-                     id=FRIENDSHIP_ITEMS["Heatran"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.rhyperior_bumper_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
+    magma_zone_rhyperior_minigame_region.minigame_location.append(
+        Location(name="Heatran",
+                 id=MinigameLocationIds.HEATRAN_BUMPER.value,
+                 requirements=Requirements(
+                     friendship_names=["Heatran"],
+                 )),
+    )
+    magma_zone_rhyperior_minigame_region.friendship_locations.append(
+        Location(name="Heatran Unlock",
+                 id=FRIENDSHIP_ITEMS["Heatran"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.rhyperior_bumper_all,
 
-                     )),
-        )
+                 )),
+    )
     return magma_zone_rhyperior_minigame_region
 
 
-def generate_magma_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_magma_zone_overworld_region():
     magma_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Magma Zone - Overworld",
                        display="Magma Zone - Overworld",
@@ -1907,19 +1893,6 @@ def generate_magma_zone_overworld_region(world, get_all_locations: bool = False)
                  id=FRIENDSHIP_ITEMS["Blaziken"],
                  requirements=Requirements(
                      prisma_names=[
-                         "Bulbasaur Prisma",
-                         "Venusaur Prisma",
-                         "Pelipper Prisma",
-                         "Gyarados Prisma",
-                         "Empoleon Prisma",
-                         "Bastiodon Prisma",
-                         "Rhyperior Prisma",
-                         "Blaziken Prisma",
-                         "Tangrowth Prisma",
-                         "Dusknoir Prisma",
-                         "Rotom Prisma",
-                         "Absol Prisma",
-                         "Salamence Prisma",
                          "Rayquaza Prisma"]
                  )),
     )
@@ -1971,7 +1944,7 @@ def generate_magma_zone_overworld_region(world, get_all_locations: bool = False)
     return magma_zone_overworld_region
 
 
-def generate_cavern_zone_bastiodon_minigame_region(world, get_all_locations: bool = False):
+def generate_cavern_zone_bastiodon_minigame_region():
     cavern_zone_bastiodon_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Cavern Zone - Bastiodon's Panel Crush",
                        display="Cavern Zone - Bastiodon's Panel Crush",
@@ -2074,27 +2047,24 @@ def generate_cavern_zone_bastiodon_minigame_region(world, get_all_locations: boo
                  requirements=Requirements(
                      friendship_names=["Magby"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        cavern_zone_bastiodon_minigame_region.minigame_location.append(
-            Location(name="Metagross",
-                     id=MinigameLocationIds.METAGROSS_PANEL.value,
-                     requirements=Requirements(
-                         friendship_names=["Metagross"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        cavern_zone_bastiodon_minigame_region.friendship_locations.append(
-            Location(name="Metagross Unlock",
-                     id=FRIENDSHIP_ITEMS["Metagross"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.bastiodon_panel_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+    cavern_zone_bastiodon_minigame_region.minigame_location.append(
+        Location(name="Metagross",
+                 id=MinigameLocationIds.METAGROSS_PANEL.value,
+                 requirements=Requirements(
+                     friendship_names=["Metagross"],
+                 )),
+    )
+    cavern_zone_bastiodon_minigame_region.friendship_locations.append(
+        Location(name="Metagross Unlock",
+                 id=FRIENDSHIP_ITEMS["Metagross"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.bastiodon_panel_all,
+                 )),
+    )
     return cavern_zone_bastiodon_minigame_region
 
 
-def generate_cavern_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_cavern_zone_overworld_region():
     cavern_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Cavern Zone - Overworld",
                        display="Cavern Zone - Overworld",
@@ -2313,7 +2283,7 @@ def generate_cavern_zone_overworld_region(world, get_all_locations: bool = False
     return cavern_zone_overworld_region
 
 
-def generate_ice_zone_empoleon_minigame_region(world, get_all_locations: bool = False):
+def generate_ice_zone_empoleon_minigame_region():
     ice_zone_empoleon_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Ice Zone - Empoleon's Snow Slide",
                        display="Ice Zone - Empoleon's Snow Slide",
@@ -2416,28 +2386,25 @@ def generate_ice_zone_empoleon_minigame_region(world, get_all_locations: bool = 
                  requirements=Requirements(
                      friendship_names=["Spheal"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        ice_zone_empoleon_minigame_region.minigame_location.append(
-            Location(name="Suicune",
-                     id=MinigameLocationIds.SUICUNE_SLIDE.value,
-                     requirements=Requirements(
-                         friendship_names=["Suicune"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        ice_zone_empoleon_minigame_region.friendship_locations.append(
-            Location(name="Suicune Unlock",
-                     id=FRIENDSHIP_ITEMS["Suicune"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.empoleon_slide_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
+    ice_zone_empoleon_minigame_region.minigame_location.append(
+        Location(name="Suicune",
+                 id=MinigameLocationIds.SUICUNE_SLIDE.value,
+                 requirements=Requirements(
+                     friendship_names=["Suicune"],
+                 )),
+    )
+    ice_zone_empoleon_minigame_region.friendship_locations.append(
+        Location(name="Suicune Unlock",
+                 id=FRIENDSHIP_ITEMS["Suicune"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.empoleon_slide_all,
 
-                     )),
-        )
+                 )),
+    )
     return ice_zone_empoleon_minigame_region
 
 
-def generate_ice_zone_overworld_lower_lift_region(world, get_all_locations: bool = False):
+def generate_ice_zone_overworld_lower_lift_region():
     ice_zone_overworld_lower_lift_region: PokeparkRegion = PokeparkRegion(
         name="Ice Zone - Overworld - Lower Lift Region",
         display="Ice Zone - Overworld - Lower Lift Region",
@@ -2469,7 +2436,7 @@ def generate_ice_zone_overworld_lower_lift_region(world, get_all_locations: bool
     return ice_zone_overworld_lower_lift_region
 
 
-def generate_ice_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_ice_zone_overworld_region():
     ice_zone_overworld_region: PokeparkRegion = (
         PokeparkRegion(name="Ice Zone - Overworld",
                        display="Ice Zone - Overworld",
@@ -2704,7 +2671,7 @@ def generate_ice_zone_overworld_region(world, get_all_locations: bool = False):
     return ice_zone_overworld_region
 
 
-def generate_beach_zone_gyarados_minigame_region(world, get_all_locations: bool = False):
+def generate_beach_zone_gyarados_minigame_region():
     beach_zone_gyarados_mingame_region: PokeparkRegion = (
         PokeparkRegion(name="Beach Zone - Gyarados' Aqua Dash",
                        display="Beach Zone - Gyarados' Aqua Dash",
@@ -2807,28 +2774,25 @@ def generate_beach_zone_gyarados_minigame_region(world, get_all_locations: bool 
                  requirements=Requirements(
                      friendship_names=["Lotad"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        beach_zone_gyarados_mingame_region.minigame_location.append(
-            Location(name="Manaphy",
-                     id=MinigameLocationIds.MANAPHY_AQUA.value,
-                     requirements=Requirements(
-                         friendship_names=["Manaphy"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        beach_zone_gyarados_mingame_region.friendship_locations.append(
-            Location(name="Manaphy Unlock",
-                     id=FRIENDSHIP_ITEMS["Manaphy"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.gyarados_aqua_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
+    beach_zone_gyarados_mingame_region.minigame_location.append(
+        Location(name="Manaphy",
+                 id=MinigameLocationIds.MANAPHY_AQUA.value,
+                 requirements=Requirements(
+                     friendship_names=["Manaphy"],
+                 )),
+    )
+    beach_zone_gyarados_mingame_region.friendship_locations.append(
+        Location(name="Manaphy Unlock",
+                 id=FRIENDSHIP_ITEMS["Manaphy"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.gyarados_aqua_all,
 
-                     )),
-        )
+                 )),
+    )
     return beach_zone_gyarados_mingame_region
 
 
-def generate_beach_zone_pelipper_minigame_region(world, get_all_locations: bool = False):
+def generate_beach_zone_pelipper_minigame_region():
     beach_zone_pelipper_mingame_region: PokeparkRegion = (
         PokeparkRegion(name="Beach Zone - Pelipper's Circle Circuit",
                        display="Beach Zone - Pelipper's Circle Circuit",
@@ -2930,28 +2894,25 @@ def generate_beach_zone_pelipper_minigame_region(world, get_all_locations: bool 
                  requirements=Requirements(
                      friendship_names=["Wingull"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        beach_zone_pelipper_mingame_region.minigame_location.append(
-            Location(name="Latias",
-                     id=MinigameLocationIds.LATIAS_CIRCLE.value,
-                     requirements=Requirements(
-                         friendship_names=["Latias"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        beach_zone_pelipper_mingame_region.friendship_locations.append(
-            Location(name="Latias Unlock",
-                     id=FRIENDSHIP_ITEMS["Latias"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.pelipper_circuit_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
+    beach_zone_pelipper_mingame_region.minigame_location.append(
+        Location(name="Latias",
+                 id=MinigameLocationIds.LATIAS_CIRCLE.value,
+                 requirements=Requirements(
+                     friendship_names=["Latias"],
+                 )),
+    )
+    beach_zone_pelipper_mingame_region.friendship_locations.append(
+        Location(name="Latias Unlock",
+                 id=FRIENDSHIP_ITEMS["Latias"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.pelipper_circuit_all,
 
-                     )),
-        )
+                 )),
+    )
     return beach_zone_pelipper_mingame_region
 
 
-def generate_beach_zone_overworld_region(world, get_all_locations: bool = False):
+def generate_beach_zone_overworld_region():
     beach_zone_overworld_region: PokeparkRegion = PokeparkRegion(
         name="Beach Zone - Overworld",
         display="Beach Zone - Overworld",
@@ -3060,8 +3021,7 @@ def generate_beach_zone_overworld_region(world, get_all_locations: bool = False)
                  id=FRIENDSHIP_ITEMS["Krabby"],
                  requirements=Requirements(
                      unlock_names=["Krabby Unlock"],
-                     powers=PowerRequirement.can_play_catch,
-                     can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 2 - Pokemon Unlock"]
+                     powers=PowerRequirement.can_play_catch
                  )),
     )
     beach_zone_overworld_region.friendship_locations.append(
@@ -3076,9 +3036,7 @@ def generate_beach_zone_overworld_region(world, get_all_locations: bool = False)
                  id=FRIENDSHIP_ITEMS["Corphish"],
                  requirements=Requirements(
                      unlock_names=["Corphish Unlock"],
-                     powers=PowerRequirement.can_battle,
-                     can_reach_locations=["Beach Zone - Overworld - Bottle Recycling 4 - Pokemon Unlock"]
-
+                     powers=PowerRequirement.can_battle
                  )),
     )
     beach_zone_overworld_region.friendship_locations.append(
@@ -3192,7 +3150,7 @@ def generate_beach_zone_overworld_region(world, get_all_locations: bool = False)
     return beach_zone_overworld_region
 
 
-def generate_meadow_zone_venusaur_minigame_region(world: "PokeparkWorld", get_all_locations: bool = False):
+def generate_meadow_zone_venusaur_minigame_region():
     meadow_zone_venusaur_minigame_region: PokeparkRegion = (
         PokeparkRegion(name="Meadow Zone - Venusaur's Vine Swing",
                        display="Meadow Zone - Venusaur's Vine Swing",
@@ -3296,28 +3254,25 @@ def generate_meadow_zone_venusaur_minigame_region(world: "PokeparkWorld", get_al
                  requirements=Requirements(
                      friendship_names=["Pachirisu"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        meadow_zone_venusaur_minigame_region.minigame_location.append(
-            Location(name="Jirachi",
-                     id=MinigameLocationIds.JIRACHI_VINE_SWING.value,
-                     requirements=Requirements(
-                         friendship_names=["Jirachi"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
-        meadow_zone_venusaur_minigame_region.friendship_locations.append(
-            Location(name="Jirachi Unlock",
-                     id=FRIENDSHIP_ITEMS["Jirachi"],
-                     requirements=Requirements(
-                         minigame=MinigameRequirement.venusaur_vine_swing_all,
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
+    meadow_zone_venusaur_minigame_region.minigame_location.append(
+        Location(name="Jirachi",
+                 id=MinigameLocationIds.JIRACHI_VINE_SWING.value,
+                 requirements=Requirements(
+                     friendship_names=["Jirachi"],
+                 )),
+    )
+    meadow_zone_venusaur_minigame_region.friendship_locations.append(
+        Location(name="Jirachi Unlock",
+                 id=FRIENDSHIP_ITEMS["Jirachi"],
+                 requirements=Requirements(
+                     minigame=MinigameRequirement.venusaur_vine_swing_all,
 
-                     )),
-        )
+                 )),
+    )
     return meadow_zone_venusaur_minigame_region
 
 
-def generate_meadow_zone_bulbasaur_minigame_region(world: "PokeparkWorld", get_all_locations: bool = False):
+def generate_meadow_zone_bulbasaur_minigame_region():
     meadow_zone_bulbasaur_minigame: PokeparkRegion = PokeparkRegion(
         name="Meadow Zone - Bulbasaur's Daring Dash Minigame",
         display="Meadow Zone - Bulbasaur's Daring Dash Minigame",
@@ -3478,20 +3433,19 @@ def generate_meadow_zone_bulbasaur_minigame_region(world: "PokeparkWorld", get_a
                  requirements=Requirements(
                      friendship_names=["Croagunk"])),
     )
-    if world.options.goal == world.options.goal.option_aftergame or get_all_locations:
-        meadow_zone_bulbasaur_minigame.minigame_location.append(
-            Location(name="Mew",
-                     id=MinigameLocationIds.MEW_DASH.value,
-                     requirements=Requirements(
-                         friendship_names=["Mew"],
-                         can_reach_locations=["Skygarden - Overworld - Mew Challenge completed"]
-                     )),
-        )
+
+    meadow_zone_bulbasaur_minigame.minigame_location.append(
+        Location(name="Mew",
+                 id=MinigameLocationIds.MEW_DASH.value,
+                 requirements=Requirements(
+                     friendship_names=["Mew"],
+                 )),
+    )
 
     return meadow_zone_bulbasaur_minigame
 
 
-def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locations: bool = False):
+def generate_meadow_zone_overworld_region():
     meadow_zone_overworld: PokeparkRegion = (
         PokeparkRegion(name="Meadow Zone - Overworld",
                        display="Meadow Zone - Overworld",
@@ -3637,7 +3591,7 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  id=FRIENDSHIP_ITEMS["Ambipom"],
                  requirements=Requirements(
                      unlock_names=["Ambipom Unlock"],
-                     powers=PowerRequirement.can_play_catch
+                     powers=PowerRequirement.can_battle
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
@@ -3645,7 +3599,7 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
                  id=FRIENDSHIP_ITEMS["Weedle"],
                  requirements=Requirements(
                      unlock_names=["Weedle Unlock"],
-                     powers=PowerRequirement.can_dash_overworld,
+                     powers=PowerRequirement.can_battle,
                  )),
     )
     meadow_zone_overworld.friendship_locations.append(
@@ -3844,7 +3798,7 @@ def generate_meadow_zone_overworld_region(world: "PokeparkWorld", get_all_locati
     return meadow_zone_overworld
 
 
-def generate_treehouse_region(world: "PokeparkWorld", get_all_locations: bool = False):
+def generate_treehouse_region():
     treehouse: PokeparkRegion = PokeparkRegion(name="Treehouse",
                                                display="Treehouse")
     treehouse.friendship_locations.append(

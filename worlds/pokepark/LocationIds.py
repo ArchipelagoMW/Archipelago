@@ -342,7 +342,9 @@ class QuestLocationIds(Enum):
     MEW_CHALLENGE3 = BERRIES["10 Berries"] + 23
     MEW_CHALLENGE4 = BERRIES["10 Berries"] + 24
     MEW_CHALLENGE_END = BERRIES["10 Berries"] + 25
-    COMPLETE_PRISMA = BERRIES["10 Berries"] + 26
+    COMPLETE_PRISMA_STAGE1 = BERRIES["10 Berries"] + 26
+    COMPLETE_PRISMA_STAGE2 = BERRIES["10 Berries"] + 27
+    COMPLETE_PRISMA_STAGE3 = BERRIES["10 Berries"] + 28
 
     THUNDERBOLT_POWERUP1 = POWERS["Progressive Thunderbolt"] + 1
     THUNDERBOLT_POWERUP2 = POWERS["Progressive Thunderbolt"] + 2

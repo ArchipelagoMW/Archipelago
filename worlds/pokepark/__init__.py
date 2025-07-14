@@ -132,10 +132,8 @@ class PokeparkWorld(World):
                      "Ice Zone Unlock",
                      "Cavern Zone & Magma Zone Unlock",
                      "Haunted Zone Unlock",
-                     "Granite Zone & Flower Zone Unlock"]
-
-        if self.options.goal == self.options.goal.option_aftergame:
-            all_zones.append("Skygarden Unlock")
+                     "Granite Zone & Flower Zone Unlock",
+                     "Skygarden Unlock"]
 
         if self.options.starting_zone == self.options.starting_zone.option_one:
             # Randomly select one starting zone
@@ -174,24 +172,8 @@ class PokeparkWorld(World):
         """Adds standard item categories to the pool."""
         # Items excluded from normal unlocks
         unlock_item_exception = ["Drifblim Unlock"]
-        friends_item_exception = []
 
-        if self.options.goal == self.options.goal.option_mew:
-            friends_item_exception.append("Jirachi")
-            friends_item_exception.append("Manaphy")
-            friends_item_exception.append("Latias")
-            friends_item_exception.append("Suicune")
-            friends_item_exception.append("Metagross")
-            friends_item_exception.append("Heatran")
-            friends_item_exception.append("Groudon")
-            friends_item_exception.append("Celebi")
-            friends_item_exception.append("Darkrai")
-            friends_item_exception.append("Rotom")
-            friends_item_exception.append("Shaymin")
-            friends_item_exception.append("Latios")
-            friends_item_exception.append("Deoxys")
-
-        pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys() if name not in friends_item_exception])
+        pool.extend([self.create_item(name) for name in FRIENDSHIP_ITEMS.keys()])
         pool.extend([self.create_item(name) for name in UNLOCK_ITEMS.keys()
                      if name not in unlock_item_exception])
         pool.extend([self.create_item(name) for name in PRISM_ITEM.keys()])

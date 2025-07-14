@@ -161,13 +161,16 @@ class TestUnlockDependencies(PokeparkTest):
     def test_pikachu_balloon_unlock(self) -> None:
         """Verify unlock conditions for accessing Pikachu in Pelipper's Circle Circuit"""
         locations = ["Beach Zone - Pelipper's Circle Circuit - Pikachu",
-                     "Granite Zone - Salamence's Sky Race - Pikachu"]
+                     "Granite Zone - Salamence's Sky Race - Pikachu",
+                     "Beach Zone - Pelipper's Circle Circuit - Latias Unlock",
+                     "Granite Zone - Salamence's Sky Race - Latios Unlock"]
         items = [["Pikachu Balloon"]]
         self.assertAccessDependency(locations, items)
 
     def test_pikachu_surfboard_unlock(self) -> None:
         """Verify unlock conditions for accessing Pikachu in Gyarados' Aqua Dash"""
-        locations = ["Beach Zone - Gyarados' Aqua Dash - Pikachu"]
+        locations = ["Beach Zone - Gyarados' Aqua Dash - Pikachu",
+                     "Beach Zone - Gyarados' Aqua Dash - Manaphy Unlock"]
         items = [["Pikachu Surfboard"]]
         self.assertAccessDependency(locations, items)
 
@@ -570,7 +573,8 @@ class TestRegionAccess(PokeparkTest):
         """Verify abillity to access Iron Tail Power Upgrades with Ice Zone or higher"""
         locations = ["Treehouse - Iron Tail Upgrade 1", "Treehouse - Iron Tail Upgrade 2",
                      "Treehouse - Iron Tail Upgrade 3"]
-        items = [["Ice Zone Unlock"], ["Cavern Zone & Magma Zone Unlock"], ["Haunted Zone Unlock"]]
+        items = [["Ice Zone Unlock"], ["Cavern Zone & Magma Zone Unlock"], ["Haunted Zone Unlock"],
+                 ["Granite Zone & Flower Zone Unlock"], ["Skygarden Unlock"]]
         self.assertAccessDependency(locations, items, True)
 
     def test_can_reach_cavern_zone(self) -> None:
