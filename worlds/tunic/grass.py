@@ -16,6 +16,8 @@ class TunicLocationData(NamedTuple):
     location_group: str | None = None
 
 
+# todo: remove region, make all of these regions append grass to the name
+# and then set the rules on the region entrances instead of the locations directly
 grass_location_table: dict[str, TunicLocationData] = {
     "Overworld - Overworld Grass (576) (7.0, 4.0, -223.0)": TunicLocationData("Overworld", "Overworld"),
     "Overworld - Overworld Grass (572) (6.0, 4.0, -223.0)": TunicLocationData("Overworld", "Overworld"),
