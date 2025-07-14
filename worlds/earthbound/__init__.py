@@ -10,7 +10,7 @@ from worlds.AutoWorld import World, WebWorld
 import settings
 from .Items import get_item_names_per_category, item_table
 from .Locations import get_locations
-from .Regions import init_areas
+from .Regions import init_areas, connect_area_exits
 from .Options import EBOptions, eb_option_groups
 from .setup_game import setup_gamevars, place_static_items
 from .modules.enemy_data import initialize_enemies
@@ -288,6 +288,7 @@ class EarthBoundWorld(World):
 
     def create_regions(self) -> None:
         init_areas(self, get_locations(self))
+        connect_area_exits(self)
         place_static_items(self)
 
     def create_items(self) -> None:

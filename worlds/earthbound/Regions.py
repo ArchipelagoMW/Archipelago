@@ -19,25 +19,6 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     player = world.player
 
     locations_per_region = get_locations_per_region(locations)
-    arcade_connection = world.dungeon_connections["Arcade"]
-    giant_step_connection = world.dungeon_connections["Giant Step"]
-    lilliput_steps_connection = world.dungeon_connections["Lilliput Steps"]
-    happy_happy_hq_connection = world.dungeon_connections["Happy-Happy HQ"]
-    belch_factory_connection = world.dungeon_connections["Belch's Factory"]
-    milky_well_connection = world.dungeon_connections["Milky Well"]
-    gold_mine_connection = world.dungeon_connections["Gold Mine"]
-    moonside_connection = world.dungeon_connections["Moonside"]
-    monotoli_building_connection = world.dungeon_connections["Monotoli Building"]
-    magnet_hill_connection = world.dungeon_connections["Magnet Hill"]
-    pink_cloud_connection = world.dungeon_connections["Pink Cloud"]
-    pyramid_connection = world.dungeon_connections["Pyramid"]
-    dungeon_man_connection = world.dungeon_connections["Dungeon Man"]
-    rainy_circle_connection = world.dungeon_connections["Rainy Circle"]
-    stonehenge_connection = world.dungeon_connections["Stonehenge Base"]
-    lumine_hall_connection = world.dungeon_connections["Lumine Hall"]
-    fire_spring_connection = world.dungeon_connections["Fire Spring"]
-    sea_of_eden_connection = world.dungeon_connections["Sea of Eden"]
-    brickroad_maze_connection = world.dungeon_connections["Brickroad Maze"]
 
     regions = [
         create_region(world, player, locations_per_region, "Menu"),
@@ -104,8 +85,32 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     multiworld.regions += regions
     connect_menu_region(world)
 
+def connect_area_exits(world):
+    multiworld = world.multiworld
+    player = world.player
+
+    arcade_connection = world.dungeon_connections["Arcade"]
+    giant_step_connection = world.dungeon_connections["Giant Step"]
+    lilliput_steps_connection = world.dungeon_connections["Lilliput Steps"]
+    happy_happy_hq_connection = world.dungeon_connections["Happy-Happy HQ"]
+    belch_factory_connection = world.dungeon_connections["Belch's Factory"]
+    milky_well_connection = world.dungeon_connections["Milky Well"]
+    gold_mine_connection = world.dungeon_connections["Gold Mine"]
+    moonside_connection = world.dungeon_connections["Moonside"]
+    monotoli_building_connection = world.dungeon_connections["Monotoli Building"]
+    magnet_hill_connection = world.dungeon_connections["Magnet Hill"]
+    pink_cloud_connection = world.dungeon_connections["Pink Cloud"]
+    pyramid_connection = world.dungeon_connections["Pyramid"]
+    dungeon_man_connection = world.dungeon_connections["Dungeon Man"]
+    rainy_circle_connection = world.dungeon_connections["Rainy Circle"]
+    stonehenge_connection = world.dungeon_connections["Stonehenge Base"]
+    lumine_hall_connection = world.dungeon_connections["Lumine Hall"]
+    fire_spring_connection = world.dungeon_connections["Fire Spring"]
+    sea_of_eden_connection = world.dungeon_connections["Sea of Eden"]
+    brickroad_maze_connection = world.dungeon_connections["Brickroad Maze"]
+
     multiworld.get_region("Ness's Mind", player).add_exits(["Onett", "Twoson", "Happy-Happy Village", "Threed", "Saturn Valley", "Dusty Dunes Desert", "Fourside", "Winters", "Summers", "Dalaam", "Scaraba", "Deep Darkness", "Tenda Village", "Lost Underworld", "Magicant"],
-                   {"Onett": lambda state: state.has("Onett Teleport", player),
+                {"Onett": lambda state: state.has("Onett Teleport", player),
                     "Twoson": lambda state: state.has("Twoson Teleport", player),
                     "Happy-Happy Village": lambda state: state.has("Happy-Happy Village Teleport", player),
                     "Threed": lambda state: state.has("Threed Teleport", player),
@@ -123,15 +128,15 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     multiworld.get_region("Northern Onett", player).add_exits(["Onett"])
 
     multiworld.get_region("Onett", player).add_exits([giant_step_connection, "Twoson", "Northern Onett", "Global ATM Access", arcade_connection],
-                                                     {giant_step_connection: lambda state: state.has("Key to the Shack", player),
-                                                      "Twoson": lambda state: state.has("Police Badge", player),
-                                                      "Northern Onett": lambda state: state.has("Police Badge", player)})
+                                                    {giant_step_connection: lambda state: state.has("Key to the Shack", player),
+                                                    "Twoson": lambda state: state.has("Police Badge", player),
+                                                    "Northern Onett": lambda state: state.has("Police Badge", player)})
 
     multiworld.get_region("Twoson", player).add_exits(["Onett", "Peaceful Rest Valley", "Threed", "Everdred's House", "Global ATM Access", "Common Condiment Shop"],
                     {"Onett": lambda state: state.has("Police Badge", player),
-                           "Peaceful Rest Valley": lambda state: state.has_any({"Pencil Eraser", "Valley Bridge Repair"}, player),
-                           "Threed": lambda state: state.has_any({"Threed Tunnels Clear", "Wad of Bills"}, player),
-                           "Everdred's House": lambda state: state.has("Paula", player)})
+                        "Peaceful Rest Valley": lambda state: state.has_any({"Pencil Eraser", "Valley Bridge Repair"}, player),
+                        "Threed": lambda state: state.has_any({"Threed Tunnels Clear", "Wad of Bills"}, player),
+                        "Everdred's House": lambda state: state.has("Paula", player)})
 
     multiworld.get_region("Peaceful Rest Valley", player).add_exits(["Twoson", "Happy-Happy Village"],
                                                                     {"Twoson": lambda state: state.has_any({"Pencil Eraser", "Valley Bridge Repair"}, player)})
@@ -139,11 +144,11 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     multiworld.get_region("Happy-Happy Village", player).add_exits(["Peaceful Rest Valley", lilliput_steps_connection, "Global ATM Access", happy_happy_hq_connection])
     
     multiworld.get_region("Threed", player).add_exits(["Twoson", "Dusty Dunes Desert", "Andonuts Lab Area", "Threed Underground", "Boogey Tent", "Global ATM Access"],
-                                                      {"Twoson": lambda state: state.has("Threed Tunnels Clear", player),
-                                                      "Dusty Dunes Desert": lambda state: state.has("Threed Tunnels Clear", player),
-                                                       "Andonuts Lab Area": lambda state: state.has_all({"UFO Engine", "Bad Key Machine"}, player),
-                                                       "Threed Underground": lambda state: state.has("Zombie Paper", player),
-                                                       "Boogey Tent": lambda state: state.has("Jeff", player)})
+                                                    {"Twoson": lambda state: state.has("Threed Tunnels Clear", player),
+                                                    "Dusty Dunes Desert": lambda state: state.has("Threed Tunnels Clear", player),
+                                                    "Andonuts Lab Area": lambda state: state.has_all({"UFO Engine", "Bad Key Machine"}, player),
+                                                    "Threed Underground": lambda state: state.has("Zombie Paper", player),
+                                                    "Boogey Tent": lambda state: state.has("Jeff", player)})
 
     multiworld.get_region("Threed Underground", player).add_exits(["Grapefruit Falls"])
 
@@ -160,14 +165,14 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
 
     multiworld.get_region("Dusty Dunes Desert", player).add_exits(["Threed", "Monkey Caves", gold_mine_connection, "Fourside", "Global ATM Access"],
                     {"Threed": lambda state: state.has("Threed Tunnels Clear", player),
-                          "Monkey Caves": lambda state: state.has("King Banana", player),
-                           gold_mine_connection: lambda state: state.has("Mining Permit", player)})
+                        "Monkey Caves": lambda state: state.has("King Banana", player),
+                        gold_mine_connection: lambda state: state.has("Mining Permit", player)})
 
     multiworld.get_region("Fourside", player).add_exits(["Dusty Dunes Desert", monotoli_building_connection, magnet_hill_connection, "Threed", "Fourside Dept. Store", "Global ATM Access", moonside_connection],
                     {monotoli_building_connection: lambda state: state.has("Yogurt Dispenser", player),
-                          magnet_hill_connection: lambda state: state.has("Signed Banana", player),
-                          "Threed": lambda state: state.has("Diamond", player),
-                          "Fourside Dept. Store": lambda state: state.has("Jeff", player)})
+                        magnet_hill_connection: lambda state: state.has("Signed Banana", player),
+                        "Threed": lambda state: state.has("Diamond", player),
+                        "Fourside Dept. Store": lambda state: state.has("Jeff", player)})
 
     multiworld.get_region("Moonside", player).add_exits(["Global ATM Access"])
 
@@ -176,7 +181,7 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
 
     multiworld.get_region("Winters", player).add_exits(["Snow Wood Boarding School", "Southern Winters", "Global ATM Access"],
                     {"Snow Wood Boarding School": lambda state: state.has("Letter For Tony", player),
-                           "Southern Winters": lambda state: state.has("Pak of Bubble Gum", player)})
+                        "Southern Winters": lambda state: state.has("Pak of Bubble Gum", player)})
 
     multiworld.get_region("Southern Winters", player).add_exits([brickroad_maze_connection])
 
@@ -188,10 +193,10 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
     {stonehenge_connection: lambda state: state.has("Eraser Eraser", player)})
 
     multiworld.get_region("Dalaam", player).add_exits([pink_cloud_connection],
-                                                      {pink_cloud_connection: lambda state: state.has("Carrot Key", player)})
+                                                    {pink_cloud_connection: lambda state: state.has("Carrot Key", player)})
 
     multiworld.get_region("Scaraba", player).add_exits([pyramid_connection, "Global ATM Access", "Common Condiment Shop"],
-                                                       {pyramid_connection: lambda state: state.has("Hieroglyph Copy", player)})
+                                                    {pyramid_connection: lambda state: state.has("Hieroglyph Copy", player)})
 
     multiworld.get_region(pyramid_connection, player).add_exits(["Southern Scaraba"])
 
@@ -199,16 +204,16 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
                                                                 {dungeon_man_connection: lambda state: state.has_any({"Key to the Tower"}, player)})
 
     multiworld.get_region("Dungeon Man", player).add_exits(["Deep Darkness"],
-                                                           {"Deep Darkness": lambda state: state.has("Submarine to Deep Darkness", player)})
+                                                        {"Deep Darkness": lambda state: state.has("Submarine to Deep Darkness", player)})
 
     multiworld.get_region("Deep Darkness", player).add_exits(["Deep Darkness Darkness"],
-                                                             {"Deep Darkness Darkness": lambda state: state.has("Hawk Eye", player)})
+                                                            {"Deep Darkness Darkness": lambda state: state.has("Hawk Eye", player)})
 
     multiworld.get_region("Deep Darkness Darkness", player).add_exits(["Tenda Village", "Deep Darkness"])
 
     multiworld.get_region("Tenda Village", player).add_exits([lumine_hall_connection, "Deep Darkness Darkness"],
-                                                             {lumine_hall_connection: lambda state: state.has("Shyness Book", player),
-                                                              "Deep Darkness Darkness": lambda state: state.has_all({"Shyness Book", "Hawk Eye"}, player)})
+                                                            {lumine_hall_connection: lambda state: state.has("Shyness Book", player),
+                                                            "Deep Darkness Darkness": lambda state: state.has_all({"Shyness Book", "Hawk Eye"}, player)})
 
     multiworld.get_region("Lumine Hall", player).add_exits(["Lost Underworld"])
 
@@ -216,7 +221,7 @@ def init_areas(world: "EarthBoundWorld", locations: List[LocationData]) -> None:
 
     if world.options.giygas_required:
         multiworld.get_region("Cave of the Present", player).add_exits(["Cave of the Past"],
-                                                                       {"Cave of the Past": lambda state: state.has("Power of the Earth", player)})
+                                                                    {"Cave of the Past": lambda state: state.has("Power of the Earth", player)})
 
         multiworld.get_region("Cave of the Past", player).add_exits(["Endgame"],
                                                                     {"Endgame": lambda state: state.has("Paula", player)})
