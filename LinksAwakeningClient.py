@@ -691,9 +691,9 @@ class LinksAwakeningContext(CommonContext):
         # Ask for updates so that players can co-op entrances in a seed
         await self.send_msgs([{"cmd": "SetNotify", "keys": [self.slot_storage_key]}])
 
-    def on_death_link(self, data: typing.Dict[str, typing.Any]) -> None:
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         self.client.death_link_status = DeathLinkStatus.PENDING
-        super(LinksAwakeningContext, self).on_death_link(data)
+        super(LinksAwakeningContext, self).on_deathlink(data)
 
     def new_checks(self, item_ids, ladxr_ids):
         self.found_checks.update(item_ids)
