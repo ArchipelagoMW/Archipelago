@@ -6,6 +6,7 @@ from typing import Dict, List, NamedTuple, Optional, Set
 
 from .names.item_name import ItemName
 from .names.location_name import LocationName
+from .names.check_type_name import CheckTypeName
 from .tables.location_list import location_table
 from BaseClasses import Item, ItemClassification
 
@@ -194,11 +195,11 @@ default_character_quartz_pool: Counter[str] = Counter()
 # fills the pool counters according to info in location_table
 for location in location_table:
     if location_table[location].vanilla_item != "":
-        if location_table[location].check_type == "Chest":
+        if location_table[location].check_type == CheckTypeName.chest:
             default_chest_pool[location_table[location].vanilla_item] += 1
-        if location_table[location].check_type == "Character Quartz":
+        if location_table[location].check_type == CheckTypeName.character_quartz:
             default_character_quartz_pool[location_table[location].vanilla_item] += 1
-        if location_table[location].check_type == "Area Unlock":
+        if location_table[location].check_type == CheckTypeName.area_unlock:
             default_item_pool[location_table[location].vanilla_item] += 1
 
 default_character_to_location = {
