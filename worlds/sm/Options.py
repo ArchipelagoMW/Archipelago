@@ -15,7 +15,7 @@ class Preset(Choice):
     - Veteran: Experienced rando player. Harder everything, some tougher tricks in logic.
     - Expert: Knows almost all tricks: full suitless Maridia, Lower Norfair hell runs, etc.
     - Master: Everything on hardest, all tricks known.
-    In-depth details on each preset can be found on the VARIA website: https://randommetroidsolver.pythonanywhere.com/presets
+    In-depth details on each preset can be found on the VARIA website: https://varia.run/presets
     You may also specify "varia_custom" to use varia_custom_preset option, or specify "custom" to use custom_preset option."""
     display_name = "Preset"
     option_newbie = 0
@@ -95,21 +95,21 @@ class StrictMinors(Toggle):
     display_name = "Strict Minors"
 
 class MissileQty(Range):
-    """The higher the number, the higher the probability of choosing missiles when placing a minor."""
+    """The higher the number, the higher the probability of choosing Missiles when placing a minor."""
     display_name = "Missile Quantity"
     range_start = 10
     range_end = 90
     default = 30
 
 class SuperQty(Range):
-    """The higher the number, the higher the probability of choosing super missiles when placing a minor."""
+    """The higher the number, the higher the probability of choosing Super Missiles when placing a minor."""
     display_name = "Super Quantity"
     range_start = 10
     range_end = 90
     default = 20
 
 class PowerBombQty(Range):
-    """The higher the number, the higher the probability of choosing power bombs when placing a minor."""
+    """The higher the number, the higher the probability of choosing Power Bombs when placing a minor."""
     display_name = "Power Bomb Quantity"
     range_start = 10
     range_end = 90
@@ -153,7 +153,7 @@ class AreaLayout(Toggle):
 
 class DoorsColorsRando(Toggle):
     """Randomize the color of Red/Green/Yellow doors. Add four new types of doors which require Ice/Wave/Spazer/Plasma
-    beams to open them."""
+    Beams to open them."""
     display_name = "Doors Colors Rando"
 
 class AllowGreyDoors(Toggle):
@@ -186,8 +186,8 @@ class LayoutPatches(DefaultOnToggle):
 
 class VariaTweaks(Toggle):
     """Include minor tweaks for the game to behave 'as it should' in a randomizer context:
-    - Bomb Torizo always activates after picking up its item and does not require bombs to activate
-    - Wrecked Ship item on the energy tank Chozo statue is present before defeating Phantoon
+    - Bomb Torizo always activates after picking up its item and does not require Bomb to activate
+    - Wrecked Ship item on the Energy Tank Chozo statue is present before defeating Phantoon
     - Lower Norfair Chozo statue that lowers the acid toward Gold Torizo does not require Space Jump to activate"""
     display_name = "Varia Tweaks"
 
@@ -257,7 +257,7 @@ class RandomMusic(Toggle):
 
 class CustomPreset(OptionDict):
     """
-    see https://randommetroidsolver.pythonanywhere.com/presets for detailed info on each preset settings
+    see https://varia.run/presets for detailed info on each preset settings
     knows: each skill (know) has a pair [can use, perceived difficulty using one of 1, 5, 10, 25, 50 or 100 each one
            matching a max_difficulty]
     settings: hard rooms, hellruns and bosses settings
@@ -270,7 +270,7 @@ class CustomPreset(OptionDict):
               }
 
 class VariaCustomPreset(OptionList):
-    """use an entry from the preset list on https://randommetroidsolver.pythonanywhere.com/presets"""
+    """use an entry from the preset list on https://varia.run/presets"""
     display_name = "Varia Custom Preset"  
     default = {}
 
@@ -307,7 +307,7 @@ class Tourian(Choice):
     Choose endgame Tourian behaviour:
     - Vanilla: regular vanilla Tourian
     - Fast: speed up Tourian to skip Metroids, Zebetites, and all cutscenes (including Mother Brain 3 fight). Golden Four statues are replaced by an invincible Gadora until all objectives are completed.
-    - Disabled: skip Tourian entirely, ie. escape sequence is triggered as soon as all objectives are completed.
+    - Disabled: skip Tourian entirely; the escape sequence is triggered as soon as all objectives are completed.
     """
     display_name = "Endgame behavior with Tourian"
     option_Vanilla = 0
