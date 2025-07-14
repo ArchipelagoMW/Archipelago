@@ -168,7 +168,7 @@ class OSRSWorld(World):
 
                 item_name = self.region_rows_by_name[parsed_outbound].itemReq
                 entrance.access_rule = lambda state, item_name=item_name.replace("*",""): state.has(item_name, self.player)
-                generate_special_rules_for(entrance, region_row, outbound_region_name, self.player, self.options)
+                generate_special_rules_for(entrance, region_row, outbound_region_name, self.player, self.options, self)
 
             for resource_region in region_row.resources:
                 if not resource_region:
@@ -179,7 +179,7 @@ class OSRSWorld(World):
                     entrance.connect(self.region_name_to_data[resource_region])
                 else:
                     entrance.connect(self.region_name_to_data[resource_region.replace('*', '')])
-                generate_special_rules_for(entrance, region_row, resource_region, self.player, self.options)
+                generate_special_rules_for(entrance, region_row, resource_region, self.player, self.options, self)
 
         self.roll_locations()
 
@@ -195,7 +195,16 @@ class OSRSWorld(World):
         generation_is_fake = hasattr(self.multiworld, "generation_is_fake")  # UT specific override
         locations_required = 0
         for item_row in item_rows:
+            # If it's a filler item, set it aside for later
+            if item_row.progression == ItemClassification.filler:
+                continue
+
+            # If it starts with "Care Pack", only add it if Care Packs are enabled
+            if item_row.name.startswith("Care Pack"):
+                if not self.options.enable_carepacks:
+                    continue
             locations_required += item_row.amount
+        if self.options.enable_duds: locations_required += self.options.dud_count
 
         locations_added = 1  # At this point we've already added the starting area, so we start at 1 instead of 0
 
@@ -232,6 +241,7 @@ class OSRSWorld(World):
             max_amount_for_task_type = getattr(self.options, f"max_{task_type}_tasks")
             tasks_for_this_type = [task for task in self.locations_by_category[task_type]
                                    if self.task_within_skill_levels(task.skills)]
+            max_amount_for_task_type = min(max_amount_for_task_type, len(tasks_for_this_type))
             if not self.options.progressive_tasks:
                 rnd.shuffle(tasks_for_this_type)
             else:
@@ -286,16 +296,36 @@ class OSRSWorld(World):
         self.create_and_add_location(index)
 
     def create_items(self) -> None:
+        filler_items = []
         for item_row in item_rows:
             if item_row.name != self.starting_area_item:
+                # If it's a filler item, set it aside for later
+                if item_row.progression == ItemClassification.filler:
+                    filler_items.append(item_row)
+                    continue
+
+                # If it starts with "Care Pack", only add it if Care Packs are enabled
+                if item_row.name.startswith("Care Pack"):
+                    if not self.options.enable_carepacks:
+                        continue
+
                 for c in range(item_row.amount):
                     item = self.create_item(item_row.name)
                     self.multiworld.itempool.append(item)
+        if self.options.enable_duds:
+            self.random.shuffle(filler_items)
+            filler_items = filler_items[0:self.options.dud_count]
+            for item_row in filler_items:
+                item = self.create_item(item_row.name)
+                self.multiworld.itempool.append(item)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(
-            [ItemNames.Progressive_Armor, ItemNames.Progressive_Weapons, ItemNames.Progressive_Magic,
-             ItemNames.Progressive_Tools, ItemNames.Progressive_Range_Armor, ItemNames.Progressive_Range_Weapon])
+        if self.options.enable_duds:
+            return self.random.choice([item for item in item_rows if item.progression == ItemClassification.filler])
+        else:
+            return self.random.choice([ItemNames.Progressive_Weapons, ItemNames.Progressive_Magic,
+                                       ItemNames.Progressive_Range_Weapon, ItemNames.Progressive_Armor,
+                                       ItemNames.Progressive_Range_Armor, ItemNames.Progressive_Tools])
 
     def create_and_add_location(self, row_index) -> None:
         location_row = location_rows[row_index]

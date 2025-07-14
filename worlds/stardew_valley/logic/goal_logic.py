@@ -60,7 +60,7 @@ class GoalLogic(BaseLogic):
         if not self.content.features.fishsanity.is_enabled:
             return self.logic.fishing.can_catch_every_fish()
 
-        rules = [self.logic.fishing.has_max_fishing()]
+        rules = [self.logic.fishing.has_max_fishing]
 
         rules.extend(
             self.logic.fishing.can_catch_fish_for_fishsanity(fish)
