@@ -979,8 +979,6 @@ if "Timespinner" in network_data_package["games"]:
         if (slot_data["PyramidStart"]):
             timespinner_location_ids["Ancient Pyramid"] += [
                 1337233, 1337234, 1337235]
-
-            list(range(1337, 1337))
         if (slot_data["PureTorcher"]):
             timespinner_location_ids["Present"] += list(range(1337250, 1337352)) + list(range(1337422, 1337496)) + [1337506] + list(range(1337712, 1337779)) + [1337781, 1337782]
             timespinner_location_ids["Past"] += list(range(1337497, 1337505)) + list(range(1337507, 1337711)) + [1337780]
