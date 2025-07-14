@@ -1,6 +1,6 @@
 from worlds.Files import APPatch, APPlayerContainer, AutoPatchRegister
 from settings import get_settings, Settings
-from Utils import user_path
+import Utils
 
 from hashlib import md5
 from typing import Any
@@ -79,14 +79,12 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         except ImportError:
             # Load the external dependencies based on OS
             logger.info("Missing dependencies detected for Luigi's Mansion, attempting to load local copy...")
-            is_linux = platform.startswith("linux")
-            is_windows = platform in ("win32", "cygwin", "msys")
             lib_path = ""
-            if not (is_linux or is_windows):
+            if not (Utils.is_linux or Utils.is_windows):
                 raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-            if is_windows:
+            if Utils.is_windows:
                 lib_path = "lib-windows"
-            elif is_linux:
+            elif Utils.is_linux:
                 lib_path = "lib-linux"
 
             # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
@@ -118,7 +116,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         options: Settings = get_settings()
         file_name = options["luigismansion_options"]["iso_file"]
         if not os_path.exists(file_name):
-            file_name = user_path(file_name)
+            file_name = Utils.user_path(file_name)
         return file_name
 
     @classmethod
