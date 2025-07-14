@@ -1,5 +1,5 @@
 import math
-from typing import Any, List, Dict, Tuple, Mapping
+from typing import Mapping
 
 from Options import OptionError
 from .data.strings import OTHER, ITEMS, CATEGORY, LOCATIONS, SLOTDATA, GOALS, OPTIONS
@@ -123,23 +123,23 @@ class ShapezWorld(World):
         # Defining instance attributes for each shapez world
         # These are set to default values that should fail unit tests if not replaced with correct values
         self.location_count: int = 0
-        self.level_logic: List[str] = []
-        self.upgrade_logic: List[str] = []
+        self.level_logic: list[str] = []
+        self.upgrade_logic: list[str] = []
         self.level_logic_type: str = ""
         self.upgrade_logic_type: str = ""
-        self.random_logic_phase_length: List[int] = []
-        self.category_random_logic_amounts: Dict[str, int] = {}
+        self.random_logic_phase_length: list[int] = []
+        self.category_random_logic_amounts: dict[str, int] = {}
         self.maxlevel: int = 0
         self.finaltier: int = 0
-        self.included_locations: Dict[str, Tuple[str, LocationProgressType]] = {}
+        self.included_locations: dict[str, tuple[str, LocationProgressType]] = {}
         self.client_seed: int = 0
-        self.shapesanity_names: List[str] = []
+        self.shapesanity_names: list[str] = []
         self.upgrade_traps_allowed: bool = False
 
         # Universal Tracker support
         self.ut_active: bool = False
-        self.passthrough: Dict[str, any] = {}
-        self.location_id_to_alias: Dict[int, str] = {}
+        self.passthrough: dict[str, any] = {}
+        self.location_id_to_alias: dict[int, str] = {}
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:
@@ -315,7 +315,7 @@ class ShapezWorld(World):
 
     def create_items(self) -> None:
         # Include guaranteed items (game mechanic unlocks and 7x4 big upgrades)
-        included_items: List[Item] = ([self.create_item(name) for name in buildings_processing.keys()]
+        included_items: list[Item] = ([self.create_item(name) for name in buildings_processing.keys()]
                                       + [self.create_item(name) for name in buildings_routing.keys()]
                                       + [self.create_item(name) for name in buildings_other.keys()]
                                       + [self.create_item(name) for name in buildings_top_row.keys()]
@@ -381,7 +381,7 @@ class ShapezWorld(World):
             if self.options.goal.current_key in [GOALS.vanilla, GOALS.mam]:
                 f(self.maxlevel, LOCATIONS.goal)
 
-    def fill_slot_data(self) -> Mapping[str, Any]:
+    def fill_slot_data(self) -> Mapping[str, any]:
         # Buildings logic; all buildings as individual parameters
         level_logic_data = {SLOTDATA.level_building(x+1): self.level_logic[x] for x in range(5)}
         upgrade_logic_data = {SLOTDATA.upgrade_building(x+1): self.upgrade_logic[x] for x in range(5)}
@@ -412,6 +412,6 @@ class ShapezWorld(World):
                 **logic_type_cat_random_data, SLOTDATA.seed: self.client_seed,
                 SLOTDATA.shapesanity: self.shapesanity_names}
 
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
+    def interpret_slot_data(self, slot_data: dict[str, any]) -> dict[str, any]:
         """Helper function for Universal Tracker"""
         return slot_data
