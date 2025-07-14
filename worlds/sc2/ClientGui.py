@@ -1,15 +1,15 @@
 from typing import *
 import asyncio
 
-from kvui import GameManager, HoverBehavior, ServerToolTip
+from NetUtils import JSONMessagePart
+from kvui import GameManager, HoverBehavior, ServerToolTip, KivyJSONtoTextParser
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.tabbedpanel import TabbedPanelItem
 from kivy.uix.gridlayout import GridLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-from kivy.uix.floatlayout import FloatLayout
+from kivymd.uix.tooltip import MDTooltip
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 
@@ -25,30 +25,22 @@ class HoverableButton(HoverBehavior, Button):
     pass
 
 
-class MissionButton(HoverableButton):
+class MissionButton(HoverableButton, MDTooltip):
     tooltip_text = StringProperty("Test")
 
     def __init__(self, *args, **kwargs):
-        super(HoverableButton, self).__init__(*args, **kwargs)
-        self.layout = FloatLayout()
-        self.popuplabel = ServerToolTip(text=self.text, markup=True)
-        self.popuplabel.padding = [5, 2, 5, 2]
-        self.layout.add_widget(self.popuplabel)
+        super(HoverableButton, self).__init__(**kwargs)
+        self._tooltip = ServerToolTip(text=self.text, markup=True)
+        self._tooltip.padding = [5, 2, 5, 2]
 
     def on_enter(self):
-        self.popuplabel.text = self.tooltip_text
+        self._tooltip.text = self.tooltip_text
 
-        if self.ctx.current_tooltip:
-            App.get_running_app().root.remove_widget(self.ctx.current_tooltip)
-
-        if self.tooltip_text == "":
-            self.ctx.current_tooltip = None
-        else:
-            App.get_running_app().root.add_widget(self.layout)
-            self.ctx.current_tooltip = self.layout
+        if self.tooltip_text != "":
+            self.display_tooltip()
 
     def on_leave(self):
-        self.ctx.ui.clear_tooltip()
+        self.remove_tooltip()
 
     @property
     def ctx(self) -> SC2Context:
@@ -69,6 +61,18 @@ class MissionLayout(GridLayout):
 class MissionCategory(GridLayout):
     pass
 
+
+class SC2JSONtoKivyParser(KivyJSONtoTextParser):
+    def _handle_text(self, node: JSONMessagePart):
+        if node.get("keep_markup", False):
+            for ref in node.get("refs", []):
+                node["text"] = f"[ref={self.ref_count}|{ref}]{node['text']}[/ref]"
+                self.ref_count += 1
+            return super(KivyJSONtoTextParser, self)._handle_text(node)
+        else:
+            return super()._handle_text(node)
+
+
 class SC2Manager(GameManager):
     logging_pairs = [
         ("Client", "Archipelago"),
@@ -87,6 +91,7 @@ class SC2Manager(GameManager):
 
     def __init__(self, ctx) -> None:
         super().__init__(ctx)
+        self.json_to_kivy_parser = SC2JSONtoKivyParser(ctx)
 
     def clear_tooltip(self) -> None:
         if self.ctx.current_tooltip:
@@ -97,12 +102,9 @@ class SC2Manager(GameManager):
     def build(self):
         container = super().build()
 
-        panel = TabbedPanelItem(text="Starcraft 2 Launcher")
-        panel.content = CampaignScroll()
+        panel = self.add_client_tab("Starcraft 2 Launcher", CampaignScroll())
         self.campaign_panel = MultiCampaignLayout()
         panel.content.add_widget(self.campaign_panel)
-
-        self.tabs.add_widget(panel)
 
         Clock.schedule_interval(self.build_mission_table, 0.5)
 

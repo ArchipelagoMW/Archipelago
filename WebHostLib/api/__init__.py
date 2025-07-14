@@ -1,51 +1,15 @@
 """API endpoints package."""
 from typing import List, Tuple
-from uuid import UUID
 
-from flask import Blueprint, abort, url_for
+from flask import Blueprint
 
-import worlds.Files
-from ..models import Room, Seed
+from ..models import Seed, Slot
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
-# unsorted/misc endpoints
-
 
 def get_players(seed: Seed) -> List[Tuple[str, str]]:
-    return [(slot.player_name, slot.game) for slot in seed.slots]
+    return [(slot.player_name, slot.game) for slot in seed.slots.order_by(Slot.player_id)]
 
 
-@api_endpoints.route('/room_status/<suuid:room>')
-def room_info(room: UUID):
-    room = Room.get(id=room)
-    if room is None:
-        return abort(404)
-    
-    def supports_apdeltapatch(game: str):
-        return game in worlds.Files.AutoPatchRegister.patch_types
-    downloads = []
-    for slot in sorted(room.seed.slots):
-        if slot.data and not supports_apdeltapatch(slot.game):
-            slot_download = {
-                "slot": slot.player_id,
-                "download": url_for("download_slot_file", room_id=room.id, player_id=slot.player_id)
-            }
-            downloads.append(slot_download)
-        elif slot.data:
-            slot_download = {
-                "slot": slot.player_id,
-                "download": url_for("download_patch", patch_id=slot.id, room_id=room.id)
-            }
-            downloads.append(slot_download)
-    return {
-        "tracker": room.tracker,
-        "players": get_players(room.seed),
-        "last_port": room.last_port,
-        "last_activity": room.last_activity,
-        "timeout": room.timeout,
-        "downloads": downloads,
-    }
-
-
-from . import generate, user, datapackage  # trigger registration
+from . import datapackage, generate, room, user  # trigger registration

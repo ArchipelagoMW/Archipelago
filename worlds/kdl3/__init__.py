@@ -201,16 +201,13 @@ class KDL3World(World):
             else:
                 animal_base = ["Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"]
                 animal_pool = [self.random.choice(animal_base)
-                               for _ in range(len(animal_friend_spawns) - 9)]
+                               for _ in range(len(animal_friend_spawns) - 10)]
                 # have to guarantee one of each animal
                 animal_pool.extend(animal_base)
             if guaranteed_animal == "Kine Spawn":
                 animal_pool.append("Coo Spawn")
             else:
                 animal_pool.append("Kine Spawn")
-            # Weird fill hack, this forces ChuChu to be the last animal friend placed
-            # If Kine is ever the last animal friend placed, he will cause fill errors on closed world
-            animal_pool.sort()
             locations = [self.multiworld.get_location(spawn, self.player) for spawn in spawns]
             items: List[Item] = [self.create_item(animal) for animal in animal_pool]
             allstate = CollectionState(self.multiworld)
@@ -328,7 +325,7 @@ class KDL3World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = KDL3ProcedurePatch()
+            patch = KDL3ProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
             self.rom_name = patch.name

@@ -1,7 +1,7 @@
 import math
 from typing import Dict
 
-from BaseClasses import CollectionState, Entrance, Item, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region, Tutorial
 
 from worlds.AutoWorld import WebWorld, World
 
@@ -56,7 +56,7 @@ class YachtDiceWorld(World):
 
     item_name_groups = item_groups
 
-    ap_world_version = "2.1.1"
+    ap_world_version = "2.1.4"
 
     def _get_yachtdice_data(self):
         return {
@@ -190,7 +190,6 @@ class YachtDiceWorld(World):
             if self.frags_per_roll == 1:
                 self.itempool += ["Roll"] * num_of_rolls_to_add  # minus one because one is in start inventory
             else:
-                self.itempool.append("Roll")  # always add a full roll to make generation easier (will be early)
                 self.itempool += ["Roll Fragment"] * (self.frags_per_roll * num_of_rolls_to_add)
 
         already_items = len(self.itempool)
@@ -231,13 +230,10 @@ class YachtDiceWorld(World):
         weights["Dice"] = weights["Dice"] / 5 * self.frags_per_dice
         weights["Roll"] = weights["Roll"] / 5 * self.frags_per_roll
 
-        extra_points_added = 0
-        multipliers_added = 0
-        items_added = 0
+        extra_points_added = [0]  # make it a mutible type so we can change the value in the function
+        step_score_multipliers_added = [0]
 
-        def get_item_to_add(weights, extra_points_added, multipliers_added, items_added):
-            items_added += 1
-
+        def get_item_to_add(weights, extra_points_added, step_score_multipliers_added):
             all_items = self.itempool + self.precollected
             dice_fragments_in_pool = all_items.count("Dice") * self.frags_per_dice + all_items.count("Dice Fragment")
             if dice_fragments_in_pool + 1 >= 9 * self.frags_per_dice:
@@ -246,21 +242,18 @@ class YachtDiceWorld(World):
             if roll_fragments_in_pool + 1 >= 6 * self.frags_per_roll:
                 weights["Roll"] = 0  # don't allow >= 6 rolls
 
-            # Don't allow too many multipliers
-            if multipliers_added > 50:
-                weights["Fixed Score Multiplier"] = 0
-                weights["Step Score Multiplier"] = 0
-
             # Don't allow too many extra points
-            if extra_points_added > 300:
+            if extra_points_added[0] > 400:
                 weights["Points"] = 0
+
+            if step_score_multipliers_added[0] > 10:
+                weights["Step Score Multiplier"] = 0
 
             # if all weights are zero, allow to add fixed score multiplier, double category, points.
             if sum(weights.values()) == 0:
-                if multipliers_added <= 50:
-                    weights["Fixed Score Multiplier"] = 1
+                weights["Fixed Score Multiplier"] = 1
                 weights["Double category"] = 1
-                if extra_points_added <= 300:
+                if extra_points_added[0] <= 400:
                     weights["Points"] = 1
 
             # Next, add the appropriate item. We'll slightly alter weights to avoid too many of the same item
@@ -274,11 +267,10 @@ class YachtDiceWorld(World):
                 return "Roll" if self.frags_per_roll == 1 else "Roll Fragment"
             elif which_item_to_add == "Fixed Score Multiplier":
                 weights["Fixed Score Multiplier"] /= 1.05
-                multipliers_added += 1
                 return "Fixed Score Multiplier"
             elif which_item_to_add == "Step Score Multiplier":
                 weights["Step Score Multiplier"] /= 1.1
-                multipliers_added += 1
+                step_score_multipliers_added[0] += 1
                 return "Step Score Multiplier"
             elif which_item_to_add == "Double category":
                 # Below entries are the weights to add each category.
@@ -303,15 +295,15 @@ class YachtDiceWorld(World):
                 choice = self.random.choices(list(probs.keys()), weights=list(probs.values()))[0]
                 if choice == "1 Point":
                     weights["Points"] /= 1.01
-                    extra_points_added += 1
+                    extra_points_added[0] += 1
                     return "1 Point"
                 elif choice == "10 Points":
                     weights["Points"] /= 1.1
-                    extra_points_added += 10
+                    extra_points_added[0] += 10
                     return "10 Points"
                 elif choice == "100 Points":
                     weights["Points"] /= 2
-                    extra_points_added += 100
+                    extra_points_added[0] += 100
                     return "100 Points"
                 else:
                     raise Exception("Unknown point value (Yacht Dice)")
@@ -320,7 +312,7 @@ class YachtDiceWorld(World):
 
         # adding 17 items as a start seems like the smartest way to get close to 1000 points
         for _ in range(17):
-            self.itempool.append(get_item_to_add(weights, extra_points_added, multipliers_added, items_added))
+            self.itempool.append(get_item_to_add(weights, extra_points_added, step_score_multipliers_added))
 
         score_in_logic = dice_simulation_fill_pool(
             self.itempool + self.precollected,
@@ -348,7 +340,7 @@ class YachtDiceWorld(World):
         else:
             # Keep adding items until a score of 1000 is in logic
             while score_in_logic < 1000:
-                item_to_add = get_item_to_add(weights, extra_points_added, multipliers_added, items_added)
+                item_to_add = get_item_to_add(weights, extra_points_added, step_score_multipliers_added)
                 self.itempool.append(item_to_add)
                 if item_to_add == "1 Point":
                     score_in_logic += 1
@@ -464,16 +456,21 @@ class YachtDiceWorld(World):
             if loc_data.region == board.name
         ]
 
-        # Add the victory item to the correct location.
-        # The website declares that the game is complete when the victory item is obtained.
+        # Change the victory location to an event and place the Victory item there.
         victory_location_name = f"{self.goal_score} score"
-        self.get_location(victory_location_name).place_locked_item(self.create_item("Victory"))
+        self.get_location(victory_location_name).address = None
+        self.get_location(victory_location_name).place_locked_item(
+            Item("Victory", ItemClassification.progression, None, self.player)
+        )
 
         # add the regions
         connection = Entrance(self.player, "New Board", menu)
         menu.exits.append(connection)
         connection.connect(board)
         self.multiworld.regions += [menu, board]
+
+    def get_filler_item_name(self) -> str:
+        return "Good RNG"
 
     def set_rules(self):
         """
