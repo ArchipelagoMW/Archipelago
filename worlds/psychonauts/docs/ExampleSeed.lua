@@ -27,7 +27,6 @@ function RandoSeed(Ob)
 
         -- these settings place item in starting player inventory if TRUE, removes from randomized pool
         Ob.startlevitation = FALSE
-        Ob.startbutton = FALSE
 
         -- if TRUE, any amount of damage will kill Raz
         Ob.instantdeath = FALSE

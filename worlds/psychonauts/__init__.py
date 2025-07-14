@@ -61,7 +61,7 @@ class PsychonautsWeb(WebWorld):
 class PSYWorld(World):
     """
     Psychonauts is a third-person action platformer game developed by Double Fine Productions, published by Majesco Entertainment, and released in 2005.
-    The player follows Razputin, a young boy gifted with Psychic abilities. After sneaking into Whispering Rock Psychic Summer Camp, it's up to Raz to explore 
+    The player follows Razputin, a young boy gifted with psychic abilities. After sneaking into Whispering Rock Psychic Summer Camp, it's up to Raz to explore 
     the minds of other characters in order to save his fellow psychic campers, and the world, from an evil threat.
     
     """

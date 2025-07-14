@@ -3,7 +3,7 @@ import zipfile
 from typing import List, Tuple, Iterable, Union, Dict, TYPE_CHECKING
 
 import Utils
-from worlds.Files import APContainer
+from worlds.Files import APPlayerContainer
 from .Items import ITEM_DICTIONARY, AP_ITEM_OFFSET
 from .Locations import ALL_LOCATIONS, PSYCHOSEED_LOCATION_IDS
 from .Options import Goal
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 PSY_NON_LOCAL_ID_START = MAX_PSY_ITEM_ID + 1
 
 
-class PSYContainer(APContainer):
+class PSYContainer(APPlayerContainer):
     game: str = 'Psychonauts'
 
     def __init__(self, patch_data: str, base_path: str, output_directory: str,
@@ -189,7 +189,6 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     default_seed_settings = '''
         Ob.isAP = TRUE
         Ob.startcobweb = FALSE
-        Ob.startbutton = FALSE
         Ob.randomizecobwebduster = TRUE
         Ob.everylocationpossible = FALSE
         Ob.harderbutton = FALSE
