@@ -66,7 +66,7 @@ DYNAMIC_FLAGS = {
     },
     "Molida Cuccoo dig map": {
         "on_scenes": [0xC00],
-        "not_has_locations": ["Molida Island Cuccoo Dig"],
+        "not_has_locations": ["Molida Island Cuccoo Grapple Tree Dig"],
         "unset_if_true": [(0x1BA651, 0x40)]
     },
     "RESET Molida Cuccoo dig map": {
@@ -733,7 +733,7 @@ DYNAMIC_FLAGS = {
     },
     "Oshus Gem": {
         "on_scenes": [0xB0A],
-        "not_has_locations": ["Mercay Oshus Force Gem"],
+        "not_has_locations": ["Mercay Oshus Spirit Gem"],
         "has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
         "set_if_true": [(0x1B55A0, 0x4), (0x1B557D, 0x2)]
     },

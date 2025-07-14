@@ -179,6 +179,7 @@ class PhantomHourglassClient(BizHawkClient):
         self.watches = {}
         self.receiving_location = False
         self.last_vanilla_item = None
+        self.delay_reset = False
         self.last_treasures = 0
         self.last_ship_parts = []
         self.last_potions = [0, 0]
@@ -394,6 +395,7 @@ class PhantomHourglassClient(BizHawkClient):
                 await self.load_local_locations(ctx, current_scene)
                 await self.update_potion_tracker(ctx)
                 await self.update_treasure_tracker(ctx)
+                self.delay_reset = False
 
                 # Start watch for stage fully loading
                 if current_stage != self.last_stage:
@@ -434,6 +436,7 @@ class PhantomHourglassClient(BizHawkClient):
                         print(f"Got read item {loc_name} from address {loc_data['address']} "
                               f"looking at bit {loc_data['value']}")
                         await self.process_checked_locations(ctx, loc_name)
+                        self.receiving_location = True
                         self.watches.pop(loc_name)
 
             # Check if link is getting location
@@ -448,7 +451,7 @@ class PhantomHourglassClient(BizHawkClient):
                 await self.process_received_items(ctx, num_received_items)
 
             # Exit location received cs
-            if self.receiving_location and not getting_location:
+            if self.receiving_location and not getting_location and not self.delay_reset:
                 print("Item Received Successfully")
                 self.receiving_location = False
 
@@ -466,6 +469,11 @@ class PhantomHourglassClient(BizHawkClient):
                 # Remove vanilla item
                 elif self.last_vanilla_item is not None and "dummy" not in ITEMS_DATA[self.last_vanilla_item]:
                     await self.remove_vanilla_item(ctx, num_received_items)
+
+            # Address reads often give items before animation
+            if self.delay_reset and getting_location:
+                self.delay_reset = False
+                print(f"Delay reset over for {self.last_vanilla_item}")
 
             # Finished game?
             if not ctx.finished_game:
@@ -740,6 +748,10 @@ class PhantomHourglassClient(BizHawkClient):
                 print(f"Setting bit {bit} for location vanil {location['vanilla_item']}")
                 await write_memory_value(ctx, addr, bit)
 
+        # Delay reset of vanilla item from certain address reads
+        if location is not None and "delay_reset" in location:
+            self.delay_reset = True
+
         # Send locations
         # print(f"Local locations: {local_checked_locations} in \n{all_checked_locations}")
         if any([i not in all_checked_locations for i in local_checked_locations]):
@@ -837,7 +849,7 @@ class PhantomHourglassClient(BizHawkClient):
 
         # Increment in-game items received count
         received_item_address = RAM_ADDRS["received_item_index"]
-        write_list = [(received_item_address[0], [num_received_items + 1], received_item_address[2])]
+        write_list = [(received_item_address[0], split_bits(num_received_items + 1, 2), received_item_address[2])]
         print(f"Vanilla item: {self.last_vanilla_item}, item name: {item_name}")
 
         # If same as vanilla item don't remove

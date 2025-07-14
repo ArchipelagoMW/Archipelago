@@ -129,13 +129,14 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ship Part",
         'post_dungeon': "Temple of Fire"
     },
-    "Mercay Oshus Force Gem": {
+    "Mercay Oshus Spirit Gem": {
         "region_id": "mercay oshus gem",
         "stage_id": 11,
         "floor_id": 10,
         "vanilla_item": "Power Gem",
         "address": 0x1B55A5,
-        "value": 0x2
+        "value": 0x2,
+        "delay_reset": True
     },
     "Mercay Oshus Phantom Sword": {
         "region_id": "mercay oshus phantom blade",
@@ -199,7 +200,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x02,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Quiver": {
         "region_id": "shop quiver",
@@ -208,7 +210,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x08,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Bombchu Bag": {
         "region_id": "shop bombchu bag",
@@ -217,7 +220,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x10,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Heart Container": {
         "region_id": "shop heart container",
@@ -234,7 +238,8 @@ LOCATIONS_DATA = {
         "stage_id": 5,
         "floor_id": 0,
         "address": 0x1B5589,
-        "value": 0x04
+        "value": 0x04,
+        "delay_reset": True
     },
     "Beedle Shop Wisdom Gem": {
         "region_id": "beedle gem",
@@ -242,7 +247,8 @@ LOCATIONS_DATA = {
         "stage_id": 5,
         "floor_id": 0,
         "address": 0x1B5589,
-        "value": 0x20
+        "value": 0x20,
+        "delay_reset": True
     },
     "Masked Beedle Heart Container": {
         "region_id": "masked ship hc",
@@ -252,6 +258,7 @@ LOCATIONS_DATA = {
         "address": 0x1B5589,
         "value": 0x01,
         "conditional": True,
+        "delay_reset": True
     },
     "Masked Beedle Courage Gem": {
         "region_id": "masked ship gem",
@@ -260,7 +267,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B558A,
         "value": 0x02,
-        "conditional": True
+        "conditional": True,
+        "delay_reset": True
     },
 
     # ========== TotOK ==============
@@ -739,7 +747,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xA,
         "floor_id": 0,
         "address": 0x1B5592,
-        "value": 0x1
+        "value": 0x1,
+        "delay_reset": True
     },
 
     # Cannon Island
@@ -946,6 +955,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 0,
         "z_max": 58000,
+        "z_min": 25000,
+        "x_min": 40000,
         "y": 0
     },
     "Molida Cave Wayfarer Hideaway Chest": {
@@ -955,8 +966,6 @@ LOCATIONS_DATA = {
         "floor_id": 10,
         "y": 0,
         "x_max": -25000,
-        "z_min": 25000,
-        "x_min": 40000
     },
     "Molida Cave Grapple Chest": {
         "region_id": "molida grapple",
@@ -1031,7 +1040,8 @@ LOCATIONS_DATA = {
         "floor_id": 11,
         "address": 0x1B55A2,
         "value": 0x8,
-        'post_dungeon': "Temple of Courage"
+        'post_dungeon': "Temple of Courage",
+        "delay_reset": True,
     },
     "Molida Archery 2000": {
         "region_id": "molida archery",
@@ -1040,7 +1050,8 @@ LOCATIONS_DATA = {
         "floor_id": 1,
         "address": 0x1B55A6,
         "value": 0x10,
-        'post_dungeon': "Temple of Courage"
+        'post_dungeon': "Temple of Courage",
+        "delay_reset": True
     },
 
     # ============= Temple of Courage ===========
@@ -1282,7 +1293,8 @@ LOCATIONS_DATA = {
         "stage_id": 7,
         "floor_id": 0,
         "address": 0x1B55A4,
-        "value": 0x40
+        "value": 0x40,
+        "delay_reset": True
     },
     # ============ Isle of Gust ============
     "Isle of Gust Hideout Chest": {
@@ -1446,7 +1458,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 1,
         "address": 0x1B5581,
-        "value": 8
+        "value": 8,
+        "delay_reset": True
     },
     "Bannan Island East Grapple Chest East": {
         "region_id": "bannan east grapple",
@@ -1486,7 +1499,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 0,
         "address": 0x1B55AA,
-        "value": 0x40
+        "value": 0x40,
+        "delay_reset": True
     },
     "Bannan Island Wayfarer Trade Quest Chest": {
         "region_id": "bannan scroll",
@@ -1504,6 +1518,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Treasure Map #6",
         "stage_id": 0x1A,
         "floor_id": 0,
+        "x_min": -75000
     },
     "Uncharted Island Grapple Chest": {
         "region_id": "uncharted grapple",
@@ -1900,7 +1915,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombchus (Progressive)",
         "address": 0x1B559F,
         "value": 0x20,
-        'post_dungeon': "Goron Temple"
+        'post_dungeon': "Goron Temple",
+        'delay_reset': True
     },
     "Dee Ess Eye Brute Chest": {
         "region_id": "ds combat",
