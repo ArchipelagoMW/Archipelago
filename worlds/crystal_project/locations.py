@@ -565,13 +565,13 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver beneath overhang in ruins south of shrine", 2675 + npc_index_offset), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Stormy Silver atop ruins", 2677 + npc_index_offset), #Ore
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
-        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
+        LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ingot
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Dust
         LocationData(POKO_POKO_DESERT, "Poko Poko Desert NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
