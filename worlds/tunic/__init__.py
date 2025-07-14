@@ -71,7 +71,7 @@ class SeedGroup(TypedDict):
     laurels_zips: bool  # laurels_zips value
     ice_grappling: int  # ice_grappling value
     ladder_storage: int  # ls value
-    laurels_at_10_fairies: bool  # laurels location value
+    laurels_at_10_fairies: bool  # whether laurels location is set to 10 fairies
     entrance_layout: int  # entrance layout value
     has_decoupled_enabled: bool  # for checking that players don't have conflicting options
     plando: list[PlandoConnection]  # consolidated plando connections for the seed group
@@ -91,6 +91,8 @@ class TunicWorld(World):
     options_dataclass = TunicOptions
     settings: ClassVar[TunicSettings]
     item_name_groups = item_name_groups
+    # grass, breakables, fuses, and bells are separated out into their own files
+    # this makes for easier organization, at the cost of stuff like what's directly below here
     location_name_groups = location_name_groups
     for group_name, members in grass_location_name_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
@@ -134,6 +136,7 @@ class TunicWorld(World):
     tracker_world: ClassVar = ut_stuff.tracker_world
 
     def generate_early(self) -> None:
+        # if you have multiple APWorlds, we want it to fail here instead of at the end of gen
         try:
             int(self.settings.disable_local_spoiler)
         except AttributeError:
@@ -141,6 +144,7 @@ class TunicWorld(World):
                             "This would cause an error at the end of generation.\n"
                             "Please remove one of them, most likely the one in lib/worlds.")
 
+        # hidden option for me to do multi-slot test gens with random options more easily
         if self.options.all_random:
             for option_name in (attr.name for attr in fields(TunicOptions)
                                 if attr not in fields(PerGameCommonOptions)):
@@ -157,8 +161,10 @@ class TunicWorld(World):
 
         check_options(self)
         self.er_regions = tunic_er_regions.copy()
+        # empty plando connections if ER is off
         if self.options.plando_connections and not self.options.entrance_rando:
             self.options.plando_connections.value = ()
+        # modify direction and order of plando connections for more consistency later on
         if self.options.plando_connections:
             def replace_connection(old_cxn: PlandoConnection, new_cxn: PlandoConnection, index: int) -> None:
                 self.options.plando_connections.value.remove(old_cxn)
@@ -190,6 +196,7 @@ class TunicWorld(World):
 
         self.player_location_table = standard_location_name_to_id.copy()
 
+        # setup our defaults for the local_fill option
         if self.options.local_fill == -1:
             if self.options.grass_randomizer:
                 if self.options.breakable_shuffle:
