@@ -1,5 +1,5 @@
 import random
-from typing import cast, Optional
+from typing import cast
 
 from Options import FreeText, NumericOption
 
@@ -171,7 +171,7 @@ class FloatRangeText(FreeText, NumericOption):
     def __ror__(self, other: any) -> int:
         raise TypeError("| operator not supported for float values")
 
-    def __round__(self, ndigits: Optional[int] = None) -> float:
+    def __round__(self, ndigits: int | None = None) -> float:
         return round(self.value, ndigits)
 
     def __rpow__(self, base: any) -> any:
