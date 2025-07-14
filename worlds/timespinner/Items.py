@@ -174,7 +174,7 @@ item_table: Dict[str, ItemData] = {
     'Corruption': ItemData('Orb Spell', 1337161),
     'Lightwall': ItemData('Orb Spell', 1337162, progression=True),
     'Bleak Ring': ItemData('Orb Passive', 1337163, useful=True),
-    'Scythe Ring': ItemData('Orb Passive', 1337164),
+    'Scythe Ring': ItemData('Orb Passive', 1337164, useful=True),
     'Pyro Ring': ItemData('Orb Passive', 1337165, progression=True),
     'Royal Ring': ItemData('Orb Passive', 1337166, progression=True),
     'Shield Ring': ItemData('Orb Passive', 1337167),
