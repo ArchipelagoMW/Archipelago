@@ -10,6 +10,8 @@
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
         - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
         - snes9x-nwa from: [snes9x nwa](https://github.com/Skarsnik/snes9x-emunwa/releases)
+        - RetroArch 1.10.3 or newer from: RetroArch Website
+        - You can additionally use the FX Pack Pro, however some issues with it have been reported and it is not officially recommended.
     
 - Your legally obtained EarthBound English ROM file, probably named `EarthBound (USA).sfc`
 
