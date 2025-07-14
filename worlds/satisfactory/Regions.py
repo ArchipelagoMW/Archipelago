@@ -47,8 +47,8 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
 
         region_names.append(f"Hub Tier {hub_tier}")
 
-        for minestone, _ in enumerate(milestones_per_hub_tier, 1):
-            region_names.append(f"Hub {hub_tier}-{minestone}")
+        for milestone, _ in enumerate(milestones_per_hub_tier, 1):
+            region_names.append(f"Hub {hub_tier}-{milestone}")
 
     region_names += [
         building_name
@@ -127,8 +127,8 @@ def create_regions_and_return_locations(world: MultiWorld, options: Satisfactory
         if (hub_tier > (options.final_elevator_package * 2)):
             break
 
-        for minestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
-            connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{minestone}",
+        for milestone, parts_per_milestone in enumerate(milestones_per_hub_tier, 1):
+            connect(regions, f"Hub Tier {hub_tier}", f"Hub {hub_tier}-{milestone}",
                 can_produce_all_allowing_handcrafting(parts_per_milestone.keys()))
             
     for building_name, building in game_logic.buildings.items():
