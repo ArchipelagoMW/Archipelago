@@ -355,7 +355,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
 
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Entrance Lantern', 1337434, logic.can_break_lanterns),
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Bottom Floor Lantern', 1337451, lambda state: logic.has_keycard_C(state) and logic.can_break_lanterns(state)),
-            LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Left Elevator Lantern 1', 1337452, logic.can_break_lanterns),
+            LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Left Elevator Lantern 1', 1337452, lambda state: state.has('Elevator Keycard', player) and logic.can_break_lanterns(state)),
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Left Elevator Lantern 2', 1337453, logic.can_break_lanterns),
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Left Stairs Base Lantern 1', 1337469, logic.can_break_lanterns),
             LocationData('Varndagroth tower left', 'Varndagroth Towers (Left): Left Stairs Base Lantern 2', 1337470, logic.can_break_lanterns),
