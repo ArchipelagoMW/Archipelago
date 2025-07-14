@@ -12,11 +12,11 @@ from Utils import ByValue, Version
 
 
 class HintStatus(ByValue, enum.IntEnum):
-    HINT_FOUND = 0
-    HINT_UNSPECIFIED = 1
+    HINT_UNSPECIFIED = 0
     HINT_NO_PRIORITY = 10
     HINT_AVOID = 20
     HINT_PRIORITY = 30
+    HINT_FOUND = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -104,6 +104,27 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     if isinstance(obj, dict):
         return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
     return obj
+
+
+_base_types = str | int | bool | float | None | tuple["_base_types", ...] | dict["_base_types", "base_types"]
+
+
+def convert_to_base_types(obj: typing.Any) -> _base_types:
+    if isinstance(obj, (tuple, list, set, frozenset)):
+        return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, dict):
+        return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
+    elif obj is None or type(obj) in (str, int, float, bool):
+        return obj
+    # unwrap simple types to their base, such as StrEnum
+    elif isinstance(obj, str):
+        return str(obj)
+    elif isinstance(obj, int):
+        return int(obj)
+    elif isinstance(obj, float):
+        return float(obj)
+    else:
+        raise Exception(f"Cannot handle {type(obj)}")
 
 
 _encode = JSONEncoder(

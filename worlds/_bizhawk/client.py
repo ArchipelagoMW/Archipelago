@@ -7,7 +7,7 @@ from __future__ import annotations
 import abc
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch as launch_component
 
 if TYPE_CHECKING:
     from .context import BizHawkClientContext
@@ -15,11 +15,12 @@ if TYPE_CHECKING:
 
 def launch_client(*args) -> None:
     from .context import launch
-    launch_subprocess(launch, name="BizHawkClient", args=args)
+    launch_component(launch, name="BizHawkClient", args=args)
 
 
 component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
-                      file_identifier=SuffixIdentifier())
+                      file_identifier=SuffixIdentifier(),
+                      description="Open the BizHawk client, to play games using the Bizhawk emulator.")
 components.append(component)
 
 
