@@ -243,6 +243,7 @@ o005_o006 = f"{RegionNames.o005}->{RegionNames.o006}"
 
 o006_o005 = f"{RegionNames.o006}->{RegionNames.o005}"
 o006_o008 = f"{RegionNames.o006}->{RegionNames.o008}"
+o006_sn = f"{RegionNames.o006}->{RegionNames.o006_sn}"
 
 o008_o001 = f"{RegionNames.o008}->{RegionNames.o001}"
 o008_o006 = f"{RegionNames.o008}->{RegionNames.o006}"

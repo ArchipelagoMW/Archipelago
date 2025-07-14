@@ -81,6 +81,7 @@ o003 = "Panic in the Attic! 3"
 o004 = "Panic in the Attic! 4"
 o005 = "A Dark and Stormy Knight! 1"
 o006 = "A Dark and Stormy Knight! 2"
+o006_sn = "Snacks: A Dark and Stormy Knight 2"
 o008 = "A Dark and Stormy Knight! 3"
 
 # P

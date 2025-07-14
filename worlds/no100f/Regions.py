@@ -1,4 +1,4 @@
-from typing import List, Dict, TYPE_CHECKING
+from typing import List, Dict
 
 from . import NO100FOptions
 from .Locations import NO100FLocation, location_table, \
@@ -7,9 +7,6 @@ from .Locations import NO100FLocation, location_table, \
 from .names import ConnectionNames, LevelNames, RegionNames, LocationNames
 
 from BaseClasses import MultiWorld, Region, Entrance
-
-if TYPE_CHECKING:
-    from . import NightOf100FrightsWorld
 
 
 def create_region(multiworld: MultiWorld, player: int, name: str, locations=None, exits=None) -> Region:
@@ -137,7 +134,8 @@ exit_table: Dict[str, List[str]] = {
     RegionNames.o003: [ConnectionNames.o003_o002, ConnectionNames.o003_o004],
     RegionNames.o004: [ConnectionNames.o004_o003, ConnectionNames.o004_o005],
     RegionNames.o005: [ConnectionNames.o005_o004, ConnectionNames.o005_o006],
-    RegionNames.o006: [ConnectionNames.o006_o005, ConnectionNames.o006_o008],
+    RegionNames.o006: [ConnectionNames.o006_o005, ConnectionNames.o006_o008, ConnectionNames.o006_sn],
+    RegionNames.o006_sn: [],
     RegionNames.o008: [ConnectionNames.o008_o001, ConnectionNames.o008_o006],
 
     # Secret (P)assage
