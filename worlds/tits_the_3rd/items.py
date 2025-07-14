@@ -6,6 +6,7 @@ from typing import Dict, List, NamedTuple, Optional, Set
 
 from .names.item_name import ItemName
 from .names.location_name import LocationName
+from .tables.location_list import location_table
 from BaseClasses import Item, ItemClassification
 
 
@@ -187,82 +188,18 @@ filler_items: List[str] = list(
 
 item_table: Dict[str, int] = {name: data.code for name, data in item_data_table.items()}
 
-default_item_pool: Counter[str] = Counter(
-    {
-        ItemName.jade_corridor_unlock_1: 1,
-        ItemName.jade_corridor_unlock_2: 1,
-        ItemName.jade_corridor_arseille_unlock: 1,
-        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
-    }
-)
-
-
-default_chest_pool: Counter[str] = Counter(
-    {
-        ItemName.extra_spicy_fries: 1,  # Default locations: 9864
-        ItemName.fresh_water: 1,  # Default locations: 9880
-        ItemName.fishy_finale: 1,  # Default locations: 9884
-        ItemName.tear_balm: 2,  # Default locations: 9858, 9865
-        ItemName.teara_balm: 10,  # Default locations: 9720, 9722, 10175, 10115, 10124, 10164, 10160, 10151, 10144, 10136
-        ItemName.reviving_balm: 1,  # Default locations: 9874
-        ItemName.ep_charge: 3,  # Default locations: 9721, 9723, 10166
-        ItemName.smelling_salts: 2,  # Default locations: 9866, 10113
-        ItemName.easy_paella_recipe: 1,  # Default locations: 9873
-        ItemName.royal_spikes: 1,  # Default locations: 9869
-        ItemName.black_bangle: 1,  # Default locations: 9867
-        ItemName.glam_choker: 1,  # Default locations: 9868
-        ItemName.hit_2: 1,  # Default locations: 9872
-        ItemName.information: 1,  # Default locations: 9857
-        ItemName.mira_300: 2,  # Default locations: 9859, 9875
-        ItemName.lower_elements_sepith_50: 3,  # Default locations: 9881, 10172, 10173
-        ItemName.higher_elements_sepith_50: 1,  # Default locations: 9885
-        ItemName.hp_2: 1, # Default locations: 10119
-        ItemName.akashic_heart: 1, # Default locations: 10116
-        ItemName.fried_phoenix: 1, # Default locations: 10120
-        ItemName.insulating_tape: 1, # Default locations: 10112
-        ItemName.mira_500: 3, # Default locations: 10127, 10128, 10129
-        ItemName.white_bracelet: 1, # Default locations: 10126
-        ItemName.proxy_puppet: 1, # 10176
-        ItemName.softening_balm: 1, # 10177
-        ItemName.septium_drops: 1, # 10178
-        ItemName.bestia_coat: 1, # 10174
-        ItemName.black_bangle_plus: 1, # 10133
-        ItemName.brain_roast: 1, # 10121
-        ItemName.swingwich: 1, # 10122
-        ItemName.s_tablet: 1, # 10114
-        ItemName.stun_gb: 1, # 10125
-        ItemName.celestial_balm: 1, # 10123
-        ItemName.long_barrel_2: 1, # 10168
-        ItemName.crimson_eye: 1, # 10163
-        ItemName.purging_balm: 2, # 10161, 10162
-        ItemName.scent: 1, # 10165
-        ItemName.repellent_dish: 1, # 10150
-        ItemName.queenly_cookie: 1, # 10145
-        ItemName.fluffy_crepe: 1, # 10146
-        ItemName.shield_2: 1, # 10138
-        ItemName.pearl_earings: 1, # 10144
-        ItemName.glam_choker_plus: 1, # 10147
-        ItemName.zeram_powder: 1, # 10148
-        ItemName.attack_2: 1, # 10137
-        ItemName.haze: 1, # 10152
-    }
-)
-
-
-default_character_quartz_pool: Counter[str] = Counter(
-    {
-        ItemName.ep_cut_2: 2,
-        ItemName.action_1: 1,
-        ItemName.hit_1: 1,
-        ItemName.range_1: 1,
-        ItemName.move_1: 1,
-        ItemName.attack_1: 2,
-        ItemName.shield_1: 1,
-        ItemName.eagle_eye: 1,
-        ItemName.hp_1: 1,
-    }
-)
-
+default_item_pool: Counter[str] = Counter()
+default_chest_pool: Counter[str] = Counter()
+default_character_quartz_pool: Counter[str] = Counter()
+# fills the pool counters according to info in location_table
+for location in location_table:
+    if location_table[location].vanilla_item != "":
+        if location_table[location].check_type == "Chest":
+            default_chest_pool[location_table[location].vanilla_item] += 1
+        if location_table[location].check_type == "Character Quartz":
+            default_character_quartz_pool[location_table[location].vanilla_item] += 1
+        if location_table[location].check_type == "Area Unlock":
+            default_item_pool[location_table[location].vanilla_item] += 1
 
 default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
