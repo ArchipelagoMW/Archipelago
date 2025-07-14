@@ -570,8 +570,8 @@ class EarthBoundWorld(World):
 
                 if item_to_counts[item.name] >= max_filler_counts[item.name]:
                     self.common_gear = [x for x in self.common_gear if x != item.name]
-                    self.uncommon_gear = [x for x in self.common_gear if x != item.name]
-                    self.rare_gear = [x for x in self.common_gear if x != item.name]
+                    self.uncommon_gear = [x for x in self.uncommon_gear if x != item.name]
+                    self.rare_gear = [x for x in self.rare_gear if x != item.name]
             pool.append(item)
 
     def get_item_pool(self, excluded_items: Set[str]) -> List[Item]:
