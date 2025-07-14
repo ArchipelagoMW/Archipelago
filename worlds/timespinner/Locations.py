@@ -690,7 +690,8 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Military Fortress (hangar)', 'Military Fortress: Spike Room Lantern 2', 1337272, lambda state: logic.can_break_lanterns(state) and (state.has('Water Mask', player) if flooded.flood_lab else logic.has_doublejump(state))),
             LocationData('Military Fortress (hangar)', 'Military Fortress: Pedestal Lantern', 1337273, lambda state: logic.can_break_lanterns(state) and (state.has('Water Mask', player) if flooded.flood_lab else (logic.has_doublejump_of_npc(state) or logic.has_forwarddash_doublejump(state)))),
 
-            LocationData('Lab Entrance', 'Lab: Intro Hallway Lantern', 1337294, logic.can_break_lanterns),
+            LocationData('Lab Entrance', 'Lab: Intro Hallway Lantern 1', 1337294, logic.can_break_lanterns),
+            # LocationData('Lab Entrance', 'Lab: Intro Hallway Lantern 2', 1337782, logic.can_break_lanterns),
             LocationData('Main Lab', 'Lab: Coffee Lantern 1', 1337305, logic.can_break_lanterns),
             LocationData('Main Lab', 'Lab: Coffee Lantern 2', 1337306, logic.can_break_lanterns),
             LocationData('Main Lab', 'Lab: Coffee Lantern 3', 1337307, logic.can_break_lanterns),
