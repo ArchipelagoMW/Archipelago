@@ -1,33 +1,34 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import typing
 import builtins
-import os
+import collections
+import functools
+import importlib
+import io
 import itertools
+import json
+import logging
+import os
+import pickle
 import subprocess
 import sys
-import pickle
-import functools
-import io
-import collections
-import importlib
-import logging
 import warnings
-
 from argparse import Namespace
-from settings import Settings, get_settings
+from collections.abc import Coroutine, Callable, Mapping, Iterable, Sequence, Collection
 from time import sleep
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
+from typing import BinaryIO, Deque, Any, TypeGuard, TYPE_CHECKING, NamedTuple, TypeVar, cast, TextIO, AbstractSet
+
 from yaml import load, load_all, dump
+
+from settings import Settings, get_settings
 
 try:
     from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
 except ImportError:
     from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     import tkinter
     import pathlib
     from BaseClasses import Region
@@ -38,7 +39,7 @@ def tuplize_version(version: str) -> Version:
     return Version(*(int(piece, 10) for piece in version.split(".")))
 
 
-class Version(typing.NamedTuple):
+class Version(NamedTuple):
     major: int
     minor: int
     build: int
@@ -55,12 +56,12 @@ is_macos = sys.platform == "darwin"
 is_windows = sys.platform in ("win32", "cygwin", "msys")
 
 
-def int16_as_bytes(value: int) -> typing.List[int]:
+def int16_as_bytes(value: int) -> list[int]:
     value = value & 0xFFFF
     return [value & 0xFF, (value >> 8) & 0xFF]
 
 
-def int32_as_bytes(value: int) -> typing.List[int]:
+def int32_as_bytes(value: int) -> list[int]:
     value = value & 0xFFFFFFFF
     return [value & 0xFF, (value >> 8) & 0xFF, (value >> 16) & 0xFF, (value >> 24) & 0xFF]
 
@@ -73,27 +74,27 @@ def snes_to_pc(value: int) -> int:
     return ((value & 0x7F0000) >> 1) | (value & 0x7FFF)
 
 
-RetType = typing.TypeVar("RetType")
-S = typing.TypeVar("S")
-T = typing.TypeVar("T")
+RetType = TypeVar("RetType")
+S = TypeVar("S")
+T = TypeVar("T")
 
 
-def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
+def cache_argsless(function: Callable[[], RetType]) -> Callable[[], RetType]:
     assert not function.__code__.co_argcount, "Can only cache 0 argument functions with this cache."
 
     sentinel = object()
-    result: typing.Union[object, RetType] = sentinel
+    result: object | RetType = sentinel
 
     def _wrap() -> RetType:
         nonlocal result
         if result is sentinel:
             result = function()
-        return typing.cast(RetType, result)
+        return cast(RetType, result)
 
     return _wrap
 
 
-def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[S, T], RetType]:
+def cache_self1(function: Callable[[S, T], RetType]) -> Callable[[S, T], RetType]:
     """Specialized cache for self + 1 arg. Does not keep global ref to self and skips building a dict key tuple."""
 
     assert function.__code__.co_argcount == 2, "Can only cache 2 argument functions with this cache."
@@ -102,7 +103,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
     @functools.wraps(function)
     def wrap(self: S, arg: T) -> RetType:
-        cache: Optional[Dict[T, RetType]] = getattr(self, cache_name, None)
+        cache: dict[T, RetType] | None = getattr(self, cache_name, None)
         if cache is None:
             res = function(self, arg)
             setattr(self, cache_name, {arg: res})
@@ -120,7 +121,7 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
 
 
 def is_frozen() -> bool:
-    return typing.cast(bool, getattr(sys, 'frozen', False))
+    return cast(bool, getattr(sys, 'frozen', False))
 
 
 def local_path(*path: str) -> str:
@@ -223,7 +224,7 @@ def output_path(*path: str) -> str:
     return path
 
 
-def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
+def open_file(filename: str | pathlib.Path) -> None:
     if is_windows:
         os.startfile(filename)  # type: ignore
     else:
@@ -322,7 +323,7 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
+def persistent_store(category: str, key: str, value: Any):
     path = user_path("_persistent_storage.yaml")
     storage = persistent_load()
     category_dict = storage.setdefault(category, {})
@@ -331,8 +332,8 @@ def persistent_store(category: str, key: str, value: typing.Any):
         f.write(dump(storage, Dumper=Dumper))
 
 
-def persistent_load() -> Dict[str, Dict[str, Any]]:
-    storage: Union[Dict[str, Dict[str, Any]], None] = getattr(persistent_load, "storage", None)
+def persistent_load() -> dict[str, dict[str, Any]]:
+    storage: dict[str, dict[str, Any]] | None = getattr(persistent_load, "storage", None)
     if storage:
         return storage
     path = user_path("_persistent_storage.yaml")
@@ -353,7 +354,7 @@ def get_file_safe_name(name: str) -> str:
     return "".join(c for c in name if c not in '<>:"/\\|?*')
 
 
-def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) -> Dict[str, Any]:
+def load_data_package_for_checksum(game: str, checksum: str | None) -> dict[str, Any]:
     if checksum and game:
         if checksum != get_file_safe_name(checksum):
             raise ValueError(f"Bad symbols in checksum: {checksum}")
@@ -374,7 +375,7 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
     return {}
 
 
-def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> None:
+def store_data_package_for_checksum(game: str, data: dict[str, Any]) -> None:
     checksum = data.get("checksum")
     if checksum and game:
         if checksum != get_file_safe_name(checksum):
@@ -430,7 +431,7 @@ safe_builtins = frozenset((
 
 
 class RestrictedUnpickler(pickle.Unpickler):
-    generic_properties_module: Optional[object]
+    generic_properties_module: object | None
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(RestrictedUnpickler, self).__init__(*args, **kwargs)
@@ -484,11 +485,11 @@ class ByValue:
 
 class KeyedDefaultDict(collections.defaultdict):
     """defaultdict variant that uses the missing key as argument to default_factory"""
-    default_factory: typing.Callable[[typing.Any], typing.Any]
+    default_factory: Callable[[Any], Any]
 
     def __init__(self,
-                 default_factory: typing.Callable[[Any], Any] = None,
-                 seq: typing.Union[typing.Mapping, typing.Iterable, None] = None,
+                 default_factory: Callable[[Any], Any] = None,
+                 seq: Mapping | Iterable | None = None,
                  **kwargs):
         if seq is not None:
             super().__init__(default_factory, seq, **kwargs)
@@ -511,9 +512,9 @@ def get_text_after(text: str, start: str) -> str:
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
-def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
+def init_logging(name: str, loglevel: str | int = logging.INFO,
                  write_mode: str = "w", log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
-                 add_timestamp: bool = False, exception_logger: typing.Optional[str] = None):
+                 add_timestamp: bool = False, exception_logger: str | None = None):
     import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
@@ -533,7 +534,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     file_handler.setFormatter(logging.Formatter(log_format))
 
     class Filter(logging.Filter):
-        def __init__(self, filter_name: str, condition: typing.Callable[[logging.LogRecord], bool]) -> None:
+        def __init__(self, filter_name: str, condition: Callable[[logging.LogRecord], bool]) -> None:
             super().__init__(filter_name)
             self.condition = condition
 
@@ -557,10 +558,10 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
         orig_hook = sys.excepthook
 
-        def handle_exception(exc_type, exc_value, exc_traceback):
+        def handle_exception(exc_type, exc_value, exc_traceback) -> Any:
             if issubclass(exc_type, KeyboardInterrupt):
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
-                return
+                return None
             logging.getLogger(exception_logger).exception("Uncaught exception",
                                                           exc_info=(exc_type, exc_value, exc_traceback),
                                                           extra={"NoStream": exception_logger is None})
@@ -592,7 +593,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
     )
 
 
-def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
+def stream_input(stream: TextIO, queue: "asyncio.Queue[str]"):
     def queuer():
         while 1:
             try:
@@ -622,7 +623,7 @@ class VersionException(Exception):
     pass
 
 
-def chaining_prefix(index: int, labels: typing.Sequence[str]) -> str:
+def chaining_prefix(index: int, labels: Sequence[str]) -> str:
     text = ""
     max_label = len(labels) - 1
     while index > max_label:
@@ -645,8 +646,7 @@ def format_SI_prefix(value, power=1000, power_labels=("", "k", "M", "G", "T", "P
     return f"{value.quantize(decimal.Decimal('1.00'))} {chaining_prefix(n, power_labels)}"
 
 
-def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit: typing.Optional[int] = None) \
-        -> typing.List[typing.Tuple[str, int]]:
+def get_fuzzy_results(input_word: str, word_list: Collection[str], limit: int | None = None) -> list[tuple[str, int]]:
     import jellyfish
 
     def get_fuzzy_ratio(word1: str, word2: str) -> float:
@@ -668,7 +668,7 @@ def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit:
     )
 
 
-def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bool, str]:
+def get_intended_text(input_text: str, possible_answers) -> tuple[str, bool, str]:
     picks = get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
@@ -692,7 +692,7 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
-def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+def get_input_text_from_response(text: str, command: str) -> str | None:
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
@@ -712,7 +712,7 @@ def is_kivy_running() -> bool:
     return False
 
 
-def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+def _mp_open_filename(res: "multiprocessing.Queue[str | None]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
     res.put(open_filename(*args))
@@ -726,8 +726,7 @@ def _run_for_stdout(*args: str):
     return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
 
 
-def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
-        -> typing.Optional[str]:
+def open_filename(title: str, filetypes: Iterable[tuple[str, Iterable[str]]], suggest: str = "") -> str | None:
     logging.info(f"Opening file input dialog for {title}.")
 
     if is_linux:
@@ -756,7 +755,7 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
             # on macOS, mixing kivy and tk does not work, so spawn a new process
             # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
             from multiprocessing import Process, Queue
-            res: "Queue[typing.Optional[str]]" = Queue()
+            res: "Queue[str | None]" = Queue()
             Process(target=_mp_open_filename, args=(res, title, filetypes, suggest)).start()
             return res.get()
         try:
@@ -768,13 +767,14 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
                                                   initialfile=suggest or None)
 
 
-def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+def _mp_open_directory(res: "multiprocessing.Queue[str | None]", *args: Any) -> None:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
     res.put(open_directory(*args))
 
 
-def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
+
+def open_directory(title: str, suggest: str = "") -> str | None:
     if is_linux:
         # prefer native dialog
         from shutil import which
@@ -801,7 +801,7 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
             # on macOS, mixing kivy and tk does not work, so spawn a new process
             # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
             from multiprocessing import Process, Queue
-            res: "Queue[typing.Optional[str]]" = Queue()
+            res: "Queue[str | None]" = Queue()
             Process(target=_mp_open_directory, args=(res, title, suggest)).start()
             return res.get()
         try:
@@ -816,7 +816,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
-        return
+        return None
 
     if is_linux and "tkinter" not in sys.modules:
         # prefer native dialog
@@ -846,12 +846,13 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         root.withdraw()
         showerror(title, text) if error else showinfo(title, text)
         root.update()
+    return None
 
 
-def title_sorted(data: typing.Iterable, key=None, ignore: typing.AbstractSet[str] = frozenset(("a", "the"))):
+def title_sorted(data: Iterable, key=None, ignore: AbstractSet[str] = frozenset(("a", "the"))):
     """Sorts a sequence of text ignoring typical articles like "a" or "the" in the beginning."""
-    def sorter(element: Union[str, Dict[str, Any]]) -> str:
-        if (not isinstance(element, str)):
+    def sorter(element: str | dict[str, Any]) -> str:
+        if not isinstance(element, str):
             element = element["title"]
 
         parts = element.split(maxsplit=1)
@@ -870,10 +871,10 @@ def read_snes_rom(stream: BinaryIO, strip_header: bool = True) -> bytearray:
     return buffer
 
 
-_faf_tasks: "Set[asyncio.Task[typing.Any]]" = set()
+_faf_tasks: "set[asyncio.Task[Any]]" = set()
 
 
-def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = None) -> None:
+def async_start(co: Coroutine[None, None, Any], name: str | None = None) -> None:
     """
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
@@ -886,7 +887,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     # ```
     # This implementation follows the pattern given in that documentation.
 
-    task: asyncio.Task[typing.Any] = asyncio.create_task(co, name=name)
+    task: asyncio.Task[Any] = asyncio.create_task(co, name=name)
     _faf_tasks.add(task)
     task.add_done_callback(_faf_tasks.discard)
 
@@ -1001,12 +1002,12 @@ def visualize_regions(root_region: Region, file_name: str, *,
     from collections import deque
     import re
 
-    uml: typing.List[str] = list()
-    seen: typing.Set[Region] = set()
-    regions: typing.Deque[Region] = deque((root_region,))
+    uml: list[str] = list()
+    seen: set[Region] = set()
+    regions: Deque[Region] = deque((root_region,))
     multiworld: MultiWorld = root_region.multiworld
 
-    def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
+    def fmt(obj: Entrance | Item | Location | Region) -> str:
         name = obj.name
         if isinstance(obj, Item):
             name = multiworld.get_name_string_for_object(obj)
@@ -1079,7 +1080,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
 
 class RepeatableChain:
-    def __init__(self, iterable: typing.Iterable):
+    def __init__(self, iterable: Iterable):
         self.iterable = iterable
 
     def __iter__(self):
@@ -1092,8 +1093,8 @@ class RepeatableChain:
         return sum(len(iterable) for iterable in self.iterable)
 
 
-def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
+def is_iterable_except_str(obj: object) -> TypeGuard[Iterable[Any]]:
     """ `str` is `Iterable`, but that's not what we want """
     if isinstance(obj, str):
         return False
-    return isinstance(obj, typing.Iterable)
+    return isinstance(obj, Iterable)
