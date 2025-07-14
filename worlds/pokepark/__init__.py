@@ -3,7 +3,7 @@ Archipelago init file for Pokepark
 """
 from BaseClasses import ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import components, Component, launch_subprocess, Type
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from .items import FRIENDSHIP_ITEMS, PokeparkItem, UNLOCK_ITEMS, BERRIES, ALL_ITEMS_TABLE, PRISM_ITEM, POWERS, \
     REGION_UNLOCK, VICTORY
 from .locations import ALL_LOCATIONS_TABLE, REGIONS
@@ -203,7 +203,7 @@ class PokeparkWorld(World):
 
 def launch_client():
     from .PokeparkClient import main
-    launch_subprocess(main, name="Pokepark client")
+    launch_component(main, name="Pokepark client")
 
 
 components.append(Component("Pokepark Client", "PokeparkClient",
