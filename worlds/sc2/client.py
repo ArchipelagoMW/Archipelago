@@ -37,13 +37,13 @@ from .options import (
     VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
     SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunPassiveAbilityPresence,
-    SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms,
+    SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms, VoidTradeWorkers,
     DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
 from .mission_tables import MissionFlag
-from .transfer_data import normalized_unit_types
+from .transfer_data import normalized_unit_types, worker_units
 from . import SC2World
 
 
@@ -411,6 +411,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             ConfigurableOptionInfo('enable_morphling', 'enable_morphling', options.EnableMorphling, can_break_logic=True),
             ConfigurableOptionInfo('difficulty_damage_modifier', 'difficulty_damage_modifier', options.DifficultyDamageModifier),
             ConfigurableOptionInfo('void_trade_age_limit', 'trade_age_limit', options.VoidTradeAgeLimit),
+            ConfigurableOptionInfo('void_trade_workers', 'trade_workers_allowed', options.VoidTradeWorkers),
             ConfigurableOptionInfo('mercenary_highlanders', 'mercenary_highlanders', options.MercenaryHighlanders),
         )
 
@@ -655,6 +656,7 @@ class SC2Context(CommonContext):
         self.kerrigan_levels_per_mission_completed = 0
         self.trade_enabled: int = EnableVoidTrade.default
         self.trade_age_limit: int = VoidTradeAgeLimit.default
+        self.trade_workers_allowed: int = VoidTradeWorkers.default
         self.trade_underway: bool = False
         self.trade_latest_reply: typing.Optional[dict] = None
         self.trade_reply_event = asyncio.Event()
@@ -865,6 +867,7 @@ class SC2Context(CommonContext):
                 self.use_nova_nco_fallback = args["slot_data"].get("use_nova_nco_fallback", False)
             self.trade_enabled = args["slot_data"].get("enable_void_trade", EnableVoidTrade.option_false)
             self.trade_age_limit = args["slot_data"].get("void_trade_age_limit", VoidTradeAgeLimit.default)
+            self.trade_workers_allowed = args["slot_data"].get("void_trade_workers", VoidTradeWorkers.default)
             self.difficulty_damage_modifier = args["slot_data"].get("difficulty_damage_modifier", DifficultyDamageModifier.option_true)
             self.mission_order_scouting = args["slot_data"].get("mission_order_scouting", MissionOrderScouting.option_none)
             self.mission_item_classification = args["slot_data"].get("mission_item_classification")
@@ -1186,14 +1189,21 @@ class SC2Context(CommonContext):
             is_young_enough = lambda send_time: trade_time - send_time <= allowed_age
         else:
             is_young_enough = lambda _: True
+        # Filter out banned units
+        if self.trade_workers_allowed == VoidTradeWorkers.option_false:
+            is_unit_allowed = lambda unit: unit not in worker_units
+        else:
+            is_unit_allowed = lambda _: True
+        
         available_units: typing.List[typing.Tuple[str, str, int]] = []
         available_counts: typing.List[int] = []
         for slot in allowed_slots:
             for (send_time, units) in reply["value"][slot].items():
                 if is_young_enough(int(send_time)):
                     for (unit, count) in units.items():
-                        available_units.append((unit, slot, send_time))
-                        available_counts.append(count)
+                        if is_unit_allowed(str(unit)):
+                            available_units.append((unit, slot, send_time))
+                            available_counts.append(count)
 
         # Pick units to receive
         # If there's not enough units in total, just pick as many as possible
@@ -1623,6 +1633,21 @@ def calculate_generic_upgrade_options(ctx: SC2Context) -> int:
 
     return result
 
+def calculate_trade_options(ctx: SC2Context) -> int:
+    result = 0
+
+    # Bit 0
+    # Trade enabled
+    if ctx.trade_enabled:
+        result |= 1 << 0
+
+    # Bit 1
+    # Workers allowed
+    if ctx.trade_workers_allowed == VoidTradeWorkers.option_true:
+        result |= 1 << 1
+    
+    return result
+
 def kerrigan_primal(ctx: SC2Context, kerrigan_level: int) -> bool:
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_always_zerg:
         return True
@@ -1718,6 +1743,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
             generic_upgrade_options = calculate_generic_upgrade_options(self.ctx)
+            trade_options = calculate_trade_options(self.ctx)
             mission_variant = get_mission_variant(self.mission_id)  # 0/1/2/3 for unchanged/Terran/Zerg/Protoss
             mission = lookup_id_to_mission[self.mission_id]
             nova_fallback: bool
@@ -1753,7 +1779,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 f" {self.ctx.grant_story_levels}"
                 f" {self.ctx.enable_morphling}"
                 f" {mission_variant}"
-                f" {self.ctx.trade_enabled}"
+                f" {trade_options}"
                 f" {self.ctx.difficulty_damage_modifier}"
                 f" {self.ctx.mercenary_highlanders}" # TODO: Possibly rework it into unit options in the next cycle
                 f" {self.ctx.war_council_nerfs}"
