@@ -1,5 +1,4 @@
 import copy
-import random
 from ..rom.addresses import Addresses
 from ..rom.rom import pc_to_snes
 from ..logic.helpers import Bosses
@@ -28,7 +27,7 @@ class Synonyms(object):
     ]
     alreadyUsed = []
     @staticmethod
-    def getVerb(): 
+    def getVerb(random):
         verb = random.choice(Synonyms.killSynonyms)
         while verb in Synonyms.alreadyUsed:
             verb = random.choice(Synonyms.killSynonyms)
@@ -88,10 +87,10 @@ class Goal(object):
         # not all objectives require an ap (like limit objectives)
         return self.clearFunc(smbm, ap)
 
-    def getText(self):
+    def getText(self, random):
         out = "{}. ".format(self.rank)
         if self.useSynonym:
-            out += self.text.format(Synonyms.getVerb())
+            out += self.text.format(Synonyms.getVerb(random))
         else:
             out += self.text
         assert len(out) <= 28, "Goal text '{}' is too long: {}, max 28".format(out, len(out))
@@ -676,7 +675,7 @@ class Objectives(object):
         return [goal.name for goal in _goals.values() if goal.available and (not removeNothing or goal.name != "nothing")]
 
     # call from rando
-    def setRandom(self, nbGoals, availableGoals):
+    def setRandom(self, nbGoals, availableGoals, random):
         while self.nbActiveGoals < nbGoals and availableGoals:
             goalName = random.choice(availableGoals)
             self.addGoal(goalName)
@@ -702,7 +701,7 @@ class Objectives(object):
         LOG.debug("tourianRequired: {}".format(self.tourianRequired))
 
     # call from rando
-    def writeGoals(self, romFile):
+    def writeGoals(self, romFile, random):
         # write check functions
         romFile.seek(Addresses.getOne('objectivesList'))
         for goal in self.activeGoals:
@@ -736,7 +735,7 @@ class Objectives(object):
         space = 3 if self.nbActiveGoals == 5 else 4
         for i, goal in enumerate(self.activeGoals):
             addr = baseAddr + i * lineLength * space
-            text = goal.getText()
+            text = goal.getText(random)
             romFile.seek(addr)
             for c in text:
                 if c not in char2tile:

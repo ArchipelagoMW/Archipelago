@@ -1,7 +1,7 @@
 import math
 from typing import Dict
 
-from BaseClasses import CollectionState, Entrance, Item, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Region, Tutorial
 
 from worlds.AutoWorld import WebWorld, World
 
@@ -56,7 +56,7 @@ class YachtDiceWorld(World):
 
     item_name_groups = item_groups
 
-    ap_world_version = "2.1.2"
+    ap_world_version = "2.1.4"
 
     def _get_yachtdice_data(self):
         return {
@@ -456,17 +456,19 @@ class YachtDiceWorld(World):
             if loc_data.region == board.name
         ]
 
-        # Add the victory item to the correct location.
-        # The website declares that the game is complete when the victory item is obtained.
+        # Change the victory location to an event and place the Victory item there.
         victory_location_name = f"{self.goal_score} score"
-        self.get_location(victory_location_name).place_locked_item(self.create_item("Victory"))
+        self.get_location(victory_location_name).address = None
+        self.get_location(victory_location_name).place_locked_item(
+            Item("Victory", ItemClassification.progression, None, self.player)
+        )
 
         # add the regions
         connection = Entrance(self.player, "New Board", menu)
         menu.exits.append(connection)
         connection.connect(board)
         self.multiworld.regions += [menu, board]
-        
+
     def get_filler_item_name(self) -> str:
         return "Good RNG"
 

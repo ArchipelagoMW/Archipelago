@@ -10,9 +10,9 @@ def level_scaling(multiworld):
     while locations:
         sphere = set()
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-            if (multiworld.level_scaling[world.player] != "by_spheres_and_distance"
-                    and (multiworld.level_scaling[world.player] != "auto" or multiworld.door_shuffle[world.player]
-                         in ("off", "simple"))):
+            if (world.options.level_scaling != "by_spheres_and_distance"
+                    and (world.options.level_scaling != "auto"
+                         or world.options.door_shuffle in ("off", "simple"))):
                 continue
             regions = {multiworld.get_region("Menu", world.player)}
             checked_regions = set()
@@ -41,7 +41,8 @@ def level_scaling(multiworld):
                     # reach them earlier. We treat them both as reachable right away for this purpose
                     return True
                 if (location.name == "Route 25 - Item" and state.can_reach("Route 25", "Region", location.player)
-                        and multiworld.blind_trainers[location.player].value < 100):
+                        and multiworld.worlds[location.player].options.blind_trainers.value < 100
+                        and "Route 25 - Jr. Trainer M" not in multiworld.regions.location_cache[location.player]):
                     # Assume they will take their one chance to get the trainer to walk out of the way to reach
                     # the item behind them
                     return True
@@ -95,9 +96,9 @@ def level_scaling(multiworld):
             if (location.item.game == "Pokemon Red and Blue" and (location.item.name.startswith("Missable ") or
                     location.item.name.startswith("Static ")) and location.name !=
                     "Pokemon Tower 6F - Restless Soul"):
-                # Normally, missable Pokemon (starters, the dojo rewards) are not considered in logic static Pokemon
-                # are not considered for moves or evolutions, as you could release them and potentially soft lock
-                # the game. However, for level scaling purposes, we will treat them as not missable or static.
+                # Normally, missable Pokemon (starters, the dojo rewards) are not considered in logic, and static
+                # Pokemon are not considered for moves or evolutions, as you could release them and potentially soft
+                # lock the game. However, for level scaling purposes, we will treat them as not missable or static.
                 # We would not want someone playing a minimal accessibility Dexsanity game to get what would be
                 # technically an "out of logic" Mansion Key from selecting Bulbasaur at the beginning of the game
                 # and end up in the Mansion early and encountering level 67 Pokémon
@@ -106,7 +107,7 @@ def level_scaling(multiworld):
             else:
                 state.collect(location.item, True, location)
     for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-        if multiworld.level_scaling[world.player] == "off":
+        if world.options.level_scaling == "off":
             continue
         level_list_copy = level_list.copy()
         for sphere in spheres:
