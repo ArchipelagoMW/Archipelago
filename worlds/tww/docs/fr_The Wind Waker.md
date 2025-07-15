@@ -28,7 +28,7 @@ Komali), un objet inutilisé dans le randomiseur.
 
 ## Que se passe-t-il quand un joueur reçoit un objet ?
 
-Quand le joueur reçoit n'importe quel objet, Il sera automatiquement ajouté à l'inventaire de Link. Link **ne tiendra pas** l'objet
+Quand le joueur reçoit n'importe quel objet, il sera automatiquement ajouté à l'inventaire de Link. Link **ne tiendra pas** l'objet
 au dessus de sa tête comme dans d'autres randomizer de Zelda.
 
 ## J'ai besoin d'aide ! Que dois-je faire ?
