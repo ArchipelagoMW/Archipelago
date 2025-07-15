@@ -1,7 +1,8 @@
 from BaseClasses import ItemClassification
 from collections import Counter
 
-from . import TunicTestBase
+from test.bases import WorldTestBase
+
 from .. import options
 from ..combat_logic import (check_combat_reqs, area_data, get_money_count, calc_effective_hp, get_potion_level,
                             get_hp_level, get_def_level, get_sp_level, has_combat_reqs)
@@ -9,9 +10,12 @@ from ..items import item_table
 from .. import TunicWorld
 
 
+class TunicTestBase(WorldTestBase):
+    game = "TUNIC"
+
+
 class TestCombat(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_on}
-    player = 1
     world: TunicWorld
     combat_items = []
     # these are items that are progression that do not contribute to combat logic

@@ -1,5 +1,10 @@
-from . import TunicTestBase
+from test.bases import WorldTestBase
+
 from .. import options
+
+
+class TunicTestBase(WorldTestBase):
+    game = "TUNIC"
 
 
 class TestWells(TunicTestBase):
