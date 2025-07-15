@@ -2,7 +2,7 @@
 # the file are consistent. It also checks that the panel and door IDs mentioned
 # all exist in the map file.
 #
-# Usage: validate_config.rb [config file] [map file]
+# Usage: validate_config.rb [config file] [ids path] [map file]
 
 require 'set'
 require 'yaml'
