@@ -93,7 +93,7 @@ Quelques préréglages (presets) sont disponibles sur la [page d'options](../pla
 
 - Type des coffres Dynamique assorties au contenu en fonction des options activés
 - Implémentation des indices venant du randomiseur de base (options de placement des indices et des types d'indices)
-- Intégration avec le système d'indice d'Archipelago(ex: indices des enchères)
+- Intégration avec le système d'indice d'Archipelago (ex: indices des enchères)
 - Support de l'EnergyLink
 - Logique de la voile rapide en tant qu'option
 - Continuer la correction de bug
