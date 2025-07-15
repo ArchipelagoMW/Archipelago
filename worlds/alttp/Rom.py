@@ -1737,8 +1737,7 @@ def get_price_data(price: int, price_type: int) -> List[int]:
 
 
 def write_custom_shops(rom, world, player):
-    shops = sorted([shop for shop in world.shops if shop.custom and shop.region.player == player],
-                   key=lambda shop: shop.sram_offset)
+    shops = sorted([shop for shop in world.worlds[player].shops if shop.custom], key=lambda shop: shop.sram_offset)
 
     shop_data = bytearray()
     items_data = bytearray()
