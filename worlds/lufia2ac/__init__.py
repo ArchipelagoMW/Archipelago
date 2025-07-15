@@ -118,7 +118,7 @@ class L2ACWorld(World):
                 L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
             chest_access.show_in_spoiler = False
             ancient_dungeon.locations.append(chest_access)
-        for iris in self.item_name_groups["Iris treasures"]:
+        for iris in sorted(self.item_name_groups["Iris treasures"]):
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
             iris_treasure: Location = \
                 L2ACLocation(self.player, treasure_name, self.location_name_to_id[treasure_name], ancient_dungeon)

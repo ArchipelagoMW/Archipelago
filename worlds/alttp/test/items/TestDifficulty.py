@@ -1,5 +1,5 @@
 from worlds.alttp.ItemPool import difficulties
-from test.TestBase import TestBase
+from test.bases import TestBase
 
 base_items = 41
 extra_counts = (15, 15, 10, 5, 25)

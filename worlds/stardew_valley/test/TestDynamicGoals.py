@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
-from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .bases import SVTestBase
 from .. import options, StardewItem
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
@@ -27,6 +27,7 @@ def collect_fishing_abilities(tester: SVTestBase):
     tester.multiworld.state.collect(tester.world.create_item("Fall"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Winter"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item(Transportation.desert_obelisk), prevent_sweep=False)
+    tester.multiworld.state.collect(tester.world.create_item("Beach Bridge"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Railroad Boulder Removed"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Island North Turtle"), prevent_sweep=False)
     tester.multiworld.state.collect(tester.world.create_item("Island West Turtle"), prevent_sweep=False)

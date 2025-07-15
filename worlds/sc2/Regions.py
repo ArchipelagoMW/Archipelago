@@ -50,7 +50,7 @@ def create_vanilla_regions(
     names: Dict[str, int] = {}
 
     # Generating all regions and locations for each enabled campaign
-    for campaign in enabled_campaigns:
+    for campaign in sorted(enabled_campaigns):
         for region_name in vanilla_mission_req_table[campaign].keys():
             regions.append(create_region(world, locations_per_region, location_cache, region_name))
     world.multiworld.regions += regions

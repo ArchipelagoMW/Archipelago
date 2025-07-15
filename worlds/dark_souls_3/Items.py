@@ -238,15 +238,6 @@ class DS3ItemData:
             ds3_code = cast(int, self.ds3_code) + level,
             filler = False,
         )
-    
-    def __hash__(self) -> int:
-        return (self.name, self.ds3_code).__hash__()
-    
-    def __eq__(self, other: Any) -> bool:
-        if isinstance(other, self.__class__):
-            return self.name == other.name and self.ds3_code == other.ds3_code
-        else:
-            return False
 
 
 class DarkSouls3Item(Item):
@@ -520,7 +511,7 @@ _vanilla_items = [
     DS3ItemData("Elkhorn Round Shield",                0x0133C510, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Warrior's Round Shield",              0x0133EC20, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Caduceus Round Shield",               0x01341330, DS3ItemCategory.SHIELD_INFUSIBLE),
-    DS3ItemData("Red and White Shield",                0x01343A40, DS3ItemCategory.SHIELD_INFUSIBLE),
+    DS3ItemData("Red and White Round Shield",          0x01343A40, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Blessed Red and White Shield+1",      0x01343FB9, DS3ItemCategory.SHIELD),
     DS3ItemData("Plank Shield",                        0x01346150, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Leather Shield",                      0x01348860, DS3ItemCategory.SHIELD_INFUSIBLE),

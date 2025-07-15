@@ -24,7 +24,7 @@ display as `Value1` on the webhost.
 files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
 Choice, and defining `alias_true = option_full`.
 - All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
-`(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
+`(Named)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
 option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
 However, you can override `from_text` and handle `text == "random"` to customize its behavior or
 implement it for additional option types.
@@ -95,7 +95,7 @@ user hovers over the yellow "(?)" icon, and included in the YAML templates gener
 The WebHost can display Option documentation either as plain text with all whitespace preserved (other than the base
 indentation), or as HTML generated from the standard Python [reStructuredText] format. Although plain text is the
 default for backwards compatibility, world authors are encouraged to write their Option documentation as
-reStructuredText and enable rich text rendering by setting `World.rich_text_options_doc = True`.
+reStructuredText and enable rich text rendering by setting `WebWorld.rich_text_options_doc = True`.
 
 [reStructuredText]: https://docutils.sourceforge.io/rst.html
 
@@ -127,6 +127,23 @@ class Difficulty(Choice):
     option_normal = 1
     option_hard = 2
     default = 1
+```
+
+### Option Visibility
+Every option has a Visibility IntFlag, defaulting to `all` (`0b1111`). This lets you choose where the option will be
+displayed. This only impacts where options are displayed, not how they can be used. Hidden options are still valid
+options in a yaml. The flags are as follows:
+* `none` (`0b0000`): This option is not shown anywhere
+* `template` (`0b0001`): This option shows up in template yamls
+* `simple_ui` (`0b0010`): This option shows up on the options page
+* `complex_ui` (`0b0100`): This option shows up on the advanced/weighted options page
+* `spoiler` (`0b1000`): This option shows up in spoiler logs
+
+```python
+from Options import Choice, Visibility
+
+class HiddenChoiceOption(Choice):
+    visibility = Visibility.none
 ```
 
 ### Option Groups
@@ -316,7 +333,7 @@ within the world.
 ### TextChoice
 Like choice allows you to predetermine options and has all of the same comparison methods and handling. Also accepts any
 user defined string as a valid option, so will either need to be validated by adding a validation step to the option
-class or within world, if necessary. Value for this class is `Union[str, int]` so if you need the value at a specified
+class or within world, if necessary. Value for this class is `str | int` so if you need the value at a specified
 point, `self.options.my_option.current_key` will always return a string.
 
 ### PlandoBosses
@@ -335,8 +352,15 @@ template. If you set a [Schema](https://pypi.org/project/schema/) on the class w
 options system will automatically validate the user supplied data against the schema to ensure it's in the correct
 format.
 
+### OptionCounter
+This is a special case of OptionDict where the dictionary values can only be integers.  
+It returns a [collections.Counter](https://docs.python.org/3/library/collections.html#collections.Counter).
+This means that if you access a key that isn't present, its value will be 0.  
+The upside of using an OptionCounter (instead of an OptionDict with integer values) is that an OptionCounter can be
+displayed on the Options page on WebHost.
+
 ### ItemDict
-Like OptionDict, except this will verify that every key in the dictionary is a valid name for an item for your world.
+An OptionCounter that will verify that every key in the dictionary is a valid name for an item for your world.
 
 ### OptionList
 This option defines a List, where the user can add any number of strings to said list, allowing duplicate values. You
