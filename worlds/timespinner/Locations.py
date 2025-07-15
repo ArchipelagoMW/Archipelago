@@ -619,6 +619,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Penultimate Hall Lantern 4', 1337661, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Penultimate Hall Lantern 5', 1337662, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Penultimate Hall Lantern 6', 1337663, logic.can_break_lanterns),
+            LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Jackpot Ledge Lantern', 1337666, lambda state: logic.has_forwarddash_doublejump(state) and logic.can_break_lanterns(state)),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Waterfall Lantern 1', 1337664, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Waterfall Lantern 2', 1337665, logic.can_break_lanterns),
             LocationData('Caves of Banishment (Flooded)', 'Caves of Banishment (Maw): Waterfall Lantern 3', 1337667, logic.can_break_lanterns),
