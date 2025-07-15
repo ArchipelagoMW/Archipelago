@@ -22,7 +22,7 @@ Como estamos usando Bizhawk, esta guía sólo es aplicable a sistemas Windows y 
 
 ### ¿Qué es un archivo YAML y por qué necesito uno?
 
-Tu archivo YAML contiene un conjunto de opciones de configuración que proporcionan al generador información sobre cómo debe generar tu juego. Cada jugador de un multiworld proporcionará su propio archivo YAML. Esta configuración permite a cada jugador disfrutar en
+Tu archivo YAML contiene un conjunto de opciones de configuración que proporcionan al generador información sobre cómo debe generar tu juego. Cada jugador de un multiworld proporcionará su propio archivo YAML. Esta configuración permite a cada jugador disfrutar
 de una experiencia personalizada a su gusto, y distintos jugadores de un mismo multiworld pueden tener opciones diferentes.
 
 ### ¿Dónde consigo un archivo YAML?
