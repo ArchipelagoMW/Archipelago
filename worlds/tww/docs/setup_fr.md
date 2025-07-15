@@ -14,7 +14,7 @@ Vous aurez besoin des choses suivantes pour être capable de jouer à The Wind W
       est spécifique à Archipelago.
 * Une ISO du jeu Zelda The Wind Waker(version Nord Américaine), probablement nommé "Legend of Zelda, The - The Wind Waker (USA).iso".
 
-De manière optionnelle, Vous pouvez également télécharger:
+De manière optionnelle, vous pouvez également télécharger:
 * Le [tracker pour Wind Waker](https://github.com/Mysteryem/ww-poptracker/releases/latest) avec [PopTracker](https://github.com/black-sliver/PopTracker/releases), qui en est la dépendance.
 * Des [modèles de personnages personnalisés pour Wind Waker](https://github.com/Sage-of-Mirrors/Custom-Wind-Waker-Player-Models) afin de personnaliser votre personnage en jeu.
 
