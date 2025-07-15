@@ -163,7 +163,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["sw ocean east", "sw ocean west", False, lambda state: ph_can_enter_ocean_sw_west(state, player)],
         ["sw ocean west", "molida island", False, None],
         ["sw ocean west", "spirit island", False, None],
-        ["sw ocean west", "sw ocean nyave", False, lambda state: ph_has_cave_damage(state, player)],
+        ["sw ocean west", "sw ocean nyave", False, lambda state: any([ph_has_cave_damage(state, player),
+                                                                      ph_clever_pots(state, player)])],
         ["sw ocean nyave", "sw ocean nyave trade", False, lambda state: ph_has_guard_notebook(state, player)],
         ["sw ocean west", "sw ocean frog phi", False, lambda state: ph_has_cannon(state, player)],
         ["sw ocean east", "sw ocean frog x", False, lambda state: ph_has_cannon(state, player)],
@@ -463,6 +464,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["maze", "maze east", False, lambda state: ph_has_explosives(state, player)],
         ["maze", "maze normal", False, lambda state: ph_has_bow(state, player)],
         ["maze normal", "maze expert", False, lambda state: ph_has_grapple(state, player)],
+        ["maze", "maze dig", False, lambda state: ph_has_shovel(state, player)],
 
         # Goal stuff
         ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],

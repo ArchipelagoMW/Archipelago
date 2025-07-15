@@ -178,7 +178,8 @@ class PhantomHourglassClient(BizHawkClient):
         self.locations_in_scene = {}
         self.watches = {}
         self.receiving_location = False
-        self.last_vanilla_item = None
+        self.last_vanilla_item: list[str] = []
+        self.delay_reset = False
         self.last_treasures = 0
         self.last_ship_parts = []
         self.last_potions = [0, 0]
@@ -197,7 +198,7 @@ class PhantomHourglassClient(BizHawkClient):
         self.new_stage_loading = None
         self.at_sea = False
 
-        self.delay_pickup = None
+        self.delay_pickup: list[str, list[list[str, str, int]]] or None = None
         self.last_key_count = 0
         self.key_address = 0
         self.key_value = 0
@@ -394,6 +395,7 @@ class PhantomHourglassClient(BizHawkClient):
                 await self.load_local_locations(ctx, current_scene)
                 await self.update_potion_tracker(ctx)
                 await self.update_treasure_tracker(ctx)
+                self.delay_reset = False
 
                 # Start watch for stage fully loading
                 if current_stage != self.last_stage:
@@ -434,6 +436,7 @@ class PhantomHourglassClient(BizHawkClient):
                         print(f"Got read item {loc_name} from address {loc_data['address']} "
                               f"looking at bit {loc_data['value']}")
                         await self.process_checked_locations(ctx, loc_name)
+                        self.receiving_location = True
                         self.watches.pop(loc_name)
 
             # Check if link is getting location
@@ -454,18 +457,35 @@ class PhantomHourglassClient(BizHawkClient):
 
                 # Check for delayed pickup first!
                 if self.delay_pickup is not None:
-                    print(f"Delayed pickup: old {self.last_key_count} new {self.key_value} loc {self.delay_pickup[0]}")
-                    self.key_value = await read_memory_value(ctx, self.key_address)
-                    if self.key_value > self.last_key_count:
-                        await self.process_checked_locations(ctx, self.delay_pickup[1], True)
-                    else:
-                        await self.process_checked_locations(ctx, self.delay_pickup[0])
+                    print(f"Delay pickup {self.delay_pickup}")
+                    fallback, pickups = self.delay_pickup
+                    need_fallback = True
+                    for location, item, value in pickups:
+                        if "Small Key" in item:
+                            self.key_value = await read_memory_value(ctx, self.key_address)
+                            new_item_read = self.key_value
+                        else:
+                            check_item = ITEMS_DATA[item]
+                            new_item_read = await read_memory_value(ctx, check_item["address"], check_item.get("size", 1))
+
+                        if new_item_read != value:
+                            await self.process_checked_locations(ctx, location, True)
+                            need_fallback = False
+
+                    if need_fallback:
+                        await self.process_checked_locations(ctx, fallback)
+
                     self.delay_pickup = None
                     self.last_key_count = 0
 
                 # Remove vanilla item
-                elif self.last_vanilla_item is not None and "dummy" not in ITEMS_DATA[self.last_vanilla_item]:
+                elif self.last_vanilla_item:
                     await self.remove_vanilla_item(ctx, num_received_items)
+
+            # Address reads often give items before animation
+            if self.delay_reset and getting_location:
+                self.delay_reset = False
+                print(f"Delay reset over for {self.last_vanilla_item}")
 
             # Finished game?
             if not ctx.finished_game:
@@ -493,9 +513,16 @@ class PhantomHourglassClient(BizHawkClient):
                         if has_item.item == ITEMS_DATA[want_item[0]]["id"]:
                             counter[i] += 1
                 for item, count_have in zip(d["has_items"], counter):
-                    item, count_want = item
-                    if (count_want == 0 and count_have != 0) or (count_want > 0 and count_have < count_want):
-                        return False
+                    item, count_want, *operation = item
+                    if not operation:
+                        if (count_want == 0 and count_have != 0) or (count_want > 0 and count_have < count_want):
+                            return False
+                    elif operation[0] == "has_exact":
+                        if count_want != count_have:
+                            return False
+                    elif operation[0] == "not_has":
+                        if count_have >= count_want:
+                            return False
             return True
 
         # Check location conditions
@@ -715,11 +742,10 @@ class PhantomHourglassClient(BizHawkClient):
                 if (location.get("x_max", 0x8FFFFFFF) > link_coords["x"] > location.get("x_min", -0x8FFFFFFF) and
                         location.get("z_max", 0x8FFFFFFF) > link_coords["z"] > location.get("z_min", -0x8FFFFFFF) and
                         location.get("y", link_coords["y"]) == link_coords["y"]):
-                    # For rooms with keys that move, check if you got a key first
+                    # For rooms with checks that move or are close, check what you got first
                     if "delay_pickup" in location:
                         if len(self.locations_in_scene) > i + 1:
-                            self.last_key_count = await read_memory_value(ctx, self.key_address)
-                            self.delay_pickup = [loc_name, location["delay_pickup"]]
+                            await self.set_delay_pickup(ctx, loc_name, location)
                             break
                     local_checked_locations.add(loc_bytes)
                     await self.set_vanilla_item(ctx, location, loc_bytes)
@@ -733,6 +759,10 @@ class PhantomHourglassClient(BizHawkClient):
                 print(f"Setting bit {bit} for location vanil {location['vanilla_item']}")
                 await write_memory_value(ctx, addr, bit)
 
+        # Delay reset of vanilla item from certain address reads
+        if location is not None and "delay_reset" in location:
+            self.delay_reset = True
+
         # Send locations
         # print(f"Local locations: {local_checked_locations} in \n{all_checked_locations}")
         if any([i not in all_checked_locations for i in local_checked_locations]):
@@ -742,6 +772,27 @@ class PhantomHourglassClient(BizHawkClient):
                 "locations": list(local_checked_locations)
             }])
 
+    # Set checks to look for inventory changes
+    async def set_delay_pickup(self, ctx, loc_name, location):
+        delay_locations = []
+        delay_pickup = location["delay_pickup"]
+        if type(delay_pickup) is str:
+            delay_locations.append(delay_pickup)
+        elif type(delay_pickup) is list:
+            delay_locations += delay_pickup
+
+        self.delay_pickup = [loc_name, []]
+        for loc in delay_locations:
+            delay_item_check = LOCATIONS_DATA[loc].get("vanilla_item", None)
+            if "Small Key" in delay_item_check:
+                self.last_key_count = await read_memory_value(ctx, self.key_address)
+                last_item_read = self.last_key_count
+            else:
+                last_item = ITEMS_DATA[delay_item_check]
+                last_item_read = await read_memory_value(ctx, last_item["address"], last_item.get("size", 1))
+            self.delay_pickup[1].append([loc, delay_item_check, last_item_read])
+        print(f"Delay pickup {self.delay_pickup}")
+
     # Called during location processing to determine what vanilla item to remove
     async def set_vanilla_item(self, ctx, location, loc_id):
         item = location.get("vanilla_item", None)
@@ -749,13 +800,13 @@ class PhantomHourglassClient(BizHawkClient):
         print(f"Setting vanilla for {item_data}")
         if ("incremental" in item_data or "progressive" in item_data or
                 item_data["id"] not in [i.item for i in ctx.items_received]):
-            self.last_vanilla_item = item
+            self.last_vanilla_item.append(item)
             # Farmable locations don't remove vanilla
             if "farmable" in location and loc_id in ctx.checked_locations:
                 if item == "Ship Part":
                     await self.give_random_treasure(ctx)
-                else:
-                    self.last_vanilla_item = None
+                if item == "Treasure":
+                    self.last_vanilla_item = []
 
     async def process_scouted_locations(self, ctx: "BizHawkClientContext", scene):
         local_scouted_locations = set(ctx.locations_scouted)
@@ -830,12 +881,13 @@ class PhantomHourglassClient(BizHawkClient):
 
         # Increment in-game items received count
         received_item_address = RAM_ADDRS["received_item_index"]
-        write_list = [(received_item_address[0], [num_received_items + 1], received_item_address[2])]
-        print(f"Vanilla item: {self.last_vanilla_item}, item name: {item_name}")
+        write_list = [(received_item_address[0], split_bits(num_received_items + 1, 2), received_item_address[2])]
+        print(f"Vanilla item: {self.last_vanilla_item}")
 
         # If same as vanilla item don't remove
-        if item_name == self.last_vanilla_item or "dummy" in item_data:
-            self.last_vanilla_item = None
+        if self.last_vanilla_item and item_name == self.last_vanilla_item[0] or "dummy" in item_data:
+            if self.last_vanilla_item:
+                self.last_vanilla_item.pop(0)
             print(f"oops it's vanilla or dummy! {self.last_vanilla_item}")
             # If got totok key at vanilla location, add to memory anyway
             if item_name == "Small Key (Temple of the Ocean King)":
@@ -939,50 +991,55 @@ class PhantomHourglassClient(BizHawkClient):
             await self.update_potion_tracker(ctx)
 
     async def remove_vanilla_item(self, ctx, num_received_items):
-        print(f"Removing vanilla item {self.last_vanilla_item}")
+        print(f"Removing vanilla items {self.last_vanilla_item}")
+        if "dummy" in ITEMS_DATA[self.last_vanilla_item[0]]:
+            self.last_vanilla_item = []
+            return
         # Handle items from random pools
-        if self.last_vanilla_item == "Treasure":
-            treasure_write_list = split_bits(self.last_treasures, 8)
-            print(f"Treasure Write List: {treasure_write_list}")
-            await write_memory_values(ctx, 0x1BA5AC, treasure_write_list, overwrite=True)
-        elif self.last_vanilla_item == "Ship Part":
-            ship_write_list = ([1] + [0] * 8) * 8
-            await write_memory_values(ctx, 0x1BA564, ship_write_list, overwrite=True)
-        elif "Potion" in self.last_vanilla_item:
-            print(f"Pots {self.last_potions}")
-            if not all(self.last_potions):
-                await write_memory_values(ctx, 0x1BA5D8, self.last_potions, overwrite=True)
+        for item in self.last_vanilla_item:
+            if item == "Treasure":
+                treasure_write_list = split_bits(self.last_treasures, 8)
+                print(f"Treasure Write List: {treasure_write_list}")
+                await write_memory_values(ctx, 0x1BA5AC, treasure_write_list, overwrite=True)
+            elif item == "Ship Part":
+                ship_write_list = ([1] + [0] * 8) * 8
+                await write_memory_values(ctx, 0x1BA564, ship_write_list, overwrite=True)
+            elif "Potion" in item:
+                print(f"Pots {self.last_potions}")
+                if not all(self.last_potions):
+                    await write_memory_values(ctx, 0x1BA5D8, self.last_potions, overwrite=True)
+                else:
+                    # If you already have 2 potions, it gives rupees instead
+                    await write_memory_value(ctx, 0x1BA53E, ITEMS_DATA[item]["value"],
+                                             incr=False, size=2)
+            # Handle all other items
             else:
-                # If you already have 2 potions, it gives rupees instead
-                await write_memory_value(ctx, 0x1BA53E, ITEMS_DATA[self.last_vanilla_item]["value"],
-                                         incr=False, size=2)
-        # Handle all other items
-        else:
-            data = ITEMS_DATA[self.last_vanilla_item]
-            value = data.get('value', 1)
-            if "Small Key" in self.last_vanilla_item:
-                address = self.key_address = await get_small_key_address(ctx)
-            elif "progressive" in data:
-                write_list = []
-                index = sum([1 for i in ctx.items_received[:num_received_items] if i.item == data["id"]])
-                if index >= len(data["progressive"]):
-                    return
-                address, value = data["progressive"][index]
-                if "give_ammo" in data:
-                    ammo_v = data["give_ammo"][max(index - 1, 0)]
-                    write_list.append((data["ammo_address"], [ammo_v], "Main RAM"))
-                if index == 2:
-                    write_list.append((address, [1], "Main RAM"))
-                await bizhawk.write(ctx.bizhawk_ctx, write_list)
-            else:
-                address = data["address"]
+                data = ITEMS_DATA[item]
+                value = data.get('value', 1)
+                if "Small Key" in item:
+                    address = self.key_address = await get_small_key_address(ctx)
+                elif "progressive" in data:
+                    write_list = []
+                    index = sum([1 for i in ctx.items_received[:num_received_items] if i.item == data["id"]])
+                    if index >= len(data["progressive"]):
+                        self.last_vanilla_item = []
+                        return
+                    address, value = data["progressive"][index]
+                    if "give_ammo" in data:
+                        ammo_v = data["give_ammo"][max(index - 1, 0)]
+                        write_list.append((data["ammo_address"], [ammo_v], "Main RAM"))
+                    if index == 2:
+                        write_list.append((address, [1], "Main RAM"))
+                    await bizhawk.write(ctx.bizhawk_ctx, write_list)
+                else:
+                    address = data["address"]
 
-            if value == "Sand":
-                value = 3600
+                if value == "Sand":
+                    value = 3600
 
-            await write_memory_value(ctx, address, value,
-                                     incr=data.get('incremental', None), unset=True, size=data.get("size", 1))
-        self.last_vanilla_item = None
+                await write_memory_value(ctx, address, value,
+                                         incr=data.get('incremental', None), unset=True, size=data.get("size", 1))
+        self.last_vanilla_item = []
 
     async def process_game_completion(self, ctx: "BizHawkClientContext", current_scene: int):
         game_clear = False

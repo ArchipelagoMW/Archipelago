@@ -1094,7 +1094,11 @@ def ph_beat_ghost_ship(state: CollectionState, player):
 def ph_goron_chus(state, player):
     return all([
         ph_has_shovel(state, player),
-        ph_has_mid_range(state, player)
+        any([
+            ph_has_hammer(state, player),
+            ph_has_bow(state, player),
+            ph_has_grapple(state, player),
+        ])
     ])
 
 

@@ -66,7 +66,7 @@ DYNAMIC_FLAGS = {
     },
     "Molida Cuccoo dig map": {
         "on_scenes": [0xC00],
-        "not_has_locations": ["Molida Island Cuccoo Dig"],
+        "not_has_locations": ["Molida Island Cuccoo Grapple Tree Dig"],
         "unset_if_true": [(0x1BA651, 0x40)]
     },
     "RESET Molida Cuccoo dig map": {
@@ -215,30 +215,48 @@ DYNAMIC_FLAGS = {
         "unset_if_true": [(0x1BA647, 0x4)],
         "set_if_true": [(0x1BA646, 0x80)],
     },
+    "RESET Spirit of power 0": {
+        "on_scenes": [0x1700],
+        "has_items": [("Spirit of Power (Progressive)", 1, "has_exact")],
+        "unset_if_true": [(0x1BA647, 0x9)]
+    },
     "RESET Spirit of power 1": {
         "on_scenes": [0x1700],
-        "has_items": [("Spirit of Power (Progressive)", 2)],
-        "set_if_true": [(0x1BA647, 0x1)]
+        "has_items": [("Spirit of Power (Progressive)", 2, "has_exact")],
+        "set_if_true": [(0x1BA647, 0x1)],
+        "unset_if_true": [(0x1BA647, 0x8)]
     },
     "RESET Spirit of power 2": {
         "on_scenes": [0x1700],
         "has_items": [("Spirit of Power (Progressive)", 3)],
         "set_if_true": [(0x1BA647, 0x9)]
     },
+    "RESET Spirit of wisdom 0": {
+        "on_scenes": [0x1700],
+        "has_items": [("Spirit of Wisdom (Progressive)", 1, "has_exact")],
+        "unset_if_true": [(0x1BA647, 0x12)]
+    },
     "RESET Spirit of Wisdom 1": {
         "on_scenes": [0x1700],
-        "has_items": [("Spirit of Wisdom (Progressive)", 2)],
-        "set_if_true": [(0x1BA647, 0x02)]
+        "has_items": [("Spirit of Wisdom (Progressive)", 2, "has_exact")],
+        "set_if_true": [(0x1BA647, 0x02)],
+        "unset_if_true": [(0x1BA647, 0x10)]
     },
     "RESET Spirit of Wisdom 2": {
         "on_scenes": [0x1700],
         "has_items": [("Spirit of Wisdom (Progressive)", 3)],
-        "set_if_true": [(0x1BA647, 0x10)]
+        "set_if_true": [(0x1BA647, 0x12)]
+    },
+    "RESET Spirit of courage 0": {
+        "on_scenes": [0x1700],
+        "has_items": [("Spirit of Courage (Progressive)", 1, "has_exact")],
+        "unset_if_true": [(0x1BA646, 0x80), (0x1BA647, 0x04)]
     },
     "RESET Spirit of Courage 1": {
         "on_scenes": [0x1700],
-        "has_items": [("Spirit of Courage (Progressive)", 2)],
-        "set_if_true": [(0x1BA646, 0x80)]
+        "has_items": [("Spirit of Courage (Progressive)", 2, "has_exact")],
+        "set_if_true": [(0x1BA646, 0x80)],
+        "unset_if_true": [(0x1BA647, 0x4)]
     },
     "RESET Spirit of Courage 2": {
         "on_scenes": [0x1700],
@@ -266,12 +284,12 @@ DYNAMIC_FLAGS = {
         "unset_if_true": [(0x1B557F, 0x80)]
     },
     # Courage Crest Room
-    "Courage Creset room not salvaged it": {
+    "Courage Crest room not salvaged it": {
         "on_scenes": [0x2508],
         "has_locations": ["Ocean SW Salvage Courage Crest"],
         "unset_if_true": [(0x1B557E, 0x40)]
     },
-    "RESET Courage Creset room not salvaged it": {
+    "RESET Courage Crest room not salvaged it": {
         "on_scenes": [0x2600, 0x2507],
         "has_locations": ["Ocean SW Salvage Courage Crest"],
         "set_if_true": [(0x1B557E, 0x40)]
@@ -357,10 +375,11 @@ DYNAMIC_FLAGS = {
     # boat requires sea chart
     "Despawn linebeck 2": {
         "on_scenes": [0xB03],
+        "not_has_locations": ["Mercay Oshus Phantom Sword"],
         "unset_if_true": [(0x1B5580, 0x4)],
     },
     "RESET despawn linebeck 2": {
-        "on_scenes": [0xB02],
+        "on_scenes": [0xB02, 0xB00],
         "set_if_true": [(0x1B5580, 0x4)],
     },
     "Despawn Linebeck setting": {
@@ -597,12 +616,13 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x2, 0x3],
         "not_has_locations": ["Ocean Pirate Ambush Item"],
         "has_locations": ["Ghost Ship Rescue Tetra"],
-        "set_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+        "set_if_true": [(0x1B557E, 0x10), (0x1B5582, 0x80), (0x1B55AB, 0x10)]
     },
     "SE despawn pirate ship": {
         "on_scenes": [0x2, 0x3],
         "not_has_locations": ["Ghost Ship Rescue Tetra"],
-        "unset_if_true": [(0x1B5582, 0x80), (0x1B55AB, 0x10)]
+        "unset_if_true": [(0x1B557E, 0x10), (0x1B5582, 0x80), (0x1B55AB, 0x10)]
+
     },
 
     # Zauz
@@ -641,6 +661,16 @@ DYNAMIC_FLAGS = {
         "has_slot_data": [("fog_settings", 0)],
         "set_if_true": [(0x1B55AB, 0x10), (0x1B5582, 0x80)]
     },
+    "Zauz remove oshus flag": {
+        "on_scenes": [0x160A],
+        "has_locations": ["Mercay Oshus Phantom Sword"],
+        "unset_if_true": [(0x1B5592, 0x40)]
+    },
+    "RESET Zauz remove oshus flag": {
+        "on_scenes": [0x1600],
+        "has_locations": ["Mercay Oshus Phantom Sword"],
+        "set_if_true": [(0x1B5592, 0x40)]
+    },
     # Jolene
     "Remove Jolene": {
         "on_scenes": [0x0],
@@ -665,11 +695,6 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x1F00],
         "unset_if_true": [(0x1B558B, 0x20)]
     },
-    "RESET Ice temple metals": {
-        "on_scenes": [0xF01],
-        "has_items": [("Azurine", 1)],
-        "set_if_true": [(0x1B558B, 0x20)]
-    },
     "Mutoh temple metals": {
         "on_scenes": [0x2106, 0x2100],
         "unset_if_true": [(0x1B558B, 0x80)]
@@ -691,6 +716,22 @@ DYNAMIC_FLAGS = {
         "has_items": [("Sword (Progressive)", 2)],
         "set_if_true": [(0x1BA648, 0x20)]
     },
+    "Oshus not have phantom sword": {
+        "on_scenes": [0xB00],
+        "has_items": [("Sword (Progressive)", 2, "not_has")],
+        "unset_if_true": [(0x1BA648, 0x20)]
+    },
+    "Oshus have phantom sword": {
+        "on_scenes": [0xB0A],
+        "has_items": [("Sword (Progressive)", 2)],
+        "not_has_locations": ["Mercay Oshus Phantom Sword"],
+        "unset_if_true": [(0x1BA648, 0x20)]
+    },
+    "RESET Oshus have phantom sword": {
+        "on_scenes": [0xB00],
+        "has_items": [("Sword (Progressive)", 2)],
+        "set_if_true": [(0x1BA648, 0x20)]
+    },
     "Block Oshus Gem": {
         "on_scenes": [0xB0A],
         "not_has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
@@ -703,7 +744,7 @@ DYNAMIC_FLAGS = {
     },
     "Oshus Gem": {
         "on_scenes": [0xB0A],
-        "not_has_locations": ["Mercay Oshus Force Gem"],
+        "not_has_locations": ["Mercay Oshus Spirit Gem"],
         "has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
         "set_if_true": [(0x1B55A0, 0x4), (0x1B557D, 0x2)]
     },
@@ -756,7 +797,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Kaleidoscope": {
         "on_scenes": [0x1, 0x2, 0x3],
-        "has_items": [("Guard Notebook", 1)],
+        "has_items": [("Kaleidoscope", 1)],
         "not_has_locations": ["Ocean SE Hoiger Howgendoogen Trade Quest Item"],
         "set_if_true": [(0x1B5590, 0x8)]
     },
@@ -772,7 +813,8 @@ DYNAMIC_FLAGS = {
     },
     # Vanilla frogs
     "Frogs show glyph": {
-        "on_scenes": [0, 0x1],
+        "on_scenes": [0, 1],
+        "has_slot_data": [("randomize_frogs", 0)],
         "set_if_true": [(0x1B55A2, 0x40)]
     },
     "RESET Frogs show glyph": {
@@ -818,22 +860,22 @@ DYNAMIC_FLAGS = {
     "Ice Field pre-dungeon": {
         "on_scenes": [0xF03, 0xF01],
         "not_has_locations": ["Temple of Ice Dungeon Reward"],
-        "unset_bits": [(0x1B558B, 0x20)]
+        "unset_if_true": [(0x1B558B, 0x20)]
     },
     "Ice Field post-dungeon": {
         "on_scenes": [0xF03, 0xF01],
         "has_locations": ["Temple of Ice Dungeon Reward"],
-        "set_bits": [(0x1B558B, 0x20)]
+        "set_if_true": [(0x1B558B, 0x20)]
     },
     "RESET Ice Field pre-dungeon": {
         "on_scenes": [0xF13, 0x1F00],
         "has_items": [("Azurine", 1)],
-        "set_bits": [(0x1B558B, 0x20)]
+        "set_if_true": [(0x1B558B, 0x20)]
     },
     "RESET Ice Field post-dungeon": {
         "on_scenes": [0xF13, 0x1F00],
         "has_items": [("Azurine", 0)],
-        "unset_bits": [(0x1B558B, 0x20)]
+        "unset_if_true": [(0x1B558B, 0x20)]
     },
 }
 

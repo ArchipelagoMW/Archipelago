@@ -129,13 +129,14 @@ LOCATIONS_DATA = {
         "vanilla_item": "Ship Part",
         'post_dungeon': "Temple of Fire"
     },
-    "Mercay Oshus Force Gem": {
+    "Mercay Oshus Spirit Gem": {
         "region_id": "mercay oshus gem",
         "stage_id": 11,
         "floor_id": 10,
         "vanilla_item": "Power Gem",
         "address": 0x1B55A5,
-        "value": 0x2
+        "value": 0x2,
+        "delay_reset": True
     },
     "Mercay Oshus Phantom Sword": {
         "region_id": "mercay oshus phantom blade",
@@ -199,7 +200,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x02,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Quiver": {
         "region_id": "shop quiver",
@@ -208,7 +210,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x08,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Bombchu Bag": {
         "region_id": "shop bombchu bag",
@@ -217,7 +220,8 @@ LOCATIONS_DATA = {
         "floor_id": 0x11,
         "address": 0x1B5589,
         "value": 0x10,
-        "island_shop": True
+        "island_shop": True,
+        "delay_reset": True
     },
     "Island Shop Heart Container": {
         "region_id": "shop heart container",
@@ -234,7 +238,8 @@ LOCATIONS_DATA = {
         "stage_id": 5,
         "floor_id": 0,
         "address": 0x1B5589,
-        "value": 0x04
+        "value": 0x04,
+        "delay_reset": True
     },
     "Beedle Shop Wisdom Gem": {
         "region_id": "beedle gem",
@@ -242,7 +247,8 @@ LOCATIONS_DATA = {
         "stage_id": 5,
         "floor_id": 0,
         "address": 0x1B5589,
-        "value": 0x20
+        "value": 0x20,
+        "delay_reset": True
     },
     "Masked Beedle Heart Container": {
         "region_id": "masked ship hc",
@@ -252,6 +258,7 @@ LOCATIONS_DATA = {
         "address": 0x1B5589,
         "value": 0x01,
         "conditional": True,
+        "delay_reset": True
     },
     "Masked Beedle Courage Gem": {
         "region_id": "masked ship gem",
@@ -260,7 +267,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B558A,
         "value": 0x02,
-        "conditional": True
+        "conditional": True,
+        "delay_reset": True
     },
 
     # ========== TotOK ==============
@@ -739,7 +747,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xA,
         "floor_id": 0,
         "address": 0x1B5592,
-        "value": 0x1
+        "value": 0x1,
+        "delay_reset": True
     },
 
     # Cannon Island
@@ -750,6 +759,7 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "x_max": -30000,
         "z_max": -15000,
+        "x_min": -50000,
         "y": 0x1333,
     },
     "Cannon Island Cave Chest": {
@@ -771,12 +781,13 @@ LOCATIONS_DATA = {
         "stage_id": 0x13,
         "floor_id": 0,
         "y": 0x1333,
-        "x_min": 0,
+        "x_min": 27000,
         "z_min": 12300,
+        "z_max": 37000,
         "sram_addr": 0x0006DC,
         "sram_value": 0x1
     },
-    "Cannon Island Dig": {
+    "Cannon Island East Dig": {
         "region_id": "cannon island dig",
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0x13,
@@ -908,7 +919,7 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "y": 0x1333,
         "force_vanilla": True,
-        "dungeon": "Temple of Fire"
+        "dungeon": "Temple of Fire",
     },
     "Temple of Fire Blaaz Heart Container": {
         "region_id": "tof blaaz",
@@ -927,6 +938,7 @@ LOCATIONS_DATA = {
         "value": 0x20,
         "dungeon": "Temple of Fire",
         "boss_reward_location": True,
+        "delay_reset": True
     },
 
     # ============ Molida Island ==============
@@ -943,6 +955,9 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0xC,
         "floor_id": 0,
+        "z_max": 58000,
+        "z_min": 25000,
+        "x_min": 40000,
         "y": 0
     },
     "Molida Cave Wayfarer Hideaway Chest": {
@@ -952,7 +967,6 @@ LOCATIONS_DATA = {
         "floor_id": 10,
         "y": 0,
         "x_max": -25000,
-        "z_min": 25000
     },
     "Molida Cave Grapple Chest": {
         "region_id": "molida grapple",
@@ -996,7 +1010,7 @@ LOCATIONS_DATA = {
         "x_max": -18000,
         "z_min": -30000
     },
-    "Molida Island Cuccoo Dig": {
+    "Molida Island Cuccoo Grapple Tree Dig": {
         "region_id": "molida cuccoo dig",
         "vanilla_item": "Treasure Map #20",
         "stage_id": 0xC,
@@ -1027,7 +1041,8 @@ LOCATIONS_DATA = {
         "floor_id": 11,
         "address": 0x1B55A2,
         "value": 0x8,
-        'post_dungeon': "Temple of Courage"
+        'post_dungeon': "Temple of Courage",
+        "delay_reset": True,
     },
     "Molida Archery 2000": {
         "region_id": "molida archery",
@@ -1036,7 +1051,8 @@ LOCATIONS_DATA = {
         "floor_id": 1,
         "address": 0x1B55A6,
         "value": 0x10,
-        'post_dungeon': "Temple of Courage"
+        'post_dungeon': "Temple of Courage",
+        "delay_reset": True
     },
 
     # ============= Temple of Courage ===========
@@ -1179,7 +1195,8 @@ LOCATIONS_DATA = {
         "address": 0x1B557F,
         "value": 0x80,
         "dungeon": "Temple of Courage",
-        "boss_reward_location": True
+        "boss_reward_location": True,
+        "delay_reset": True
     },
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
@@ -1188,7 +1205,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B557F,
         "value": 0x80,
-        "dungeon": "Temple of Courage"
+        "dungeon": "Temple of Courage",
+        "delay_reset": True
     },
     "Temple of Courage Heart Container": {
         "region_id": "toc crayk",
@@ -1278,7 +1296,8 @@ LOCATIONS_DATA = {
         "stage_id": 7,
         "floor_id": 0,
         "address": 0x1B55A4,
-        "value": 0x40
+        "value": 0x40,
+        "delay_reset": True
     },
     # ============ Isle of Gust ============
     "Isle of Gust Hideout Chest": {
@@ -1399,6 +1418,7 @@ LOCATIONS_DATA = {
         "address": 0x1B557F,
         "value": 0x40,
         "dungeon": "Temple of Wind",
+        "delay_reset": True
     },
     "Temple of Wind Cyclok Dungeon Reward": {
         "region_id": "tow cyclok",
@@ -1410,6 +1430,7 @@ LOCATIONS_DATA = {
         "value": 0x40,
         "boss_reward_location": True,
         "dungeon": "Temple of Wind",
+        "delay_reset": True
     },
     "Temple of Wind Cyclok Heart Container": {
         "region_id": "tow cyclok",
@@ -1442,17 +1463,19 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 1,
         "address": 0x1B5581,
-        "value": 8
+        "value": 8,
+        "delay_reset": True
     },
     "Bannan Island East Grapple Chest East": {
         "region_id": "bannan east grapple",
         "vanilla_item": "Courage Gem",
         "stage_id": 0x14,
         "floor_id": 0,
-        "x_min": 82500,
+        "x_min": 60000,
         "z_max": -25000,
         "sram_addr": 0x198,
-        "sram_value": 4
+        "sram_value": 4,
+        "delay_pickup": ["Bannan Island East Grapple Dig", "Bannan Island East Grapple Chest West"]
     },
     "Bannan Island East Grapple Chest West": {
         "region_id": "bannan east grapple",
@@ -1460,18 +1483,19 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 0,
         "x_min": 60000,
-        "x_max": 77500,
+        "x_max": 100000,
         "z_max": -25000,
         "sram_addr": 0x198,
-        "sram_value": 2
+        "sram_value": 2,
+        "delay_pickup": ["Bannan Island East Grapple Dig", "Bannan Island East Grapple Chest East"]
     },
     "Bannan Island East Grapple Dig": {
         "region_id": "bannan east grapple dig",
         "vanilla_item": "Treasure Map #22",
         "stage_id": 0x14,
         "floor_id": 0,
-        "x_min": 77500,
-        "x_max": 82500,
+        "x_min": 60000,
+        "x_max": 100000,
         "z_max": -25000,
         # "sram_addr": 0x22B0,
         # "sram_value": 8
@@ -1482,7 +1506,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 0,
         "address": 0x1B55AA,
-        "value": 0x40
+        "value": 0x40,
+        "delay_reset": True
     },
     "Bannan Island Wayfarer Trade Quest Chest": {
         "region_id": "bannan scroll",
@@ -1500,6 +1525,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Treasure Map #6",
         "stage_id": 0x1A,
         "floor_id": 0,
+        "x_min": -75000
     },
     "Uncharted Island Grapple Chest": {
         "region_id": "uncharted grapple",
@@ -1792,6 +1818,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x4,
         "dungeon": "Goron Temple",
+        "delay_reset": True
     },
     "Goron Temple Dongorongo Heart Container": {
         "region_id": "gt dongo",
@@ -1855,7 +1882,7 @@ LOCATIONS_DATA = {
 
     # ============= Dee Ess Island ==============
 
-    "Dee Ess Start Button Dig": {
+    "Dee Ess Menu Button Dig": {
         "region_id": "ds dig",
         "stage_id": 0x1B,
         "floor_id": 0x0,
@@ -1896,7 +1923,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombchus (Progressive)",
         "address": 0x1B559F,
         "value": 0x20,
-        'post_dungeon': "Goron Temple"
+        'post_dungeon': "Goron Temple",
+        'delay_reset': True
     },
     "Dee Ess Eye Brute Chest": {
         "region_id": "ds combat",
@@ -2090,6 +2118,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x8,
         "dungeon": "Temple of Ice",
+        "delay_reset": True
     },
     "Temple of Ice Gleeok Heart Container": {
         "region_id": "toi gleeok",
@@ -2124,9 +2153,21 @@ LOCATIONS_DATA = {
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
-        "x_max": -4000,
+        "x_max": 2000,
         "sram_addr": 0x73C,
-        "sram_value": 4
+        "sram_value": 4,
+        "delay_pickup": ["Isle of the Dead Rupoor Cave 3", "Isle of the Dead Rupoor Cave 2"]
+    },
+    "Isle of the Dead Rupoor Cave 4": {
+        "region_id": "iotd rupoor",
+        "vanilla_item": "Ship Part",
+        "stage_id": 0x15,
+        "floor_id": 2,
+        "z_max": -55000,
+        "x_min": -4000,
+        "sram_addr": 0x73C,
+        "sram_value": 1,
+        "delay_pickup": ["Isle of the Dead Rupoor Cave 3", "Isle of the Dead Rupoor Cave 2"]
     },
     "Isle of the Dead Rupoor Cave 2": {
         "region_id": "iotd rupoor",
@@ -2134,10 +2175,10 @@ LOCATIONS_DATA = {
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
-        "x_min": -4000,
-        "x_max": 2000,
+        "x_max": 8000,
         "sram_addr": 0x73C,
-        "sram_value": 2
+        "sram_value": 2,
+        "delay_pickup": "Isle of the Dead Rupoor Cave 3"
     },
     "Isle of the Dead Rupoor Cave 3": {
         "region_id": "iotd rupoor",
@@ -2146,19 +2187,9 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "z_max": -55000,
         "x_min": 2000,
-        "x_max": 8000,
         "sram_addr": 0x73C,
-        "sram_value": 1
-    },
-    "Isle of the Dead Rupoor Cave 4": {
-        "region_id": "iotd rupoor",
-        "vanilla_item": "Ship Part",
-        "stage_id": 0x15,
-        "floor_id": 2,
-        "z_max": -55000,
-        "x_min": 8000,
-        "sram_addr": 0x73C,
-        "sram_value": 1
+        "sram_value": 1,
+        "delay_pickup": "Isle of the Dead Rupoor Cave 2"
     },
     "Isle of the Dead Face Cave Chest": {
         "region_id": "iotd cave",
@@ -2332,6 +2363,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x10,
         "dungeon": "Mutoh's Temple",
+        "delay_reset": True
     },
     "Mutoh's Temple Heart Container Chest": {
         "region_id": "mutoh eox",
@@ -2358,7 +2390,9 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "y": 0,
-        "x_min": 40000
+        "x_min": 40000,
+        "z_max": 24000,
+        "z_min": -26000
     },
     "Maze Island Beginner": {
         "region_id": "maze",
@@ -2464,8 +2498,59 @@ LOCATIONS_DATA = {
         "z_min": 10000,
         "z_max": 30000,
     },
-
-
+    "Cannon Island SE Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x1333,
+        "x_max": 27000,
+        "z_min": 37000
+    },
+    "Maze Island SE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 80000,
+        "z_min": 70000
+    },
+    "Maze Island NE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 40000,
+        "z_max": -60000
+    },
+    "Maze Island NW Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_max": -15000,
+        "z_max": -60000
+    },
+    "Cannon Island Bee Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "x_max": -50000,
+        "y": 0x1333,
+    },
+    "Molida Island Cuccoo Grapple Small Island Dig": {
+        "region_id": "molida cuccoo dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0xC,
+        "floor_id": 0,
+        "z_min": 58000,
+        "y": 0,
+        "x_min": 40000
+    },
 
 }
 
