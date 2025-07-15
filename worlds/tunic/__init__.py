@@ -424,19 +424,6 @@ class TunicWorld(World):
                     ladder_count += 1
             remove_filler(ladder_count)
 
-        if self.options.shuffle_fuses:
-            for item_name, item_data in item_table.items():
-                if item_data.item_group == "Fuses":
-                    if item_name == "Cathedral Elevator Fuse" and self.options.entrance_rando:
-                        tunic_items.append(self.create_item(item_name, ItemClassification.useful))
-                        continue
-                    items_to_create[item_name] = 1
-
-        if self.options.shuffle_bells:
-            for item_name, item_data in item_table.items():
-                if item_data.item_group == "Bells":
-                    items_to_create[item_name] = 1
-
         if self.options.hexagon_quest:
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
@@ -721,8 +708,8 @@ class TunicWorld(World):
             "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "decoupled": self.options.decoupled.value if self.options.entrance_rando else 0,
             "shuffle_ladders": self.options.shuffle_ladders.value,
-            "shuffle_fuses": self.options.shuffle_fuses.value,
-            "shuffle_bells": self.options.shuffle_bells.value,
+            # "shuffle_fuses": self.options.shuffle_fuses.value,
+            # "shuffle_bells": self.options.shuffle_bells.value,
             "grass_randomizer": self.options.grass_randomizer.value,
             "combat_logic": self.options.combat_logic.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
