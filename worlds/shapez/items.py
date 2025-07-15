@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Any
 
 from BaseClasses import Item, ItemClassification as IClass
 from .options import ShapezOptions
@@ -205,9 +205,9 @@ def trap(random: float, split_draining: bool, whacky_allowed: bool) -> str:
     return random_choice_nested(random, pool)
 
 
-def random_choice_nested(random: float, nested: list[any]) -> any:
+def random_choice_nested(random: float, nested: list[Any]) -> Any:
     """Helper function for getting a random element from a nested list."""
-    current: any = nested
+    current: Any = nested
     while isinstance(current, list):
         index_float = random*len(current)
         current = current[int(index_float)]
