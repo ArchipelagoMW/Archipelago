@@ -201,6 +201,7 @@ class CommonContext:
 
         # noinspection PyTypeChecker
         def __getitem__(self, key: str) -> typing.Mapping[int, str]:
+            assert isinstance(key, str), f"ctx.{self.lookup_type}_names used with an id, use the lookup_in_ helpers instead"
             return self._game_store[key]
 
         def __len__(self) -> int:
