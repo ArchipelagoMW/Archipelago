@@ -2541,31 +2541,6 @@
     },
     {
         "type": "Weapon",
-        "name": "DebugSciel",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "DebugLune",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "DebugVerso",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "DebugMaelle",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
-        "name": "DebugMonoco",
-        "progressive": 2
-    },
-    {
-        "type": "Weapon",
         "name": "Simoso",
         "progressive": 2
     }

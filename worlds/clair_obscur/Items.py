@@ -21,7 +21,7 @@ def reverse_offset_item_value(item_id: int) -> int:
     """
     Returns the item value for a given AP item id
     """
-    return BASE_OFFSET - item_id
+    return item_id - BASE_OFFSET
 
 
 def create_item_name_to_ap_id() -> Dict[str, int]:
