@@ -1,13 +1,8 @@
-from test.bases import WorldTestBase
-
 from .. import options
+from .bases import TunicTestBase
 
 
-class TunicTestBase(WorldTestBase):
-    game = "TUNIC"
-
-
-class TestWells(TunicTestBase):
+class TestAccess(TunicTestBase):
     options = {options.CombatLogic.internal_name: options.CombatLogic.option_off}
 
     # test that the wells function properly. Since fairies is written the same way, that should succeed too
