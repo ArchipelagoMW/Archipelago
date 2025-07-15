@@ -52,7 +52,7 @@ Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où
 * Vérifier que vous utiliser la bonne version du build du randomizer que vous utilisez pour la version d'Archipelago. 
   * Le build doit donner un message d'erreur vous dirigeant vers la bonne version. Vous pouvez aussi consulter les notes de version des builds AP de TWW [ici](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2), afin de voir avec quelles versions d'Archipelago chaque build est compatible avec.
 * Ne pas lancer le Launcher d'Archipelago ou Dolphin en tant qu'Administrateur sur Windows.
-* Si vous rencontrez des problèmes avec l'authentification, Vérifier que la ROM randomisé est ouverte dans Dolphin et correspond au
+* Si vous rencontrez des problèmes avec l'authentification, vérifier que la ROM randomisé est ouverte dans Dolphin et correspond au
   multiworld auquel vous vous connectez.
 * Verifier que vous n'utilisez aucune triche Dolphin ou que des codes de triches sont activés. Certains codes peut interférer de manière imprévue
   avec l'émulation et rendre la résolution des problèmes compliquées.
