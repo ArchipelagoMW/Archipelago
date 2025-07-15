@@ -573,7 +573,9 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
+    def can_beat_game(self,
+                      starting_state: Optional[CollectionState] = None,
+                      locations: Optional[Iterable[Location]] = None) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -582,7 +584,9 @@ class MultiWorld():
             state = CollectionState(self)
             if self.has_beaten_game(state):
                 return True
-        prog_locations = {location for location in self.get_locations() if location.item
+
+        base_locations = self.get_locations() if locations is None else locations
+        prog_locations = {location for location in base_locations if location.item
                           and location.item.advancement and location not in state.locations_checked}
 
         while prog_locations:
@@ -716,6 +720,12 @@ class MultiWorld():
                     sphere.append(locations.pop(n))
 
             if not sphere:
+                if __debug__:
+                    from Fill import FillError
+                    raise FillError(
+                        f"Could not access required locations for accessibility check. Missing: {locations}",
+                        multiworld=self,
+                    )
                 # ran out of places and did not finish yet, quit
                 logging.warning(f"Could not access required locations for accessibility check."
                                 f" Missing: {locations}")
@@ -1160,13 +1170,13 @@ class Region:
             self.region_manager = region_manager
 
         def __getitem__(self, index: int) -> Location:
-            return self._list.__getitem__(index)
+            return self._list[index]
 
         def __setitem__(self, index: int, value: Location) -> None:
             raise NotImplementedError()
 
         def __len__(self) -> int:
-            return self._list.__len__()
+            return len(self._list)
 
         def __iter__(self):
             return iter(self._list)
@@ -1180,8 +1190,8 @@ class Region:
 
     class LocationRegister(Register):
         def __delitem__(self, index: int) -> None:
-            location: Location = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            location: Location = self._list[index]
+            del self._list[index]
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
@@ -1192,8 +1202,8 @@ class Region:
 
     class EntranceRegister(Register):
         def __delitem__(self, index: int) -> None:
-            entrance: Entrance = self._list.__getitem__(index)
-            self._list.__delitem__(index)
+            entrance: Entrance = self._list[index]
+            del self._list[index]
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
@@ -1347,8 +1357,8 @@ class Region:
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
         :param exits: exits from the region. format is {"connecting_region": "exit_name"}. if a non dict is provided,
-        created entrances will be named "self.name -> connecting_region"
-        :param rules: rules for the exits from this region. format is {"connecting_region", rule}
+                      created entrances will be named "self.name -> connecting_region"
+        :param rules: rules for the exits from this region. format is {"connecting_region": rule}
         """
         if not isinstance(exits, Dict):
             exits = dict.fromkeys(exits)
@@ -1440,27 +1450,43 @@ class Location:
 
 
 class ItemClassification(IntFlag):
-    filler = 0b0000
+    filler = 0b00000
     """ aka trash, as in filler items like ammo, currency etc """
 
-    progression = 0b0001
+    progression = 0b00001
     """ Item that is logically relevant.
     Protects this item from being placed on excluded or unreachable locations. """
 
-    useful = 0b0010
+    useful = 0b00010
     """ Item that is especially useful.
     Protects this item from being placed on excluded or unreachable locations.
     When combined with another flag like "progression", it means "an especially useful progression item". """
 
-    trap = 0b0100
+    trap = 0b00100
     """ Item that is detrimental in some way. """
 
-    skip_balancing = 0b1000
+    skip_balancing = 0b01000
     """ should technically never occur on its own
     Item that is logically relevant, but progression balancing should not touch.
-    Typically currency or other counted items. """
+    
+    Possible reasons for why an item should not be pulled ahead by progression balancing:
+    1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
+    2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items) """
 
-    progression_skip_balancing = 0b1001  # only progression gets balanced
+    deprioritized = 0b10000
+    """ Should technically never occur on its own.
+    Will not be considered for priority locations,
+    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. 
+    
+    Should be used for items that would feel bad for the player to find on a priority location.
+    Usually, these are items that are plentiful or insignificant. """
+
+    progression_deprioritized_skip_balancing = 0b11001
+    """ Since a common case of both skip_balancing and deprioritized is "insignificant progression", 
+    these items often want both flags. """
+
+    progression_skip_balancing = 0b01001  # only progression gets balanced
+    progression_deprioritized = 0b10001  # only progression can be placed during priority fill
 
     def as_flag(self) -> int:
         """As Network API flag int."""
@@ -1507,6 +1533,10 @@ class Item:
     @property
     def trap(self) -> bool:
         return ItemClassification.trap in self.classification
+
+    @property
+    def deprioritized(self) -> bool:
+        return ItemClassification.deprioritized in self.classification
 
     @property
     def filler(self) -> bool:
@@ -1617,21 +1647,19 @@ class Spoiler:
 
         # in the second phase, we cull each sphere such that the game is still beatable,
         # reducing each range of influence to the bare minimum required inside it
-        restore_later: Dict[Location, Item] = {}
+        required_locations = {location for sphere in collection_spheres for location in sphere}
         for num, sphere in reversed(tuple(enumerate(collection_spheres))):
             to_delete: Set[Location] = set()
             for location in sphere:
-                # we remove the item at location and check if game is still beatable
+                # we remove the location from required_locations to sweep from, and check if the game is still beatable
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', location.item.name,
                               location.item.player)
-                old_item = location.item
-                location.item = None
-                if multiworld.can_beat_game(state_cache[num]):
+                required_locations.remove(location)
+                if multiworld.can_beat_game(state_cache[num], required_locations):
                     to_delete.add(location)
-                    restore_later[location] = old_item
                 else:
                     # still required, got to keep it around
-                    location.item = old_item
+                    required_locations.add(location)
 
             # cull entries in spheres for spoiler walkthrough at end
             sphere -= to_delete
@@ -1648,7 +1676,7 @@ class Spoiler:
                 logging.debug('Checking if %s (Player %d) is required to beat the game.', item.name, item.player)
                 precollected_items.remove(item)
                 multiworld.state.remove(item)
-                if not multiworld.can_beat_game():
+                if not multiworld.can_beat_game(multiworld.state, required_locations):
                     # Add the item back into `precollected_items` and collect it into `multiworld.state`.
                     multiworld.push_precollected(item)
                 else:
@@ -1690,9 +1718,6 @@ class Spoiler:
             self.create_paths(state, collection_spheres)
 
         # repair the multiworld again
-        for location, item in restore_later.items():
-            location.item = item
-
         for item in removed_precollected:
             multiworld.push_precollected(item)
 
