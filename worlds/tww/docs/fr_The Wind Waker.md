@@ -39,7 +39,7 @@ serveur discord d'Archipelago.
 
 ## J'ai ouvert mon jeu dans Dolphin, mais je n'ai aucun de mes items de démarrage !
 
-Vous devez vous connecter à la salle du multiworld pour recevoir vos objets, Cela inclut votre inventaire de départ.
+Vous devez vous connecter à la salle du multiworld pour recevoir vos objets. Cela inclut votre inventaire de départ.
 
 ## Problèmes Connus
 
