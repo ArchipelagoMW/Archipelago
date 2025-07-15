@@ -919,7 +919,7 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "y": 0x1333,
         "force_vanilla": True,
-        "dungeon": "Temple of Fire"
+        "dungeon": "Temple of Fire",
     },
     "Temple of Fire Blaaz Heart Container": {
         "region_id": "tof blaaz",
@@ -938,6 +938,7 @@ LOCATIONS_DATA = {
         "value": 0x20,
         "dungeon": "Temple of Fire",
         "boss_reward_location": True,
+        "delay_reset": True
     },
 
     # ============ Molida Island ==============
@@ -1194,7 +1195,8 @@ LOCATIONS_DATA = {
         "address": 0x1B557F,
         "value": 0x80,
         "dungeon": "Temple of Courage",
-        "boss_reward_location": True
+        "boss_reward_location": True,
+        "delay_reset": True
     },
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
@@ -1203,7 +1205,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B557F,
         "value": 0x80,
-        "dungeon": "Temple of Courage"
+        "dungeon": "Temple of Courage",
+        "delay_reset": True
     },
     "Temple of Courage Heart Container": {
         "region_id": "toc crayk",
@@ -1415,6 +1418,7 @@ LOCATIONS_DATA = {
         "address": 0x1B557F,
         "value": 0x40,
         "dungeon": "Temple of Wind",
+        "delay_reset": True
     },
     "Temple of Wind Cyclok Dungeon Reward": {
         "region_id": "tow cyclok",
@@ -1426,6 +1430,7 @@ LOCATIONS_DATA = {
         "value": 0x40,
         "boss_reward_location": True,
         "dungeon": "Temple of Wind",
+        "delay_reset": True
     },
     "Temple of Wind Cyclok Heart Container": {
         "region_id": "tow cyclok",
@@ -1466,10 +1471,11 @@ LOCATIONS_DATA = {
         "vanilla_item": "Courage Gem",
         "stage_id": 0x14,
         "floor_id": 0,
-        "x_min": 82500,
+        "x_min": 60000,
         "z_max": -25000,
         "sram_addr": 0x198,
-        "sram_value": 4
+        "sram_value": 4,
+        "delay_pickup": ["Bannan Island East Grapple Dig", "Bannan Island East Grapple Chest West"]
     },
     "Bannan Island East Grapple Chest West": {
         "region_id": "bannan east grapple",
@@ -1477,18 +1483,19 @@ LOCATIONS_DATA = {
         "stage_id": 0x14,
         "floor_id": 0,
         "x_min": 60000,
-        "x_max": 77500,
+        "x_max": 100000,
         "z_max": -25000,
         "sram_addr": 0x198,
-        "sram_value": 2
+        "sram_value": 2,
+        "delay_pickup": ["Bannan Island East Grapple Dig", "Bannan Island East Grapple Chest East"]
     },
     "Bannan Island East Grapple Dig": {
         "region_id": "bannan east grapple dig",
         "vanilla_item": "Treasure Map #22",
         "stage_id": 0x14,
         "floor_id": 0,
-        "x_min": 77500,
-        "x_max": 82500,
+        "x_min": 60000,
+        "x_max": 100000,
         "z_max": -25000,
         # "sram_addr": 0x22B0,
         # "sram_value": 8
@@ -1811,6 +1818,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x4,
         "dungeon": "Goron Temple",
+        "delay_reset": True
     },
     "Goron Temple Dongorongo Heart Container": {
         "region_id": "gt dongo",
@@ -2110,6 +2118,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x8,
         "dungeon": "Temple of Ice",
+        "delay_reset": True
     },
     "Temple of Ice Gleeok Heart Container": {
         "region_id": "toi gleeok",
@@ -2144,9 +2153,21 @@ LOCATIONS_DATA = {
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
-        "x_max": -4000,
+        "x_max": 2000,
         "sram_addr": 0x73C,
-        "sram_value": 4
+        "sram_value": 4,
+        "delay_pickup": ["Isle of the Dead Rupoor Cave 3", "Isle of the Dead Rupoor Cave 2"]
+    },
+    "Isle of the Dead Rupoor Cave 4": {
+        "region_id": "iotd rupoor",
+        "vanilla_item": "Ship Part",
+        "stage_id": 0x15,
+        "floor_id": 2,
+        "z_max": -55000,
+        "x_min": -4000,
+        "sram_addr": 0x73C,
+        "sram_value": 1,
+        "delay_pickup": ["Isle of the Dead Rupoor Cave 3", "Isle of the Dead Rupoor Cave 2"]
     },
     "Isle of the Dead Rupoor Cave 2": {
         "region_id": "iotd rupoor",
@@ -2154,10 +2175,10 @@ LOCATIONS_DATA = {
         "stage_id": 0x15,
         "floor_id": 2,
         "z_max": -55000,
-        "x_min": -4000,
-        "x_max": 2000,
+        "x_max": 8000,
         "sram_addr": 0x73C,
-        "sram_value": 2
+        "sram_value": 2,
+        "delay_pickup": "Isle of the Dead Rupoor Cave 3"
     },
     "Isle of the Dead Rupoor Cave 3": {
         "region_id": "iotd rupoor",
@@ -2166,19 +2187,9 @@ LOCATIONS_DATA = {
         "floor_id": 2,
         "z_max": -55000,
         "x_min": 2000,
-        "x_max": 8000,
         "sram_addr": 0x73C,
-        "sram_value": 1
-    },
-    "Isle of the Dead Rupoor Cave 4": {
-        "region_id": "iotd rupoor",
-        "vanilla_item": "Ship Part",
-        "stage_id": 0x15,
-        "floor_id": 2,
-        "z_max": -55000,
-        "x_min": 8000,
-        "sram_addr": 0x73C,
-        "sram_value": 1
+        "sram_value": 1,
+        "delay_pickup": "Isle of the Dead Rupoor Cave 2"
     },
     "Isle of the Dead Face Cave Chest": {
         "region_id": "iotd cave",
@@ -2352,6 +2363,7 @@ LOCATIONS_DATA = {
         "address": 0x1B559B,
         "value": 0x10,
         "dungeon": "Mutoh's Temple",
+        "delay_reset": True
     },
     "Mutoh's Temple Heart Container Chest": {
         "region_id": "mutoh eox",

@@ -721,6 +721,17 @@ DYNAMIC_FLAGS = {
         "has_items": [("Sword (Progressive)", 2, "not_has")],
         "unset_if_true": [(0x1BA648, 0x20)]
     },
+    "Oshus have phantom sword": {
+        "on_scenes": [0xB0A],
+        "has_items": [("Sword (Progressive)", 2)],
+        "not_has_locations": ["Mercay Oshus Phantom Sword"],
+        "unset_if_true": [(0x1BA648, 0x20)]
+    },
+    "RESET Oshus have phantom sword": {
+        "on_scenes": [0xB00],
+        "has_items": [("Sword (Progressive)", 2)],
+        "set_if_true": [(0x1BA648, 0x20)]
+    },
     "Block Oshus Gem": {
         "on_scenes": [0xB0A],
         "not_has_locations": ["Temple of Wind Cyclok Dungeon Reward"],
@@ -786,7 +797,7 @@ DYNAMIC_FLAGS = {
     },
     "RESET Kaleidoscope": {
         "on_scenes": [0x1, 0x2, 0x3],
-        "has_items": [("Guard Notebook", 1)],
+        "has_items": [("Kaleidoscope", 1)],
         "not_has_locations": ["Ocean SE Hoiger Howgendoogen Trade Quest Item"],
         "set_if_true": [(0x1B5590, 0x8)]
     },
@@ -802,7 +813,8 @@ DYNAMIC_FLAGS = {
     },
     # Vanilla frogs
     "Frogs show glyph": {
-        "on_scenes": [0, 0x1],
+        "on_scenes": [0, 1],
+        "has_slot_data": [("randomize_frogs", 0)],
         "set_if_true": [(0x1B55A2, 0x40)]
     },
     "RESET Frogs show glyph": {
