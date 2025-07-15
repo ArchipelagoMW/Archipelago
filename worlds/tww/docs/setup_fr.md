@@ -56,10 +56,10 @@ Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où
   multiworld auquel vous vous connectez.
 * Verifier que vous n'utilisez aucune triche Dolphin ou que des codes de triches sont activés. Certains codes peut interférer de manière imprévue
   avec l'émulation et rendre la résolution des problèmes compliquées.
-* Vérifiez que `Modifier la taille de la mémoire émulée` dans Dolphin (situé sous `Options` > `Configuration` > `Avancé`) est
+* Vérifier que `Modifier la taille de la mémoire émulée` dans Dolphin (situé sous `Options` > `Configuration` > `Avancé`) est
   **désactivé**.
 * Si le client ne peut pas se connecter à Dolphin, Vérifier que Dolphin est situé sur le même disque qu'Archipelago. 
   D'après certaines informations, avoir Dolphin sur un disque dur externe cause des problèmes de connexion.
-* Vérifize que la `Région de remplacement` dans Dolphin (situé sous `Options` > `Configuration` > `Général`) est mise à `NTSC-U`.
+* Vérifier que la `Région de remplacement` dans Dolphin (situé sous `Options` > `Configuration` > `Général`) est mise à `NTSC-U`.
 * Si vous lancez un menu de démarrage de Gamecube personnalisé, vous aurez besoin de le passer en allant dans `Options` > `Configuration` > `GameCube`
   et cocher `Passer le Menu Principal`.
