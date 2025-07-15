@@ -61,7 +61,23 @@ But not a separate one. We have modified the base game to provide in-game tracki
 Continue through the new game setup as normal - though it is not recommended to enable any of the base game's randomizer settings. (Some of them may still work, but some of them will break things lol).
 
 ### Can I use other Crystal Project mods?
-Using other Crystal Project mods along with Archipelago is not yet fully supported. Apply them with caution! Also, mods newer than the Archipelago version (Editor version 30) will be incompatible.
+Using other Crystal Project mods along with Archipelago is not yet fully supported. Apply them with caution! Mods newer than the Archipelago version (Editor version 30) will be incompatible.
+
+The Use Mods YAML option adds items and locations from other Crystal Project mods to the item and location pools at generation.
+WARNING: This option is very in beta right now! Enabling it is not recommended for: multiworlds that do not allow releasing items or with Regionsanity enabled (some mods add items to regions but don't place them anywhere near that region).
+
+Multiworld host instructions for the Use Mods option:
+1. In order to select the mods you'd like to include in randomization, make a folder named "crystal_project_mods" inside your root Archipelago directory.
+1. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>/steamapps/workshop/content/1637730) and find the individual folders for the mods you'd like to include.
+1. Inside each mod's folder is a mod json. Copy that json to the crystal_project_mods folder you made inside the Archipelago directory.
+
+NOTE: When the Use Mods option is on, all Crystal Project players in the multiworld with this option enabled MUST use the same mods.
+
+The in-game tracking will use special icons for modded locations that will not display their accessibility (as we can only guess at how accessible they are based on coordinates, and would prefer the tracking to be as accurate as possible).
+
+When disabled, only base game locations and items will be randomized. You can still use other mods - at your own risk, adventurer - they just won't add checks.
+
+The game will warn you if you open a game with mods that don't match the mods used to generate the multiworld.
 
 ## Play the game
 
