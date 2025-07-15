@@ -21,9 +21,9 @@ Celles-ci incluant un message indiquant que la localisation n'est pas randomisé
 ## Quel est l'objectif de The Wind Waker ?
 
 Atteindre et battre Ganondorf en haut de la tour de Ganon. 
-Pour cela, vous aurez besoin des huit morceaux de la Triforce du Courage, l'Excalibur entièrerement ranimée.
-Sauf si ce sont des épées optionnelles ou en mode sans épée, les flèches de lumières,
-ainsi que tous les objets nécessaires pour atteindre Ganondorf.
+Pour cela, vous aurez besoin des huit morceaux de la Triforce du Courage, l'Excalibur entièrerement ranimée (sauf si ce
+sont des épées optionnelles ou en mode sans épée), les flèches de lumières, ainsi que tous les objets nécessaires pour
+atteindre Ganondorf.
 
 ## A quoi ressemble un objet venant d'un autre monde dans TWW ?
 
