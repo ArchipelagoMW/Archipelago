@@ -66,7 +66,7 @@ serveur discord d'Archipelago !
 Les options `logic_obscurity` et `logic_precision` modifient la logique du randomizer pour mettre différentes astuces et techniques
 en logique.
 [Ce document](https://docs.google.com/spreadsheets/d/14ToE1SvNr9yRRqU4GK2qxIsuDUs9Edegik3wUbLtzH8/edit?usp=sharing)
-liste parfaitement les changements qui sont fait. Les options sont progressives, donc, par exemple, la difficulté obscure dur hard inclue la
+liste parfaitement les changements qui sont fait. Les options sont progressives, donc, par exemple, la difficulté obscure dur inclue la
 les astuces normales et durs. Certains changements ont besoin de la combinaison des deux options. Par exemple, pour mettre les canons qui détruisent la porte de la forteresse maudite pour vous en logique,  les paramètres obscure et précision doivent tout les deux être mis au moins à normal.
 
 ### Quels sont les différents préréglages d'options ?
