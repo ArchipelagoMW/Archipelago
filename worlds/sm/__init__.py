@@ -852,7 +852,7 @@ class SMWorld(World):
     def fill_slot_data(self): 
         slot_data = {}
         if not self.multiworld.is_race:
-            slot_data = self.options.as_dict(*self.options_dataclass.type_hints)
+            slot_data = self.options.as_dict("start_location", "max_difficulty", "area_randomization", "doors_colors_rando", "boss_randomization")
             slot_data["Preset"] = { "Knows": {},
                                     "Settings": {"hardRooms": Settings.SettingsDict[self.player].hardRooms,
                                                  "bossesDifficulty": Settings.SettingsDict[self.player].bossesDifficulty,
