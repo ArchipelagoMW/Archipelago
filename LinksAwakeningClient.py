@@ -360,7 +360,7 @@ class LinksAwakeningClient():
     auth = None
     game_crc = None
     collect_enabled = True
-    death_link_status = DeathLinkStatus.NONE
+    death_link_status = DeathLinkStatus.DYING # avoids sending a death if player is dead when client connects
     retroarch_address = None
     retroarch_port = None
     gameboy = None
@@ -521,7 +521,7 @@ class LinksAwakeningClient():
 
         if self.death_link_status == DeathLinkStatus.NONE:
             if not wHealth: # natural death
-                death_link_cb()
+                await death_link_cb()
                 self.death_link_status = DeathLinkStatus.DYING
         elif self.death_link_status == DeathLinkStatus.PENDING:
             self.gameboy.send_mw_command(command=MWCommands.DEATH_LINK)
