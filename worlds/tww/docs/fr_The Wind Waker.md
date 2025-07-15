@@ -71,7 +71,7 @@ les astuces normales et durs. Certains changements ont besoin de la combinaison 
 
 ### Quels sont les différents préréglages d'options ?
 
-Quelques préréglages(preset) sont disponibles sur la [page d'options](../player-options) pour votre confort.
+Quelques préréglages (presets) sont disponibles sur la [page d'options](../player-options) pour votre confort.
 
 - **Tournoi Saison 7**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
   [Tournoi Saison 7](https://docs.google.com/document/d/1mJj7an-DvpYilwNt-DdlFOy1fz5_NMZaPZvHeIekplc).
