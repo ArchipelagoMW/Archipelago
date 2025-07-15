@@ -865,13 +865,13 @@ class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mappin
         return ", ".join(f"{key}: {v}" for key, v in value.items())
 
     def __getitem__(self, item: str) -> typing.Any:
-        return self.value.__getitem__(item)
+        return self.value[item]
 
     def __iter__(self) -> typing.Iterator[str]:
-        return self.value.__iter__()
+        return iter(self.value)
 
     def __len__(self) -> int:
-        return self.value.__len__()
+        return len(self.value)
 
     # __getitem__ fallback fails for Counters, so we define this explicitly
     def __contains__(self, item) -> bool:
@@ -1067,10 +1067,10 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
         yield from self.value
 
     def __getitem__(self, index: typing.SupportsIndex) -> PlandoText:
-        return self.value.__getitem__(index)
+        return self.value[index]
 
     def __len__(self) -> int:
-        return self.value.__len__()
+        return len(self.value)
 
 
 class ConnectionsMeta(AssembleOptions):
@@ -1217,7 +1217,7 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                                         connection.exit) for connection in value])
 
     def __getitem__(self, index: typing.SupportsIndex) -> PlandoConnection:
-        return self.value.__getitem__(index)
+        return self.value[index]
 
     def __iter__(self) -> typing.Iterator[PlandoConnection]:
         yield from self.value

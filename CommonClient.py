@@ -211,7 +211,7 @@ class CommonContext:
             return iter(self._game_store)
 
         def __repr__(self) -> str:
-            return self._game_store.__repr__()
+            return repr(self._game_store)
 
         def lookup_in_game(self, code: int, game_name: typing.Optional[str] = None) -> str:
             """Returns the name for an item/location id in the context of a specific game or own game if `game` is
