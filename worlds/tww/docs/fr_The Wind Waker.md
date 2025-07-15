@@ -78,8 +78,8 @@ Quelques préréglages (presets) sont disponibles sur la [page d'options](../pla
   Ce préréglage contient 4 boss requis (avec le Roi Cuirassé garanti d'être requis), entrée des donjons randomisées, difficulté obscure dur,
    et une variété de checks dans l'overworld. Même si la liste d'options progressive peut sembler intimidante,
   ce préréglage exclut également plusieurs localisations et vous fait commencez avec quelques objets.
-- **Miniblins 2025**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
-  [2025 Season of Miniblins](https://docs.google.com/document/d/19vT68eU6PepD2BD2ZjR9ikElfqs8pXfqQucZ-TcscV8). Ce
+- **Miniblins 2025**: Ce sont (aussi proche que possible) les paramètres utilisés dans la
+  [Saison 2025 de Miniblins](https://docs.google.com/document/d/19vT68eU6PepD2BD2ZjR9ikElfqs8pXfqQucZ-TcscV8) du serveur WWR Racing. Ce
   préréglage est bien si vous êtes nouveau à The Wind Waker! Il n'y a pas beaucoup de localisation dans ce monde, et tu as seulement besoin de compléter deux donjons.
   Tu commences aussi avec plusieurs objets utiles comme la double magie, une amélioration de capacité pour votre arc et vos bombes ainsi que six coeurs.
 - **Mixed Pools**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
