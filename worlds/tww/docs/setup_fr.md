@@ -81,7 +81,7 @@ Une fois que vous êtes prêt, suivez ces étapes pour vous connecter à la sall
 * Ne pas lancer le Launcher d'Archipelago ou Dolphin en tant qu'Administrateur sur Windows.
 * Si vous rencontrez des problèmes avec l'authentification, 
   vérifier que la ROM randomisé est ouverte dans Dolphin et correspond au multiworld auquel vous vous connectez.
-* Verifier que vous n'utilisez aucune triche Dolphin ou que des codes de triches sont activés. 
+* Vérifier que vous n'utilisez aucune triche Dolphin ou que des codes de triches sont activés. 
   Certains codes peut interférer de manière imprévue avec l'émulation et 
   rendre la résolution des problèmes compliquées.
 * Vérifier que `Modifier la taille de la mémoire émulée` dans Dolphin 
