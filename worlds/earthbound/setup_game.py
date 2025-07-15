@@ -9,7 +9,7 @@ from .modules.dungeon_er import shuffle_dungeons
 
 def setup_gamevars(world) -> None:
     """Initialize or roll most world variables"""
-    
+
     world.slime_pile_wanted_item = world.random.choice([
         "Cookie",
         "Bag of Fries",
@@ -156,8 +156,6 @@ def setup_gamevars(world) -> None:
         ])
 
     world.multiworld.push_precollected(world.create_item(world.starting_character))
-    if world.options.random_start_location:
-        world.multiworld.push_precollected(world.create_item(world.starting_teleport))
 
     valid_starts = 14
     if world.options.magicant_mode != 00:
@@ -364,6 +362,7 @@ def setup_gamevars(world) -> None:
         del world.valid_teleports[world.start_location - 1]
 
         world.starting_teleport = world.random.choice(world.valid_teleports)
+        world.multiworld.push_precollected(world.create_item(world.starting_teleport))
 
     filler_items = (world.common_items + world.uncommon_items + world.rare_items + world.common_gear +
                     world.uncommon_gear + world.rare_gear)
