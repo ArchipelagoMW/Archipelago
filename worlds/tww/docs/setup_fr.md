@@ -1,6 +1,6 @@
 # Guide de mise en place de l'Archipelago de The Wind Waker
 
-Bienvenue dans l'Archipelago The Wind Waker ! Ce guide vous aidera à mettre en place le randomizer et à jouer à votre premier multiworld.
+Bienvenue dans l'Archipelago The Wind Waker ! Ce guide vous aidera à mettre en place le randomiser et à jouer à votre premier multiworld.
 Si vous jouez à The Wind Waker, vous devez suivre quelques étapes simple pour commencer.
 
 ## Requis
@@ -9,8 +9,8 @@ Vous aurez besoin des choses suivantes pour être capable de jouer à The Wind W
 *  L'[émulateur Dolphin](https://dolphin-emu.org/download/). **Nous recommendons d'utiliser la dernière version sortie.**
     * Les utilisateurs Linux peuvent utiliser le paquet flatpak
     [Disponible sur Flathub](https://flathub.org/apps/org.DolphinEmu.dolphin-emu).
-* La dernière version du [Randomizer The Wind Waker pour Archipelago ](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2).
-    * Veuillez noter que cette version est **différente** de celui utilisé pour le randomizer standard. Cette version
+* La dernière version du [Randomiser The Wind Waker pour Archipelago ](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2).
+    * Veuillez noter que cette version est **différente** de celui utilisé pour le randomiser standard. Cette version
       est spécifique à Archipelago.
 * Une ISO du jeu Zelda The Wind Waker (version Nord Américaine), probablement nommé "Legend of Zelda, The - The Wind Waker (USA).iso".
 
@@ -22,7 +22,7 @@ De manière optionnelle, vous pouvez également télécharger:
 
 Tous les joueurs jouant à The Wind Waker doivent donner à l'hôte de la salle un YAML comportant les paramètres de leur monde.
 Vous pouvez aller sur la [page d'options The Wind Waker](/games/The%20Wind%20Waker/player-options) pour générer un YAML avec vos options désirés. 
-Seulementes les localisations catégorisées sous les options activés sous "Progression Locations" seront randomizés dans votre monde.
+Seulementes les localisations catégorisées sous les options activés sous "Progression Locations" seront randomisés dans votre monde.
 Une fois que vous êtes heureux avec vos paramètres, donnez votre fichier YAML à l'hôte de la salle et procéder à la prochaine étape.
 
 ## Connexion à une salle
@@ -32,7 +32,7 @@ Le fichier APTWW doit être nommé `P#_<nom>_XXXXX.aptww`, où `#` est l'identif
 `XXXXX` est l'identifiant de la salle. L'hôte doit également vous donner le nom de la salle du serveur avec le numéro de port.
 
 Une fois que vous êtes prêt, suivez ces étapes pour vous connecter à la salle:
-1. Lancer le build AP du Randomizer. Si c'est la première fois que vous ouvrez le randomizer, vous aurez besoin d'indiquer le chemin vers votre ISO de The Wind Waker et le dossier de sortie pour l'ISO randomisé. Ceux-ci seront sauvegardé pour la prochaine fois que vous ouvrez le programme.
+1. Lancer le build AP du Randomiser. Si c'est la première fois que vous ouvrez le randomiser, vous aurez besoin d'indiquer le chemin vers votre ISO de The Wind Waker et le dossier de sortie pour l'ISO randomisé. Ceux-ci seront sauvegardé pour la prochaine fois que vous ouvrez le programme.
 2. Modifier n'importe quel cosmétique comme vous le voulez avec les ajustements désirés ainsi que la personnalisation de votre personnage desiré.
 3. Pour le fichier APTWW, naviguer et localiser le chemin du fichier.
 4. Appuyer sur `Randomize` en bas à droite. Cela va randomiser et mettre l'ISO dans le dossier de sortie que vous avez renseigné. Le fichier sera nommé `TWW AP_YYYYY_P# (<nom>).iso`, où `YYYYY` est le numéro de votre seed, `#` est l'identifiant de votre joueur, et `<nom>` est le nom de votre joueur (nom de slot). Veuillez vérifier que ces valeurs sont correctes pour votre multiworld.
@@ -49,7 +49,7 @@ Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où
 
 * Vérifier que vous utilisez la même version d'Archipelago que celui qui a généré le multiworld.
 * Vérifier que `tww.apworld` n'est pas dans votre dossier d'installation Archipelago dans le dossier `custom_worlds`.
-* Vérifier que vous utiliser la bonne version du build du randomizer que vous utilisez pour la version d'Archipelago. 
+* Vérifier que vous utiliser la bonne version du build du randomiser que vous utilisez pour la version d'Archipelago. 
   * Le build doit donner un message d'erreur vous dirigeant vers la bonne version. Vous pouvez aussi consulter les notes de version des builds AP de TWW [ici](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2), afin de voir avec quelles versions d'Archipelago chaque build est compatible avec.
 * Ne pas lancer le Launcher d'Archipelago ou Dolphin en tant qu'Administrateur sur Windows.
 * Si vous rencontrez des problèmes avec l'authentification, vérifier que la ROM randomisé est ouverte dans Dolphin et correspond au
