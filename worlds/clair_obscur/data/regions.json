@@ -1,0 +1,898 @@
+[
+    {
+        "region_name": "Ancient Sanctuary",
+        "locations": [
+            "Chest_AncientSanctuary_1",
+            "Chest_AncientSanctuary_2",
+            "Chest_AncientSanctuary_3",
+            "Chest_AncientSanctuary_4",
+            "Chest_AncientSanctuary_5",
+            "Chest_AncientSanctuary_6",
+            "Chest_AncientSanctuary_7",
+            "Chest_AncientSanctuary_8",
+            "Chest_AncientSanctuary_9",
+            "Chest_AncientSanctuary_10",
+            "Chest_AncientSanctuary_11",
+            "Chest_AncientSanctuary_12",
+            "Chest_AncientSanctuary_13",
+            "Chest_AncientSanctuary_14",
+            "Chest_AncientSanctuary_15",
+            "Chest_AncientSanctuary_16",
+            "Chest_AncientSanctuary_17",
+            "Chest_AncientSanctuary_19"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Crimson Forest",
+        "locations": [
+            "Chest_CrimsonForest_1",
+            "Chest_CrimsonForest_2",
+            "Chest_CrimsonForest_3",
+            "Chest_CrimsonForest_4",
+            "Chest_CrimsonForest_5",
+            "Chest_CrimsonForest_6",
+            "Chest_CrimsonForest_7",
+            "Chest_CrimsonForest_8",
+            "Chest_CrimsonForest_9"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Dark Shores",
+        "locations": [
+            "Chest_DarkShores_1",
+            "Chest_DarkShores_2",
+            "Chest_DarkShores_3",
+            "Chest_DarkShores_4",
+            "Chest_DarkShores_5",
+            "Chest_DarkShores_6",
+            "Chest_DarkShores_7",
+            "Chest_DarkShores_8",
+            "Chest_DarkShores_9"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Esquies Nest",
+        "locations": [
+            "Chest_EsquiesNest_1",
+            "Chest_EsquiesNest_2",
+            "Chest_EsquiesNest_3",
+            "Chest_EsquiesNest_4",
+            "Chest_EsquiesNest_5",
+            "Chest_EsquiesNest_6",
+            "Chest_EsquiesNest_7"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Falling Leaves",
+        "locations": [
+            "Chest_FallingLeaves_1",
+            "Chest_FallingLeaves_2",
+            "Chest_FallingLeaves_3"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Flying Manor",
+        "locations": [
+            "Chest_FlyingManor_1",
+            "Chest_FlyingManor_2",
+            "Chest_FlyingManor_3",
+            "Chest_FlyingManor_4",
+            "Chest_FlyingManor_5",
+            "Chest_FlyingManor_6",
+            "Chest_FlyingManor_9",
+            "Chest_FlyingManor_10",
+            "Chest_FlyingManor_11",
+            "Chest_FlyingManor_12",
+            "Chest_FlyingManor_13",
+            "Chest_FlyingManor_14",
+            "Chest_FlyingManor_15",
+            "Chest_FlyingManor_16",
+            "Chest_FlyingManor_17",
+            "Chest_FlyingManor_18",
+            "Chest_FlyingManor_19",
+            "Chest_FlyingManor_21",
+            "Chest_FlyingManor_22",
+            "Chest_FlyingManor_23",
+            "Chest_FlyingManor_24",
+            "Chest_FlyingManor_25",
+            "Chest_FlyingManor_26",
+            "Chest_FlyingManor_27",
+            "Chest_FlyingManor_28",
+            "Chest_FlyingManor_29",
+            "Chest_FlyingManor_30",
+            "Chest_FlyingManor_32",
+            "Chest_FlyingManor_33",
+            "Chest_FlyingManor_34",
+            "Chest_FlyingManor_36",
+            "Chest_FlyingManor_37",
+            "Chest_FlyingManor_38",
+            "Chest_FlyingManor_39",
+            "Chest_FlyingManor_40",
+            "Chest_FlyingManor_41"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Forgotten Battlefield",
+        "locations": [
+            "Chest_ForgottenBattlefield_1",
+            "Chest_ForgottenBattlefield_2",
+            "Chest_ForgottenBattlefield_3",
+            "Chest_ForgottenBattlefield_4",
+            "Chest_ForgottenBattlefield_5",
+            "Chest_ForgottenBattlefield_6",
+            "Chest_ForgottenBattlefield_7",
+            "Chest_ForgottenBattlefield_8",
+            "Chest_ForgottenBattlefield_9",
+            "Chest_ForgottenBattlefield_10",
+            "Chest_ForgottenBattlefield_11",
+            "Chest_ForgottenBattlefield_12",
+            "Chest_ForgottenBattlefield_13",
+            "Chest_ForgottenBattlefield_14",
+            "Chest_ForgottenBattlefield_15",
+            "Chest_ForgottenBattlefield_16",
+            "Chest_ForgottenBattlefield_17",
+            "Chest_ForgottenBattlefield_18",
+            "Chest_ForgottenBattlefield_19",
+            "Chest_ForgottenBattlefield_20",
+            "Chest_ForgottenBattlefield_21",
+            "Chest_ForgottenBattlefield_22",
+            "Chest_ForgottenBattlefield_23",
+            "Chest_ForgottenBattlefield_24",
+            "Chest_ForgottenBattlefield_25",
+            "Chest_ForgottenBattlefield_26"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Frozen Hearts",
+        "locations": [
+            "Chest_FrozenHearts_1",
+            "Chest_FrozenHearts_2",
+            "Chest_FrozenHearts_3",
+            "Chest_FrozenHearts_4",
+            "Chest_FrozenHearts_5",
+            "Chest_FrozenHearts_6",
+            "Chest_FrozenHearts_7",
+            "Chest_FrozenHearts_8",
+            "Chest_FrozenHearts_9",
+            "Chest_FrozenHearts_10",
+            "Chest_FrozenHearts_11",
+            "Chest_FrozenHearts_12",
+            "Chest_FrozenHearts_13",
+            "Chest_FrozenHearts_14",
+            "Chest_FrozenHearts_15",
+            "Chest_FrozenHearts_16",
+            "Chest_FrozenHearts_17",
+            "Chest_FrozenHearts_18",
+            "Chest_FrozenHearts_19",
+            "Chest_FrozenHearts_20",
+            "Chest_FrozenHearts_21",
+            "Chest_FrozenHearts_22",
+            "Chest_FrozenHearts_23",
+            "Chest_FrozenHearts_24",
+            "Chest_FrozenHearts_25",
+            "Chest_FrozenHearts_26",
+            "Chest_FrozenHearts_27",
+            "Chest_FrozenHearts_29",
+            "Chest_FrozenHearts_30",
+            "Chest_FrozenHearts_31"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Gestral Village",
+        "locations": [
+            "Chest_GestralVillage_1",
+            "Chest_GestralVillage_2",
+            "Chest_GestralVillage_3",
+            "Chest_GestralVillage_4",
+            "Chest_GestralVillage_5",
+            "Chest_GestralVillage_6",
+            "Chest_GestralVillage_7",
+            "Chest_GestralVillage_8",
+            "Chest_GestralVillage_9"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Goblus Lair",
+        "locations": [
+            "Chest_GoblusLair_1",
+            "Chest_GoblusLair_2",
+            "Chest_GoblusLair_3",
+            "Chest_GoblusLair_4",
+            "Chest_GoblusLair_5",
+            "Chest_GoblusLair_6",
+            "Chest_GoblusLair_7",
+            "Chest_GoblusLair_8",
+            "Chest_GoblusLair_9",
+            "Chest_GoblusLair_10",
+            "Chest_GoblusLair_11",
+            "Chest_GoblusLair_12",
+            "Chest_GoblusLair_13",
+            "Chest_GoblusLair_14",
+            "Chest_GoblusLair_15",
+            "Chest_GoblusLair_16",
+            "Chest_GoblusLair_17",
+            "Chest_GoblusLair_18",
+            "Chest_GoblusLair_19",
+            "Chest_GoblusLair_20",
+            "Chest_GoblusLair_21",
+            "Chest_GoblusLair_22",
+            "Chest_GoblusLair_23",
+            "Chest_GoblusLair_24",
+            "Chest_GoblusLair_25",
+            "Chest_GoblusLair_26",
+            "Chest_GoblusLair_27"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Grandis Station",
+        "locations": [
+            "Chest_GrandisStation_1",
+            "Chest_GrandisStation_2"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Lumiere",
+        "locations": [
+            "Chest_Lumiere_1",
+            "Chest_Lumiere_2",
+            "Chest_Lumiere_3",
+            "Chest_Lumiere_4",
+            "Chest_Lumiere_5",
+            "Chest_Lumiere_6",
+            "Chest_Lumiere_7",
+            "Chest_Lumiere_8",
+            "Chest_Lumiere_9",
+            "Chest_Lumiere_10",
+            "Chest_Lumiere_11",
+            "Chest_Lumiere_12",
+            "Chest_Lumiere_13",
+            "Chest_Lumiere_14",
+            "Chest_Lumiere_15",
+            "Chest_Lumiere_16",
+            "Chest_Lumiere_17",
+            "Chest_Lumiere_18",
+            "Chest_Lumiere_19",
+            "Chest_Lumiere_20",
+            "Chest_Lumiere_21",
+            "Chest_Lumiere_22",
+            "Chest_Lumiere_23",
+            "Chest_Lumiere_24",
+            "Chest_Lumiere_25",
+            "Chest_Lumiere_26",
+            "Chest_Lumiere_27",
+            "Chest_Lumiere_28",
+            "Chest_Lumiere_29",
+            "Chest_Lumiere_30",
+            "Chest_Lumiere_31",
+            "Chest_Lumiere_32",
+            "Chest_Lumiere_33",
+            "Chest_Lumiere_34",
+            "Chest_Lumiere_35",
+            "Chest_Lumiere_36",
+            "Chest_Lumiere_37",
+            "Chest_Lumiere_38",
+            "Chest_Lumiere_39",
+            "Chest_Lumiere_40",
+            "Chest_Lumiere_41",
+            "Chest_Lumiere_42",
+            "Chest_Lumiere_43",
+            "Chest_Lumiere_44"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Lumiere ACT1",
+        "locations": [
+            "Chest_Lumiere_ACT1_1",
+            "Chest_Lumiere_ACT1_2",
+            "Chest_Lumiere_ACT1_3",
+            "Chest_Lumiere_ACT1_4"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Manor",
+        "locations": [
+            "Chest_Manor_1",
+            "Chest_Manor_2",
+            "Chest_Manor_3",
+            "Chest_Manor_4",
+            "Chest_Manor_5",
+            "Chest_Manor_6",
+            "Chest_Manor_7",
+            "Chest_Manor_8",
+            "Chest_Manor_9",
+            "Chest_Manor_11",
+            "Chest_Manor_12",
+            "Chest_Manor_13",
+            "Chest_Manor_14",
+            "Chest_Manor_15",
+            "Chest_Manor_16"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Monolith",
+        "locations": [
+            "Chest_Monolith_1",
+            "Chest_Monolith_2",
+            "Chest_Monolith_3",
+            "Chest_Monolith_4",
+            "Chest_Monolith_5",
+            "Chest_Monolith_6",
+            "Chest_Monolith_7",
+            "Chest_Monolith_8",
+            "Chest_Monolith_9",
+            "Chest_Monolith_10",
+            "Chest_Monolith_11",
+            "Chest_Monolith_12",
+            "Chest_Monolith_13",
+            "Chest_Monolith_14",
+            "Chest_Monolith_15",
+            "Chest_Monolith_16",
+            "Chest_Monolith_17",
+            "Chest_Monolith_18",
+            "Chest_Monolith_19",
+            "Chest_Monolith_20",
+            "Chest_Monolith_21",
+            "Chest_Monolith_22",
+            "Chest_Monolith_23",
+            "Chest_Monolith_24",
+            "Chest_Monolith_25",
+            "Chest_Monolith_26",
+            "Chest_Monolith_27",
+            "Chest_Monolith_28",
+            "Chest_Monolith_29",
+            "Chest_Monolith_30",
+            "Chest_Monolith_31",
+            "Chest_Monolith_32",
+            "Chest_Monolith_33",
+            "Chest_Monolith_34",
+            "Chest_Monolith_35",
+            "Chest_Monolith_36",
+            "Chest_Monolith_37",
+            "Chest_Monolith_38",
+            "Chest_Monolith_39",
+            "Chest_Monolith_40",
+            "Chest_Monolith_41"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Old Lumiere",
+        "locations": [
+            "Chest_OldLumiere_1",
+            "Chest_OldLumiere_2",
+            "Chest_OldLumiere_3",
+            "Chest_OldLumiere_4",
+            "Chest_OldLumiere_5",
+            "Chest_OldLumiere_6",
+            "Chest_OldLumiere_7",
+            "Chest_OldLumiere_8",
+            "Chest_OldLumiere_9",
+            "Chest_OldLumiere_10",
+            "Chest_OldLumiere_11",
+            "Chest_OldLumiere_12",
+            "Chest_OldLumiere_13",
+            "Chest_OldLumiere_14",
+            "Chest_OldLumiere_15",
+            "Chest_OldLumiere_16",
+            "Chest_OldLumiere_17",
+            "Chest_OldLumiere_18",
+            "Chest_OldLumiere_19",
+            "Chest_OldLumiere_20"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Reacher",
+        "locations": [
+            "Chest_Reacher_1",
+            "Chest_Reacher_2",
+            "Chest_Reacher_3",
+            "Chest_Reacher_4",
+            "Chest_Reacher_5",
+            "Chest_Reacher_6",
+            "Chest_Reacher_7",
+            "Chest_Reacher_8",
+            "Chest_Reacher_9",
+            "Chest_Reacher_10",
+            "Chest_Reacher_11",
+            "Chest_Reacher_12",
+            "Chest_Reacher_13",
+            "Chest_Reacher_14",
+            "Chest_Reacher_15",
+            "Chest_Reacher_16",
+            "Chest_Reacher_17",
+            "Chest_Reacher_18",
+            "Chest_Reacher_19",
+            "Chest_Reacher_20",
+            "Chest_Reacher_21",
+            "Chest_Reacher_22",
+            "Chest_Reacher_23",
+            "Chest_Reacher_24",
+            "Chest_Reacher_25",
+            "Chest_Reacher_26"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Renoir SDraft",
+        "locations": [
+            "Chest_RenoirSDraft_1",
+            "Chest_RenoirSDraft_2",
+            "Chest_RenoirSDraft_3",
+            "Chest_RenoirSDraft_4",
+            "Chest_RenoirSDraft_5",
+            "Chest_RenoirSDraft_6",
+            "Chest_RenoirSDraft_7",
+            "Chest_RenoirSDraft_8",
+            "Chest_RenoirSDraft_9",
+            "Chest_RenoirSDraft_10",
+            "Chest_RenoirSDraft_11",
+            "Chest_RenoirSDraft_12"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Sea Cliff",
+        "locations": [
+            "Chest_SeaCliff_1",
+            "Chest_SeaCliff_2",
+            "Chest_SeaCliff_3",
+            "Chest_SeaCliff_4",
+            "Chest_SeaCliff_5",
+            "Chest_SeaCliff_6",
+            "Chest_SeaCliff_7",
+            "Chest_SeaCliff_8",
+            "Chest_SeaCliff_9",
+            "Chest_SeaCliff_10",
+            "Chest_SeaCliff_11",
+            "Chest_SeaCliff_12",
+            "Chest_SeaCliff_13",
+            "Chest_SeaCliff_14",
+            "Chest_SeaCliff_15",
+            "Chest_SeaCliff_16",
+            "Chest_SeaCliff_17",
+            "Chest_SeaCliff_18",
+            "Chest_SeaCliff_19",
+            "Chest_SeaCliff_20",
+            "Chest_SeaCliff_21",
+            "Chest_SeaCliff_22",
+            "Chest_SeaCliff_23",
+            "Chest_SeaCliff_24",
+            "Chest_SeaCliff_25",
+            "Chest_SeaCliff_26",
+            "Chest_SeaCliff_27",
+            "Chest_SeaCliff_28",
+            "Chest_SeaCliff_29",
+            "Chest_SeaCliff_30",
+            "Chest_SeaCliff_31",
+            "Chest_SeaCliff_32",
+            "Chest_SeaCliff_33",
+            "Chest_SeaCliff_34",
+            "Chest_SeaCliff_35",
+            "Chest_SeaCliff_36",
+            "Chest_SeaCliff_37",
+            "Chest_SeaCliff_38",
+            "Chest_SeaCliff_39"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Sirene",
+        "locations": [
+            "Chest_Sirene_1",
+            "Chest_Sirene_2",
+            "Chest_Sirene_3",
+            "Chest_Sirene_4",
+            "Chest_Sirene_6",
+            "Chest_Sirene_7",
+            "Chest_Sirene_8",
+            "Chest_Sirene_9",
+            "Chest_Sirene_10",
+            "Chest_Sirene_11",
+            "Chest_Sirene_12",
+            "Chest_Sirene_13",
+            "Chest_Sirene_14",
+            "Chest_Sirene_15",
+            "Chest_Sirene_16",
+            "Chest_Sirene_17",
+            "Chest_Sirene_18",
+            "Chest_Sirene_19",
+            "Chest_Sirene_20",
+            "Chest_Sirene_21",
+            "Chest_Sirene_22",
+            "Chest_Sirene_23",
+            "Chest_Sirene_24",
+            "Chest_Sirene_25",
+            "Chest_Sirene_26",
+            "Chest_Sirene_27",
+            "Chest_Sirene_28",
+            "Chest_Sirene_29",
+            "Chest_Sirene_30"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Red Woods",
+        "locations": [
+            "Chest_SmallLevel_RedWoods_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Goblus Lair 02",
+        "locations": [
+            "Chest_SmallLevel_GoblusLair_02_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Stonewave Cliffs Cave",
+        "locations": [
+            "Chest_SmallLevel_StonewaveCliffsCave_1",
+            "Chest_SmallLevel_StonewaveCliffsCave_2",
+            "Chest_SmallLevel_StonewaveCliffsCave_3",
+            "Chest_SmallLevel_StonewaveCliffsCave_4"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Chosen Path",
+        "locations": [
+            "Chest_SmallLevel_ChosenPath_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Floating Island",
+        "locations": [
+            "Chest_SmallLevel_FloatingIsland_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Visages",
+        "locations": [
+            "Chest_SmallLevel_Visages_1",
+            "Chest_SmallLevel_Visages_2"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Reacher",
+        "locations": [
+            "Chest_SmallLevel_Reacher_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Rock Trailing",
+        "locations": [
+            "Chest_SmallLevel_RockTrailing_1",
+            "Chest_SmallLevel_RockTrailing_2",
+            "Chest_SmallLevel_RockTrailing_3",
+            "Chest_SmallLevel_RockTrailing_4",
+            "Chest_SmallLevel_RockTrailing_5",
+            "Chest_SmallLevel_RockTrailing_6",
+            "Chest_SmallLevel_RockTrailing_7",
+            "Chest_SmallLevel_RockTrailing_8"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Cemetery",
+        "locations": [
+            "Chest_SmallLevel_Cemetery_1",
+            "Chest_SmallLevel_Cemetery_2",
+            "Chest_SmallLevel_Cemetery_3",
+            "Chest_SmallLevel_Cemetery_4"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Coastal Cave",
+        "locations": [
+            "Chest_SmallLevel_CoastalCave_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Cavern Crusher",
+        "locations": [
+            "Chest_SmallLevel_CavernCrusher_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Door Maze",
+        "locations": [
+            "Chest_SmallLevel_DoorMaze_1",
+            "Chest_SmallLevel_DoorMaze_2",
+            "Chest_SmallLevel_DoorMaze_3",
+            "Chest_SmallLevel_DoorMaze_4",
+            "Chest_SmallLevel_DoorMaze_5"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Sinister Cave",
+        "locations": [
+            "Chest_SmallLevel_SinisterCave_1",
+            "Chest_SmallLevel_SinisterCave_2",
+            "Chest_SmallLevel_SinisterCave_3"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Mini Levels",
+        "locations": [
+            "Chest_MiniLevels_1",
+            "Chest_MiniLevels_2",
+            "Chest_MiniLevels_3",
+            "Chest_MiniLevels_4",
+            "Chest_MiniLevels_5",
+            "Chest_MiniLevels_6",
+            "Chest_MiniLevels_7"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Spring Meadows",
+        "locations": [
+            "Chest_SmallLevel_SpringMeadows_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Flying Casino Entrance",
+        "locations": [
+            "Chest_SmallLevel_FlyingCasinoEntrance_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level The Carrousel",
+        "locations": [
+            "Chest_SmallLevel_TheCarrousel_1",
+            "Chest_SmallLevel_TheCarrousel_2"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level White Sands",
+        "locations": [
+            "Chest_SmallLevel_WhiteSands_1",
+            "Chest_SmallLevel_WhiteSands_2"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Small Level Sacred River",
+        "locations": [
+            "Chest_SmallLevel_SacredRiver_1"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Spring Meadows",
+        "locations": [
+            "Chest_SpringMeadows_1",
+            "Chest_SpringMeadows_2",
+            "Chest_SpringMeadows_3",
+            "Chest_SpringMeadows_4",
+            "Chest_SpringMeadows_5",
+            "Chest_SpringMeadows_6",
+            "Chest_SpringMeadows_7",
+            "Chest_SpringMeadows_8",
+            "Chest_SpringMeadows_9",
+            "Chest_SpringMeadows_10",
+            "Chest_SpringMeadows_11",
+            "Chest_SpringMeadows_12",
+            "Chest_SpringMeadows_13",
+            "Chest_SpringMeadows_14",
+            "Chest_SpringMeadows_15",
+            "Chest_SpringMeadows_16",
+            "Chest_SpringMeadows_17",
+            "Chest_SpringMeadows_18",
+            "Chest_SpringMeadows_19",
+            "Chest_SpringMeadows_20",
+            "Chest_SpringMeadows_21",
+            "Chest_SpringMeadows_22",
+            "Chest_SpringMeadows_23",
+            "Chest_SpringMeadows_24",
+            "Chest_SpringMeadows_25",
+            "Chest_SpringMeadows_26"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Twilight Sanctuary",
+        "locations": [
+            "Chest_TwilightSanctuary_1",
+            "Chest_TwilightSanctuary_2",
+            "Chest_TwilightSanctuary_3",
+            "Chest_TwilightSanctuary_4",
+            "Chest_TwilightSanctuary_5",
+            "Chest_TwilightSanctuary_6",
+            "Chest_TwilightSanctuary_7",
+            "Chest_TwilightSanctuary_8",
+            "Chest_TwilightSanctuary_9",
+            "Chest_TwilightSanctuary_10",
+            "Chest_TwilightSanctuary_11",
+            "Chest_TwilightSanctuary_12",
+            "Chest_TwilightSanctuary_13",
+            "Chest_TwilightSanctuary_14",
+            "Chest_TwilightSanctuary_15",
+            "Chest_TwilightSanctuary_16"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "Visages",
+        "locations": [
+            "Chest_Visages_1",
+            "Chest_Visages_2",
+            "Chest_Visages_3",
+            "Chest_Visages_4",
+            "Chest_Visages_5",
+            "Chest_Visages_6",
+            "Chest_Visages_7",
+            "Chest_Visages_8",
+            "Chest_Visages_10",
+            "Chest_Visages_11",
+            "Chest_Visages_12",
+            "Chest_Visages_13",
+            "Chest_Visages_14",
+            "Chest_Visages_15",
+            "Chest_Visages_16",
+            "Chest_Visages_17",
+            "Chest_Visages_18",
+            "Chest_Visages_19",
+            "Chest_Visages_20"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    },
+    {
+        "region_name": "World Map",
+        "locations": [
+            "Chest_WorldMap_1",
+            "Chest_WorldMap_2",
+            "Chest_WorldMap_3",
+            "Chest_WorldMap_4",
+            "Chest_WorldMap_5",
+            "Chest_WorldMap_6",
+            "Chest_WorldMap_7",
+            "Chest_WorldMap_8",
+            "Chest_WorldMap_9",
+            "Chest_WorldMap_10",
+            "Chest_WorldMap_11",
+            "Chest_WorldMap_12",
+            "Chest_WorldMap_13",
+            "Chest_WorldMap_14",
+            "Chest_WorldMap_15",
+            "Chest_WorldMap_16",
+            "Chest_WorldMap_17",
+            "Chest_WorldMap_18",
+            "Chest_WorldMap_19",
+            "Chest_WorldMap_20",
+            "Chest_WorldMap_21",
+            "Chest_WorldMap_22",
+            "Chest_WorldMap_23",
+            "Chest_WorldMap_24",
+            "Chest_WorldMap_25",
+            "Chest_WorldMap_26",
+            "Chest_WorldMap_27",
+            "Chest_WorldMap_28",
+            "Chest_WorldMap_29",
+            "Chest_WorldMap_30",
+            "Chest_WorldMap_31",
+            "Chest_WorldMap_32",
+            "Chest_WorldMap_33",
+            "Chest_WorldMap_34",
+            "Chest_WorldMap_35",
+            "Chest_WorldMap_36",
+            "Chest_WorldMap_37",
+            "Chest_WorldMap_38",
+            "Chest_WorldMap_39",
+            "Chest_WorldMap_40",
+            "Chest_WorldMap_41",
+            "Chest_WorldMap_42",
+            "Chest_WorldMap_43",
+            "Chest_WorldMap_44",
+            "Chest_WorldMap_45",
+            "Chest_WorldMap_46",
+            "Chest_WorldMap_47",
+            "Chest_WorldMap_48",
+            "Chest_WorldMap_49",
+            "Chest_WorldMap_50",
+            "Chest_WorldMap_51",
+            "Chest_WorldMap_52",
+            "Chest_WorldMap_53",
+            "Chest_WorldMap_54",
+            "Chest_WorldMap_55",
+            "Chest_WorldMap_56",
+            "Chest_WorldMap_57",
+            "Chest_WorldMap_58",
+            "Chest_WorldMap_59",
+            "Chest_WorldMap_60",
+            "Chest_WorldMap_61",
+            "Chest_WorldMap_62",
+            "Chest_WorldMap_63",
+            "Chest_WorldMap_64",
+            "Chest_WorldMap_65",
+            "Chest_WorldMap_66",
+            "Chest_WorldMap_67",
+            "Chest_WorldMap_68"
+        ],
+        "parent_map": "",
+        "exits": []
+    },
+    {
+        "region_name": "Yellow Forest",
+        "locations": [
+            "Chest_YellowForest_1",
+            "Chest_YellowForest_2",
+            "Chest_YellowForest_3",
+            "Chest_YellowForest_4",
+            "Chest_YellowForest_5",
+            "Chest_YellowForest_6"
+        ],
+        "parent_map": "World Map",
+        "exits": []
+    }
+]
