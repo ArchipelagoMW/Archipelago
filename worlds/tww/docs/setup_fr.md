@@ -12,7 +12,7 @@ Vous aurez besoin des choses suivantes pour être capable de jouer à The Wind W
 * La dernière version du [Randomizer The Wind Waker pour Archipelago ](https://github.com/tanjo3/wwrando/releases?q=tag%3Aap_2).
     * Veuillez noter que cette version est **différente** de celui utilisé pour le randomizer standard. Cette version
       est spécifique à Archipelago.
-* Une ISO du jeu Zelda The Wind Waker(version Nord Américaine), probablement nommé "Legend of Zelda, The - The Wind Waker (USA).iso".
+* Une ISO du jeu Zelda The Wind Waker (version Nord Américaine), probablement nommé "Legend of Zelda, The - The Wind Waker (USA).iso".
 
 De manière optionnelle, vous pouvez également télécharger:
 * Le [tracker pour Wind Waker](https://github.com/Mysteryem/ww-poptracker/releases/latest) avec [PopTracker](https://github.com/black-sliver/PopTracker/releases), qui en est la dépendance.
