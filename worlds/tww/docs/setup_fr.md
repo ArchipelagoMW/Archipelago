@@ -39,7 +39,7 @@ Une fois que vous êtes prêt, suivez ces étapes pour vous connecter à la sall
 5. Ouvrez Dolphin et utilisez le pour ouvrir l'iso randomisé.
 6. Lancer `ArchipelagoLauncher.exe` (sans le `.exe` sur Linux) et choisissez `The Wind Waker Client`, cela va lancer le client texte. 
 7. Si Dolphin n'est pas encore ouvert, ou que vous n'avez pas encore commencé de nouveau fichier, vous serez demandé à le faire.
-    * Une fois que vous avez ouvert votre ISO dans Dolphin, Le client doit dire "Dolphin connected successfully.".
+    * Une fois que vous avez ouvert votre ISO dans Dolphin, le client doit dire "Dolphin connected successfully.".
 8. Connectez-vous à la salle entrant le nom du serveur et son numéro de port en haut et cliquer sur `Connect`. 
 Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où `<port>` est le numéro de port. Si un jeu est hébergé à partir de
 `ArchipelagoServer.exe` (sans le `.exe` sur Linux), le numéro de port par défaut est `38281` mais il peut être changé dans le `host.yaml`.
