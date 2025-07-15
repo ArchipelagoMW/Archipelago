@@ -18,7 +18,7 @@ from .regions import create_regions
 from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
 from .text import encode_text
-from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, RedDeltaPatch, BlueDeltaPatch
+from .rom import generate_output, PokemonRedProcedurePatch, PokemonBlueProcedurePatch
 from .pokemon import process_pokemon_data, process_move_data, verify_hm_moves
 from .encounters import process_pokemon_locations, process_trainer_data
 from .rules import set_rules
@@ -33,12 +33,12 @@ class PokemonSettings(settings.Group):
         """File names of the Pokemon Red and Blue roms"""
         description = "Pokemon Red (UE) ROM File"
         copy_to = "Pokemon Red (UE) [S][!].gb"
-        md5s = [RedDeltaPatch.hash]
+        md5s = [PokemonRedProcedurePatch.hash]
 
     class BlueRomFile(settings.UserFilePath):
         description = "Pokemon Blue (UE) ROM File"
         copy_to = "Pokemon Blue (UE) [S][!].gb"
-        md5s = [BlueDeltaPatch.hash]
+        md5s = [PokemonBlueProcedurePatch.hash]
 
     red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
     blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
@@ -111,16 +111,7 @@ class PokemonRedBlueWorld(World):
         self.dexsanity_table = []
         self.trainersanity_table = []
         self.local_locs = []
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        versions = set()
-        for player in multiworld.player_ids:
-            if multiworld.worlds[player].game == "Pokemon Red and Blue":
-                versions.add(multiworld.worlds[player].options.game_version.current_key)
-        for version in versions:
-            if not os.path.exists(get_base_rom_path(version)):
-                raise FileNotFoundError(get_base_rom_path(version))
+        self.pc_item = None
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld):
@@ -289,7 +280,9 @@ class PokemonRedBlueWorld(World):
             multiworld.random.shuffle(itempool)
             unplaced_items = []
             for i, item in enumerate(itempool):
-                if item.player == loc.player and loc.can_fill(multiworld.state, item, False):
+                if ((item.player == loc.player or (item.player in multiworld.groups
+                                                   and loc.player in multiworld.groups[item.player]["players"]))
+                        and loc.can_fill(multiworld.state, item, False)):
                     if item.advancement:
                         pool = progitempool
                     elif item.useful:
@@ -308,8 +301,6 @@ class PokemonRedBlueWorld(World):
                         break
                     else:
                         unplaced_items.append(item)
-            else:
-                raise FillError(f"Pokemon Red and Blue local item fill failed for player {loc.player}: could not place {item.name}")
             progitempool += [item for item in unplaced_items if item.advancement]
             usefulitempool += [item for item in unplaced_items if item.useful]
             filleritempool += [item for item in unplaced_items if (not item.advancement) and (not item.useful)]
@@ -330,7 +321,7 @@ class PokemonRedBlueWorld(World):
                             "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
                             "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
                         ] if self.multiworld.get_location(loc, self.player).item is None]
-                    state = self.multiworld.get_all_state(False)
+                    state = self.multiworld.get_all_state(False, True, False)
                     # Give it two tries to place badges with wild Pokemon and learnsets as-is.
                     # If it can't, then try with all Pokemon collected, and we'll try to fix HM move availability after.
                     if attempt > 1:
@@ -404,7 +395,7 @@ class PokemonRedBlueWorld(World):
 
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, True, False)
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
         for location in evolutions_region.locations.copy():
             if not all_state.can_reach(location, player=self.player):
@@ -446,21 +437,18 @@ class PokemonRedBlueWorld(World):
                 if loc.item is None:
                     locs.add(loc)
 
-        if not self.options.key_items_only:
-            loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
-            if loc.item is None:
-                locs.add(loc)
-
         for loc in sorted(locs):
             if loc.name in self.options.priority_locations.value:
                 add_item_rule(loc, lambda i: i.advancement)
-            add_item_rule(loc, lambda i: i.player == self.player)
+            add_item_rule(loc, lambda i: i.player == self.player
+                                         or (i.player in self.multiworld.groups
+                                             and self.player in self.multiworld.groups[i.player]["players"]))
             if self.options.old_man == "early_parcel" and loc.name != "Player's House 2F - Player's PC":
                 add_item_rule(loc, lambda i: i.name != "Oak's Parcel")
 
         self.local_locs = locs
 
-        all_state = self.multiworld.get_all_state(False)
+        all_state = self.multiworld.get_all_state(False, True, False)
 
         reachable_mons = set()
         for mon in poke_data.pokemon_data:
@@ -519,6 +507,19 @@ class PokemonRedBlueWorld(World):
                             break
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
+
+        if not self.options.key_items_only:
+            loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
+            # Absolutely cannot have another player's item
+            if loc.item is not None and loc.item.player != self.player:
+                self.multiworld.itempool.append(loc.item)
+                loc.item = None
+            loc.place_locked_item(self.pc_item)
+
+    def get_pre_fill_items(self) -> typing.List["Item"]:
+        pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
+        pool.append(self.pc_item)
+        return pool
 
     @classmethod
     def stage_post_fill(cls, multiworld):

@@ -5,17 +5,18 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-import websockets
+if typing.TYPE_CHECKING:
+    from websockets import WebSocketServerProtocol as ServerConnection
 
 from Utils import ByValue, Version
 
 
-class HintStatus(enum.IntEnum):
-    HINT_FOUND = 0
-    HINT_UNSPECIFIED = 1
+class HintStatus(ByValue, enum.IntEnum):
+    HINT_UNSPECIFIED = 0
     HINT_NO_PRIORITY = 10
     HINT_AVOID = 20
     HINT_PRIORITY = 30
+    HINT_FOUND = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -105,6 +106,27 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     return obj
 
 
+_base_types = str | int | bool | float | None | tuple["_base_types", ...] | dict["_base_types", "base_types"]
+
+
+def convert_to_base_types(obj: typing.Any) -> _base_types:
+    if isinstance(obj, (tuple, list, set, frozenset)):
+        return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, dict):
+        return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
+    elif obj is None or type(obj) in (str, int, float, bool):
+        return obj
+    # unwrap simple types to their base, such as StrEnum
+    elif isinstance(obj, str):
+        return str(obj)
+    elif isinstance(obj, int):
+        return int(obj)
+    elif isinstance(obj, float):
+        return float(obj)
+    else:
+        raise Exception(f"Cannot handle {type(obj)}")
+
+
 _encode = JSONEncoder(
     ensure_ascii=False,
     check_circular=False,
@@ -151,7 +173,7 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: websockets.WebSocketServerProtocol
+    socket: "ServerConnection"
 
     def __init__(self, socket):
         self.socket = socket
