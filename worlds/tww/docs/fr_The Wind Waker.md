@@ -86,8 +86,8 @@ les paramètres obscure et précision doivent tout les deux être mis au moins �
 
 Quelques préréglages (presets) sont disponibles sur la [page d'options](../player-options) pour votre confort.
 
-- **Tournoi Saison 8**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
-  [Tournoi Saison 8](https://docs.google.com/document/d/1b8F5DL3P5fgsQC_URiwhpMfqTpsGh2M-KmtTdXVigh4).
+- **Tournoi Saison 8**: Ce sont (aussi proche que possible) les paramètres utilisés dans le [Tournoi
+  Saison 8](https://docs.google.com/document/d/1b8F5DL3P5fgsQC_URiwhpMfqTpsGh2M-KmtTdXVigh4) du serveur WWR Racing.
   Ce préréglage contient 4 boss requis (avec le Roi Cuirassé garanti d'être requis),
   entrée des donjons randomisées, difficulté obscure dur, et une variété de checks dans l'overworld,
   même si la liste d'options progressive peut sembler intimidante.
