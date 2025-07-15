@@ -178,9 +178,9 @@ class LevelGating(Choice):
     Level Capped: The party's maximum level is hard capped. Progressive Levels are added to the pool. Collecting them allows your party to gain more levels, and in-game tracking will light up
     checks that you have access to based on that max level.
 
-    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels based on the number you've collected. For example, if the Progressive Level
+    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. For example, if the Progressive Level
     Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
-    has already reached that level, no extra levels will be granted. In-game tracking will light up checks that you have access to based on the number you have collected.
+    has already reached that level, no extra levels will be granted. 2 LP are granted per 1 level granted. In-game tracking will light up checks that you have access to based on the number you have collected.
     """
     display_name = "Level Gating"
     option_none = 0
