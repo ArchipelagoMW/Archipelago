@@ -23,7 +23,7 @@ De manière optionnelle, vous pouvez également télécharger:
 Tous les joueurs jouant à The Wind Waker doivent donner à l'hôte de la salle un YAML comportant les paramètres de leur monde.
 Vous pouvez aller sur la [page d'options The Wind Waker](/games/The%20Wind%20Waker/player-options) pour générer un YAML avec vos options désirés. 
 Seulementes les localisations catégorisées sous les options activés sous "Progression Locations" seront randomizés dans votre monde.
-Une fois que vous êtes heureux avec vos paramètres, Donnez votre fichier YAML à l'hôte de la salle et procéder à la prochaine étape.
+Une fois que vous êtes heureux avec vos paramètres, donnez votre fichier YAML à l'hôte de la salle et procéder à la prochaine étape.
 
 ## Connexion à une salle
 
