@@ -218,7 +218,11 @@ class HKWorld(World):
         wp = self.options.WhitePalace
         if wp <= WhitePalace.option_nopathofpain:
             exclusions.update(path_of_pain_locations)
-            exclusions.add("Soul_Totem-Path_of_Pain")
+            exclusions.update((
+                "Soul_Totem-Path_of_Pain",
+                "Lore_Tablet-Path_of_Pain_Entrance",
+                "Journal_Entry-Seal_of_Binding",
+                ))
         if wp <= WhitePalace.option_kingfragment:
             exclusions.update(white_palace_checks)
         if wp == WhitePalace.option_exclude:
