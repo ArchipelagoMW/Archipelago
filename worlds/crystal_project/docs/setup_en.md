@@ -44,18 +44,28 @@ See [Archipelago Multiworld Setup Guide](https://archipelago.gg/tutorial/Archipe
 
 ### Where do I get a YAML file?
 
-A YAML file is included on the [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases)
+Two YAML files are included on the [Crystal Project AP World Releases Page](https://github.com/Emerassi/CrystalProjectAPWorld/releases): a default YAML, and an Explorer preset that maximizes platforming and minimizes combat.
 
-### Connect to the MultiServer
+## Is there a tracker for this game?
 
-Start a new game in Crystal Project. Don't touch the in-game randomizer settings (some of them may still work, but some of them will break things lol).
-Once loaded into the world, open the menu and select Archipelago from the sidebar.
-Fill out the hostname and port (archipelago.gg: ######), slot name, and password (if applicable).  You can use your keyboard to type here FYI!
- Then hit the Save button. You should now be connected! 
-(Note: settings like starting job randomization will only apply after you've connected to the multiworld for the first time.)
+### Yes!
 
-### Play the game
+But not a separate one. We have modified the base game to provide in-game tracking, including a full locations list, goal items tracker, world map icons, and minimap icons (with custom art to indicate accessibility and importance!) You can even bind the world map and locations list to hotkeys.
+
+## Connect to the MultiServer
+
+1. Start a new game in Crystal Project. An Archipelago connection screen will appear.
+1. Fill out the hostname and port (archipelago.gg: #####), slot name, and password (if applicable). You can use your keyboard to type, or you can hit the Paste button on controller.
+1. Hit the Connect button. You should now be connected!
+
+Continue through the new game setup as normal - though it is not recommended to enable any of the base game's randomizer settings. (Some of them may still work, but some of them will break things lol).
+
+### Can I use other Crystal Project mods?
+Using other Crystal Project mods along with Archipelago is not yet fully supported. Apply them with caution! Also, mods newer than the Archipelago version (Editor version 30) will be incompatible.
+
+## Play the game
 
 After you've successfully connected once, your save file will automatically reconnect to the multiworld the next time you open the game.
-(Remember to refresh the multiworld room page if no one has connected in a while.)
-Set forth on adventure!
+(Remember to refresh the multiworld room page if no one has connected in a while.) If the room number has changed, open the menu and select Archipelago from the sidebar to update your connection information and reconnect.
+
+Set forth on adventure! Remember to touch any save points you come across so you can teleport to them from the world map.
