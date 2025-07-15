@@ -375,7 +375,7 @@ ZONESYSTEM = ZoneSystem(world_state_address=0x8037500D,
                                 fast_travel_flag=0x03),  # +2 granite zone +1 flower zone
                             ZoneState(
                                 item_id=REGION_UNLOCK["Skygarden Unlock"],
-                                world_state_value=0x272e,
+                                world_state_value=0x2af8,
                                 addresses=[],
                                 fast_travel_flag=0x00),  # no fast travel
                         ],

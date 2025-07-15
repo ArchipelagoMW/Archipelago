@@ -132,8 +132,7 @@ class PokeparkWorld(World):
                      "Ice Zone Unlock",
                      "Cavern Zone & Magma Zone Unlock",
                      "Haunted Zone Unlock",
-                     "Granite Zone & Flower Zone Unlock",
-                     "Skygarden Unlock"]
+                     "Granite Zone & Flower Zone Unlock"]
 
         if self.options.starting_zone == self.options.starting_zone.option_one:
             # Randomly select one starting zone
@@ -148,6 +147,8 @@ class PokeparkWorld(World):
             for zone in all_zones:
                 if zone not in starting_zones:
                     pool.append(self.create_item(zone))
+            # Add Skygarden Unlock
+            pool.append(self.create_item("Skygarden Unlock"))
 
         if self.options.starting_zone == self.options.starting_zone.option_none:  # option_none (default is Meadow Zone)
             self.multiworld.push_precollected(self.create_item("Meadow Zone Unlock"))
@@ -157,6 +158,9 @@ class PokeparkWorld(World):
                 if zone != "Meadow Zone Unlock":
                     pool.append(self.create_item(zone))
 
+            # Add Skygarden Unlock
+            pool.append(self.create_item("Skygarden Unlock"))
+
         if self.options.starting_zone == self.options.starting_zone.option_ice_zone:
             self.multiworld.push_precollected(self.create_item("Ice Zone Unlock"))
 
@@ -164,6 +168,9 @@ class PokeparkWorld(World):
             for zone in all_zones:
                 if zone != "Ice Zone Unlock":
                     pool.append(self.create_item(zone))
+
+            # Add Skygarden Unlock
+            pool.append(self.create_item("Skygarden Unlock"))
 
         # Drifblim is always unlocked
         self.multiworld.push_precollected(self.create_item("Drifblim Unlock"))

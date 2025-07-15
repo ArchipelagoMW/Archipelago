@@ -68,7 +68,7 @@ async def state_watcher(ctx):
             current_state = max(available_states,
                                 key=lambda x: x.world_state_value)  # highest world state from Region Unlocks
 
-            if int.from_bytes(dme.read_bytes(zone_system.world_state_address, 2)) < 0x272e:
+            if int.from_bytes(dme.read_bytes(zone_system.world_state_address, 2)) < 0x2af8:
                 dme.write_bytes(zone_system.world_state_address,
                                 current_state.world_state_value.to_bytes(2, byteorder='big'))
 
