@@ -3,14 +3,14 @@ from typing import FrozenSet, TYPE_CHECKING
 from BaseClasses import Region
 from worlds.generic.Rules import set_rule, add_rule, forbid_item
 
-from .bells import set_bell_location_rules
+# from .bells import set_bell_location_rules
 from .combat_logic import has_combat_reqs
 from .constants import *
 from .er_data import Portal, get_portal_outlet_region
-from .fuses import set_fuse_location_rules, has_fuses
+# from .fuses import set_fuse_location_rules, has_fuses
 from .grass import set_grass_location_rules
 from .ladder_storage_data import ow_ladder_groups, region_ladders, easy_ls, medium_ls, hard_ls
-from .logic_helpers import (has_ability, has_ladder, has_melee, has_sword, has_lantern, has_mask,
+from .logic_helpers import (has_ability, has_ladder, has_melee, has_sword, has_lantern, has_mask, has_fuses,
                             can_shop, can_get_past_bushes, laurels_zip, has_ice_grapple_logic, can_ladder_storage)
 from .options import IceGrappling, LadderStorage, CombatLogic
 
@@ -1532,11 +1532,11 @@ def set_er_location_rules(world: "TunicWorld") -> None:
     if options.grass_randomizer:
         set_grass_location_rules(world)
 
-    if options.shuffle_fuses:
-        set_fuse_location_rules(world)
-
-    if options.shuffle_bells:
-        set_bell_location_rules(world)
+    # if options.shuffle_fuses:
+    #     set_fuse_location_rules(world)
+    #
+    # if options.shuffle_bells:
+    #     set_bell_location_rules(world)
 
     forbid_item(world.get_location("Secret Gathering Place - 20 Fairy Reward"), fairies, player)
 

@@ -7,13 +7,13 @@ from Options import PlandoConnection, OptionError, PerGameCommonOptions, Range, 
 from settings import Group, Bool, FilePath
 from worlds.AutoWorld import WebWorld, World
 
-from .bells import bell_location_groups, bell_location_name_to_id
+# from .bells import bell_location_groups, bell_location_name_to_id
 from .breakables import breakable_location_name_to_id, breakable_location_groups, breakable_location_table
 from .combat_logic import area_data, CombatState
 from .er_data import portal_mapping, RegionInfo, tunic_er_regions
 from .er_rules import set_er_location_rules
 from .er_scripts import create_er_regions, verify_plando_directions
-from .fuses import fuse_location_name_to_id, fuse_location_groups
+# from .fuses import fuse_location_name_to_id, fuse_location_groups
 from .grass import grass_location_table, grass_location_name_to_id, grass_location_name_groups, excluded_grass_locations
 from .items import (item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names,
                     combat_items)
@@ -98,17 +98,17 @@ class TunicWorld(World):
         location_name_groups.setdefault(group_name, set()).update(members)
     for group_name, members in breakable_location_groups.items():
         location_name_groups.setdefault(group_name, set()).update(members)
-    for group_name, members in fuse_location_groups.items():
-        location_name_groups.setdefault(group_name, set()).update(members)
-    for group_name, members in bell_location_groups.items():
-        location_name_groups.setdefault(group_name, set()).update(members)
+    # for group_name, members in fuse_location_groups.items():
+    #     location_name_groups.setdefault(group_name, set()).update(members)
+    # for group_name, members in bell_location_groups.items():
+    #     location_name_groups.setdefault(group_name, set()).update(members)
 
     item_name_to_id = item_name_to_id
     location_name_to_id = standard_location_name_to_id.copy()
     location_name_to_id.update(grass_location_name_to_id)
     location_name_to_id.update(breakable_location_name_to_id)
-    location_name_to_id.update(fuse_location_name_to_id)
-    location_name_to_id.update(bell_location_name_to_id)
+    # location_name_to_id.update(fuse_location_name_to_id)
+    # location_name_to_id.update(bell_location_name_to_id)
 
     player_location_table: dict[str, int]
     ability_unlocks: dict[str, int]
@@ -223,11 +223,11 @@ class TunicWorld(World):
                 self.player_location_table.update({name: num for name, num in breakable_location_name_to_id.items()
                                                    if not name.startswith("Purgatory")})
 
-        if self.options.shuffle_fuses:
-            self.player_location_table.update(fuse_location_name_to_id)
-
-        if self.options.shuffle_bells:
-            self.player_location_table.update(bell_location_name_to_id)
+        # if self.options.shuffle_fuses:
+        #     self.player_location_table.update(fuse_location_name_to_id)
+        #
+        # if self.options.shuffle_bells:
+        #     self.player_location_table.update(bell_location_name_to_id)
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld) -> None:

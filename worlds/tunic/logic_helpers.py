@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import CollectionState
 
 from .constants import *
+from .fuses import fuse_activation_reqs
 from .options import HexagonQuestAbilityUnlockType, IceGrappling
 
 if TYPE_CHECKING:
@@ -86,3 +87,11 @@ def can_shop(state: CollectionState, world: "TunicWorld") -> bool:
 def can_get_past_bushes(state: CollectionState, world: "TunicWorld") -> bool:
     # add in glass cannon + stick for grass rando
     return has_sword(state, world.player) or state.has_any((fire_wand, laurels, gun), world.player)
+
+
+def has_fuses(fuse_event: str, state: CollectionState, world: "TunicWorld") -> bool:
+    player = world.player
+    if world.options.shuffle_fuses:
+        return state.has_all(fuse_activation_reqs[fuse_event], player)
+
+    return state.has(fuse_event, player)

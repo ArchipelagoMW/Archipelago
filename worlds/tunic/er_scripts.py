@@ -113,13 +113,13 @@ def place_event_items(world: "TunicWorld", regions: dict[str, Region]) -> None:
             location.place_locked_item(
                 TunicERItem("Unseal the Heir", ItemClassification.progression, None, world.player))
         elif event_name.endswith("Bell"):
-            if world.options.shuffle_bells:
-                continue
+            # if world.options.shuffle_bells:
+            #     continue
             location.place_locked_item(
                 TunicERItem("Ring " + event_name, ItemClassification.progression, None, world.player))
         elif event_name.endswith("Fuse") or event_name.endswith("Fuses"):
-            if world.options.shuffle_fuses:
-                continue
+            # if world.options.shuffle_fuses:
+            #     continue
             location.place_locked_item(
                 TunicERItem("Activate " + event_name, ItemClassification.progression, None, world.player))
         region.locations.append(location)
@@ -200,8 +200,10 @@ def pair_portals(world: "TunicWorld", regions: dict[str, Region]) -> dict[Portal
     entrance_layout = world.options.entrance_layout
     laurels_location = world.options.laurels_location
     decoupled = world.options.decoupled
-    shuffle_fuses = bool(world.options.shuffle_fuses.value)
-    shuffle_bells = bool(world.options.shuffle_bells.value)
+    # shuffle_fuses = bool(world.options.shuffle_fuses.value)
+    # shuffle_bells = bool(world.options.shuffle_bells.value)
+    shuffle_fuses = False
+    shuffle_bells = False
     traversal_reqs = deepcopy(traversal_requirements)
     has_laurels = True
     waterfall_plando = False
