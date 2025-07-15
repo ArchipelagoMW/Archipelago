@@ -73,17 +73,18 @@ les astuces normales et durs. Certains changements ont besoin de la combinaison 
 
 Quelques préréglages (presets) sont disponibles sur la [page d'options](../player-options) pour votre confort.
 
-- **Tournoi Saison 7**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
-  [Tournoi Saison 7](https://docs.google.com/document/d/1mJj7an-DvpYilwNt-DdlFOy1fz5_NMZaPZvHeIekplc).
-  Ce preréglage contient trois boss requis et une difficulté obscure dur, et même si la liste des options activés peut sembler intimidant, 
-  le préréglage aussi exclue certaines localisations.
+- **Tournoi Saison 8**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
+  [Tournoi Saison 8](https://docs.google.com/document/d/1b8F5DL3P5fgsQC_URiwhpMfqTpsGh2M-KmtTdXVigh4).
+  Ce préréglage contient 4 boss requis (avec le Roi Cuirassé garanti d'être requis), entrée des donjons randomisées, difficulté obscure dur,
+   et une variété de checks dans l'overworld. Même si la liste d'options progressive peut sembler intimidante,
+  ce préréglage exclut également plusieurs localisations et vous fait commencez avec quelques objets.
 - **Miniblins 2025**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
   [2025 Season of Miniblins](https://docs.google.com/document/d/19vT68eU6PepD2BD2ZjR9ikElfqs8pXfqQucZ-TcscV8). Ce
   préréglage est bien si vous êtes nouveau à The Wind Waker! Il n'y a pas beaucoup de localisation dans ce monde, et tu as seulement besoin de compléter deux donjons.
-  Tu commences aussi avec plusieurs objets utiles comme la double magie, une amélioration de capacité pour votre arc et vos bombes et six coeurs.
+  Tu commences aussi avec plusieurs objets utiles comme la double magie, une amélioration de capacité pour votre arc et vos bombes ainsi que six coeurs.
 - **Mixed Pools**: Ce sont (aussi proche que possible) les paramètres utilisés dans le serveur WWR Racing
   [Mixed Pools Co-op Tournoi](https://docs.google.com/document/d/1YGPTtEgP978TIi0PUAD792OtZbE2jBQpI8XCAy63qpg). Ce
-  prérégalge contient toutes les entrées randomisés et inclue la plupart des localisations derrière une entrée randomisé. Il y a aussi plusieurs
+  préréglage contient toutes les entrées randomisés et inclue la plupart des localisations derrière une entrée randomisé. Il y a aussi plusieurs
   locations de l'overworld, étant donnée que ces paramètres sont censés être joué dans une équipe de deux joueurs. Ce préréglage a aussi six
   boss requis, mais vu que les pools d'entrées sont randomisés, les boss peuvent être trouvés n'importe où ! Regarder votre carte de l'océan pour
   déterminer quels îles les boss sont.
