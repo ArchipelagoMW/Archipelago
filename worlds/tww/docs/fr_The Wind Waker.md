@@ -112,12 +112,12 @@ Ce randomiseur ne pouvait pas être possible sans l'aide de :
 - Gamma / SageOfMirrors: (programmation additionnelle)
 - LagoLunatic: (randomiseur de base, assistance additionelle)
 - Lunix: (Support Linux, programmation additionnelle)
+- mobby45 (traduction du guide français)
 - Mysteryem: (Support du tracker, programmation additionnelle)
 - Necrofitz: (documentation additionelle)
 - Ouro: (Support du tracker)
-- tal (matzahTalSoup): (dungeon secrets guide)
+- tal (matzahTalSoup): (guide pour les dungeon secrets)
 - Tubamann: (programmation additionnelle)
-- mobby45 (traduction du guide français)
 
 Le logo archipelago © 2022 par Krista Corkos et Christopher Wilson, sous licence
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
