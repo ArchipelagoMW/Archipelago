@@ -43,7 +43,7 @@ Une fois que vous êtes prêt, suivez ces étapes pour vous connecter à la sall
 8. Connectez-vous à la salle entrant le nom du serveur et son numéro de port en haut et cliquer sur `Connect`. 
 Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où `<port>` est le numéro de port. Si un jeu est hébergé à partir de
 `ArchipelagoServer.exe` (sans le `.exe` sur Linux), le numéro de port par défaut est `38281` mais il peut être changé dans le `host.yaml`.
-9. Si tu as ouvert ton ISO correspondant au multiworld auquel tu es connecté, ça doit authentifier authenticate ton nom de slot automatiquement quand tu commences une nouveau fichier de sauvegarde.
+9. Si tu as ouvert ton ISO correspondant au multiworld auquel tu es connecté, ça doit authentifier ton nom de slot automatiquement quand tu commences une nouveau fichier de sauvegarde.
 
 ## Résolutions de problèmes
 
