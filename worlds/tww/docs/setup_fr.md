@@ -62,4 +62,4 @@ Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où
   D'après certaines informations, avoir Dolphin sur un disque dur externe cause des problèmes de connexion.
 * Vérifize que la `Fallback Region` dans Dolphin (situé sous `Options` > `Configuration` > `General`) est mise à `NTSC-U`.
 * Si vous lancez un menu de démarrage de Gamecube personnalisé, vous aurez besoin de le passer en allant dans `Options` > `Configuration` > `GameCube`
-  et cocher `Skip Main Menu`.
+  et cocher `Passer le Menu Principal`.
