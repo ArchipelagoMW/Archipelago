@@ -34,7 +34,7 @@ au dessus de sa tête comme dans d'autres randomizer de Zelda.
 ## J'ai besoin d'aide ! Que dois-je faire ?
 
 Référez vous à la [FAQ](https://lagolunatic.github.io/wwrando/faq/) premièrement. Ensuite, essayez les étapes de résolutions de problèmes dans le 
-[guide de mise en place](/tutorial/The%20Wind%20Waker/setup/en). Si vous êtes encore bloqué, S'il vous plait poser votre question dans le salon textuel Wind Waker dans le
+[guide de mise en place](/tutorial/The%20Wind%20Waker/setup/en). Si vous êtes encore bloqué, s'il vous plait poser votre question dans le salon textuel Wind Waker dans le
 serveur discord d'Archipelago.
 
 ## J'ai ouvert mon jeu dans Dolphin, mais je n'ai aucun de mes items de démarrage !
