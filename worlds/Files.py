@@ -158,6 +158,7 @@ class APContainer:
 class APPlayerContainer(APContainer):
     """A zipfile containing at least archipelago.json meant for a player"""
     game: ClassVar[Optional[str]] = None
+    patch_file_ending: str = ""
 
     player: Optional[int]
     player_name: str
@@ -184,6 +185,7 @@ class APPlayerContainer(APContainer):
             "player": self.player,
             "player_name": self.player_name,
             "game": self.game,
+            "patch_file_ending": self.patch_file_ending,
         })
         return manifest
 
@@ -223,7 +225,6 @@ class APProcedurePatch(APAutoPatchInterface):
     """
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
-    patch_file_ending: str = ""
     files: Dict[str, bytes]
 
     @classmethod
@@ -245,7 +246,6 @@ class APProcedurePatch(APAutoPatchInterface):
         manifest = super(APProcedurePatch, self).get_manifest()
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending
-        manifest["patch_file_ending"] = self.patch_file_ending
         manifest["procedure"] = self.procedure
         if self.procedure == APDeltaPatch.procedure:
             manifest["compatible_version"] = 5

@@ -216,7 +216,6 @@ register_mod_content_pack(SVEContentPack(
         villagers_data.scarlett,
         villagers_data.susan,
         villagers_data.morris,
-        # The wizard leaves his tower on sunday, for like 1 hour... Good enough for entrance rando!
-        override(villagers_data.wizard, locations=(Region.wizard_tower, Region.forest), bachelor=True, mod_name=ModNames.sve),
+        override(villagers_data.wizard, bachelor=True, mod_name=ModNames.sve),
     )
 ))
