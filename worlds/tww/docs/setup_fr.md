@@ -56,7 +56,7 @@ Pour ceux qui hébergent sur le site web, cela sera `archipelago.gg:<port>`, où
   multiworld auquel vous vous connectez.
 * Verifier que vous n'utilisez aucune triche Dolphin ou que des codes de triches sont activés. Certains codes peut interférer de manière imprévue
   avec l'émulation et rendre la résolution des problèmes compliquées.
-* Vérifiez que `Enable Emulated Memory Size Override` dans Dolphin (situé sous `Options` > `Configuration` > `Advanced`) est
+* Vérifiez que `Modifier la taille de la mémoire émulée` dans Dolphin (situé sous `Options` > `Configuration` > `Avancé`) est
   **désactivé**.
 * Si le client ne peut pas se connecter à Dolphin, Vérifier que Dolphin est situé sur le même disque qu'Archipelago. 
   D'après certaines informations, avoir Dolphin sur un disque dur externe cause des problèmes de connexion.
