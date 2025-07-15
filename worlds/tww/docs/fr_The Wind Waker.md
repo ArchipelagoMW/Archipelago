@@ -23,7 +23,7 @@ Atteindre et battre Ganondorf en haut de la tour de Ganon. Pour cela, vous aurez
 
 ## A quoi ressemble un objet venant d'un autre monde dans TWW ?
 
-Les objets appartenant aux autres mondes qui ne sont pas TWW sont représentés par la Lettre du père de Komali (La lettre que Médolie vous donne pour la donner à
+Les objets appartenant aux autres mondes qui ne sont pas TWW sont représentés par la Lettre de Père (la lettre que Médolie vous donne pour la donner à
 Komali), un objet inutilisé dans le randomiseur.
 
 ## Que se passe-t-il quand un joueur reçoit un objet ?
