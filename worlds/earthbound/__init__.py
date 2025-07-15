@@ -110,6 +110,7 @@ class EarthBoundWorld(World):
         self.get_all_spheres = threading.Event()
         self.boss_list: List[str] = []
         self.starting_region = int
+        self.dungeon_connections = {}
 
         self.common_items = [
             "Cookie",
