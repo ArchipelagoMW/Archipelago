@@ -34,7 +34,7 @@ Le fichier APTWW doit être nommé `P#_<nom>_XXXXX.aptww`, où `#` est l'identif
 Une fois que vous êtes prêt, suivez ces étapes pour vous connecter à la salle:
 1. Lancer le build AP du Randomizer. Si c'est la première fois que vous ouvrez le randomizer, vous aurez besoin d'indiquer le chemin vers votre ISO de The Wind Waker et le dossier de sortie pour l'ISO randomisé. Ceux-ci seront sauvegardé pour la prochaine fois que vous ouvrez le programme.
 2. Modifier n'importe quel cosmétique comme vous le voulez avec les ajustements désirés ainsi que la personnalisation de votre personnage desiré.
-3. Pour le fichier APTWW, Naviguer et localiser le chemin du fichier.
+3. Pour le fichier APTWW, naviguer et localiser le chemin du fichier.
 4. Appuyer sur `Randomize` en bas à droite. Cela va randomiser et mettre l'ISO dans le dossier de sortie que vous avez renseigné. Le fichier sera nommé `TWW AP_YYYYY_P# (<nom>).iso`, où `YYYYY` est le numéro de votre seed, `#` est l'identifiant de votre joueur, et `<nom>` est le nom de votre joueur(nom de slot). Veuillez vérifier que ces valeurs sont correctes pour votre multiworld.
 5. Ouvrez Dolphin et utilisez le pour ouvrir l'iso randomisé.
 6. Lancer `ArchipelagoLauncher.exe` (sans le `.exe` sur Linux) et choisissez `The Wind Waker Client`, cela va lancer le client texte. 
