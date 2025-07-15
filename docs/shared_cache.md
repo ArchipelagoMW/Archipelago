@@ -9,7 +9,7 @@ It can be found at the User Cache Directory for appname `Archipelago` in the `Ca
 The Common Cache `common.json` can be used to store any generic data that is expected to be shared across programs
 for the same User.
 
-* `uuid`: A UUID identifier used to identify clients as from the same user/machine, to be sent is the Connect packet
+* `uuid`: A UUID identifier used to identify clients as from the same user/machine, to be sent in the Connect packet
 
 ## Data Package Cache
 
