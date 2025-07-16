@@ -1,4 +1,4 @@
-# Guide de mise en place de l'Archipelago de The Wind Waker traduit en français par mobby45
+# Guide de mise en place de l'Archipelago de The Wind Waker
 
 Bienvenue dans l'Archipelago The Wind Waker ! 
 Ce guide vous aidera à mettre en place le randomiser et à jouer à votre premier multiworld.
