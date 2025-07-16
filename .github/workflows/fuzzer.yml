@@ -1,0 +1,17 @@
+name: Fuzz APWorld
+on:
+  push:
+    branches: [medievil, future/*, ci]
+  pull_request:
+    branches: [medievil, future/*]
+
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Eijebong/ap-actions/fuzz@main
+        with:
+          apworld-path: worlds/medievil
+          ap-version: '0.6.2'
+          python-version: '3.12'
