@@ -41,6 +41,7 @@ class BizHawkClientCommandProcessor(ClientCommandProcessor):
 
 class BizHawkClientContext(CommonContext):
     command_processor = BizHawkClientCommandProcessor
+    server_seed_name: str | None = None
     auth_status: AuthStatus
     password_requested: bool
     client_handler: BizHawkClient | None
@@ -68,6 +69,8 @@ class BizHawkClientContext(CommonContext):
         if cmd == "Connected":
             self.slot_data = args.get("slot_data", None)
             self.auth_status = AuthStatus.AUTHENTICATED
+        elif cmd == "RoomInfo":
+            self.server_seed_name = args.get("seed_name", None)
 
         if self.client_handler is not None:
             self.client_handler.on_package(self, cmd, args)
@@ -100,6 +103,7 @@ class BizHawkClientContext(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool=False):
         self.auth_status = AuthStatus.NOT_AUTHENTICATED
+        self.server_seed_name = None
         await super().disconnect(allow_autoreconnect)
 
 
@@ -272,6 +276,6 @@ def launch(*launch_args: str) -> None:
 
     Utils.init_logging("BizHawkClient", exception_logger="Client")
     import colorama
-    colorama.init()
+    colorama.just_fix_windows_console()
     asyncio.run(main())
     colorama.deinit()

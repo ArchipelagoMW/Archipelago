@@ -150,7 +150,8 @@ base_game = BaseGameContentPack(
         Seed.coffee_starter: (CustomRuleSource(lambda logic: logic.traveling_merchant.has_days(3) & logic.monster.can_kill_many(Monster.dust_sprite)),),
         Seed.coffee: (HarvestCropSource(seed=Seed.coffee_starter, seasons=(Season.spring, Season.summer,)),),
 
-        Vegetable.tea_leaves: (CustomRuleSource(lambda logic: logic.has(Sapling.tea) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
+        Vegetable.tea_leaves: (
+        CustomRuleSource(lambda logic: logic.has(WildSeeds.tea_sapling) & logic.time.has_lived_months(2) & logic.season.has_any_not_winter()),),
     },
     artisan_good_sources={
         Beverage.beer: (MachineSource(item=Vegetable.wheat, machine=Machine.keg),),

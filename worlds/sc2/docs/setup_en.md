@@ -41,6 +41,7 @@ Remember the name you enter in the options page or in the yaml file, you'll need
 Check out [Creating a YAML](/tutorial/Archipelago/setup/en#creating-a-yaml) for more game-agnostic information.
 
 ### Common yaml questions
+
 #### How do I know I set my yaml up correctly?
 
 The simplest way to check is to use the website [validator](/check). 
