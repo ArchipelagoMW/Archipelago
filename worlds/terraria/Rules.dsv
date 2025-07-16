@@ -151,7 +151,7 @@ Magma Stone;
 // Evil
 Smashing, Poppet!;                  Achievement;
 Arms Dealer;                        Npc;
-Leading Landlord;                   Achievement;                                Nurse & Arms Dealer; // The logic is way more complex, but that doesn't affect anything
+Leading Landlord;                   Achievement | Not Getfixedboi;              Nurse & Arms Dealer; // The logic is way more complex, but that doesn't affect anything
 Completely Awesome;                 Achievement;                                Arms Dealer;
 Illegal Gun Parts;                  ;                                           Arms Dealer | Flamethrower;
 
