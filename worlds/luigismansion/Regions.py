@@ -1,6 +1,5 @@
 from typing import Optional, Callable, TYPE_CHECKING
 
-from BaseClasses import MultiWorld
 from . import Rules
 
 if TYPE_CHECKING:
