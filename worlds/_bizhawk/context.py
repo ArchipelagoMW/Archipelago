@@ -238,6 +238,7 @@ def _patch_and_run_game(patch_file: str):
         return metadata
     except Exception as exc:
         logger.exception(exc)
+        Utils.messagebox("Error Patching Game", str(exc), True)
         return {}
 
 

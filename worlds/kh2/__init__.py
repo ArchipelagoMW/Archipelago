@@ -3,7 +3,7 @@ from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fast_fill
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
@@ -17,7 +17,7 @@ from .Subclasses import KH2Item
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="KH2Client")
+    launch_component(launch, name="KH2Client")
 
 
 components.append(Component("KH2 Client", "KH2Client", func=launch_client, component_type=Type.CLIENT))

@@ -378,13 +378,14 @@ def randomize_entrances(
                     and world.multiworld.has_beaten_game(er_state.collection_state, world.player):
                 # ensure that we have enough locations to place our progression
                 accessible_location_count = 0
-                prog_item_count = sum(er_state.collection_state.prog_items[world.player].values())
+                prog_item_count = len([item for item in world.multiworld.itempool if item.advancement and item.player == world.player])
                 # short-circuit location checking in this case
                 if prog_item_count == 0:
                     return True
                 for region in er_state.placed_regions:
                     for loc in region.locations:
-                        if loc.can_reach(er_state.collection_state):
+                        if not loc.item and loc.can_reach(er_state.collection_state):
+                            # don't count locations with preplaced items
                             accessible_location_count += 1
                             if accessible_location_count >= prog_item_count:
                                 perform_validity_check = False
