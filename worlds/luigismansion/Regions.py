@@ -1,6 +1,8 @@
 from typing import Optional, Callable, TYPE_CHECKING
 
+from BaseClasses import MultiWorld
 from . import Rules
+
 if TYPE_CHECKING:
     from . import Rules, LMWorld
 
@@ -193,7 +195,7 @@ def set_ghost_type(world: "LMWorld", ghost_list: dict):
 
 
 def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = None,
-            doorid: Optional[int] = None, rule: Optional[Callable] = None, one_way: bool = False):
+            doorid: Optional[int] = None, rule: Optional[Callable] = None, one_way: bool = False, required_element: Optional[str] = ""):
     player = world.player
 
     if world.open_doors.get(doorid) == 0:
@@ -208,6 +210,31 @@ def lmconnect(world: "LMWorld", source: str, target: str, key: Optional[str] = N
     source_region.connect(target_region, rule=rule)
     if not one_way:
         target_region.connect(source_region, rule=rule)
+
+    if required_element == "Fire":
+        for fregion in Rules.FIRE_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.multiworld.get_region(fregion,world.player),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.multiworld.get_region(fregion, world.player),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
+    elif required_element == "Ice":
+        for iregion in Rules.ICE_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.multiworld.get_region(iregion,world.player),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.multiworld.get_region(iregion, world.player),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
+    elif required_element == "Water":
+        for wregion in Rules.WATER_SPIRIT_SPOT:
+            world.multiworld.register_indirect_condition(world.multiworld.get_region(wregion,world.player),
+                                                         world.multiworld.get_entrance(f"{source_region.name} -> {target_region.name}", world.player))
+            if not one_way:
+                world.multiworld.register_indirect_condition(world.multiworld.get_region(wregion, world.player),
+                                                             world.multiworld.get_entrance(
+                                                                 f"{target_region.name} -> {source_region.name}", world.player))
 
 
 def connect_regions(world: "LMWorld"):
@@ -238,9 +265,9 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Ballroom", "Storage Room", "Storage Room Key", 16)
     lmconnect(world, "Dining Room", "Kitchen", "Kitchen Key", 11)
     lmconnect(world, "Kitchen", "Boneyard", "Boneyard Key", 10,
-            lambda state: Rules.can_fst_water(state, world.player))
+            lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "Boneyard", "Graveyard",
-            rule=lambda state: Rules.can_fst_water(state, world.player))
+            rule=lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "Billiards Room", "Projection Room", "Projection Room Key", 18)
     lmconnect(world, "Fortune-Teller's Room", "Mirror Room", "Mirror Room Key", 5)
     lmconnect(world, "Laundry Room", "Butler's Room", "Butler's Room Key", 1)
@@ -248,7 +275,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "Courtyard", "The Well")
     lmconnect(world, "Rec Room", "2F Stairwell", "South Rec Room Key", 24)
     lmconnect(world, "2F Stairwell", "Tea Room", "Tea Room Key", 47,
-            lambda state: Rules.can_fst_water(state, world.player))
+            lambda state: Rules.can_fst_water(state, world.player), required_element="Water")
     lmconnect(world, "2F Stairwell", "2F Rear Hallway", "Upper 2F Stairwell Key", 75)
     lmconnect(world, "2F Rear Hallway", "2F Bathroom", "2F Bathroom Key", 48)
     lmconnect(world, "2F Rear Hallway", "2F Washroom", "2F Washroom Key", 45)
@@ -257,7 +284,7 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "2F Rear Hallway", "Sitting Room", "Sitting Room Key", 29)
     lmconnect(world, "2F Rear Hallway", "Safari Room", "Safari Room Key", 56)
     lmconnect(world, "Astral Hall", "Observatory", "Observatory Key", 40,
-            lambda state: Rules.can_fst_fire(state, world.player))
+            lambda state: Rules.can_fst_fire(state, world.player), required_element="Fire")
     lmconnect(world, "Sitting Room", "Guest Room", "Guest Room Key", 30)
     lmconnect(world, "Safari Room", "East Attic Hallway", "East Attic Hallway Key", 55)
     lmconnect(world, "East Attic Hallway", "Artist's Studio", "Artist's Studio Key", 63)
