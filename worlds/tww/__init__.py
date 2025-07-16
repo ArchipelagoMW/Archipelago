@@ -83,7 +83,7 @@ class TWWWeb(WebWorld):
     The web interface includes the setup guide and the options page for generating YAMLs.
     """
 
-    tutorials = [
+        tutorials = [
         Tutorial(
             "Multiworld Setup Guide",
             "A guide to setting up the Archipelago The Wind Waker software on your computer.",
@@ -91,6 +91,14 @@ class TWWWeb(WebWorld):
             "setup_en.md",
             "setup/en",
             ["tanjo3", "Lunix"],
+        ),
+        Tutorial(
+            "Multiworld Setup Guide",
+            "Un guide pour mettre en place l'Archipelago The Wind Waker sur votre ordinateur.",
+            "Français",
+            "setup_fr.md",
+            "setup/fr",
+            ["mobby45"]
         )
     ]
     theme = "ocean"
