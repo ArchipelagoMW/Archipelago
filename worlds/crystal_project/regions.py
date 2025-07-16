@@ -235,7 +235,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     ANCIENT_RESERVOIR: lambda state: logic.has_swimming(state),
                     SALMON_PASS: lambda state: logic.has_swimming(state),
                     GREENSHIRE_REPRISE: lambda state: logic.has_swimming(state) or options.obscureRoutes.value == options.obscureRoutes.option_true,
-                    PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state),
+                    PROVING_MEADOWS: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
                     LAKE_DELENDE: lambda state: logic.has_vertical_movement(state) or options.obscureRoutes.value == options.obscureRoutes.option_true})
     fancy_add_exits(world, MERCURY_SHRINE, [DELENDE, SEASIDE_CLIFFS, BEAURIOR_VOLCANO],
                     {BEAURIOR_VOLCANO: lambda state: logic.has_vertical_movement(state)})
