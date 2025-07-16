@@ -5,6 +5,7 @@ from typing import TextIO, Dict
 from BaseClasses import CollectionState, Tutorial, MultiWorld
 from entrance_rando import ERPlacementState
 from worlds.AutoWorld import World, WebWorld
+from .component import setup_candy_box_2_component
 from .expected_client_version import EXPECTED_CLIENT_VERSION
 from .locations import location_descriptions, locations, CandyBox2LocationName
 from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
@@ -171,3 +172,5 @@ class CandyBox2World(World):
                 er_hint_data[location.address] = entrance_friendly_names[entrance]
 
         hint_data[self.player] = er_hint_data
+
+setup_candy_box_2_component()
