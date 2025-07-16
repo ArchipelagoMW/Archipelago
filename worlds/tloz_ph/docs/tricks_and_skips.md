@@ -44,6 +44,9 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
   - [With boomerang](https://www.youtube.com/watch?v=2DAUMNNQNhw) (Glitched Logic)
 - B1 Boomerang Skip with Spirit of Courage (Not Implemented)
 
+## Nyave's Ship
+- Kill miblins with barrels (Hard Logic)
+
 ## Temple of Wind
 - [Boss key early](https://www.youtube.com/watch?v=16hl9_mOLds) (not implemented)
 - [B1 out of bounds](https://www.youtube.com/watch?v=ertGqXyGL-c) (doesn't effect logic)
