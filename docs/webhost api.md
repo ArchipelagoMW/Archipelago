@@ -21,10 +21,6 @@ Current endpoints:
     - [`/get_seeds`](#getseeds)
 
 
-## UUID vs SUUID
-Currently, the server reports back the item's `UUID` (Universally Unique Identifier). The item's `UUID` needs to be converted to a `base64 UUID` (nicknamed a `ShortUUID` and refered to as `SUUID` in the remainder of this document) that are URL safe in order to be queried via API endpoints.
-- [PR 4944](https://github.com/ArchipelagoMW/Archipelago/pull/4944) is in progress to convert API returns into SUUIDs
-
 ## Datapackage Endpoints
 These endpoints are used by applications to acquire a room's datapackage, and validate that they have the correct datapackage for use. Datapackages normally include, item IDs, location IDs, and name groupings, for a given room, and are essential for mapping IDs received from Archipelago to their correct items or locations.
 
@@ -185,7 +181,7 @@ Endpoints to fetch information of the active WebHost room with the supplied room
 ### `/room_status/<suuid:room_id>`  
 <a name="roomstatus"></a>
 Will provide a dict of room data with the following keys:
-- Tracker UUID (`tracker`)
+- Tracker SUUID (`tracker`)
 - A list of players (`players`)
     - Each item containing a list with the Slot name and Game
 - Last known hosted port (`last_port`)
@@ -255,13 +251,13 @@ User endpoints can get room and seed details from the current session tokens (co
 <a name="getrooms"></a>
 Retreives a list of all rooms currently owned by the session token.  
 Each list item will contain a dict with the room's details:
-- Room UUID (`room_id`)
-- Seed UUID (`seed_id`)
+- Room SUUID (`room_id`)
+- Seed SUUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - Last activity timestamp (`last_activity`)
 - Last known AP port (`last_port`)
 - Room timeout counter in seconds (`timeout`)
-- Room tracker UUID (`tracker`)
+- Room tracker SUUID (`tracker`)
 
 Example:
 ```
@@ -291,7 +287,7 @@ Example:
 <a name="getseeds"></a>
 Retreives a list of all seeds currently owned by the session token.  
 Each item in the list will contain a dict with the seed's details:
-- Seed UUID (`seed_id`)
+- Seed SUUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - A list of player slots (`players`)
     - Each item in the list will contain a list of the slot name and game
