@@ -1315,6 +1315,7 @@ class CommonOptions(metaclass=OptionsMetaProperty):
         will be returned as a sorted list.
         """
         assert option_names, "options.as_dict() was used without any option names."
+        assert len(option_names) < len(self.__class__.type_hints), "Specify only options you need."
         option_results = {}
         for option_name in option_names:
             if option_name not in type(self).type_hints:
