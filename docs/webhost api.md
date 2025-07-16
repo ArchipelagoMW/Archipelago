@@ -1,7 +1,6 @@
 # API Guide
 
-Archipelago has a rudimentary API that can be queried by endpoints.
-The API is a work-in-progress and should be improved over time.
+Archipelago has a rudimentary API that can be queried by endpoints. The API is a work-in-progress and should be improved over time.
 
 The following API requests are formatted as: `https://<Archipelago URL>/api/<endpoint>`
 
@@ -22,14 +21,12 @@ Current endpoints:
     - [`/get_seeds`](#getseeds)
 
 
-### UUID vs SUUID
-Currently, the server reports back the item's `UUID` (Universally Unique Identifier).  
-The item's `UUID` needs to be converted to a `base64 UUID` (nicknamed a `ShortUUID` and refered to as `SUUID` in the remainder of this document) that are URL safe in order to be queried via API endpoints.
+## UUID vs SUUID
+Currently, the server reports back the item's `UUID` (Universally Unique Identifier). The item's `UUID` needs to be converted to a `base64 UUID` (nicknamed a `ShortUUID` and refered to as `SUUID` in the remainder of this document) that are URL safe in order to be queried via API endpoints.
 - [PR 4944](https://github.com/ArchipelagoMW/Archipelago/pull/4944) is in progress to convert API returns into SUUIDs
 
 ## Datapackage Endpoints
-These endpoints are used by applications to acquire and validate that they have a current datapackage for game data.   
-Such as item and location IDs, or name groupings.
+These endpoints are used by applications to acquire a room's datapackage, and validate that they have the correct datapackage for use. Datapackages normally include, item IDs, location IDs, and name groupings, for a given room, and are essential for mapping IDs received from Archipelago to their correct items or locations.
 
 ### `/datapackage`
 <a name="datapackage"></a>
@@ -136,8 +133,8 @@ weights={"weights": data}
 req = requests.post("https://archipelago.gg/api/generate", json=weights)
 ```
 
-### Generation Response:
-#### Successful Generation:
+#### Generation Response:
+##### Successful Generation:
 Upon successful generation, you'll be sent a JSON dict response detailing the generation:
 - The UUID of the generation `detail`
 - The SUUID of the generation `encoded`
@@ -156,7 +153,7 @@ Example:
 }
 ```
 
-#### Failed Generation:
+##### Failed Generation:
 
 Upon failed generation, you'll be returned a single key-value pair. The key will always be `text`  
 The value will give you a hint as to what may have gone wrong.
