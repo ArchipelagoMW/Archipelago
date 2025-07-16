@@ -159,7 +159,6 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.game[self.player] = self.game
         self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
-        self.multiworld.state = CollectionState(self.multiworld)
         random.seed(self.multiworld.seed)
         self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
@@ -168,6 +167,7 @@ class WorldTestBase(unittest.TestCase):
                 1: option.from_any(self.options.get(name, option.default))
             })
         self.multiworld.set_options(args)
+        self.multiworld.state = CollectionState(self.multiworld)
         self.world = self.multiworld.worlds[self.player]
         for step in gen_steps:
             call_all(self.multiworld, step)
