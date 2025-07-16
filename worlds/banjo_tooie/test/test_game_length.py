@@ -1,13 +1,13 @@
-from ..Options import GameLength
+from ..Options import WorldRequirements
 from ..Names import itemName
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 from math import ceil
 
-class GameLengthTest(BanjoTooieTestBase):
+class WorldRequirementTest(BanjoTooieTestBase):
     expected_world_costs = [1, 4, 8, 14, 20, 28, 36, 45, 55]
     def test_check_world_costs(self) -> None:
-        assert list(self.world.randomize_worlds.values()) == self.expected_world_costs
+        assert list(self.world.world_requirements.values()) == self.expected_world_costs
 
     def test_jiggies(self) -> None:
         expected_progression_jiggies = max(self.expected_world_costs)
@@ -22,154 +22,154 @@ class GameLengthTest(BanjoTooieTestBase):
                  == expected_useful_jiggies
 
 
-class GameLengthMinTest(GameLengthTest):
+class WorldRequirementMinTest(WorldRequirementTest):
     expected_world_costs = [1, 1, 1, 1, 1, 1, 1, 1, 1]
     options = {
-        "game_length": GameLength.option_custom,
+        "world_requirements": WorldRequirements.option_custom,
         "custom_worlds": "1,1,1,1,1,1,1,1,1"
     }
 
-class GameLengthQuickTest(GameLengthTest):
+class WorldRequirementQuickTest(WorldRequirementTest):
     expected_world_costs = [1,3,6,10,15,21,28,35,44]
     options = {
-        "game_length": GameLength.option_quick
+        "world_requirements": WorldRequirements.option_quick
     }
 
-class GameLengthNormalTest(GameLengthTest):
+class WorldRequirementNormalTest(WorldRequirementTest):
     expected_world_costs = [1,4,8,14,20,28,36,45,55]
     options = {
-        "game_length": GameLength.option_normal
+        "world_requirements": WorldRequirements.option_normal
     }
 
-class GameLengthLongTest(GameLengthTest):
+class WorldRequirementLongTest(WorldRequirementTest):
     expected_world_costs = [1,8,16,25,34,43,52,60,70]
     options = {
-        "game_length": GameLength.option_long
+        "world_requirements": WorldRequirements.option_long
     }
 
-class GameLengthMaxTest(GameLengthTest):
+class WorldRequirementMaxTest(WorldRequirementTest):
     expected_world_costs = [1,10,20,30,50,60,70,80,90]
     options = {
-        "game_length": GameLength.option_custom,
+        "world_requirements": WorldRequirements.option_custom,
         "custom_worlds": "1,10,20,30,50,60,70,80,90"
     }
 
-class GameLengthMinIntendedTest(GameLengthMinTest, IntendedLogic):
+class WorldRequirementMinIntendedTest(WorldRequirementMinTest, IntendedLogic):
     options = {
-        **GameLengthMinTest.options,
+        **WorldRequirementMinTest.options,
         **IntendedLogic.options
     }
 
-class GameLengthMinEasyTricksTest(GameLengthMinTest, EasyTricksLogic):
+class WorldRequirementMinEasyTricksTest(WorldRequirementMinTest, EasyTricksLogic):
     options = {
-        **GameLengthMinTest.options,
+        **WorldRequirementMinTest.options,
         **EasyTricksLogic.options
     }
 
-class GameLengthMinHardTricksTest(GameLengthMinTest, HardTricksLogic):
+class WorldRequirementMinHardTricksTest(WorldRequirementMinTest, HardTricksLogic):
     options = {
-        **GameLengthMinTest.options,
+        **WorldRequirementMinTest.options,
         **HardTricksLogic.options
     }
 
-class GameLengthMinGlitchesTest(GameLengthMinTest, GlitchesLogic):
+class WorldRequirementMinGlitchesTest(WorldRequirementMinTest, GlitchesLogic):
     options = {
-        **GameLengthMinTest.options,
+        **WorldRequirementMinTest.options,
         **GlitchesLogic.options
     }
 
-class GameLengthQuickIntendedTest(GameLengthQuickTest, IntendedLogic):
+class WorldRequirementQuickIntendedTest(WorldRequirementQuickTest, IntendedLogic):
     options = {
-        **GameLengthQuickTest.options,
+        **WorldRequirementQuickTest.options,
         **IntendedLogic.options
     }
 
-class GameLengthQuickEasyTricksTest(GameLengthQuickTest, EasyTricksLogic):
+class WorldRequirementQuickEasyTricksTest(WorldRequirementQuickTest, EasyTricksLogic):
     options = {
-        **GameLengthQuickTest.options,
+        **WorldRequirementQuickTest.options,
         **EasyTricksLogic.options
     }
 
-class GameLengthQuickHardTricksTest(GameLengthQuickTest, HardTricksLogic):
+class WorldRequirementQuickHardTricksTest(WorldRequirementQuickTest, HardTricksLogic):
     options = {
-        **GameLengthQuickTest.options,
+        **WorldRequirementQuickTest.options,
         **HardTricksLogic.options
     }
 
-class GameLengthQuickGlitchesTest(GameLengthQuickTest, GlitchesLogic):
+class WorldRequirementQuickGlitchesTest(WorldRequirementQuickTest, GlitchesLogic):
     options = {
-        **GameLengthQuickTest.options,
+        **WorldRequirementQuickTest.options,
         **GlitchesLogic.options
     }
 
-class GameLengthNormalIntendedTest(GameLengthNormalTest, IntendedLogic):
+class WorldRequirementNormalIntendedTest(WorldRequirementNormalTest, IntendedLogic):
     options = {
-        **GameLengthNormalTest.options,
+        **WorldRequirementNormalTest.options,
         **IntendedLogic.options
     }
 
-class GameLengthNormalEasyTricksTest(GameLengthNormalTest, EasyTricksLogic):
+class WorldRequirementNormalEasyTricksTest(WorldRequirementNormalTest, EasyTricksLogic):
     options = {
-        **GameLengthNormalTest.options,
+        **WorldRequirementNormalTest.options,
         **EasyTricksLogic.options
     }
 
-class GameLengthNormalHardTricksTest(GameLengthNormalTest, HardTricksLogic):
+class WorldRequirementNormalHardTricksTest(WorldRequirementNormalTest, HardTricksLogic):
     options = {
-        **GameLengthNormalTest.options,
+        **WorldRequirementNormalTest.options,
         **HardTricksLogic.options
     }
 
-class GameLengthNormalGlitchesTest(GameLengthNormalTest, GlitchesLogic):
+class WorldRequirementNormalGlitchesTest(WorldRequirementNormalTest, GlitchesLogic):
     options = {
-        **GameLengthNormalTest.options,
+        **WorldRequirementNormalTest.options,
         **GlitchesLogic.options
     }
 
-class GameLengthLongIntendedTest(GameLengthLongTest, IntendedLogic):
+class WorldRequirementLongIntendedTest(WorldRequirementLongTest, IntendedLogic):
     options = {
-        **GameLengthLongTest.options,
+        **WorldRequirementLongTest.options,
         **IntendedLogic.options
     }
 
-class GameLengthLongEasyTricksTest(GameLengthLongTest, EasyTricksLogic):
+class WorldRequirementLongEasyTricksTest(WorldRequirementLongTest, EasyTricksLogic):
     options = {
-        **GameLengthLongTest.options,
+        **WorldRequirementLongTest.options,
         **EasyTricksLogic.options
     }
 
-class GameLengthLongHardTricksTest(GameLengthLongTest, HardTricksLogic):
+class WorldRequirementLongHardTricksTest(WorldRequirementLongTest, HardTricksLogic):
     options = {
-        **GameLengthLongTest.options,
+        **WorldRequirementLongTest.options,
         **HardTricksLogic.options
     }
 
-class GameLengthLongGlitchesTest(GameLengthLongTest, GlitchesLogic):
+class WorldRequirementLongGlitchesTest(WorldRequirementLongTest, GlitchesLogic):
     options = {
-        **GameLengthLongTest.options,
+        **WorldRequirementLongTest.options,
         **GlitchesLogic.options
     }
 
-class GameLengthMaxIntendedTest(GameLengthMaxTest, IntendedLogic):
+class WorldRequirementMaxIntendedTest(WorldRequirementMaxTest, IntendedLogic):
     options = {
-        **GameLengthMaxTest.options,
+        **WorldRequirementMaxTest.options,
         **IntendedLogic.options
     }
 
-class GameLengthMaxEasyTricksTest(GameLengthMaxTest, EasyTricksLogic):
+class WorldRequirementMaxEasyTricksTest(WorldRequirementMaxTest, EasyTricksLogic):
     options = {
-        **GameLengthMaxTest.options,
+        **WorldRequirementMaxTest.options,
         **EasyTricksLogic.options
     }
 
-class GameLengthMaxHardTricksTest(GameLengthMaxTest, HardTricksLogic):
+class WorldRequirementMaxHardTricksTest(WorldRequirementMaxTest, HardTricksLogic):
     options = {
-        **GameLengthMaxTest.options,
+        **WorldRequirementMaxTest.options,
         **HardTricksLogic.options
     }
 
-class GameLengthMaxGlitchesTest(GameLengthMaxTest, GlitchesLogic):
+class WorldRequirementMaxGlitchesTest(WorldRequirementMaxTest, GlitchesLogic):
     options = {
-        **GameLengthMaxTest.options,
+        **WorldRequirementMaxTest.options,
         **GlitchesLogic.options
     }

@@ -1,7 +1,5 @@
-from ..Names import itemName
 from ..Options import RandomizeWarpPads
 from ..Items import warp_pad_table
-from ..Locations import all_location_table
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
@@ -15,6 +13,10 @@ class TestRandomizedWarpPads(BanjoTooieTestBase):
         for warp_pad_name in warp_pad_table.keys():
             assert warp_pad_name in item_pool_names
 
+    def test_locations(self) -> None:
+        world_location_names = [location.name for location in self.world.get_locations()]
+        for warp_pad_data in warp_pad_table.values():
+            assert warp_pad_data.default_location in world_location_names
 
 
 class TestVanillaWarpPads(BanjoTooieTestBase):
@@ -27,17 +29,10 @@ class TestVanillaWarpPads(BanjoTooieTestBase):
         for warp_pad_name in warp_pad_table.keys():
             assert warp_pad_name not in item_pool_names
 
-    def test_prefills(self) -> None:
-        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()\
-                                   if location_data.group == "Warp Pads"]
-        vanilla_locations = [location for location in self.world.get_locations()\
-                             if location.name in vanilla_locations_names]
-
-        warp_pad_names = warp_pad_table.keys()
-
-        assert len(vanilla_locations) == 39
-        for location in vanilla_locations:
-            assert location.item.name in warp_pad_names
+    def test_locations(self) -> None:
+        world_location_names = [location.name for location in self.world.get_locations()]
+        for warp_pad_data in warp_pad_table.values():
+            assert warp_pad_data.default_location not in world_location_names
 
 class TestRandomizedWarpPadsIntended(TestRandomizedWarpPads, IntendedLogic):
     options = {

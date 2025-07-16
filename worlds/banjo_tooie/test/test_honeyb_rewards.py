@@ -1,5 +1,5 @@
-from ..Names import itemName, locationName
-from ..Options import EnableHoneyBRewards, RandomizeBKMoveList
+from ..Names import locationName
+from ..Options import EnableHoneyBRewards
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 

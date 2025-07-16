@@ -40,6 +40,10 @@ La [page d'options pour ce jeu](../player-options) contient toutes les options p
 - Le rugissement du T-rex
 - Les nids
 - Les pièges
+- Les silos de l'overworld
+- Les plate-formes de téléportation
+- Les billets du chapiteau de Witchyworld
+- Les reliques vertes de Targitzan
 
 ## Quand le joueur reçoit un item, qu'est-ce qui se passe ?
 

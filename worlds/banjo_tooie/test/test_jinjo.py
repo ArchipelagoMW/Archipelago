@@ -7,7 +7,7 @@ from ..Names import locationName, itemName
 class JinjosEnabled(BanjoTooieTestBase):
     options = {
         "randomize_jinjos": RandomizeJinjos.option_true,
-        "game_length": "custom",
+        "world_requirements": "custom",
         "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
     }
     def test_item_pool_jinjos(self) -> None:
@@ -30,7 +30,7 @@ class JinjosEnabled(BanjoTooieTestBase):
 class JinjosDisabled(BanjoTooieTestBase):
     options = {
         "randomize_jinjos": RandomizeJinjos.option_false,
-        "game_length": "custom",
+        "world_requirements": "custom",
         "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
     }
     def test_disabled_item_pool(self) -> None:

@@ -1,13 +1,13 @@
 from BaseClasses import ItemClassification
 from worlds.banjo_tooie.Names import locationName
 from ..Names import itemName
-from ..Options import EnableCheatoRewards, RandomizeBKMoveList
+from ..Options import RandomizeCheatoRewards
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
 class TestRandomizedCheatoRewards(BanjoTooieTestBase):
     options = {
-        "cheato_rewards": EnableCheatoRewards.option_true,
+        "cheato_rewards": RandomizeCheatoRewards.option_true,
     }
 
     def test_item_classification(self) -> None:
@@ -29,25 +29,13 @@ class TestRandomizedCheatoRewards(BanjoTooieTestBase):
 
 class TestVanillaCheatoRewards(BanjoTooieTestBase):
     options = {
-        "cheato_rewards": EnableCheatoRewards.option_false,
+        "cheato_rewards": RandomizeCheatoRewards.option_false,
     }
 
     def test_item_classification(self) -> None:
         items = [item for item in self.multiworld.itempool if item.name == itemName.PAGES]
         for item in items:
             assert item.classification == ItemClassification.filler
-
-    def test_locations(self) -> None:
-        location_names = [
-            locationName.CHEATOR1,
-            locationName.CHEATOR2,
-            locationName.CHEATOR3,
-            locationName.CHEATOR4,
-            locationName.CHEATOR5
-        ]
-        world_location_names = [location.name for location in self.world.get_locations()]
-        for name in location_names:
-            assert not name in world_location_names
 
 class TestRandomizedCheatoRewardsIntended(TestRandomizedCheatoRewards, IntendedLogic):
     options = {

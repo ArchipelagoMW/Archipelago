@@ -1,9 +1,14 @@
 from dataclasses import dataclass
-from Options import Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, NamedRange, StartInventoryPool, FreeText
+from typing import List
+from Options import OptionGroup, Toggle, DeathLink, PerGameCommonOptions, Choice, DefaultOnToggle, Range, NamedRange, StartInventoryPool, FreeText
 
 class RandomizeBTMoveList(DefaultOnToggle):
     """Jamjars' & Roysten's Movelist are randomized."""
     display_name = "Randomize Banjo-Tooie Movelist"
+
+class TagLink(Toggle):
+    """When other multiworld games tag/swap characters, you will auto swap with them and vise versa."""
+    display_name = "Tag Link"
 
 class DialogCharacters(Choice):
     """Change the character that announces your obtained moves, worlds, etc."""
@@ -144,17 +149,21 @@ class ProgressiveBeakBuster(Toggle):
     display_name = "Progressive Beak Buster"
 
 class EggsBehaviour(Choice):
-    """Change the way Eggs work. Randomize Moves and Randomize BK Moves are required."""
+    """Change the way Eggs work. Randomize Moves and Randomize BK Moves are required.
+    Start with Blue Eggs: You start with Blue Eggs, and you must find the other 4.
+    Random Starting Egg: You start with one type of egg, and you must find the other 4.
+    Progressive Eggs: You start with blue eggs, and you find items to unlock the others in the vanilla order.
+    Simple Random Start Egg: You start with one type of egg that is not Clockwork Kazooie Eggs, and you must find the other 4."""
     display_name = "Egg Behaviour"
     option_start_with_blue_eggs = 0
     option_random_starting_egg = 1
     option_progressive_eggs = 2
-    option_simple_random_starting_egg = 3 #no clockworks
+    option_simple_random_starting_egg = 3
     default = 0
 
 class ProgressiveShoes(Toggle):
-    """Stilt Stride to Turbo Trainers to Spring Boots to Claw Climber Boots. Randomize Moves and Randomize BK Moves are required."""
-    display_name = "Progressive Kazooie Shoes"
+    """Stilt Stride to Turbo Trainers to Springy Step Shoes to Claw Clamber Boots. Randomize Moves and Randomize BK Moves are required."""
+    display_name = "Progressive Shoes"
 
 class ProgressiveWaterTraining(Choice):
     """Basic: Dive to Double Air to Faster Swimming.
@@ -182,10 +191,13 @@ class ProgressiveBashAttack(Toggle):
     """Ground Rat-a-tat Rap to Breegull Bash. Randomize Stop N Swap and Randomize BK Moves are required"""
     display_name = "Progressive Bash Attack"
 
-class EnableCheatoRewards(DefaultOnToggle):
-    """Cheato rewards you with a cheat and an additional randomized reward.
-    Cheato Pages are set to progression when this setting is enabled."""
-    display_name = "Cheato Rewards"
+class RandomizeCheatoRewards(DefaultOnToggle):
+    """Cheato Rewards are added to the pool."""
+    display_name = "Randomize Cheato Rewards"
+
+class AutoEnableCheats(Toggle):
+    """When Feathers and Eggs cheats are found, only enable them automatically when received."""
+    display_name = "Automatic Cheat Activation"
 
 class RandomizeJinjos(DefaultOnToggle):
     """Jinjos have fled to other worlds. Other players need to return them home."""
@@ -204,12 +216,25 @@ class RandomizeHoneycombs(DefaultOnToggle):
     display_name = "Randomize Honeycombs"
 
 class EnableHoneyBRewards(DefaultOnToggle):
-    """Honey B gives you health and an additional randomized reward."""
-    display_name = "Honey B Rewards"
+    """Health Upgrades are added to the pool."""
+    display_name = "Randomize Honey B Rewards"
+
+class RandomizeGreenRelics(DefaultOnToggle):
+    """Targitzan's Green Relics are randomized."""
+    display_name = "Randomize Green Relics"
+
+class RandomizeBeans(DefaultOnToggle):
+    """CCL Beans are randomized."""
+    display_name = "Randomize Beans"
+
+class RandomizeBigTentTickets(DefaultOnToggle):
+    """Big Top Tickets are randomized."""
+    display_name = "Randomize Big Top Tickets"
 
 class RandomizeGlowbos(DefaultOnToggle):
-    """Glowbos are randomized."""
-    display_name = "Randomize Glowbos"
+    """Mumbo and Humba Magic are in the pool and automatically unlocked when received.
+    When disabled, collecting a Glowbo will give you either a Mumbo or Humba Magic."""
+    display_name = "Randomize Mumbo and Humba Magic"
 
 class RandomizeTrebleClefs(DefaultOnToggle):
     """Treble Clefs are randomized."""
@@ -221,27 +246,25 @@ class RandomizeTrainStationSwitches(Toggle):
 
 class RandomizeChuffyTrain(Toggle):
     """Chuffy is randomized.
-    Once received, you can call Chuffy at any unlocked station without defeating Old King Coal."""
-    display_name = "Chuffy as a Randomized AP Item"
+    Once received, you can call Chuffy at any unlocked station before defeating Old King Coal."""
+    display_name = "Randomize Chuffy"
 
 class RandomizeNotes(Toggle):
     """Note Nests are randomized."""
     display_name = "Randomize Note Nests"
 
 class BassClefNotes(Range):
-    """Convert some 5 notes into Bass Clefs (10 notes). How many notes do you want converted?
-       Be aware that 1 Bass Clef removes two 5 notes and adds an additional Big-O-Pants.
+    """Convert two 5 note nests into Bass Clefs (10 notes), and adds 1 filler per Bass Clef.
        Randomize Notes is required."""
-    display_name = "Bass Clefs (10 notes) Amount"
+    display_name = "Number of Bass Clefs"
     range_start = 0
     range_end = 30
     default = 0
 
 class TrebleclefNotes(Range):
-    """Convert some 5 notes into Treble Clefs (20 notes). How many notes do you want converted?
-       Be aware that 1 Treble Clef removes four 5 notes and adds three additional Big-O-Pants.
+    """Convert four 5 note nests into Treble Clefs (20 notes), and adds 3 per additional Treble Clef.
        Randomize Notes is required."""
-    display_name = "Add additional Treble Clefs (20 notes) Amount"
+    display_name = "Additional Treble Clefs"
     range_start = 0
     range_end = 21
     default = 0
@@ -257,7 +280,7 @@ class MaxTraps(NamedRange):
 
 class RandomizeWorldDinoRoar(Toggle):
     """Baby T-Rex's Roar is lost across the MultiWorld. Other players need to help him learn to ROAR!"""
-    display_name = "Baby T-Rex Roar"
+    display_name = "Randomize Baby T-Rex Roar"
 
 class EnableNestsanity(Toggle):
     """Eggs and feather nests give checks when you collect them for the first time. They behave as regular egg nests after they have been collected."""
@@ -395,8 +418,7 @@ class ExtraCheats(Toggle):
 
 class EasyCanary(DefaultOnToggle):
     """Makes Canary Mary Races much easier."""
-    display_name = "Easy Canary"
-
+    display_name = "Easy Canary Mary"
 
 class Backdoors(Toggle):
     """Opens many one-way switches on game start, allowing for more backdoor access to levels.
@@ -406,17 +428,25 @@ class Backdoors(Toggle):
     George is pre-dropped to make HFP -> JRL more accessible."""
     display_name = "Open Backdoors"
 
+class GIFrontDoor(Toggle):
+    """Opens Grunty's Industries frontdoor without requiring to get in first."""
+    display_name = "Open GI Frontdoor"
+
 class OpenHag1(DefaultOnToggle):
     """HAG 1 boss fight is opened when Cauldron Keep is opened, requiring fewer Jiggies to win."""
-    display_name = "HAG 1 Open"
+    display_name = "Open HAG 1"
 
-class RandomizeWorlds(Toggle):
+class RandomizeWorldOrder(Toggle):
     """Worlds will open in a randomized order. Randomized Moves and Skip Puzzles required."""
-    display_name = "Randomize Worlds"
+    display_name = "Randomize World Order"
 
 class RandomizeWorldZones(Toggle):
-    """World Entrances will warp you to a different world. This does not affect Chuffy."""
+    """The main entrance of each world will warp you to a random world."""
     display_name = "Randomize World Entrances"
+
+class RandomizeBossZones(Toggle):
+    """The entrance of each boss will warp you to a random boss."""
+    display_name = "Randomize Bosses"
 
 class RandomizeStopnSwap(Toggle):
     """Mystery Eggs, their rewards, and the Ice Key are scattered across the MultiWorld."""
@@ -483,19 +513,30 @@ class JinjoFamilyRescueLength(Range):
     range_end = 9
     default = 9
 
+class TokensInPool(Range):
+    """How many Mumbo Tokens are in the pool.
+    If Randomize Signpost are enabled, you are allowed up to 50.
+    If Nestanity is enabled, you are allowed up to 100.
+    If neither are enabled, you are allowed up to 15.
+    Choose a value between 1 and 100."""
+    display_name = "Token Hunt: Mumbo Tokens in Pool"
+    range_start = 1
+    range_end = 100
+    default = 15
+
 class TokenHuntLength(Range):
-    """How many Mumbo Tokens of the 15 hidden throughout the world do you need to find.
-    Choose a value between 1 and 15."""
+    """How many Mumbo Tokens you need to find to beat your game.
+    Choose a value less than or equal to the Mumbo Tokens that you have specified in the pool."""
     display_name = "Token Hunt Length"
     range_start = 1
-    range_end = 15
-    default = 5
+    range_end = 100
+    default = 10
 
-class GameLength(Choice):
+class WorldRequirements(Choice):
     """Choose how quickly the worlds open.
     quick: Worlds open at 1, 3, 6, 10, 15, 21, 28, 36, and 44 Jiggys
     normal: Worlds open at 1, 4, 8, 14, 20, 28, 36, 45, and 55 Jiggys
-    long: Worlds open at 1, 8, 16, 25, 34, 43, 52, 61, and 70 Jiggys
+    long: Worlds open at 1, 8, 16, 25, 34, 43, 52, 60, and 70 Jiggys
     custom: You pick when worlds open
     """
     display_name = "World Requirements"
@@ -506,8 +547,8 @@ class GameLength(Choice):
     option_randomize = 4
     default = 1
 
-class CustomWorlds(FreeText):
-    """Enter a list of jiggy requirements you want for each world unlock. Max values of each world are: 1,20,30,40,50,60,70,80,90.
+class CustomWorldCosts(FreeText):
+    """Enter a list of jiggy requirements you want for each world unlock. Max values of each world are: 1,10,20,30,50,60,70,80,90.
     This option only functions if the World Requirements option is set to custom."""
     display_name = "Custom World Cost List"
     default = "1,4,8,14,20,28,36,45,55"
@@ -522,7 +563,7 @@ class SkipKlungo(Toggle):
 
 class RandomizeSignposts(Toggle):
     "Signposts give items when read."
-    display_name = "Randomize Banjo-Kazooie Movelist"
+    display_name = "Randomize Signposts"
 
 class SignpostHints(Range):
     """Choose how many signpost give a hint when read."""
@@ -581,10 +622,11 @@ class RandomizeSilos(Toggle):
 
 class RandomizeWarpPads(Toggle):
     """Warp Pads give checks when tagging them. They can only be used once you receive the corresponding item to use a warp pad."""
-    display_name = "Randomize Silos"
+    display_name = "Randomize Warp Pads"
 
 @dataclass
 class BanjoTooieOptions(PerGameCommonOptions):
+    tag_link:TagLink
     death_link: DeathLink
 
     logic_type: LogicType
@@ -594,12 +636,14 @@ class BanjoTooieOptions(PerGameCommonOptions):
     minigame_hunt_length: MinigameHuntLength
     boss_hunt_length: BossHuntLength
     jinjo_family_rescue_length: JinjoFamilyRescueLength
+    tokens_in_pool: TokensInPool
     token_hunt_length: TokenHuntLength
 
-    game_length: GameLength
-    custom_worlds:CustomWorlds
 
-    randomize_moves: RandomizeBTMoveList
+    world_requirements: WorldRequirements
+    custom_worlds: CustomWorldCosts
+
+    randomize_bt_moves: RandomizeBTMoveList
     jamjars_silo_costs: JamjarsSiloCosts
     randomize_bk_moves: RandomizeBKMoveList
     egg_behaviour: EggsBehaviour
@@ -619,18 +663,45 @@ class BanjoTooieOptions(PerGameCommonOptions):
     randomize_jinjos: RandomizeJinjos
     randomize_doubloons: RandomizeDoubloons
     randomize_cheato: RandomizeCheatoPages
-    cheato_rewards: EnableCheatoRewards
+    cheato_rewards: RandomizeCheatoRewards
     randomize_honeycombs: RandomizeHoneycombs
     honeyb_rewards: EnableHoneyBRewards
+    randomize_tickets:RandomizeBigTentTickets
+    randomize_green_relics:RandomizeGreenRelics
+    randomize_beans:RandomizeBeans
     randomize_glowbos: RandomizeGlowbos
     randomize_stop_n_swap: RandomizeStopnSwap
     randomize_dino_roar: RandomizeWorldDinoRoar
     nestsanity: EnableNestsanity
     randomize_signposts: RandomizeSignposts
 
+    randomize_stations: RandomizeTrainStationSwitches
+    randomize_chuffy: RandomizeChuffyTrain
+    randomize_warp_pads: RandomizeWarpPads
+    randomize_silos: RandomizeSilos
+    open_silos: OpenSilos
+    skip_puzzles: SkipPuzzles
+    randomize_worlds: RandomizeWorldOrder
+    randomize_world_entrance_loading_zone: RandomizeWorldZones
+    randomize_boss_loading_zone: RandomizeBossZones
+    backdoors: Backdoors
+    open_gi_frontdoor: GIFrontDoor
+
+    signpost_hints: SignpostHints
+    signpost_move_hints: SignpostMoveHints
+    add_signpost_hints_to_ap: AddSignpostHintsToArchipelagoHints
+    hint_clarity: HintClarity
+
+    extra_cheats: ExtraCheats
+    easy_canary: EasyCanary
+    speed_up_minigames: SpeedUpMinigames
+    tower_of_tragedy: TowerOfTragedy
+    skip_klungo: SkipKlungo
+    auto_enable_cheats: AutoEnableCheats
+    jingaling_jiggy: KingJingalingHasJiggy
+
     replace_extra_jiggies: ReplaceExtraJiggies
     replace_extra_notes: ReplaceExtraNotes
-
     extra_jiggies_weight: ExtraJiggiesWeight
     extra_notes_weight: ExtraNotesWeight
     extra_doubloons_weight: ExtraDoubloonsWeight
@@ -645,29 +716,112 @@ class BanjoTooieOptions(PerGameCommonOptions):
     tip_trap_weight: TipTrapWeight
     max_traps: MaxTraps
 
-    randomize_stations: RandomizeTrainStationSwitches
-    randomize_chuffy: RandomizeChuffyTrain
-    randomize_warp_pads: RandomizeWarpPads
-    randomize_silos: RandomizeSilos
-    open_silos: OpenSilos
-    jingaling_jiggy: KingJingalingHasJiggy
-    skip_puzzles: SkipPuzzles
-    randomize_worlds: RandomizeWorlds
-    randomize_world_loading_zone: RandomizeWorldZones
-    backdoors:Backdoors
-
-    extra_cheats: ExtraCheats
-    easy_canary: EasyCanary
-    speed_up_minigames: SpeedUpMinigames
-    tower_of_tragedy: TowerOfTragedy
-    skip_klungo: SkipKlungo
-
-    signpost_hints: SignpostHints
-    signpost_move_hints: SignpostMoveHints
-    add_signpost_hints_to_ap: AddSignpostHintsToArchipelagoHints
-    hint_clarity: HintClarity
-
     dialog_character: DialogCharacters # Keep this at the bottom so that the huge list stays at the bottom of the yaml.
 
     start_inventory_from_pool: StartInventoryPool
 
+bt_option_groups: List[OptionGroup] = [
+    OptionGroup("Victory Condition", [
+        VictoryCondition,
+        OpenHag1,
+        MinigameHuntLength,
+        BossHuntLength,
+        JinjoFamilyRescueLength,
+        TokensInPool,
+        TokenHuntLength,
+    ]),
+    OptionGroup("World Costs", [
+        WorldRequirements,
+        CustomWorldCosts,
+    ]),
+    OptionGroup("Randomized Moves", [
+        RandomizeBKMoveList,
+        RandomizeBTMoveList,
+        JamjarsSiloCosts,
+    ]),
+    OptionGroup("Progressive Moves", [
+        EggsBehaviour,
+        ProgressiveBeakBuster,
+        ProgressiveShoes,
+        ProgressiveWaterTraining,
+        ProgressiveFlight,
+        ProgressiveEggAim,
+        ProgressiveBashAttack,
+    ]),
+
+    OptionGroup("Item Pool", [
+        RandomizeNotes,
+        RandomizeTrebleClefs,
+        TrebleclefNotes,
+        BassClefNotes,
+        RandomizeJinjos,
+        RandomizeDoubloons,
+        RandomizeCheatoPages,
+        RandomizeCheatoRewards,
+        RandomizeHoneycombs,
+        EnableHoneyBRewards,
+        RandomizeBigTentTickets,
+        RandomizeGreenRelics,
+        RandomizeBeans,
+        RandomizeGlowbos,
+        RandomizeStopnSwap,
+        RandomizeWorldDinoRoar,
+        EnableNestsanity,
+        RandomizeSignposts,
+    ]),
+
+    OptionGroup("Overworld and Level Exploration", [
+        RandomizeTrainStationSwitches,
+        RandomizeChuffyTrain,
+        RandomizeWarpPads,
+        RandomizeSilos,
+        OpenSilos,
+        SkipPuzzles,
+        RandomizeWorldOrder,
+        RandomizeWorldZones,
+        RandomizeBossZones,
+        Backdoors,
+        GIFrontDoor,
+    ]),
+
+    OptionGroup("Signpost Hints", [
+        SignpostHints,
+        SignpostMoveHints,
+        HintClarity,
+        AddSignpostHintsToArchipelagoHints,
+    ]),
+
+    OptionGroup("Quality of Life", [
+        EasyCanary,
+        SpeedUpMinigames,
+        TowerOfTragedy,
+        SkipKlungo,
+        AutoEnableCheats,
+        ExtraCheats,
+        KingJingalingHasJiggy,
+    ]),
+
+    # Collapsed by default
+    OptionGroup("Fillers", [
+        ReplaceExtraJiggies,
+        ReplaceExtraNotes,
+        ExtraJiggiesWeight,
+        ExtraNotesWeight,
+        ExtraDoubloonsWeight,
+        EggNestsWeight,
+        FeatherNestsWeight,
+        BigOPantsWeight,
+        GoldenEggsWeight,
+        TripTrapWeight,
+        SlipTrapWeight,
+        TransformTrapWeight,
+        SquishTrapWeight,
+        TipTrapWeight,
+        MaxTraps,
+    ], True),
+
+    # Keep this one at the bottom, to make the huge list stay at the bottom.
+    OptionGroup("Aesthetics", [
+        DialogCharacters
+    ])
+]

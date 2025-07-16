@@ -1,6 +1,5 @@
-from worlds.banjo_tooie.Names import itemName
 from ..Regions import SIGNPOST_REGIONS
-from ..Options import RandomizeBKMoveList, RandomizeSignposts
+from ..Options import RandomizeSignposts
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 

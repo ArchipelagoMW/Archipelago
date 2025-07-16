@@ -290,7 +290,7 @@ def get_worst_location_names(world: World):
         ])
 
     # The 5 most expensive silos
-    if world.options.randomize_moves:
+    if world.options.randomize_bt_moves:
         sorted_silos = [k for k, v in sorted(world.jamjars_siloname_costs.items(), key=lambda item: item[1])]
         for _ in range(5):
             worst_location_names.append(sorted_silos.pop())
@@ -358,7 +358,7 @@ def get_bad_location_names(world: World):
         ])
 
     # The next 5 most expensive silos
-    if world.options.randomize_moves:
+    if world.options.randomize_bt_moves:
         sorted_silos = [k for k, v in sorted(world.jamjars_siloname_costs.items(), key=lambda item: item[1])]
         for _ in range(6, 10):
             bad_location_names.append(sorted_silos.pop())
@@ -381,7 +381,7 @@ def generate_move_hints(world: World, hints: List[Hint]):
 
 def get_move_locations(world: World) -> List[Location]:
     all_moves_names = []
-    if world.options.randomize_moves:
+    if world.options.randomize_bt_moves:
         all_moves_names.extend(moves_table.keys()) # We don't want BT moves to be hinted when they're in the vanilla location.
     all_moves_names.extend(bk_moves_table.keys())
     all_moves_names.extend(progressive_ability_table.keys())

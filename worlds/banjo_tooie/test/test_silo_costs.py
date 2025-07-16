@@ -1,11 +1,11 @@
 from ..Names import locationName, regionName
-from ..Options import JamjarsSiloCosts, RandomizeBTMoveList, RandomizeWorldZones, RandomizeWorlds
+from ..Options import JamjarsSiloCosts, RandomizeBTMoveList, RandomizeWorldZones, RandomizeWorldOrder
 from . import BanjoTooieTestBase
 
 
 class VanillaSiloCostTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "jamjars_silo_costs": JamjarsSiloCosts.option_vanilla
     }
     def test_vanilla_costs(self) -> None:
@@ -39,7 +39,7 @@ class VanillaSiloCostTest(BanjoTooieTestBase):
 
 class ProgressiveSiloCostTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "jamjars_silo_costs": JamjarsSiloCosts.option_progressive
     }
 
@@ -62,7 +62,7 @@ class ProgressiveSiloCostTest(BanjoTooieTestBase):
         }
         previous_silo_cost = 0
 
-        for world_entrance in self.world.randomize_order:
+        for world_entrance in self.world.world_order:
 
             next_silo = world_silo[self.world.loading_zones[world_entrance]]
             if next_silo is None:
@@ -77,34 +77,34 @@ class ProgressiveSiloCostTest(BanjoTooieTestBase):
 class ProgressiveSiloCostVanillaLevelOrderTest(ProgressiveSiloCostTest, VanillaSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
-        "randomize_worlds": RandomizeWorlds.option_false,
-        "randomize_world_loading_zone": RandomizeWorldZones.option_false
+        "randomize_worlds": RandomizeWorldOrder.option_false,
+        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_false
     }
 
 class ProgressiveSiloCostRandomLevelOrderTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
-        "randomize_worlds": RandomizeWorlds.option_true,
-        "randomize_world_loading_zone": RandomizeWorldZones.option_false
+        "randomize_worlds": RandomizeWorldOrder.option_true,
+        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_false
     }
 
 class ProgressiveSiloCostRandomLevelLoadingZoneTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
-        "randomize_worlds": RandomizeWorlds.option_false,
-        "randomize_world_loading_zone": RandomizeWorldZones.option_true
+        "randomize_worlds": RandomizeWorldOrder.option_false,
+        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_true
     }
 
 class ProgressiveSiloCostRandomLevelOrderAndLoadingZoneTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
-        "randomize_worlds": RandomizeWorlds.option_true,
-        "randomize_world_loading_zone": RandomizeWorldZones.option_true
+        "randomize_worlds": RandomizeWorldOrder.option_true,
+        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_true
     }
 
 class RandomSiloCostTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "jamjars_silo_costs": JamjarsSiloCosts.option_randomize
     }
 

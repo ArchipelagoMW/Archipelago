@@ -48,11 +48,7 @@ class TestVanillaClosedSilos(BanjoTooieTestBase):
         vanilla_locations = [location for location in self.world.get_locations()\
                              if location.name in vanilla_locations_names]
 
-        silo_names = silo_table.keys()
-
-        assert len(vanilla_locations) == 7
-        for location in vanilla_locations:
-            assert location.item.name in silo_names
+        assert len(vanilla_locations) == 0
 
 class TestVanillaOpenSilos(BanjoTooieTestBase):
     options = {

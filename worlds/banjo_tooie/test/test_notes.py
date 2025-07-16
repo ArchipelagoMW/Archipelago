@@ -1,4 +1,4 @@
-from ..Names import itemName, locationName
+from ..Names import itemName
 from ..Options import RandomizeNotes
 from .test_logic import EasyTricksLogic, EasyTricksLogicNoBKShuffle, GlitchesLogic, GlitchesLogicNoBKShuffle, HardTricksLogic, HardTricksLogicNoBKShuffle, IntendedLogic, IntendedLogicNoBKShuffle
 from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER

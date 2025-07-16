@@ -5,9 +5,6 @@
 
 -- local RDRAMBase = 0x80000000;
 -- local RDRAMSize = 0x800000;
--- local character_state = 0x136F63;
--- local camera_pointer_pointer = 0x127728;
--- local global_flag_pointer = 0x12C780;
 
 local socket_loaded, socket = pcall(require, "socket")
 if not socket_loaded then
@@ -18,8 +15,8 @@ local json = require('json')
 local math = require('math')
 require('common')
 
-local SCRIPT_VERSION = 4
-local BT_VERSION = "V4.4.2"
+local SCRIPT_VERSION = 5
+local BT_VERSION = "V4.8"
 local PLAYER = ""
 local SEED = 0
 
@@ -43,6 +40,7 @@ local DEBUG_JIGGY = false
 local DEBUG_TREBLE = false
 local DEBUG_NOTES = false
 local DEBUG_HONEY = false
+local DEBUG_HEALTHUPGRADE = false
 local DEBUG_GLOWBO = false
 local DEBUG_ROYSTEN = false
 local DEBUG_CHUFFY = false
@@ -58,6 +56,12 @@ local DEBUG_NESTS = false
 local DEBUG_SIGNPOSTS = false
 local DEBUG_WARPSILOS = false
 local DEBUG_WARPPADS = false
+local DEBUG_BOGGY_KIDS = false
+local DEBUG_ALIEN_KIDS = false
+local DEBUG_SKIVVIES = false
+local DEBUG_MRFIT = false
+
+
 local DEBUGLVL2 = false
 local DEBUGLVL3 = false
 local AP_TIMEOUT_COUNTER = 0
@@ -80,6 +84,10 @@ local TOTAL_TREBLE = 0;
 local TOTAL_PAGES = 0;
 local TOTAL_DOUBLOONS = 0;
 local TOTAL_NOTES = 0;
+local TOTAL_HEALTHUPGRADE = 0;
+local TOTAL_BTTICKETS = 0;
+local TOTAL_GRRELICS = 0;
+local TOTAL_BEANS = 0;
 
 local WHITE_JINJO = 0;
 local ORANGE_JINJO = 0;
@@ -117,6 +125,10 @@ local TH_LENGTH = nil;
 local DEATH_LINK_TRIGGERED = false;
 local DEATH_LINK = false
 
+--------------- TAG LINK ------------------------
+local TAG_LINK_TRIGGERED = false
+local TAG_LINK = false
+
 ---------------- IOH SILO VARS -------------
 local OPEN_SILO = "NONE"
 
@@ -149,7 +161,13 @@ local DEATH_MESSAGES = {
     [11] = {message = "That death just now, I saw coming,\nYour skill issues are rather stunning!"},
     [12] = {message = "Seeing this pathetic display,\nIs serotonin in my day"},
     [13] = {message = "What a selfish thing to do,\nYour friends just died because of you!"},
-    [14] = {message = "You tried something rather stupid,\nI hope no one will try what you did"}
+    [14] = {message = "You tried something rather stupid,\nI hope no one will try what you did"},
+    [15] = {message = "I see your having trouble with this seed,\nits too bad you never learned how to read."},
+    [16] = {message = "You'll label that one unfair, but I found that beat was rare."},
+    [17] = {message = "You were not prepared for trouble, so now my minions will be working on the double."},
+    [18] = {message = "Seeing you trip and fall is rather funny, I get to watch you run out of honey."},
+    [19] = {message = "Welcome bozos to death's door... \nWait, hold on, you're back for more?"},
+    [20] = {message = "Can't believe you died at this stage, \nWhy don't you look elsewhere on your tracker page!"}
 }
 
 local receive_map = { -- [ap_id] = item_id; --  Required for Async Items
@@ -654,6 +672,33 @@ local ASSET_MAP_CHECK = {
         ["SIGNPOSTS"] = {
             "1231509",
             "1231510",
+        },
+        ["GREEN_RELICS"] = {
+            "1231614",
+            "1231615",
+            "1231616",
+            "1231617",
+            "1231618",
+            "1231619",
+            "1231620",
+            "1231621",
+            "1231622",
+            "1231623",
+            "1231624",
+            "1231625",
+            "1231626",
+            "1231627",
+            "1231628",
+            "1231629",
+            "1231630",
+            "1231631",
+            "1231632",
+            "1231633",
+            "1231634",
+            "1231635",
+            "1231636",
+            "1231637",
+            "1231638",
         }
     },
     --GLITTER GULCH MINE
@@ -942,13 +987,23 @@ local ASSET_MAP_CHECK = {
             "1231569",
             "1231570"
         },
-
+        ["BOGGY_KIDS"] = {
+            "1231596",
+            "1231598"
+        },
+        ["BIGTOP_TICKETS"] = {
+            "1231610",
+            "1231611",
+            "1231612",
+            "1231613"
+        }
     },
     [0xEA] = { --WW - Cave of Horrors
         ["JINJOS"] = {
             "1230562", -- Cave of Horrors
         },
-        ["SIGNPOSTS"] = {"1231521"}
+        ["SIGNPOSTS"] = {"1231521"},
+        ["BOGGY_KIDS"] = {"1231596"}
     },
     [0xE1] = { --WW - Crazy Castle Stockade
         ["JIGGIES"] = {
@@ -964,7 +1019,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231189",
             "1231190",
-        }
+        },
+        ["BOGGY_KIDS"] = {"1231597"}
     },
     [0xE3] = { -- WW - Pump Room
         ["NESTS"] = {
@@ -977,6 +1033,7 @@ local ASSET_MAP_CHECK = {
         ["JIGGIES"] = {
             "1230617", -- Dodgem
         },
+        ["BOGGY_KIDS"] = {"1231596"}
     },
     [0xEB] = { --WW - Haunted Cavern
         ["PAGES"] = {
@@ -1020,7 +1077,8 @@ local ASSET_MAP_CHECK = {
             "1231193",
             "1231194",
             "1231195",
-        }
+        },
+        ["BOGGY_KIDS"] = {"1231597"}
     },
     [0xE7] = { --WW - The Inferno
         ["JIGGIES"] = {
@@ -1039,6 +1097,10 @@ local ASSET_MAP_CHECK = {
         ["WARPPADS"] = {
             "1231571"
         },
+        ["BOGGY_KIDS"] = {
+            "1231597",
+            "1231598"
+        }
     },
     [0x176] = { -- WW - Mumbo Skull
         ["HONEYCOMB"] = {
@@ -1055,7 +1117,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231201",
             "1231202",
-        }
+        },
+        ["BOGGY_KIDS"] = {"1231598"}
     },
     --JOLLY ROGER'S LAGOON
     [0x1A7] = { --JRL
@@ -1546,7 +1609,7 @@ local ASSET_MAP_CHECK = {
         },
         ["SIGNPOSTS"] = {"1231531"},
         ["WARPPADS"] = {"1231586"},
-
+        ["SKIVVIES"] = {"1231607"}
     },
     [0x10F] = { --GI - Basement
         ["JIGGIES"] = {
@@ -1618,7 +1681,7 @@ local ASSET_MAP_CHECK = {
             "1231324",
         },
         ["WARPPADS"] = {"1231582"},
-
+        ["SKIVVIES"] = {"1231603"}
     },
     [0x105] = { --GI - Elevator Shaft
         ["NESTS"] = {
@@ -1667,6 +1730,7 @@ local ASSET_MAP_CHECK = {
             "1231344",
         },
         ["WARPPADS"] = {"1231583"},
+        ["SKIVVIES"] = {"1231604"}
 
     },
     [0x107] = { --GI - Floor 2 Electromagnetic Chamber
@@ -1708,7 +1772,8 @@ local ASSET_MAP_CHECK = {
         ["NESTS"] = {
             "1231354",
             "1231355",
-        }
+        },
+        ["SKIVVIES"] = {"1231605"}
     },
     [0x10A] =	{ --GI - Floor 3 (Packing Room)
         ["JIGGIES"] = {
@@ -1750,7 +1815,9 @@ local ASSET_MAP_CHECK = {
             "1231366",
             "1231367",
             "1231368",
-        }
+        },
+        ["SKIVVIES"] = {"1231606"}
+
     },
     [0x187] =	{ --GI - Sewer Entrance
         ["JIGGIES"] = {
@@ -1798,7 +1865,9 @@ local ASSET_MAP_CHECK = {
             "1231328",
             "1231329",
         },
-        ["SIGNPOSTS"] = {"1231532"}
+        ["SIGNPOSTS"] = {"1231532"},
+        ["SKIVVIES"] = {"1231602"}
+
     },
     [0x162] = { --GI - Clinker's Cavern
         ["NESTS"] = {
@@ -1898,6 +1967,11 @@ local ASSET_MAP_CHECK = {
             "1231589",
             "1231590"
         },
+        ["ALIEN_KIDS"] = {
+            "1231599",
+            "1231600",
+            "1231601"
+        }
 
     },
     [0x133] =	{ --HFP - Inside the Volcano
@@ -2066,7 +2140,14 @@ local ASSET_MAP_CHECK = {
             "1231465",
         },
         ["WARPPADS"] = {"1231592"},
-
+        ["MRFIT"] = {
+            "1231608",
+            "1231609"
+        },
+        ["BEANS"] = {
+            "1231639",
+            "1231640"
+        },
     },
     [0x13A] =	{ --CCL - Central Cavern
         ["JIGGIES"] = {
@@ -2198,159 +2279,173 @@ local ASSET_MAP_CHECK = {
 
 local ITEM_TABLE = {}; -- reverses ROM_ITEM so the key is the Item
 local ROM_ITEM_TABLE = {
-    "AP_ITEM_PAGES",
-    "AP_ITEM_HONEY",
-    "AP_ITEM_WJINJO",
-    "AP_ITEM_OJINJO",
-    "AP_ITEM_YJINJO",
-    "AP_ITEM_BRJINJO",
-    "AP_ITEM_GJINJO",
-    "AP_ITEM_RJINJO",
-    "AP_ITEM_BLJINJO",
-    "AP_ITEM_PJINJO",
-    "AP_ITEM_BKJINJO",
-    "AP_ITEM_DOUBLOON",
-    "AP_ITEM_JIGGY",
-    "AP_ITEM_TREBLE",
-    "AP_ITEM_NOTE",
-    "AP_ITEM_MUMBOTOKEN",
-    "AP_ITEM_IKEY",
-    "AP_ITEM_PMEGG",
-    "AP_ITEM_BMEGG",
-    "AP_ITEM_GGRAB",
-    "AP_ITEM_BBLASTER",
-    "AP_ITEM_EGGAIM",
-    "AP_ITEM_BDRILL",
-    "AP_ITEM_BBAYONET",
-    "AP_ITEM_AIREAIM",
-    "AP_ITEM_SPLITUP",
-    "AP_ITEM_WWHACK",
-    "AP_ITEM_TTORP",
-    "AP_ITEM_AUQAIM",
-    "AP_ITEM_SHPACK",
-    "AP_ITEM_GLIDE",
-    "AP_ITEM_SNPACK",
-    "AP_ITEM_LSPRING",
-    "AP_ITEM_CLAWBTS",
-    "AP_ITEM_SPRINGB",
-    "AP_ITEM_TAXPACK",
-    "AP_ITEM_HATCH",
-    "AP_ITEM_PACKWH",
-    "AP_ITEM_SAPACK",
-    "AP_ITEM_FEGGS",
-    "AP_ITEM_GEGGS",
-    "AP_ITEM_CEGGS",
-    "AP_ITEM_IEGGS",
-    "AP_ITEM_FSWIM",
-    "AP_ITEM_DAIR",
-    "AP_ITEM_BBASH",
-    "AP_ITEM_HOMINGEGGS",
-    "AP_ITEM_AMAZEOGAZE",
-    "AP_ITEM_ROAR",
-    "AP_ITEM_DIVE",
-    "AP_ITEM_FPAD",
-    "AP_ITEM_GRAT",
-    "AP_ITEM_ROLL",
-    "AP_ITEM_ARAT",
-    "AP_ITEM_BBARGE",
-    "AP_ITEM_TJUMP",
-    "AP_ITEM_FLUTTER",
-    "AP_ITEM_FFLIP",
-    "AP_ITEM_CLIMB",
-    "AP_ITEM_BEGGS",
-    "AP_ITEM_TTROT",
-    "AP_ITEM_BBUST",
-    "AP_ITEM_WWING",
-    "AP_ITEM_SSTRIDE",
-    "AP_ITEM_TTRAIN",
-    "AP_ITEM_BBOMB",
-    "AP_ITEM_EGGSHOOT",
-    "AP_ITEM_MUMBOMT",
-    "AP_ITEM_MUMBOGM",
-    "AP_ITEM_MUMBOWW",
-    "AP_ITEM_MUMBOJR",
-    "AP_ITEM_MUMBOTD",
-    "AP_ITEM_MUMBOGI",
-    "AP_ITEM_MUMBOHP",
-    "AP_ITEM_MUMBOCC",
-    "AP_ITEM_MUMBOIH",
-    "AP_ITEM_HUMBAMT",
-    "AP_ITEM_HUMBAGM",
-    "AP_ITEM_HUMBAWW",
-    "AP_ITEM_HUMBAJR",
-    "AP_ITEM_HUMBATD",
-    "AP_ITEM_HUMBAGI",
-    "AP_ITEM_HUMBAHP",
-    "AP_ITEM_HUMBACC",
-    "AP_ITEM_HUMBAIH",
-    "AP_ITEM_TRAINSWIH",
-    "AP_ITEM_TRAINSWTD",
-    "AP_ITEM_TRAINSWGI",
-    "AP_ITEM_TRAINSWHP1",
-    "AP_ITEM_TRAINSWHP2",
-    "AP_ITEM_TRAINSWWW",
-    "AP_ITEM_CHUFFY",
-    "AP_ITEM_GNEST",
-    "AP_ITEM_ENEST",
-    "AP_ITEM_FNEST",
-    "AP_ITEM_MTA",
-    "AP_ITEM_GGA",
-    "AP_ITEM_WWA",
-    "AP_ITEM_JRA",
-    "AP_ITEM_TDA",
-    "AP_ITEM_GIA",
-    "AP_ITEM_HFA",
-    "AP_ITEM_CCA",
-    "AP_ITEM_CKA",
-    "AP_ITEM_H1A",
-    "AP_ITEM_WARPMT_HUMBA",
-    "AP_ITEM_WARPMT_PRISON",
-    "AP_ITEM_WARPMT_MUMBO",
-    "AP_ITEM_WARPMT_ENTRANCE",
-    "AP_ITEM_WARPMT_KICKBALL",
-    "AP_ITEM_WARPGG_TRAIN",
-    "AP_ITEM_WARPGG_CRUSHING",
-    "AP_ITEM_WARPGG_HUMBA",
-    "AP_ITEM_WARPGG_MUMBO",
-    "AP_ITEM_WARPGG_ENTRANCE",
-    "AP_ITEM_WARPWW_BIGTOP",
-    "AP_ITEM_WARPWW_ENTRANCE",
-    "AP_ITEM_WARPWW_MUMBO",
-    "AP_ITEM_WARPWW_HUMBA",
-    "AP_ITEM_WARPWW_SPACE",
-    "AP_ITEM_WARPJR_LOCKERS",
-    "AP_ITEM_WARPJR_BIGFISH",
-    "AP_ITEM_WARPJR_SHIP",
-    "AP_ITEM_WARPJR_ATLANTIS",
-    "AP_ITEM_WARPJR_ENTRANCE",
-    "AP_ITEM_WARPGI_MUMBO",
-    "AP_ITEM_WARPGI_HUMBA",
-    "AP_ITEM_WARPGI_ENTRANCE",
-    "AP_ITEM_WARPGI_ROOF",
-    "AP_ITEM_WARPGI_CRUSHER",
-    "AP_ITEM_WARPTD_TOP",
-    "AP_ITEM_WARPTD_HUMBA",
-    "AP_ITEM_WARPTD_MUMBO",
-    "AP_ITEM_WARPTD_STOMPING",
-    "AP_ITEM_WARPTD_ENTRANCE",
-    "AP_ITEM_WARPCC_ENTRANCE",
-    "AP_ITEM_WARPCC_CENTER",
-    "AP_ITEM_WARPHF_ICICLE",
-    "AP_ITEM_WARPHF_HUMBA",
-    "AP_ITEM_WARPHF_ICYUPPER",
-    "AP_ITEM_WARPHF_LAVAUPPER",
-    "AP_ITEM_WARPHF_ENTRANCE",
-    "AP_ITEM_WARPCK_HAG1",
-    "AP_ITEM_WARPCK_ENTRANCE",
-    "AP_ITEM_SILO_JINJO_VILLAGE",
-    "AP_ITEM_SILO_WOODED_HOLLOW",
-    "AP_ITEM_SILO_PLATEAU",
-    "AP_ITEM_SILO_PINE_GROVE",
-    "AP_ITEM_SILO_CLIFF_TOP",
-    "AP_ITEM_SILO_WASTELAND",
-    "AP_ITEM_SILO_QUAGMIRE",
-    "AP_ITEM_MAX",
+  "AP_ITEM_GGRAB",
+  "AP_ITEM_BBLASTER",
+  "AP_ITEM_EGGAIM",
+  "AP_ITEM_BDRILL",
+  "AP_ITEM_BBAYONET",
+  "AP_ITEM_AIREAIM",
+  "AP_ITEM_SPLITUP",
+  "AP_ITEM_WWHACK",
+  "AP_ITEM_TTORP",
+  "AP_ITEM_AUQAIM",
+  "AP_ITEM_SHPACK",
+  "AP_ITEM_GLIDE",
+  "AP_ITEM_SNPACK",
+  "AP_ITEM_LSPRING",
+  "AP_ITEM_CLAWBTS",
+  "AP_ITEM_SPRINGB",
+  "AP_ITEM_TAXPACK",
+  "AP_ITEM_HATCH",
+  "AP_ITEM_PACKWH",
+  "AP_ITEM_SAPACK",
+  "AP_ITEM_FEGGS",
+  "AP_ITEM_GEGGS",
+  "AP_ITEM_CEGGS",
+  "AP_ITEM_IEGGS",
+  "AP_ITEM_FSWIM",
+  "AP_ITEM_DAIR",
+  "AP_ITEM_BBASH",
+  "AP_ITEM_AMAZEOGAZE",
+  "AP_ITEM_ROAR",
+  "AP_ITEM_DIVE",
+  "AP_ITEM_FPAD",
+  "AP_ITEM_GRAT",
+  "AP_ITEM_ROLL",
+  "AP_ITEM_ARAT",
+  "AP_ITEM_BBARGE",
+  "AP_ITEM_TJUMP",
+  "AP_ITEM_FLUTTER",
+  "AP_ITEM_FFLIP",
+  "AP_ITEM_CLIMB",
+  "AP_ITEM_BEGGS",
+  "AP_ITEM_TTROT",
+  "AP_ITEM_BBUST",
+  "AP_ITEM_WWING",
+  "AP_ITEM_SSTRIDE",
+  "AP_ITEM_TTRAIN",
+  "AP_ITEM_BBOMB",
+  "AP_ITEM_EGGSHOOT",
+  "AP_ITEM_PAGES",
+  "AP_ITEM_HONEY",
+  "AP_ITEM_WJINJO",
+  "AP_ITEM_OJINJO",
+  "AP_ITEM_YJINJO",
+  "AP_ITEM_BRJINJO",
+  "AP_ITEM_GJINJO",
+  "AP_ITEM_RJINJO",
+  "AP_ITEM_BLJINJO",
+  "AP_ITEM_PJINJO",
+  "AP_ITEM_BKJINJO",
+  "AP_ITEM_DOUBLOON",
+  "AP_ITEM_JIGGY",
+  "AP_ITEM_TREBLE",
+  "AP_ITEM_NOTE",
+  "AP_ITEM_MUMBOTOKEN",
+  "AP_ITEM_IKEY",
+  "AP_ITEM_PMEGG",
+  "AP_ITEM_BMEGG",
+  "AP_ITEM_HEALTHUP",
+  "AP_ITEM_HOMINGEGGS",
+  "AP_ITEM_CHEATFEATHER",
+  "AP_ITEM_CHEATEGG",
+  "AP_ITEM_CHEATFALL",
+  "AP_ITEM_CHEATHONEY",
+  "AP_ITEM_CHEATJUKE",
+  "AP_ITEM_MUMBOMT",
+  "AP_ITEM_MUMBOGM",
+  "AP_ITEM_MUMBOWW",
+  "AP_ITEM_MUMBOJR",
+  "AP_ITEM_MUMBOTD",
+  "AP_ITEM_MUMBOGI",
+  "AP_ITEM_MUMBOHP",
+  "AP_ITEM_MUMBOCC",
+  "AP_ITEM_MUMBOIH",
+  "AP_ITEM_HUMBAMT",
+  "AP_ITEM_HUMBAGM",
+  "AP_ITEM_HUMBAWW",
+  "AP_ITEM_HUMBAJR",
+  "AP_ITEM_HUMBATD",
+  "AP_ITEM_HUMBAGI",
+  "AP_ITEM_HUMBAHP",
+  "AP_ITEM_HUMBACC",
+  "AP_ITEM_HUMBAIH",
+  "AP_ITEM_TRAINSWIH",
+  "AP_ITEM_TRAINSWTD",
+  "AP_ITEM_TRAINSWGI",
+  "AP_ITEM_TRAINSWHP1",
+  "AP_ITEM_TRAINSWHP2",
+  "AP_ITEM_TRAINSWWW",
+  "AP_ITEM_CHUFFY",
+  "AP_ITEM_GNEST",
+  "AP_ITEM_ENEST",
+  "AP_ITEM_FNEST",
+  "AP_ITEM_MTA",
+  "AP_ITEM_GGA",
+  "AP_ITEM_WWA",
+  "AP_ITEM_JRA",
+  "AP_ITEM_TDA",
+  "AP_ITEM_GIA",
+  "AP_ITEM_HFA",
+  "AP_ITEM_CCA",
+  "AP_ITEM_CKA",
+  "AP_ITEM_H1A",
+  "AP_ITEM_WARPMT_HUMBA",
+  "AP_ITEM_WARPMT_PRISON",
+  "AP_ITEM_WARPMT_MUMBO",
+  "AP_ITEM_WARPMT_ENTRANCE",
+  "AP_ITEM_WARPMT_KICKBALL",
+  "AP_ITEM_WARPGG_TRAIN",
+  "AP_ITEM_WARPGG_CRUSHING",
+  "AP_ITEM_WARPGG_HUMBA",
+  "AP_ITEM_WARPGG_MUMBO",
+  "AP_ITEM_WARPGG_ENTRANCE",
+  "AP_ITEM_WARPWW_BIGTOP",
+  "AP_ITEM_WARPWW_ENTRANCE",
+  "AP_ITEM_WARPWW_MUMBO",
+  "AP_ITEM_WARPWW_HUMBA",
+  "AP_ITEM_WARPWW_SPACE",
+  "AP_ITEM_WARPJR_LOCKERS",
+  "AP_ITEM_WARPJR_BIGFISH",
+  "AP_ITEM_WARPJR_SHIP",
+  "AP_ITEM_WARPJR_ATLANTIS",
+  "AP_ITEM_WARPJR_ENTRANCE",
+  "AP_ITEM_WARPGI_MUMBO",
+  "AP_ITEM_WARPGI_HUMBA",
+  "AP_ITEM_WARPGI_ENTRANCE",
+  "AP_ITEM_WARPGI_ROOF",
+  "AP_ITEM_WARPGI_CRUSHER",
+  "AP_ITEM_WARPTD_TOP",
+  "AP_ITEM_WARPTD_HUMBA",
+  "AP_ITEM_WARPTD_MUMBO",
+  "AP_ITEM_WARPTD_STOMPING",
+  "AP_ITEM_WARPTD_ENTRANCE",
+  "AP_ITEM_WARPCC_ENTRANCE",
+  "AP_ITEM_WARPCC_CENTER",
+  "AP_ITEM_WARPHF_ICICLE",
+  "AP_ITEM_WARPHF_HUMBA",
+  "AP_ITEM_WARPHF_ICYUPPER",
+  "AP_ITEM_WARPHF_LAVAUPPER",
+  "AP_ITEM_WARPHF_ENTRANCE",
+  "AP_ITEM_WARPCK_HAG1",
+  "AP_ITEM_WARPCK_ENTRANCE",
+  "AP_ITEM_SILO_JINJO_VILLAGE",
+  "AP_ITEM_SILO_WOODED_HOLLOW",
+  "AP_ITEM_SILO_PLATEAU",
+  "AP_ITEM_SILO_PINE_GROVE",
+  "AP_ITEM_SILO_CLIFF_TOP",
+  "AP_ITEM_SILO_WASTELAND",
+  "AP_ITEM_SILO_QUAGMIRE",
+  "AP_ITEM_BTTICKET",
+  "AP_ITEM_GRRELIC",
+  "AP_ITEM_BEAN",
+  "AP_ITEM_MAX",
 };
+
+for index, item in pairs(ROM_ITEM_TABLE)
+do
+    ITEM_TABLE[item] = index - 1
+end
 
 local TRAP_TABLE = {};
 local TRAPS = {
@@ -3502,7 +3597,7 @@ local ADDRESS_MAP = {
         ["1230589"] = {
             ['addr'] = 0x3E,
             ['bit'] = 2,
-            ['name'] = 'CCL: Fake Mumbo Skull Jinjo'
+            ['name'] = 'CCL: Mingy Jongo Skull Jinjo'
         },
         ["1230590"] = {
             ['addr'] = 0x3E,
@@ -3564,7 +3659,7 @@ local ADDRESS_MAP = {
         ["1230737"] = {
             ['addr'] = 0x57,
             ['bit'] = 4,
-            ['name'] = "JRL: Pawno's Cheato Page"
+            ['name'] = "JRL: Pawno Cheato Page"
         },
         ["1230738"] = {
             ['addr'] = 0x57,
@@ -5355,7 +5450,201 @@ local ADDRESS_MAP = {
             ['addr'] = 0x75,
             ['bit'] = 5,
         },
-    }
+    },
+    ['BOGGY_KIDS'] = {
+        ['1231596'] = {
+            ['addr'] = 0x0C,
+            ['bit'] = 4,
+        },
+        ['1231597'] = {
+            ['addr'] = 0x0C,
+            ['bit'] = 5,
+        },
+        ['1231598'] = {
+            ['addr'] = 0x0C,
+            ['bit'] = 6,
+        }
+    },
+    ['ALIEN_KIDS'] = {
+        ['1231599'] = {
+            ['addr'] = 0x69,
+            ['bit'] = 2,
+        },
+        ['1231600'] = {
+            ['addr'] = 0x69,
+            ['bit'] = 3,
+        },
+        ['1231601'] = {
+            ['addr'] = 0x69,
+            ['bit'] = 4,
+        }
+    },
+    ['SKIVVIES'] = {
+        ['1231602'] = {
+            ['addr'] = 0x81,
+            ['bit'] = 1,
+        },
+        ['1231603'] = {
+            ['addr'] = 0x81,
+            ['bit'] = 2,
+        },
+        ['1231604'] = {
+            ['addr'] = 0x80,
+            ['bit'] = 7,
+        },
+        ['1231605'] = {
+            ['addr'] = 0x81,
+            ['bit'] = 0,
+        },
+        ['1231606'] = {
+            ['addr'] = 0x80,
+            ['bit'] = 6,
+        },
+        ['1231607'] = {
+            ['addr'] = 0x80,
+            ['bit'] = 5,
+        },
+    },
+    ['MRFIT'] = {
+        ['1231608'] = {
+            ['addr'] = 0x76,
+            ['bit'] = 4,
+        },
+        ['1231609'] = {
+            ['addr'] = 0x76,
+            ['bit'] = 5,
+        },
+    },
+    ["BIGTOP_TICKETS"] = {
+        ['1231610'] = {
+            ['addr'] = 0x9C,
+            ['bit'] = 4
+        },
+        ['1231611'] = {
+            ['addr'] = 0x9C,
+            ['bit'] = 5
+        },
+        ['1231612'] = {
+            ['addr'] = 0x9C,
+            ['bit'] = 6
+        },
+        ['1231613'] = {
+            ['addr'] = 0x9C,
+            ['bit'] = 7
+        },
+    },
+    ["GREEN_RELICS"] = {
+        ['1231614'] = {
+            ['addr'] = 0x5A,
+            ['bit'] = 5,
+        },
+        ['1231615'] = {
+            ['addr'] = 0x5A,
+            ['bit'] = 4,
+        },
+        ['1231616'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 7,
+        },
+        ['1231617'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 6,
+        },
+        ['1231618'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 5,
+        },
+        ['1231619'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 3,
+        },
+        ['1231620'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 4,
+        },
+        ['1231621'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 2,
+        },
+        ['1231622'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 1,
+        },
+        ['1231623'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 2,
+        },
+        ['1231624'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 3,
+        },
+        ['1231625'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 5,
+        },
+        ['1231626'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 4,
+        },
+        ['1231627'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 6,
+        },
+        ['1231628'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 7,
+        },
+        ['1231629'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 1,
+        },
+        ['1231630'] = {
+            ['addr'] = 0x5C,
+            ['bit'] = 0,
+        },
+        ['1231631'] = {
+            ['addr'] = 0x5D,
+            ['bit'] = 0,
+        },
+        ['1231632'] = {
+            ['addr'] = 0x5D,
+            ['bit'] = 1,
+        },
+        ['1231633'] = {
+            ['addr'] = 0x5D,
+            ['bit'] = 2,
+        },
+        ['1231634'] = {
+            ['addr'] = 0x5D,
+            ['bit'] = 4,
+        },
+        ['1231635'] = {
+            ['addr'] = 0x5D,
+            ['bit'] = 3,
+        },
+        ['1231636'] = {
+            ['addr'] = 0x5A,
+            ['bit'] = 6,
+        },
+        ['1231637'] = {
+            ['addr'] = 0x5A,
+            ['bit'] = 7,
+        },
+        ['1231638'] = {
+            ['addr'] = 0x5B,
+            ['bit'] = 0,
+        },
+    },
+    ["BEANS"] = {
+        ['1231639'] = {
+            ['addr'] = 0x62,
+            ['bit'] = 6
+        },
+        ['1231640'] = {
+            ['addr'] = 0x62,
+            ['bit'] = 5
+        }
+    },
 }
 
 -- Properties of world entrances and associated puzzles
@@ -5415,67 +5704,168 @@ local MAP_ENTRANCES = {
         ['name'] = "Mayahem Temple",
         ['entranceId'] = 10,
         ['exitId'] = 2,
-        ['exitMap'] = 0x14F
+        ['exitMap'] = 0x14F,
+        ["access"] = {},
+        ["reverse_access"] = {},
     },
     [0xC7] = {
         ['name'] = "Glitter Gulch Mine",
         ['entranceId'] = 17,
         ['exitId'] = 2,
-        ['exitMap'] = 0x152
+        ['exitMap'] = 0x152,
+        ["access"] = {},
+        ["reverse_access"] = {},
     },
     [0xD6] = {
         ['name'] = "Witchyworld",
         ['entranceId'] = 18,
         ['exitId'] = 2,
-        ['exitMap'] = 0x154
+        ['exitMap'] = 0x154,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
     },
     [0x1A7] = {
         ['name'] = "Jolly Roger's Lagoon - Town Center",
         ['entranceId'] = 3,
         ['exitId'] = 5,
-        ['exitMap'] = 0x155
+        ['exitMap'] = 0x155,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
     },
     [0x112] = {
         ['name'] = "Terrydactyland",
         ['entranceId'] = 23,
         ['exitId'] = 2,
-        ['exitMap'] = 0x15A
+        ['exitMap'] = 0x15A,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
     },
     [0x100] = {
         ['name'] = "Outside Grunty Industries",
         ['entranceId'] = 9,
         ['exitId'] = 2,
-        ['exitMap'] = 0x15C
+        ['exitMap'] = 0x15C,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
     },
     [0x127] = {
         ['name'] = "Hailfire Peaks",
         ['entranceId'] = 21,
         ['exitId'] = 6,
-        ['exitMap'] = 0x155
+        ['exitMap'] = 0x155,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
     },
     [0x136] = {
         ['name'] = "Cloud Cuckooland",
         ['entranceId'] = 20,
         ['exitId'] = 5,
-        ['exitMap'] = 0x15A
+        ['exitMap'] = 0x15A,
+        ["access"] = {},
+        ["reverse_access"] = {},
     },
     [0x15D] = {
         ['name'] = "Cauldron Keep",
         ['entranceId'] = 1,
         ['exitId'] = 3,
-        ['exitMap'] = 0x15C
-    }
+        ['exitMap'] = 0x15C,
+        ["access"] = {},
+        ["reverse_access"] = {},
+    },
+    [0x17A] = {
+        ['name'] = "Targitzan's Really Sacred Chamber",
+        ['entranceId'] = 1,
+        ['exitId'] = 2,
+        ['exitMap'] = 0x178,
+        ["access"] = {ITEM_TABLE["AP_ITEM_BBLASTER"]},
+        ["reverse_access"] = {ITEM_TABLE["AP_ITEM_BBLASTER"]},
+
+    },
+    [0x0D1] = {
+        ['name'] = "Inside Chuffy's Boiler",
+        ['entranceId'] = 1,
+        ['exitId'] = 2,
+        ['exitMap'] = 0x0D0,
+        ["access"] = {},
+        ["reverse_access"] = {},
+    },
+    [0x0F9] = {
+        ['name'] = "Big Top Interior",
+        ['entranceId'] = 1,
+        ['exitId'] = 3,
+        ['exitMap'] = 0x0D6,
+        ["access"] = {},
+        ["reverse_access"] = {},
+    },
+    [0x0FC] = {
+        ['name'] = "Davy Jones' Locker",
+        ['entranceId'] = 1,
+        ['exitId'] = 0x28, --different lockers
+        ['exitMap'] = 0x1A9,
+        ["access"] = {ITEM_TABLE["AP_ITEM_GEGGS"], ITEM_TABLE["AP_ITEM_AUQAIM"]},
+        ["reverse_access"] = {},
+    },
+    [0x113] = {
+        ['name'] = "Terry's Nest",
+        ['entranceId'] = 0x05,
+        ['exitId'] = 0x14,
+        ['exitMap'] = 0x112,
+        ["access"] = {},
+        ["reverse_access"] = {},
+    },
+    [0x110] = {
+        ['name'] = "Repair Depot",
+        ['entranceId'] = 1,
+        ['exitId'] = 3,
+        ['exitMap'] = 0x10F,
+        ["access"] = {ITEM_TABLE["AP_ITEM_GEGGS"]},
+        ["reverse_access"] = {},
+    },
+    [0x12B] = {
+        ['name'] = "Chilli Billi Crater",
+        ['entranceId'] = 1,
+        ['exitId'] = 0x16,
+        ['exitMap'] = 0x127,
+        ["access"] = {ITEM_TABLE["AP_ITEM_IEGGS"]},
+        ["reverse_access"] = {},
+
+    },
+    [0x12C] = {
+        ['name'] = "Chilli Willy Crater",
+        ['entranceId'] = 1,
+        ['exitId'] = 0x0C,
+        ['exitMap'] = 0x128,
+        ["access"] = {},
+        ["reverse_access"] = {},
+
+    },
+    [0x13F] = {
+        ['name'] = "Mingy Jongo Skull",
+        ['entranceId'] = 1,
+        ['exitId'] = 0x09,
+        ['exitMap'] = 0x136,
+        ["access"] = {},
+        ["reverse_access"] = {},
+    },
 }
 
 BTHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
+
     base_index = 0x400000,
     version = 0x0,
     pc = 0x4,
         pc_death_us = 0x0,
         pc_death_ap = 0x1,
-        pc_show_txt = 0x2,
+        pc_tag_us = 0x2,
+        pc_tag_ap = 0x3,
+        pc_show_txt = 0x4,
     pc_messages = 0x8,
     signpost_messages = 0xC,
     pc_settings = 0x10,
@@ -5485,18 +5875,25 @@ BTHACK = {
         setting_nests = 0x6,
         setting_warppads = 0x7,
         setting_warpsilos = 0x8,
-        setting_puzzle = 0x9,
-        setting_backdoors = 0xA,
-        setting_klungo = 0xB,
-        setting_tot = 0xC,
-        setting_minigames = 0xD,
-        setting_dialog_character = 0xE,
-        setting_max_mumbo_tokens = 0xF,
-        setting_signpost_hints = 0x10,
-        setting_extra_cheats = 0x11,
-        setting_easy_canary = 0x12,
-        setting_jiggy_requirements = 0x13,
-        setting_silo_requirements = 0x1E,
+        setting_honeyb_rewards = 0x9,
+        setting_cheato_rewards = 0xA,
+        setting_randomize_tickets = 0xB,
+        setting_randomize_green_relics = 0xC,
+        setting_randomize_beans = 0xD,
+        setting_puzzle = 0xE,
+        setting_backdoors = 0xF,
+        setting_gi_open_frontdoor = 0x10,
+        setting_klungo = 0x11,
+        setting_tot = 0x12,
+        setting_minigames = 0x13,
+        setting_dialog_character = 0x14,
+        setting_max_mumbo_tokens = 0x15,
+        setting_signpost_hints = 0x16,
+        setting_extra_cheats = 0x17,
+        setting_automatic_cheats = 0x18,
+        setting_easy_canary = 0x19,
+        setting_jiggy_requirements = 0x1A,
+        setting_silo_requirements = 0x26,
     pc_items = 0x14,
     pc_traps = 0x18,
     pc_exit_map = 0x1C,
@@ -5505,17 +5902,22 @@ BTHACK = {
         exit_to_map = 0x4,
         exit_og_exit = 0x6,
         exit_to_exit = 0x7,
-        exit_map_struct_size = 0x8,
+        exit_access_rules = 0x8,
+        exit_access_rules_size = 0x6,
+        exit_map_struct_size = 0xE,
         world_index = 0,
     n64 = 0x20,
         n64_show_text = 0x0,
         n64_death_us = 0x1,
         n64_death_ap = 0x2,
-        current_map = 0x4,
+        n64_tag_us = 0x3,
+        n64_tag_ap = 0x4,
+        current_map = 0x6,
     real_flags = 0x24,
     fake_flags = 0x28,
     nest_flags = 0x2C,
     signpost_flags = 0x30,
+
     txt_queue = 0
 }
 
@@ -5633,6 +6035,30 @@ function BTHACK:setSettingWarpPads(warppad)
     mainmemory.writebyte(self.setting_warppads + BTHACK:getSettingPointer(), warppad);
 end
 
+function BTHACK:setSettingHoneyB(honeyb)
+    mainmemory.writebyte(self.setting_honeyb_rewards + BTHACK:getSettingPointer(), honeyb);
+end
+
+function BTHACK:setSettingCheato(cheato)
+    mainmemory.writebyte(self.setting_cheato_rewards + BTHACK:getSettingPointer(), cheato);
+end
+
+function BTHACK:setSettingRandomizeTickets(tickets)
+    mainmemory.writebyte(self.setting_randomize_tickets + BTHACK:getSettingPointer(), tickets);
+end
+
+function BTHACK:setSettingRandomizeGreenRelics(grelic)
+    mainmemory.writebyte(self.setting_randomize_green_relics + BTHACK:getSettingPointer(), grelic);
+end
+
+function BTHACK:setSettingRandomizeBeans(beans)
+    mainmemory.writebyte(self.setting_randomize_beans + BTHACK:getSettingPointer(), beans);
+end
+
+function BTHACK:setSettingAutomaticCheats(cheats)
+    mainmemory.writebyte(self.setting_automatic_cheats + BTHACK:getSettingPointer(), cheats);
+end
+
 function BTHACK:getNestPointer()
     local hackPointerIndex = BTHACK:dereferencePointer(self.base_index);
 	return BTHACK:dereferencePointer(self.nest_flags + hackPointerIndex);
@@ -5665,6 +6091,10 @@ end
 
 function BTHACK:setSettingBackdoors(backdoors)
     mainmemory.writebyte(self.setting_backdoors + BTHACK:getSettingPointer(), backdoors);
+end
+
+function BTHACK:setSettingGIFrontdoor(gifrontdoor)
+    mainmemory.writebyte(self.setting_gi_open_frontdoor + BTHACK:getSettingPointer(), gifrontdoor);
 end
 
 function BTHACK:setSettingKlungo(klungo)
@@ -5719,7 +6149,7 @@ function BTHACK:getMap()
         return 0x0
     end
 	local n64_ptr = BTHACK:dereferencePointer(self.n64 + hackPointerIndex);
-    return mainmemory.read_u16_be(n64_ptr + 4)
+    return mainmemory.read_u16_be(n64_ptr + self.current_map)
 end
 
 function BTHACK:getTrapPointer()
@@ -5735,7 +6165,7 @@ function BTHACK:sendTrap(index, value)
     mainmemory.writebyte(index + self:getTrapPointer(), value);
 end
 
-function BTHACK:setWorldEntrance(currentWorldId, newWorldId, entranceId, currentMap, newEntanceId)
+function BTHACK:setWorldEntrance(currentWorldId, newWorldId, entranceId, currentMap, newEntanceId, access)
     local hackPointerIndex = BTHACK:dereferencePointer(self.base_index);
     if hackPointerIndex == nil
     then
@@ -5753,6 +6183,15 @@ function BTHACK:setWorldEntrance(currentWorldId, newWorldId, entranceId, current
     mainmemory.write_u16_be(exit_maps_ptr + world_index + self.exit_to_map, newWorldId)
     mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_to_exit, newEntanceId)
     mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_og_exit, entranceId)
+
+    for _, move_id in pairs(access)
+    do
+        local offset_byte = math.floor(move_id / 8)
+        local bitbit = math.fmod(move_id, 8)
+        local currentValue = mainmemory.readbyte(exit_maps_ptr + world_index + self.exit_access_rules + offset_byte);
+        local new_value = bit.set(currentValue, bitbit)
+        mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_access_rules + offset_byte, new_value)
+    end
     return true
 end
 
@@ -5784,19 +6223,35 @@ function BTHACK:getPCHintPointer()
 end
 
 function BTHACK:getPCDeath()
-    return mainmemory.readbyte(self:getPCPointer());
+    return mainmemory.readbyte(self:getPCPointer() + self.pc_death_us);
+end
+
+function BTHACK:getPCTag()
+    return mainmemory.readbyte(self:getPCPointer() + self.pc_tag_us);
 end
 
 function BTHACK:setPCDeath(DEATH_COUNT)
-    mainmemory.writebyte(self:getPCPointer(), DEATH_COUNT);
+    mainmemory.writebyte(self:getPCPointer() + self.pc_death_us, DEATH_COUNT);
+end
+
+function BTHACK:setPCTag(TAG_COUNT)
+    mainmemory.writebyte(self:getPCPointer() + self.pc_tag_us, TAG_COUNT);
 end
 
 function BTHACK:getAPDeath()
    return mainmemory.readbyte(self:getPCPointer() + self.pc_death_ap);
 end
 
+function BTHACK:getAPTag()
+   return mainmemory.readbyte(self:getPCPointer() + self.pc_tag_ap);
+end
+
 function BTHACK:setAPDeath(DEATH_COUNT)
     mainmemory.writebyte(self:getPCPointer() + self.pc_death_ap, DEATH_COUNT);
+end
+
+function BTHACK:setAPTag(TAG_COUNT)
+    mainmemory.writebyte(self:getPCPointer() + self.pc_tag_ap, TAG_COUNT);
 end
 
 function BTHACK:getNPointer()
@@ -5810,6 +6265,10 @@ end
 
 function BTHACK:getNLocalDeath()
    return mainmemory.readbyte(BTHACK:getNPointer() + self.n64_death_us);
+end
+
+function BTHACK:getNLocalTag()
+   return mainmemory.readbyte(BTHACK:getNPointer() + self.n64_tag_us);
 end
 
 function BTHACK:setTextQueue(icon_id)
@@ -6086,7 +6545,7 @@ function cheato_rewards_check()
         then
             for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["CHEATOR"])
             do
-                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["CHEATO"][locationId]['addr'], ADDRESS_MAP["CHEATO"][locationId]['bit'])
+                checks[locationId] = BTH:checkFakeFlag(ADDRESS_MAP["CHEATO"][locationId]['addr'], ADDRESS_MAP["CHEATO"][locationId]['bit'])
                 if DEBUG_CHEATO == true
                 then
                     print(ADDRESS_MAP["CHEATO"][locationId]['name']..":"..tostring(checks[locationId]))
@@ -6097,6 +6556,28 @@ function cheato_rewards_check()
     return checks
 end
 
+function obtain_cheats(itemId)
+    if itemId == 1230917
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_CHEATFEATHER"], 1)
+    end
+    if itemId == 1230918
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_CHEATEGG"], 1)
+    end
+    if itemId == 1230919
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_CHEATFALL"], 1)
+    end
+    if itemId == 1230920
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_CHEATHONEY"], 1)
+    end
+    if itemId == 1230921
+    then
+        BTH:setItem(ITEM_TABLE["AP_ITEM_CHEATJUKE"], 1)
+    end
+end
 ---------------------------------- HONEYCOMBS ---------------------------------
 
 function honeycomb_check()
@@ -6139,9 +6620,9 @@ function honey_b_check()
     then
         if ASSET_MAP_CHECK[CURRENT_MAP]["HONEYB"] ~= nil
         then
-            local result_bit1 = BTH:checkRealFlag(0x98, 2)
-            local result_bit2 = BTH:checkRealFlag(0x98, 3)
-            local result_bit3 = BTH:checkRealFlag(0x98, 4)
+            local result_bit1 = BTH:checkFakeFlag(0x98, 2)
+            local result_bit2 = BTH:checkFakeFlag(0x98, 3)
+            local result_bit3 = BTH:checkFakeFlag(0x98, 4)
             if result_bit1 == true
             then
                 bit1 = 1
@@ -6161,6 +6642,15 @@ function honey_b_check()
         end
     end
     return checks
+end
+
+function obtained_AP_HEALTHUPGRADE()
+    if DEBUG_HEALTHUPGRADE == true
+    then
+        print("Obtain Health Upgrade")
+    end
+    TOTAL_HEALTHUPGRADE = TOTAL_HEALTHUPGRADE + 1
+    BTH:setItem(ITEM_TABLE["AP_ITEM_HEALTHUP"], TOTAL_HEALTHUPGRADE)
 end
 
 ---------------------------------- GLOWBO AND MAGIC ---------------------------------
@@ -7119,6 +7609,157 @@ function obtain_warppads(itemId)
 
 end
 
+---------------------- BOGGY KIDS ----------------------------
+function boggy_kids_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["BOGGY_KIDS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["BOGGY_KIDS"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["BOGGY_KIDS"][locationId]['addr'], ADDRESS_MAP["BOGGY_KIDS"][locationId]['bit'])
+                if DEBUG_BOGGY_KIDS == true
+                then
+                    print(ADDRESS_MAP["BOGGY_KIDS"][locationId]..":"..tostring(checks[locationId]))
+                end
+            end
+        end
+    end
+    return checks
+end
+
+---------------------- ALIEN KIDS ----------------------------
+function alien_kids_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["ALIEN_KIDS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["ALIEN_KIDS"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["ALIEN_KIDS"][locationId]['addr'], ADDRESS_MAP["ALIEN_KIDS"][locationId]['bit'])
+                if DEBUG_ALIEN_KIDS == true
+                then
+                    print(ADDRESS_MAP["ALIEN_KIDS"][locationId]..":"..tostring(checks[locationId]))
+                end
+            end
+        end
+    end
+    return checks
+end
+
+---------------------- SKIVVIES ----------------------------
+function skivvies_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["SKIVVIES"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["SKIVVIES"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["SKIVVIES"][locationId]['addr'], ADDRESS_MAP["SKIVVIES"][locationId]['bit'])
+                if DEBUG_SKIVVIES == true
+                then
+                    print(ADDRESS_MAP["SKIVVIES"][locationId]..":"..tostring(checks[locationId]))
+                end
+            end
+            if BTH:checkRealFlag(0x81, 3) == true
+            then
+                for locationId, T in pairs(ADDRESS_MAP["SKIVVIES"])
+                do
+                    checks[locationId] = true
+                end
+            end
+        end
+    end
+    return checks
+end
+
+---------------------- MR FIT EVENTS ----------------------------
+function mr_fit_events_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["MRFIT"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["MRFIT"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["MRFIT"][locationId]['addr'], ADDRESS_MAP["MRFIT"][locationId]['bit'])
+                if DEBUG_MRFIT == true
+                then
+                    print(ADDRESS_MAP["MRFIT"][locationId]..":"..tostring(checks[locationId]))
+                end
+            end
+        end
+    end
+    return checks
+end
+
+---------------------- BIGTOP TICKETS ----------------------------
+function bttickets_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["BIGTOP_TICKETS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["BIGTOP_TICKETS"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["BIGTOP_TICKETS"][locationId]['addr'], ADDRESS_MAP["BIGTOP_TICKETS"][locationId]['bit'])
+            end
+        end
+    end
+    return checks
+end
+
+function obtain_AP_TICKETS()
+    TOTAL_BTTICKETS = TOTAL_BTTICKETS + 1
+    BTH:setItem(ITEM_TABLE["AP_ITEM_BTTICKET"], TOTAL_BTTICKETS)
+end
+
+---------------------- GREEN RELICS ----------------------------
+function grrelic_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["GREEN_RELICS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["GREEN_RELICS"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["GREEN_RELICS"][locationId]['addr'], ADDRESS_MAP["GREEN_RELICS"][locationId]['bit'])
+            end
+        end
+    end
+    return checks
+end
+
+function obtain_AP_GRRELIC()
+    TOTAL_GRRELICS = TOTAL_GRRELICS + 1
+    BTH:setItem(ITEM_TABLE["AP_ITEM_GRRELIC"], TOTAL_GRRELICS)
+end
+
+---------------------- BEANS ----------------------------
+
+function beans_check()
+    local checks = {}
+    if ASSET_MAP_CHECK[CURRENT_MAP] ~= nil
+    then
+        if ASSET_MAP_CHECK[CURRENT_MAP]["BEANS"] ~= nil
+        then
+            for _,locationId in pairs(ASSET_MAP_CHECK[CURRENT_MAP]["BEANS"])
+            do
+                checks[locationId] = BTH:checkRealFlag(ADDRESS_MAP["BEANS"][locationId]['addr'], ADDRESS_MAP["BEANS"][locationId]['bit'])
+            end
+        end
+    end
+    return checks
+end
+
+function obtain_AP_BEANS()
+    TOTAL_BEANS = TOTAL_BEANS + 1
+    BTH:setItem(ITEM_TABLE["AP_ITEM_BEAN"], TOTAL_BEANS)
+end
+
 ---------------------- GAME FUNCTIONS -------------------
 
 function zoneWarp(zone_table)
@@ -7144,11 +7785,11 @@ function zoneWarp(zone_table)
             end
        end
        while success == false do
-            BTH:setWorldEntrance(orig_map, new_map, orig_table['entranceId'], orig_table['exitMap'], new_table['entranceId'])
-            success = BTH:setWorldEntrance(new_table['exitMap'], orig_table['exitMap'], new_table['exitId'], new_map, orig_table['exitId'])
+            BTH:setWorldEntrance(orig_map, new_map, orig_table['entranceId'], orig_table['exitMap'], new_table['entranceId'], new_table['access'])
+            success = BTH:setWorldEntrance(new_table['exitMap'], orig_table['exitMap'], new_table['exitId'], new_map, orig_table['exitId'], orig_table['reverse_access'])
             if orig_map == 0xC7 -- Glitter Gulch Mine
             then
-                BTH:setWorldEntrance(orig_map, new_map, 16, orig_table['exitMap'], new_table['entranceId'])
+                BTH:setWorldEntrance(orig_map, new_map, 16, orig_table['exitMap'], new_table['entranceId'], new_table['access'])
             end
             emu.frameadvance()
        end
@@ -7157,6 +7798,10 @@ end
 
 function hag1_open()
     if BTH:getItem(ITEM_TABLE["AP_ITEM_H1A"]) == 1
+    then
+        return
+    end
+    if GOAL_TYPE == 1 or GOAL_TYPE == 2 or GOAL_TYPE == 5
     then
         return
     end
@@ -7263,6 +7908,14 @@ local transformation_names = {
     [1230180] = {name = "Snowball", attribute = "cool"},
     [1230181] = {name = "Bee", attribute = "cute"},
     [1230182] = {name = "Dragon", attribute = "dangerous"},
+}
+
+local cheat_names = {
+    [1230917] = "Feathers Cheat",
+    [1230918] = "Egg Cheat",
+    [1230919] = "Fallproof Cheat",
+    [1230920] = "Honeyback Cheat. Press D-Pad Down to Toggle this Cheat",
+    [1230921] = "Jukebox Cheat",
 }
 
 function display_item_message(msg_table)
@@ -7504,6 +8157,11 @@ function get_item_message_text(item_id, item, player)
         return own
             and string.format("You can now use the %s.", item)
             or string.format("%s has just unlocked the %s.", player, item)
+    elseif 1230917 <= item_id and item_id <= 1230921 -- Cheats
+    then
+        return own
+            and string.format("You can now use the %s.", cheat_names[item_id])
+            or string.format("%s has just sent you the %s.", player, cheat_names[item_id])
     end
 
     return nil
@@ -7578,7 +8236,7 @@ function get_item_message_char(item_id)
             return 8 -- Mumbo
         elseif 1230174 <= item_id and item_id <= 1230182 -- Humba Transformations
         then
-            return 37 -- Humba    
+            return 37 -- Humba
         elseif 1230870 <= item_id and item_id <= 1230876 -- Silos
         then
             return 17 -- Jamjars
@@ -7606,6 +8264,9 @@ function get_item_message_char(item_id)
         elseif 1230912 <= item_id and item_id <= 1230915 -- Warppad CC
         then
             return 27 -- Canary
+        elseif 1230917 <= item_id and item_id <= 1230921 -- Cheats
+        then
+            return 28 -- Cheato
         else -- Default
             return 7 -- Bottles
         end
@@ -7706,6 +8367,9 @@ function processAGIItem(item_list)
             elseif( 1230877 <= memlocation and memlocation <= 1230915) -- Warppads
             then
                 obtain_warppads(memlocation)
+            elseif( 1230917 <= memlocation and memlocation <= 1230921) -- Cheats
+            then
+                obtain_cheats(memlocation)
             elseif(memlocation == 1230514) -- Doubloon Item
             then
                 obtained_AP_DOUBLOON()
@@ -7726,6 +8390,9 @@ function processAGIItem(item_list)
             elseif(memlocation == 1230512)  -- Honeycomb Item
             then
                 obtained_AP_HONEYCOMB()
+            elseif(memlocation == 1230916)  -- Health Upgrade Item
+            then
+                obtained_AP_HEALTHUPGRADE()
             elseif(memlocation == 1230797) -- Notes
             then
                 obtain_AP_NOTES()
@@ -7748,6 +8415,15 @@ function processAGIItem(item_list)
             elseif(memlocation == 1230833) -- Tip Trap
             then
                 traps(memlocation)
+            elseif(memlocation == 1230922) -- BigTop Tickets
+            then
+                obtain_AP_TICKETS()
+            elseif(memlocation == 1230923) -- Green Relic
+            then
+                obtain_AP_GRRELIC()
+            elseif(memlocation == 1230924) -- Beans
+            then
+                obtain_AP_BEANS()
             end
             receive_map[tostring(ap_id)] = tostring(memlocation)
         end
@@ -7782,6 +8458,11 @@ function process_block(block)
         local randomDeathMsg = DEATH_MESSAGES[math.random(1, #DEATH_MESSAGES)]["message"]
         table.insert(MESSAGE_TABLE, {randomDeathMsg, 15})
     end
+    if block['triggerTag'] == true and TAG_LINK == true
+    then
+        local tag = BTH:getAPTag()
+        BTH:setAPTag(tag + 1)
+    end
 
     if DEBUGLVL3 == true then
         print(block)
@@ -7791,6 +8472,9 @@ end
 function SendToBTClient()
     local retTable = {}
     local detect_death = false
+    local detect_tag = false
+    -- print(BTH:getNLocalDeath())
+    -- print(BTH:getPCDeath())
     if BTH:getPCDeath() ~= BTH:getNLocalDeath() and DEATH_LINK == false
     then
         local randomDeathMsg = DEATH_MESSAGES[math.random(1, #DEATH_MESSAGES)]["message"]
@@ -7809,9 +8493,28 @@ function SendToBTClient()
     else
         DEATH_LINK_TRIGGERED = false
     end
+
+    if BTH:getPCTag() ~= BTH:getNLocalTag() and TAG_LINK == false
+    then
+        local tag = BTH:getPCTag()
+        BTH:setPCTag(tag + 1)
+    end
+    if BTH:getPCTag() ~= BTH:getNLocalTag() and TAG_LINK == true and TAG_LINK_TRIGGERED == false
+    then
+        detect_tag = true
+        local tag = BTH:getPCTag()
+        BTH:setPCTag(tag + 1)
+        TAG_LINK_TRIGGERED = true
+    else
+        TAG_LINK_TRIGGERED = false
+    end
     retTable["scriptVersion"] = SCRIPT_VERSION;
     retTable["playerName"] = PLAYER;
     retTable["deathlinkActive"] = DEATH_LINK;
+    retTable["taglinkActive"] = TAG_LINK;
+    retTable["isDead"] = detect_death;
+    retTable["isTag"] = detect_tag;
+
     retTable["jiggies"] = jiggy_check()
     retTable["jinjos"] = jinjo_check()
     retTable["pages"] = pages_check()
@@ -7824,7 +8527,6 @@ function SendToBTClient()
     retTable['treble'] = treble_check();
     retTable['stations'] = train_station_check();
     retTable['chuffy'] = chuffy_check();
-    retTable["isDead"] = detect_death;
     retTable["jinjofam"] = jinjo_family_check();
     retTable["worlds"] = UNLOCKED_WORLDS;
     retTable["mystery"] = mystery_check();
@@ -7839,6 +8541,14 @@ function SendToBTClient()
     retTable["signposts"] = signpost_check();
     retTable["silos"] = warpsilo_check();
     retTable["warppads"] = warppad_check();
+    retTable["boggy_kids"] = boggy_kids_check();
+    retTable["alien_kids"] = alien_kids_check();
+    retTable["skivvies"] = skivvies_check();
+    retTable["fit_events"] = mr_fit_events_check();
+    retTable["bt_tickets"] = bttickets_check();
+    retTable["green_relics"] = grrelic_check();
+    retTable["beans"] = beans_check();
+
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
 
@@ -7960,10 +8670,6 @@ function process_slot(block)
         print(block)
         print("EO_slot_data")
     end
-    for index, item in pairs(ROM_ITEM_TABLE)
-    do
-        ITEM_TABLE[item] = index - 1
-    end
     for index, item in pairs(DAILOG_KEY_TABLE)
     do
         DIALOG_CHARACTER_TABLE[item] = index - 1
@@ -7992,6 +8698,10 @@ function process_slot(block)
     if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= 0
     then
         DEATH_LINK = true
+    end
+    if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= 0
+    then
+        TAG_LINK = true
     end
     if block['slot_logic_type'] ~= nil and block['slot_logic_type'] ~= "false"
     then
@@ -8052,6 +8762,22 @@ function process_slot(block)
     then
         BACKDOORS = true
         BTH:setSettingBackdoors(1)
+    end
+    if block['slot_open_gi_entrance'] ~= nil and block['slot_open_gi_entrance'] ~= 0
+    then
+        BTH:setSettingGIFrontdoor(1)
+    end
+    if block['slot_randomize_tickets'] ~= nil and block['slot_randomize_tickets'] ~= 0
+    then
+        BTH:setSettingRandomizeTickets(1)
+    end
+    if block['slot_randomize_green_relics'] ~= nil and block['slot_randomize_green_relics'] ~= 0
+    then
+        BTH:setSettingRandomizeGreenRelics(1)
+    end
+    if block['slot_randomize_beans'] ~= nil and block['slot_randomize_beans'] ~= 0
+    then
+        BTH:setSettingRandomizeBeans(1)
     end
     if block['slot_skip_klungo'] ~= nil and block['slot_skip_klungo'] ~= 0
     then
@@ -8205,6 +8931,18 @@ function process_slot(block)
     then
         BTH:setSettingWarpPads(1)
     end
+    if block['slot_cheato_rewards'] ~= nil and block['slot_cheato_rewards'] ~= 0
+    then
+        BTH:setSettingCheato(1)
+    end
+    if block['slot_honeyb_rewards'] ~= nil and block['slot_honeyb_rewards'] ~= 0
+    then
+        BTH:setSettingHoneyB(1)
+    end
+    if block['slot_auto_enable_cheats'] ~= nil and block['slot_auto_enable_cheats'] ~= 0
+    then
+        BTH:setSettingAutomaticCheats(1)
+    end
     if block['slot_randomize_silos'] ~= nil and block['slot_randomize_silos'] ~= 0
     then
         BTH:setSettingSilos(1)
@@ -8286,11 +9024,8 @@ function printGoalInfo()
         elseif GOAL_TYPE == 4 then
             message ="You absolute mad lad! You're doing the Wonder Wing Challenge!\nGood Luck and"..randomEncouragment;
             BTH:setSettingMaxMumboTokens(32)
-        elseif GOAL_TYPE == 5 and TH_LENGTH == 15 then
-            message ="You are trying to find all 15 of Mumbo's Tokens scattered throughout the Isle of Hags!\nGood Luck and"..randomEncouragment;
-            BTH:setSettingMaxMumboTokens(TH_LENGTH)
-        elseif GOAL_TYPE == 5 and TH_LENGTH < 15 then
-            message = "You are trying to find "..TH_LENGTH.." of the 15 of Mumbo Tokens scattered throughout the Isle O' Hags!\nGood Luck and"..randomEncouragment;
+        elseif GOAL_TYPE == 5 then
+            message = "You are trying to find "..TH_LENGTH.." Mumbo Tokens scattered throughout the Isle O' Hags!\nGood Luck and"..randomEncouragment;
             BTH:setSettingMaxMumboTokens(TH_LENGTH)
         elseif GOAL_TYPE == 6 then
             message = "You need to defeat "..BH_LENGTH.." Bosses in order to defeat HAG-1!\nGood Luck and"..randomEncouragment;
@@ -8342,8 +9077,15 @@ function main()
     end
     print("Banjo-Tooie Archipelago Version " .. BT_VERSION)
     BTH = BTHACK:new(nil)
+    local check = 0
     while BTHACK:getSettingPointer() == nil
     do
+        check = check + 1
+        if(check == 75 and BTH:getRomVersion() == "0")
+        then
+            print("This is the vanilla rom. Please use the patched version of Banjo-Tooie.")
+            return
+        end
         emu.frameadvance()
     end
     server, error = socket.bind('localhost', 21221)
@@ -8408,16 +9150,13 @@ function main()
             end
         elseif (CUR_STATE == STATE_UNINITIALIZED) then
             if  (FRAME % 60 == 1) then
-                server:settimeout(2)
+                server:settimeout(0)
                 local client, timeout = server:accept()
                 if timeout == nil then
                     print('Initial Connection Made')
                     CUR_STATE = STATE_INITIAL_CONNECTION_MADE
                     BT_SOCK = client
                     BT_SOCK:settimeout(0)
-                else
-                    print('Connection failed, ensure Banjo Tooie Client is running, connected, reboot Core and rerun banjotooie_connector.lua')
-                    return
                 end
             end
         end

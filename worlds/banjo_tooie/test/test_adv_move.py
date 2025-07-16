@@ -5,7 +5,7 @@ from .. import all_item_table
 
 class AdvMovesEnabled(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true
+        "randomize_bt_moves": RandomizeBTMoveList.option_true
     }
 
     def test_item_pool(self) -> None:
@@ -25,7 +25,7 @@ class AdvMovesEnabled(BanjoTooieTestBase):
 
 class AdvMovesDisabled(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_false
+        "randomize_bt_moves": RandomizeBTMoveList.option_false
     }
 
     def test_disabled_item_pool(self) -> None:

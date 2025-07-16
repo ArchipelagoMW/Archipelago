@@ -7,7 +7,7 @@ from .. import all_item_table, all_group_table
 #Tests and make sure that if the correct Victory Condition is set, enough Mumbo Tokens are placed
 # and the game is beatable.
 class TokenTest(BanjoTooieTestBase):
-    mumbo_token_location_group = {}
+    mumbo_token_location_group = set()
 
     def test_mumbo_tokens(self, amt = None) -> None:
         if amt == None:

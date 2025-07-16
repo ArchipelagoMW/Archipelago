@@ -1,5 +1,5 @@
 from ..Options import RandomizeGlowbos
-from ..Items import level_progress_table
+from ..Items import glowbo_table
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
@@ -9,7 +9,7 @@ class TestRandomizedGlowbos(BanjoTooieTestBase):
     }
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
-        for glowbo in level_progress_table.keys():
+        for glowbo in glowbo_table.keys():
             assert glowbo in item_pool_names
 
 class TestVanillaGlowbos(BanjoTooieTestBase):
@@ -17,14 +17,14 @@ class TestVanillaGlowbos(BanjoTooieTestBase):
         "randomize_glowbos": RandomizeGlowbos.option_false,
     }
     def test_item_pool(self) -> None:
-        for glowbo in level_progress_table.keys():
+        for glowbo in glowbo_table.keys():
             assert not glowbo in self.multiworld.itempool
 
     def test_prefills(self) -> None:
-        glowbo_location_names = [item_data.default_location for item_data in level_progress_table.values()]
+        glowbo_location_names = [item_data.default_location for item_data in glowbo_table.values()]
         for location in self.world.get_locations():
             if location.name in glowbo_location_names:
-                assert location.name == level_progress_table[location.item.name].default_location
+                assert location.name == glowbo_table[location.item.name].default_location
 
 
 class TestRandomizedGlowbosIntended(TestRandomizedGlowbos, IntendedLogic):

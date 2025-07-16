@@ -1,3 +1,5 @@
+MENU = "Menu"
+
 IOHJV = "Isle O Hags - Jinjo Village"
 IOHJVKP  = "Isle O Hags - King Jingaling Palace"
 IOHJVGJ  = "Isle O Hags - Green Jinjo House"
@@ -75,6 +77,7 @@ TLS = "Terrydactyland Station"
 TL_HATCH = "Terrydactyland - Hatch Cave"
 TLSP = "Terrydactyland - Stomping Plains"
 TLTOP = "Terrydactyland - Top of the Mountain"
+TLIMTOP = "Terrydactyland - Inside the Mountain, Top"
 TLWARP = "Terrydactyland Warp Pads"
 
 GIO = "Outside Grunty Industries"
@@ -112,3 +115,14 @@ GIWARP = "Grunty Industries Warp Pads"
 HPWARP = "Hailfire Peaks Warp Pads"
 CCWARP = "Cloud Cuckooland Warp Pads"
 CKWARP = "Cauldron Keep Warp Pads"
+
+#Bosses needed for Rando. Don't change these names
+MTBOSS  = "Targitzan's Really Sacred Chamber"
+GMBOSS  = "Inside Chuffy's Boiler"
+WWBOSS  = "Big Top Interior"
+JRBOSS  = "Davy Jones' Locker"
+TLBOSS  = "Terry's Nest"
+GIBOSS  = "Repair Depot"
+HPFBOSS = "Chilli Billi Crater"
+HPIBOSS = "Chilli Willy Crater"
+CCBOSS  = "Mingy Jongo Skull"

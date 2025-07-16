@@ -5,7 +5,7 @@ from . import BanjoTooieTestBase
 
 class BlueEggStartVanillaMovesTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_false,
+        "randomize_bt_moves": RandomizeBTMoveList.option_false,
         "egg_behaviour": EggsBehaviour.option_start_with_blue_eggs,
     }
 
@@ -31,7 +31,7 @@ class BlueEggStartVanillaMovesTest(BanjoTooieTestBase):
 
 class BlueEggStartRandomizedMovesTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "egg_behaviour": EggsBehaviour.option_start_with_blue_eggs,
     }
 
@@ -46,7 +46,7 @@ class BlueEggStartRandomizedMovesTest(BanjoTooieTestBase):
 
 class RandomStartEggTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "egg_behaviour": EggsBehaviour.option_random_starting_egg,
         "randomize_notes": RandomizeNotes(True),
@@ -70,7 +70,7 @@ class RandomStartEggTest(BanjoTooieTestBase):
 
 class RandomSimpleStartEggTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "egg_behaviour": EggsBehaviour.option_simple_random_starting_egg,
         "randomize_notes": RandomizeNotes(True),
@@ -94,7 +94,7 @@ class RandomSimpleStartEggTest(BanjoTooieTestBase):
 
 class ProgressiveEggsTest(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "egg_behaviour": EggsBehaviour.option_progressive_eggs,
     }
 

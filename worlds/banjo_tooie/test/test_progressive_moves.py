@@ -6,7 +6,7 @@ from . import BanjoTooieTestBase
 
 class TestProgressiveMove(BanjoTooieTestBase):
     options = {
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "randomize_notes": RandomizeNotes.option_true
     }

@@ -1,7 +1,6 @@
 import typing
 from BaseClasses import ItemClassification
 from ...AutoWorld import call_all
-from test.bases import WorldTestBase
 from ..Options import HintClarity, RandomizeBKMoveList, RandomizeBTMoveList, RandomizeSignposts, SignpostHints, AddSignpostHintsToArchipelagoHints
 from . import BanjoTooieTestBase
 from ..Items import moves_table, bk_moves_table, progressive_ability_table, all_item_table
@@ -44,7 +43,7 @@ class TestSignpostsHints(BanjoTooieTestBase):
 
         # There can be more if slow locations are also hinted.
         possible_moves = 0
-        if self.world.options.randomize_moves:
+        if self.world.options.randomize_bt_moves:
             possible_moves += 24
         if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all:
             possible_moves += 16
@@ -157,7 +156,7 @@ class TestClearSignpostsNoHints(TestClearSignpostsHints):
 class TestClearSignpostsAllHintsHalfMoves(TestClearSignpostsHints):
     options = {
         **TestClearSignpostsHints.options,
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "signpost_hints": SignpostHints.range_end,
         "signpost_move_hints": 30,
@@ -174,7 +173,7 @@ class TestCrypticSignpostsNoHints(TestCrypticSignpostsHints):
 class TestCrypticSignpostsAllHintsHalfMoves(TestCrypticSignpostsHints):
     options = {
         **TestCrypticSignpostsHints.options,
-        "randomize_moves": RandomizeBTMoveList.option_true,
+        "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "signpost_hints": SignpostHints.range_end,
         "signpost_move_hints": 30,

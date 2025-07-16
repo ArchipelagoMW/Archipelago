@@ -2,8 +2,10 @@ from collections import defaultdict
 from ..Names import itemName
 from . import BanjoTooieTestBase
 
+BASE_FILLERS = 4
+
 ALL_90_JIGGIES_AND_900_NOTES_PROGRESSION = {
-    "game_length": "custom",
+    "world_requirements": "custom",
     "custom_worlds": "1,1,1,1,1,1,1,1,90",
     "randomize_notes": "false",
 }
@@ -19,7 +21,7 @@ ADD_NO_FILLERS_FROM_BK_MOVES = {
 ADD_687_FILLERS = {
     **ADD_16_FILLERS_FROM_BK_MOVES,
     # length config (adds 44)
-    "game_length": "custom",
+    "world_requirements": "custom",
     "custom_worlds": "1,1,1,1,1,1,1,1,1",
     # nests config (adds 473)
     "nestsanity": "true",
@@ -89,7 +91,7 @@ class TestMaxTrapsZero(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.filler_distribution.values()) == 16
+        assert sum(pool.filler_distribution.values()) == 16 + BASE_FILLERS
         assert sum(pool.trap_distribution.values()) == 0
 
 class TestMaxTrapsNonZero(FillersTrapTestBase):
@@ -108,7 +110,7 @@ class TestMaxTrapsNonZero(FillersTrapTestBase):
         traps = sum(pool.trap_distribution.values())
         assert fillers > 0
         assert traps > 0
-        assert fillers + traps == 16
+        assert fillers + traps == 16 + BASE_FILLERS
 
 class TestMaxTrapsZeroWithNestsanity(FillersTrapTestBase):
     options = {
@@ -122,7 +124,7 @@ class TestMaxTrapsZeroWithNestsanity(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.filler_distribution.values()) == 315 + 135 + 23   # all three nest types
+        assert sum(pool.filler_distribution.values()) == 315 + 135 + 23 + BASE_FILLERS    # all three nest types
         assert sum(pool.trap_distribution.values()) == 0
 
 
@@ -141,7 +143,7 @@ class TestFillersExtraClefs(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.filler_distribution.values()) == 30 + 21 * 3
+        assert sum(pool.filler_distribution.values()) == 30 + 21 * 3 + BASE_FILLERS
         assert sum(pool.trap_distribution.values()) == 0
 
 
@@ -154,7 +156,7 @@ class TestAllWeightsZeroAddPants(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert pool.distribution[itemName.NONE] == 687
+        assert pool.distribution[itemName.NONE] == 687 + BASE_FILLERS
 
 class TestAllFillerWeightsZeroAddRestPants(FillersTrapTestBase):
     options = {
@@ -174,7 +176,7 @@ class TestAllFillerWeightsZeroAddRestPants(FillersTrapTestBase):
         pool = self.pool()
 
         assert pool.distribution[itemName.SQTRAP] == 87
-        assert pool.distribution[itemName.NONE] == 600
+        assert pool.distribution[itemName.NONE] == (687 + BASE_FILLERS) - 87
 
 class TestRespectDistribution(FillersTrapTestBase):
     options = {
@@ -201,7 +203,7 @@ class TestRespectDistribution(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
 
         assert pool.distribution[itemName.JIGGY] == 0
         assert pool.distribution[itemName.NONE] == 0
@@ -209,12 +211,12 @@ class TestRespectDistribution(FillersTrapTestBase):
         assert pool.distribution[itemName.STRAP] == 0
         assert pool.distribution[itemName.TRTRAP] == 0
         assert pool.distribution[itemName.GNEST] == 0
-        assert   4 <= pool.distribution[itemName.DOUBLOON] <= 35
-        assert   4 <= pool.distribution[itemName.ENEST] <= 35
-        assert  66 <= pool.distribution[itemName.NOTE] <= 129
-        assert  66 <= pool.distribution[itemName.FNEST] <= 129
-        assert 155 <= pool.distribution[itemName.SQTRAP] <= 236
-        assert 155 <= pool.distribution[itemName.TITRAP] <= 236
+        assert   6 <= pool.distribution[itemName.DOUBLOON] <= 38
+        assert   6 <= pool.distribution[itemName.ENEST] <= 38
+        assert  75 <= pool.distribution[itemName.NOTE] <= 141
+        assert  75 <= pool.distribution[itemName.FNEST] <= 141
+        assert 174 <= pool.distribution[itemName.SQTRAP] <= 258
+        assert 174 <= pool.distribution[itemName.TITRAP] <= 258
 
 
 class TestRespectDistribution2(FillersTrapTestBase):
@@ -242,7 +244,7 @@ class TestRespectDistribution2(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
 
         assert pool.distribution[itemName.DOUBLOON] == 0
         assert pool.distribution[itemName.ENEST] == 0
@@ -250,12 +252,12 @@ class TestRespectDistribution2(FillersTrapTestBase):
         assert pool.distribution[itemName.FNEST] == 0
         assert pool.distribution[itemName.SQTRAP] == 0
         assert pool.distribution[itemName.TITRAP] == 0
-        assert   4 <= pool.distribution[itemName.JIGGY] <= 35
-        assert   4 <= pool.distribution[itemName.NONE] <= 35
-        assert  66 <= pool.distribution[itemName.TTRAP] <= 129
-        assert  66 <= pool.distribution[itemName.STRAP] <= 129
-        assert 155 <= pool.distribution[itemName.TRTRAP] <= 236
-        assert 155 <= pool.distribution[itemName.GNEST] <= 236
+        assert   6 <= pool.distribution[itemName.JIGGY] <= 35
+        assert   6 <= pool.distribution[itemName.NONE] <= 35
+        assert  75 <= pool.distribution[itemName.TTRAP] <= 141
+        assert  75 <= pool.distribution[itemName.STRAP] <= 141
+        assert 174 <= pool.distribution[itemName.TRTRAP] <= 258
+        assert 174 <= pool.distribution[itemName.GNEST] <= 258
 
 class TestRespectMaxTraps(FillersTrapTestBase):
     options = {
@@ -273,7 +275,7 @@ class TestRespectMaxTraps(FillersTrapTestBase):
         pool = self.pool()
 
         assert sum(pool.trap_distribution.values()) == 30
-        assert sum(pool.filler_distribution.values()) == 657
+        assert sum(pool.filler_distribution.values()) == (687 + BASE_FILLERS) - 30
 
         assert 280 <= pool.filler_distribution[itemName.ENEST] <= 375
         assert 280 <= pool.filler_distribution[itemName.FNEST] <= 375
@@ -289,7 +291,7 @@ class TestJiggiesHardLimit(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         assert pool.total_distribution[itemName.JIGGY] == 249 # One more for jingaling's
 
 class TestDoubloonsHardLimit(FillersTrapTestBase):
@@ -303,7 +305,7 @@ class TestDoubloonsHardLimit(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         assert pool.total_distribution[itemName.DOUBLOON] == 250
 
 
@@ -318,7 +320,7 @@ class TestNotesHardLimit(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         assert pool.total_distribution[itemName.NOTE] == 250
 
 class TestDefaultFillersWithNestsanityPlenty(FillersTrapTestBase):
@@ -330,7 +332,7 @@ class TestDefaultFillersWithNestsanityPlenty(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 687
+        assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         # adding reasonable expectations here
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 120
         assert 20 <= pool.filler_distribution[itemName.JIGGY] <= 100
@@ -344,7 +346,7 @@ class TestDefaultFillersWithoutNestsanityPlenty(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 214
+        assert sum(pool.distribution.values()) == 214 + BASE_FILLERS
         # adding reasonable expectations here
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 90
         assert 20 <= pool.filler_distribution[itemName.JIGGY] <= 70
@@ -363,7 +365,7 @@ class TestDefaultFillersWithoutNestsanityReasonable(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert sum(pool.distribution.values()) == 187
+        assert sum(pool.distribution.values()) == 187 + BASE_FILLERS
         # adding reasonable expectations here
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 90
         assert 15 <= pool.filler_distribution[itemName.JIGGY] <= 65
@@ -374,7 +376,7 @@ class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
 
         # exactly 50 jiggies are progressive
         "jingaling_jiggy": "false",
-        "game_length": "custom",
+        "world_requirements": "custom",
         "custom_worlds": "1,1,1,1,1,1,1,1,50",
 
         # This also adds 9 filler
@@ -402,7 +404,7 @@ class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
         assert sum(pool.distribution.values()) == \
                pool.filler_distribution[itemName.JIGGY]\
                + pool.filler_distribution[itemName.NOTE]\
-               + 25
+               + 25 + BASE_FILLERS
 
         assert pool.filler_distribution[itemName.JIGGY] == 20
         # clefts account for 250 total.
@@ -416,7 +418,7 @@ class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
 class TestNoReplaceExtraJiggiesMinimalRespectCount(FillersTrapTestBase):
     options = {
         **ADD_16_FILLERS_FROM_BK_MOVES,
-        "game_length": "custom",
+        "world_requirements": "custom",
         "custom_worlds": "1,1,1,1,1,1,1,1,1",
 
         "randomize_jinjos": "false",
@@ -433,7 +435,7 @@ class TestNoReplaceExtraJiggiesMinimalRespectCount(FillersTrapTestBase):
 class TestNoReplaceExtraJiggiesMaximalRespectCount(FillersTrapTestBase):
     options = {
         **ADD_16_FILLERS_FROM_BK_MOVES,
-        "game_length": "custom",
+        "world_requirements": "custom",
         "custom_worlds": "1,1,1,1,1,1,1,1,90",
 
         "randomize_jinjos": "false",

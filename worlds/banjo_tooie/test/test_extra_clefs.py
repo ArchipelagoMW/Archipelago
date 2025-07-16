@@ -1,5 +1,5 @@
 from ..Names import itemName
-from ..Options import BassClefNotes, RandomizeBKMoveList, RandomizeNotes, TrebleclefNotes
+from ..Options import BassClefNotes, RandomizeNotes, TrebleclefNotes
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from . import BanjoTooieTestBase
