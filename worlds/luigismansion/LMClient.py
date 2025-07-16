@@ -807,7 +807,7 @@ def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
         try:
             lm_usa_manifest = lm_usa_patch.read_contents(output_data)
             server_address = lm_usa_manifest["server"]
-            asyncio.run(lm_usa_patch.patch(output_data))
+            lm_usa_patch.patch(output_data)
         except Exception as ex:
             logger.error("Unable to patch your Luigi's Mansion ROM as expected. Additional details:\n" + str(ex))
             Utils.messagebox("Cannot Patch Luigi's Mansion", "Unable to patch your Luigi's Mansion ROM as " +
