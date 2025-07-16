@@ -2,8 +2,8 @@
 Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NCGJjt9wil1gnRB2rZO9DIv_5etKmRf0sAH66i5SVQ/edit?usp=sharing) for collecting everything relevant to the vanilla game!
 
 ## Mercay island
-- [Swordless/bombless Mountain Passage](https://www.youtube.com/watch?v=6_J14xLnVWM). Savewarping from the back entrance of Mountain Passage also works (Not in logic)
-- [Mercay out of bounds](https://www.youtube.com/watch?v=IcyfYE68LUQ). (Not in logic yet)
+- [Swordless/bombless Mountain Passage](https://www.youtube.com/watch?v=6_J14xLnVWM). Savewarping from the back entrance of Mountain Passage also works (Glitched Logic)
+- [Mercay out of bounds](https://www.youtube.com/watch?v=IcyfYE68LUQ). (Glitched Logic)
 
 ## TotOK
 - Phantom hourglass time is not yet in logic, I've started planning for it but it's a ways away.
@@ -31,7 +31,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
  - [Bomb garden skip](https://www.youtube.com/watch?v=KtJ2GkNlr3E) (doesn't effect logic)
 
 ## Isle of Ember
-- [Grapple chest without grapple](https://www.youtube.com/watch?v=IZiyFStyRfg) (Not implemented yet)
+- [Grapple chest without grapple](https://www.youtube.com/watch?v=IZiyFStyRfg) (Glitched Logic)
 
 ## Temple of Fire
 - Hit 1F spin switch with things other than sword: bombs, chus and boomerang (Hard Logic)
@@ -41,7 +41,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - 1F Hammer clip all the switches (Glitched Logic)
 - B1 Invisible maze early
   - With grapple (all settings)
-  - [With boomerang](https://www.youtube.com/watch?v=2DAUMNNQNhw) (Not implemented yet)
+  - [With boomerang](https://www.youtube.com/watch?v=2DAUMNNQNhw) (Glitched Logic)
 - B1 Boomerang Skip with Spirit of Courage (Not Implemented)
 
 ## Temple of Wind
@@ -68,7 +68,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - 3F hit boomerang switches with bow (Hard Logic)
 - 1F shortcut hammer clip (Glitched Logic)
 - B1 Hammer clip color switch (Glitched logic)
-- B1 [BCL switch skip](https://www.youtube.com/watch?v=aED-Yp_5MXo) (Not implemented yet)
+- B1 [BCL switch skip](https://www.youtube.com/watch?v=aED-Yp_5MXo) (Glitched Logic)
 - B1 Jump to boomerang switches and hit with bow (Hard Logic)
 - B2 Hammer clip for early boss key (Glitched Logic)
 
