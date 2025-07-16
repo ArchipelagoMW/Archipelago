@@ -9,7 +9,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - Phantom hourglass time is not yet in logic, I've started planning for it but it's a ways away.
 - Kill b1 phantoms with
   - Phantom Sword (all settings)
-  - Bow or (Sword + 2 Spirits of Power) or Hammer (Kill phantoms with stun)
+  - Bow or (Sword + 2 Spirits of Power) or Hammer (Kill phantoms with stun). Push them into the pit by the grapple pegs
   - Grappling Hook (Kill phantoms with weapon)
  - B2 hit swtiches with pots from floor above (Hard Logic)
  - B2 hit switch over fire with pot (Hard Logic)
@@ -34,6 +34,7 @@ Thanks to the [glitches spreadsheet](https://docs.google.com/spreadsheets/d/18NC
 - [Grapple chest without grapple](https://www.youtube.com/watch?v=IZiyFStyRfg) (Not implemented yet)
 
 ## Temple of Fire
+- Hit 1F spin switch with things other than sword: bombs, chus and boomerang (Hard Logic)
 - [Rat key early](https://www.youtube.com/watch?v=OJ-CwmYvWrc) (really tricky to kill rat with just boomerang, doesn't effect logic if killed with hammer clip)
 
 ## Temple of Courage
