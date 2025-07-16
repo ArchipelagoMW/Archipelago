@@ -70,6 +70,7 @@ Multiworld host instructions for the Use Mods option:
 1. In order to select the mods you'd like to include in randomization, make a folder named "crystal_project_mods" inside your root Archipelago directory.
 1. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>/steamapps/workshop/content/1637730) and find the individual folders for the mods you'd like to include.
 1. Inside each mod's folder is a mod json. Copy that json to the crystal_project_mods folder you made inside the Archipelago directory.
+1. If you have a specific order you want to apply the mods, rename the jsons such that they are in alphabetical order in the order you want them to be applied. E.g. name the first mod a_modname, the second b_modname, etc.
 
 NOTE: When the Use Mods option is on, all Crystal Project players in the multiworld with this option enabled MUST use the same mods.
 
