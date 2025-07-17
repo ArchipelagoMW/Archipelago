@@ -17,14 +17,6 @@ flowchart LR
     end
     CC <-- Integrated --> SC2C
 
-    %% ChecksFinder
-    subgraph ChecksFinder
-        CFC[ChecksFinderClient]
-        CF[ChecksFinder]
-        CFC <--> CF
-    end
-    CC <-- Integrated --> CFC
-
     %% A Link to the Past
     subgraph A Link to the Past
         LTTP[SNES]
@@ -139,6 +131,16 @@ flowchart LR
         NM <--> R
     end
     AS <-- WebSockets --> NM
+
+    %% Godot Based Games
+    subgraph Godot
+        GT[Game using GodotAP project]
+        ASU[APSudoku]
+        CF[ChecksFinder]
+        GT <--> ASU
+        GT <--> CF
+    end
+    AS <-- WebSockets --> GT
 
     %% Archipelago WebHost
     subgraph "WebHost (archipelago.gg)"
