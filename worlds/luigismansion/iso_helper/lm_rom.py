@@ -111,6 +111,8 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
 
                 sys.path.append(temp_zip_path)
 
+                Utils.messagebox("I AM A TEMP BOX", f"DONT CLICK OKAY UNTIL YOU CHECK: {temp_zip_path}")
+
                 # Verify we have a clean rom of the game first
                 self.verify_base_rom(lm_clean_iso)
 
