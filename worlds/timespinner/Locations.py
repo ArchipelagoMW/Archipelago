@@ -150,10 +150,10 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Jackpot room chest 3',  1337118, lambda state: flooded.flood_maw or logic.has_forwarddash_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Jackpot room chest 4',  1337119, lambda state: flooded.flood_maw or logic.has_forwarddash_doublejump(state)),
         LocationData('Caves of Banishment (upper)', 'Caves of Banishment (Maw): Pedestal',  1337120, lambda state: not flooded.flood_maw or state.has('Water Mask', player)),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Last chance before Maw',  1337121, lambda state: state.has('Water Mask', player) if flooded.flood_maw else logic.has_doublejump(state)),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Plasma Crystal', 1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) and (not flooded.flood_maw or state.has('Water Mask', player))),
-        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player) and (not flooded.flood_maw or state.has('Water Mask', player))),
-        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Mineshaft',  1337122, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player) and (not flooded.flood_maw or state.has('Water Mask', player))),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Last chance before Maw',  1337121, lambda state: flooded.flood_maw or logic.has_doublejump(state)),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Plasma Crystal', 1337173, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
+        LocationData('Caves of Banishment (Maw)', 'Killed Maw',  EventId, lambda state: state.has('Gas Mask', player)),
+        LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Mineshaft',  1337122, lambda state: state.has_any({'Gas Mask', 'Talaria Attachment'}, player)),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Wyvern room',  1337123),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Siren room above water chest',  1337124),
         LocationData('Caves of Banishment (Sirens)', 'Caves of Banishment (Sirens): Siren room underwater left chest',  1337125, lambda state: state.has('Water Mask', player)),
@@ -251,7 +251,7 @@ def get_location_datas(player: Optional[int], options: Optional[TimespinnerOptio
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Top Struggle Juggle Base (War of the Sisters)',  1337195),
             LocationData('Royal towers (upper)', 'Royal Towers: Journal - Aelana Boss (Stained Letter)',  1337196),
             LocationData('Royal towers', 'Royal Towers: Journal - Near Bottom Struggle Juggle (Mission Findings)',  1337197, lambda state: flooded.flood_courtyard or logic.has_doublejump_of_npc(state)),
-            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198, lambda state: not flooded.flood_maw or state.has('Water Mask', player))
+            LocationData('Caves of Banishment (Maw)', 'Caves of Banishment (Maw): Journal - Lower Left Caves (Naivety)',  1337198)
         )
 
     # 1337199 - 1337232 Reserved for future use
