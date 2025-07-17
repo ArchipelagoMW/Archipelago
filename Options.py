@@ -1485,7 +1485,7 @@ class PlandoItem:
     force: bool | typing.Literal["silent"] = "silent"
     count: int | bool | dict[str, int] = False
     percentage: int = 100
-    item_group_method: typing.Literal["all", "uniform", "random"] = "random"
+    item_group_unfolding: typing.Literal["all", "uniform", "random"] = "random"
 
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
@@ -1506,10 +1506,10 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         value: typing.List[PlandoItem] = []
         for item in data:
             if isinstance(item, typing.Mapping):
-                item_group_method = item.get("item_group_method", "random")
-                if item_group_method not in ("all", "uniform", "random"):
-                    raise Exception(f"Plando `item_group_method` has to be \"all\", \"uniform\", or \"random\", "
-                                    f"not {item_group_method}")
+                item_group_unfolding = item.get("item_group_unfolding", "random")
+                if item_group_unfolding not in ("all", "uniform", "random"):
+                    raise Exception(f"Plando `item_group_unfolding` has to be \"all\", \"uniform\", or \"random\", "
+                                    f"not {item_group_unfolding}")
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
                     raise OptionError(f"Plando `percentage` has to be int, not {type(percentage)}.")
@@ -1546,7 +1546,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         raise OptionError(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
                     if not (isinstance(force, bool) or force == "silent"):
                         raise OptionError(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
-                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage, item_group_method))
+                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage, item_group_unfolding))
             elif isinstance(item, PlandoItem):
                 if roll_percentage(item.percentage):
                     value.append(item)
@@ -1584,9 +1584,9 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             if value is True:
                                 for key in filtered_items:
                                     plando.items[key] = True
-                            elif plando.item_group_method == "all":
+                            elif plando.item_group_unfolding == "all":
                                 plando.items.update({key: value for key in filtered_items})
-                            elif plando.item_group_method == "uniform":
+                            elif plando.item_group_unfolding == "uniform":
                                 quotient, remainder = divmod(value, len(filtered_items))
                                 plando.items.update({key: quotient for key in filtered_items})
                                 for key in random.sample(filtered_items, k=remainder):
