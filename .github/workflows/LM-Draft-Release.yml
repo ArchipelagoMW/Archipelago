@@ -25,9 +25,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: lib-windows
-        path: |
-          ./lib-windows/**
-          !./lib-windows/**/___pycache___/
+        path: ./lib-windows/**
   
   linux-deps:
     runs-on: ubuntu-latest
@@ -44,9 +42,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: lib-linux
-        path:  |
-          ./lib-linux/**
-          !./lib-linux/**/___pycache___/
+        path: ./lib-linux/**
 
   fuzz:
     needs: [windows-deps, linux-deps]
@@ -79,20 +75,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Create Local Windows Lib Folder
-        run: mkdir worlds/luigismansion/iso_helper/lib-windows
-      - name: Create Local Linux Lib Folder
-        run: mkdir worlds/luigismansion/iso_helper/lib-linux
-      
-      - uses: actions/download-artifact@v4
-        with:
-          name: lib-windows
-          path: worlds/luigismansion/iso_helper/lib-windows
-      - uses: actions/download-artifact@v4
-        with:
-          name: lib-linux
-          path: worlds/luigismansion/iso_helper/lib-linux
 
       - name: Compress Directory
         run: Compress-Archive -Path ./worlds/luigismansion -DestinationPath ./luigismansion.apworld
