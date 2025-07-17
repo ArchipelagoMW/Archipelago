@@ -8,10 +8,21 @@ from .static_locations import ID_START
 
 ITEM_DATA: Dict[str, ItemData] = {}
 ITEM_GROUPS: Dict[str, Set[str]] = {}
+POSSIBLE_ITEMS: Set[str] = set()
 
 # Useful items that are treated specially at generation time and should not be automatically added to the player's
 # item list during get_progression_items.
 _special_usefuls: List[str] = ["Puzzle Skip"]
+
+_impossible_items: Set[str] = {
+    "Dots",
+    "Full Dots",
+    "Symmetry",
+    "Colored Dots",
+    "Stars",
+    "Stars + Same Colored Symbol",
+    "Invisible Dots"
+}
 
 ALWAYS_GOOD_SYMBOL_ITEMS: Set[str] = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
@@ -70,6 +81,9 @@ def populate_items() -> None:
 
         ITEM_DATA[item_name] = ItemData(ap_item_code, definition,
                                         classification, local_only)
+
+        if item_name not in _impossible_items:
+            POSSIBLE_ITEMS.add(item_name)
 
 
 def get_item_to_door_mappings() -> Dict[int, List[int]]:
