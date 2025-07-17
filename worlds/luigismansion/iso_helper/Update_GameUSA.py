@@ -49,11 +49,9 @@ def update_game_usa(given_gcm: GCM) -> GCM:
 
     logger.info("Overwriting game_uza.szp with the new re-created file...")
     given_gcm.delete_file(given_gcm.files_by_path["files/Game/game_usa.szp"])
-    logger.info("Overwriting game_uza.szp with the new re-created file...")
     given_gcm.add_new_file("files/Game/game_usa.szp", game_usa_edit)
-    logger.info("Overwriting game_uza.szp with the new re-created file...")
     game_usa_edit.save_changes()
-    logger.info("Overwriting game_uza.szp with the new re-created file...")
+    logger.info("game_uza.szp Yay0 check...")
     given_gcm.changed_files["files/Game/game_usa.szp"] = Yay0.compress(game_usa_edit.data)
     return given_gcm
 
