@@ -260,11 +260,7 @@ class HatInTimeWorld(World):
                                        f"{item_name} ({self.multiworld.get_player_name(loc.item.player)})")
 
         slot_data["ShopItemNames"] = shop_item_names
-
-        for name, value in self.options.as_dict(*self.options_dataclass.type_hints).items():
-            if name in slot_data_options:
-                slot_data[name] = value
-
+        slot_data.update(self.options.as_dict(*slot_data_options))
         return slot_data
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
