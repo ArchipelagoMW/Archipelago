@@ -20,9 +20,10 @@ from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, app
 from .Rules import set_rules
 
 
-def launch_client():
+def launch_client(*args):
     from .Client import main
-    launch(main, name="AdventureClient")
+    launch(main, name="AdventureClient", args=args)
+
 
 components.append(Component(display_name='Adventure Client', func=launch_client, component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier('.apadvn')))

@@ -746,11 +746,11 @@ class CompatItemHolder(typing.NamedTuple):
     quantity: int = 1
 
 
-async def main():
+async def main(launcher_args):
     multiprocessing.freeze_support()
     parser = get_base_parser()
     parser.add_argument('--name', default=None, help="Slot Name to connect as.")
-    args = parser.parse_args()
+    args = parser.parse_args(launcher_args)
 
     ctx = SC2Context(args.connect, args.password)
     ctx.auth = args.name
@@ -1624,7 +1624,7 @@ def get_location_offset(mission_id):
         else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
 
 
-def launch():
+def launch(*launcher_args: str):
     colorama.just_fix_windows_console()
-    asyncio.run(main())
+    asyncio.run(main(launcher_args))
     colorama.deinit()

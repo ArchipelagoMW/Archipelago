@@ -19,9 +19,10 @@ from worlds.generic.Rules import add_item_rule, add_rule, forbid_item
 from worlds.LauncherComponents import Component, components, launch, Type, SuffixIdentifier
 
 
-def launch_client():
+def launch_client(*args):
     from .Client import main
-    launch(main, name="MMBN3Client")
+    launch(main, name="MMBN3Client", args=args)
+
 
 components.append(Component(display_name="MMBN3 Client", func=launch_client, component_type=Type.CLIENT,
                             file_identifier=SuffixIdentifier('.apbn3')))

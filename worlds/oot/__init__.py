@@ -41,16 +41,19 @@ from worlds.LauncherComponents import launch as launch_componenent, components, 
 i_o_limiter = threading.Semaphore(2)
 
 
-def launch_client():
+def launch_client(*args):
     from .Client import main
-    launch_componenent(main, name="OoTClient")
-
-components.append(Component(display_name="OoT Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apz5')))
+    launch_componenent(main, name="OoTClient", args=args)
 
 
-def launch_adjuster():
+components.append(Component(display_name="OoT Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apz5')))
+
+
+def launch_adjuster(*args):
     from .Adjuster import launch
-    launch_componenent(launch, name="OoTAdjuster")
+    launch_componenent(launch, name="OoTAdjuster", args=args)
+
 
 components.append(Component(display_name="OoT Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 

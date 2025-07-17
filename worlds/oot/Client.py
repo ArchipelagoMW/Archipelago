@@ -314,7 +314,7 @@ async def patch_and_run_game(apz5_file):
     async_start(run_game(comp_path))
 
 
-def main():
+def main(*launcher_args: str):
 
     Utils.init_logging("OoTClient")
 
@@ -323,7 +323,7 @@ def main():
         parser = get_base_parser()
         parser.add_argument('apz5_file', default="", type=str, nargs="?",
                             help='Path to an APZ5 file')
-        args = parser.parse_args()
+        args = parser.parse_args(launcher_args)
 
         if args.apz5_file:
             logger.info("APZ5 file supplied, beginning patching process...")

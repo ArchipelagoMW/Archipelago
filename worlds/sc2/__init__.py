@@ -22,9 +22,10 @@ from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2
     SC2Race
 
 
-def launch_client():
+def launch_client(*args):
     from .Client import launch
-    launch_component(launch, name="StarCraft2Client")
+    launch_component(launch, name="StarCraft2Client", args=args)
+
 
 components.append(Component(display_name="Starcraft 2 Client", func=launch_client, component_type=Type.CLIENT))
 

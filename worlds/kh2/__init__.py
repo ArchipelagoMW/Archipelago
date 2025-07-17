@@ -19,6 +19,7 @@ def launch_client(*args: str):
     from .Client import main
     launch_component(main, name="KH2Client", args=args)
 
+
 components.append(Component(display_name="KH2 Client", func=launch_client, component_type=Type.CLIENT))
 
 

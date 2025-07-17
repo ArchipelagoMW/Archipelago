@@ -760,14 +760,14 @@ def run_game(romfile: str) -> None:
         except FileNotFoundError:
             logger.error(f"Couldn't launch ROM, {args[0]} is missing")
 
-async def main():
+async def main(launch_args):
     parser = get_base_parser(description="Link's Awakening Client.")
     parser.add_argument("--url", help="Archipelago connection url")
     parser.add_argument("--no-magpie", dest='magpie', default=True, action='store_false', help="Disable magpie bridge")
     parser.add_argument('diff_file', default="", type=str, nargs="?",
                         help='Path to a .apladx Archipelago Binary Patch file')
 
-    args = parser.parse_args()
+    args = parser.parse_args(launch_args)
 
     if args.diff_file:
         import Patch
@@ -795,7 +795,7 @@ async def main():
     await ctx.exit_event.wait()
     await ctx.shutdown()
 
-def main():
+def main(*launch_args):
     colorama.just_fix_windows_console()
-    asyncio.run(main())
+    asyncio.run(main(launch_args))
     colorama.deinit()

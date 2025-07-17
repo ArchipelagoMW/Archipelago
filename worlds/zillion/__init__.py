@@ -31,11 +31,13 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, launch as launch_component, Type, SuffixIdentifier
 
 
-def launch_client():
+def launch_client(*args):
     from .client import launch
-    launch_component(launch, name="ZillionClient")
+    launch_component(launch, name="ZillionClient", args=args)
 
-components.append(Component(display_name="Zillion Client", func=launch_client, component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apzl')))
+
+components.append(Component(display_name="Zillion Client", func=launch_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier('.apzl')))
 
 
 class ZillionSettings(settings.Group):

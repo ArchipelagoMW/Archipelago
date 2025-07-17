@@ -20,6 +20,7 @@ def launch_client(*args: str):
     from .Client import launch
     launch_component(launch, name="AHITClient", args=args)
 
+
 components.append(Component(display_name="A Hat in Time Client", func=launch_client, component_type=Type.CLIENT, icon='yatta'))
 
 icon_paths['yatta'] = local_path('data', 'yatta.png')

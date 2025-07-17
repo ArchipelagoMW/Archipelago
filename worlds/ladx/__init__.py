@@ -36,11 +36,13 @@ from .Rom import LADXDeltaPatch, get_base_rom_path
 DEVELOPER_MODE = False
 
 
-def launch_client():
+def launch_client(*args):
     from .Client import main
-    launch(main, name="LinksAwakeningClient")
+    launch(main, name="LinksAwakeningClient", args=args)
 
-components.append(Component(display_name="Links Awakening DX Client", func=launch_client, file_identifier=SuffixIdentifier('.apladx')))
+
+components.append(Component(display_name="Links Awakening DX Client", func=launch_client,
+                            file_identifier=SuffixIdentifier('.apladx')))
 
 
 class LinksAwakeningSettings(settings.Group):

@@ -166,9 +166,9 @@ def get_argparser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main(launcher_args):
     parser = get_argparser()
-    args = parser.parse_args(namespace=get_adjuster_settings_no_defaults(GAME_ALTTP))
+    args = parser.parse_args(launcher_args, namespace=get_adjuster_settings_no_defaults(GAME_ALTTP))
     
     # set up logger
     loglevel = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}[
@@ -1387,5 +1387,5 @@ class ToolTips(object):
             cls.after_id = None
 
 
-def launch():
-    main()
+def launch(*launcher_args):
+    main(launcher_args)

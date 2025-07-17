@@ -17,7 +17,7 @@ from Utils import local_path
 
 logger = logging.getLogger('OoTAdjuster')
 
-def main():
+def main(launcher_args):
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--rom', default='', 
@@ -32,7 +32,7 @@ def main():
     parser.add_argument('--deathlink',
         help='Enable DeathLink system', action='store_true')
 
-    args = parser.parse_args()
+    args = parser.parse_args(launcher_args)
     if not os.path.isfile(args.rom):
         adjustGUI()
     else:
@@ -246,5 +246,5 @@ def adjust(args):
             os.remove("ZOOTDEC.z64")
     return comp_path
 
-def launch():
-    main()
+def launch(*launcher_args: str):
+    main(launcher_args)

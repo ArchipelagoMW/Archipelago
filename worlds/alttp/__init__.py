@@ -29,9 +29,10 @@ lttp_logger = logging.getLogger("A Link to the Past")
 extras_list = sum(difficulties['normal'].extras[0:5], [])
 
 
-def launch_adjuster():
+def launch_adjuster(*args):
     from .Adjuster import launch
-    launch_component(launch, "LttPAdjuster")
+    launch_component(launch, "LttPAdjuster", args=args)
+
 
 components.append(Component(display_name="LttP Adjuster", component_type=Type.ADJUSTER, func=launch_adjuster))
 
