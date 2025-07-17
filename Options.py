@@ -1485,7 +1485,7 @@ class PlandoItem:
     force: bool | typing.Literal["silent"] = "silent"
     count: int | bool | dict[str, int] = False
     percentage: int = 100
-    item_group_method: typing.Literal["all", "even", "random"] = "random"
+    item_group_method: typing.Literal["all", "uniform", "random"] = "random"
 
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
@@ -1507,8 +1507,8 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         for item in data:
             if isinstance(item, typing.Mapping):
                 item_group_method = item.get("item_group_method", "random")
-                if item_group_method not in ("all", "even", "random"):
-                    raise Exception(f"Plando `item_group_method` has to be \"all\", \"even\", or \"random\", "
+                if item_group_method not in ("all", "uniform", "random"):
+                    raise Exception(f"Plando `item_group_method` has to be \"all\", \"uniform\", or \"random\", "
                                     f"not {item_group_method}")
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
@@ -1586,7 +1586,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                                     plando.items[key] = True
                             elif plando.item_group_method == "all":
                                 plando.items.update({key: value for key in filtered_items})
-                            elif plando.item_group_method == "even":
+                            elif plando.item_group_method == "uniform":
                                 quotient, remainder = divmod(value, len(filtered_items))
                                 plando.items.update({key: quotient for key in filtered_items})
                                 for key in random.sample(filtered_items, k=remainder):
