@@ -26,7 +26,6 @@ from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
 from .iso_helper.lm_rom import LMPlayerContainer
-from .LMClient import CLIENT_VERSION
 
 def run_client(*args):
     from .LMClient import main  # lazy import
@@ -896,6 +895,8 @@ class LMWorld(World):
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
+        from .LMClient import CLIENT_VERSION
+
         return {
             "rank requirement": self.options.rank_requirement.value,
             "better vacuum": self.options.good_vacuum.value,
