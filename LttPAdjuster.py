@@ -33,10 +33,15 @@ WINDOW_MIN_HEIGHT = 525
 WINDOW_MIN_WIDTH = 425
 
 class AdjusterWorld(object):
+    class AdjusterSubWorld(object):
+        def __init__(self, random):
+            self.random = random
+
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
         self.per_slot_randoms = {1: random}
+        self.worlds = {1: self.AdjusterSubWorld(random)}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
