@@ -1485,6 +1485,7 @@ class PlandoItem:
     force: bool | typing.Literal["silent"] = "silent"
     count: int | bool | dict[str, int] = False
     percentage: int = 100
+    item_group_method: typing.Literal["all", "even", "random"] = "random"
 
 
 class PlandoItems(Option[typing.List[PlandoItem]]):
@@ -1505,6 +1506,10 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
         value: typing.List[PlandoItem] = []
         for item in data:
             if isinstance(item, typing.Mapping):
+                item_group_method = item.get("item_group_method", "random")
+                if item_group_method not in ("all", "even", "random"):
+                    raise Exception(f"Plando `item_group_method` has to be \"all\", \"even\", or \"random\", "
+                                    f"not {item_group_method}")
                 percentage = item.get("percentage", 100)
                 if not isinstance(percentage, int):
                     raise OptionError(f"Plando `percentage` has to be int, not {type(percentage)}.")
@@ -1541,7 +1546,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                         raise OptionError(f"Plando 'from_pool' has to be true or false, not {from_pool!r}.")
                     if not (isinstance(force, bool) or force == "silent"):
                         raise OptionError(f"Plando `force` has to be true or false or `silent`, not {force!r}.")
-                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage))
+                    value.append(PlandoItem(items, locations, world, from_pool, force, count, percentage, item_group_method))
             elif isinstance(item, PlandoItem):
                 if roll_percentage(item.percentage):
                     value.append(item)
@@ -1579,6 +1584,13 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
                             if value is True:
                                 for key in filtered_items:
                                     plando.items[key] = True
+                            elif plando.item_group_method == "all":
+                                plando.items.update({key: value for key in filtered_items})
+                            elif plando.item_group_method == "even":
+                                quotient, remainder = divmod(value, len(filtered_items))
+                                plando.items.update({key: quotient for key in filtered_items})
+                                for key in random.sample(filtered_items, k=remainder):
+                                    plando.items[key] += 1
                             else:
                                 for key in random.choices(filtered_items, k=value):
                                     plando.items[key] = plando.items.get(key, 0) + 1
