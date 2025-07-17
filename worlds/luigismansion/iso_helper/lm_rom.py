@@ -5,11 +5,8 @@ import Utils
 from hashlib import md5
 from typing import Any
 from os import path as os_path
-import yaml, json, logging
-from yaml import CDumper as Dumper
-from sys import platform, path
-from importlib import resources
-import zipfile
+import yaml, json, logging, sys, zipfile, tempfile
+import urllib.request
 
 logger = logging.getLogger()
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
@@ -44,7 +41,8 @@ class LMPlayerContainer(APPlayerContainer):
         super().__init__(patch_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
-        opened_zipfile.writestr("patch.aplm", yaml.dump(self.output_data,sort_keys=False,Dumper=Dumper))
+        opened_zipfile.writestr("patch.aplm",
+            yaml.dump(self.output_data,sort_keys=False,Dumper=yaml.CDumper))
         super().write_contents(opened_zipfile)
 
 
@@ -59,7 +57,22 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
     def __init__(self, *args: Any, **kwargs: Any):
         super(LMUSAAPPatch, self).__init__(*args, **kwargs)
 
-    async def patch(self, aplm_patch: str) -> None:
+    def __get_archive_name(self) -> str:
+        if not (Utils.is_linux or Utils.is_windows):
+            message = f"Your OS is not supported with this randomizer {sys.platform}."
+            logger.error(message)
+            raise RuntimeError(message)
+
+        lib_path = ""
+        if Utils.is_windows:
+            lib_path = "lib-windows"
+        elif Utils.is_linux:
+            lib_path = "lib-linux"
+
+        logger.info(f"Dependency archive name to use: {lib_path}")
+        return lib_path
+
+    def patch(self, aplm_patch: str) -> None:
         # Get the AP Path for the base ROM
         lm_clean_iso = self.get_base_rom_path()
         logger.info("Provided Luigi's Mansion ISO Path was: " + lm_clean_iso)
@@ -79,19 +92,22 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         except ImportError:
             # Load the external dependencies based on OS
             logger.info("Missing dependencies detected for Luigi's Mansion, attempting to load local copy...")
-            lib_path = ""
-            if not (Utils.is_linux or Utils.is_windows):
-                raise RuntimeError(f"Your OS is not supported with this randomizer {platform}")
-            if Utils.is_windows:
-                lib_path = "lib-windows"
-            elif Utils.is_linux:
-                lib_path = "lib-linux"
+            from ..LMClient import CLIENT_VERSION
+            lib_path = self.__get_archive_name()
+            lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/V{CLIENT_VERSION}"
+            download_path = f"{lib_path_base}/{lib_path}.zip"
 
-            # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
-            # the with block ends.
-            with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
-                logger.info("Temp Resource Path: " + str(resource_lib_path))
-                path.append(str(resource_lib_path))
+            with tempfile.TemporaryDirectory() as tmp_dir_name:
+                logger.info(f"Temporary Directory created as: {tmp_dir_name}")
+                temp_zip_path = os_path.join(tmp_dir_name, "temp.zip")
+
+                with urllib.request.urlopen(download_path) as response, open(temp_zip_path, 'wb') as created_zip:
+                    created_zip.write(response.read())
+
+                with zipfile.ZipFile(temp_zip_path) as z:
+                    z.extractall(tmp_dir_name)
+
+                sys.path.append(temp_zip_path)
 
                 # Verify we have a clean rom of the game first
                 self.verify_base_rom(lm_clean_iso)
@@ -101,6 +117,12 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                 with zipfile.ZipFile(aplm_patch, "r") as zf:
                     aplm_bytes = zf.read("patch.aplm")
                 LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
+
+            # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
+            # the with block ends.
+            # with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
+            #    logger.info("Temp Resource Path: " + str(resource_lib_path))
+            #    path.append(str(resource_lib_path))
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
