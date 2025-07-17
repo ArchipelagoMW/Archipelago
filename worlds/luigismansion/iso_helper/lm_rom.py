@@ -94,8 +94,10 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             logger.info("Missing dependencies detected for Luigi's Mansion, attempting to load local copy...")
             from ..LMClient import CLIENT_VERSION
             lib_path = self.__get_archive_name()
-            lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/V{CLIENT_VERSION}"
+            lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
             download_path = f"{lib_path_base}/{lib_path}.zip"
+
+            ap_lib_path = Utils.home_path("lib")
 
             with tempfile.TemporaryDirectory() as tmp_dir_name:
                 logger.info(f"Temporary Directory created as: {tmp_dir_name}")
