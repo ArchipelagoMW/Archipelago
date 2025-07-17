@@ -21,7 +21,7 @@ jobs:
     - name: Create Lib-Windows
       run: mkdir lib-windows
     - name: Install Windows-Deps
-      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-windows --verbose
     - uses: actions/upload-artifact@v4
       with:
         name: lib-windows
@@ -38,7 +38,7 @@ jobs:
     - name: Create Lib-Linux
       run: mkdir lib-linux
     - name: Install Linux-Deps
-      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-linux
+      run: pip install -r ${{github.workspace}}/worlds/luigismansion/requirements.txt --target ./lib-linux --verbose
     - uses: actions/upload-artifact@v4
       with:
         name: lib-linux
