@@ -97,8 +97,6 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
             download_path = f"{lib_path_base}/{lib_path}.zip"
 
-            ap_lib_path = Utils.home_path("lib")
-
             with tempfile.TemporaryDirectory() as tmp_dir_name:
                 logger.info(f"Temporary Directory created as: {tmp_dir_name}")
                 temp_zip_path = os_path.join(tmp_dir_name, "temp.zip")
@@ -107,7 +105,9 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                     created_zip.write(response.read())
 
                 with zipfile.ZipFile(temp_zip_path) as z:
-                    z.extractall(ap_lib_path)
+                    z.extractall(tmp_dir_name)
+
+                sys.path.append(tmp_dir_name)
 
                 # Verify we have a clean rom of the game first
                 self.verify_base_rom(lm_clean_iso)
@@ -117,12 +117,6 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                 with zipfile.ZipFile(aplm_patch, "r") as zf:
                     aplm_bytes = zf.read("patch.aplm")
                 LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
-
-            # Use importlib.resources to automatically make a temp directory that will get auto cleaned up after
-            # the with block ends.
-            # with resources.as_file(resources.files(__name__).joinpath(lib_path)) as resource_lib_path:
-            #    logger.info("Temp Resource Path: " + str(resource_lib_path))
-            #    path.append(str(resource_lib_path))
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
