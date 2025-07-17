@@ -26,9 +26,7 @@ from .Presets import lm_options_presets
 from .Regions import *
 from . import Rules
 from .iso_helper.lm_rom import LMPlayerContainer
-
-
-CLIENT_VERSION = "0.4.9"
+from .LMClient import CLIENT_VERSION
 
 def run_client(*args):
     from .LMClient import main  # lazy import

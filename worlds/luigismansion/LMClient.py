@@ -6,10 +6,11 @@ from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 import dolphin_memory_engine as dme
 
 from .iso_helper.lm_rom import LMUSAAPPatch
-from . import CLIENT_VERSION
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
+
+CLIENT_VERSION = "0.4.9"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
