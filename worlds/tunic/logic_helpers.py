@@ -54,9 +54,9 @@ def has_ice_grapple_logic(long_range: bool, difficulty: IceGrappling, state: Col
     if world.options.ice_grappling < difficulty:
         return False
     if not long_range:
-        return state.has_all({ice_dagger, grapple}, world.player)
+        return state.has_all((ice_dagger, grapple), world.player)
     else:
-        return state.has_all({ice_dagger, fire_wand, grapple}, world.player) and has_ability(icebolt, state, world)
+        return state.has_all((ice_dagger, fire_wand, grapple), world.player) and has_ability(icebolt, state, world)
 
 
 def can_ladder_storage(state: CollectionState, world: "TunicWorld") -> bool:
