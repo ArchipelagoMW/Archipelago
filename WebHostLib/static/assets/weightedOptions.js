@@ -123,12 +123,26 @@ window.addEventListener('load', () => {
 });
 
 const addRangeRow = (optionName) => {
-  const inputQuery = `input[type=number][data-option="${optionName}"].range-option-value`;
+  const inputQuery = `input[data-option="${optionName}"]`;
   const inputTarget = document.querySelector(inputQuery);
   const newValue = inputTarget.value;
-  if (!/^-?\d+$/.test(newValue)) {
-    alert('Range values must be a positive or negative integer!');
-    return;
+  switch (inputTarget.type) {
+    case 'number':
+      if (!/^-?\d+$/.test(newValue)) {
+        alert('Range values must be a positive or negative integer!');
+        return;
+      }
+      break;
+    case 'text':
+      if(newValue === "") {
+        alert('Range values for text must be a non-empty string!');
+        return;
+      }
+      break;
+    default:
+      console.error(`Found unsupported input type: ${inputTarget.type}`);
+      return;
+      break;
   }
   inputTarget.value = '';
   const tBody = document.querySelector(`table[data-option="${optionName}"].range-rows tbody`);
