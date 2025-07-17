@@ -10,7 +10,7 @@ from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
 
-CLIENT_VERSION = "0.4.9"
+CLIENT_VERSION = "0.4.10-Beta"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -273,9 +273,9 @@ class LMContext(CommonContext):
             if not args["slot_data"]["apworld version"] == CLIENT_VERSION:
                 local_version = str(args["slot_data"]["apworld version"]) if (
                     str(args["slot_data"]["apworld version"])) else "N/A"
-                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion APWorld version. " +
-                    f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
-                    f"generator, which is '{local_version}'")
+                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion " +
+                    f"APWorld version.\nThe client version is {CLIENT_VERSION}!\nPlease verify you are using the " +
+                    f"same APWorld as the generator, which is '{local_version}'")
 
             arg_seed = str(args["slot_data"]["seed"])
             iso_seed = read_string(0x80000001, len(arg_seed))
@@ -336,7 +336,7 @@ class LMContext(CommonContext):
 
     def make_gui(self):
         ui = super().make_gui()
-        ui.base_title = f"Luigi's Mansion Client v{CLIENT_VERSION}"
+        ui.base_title = f"Luigi's Mansion Client {CLIENT_VERSION}"
         if tracker_loaded:
             ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
@@ -631,7 +631,7 @@ class LMContext(CommonContext):
         return
 
 async def dolphin_sync_task(ctx: LMContext):
-    logger.info("Using Luigi's Mansion client v" + CLIENT_VERSION)
+    logger.info(f"Using Luigi's Mansion client {CLIENT_VERSION}")
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
@@ -800,7 +800,7 @@ async def give_player_items(ctx: LMContext):
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
-    logger.info("Starting LM Client v" + CLIENT_VERSION)
+    logger.info(f"Starting LM Client {CLIENT_VERSION}")
     server_address: str = ""
 
     if output_data:
