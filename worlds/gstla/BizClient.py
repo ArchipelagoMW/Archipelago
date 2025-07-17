@@ -4,14 +4,14 @@ import base64
 from collections import defaultdict
 import logging
 from enum import IntEnum, Enum
-from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional
+from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
-from .gen.LocationNames import loc_names_by_id
+from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData
-from .gen.LocationData import all_locations, LocationType, djinn_locations
+from .gen.LocationData import all_locations, LocationType, djinn_locations, LocationData, location_name_to_data
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
@@ -24,10 +24,23 @@ PREVENT_FLEEING_ADDR = 0x48B
 IN_BATTLE_ADDR = 0x60
 
 
+
 class _MemDomain(str, Enum):
     EWRAM = 'EWRAM'
     ROM = 'ROM'
-
+# OH, right, there's a small yet important detail. (edited)
+# [2:03 PM]
+# Unit IDs start at 0 (Isaac), with the very first enemy slot being ID (index 0 in the editor). However, unit IDs and enemy IDs are slightly different; the enemy portion of unit IDs starts after the last PC ID. (edited)
+# [2:05 PM]
+# In other words, unit ID = enemy ID + 8.
+# [2:05 PM]
+# So it's checking enemy slot 368 there. That is the true enemy ID for the last phase of the Doom Dragon fight (the one after it is just an extension of its moveset). (edited)
+# [2:06 PM]
+# You also have battle IDs, but those work differently and apply to the current battle.
+# [2:07 PM]
+# It's a weird case where PCs and enemies are mostly handled the same way in the engine, except for some exceptions that determine access to mechanics or presence in data tables.
+# [2:07 PM]
+# The biggest actual difference between them is arguably how their movesets are handled.
 
 class _DataLocations(IntEnum):
     IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
@@ -45,6 +58,7 @@ class _DataLocations(IntEnum):
     TREASURE_D_FLAGS = (FLAG_START + (0xD00 >> 3), 0x20, 0xD00, _MemDomain.EWRAM)
     TREASURE_E_FLAGS = (FLAG_START + (0xE00 >> 3), 0x20, 0xE00, _MemDomain.EWRAM)
     TREASURE_F_FLAGS = (FLAG_START + (0xF00 >> 3), 0x20, 0xF00, _MemDomain.EWRAM)
+    ENEMY_FLAGS = (FLAG_START + (0x600 >> 3), 0x40, 0x600, _MemDomain.EWRAM)
     DOOM_DRAGON = (FLAG_START + (0x778 >> 3), 0x1, 0x778, _MemDomain.EWRAM)
 
     def __new__(cls, addr: int, length: int, initial_flag: int, domain: _MemDomain):
@@ -59,6 +73,62 @@ class _DataLocations(IntEnum):
 
     def to_request(self) -> Tuple[int, int, _MemDomain]:
         return self.addr, self.length, self.domain
+
+
+class GoalManager:
+
+    supported_flags: dict[str, int] = {
+        LocationName.Doom_Dragon_368_Event: location_name_to_data[LocationName.Doom_Dragon_368_Event].flag,
+        LocationName.Poseidon_93_Event: location_name_to_data[LocationName.Poseidon_93_Event].flag,
+    }
+
+    def __init__(self):
+        self.flag_requirements: Set[str] = set()
+        self.count_requirements: dict[str, int] = dict()
+        self.desired_flags: dict[int, str] = dict()
+        self.current: defaultdict[str, defaultdict[str, bool]] = defaultdict(lambda: defaultdict(lambda: False))
+
+    def init_reqs_from_slotdata(self, slot_data: dict[str, Any]) -> bool:
+        if slot_data is None:
+            return False
+
+        reqs: dict[str, Any] = slot_data['goal']
+        if reqs is None or 'flags' not in reqs:
+            self.flag_requirements.add("Doom Dragon")
+        else:
+            self.flag_requirements: Set[str] = reqs['flags']
+
+        for key in self.flag_requirements:
+            enemy_flag = GoalManager.supported_flags[option_name_to_goal_name[key]]
+            self.desired_flags[enemy_flag] = key
+
+    def check_goals(self, client: 'GSTLAClient', ctx: 'BizHawkClientContext') -> dict[str, Any]:
+        data: dict[str, Any] = ctx.stored_data
+        if 'flags' not in data:
+            data['flags'] = {}
+        server_flags = data['flags']
+        updated_flags: dict[str, Any] = dict()
+        for flag, is_set in client.goal_map.items():
+            name = self.desired_flags.get(flag, None)
+            if name is not None:
+                if is_set and server_flags.get(name, False):
+                    updated_flags[name] = is_set
+        return {'flags': updated_flags}
+
+
+    async def update_server(self, ctx: 'BizHawkClientContext') -> None:
+        # TODO: datastorage get/set
+        # Also! still need to add poseidon to logic
+        # ctx.
+        pass
+
+
+    def is_done(self, ctx: 'BizHawkClientContext'):
+        done = True
+        for name in self.flag_requirements:
+            if not ctx.stored_data.get("flags", {}).get(name, False):
+                done = False
+        return done
 
 
 def _handle_common_cmd(self: 'BizHawkClientCommandProcessor') -> Optional[GSTLAClient]:
@@ -132,6 +202,7 @@ class GSTLAClient(BizHawkClient):
         super().__init__()
         self.slot_name = ''
         self.flag_map: defaultdict[int, Set[int]] = defaultdict(lambda: set())
+        self.goal_map: dict[int, bool] = dict()
         self.djinn_ram_to_rom: Dict[int, int] = dict()
         self.djinn_flag_map: Dict[int, str] = dict()
         self.checked_djinn: Set[str] = set()
@@ -146,6 +217,7 @@ class GSTLAClient(BizHawkClient):
         self.local_locations: Set[int] = set()
         self.starting_items: StartingItemHandler = StartingItemHandler(dict())
         self.was_in_game: bool = False
+        self.goals = GoalManager()
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
         game_name = await read(ctx.bizhawk_ctx, [(0xA0, 0x12, _MemDomain.ROM)])
@@ -186,6 +258,7 @@ class GSTLAClient(BizHawkClient):
             section = int.from_bytes(result[0][index * 2:(index * 2) + 2], 'little')
             rom_flag = (section >> 8) * 0x14 + (section & 0xFF) + 0x30
             self.djinn_ram_to_rom[rom_flag] = djinn_flag
+        ctx.slot_data
 
     def _is_in_game(self, data: List[bytes]) -> bool:
         # What the emo tracker pack does; seems like it also verifies the player
@@ -235,6 +308,8 @@ class GSTLAClient(BizHawkClient):
                     # logger.debug("flag found: %s, locs: %s", hex(flag), locs)
                     if locs is not None:
                         self.temp_locs |= locs
+                    if flag in self.goal_map:
+                        self.goal_map[flag] = True
                 part_int >>= 1
         # logger.debug(self.temp_locs)
 
@@ -258,6 +333,8 @@ class GSTLAClient(BizHawkClient):
                                            item_code.to_bytes(length=2, byteorder="little"),
                                            _DataLocations.AP_ITEM_SLOT.domain)])
 
+    async def _update_goals(self, updated: dict[str, Any]):
+        pass
 
     async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
         # TODO: implement
@@ -286,6 +363,9 @@ class GSTLAClient(BizHawkClient):
             self.was_in_game = True
             logger.debug(ctx.slot_data)
             self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
+            self.goals.init_reqs_from_slotdata(ctx.slot_data)
+            for desired_flag in self.goals.desired_flags.keys():
+                self.goal_map[desired_flag] = False
 
         # logger.debug(
         #     f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
@@ -298,6 +378,8 @@ class GSTLAClient(BizHawkClient):
         for i in range(_DataLocations.TREASURE_8_FLAGS, _DataLocations.TREASURE_F_FLAGS.value + 1):
             self._check_common_flags(_DataLocations(i), result)
         self._check_common_flags(_DataLocations.INITIAL_INVENTORY, result)
+        self._check_common_flags(_DataLocations.ENEMY_FLAGS, result)
+
 
         await self._receive_items(ctx, result)
 
@@ -307,7 +389,12 @@ class GSTLAClient(BizHawkClient):
                 logger.debug("Sending locations to AP: %s", self.local_locations)
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(self.local_locations)}])
 
-        victory_check = result[_DataLocations.DOOM_DRAGON]
-        if victory_check[0] & 1 > 0 and not ctx.finished_game:
+        updated = self.goals.check_goals(self, ctx)
+
+        await self._update_goals(updated)
+
+        # victory_check = result[_DataLocations.DOOM_DRAGON]
+        # if victory_check[0] & 1 > 0 and not ctx.finished_game:
+        if not ctx.finished_game and  self.goals.is_done(ctx):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True

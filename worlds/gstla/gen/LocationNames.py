@@ -112,3 +112,8 @@ ids_by_loc_name: Dict[str, int] = {
 loc_names_by_id: Dict[int, str] = {
     value: key for key, value in ids_by_loc_name.items()
 }
+
+option_name_to_goal_name = {
+    "Doom Dragon": LocationName.Doom_Dragon_368_Event,
+    "Poseidon": LocationName.Poseidon_93_Event,
+}

@@ -50,6 +50,12 @@ class LocationDatum(NamedTuple):
     map_name: str
     restrictions: int
 
+class EnemyDatum(NamedTuple):
+    name: str
+    id: int
+    ap_id: int
+    flag: int
+
 class EventDatum(NamedTuple):
     event_id: int
     flag: int
@@ -164,6 +170,13 @@ class ItemName(NamedTuple):
                         ItemName.setup_str_name(item.name,suffix))
         return ret
 
+    @classmethod
+    def from_enemy_data(cls, enemy: EnemyDatum, event: bool = True):
+        ret = ItemName(enemy.ap_id,
+                       ItemName.setup_py_name(enemy.name, '_'+str(enemy.id) + (" Event" if event else "")),
+                       ItemName.setup_str_name(enemy.name, ' '+str(enemy.id) + (" Event" if event else "")))
+        return ret
+
     @staticmethod
     def setup_py_name(name: str, suffix=''):
         return (name + suffix).replace(' ', '_').replace("'", '').replace('???', 'Empty')
@@ -201,6 +214,7 @@ class GameData:
         self.raw_summon_data: List[SummonDatum] = []
         self.raw_psy_data: List[PsyDatum] = []
         self.raw_character_data: List[CharacterDatum] = []
+        self.raw_enemy_data: List[EnemyDatum] = []
         self.location_names: Dict[int, LocationName] = dict()
         self.item_names: Dict[int, ItemName] = dict()
         self.events: Dict[int, EventDatum] = dict()
@@ -242,6 +256,7 @@ class GameData:
         self._load_djinn()
         self._load_summons()
         self._load_forgeables()
+        self._load_enemies()
         self._setup_events()
         self._setup_location_names()
         self._setup_item_names()
@@ -384,6 +399,25 @@ class GameData:
                 self.raw_summon_data.append(
                     SummonDatum(summon['id'] + 0xF00, summon['name'], summon['addr'])
                 )
+
+    def _load_enemies(self):
+        enemy_offset = 6000
+        with open(os.path.join(SCRIPT_DIR, 'data', 'enemies.json'), 'r') as enemy_file:
+            enemy_data = json.load(enemy_file)
+            for name, list in enemy_data.items():
+                if name == "???":
+                    continue
+                for enemy in list:
+                    self.raw_enemy_data.append(
+                        # Enemy kill flags start at 0x600; the flag is off by 7 sorta; -1 for the json
+                        # starting at 1 instead of 0, and + 8 for player characters
+                        EnemyDatum(enemy['name'], enemy['id'] - 1, enemy['id']+enemy_offset, enemy['id'] - 1 + 8 + 0x600)
+                    )
+
+        for enemy in self.raw_enemy_data:
+            name = ItemName.from_enemy_data(enemy)
+            self.item_names[enemy.ap_id] = name
+            self.location_names[enemy.ap_id] = LocationName(enemy.ap_id, enemy.flag, name.py_name, name.str_name)
 
     def _recurse_tracker_data(self,
                               tracker_name_data: Dict[int, str],

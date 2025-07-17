@@ -1,13 +1,12 @@
 # This file was generated using jinja2 from a template. If this file needs
 # to be changed, either change the template, or the code leveraging the template.
-from typing import Callable, List, Dict, NamedTuple, Optional, TYPE_CHECKING, TypedDict
-from enum import Enum, IntFlag, auto
+from typing import Callable, List, Dict, Optional, TYPE_CHECKING, TypedDict
 
 from typing_extensions import Unpack, NotRequired
 
 from BaseClasses import MultiWorld
 from .InternalLocationData import InternalLocationData, LocationType, LocationRestriction
-from .LocationNames import loc_names_by_id
+from .LocationNames import loc_names_by_id, LocationName
 import worlds.gstla.gen.InternalLocationData as LocationLists
 
 if TYPE_CHECKING:

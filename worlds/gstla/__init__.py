@@ -13,7 +13,7 @@ from worlds.AutoWorld import WebWorld, World
 import os
 
 from typing import List, TextIO, BinaryIO, ClassVar, Type, cast, Optional, Sequence, Tuple, Any, Mapping, TYPE_CHECKING, \
-    Dict
+    Dict, Set
 from .Option_groups import gstla_option_groups
 from .Option_presets import gstla_options_presets
 from .Options import GSTLAOptions
@@ -182,9 +182,15 @@ class GSTLAWorld(World):
         set_entrance_rules(self)
         set_item_rules(self)
         set_access_rules(self)
+        goal_conditions = self.options.goal.value
+        needed_items: Set[str] = set()
 
+        if len(goal_conditions) == 0 or "Doom Dragon" in goal_conditions:
+            needed_items.add(ItemName.Victory)
+        if "Poseidon" in goal_conditions:
+            needed_items.add(ItemName.Poseidon_defeated)
         self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has(ItemName.Victory, self.player)
+            lambda state: all([state.has(item, self.player) for item in needed_items])
 
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill = []
@@ -216,7 +222,11 @@ class GSTLAWorld(World):
                 ret['start_inventory'][item_id_by_name[k]] += v
             else:
                 ret['start_inventory'][item_id_by_name[k]] = v
-
+        goal_dict = dict()
+        for goal in self.options.goal.value:
+            # TODO: needs to handle summons and djinn
+            goal_dict[goal] = 1
+        ret["goal"] = goal_dict
         return ret
 
     def generate_output(self, output_directory: str):

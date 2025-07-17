@@ -1,4 +1,4 @@
-from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Toggle, Range, NamedRange, PerGameCommonOptions, StartInventoryPool, OptionSet
 from dataclasses import dataclass
 
 class StartWithShip(Choice):
@@ -614,9 +614,19 @@ class AutoRun(Toggle):
     display_name = "Auto Run"
     default = 1
 
+class Goal(OptionSet):
+    """What conditions must be satisfied for this world to goal.  You can select however many you want, and only
+    when all the selected conditions are satisfied is the world considered goaled."""
+    valid_keys = {
+        "Doom Dragon",
+        "Poseidon",
+    }
+    default = {"Doom Dragon"}
+
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
+    goal: Goal
     item_shuffle: ItemShuffle
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations

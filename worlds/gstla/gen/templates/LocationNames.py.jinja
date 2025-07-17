@@ -25,6 +25,11 @@ class InternalLocationName:
         {{event.py_name}} = "{{event.str_name}}"
     {% endfor %}
 
+    ##enemy events
+    {% for enemy in enemies -%}
+        {{enemy.py_name}} = "{{enemy.str_name}}"
+    {% endfor %}
+
     ##remainder
     {% for name in remainder -%}
         {{name.py_name}} = "{{name.str_name}}"

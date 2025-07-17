@@ -35,6 +35,11 @@ class InternalItemName:
     {{name.py_name}} = "{{name.str_name}}"
     {% endfor %}
 
+    # Enemies
+    {% for name in enemies-%}
+    {{name.py_name}} = "{{name.str_name}}"
+    {% endfor %}
+
 item_id_by_py_name: Dict[str, int] = {
     {% for d in name_list -%}
     "{{d['name']}}": {{d['id']}},
