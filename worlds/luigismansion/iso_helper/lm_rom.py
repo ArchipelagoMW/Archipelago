@@ -114,17 +114,17 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
                     with zipfile.ZipFile(temp_zip_path) as z:
                         z.extractall(ap_custom_lib_path)
 
-                logger.info(f"Appending the following to sys path to get dependencies correctly: {ap_custom_lib_path}")
-                sys.path.append(ap_custom_lib_path)
+            logger.info(f"Appending the following to sys path to get dependencies correctly: {ap_custom_lib_path}")
+            sys.path.append(ap_custom_lib_path)
 
-                # Verify we have a clean rom of the game first
-                self.verify_base_rom(lm_clean_iso)
+            # Verify we have a clean rom of the game first
+            self.verify_base_rom(lm_clean_iso)
 
-                # Use our randomize function to patch the file into an ISO.
-                from ..LMGenerator import LuigisMansionRandomizer
-                with zipfile.ZipFile(aplm_patch, "r") as zf:
-                    aplm_bytes = zf.read("patch.aplm")
-                LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
+            # Use our randomize function to patch the file into an ISO.
+            from ..LMGenerator import LuigisMansionRandomizer
+            with zipfile.ZipFile(aplm_patch, "r") as zf:
+                aplm_bytes = zf.read("patch.aplm")
+            LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
 
     def read_contents(self, aplm_patch: str) -> dict[str, Any]:
         with zipfile.ZipFile(aplm_patch, "r") as zf:
