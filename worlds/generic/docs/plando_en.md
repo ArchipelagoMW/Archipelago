@@ -91,6 +91,12 @@ Each block can have several different options to tailor it the way you like.
     * **If `min` is defined,** it will place at least `min` many items (can be combined with `max`).
     * **If `max` is defined,** it will place at most `max` many items (can be combined with `min`).
 
+* `item_group_unfolding` determines how item groups with numerical values (`number`) are unfolded into items.
+    * `random`: Uses a total of `number` items in the group (duplicates allowed). **(Default)**
+    * `all`: Uses `number` of each item in the group.
+    * `uniform`: Uses a total of `number` items in the group (duplicates allowed), but using as close to the
+      same amount of each as possible.
+
 ### Available Items and Locations
 
 A list of all available items and locations can be found in the [website's datapackage](/datapackage). The items and 
@@ -215,6 +221,21 @@ The first block will place the player's Biggoron Sword, Bow, Magic Meter, streng
 dungeon major item chests. Because the from_pool value is `false`, a copy of these items is added to these locations, 
 while the originals remain in the item pool to be shuffled. The second block will place the Kokiri Sword in the Deku 
 Tree Slingshot Chest, again not from the pool.
+
+```yaml
+  plando_items:
+    - items:
+        Clocks: 3
+    - items:
+        Clocks: 2
+      item_group_unfolding: "all"
+    - items:
+        Clocks: 7
+      item_group_unfolding: "uniform"
+```
+The first block will place 3 random Clocks (there are Blue, Green, and Red Clocks). This could place one of each,
+three of one, or any other combination. The second block will place 2 of each clock (6 total). The third block will
+place 2 of each clock and 1 additional random clock.
 
 ## Boss Plando
 
