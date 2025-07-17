@@ -4,8 +4,7 @@ import Utils
 
 from hashlib import md5
 from typing import Any
-from os import path as os_path
-import yaml, json, logging, sys, zipfile, tempfile
+import yaml, json, logging, sys, os, zipfile, tempfile
 import urllib.request
 
 logger = logging.getLogger()
@@ -77,7 +76,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
         lm_clean_iso = self.get_base_rom_path()
         logger.info("Provided Luigi's Mansion ISO Path was: " + lm_clean_iso)
 
-        base_path = os_path.splitext(aplm_patch)[0]
+        base_path = os.path.splitext(aplm_patch)[0]
         output_file = base_path + self.result_file_ending
 
         try:
@@ -91,23 +90,32 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
             LuigisMansionRandomizer(lm_clean_iso, output_file, aplm_bytes)
         except ImportError:
             # Load the external dependencies based on OS
-            logger.info("Missing dependencies detected for Luigi's Mansion, attempting to load local copy...")
-            from ..LMClient import CLIENT_VERSION
-            lib_path = self.__get_archive_name()
-            lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
-            download_path = f"{lib_path_base}/{lib_path}.zip"
+            ap_lib_path = Utils.home_path("lib")
+            ap_custom_lib_path = os.path.join(ap_lib_path, "custom_world_deps", "luigismansion", "deps")
+            logger.info("Missing dependencies detected for Luigi's Mansion, attempting to see if " +
+                f"{ap_custom_lib_path} exists")
 
-            with tempfile.TemporaryDirectory() as tmp_dir_name:
-                logger.info(f"Temporary Directory created as: {tmp_dir_name}")
-                temp_zip_path = os_path.join(tmp_dir_name, "temp.zip")
+            if not os.path.exists(ap_custom_lib_path):
+                os.makedirs(ap_custom_lib_path, exist_ok=True)
+                logger.info(f"{ap_custom_lib_path} did not exist, downloading dependencies...")
 
-                with urllib.request.urlopen(download_path) as response, open(temp_zip_path, 'wb') as created_zip:
-                    created_zip.write(response.read())
+                from ..LMClient import CLIENT_VERSION
+                lib_path = self.__get_archive_name()
+                lib_path_base = f"https://github.com/BootsinSoots/Archipelago/releases/download/{CLIENT_VERSION}"
+                download_path = f"{lib_path_base}/{lib_path}.zip"
 
-                with zipfile.ZipFile(temp_zip_path) as z:
-                    z.extractall(tmp_dir_name)
+                with tempfile.TemporaryDirectory() as tmp_dir_name:
+                    logger.info(f"Temporary Directory created as: {tmp_dir_name}")
+                    temp_zip_path = os.path.join(tmp_dir_name, "temp.zip")
 
-                sys.path.append(tmp_dir_name)
+                    with urllib.request.urlopen(download_path) as response, open(temp_zip_path, 'wb') as created_zip:
+                        created_zip.write(response.read())
+
+                    with zipfile.ZipFile(temp_zip_path) as z:
+                        z.extractall(ap_custom_lib_path)
+
+                logger.info(f"Appending the following to sys path to get dependencies correctly: {ap_custom_lib_path}")
+                sys.path.append(ap_custom_lib_path)
 
                 # Verify we have a clean rom of the game first
                 self.verify_base_rom(lm_clean_iso)
@@ -131,7 +139,7 @@ class LMUSAAPPatch(APPatch, metaclass=AutoPatchRegister):
     def get_base_rom_path(cls) -> str:
         options: Settings = get_settings()
         file_name = options["luigismansion_options"]["iso_file"]
-        if not os_path.exists(file_name):
+        if not os.path.exists(file_name):
             file_name = Utils.user_path(file_name)
         return file_name
 
