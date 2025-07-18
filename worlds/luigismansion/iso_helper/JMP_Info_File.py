@@ -6,12 +6,14 @@ from pkgutil import get_data
 
 from gclib.rarc import RARC
 from .JMP_Field_Header import JMPFieldHeader
-from .Helper_Functions import StringByteFunction as sbf
+from ..Helper_Functions import StringByteFunction as sbf
 
 IMPORTANT_HEADER_BYTE_LENGTH = 16
 FIELD_DATA_BYTE_LENGTH = 12
 INTEGER_BYTE_LENGTH = 4
 STRING_BYTE_LENGTH = 32
+
+MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
 class JMPInfoFile:
     __header_byte_length = 0
@@ -35,7 +37,7 @@ class JMPInfoFile:
         if self.info_file_entry is None:
             raise Exception("Unable to find an info file with name '" + name_of_info_file + "' in provided RARC file.")
 
-        json_data = json.loads(get_data(__name__, "data/names.json"))
+        json_data = json.loads(get_data(MAIN_PKG_NAME, "data/names.json"))
 
         if name_of_info_file not in json_data:
             raise Exception("Unable to load info file headers for '" + name_of_info_file + "'.")

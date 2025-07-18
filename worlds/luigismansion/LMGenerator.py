@@ -1,9 +1,12 @@
-import hashlib
-import os
-import yaml
+import os, yaml
 
 from collections import Counter
 from CommonClient import logger
+
+from gclib.gcm import GCM
+from gclib.dol import DOL
+from gclib.rarc import RARC
+from gclib.yaz0_yay0 import Yay0
 
 def counter_constructor(loader, node):
     args = loader.construct_sequence(node)
@@ -14,19 +17,12 @@ yaml.SafeLoader.add_constructor(
     'tag:yaml.org,2002:python/object/apply:collections.Counter',
     counter_constructor
 )
-
 from .iso_helper.DOL_Updater import update_dol_offsets
 from .iso_helper.Update_GameUSA import update_game_usa
-from .JMP_Info_File import JMPInfoFile
+from .iso_helper.JMP_Info_File import JMPInfoFile
 from .Patching import *
 from .Helper_Functions import StringByteFunction as sbf
 from .iso_helper.Events import *
-
-from gclib import fs_helpers as fs
-from gclib.gcm import GCM
-from gclib.dol import DOL
-from gclib.rarc import RARC
-from gclib.yaz0_yay0 import Yay0
 
 RANDOMIZER_NAME = "Luigi's Mansion"
 CLEAN_LUIGIS_MANSION_ISO_MD5 = 0x6e3d9ae0ed2fbd2f77fa1ca09a60c494  # Based on the USA version of Luigi's Mansion
@@ -36,7 +32,7 @@ class InvalidCleanISOError(Exception): pass
 
 
 class LuigisMansionRandomizer:
-    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data=None, debug_flag=False):
+    def __init__(self, clean_iso_path: str, randomized_output_file_path: str, ap_output_data: bytes, debug_flag=False):
         # Takes note of the provided Randomized Folder path and if files should be exported instead of making an ISO.
         self.debug = debug_flag
         self.clean_iso_path = clean_iso_path
@@ -49,12 +45,7 @@ class LuigisMansionRandomizer:
         except IOError:
             raise Exception("'" + randomized_output_file_path + "' is currently in use by another program.")
 
-        with open(os.path.abspath(ap_output_data)) as stream:
-            self.output_data = yaml.safe_load(stream)
-
-        # Verifies we have a valid installation of Luigi's Mansion USA. There are some regional file differences.
-        logger.info("Verifying if the provided ISO is a valid copy of Luigi's Mansion USA edition.")
-        self.__verify_supported_version()
+        self.output_data = yaml.safe_load(ap_output_data)
 
         # After verifying, this will also read the entire iso, including system files and their content
         self.gcm = GCM(self.clean_iso_path)
@@ -102,42 +93,6 @@ class LuigisMansionRandomizer:
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
-
-    # Verify if the provided ISO file is a valid file extension and contains a valid Game ID.
-    # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
-    def __verify_supported_version(self):
-        with open(self.clean_iso_path, "rb") as f:
-            magic = fs.try_read_str(f, 0, 4)
-            game_id = fs.try_read_str(f, 0, 6)
-        print("Magic: " + str(magic) + "; Game ID: " + str(game_id))
-        if magic == "CISO":
-            raise InvalidCleanISOError(f"The provided ISO is in CISO format. The {RANDOMIZER_NAME} randomizer " +
-                                       "only supports ISOs in ISO format.")
-        if game_id != "GLME01":
-            if game_id and game_id.startswith("GLM"):
-                raise InvalidCleanISOError(f"Invalid version of {RANDOMIZER_NAME}. " +
-                                           "Only the North American version is supported by this randomizer.")
-            else:
-                raise InvalidCleanISOError("Invalid game given as the vanilla ISO. You must specify a " +
-                                           "%s ISO (North American version)." % RANDOMIZER_NAME)
-        self.__verify_correct_clean_iso_md5()
-
-    # Verify the MD5 hash matches the expectation of a USA-based ISO.
-    # Based on some similar code from (MIT License): https://github.com/LagoLunatic/wwrando
-    def __verify_correct_clean_iso_md5(self):
-        md5 = hashlib.md5()
-        with open(self.clean_iso_path, "rb") as f:
-            while True:
-                chunk = f.read(1024 * 1024)
-                if not chunk:
-                    break
-                md5.update(chunk)
-
-        integer_md5 = int(md5.hexdigest(), 16)
-        if integer_md5 != CLEAN_LUIGIS_MANSION_ISO_MD5:
-            raise InvalidCleanISOError(
-                f"Invalid vanilla {RANDOMIZER_NAME} ISO. Your ISO may be corrupted.\n" +
-                f"Correct ISO MD5 hash: {CLEAN_LUIGIS_MANSION_ISO_MD5:x}\nYour ISO's MD5 hash: {integer_md5:x}")
 
     # Get an ARC / RARC / SZP file from within the ISO / ROM
     def get_arc(self, arc_path):
@@ -218,8 +173,8 @@ class LuigisMansionRandomizer:
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 0 else False
-        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 0 else False
+        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
+        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 1 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
@@ -298,6 +253,7 @@ class LuigisMansionRandomizer:
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
         logger.info("Saving all files back into the main mansion file, then generating the new ISO file...")
         self.map_two_file.save_changes()
+        logger.info("map2.szp Yay0 check...")
         self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
         # Generator function to combine all necessary files into an ISO file.

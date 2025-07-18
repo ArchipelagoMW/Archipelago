@@ -5,11 +5,12 @@ from pkgutil import get_data
 from typing import Optional
 
 from gclib.gcm import GCM
-from gclib.rarc import RARC, RARCNode, RARCFileEntry
+from gclib.rarc import RARC, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
 from .. import ALWAYS_HINT
 from .. Hints import PORTRAIT_HINTS
+from CommonClient import logger
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
@@ -171,6 +172,7 @@ def randomize_music(gcm: GCM, seed: str) -> GCM:
              event_file.name == name_to_find).data = updated_event
 
         event_arc.save_changes()
+        logger.info("Randomize music Yay0 check...")
         gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
     return gcm
 
@@ -182,7 +184,7 @@ def write_portrait_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dic
     if hint_distribution_choice == 1:
         for portrait_name in PORTRAIT_HINTS:
             jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+            joke_hint = random.choice(str.splitlines(jokes)).replace("{BreakHere}", "\n")
             csv_lines = csv_lines.replace(f"{portrait_name}", joke_hint)
     else:
         for portrait_name, portrait_hint in all_hints.items():
@@ -240,7 +242,7 @@ def randomize_clairvoya(gcm: GCM, req_mario_count: str, hint_distribution_choice
             case_type = "DisabledHint"
         case 1:
             jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-            joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+            joke_hint = random.choice(str.splitlines(jokes))
             csv_lines = csv_lines.replace("{JokeText}", joke_hint)
             case_type = "JokeHint"
         case _:
@@ -326,7 +328,7 @@ def write_in_game_hints(gcm: GCM, hint_distribution_choice: int, all_hints: dict
                 case_type = "DisabledHint"
             case 1:
                 jokes = get_data(MAIN_PKG_NAME, "data/jokes.txt").decode('utf-8')
-                joke_hint = random.choice(str.splitlines(jokes)).replace("\\\\n", "\r\n")
+                joke_hint = random.choice(str.splitlines(jokes))
                 csv_lines = csv_lines.replace("{JokeText}", joke_hint)
                 case_type = "JokeHint"
             case _:
@@ -399,5 +401,6 @@ def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: b
 
         #TODO check for all directories being empty and delete them.
 
+    logger.info(f"Event{event_number} Yay0 check...")
     gcm.changed_files["files/Event/event" + event_number + ".szp"] = Yay0.compress(custom_event.data)
     return gcm
