@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 import typing
 
 from BaseClasses import (
@@ -173,6 +173,30 @@ class AreaData:
         self.logic = world.logic
         self.tricks = world.tricks
         # Setting here so options are not needed in the actual functions
+        self._door_access_cache: Dict[int, Callable[[CollectionState], bool]] = {}
+        self._sub_region_access_cache: Dict[Tuple[int, int], Callable[[CollectionState], bool]] = {}
+        
+        # Pre-build lookup tables for door lock requirements
+        self._lock_checks: Dict[DoorLockType, Callable[["MetroidPrimeWorld", CollectionState], bool]] = {
+            DoorLockType.Wave: self.logic.can_wave_beam,
+            DoorLockType.Ice: self.logic.can_ice_beam,
+            DoorLockType.Plasma: self.logic.can_plasma_beam,
+            DoorLockType.Power_Beam: self.logic.can_power_beam,
+            DoorLockType.Missile: lambda w, s: self.logic.can_missile(w, s, 1),
+            DoorLockType.Bomb: self.logic.can_bomb,
+        }
+        
+        # Pre-build lookup tables for blast shield requirements
+        self._shield_checks: Dict[BlastShieldType, Callable[["MetroidPrimeWorld", CollectionState], bool]] = {
+            BlastShieldType.Bomb: self.logic.can_bomb,
+            BlastShieldType.Missile: lambda w, s: self.logic.can_missile(w, s, 1),
+            BlastShieldType.Power_Bomb: self.logic.can_power_bomb,
+            BlastShieldType.Charge_Beam: self.logic.can_charge_beam,
+            BlastShieldType.Super_Missile: self.logic.can_super_missile,
+            BlastShieldType.Wavebuster: lambda w, s: self.logic.can_beam_combo(w, s, SuitUpgrade.Wave_Beam),
+            BlastShieldType.Ice_Spreader: lambda w, s: self.logic.can_beam_combo(w, s, SuitUpgrade.Ice_Beam),
+            BlastShieldType.Flamethrower: lambda w, s: self.logic.can_beam_combo(w, s, SuitUpgrade.Plasma_Beam),
+        }
 
     def _init_room_names_and_areas(self):
         for room_name, room_data in self.rooms.items():
@@ -253,22 +277,6 @@ class AreaData:
                     if shield_applied:
                         door_data.lock = DoorLockType.Blue
 
-                def sub_region_access_rule_func(
-                    state: CollectionState,
-                    world: "MetroidPrimeWorld",
-                    origin_door_data: DoorData,
-                    target_door_data: DoorData,
-                ):
-                    meets_origin_door_requirements = (
-                        origin_door_data.sub_region_access_override(world, state)
-                        and self._can_open_door(world, state, origin_door_data)
-                        if origin_door_data.sub_region_access_override is not None
-                        else self._can_access_door(world, state, origin_door_data)
-                    )  # Use override if any, otherwise use default access rule
-                    return meets_origin_door_requirements and self._can_open_door(
-                        world, state, target_door_data
-                    )
-
                 def get_connection_name(
                     door_data: DoorData,
                     target_room_name: str = name,
@@ -294,12 +302,17 @@ class AreaData:
                 target_region = world.get_region(
                     door_data.get_destination_region_name()
                 )
+                # Get or create cached door access function
+                door_id = id(door_data)
+                if door_id not in self._door_access_cache:
+                    self._door_access_cache[door_id] = self._create_door_access_function(
+                        world, door_data
+                    )
+
                 entrance = region.connect(
                     target_region,
                     get_connection_name(door_data),
-                    lambda state, w=world, dd=door_data: self._can_access_door(
-                        w, state, dd
-                    ),
+                    self._door_access_cache[door_id],
                 )
 
                 if door_data.indirect_condition_rooms:
@@ -324,6 +337,13 @@ class AreaData:
                     )
 
                     assert target_door.default_destination and target_room.room_name
+                    # Get or create cached sub-region access function
+                    sub_region_key = (id(door_data), id(target_door))
+                    if sub_region_key not in self._sub_region_access_cache:
+                        self._sub_region_access_cache[sub_region_key] = self._create_sub_region_access_function(
+                            world, door_data, target_door
+                        )
+
                     region.connect(
                         target_sub_region,
                         get_connection_name(door_data)
@@ -333,10 +353,15 @@ class AreaData:
                             target_destination=target_door.default_destination,
                             target_room_name=target_room.room_name.value,
                         ),
-                        lambda state, w=world, origin_door_data=door_data, target_door_data=target_door: sub_region_access_rule_func(
-                            state, w, origin_door_data, target_door_data
-                        ),
+                        self._sub_region_access_cache[sub_region_key],
                     )
+                    # Get or create cached sub-region access function for reverse direction
+                    reverse_sub_region_key = (id(target_door), id(door_data))
+                    if reverse_sub_region_key not in self._sub_region_access_cache:
+                        self._sub_region_access_cache[reverse_sub_region_key] = self._create_sub_region_access_function(
+                            world, target_door, door_data
+                        )
+
                     target_sub_region.connect(
                         region,
                         get_connection_name(
@@ -346,68 +371,29 @@ class AreaData:
                         )
                         + " then "
                         + get_connection_name(door_data),
-                        lambda state, w=world, origin_door_data=target_door, target_door_data=door_data: sub_region_access_rule_func(
-                            state, w, origin_door_data, target_door_data
-                        ),
+                        self._sub_region_access_cache[reverse_sub_region_key],
                     )
 
     def _can_open_door(
         self, world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData
     ) -> bool:
-        can_color = False
-        can_blast_shield = False
         lock = door_data.lock or door_data.defaultLock
-        if lock:
-            if lock == DoorLockType.None_:
-                can_color = True
-            elif lock == DoorLockType.Blue:
-                can_color = True
-            elif lock == DoorLockType.Wave:
-                can_color = self.logic.can_wave_beam(world, state)
-            elif lock == DoorLockType.Ice:
-                can_color = self.logic.can_ice_beam(world, state)
-            elif lock == DoorLockType.Plasma:
-                can_color = self.logic.can_plasma_beam(world, state)
-            elif lock == DoorLockType.Power_Beam:
-                can_color = self.logic.can_power_beam(world, state)
-            elif lock == DoorLockType.Missile:
-                can_color = self.logic.can_missile(world, state, 1)
-            elif lock == DoorLockType.Bomb:
-                can_color = self.logic.can_bomb(world, state)
-        else:
-            can_color = True
-
-        if door_data.blast_shield is not None:
-            if door_data.blast_shield == BlastShieldType.Bomb:
-                can_blast_shield = self.logic.can_bomb(world, state)
-            elif door_data.blast_shield == BlastShieldType.Missile:
-                can_blast_shield = self.logic.can_missile(world, state, 1)
-            elif door_data.blast_shield == BlastShieldType.Power_Bomb:
-                can_blast_shield = self.logic.can_power_bomb(world, state)
-            elif door_data.blast_shield == BlastShieldType.Charge_Beam:
-                can_blast_shield = self.logic.can_charge_beam(world, state)
-            elif door_data.blast_shield == BlastShieldType.Super_Missile:
-                can_blast_shield = self.logic.can_super_missile(world, state)
-            elif door_data.blast_shield == BlastShieldType.Wavebuster:
-                can_blast_shield = self.logic.can_beam_combo(
-                    world, state, SuitUpgrade.Wave_Beam
-                )
-            elif door_data.blast_shield == BlastShieldType.Ice_Spreader:
-                can_blast_shield = self.logic.can_beam_combo(
-                    world, state, SuitUpgrade.Ice_Beam
-                )
-            elif door_data.blast_shield == BlastShieldType.Flamethrower:
-                can_blast_shield = self.logic.can_beam_combo(
-                    world, state, SuitUpgrade.Plasma_Beam
-                )
-            elif door_data.blast_shield == BlastShieldType.Disabled:
-                can_blast_shield = False
-            elif door_data.blast_shield == BlastShieldType.No_Blast_Shield:
-                can_blast_shield = True
-        else:
-            can_blast_shield = True
-
-        return can_color and can_blast_shield
+        
+        # Check lock requirement using shared dictionary
+        if lock and lock not in (DoorLockType.None_, DoorLockType.Blue):
+            check = self._lock_checks.get(lock)
+            if check and not check(world, state):
+                return False
+        
+        # Check blast shield requirement using shared dictionary
+        if door_data.blast_shield == BlastShieldType.Disabled:
+            return False
+        elif door_data.blast_shield and door_data.blast_shield != BlastShieldType.No_Blast_Shield:
+            check = self._shield_checks.get(door_data.blast_shield)
+            if check and not check(world, state):
+                return False
+        
+        return True
 
     def _set_pickup_rule(
         self,
@@ -421,8 +407,8 @@ class AreaData:
             Callable[["MetroidPrimeWorld", CollectionState], bool],
         ] = []
         max_difficulty = world.options.trick_difficulty.value
-        allow_list = world.options.trick_allow_list
-        deny_list = world.options.trick_deny_list
+        allow_list = world.options.trick_allow_list.value
+        deny_list = world.options.trick_deny_list.value
         for trick in pickup_data.tricks:
             if trick.name not in allow_list and (
                 trick.difficulty.value > max_difficulty or trick.name in deny_list
@@ -442,27 +428,84 @@ class AreaData:
                 return False
             add_rule(location, trick_rules, "or")
 
-    def _can_access_door(
-        self, world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData
-    ) -> bool:
-        """Determines if the player can open the door based on the lock type as well as whether they can reach it or not"""
+
+    def _create_door_access_function(
+        self, world: "MetroidPrimeWorld", door_data: DoorData
+    ) -> Callable[[CollectionState], bool]:
         max_difficulty = world.options.trick_difficulty.value
-        allow_list = world.options.trick_allow_list
-        deny_list = world.options.trick_deny_list
+        allow_list = world.options.trick_allow_list.value
+        deny_list = world.options.trick_deny_list.value
 
-        if not self._can_open_door(world, state, door_data):
-            return False
-
+        eligible_tricks: List[Callable[["MetroidPrimeWorld", CollectionState], bool]] = []
         for trick in door_data.tricks:
             if trick.name not in allow_list and (
                 trick.difficulty.value > max_difficulty or trick.name in deny_list
             ):
                 continue
-            if trick.rule_func(world, state):
-                return True
-        if door_data.rule_func is None:
-            return True
-        if door_data.rule_func(world, state):
-            return True
+            eligible_tricks.append(trick.rule_func)
 
-        return False
+        # Pre-determine lock and blast shield requirements
+        lock = door_data.lock or door_data.defaultLock
+        blast_shield = door_data.blast_shield
+        base_rule = door_data.rule_func
+
+        lock_check = self._lock_checks.get(lock) if lock not in (None, DoorLockType.None_, DoorLockType.Blue) else None
+        shield_check = self._shield_checks.get(blast_shield) if blast_shield not in (None, BlastShieldType.No_Blast_Shield) else None
+        is_disabled = blast_shield == BlastShieldType.Disabled
+
+        # Create optimized access function
+        def door_access_function(state: CollectionState) -> bool:
+            # Handle disabled doors
+            if is_disabled:
+                return False
+                
+            # Check lock requirement
+            if lock_check and not lock_check(world, state):
+                return False
+            
+            # Check blast shield requirement
+            if shield_check and not shield_check(world, state):
+                return False
+
+            # Check if any eligible trick allows access
+            for trick_func in eligible_tricks:
+                if trick_func(world, state):
+                    return True
+
+            # Check base rule if no tricks succeeded
+            if base_rule is None:
+                return True
+            return base_rule(world, state)
+
+        return door_access_function
+
+    def _create_sub_region_access_function(
+        self, world: "MetroidPrimeWorld", origin_door: DoorData, target_door: DoorData
+    ) -> Callable[[CollectionState], bool]:
+        """Pre-calculates a sub-region access function for door-to-door connections."""
+        # Get or create the door access function for the origin door
+        origin_door_id = id(origin_door)
+        if origin_door_id not in self._door_access_cache:
+            self._door_access_cache[origin_door_id] = self._create_door_access_function(
+                world, origin_door
+            )
+        origin_access_func = self._door_access_cache[origin_door_id]
+
+        # Handle sub_region_access_override
+        has_override = origin_door.sub_region_access_override is not None
+        override_func = origin_door.sub_region_access_override
+
+        def sub_region_access_function(state: CollectionState) -> bool:
+            # Check origin door requirements
+            if has_override:
+                assert override_func is not None  # Type guard for pyright
+                if not (override_func(world, state) and self._can_open_door(world, state, origin_door)):
+                    return False
+            else:
+                if not origin_access_func(state):
+                    return False
+
+            # Check target door requirements (only _can_open_door, not full access)
+            return self._can_open_door(world, state, target_door)
+
+        return sub_region_access_function
