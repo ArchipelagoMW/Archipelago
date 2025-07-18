@@ -262,7 +262,7 @@ def generateRom(args, world: "LinksAwakeningWorld"):
     all_items = world.multiworld.get_items()
     our_items = [item for item in all_items
                  if item.player == world.player
-                 and world.player < 100 # slots 100+ have a generic name for rom space reasons, so don't hint these
+                 and world.player < 101 # slots 101+ have a generic name for rom space reasons, so don't hint these
                  and item.location
                  and item.code is not None
                  and item.location.show_in_spoiler]
