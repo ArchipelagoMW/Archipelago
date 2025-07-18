@@ -21,7 +21,6 @@ _skip_update = bool(
     multiprocessing.parent_process() or 
     os.environ.get("SKIP_REQUIREMENTS_UPDATE", "").lower() in ("1", "true", "yes")
 )
-# _skip_update = bool(getattr(sys, "frozen", False) or multiprocessing.parent_process())
 update_ran = _skip_update
 
 
