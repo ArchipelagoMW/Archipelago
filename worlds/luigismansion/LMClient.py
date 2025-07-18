@@ -10,7 +10,7 @@ from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
 
-CLIENT_VERSION = "0.4.10-Beta"
+CLIENT_VERSION = "V0.4.10"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
