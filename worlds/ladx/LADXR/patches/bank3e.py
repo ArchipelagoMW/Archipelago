@@ -5,15 +5,11 @@ from ..utils import formatText
 
 import pkgutil
 
-NAMES_TO_STORE = 100
-
 def hasBank3E(rom):
     return rom.banks[0x3E][0] != 0x00
 
 def generate_name(l, i):
-    if i == NAMES_TO_STORE - 1 and len(l) > NAMES_TO_STORE:
-        name = "Someone"
-    elif i < len(l):
+    if i < len(l):
         name = l[i]
     else:
         name = f"player {i}"
@@ -219,7 +215,7 @@ LocalOnlyItemAndMessage:
         + get_asm("bowwow.asm")
         + get_asm("message.asm")
         + get_asm("itemnames.asm")
-        + "".join(generate_name(["The Server"] + player_name_list, i ) for i in range(NAMES_TO_STORE)) # allocate
+        + "".join(generate_name(["The Server"] + player_name_list, i ) for i in range(100)) # allocate
         + 'db "another world", $ff\n'
         + get_asm("owl.asm"), 0x4000), fill_nop=True)
     # 3E:3300-3616: Multiworld flags per room (for both chests and dropped keys)
