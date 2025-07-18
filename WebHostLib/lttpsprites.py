@@ -8,10 +8,10 @@ from worlds.alttp.Rom import Sprite
 
 def update_sprites_lttp():
     from tkinter import Tk
-    from LttPAdjuster import get_image_for_sprite
-    from LttPAdjuster import BackgroundTaskProgress
-    from LttPAdjuster import BackgroundTaskProgressNullWindow
-    from LttPAdjuster import update_sprites
+    from worlds.alttp.Adjuster import get_image_for_sprite
+    from worlds.alttp.Adjuster import BackgroundTaskProgress
+    from worlds.alttp.Adjuster import BackgroundTaskProgressNullWindow
+    from worlds.alttp.Adjuster import update_sprites
 
     # Target directories
     input_dir = user_path("data", "sprites", "alttpr")
