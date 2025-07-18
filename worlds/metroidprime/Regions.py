@@ -29,11 +29,11 @@ def create_regions(world: "MetroidPrimeWorld", final_boss_selection: int):
 
     if world.options.pre_scan_elevators:
         # Pre-scanned, so no requirements.
-        can_access_elevator = lambda state: True
+        can_access_elevator: typing.Optional[typing.Callable[[CollectionState], bool]] = None
     else:
-
-        def can_access_elevator(state: CollectionState) -> bool:
+        def _can_access_elevator(state: CollectionState) -> bool:
             return world.logic.can_scan(world, state)
+        can_access_elevator = _can_access_elevator
 
     for mappings in world.elevator_mapping.values():
         for elevator, target in mappings.items():

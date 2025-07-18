@@ -38,22 +38,21 @@ class ChozoRuinsAreaData(AreaData):
             and self.logic.can_bomb(world, state)
         )
 
-    def can_flaahgra(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
-        bomb_req = self.logic.can_bomb(world, state) or (
+    def _can_flaahgra_bomb_req(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
+        return self.logic.can_bomb(world, state) or (
             self.logic.can_power_bomb(world, state)
             and self.logic.has_power_bomb_count(world, state, 4)
         )
-        beam_req = self.logic.can_power_beam(world, state)
+    def can_flaahgra(self, world: "MetroidPrimeWorld", state: CollectionState) -> bool:
         if world.starting_room_data.name == RoomName.Sunchamber_Lobby.value:
-            return bomb_req and beam_req
-
+            return self.logic.can_power_beam(world, state) and self._can_flaahgra_bomb_req(world, state)
         return (
             state.can_reach_region(RoomName.Sunchamber.value, world.player)
-            and self.logic.can_combat_flaahgra(world, state)
-            and self.logic.can_missile(world, state, 1)
             and self.logic.can_scan(world, state)
-            and bomb_req
-            and beam_req
+            and self.logic.can_power_beam(world, state)
+            and self.logic.can_missile(world, state, 1)
+            and self._can_flaahgra_bomb_req(world, state)
+            and self.logic.can_combat_flaahgra(world, state)
         )
 
     def can_climb_tower_of_light(

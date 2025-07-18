@@ -431,12 +431,16 @@ class AreaData:
             eligible_trick_rules.append(trick.rule_func)
         if base_rule is not None:
             add_rule(location, lambda state: base_rule(world, state))
-        if eligible_trick_rules:
-            add_rule(
-                location,
-                lambda state: any(rule(world, state) for rule in eligible_trick_rules),
-                "or",
-            )
+        if len(eligible_trick_rules) == 1:
+            trick_rule = eligible_trick_rules[0]
+            add_rule(location, lambda state: trick_rule(world, state), "or")
+        elif eligible_trick_rules:
+            def trick_rules(state: CollectionState):
+                for rule in eligible_trick_rules:
+                    if rule(world, state):
+                        return True
+                return False
+            add_rule(location, trick_rules, "or")
 
     def _can_access_door(
         self, world: "MetroidPrimeWorld", state: CollectionState, door_data: DoorData

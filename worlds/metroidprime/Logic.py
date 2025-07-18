@@ -318,7 +318,7 @@ class Logic:
         minimal_tanks: int,
         requires_charge_beam: bool = True,
     ) -> bool:
-        difficulty = CombatLogicDifficulty(world.options.combat_logic_difficulty)
+        difficulty = CombatLogicDifficulty(world.options.combat_logic_difficulty.value)
         if difficulty == CombatLogicDifficulty.NO_LOGIC:
             return True
         elif difficulty == CombatLogicDifficulty.NORMAL:
