@@ -42,7 +42,7 @@ class MagicantMode(Choice):
 class MonkeyCavesMode(Choice):
     """Chests: Items required to finish the Monkey Caves will be forcibly placed on the chests that can be found in-between rooms of the monkey caves. The "reward" locations, usually found at the end of a branch, are still random. If you waste chest items, they will need to be replaced via the methods in hunt mode.
        Hunt: Items required to finish the Monkey Caves will needsell you every minor item needed to be found outside. They can be obtained from the Dusty Dunes drugstore, the Fourside department store, and the pizza shop in either Twoson or Threed.
-       Shop: The monkey outside the Monkey Caves will  to complete the caves and is not affected by shop randomization.
+       Shop: The monkey outside the Monkey Caves will sell every item needed to complete the caves and is not affected by shop randomization.
        Solved: The Monkey Caves monkeys will already be moved out of the way and not require any items."""
     display_name = "Monkey Caves Mode"
     option_chests = 0
