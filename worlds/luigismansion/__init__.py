@@ -657,6 +657,18 @@ class LMWorld(World):
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     else:
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+            if region.name in GHOST_TO_ROOM.keys():
+                # if fire, require water
+                if self.ghost_affected_regions[region.name] == "Fire":
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                # if water, require ice
+                elif self.ghost_affected_regions[region.name] == "Water":
+                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                # if ice, require fire
+                elif self.ghost_affected_regions[region.name] == "Ice":
+                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                else:
+                    pass
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
