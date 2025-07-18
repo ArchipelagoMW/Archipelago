@@ -35,7 +35,7 @@ class LootboxVaults(DefaultOnToggle):
 
 
 class EasyMillaRace(Toggle):
-    """Make the race in Milla's Mind easier by removing Bobby from the race and increasing player speed to 1.5x"""
+    """Makes collecting figments and winning the race in Milla's Mind easier by removing everyone else from the race."""
     display_name = "Easy Milla Race"
 
 
