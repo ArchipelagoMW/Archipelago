@@ -75,7 +75,7 @@ location_tables = {
     MedievilLocationData("Cleared: Ghost Ship","Level_End",19,MedievilLocationCategory.LEVEL_END), 
     MedievilLocationData("Cleared: The Entrance Hall","Level_End",20,MedievilLocationCategory.LEVEL_END), 
     MedievilLocationData("Cleared: The Time Device","Level_End",21,MedievilLocationCategory.LEVEL_END), 
-    MedievilLocationData("Cleared: Zaroks Lair","Level_End",22,MedievilLocationCategory.PROGRESSION),
+    # MedievilLocationData("Cleared: Zaroks Lair","Level_End",22,MedievilLocationCategory.PROGRESSION),
     
     # Chalices
     
@@ -241,7 +241,7 @@ location_tables = {
 
     # Dans Crypt
     MedievilLocationData("Gold Coins: Over the water","Level_End",160,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Bronze Shield in DC","Level_End",161,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Copper Shield in DC","Level_End",161,MedievilLocationCategory.FUN),
     MedievilLocationData("Equipment: Daggers in DC","Level_End",162,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Behind Wall in Crypt - Left","Level_End",163,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Behind Wall in Crypt - Right","Level_End",164,MedievilLocationCategory.FUN),
@@ -252,7 +252,7 @@ location_tables = {
     MedievilLocationData("Gold Coins: Life Potion Right Chest","Level_End",167,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Shop Chest","Level_End",168,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Bag Near Hill Fountain","Level_End",169,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Bronze Shield in GY","Level_End",170,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Copper Shield in GY","Level_End",170,MedievilLocationCategory.FUN),
 
     # Cemetery Hill
     MedievilLocationData("Gold Coins: Near Boulder Entrance","Level_End",171,MedievilLocationCategory.FUN),
@@ -264,7 +264,7 @@ location_tables = {
     MedievilLocationData("Equipment: Copper Shield in CH 3","Level_End",177,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Chest at Exit","Level_End",178,MedievilLocationCategory.FUN),
     MedievilLocationData("Equipment: Club in CH","Level_End",179,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Copper Shield in CH 2","Level_End",180,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Copper Shield in Arena","Level_End",180,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Arena","Level_End",181,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Chest in Arena","Level_End",182,MedievilLocationCategory.FUN),
 
@@ -314,7 +314,7 @@ location_tables = {
     MedievilLocationData("Equipment: Club in SF Inside Hut","Level_End",220,MedievilLocationCategory.FUN),
     MedievilLocationData("Equipment: Silver Shield in SF Behind Windmill","Level_End",221,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Bag in the Barn","Level_End",222,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Bronze Shield in SF - Chest In the Barn","Level_End",223,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Copper Shield in SF - Chest In the Barn","Level_End",223,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Cornfield Square near Barn","Level_End",224,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Cornfield Path 1","Level_End",225,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Cornfield Path","Level_End",226,MedievilLocationCategory.FUN),
@@ -390,7 +390,7 @@ location_tables = {
     MedievilLocationData("Gold Coins: Bag on Island Near Soul 2","Level_End",288,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Next to Lost Soul 3","Level_End",289,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Near Gate","Level_End",290,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Silver Shield in PU in Chest Near Soul 5","Level_End",291,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Silver Shield in PAD in Chest Near Soul 5","Level_End",291,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Chariot Right","Level_End",292,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Chariot Left","Level_End",293,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Jump Spot 1","Level_End",294,MedievilLocationCategory.FUN),
@@ -457,7 +457,7 @@ location_tables = {
     MedievilLocationData("Gold Coins: Bag in Bat Room Left","Level_End",344,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Chest in Bat Room","Level_End",345,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Bag in Bat Room Centre","Level_End",346,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Silver Shield in TA in Bat Room","Level_End",347,MedievilLocationCategory.FUN),
+    MedievilLocationData("Equipment: Silver Shield in IA in Bat Room","Level_End",347,MedievilLocationCategory.FUN),
     MedievilLocationData("Gold Coins: Bag in Bat Room Right","Level_End",348,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Asylumn Room 1","Level_End",349,MedievilLocationCategory.FUN),
     MedievilLocationData("Energy Vial: Asylumn Room 2","Level_End",350,MedievilLocationCategory.FUN),
@@ -525,7 +525,7 @@ location_tables = {
     
     # Zaroks Lair
     MedievilLocationData("Equipment: Good Lightning","Level_End",401,MedievilLocationCategory.FUN),
-    MedievilLocationData("Equipment: Silver Shield","Level_End",402,MedievilLocationCategory.FUN)    
+    MedievilLocationData("Equipment: Silver Shield in ZL Arena","Level_End",402,MedievilLocationCategory.FUN)    
 ]
 }
 
