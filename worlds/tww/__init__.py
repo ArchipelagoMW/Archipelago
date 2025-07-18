@@ -93,8 +93,8 @@ class TWWWeb(WebWorld):
             ["tanjo3", "Lunix"],
         ),
         Tutorial(
-            "Guide de mise en place du Multiworld",
-            "Un guide pour mettre en place l'Archipelago The Wind Waker sur votre ordinateur.",
+            "Multiworld Setup Guide",
+            "A guide to setting up the Archipelago The Wind Waker software on your computer.",
             "Français",
             "setup_fr.md",
             "setup/fr",
