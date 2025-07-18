@@ -483,6 +483,18 @@ def restricted_loads(s: bytes) -> Any:
     return RestrictedUnpickler(io.BytesIO(s)).load()
 
 
+def restricted_dumps(obj: Any) -> bytes:
+    """Helper function analogous to pickle.dumps()."""
+    s = pickle.dumps(obj)
+    # Assert that the string can be successfully loaded by restricted_loads
+    try:
+        restricted_loads(s)
+    except pickle.UnpicklingError as e:
+        raise pickle.PicklingError(e) from e
+
+    return s
+
+
 class ByValue:
     """
     Mixin for enums to pickle value instead of name (restores pre-3.11 behavior). Use as left-most parent.
