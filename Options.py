@@ -1644,7 +1644,7 @@ class OptionGroup(typing.NamedTuple):
 
 
 item_and_loc_options = [LocalItems, NonLocalItems, StartInventory, StartInventoryPool, StartHints,
-                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks]
+                        StartLocationHints, ExcludeLocations, PriorityLocations, ItemLinks, PlandoItems]
 """
 Options that are always populated in "Item & Location Options" Option Group. Cannot be moved to another group.
 If desired, a custom "Item & Location Options" Option Group can be defined, but only for adding additional options to
