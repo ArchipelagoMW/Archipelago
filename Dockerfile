@@ -94,4 +94,5 @@ RUN if [ "$TARGETARCH" = "amd64" ]; then \
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:${PORT:-80} || exit 1
 
+ENV SKIP_REQUIREMENTS_UPDATE=true
 ENTRYPOINT [ "python", "WebHost.py" ]
