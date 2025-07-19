@@ -113,6 +113,26 @@ def ph_has_cannon(state: CollectionState, player: int):
 def ph_has_salvage(state: CollectionState, player: int):
     return state.has("Salvage Arm", player)
 
+def ph_has_fishing_rod(state, player):
+    return state.has("Fishing Rod", player)
+
+def ph_has_big_catch_lure(state, player):
+    return state.has("Big Catch Lure", player)
+
+def ph_has_swordfish_shadows(state, player):
+    return state.has("Swordfish Shadows", player)
+
+def ph_has_loovar(state, player):
+    return state.has("Fish: Loovar", player)
+
+def ph_has_rsf(state, player):
+    return state.has("Fish: Rusty Swordfish", player)
+
+def ph_has_neptoona(state, player):
+    return state.has("Fish: Legendary Neptoona", player)
+
+def ph_has_stowfish(state, player):
+    return state.has("Fish: Stowfish", player)
 
 # ============== Frogs =======================
 

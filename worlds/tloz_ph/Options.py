@@ -289,6 +289,17 @@ class PhantomHourglassSkipOceanFights(Toggle):
     display_name = "skip_ocean_fights"
     default = 0
 
+class PhantomHourglassRandomizeFishing(Choice):
+    """
+    Adds checks for catching the 6 fish you can catch at sea, and handing in 4 fish to the wayfarer on bannan island.
+    The hint option also gives free hints for the catching fish checks in the wayfarers hut on bannan island.
+    """
+    display_name = "randomize_fishing"
+    option_no_fish = 0
+    option_randomize_fish_with_hints = 1
+    option_randomize_fish_without_hints = 2
+    default = 0
+
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
     # Accessibility
@@ -311,6 +322,7 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     randomize_minigames: PhantomHourglassRandomizeMinigames
     randomize_harrow: PhantomHourglassRandomizeHarrow
     randomize_digs: PhantomHourglassRandomizeDigSpots
+    randomize_fishing: PhantomHourglassRandomizeFishing
     keysanity: PhantomHourglassKeyRandomization
     randomize_frogs: PhantomHourglassFrogRandomization
     randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization

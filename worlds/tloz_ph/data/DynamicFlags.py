@@ -877,5 +877,47 @@ DYNAMIC_FLAGS = {
         "has_items": [("Azurine", 0)],
         "unset_if_true": [(0x1B558B, 0x20)]
     },
+    # Wayfarer fishing checks
+    "RESET Swordfish Shadow": {
+        "on_scenes": [0x1400],
+        "has_items": [("Swordfish Shadows", 0)],
+        "unset_if_true": [(0x1B55A7, 0x10)]
+    },
+    "Fishing remove Fish": {
+        "on_scenes": [0x200],
+        "unset_if_true": [(0x1BA5B4, 0xFF), (0x1BA5B5, 0xFF),
+                          (0x1BA5B6, 0xFF), (0x1BA5B7, 0xFF),
+                          (0x1BA5B8, 0xFF), (0x1BA5B9, 0xFF)]
+    },
+    "RESET Fishing remove Stowfish": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Stowfish", 1)],
+        "set_if_true": [(0x1BA5B9, 0x1)]
+    },
+    "RESET Fishing skippy": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Skippyjack", 1)],
+        "set_if_true": [(0x1BA5B4, 0x1)]
+    },
+    "RESET Fishing toona": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Toona", 1)],
+        "set_if_true": [(0x1BA5B5, 0x1)]
+    },
+    "RESET Fishing loovar": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Loovar", 1)],
+        "set_if_true": [(0x1BA5B6, 0x1)]
+    },
+    "RESET Fishing rsf": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Rusty Swordfish", 1)],
+        "set_if_true": [(0x1BA5B7, 0x1)]
+    },
+    "RESET Fishing neptoona": {
+        "on_scenes": [0, 1, 2, 3],
+        "has_items": [("Fish: Legendary Neptoona", 1)],
+        "set_if_true": [(0x1BA5B8, 0x1)]
+    },
 }
 

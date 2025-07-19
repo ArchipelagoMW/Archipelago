@@ -394,6 +394,7 @@ class PhantomHourglassClient(BizHawkClient):
             # Process on new room
             if current_scene != self.last_scene:
                 print(f"Entered new scene {hex(current_scene)}")
+                print(ctx.missing_locations)
                 self.entering_dungeon = None
                 await self.load_local_locations(ctx, current_scene)
                 await self.update_potion_tracker(ctx)
@@ -834,7 +835,6 @@ class PhantomHourglassClient(BizHawkClient):
                 if ctx.slot_data[option] not in value:
                     return False
             return True
-
         local_scouted_locations = set(ctx.locations_scouted)
         print(f"hints {self.hint_scene_to_watches.get(scene, [])}")
         for hint_name in self.hint_scene_to_watches.get(scene, []):

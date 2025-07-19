@@ -1,4 +1,4 @@
-from worlds.tloz_ph.data.Constants import *
+from .Constants import *
 
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
@@ -1507,11 +1507,54 @@ LOCATIONS_DATA = {
     "Bannan Island Wayfarer Gift": {
         "region_id": "bannan",
         "vanilla_item": "Fishing Rod",
+        "item_override": "Nothing!",
         "stage_id": 0x14,
         "floor_id": 1,
         "address": 0x1B5581,
         "value": 8,
         "delay_reset": True
+    },
+    "Bannan Island Wayfarer Give Loovar": {
+        "region_id": "bannan loovar",
+        "vanilla_item": "Big Catch Lure",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A4,
+        "value": 1,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Rusty Swordfish": {
+        "region_id": "bannan rsf",
+        "vanilla_item": "Ship Part",
+        "item_override": "Swordfish Shadows",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A3,
+        "value": 0x80,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Legendary Neptoona": {
+        "region_id": "bannan neptoona",
+        "vanilla_item": "Heart Container",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A3,
+        "value": 0x40,
+        "delay_reset": True,
+        "conditional": True,
+    },
+    "Bannan Island Wayfarer Give Stowfish": {
+        "region_id": "bannan stowfish",
+        "vanilla_item": "Ship Part",
+        "item_override": "Fishing Rod",
+        "stage_id": 0x14,
+        "floor_id": 1,
+        "address": 0x1B55A9,
+        "value": 0x4,
+        "delay_reset": True,
+        "conditional": True,
     },
     "Bannan Island East Grapple Chest East": {
         "region_id": "bannan east grapple",
@@ -2589,6 +2632,62 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B5590,
         "value": 0x10
+    },
+
+    # ==== Fishing ===
+    "Fishing Catch Skippyjack": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Skippyjack",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B4,
+        "value": 1,
+        "conditional": True,
+    },
+    "Fishing Catch Toona": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Toona",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B5,
+        "value": 1,
+        "conditional": True,
+    },
+    "Fishing Catch Loovar": {
+        "region_id": "fishing",
+        "vanilla_item": "Fish: Loovar",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B6,
+        "value": 1,
+        "conditional": True,
+    },
+    "Fishing Catch Rusty Swordfish": {
+        "region_id": "fishing bcl",
+        "vanilla_item": "Fish: Rusty Swordfish",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B7,
+        "value": 1,
+        "conditional": True,
+    },
+    "Fishing Catch Legendary Neptoona": {
+        "region_id": "fishing shadows",
+        "vanilla_item": "Fish: Legendary Neptoona",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B8,
+        "value": 0x1,
+        "conditional": True,
+    },
+    "Fishing Catch Stowfish": {
+        "region_id": "fishing shadows",
+        "vanilla_item": "Fish: Stowfish",
+        "stage_id": 0x2,
+        "floor_id": 0,
+        "address": 0x1BA5B9,
+        "value": 0x1,
+        "conditional": True,
     },
 
     # ==== New checks at bottom to preserve id ordering

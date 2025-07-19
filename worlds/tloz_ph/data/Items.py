@@ -147,12 +147,17 @@ ITEMS_DATA = {
     "Fishing Rod": {
         'classification': ItemClassification.progression,
         'address': 0x1BA649,
-        'value': 0x01
+        'value': 0x01,
     },
     "Big Catch Lure": {
         'classification': ItemClassification.progression,
         'address': 0x1BA649,
         'value': 0x80
+    },
+    "Swordfish Shadows": {
+        'classification': ItemClassification.progression,
+        'address': 0x1B55A7,
+        'value': 0x10
     },
     "Cyclone Slate": {
         'classification': ItemClassification.progression,
@@ -806,6 +811,49 @@ ITEMS_DATA = {
         'classification': ItemClassification.useful,
         'backup_filler': True,
         'ship': 8
+    },
+    # Fish
+    "Fish: Skippyjack": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA5B4,
+        'value': 1,
+        'incremental': True,
+        'size': 1
+    },
+    "Fish: Toona": {
+        'classification': ItemClassification.filler,
+        'address': 0x1BA5B5,
+        'value': 1,
+        'incremental': True,
+        'size': 1
+    },
+    "Fish: Loovar": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA5B6,
+        'value': 1,
+        'incremental': True,
+        'size': 1
+    },
+    "Fish: Rusty Swordfish": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA5B7,
+        'value': 1,
+        'incremental': True,
+        'size': 1
+    },
+    "Fish: Legendary Neptoona": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA5B8,
+        'value': 1,
+        'incremental': True,
+        'size': 1
+    },
+    "Fish: Stowfish": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA5B9,
+        'value': 1,
+        'incremental': True,
+        'size': 1
     },
     "_UT_Glitched_logic": {
         'classification': ItemClassification.progression,

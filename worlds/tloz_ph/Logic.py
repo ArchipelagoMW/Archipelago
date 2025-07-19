@@ -311,6 +311,10 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["bannan east grapple", "bannan east grapple dig", False, lambda state: ph_has_shovel(state, player)],
         ["bannan east", "bannan cannon game", False, lambda state: ph_has_cannon(state, player)],
         ["bannan", "bannan scroll", False, lambda state: ph_bannan_scroll(state, player)],
+        ["bannan", "bannan loovar", False, lambda state: ph_has_loovar(state, player)],
+        ["bannan", "bannan rsf", False, lambda state: ph_has_rsf(state, player)],
+        ["bannan", "bannan neptoona", False, lambda state: ph_has_neptoona(state, player)],
+        ["bannan", "bannan stowfish", False, lambda state: ph_has_stowfish(state, player)],
 
         # ================= Zauz's Island ====================
 
@@ -465,6 +469,12 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["maze", "maze normal", False, lambda state: ph_has_bow(state, player)],
         ["maze normal", "maze expert", False, lambda state: ph_has_grapple(state, player)],
         ["maze", "maze dig", False, lambda state: ph_has_shovel(state, player)],
+
+        # ========== Fishing ====================
+
+        ["sw ocean", "fishing", False, lambda state: ph_has_fishing_rod(state, player)],
+        ["fishing", "fishing bcl", False, lambda state: ph_has_big_catch_lure(state, player)],
+        ["fishing", "fishing shadows", False, lambda state: ph_has_swordfish_shadows(state, player)],
 
         # Goal stuff
         ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],

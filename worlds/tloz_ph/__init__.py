@@ -161,6 +161,8 @@ class PhantomHourglassWorld(World):
                 return self.options.randomize_digs
             if location_name in LOCATION_GROUPS["Minigames"]:
                 return self.options.randomize_minigames
+            if location_name in LOCATION_GROUPS["Fishing Locations"]:
+                return self.options.randomize_fishing
             if "GOAL" in location_name:
                 if location_name == "GOAL: Beat Bellumbeck" and self.options.goal == "beat_bellumbeck":
                     return True
@@ -469,7 +471,8 @@ class PhantomHourglassWorld(World):
         options = ["goal", "dungeons_required", "bellum_access",
                    "ghost_ship_in_dungeon_pool", "exclude_non_required_dungeons",
                    "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
-                   "randomize_minigames", "randomize_digs", "keysanity", "randomize_frogs",
+                   "randomize_minigames", "randomize_digs", "randomize_fishing",
+                   "keysanity", "randomize_frogs",
                    "randomize_triforce_crest", "randomize_harrow",
                    "randomize_masked_beedle",
                    "fog_settings", "skip_ocean_fights",

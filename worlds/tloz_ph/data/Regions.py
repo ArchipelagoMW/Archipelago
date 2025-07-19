@@ -316,4 +316,14 @@ REGIONS = [
     "maze expert",
     "maze dig",
 
+    # Fishing
+    'fishing',
+    'fishing bcl',
+    'fishing shadows',
+    'bannan loovar',
+    'bannan rsf',
+    'bannan neptoona',
+    'bannan stowfish',
+
+
 ]

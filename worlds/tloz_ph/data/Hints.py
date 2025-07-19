@@ -45,12 +45,7 @@ HINT_DATA = {
 
     # Spirit Island
     "Spirit Island 1": {
-        "locations": ["Spirit Island Power Upgrade Level 1",
-                      "Spirit Island Wisdom Upgrade Level 1",
-                      "Spirit Island Courage Upgrade Level 1",
-                      "Spirit Island Power Upgrade Level 2",
-                      "Spirit Island Wisdom Upgrade Level 2",
-                      "Spirit Island Courage Upgrade Level 2"],
+        "locations": LOCATION_GROUPS["Spirit Upgrades"],
         "scenes": [0x1701],
         "slot_data": [("spirit_island_hints", 0)]
     },
@@ -106,4 +101,10 @@ HINT_DATA = {
         "scenes": [0x700],
         "slot_data": ["minigame_hints", "randomize_minigames"],
     },
+    "Fishing Hints": {
+        "scenes": [0x1401],
+        "slot_data": ["randomize_fishing"],
+        "locations": LOCATION_GROUPS["Fish"]
+    },
+
 }

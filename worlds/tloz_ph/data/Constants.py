@@ -531,6 +531,12 @@ STAGE_LOCATION_GROUPS = {
         "Beedle Shop Wisdom Gem",
         "Masked Beedle Heart Container",
         "Masked Beedle Courage Gem",
+        "Fishing Catch Skippyjack",
+        "Fishing Catch Toona",
+        "Fishing Catch Loovar",
+        "Fishing Catch Rusty Swordfish",
+        "Fishing Catch Legendary Neptoona",
+        "Fishing Catch Stowfish",
     ],
     "Open Ocean": [
         "Ocean SW Salvage Courage Crest",
@@ -540,6 +546,12 @@ STAGE_LOCATION_GROUPS = {
         "Ocean SE Golden Frog Omega",
         "Ocean SE Golden Frog W",
         "Ocean NE Golden Frog Square",
+        "Fishing Catch Skippyjack",
+        "Fishing Catch Toona",
+        "Fishing Catch Loovar",
+        "Fishing Catch Rusty Swordfish",
+        "Fishing Catch Legendary Neptoona",
+        "Fishing Catch Stowfish",
     ],
     "Ocean SW": [
         "Ocean SW Salvage Courage Crest",
@@ -569,6 +581,12 @@ STAGE_LOCATION_GROUPS = {
         "Beedle Shop Wisdom Gem",
         "Masked Beedle Heart Container",
         "Masked Beedle Courage Gem",
+        "Fishing Catch Skippyjack",
+        "Fishing Catch Toona",
+        "Fishing Catch Loovar",
+        "Fishing Catch Rusty Swordfish",
+        "Fishing Catch Legendary Neptoona",
+        "Fishing Catch Stowfish",
     ],
     "Traveller Ships": [
         "Ocean SW Nyave Treasure",
@@ -705,6 +723,10 @@ STAGE_LOCATION_GROUPS = {
         "Bannan Island East Grapple Dig",
         "Bannan Island Cannon Game",
         "Bannan Island Wayfarer Trade Quest Chest",
+        "Bannan Island Wayfarer Give Loovar",
+        "Bannan Island Wayfarer Give Rusty Swordfish",
+        "Bannan Island Wayfarer Give Legendary Neptoona",
+        "Bannan Island Wayfarer Give Stowfish",
     ],
     "Uncharted Island": [
         "Uncharted Island Eye Dig",
@@ -944,6 +966,26 @@ CATEGORY_LOCATION_GROUPS = {
         "Spirit Island Courage Upgrade Level 1",
         "Spirit Island Courage Upgrade Level 2",
     ],
+    "Fishing Locations": [
+        "Bannan Island Wayfarer Give Loovar",
+        "Bannan Island Wayfarer Give Rusty Swordfish",
+        "Bannan Island Wayfarer Give Legendary Neptoona",
+        "Bannan Island Wayfarer Give Stowfish",
+        "Fishing Catch Skippyjack",
+        "Fishing Catch Toona",
+        "Fishing Catch Loovar",
+        "Fishing Catch Rusty Swordfish",
+        "Fishing Catch Legendary Neptoona",
+        "Fishing Catch Stowfish",
+    ],
+    "Fish": [
+        "Fishing Catch Skippyjack",
+        "Fishing Catch Toona",
+        "Fishing Catch Loovar",
+        "Fishing Catch Rusty Swordfish",
+        "Fishing Catch Legendary Neptoona",
+        "Fishing Catch Stowfish",
+    ]
 }
 
 LOCATION_GROUPS = CATEGORY_LOCATION_GROUPS | STAGE_LOCATION_GROUPS
