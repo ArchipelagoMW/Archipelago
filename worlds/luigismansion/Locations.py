@@ -95,18 +95,28 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Huge Flower (Boneyard)":   LMLocationData("Boneyard", 70, "Chest", 8, ["Water Element Medal"],
         update_ram_addr=[LMRamData(0x803CDF66, bit_position=2, in_game_room_id=11, ram_byte_size=2)]),
 
-    # "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], 1), # TODO Prevents Ghosts Spawn
-    # "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], 1), # TODO Prevents Ghosts Spawn
-    # "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 12, "Furniture", 245, [], 1), # TODO Prevents Ghosts Spawn
-    # "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], 1), # TODO Prevents Ghosts Spawn
-    # "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], 37), # TODO Prevents Ghosts Spawn
-    # "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], 37), # TODO Prevents Ghosts Spawn
+    "Hidden Room Large Chest L": LMLocationData("Hidden Room", 9, "Furniture", 243, [], remote_only=True,
+                                                update_ram_addr=[LMRamData(in_game_room_id=1)]),
+    "Hidden Room Large Chest C": LMLocationData("Hidden Room", 10, "Furniture", 241, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=1)]),
+    "Hidden Room Small Chest L Shelf": LMLocationData("Hidden Room", 12, "Furniture", 245, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=1)]),
+    "Hidden Room Small Chest R Floor": LMLocationData("Hidden Room", 15, "Furniture", 247, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=1)]),
+    "Sealed Room Lower Big Chest": LMLocationData("Sealed Room", 34, "Furniture", 529, [], remote_only=True,
+                                                  update_ram_addr=[LMRamData(in_game_room_id=37)]),
+    "Sealed Room Upper C Big Chest": LMLocationData("Sealed Room", 36, "Furniture", 527, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=37)]),
     "Sealed Room SW Shelf Chest": LMLocationData("Sealed Room", 869, "Furniture", 531, [],
         update_ram_addr=[LMRamData(in_game_room_id=37)]), #TODO test that this is the right entry
-    # "Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], 51), # TODO Prevents Ghosts Spawn
-    # "Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], 51), # TODO Prevents Ghosts Spawn
-    # "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], 53), # TODO Prevents Ghosts Spawn
-    # "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], 53), # TODO Prevents Ghosts Spawn
+    "Armory 4th Gray Chest": LMLocationData("Armory", 38, "Furniture", 651, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=51)]),
+    "Armory 5th Gray Chest": LMLocationData("Armory", 40, "Furniture", 653, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=51)]),
+    "Telephone Room C Chest": LMLocationData("Telephone Room", 43, "Furniture", 680, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=53)]),
+    "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], remote_only=True,
+                                                     update_ram_addr=[LMRamData(in_game_room_id=53)]),
     # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []), # TODO Do we want this?
 
     # Special Case
@@ -266,7 +276,7 @@ PLANT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Balcony Plant Center R": LMLocationData("Balcony", 84, "Plant", 613, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant Directly in NE Corner": LMLocationData("Balcony", 872, "Plant", 608, ["Water Element Medal"],
-        update_ram_addr=[LMRamData(in_game_room_id=62)]), # TODO spawns the Red Diamond
+        update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant SE Corner": LMLocationData("Balcony", 80, "Plant", 609, ["Water Element Medal"],
         update_ram_addr=[LMRamData(in_game_room_id=62)]),
     "Balcony Plant Second from Right Plant near NW Bench": LMLocationData("Balcony", 873, "Plant", 615,
@@ -382,8 +392,10 @@ CEILING_LOCATION_TABLE ={
                                                  update_ram_addr=[LMRamData(in_game_room_id=22)]),
     "Secret Altar C Chandelier": LMLocationData("Secret Altar", 613, "Furniture", 38, [],
                                                 update_ram_addr=[LMRamData(in_game_room_id=73)]),
-    # "Secret Altar R Chandelier": LMLocationData("Secret Altar", 612, "Furniture", 40, [], 73), #TODO Cannot access
-    # "Secret Altar L Chandelier": LMLocationData("Secret Altar", 614, "Furniture", 39, [], 73), #TODO Cannot access
+    "Secret Altar R Chandelier": LMLocationData("Secret Altar", 612, "Furniture", 40, [],
+                                                     update_ram_addr=[LMRamData(in_game_room_id=73)]),
+    "Secret Altar L Chandelier": LMLocationData("Secret Altar", 614, "Furniture", 39, [],
+                                                     update_ram_addr=[LMRamData(in_game_room_id=1)]),
 }
 
 DECOR_LOCATION_TABLE = {
@@ -411,7 +423,9 @@ DECOR_LOCATION_TABLE = {
                                           update_ram_addr=[LMRamData(in_game_room_id=34)]),
     "Nursery Vase": LMLocationData("Nursery", 166, "Furniture", 488, [],
                                    update_ram_addr=[LMRamData(in_game_room_id=26)]),
-    "Chauncey's Crib (Nursery)": LMLocationData("Nursery", 167, "Furniture", 372, [],
+    "Nursery Rocking Horse": LMLocationData("Nursery", 168, "Furniture", 364, [], remote_only=True,
+                                            update_ram_addr=[LMRamData(in_game_room_id=26)]),  # TODO doesn't work?
+    "Chauncey's Crib (Nursery)": LMLocationData("Nursery", 167, "Furniture", 372, [], remote_only=True,
                                                 update_ram_addr=[LMRamData(in_game_room_id=26)]),
     "Nursery Toy Blocks R (closer to Door)": LMLocationData("Nursery", 173, "Furniture", 498, [],
                                                             update_ram_addr=[LMRamData(in_game_room_id=26)]),
@@ -499,7 +513,7 @@ DECOR_LOCATION_TABLE = {
                                                                   update_ram_addr=[LMRamData(in_game_room_id=8)]),
     "Kitchen Oven": LMLocationData("Kitchen", 307, "Furniture", 80, ["Fire Element Medal"],
                                    update_ram_addr=[LMRamData(in_game_room_id=7)]),
-    "Kitchen Dishwasher": LMLocationData("Kitchen", 314, "Furniture", 82, [],
+    "Kitchen Dishwasher": LMLocationData("Kitchen", 314, "Furniture", 82, [], remote_only=True,
                                          update_ram_addr=[LMRamData(in_game_room_id=7)]),
     "Spooky's Dog Bowl (Boneyard)": LMLocationData("Boneyard", 317, "Furniture", 97, [],
                                                    update_ram_addr=[LMRamData(in_game_room_id=11)]),
@@ -685,28 +699,43 @@ DECOR_LOCATION_TABLE = {
         update_ram_addr=[LMRamData(in_game_room_id=73)]),
     "Secret Altar Brazier (near front, away from 4th Wall)": LMLocationData("Secret Altar", 611, "Furniture", 29, [],
         update_ram_addr=[LMRamData(in_game_room_id=73)]),
-    # "Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], 51), # TODO Prevents Ghost Spawns
-    # "Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], 51), # TODO Prevents Ghost Spawns
-    # "Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], 51), # TODO Prevents Ghost Spawns
-    # "Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], 51), # TODO Prevents Ghost Spawns
+    "Armory Armor Suit 6": LMLocationData("Armory", 522, "Furniture", 647, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=51)]),
+    "Armory Armor Suit 7": LMLocationData("Armory", 523, "Furniture", 648, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=51)]),
+    "Armory Armor Suit 8": LMLocationData("Armory", 524, "Furniture", 649, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=51)]),
+    "Armory Armor Suit 9": LMLocationData("Armory", 525, "Furniture", 650, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=51)]),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Vase 9', 551),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Vase 10', 553),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Vase 11', 554),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Vase 12', 555),
     #        LMLocationData('Ceramics Studio', 'Ceramics Studio Vase 13', 556),
-    # "Artist's Studio Gold Ghost Easel": LMLocationData("Artist's Studio", 603, "Furniture", 691, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Pink Ghost Easel": LMLocationData("Artist's Studio", 604, "Furniture", 692, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Blue Ghost Easel": LMLocationData("Artist's Studio", 605, "Furniture", 693, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Red Ghost Easel": LMLocationData("Artist's Studio", 606, "Furniture", 694, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Shy Guy Ghost Easel": LMLocationData("Artist's Studio", 607, "Furniture", 695, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Green Ghost Easel": LMLocationData("Artist's Studio", 608, "Furniture", 696, [], 60), # TODO Prevents Ghost Spawns
-    # "Artist's Studio Purple Ghost Easel": LMLocationData("Artist's Studio", 609, "Furniture", 697, [], 60), # TODO Prevents Ghost Spawns
-    # "Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], 55), # TODO Prevents Ghost Spawns
-    # "Nursery Rocking Horse": LMLocationData("Nursery", 168, "Furniture", 364, [], 26), #TODO doesn't work, is a characterinfo item
-    # "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], 7), TODO Prevents Ghosts Spawn
-    # "Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, [], 15), # TODO Prevents Skeletons Spawn
-    # "Rec Room Front Bicycle": LMLocationData("Rec Room", 338, "Furniture", 107, [], 23), TODO Prevents Speedy Spirit Spawn
-    # "2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], 45), # TODO Prevents Ghost Spawns
+    "Artist's Studio Gold Ghost Easel": LMLocationData("Artist's Studio", 603, "Furniture", 691, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Pink Ghost Easel": LMLocationData("Artist's Studio", 604, "Furniture", 692, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Blue Ghost Easel": LMLocationData("Artist's Studio", 605, "Furniture", 693, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Red Ghost Easel": LMLocationData("Artist's Studio", 606, "Furniture", 694, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Shy Guy Ghost Easel": LMLocationData("Artist's Studio", 607, "Furniture", 695, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Green Ghost Easel": LMLocationData("Artist's Studio", 608, "Furniture", 696, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Artist's Studio Purple Ghost Easel": LMLocationData("Artist's Studio", 609, "Furniture", 697, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=60)]),
+    "Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], remote_only=True,
+                                                update_ram_addr=[LMRamData(in_game_room_id=55)]),
+    "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], remote_only=True,
+                                                update_ram_addr=[LMRamData(in_game_room_id=7)]),
+    "Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=15)]),
+    "Rec Room Front Bicycle": LMLocationData("Rec Room", 338, "Furniture", 107, [], remote_only=True,
+                                             update_ram_addr=[LMRamData(in_game_room_id=23)]),
+    "2F Washroom Toilet": LMLocationData("2F Washroom", 378, "Furniture", 443, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=45)]),
 }
 
 CANDLES_LOCATION_TABLE = {
@@ -908,7 +937,7 @@ SEATING_LOCATION_TABLE = {
                                    update_ram_addr=[LMRamData(in_game_room_id=36)]),
     "Parlor Couch": LMLocationData("Parlor", 102, "Furniture", 341, [],
                                    update_ram_addr=[LMRamData(in_game_room_id=36)]),
-    "Study Chair": LMLocationData("Study", 144, "Furniture", 350, [],
+    "Study Chair": LMLocationData("Study", 144, "Furniture", 350, [], remote_only=True,
                                   update_ram_addr=[LMRamData(in_game_room_id=35)]),
     "Master Bedroom Stool": LMLocationData("Master Bedroom", 158, "Furniture", 376, [],
                                            update_ram_addr=[LMRamData(in_game_room_id=34)]),
@@ -946,7 +975,7 @@ SEATING_LOCATION_TABLE = {
                                               update_ram_addr=[LMRamData(in_game_room_id=22)]),
     "Conservatory Cello Chair": LMLocationData("Conservatory", 278, "Furniture", 129, [],
                                                update_ram_addr=[LMRamData(in_game_room_id=22)]),
-    "Conservatory Piano Bench": LMLocationData("Conservatory", 282, "Furniture", 120, [],
+    "Conservatory Piano Bench": LMLocationData("Conservatory", 282, "Furniture", 120, [], remote_only=True,
                                                update_ram_addr=[LMRamData(in_game_room_id=22)]),
     "Dining Room L Chair": LMLocationData("Dining Room", 292, "Furniture", 86, [],
                                           update_ram_addr=[LMRamData(in_game_room_id=8)]),
@@ -979,7 +1008,7 @@ SEATING_LOCATION_TABLE = {
                                                                              LMRamData(in_game_room_id=50)]),
     "Nana's Room Loveseat": LMLocationData("Nana's Room", 391, "Furniture", 387, [],
                                            update_ram_addr=[LMRamData(in_game_room_id=49)]),
-    "Nana's Room Chair": LMLocationData("Nana's Room", 392, "Furniture", 386, [],
+    "Nana's Room Chair": LMLocationData("Nana's Room", 392, "Furniture", 386, [], remote_only=True,
                                         update_ram_addr=[LMRamData(in_game_room_id=49)]),
     "Observatory Chair": LMLocationData("Observatory", 718, "Furniture", 470, [],
                                         update_ram_addr=[LMRamData(in_game_room_id=44)]),
@@ -987,7 +1016,7 @@ SEATING_LOCATION_TABLE = {
                                              update_ram_addr=[LMRamData(in_game_room_id=12)]),
     "Billiards Room L Chair": LMLocationData("Billiards Room", 412, "Furniture", 150, [],
                                              update_ram_addr=[LMRamData(in_game_room_id=12)]),
-    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [],
+    "Billiards Room R Chair": LMLocationData("Billiards Room", 413, "Furniture", 151, [], remote_only=True,
                                              update_ram_addr=[LMRamData(in_game_room_id=12)]),
     "Safari Room Chair": LMLocationData("Safari Room", 432, "Furniture", 627, [],
                                         update_ram_addr=[LMRamData(in_game_room_id=55)]),
@@ -1017,7 +1046,8 @@ SEATING_LOCATION_TABLE = {
                                        update_ram_addr=[LMRamData(in_game_room_id=29)]),
     "Artist's Studio Stools": LMLocationData("Artist's Studio", 598, "Furniture", 689, [],
                                              update_ram_addr=[LMRamData(in_game_room_id=60)]),
-    # "Storage Room Chair": LMLocationData("Storage Room", 209, "Furniture", 161, [], 14), #TODO Prevents Speedy Spirit Spawn
+    "Storage Room Chair": LMLocationData("Storage Room", 209, "Furniture", 161, [], remote_only=True,
+                                         update_ram_addr=[LMRamData(in_game_room_id=14)]),
 }
 
 SURFACES_LOCATION_TABLE = {
@@ -1078,8 +1108,10 @@ SURFACES_LOCATION_TABLE = {
                                          update_ram_addr=[LMRamData(in_game_room_id=50)]),
     "Tea Room East Table": LMLocationData("Tea Room", 863, "Furniture", 539, [],
                                          update_ram_addr=[LMRamData(in_game_room_id=50)]),
-    # "Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], 27), #TODO Prevents Speedy Spirit Spawn?
-    # "Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], 69), # TODO Prevents Speedy Spirit Spawn
+    "Twins' Room Bunk Bed": LMLocationData("Twins' Room", 182, "Furniture", 425, [], remote_only=True,
+                                           update_ram_addr=[LMRamData(in_game_room_id=27)]),
+    "Breaker Room Table": LMLocationData("Breaker Room", 445, "Furniture", 44, [], remote_only=True,
+                                         update_ram_addr=[LMRamData(in_game_room_id=69)]),
 }
 
 STORAGE_LOCATION_TABLE = {
@@ -1249,9 +1281,12 @@ STORAGE_LOCATION_TABLE = {
                                       update_ram_addr=[LMRamData(in_game_room_id=68)]),
     "Pipe Room Bucket": LMLocationData("Pipe Room", 594, "Furniture", 22, [],
                                        update_ram_addr=[LMRamData(in_game_room_id=68)]),
-    # "Cellar Crate 1": LMLocationData("Cellar", 462, "Furniture", 67, [], 66), # TODO Prevents Ghost Spawns
-    # "Cellar Barrel 1": LMLocationData("Cellar", 463, "Furniture", 5, [], 66), # TODO Prevents Ghost Spawns
-    # "Cellar Barrel 2": LMLocationData("Cellar", 464, "Furniture", 6, [], 66), # TODO Prevents Ghost Spawns
+    "Cellar NW Crate": LMLocationData("Cellar", 462, "Furniture", 67, [], remote_only=True,
+                                      update_ram_addr=[LMRamData(in_game_room_id=66)]),
+    "Cellar Barrel (back wall)": LMLocationData("Cellar", 463, "Furniture", 5, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=66)]),
+    "Cellar Barrel (by exit)": LMLocationData("Cellar", 464, "Furniture", 6, [], remote_only=True,
+                                                    update_ram_addr=[LMRamData(in_game_room_id=66)]),
 }
 
 DRAWERS_LOCATION_TABLE = {
@@ -1325,9 +1360,12 @@ DRAWERS_LOCATION_TABLE = {
                                                update_ram_addr=[LMRamData(in_game_room_id=53)]),
     "Guest Room End Table": LMLocationData("Guest Room", 580, "Furniture", 497, ["Water Element Medal"],
                                            update_ram_addr=[LMRamData(in_game_room_id=29)]),
-    # "Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], 41), #TODO Prevents Ghost Spawns
-    # "Wardrobe East Dresser": LMLocationData("Wardrobe", 871, "Furniture", 477, [], 41), #TODO Prevents Ghost Spawns
-    # "Dining Room L China Hutch": LMLocationData("Dining Room", 294, "Furniture", 278, [], 8), #TODO Prevents Speedy Spirit Spawn
+    "Wardrobe West Dresser": LMLocationData("Wardrobe", 127, "Furniture", 479, [], remote_only=True,
+                                                update_ram_addr=[LMRamData(in_game_room_id=41)]),
+    "Wardrobe Right Dresser": LMLocationData("Wardrobe", 871, "Furniture", 477, [], remote_only=True,
+                                             update_ram_addr=[LMRamData(in_game_room_id=41)]),
+    "Dining Room L China Hutch": LMLocationData("Dining Room", 294, "Furniture", 278, [], remote_only=True,
+                                                update_ram_addr=[LMRamData(in_game_room_id=8)]),
 }
 
 # Adds the myriad of shakable objects or objects that react to elements such as fire as locations
@@ -1680,7 +1718,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803D5DAB, bit_position=1, in_game_room_id=59)]),
     "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, [],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DAA, bit_position=5, in_game_room_id=60)]),
-    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"],
+    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DBF, bit_position=1, in_game_room_id=64)]),
 }
 

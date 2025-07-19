@@ -102,9 +102,9 @@ class BananaTrapWeight(Range):
 
 
 class NothingWeight(Range):
-    """Set the weight for how often nothing is chosen as filler."""
-    display_name = "'Nothing' Weight"
-    internal_name = "mothing_weight"
+    """Set the weight for how often dust is chosen as filler."""
+    display_name = "Dust Weight"
+    internal_name = "dust_weight"
     range_start = 0
     range_end = 100
     default = 40
@@ -264,13 +264,13 @@ class MarioItems(Range):
     default = 5
 
 
-class WashroomBooCount(Range):
-    """Set the number of Boos required to reach the 1F Washroom. 0 = Starts Open"""
-    display_name = "Washroom Boo Count"
-    internal_name = "washroom_boo_count"
-    range_start = 0
-    range_end = 50
-    default = 5
+# class WashroomBooCount(Range):
+#     """Set the number of Boos required to reach the 1F Washroom. 0 = Starts Open"""
+#     display_name = "Washroom Boo Count"
+#     internal_name = "washroom_boo_count"
+#     range_start = 0
+#     range_end = 50
+#     default = 5
 
 
 class BalconyBooCount(Range):
@@ -596,7 +596,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     boo_gates: BooGates
     mario_items: MarioItems
     washroom_boo_count: WashroomBooCount
-    balcony_boo_count: BalconyBooCount
+    #balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     king_boo_health: KingBooHealth
     boo_health_option: BooHealthOption
@@ -621,6 +621,6 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     poss_trap_weight: PossTrapWeight
     bonk_trap_weight: BonkTrapWeight
     ghost_weight: GhostTrapWeight
-    nothing_weight: NothingWeight
+    dust_weight: NothingWeight
     heart_weight: HeartWeight
     start_inventory_from_pool: StartInventoryPool

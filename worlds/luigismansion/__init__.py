@@ -68,7 +68,7 @@ class LMWeb(WebWorld):
             LuigiOptions.RankRequirement,
             LuigiOptions.MarioItems,
             LuigiOptions.BooGates,
-            LuigiOptions.WashroomBooCount,
+            # LuigiOptions.WashroomBooCount,
             LuigiOptions.BalconyBooCount,
             LuigiOptions.FinalBooCount,
             LuigiOptions.Enemizer,
@@ -517,7 +517,7 @@ class LMWorld(World):
                 self.options.walksanity.value = passthrough["walksanity"]
                 self.options.mario_items.value = passthrough["clairvoya requirement"]
                 self.options.boo_gates.value = passthrough["boo gates"]
-                self.options.washroom_boo_count.value = passthrough["washroom boo count"]
+                # self.options.washroom_boo_count.value = passthrough["washroom boo count"]
                 self.options.balcony_boo_count.value = passthrough["balcony boo count"]
                 self.options.final_boo_count.value = passthrough["final boo count"]
                 self.options.enemizer.value = passthrough["enemizer"]
@@ -580,7 +580,7 @@ class LMWorld(World):
         if self.options.boo_gates.value == 0:
             self.options.final_boo_count.value = 0
             self.options.balcony_boo_count.value = 0
-            self.options.washroom_boo_count.value = 0
+            # self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
         # Add all randomizable regions
@@ -657,6 +657,18 @@ class LMWorld(World):
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     else:
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+            if region.name in GHOST_TO_ROOM.keys():
+                # if fire, require water
+                if self.ghost_affected_regions[region.name] == "Fire":
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                # if water, require ice
+                elif self.ghost_affected_regions[region.name] == "Water":
+                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                # if ice, require fire
+                elif self.ghost_affected_regions[region.name] == "Ice":
+                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                else:
+                    pass
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
@@ -749,7 +761,7 @@ class LMWorld(World):
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.dust_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.coin_weight.value, twencoin, thircoin,
                           # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
@@ -913,7 +925,7 @@ class LMWorld(World):
             "walksanity": self.options.walksanity.value,
             "clairvoya requirement": self.options.mario_items.value,
             "boo gates": self.options.boo_gates.value,
-            "washroom boo count": self.options.washroom_boo_count.value,
+            # "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
