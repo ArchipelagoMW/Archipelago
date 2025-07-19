@@ -27,11 +27,11 @@ Keys, Mario's Items, and Element Medals can be found in other worlds, along with
 
 ## What does another world's item look like in Luigi's Mansion?
 
-Items belonging to other worlds are represented by an AP icon and are called AP items.
+Items belonging to other worlds are represented by an AP icon (WIP) and are called AP items.
 
 ## When the player receives an item, what happens?
 
-Items received in Luigi's Mansion will display a popup window that does not interrupt gameplay.. 
+Items received in Luigi's Mansion will display a text overlay that does not interrupt gameplay.. 
 
 ## Changes from the vanilla game
 
@@ -39,7 +39,7 @@ Items received in Luigi's Mansion will display a popup window that does not inte
 
 - Add Plants into the pool as locations
 - Add Portrait Ghosts into the pool as locations
-- Add Speedy Spirits and Gold Mice into the pool as locations. These now require the Blackout to be active to reach
+- Add Speedy Spirits and Gold Mice into the pool as locations. These logically require the Blackout to be active to reach. The gold mice can be acquired out of logic before the blackout is available.
 - Add Boos into the pool as locations and items
 - Add Toads into the pool as locations
 - Add almost every interactable object within the game into the pool as locations
