@@ -1680,7 +1680,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803D5DAB, bit_position=1, in_game_room_id=59)]),
     "Vincent van Gore, the Starving Artist": LMLocationData("Artist's Studio", 641, "Portrait", 107, [],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DAA, bit_position=5, in_game_room_id=60)]),
-    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"],
+    "Sir Weston, the Chilly Climber": LMLocationData("Cold Storage", 642, "Portrait", 1, ["Fire Element Medal"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DBF, bit_position=1, in_game_room_id=64)]),
 }
 
