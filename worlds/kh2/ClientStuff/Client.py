@@ -281,6 +281,14 @@ class KH2Context(CommonContext):
             logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot: {self.slot_name}")
             self.serverconnected = False
             self.disconnect_from_server = True
+    #to not softlock the client when you connect to the wrong slot/game
+    def event_invalid_slot(self):
+        self.kh2seedname = None
+        CommonContext.event_invalid_slot(self)
+
+    def event_invalid_game(self):
+        self.kh2seedname = None
+        CommonContext.event_invalid_slot(self)
 
     async def connection_closed(self):
         self.kh2connected = False
@@ -480,7 +488,7 @@ class KH2Context(CommonContext):
                         self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
 
                 if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
-                    itemName = self.item_names.lookup_in_game(itemId)
+                    itemName = self.item_names.lookup_in_slot(itemId,receiverID)
                     playerName = self.player_names[receiverID]
                     totalLength = len(itemName) + len(playerName)
                     if self.client_settings["send_popup_type"] == "Info":
