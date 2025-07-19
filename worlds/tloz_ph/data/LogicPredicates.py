@@ -356,9 +356,14 @@ def ph_can_farm_rupees(state: CollectionState, player: int):
                     ph_has_phantom_sword(state, player),
                     ph_has_spirit(state, player, "Power")
                 ]),
-                state.has("_beat_toc", player),
-                state.has("_can_play_cannon_game", player),
-                state.has("_can_play_goron_race", player),
+                all([  # Can Farm Minigames
+                    ph_option_randomize_minigames(state, player),
+                    any([
+                        state.has("_beat_toc", player),  # Archery Game
+                        state.has("_can_play_cannon_game", player),
+                        state.has("_can_play_goron_race", player),
+                    ])
+                ])
             ])
         ]),
         all([  # Can farm harrow (and chooses to play with harrow)
@@ -372,7 +377,10 @@ def ph_island_shop(state, player, price):
     other_costs = 0
     if ph_has_sea_chart(state, player, "SW"):
         # Includes cannon island, but not salvage arm cause that also unlocks treasure shop
-        other_costs += 1550  # TODO this might break generation
+        other_costs += 1550
+        if ph_option_randomize_masked_beedle(state, player):
+            other_costs += 1500
+        other_costs *= 0.7  # Cost multiplier, cause the chance of all checks being useful is low
     return ph_has_rupees(state, player, price + other_costs)
 
 
@@ -386,6 +394,7 @@ def ph_beedle_shop(state, player, price):
         other_costs += 1000
     if ph_option_randomize_masked_beedle(state, player):
         other_costs += 1500
+    other_costs *= 0.7  # Cost multiplier, cause the chance of all checks being useful is low
     return ph_has_rupees(state, player, price + other_costs)
 
 
@@ -408,7 +417,7 @@ def ph_can_buy_heart(state: CollectionState, player: int):
 # ============ Option states =============
 
 def ph_option_glitched_logic(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.logic == "glitched"
+    return state.multiworld.worlds[player].options.logic == "glitched" or state.has("_UT_Glitched_logic", player)
 
 
 def ph_option_normal_logic(state: CollectionState, player: int):
@@ -416,7 +425,8 @@ def ph_option_normal_logic(state: CollectionState, player: int):
 
 
 def ph_option_hard_logic(state: CollectionState, player: int):
-    return state.multiworld.worlds[player].options.logic in ["hard", "glitched"]
+    return (state.multiworld.worlds[player].options.logic in ["hard", "glitched"]
+            or state.has("_UT_Glitched_logic", player))
 
 
 def ph_option_not_glitched_logic(state: CollectionState, player: int):
@@ -436,22 +446,33 @@ def ph_option_keys_in_own_dungeon(state: CollectionState, player: int):
 
 
 def ph_option_phantoms_hard(state: CollectionState, player: int):
-    return all([state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon"],
-                ph_has_grapple(state, player)])
+    return any([
+        all([
+            state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon"],
+            ph_has_grapple(state, player)
+        ]),
+        ph_UT_glitched_logic(state, player)
+    ])
 
 
 def ph_option_phantoms_med(state: CollectionState, player: int):
-    return all([state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon", "require_stun"],
-                any([
-                    ph_has_bow(state, player),
-                    ph_has_hammer(state, player),
-                    ph_has_fire_sword(state, player)
-                ])])
+    return any([
+        all([
+            state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon", "require_stun"],
+            any([
+                ph_has_bow(state, player),
+                ph_has_hammer(state, player),
+                ph_has_fire_sword(state, player)
+            ])
+        ]),
+        ph_UT_glitched_logic(state, player)
+    ])
 
 
 def ph_option_phantoms_easy(state: CollectionState, player: int):
-    return (state.multiworld.worlds[player].options.phantom_combat_difficulty in
-            ["require_weapon", "require_stun", "require_traps"])
+    return any([state.multiworld.worlds[player].options.phantom_combat_difficulty in
+                ["require_weapon", "require_stun", "require_traps"],
+                ph_UT_glitched_logic(state, player)])
 
 
 def ph_option_phantoms_sword_only(state: CollectionState, player: int):
@@ -472,6 +493,8 @@ def ph_clever_bombs(state: CollectionState, player: int):
     return all([ph_has_bombs(state, player),
                 ph_option_hard_logic(state, player)])
 
+def ph_option_randomize_minigames(state: CollectionState, player: int):
+    return state.multiworld.worlds[player].options.randomize_minigames
 
 def ph_option_randomize_frogs(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_frogs == "randomize"
@@ -537,9 +560,20 @@ def ph_option_goal_midway(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.goal == "triforce_door"
 
 
+def ph_can_pass_sea_monsters(state, player):
+    return any([
+        ph_has_cannon(state, player),
+        state.multiworld.worlds[player].options.skip_ocean_fights
+    ])
+
+
 # For doing sneaky stuff with universal tracker UT
 def ph_is_ut(state: CollectionState, player: int):
     return getattr(state.multiworld, "generation_is_fake", False)
+
+
+def ph_UT_glitched_logic(state, player):
+    return state.has("_UT_Glitched_logic", player)
 
 
 # ============= Key logic ==============
@@ -631,6 +665,7 @@ def ph_can_arrow_despawn(state: CollectionState, player: int):
         ph_option_glitched_logic(state, player)
     ])
 
+
 def ph_can_bcl(state, player):
     # Bombchu Camera Lock
     return all([
@@ -638,11 +673,13 @@ def ph_can_bcl(state, player):
         ph_option_glitched_logic(state, player)
     ])
 
+
 def ph_can_sword_glitch(state, player):
     return all([
         ph_has_sword(state, player),
         ph_option_glitched_logic(state, player)
     ])
+
 
 def ph_can_sword_scroll_clip(state, player):
     return all([
@@ -905,7 +942,7 @@ def ph_mercay_passage_rat(state, player):
 def ph_bannan_scroll(state, player):
     return all([
         ph_has_wood_heart(state, player),
-        ph_has_cannon(state, player),
+        ph_can_pass_sea_monsters(state, player),
         ph_has_sea_chart(state, player, "SE"),
     ])
 
@@ -932,6 +969,7 @@ def ph_tof_1f_key_ut(state, player):
         ph_ut_small_key_own_dungeon(state, player),
         ph_can_kill_bat(state, player)
     ])
+
 
 def ph_tof_3f(state, player):
     return all([

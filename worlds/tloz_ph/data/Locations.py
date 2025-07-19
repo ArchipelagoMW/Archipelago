@@ -1,4 +1,4 @@
-
+from worlds.tloz_ph.data.Constants import *
 
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
@@ -6,7 +6,8 @@
 LOCATIONS_DATA = {
     "Mercay Sword Chest": {
         "region_id": "mercay island",
-        "vanilla_item": "Sword (Progressive)",
+        "item_override": "Sword (Progressive)",
+        "vanilla_item": "Oshus' Sword",
         "stage_id": 11,
         "floor_id": 19,
         "sram_addr": 0x00043C,
@@ -84,7 +85,8 @@ LOCATIONS_DATA = {
         "address": 0x1B55A0,
         "value": 0x4,
         "y": 0x399A,
-        "vanilla_item": "Nothing!"
+        "vanilla_item": "Nothing!",
+        # "item_override": "Phantom Hourglass",
     },
     "Mercay Freedle Tunnel Chest": {
         "region_id": "mercay freedle tunnel chest",
@@ -142,7 +144,8 @@ LOCATIONS_DATA = {
         "region_id": "mercay oshus phantom blade",
         "stage_id": 11,
         "floor_id": 10,
-        "vanilla_item": "Sword (Progressive)",
+        "item_override": "Sword (Progressive)",
+        "vanilla_item": "Phantom Sword",
         "address": 0x1BA648,
         "value": 0x20
     },
@@ -198,6 +201,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Power Gem",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x02,
         "island_shop": True,
@@ -208,6 +212,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bow (Progressive)",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x08,
         "island_shop": True,
@@ -218,6 +223,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Bombchus (Progressive)",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5589,
         "value": 0x10,
         "island_shop": True,
@@ -228,6 +234,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Heart Container",
         "stage_id": 11,
         "floor_id": 0x11,
+        "additional_rooms": [0xC0E, 0x1014],
         "address": 0x1B5588,
         "value": 0x80,
         "island_shop": True
@@ -762,6 +769,15 @@ LOCATIONS_DATA = {
         "x_min": -50000,
         "y": 0x1333,
     },
+    "Cannon Island Bee Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "x_max": -50000,
+        "y": 0x1333,
+        "conditional": True
+    },
     "Cannon Island Cave Chest": {
         "region_id": "cannon island",
         "vanilla_item": "Power Gem",
@@ -774,6 +790,16 @@ LOCATIONS_DATA = {
         "stage_id": 0x13,
         "floor_id": 0,
         "y": 0x2666
+    },
+    "Cannon Island SE Dig": {
+        "region_id": "cannon island dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x13,
+        "floor_id": 0,
+        "y": 0x1333,
+        "x_max": 27000,
+        "z_min": 37000,
+        "conditional": True
     },
     "Cannon Island Bonk Tree": {
         "region_id": "cannon island",
@@ -796,7 +822,8 @@ LOCATIONS_DATA = {
         "x_min": 0,
         "z_max": 12300,
         "sram_addr": 0x000190,
-        "sram_value": 2
+        "sram_value": 2,
+        "conditional": True
     },
     "Cannon Island Cannon": {
         "region_id": "cannon island",
@@ -958,7 +985,8 @@ LOCATIONS_DATA = {
         "z_max": 58000,
         "z_min": 25000,
         "x_min": 40000,
-        "y": 0
+        "y": 0,
+        "conditional": True
     },
     "Molida Cave Wayfarer Hideaway Chest": {
         "region_id": "molida dig",
@@ -982,7 +1010,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 10,
         "y": 0,
-        "x_min": 15000
+        "x_min": 15000,
+        "conditional": True
     },
     "Molida Cave Shovel Chest": {
         "region_id": "molida cave back",
@@ -999,7 +1028,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xC,
         "floor_id": 15,
         "sram_addr": 0x158,
-        "sram_value": 0x100
+        "sram_value": 0x100,
+        "conditional": True
     },
     "Molida Island Cliff Chest": {
         "region_id": "molida cave back",
@@ -1017,6 +1047,16 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "y": 0x1333,
         "x_min": 90000
+    },
+    "Molida Island Cuccoo Grapple Small Island Dig": {
+        "region_id": "molida cuccoo dig",
+        "vanilla_item": "Big Red Rupee (200)",
+        "stage_id": 0xC,
+        "floor_id": 0,
+        "z_min": 58000,
+        "y": 0,
+        "x_min": 40000,
+        "conditional": True
     },
     "Molida Island North Dig Chest": {
         "region_id": "molida north",
@@ -1043,6 +1083,7 @@ LOCATIONS_DATA = {
         "value": 0x8,
         'post_dungeon': "Temple of Courage",
         "delay_reset": True,
+        "conditional": True
     },
     "Molida Archery 2000": {
         "region_id": "molida archery",
@@ -1052,7 +1093,8 @@ LOCATIONS_DATA = {
         "address": 0x1B55A6,
         "value": 0x10,
         'post_dungeon': "Temple of Courage",
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
 
     # ============= Temple of Courage ===========
@@ -1200,7 +1242,8 @@ LOCATIONS_DATA = {
     },
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
+        "item_override": "Sand of Hours",
         "stage_id": 0x2C,
         "floor_id": 0,
         "address": 0x1B557F,
@@ -1290,14 +1333,15 @@ LOCATIONS_DATA = {
         "floor_id": 1,
         "conditional": True
     },
-    "Prince of Red Lion Combat Reward": {
+    "Ocean NW Prince of Red Lion Combat Reward": {
         "region_id": "porl item",
         "vanilla_item": "Heart Container",
         "stage_id": 7,
         "floor_id": 0,
         "address": 0x1B55A4,
         "value": 0x40,
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
     # ============ Isle of Gust ============
     "Isle of Gust Hideout Chest": {
@@ -1325,7 +1369,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "stage_id": 0xE,
         "floor_id": 0x0,
-        "y": 0x4CCD
+        "y": 0x4CCD,
+        "conditional": True
     },
     "Isle of Gust West Cliff Chest": {
         "region_id": "gust dig",
@@ -1340,7 +1385,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xE,
         "floor_id": 0x1,
         "y": 0x2666,
-        "x_max": -85000
+        "x_max": -85000,
+        "conditional": True
     },
     "Isle of Gust Sandworm Chest": {
         "region_id": "gust dig",
@@ -1412,7 +1458,8 @@ LOCATIONS_DATA = {
     },
     "Temple of Wind Cyclok Sand of Hours": {
         "region_id": "tow cyclok",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
+        "item_override": "Sand of Hours",
         "stage_id": 0x2A,
         "floor_id": 0x0,
         "address": 0x1B557F,
@@ -1507,7 +1554,8 @@ LOCATIONS_DATA = {
         "floor_id": 0,
         "address": 0x1B55AA,
         "value": 0x40,
-        "delay_reset": True
+        "delay_reset": True,
+        "conditional": True
     },
     "Bannan Island Wayfarer Trade Quest Chest": {
         "region_id": "bannan scroll",
@@ -1814,7 +1862,8 @@ LOCATIONS_DATA = {
         "region_id": "gt dongo",
         "stage_id": 0x2E,
         "floor_id": 0x0,
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
+        "item_override": "Sand of Hours",
         "address": 0x1B559B,
         "value": 0x4,
         "dungeon": "Goron Temple",
@@ -1891,6 +1940,16 @@ LOCATIONS_DATA = {
         "x_max": -25000,
         "z_min": 45000
     },
+    "Dee Ess Blow in Microphone Chest": {
+        "region_id": "ds",
+        "stage_id": 0x1B,
+        "floor_id": 0x0,
+        "vanilla_item": "Gold Rupee (300)",
+        "y": 0,
+        "x_max": -15000,
+        "z_min": 10000,
+        "z_max": 30000,
+    },
     "Dee Ess Left Speakers Dig SSW": {
         "region_id": "ds dig",
         "stage_id": 0x1B,
@@ -1898,7 +1957,8 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_min": -67500,
-        "x_max": -50000
+        "x_max": -50000,
+        "conditional": True
     },
     "Dee Ess Right Speakers Dig SE": {
         "region_id": "ds dig",
@@ -1907,6 +1967,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_min": 45000,
+        "conditional": True
     },
     "Dee Ess Left Speakers Dig West ": {
         "region_id": "ds dig",
@@ -1915,6 +1976,7 @@ LOCATIONS_DATA = {
         "vanilla_item": "Big Green Rupee (100)",
         "y": 0x2666,
         "x_max": -67500,
+        "conditional": True
     },
     "Dee Ess Win Goron Game": {
         "region_id": "ds race",
@@ -1924,7 +1986,8 @@ LOCATIONS_DATA = {
         "address": 0x1B559F,
         "value": 0x20,
         'post_dungeon': "Goron Temple",
-        'delay_reset': True
+        'delay_reset': True,
+        "conditional": True
     },
     "Dee Ess Eye Brute Chest": {
         "region_id": "ds combat",
@@ -1956,7 +2019,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xF,
         "floor_id": 0x2,
         "vanilla_item": "Big Red Rupee (200)",
-        "z_min": -20000
+        "z_min": -20000,
+        "conditional": True
     },
     "Isle of Frost Fofo Dig (SE)": {
         "region_id": "iof dig",
@@ -1966,7 +2030,8 @@ LOCATIONS_DATA = {
         "z_min": -60000,
         "z_max": -30000,
         "x_min": -115000,
-        "x_max": -85000
+        "x_max": -85000,
+        "conditional": True
     },
     "Isle of Frost Dobo Dig (SW)": {
         "region_id": "iof dig",
@@ -1976,7 +2041,8 @@ LOCATIONS_DATA = {
         "z_min": -60000,
         "z_max": -30000,
         "x_min": -175000,
-        "x_max": -145000
+        "x_max": -145000,
+        "conditional": True
     },
     "Isle of Frost Estate SW Island Dig": {
         "region_id": "iof dig",
@@ -1990,7 +2056,8 @@ LOCATIONS_DATA = {
         "stage_id": 0xF,
         "floor_id": 0x2,
         "vanilla_item": "Gold Rupee (300)",
-        "x_min": -60000
+        "x_min": -60000,
+        "conditional": True
     },
     "Isle of Frost Ice Field South Ledge West Chest": {
         "region_id": "iof grapple",
@@ -2114,7 +2181,8 @@ LOCATIONS_DATA = {
         "region_id": "toi gleeok",
         "stage_id": 0x2D,
         "floor_id": 0x0,
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
+        "item_override": "Sand of Hours",
         "address": 0x1B559B,
         "value": 0x8,
         "dungeon": "Temple of Ice",
@@ -2223,7 +2291,8 @@ LOCATIONS_DATA = {
         "additional_rooms": [0x1201],
         "y": 0x1333,
         "x_max": -200000,
-        "z_max": -40000
+        "z_max": -40000,
+        "conditional": True
     },
     "Isle of Ruins Bonk Tree": {
         "region_id": "ruins",
@@ -2357,7 +2426,8 @@ LOCATIONS_DATA = {
     },
     "Mutoh's Temple Eox Sand of Hours": {
         "region_id": "mutoh eox",
-        "vanilla_item": "Sand of Hours",
+        "vanilla_item": "Sand of Hours (Boss)",
+        "item_override": "Sand of Hours",
         "stage_id": 0x2F,
         "floor_id": 0,
         "address": 0x1B559B,
@@ -2394,13 +2464,44 @@ LOCATIONS_DATA = {
         "z_max": 24000,
         "z_min": -26000
     },
+    "Maze Island SE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 80000,
+        "z_min": 70000,
+        "conditional": True
+    },
+    "Maze Island NE Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_min": 40000,
+        "z_max": -60000,
+        "conditional": True
+    },
+    "Maze Island NW Dig": {
+        "region_id": "maze dig",
+        "vanilla_item": "Big Green Rupee (100)",
+        "stage_id": 0x19,
+        "floor_id": 0,
+        "y": 0,
+        "x_max": -15000,
+        "z_max": -60000,
+        "conditional": True
+    },
     "Maze Island Beginner": {
         "region_id": "maze",
         "vanilla_item": "Wisdom Gem",
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B558E,
-        "value": 1
+        "value": 1,
+        "conditional": True
     },
     "Maze Island Normal": {
         "region_id": "maze normal",
@@ -2408,7 +2509,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B5598,
-        "value": 0x40
+        "value": 0x40,
+        "conditional": True
     },
     "Maze Island Expert": {
         "region_id": "maze expert",
@@ -2416,7 +2518,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "address": 0x1B5598,
-        "value": 0x80
+        "value": 0x80,
+        "conditional": True
     },
     "Maze Island Bonus Reward": {
         "region_id": "maze expert",
@@ -2424,7 +2527,8 @@ LOCATIONS_DATA = {
         "stage_id": 0x19,
         "floor_id": 0,
         "x_max": -50000,
-        "z_min": 50000
+        "z_min": 50000,
+        "conditional": True
     },
 
     # Goals
@@ -2488,69 +2592,9 @@ LOCATIONS_DATA = {
     },
 
     # ==== New checks at bottom to preserve id ordering
-    "Dee Ess Blow in Microphone Chest": {
-        "region_id": "ds",
-        "stage_id": 0x1B,
-        "floor_id": 0x0,
-        "vanilla_item": "Gold Rupee (300)",
-        "y": 0,
-        "x_max": -15000,
-        "z_min": 10000,
-        "z_max": 30000,
-    },
-    "Cannon Island SE Dig": {
-        "region_id": "cannon island dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x13,
-        "floor_id": 0,
-        "y": 0x1333,
-        "x_max": 27000,
-        "z_min": 37000
-    },
-    "Maze Island SE Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
-        "floor_id": 0,
-        "y": 0,
-        "x_min": 80000,
-        "z_min": 70000
-    },
-    "Maze Island NE Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
-        "floor_id": 0,
-        "y": 0,
-        "x_min": 40000,
-        "z_max": -60000
-    },
-    "Maze Island NW Dig": {
-        "region_id": "maze dig",
-        "vanilla_item": "Big Green Rupee (100)",
-        "stage_id": 0x19,
-        "floor_id": 0,
-        "y": 0,
-        "x_max": -15000,
-        "z_max": -60000
-    },
-    "Cannon Island Bee Dig": {
-        "region_id": "cannon island dig",
-        "vanilla_item": "Big Red Rupee (200)",
-        "stage_id": 0x13,
-        "floor_id": 0,
-        "x_max": -50000,
-        "y": 0x1333,
-    },
-    "Molida Island Cuccoo Grapple Small Island Dig": {
-        "region_id": "molida cuccoo dig",
-        "vanilla_item": "Big Red Rupee (200)",
-        "stage_id": 0xC,
-        "floor_id": 0,
-        "z_min": 58000,
-        "y": 0,
-        "x_min": 40000
-    },
+
+
+
 
 }
 
@@ -2558,5 +2602,18 @@ for i, name in enumerate(LOCATIONS_DATA):
     LOCATIONS_DATA[name]["id"] = i+1
 
 if __name__ == "__main__":
+    islands = {}
+    island_groups = {}
     for location, data in LOCATIONS_DATA.items():
-        print(f"{location} | {data['region_id']} | id: {data['id']} | stage: {data['stage_id']} | room: {data['floor_id']}")
+        islands.setdefault(data["stage_id"], [])
+        islands[data["stage_id"]].append(location)
+
+    for i, data in islands.items():
+        island_groups[STAGES[i]] = data
+        print(f"\t\"{STAGES[i]}\": [")
+        for loc in data:
+            print(f"\t\t\"{loc}\",")
+        print(f"\t],")
+
+
+

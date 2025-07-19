@@ -79,6 +79,8 @@ class PhantomHourglassWorld(World):
     item_name_groups = ITEM_GROUPS
     origin_region_name = "mercay island"
 
+    glitches_item_name = "_UT_Glitched_logic"
+
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
 
@@ -145,14 +147,20 @@ class PhantomHourglassWorld(World):
         if not location_data.get("conditional", False):
             return True
         else:
-            if location_name in FROG_LOCATION_NAMES:
+            if location_name in LOCATION_GROUPS["Golden Frogs"]:
                 return self.options.randomize_frogs != PhantomHourglassFrogRandomization.option_start_with
             if "Harrow Island" in location_name:
                 return self.options.randomize_harrow
-            if "Zauz's Island Triforce Crest" in location_name:
+            if "Zauz's Island Triforce Crest" == location_name:
                 return self.options.randomize_triforce_crest
             if "Masked Beedle" in location_name:
                 return self.options.randomize_masked_beedle
+            if "Molida Archery 2000" == location_name:
+                return self.options.logic in ["hard", "glitched"]
+            if location_name in LOCATION_GROUPS["Rupee Dig Spots"]:
+                return self.options.randomize_digs
+            if location_name in LOCATION_GROUPS["Minigames"]:
+                return self.options.randomize_minigames
             if "GOAL" in location_name:
                 if location_name == "GOAL: Beat Bellumbeck" and self.options.goal == "beat_bellumbeck":
                     return True
@@ -304,7 +312,7 @@ class PhantomHourglassWorld(World):
                     forced_item = self.create_item(item_name)
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
                     continue
-            if item_name in FROG_NAMES:
+            if item_name in ITEM_GROUPS["Golden Frog Glyphs"]:
                 if self.options.randomize_frogs == "vanilla":
                     forced_item = self.create_item(item_name)
                     self.multiworld.get_location(loc_name, self.player).place_locked_item(forced_item)
@@ -319,7 +327,8 @@ class PhantomHourglassWorld(World):
                 filler_item_count += 1
                 continue
             if (item_name in ["Treasure", "Ship Part", "Nothing!", "Potion", "Red Potion", "Purple Potion",
-                              "Yellow Potion", "Power Gem", "Wisdom Gem", "Courage Gem", "Heart Container"]
+                              "Yellow Potion", "Power Gem", "Wisdom Gem", "Courage Gem", "Heart Container",
+                              "Bombs (Progressive)", "Bow (Progressive)", "Bombchus (Progressive)"]
                     or "Treasure Map" in item_name):
                 filler_item_count += 1
                 continue
@@ -328,12 +337,13 @@ class PhantomHourglassWorld(World):
 
         # Fill filler count with consistent amounts of items, when filler count is empty it won't add any more items
         # so add progression items first
-        add_items = [("Wisdom Gem", 20), ("Power Gem", 20), ("Courage Gem", 20), ("Heart Container", 13)]
+        add_items = [("Wisdom Gem", 20), ("Power Gem", 20), ("Courage Gem", 20), ("Heart Container", 13),
+                     ("Bombs (Progressive)", 3), ("Bow (Progressive)", 3), ("Bombchus (Progressive)", 3)]
         for i, count in add_items:
             item_pool_dict, filler_item_count = add_items_from_filler(item_pool_dict, filler_item_count, i, count)
         # Add ships if enough room in filler pool
         if filler_item_count >= 8:
-            for i in SHIPS[1:]:
+            for i in ITEM_GROUPS["Ships"][1:]:
                 item_pool_dict[i] = 1
             filler_item_count -= 8
 
@@ -459,10 +469,11 @@ class PhantomHourglassWorld(World):
         options = ["goal", "dungeons_required", "bellum_access",
                    "ghost_ship_in_dungeon_pool", "exclude_non_required_dungeons",
                    "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
-                   "keysanity", "randomize_frogs", "randomize_triforce_crest", "randomize_harrow",
+                   "randomize_minigames", "randomize_digs", "keysanity", "randomize_frogs",
+                   "randomize_triforce_crest", "randomize_harrow",
                    "randomize_masked_beedle",
-                   "fog_settings",
-                   "dungeon_hints", "shop_hints", "spirit_island_hints",
+                   "fog_settings", "skip_ocean_fights",
+                   "dungeon_hints", "shop_hints", "minigame_hints", "spirit_island_hints",
                    "ph_starting_time", "ph_time_increment",
                    "death_link"]
         slot_data = self.options.as_dict(*options)

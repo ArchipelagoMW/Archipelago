@@ -20,22 +20,22 @@ class PhantomHourglassGoal(Choice):
 
 class PhantomHourglassStartingTime(Range):
     """
-    How much time to start with in your Phantom Hourglass, in minutes
+    How much time to start with in your Phantom Hourglass, in seconds
     """
     display_name = "Phantom Hourglass Starting Time"
     range_start = 0
-    range_end = 30
-    default = 10
+    range_end = 5999
+    default = 600
 
 
 class PhantomHourglassTimeIncrement(Range):
     """
-    How much time to get for each sand of hours upgrade, in minutes
+    How much time to get for each sand of hours upgrade, in seconds
     """
     display_name = "Increment for each Sand of Hours"
     range_start = 0
-    range_end = 30
-    default = 1
+    range_end = 5999
+    default = 60
 
 
 class PhantomHourglassRemoveItemsFromPool(ItemDict):
@@ -52,7 +52,7 @@ class PhantomHourglassLogic(Choice):
     """
     Logic options:
     - Normal: Glitches not in logic.
-    - Medium: Includes some cool uses of pots aren't hard, bun unconventional
+    - Hard: Includes some cool uses of pots aren't hard, but unconventional
     - Glitched: Hammer clips, chu camera displacement and clever use of items in logic
     Be careful, using glitches on normal logic can cause key-related softlocks
     """
@@ -249,6 +249,46 @@ class PhantomHourglassShopHints(Toggle):
     display_name = "hint_shops"
     default = 1
 
+class PhantomHourglassRandomizeDigSpots(Toggle):
+    """
+    Randomize dig spots that give 100-300 rupees
+    """
+    display_name = "randomize_rupee_dig_spots"
+    default = 1
+
+class PhantomHourglassRandomizeMinigames(Toggle):
+    """
+    Randomize the following minigames:
+    - Bannan Cannon Game
+    - Molida Archer
+    - Dee Ess Goron Game
+    - Maze Island Main Rewards
+    - Prince of Red Lions Fight
+    """
+    display_name = "randomize_minigames"
+    default = 1
+
+class PhantomHourglassMinigameHints(Toggle):
+    """
+    Add Hints the following minigames:
+    - Bannan Cannon Game
+    - Molida Archer
+    - Dee Ess Goron Game
+    - Maze Island Main Rewards
+    - Prince of Red Lions Fight
+    - Harrow Island
+    """
+    display_name = "randomize_minigames"
+    default = 0
+
+class PhantomHourglassSkipOceanFights(Toggle):
+    """
+    The Massive Eye fight before Goron Island, ice pillars around Isle of Frost and Giant Eye Plant before Bannan trade
+    quest item are removed, and cannon isn't required
+    """
+    display_name = "skip_ocean_fights"
+    default = 0
+
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
     # Accessibility
@@ -268,19 +308,23 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     boat_requires_sea_chart: PhantomHourglassBoatRequriesSeaChart
 
     # Item Randomization
+    randomize_minigames: PhantomHourglassRandomizeMinigames
+    randomize_harrow: PhantomHourglassRandomizeHarrow
+    randomize_digs: PhantomHourglassRandomizeDigSpots
     keysanity: PhantomHourglassKeyRandomization
     randomize_frogs: PhantomHourglassFrogRandomization
     randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
-    randomize_harrow: PhantomHourglassRandomizeHarrow
     randomize_masked_beedle: PhantomHourglassRandomizeMaskedBeedle
 
     # Hint Options
     dungeon_hints: PhantomHourglassDungeonHints
     shop_hints: PhantomHourglassShopHints
+    minigame_hints: PhantomHourglassMinigameHints
     spirit_island_hints: PhantomHourglassHintSpiritIsland
 
     # World Options
     fog_settings: PhantomHourglassFogSettings
+    skip_ocean_fights: PhantomHourglassSkipOceanFights
 
     # Phantom Hourglass
     ph_starting_time: PhantomHourglassStartingTime

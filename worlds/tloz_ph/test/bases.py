@@ -18,4 +18,5 @@ class TestGeneration(WorldTestBase):
         "randomize_harrow": False,
         "exclude_non_required_dungeons": True,
         "randomize_masked_beedle": True,
+        "randomize minigames": False
                }

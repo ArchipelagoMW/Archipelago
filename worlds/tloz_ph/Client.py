@@ -161,6 +161,7 @@ class PhantomHourglassClient(BizHawkClient):
         self.location_name_to_id = build_location_name_to_id_dict()
         self.location_area_to_watches = build_location_room_to_watches()
         self.scene_to_dynamic_flag = build_scene_to_dynamic_flag()
+        self.hint_scene_to_watches = build_hint_scene_to_watches()
 
         self.local_checked_locations = set()
         self.local_scouted_locations = set()
@@ -244,7 +245,7 @@ class PhantomHourglassClient(BizHawkClient):
             write_list.append((adr, [value], "Main RAM"))
 
         # Set starting time for PH
-        ph_time = ctx.slot_data["ph_starting_time"] * 3600
+        ph_time = ctx.slot_data["ph_starting_time"] * 60
         ph_time_bits = split_bits(ph_time, 4)
         write_list.append((0x1BA528, ph_time_bits, "Main RAM"))
 
@@ -255,6 +256,8 @@ class PhantomHourglassClient(BizHawkClient):
         fog_bits = FOG_SETTINGS_FLAGS[ctx.slot_data["fog_settings"]]
         if len(fog_bits) > 0:
             write_list += [(a, [v], "Main RAM") for a, v in fog_bits]
+        if ctx.slot_data["skip_ocean_fights"] == 1:
+            write_list += [(0x1B5592, [0x84], "Main RAM")]
 
         await bizhawk.write(ctx.bizhawk_ctx, write_list)
         self.removed_boomerang = False
@@ -630,10 +633,15 @@ class PhantomHourglassClient(BizHawkClient):
             self.stage_address = await get_address_from_heap(ctx)
             self.key_address = self.stage_address + SMALL_KEY_OFFSET
             if stage in STAGE_FLAGS:
-                print(
-                    f"Setting Stage flags for {STAGES[stage]}, adr: {hex(self.stage_address + STAGE_FLAGS_OFFSET)}")
-                await write_memory_values(ctx, self.stage_address + STAGE_FLAGS_OFFSET,
-                                          STAGE_FLAGS[stage])
+                flags = STAGE_FLAGS[stage]
+
+                # Change certain stage flags based on options
+                if stage == 0 and ctx.slot_data["skip_ocean_fights"] == 1:
+                    flags = SKIP_OCEAN_FIGHTS_FLAGS
+
+                print(f"Setting Stage flags for {STAGES[stage]}, "
+                      f"adr: {hex(self.stage_address + STAGE_FLAGS_OFFSET)}")
+                await write_memory_values(ctx, self.stage_address + STAGE_FLAGS_OFFSET, flags)
             # Give dungeon keys
             if stage in DUNGEON_KEY_DATA:
                 # Change key read location if using TotOK midway
@@ -809,58 +817,44 @@ class PhantomHourglassClient(BizHawkClient):
                     self.last_vanilla_item = []
 
     async def process_scouted_locations(self, ctx: "BizHawkClientContext", scene):
+        def check_items(d):
+            for item in d.get("has_items", []):
+                print(f"Hint item {item} id {ITEMS_DATA[item]['id']} have {ITEMS_DATA[item]['id'] in ctx.items_received}")
+                if ITEMS_DATA[item]["id"] not in [i.item for i in ctx.items_received]:
+                    return False
+            return True
+
+        def check_slot_data(d):
+            for args in d.get("slot_data", []):
+                if type(args) is str:
+                    option, value = args, [True]
+                else:
+                    option, value = args
+                    value = [value] if type(value) is int else value
+                if ctx.slot_data[option] not in value:
+                    return False
+            return True
+
         local_scouted_locations = set(ctx.locations_scouted)
-        if scene in HINTS_ON_SCENE:
-            hint_data = HINTS_ON_SCENE[scene]
-            if ctx.slot_data["shop_hints"]:
-                # Items unique to that shop
-                if "unique" in hint_data:
-                    locations = hint_data["unique"]
-                    print(f"scouting {hex(scene)} for {hint_data['unique']}")
-                    [local_scouted_locations.add(self.location_name_to_id[loc]) for loc in locations]
+        print(f"hints {self.hint_scene_to_watches.get(scene, [])}")
+        for hint_name in self.hint_scene_to_watches.get(scene, []):
+            hint_data = HINT_DATA[hint_name]
+            # Check requirements
+            if not check_items(hint_data):
+                continue
+            if not check_slot_data(hint_data):
+                continue
 
-                # beedle items
-                if "beedle" in hint_data:
-                    read = await read_memory_value(ctx, 0x1BA644)
-                    if read & 0x10:  # TODO: Hard coding this is stupid (bomb check)
-                        local_scouted_locations.add(self.location_name_to_id["Beedle Shop Bomb Bag"])
-                    if ctx.slot_data["randomize_masked_beedle"]:
-                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Courage Gem"])
-                        local_scouted_locations.add(self.location_name_to_id["Masked Beedle Heart Container"])
-
-                # Items in all island shops
-                if hint_data.get("island_shop", False):
-                    has_bow, has_chus = False, False
-                    for i in ctx.items_received:
-                        item = self.item_id_to_name[i.item]
-                        if item == "Bow (Progressive)":
-                            has_bow = True
-                        if item == "Bombchus (Progressive)":
-                            has_chus = True
-
-                    local_scouted_locations.add(self.location_name_to_id["Island Shop Power Gem"])
-                    if has_bow:
-                        local_scouted_locations.add(self.location_name_to_id["Island Shop Quiver"])
-                        if has_chus:
-                            local_scouted_locations.add(self.location_name_to_id["Island Shop Bombchu Bag"])
-                            local_scouted_locations.add(self.location_name_to_id["Island Shop Heart Container"])
-
-            # Hint required dungeons
-            if "dungeon_hints" in hint_data:
-                if ctx.slot_data["dungeon_hints"] == hint_data["dungeon_hints"]:
+            # Figure out locations to hint
+            if "locations" in hint_data:
+                # Hint required dungeons
+                if "Dungeon Hints" in hint_data["locations"]:
                     for loc in ctx.slot_data["required_dungeon_locations"]:
                         local_scouted_locations.add(self.location_name_to_id[loc])
-
-            print(f"Spirit hints {ctx.slot_data['spirit_island_hints']}")
-            # Hint Spirit Island
-            if hint_data.get("spirit_island_hints", False):
-                forces = ["Power", "Wisdom", "Courage"]
-                if ctx.slot_data["spirit_island_hints"] != 2:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 2"])
-                if ctx.slot_data["spirit_island_hints"] == 0:
-                    for i in forces:
-                        local_scouted_locations.add(self.location_name_to_id[f"Spirit Island {i} Upgrade Level 1"])
+                else:
+                    local_scouted_locations.update([self.location_name_to_id[loc] for loc in hint_data["locations"]])
+            else:
+                local_scouted_locations.add(self.location_name_to_id[hint_name])
 
         # Send hints
         if self.local_scouted_locations != local_scouted_locations:
@@ -946,7 +940,12 @@ class PhantomHourglassClient(BizHawkClient):
             if "incremental" in item_data:
                 # Sand of hours check
                 if item_data.get("value") == "Sand":
-                    value = ctx.slot_data["ph_time_increment"] * 3600
+                    last_time = await read_memory_value(ctx, item_address, size=4)
+                    value = ctx.slot_data["ph_time_increment"] * 60
+                    if last_time + value > 0x57E3F:
+                        value = 0x57E3F - last_time
+                elif item_data.get("value") == "Sand PH":
+                    value = ctx.slot_data["ph_starting_time"] * 60
                 else:
                     value = item_data.get("value", 1)
 
@@ -1033,9 +1032,6 @@ class PhantomHourglassClient(BizHawkClient):
                     await bizhawk.write(ctx.bizhawk_ctx, write_list)
                 else:
                     address = data["address"]
-
-                if value == "Sand":
-                    value = 3600
 
                 await write_memory_value(ctx, address, value,
                                          incr=data.get('incremental', None), unset=True, size=data.get("size", 1))

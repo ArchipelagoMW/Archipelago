@@ -20,6 +20,16 @@ ITEMS_DATA = {
         'progressive': [[0x1BA644, 1], [0x1BA648, 32]],
         'set_bit': [(0x1BA644, 1)]  # Means that sending sword if sword breaks gives the base layer
     },
+    "Oshus' Sword": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA644,
+        'value': 1
+    },
+    "Phantom Sword": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA648,
+        'value': 32
+    },
     "Shield": {
         'classification': ItemClassification.progression,
         'address': 0x1BA644,
@@ -92,6 +102,21 @@ ITEMS_DATA = {
         'value': 4,
         'incremental': True,
         'size': 2
+    },
+    "Phantom Hourglass": {
+        'classification': ItemClassification.progression,
+        'address': 0x1BA528,
+        'value': "Sand PH",
+        'incremental': True,
+        'size': 4
+    },
+    "Sand of Hours (Boss)": {
+        'classification': ItemClassification.useful,
+        'backup_filler': True,
+        'address': 0x1BA528,
+        'value': 7200,
+        'incremental': True,
+        'size': 4
     },
     "Sand of Hours": {
         'classification': ItemClassification.useful,
@@ -782,9 +807,18 @@ ITEMS_DATA = {
         'backup_filler': True,
         'ship': 8
     },
+    "_UT_Glitched_logic": {
+        'classification': ItemClassification.progression,
+        'dummy': True
+    }
 }
 
 
 # Oops apparently not a constant lul (it will be after this)
-for i, k in enumerate(ITEMS_DATA.keys()):
+for i, k in enumerate(ITEMS_DATA):
     ITEMS_DATA[k]["id"] = i+1
+
+if __name__ == "__main__":
+    for item in ITEMS_DATA:
+        print(f"\t\"{item}\",")
+
