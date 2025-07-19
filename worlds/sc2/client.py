@@ -1606,7 +1606,7 @@ def caclulate_soa_options(ctx: SC2Context, mission: SC2Mission) -> int:
             and MissionFlag.Protoss in mission.flags
         )
         or (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_any_race_lotv
-            and mission.campaign == SC2Campaign.LOTV
+            and (mission.campaign == SC2Campaign.LOTV or mission == SC2Mission.INTO_THE_VOID)
         )
         or (ctx.spear_of_adun_passive_ability_presence == SpearOfAdunPassiveAbilityPresence.option_lotv_protoss
             and (MissionFlag.VanillaSoa in mission.flags  # Keeps SOA off on Growing Shadow, as that's vanilla behaviour
