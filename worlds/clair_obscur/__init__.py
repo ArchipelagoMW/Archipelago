@@ -63,6 +63,13 @@ class ClairObscurWorld(World):
             item = self.create_item_by_id(2)
             self.item_pool.append(item)
 
+        #Add 4 more Progressive Rocks
+        for i in range(0, 4):
+            #item = self.create_item("Progressive Rock")
+            # ^ This ends up adding the offset twice. For now, I'm hardcoding in the ID as with the filler items above.
+            item = self.create_item_by_id(7)
+            self.item_pool.append(item)
+
         self.multiworld.itempool += self.item_pool
 
 
@@ -99,3 +106,6 @@ class ClairObscurWorld(World):
         regions = create_regions(self)
 
         create_locations(self, regions)
+
+        self.multiworld.completion_condition[self.player] = (lambda state: state.has("Progressive Rock", self.player, 4)
+                                                             and state.has("Painter", self.player))

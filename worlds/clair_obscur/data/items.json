@@ -37,32 +37,10 @@
     },
 
     {
-        "type": "Equie capacities",
-        "name": "Base",
+        "type": "Esquie",
+        "name": "Progressive Rock",
         "progressive": 1
     },
-    {
-        "type": "Equie capacities",
-        "name": "HardenLands",
-        "progressive": 1
-    },
-    {
-        "type": "Equie capacities",
-        "name": "Swim",
-        "progressive": 1
-    },
-    {
-        "type": "Equie capacities",
-        "name": "SwimBoost",
-        "progressive": 1
-    },
-    {
-        "type": "Equie capacities",
-        "name": "Fly",
-        "progressive": 1
-    },
-
-
 
     {
         "type": "Exploration capacities",
@@ -1385,7 +1363,7 @@
     {
         "type": "Picto",
         "name": "Painter",
-        "progressive": 2
+        "progressive": 1
     },
     {
         "type": "Picto",
