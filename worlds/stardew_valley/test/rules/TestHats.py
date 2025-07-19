@@ -1,6 +1,7 @@
 from ..bases import SVTestBase
 from ..options.presets import allsanity_mods_7_x_x
 from ... import locations_by_tag
+from ...content.feature.hatsanity import to_location_name
 from ...data.hats_data import Hats
 from ...locations import LocationTags
 from ...options import Hatsanity, SeasonRandomization, FestivalLocations, Shipsanity, Eatsanity, Cooksanity, Fishsanity, Craftsanity
@@ -16,14 +17,14 @@ class TestHatsLogic(SVTestBase):
     }
 
     def test_need_spring_to_grab_leprechaun_hat(self):
-        hat_location = Hats.leprechaun_hat.to_location_name()
+        hat_location = to_location_name(Hats.leprechaun_hat)
         self.assert_cannot_reach_location(hat_location)
         self.collect("Spring")
         self.assert_can_reach_location(hat_location)
 
     def test_need_pans_to_wear_pan_hats(self):
         pan_hats = [Hats.copper_pan_hat, Hats.steel_pan_hat, Hats.gold_pan_hat, Hats.iridium_pan_hat]
-        locations = [hat.to_location_name() for hat in pan_hats]
+        locations = [to_location_name(hat) for hat in pan_hats]
         for location in locations:
             self.assert_cannot_reach_location(location)
             self.collect("Progressive Pan")
@@ -32,7 +33,7 @@ class TestHatsLogic(SVTestBase):
     def test_reach_frog_hat(self):
         required_item_names = ["Progressive Fishing Rod", "Wizard Invitation", "Island Obelisk", "Island West Turtle", "Island Farmhouse"]
         required_items = [self.create_item(item_name) for item_name in required_item_names]
-        location = Hats.frog_hat.to_location_name()
+        location = to_location_name(Hats.frog_hat)
         for required_item in required_items:
             self.collect(required_item)
         self.assert_can_reach_location(location)
@@ -81,4 +82,3 @@ class TestHatLocations(SVTestBase):
                     self.assertNotIn(hat_location.name, location_names, "The Panda Hat cannot be obtained on the standard edition of the game")
                 else:
                     self.assertIn(hat_location.name, location_names)
-

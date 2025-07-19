@@ -13,7 +13,6 @@ from .content.vanilla.qi_board import qi_board_content_pack
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.game_item import ItemTag
 from .data.harvest import HarvestCropSource, HarvestFruitTreeSource
-from .data.hats_data import wear_prefix, hat_clarifier
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, \
     all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
@@ -110,7 +109,7 @@ def set_rules(world):
     set_arcade_machine_rules(logic, multiworld, player, world_options)
     set_movie_rules(logic, multiworld, player, world_options, world_content)
     set_secrets_rules(logic, multiworld, player, world_options, world_content)
-    set_hatsanity_rules(all_location_names, logic, multiworld, player, world_options, world_content)
+    set_hatsanity_rules(logic, multiworld, player, world_content)
     set_eatsanity_rules(all_location_names, logic, multiworld, player, world_options)
     set_endgame_locations_rules(logic, multiworld, player, world_options)
 
@@ -271,7 +270,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.adventurer_guild_to_bedroom, logic.monster.can_kill_max(Generic.any))
     if world_options.include_endgame_locations == IncludeEndgameLocations.option_true:
         set_entrance_rule(multiworld, player, LogicEntrance.purchase_wizard_blueprints, logic.quest.has_magic_ink())
-    set_entrance_rule(multiworld, player, LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS/2))
+    set_entrance_rule(multiworld, player, LogicEntrance.search_garbage_cans, logic.time.has_lived_months(MAX_MONTHS / 2))
 
     set_entrance_rule(multiworld, player, Entrance.forest_beach_shortcut, logic.received("Forest To Beach Shortcut"))
     set_entrance_rule(multiworld, player, Entrance.mountain_jojamart_shortcut, logic.received("Mountain Shortcuts"))
@@ -489,9 +488,11 @@ def set_walnut_puzzle_rules(logic: StardewLogic, multiworld, player, world_optio
                       & logic.region.can_reach_all(Region.island_north, Region.island_west, Region.island_east, Region.island_south))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Melon", logic.has(Fruit.melon) & logic.region.can_reach(Region.island_west))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Wheat",
-                      logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Melon"))
+                      logic.has(Vegetable.wheat) & logic.region.can_reach(Region.island_west)
+                      & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Melon"))
     set_location_rule(multiworld, player, "Walnutsanity: Gourmand Frog Garlic",
-                      logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west) & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Wheat"))
+                      logic.has(Vegetable.garlic) & logic.region.can_reach(Region.island_west)
+                      & logic.region.can_reach_location("Walnutsanity: Gourmand Frog Wheat"))
     set_location_rule(multiworld, player, "Walnutsanity: Whack A Mole", logic.tool.has_tool(Tool.watering_can, ToolMaterial.iridium))
     set_location_rule(multiworld, player, "Walnutsanity: Complete Large Animal Collection", logic.walnut.can_complete_large_animal_collection())
     set_location_rule(multiworld, player, "Walnutsanity: Complete Snake Collection", logic.walnut.can_complete_snake_collection())
@@ -1032,16 +1033,14 @@ def set_secret_note_gift_rule(logic: StardewLogic, multiworld: MultiWorld, playe
     set_location_rule(multiworld, player, secret_note_location, logic.gifts.can_fulfill(gift_requirements[secret_note_location]))
 
 
-def set_hatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions, content: StardewContent):
-    for hat_location in locations.locations_by_tag[LocationTags.HATSANITY]:
-        if hat_location.name not in all_location_names:
+def set_hatsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
+    hatsanity = content.features.hatsanity
+
+    for hat in content.hats.values():
+        if not hatsanity.is_included(hat):
             continue
-        hat_name = hat_location.name[len(wear_prefix):]
-        if hat_name not in content.hats:
-            hat_name = f"{hat_name}{hat_clarifier}"
-        if hat_name not in content.hats:
-            continue
-        set_rule(multiworld.get_location(hat_location.name, player), logic.hat.can_wear(hat_name))
+
+        set_location_rule(multiworld, player, hatsanity.to_location_name(hat), logic.hat.can_wear(hat))
 
 
 def set_eatsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
@@ -1071,7 +1070,8 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Junimo Hut Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.junimo_hut))
     set_location_rule(multiworld, player, "Gold Clock Blueprint", logic.building.can_purchase_wizard_blueprint(WizardBuilding.gold_clock))
     set_location_rule(multiworld, player, "Purchase Return Scepter", logic.money.can_spend_at(Region.sewer, 2_000_000))
-    set_location_rule(multiworld, player, "Pam House Blueprint", logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
+    set_location_rule(multiworld, player, "Pam House Blueprint",
+                      logic.money.can_spend_at(Region.carpenter, 500_000) & logic.grind.can_grind_item(950, Material.wood))
     set_location_rule(multiworld, player, "Forest To Beach Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     set_location_rule(multiworld, player, "Mountain Shortcuts Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
     set_location_rule(multiworld, player, "Town To Tide Pools Shortcut Blueprint", logic.money.can_spend_at(Region.carpenter, 75_000))
@@ -1079,8 +1079,10 @@ def set_endgame_locations_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     set_location_rule(multiworld, player, "Purchase Statue Of Endless Fortune", logic.money.can_spend_at(Region.casino, 1_000_000))
     set_location_rule(multiworld, player, "Purchase Catalogue", logic.money.can_spend_at(Region.pierre_store, 30_000))
     set_location_rule(multiworld, player, "Purchase Furniture Catalogue", logic.money.can_spend_at(Region.carpenter, 200_000))
-    set_location_rule(multiworld, player, "Purchase Joja Furniture Catalogue", logic.action.can_speak_junimo() & logic.money.can_spend_at(Region.movie_theater, 25_000))
-    set_location_rule(multiworld, player, "Purchase Junimo Catalogue", logic.action.can_speak_junimo() & logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
+    set_location_rule(multiworld, player, "Purchase Joja Furniture Catalogue",
+                      logic.action.can_speak_junimo() & logic.money.can_spend_at(Region.movie_theater, 25_000))
+    set_location_rule(multiworld, player, "Purchase Junimo Catalogue",
+                      logic.action.can_speak_junimo() & logic.money.can_spend_at(LogicRegion.traveling_cart, 70_000))
     set_location_rule(multiworld, player, "Purchase Retro Catalogue", logic.money.can_spend_at(LogicRegion.traveling_cart, 110_000))
     # set_location_rule(multiworld, player, "Find Trash Catalogue", logic) # No need, the region is enough
     set_location_rule(multiworld, player, "Purchase Wizard Catalogue", logic.money.can_spend_at(Region.sewer, 150_000))

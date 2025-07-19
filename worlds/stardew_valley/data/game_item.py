@@ -2,9 +2,12 @@ import enum
 from abc import ABC
 from dataclasses import dataclass, field
 from types import MappingProxyType
-from typing import Iterable, ClassVar, Mapping, Callable, Any
+from typing import Iterable, ClassVar, Mapping, Callable, TYPE_CHECKING
 
 from ..stardew_rule.protocol import StardewRule
+
+if TYPE_CHECKING:
+    from ..logic.logic import StardewLogic
 
 DEFAULT_REQUIREMENT_TAGS = MappingProxyType({})
 
@@ -54,7 +57,7 @@ class GenericSource(Source):
 @dataclass(frozen=True)
 class CustomRuleSource(Source):
     """Hopefully once everything is migrated to sources, we won't need these custom logic anymore."""
-    create_rule: Callable[[Any], StardewRule]
+    create_rule: "Callable[[StardewLogic], StardewRule]"
 
 
 class Tag(Source):

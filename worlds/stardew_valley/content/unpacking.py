@@ -52,7 +52,6 @@ def register_pack(content: StardewContent, pack: ContentPack):
     register_sources_and_call_hook(content, pack.shop_sources, pack.shop_source_hook)
     register_sources_and_call_hook(content, pack.crafting_sources, pack.crafting_hook)
     register_sources_and_call_hook(content, pack.artisan_good_sources, pack.artisan_good_hook)
-    register_sources_and_call_hook(content, {hat.name: sources for hat, sources in pack.hat_sources.items()}, pack.hat_source_hook)
 
     for fish in pack.fishes:
         content.fishes[fish.name] = fish
@@ -74,8 +73,11 @@ def register_pack(content: StardewContent, pack: ContentPack):
         content.skills[skill.name] = skill
     pack.skill_hook(content)
 
-    for hat in pack.hat_sources:
-        content.hats[hat.name] = hat
+    for hat, sources in pack.hat_sources.items():
+        item = content.source_item(hat.clarified_name, *sources)
+        # Some sources may be filtered out. We don't want to register a hat without source.
+        if item.sources:
+            content.hats[hat.name] = hat
     pack.hat_source_hook(content)
 
     # register_quests

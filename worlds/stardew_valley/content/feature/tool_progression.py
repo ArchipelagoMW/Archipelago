@@ -6,6 +6,7 @@ from functools import cache
 from types import MappingProxyType
 from typing import ClassVar
 
+from .base import FeatureBase
 from ...strings.tool_names import Tool
 
 
@@ -71,7 +72,7 @@ def get_tools_distribution(progressive_tools_enabled: bool, skill_masteries_enab
 
 
 @dataclass(frozen=True)
-class ToolProgressionFeature(ABC):
+class ToolProgressionFeature(FeatureBase, ABC):
     is_progressive: ClassVar[bool]
     starting_tools: Mapping[str, int]
     tool_distribution: Mapping[str, int]

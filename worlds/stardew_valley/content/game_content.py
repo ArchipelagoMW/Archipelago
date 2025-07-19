@@ -2,9 +2,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Iterable, Set, Any, Mapping, Type, Generator
+from types import MappingProxyType
+from typing import Iterable, Set, Any, Mapping, Generator
 
-from .feature import booksanity, cropsanity, fishsanity, friendsanity, skill_progression, building_progression, tool_progression
+from .feature import BooksanityFeature, BuildingProgressionFeature, CropsanityFeature, FishsanityFeature, FriendsanityFeature, HatsanityFeature, \
+    MuseumsanityFeature, SkillProgressionFeature, ToolProgressionFeature
+from .feature.base import DisableSourceHook, DisableRequirementHook, FeatureBase
 from ..data.animal import Animal
 from ..data.building import Building
 from ..data.fish_data import FishItem
@@ -36,7 +39,7 @@ class StardewContent:
                 if isinstance(source, types):
                     yield source
 
-    def source_item(self, item_name: str, *sources: Source):
+    def source_item(self, item_name: str, *sources: Source) -> GameItem:
         filtered_sources = list(self._filter_sources(sources))
 
         item = self.game_items.setdefault(item_name, GameItem(item_name))
@@ -45,6 +48,8 @@ class StardewContent:
         for source in filtered_sources:
             for requirement_name, tags in source.requirement_tags.items():
                 self.tag_item(requirement_name, *tags)
+
+        return item
 
     def tag_item(self, item_name: str, *tags: ItemTag):
         item = self.game_items.setdefault(item_name, GameItem(item_name))
@@ -68,54 +73,64 @@ class StardewContent:
 
         return content_pack in self.registered_packs
 
-    @cached_property
-    def _disabled_sources(self) -> frozenset[Type[Source]]:
-        """Returns a set of source types that are disabled by features. Need to be exact types, subclasses are not considered."""
-        disabled_sources = set()
-        # TODO implement in other features
-        for feature in self.features.__dict__.values():
-            if hasattr(feature, 'disabled_sources'):
-                disabled_sources.update(feature.disabled_sources)
-        return frozenset(disabled_sources)
-
-    @cached_property
-    def _disabled_requirements(self) -> frozenset[Type[Requirement]]:
-        """Returns a set of requirement types that are disabled by features. Need to be exact types, subclasses are not considered."""
-        disabled_requirements = set()
-        # TODO implement in other features
-        for feature in self.features.__dict__.values():
-            if hasattr(feature, 'disabled_requirements'):
-                disabled_requirements.update(feature.disabled_requirements)
-        return frozenset(disabled_requirements)
-
     def _filter_sources(self, sources: Iterable[Source]) -> Generator[Source]:
         """Filters out sources that are disabled by features."""
         for source in sources:
-            if type(source) in self._disabled_sources:
-                continue
+            if not self._is_disabled(source):
+                yield source
 
-            has_disabled_requirements = False
-            for requirement in source.all_requirements:
-                if type(requirement) in self._disabled_requirements:
-                    has_disabled_requirements = True
-                    break
-            if has_disabled_requirements:
-                continue
+    def _is_disabled(self, source: Source) -> bool:
+        """Checks if a source is disabled by any feature."""
+        try:
+            hook = self.features.disable_source_hooks[type(source)]
+            if hook(source, content=self):
+                return True
+        except KeyError:
+            pass
 
-            yield source
+        for requirement in source.all_requirements:
+            try:
+                hook = self.features.disable_requirement_hooks[type(requirement)]
+                if hook(requirement, content=self):
+                    return True
+            except KeyError:
+                pass
+
+        return False
 
 
 @dataclass(frozen=True)
 class StardewFeatures:
-    booksanity: booksanity.BooksanityFeature
-    building_progression: building_progression.BuildingProgressionFeature
-    cropsanity: cropsanity.CropsanityFeature
-    fishsanity: fishsanity.FishsanityFeature
-    friendsanity: friendsanity.FriendsanityFeature
-    hatsanity: hatsanity.HatsanityFeature
-    museumsanity: museumsanity.MuseumsanityFeature
-    skill_progression: skill_progression.SkillProgressionFeature
-    tool_progression: tool_progression.ToolProgressionFeature
+    booksanity: BooksanityFeature
+    building_progression: BuildingProgressionFeature
+    cropsanity: CropsanityFeature
+    fishsanity: FishsanityFeature
+    friendsanity: FriendsanityFeature
+    hatsanity: HatsanityFeature
+    museumsanity: MuseumsanityFeature
+    skill_progression: SkillProgressionFeature
+    tool_progression: ToolProgressionFeature
+
+    @cached_property
+    def all_features(self) -> Iterable[FeatureBase]:
+        return (self.booksanity, self.building_progression, self.cropsanity, self.fishsanity, self.friendsanity, self.hatsanity, self.museumsanity,
+                self.skill_progression, self.tool_progression)
+
+    @cached_property
+    def disable_source_hooks(self) -> Mapping[type[Source], DisableSourceHook]:
+        """Returns a set of source types that are disabled by features. Need to be exact types, subclasses are not considered."""
+        hooks = {}
+        for feature in self.all_features:
+            hooks.update(feature.disable_source_hooks)
+        return MappingProxyType(hooks)
+
+    @cached_property
+    def disable_requirement_hooks(self) -> Mapping[type[Requirement], DisableRequirementHook]:
+        """Returns a set of requirement types that are disabled by features. Need to be exact types, subclasses are not considered."""
+        hooks = {}
+        for feature in self.all_features:
+            hooks.update(feature.disable_requirement_hooks)
+        return MappingProxyType(hooks)
 
 
 @dataclass(frozen=True)

@@ -10,7 +10,6 @@ from .content.game_content import StardewContent
 from .content.vanilla.ginger_island import ginger_island_content_pack
 from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
-from .data.hats_data import Hats
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
 from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
@@ -586,15 +585,11 @@ def extend_hats_locations(randomized_locations: List[LocationData], content: Sta
     if not hatsanity.is_enabled:
         return
 
-    museum_hats = [Hats.blue_bonnet, Hats.cowboy]
-
     for hat in content.hats.values():
         if not hatsanity.is_included(hat):
             continue
-        if not content.features.museumsanity.is_enabled and hat in museum_hats:
-            continue
 
-        randomized_locations.append(location_table[hat.to_location_name()])
+        randomized_locations.append(location_table[hatsanity.to_location_name(hat)])
 
 
 def eatsanity_item_is_included(location: LocationData, options: StardewValleyOptions, content: StardewContent) -> bool:

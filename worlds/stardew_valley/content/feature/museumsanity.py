@@ -1,21 +1,22 @@
 from abc import ABC
 from dataclasses import dataclass
-from typing import Tuple, ClassVar
+from typing import ClassVar
 
-from ...data.game_item import Source, Requirement
+from .base import FeatureBase
 from ...data.requirement import MuseumCompletionRequirement
 
 
 @dataclass(frozen=True)
-class MuseumsanityFeature(ABC):
+class MuseumsanityFeature(FeatureBase, ABC):
     is_enabled: ClassVar[bool]
-    disabled_sources: ClassVar[Tuple[type[Source], ...]] = ()
-    disabled_requirements: ClassVar[Tuple[type[Requirement], ...]] = ()
 
 
 class MuseumsanityNone(MuseumsanityFeature):
     is_enabled = False
-    disabled_requirements = (MuseumCompletionRequirement,)
+
+    @staticmethod
+    def _disable_museum_completion_requirement(requirement: MuseumCompletionRequirement) -> bool:
+        return True
 
 
 @dataclass(frozen=True)
@@ -26,6 +27,10 @@ class MuseumsanityMilestones(MuseumsanityFeature):
 @dataclass(frozen=True)
 class MuseumsanityRandomized(MuseumsanityFeature):
     is_enabled = True
+    amount_of_randomized_donations: int = 40
+
+    def _disable_museum_completion_requirement(self, requirement: MuseumCompletionRequirement) -> bool:
+        return requirement.number_donated > self.amount_of_randomized_donations
 
 
 @dataclass(frozen=True)
