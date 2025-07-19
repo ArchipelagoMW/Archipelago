@@ -223,10 +223,13 @@ class GSTLAWorld(World):
             else:
                 ret['start_inventory'][item_id_by_name[k]] = v
         goal_dict = dict()
+        flags = set()
         for goal in self.options.goal.value:
             # TODO: needs to handle summons and djinn
-            goal_dict[goal] = 1
+            flags.add(goal)
+        goal_dict['flags'] = flags
         ret["goal"] = goal_dict
+        print(ret)
         return ret
 
     def generate_output(self, output_directory: str):

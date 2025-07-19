@@ -213,6 +213,7 @@ def generate_location_names(env: Environment, data: GameData):
             remainder.append(loc_name)
     for enemy in data.raw_enemy_data:
         enemies.append(data.location_names[enemy.ap_id])
+        # name_list.append({'name': data.location_names[enemy.ap_id].py_name, 'id': enemy.ap_id})
 
     with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalLocationNames.py'), 'w') as outfile:
         write_warning(outfile)
@@ -242,7 +243,7 @@ def generate_item_names(env: Environment, data: GameData):
         events = [data.item_names[event.event_id] for event in data.events.values()]
         name_list += [{'name': data.item_names[x.id].py_name, 'id': x.id} for x in events]
         enemies = [data.item_names[enemy.ap_id] for enemy in data.raw_enemy_data]
-        name_list += [{'name': data.item_names[x.id].py_name, 'id': x.id} for x in enemies]
+        # name_list += [{'name': data.item_names[x.id].py_name, 'id': x.id} for x in enemies]
         name_list += [{'name': d.name, 'id': d.ap_id} for d in data.raw_djinn_data]
         name_list += [{'name': data.item_names[p.id].py_name, 'id': p.id} for p in data.raw_psy_data]
         name_list += [{'name': c.name, 'id': c.id} for c in data.raw_character_data]

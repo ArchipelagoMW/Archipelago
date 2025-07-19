@@ -53,6 +53,10 @@ def _wrap_loc(loc: InternalLocationData) -> LocationData:
 def _convert_locs(data: List[InternalLocationData]) -> List[LocationData]:
     return [_wrap_loc(x) for x in data]
 
+ap_only_events = [
+
+]
+
 djinn_locations = _convert_locs(LocationLists.djinn_locations)
 
 summon_tablets = _convert_locs(LocationLists.summon_tablets)
@@ -78,5 +82,6 @@ def create_loctype_to_datamapping() -> Dict[str, List[LocationData]]:
 all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summon_tablets + events + the_rest
 location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.ap_id: location for location in all_locations if location.loc_type != LocationType.Event}
+event_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type == LocationType.Event}
 assert len(all_locations) == len(location_id_to_data) + len(events)
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()

@@ -65,10 +65,10 @@ events = [
     InternalLocationData({{event.flag}}, {{event.flag}}, {{event.event_id}}, {{event.event_id}}, [0], 0,
         {{event.event_id}}, True, True, LocationType.Event, LocationRestriction(7), True), # {{event.location_name}} {{event.item_name}}
     {% endfor %}
-    {% for enemy in enemies -%}
+    {#{% for enemy in enemies -%}
         InternalLocationData({{enemy.flag}}, {{enemy.flag}}, {{enemy.ap_id}}, {{enemy.ap_id}}, [0], 0,
         {{enemy.ap_id}}, True, True, LocationType.Event, LocationRestriction(7), True), # {{enemy.name}}
-    {% endfor %}
+    {% endfor %}#}
 ]
 
 the_rest = [

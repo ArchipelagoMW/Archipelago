@@ -517,13 +517,17 @@ class GameData:
             EventDatum(event_offset + 3, 0x97F, "Alhafra Prison Briggs", "Briggs escaped" ),
             EventDatum(event_offset + 4, 0x8FF, "Gabomba Statue", "Gabomba Statue Completed" ),
             EventDatum(event_offset + 5, 0x9EE, "Gaia Rock - Serpent Fight", "Serpent defeated" ),
-            EventDatum(event_offset + 6, 0x8DD, "Sea of Time - Poseidon fight", "Poseidon defeated"),
+            EventDatum(event_offset + 6, 0x665, "Sea of Time - Poseidon fight", "Poseidon defeated"),
             EventDatum(event_offset + 7, 0x93F, "Lemurian Ship - Aqua Hydra fight", "Aqua Hydra defeated"),
             EventDatum(event_offset + 8, 0x94D, "Shaman Village - Moapa fight", "Moapa defeated" ),
             EventDatum(event_offset + 9, 0xA21, "Jupiter_Lighthouse Aeri - Agatio and Karst fight", "Jupiter Beacon Lit"),
             EventDatum(event_offset + 10, 0xA4B, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
             EventDatum(event_offset + 11, 0x8DE, "Lemurian Ship - Engine Room", "Ship"),
             EventDatum(event_offset + 12, 0x8DF, "Contigo - Wings of Anemos", "Wings of Anemos"),
+        ]
+        event_offset += 12
+        boss_events = [
+            # EventDatum(event_offset + 1, 94 - 1 + 8 + 0x600,"Sea of Time - Poseidon fight", "Poseidon defeated")
         ]
         self.events = {e.event_id: e for e in events}
         for event in self.events.values():

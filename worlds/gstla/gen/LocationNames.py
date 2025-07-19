@@ -114,6 +114,6 @@ loc_names_by_id: Dict[int, str] = {
 }
 
 option_name_to_goal_name = {
-    "Doom Dragon": LocationName.Doom_Dragon_368_Event,
-    "Poseidon": LocationName.Poseidon_93_Event,
+    "Doom Dragon": LocationName.Mars_Lighthouse_Doom_Dragon_Fight,
+    "Poseidon": LocationName.Sea_of_Time_Poseidon_fight,
 }
