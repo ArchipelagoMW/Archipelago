@@ -3,9 +3,12 @@ import random
 import struct
 from typing import ByteString, Callable
 import json
-import pymem
-from pymem import pattern
-from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
+# import pymem
+# from pymem import pattern
+# from pymem.exception import ProcessNotFound, ProcessError, MemoryReadError, WinAPIError
+import PyMemoryEditor
+from PyMemoryEditor import OpenProcess
+from PyMemoryEditor import ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess
 from dataclasses import dataclass
 
 from ..locs import (orb_locations as orbs,
@@ -166,7 +169,7 @@ class JakAndDaxterMemoryReader:
     initiated_connect: bool = False
 
     # The memory reader just needs the game running.
-    gk_process: pymem.process = None
+    gk_process: OpenProcess = None
 
     location_outbox: list[int] = []
     outbox_index: int = 0
@@ -227,8 +230,8 @@ class JakAndDaxterMemoryReader:
 
         if self.connected:
             try:
-                self.gk_process.read_bool(self.gk_process.base_address)  # Ping to see if it's alive.
-            except (ProcessError, MemoryReadError, WinAPIError):
+                self.gk_process.read_process_memory(0, bytes, 1)  # Ping to see if it's alive.
+            except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
                 msg = (f"Error reading game memory! (Did the game crash?)\n"
                        f"Please close all open windows and reopen the Jak and Daxter Client "
                        f"from the Archipelago Launcher.\n"
@@ -272,24 +275,24 @@ class JakAndDaxterMemoryReader:
 
     async def connect(self):
         try:
-            self.gk_process = pymem.Pymem("gk.exe")  # The GOAL Kernel
-            logger.debug("Found the gk process: " + str(self.gk_process.process_id))
-        except ProcessNotFound:
+            self.gk_process = OpenProcess(process_name="gk.exe")  # The GOAL Kernel
+            logger.debug(f"Found the gk process: {self.gk_process.pid}")
+        except ProcessNotFoundError:
             self.log_error(logger, "Could not find the game process.")
             self.connected = False
             return
 
-        # If we don't find the marker in the first loaded module, we've failed.
-        modules = list(self.gk_process.list_modules())
-        marker_address = pattern.pattern_scan_module(self.gk_process.process_handle, modules[0], self.marker)
-        if marker_address:
+        # If we don't find the marker in any loaded module, we've failed.
+        marker_addresses = list(self.gk_process.search_by_value(bytes, len(self.marker), self.marker))
+        if len(marker_addresses) > 0:
             # At this address is another address that contains the struct we're looking for: the game's state.
             # From here we need to add the length in bytes for the marker and 4 bytes of padding,
             # and the struct address is 8 bytes long (it's an uint64).
-            goal_pointer = marker_address + len(self.marker) + 4
-            self.goal_address = int.from_bytes(self.gk_process.read_bytes(goal_pointer, sizeof_uint64),
-                                               byteorder="little",
-                                               signed=False)
+            goal_pointer = marker_addresses[0] + len(self.marker) + 4
+            self.goal_address = int.from_bytes(
+                self.gk_process.read_process_memory(goal_pointer, bytes, sizeof_uint64),
+                byteorder="little",
+                signed=False)
             logger.debug("Found the archipelago memory address: " + str(self.goal_address))
             await self.verify_memory_version()
         else:
@@ -309,8 +312,8 @@ class JakAndDaxterMemoryReader:
                 self.log_success(logger, "The Memory Reader is ready!")
                 self.connected = True
             else:
-                raise MemoryReadError(memory_version_offset, sizeof_uint32)
-        except (ProcessError, MemoryReadError, WinAPIError):
+                raise Exception(memory_version_offset, sizeof_uint32)
+        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess, Exception):
             if memory_version is None:
                 msg = (f"Could not find a version number in the OpenGOAL memory structure!\n"
                        f"   Expected Version: {str(expected_memory_version)}\n"
@@ -336,7 +339,7 @@ class JakAndDaxterMemoryReader:
             self.connected = False
 
     async def print_status(self):
-        proc_id = str(self.gk_process.process_id) if self.gk_process else "None"
+        proc_id = str(self.gk_process.pid) if self.gk_process else "None"
         last_loc = str(self.location_outbox[self.outbox_index - 1] if self.outbox_index else "None")
         msg = (f"Memory Reader Status:\n"
                f"   Game process ID: {proc_id}\n"
@@ -451,7 +454,7 @@ class JakAndDaxterMemoryReader:
                 self.finished_game = True
                 self.log_success(logger, "Congratulations! You finished the game!")
 
-        except (ProcessError, MemoryReadError, WinAPIError):
+        except (ProcessNotFoundError, ProcessIDNotExistsError, ClosedProcess):
             msg = (f"Error reading game memory! (Did the game crash?)\n"
                    f"Please close all open windows and reopen the Jak and Daxter Client "
                    f"from the Archipelago Launcher.\n"
@@ -467,7 +470,7 @@ class JakAndDaxterMemoryReader:
 
     def read_goal_address(self, offset: int, length: int) -> int:
         return int.from_bytes(
-            self.gk_process.read_bytes(self.goal_address + offset, length),
+            self.gk_process.read_process_memory(self.goal_address + offset, bytes, length),
             byteorder="little",
             signed=False)
 
