@@ -729,12 +729,14 @@ class SpearOfAdunPresence(Choice):
     LotV Protoss: Spear of Adun calldowns are only available in LotV main campaign
     Protoss: Spear of Adun calldowns are available in any Protoss mission
     Everywhere: Spear of Adun calldowns are available in any mission of any race
+    Any Race LotV: Spear of Adun calldowns are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Presence"
     option_not_present = 0
     option_lotv_protoss = 1
     option_protoss = 2
     option_everywhere = 3
+    option_any_race_lotv = 4
     default = option_lotv_protoss
 
     # Fix case
@@ -766,12 +768,14 @@ class SpearOfAdunPassiveAbilityPresence(Choice):
     LotV Protoss: Spear of Adun autocasts are only available in LotV main campaign
     Protoss: Spear of Adun autocasts are available in any Protoss mission
     Everywhere: Spear of Adun autocasts are available in any mission of any race
+    Any Race LotV: Spear of Adun autocasts are available in any race-swapped variant of a LotV mission
     """
     display_name = "Spear of Adun Passive Ability Presence"
     option_not_present = 0
     option_lotv_protoss = 1
     option_protoss = 2
     option_everywhere = 3
+    option_any_race_lotv = 4
     default = option_lotv_protoss
 
     # Fix case
