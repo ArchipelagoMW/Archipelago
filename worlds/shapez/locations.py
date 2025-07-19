@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Tuple, Dict, Optional, Callable
+from typing import Callable
 
 from BaseClasses import Location, LocationProgressType, Region
 from .data.strings import CATEGORY, LOCATIONS, REGIONS, OPTIONS, GOALS, OTHER, SHAPESANITY
@@ -7,7 +7,7 @@ from .options import max_shapesanity, max_levels_and_upgrades
 
 categories = [CATEGORY.belt, CATEGORY.miner, CATEGORY.processors, CATEGORY.painting]
 
-translate: List[Tuple[int, str]] = [
+translate: list[tuple[int, str]] = [
     (1000, "M"),
     (900, "CM"),
     (500, "D"),
@@ -148,17 +148,17 @@ location_description = {  # TODO change keys to global strings
                      "windmill.",
 }
 
-shapesanity_simple: Dict[str, str] = {}
-shapesanity_1_4: Dict[str, str] = {}
-shapesanity_two_sided: Dict[str, str] = {}
-shapesanity_three_parts: Dict[str, str] = {}
-shapesanity_four_parts: Dict[str, str] = {}
+shapesanity_simple: dict[str, str] = {}
+shapesanity_1_4: dict[str, str] = {}
+shapesanity_two_sided: dict[str, str] = {}
+shapesanity_three_parts: dict[str, str] = {}
+shapesanity_four_parts: dict[str, str] = {}
 
-level_locations: List[str] = ([LOCATIONS.level(1, 1), LOCATIONS.level(20, 1), LOCATIONS.level(20, 2)]
+level_locations: list[str] = ([LOCATIONS.level(1, 1), LOCATIONS.level(20, 1), LOCATIONS.level(20, 2)]
                               + [LOCATIONS.level(x) for x in range(1, max_levels_and_upgrades)])
-upgrade_locations: List[str] = [LOCATIONS.upgrade(cat, roman(x))
+upgrade_locations: list[str] = [LOCATIONS.upgrade(cat, roman(x))
                                 for cat in categories for x in range(2, max_levels_and_upgrades+1)]
-achievement_locations: List[str] = [LOCATIONS.my_eyes, LOCATIONS.painter, LOCATIONS.cutter, LOCATIONS.rotater,
+achievement_locations: list[str] = [LOCATIONS.my_eyes, LOCATIONS.painter, LOCATIONS.cutter, LOCATIONS.rotater,
                                     LOCATIONS.wait_they_stack, LOCATIONS.wires, LOCATIONS.storage, LOCATIONS.freedom,
                                     LOCATIONS.the_logo, LOCATIONS.to_the_moon, LOCATIONS.its_piling_up,
                                     LOCATIONS.use_it_later, LOCATIONS.efficiency_1, LOCATIONS.preparing_to_launch,
@@ -172,7 +172,7 @@ achievement_locations: List[str] = [LOCATIONS.my_eyes, LOCATIONS.painter, LOCATI
                                     LOCATIONS.mam, LOCATIONS.perfectionist, LOCATIONS.next_dimension, LOCATIONS.oops,
                                     LOCATIONS.copy_pasta, LOCATIONS.ive_seen_that_before, LOCATIONS.memories,
                                     LOCATIONS.i_need_trains, LOCATIONS.a_bit_early, LOCATIONS.gps]
-shapesanity_locations: List[str] = [LOCATIONS.shapesanity(x) for x in range(1, max_shapesanity+1)]
+shapesanity_locations: list[str] = [LOCATIONS.shapesanity(x) for x in range(1, max_shapesanity+1)]
 
 
 def init_shapesanity_pool() -> None:
@@ -186,12 +186,12 @@ def init_shapesanity_pool() -> None:
 
 
 def addlevels(maxlevel: int, logictype: str,
-              random_logic_phase_length: List[int]) -> Dict[str, Tuple[str, LocationProgressType]]:
+              random_logic_phase_length: list[int]) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all level locations based on player options (maxlevel INCLUDED).
     If shape requirements are not randomized, the logic type is expected to be vanilla."""
 
     # Level 1 is always directly accessible
-    locations: Dict[str, Tuple[str, LocationProgressType]] \
+    locations: dict[str, tuple[str, LocationProgressType]] \
         = {LOCATIONS.level(1): (REGIONS.main, LocationProgressType.PRIORITY),
            LOCATIONS.level(1, 1): (REGIONS.main, LocationProgressType.PRIORITY)}
     level_regions = [REGIONS.main, REGIONS.levels_1, REGIONS.levels_2, REGIONS.levels_3,
@@ -282,11 +282,11 @@ def addlevels(maxlevel: int, logictype: str,
 
 
 def addupgrades(finaltier: int, logictype: str,
-                category_random_logic_amounts: Dict[str, int]) -> Dict[str, Tuple[str, LocationProgressType]]:
+                category_random_logic_amounts: dict[str, int]) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all upgrade locations based on player options (finaltier INCLUDED).
     If shape requirements are not randomized, give logic type 0."""
 
-    locations: Dict[str, Tuple[str, LocationProgressType]] = {}
+    locations: dict[str, tuple[str, LocationProgressType]] = {}
     upgrade_regions = [REGIONS.main, REGIONS.upgrades_1, REGIONS.upgrades_2, REGIONS.upgrades_3,
                        REGIONS.upgrades_4, REGIONS.upgrades_5]
 
@@ -366,13 +366,13 @@ def addupgrades(finaltier: int, logictype: str,
 
 
 def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive: bool,
-                    maxlevel: int, upgradelogictype: str, category_random_logic_amounts: Dict[str, int],
-                    goal: str, presentlocations: Dict[str, Tuple[str, LocationProgressType]],
+                    maxlevel: int, upgradelogictype: str, category_random_logic_amounts: dict[str, int],
+                    goal: str, presentlocations: dict[str, tuple[str, LocationProgressType]],
                     add_alias: Callable[[str, str], None], has_upgrade_traps: bool
-                    ) -> Dict[str, Tuple[str, LocationProgressType]]:
+                    ) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with all achievement locations based on player options."""
 
-    locations: Dict[str, Tuple[str, LocationProgressType]] = dict()
+    locations: dict[str, tuple[str, LocationProgressType]] = dict()
     upgrade_regions = [REGIONS.main, REGIONS.upgrades_1, REGIONS.upgrades_2, REGIONS.upgrades_3,
                        REGIONS.upgrades_4, REGIONS.upgrades_5]
 
@@ -472,10 +472,10 @@ def addachievements(excludesoftlock: bool, excludelong: bool, excludeprogressive
 
 
 def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[str], None],
-                   add_alias: Callable[[str, str], None]) -> Dict[str, Tuple[str, LocationProgressType]]:
+                   add_alias: Callable[[str, str], None]) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns a dictionary with a given number of random shapesanity locations."""
 
-    included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
+    included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
 
     def f(name: str, region: str, alias: str, progress: LocationProgressType = LocationProgressType.DEFAULT) -> None:
         included_shapes[name] = (region, progress)
@@ -518,11 +518,11 @@ def addshapesanity(amount: int, random: Random, append_shapesanity: Callable[[st
     return included_shapes
 
 
-def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str, str], None]
-                      ) -> Dict[str, Tuple[str, LocationProgressType]]:
+def addshapesanity_ut(shapesanity_names: list[str], add_alias: Callable[[str, str], None]
+                      ) -> dict[str, tuple[str, LocationProgressType]]:
     """Returns the same information as addshapesanity but will add specific values based on a UT rebuild."""
 
-    included_shapes: Dict[str, Tuple[str, LocationProgressType]] = {}
+    included_shapes: dict[str, tuple[str, LocationProgressType]] = {}
 
     for name in shapesanity_names:
         for options in [shapesanity_simple, shapesanity_1_4, shapesanity_two_sided, shapesanity_three_parts,
@@ -540,7 +540,7 @@ def addshapesanity_ut(shapesanity_names: List[str], add_alias: Callable[[str, st
 class ShapezLocation(Location):
     game = OTHER.game_name
 
-    def __init__(self, player: int, name: str, address: Optional[int], region: Region,
+    def __init__(self, player: int, name: str, address: int | None, region: Region,
                  progress_type: LocationProgressType):
         super(ShapezLocation, self).__init__(player, name, address, region)
         self.progress_type = progress_type
