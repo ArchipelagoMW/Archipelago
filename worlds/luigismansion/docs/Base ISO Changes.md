@@ -8,8 +8,9 @@
 - Add visiting rooms as checks. Must be connected to server. (Optional)
 - Add Speedy Spirits into the pool as locations. Must be connected to server. These are blackout only, and still count even if they run away, so unmissable (Optional)
 - Add Boos into the pool as separate locations and items. Only Boo Radar is required for the locations.  
-- Require the player to have obtained enough money to get a specific rank upon completion. (Optional) 
-- Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
+- Require the player to have obtained enough money to get a specific rank upon completion. (Optional)
+- 1F Washroom Boo Gate has been removed in favor of simply locking the door.
+- Customize the Boo count requirement for the Balcony and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations) except ending cutscenes
 - The Blackout can be toggled from the breaker in the breaker room, to access certain locations of the game.
