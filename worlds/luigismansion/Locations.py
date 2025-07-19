@@ -423,6 +423,8 @@ DECOR_LOCATION_TABLE = {
                                           update_ram_addr=[LMRamData(in_game_room_id=34)]),
     "Nursery Vase": LMLocationData("Nursery", 166, "Furniture", 488, [],
                                    update_ram_addr=[LMRamData(in_game_room_id=26)]),
+    "Nursery Rocking Horse": LMLocationData("Nursery", 168, "Furniture", 364, [], remote_only=True,
+                                            update_ram_addr=[LMRamData(in_game_room_id=26)]),  # TODO doesn't work?
     "Chauncey's Crib (Nursery)": LMLocationData("Nursery", 167, "Furniture", 372, [], remote_only=True,
                                                 update_ram_addr=[LMRamData(in_game_room_id=26)]),
     "Nursery Toy Blocks R (closer to Door)": LMLocationData("Nursery", 173, "Furniture", 498, [],
@@ -726,7 +728,6 @@ DECOR_LOCATION_TABLE = {
                                                     update_ram_addr=[LMRamData(in_game_room_id=60)]),
     "Safari Room C Deer Head": LMLocationData("Safari Room", 439, "Furniture", 630, [], remote_only=True,
                                                 update_ram_addr=[LMRamData(in_game_room_id=55)]),
-    # "Nursery Rocking Horse": LMLocationData("Nursery", 168, "Furniture", 364, [], 26), #TODO doesn't work, is a characterinfo item
     "Kitchen Refrigerator": LMLocationData("Kitchen", 308, "Furniture", 78, [], remote_only=True,
                                                 update_ram_addr=[LMRamData(in_game_room_id=7)]),
     "Graveyard Tombstone 3": LMLocationData("Graveyard", 326, "Furniture", 177, [], remote_only=True,
