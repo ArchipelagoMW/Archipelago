@@ -23,7 +23,8 @@ from .items import (
     default_character_to_location,
     default_craft_pool,
 )
-from .locations import create_locations, craft_locations, location_groups, location_table
+from .tables.location_list import craft_locations, location_table
+from .locations import create_locations, location_groups
 from .options import CharacterStartingQuartzOptions, ChestItemPoolOptions, SealingStoneCharactersOptions, StartingCharactersOptions, TitsThe3rdOptions, CraftShuffle, CraftPlacement
 from .regions import create_regions, connect_regions
 from .settings import TitsThe3rdSettings
@@ -168,31 +169,50 @@ class TitsThe3rdWorld(World):
 
         return itempool
 
-    def _set_default_craft_locations(self, location_names: Set[str], item_name: ItemName) -> None:
+    def _set_default_craft_locations_for_character(self, location_names: Set[str], item_name: ItemName) -> None:
+        """
+        Given a set of craft location names, set them to the progressive craft for the given character.
+
+        Args:
+            location_names (Set[str]): The set of location names to set the progressive craft for.
+            item_name (ItemName): The item name of the progressive craft.
+
+        Returns:
+            None
+        """
         for location_name in location_names:
             self.multiworld.get_location(location_name, self.player).place_locked_item(self.create_item(item_name))
+
+    def _set_default_craft_locations(self) -> None:
+        """
+        Set the craft unlock locations for each character to the default location.
+
+        Returns:
+            None
+        """
+        self._set_default_craft_locations_for_character(location_names=location_groups["Estelle Crafts"], item_name=ItemName.estelle_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Joshua Crafts"], item_name=ItemName.joshua_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Scherazard Crafts"], item_name=ItemName.scherazard_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Olivier Crafts"], item_name=ItemName.olivier_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Kloe Crafts"], item_name=ItemName.kloe_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Agate Crafts"], item_name=ItemName.agate_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Tita Crafts"], item_name=ItemName.tita_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Zin Crafts"], item_name=ItemName.zin_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Kevin Crafts"], item_name=ItemName.kevin_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Anelace Crafts"], item_name=ItemName.anelace_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Josette Crafts"], item_name=ItemName.josette_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Richard Crafts"], item_name=ItemName.richard_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Mueller Crafts"], item_name=ItemName.mueller_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Julia Crafts"], item_name=ItemName.julia_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Ries Crafts"], item_name=ItemName.ries_progressive_craft)
+        self._set_default_craft_locations_for_character(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
 
     def pre_fill(self) -> None:
         # Crafts
         if self.options.craft_placement == CraftPlacement.option_default and self.options.craft_shuffle:
             # Crafts are at their default locations, but which craft is given is randomized.
             # (E.g. Estelle may get Dual Strike when she levels up)
-            self._set_default_craft_locations(location_names=location_groups["Estelle Crafts"], item_name=ItemName.estelle_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Joshua Crafts"], item_name=ItemName.joshua_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Scherazard Crafts"], item_name=ItemName.scherazard_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Olivier Crafts"], item_name=ItemName.olivier_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Kloe Crafts"], item_name=ItemName.kloe_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Agate Crafts"], item_name=ItemName.agate_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Tita Crafts"], item_name=ItemName.tita_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Zin Crafts"], item_name=ItemName.zin_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Kevin Crafts"], item_name=ItemName.kevin_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Anelace Crafts"], item_name=ItemName.anelace_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Josette Crafts"], item_name=ItemName.josette_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Richard Crafts"], item_name=ItemName.richard_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Mueller Crafts"], item_name=ItemName.mueller_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Julia Crafts"], item_name=ItemName.julia_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Ries Crafts"], item_name=ItemName.ries_progressive_craft)
-            self._set_default_craft_locations(location_names=location_groups["Renne Crafts"], item_name=ItemName.renne_progressive_craft)
+            self._set_default_craft_locations()
         elif self.options.craft_placement == CraftPlacement.option_crafts:
             # Crafts are shuffled amongst each other (e.g. levelling up as character X may give a craft for character Y)
             craft_items = []
@@ -206,8 +226,9 @@ class TitsThe3rdWorld(World):
                 remaining_craft_locations.remove(location_name)
 
     def create_items(self) -> None:
-        itempool = deepcopy(default_item_pool)
         """Define items for Trails in the Sky the 3rd AP"""
+        itempool = deepcopy(default_item_pool)
+
         # Handle Sealing Stone Quartz
         # Vanilla Shuffle
         if self.options.character_starting_quartz_options == CharacterStartingQuartzOptions.option_vanilla_shuffle:
@@ -229,9 +250,7 @@ class TitsThe3rdWorld(World):
                     self.multiworld.get_location(LocationName.original_to_spoiler_mapping[location_name], self.player).place_locked_item(quartz_item)
                 else:
                     self.multiworld.get_location(location_name, self.player).place_locked_item(quartz_item)
-        # All Random: We just let the filler handler further down handle this
-        else:
-            ...
+        # Else all random (NOP): We just let the filler handler further down handle this
 
         # Handle Chest Item Pool
         if self.options.chest_itempool_option == ChestItemPoolOptions.option_vanilla_shuffle:
@@ -267,10 +286,10 @@ class TitsThe3rdWorld(World):
         # If craft shuffle is off, event get crafts will be the default craft.
         #   For these, craft_get_order will be ignored.
         # This behaviour is handled by the client.
-        craft_get_order, old_craft_id_to_new_craft_stats = shuffle_crafts_main(self.options, self.random)
+        craft_get_order, old_craft_id_to_new_craft_id = shuffle_crafts_main(self.options, self.random)
         return {
             "craft_get_order": craft_get_order,
-            "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_stats,
+            "old_craft_id_to_new_craft_id": old_craft_id_to_new_craft_id,
             "default_event_crafts": not self.options.craft_shuffle,
             "default_crfget": self.options.craft_placement == CraftPlacement.option_default and not self.options.craft_shuffle,
         }

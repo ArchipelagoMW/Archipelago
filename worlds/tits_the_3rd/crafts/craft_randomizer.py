@@ -1,13 +1,6 @@
-import os
-import sys
 from copy import deepcopy
 from random import Random
 from typing import Dict, List, Optional
-
-
-# TODO: delete me
-AP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(os.path.dirname(AP_DIR))
 
 from worlds.tits_the_3rd.crafts.models import Character
 from worlds.tits_the_3rd.tables.craft_list import (
@@ -20,9 +13,9 @@ from worlds.tits_the_3rd.tables.craft_list import (
 )
 from worlds.tits_the_3rd.options import TitsThe3rdOptions, CraftPlacement
 
-def _get_character_to_craft_get_order(characters: List[Character]) -> dict[str, List[Dict[int, int]]]:
+def _get_character_to_craft_get_order() -> dict[str, List[Dict[int, int]]]:
     """
-    Given a list of characters with crafts, convert this to a dictionary of:
+    Return a dictionary of:
     {
       character_name (str): [
         craft_id (int)
@@ -30,6 +23,7 @@ def _get_character_to_craft_get_order(characters: List[Character]) -> dict[str, 
     }
 
     The order of the craft_id is the default order based on level acquired.
+    This will return the character's default crafts.
     """
     character_to_craft_get_order = {}
     for character in default_characters:
@@ -70,6 +64,8 @@ def _progress_size_constraints(characters: List[Character], rng: Random):
     """
     If the character animation size is too large, swap crafts until the size for that character is valid.
     Crafts can only be swapped amongst those in the same craft category.
+
+    Tested with 100000 runs without failure.
     """
     for character in characters:
         while character.remaining_buffer_size_bytes < 0:
@@ -94,8 +90,6 @@ def _progress_size_constraints(characters: List[Character], rng: Random):
                 character_to_swap_with.get_craft_list_by_category(craft_category).append(craft_1)
 
 
-
-
 def _is_in_invalid_size_state(characters: List[Character]) -> bool:
     """
     Returns True if any character is in an invalid size state.
@@ -114,10 +108,13 @@ def _fix_size_constraints(characters: List[Character], rng: Random):
         _progress_size_constraints(characters, rng)
 
 
-def _shuffle_crafts(characters: List[Character], rng: Random):
+def _shuffle_crafts(characters: List[Character], rng: Random) -> List[Character]:
     """
     Shuffle the crafts for each character.
     Crafts can only be shuffled amongst those in the same craft category.
+
+    Returns:
+        List[Character]: The characters with their shuffled crafts.
     """
     fixed_normal_craft_table_copy = fixed_normal_craft_table.copy()
     fixed_scraft_table_copy = fixed_scraft_table.copy()
@@ -139,6 +136,12 @@ def _shuffle_crafts(characters: List[Character], rng: Random):
     return characters
 
 def _get_old_craft_id_to_new_craft_id(characters: List[Character]) -> Dict[int, int]:
+    """
+    Get a mapping of old craft IDs to new craft IDs.
+
+    Returns:
+        Dict[int, int]: A mapping of old craft IDs to new craft IDs.
+    """
     old_craft_id_to_new_craft_id = {}
     for idx, character in enumerate(characters):
         default_character = default_characters[idx]
@@ -165,10 +168,16 @@ def shuffle_crafts_main(options: TitsThe3rdOptions, rng: Random) -> tuple[Option
     if options.craft_placement == CraftPlacement.option_default and not options.craft_shuffle:
         return None, None
     characters = deepcopy(default_characters)
+
     old_craft_id_to_new_craft_id = None
     if options.craft_shuffle:
+        # Get a mapping of shuffled crafts.
         characters = _shuffle_crafts(characters, rng)
         old_craft_id_to_new_craft_id = _get_old_craft_id_to_new_craft_id(characters)
-    character_to_craft_get_order = _get_character_to_craft_get_order(characters)
+
+    # Note the character_to_craft_get_order is the default craft ids.
+    # This is because we tell the game to give the default craft ID, but it has the data of the new craft ID.
+    character_to_craft_get_order = _get_character_to_craft_get_order()
     character_to_craft_get_order = _shuffle_craft_get_order(character_to_craft_get_order, rng)
+
     return character_to_craft_get_order, old_craft_id_to_new_craft_id

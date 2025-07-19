@@ -1,4 +1,9 @@
+"""
+This is a tool to write the animation files for each character.
+This is needed for craft randomization, where we must set the animation of the original craft ID to the new craft ID.
+"""
 import os
+
 from worlds.tits_the_3rd.tables.craft_list import default_characters
 
 CHARACTER_NAME_TO_ANIMATION_FILES = {
@@ -28,17 +33,27 @@ class AnimationWriter:
         self.craft_id_to_craft_file_name_mapping = None
         self._populate_craft_mappings()
 
-    def write_animation(self, source_craft_id: int, destination_craft_id: int):
+    def write_animation(self, source_craft_id: int, destination_craft_id: int) -> None:
         """
-        source_craft: str: The craft animation you wish to write.
-        destination_craft: str: The craft animation you wish to overwrite.
+        Write the craft animation instructions of the source craft id to the destination craft id.
 
-        Arguments should be in the format of "<character_name>_<craft_name>"
+        Args:
+            source_craft_id (int): The craft animation you wish to write.
+            destination_craft_id (int): The craft animation you wish to overwrite.
+
+        Returns:
+            None
         """
         data = self._read_craft(source_craft_id)
         self._write_craft(destination_craft_id, data)
 
-    def _populate_craft_mappings(self):
+    def _populate_craft_mappings(self) -> None:
+        """
+        Prefill the mappings for later use.
+
+        Returns:
+            None
+        """
         self.craft_id_to_as_function_name = {}
         self.craft_id_to_character_name_mapping = {}
         self.craft_id_to_craft_file_name_mapping = {}
@@ -59,17 +74,29 @@ class AnimationWriter:
 
     def _read_craft(self, craft_id: int) -> bytes:
         """
-        craft_id: int: The craft animation you wish to read.
+        Read the craft animation instructions from the file.
+
+        Args:
+            craft_id (int): The craft animation you wish to read.
+
+        Returns:
+            bytes: The data from the craft animation.
         """
         craft_file = self.craft_id_to_craft_file_name_mapping[craft_id]
         input_path = os.path.join(self.craft_dir, craft_file)
         with open(input_path, "r", encoding='utf-8') as f:
             return f.read()
 
-    def _write_craft(self, destination_craft_id: int, data: bytes):
+    def _write_craft(self, destination_craft_id: int, data: bytes) -> None:
         """
-        destination_craft: str: The craft animation you wish to overwrite.
-        data: bytes: The data to write to the craft animation.
+        Write the craft animation instructions to the file.
+
+        Args:
+            destination_craft_id (int): The craft animation you wish to overwrite.
+            data (bytes): The data to write to the craft animation.
+
+        Returns:
+            None
         """
         destination_craft_function_name = self.craft_id_to_as_function_name[destination_craft_id]
         character_name = self.craft_id_to_character_name_mapping[destination_craft_id]

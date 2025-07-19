@@ -66,6 +66,9 @@ class TitsThe3rdContext(CommonContext):
         self.game_interface = TitsThe3rdMemoryIO(self.exit_event)
 
     def _clean_previous_mod_install(self, lib_ark_dir):
+        """
+        Clean the previous mod install.
+        """
         if os.path.exists(lib_ark_dir):
             shutil.rmtree(lib_ark_dir)
         os.makedirs(lib_ark_dir, exist_ok=False)
@@ -110,6 +113,10 @@ class TitsThe3rdContext(CommonContext):
         return
 
     def _setup_item_table(self, dt_game_mod_folder, dt_base_folder) -> None:
+        """
+        Setup t_item2._dt and t_ittxt2._dt.
+        This is used for embedding non-local item names and custom items into the game.
+        """
         game_items, game_items_text = dt_items.parse_item_table(os.path.join(dt_base_folder, "t_item2._dt"), os.path.join(dt_base_folder, "t_ittxt2._dt"))
         last_item = game_items.pop()
         last_text = game_items_text.pop()
@@ -128,6 +135,10 @@ class TitsThe3rdContext(CommonContext):
         dt_items.write_item_text_table(os.path.join(dt_game_mod_folder, "t_ittxt2._dt"), game_items_text)
 
     def _setup_t_magic_table(self, game_dir, dt_game_mod_folder, dt_base_folder) -> None:
+        """
+        Setup t_magic._dt.
+        This is used for shuffling crafts.
+        """
         if not self.slot_data["old_craft_id_to_new_craft_id"]:
             return  # No craft changes, we can use the default table
         if not "T_MAGIC_Converter.exe" in os.listdir(game_dir):
@@ -213,6 +224,9 @@ class TitsThe3rdContext(CommonContext):
         shutil.move(t_crtget_path, os.path.join(dt_game_mod_folder, "t_crfget._dt"))
 
     def _setup_data_table_game_mod_folder(self, game_dir) -> None:
+        """
+        Changes to ED6_DT22.dir. This is the data tables for the game.
+        """
         data_table_game_mod_folder = os.path.join(game_dir, "data", "ED6_DT22")
         with tempfile.TemporaryDirectory() as data_table_base_folder:
             factoria_command = f'"{os.path.join(game_dir, "factoria.exe")}" --output "{data_table_base_folder}" "{os.path.join(game_dir, "ED6_DT22.dir")}"'
@@ -224,6 +238,9 @@ class TitsThe3rdContext(CommonContext):
             self._setup_t_crfget_table(data_table_game_mod_folder, data_table_base_folder)
 
     def _setup_as_game_mod_folder(self, game_dir, patch_output_dir) -> None:
+        """
+        Changes to ED6_DT30.dir (animation files). This is used for shuffling crafts.
+        """
         if not self.slot_data["old_craft_id_to_new_craft_id"]:
             return  # No craft changes, we can use the default animations.
         if not "AS_Converter.exe" in os.listdir(game_dir):
@@ -265,6 +282,9 @@ class TitsThe3rdContext(CommonContext):
             shutil.rmtree("outbin")
 
     def install_game_mod(self):
+        """
+        Install the game mod using the patch.
+        """
         game_dir = Path(get_settings().tits_the_3rd_options.game_installation_path)
         files_in_game_dir = os.listdir(game_dir)
         if not "ed6_win3_DX9.exe" in files_in_game_dir:
@@ -312,7 +332,6 @@ class TitsThe3rdContext(CommonContext):
         self.non_local_locations_initiated = False
         self.player_name_to_game = dict()
         self.slot_data = None
-        self.next_craft_idx = {name: 0 for name in CHARACTER_ID_TO_NAME.values()}
 
     async def server_auth(self, password_requested: bool = False):
         """Wrapper for login."""
@@ -455,8 +474,7 @@ class TitsThe3rdContext(CommonContext):
     async def check_location(self, location_id: int):
         if not self.game_interface.should_send_and_recieve_items(self.world_player_identifier):
             return
-        if location_id == get_location_id(LocationName.grancel_castle_queens_bedroom):
-            # Chapter 1 boss defeated
+        if location_id == get_location_id(LocationName.grancel_castle_queens_bedroom):  # Goal location
             self.finished_game = True
             await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
         self.locations_checked.add(location_id)

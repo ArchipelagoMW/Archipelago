@@ -1,4 +1,6 @@
 from collections import namedtuple
+import re
+from typing import Dict
 
 from ..names.item_name import ItemName
 from ..names.location_name import LocationName
@@ -366,3 +368,79 @@ location_table = dict([
     # (LocationName.renne_craft_unlock_level_129_chain_3,                                         LocationData(100171,     "Craft",               RegionName.level_133,                           ItemName.renne_progressive_craft,                   "",                                                     [(ItemName.renne, 1)])),
     # (LocationName.renne_craft_unlock_star_door_10_pater_mater,                                  LocationData(100172,     "Craft",               RegionName.star_door_10,                        ItemName.renne_progressive_craft,                   "",                                                     [(ItemName.renne, 1)])),
 ])
+
+def _get_craft_locations(character_name: str) -> Dict[str, LocationData]:
+    """
+    Get the craft locations for a given character.
+    """
+    return {
+        location_name: location_data for location_name, location_data in location_table.items() if
+        (
+            location_data.check_type == "Craft"
+            and location_name.lower().startswith(character_name)
+        )
+    }
+
+estelle_craft_locations: Dict[str, LocationData] = _get_craft_locations("estelle")
+joshua_craft_locations: Dict[str, LocationData] = _get_craft_locations("joshua")
+scherazard_craft_locations: Dict[str, LocationData] = _get_craft_locations("scherazard")
+olivier_craft_locations: Dict[str, LocationData] = _get_craft_locations("olivier")
+kloe_craft_locations: Dict[str, LocationData] = _get_craft_locations("kloe")
+agate_craft_locations: Dict[str, LocationData] = _get_craft_locations("agate")
+tita_craft_locations: Dict[str, LocationData] = _get_craft_locations("tita")
+zin_craft_locations: Dict[str, LocationData] = _get_craft_locations("zin")
+kevin_craft_locations: Dict[str, LocationData] = _get_craft_locations("kevin")
+anelace_craft_locations: Dict[str, LocationData] = _get_craft_locations("anelace")
+josette_craft_locations: Dict[str, LocationData] = _get_craft_locations("josette")
+richard_craft_locations: Dict[str, LocationData] = _get_craft_locations("richard")
+mueller_craft_locations: Dict[str, LocationData] = _get_craft_locations("mueller")
+julia_craft_locations: Dict[str, LocationData] = _get_craft_locations("julia")
+ries_craft_locations: Dict[str, LocationData] = _get_craft_locations("ries")
+renne_craft_locations: Dict[str, LocationData] = _get_craft_locations("renne")
+
+craft_locations: Dict[str, LocationData] = {
+    **estelle_craft_locations,
+    **joshua_craft_locations,
+    **scherazard_craft_locations,
+    **olivier_craft_locations,
+    **kloe_craft_locations,
+    **agate_craft_locations,
+    **tita_craft_locations,
+    **zin_craft_locations,
+    **kevin_craft_locations,
+    **anelace_craft_locations,
+    **josette_craft_locations,
+    **richard_craft_locations,
+    **mueller_craft_locations,
+    **julia_craft_locations,
+    **ries_craft_locations,
+    **renne_craft_locations,
+}
+
+character_name_to_id = {
+    "estelle": 0,
+    "joshua": 1,
+    "scherazard": 2,
+    "olivier": 3,
+    "kloe": 4,
+    "agate": 5,
+    "tita": 6,
+    "zin": 7,
+    "kevin": 8,
+    "anelace": 9,
+    "josette": 10,
+    "richard": 11,
+    "mueller": 12,
+    "julia": 13,
+    "ries": 14,
+    "renne": 15
+}
+craft_location_id_to_character_id_and_level_threshold = {}
+for craft in craft_locations:
+    # Parse the level threshold and character from the craft name to build the above table
+    character_name = craft.split(" ")[0].lower()
+    character_id = character_name_to_id[character_name]
+    level_match = re.search(r'\(Level (\d+)\)', craft)
+    if level_match:
+        level_threshold = int(level_match.group(1))
+        craft_location_id_to_character_id_and_level_threshold[craft_locations[craft].flag] = (character_id, level_threshold)

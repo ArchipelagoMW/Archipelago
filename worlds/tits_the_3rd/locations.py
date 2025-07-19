@@ -1,12 +1,27 @@
 """This module represents location definitions for Trails in the Sky the 3rd"""
 from typing import Callable, Dict, Optional, Set
-import re
 
 from BaseClasses import CollectionState, MultiWorld, Location
 from .names.location_name import LocationName
-from .names.region_name import RegionName
-from .names.item_name import ItemName
-from .tables.location_list import location_table, LocationData
+from .tables.location_list import (
+    location_table,
+    estelle_craft_locations,
+    joshua_craft_locations,
+    scherazard_craft_locations,
+    olivier_craft_locations,
+    kloe_craft_locations,
+    agate_craft_locations,
+    tita_craft_locations,
+    zin_craft_locations,
+    kevin_craft_locations,
+    anelace_craft_locations,
+    josette_craft_locations,
+    richard_craft_locations,
+    mueller_craft_locations,
+    julia_craft_locations,
+    ries_craft_locations,
+    renne_craft_locations
+)
 from .options import TitsThe3rdOptions, CraftPlacement
 
 MIN_CRAFT_LOCATION_ID = 100000
@@ -18,8 +33,11 @@ class TitsThe3rdLocation(Location):
 
 
 def get_location_id(location_name: LocationName):
+    """
+    Get the location id for a given location name.
+    """
     if location_name not in location_table:
-        raise Exception(f"{location_name} is not part of location list. Something went wrong?")
+        raise RuntimeError(f"{location_name} is not part of location list. Something went wrong?")
     return location_table[location_name].flag
 
 
@@ -64,52 +82,6 @@ def create_locations(multiworld: MultiWorld, player: int, options: TitsThe3rdOpt
             create_location(multiworld, player, location_name, rule)
 
 
-# TODO: move below to tables?
-def _get_craft_locations(character_name: str) -> Dict[str, LocationData]:
-    return {
-        location_name: location_data for location_name, location_data in location_table.items() if
-        (
-            location_data.check_type == "Craft"
-            and location_name.lower().startswith(character_name)
-        )
-    }
-
-estelle_craft_locations: Dict[str, LocationData] = _get_craft_locations("estelle")
-joshua_craft_locations: Dict[str, LocationData] = _get_craft_locations("joshua")
-scherazard_craft_locations: Dict[str, LocationData] = _get_craft_locations("scherazard")
-olivier_craft_locations: Dict[str, LocationData] = _get_craft_locations("olivier")
-kloe_craft_locations: Dict[str, LocationData] = _get_craft_locations("kloe")
-agate_craft_locations: Dict[str, LocationData] = _get_craft_locations("agate")
-tita_craft_locations: Dict[str, LocationData] = _get_craft_locations("tita")
-zin_craft_locations: Dict[str, LocationData] = _get_craft_locations("zin")
-kevin_craft_locations: Dict[str, LocationData] = _get_craft_locations("kevin")
-anelace_craft_locations: Dict[str, LocationData] = _get_craft_locations("anelace")
-josette_craft_locations: Dict[str, LocationData] = _get_craft_locations("josette")
-richard_craft_locations: Dict[str, LocationData] = _get_craft_locations("richard")
-mueller_craft_locations: Dict[str, LocationData] = _get_craft_locations("mueller")
-julia_craft_locations: Dict[str, LocationData] = _get_craft_locations("julia")
-ries_craft_locations: Dict[str, LocationData] = _get_craft_locations("ries")
-renne_craft_locations: Dict[str, LocationData] = _get_craft_locations("renne")
-
-craft_locations: Dict[str, LocationData] = {
-    **estelle_craft_locations,
-    **joshua_craft_locations,
-    **scherazard_craft_locations,
-    **olivier_craft_locations,
-    **kloe_craft_locations,
-    **agate_craft_locations,
-    **tita_craft_locations,
-    **zin_craft_locations,
-    **kevin_craft_locations,
-    **anelace_craft_locations,
-    **josette_craft_locations,
-    **richard_craft_locations,
-    **mueller_craft_locations,
-    **julia_craft_locations,
-    **ries_craft_locations,
-    **renne_craft_locations,
-}
-
 location_groups: Dict[str, Set[str]] = {
     "Estelle Crafts": set(estelle_craft_locations.keys()),
     "Joshua Crafts": set(joshua_craft_locations.keys()),
@@ -128,32 +100,3 @@ location_groups: Dict[str, Set[str]] = {
     "Ries Crafts": set(ries_craft_locations.keys()),
     "Renne Crafts": set(renne_craft_locations.keys()),
 }
-
-character_name_to_id = {
-    "estelle": 0,
-    "joshua": 1,
-    "scherazard": 2,
-    "olivier": 3,
-    "kloe": 4,
-    "agate": 5,
-    "tita": 6,
-    "zin": 7,
-    "kevin": 8,
-    "anelace": 9,
-    "josette": 10,
-    "richard": 11,
-    "mueller": 12,
-    "julia": 13,
-    "ries": 14,
-    "renne": 15
-}
-craft_location_id_to_character_id_and_level_threshold = {}
-for craft in craft_locations:
-    # Parse the level threshold and character from the craft name to build the above table
-    character_name = craft.split(" ")[0].lower()
-    character_id = character_name_to_id[character_name]
-    level_match = re.search(r'\(Level (\d+)\)', craft)
-    if level_match:
-        level_threshold = int(level_match.group(1))
-        craft_location_id_to_character_id_and_level_threshold[craft_locations[craft].flag] = (character_id, level_threshold)
-

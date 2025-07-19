@@ -53,10 +53,10 @@ class TitsThe3rdMemoryIO():
     OFFSET_FLAG_0: int = 0x2AD491C
     OFFSET_WPID: int = OFFSET_FLAG_0 + (9504 // 8) # Flag 9504 - 9536
     FLAG_SHOULD_WRITE_WPID: int = 9496
-    FLAG_HAS_CHARACTER_ARRAY: int = 9670
+    FLAG_HAS_CHARACTER_ARRAY: int = 9670 # Array of flags, which are true if the character was unlocked.
     OFFSET_ITEMS_RECEIVED_INDEX = OFFSET_FLAG_0 + (1024 // 8)
-    OFFSET_CHARACTER_LEVEL: int = 0x2ACD11C
-    CHARACTER_LEVEL_OFFSET_INTERVAL: int = 0x3C
+    OFFSET_CHARACTER_LEVEL: int = 0x2ACD11C # Estelle's character level.
+    CHARACTER_LEVEL_OFFSET_INTERVAL: int = 0x3C # Offset between each character's level.
     CHARACTER_ID_TO_NAME = {
         0: "estelle",
         1: "joshua",
@@ -441,7 +441,8 @@ class TitsThe3rdMemoryIO():
             return False
         self.tits_the_3rd_mem.write_bytes(address + 30, character_id.to_bytes(1, "little"), 1) # char 1 byte
         self.tits_the_3rd_mem.write_bytes(address + 31, craft_id.to_bytes(2, "little"), 2) # craft id 4 bytes
-        message = f"Progressive Craft for {self.CHARACTER_ID_TO_NAME[character_id]}!"
+        character_name = self.CHARACTER_ID_TO_NAME[character_id].capitalize()
+        message = f"Progressive Craft for {character_name}!"
         message = message.ljust(34)
         self.tits_the_3rd_mem.write_bytes(address + 55, bytes(message, encoding="utf8"), 34)
         self.call_scena(self.scena_functions["give_craft"])

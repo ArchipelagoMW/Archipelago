@@ -108,14 +108,15 @@ class CharacterStartingQuartzOptions(Choice):
 
 class CraftShuffle(Toggle):
     """
-    If enabled, characters may differ from their default crafts.
+    If enabled, characters crafts may differ from their default crafts.
+    E.g. Estelle may get Joshua's Dual Strike instead of Hurricane.
     """
     display_name = "Craft Shuffle"
     default_value = False
 
 class CraftPlacement(Choice):
     """
-    Where to place the crafts.
+    Shuffle craft unlocks into the item pool.
 
     Default: Crafts are placed in the default locations.
     Crafts: Craft unlock locations will always unlock a craft, but it will be for a random character.
