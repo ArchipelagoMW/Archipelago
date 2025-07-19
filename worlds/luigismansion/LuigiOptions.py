@@ -264,13 +264,13 @@ class MarioItems(Range):
     default = 5
 
 
-class WashroomBooCount(Range):
-    """Set the number of Boos required to reach the 1F Washroom. 0 = Starts Open"""
-    display_name = "Washroom Boo Count"
-    internal_name = "washroom_boo_count"
-    range_start = 0
-    range_end = 50
-    default = 5
+# class WashroomBooCount(Range):
+#     """Set the number of Boos required to reach the 1F Washroom. 0 = Starts Open"""
+#     display_name = "Washroom Boo Count"
+#     internal_name = "washroom_boo_count"
+#     range_start = 0
+#     range_end = 50
+#     default = 5
 
 
 class BalconyBooCount(Range):
@@ -596,7 +596,7 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     boo_gates: BooGates
     mario_items: MarioItems
     washroom_boo_count: WashroomBooCount
-    balcony_boo_count: BalconyBooCount
+    #balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     king_boo_health: KingBooHealth
     boo_health_option: BooHealthOption
