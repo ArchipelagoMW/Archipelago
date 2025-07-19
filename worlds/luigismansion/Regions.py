@@ -253,9 +253,9 @@ def connect_regions(world: "LMWorld"):
     lmconnect(world, "1F Hallway", "1F Bathroom", "1F Bathroom Key", 23)
     lmconnect(world, "1F Hallway", "Conservatory", "Conservatory Key", 21)
     lmconnect(world, "1F Hallway", "Billiards Room", "Billiards Room Key", 17)
-    lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20,
-            lambda state, wash_boo_count=world.options.washroom_boo_count.value: state.has_group("Boo", world.player, wash_boo_count)
-                          or state.has("Boo", world.player, wash_boo_count))
+    lmconnect(world, "1F Hallway", "1F Washroom", "1F Washroom Key", 20)
+            # lambda state, wash_boo_count=world.options.washroom_boo_count.value: state.has_group("Boo", world.player, wash_boo_count)
+            #               or state.has("Boo", world.player, wash_boo_count))
     lmconnect(world, "1F Hallway", "Ballroom", "Ballroom Key", 15)
     lmconnect(world, "1F Hallway", "Dining Room", "Dining Room Key", 14)
     lmconnect(world, "1F Hallway", "Laundry Room", "Laundry Room Key", 7)

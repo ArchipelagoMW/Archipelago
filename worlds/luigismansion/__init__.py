@@ -68,7 +68,7 @@ class LMWeb(WebWorld):
             LuigiOptions.RankRequirement,
             LuigiOptions.MarioItems,
             LuigiOptions.BooGates,
-            LuigiOptions.WashroomBooCount,
+            # LuigiOptions.WashroomBooCount,
             LuigiOptions.BalconyBooCount,
             LuigiOptions.FinalBooCount,
             LuigiOptions.Enemizer,
@@ -517,7 +517,7 @@ class LMWorld(World):
                 self.options.walksanity.value = passthrough["walksanity"]
                 self.options.mario_items.value = passthrough["clairvoya requirement"]
                 self.options.boo_gates.value = passthrough["boo gates"]
-                self.options.washroom_boo_count.value = passthrough["washroom boo count"]
+                # self.options.washroom_boo_count.value = passthrough["washroom boo count"]
                 self.options.balcony_boo_count.value = passthrough["balcony boo count"]
                 self.options.final_boo_count.value = passthrough["final boo count"]
                 self.options.enemizer.value = passthrough["enemizer"]
@@ -580,7 +580,7 @@ class LMWorld(World):
         if self.options.boo_gates.value == 0:
             self.options.final_boo_count.value = 0
             self.options.balcony_boo_count.value = 0
-            self.options.washroom_boo_count.value = 0
+            # self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
         # Add all randomizable regions
@@ -925,7 +925,7 @@ class LMWorld(World):
             "walksanity": self.options.walksanity.value,
             "clairvoya requirement": self.options.mario_items.value,
             "boo gates": self.options.boo_gates.value,
-            "washroom boo count": self.options.washroom_boo_count.value,
+            # "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,
