@@ -14,8 +14,6 @@ from .Items import item_name_groups
 
 from .StateHelpers import has_hearts, can_use_bombs, can_hold_arrows
 
-logger = logging.getLogger("Shops")
-
 
 @unique
 class ShopType(IntEnum):
@@ -162,7 +160,10 @@ shop_class_mapping = {ShopType.UpgradeShop: UpgradeShop,
 
 
 def push_shop_inventories(multiworld):
-    shop_slots = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if shop.type
+    all_shops =  []
+    for world in multiworld.get_game_worlds(ALttPLocation.game):
+        all_shops.extend(world.shops)
+    shop_slots = [location for shop_locations in (shop.region.locations for shop in all_shops if shop.type
                   != ShopType.TakeAny) for location in shop_locations if location.shop_slot is not None]
 
     for location in shop_slots:
@@ -178,7 +179,7 @@ def push_shop_inventories(multiworld):
                 get_price(multiworld, location.shop.inventory[location.shop_slot], location.player,
                           location.shop_price_type)[1])
 
-    for world in multiworld.get_game_worlds("A Link to the Past"):
+    for world in multiworld.get_game_worlds(ALttPLocation.game):
         world.pushed_shop_inventories.set()
 
 
@@ -225,7 +226,7 @@ def create_shops(multiworld, player: int):
         if locked is None:
             shop.locked = True
         region.shop = shop
-        multiworld.shops.append(shop)
+        multiworld.worlds[player].shops.append(shop)
         for index, item in enumerate(inventory):
             shop.add_inventory(index, *item)
             if not locked and (num_slots or type == ShopType.UpgradeShop):
@@ -309,50 +310,50 @@ def set_up_shops(multiworld, player: int):
     from .Options import small_key_shuffle
     # TODO: move hard+ mode changes for shields here, utilizing the new shops
 
-    if multiworld.worlds[player].options.retro_bow:
+    local_world = multiworld.worlds[player]
+
+    if local_world.options.retro_bow:
         rss = multiworld.get_region('Red Shield Shop', player).shop
+        # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
         replacement_items = [['Red Potion', 150], ['Green Potion', 75], ['Blue Potion', 200], ['Bombs (10)', 50],
-                             ['Blue Shield', 50], ['Small Heart',
-                                                   10]]  # Can't just replace the single arrow with 10 arrows as retro doesn't need them.
-        if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
+                             ['Blue Shield', 50], ['Small Heart', 10]]
+        if local_world.options.small_key_shuffle == small_key_shuffle.option_universal:
             replacement_items.append(['Small Key (Universal)', 100])
         replacement_item = multiworld.random.choice(replacement_items)
         rss.add_inventory(2, 'Single Arrow', 80, 1, replacement_item[0], replacement_item[1])
         rss.locked = True
 
-    if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal or multiworld.worlds[player].options.retro_bow:
-        for shop in multiworld.random.sample([s for s in multiworld.shops if
-                                              s.custom and not s.locked and s.type == ShopType.Shop
-                                              and s.region.player == player], 5):
+    if local_world.options.small_key_shuffle == small_key_shuffle.option_universal or local_world.options.retro_bow:
+        for shop in multiworld.random.sample([s for s in local_world.shops if
+                                              s.custom and not s.locked and s.type == ShopType.Shop], 5):
             shop.locked = True
             slots = [0, 1, 2]
             multiworld.random.shuffle(slots)
             slots = iter(slots)
-            if multiworld.worlds[player].options.small_key_shuffle == small_key_shuffle.option_universal:
+            if local_world.options.small_key_shuffle == small_key_shuffle.option_universal:
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
-            if multiworld.worlds[player].options.retro_bow:
+            if local_world.options.retro_bow:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
 
-    if multiworld.worlds[player].options.shuffle_capacity_upgrades:
-        for shop in multiworld.shops:
-            if shop.type == ShopType.UpgradeShop and shop.region.player == player and \
+    if local_world.options.shuffle_capacity_upgrades:
+        for shop in local_world.shops:
+            if shop.type == ShopType.UpgradeShop and \
                     shop.region.name == "Capacity Upgrade":
                 shop.clear_inventory()
 
-    if (multiworld.worlds[player].options.shuffle_shop_inventories or multiworld.worlds[player].options.randomize_shop_prices
-            or multiworld.worlds[player].options.randomize_cost_types):
+    if (local_world.options.shuffle_shop_inventories or local_world.options.randomize_shop_prices
+            or local_world.options.randomize_cost_types):
         shops = []
         total_inventory = []
-        for shop in multiworld.shops:
-            if shop.region.player == player:
-                if shop.type == ShopType.Shop and not shop.locked:
-                    shops.append(shop)
-                    total_inventory.extend(shop.inventory)
+        for shop in local_world.shops:
+            if shop.type == ShopType.Shop and not shop.locked:
+                shops.append(shop)
+                total_inventory.extend(shop.inventory)
 
         for item in total_inventory:
             item["price_type"], item["price"] = get_price(multiworld, item, player)
 
-        if multiworld.worlds[player].options.shuffle_shop_inventories:
+        if local_world.options.shuffle_shop_inventories:
             multiworld.random.shuffle(total_inventory)
 
             i = 0
@@ -407,7 +408,7 @@ price_rate_display = {
 }
 
 
-def get_price_modifier(item):
+def get_price_modifier(item) -> float:
     if item.game == "A Link to the Past":
         if any(x in item.name for x in
                ['Compass', 'Map', 'Single Bomb', 'Single Arrow', 'Piece of Heart']):
@@ -418,9 +419,9 @@ def get_price_modifier(item):
         elif any(x in item.name for x in ['Small Key', 'Heart']):
             return 0.5
         else:
-            return 1
+            return 1.0
     if item.advancement:
-        return 1
+        return 1.0
     elif item.useful:
         return 0.5
     else:
@@ -471,7 +472,7 @@ def get_price(multiworld, item, player: int, price_type=None):
 
 def shop_price_rules(state: CollectionState, player: int, location: ALttPLocation):
     if location.shop_price_type == ShopPriceType.Hearts:
-        return has_hearts(state, player, (location.shop_price / 8) + 1)
+        return has_hearts(state, player, (location.shop_price // 8) + 1)
     elif location.shop_price_type == ShopPriceType.Bombs:
         return can_use_bombs(state, player, location.shop_price)
     elif location.shop_price_type == ShopPriceType.Arrows:
