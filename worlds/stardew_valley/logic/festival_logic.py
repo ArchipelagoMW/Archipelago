@@ -9,9 +9,11 @@ from ..strings.festival_check_names import FestivalCheck
 from ..strings.fish_names import Fish
 from ..strings.forageable_names import Forageable
 from ..strings.generic_names import Generic
+from ..strings.gift_names import Gift
 from ..strings.machine_names import Machine
 from ..strings.monster_names import Monster
 from ..strings.region_names import Region
+from ..strings.season_names import Season
 
 
 class FestivalLogicMixin(BaseLogicMixin):
@@ -191,3 +193,8 @@ class FestivalLogic(BaseLogic):
         for rarecrow_number in range(1, 9):
             rules.append(self.logic.received(f"Rarecrow #{rarecrow_number}"))
         return self.logic.and_(*rules)
+
+    def has_golden_pumpkin(self) -> StardewRule:
+        if self.options.festival_locations == FestivalLocations.option_disabled:
+            return self.logic.season.has(Season.fall)
+        return self.logic.received(Gift.golden_pumpkin) & self.logic.season.has(Season.fall)
