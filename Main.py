@@ -7,6 +7,7 @@ import tempfile
 import time
 import zipfile
 import zlib
+import json
 
 import worlds
 from BaseClasses import CollectionState, Item, Location, LocationProgressType, MultiWorld
@@ -71,6 +72,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger.info('')
 
+    if args.item_category:
+        multiworld.item_category = {}
+
     for player in multiworld.player_ids:
         for item_name, count in multiworld.worlds[player].options.start_inventory.value.items():
             for _ in range(count):
@@ -92,6 +96,44 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                         multiworld.early_items[player][item_name] = max(0, local_early - remaining_count)
                     del local_early
             del early
+        if args.item_category:
+            categorized = {
+                "progression": [],
+                "useful": [],
+                "filler": [],
+                "trap": [],
+                "progression_skip_balancing": []
+            }
+
+            world_instance = multiworld.worlds[player]
+            world_class = world_instance.__class__
+
+            for item_name in getattr(world_class, "item_names", []):
+                item = world_instance.create_item(item_name)
+                if item.advancement:
+                    categorized["progression"].append(item.name)
+                elif item.useful:
+                    categorized["useful"].append(item.name)
+                else:
+                    categorized["filler"].append(item.name)
+
+                if item.trap:
+                    categorized["trap"].append(item.name)
+                if getattr(item, "skip_in_prog_balancing", False):
+                    categorized["progression_skip_balancing"].append(item.name)
+
+            game_name = multiworld.game[player]
+
+            if game_name not in multiworld.item_category:
+                multiworld.item_category[game_name] = {}
+
+            for category, items in categorized.items():
+                multiworld.item_category[game_name].setdefault(category.upper(), []).extend(items)
+                
+    if args.item_category:
+        for game, categories in multiworld.item_category.items():
+            for category, items in categories.items():
+                categories[category] = sorted(set(items))
 
     logger.info('Creating MultiWorld.')
     AutoWorld.call_all(multiworld, "create_regions")
@@ -363,6 +405,11 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
         if args.spoiler:
             multiworld.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
+
+        if args.item_category:
+            item_category_file_path = os.path.join(temp_dir, '%s_Item_Category.json' % outfilebase)
+            with open(item_category_file_path, 'w', encoding='utf-8') as f:
+                json.dump(multiworld.item_category, f, indent=4, ensure_ascii=False)
 
         zipfilename = output_path(f"AP_{multiworld.seed_name}.zip")
         logger.info(f"Creating final archive at {zipfilename}")

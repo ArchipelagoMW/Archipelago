@@ -57,6 +57,7 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--item_category", help="Generate a JSON file with categorized items for games used in the current seed", action="store_true")
     args = parser.parse_args()
 
     if args.skip_output and args.spoiler_only:
@@ -179,6 +180,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     erargs.spoiler_only = args.spoiler_only
     erargs.name = {}
     erargs.csv_output = args.csv_output
+    erargs.item_category = args.item_category
 
     settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
