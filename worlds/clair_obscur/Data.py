@@ -23,12 +23,14 @@ class ClairObscurRegionData:
     parent_map: str
     exits: List[str]
     locations: List[str]
+    condition: {}
 
-    def __init__(self, name: str, parent_map: str):
+    def __init__(self, name: str, parent_map: str, cond: {}):
         self.name = name
         self.parent_map = parent_map
         self.exits = []
         self.locations = []
+        self.condition = cond if cond is not None else {}
 
 
 class ClairObscurData:
@@ -82,7 +84,7 @@ def populate_data_items() -> dict[int, ClairObscurItemData]:
         elif item["progressive"] == 2:
             classification = ItemClassification.useful
         else:
-            raise ValueError(f"Unknow classification {item["progressive"]} for {item_name}")
+            raise ValueError(f"Unknown classification '{item["progressive"]}' for {item_name}")
 
         items[item_id] = ClairObscurItemData(
             item_name,
@@ -103,7 +105,8 @@ def populate_data_regions() -> Dict[str, ClairObscurRegionData]:
         region_name = region["region_name"]
         current_region_data = ClairObscurRegionData(
             region_name,
-            region["parent_map"]
+            region["parent_map"],
+            region["condition"]
         )
 
         for location_name in region["locations"]:
