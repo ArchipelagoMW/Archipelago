@@ -3,7 +3,6 @@ from typing import NamedTuple, Dict, Set, Optional
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
 from .Helper_Functions import LMRamData
-from ..smw.Locations import dragon_coin_location_table
 
 
 class LMItemData(NamedTuple):
