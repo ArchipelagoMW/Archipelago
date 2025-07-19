@@ -18,7 +18,8 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
     2. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
     3. Install the mod from `KH2FM-Mods-equations19/auto-save` using OpenKH Mod Manager
     4. Install the mod from `KH2FM-Mods-equations19/KH2-Lua-Library` using OpenKH Mod Manager
-    5. AP Randomizer Seed
+    5. Install the mod from `TopazTK/EnablersAP` using OpenKH Mod Manager
+    6. AP Randomizer Seed
 - Optional Quality of Life Mods for Archipelago
     1. Optionally Install the Archipelago Quality Of Life mod from `JaredWeakStrike/AP_QOL` using OpenKH Mod Manager
     2. Optionally Install the Quality Of Life mod from `shananas/BearSkip` using OpenKH Mod Manager
@@ -52,7 +53,7 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 
 <h2 style="text-transform:none";>What the Mod Manager Should Look Like.</h2>
 
-![image](https://i.imgur.com/N0WJ8Qn.png)
+![image](https://i.imgur.com/su6fOvH.png)
 
 
 <h2 style="text-transform:none";>Using the KH2 Client</h2>
