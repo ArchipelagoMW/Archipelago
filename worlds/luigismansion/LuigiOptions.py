@@ -595,8 +595,8 @@ class LMOptions(DeathLinkMixin, PerGameCommonOptions):
     speedy_spirits: SpeedySpirits
     boo_gates: BooGates
     mario_items: MarioItems
-    washroom_boo_count: WashroomBooCount
-    #balcony_boo_count: BalconyBooCount
+    #washroom_boo_count: WashroomBooCount
+    balcony_boo_count: BalconyBooCount
     final_boo_count: FinalBooCount
     king_boo_health: KingBooHealth
     boo_health_option: BooHealthOption

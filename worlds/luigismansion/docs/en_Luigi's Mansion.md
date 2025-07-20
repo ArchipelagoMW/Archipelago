@@ -44,7 +44,7 @@ Items received in Luigi's Mansion will display a text overlay that does not inte
 - Add Toads into the pool as locations
 - Add almost every interactable object within the game into the pool as locations
 - Require the player to have obtained enough money to get a specific rank upon completion.
-- Customize the Boo count requirement for the 1F Washroom, Balcony, and Secret Altar
+- Customize the Boo count requirement for the Balcony and Secret Altar
 - Customize the number of Mario's items needed to trigger the Fortune-teller
 - Start with the stronger Poltergust or include it in the item pool
 - Start with the Boo Radar or include it in the pool
@@ -66,6 +66,7 @@ Boo Anger (if you want boos to stay passive or get aggressive and attack Luigi),
 
 - Save anywhere by pressing Down on the Dpad + B (as long as blackout is not on and if you are NOT in a boss fight)
 - Various streamlining tweaks (removed cutscenes, dialogue, transitions, and animations)
+- The 1F Washroom boo gate has been removed in favor of simply locking the door.
 - Many events have had text changed to better represent the state or events of the randomizer
 - Breaker Room starts locked unless Door Rando is on
 - In-game hints for the locations of items appear on Toads, Telephones and Madame Clairvoya
