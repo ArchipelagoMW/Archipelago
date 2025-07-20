@@ -241,7 +241,7 @@ def get_mission_count_table(multiworld: MultiWorld, world: World, player: int):
         sonic_active_missions        = min(sonic_active_missions, world.options.sonic_mission_count.value)
         tails_active_missions        = min(tails_active_missions, world.options.tails_mission_count.value)
         knuckles_active_missions     = min(knuckles_active_missions, world.options.knuckles_mission_count.value)
-        shadow_active_missions       = min(shadow_active_missions, world.options.sonic_mission_count.value)
+        shadow_active_missions       = min(shadow_active_missions, world.options.shadow_mission_count.value)
         eggman_active_missions       = min(eggman_active_missions, world.options.eggman_mission_count.value)
         rouge_active_missions        = min(rouge_active_missions, world.options.rouge_mission_count.value)
         kart_active_missions         = min(kart_active_missions, world.options.kart_mission_count.value)
