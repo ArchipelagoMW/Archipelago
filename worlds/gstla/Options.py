@@ -616,7 +616,12 @@ class AutoRun(Toggle):
 
 class Goal(OptionSet):
     """What conditions must be satisfied for this world to goal.  You can select however many you want, and only
-    when all the selected conditions are satisfied is the world considered goaled."""
+    when all the selected conditions are satisfied is the world considered goaled.
+
+    IMPORTANT:
+    If Doom Dragon is a selected goal, make sure you have a save prior to the fight available if you don't
+    end the world on this fight.  We take no responsibility for borked experiences due to save mismanagement.
+    """
     valid_keys = {
         "Chestbeaters",
         "King Scorpion",
