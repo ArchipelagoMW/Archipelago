@@ -580,7 +580,7 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
+        if any([netItem.item for netItem in self.items_received if netItem.item == 8064]): # TODO update for variable amounts of this item
             vac_speed = "3800000F"
             vac_item = next(netItem.item for netItem in self.items_received if netItem.item == 8064)
             lm_item_name = self.item_names.lookup_in_game(vac_item)

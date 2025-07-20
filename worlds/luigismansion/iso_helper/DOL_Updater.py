@@ -33,7 +33,7 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    if any("Poltergust 4000" in key for key in start_inv):
+    if any("Progressive Vacuum" in key for key in start_inv): #TODO Correct for variable amounts of "Progressive Vacuum"
         vac_speed = "3800000F"
     else:
         vac_speed = "800D0160"
