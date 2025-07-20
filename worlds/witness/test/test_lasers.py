@@ -7,7 +7,7 @@ class TestSymbolsRequiredToWinElevatorNormal(WitnessTestBase):
         "puzzle_randomization": "sigma_normal",
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
+        "early_good_items": {},
     }
 
     def test_symbols_to_win(self) -> None:
@@ -37,7 +37,7 @@ class TestSymbolsRequiredToWinElevatorExpert(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
+        "early_good_items": {},
         "puzzle_randomization": "sigma_expert",
     }
 
@@ -70,7 +70,7 @@ class TestSymbolsRequiredToWinElevatorVanilla(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
+        "early_good_items": {},
         "puzzle_randomization": "none",
     }
 
@@ -101,7 +101,6 @@ class TestSymbolsRequiredToWinElevatorVariety(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
         "puzzle_randomization": "umbra_variety",
     }
 
@@ -134,7 +133,7 @@ class TestPanelsRequiredToWinElevator(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
+        "early_good_items": {},
         "shuffle_symbols": False,
         "shuffle_doors": "panels",
         "door_groupings": "off",
@@ -163,7 +162,7 @@ class TestDoorsRequiredToWinElevator(WitnessTestBase):
         "shuffle_lasers": True,
         "mountain_lasers": 1,
         "victory_condition": "elevator",
-        "early_symbol_item": False,
+        "early_good_items": {},
         "shuffle_symbols": False,
         "shuffle_doors": "doors",
         "door_groupings": "off",
