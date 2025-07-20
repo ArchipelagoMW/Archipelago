@@ -89,7 +89,7 @@ class _RestrictiveFillBatcher:
     _MIN_TOTAL_ITEMS_PER_BATCH: typing.ClassVar[int] = 40
     """
     Try to pick no fewer than this many items total for each batch. If a player does not have enough items remaining to
-    fully filly out a batch, then the total number of items in a batch can end up lower than this value.
+    fully fill out a batch, then the total number of items in a batch can end up lower than this value.
     With a low number of players, try to keep the total number of items in the batch from being too small, to prevent
     fills with few players from creating lots of very small batches.
     """
