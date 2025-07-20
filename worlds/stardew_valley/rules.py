@@ -144,7 +144,7 @@ def set_tool_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, co
     if not content.features.tool_progression.is_progressive:
         return
 
-    rule_collector.set_location_rule("Purchase Fiberglass Rod", (logic.skill.has_level(Skill.fishing, 2) & logic.money.can_spend(1800)))
+    rule_collector.set_location_rule("Purchase Fiberglass Rod", logic.skill.has_level(Skill.fishing, 2) & logic.money.can_spend(1800))
     rule_collector.set_location_rule("Purchase Iridium Rod", logic.skill.has_level(Skill.fishing, 6) & logic.money.can_spend(7500))
 
     rule_collector.set_location_rule("Copper Pan Cutscene", logic.received("Glittering Boulder Removed"))
@@ -264,8 +264,7 @@ def set_dangerous_mine_rules(logic, rule_collector: StardewRuleCollector, world_
     rule_collector.set_entrance_rule(Entrance.dig_to_dangerous_mines_20, dangerous_mine_rule)
     rule_collector.set_entrance_rule(Entrance.dig_to_dangerous_mines_60, dangerous_mine_rule)
     rule_collector.set_entrance_rule(Entrance.dig_to_dangerous_mines_100, dangerous_mine_rule)
-    rule_collector.set_entrance_rule(Entrance.enter_dangerous_skull_cavern,
-                                     (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
+    rule_collector.set_entrance_rule(Entrance.enter_dangerous_skull_cavern, logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room))
 
 
 def set_farm_buildings_entrance_rules(logic, rule_collector: StardewRuleCollector):
@@ -429,8 +428,7 @@ def set_island_parrot_rules(logic: StardewLogic, rule_collector: StardewRuleColl
     rule_collector.set_location_rule(Transportation.farm_obelisk, has_20_walnut & logic.received("Island Mailbox"))
     rule_collector.set_location_rule("Dig Site Bridge", has_10_walnut & logic.received("Island West Turtle"))
     rule_collector.set_location_rule("Island Trader", has_10_walnut & logic.received("Island Farmhouse"))
-    rule_collector.set_location_rule("Volcano Bridge",
-                                     has_5_walnut & logic.received("Island West Turtle") & logic.region.can_reach(Region.volcano_floor_10))
+    rule_collector.set_location_rule("Volcano Bridge", has_5_walnut & logic.received("Island West Turtle") & logic.region.can_reach(Region.volcano_floor_10))
     rule_collector.set_location_rule("Volcano Exit Shortcut", has_5_walnut & logic.received("Island West Turtle"))
     rule_collector.set_location_rule("Island Resort", has_20_walnut & logic.received("Island Farmhouse"))
     rule_collector.set_location_rule(Transportation.parrot_express, has_10_walnut)
