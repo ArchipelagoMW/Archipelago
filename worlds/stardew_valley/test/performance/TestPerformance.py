@@ -97,7 +97,7 @@ class SVPerformanceTestCase(SVTestCase):
         acceptable_average_time = self.acceptable_time_per_player * amount_of_players
         total_time = 0
         all_times = []
-        seeds = [get_seed() for _ in range(self.number_generations)] if not self.fixed_seed else [85635032403287291967] * self.number_generations
+        seeds = [get_seed() for _ in range(self.number_generations)] if not self.fixed_seed else [74898321050311118687] * self.number_generations
 
         for i, seed in enumerate(seeds):
             with self.subTest(f"Seed: {seed}"):
