@@ -1,6 +1,8 @@
 import logging
 import math
 import typing
+from collections import Counter
+from functools import wraps
 from random import Random
 from typing import Dict, List, Any, ClassVar, TextIO, Optional
 
@@ -12,6 +14,7 @@ from worlds.LauncherComponents import components, Component, icon_paths, Type
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
+from .content.feature.walnutsanity import get_walnut_amount
 from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
     setup_early_items
 from .locations import location_table, create_locations, LocationData, locations_by_tag
@@ -46,6 +49,12 @@ class StardewLocation(Location):
 
 class StardewItem(Item):
     game: str = STARDEW_VALLEY
+    events_to_collect: Counter[str]
+
+    @wraps(Item.__init__)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.events_to_collect = Counter()
 
 
 class StardewWebWorld(WebWorld):
@@ -131,7 +140,7 @@ class StardewValleyWorld(World):
     trash_bear_requests: Dict[str, List[str]]
 
     total_progression_items: int
-    classifications_to_override_post_fill: list[tuple[Item, ItemClassification]]
+    classifications_to_override_post_fill: list[tuple[StardewItem, ItemClassification]]
 
     @classmethod
     def create_group(cls, multiworld: MultiWorld, new_player_id: int, players: set[int]) -> World:
@@ -382,6 +391,13 @@ class StardewValleyWorld(World):
 
         stardew_item = StardewItem(item.name, classification_pre_fill, item.code, self.player)
 
+        if stardew_item.advancement:
+            # Progress is only counted for pre-fill progression items, so we don't count filler items later converted to progression post-fill.
+            stardew_item.events_to_collect[Event.received_progression_item] = 1
+
+        if (walnut_amount := get_walnut_amount(stardew_item.name)) > 0:
+            stardew_item.events_to_collect[Event.received_walnuts] = walnut_amount
+
         if classification_post_fill is not None:
             self.classifications_to_override_post_fill.append((stardew_item, classification_post_fill))
 
@@ -389,7 +405,8 @@ class StardewValleyWorld(World):
 
     def create_event_location(self, location_data: LocationData, rule: StardewRule, item: str):
         region = self.multiworld.get_region(location_data.region, self.player)
-        region.add_event(location_data.name, item, rule, StardewLocation, StardewItem)
+        item = typing.cast(StardewItem, region.add_event(location_data.name, item, rule, StardewLocation, StardewItem))
+        item.events_to_collect[Event.received_progression_item] = 1
 
     def set_rules(self):
         set_rules(self)
@@ -476,18 +493,13 @@ class StardewValleyWorld(World):
             return False
 
         player_state = state.prog_items[self.player]
+        player_state.update(item.events_to_collect)
 
-        received_progression_count = player_state[Event.received_progression_item]
-        received_progression_count += 1
         if self.total_progression_items:
+            received_progression_count = player_state[Event.received_progression_item]
             # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
-        player_state[Event.received_progression_item] = received_progression_count
-
-        walnut_amount = self.get_walnut_amount(item.name)
-        if walnut_amount:
-            player_state[Event.received_walnuts] += walnut_amount
 
         return True
 
@@ -497,26 +509,11 @@ class StardewValleyWorld(World):
             return False
 
         player_state = state.prog_items[self.player]
+        player_state.subtract(item.events_to_collect)
 
-        received_progression_count = player_state[Event.received_progression_item]
-        received_progression_count -= 1
         if self.total_progression_items:
+            received_progression_count = player_state[Event.received_progression_item]
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
-        player_state[Event.received_progression_item] = received_progression_count
-
-        walnut_amount = self.get_walnut_amount(item.name)
-        if walnut_amount:
-            player_state[Event.received_walnuts] -= walnut_amount
 
         return True
-
-    @staticmethod
-    def get_walnut_amount(item_name: str) -> int:
-        if item_name == "Golden Walnut":
-            return 1
-        if item_name == "3 Golden Walnuts":
-            return 3
-        if item_name == "5 Golden Walnuts":
-            return 5
-        return 0

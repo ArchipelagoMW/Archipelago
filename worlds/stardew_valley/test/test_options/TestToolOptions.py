@@ -1,4 +1,5 @@
 import itertools
+from collections import Counter
 
 from BaseClasses import ItemClassification
 from ...options import ToolProgression
@@ -40,3 +41,4 @@ class TestToolProgression(SVTestBase):
                                                    (None, None))
 
         self.assertEqual(post_fill_classification, ItemClassification.progression_skip_balancing)
+        self.assertEqual(Counter(), trash_can.events_to_collect)
