@@ -4,6 +4,7 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.vanilla.qi_board import qi_board_content_pack
 from ..data.shop import ShopSource, HatMouseSource
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_, true_
+from ..strings.ap_names.event_names import Event
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.building_names import Building
 from ..strings.crop_names import Vegetable
@@ -90,7 +91,8 @@ class MoneyLogic(BaseLogic):
     # Should be cached
     def can_trade(self, currency: str, amount: int) -> StardewRule:
         if amount == 0:
-            return True_()
+            return self.logic.true_
+
         if currency == Currency.money or currency == MemeCurrency.bank_money:
             return self.can_spend(amount)
         if currency == Currency.star_token:
@@ -99,23 +101,23 @@ class MoneyLogic(BaseLogic):
             return self.logic.region.can_reach(Region.casino) & self.logic.time.has_lived_months(amount // 1000)
         if currency == Currency.qi_gem:
             if self.content.is_enabled(qi_board_content_pack):
-                number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))
-                return self.logic.received_n(*qi_gem_rewards, count=number_rewards)
-            number_rewards = 2
-            return self.logic.region.can_reach(Region.qi_walnut_room) & \
-                self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
+                return self.logic.received(Event.received_qi_gems, amount * 3)
+            return self.logic.region.can_reach_all(Region.qi_walnut_room, Region.saloon) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
+
         if currency == MemeCurrency.code or currency == MemeCurrency.energy or currency == MemeCurrency.blood:
             return self.logic.true_
         if currency == MemeCurrency.clic and amount < 100:
             return self.logic.true_
-        if currency == MemeCurrency.steps and amount < 6000:
-            return self.logic.true_
         if currency == MemeCurrency.clic or currency == MemeCurrency.time:
             return self.logic.time.has_lived_months(1)
+
+        if currency == MemeCurrency.steps and amount < 6000:
+            return self.logic.true_
         if currency == MemeCurrency.steps:
             return self.logic.time.has_lived_months(amount // 5000)
+
         if currency == MemeCurrency.cookies:
             return self.logic.time.has_lived_months(amount // 10000)
         if currency == MemeCurrency.child:
@@ -129,12 +131,14 @@ class MoneyLogic(BaseLogic):
             return self.logic.fishing.can_catch_many_fish(amount)
         if currency == MemeCurrency.honeywell:
             return self.logic.has(ArtisanGood.honey) & self.logic.building.has_building(Building.well)
+
         if currency == MemeCurrency.sleep_days:
             if not self.options.multiple_day_sleep_enabled.value:
                 return self.logic.false_
             if amount > 200:
                 return self.logic.region.can_reach(Region.farm_house) & self.logic.season.has(Season.winter)
             return self.logic.region.can_reach(Region.farm_house)
+
         if currency == MemeCurrency.time_elapsed:
             if amount <= 1000:
                 return self.logic.true_
@@ -143,6 +147,7 @@ class MoneyLogic(BaseLogic):
             if amount <= 1800:
                 return self.logic.building.has_building(Building.stable)
             return self.logic.has(Beverage.coffee) & self.logic.building.has_building(Building.stable)
+
         if currency == MemeCurrency.deathlinks:
             if self.options.death_link == DeathLink.option_true:
                 return self.logic.time.has_lived_months(amount)

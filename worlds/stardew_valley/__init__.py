@@ -14,6 +14,7 @@ from worlds.LauncherComponents import components, Component, icon_paths, Type
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles, get_trash_bear_requests
 from .content import StardewContent, create_content
+from .content.feature.special_order_locations import get_qi_gem_amount
 from .content.feature.walnutsanity import get_walnut_amount
 from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
     setup_early_items
@@ -397,6 +398,9 @@ class StardewValleyWorld(World):
 
         if (walnut_amount := get_walnut_amount(stardew_item.name)) > 0:
             stardew_item.events_to_collect[Event.received_walnuts] = walnut_amount
+
+        if (qi_gem_amount := get_qi_gem_amount(stardew_item.name)) > 0:
+            stardew_item.events_to_collect[Event.received_qi_gems] = qi_gem_amount
 
         if classification_post_fill is not None:
             self.classifications_to_override_post_fill.append((stardew_item, classification_post_fill))
