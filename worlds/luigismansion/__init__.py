@@ -153,7 +153,7 @@ class LMWorld(World):
     }
     settings: LuigisMansionSettings
     item_name_groups = get_item_names_per_category()
-    required_client_version = (0, 6, 0)
+    required_client_version = (0, 6, 2)
     web = LMWeb()
 
     using_ut: bool # so we can check if we're using UT only once

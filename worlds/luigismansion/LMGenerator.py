@@ -184,7 +184,7 @@ class LuigisMansionRandomizer:
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
-        washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
+        #washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
@@ -208,13 +208,11 @@ class LuigisMansionRandomizer:
 
         if bool_boo_checks:
             logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
-            boo_list_events = ["16", "47", "96"]
+            boo_list_events = ["16", "96"]
             str_move_type = None
             for event_no in boo_list_events:
                 if event_no == "16":
                     required_boo_count = final_boo_count
-                elif event_no == "47":
-                    required_boo_count = washroom_boo_count
                 else:
                     required_boo_count = balcony_boo_count
                     str_move_type = "MOVEOUTSIDE" if str(self.output_data["Options"]["spawn"]) in \
