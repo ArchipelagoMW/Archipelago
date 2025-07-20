@@ -19,6 +19,7 @@ from .content.feature.walnutsanity import get_walnut_amount
 from .items import item_table, ItemData, Group, items_by_group, create_items, generate_filler_choice_pool, \
     setup_early_items
 from .locations import location_table, create_locations, LocationData, locations_by_tag
+from .logic.combat_logic import valid_weapons
 from .logic.logic import StardewLogic
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, EnabledFillerBuffs, \
     NumberOfMovementBuffs, BuildingProgression, EntranceRandomization, FarmType, ToolProgression, BackpackProgression, TrapDistribution, BundlePrice, \
@@ -32,6 +33,7 @@ from .options.worlds_group import apply_most_restrictive_options
 from .regions import create_regions, prepare_mod_data
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
+from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
 
@@ -505,6 +507,9 @@ class StardewValleyWorld(World):
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
 
+        if item.name in APWeapon.all_weapons:
+            player_state[Event.received_progressive_weapon] = max(player_state[Event.received_progressive_weapon], player_state[item.name])
+
         return True
 
     def remove(self, state: CollectionState, item: StardewItem) -> bool:
@@ -517,7 +522,11 @@ class StardewValleyWorld(World):
 
         if self.total_progression_items:
             received_progression_count = player_state[Event.received_progression_item]
+            # Total progression items is not set until all items are created, but collect will be called during the item creation when an item is precollected.
             # We can't update the percentage if we don't know the total progression items, can't divide by 0.
             player_state[Event.received_progression_percent] = received_progression_count * 100 // self.total_progression_items
+
+        if item.name in APWeapon.all_weapons:
+            player_state[Event.received_progressive_weapon] = max(player_state[weapon] for weapon in APWeapon.all_weapons)
 
         return True
