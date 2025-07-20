@@ -2,8 +2,8 @@ from typing import ClassVar
 
 from BaseClasses import MultiWorld, get_seed
 from test.param import classvar_matrix
-from . import SVTestCase, skip_long_tests, solo_multiworld
 from .assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
+from .bases import skip_long_tests, SVTestCase, solo_multiworld
 from .options.option_names import generate_random_world_options
 
 

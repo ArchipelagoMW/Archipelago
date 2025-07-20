@@ -147,7 +147,7 @@ class ZillionContext(CommonContext):
 
         class ZillionManager(GameManager):
             logging_pairs = [
-                ("Client", "Archipelago")
+                ("Client", "Archipelago"),
             ]
             base_title = "Archipelago Zillion Client"
 
@@ -282,7 +282,7 @@ class ZillionContext(CommonContext):
 
             payload = {
                 "cmd": "Get",
-                "keys": [f"zillion-{self.auth}-doors"]
+                "keys": [f"zillion-{self.auth}-doors"],
             }
             async_start(self.send_msgs([payload]))
         elif cmd == "Retrieved":
@@ -326,7 +326,7 @@ class ZillionContext(CommonContext):
                     n_locations = len(self.missing_locations) + len(self.checked_locations) - 1  # -1 to ignore win
                     logger.info(f"New Check: {loc_name} ({self.ap_local_count}/{n_locations})")
                     async_start(self.send_msgs([
-                        {"cmd": "LocationChecks", "locations": [server_id]}
+                        {"cmd": "LocationChecks", "locations": [server_id]},
                     ]))
                 else:
                     # This will happen a lot in Zillion,
@@ -338,7 +338,7 @@ class ZillionContext(CommonContext):
                 if not self.finished_game:
                     async_start(self.send_msgs([
                         {"cmd": "LocationChecks", "locations": [loc_name_to_id["J-6 bottom far left"]]},
-                        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
+                        {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL},
                     ]))
                     self.finished_game = True
             elif isinstance(event_from_game, events.DoorEventFromGame):
@@ -347,7 +347,7 @@ class ZillionContext(CommonContext):
                     payload = {
                         "cmd": "Set",
                         "key": f"zillion-{self.auth}-doors",
-                        "operations": [{"operation": "replace", "value": doors_b64}]
+                        "operations": [{"operation": "replace", "value": doors_b64}],
                     }
                     async_start(self.send_msgs([payload]))
             elif isinstance(event_from_game, events.MapEventFromGame):
@@ -367,7 +367,7 @@ class ZillionContext(CommonContext):
                 # TODO: colors in this text, like sni client?
                 logger.info(f"received {self.ap_id_to_name[ap_id]} from {from_name}")
             self.to_game.put_nowait(
-                events.ItemEventToGame(zz_item_ids)
+                events.ItemEventToGame(zz_item_ids),
             )
             self.next_item = len(self.items_received)
 
@@ -398,7 +398,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
         logger.info("Start Zillion in RetroArch, then use the /sms command to connect to it.")
     await asyncio.wait((
         asyncio.create_task(ctx.look_for_retroarch.wait()),
-        asyncio.create_task(ctx.exit_event.wait())
+        asyncio.create_task(ctx.exit_event.wait()),
     ), return_when=asyncio.FIRST_COMPLETED)
 
     last_log = ""
@@ -443,7 +443,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                                         await asyncio.wait((
                                             asyncio.create_task(ctx.got_slot_data.wait()),
                                             asyncio.create_task(ctx.exit_event.wait()),
-                                            asyncio.create_task(asyncio.sleep(6))
+                                            asyncio.create_task(asyncio.sleep(6)),
                                         ), return_when=asyncio.FIRST_COMPLETED)  # to not spam connect packets
                             else:  # not correct seed name
                                 log_no_spam("incorrect seed - did you mix up roms?")
@@ -467,7 +467,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                     await asyncio.wait((
                         asyncio.create_task(ctx.got_room_info.wait()),
                         asyncio.create_task(ctx.exit_event.wait()),
-                        asyncio.create_task(asyncio.sleep(6))
+                        asyncio.create_task(asyncio.sleep(6)),
                     ), return_when=asyncio.FIRST_COMPLETED)
             else:  # no name found in game
                 if not help_message_shown:

@@ -1,17 +1,7 @@
 from functools import cached_property
-from typing import Union
 
 from Utils import cache_self1
-from .action_logic import ActionLogicMixin
 from .base_logic import BaseLogicMixin, BaseLogic
-from .building_logic import BuildingLogicMixin
-from .has_logic import HasLogicMixin
-from .money_logic import MoneyLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .relationship_logic import RelationshipLogicMixin
-from .season_logic import SeasonLogicMixin
-from .skill_logic import SkillLogicMixin
 from ..data.recipe_data import RecipeSource, StarterSource, ShopSource, SkillSource, FriendshipSource, \
     QueenOfSauceSource, CookingRecipe, ShopFriendshipSource
 from ..data.recipe_source import CutsceneSource, ShopTradeSource
@@ -29,8 +19,7 @@ class CookingLogicMixin(BaseLogicMixin):
         self.cooking = CookingLogic(*args, **kwargs)
 
 
-class CookingLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin,
-BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]):
+class CookingLogic(BaseLogic):
     @cached_property
     def can_cook_in_kitchen(self) -> StardewRule:
         return self.logic.building.has_building(Building.kitchen) | self.logic.skill.has_level(Skill.foraging, 9)

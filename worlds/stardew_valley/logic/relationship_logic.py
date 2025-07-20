@@ -1,16 +1,8 @@
 import math
-import typing
 from typing import Union
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
-from .building_logic import BuildingLogicMixin
-from .gift_logic import GiftLogicMixin
-from .has_logic import HasLogicMixin
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .season_logic import SeasonLogicMixin
-from .time_logic import TimeLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
 from ..stardew_rule import StardewRule, True_, false_, true_
@@ -21,11 +13,6 @@ from ..strings.gift_names import Gift
 from ..strings.region_names import Region
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
-
-if typing.TYPE_CHECKING:
-    from ..mods.logic.mod_logic import ModLogicMixin
-else:
-    ModLogicMixin = object
 
 possible_kids = ("Cute Baby", "Ugly Baby")
 
@@ -43,8 +30,7 @@ class RelationshipLogicMixin(BaseLogicMixin):
         self.relationship = RelationshipLogic(*args, **kwargs)
 
 
-class RelationshipLogic(BaseLogic[Union[RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin,
-ReceivedLogicMixin, HasLogicMixin, ModLogicMixin]]):
+class RelationshipLogic(BaseLogic):
 
     def can_date(self, npc: str) -> StardewRule:
         return self.logic.relationship.has_hearts(npc, 8) & self.logic.has(Gift.bouquet)

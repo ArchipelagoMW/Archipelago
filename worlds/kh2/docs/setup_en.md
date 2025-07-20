@@ -10,7 +10,7 @@
 Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)
-    1. Version 25.01.26.0 or greater OpenKH Mod Manager with Panacea
+    1. Version 25.03.16.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
     3. Install the mod `KH2FM-Mods-Num/GoA-ROM-Edition` using OpenKH Mod Manager
 - Needed for Archipelago 
@@ -27,7 +27,7 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
 
 Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion`<br> 
 Have this mod second-highest priority below the .zip seed.<br>
-This mod is based upon Num's Garden of Assemblege Mod and requires it to work. Without Num this could not be possible. 
+This mod is based upon Num's Garden of Assemblage Mod and requires it to work. Without Num this could not be possible. 
 
 <h3 style="text-transform:none";>Required: Auto Save Mod and KH2 Lua Library</h3>
 
@@ -35,7 +35,7 @@ Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup.
 
 <h3 style="text-transform:none";>Optional QoL Mods: AP QoL and Bear Skip</h3>
 
-`JaredWeakStrike/AP_QOL` Makes the urns minigames much faster, makes Cavern of Remembrance orbs drop significantly more drive orbs for refilling drive/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
+`JaredWeakStrike/AP_QOL` Makes the urns minigames much faster, makes Cavern of Remembrance orbs drop significantly more drive orbs for refilling drive/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto-scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
 
 `shananas/BearSkip` Skips all minigames in 100 Acre Woods except the Spooky Cave minigame since there are chests in Spooky Cave you can only get during the minigame. For Spooky Cave, Pooh is moved to the other side of the invisible wall that prevents you from using his RC to finish the minigame.
 
@@ -82,6 +82,9 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
 
 - Loading into Simulated Twilight Town Instead of the GOA.
     - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
+
+-  Using a seed from the standalone KH2 Randomizer Seed Generator.
+    - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](https://archipelago.gg/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
 
 <h2 style="text-transform:none"; >Best Practices</h2>
 
@@ -139,4 +142,4 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library`?
     - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress. Both mods are needed for auto save to work.
 - How do I load an auto save?
-    - To load an auto-save, hold down the Select or your equivalent on your prefered controller while choosing a file. Make sure to hold the button down the whole time.
+    - To load an auto-save, hold down the Select or your equivalent on your preferred controller while choosing a file. Make sure to hold the button down the whole time.

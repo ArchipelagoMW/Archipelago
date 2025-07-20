@@ -10,8 +10,8 @@ import sys
 import urllib.parse
 import urllib.request
 from collections import Counter
-from typing import Any, Dict, Tuple, Union
 from itertools import chain
+from typing import Any
 
 import ModuleUpdate
 
@@ -77,7 +77,7 @@ def get_seed_name(random_source) -> str:
     return f"{random_source.randint(0, pow(10, seeddigits) - 1)}".zfill(seeddigits)
 
 
-def main(args=None) -> Tuple[argparse.Namespace, int]:
+def main(args=None) -> tuple[argparse.Namespace, int]:
     # __name__ == "__main__" check so unittests that already imported worlds don't trip this.
     if __name__ == "__main__" and "worlds" in sys.modules:
         raise Exception("Worlds system should not be loaded before logging init.")
@@ -95,7 +95,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         logging.info("Race mode enabled. Using non-deterministic random source.")
         random.seed()  # reset to time-based random source
 
-    weights_cache: Dict[str, Tuple[Any, ...]] = {}
+    weights_cache: dict[str, tuple[Any, ...]] = {}
     if args.weights_file_path and os.path.exists(args.weights_file_path):
         try:
             weights_cache[args.weights_file_path] = read_weights_yamls(args.weights_file_path)
@@ -180,7 +180,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     erargs.name = {}
     erargs.csv_output = args.csv_output
 
-    settings_cache: Dict[str, Tuple[argparse.Namespace, ...]] = \
+    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
         {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
          for fname, yamls in weights_cache.items()}
 
@@ -212,7 +212,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
         path = player_path_cache[player]
         if path:
             try:
-                settings: Tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
+                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
                     tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
                 for settingsObject in settings:
                     for k, v in vars(settingsObject).items():
@@ -224,10 +224,14 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
                             except Exception as e:
                                 raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    if path == args.weights_file_path:  # if name came from the weights file, just use base player name
-                        erargs.name[player] = f"Player{player}"
-                    elif player not in erargs.name:  # if name was not specified, generate it from filename
-                        erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+                    # name was not specified
+                    if player not in erargs.name:
+                        if path == args.weights_file_path:
+                            # weights file, so we need to make the name unique
+                            erargs.name[player] = f"Player{player}"
+                        else:
+                            # use the filename
+                            erargs.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
                     erargs.name[player] = handle_name(erargs.name[player], player, name_counter)
 
                     player += 1
@@ -242,7 +246,7 @@ def main(args=None) -> Tuple[argparse.Namespace, int]:
     return erargs, seed
 
 
-def read_weights_yamls(path) -> Tuple[Any, ...]:
+def read_weights_yamls(path) -> tuple[Any, ...]:
     try:
         if urllib.parse.urlparse(path).scheme in ('https', 'file'):
             yaml = str(urllib.request.urlopen(path).read(), "utf-8-sig")
@@ -252,7 +256,20 @@ def read_weights_yamls(path) -> Tuple[Any, ...]:
     except Exception as e:
         raise Exception(f"Failed to read weights ({path})") from e
 
-    return tuple(parse_yamls(yaml))
+    from yaml.error import MarkedYAMLError
+    try:
+        return tuple(parse_yamls(yaml))
+    except MarkedYAMLError as ex:
+        if ex.problem_mark:
+            lines = yaml.splitlines()
+            if ex.context_mark:
+                relevant_lines = "\n".join(lines[ex.context_mark.line:ex.problem_mark.line+1])
+            else:
+                relevant_lines = lines[ex.problem_mark.line]
+            error_line = " " * ex.problem_mark.column + "^"
+            raise Exception(f"{ex.context} {ex.problem} on line {ex.problem_mark.line}:"
+                            f"\n{relevant_lines}\n{error_line}")
+        raise ex
 
 
 def interpret_on_off(value) -> bool:
@@ -321,12 +338,6 @@ def handle_name(name: str, player: int, name_counter: Counter):
     return new_name
 
 
-def roll_percentage(percentage: Union[int, float]) -> bool:
-    """Roll a percentage chance.
-    percentage is expected to be in range [0, 100]"""
-    return random.random() < (float(percentage) / 100)
-
-
 def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
@@ -371,7 +382,7 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     return weights
 
 
-def roll_meta_option(option_key, game: str, category_dict: Dict) -> Any:
+def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
     from worlds import AutoWorldRegister
 
     if not game:
@@ -392,7 +403,7 @@ def roll_linked_options(weights: dict) -> dict:
         if "name" not in option_set:
             raise ValueError("One of your linked options does not have a name.")
         try:
-            if roll_percentage(option_set["percentage"]):
+            if Options.roll_percentage(option_set["percentage"]):
                 logging.debug(f"Linked option {option_set['name']} triggered.")
                 new_options = option_set["options"]
                 for category_name, category_options in new_options.items():
@@ -425,7 +436,7 @@ def roll_triggers(weights: dict, triggers: list, valid_keys: set) -> dict:
             trigger_result = get_choice("option_result", option_set)
             result = get_choice(key, currently_targeted_weights)
             currently_targeted_weights[key] = result
-            if result == trigger_result and roll_percentage(get_choice("percentage", option_set, 100)):
+            if result == trigger_result and Options.roll_percentage(get_choice("percentage", option_set, 100)):
                 for category_name, category_options in option_set["options"].items():
                     currently_targeted_weights = weights
                     if category_name:
@@ -456,6 +467,14 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
 
 
 def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.bosses):
+    """
+    Roll options from specified weights, usually originating from a .yaml options file.
+
+    Important note:
+    The same weights dict is shared between all slots using the same yaml (e.g. generic weights file for filler slots).
+    This means it should never be modified without making a deepcopy first.
+    """
+
     from worlds import AutoWorldRegister
 
     if "linked_options" in weights:
@@ -521,10 +540,6 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         handle_option(ret, game_weights, option_key, option, plando_options)
         valid_keys.add(option_key)
 
-    # TODO remove plando_items after moving it to the options system
-    valid_keys.add("plando_items")
-    if PlandoOptions.items in plando_options:
-        ret.plando_items = copy.deepcopy(game_weights.get("plando_items", []))
     if ret.game == "A Link to the Past":
         # TODO there are still more LTTP options not on the options system
         valid_keys |= {"sprite_pool", "sprite", "random_sprite_on_event"}
