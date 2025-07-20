@@ -87,7 +87,10 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
         self.multiworld.state = self.original_state
         self.multiworld.itempool = self.original_itempool
         for location in self.unfilled_locations:
-            location.item = None
+            item = location.item
+            if item:
+                location.item = None
+                item.location = None
 
         self.multiworld.lock.release()
 
