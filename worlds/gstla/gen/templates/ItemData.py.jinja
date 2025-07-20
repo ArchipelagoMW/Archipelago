@@ -43,7 +43,7 @@ class InternalEventItemData(InternalItemData):
 
 summon_list: List[InternalItemData] = [
     {% for summon in summons -%}
-    InternalItemData({{summon.id}}, name_by_item_id[{{summon.id}}], ItemClassification.useful, {{summon.addr}}, ItemType.Psyenergy{#, 132#}),
+    InternalItemData({{summon.id}}, name_by_item_id[{{summon.id}}], ItemClassification.useful, {{summon.addr}}, ItemType.Summon{#, 132#}),
     {% endfor %}
 ]
 

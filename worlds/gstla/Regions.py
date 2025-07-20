@@ -133,6 +133,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Kandorean_Temple_Mimic,
         LocationName.Kandorean_Temple_Lash_Pebble,
         LocationName.Kandorean_Temple_Mysterious_Card,
+        LocationName.Kandorean_Temple_Chestbeaters,
         LocationName.Fog
     ]),
     RegionName.ShrineOfTheSeaGod: RegionData(RegionName.ShrineOfTheSeaGod, [
@@ -198,7 +199,8 @@ regions: Dict[str, RegionData] = {
         LocationName.Yampi_Desert_Antidote,
         LocationName.Yampi_Desert_Guardian_Ring,
         LocationName.Yampi_Desert_Scoop_Gem,
-        LocationName.Blitz
+        LocationName.Yampi_Desert_King_Scorpion,
+        LocationName.Blitz,
     ],
     [
         EntranceName.YampiDesertFrontToYampiDesertBack
@@ -221,7 +223,8 @@ regions: Dict[str, RegionData] = {
         LocationName.Yampi_Desert_Cave_Orihalcon,
         LocationName.Yampi_Desert_Cave_Dark_Matter,
         LocationName.Yampi_Desert_Cave_Mythril_Silver,
-        LocationName.Crystal
+        LocationName.Crystal,
+        LocationName.Yampi_Desert_Cave_Valukar,
     ]),
     RegionName.Alhafra: RegionData(RegionName.Alhafra,
     [
@@ -428,7 +431,8 @@ regions: Dict[str, RegionData] = {
         LocationName.Islet_Cave_Turtle_Boots,
         LocationName.Islet_Cave_Rusty_Staff,
         LocationName.Meld,
-        LocationName.Serac
+        LocationName.Serac,
+        LocationName.Islet_Cave_Sentinel,
     ]),
     RegionName.ApojiiIslands:RegionData(RegionName.ApojiiIslands,
     [
@@ -518,6 +522,7 @@ regions: Dict[str, RegionData] = {
         LocationName.Gale,
         LocationName.Treasure_Isle_Iris_Robe,
         LocationName.Treasure_Isle_Fire_Brand,
+        LocationName.Treasure_Isle_Star_Magician,
     ]),
     RegionName.TundariaTower: RegionData(RegionName.TundariaTower,
     [
@@ -574,7 +579,8 @@ regions: Dict[str, RegionData] = {
         LocationName.Champa_Sleep_Bomb,
         LocationName.Champa_Smoke_Bomb,
         LocationName.Champa_Lucky_Medal,
-        LocationName.Champa_Viking_Helm
+        LocationName.Champa_Viking_Helm,
+        LocationName.Champa_Avimander,
     ]),
     RegionName.Yallam: RegionData(RegionName.Yallam,
     [
@@ -717,14 +723,17 @@ regions: Dict[str, RegionData] = {
         LocationName.Contigo_Isaac,
         LocationName.Contigo_Garet,
         LocationName.Contigo_Ivan,
-        LocationName.Contigo_Mia
+        LocationName.Contigo_Mia,
+        LocationName.Contigo_Reunion,
     ]),
     RegionName.AttekaCavern: RegionData(RegionName.AttekaCavern,
     [
         LocationName.Atteka_Cavern_Coatlicue
     ]),
     RegionName.AnemosSanctum: RegionData(RegionName.AnemosSanctum,
-    []),
+    [
+        LocationName.Anemos_Inner_Sanctum_Dullahan,
+    ]),
     RegionName.GondowanSettlement: RegionData(RegionName.GondowanSettlement,
     [
         LocationName.Gondowan_Settlement_Lucky_Medal,

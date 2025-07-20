@@ -9,6 +9,7 @@ from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
+from . import items_by_id, ItemType
 from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData
 from .gen.LocationData import all_locations, LocationType, djinn_locations, LocationData, location_name_to_data, \
@@ -60,6 +61,7 @@ class _DataLocations(IntEnum):
     TREASURE_E_FLAGS = (FLAG_START + (0xE00 >> 3), 0x20, 0xE00, _MemDomain.EWRAM)
     TREASURE_F_FLAGS = (FLAG_START + (0xF00 >> 3), 0x20, 0xF00, _MemDomain.EWRAM)
     ENEMY_FLAGS = (FLAG_START + (0x600 >> 3), 0x40, 0x600, _MemDomain.EWRAM)
+    STORY_FLAGS = (FLAG_START + (0x800 >> 3), 0x40, 0x800, _MemDomain.EWRAM)
     # DOOM_DRAGON = (FLAG_START + (0x778 >> 3), 0x1, 0x778, _MemDomain.EWRAM)
 
     def __new__(cls, addr: int, length: int, initial_flag: int, domain: _MemDomain):
@@ -79,8 +81,26 @@ class _DataLocations(IntEnum):
 class GoalManager:
 
     supported_flags: dict[str, int] = {
-        LocationName.Mars_Lighthouse_Doom_Dragon_Fight: event_name_to_data[LocationName.Mars_Lighthouse_Doom_Dragon_Fight].flag,
-        LocationName.Sea_of_Time_Poseidon_fight: event_name_to_data[LocationName.Sea_of_Time_Poseidon_fight].flag,
+        x: event_name_to_data[x].flag for x in [
+            LocationName.Kandorean_Temple_Chestbeaters,
+            LocationName.Yampi_Desert_King_Scorpion,
+            LocationName.Alhafra_Briggs,
+            LocationName.Lemurian_Ship_Aqua_Hydra_fight,
+            LocationName.Sea_of_Time_Poseidon_fight,
+            LocationName.Gaia_Rock_Serpent_Fight,
+            LocationName.Champa_Avimander,
+            LocationName.Shaman_Village_Moapa_fight,
+            LocationName.Contigo_Reunion,
+            LocationName.Mars_Lighthouse_Flame_Dragons_fight,
+            LocationName.Mars_Lighthouse_Doom_Dragon_Fight,
+            LocationName.Treasure_Isle_Star_Magician,
+            LocationName.Islet_Cave_Sentinel,
+            LocationName.Yampi_Desert_Cave_Valukar,
+            LocationName.Anemos_Inner_Sanctum_Dullahan,
+        ]
+        # LocationName.Kandorean_Temple_Chestbeaters: event_name_to_data[LocationName.Sea_of_Time_Poseidon_fight].flag,
+        # LocationName.Sea_of_Time_Poseidon_fight: event_name_to_data[LocationName.Sea_of_Time_Poseidon_fight].flag,
+        # LocationName.Mars_Lighthouse_Doom_Dragon_Fight: event_name_to_data[LocationName.Mars_Lighthouse_Doom_Dragon_Fight].flag,
     }
 
     def __init__(self):
@@ -88,25 +108,30 @@ class GoalManager:
         self.count_requirements: dict[str, int] = dict()
         self.desired_flags: dict[int, str] = dict()
         self.current: defaultdict[str, defaultdict[str, bool]] = defaultdict(lambda: defaultdict(lambda: False))
+        self.initialized = False
 
-    def init_reqs_from_slotdata(self, slot_data: dict[str, Any]) -> bool:
-        if slot_data is None:
-            return False
-
+    def init_reqs_from_slotdata(self, slot_data: dict[str, Any]) -> None:
         reqs: dict[str, Any] = slot_data['goal']
-        if reqs is None or 'flags' not in reqs:
-            self.flag_requirements.add("Doom Dragon")
-        else:
+        if reqs is None:
+            reqs = dict()
+
+        if 'flags' in reqs:
             self.flag_requirements: Set[str] = reqs['flags']
+        if 'counts' in reqs:
+            self.count_requirements: dict[str, int] = reqs['counts']
+
+        if len(self.flag_requirements) == 0 and len(self.count_requirements) == 0:
+            self.flag_requirements.add("Doom Dragon")
 
         for key in self.flag_requirements:
             enemy_flag = GoalManager.supported_flags[option_name_to_goal_name[key]]
             self.desired_flags[enemy_flag] = key
         logger.info(f"Desired flags: {self.desired_flags}")
+        logger.info(f"Desired counts: {self.count_requirements}")
 
 
     async def check_goals(self, client: 'GSTLAClient', ctx: 'BizHawkClientContext') -> None:
-        server_flags: Optional[dict[str, Any]] = ctx.stored_data.get(client._get_goal_flags_key(ctx), dict())
+        server_flags: Optional[dict[str, Any]] = ctx.stored_data.get(client.get_goal_flags_key(ctx), dict())
         if server_flags is None:
             server_flags = dict()
         updated_flags: dict[str, Any] = dict()
@@ -115,21 +140,45 @@ class GoalManager:
             if name is not None:
                 if is_set and not server_flags.get(name, False):
                     updated_flags[name] = is_set
-        if updated_flags:
+
+        server_djinn = ctx.stored_data.get(client.get_djinn_count_key(ctx), dict())
+        if server_djinn is None:
+            server_djinn = dict()
+        difference = False
+        if "djinn" in self.count_requirements:
+            difference = client.checked_djinn.difference(server_djinn.keys())
+
+        if updated_flags or difference:
             logger.info(f"Flags updated: {updated_flags}")
-            await client._update_goals(updated_flags, ctx)
-        #     return {'flags': updated_flags}
-        # else:
-        #     return dict()
+            logger.info(f"Difference: {difference}")
+            await client.update_goal_flags(updated_flags, ctx, include_djinn=len(difference)>0)
 
     def is_done(self, client: 'GSTLAClient', ctx: 'BizHawkClientContext'):
-        done = True
-        goal_flags: dict[str, Any] = ctx.stored_data.get(client._get_goal_flags_key(ctx), dict())
+        if not self.initialized:
+            return
+        goal_flags: dict[str, Any] = ctx.stored_data.get(client.get_goal_flags_key(ctx), dict())
+        if goal_flags is None:
+            goal_flags = dict()
         # logger.info(f"Goal flags: {goal_flags}")
         for name in self.flag_requirements:
             if not goal_flags.get(name, False):
-                done = False
-        return done
+                return False
+
+        if "djinn" in self.count_requirements:
+            required_count = self.count_requirements["djinn"]
+            server_count = ctx.stored_data.get(client.get_djinn_count_key(ctx), None)
+            if server_count is None:
+                server_count = dict()
+            if required_count > len(server_count):
+                return False
+
+        if "summon" in self.count_requirements:
+            required_count = self.count_requirements["summons"]
+            server_count = len(client.summons)
+            if required_count > server_count:
+                return False
+
+        return True
 
 
 def _handle_common_cmd(self: 'BizHawkClientCommandProcessor') -> Optional[GSTLAClient]:
@@ -167,10 +216,50 @@ def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     for djinn in client.checked_djinn:
         logger.info(djinn)
 
+def cmd_print_goals(self: 'BizHawkClientCommandProcessor') -> None:
+    """Prints the goals for this seed"""
+    client = _handle_common_cmd(self)
+    if client is None:
+        return
+    flags = client.goals.flag_requirements
+    if flags:
+        logger.info("Must clear the following: ")
+        for flag in flags:
+            logger.info(flag)
+    counters = client.goals.count_requirements
+    if counters:
+        logger.info("Obtain the following: ")
+        for thing, num in counters.items():
+            logger.info(f"{thing}: {num}")
+
+def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
+    """Prints the current progress towards the goal"""
+    client = _handle_common_cmd(self)
+    if client is None:
+        return
+    flags = self.ctx.stored_data.get(client.get_goal_flags_key(self.ctx))
+    if flags is not None and len(flags) != 0:
+        logger.info("Objectives Completed: ")
+        for flag, cleared in flags.items():
+            if cleared:
+                logger.info(flag)
+
+    djinn_count = self.ctx.stored_data.get(client.get_djinn_count_key(self.ctx))
+    if "djinn" in client.goals.count_requirements and djinn_count is not None:
+        logger.info(f"Djinn count: {len(djinn_count)}")
+        # logger.info("Objectives Not Completed: ")
+        # for flag, cleared in flags.items():
+        #     if not cleared:
+        #         logger.info(flag)
+    if "summons" in client.goals.count_requirements:
+        logger.info(f"Summon count: {len(client.summons)}")
+
 
 commands = [
     ("unchecked_djinn", cmd_unchecked_djinn),
-    ("djinn", cmd_checked_djinn)
+    ("djinn", cmd_checked_djinn),
+    ("goals", cmd_print_goals),
+    ("goals_completed", cmd_print_progress)
 ]
 
 
@@ -208,6 +297,8 @@ class GSTLAClient(BizHawkClient):
         self.djinn_flag_map: Dict[int, str] = dict()
         self.checked_djinn: Set[str] = set()
         self.mimics = {x.id: x for x in mimics}
+        self.summons: Set[str] = set()
+        self.summon_index: int = 0
         for loc in all_locations:
             if loc.loc_type == LocationType.Event:
                 continue
@@ -266,8 +357,22 @@ class GSTLAClient(BizHawkClient):
         flag = int.from_bytes(data[_DataLocations.IN_GAME], 'little')
         return flag > 1
 
-    def _get_goal_flags_key(self, ctx: 'BizHawkClientContext') -> str:
+    def get_goal_flags_key(self, ctx: 'BizHawkClientContext') -> str:
         return f"gstla_goal_flags_status_{ctx.slot}_{ctx.team}"
+
+    def get_djinn_count_key(self, ctx: 'BizHawkClientContext') -> str:
+        return f"gstla_goal_djinn_status_{ctx.slot}_{ctx.team}"
+
+    def check_summon_count(self, ctx: "BizHawkClientContext") -> None:
+        if self.summon_index >= len(ctx.items_received):
+            return
+        end = len(ctx.items_received)
+        for i in range(self.summon_index, end):
+            item = ctx.items_received[i]
+            itemdata = items_by_id[item.item]
+            if itemdata.type == ItemType.Summon:
+                self.summons.add(itemdata.name)
+        self.summon_index = end
 
     def _check_djinn_flags(self, data: List[bytes]) -> None:
         flag_bytes = data[_DataLocations.DJINN_FLAGS]
@@ -333,18 +438,21 @@ class GSTLAClient(BizHawkClient):
             logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index - start_count)
             item_code = ctx.items_received[item_index - start_count].item
         if item_code is not None:
+            itemdata = items_by_id[item_code]
+            if itemdata.type == ItemType.Summon:
+                self.summons.add(itemdata.name)
             logger.debug("Writing Item %d to Slot", item_code)
             await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
                                            item_code.to_bytes(length=2, byteorder="little"),
                                            _DataLocations.AP_ITEM_SLOT.domain)])
 
-    async def _update_goals(self, updated: dict[str, Any], ctx: 'BizHawkClientContext') -> None:
-        await ctx.send_msgs([
+    async def update_goal_flags(self, updated: dict[str, Any], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
+        messages = [
             {
                 "cmd": "Set",
                 "operation": "update",
                 "want_reply": True,
-                "key": self._get_goal_flags_key(ctx),
+                "key": self.get_goal_flags_key(ctx),
                 "default": dict(),
                 "operations": [
                     {
@@ -353,7 +461,23 @@ class GSTLAClient(BizHawkClient):
                     }
                 ]
             }
-        ])
+        ]
+        if include_djinn:
+            messages.append({
+                "cmd": "Set",
+                "operation": "update",
+                "want_reply": True,
+                "key": self.get_djinn_count_key(ctx),
+                "default": dict(),
+                "operations": [
+                    {
+                        "operation": "update",
+                        "value": {x: True for x in self.checked_djinn},
+                    }
+                ]
+            })
+
+        await ctx.send_msgs(messages)
 
     async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
         # TODO: implement
@@ -379,14 +503,16 @@ class GSTLAClient(BizHawkClient):
             return
 
         if not self.was_in_game and ctx.slot_data is not None:
-            self.was_in_game = True
             logger.info(f"Slot data: {ctx.slot_data}")
             self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
             self.goals.init_reqs_from_slotdata(ctx.slot_data)
             for desired_flag in self.goals.desired_flags.keys():
                 self.goal_map[desired_flag] = False
-            ctx.set_notify(self._get_goal_flags_key(ctx))
+            ctx.set_notify(self.get_goal_flags_key(ctx), self.get_djinn_count_key(ctx))
             logger.info(self.goals.flag_requirements)
+            logger.info(self.goals.count_requirements)
+            self.was_in_game = True
+            self.goals.initialized = True
 
         # logger.debug(
         #     f"Local locations checked: {len(self.local_locations)}; server locations checked: {len(ctx.checked_locations)}")
@@ -400,6 +526,7 @@ class GSTLAClient(BizHawkClient):
             self._check_common_flags(_DataLocations(i), result)
         self._check_common_flags(_DataLocations.INITIAL_INVENTORY, result)
         self._check_common_flags(_DataLocations.ENEMY_FLAGS, result)
+        self._check_common_flags(_DataLocations.STORY_FLAGS, result)
 
 
         await self._receive_items(ctx, result)

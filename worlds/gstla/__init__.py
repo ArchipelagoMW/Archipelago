@@ -8,7 +8,7 @@ from io import BytesIO, StringIO
 from math import floor
 
 import settings
-from Options import PerGameCommonOptions
+from Options import PerGameCommonOptions, OptionError
 from worlds.AutoWorld import WebWorld, World
 import os
 
@@ -108,6 +108,7 @@ class GSTLAWorld(World):
     item_name_groups = {
         ItemType.Djinn.name: {item.name for item in all_items if item.type == ItemType.Djinn},
         ItemType.Character.name: {item.name for item in all_items if item.type == ItemType.Character},
+        ItemType.Summon.name: {item.name for item in all_items if item.type == ItemType.Summon},
         ItemType.Mimic.name: {item.name for item in all_items if item.type == ItemType.Mimic},
         "Lash": {ItemName.Lash_Pebble},
         "Pound": {ItemName.Pound_Cube},
@@ -135,6 +136,8 @@ class GSTLAWorld(World):
         self._character_levels: List[Tuple[int, int]] = []
 
     def generate_early(self) -> None:
+        if len(self.options.goal.value) == 0:
+            raise OptionError("A goal must be selected")
         if self.options.shuffle_characters < 2:
             self.options.non_local_items.value -= self.item_name_groups[ItemType.Character.name]
 
@@ -187,10 +190,47 @@ class GSTLAWorld(World):
 
         if len(goal_conditions) == 0 or "Doom Dragon" in goal_conditions:
             needed_items.add(ItemName.Victory)
+        if "Chestbeaters" in goal_conditions:
+            needed_items.add(ItemName.Chestbeaters_defeated)
+        if "King Scorpion" in goal_conditions:
+            needed_items.add(ItemName.King_Scorpion_defeated)
+        if "Briggs" in goal_conditions:
+            needed_items.add(ItemName.Briggs_defeated)
+        if "Aqua Hydra" in goal_conditions:
+            needed_items.add(ItemName.Aqua_Hydra_defeated)
         if "Poseidon" in goal_conditions:
             needed_items.add(ItemName.Poseidon_defeated)
+        if "Serpent" in goal_conditions:
+            needed_items.add(ItemName.Serpent_defeated)
+        if "Avimander" in goal_conditions:
+            needed_items.add(ItemName.Avimander_defeated)
+        if "Moapa" in goal_conditions:
+            needed_items.add(ItemName.Moapa_defeated)
+        if "Reunion" in goal_conditions:
+            needed_items.add(ItemName.Reunion)
+        if "Flame Dragons" in goal_conditions:
+            needed_items.add(ItemName.Flame_Dragons_defeated)
+        if "Star Magician" in goal_conditions:
+            needed_items.add(ItemName.Star_Magician_defeated)
+        if "Sentinel" in goal_conditions:
+            needed_items.add(ItemName.Sentinel_defeated)
+        if "Valukar" in goal_conditions:
+            needed_items.add(ItemName.Valukar_defeated)
+        if "Dullahan" in goal_conditions:
+            needed_items.add(ItemName.Dullahan_defeated)
+        if "Djinn Hunt" in goal_conditions:
+            djinn_needed = self.options.djinn_hunt_count.value
+        else:
+            djinn_needed = 0
+        if "Summon Hunt" in goal_conditions:
+            summons_needed = self.options.summon_hunt_count.value
+        else:
+            summons_needed = 0
         self.multiworld.completion_condition[self.player] = \
-            lambda state: all([state.has(item, self.player) for item in needed_items])
+            lambda state: (all([state.has(item, self.player) for item in needed_items]) and
+                           state.count_group(ItemType.Djinn.name, self.player) >= djinn_needed and
+                           state.count_group(ItemType.Summon.name, self.player) >= summons_needed)
+
 
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill = []
@@ -224,10 +264,18 @@ class GSTLAWorld(World):
                 ret['start_inventory'][item_id_by_name[k]] = v
         goal_dict = dict()
         flags = set()
+        counts = dict()
         for goal in self.options.goal.value:
             # TODO: needs to handle summons and djinn
+            if "Hunt" in goal:
+                continue
             flags.add(goal)
+        if "Djinn Hunt" in self.options.goal:
+            counts["djinn"] = self.options.djinn_hunt_count.value
+        if "Summon Hunt" in self.options.goal:
+            counts["summons"] = self.options.summon_hunt_count.value
         goal_dict['flags'] = flags
+        goal_dict['counts'] = counts
         ret["goal"] = goal_dict
         print(ret)
         return ret

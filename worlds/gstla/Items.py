@@ -10,6 +10,8 @@ from .gen.ItemData import (ItemData, events, mimics, psyenergy_as_item_list, psy
                            TrapType, FillerType, all_items as all_gen_items, djinn_items, characters as character_items)
 from .gen.LocationData import LocationType, location_type_to_data
 from .GameData import ItemType
+from ..ror2.items import classification
+
 if TYPE_CHECKING:
     from . import GSTLAWorld, GSTLALocation
 
@@ -190,11 +192,14 @@ def create_items(world: 'GSTLAWorld', player: int):
         ap_item = create_item_direct(item, player)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
+    summon_classification = None
+    if "Summon Hunt" in world.options.goal:
+        summon_classification = ItemClassification.progression_skip_balancing
     for item in summon_list:
         #Ignore summons that are obtained by gaining X djinn
         if item.id < 3856:
             continue
-        ap_item = create_item_direct(item, player)
+        ap_item = create_item_direct(item, player, classification=summon_classification)
         world.multiworld.itempool.append(ap_item)
         sum_locations -= 1
         

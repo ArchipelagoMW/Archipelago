@@ -618,15 +618,44 @@ class Goal(OptionSet):
     """What conditions must be satisfied for this world to goal.  You can select however many you want, and only
     when all the selected conditions are satisfied is the world considered goaled."""
     valid_keys = {
-        "Doom Dragon",
+        "Chestbeaters",
+        "King Scorpion",
+        "Briggs",
+        "Aqua Hydra",
         "Poseidon",
+        "Serpent",
+        "Avimander",
+        "Moapa",
+        "Reunion",
+        "Flame Dragons",
+        "Doom Dragon",
+        "Star Magician",
+        "Sentinel",
+        "Valukar",
+        "Dullahan",
+        "Djinn Hunt",
+        "Summon Hunt",
     }
     default = {"Doom Dragon"}
+
+class DjinnHuntCount(Range):
+    """How many djinn you need to obtain in order to satisfy the Djinn Hunt Objective"""
+    range_start = 1
+    range_end = 72
+    default = 56
+
+class SummonHuntCount(Range):
+    """How many summons you need to obtain in order to satisfy the Summon Hunt Objective"""
+    range_start = 1
+    range_end = 13
+    default = 10
 
 @dataclass
 class GSTLAOptions(PerGameCommonOptions):
     #Pool and Logic settings
     goal: Goal
+    djinn_hunt_count: DjinnHuntCount
+    summon_hunt_count: SummonHuntCount
     item_shuffle: ItemShuffle
     reveal_hidden_item: RevealHiddenItem
     omit_locations: OmitLocations

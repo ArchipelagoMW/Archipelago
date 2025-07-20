@@ -245,6 +245,14 @@ class InternalLocationName:
     Mars_Lighthouse_Flame_Dragons_fight = "Mars Lighthouse - Flame Dragons fight"
     Lemurian_Ship_Engine_Room = "Lemurian Ship - Engine Room"
     Contigo_Wings_of_Anemos = "Contigo - Wings of Anemos"
+    Kandorean_Temple_Chestbeaters = "Kandorean Temple - Chestbeaters"
+    Yampi_Desert_King_Scorpion = "Yampi Desert - King Scorpion"
+    Champa_Avimander = "Champa - Avimander"
+    Treasure_Isle_Star_Magician = "Treasure Isle - Star Magician"
+    Islet_Cave_Sentinel = "Islet Cave - Sentinel"
+    Yampi_Desert_Cave_Valukar = "Yampi Desert Cave - Valukar"
+    Anemos_Inner_Sanctum_Dullahan = "Anemos Inner Sanctum - Dullahan"
+    Contigo_Reunion = "Contigo - Reunion"
     
 
     ##enemy events
@@ -519,6 +527,14 @@ ids_by_loc_name: Dict[str, int] = {
     InternalLocationName.Mars_Lighthouse_Flame_Dragons_fight: 5010,
     InternalLocationName.Lemurian_Ship_Engine_Room: 5011,
     InternalLocationName.Contigo_Wings_of_Anemos: 5012,
+    InternalLocationName.Kandorean_Temple_Chestbeaters: 5013,
+    InternalLocationName.Yampi_Desert_King_Scorpion: 5014,
+    InternalLocationName.Champa_Avimander: 5015,
+    InternalLocationName.Treasure_Isle_Star_Magician: 5016,
+    InternalLocationName.Islet_Cave_Sentinel: 5017,
+    InternalLocationName.Yampi_Desert_Cave_Valukar: 5018,
+    InternalLocationName.Anemos_Inner_Sanctum_Dullahan: 5019,
+    InternalLocationName.Contigo_Reunion: 5020,
     InternalLocationName.Daila_Herb: 991776,
     InternalLocationName.Daila_Smoke_Bomb: 991784,
     InternalLocationName.Daila_Psy_Crystal: 991812,
@@ -926,6 +942,14 @@ ids_by_py_name: Dict[str, int] = {
     "Mars_Lighthouse_Flame_Dragons_fight": 5010,
     "Lemurian_Ship_Engine_Room": 5011,
     "Contigo_Wings_of_Anemos": 5012,
+    "Kandorean_Temple_Chestbeaters": 5013,
+    "Yampi_Desert_King_Scorpion": 5014,
+    "Champa_Avimander": 5015,
+    "Treasure_Isle_Star_Magician": 5016,
+    "Islet_Cave_Sentinel": 5017,
+    "Yampi_Desert_Cave_Valukar": 5018,
+    "Anemos_Inner_Sanctum_Dullahan": 5019,
+    "Contigo_Reunion": 5020,
     "Daila_Herb": 991776,
     "Daila_Smoke_Bomb": 991784,
     "Daila_Psy_Crystal": 991812,
@@ -1333,6 +1357,14 @@ loc_names_by_id: Dict[int, str] = {
     5010: InternalLocationName.Mars_Lighthouse_Flame_Dragons_fight,
     5011: InternalLocationName.Lemurian_Ship_Engine_Room,
     5012: InternalLocationName.Contigo_Wings_of_Anemos,
+    5013: InternalLocationName.Kandorean_Temple_Chestbeaters,
+    5014: InternalLocationName.Yampi_Desert_King_Scorpion,
+    5015: InternalLocationName.Champa_Avimander,
+    5016: InternalLocationName.Treasure_Isle_Star_Magician,
+    5017: InternalLocationName.Islet_Cave_Sentinel,
+    5018: InternalLocationName.Yampi_Desert_Cave_Valukar,
+    5019: InternalLocationName.Anemos_Inner_Sanctum_Dullahan,
+    5020: InternalLocationName.Contigo_Reunion,
     991776: InternalLocationName.Daila_Herb,
     991784: InternalLocationName.Daila_Smoke_Bomb,
     991812: InternalLocationName.Daila_Psy_Crystal,

@@ -280,6 +280,22 @@ events = [
         5011, True, True, LocationType.Event, LocationRestriction(7), True), # Lemurian Ship - Engine Room Ship
     InternalLocationData(2271, 2271, 5012, 5012, [0], 0,
         5012, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Wings of Anemos Wings of Anemos
+    InternalLocationData(1610, 1610, 5013, 5013, [0], 0,
+        5013, True, True, LocationType.Event, LocationRestriction(7), True), # Kandorean Temple - Chestbeaters Chestbeaters defeated
+    InternalLocationData(1613, 1613, 5014, 5014, [0], 0,
+        5014, True, True, LocationType.Event, LocationRestriction(7), True), # Yampi Desert - King Scorpion King Scorpion defeated
+    InternalLocationData(1634, 1634, 5015, 5015, [0], 0,
+        5015, True, True, LocationType.Event, LocationRestriction(7), True), # Champa - Avimander Avimander defeated
+    InternalLocationData(1700, 1700, 5016, 5016, [0], 0,
+        5016, True, True, LocationType.Event, LocationRestriction(7), True), # Treasure Isle - Star Magician Star Magician defeated
+    InternalLocationData(1757, 1757, 5017, 5017, [0], 0,
+        5017, True, True, LocationType.Event, LocationRestriction(7), True), # Islet Cave - Sentinel Sentinel defeated
+    InternalLocationData(1745, 1745, 5018, 5018, [0], 0,
+        5018, True, True, LocationType.Event, LocationRestriction(7), True), # Yampi Desert Cave - Valukar Valukar defeated
+    InternalLocationData(1754, 1754, 5019, 5019, [0], 0,
+        5019, True, True, LocationType.Event, LocationRestriction(7), True), # Anemos Inner Sanctum - Dullahan Dullahan defeated
+    InternalLocationData(2593, 2593, 5020, 5020, [0], 0,
+        5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
     
     
 ]

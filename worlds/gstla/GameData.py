@@ -80,6 +80,7 @@ class ItemType(int, Enum):
     Event = 14
     Character = 15
     Mimic = 16
+    Summon = 17
 
 class ItemFlags(IntFlag):
     NONE = 0
@@ -126,7 +127,7 @@ class SummonDatum(NamedTuple):
     id: int
     name: str
     addr: int
-    item_type: ItemType = ItemType.Psyenergy
+    item_type: ItemType = ItemType.Summon
 
 class PsyDatum(NamedTuple):
     id: int
@@ -524,11 +525,21 @@ class GameData:
             EventDatum(event_offset + 10, 0xA4B, "Mars Lighthouse - Flame Dragons fight", "Flame Dragons - defeated"),
             EventDatum(event_offset + 11, 0x8DE, "Lemurian Ship - Engine Room", "Ship"),
             EventDatum(event_offset + 12, 0x8DF, "Contigo - Wings of Anemos", "Wings of Anemos"),
+            EventDatum(event_offset + 13, 0x64a, "Kandorean Temple - Chestbeaters", "Chestbeaters defeated"),
+            EventDatum(event_offset + 14, 0x64d, "Yampi Desert - King Scorpion", "King Scorpion defeated"),
+            EventDatum(event_offset + 15, 0x662, "Champa - Avimander", "Avimander defeated"),
+            EventDatum(event_offset + 16, 0x6a4, "Treasure Isle - Star Magician", "Star Magician defeated"),
+            EventDatum(event_offset + 17, 0x6dd, "Islet Cave - Sentinel", "Sentinel defeated"),
+            EventDatum(event_offset + 18, 0x6d1, "Yampi Desert Cave - Valukar", "Valukar defeated"),
+            EventDatum(event_offset + 19, 0x6da, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
+            EventDatum(event_offset + 20, 0xA21, "Contigo - Reunion", "Reunion"),
+            # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
+            # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),
         ]
-        event_offset += 12
-        boss_events = [
+        # event_offset += 12
+        # boss_events = [
             # EventDatum(event_offset + 1, 94 - 1 + 8 + 0x600,"Sea of Time - Poseidon fight", "Poseidon defeated")
-        ]
+        # ]
         self.events = {e.event_id: e for e in events}
         for event in self.events.values():
             self.location_names[event.event_id] = LocationName(event.event_id, event.flag, event.location_name.replace(' ', '_').replace('-', '').replace('__', '_'), event.location_name)

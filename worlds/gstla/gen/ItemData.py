@@ -73,7 +73,7 @@ class EventItemData(ItemData, base_event):
         super().__init__(item, **kwargs)
 
 _overrides: dict[str, ItemDataDict] = dict()
-_overrides[ItemName.Catch_Beads] = {"classification": ItemClassification.filler}
+_overrides[ItemName.Catch_Beads] = {"progression": ItemClassification.filler}
 
 
 def _wrap_datum(item: InternalItemData) -> ItemData:

@@ -526,6 +526,14 @@ class InternalItemName:
     Flame_Dragons_defeated = "Flame Dragons - defeated"
     Ship = "Ship"
     Wings_of_Anemos = "Wings of Anemos"
+    Chestbeaters_defeated = "Chestbeaters defeated"
+    King_Scorpion_defeated = "King Scorpion defeated"
+    Avimander_defeated = "Avimander defeated"
+    Star_Magician_defeated = "Star Magician defeated"
+    Sentinel_defeated = "Sentinel defeated"
+    Valukar_defeated = "Valukar defeated"
+    Dullahan_defeated = "Dullahan defeated"
+    Reunion = "Reunion"
     
 
     # Characters
@@ -965,6 +973,14 @@ item_id_by_py_name: Dict[str, int] = {
     "Flame_Dragons_defeated": 5010,
     "Ship": 5011,
     "Wings_of_Anemos": 5012,
+    "Chestbeaters_defeated": 5013,
+    "King_Scorpion_defeated": 5014,
+    "Avimander_defeated": 5015,
+    "Star_Magician_defeated": 5016,
+    "Sentinel_defeated": 5017,
+    "Valukar_defeated": 5018,
+    "Dullahan_defeated": 5019,
+    "Reunion": 5020,
     "Flint": 16384000,
     "Granite": 16384002,
     "Quartz": 16384004,

@@ -519,6 +519,10 @@ def set_access_rules(world: 'GSTLAWorld'):
              lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Left_Prong, player)
                            and state.has(ItemName.Center_Prong, player) and state.has(ItemName.Right_Prong, player))
 
+    add_rule(world.get_location(LocationName.Champa_Avimander),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 2 and state.has(ItemName.Reveal, player) and state.has(ItemName.Briggs_escaped, player) and state.has(ItemName.Left_Prong, player)
+                           and state.has(ItemName.Center_Prong, player) and state.has(ItemName.Right_Prong, player))
+
     add_rule(world.get_location(LocationName.Champa_Viking_Helm),
              lambda state: state.has(ItemName.Reveal, player))
 
@@ -754,6 +758,9 @@ def set_access_rules(world: 'GSTLAWorld'):
         add_rule(world.get_location(LocationName.Yampi_Desert_Scoop_Gem),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(3 * djinn_percentage))
 
+        add_rule(world.get_location(LocationName.Yampi_Desert_King_Scorpion),
+                 lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(3 * djinn_percentage))
+
         add_rule(world.get_location(LocationName.Alhafra_Briggs),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(6 * djinn_percentage))
 
@@ -763,6 +770,9 @@ def set_access_rules(world: 'GSTLAWorld'):
         add_rule(world.get_location(LocationName.Gaia_Rock_Serpent_Fight),
                  lambda state: (state.count_group(ItemType.Djinn.name, player) >= math.ceil(24 * djinn_percentage) or
                                 (state.count_group(ItemType.Djinn.name, player) >= math.ceil(16 * djinn_percentage) and state.has(ItemName.Whirlwind, player))))
+
+        add_rule(world.get_location(LocationName.Champa_Avimander),
+                 lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(20 * djinn_percentage))
 
         add_rule(world.get_location(LocationName.Champa_Trident),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(20 * djinn_percentage))
@@ -778,10 +788,31 @@ def set_access_rules(world: 'GSTLAWorld'):
 
         add_rule(world.get_location(LocationName.Mars_Lighthouse_Doom_Dragon_Fight),
                  lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(56 * djinn_percentage))
+        add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Valukar),
+                 lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(
+                     ItemName.Pound_Cube, player))
+        add_rule(world.get_location(LocationName.Islet_Cave_Sentinel),
+                 lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
+        add_rule(world.get_location(LocationName.Treasure_Isle_Star_Magician),
+                 lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
     else:
         #Force whirldwind to be able to get all 4 light orbs to make serpent as weak as possible to beat it logically without djinn
         add_rule(world.get_location(LocationName.Gaia_Rock_Serpent_Fight),
                  lambda state: state.has(ItemName.Whirlwind, player))
+
+    # Superbosses logic
+    add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Valukar),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Pound_Cube, player))
+    add_rule(world.get_location(LocationName.Islet_Cave_Sentinel),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Teleport_Lapis, player))
+    add_rule(world.get_location(LocationName.Treasure_Isle_Star_Magician),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+    add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Dullahan),
+             lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Lifting_Gem, player) and state.has(
+                 ItemName.Sand, player) and state.has(ItemName.Hover_Jade, player))
+    add_rule(world.get_location(LocationName.Anemos_Inner_Sanctum_Dullahan),
+             lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(72 * djinn_percentage))
+
 
     #Optional Super Boss content
     if world.options.omit_locations < 2:
@@ -790,18 +821,17 @@ def set_access_rules(world: 'GSTLAWorld'):
 
         add_rule(world.get_location(LocationName.Islet_Cave_Catastrophe),
              lambda state: state.count_group(ItemType.Character.name, player) >= 7 and state.has(ItemName.Teleport_Lapis, player))
-        
-        add_rule(world.get_location(LocationName.Treasure_Isle_Azul), 
+
+        add_rule(world.get_location(LocationName.Treasure_Isle_Azul),
              lambda state: state.count_group(ItemType.Character.name, player) >= 7)
+
 
         if world.options.djinn_logic > 0:
                 add_rule(world.get_location(LocationName.Yampi_Desert_Cave_Daedalus),
                         lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
-
                 add_rule(world.get_location(LocationName.Islet_Cave_Catastrophe),
                         lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
-
-                add_rule(world.get_location(LocationName.Treasure_Isle_Azul), 
+                add_rule(world.get_location(LocationName.Treasure_Isle_Azul),
                         lambda state: state.count_group(ItemType.Djinn.name, player) >= math.ceil(64 * djinn_percentage))
 
 
