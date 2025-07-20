@@ -280,8 +280,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_witch_hut, (logic.quest.can_complete_quest(Quest.goblin_problem) | logic.mod.magic.can_blink()))
     rule_collector.set_entrance_rule(Entrance.enter_mutant_bug_lair,
-                                     (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(
-                                         NPC.krobus)) | logic.mod.magic.can_blink())
+                                     (logic.wallet.has_rusty_key() & logic.region.can_reach(Region.railroad) & logic.relationship.can_meet(NPC.krobus))
+                                     | logic.mod.magic.can_blink())
     rule_collector.set_entrance_rule(Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, rule_collector, content)
@@ -1041,13 +1041,13 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
         rule_collector.set_location_rule(SecretNote.note_22, logic.registry.quest_rules[Quest.the_mysterious_qi])
         rule_collector.set_location_rule(SecretNote.note_23, logic.registry.quest_rules[Quest.strange_note])
         rule_collector.set_location_rule(SecretNote.note_24,
-                                         logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(
-                                             Mineral.any_gem) & logic.season.has_any_not_winter())
+                                         logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(Mineral.any_gem)
+                                         & logic.season.has_any_not_winter())
         rule_collector.set_location_rule(SecretNote.note_25, logic.season.has_any_not_winter() & logic.fishing.can_fish_at(Region.railroad)
                                          & logic.relationship.can_meet_any(NPC.abigail, NPC.caroline, ))
         rule_collector.set_location_rule(SecretNote.note_26,
-                                         logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(
-                                             ArtisanGood.raisins) & logic.season.has_any_not_winter())
+                                         logic.building.has_wizard_building(WizardBuilding.junimo_hut) & logic.has(ArtisanGood.raisins)
+                                         & logic.season.has_any_not_winter())
         rule_collector.set_location_rule(SecretNote.note_27, logic.region.can_reach(Region.mastery_cave))
 
 
