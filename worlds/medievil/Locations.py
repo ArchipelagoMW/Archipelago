@@ -108,6 +108,7 @@ list_of_level_locations = [
     ["Chaos Rune: The Graveyard","Level_End",MedievilLocationCategory.PROGRESSION],
     ["Equipment: Copper Shield - TG","Level_End",MedievilLocationCategory.FUN],
     ["Life Bottle: The Graveyard","Level_End",MedievilLocationCategory.FUN],
+    ["Gold Coins: Bag at Start - TG","Level_End",MedievilLocationCategory.FUN],    
     ["Gold Coins: Near Chaos Rune - TG","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Life Potion Left Chest - TG","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Life Potion Right Chest - TG","Level_End",MedievilLocationCategory.FUN],
@@ -348,6 +349,7 @@ list_of_level_locations = [
     ["Equipment: Dragon Armour - CC","Level_End",MedievilLocationCategory.FUN],
     ["Energy Vial: Dragon Room 1st Platform - CC","Level_End",MedievilLocationCategory.FUN],
     ["Energy Vial: Dragon Room 3rd Platform - CC","Level_End",MedievilLocationCategory.FUN],
+    ["Gold Coins: Bag at bottom of winding staircase - CC", "Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Chest in Crystal after Pool - CC","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Bag in Crystal at Start - CC","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Bag in Spinner - CC","Level_End",MedievilLocationCategory.FUN],
@@ -516,7 +518,7 @@ list_of_level_locations = [
     
     # Bosses go here
     
-    # Monsters for Monstersanity also go here
+    # Monsters for Monstersanity (if i hate myself) also go here
 ]
         
 # don't forget you need minimum number of locations to be the max of the progression items
