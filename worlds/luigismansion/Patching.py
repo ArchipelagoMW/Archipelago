@@ -1333,14 +1333,14 @@ def update_boo_table(telesa_info, output_data):
 
 
 def update_iyapoo_table(iyapoo_table, output_data):
-    if output_data["Options"]["speedy spirits"] == 0 and output_data["Options"]["gold_mice"] == 0:
+    if output_data["Options"]["speedy_spirits"] == 0 and output_data["Options"]["gold_mice"] == 0:
         return
 
     slot_num: int = int(output_data["Slot"])
     output_loc = output_data["Locations"]
     for iyapoo in iyapoo_table.info_file_field_entries:
         item_data = {}
-        if output_data["Options"]["speedy spirits"] == 0 and "iyapoo" in iyapoo["name"]:
+        if output_data["Options"]["speedy_spirits"] == 0 and "iyapoo" in iyapoo["name"]:
             continue
         match iyapoo["name"]:
             case "iyapoo1":
@@ -1428,13 +1428,14 @@ def update_iyapoo_table(iyapoo_table, output_data):
                 elif "Ruby" in item_data["name"]:
                     ruby_amount = item_amt
 
-        iyapoo_table.info_file_field_entries[iyapoo]["coin"] = coin_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["bill"] = bill_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["gold"] = gold_bar_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["sapphire"] = sapphire_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["emerald"] = emerald_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["ruby"] = ruby_amount
-        iyapoo_table.info_file_field_entries[iyapoo]["other"] = treasure_item_name
+        index = iyapoo_table.info_file_field_entries.index(iyapoo)
+        iyapoo_table.info_file_field_entries[index]["coin"] = coin_amount
+        iyapoo_table.info_file_field_entries[index]["bill"] = bill_amount
+        iyapoo_table.info_file_field_entries[index]["gold"] = gold_bar_amount
+        iyapoo_table.info_file_field_entries[index]["sapphire"] = sapphire_amount
+        iyapoo_table.info_file_field_entries[index]["emerald"] = emerald_amount
+        iyapoo_table.info_file_field_entries[index]["ruby"] = ruby_amount
+        iyapoo_table.info_file_field_entries[index].update({"other": treasure_item_name})
 
 
 def apply_new_ghost(enemy_info_entry, element):
