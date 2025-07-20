@@ -23,6 +23,7 @@ from .tables.location_list import (
     renne_craft_locations
 )
 from .options import TitsThe3rdOptions, CraftPlacement
+from .spoiler_mapping import scrub_spoiler_data
 
 MIN_CRAFT_LOCATION_ID = 100000
 MAX_CRAFT_LOCATION_ID = 100000 + 10000
@@ -41,7 +42,7 @@ def get_location_id(location_name: LocationName):
     return location_table[location_name].flag
 
 
-def create_location(multiworld: MultiWorld, player: int, location_name: str, rule: Optional[Callable[[CollectionState], bool]] = None):
+def create_location(multiworld: MultiWorld, player: int, location_name: str, options: TitsThe3rdOptions, rule: Optional[Callable[[CollectionState], bool]] = None):
     """
     Create a location in accordance with the location table in location_list.py
 
@@ -52,7 +53,10 @@ def create_location(multiworld: MultiWorld, player: int, location_name: str, rul
         rule: A rule to apply to the location.
     """
     region = multiworld.get_region(location_table[location_name].region, player)
-    location = TitsThe3rdLocation(player, location_name, location_table[location_name].flag, region)
+    shown_location_name = location_name
+    if options.name_spoiler_option:
+        shown_location_name = scrub_spoiler_data(location_name)
+    location = TitsThe3rdLocation(player, shown_location_name, location_table[location_name].flag, region)
     if rule:
         location.access_rule = rule
     region.locations.append(location)
@@ -76,10 +80,7 @@ def create_locations(multiworld: MultiWorld, player: int, options: TitsThe3rdOpt
                 state.has(item_name, quantity, player)
                 for item_name, quantity in location_table[location_name].item_requirements
             )
-        if options.name_spoiler_option & (location_table[location_name].spoiler_name != ""):
-            create_location(multiworld, player, location_table[location_name].spoiler_name, rule)
-        else:
-            create_location(multiworld, player, location_name, rule)
+        create_location(multiworld, player, location_name, options, rule)
 
 
 location_groups: Dict[str, Set[str]] = {

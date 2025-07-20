@@ -84,57 +84,21 @@ class ItemName:
 
     # Characters
     estelle = "Estelle"
-    estelle_spoiler = "Chapter 5 First Character"
     joshua = "Joshua"
-    joshua_spoiler = "Chapter 2 Third Character"
     scherazard = "Scherazard"
-    scherazard_spoiler = "Chapter 4 Third Character"
     olivier = "Olivier"
-    olivier_spoiler = "Chapter 4 Second Character"
     kloe = "Kloe"
-    kloe_spoiler = "Chapter 3 First Character"
     agate = "Agate"
-    agate_spoiler = "Chapter 4 Fourth Character"
     tita = "Tita"
-    tita_spoiler = "Chapter 1 First Character"
     zin = "Zin"
-    zin_spoiler = "Chapter 4 First Character"
     kevin = "Kevin"
-    kevin_spoiler = "Male Default Character"
     anelace = "Anelace"
-    anelace_spoiler = "Chapter 4 Third Character"
     josette = "Josette"
-    josette_spoiler = "Chapter 2 Second Character"
     richard = "Richard"
-    richard_spoiler = "Chapter 5 Second Character"
     mueller = "Mueller"
-    mueller_spoiler = "Chapter 2 First Character"
     julia = "Julia"
-    julia_spoiler = "Chapter 1 Second Character"
     ries = "Ries"
-    ries_spoiler = "Female Default Character"
     renne = "Renne"
-    renne_spoiler = "Chapter 5 Third Character"
-
-    original_to_spoiler_mapping = {
-        estelle: estelle_spoiler,
-        joshua: joshua_spoiler,
-        scherazard: scherazard_spoiler,
-        olivier: olivier_spoiler,
-        kloe: kloe_spoiler,
-        agate: agate_spoiler,
-        tita: tita_spoiler,
-        zin: zin_spoiler,
-        kevin: kevin_spoiler,
-        anelace: anelace_spoiler,
-        josette: josette_spoiler,
-        richard: richard_spoiler,
-        mueller: mueller_spoiler,
-        julia: julia_spoiler,
-        ries: ries_spoiler,
-        renne: renne_spoiler,
-    }
-
 
     # Area Unlock
     jade_corridor_unlock_1 = "Area Expansion: Jade Corridor 1"

@@ -138,13 +138,6 @@ character_table: Dict[str, TitsThe3rdItemData] = {
     ItemName.julia: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
 }
 
-character_spoiler_table: Dict[str, TitsThe3rdItemData] = {
-    ItemName.kevin_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 8, ItemClassification.progression),
-    ItemName.ries_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 14, ItemClassification.progression),
-    ItemName.tita_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 6, ItemClassification.progression),
-    ItemName.julia_spoiler: TitsThe3rdItemData(meta_data_table[ItemName.character_min_id].code + 13, ItemClassification.progression),
-}
-
 area_unlock_table: Dict[str, TitsThe3rdItemData] = {  # Item ID is 200000 + flag number
     ItemName.jade_corridor_unlock_1: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 256, ItemClassification.progression),
     ItemName.jade_corridor_unlock_2: TitsThe3rdItemData(meta_data_table[ItemName.area_min_id].code + 257, ItemClassification.progression),
@@ -181,7 +174,6 @@ item_data_table: Dict[str, TitsThe3rdItemData] = {
     **currency_table,
     **key_item_table,
     **character_table,
-    **character_spoiler_table,
     **area_unlock_table,
     **meta_data_table,
     **craft_unlock_table,
@@ -194,7 +186,6 @@ item_groups: Dict[str, Set[str]] = {
     "Quartz": set(quartz_table.keys()),
     "Currency": set(currency_table.keys()),
     "Characters": set(character_table.keys()),
-    "Characters Spoiler": set(character_spoiler_table.keys()),
     "Area Unlock": set(area_unlock_table.keys()),
 }
 
