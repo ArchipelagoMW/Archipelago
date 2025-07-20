@@ -21,6 +21,7 @@
 - (Optional) Increase Luigi's innate movement speed.
 - (Optional) Randomize music
 - (Optional) Deathlink (Can be toggled in client)
+- (Optional) TrapLink, which shares traps with others who have it enabled (Can be toggled in client)
 - (Optional) Weights for all filler items
 - (Optional) Change Luigi's Max Health
 - (Optional) Change King Boo's health (final boss)

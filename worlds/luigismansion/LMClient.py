@@ -10,7 +10,7 @@ from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
 
-CLIENT_VERSION = "V0.4.10"
+CLIENT_VERSION = "V0.4.11"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -284,7 +284,7 @@ class LMContext(CommonContext):
                                 "Please verify that you are using the right ISO/seed/APLM file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
+            self.pickup_anim_on = True if int(args["slot_data"]["pickup animation"]) == 1 else False
             self.rank_req = int(args["slot_data"]["rank requirement"])
             self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
