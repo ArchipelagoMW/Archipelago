@@ -1436,8 +1436,6 @@ def update_iyapoo_table(iyapoo_table, output_data):
         iyapoo_table.info_file_field_entries[iyapoo]["ruby"] = ruby_amount
         iyapoo_table.info_file_field_entries[iyapoo]["other"] = treasure_item_name
 
-        #TODO Define more features here
-
 
 def apply_new_ghost(enemy_info_entry, element):
     # The list of ghosts that can replace the vanilla ones. Only includes the ones without elements.
