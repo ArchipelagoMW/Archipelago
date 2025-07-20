@@ -13,7 +13,7 @@ from . import items_by_id, ItemType
 from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData
 from .gen.LocationData import all_locations, LocationType, djinn_locations, LocationData, location_name_to_data, \
-    event_name_to_data
+    event_name_to_data, location_id_to_data, event_id_to_name
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext, BizHawkClientCommandProcessor
@@ -25,24 +25,9 @@ FORCE_ENCOUNTER_ADDR = 0x30164
 PREVENT_FLEEING_ADDR = 0x48B
 IN_BATTLE_ADDR = 0x60
 
-
-
 class _MemDomain(str, Enum):
     EWRAM = 'EWRAM'
     ROM = 'ROM'
-# OH, right, there's a small yet important detail. (edited)
-# [2:03 PM]
-# Unit IDs start at 0 (Isaac), with the very first enemy slot being ID (index 0 in the editor). However, unit IDs and enemy IDs are slightly different; the enemy portion of unit IDs starts after the last PC ID. (edited)
-# [2:05 PM]
-# In other words, unit ID = enemy ID + 8.
-# [2:05 PM]
-# So it's checking enemy slot 368 there. That is the true enemy ID for the last phase of the Doom Dragon fight (the one after it is just an extension of its moveset). (edited)
-# [2:06 PM]
-# You also have battle IDs, but those work differently and apply to the current battle.
-# [2:07 PM]
-# It's a weird case where PCs and enemies are mostly handled the same way in the engine, except for some exceptions that determine access to mechanics or presence in data tables.
-# [2:07 PM]
-# The biggest actual difference between them is arguably how their movesets are handled.
 
 class _DataLocations(IntEnum):
     IN_GAME = (0x428, 0x2, 0x0, _MemDomain.EWRAM)
@@ -98,15 +83,12 @@ class GoalManager:
             LocationName.Yampi_Desert_Cave_Valukar,
             LocationName.Anemos_Inner_Sanctum_Dullahan,
         ]
-        # LocationName.Kandorean_Temple_Chestbeaters: event_name_to_data[LocationName.Sea_of_Time_Poseidon_fight].flag,
-        # LocationName.Sea_of_Time_Poseidon_fight: event_name_to_data[LocationName.Sea_of_Time_Poseidon_fight].flag,
-        # LocationName.Mars_Lighthouse_Doom_Dragon_Fight: event_name_to_data[LocationName.Mars_Lighthouse_Doom_Dragon_Fight].flag,
     }
 
     def __init__(self):
         self.flag_requirements: Set[str] = set()
         self.count_requirements: dict[str, int] = dict()
-        self.desired_flags: dict[int, str] = dict()
+        self.desired_flags: dict[int, int] = dict()
         self.current: defaultdict[str, defaultdict[str, bool]] = defaultdict(lambda: defaultdict(lambda: False))
         self.initialized = False
 
@@ -124,8 +106,10 @@ class GoalManager:
             self.flag_requirements.add("Doom Dragon")
 
         for key in self.flag_requirements:
-            enemy_flag = GoalManager.supported_flags[option_name_to_goal_name[key]]
-            self.desired_flags[enemy_flag] = key
+            location_name = option_name_to_goal_name[key]
+            enemy_flag = GoalManager.supported_flags[location_name]
+            location_data = event_name_to_data[location_name]
+            self.desired_flags[enemy_flag] = location_data.ap_id
         logger.info(f"Desired flags: {self.desired_flags}")
         logger.info(f"Desired counts: {self.count_requirements}")
 
@@ -134,19 +118,19 @@ class GoalManager:
         server_flags: Optional[dict[str, Any]] = ctx.stored_data.get(client.get_goal_flags_key(ctx), dict())
         if server_flags is None:
             server_flags = dict()
-        updated_flags: dict[str, Any] = dict()
+        updated_flags: dict[int, Any] = dict()
         for flag, is_set in client.goal_map.items():
-            name = self.desired_flags.get(flag, None)
-            if name is not None:
-                if is_set and not server_flags.get(name, False):
-                    updated_flags[name] = is_set
+            ap_id = self.desired_flags.get(flag, None)
+            if ap_id is not None:
+                if is_set and not server_flags.get(ap_id, False):
+                    updated_flags[ap_id] = is_set
 
-        server_djinn = ctx.stored_data.get(client.get_djinn_count_key(ctx), dict())
+        server_djinn = ctx.stored_data.get(client.get_djinn_count_key(ctx), [])
         if server_djinn is None:
-            server_djinn = dict()
+            server_djinn: List[int] = []
         difference = False
         if "djinn" in self.count_requirements:
-            difference = client.checked_djinn.difference(server_djinn.keys())
+            difference = client.checked_djinn.difference(server_djinn)
 
         if updated_flags or difference:
             logger.info(f"Flags updated: {updated_flags}")
@@ -204,7 +188,7 @@ def cmd_unchecked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
         return
     for djinn in djinn_locations:
         djinn_name = loc_names_by_id[djinn.id]
-        if djinn_name not in client.checked_djinn:
+        if djinn.id not in client.checked_djinn:
             logger.info(djinn_name)
 
 
@@ -213,7 +197,8 @@ def cmd_checked_djinn(self: 'BizHawkClientCommandProcessor') -> None:
     client = _handle_common_cmd(self)
     if client is None:
         return
-    for djinn in client.checked_djinn:
+    for djinn_id in client.checked_djinn:
+        djinn = loc_names_by_id[djinn_id]
         logger.info(djinn)
 
 def cmd_print_goals(self: 'BizHawkClientCommandProcessor') -> None:
@@ -242,7 +227,8 @@ def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
         logger.info("Objectives Completed: ")
         for flag, cleared in flags.items():
             if cleared:
-                logger.info(flag)
+                event_name = event_id_to_name
+                logger.info(event_name)
 
     djinn_count = self.ctx.stored_data.get(client.get_djinn_count_key(self.ctx))
     if "djinn" in client.goals.count_requirements and djinn_count is not None:
@@ -295,7 +281,7 @@ class GSTLAClient(BizHawkClient):
         self.goal_map: dict[int, bool] = dict()
         self.djinn_ram_to_rom: Dict[int, int] = dict()
         self.djinn_flag_map: Dict[int, str] = dict()
-        self.checked_djinn: Set[str] = set()
+        self.checked_djinn: Set[int] = set()
         self.mimics = {x.id: x for x in mimics}
         self.summons: Set[str] = set()
         self.summon_index: int = 0
@@ -390,7 +376,7 @@ class GSTLAClient(BizHawkClient):
                     # TODO: this may be wrong once djinn are events
                     # logger.debug("RAM Djinn: %s, Flag: %s -> ROM Djinn: %s, Flag: %s",
                     #              original_djinn, hex(original_flag), shuffled_djinn, hex(shuffled_flag))
-                    self.checked_djinn.add(self.djinn_flag_map[shuffled_flag])
+                    self.checked_djinn.add(shuffled_flag)
                     # TODO: if djinn ever become proper items this code would be needed
                     # locs = self.flag_map.get(shuffled_flag, None)
                     # # logger.debug("orig_flag: %s, shuffle flag: %s, locs: %s", hex(flag), hex(shuffled_flag), locs)
@@ -446,7 +432,7 @@ class GSTLAClient(BizHawkClient):
                                            item_code.to_bytes(length=2, byteorder="little"),
                                            _DataLocations.AP_ITEM_SLOT.domain)])
 
-    async def update_goal_flags(self, updated: dict[str, Any], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
+    async def update_goal_flags(self, updated: dict[int, Any], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
         messages = [
             {
                 "cmd": "Set",
@@ -472,7 +458,7 @@ class GSTLAClient(BizHawkClient):
                 "operations": [
                     {
                         "operation": "update",
-                        "value": {x: True for x in self.checked_djinn},
+                        "value": [x for x in self.checked_djinn],
                     }
                 ]
             })

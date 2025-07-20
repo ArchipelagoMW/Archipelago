@@ -83,5 +83,6 @@ all_locations: List[LocationData] = djinn_locations + psyenergy_locations + summ
 location_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type != LocationType.Event}
 location_id_to_data: Dict[int, LocationData] = {location.ap_id: location for location in all_locations if location.loc_type != LocationType.Event}
 event_name_to_data: Dict[str, LocationData] = {loc_names_by_id[location.ap_id]: location for location in all_locations if location.loc_type == LocationType.Event}
+event_id_to_name: Dict[int, str] = {location.ap_id: loc_names_by_id[location.ap_id] for location in all_locations if location.loc_type == LocationType.Event}
 assert len(all_locations) == len(location_id_to_data) + len(events)
 location_type_to_data: Dict[str, List[LocationData]] = create_loctype_to_datamapping()
