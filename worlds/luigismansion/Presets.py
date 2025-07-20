@@ -30,7 +30,7 @@ all_random_settings = {
     LMOptions.BooGates.internal_name:                  "random",
     LMOptions.KingBooHealth.internal_name:             "random",
     LMOptions.MarioItems.internal_name:                "random",
-    LMOptions.WashroomBooCount.internal_name:          "random",
+    # LMOptions.WashroomBooCount.internal_name:          "random",
     LMOptions.BalconyBooCount.internal_name:           "random",
     LMOptions.FinalBooCount.internal_name:             "random",
     LMOptions.BundleWeight.internal_name:              "random",
