@@ -209,7 +209,7 @@ class LMContext(CommonContext):
         self.rank_req = -1
         self.last_not_ingame = time.time()
         self.boosanity = False
-        self.boo_washroom_count = None
+        #self.boo_washroom_count = None
         self.boo_balcony_count = None
         self.boo_final_count = None
         self.received_trap_link = False
@@ -286,7 +286,7 @@ class LMContext(CommonContext):
             self.boosanity = bool(args["slot_data"]["boosanity"])
             self.pickup_anim_on = True if int(args["slot_data"]["pickup animation"]) == 1 else False
             self.rank_req = int(args["slot_data"]["rank requirement"])
-            self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
+            #self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             self.luigimaxhp = int(args["slot_data"]["luigi max health"])
@@ -619,9 +619,6 @@ class LMContext(CommonContext):
                     dme.write_byte(addr_to_update.ram_addr, curr_val)
 
             curr_boo_count = len(set(boo_received_list))
-            if curr_boo_count >= self.boo_washroom_count:
-                boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
-                dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
             if curr_boo_count >= self.boo_balcony_count:
                 boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
                 dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))

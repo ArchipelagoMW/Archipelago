@@ -91,11 +91,11 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
-        events_to_remove += [16, 47, 96]
+        events_to_remove += [16, 96]
 
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not (info_entry["EventNo"] in events_to_remove or (info_entry["EventNo"] == 93 and
@@ -174,20 +174,20 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["disappear_flag"] = 22
             x["EventIf"] = 2
 
-        # Update the Washroom event trigger to be area entry based
-        # Also updates the event disappear trigger to be flag 28
-        # Also updates the EventFlag to 0, so this event always plays
-        if boo_checks and x["EventNo"] == 47:
-            x["pos_x"] = -1725.000000
-            x["pos_y"] = 100.000000
-            x["pos_z"] = -4150.000000
-            x["EventFlag"] = 0
-            x["disappear_flag"] = 28
-            x["EventIf"] = 5
-            x["EventArea"] = 380
-            x["EventLock"] = 1
-            x["PlayerStop"] = 1
-            x["EventLoad"] = 0
+        # # Update the Washroom event trigger to be area entry based
+        # # Also updates the event disappear trigger to be flag 28
+        # # Also updates the EventFlag to 0, so this event always plays
+        # if boo_checks and x["EventNo"] == 47:
+        #     x["pos_x"] = -1725.000000
+        #     x["pos_y"] = 100.000000
+        #     x["pos_z"] = -4150.000000
+        #     x["EventFlag"] = 0
+        #     x["disappear_flag"] = 28
+        #     x["EventIf"] = 5
+        #     x["EventArea"] = 380
+        #     x["EventLock"] = 1
+        #     x["PlayerStop"] = 1
+        #     x["EventLoad"] = 0
 
         # Update the King Boo event trigger to be area entry based
         if boo_checks and x["EventNo"] == 16:
