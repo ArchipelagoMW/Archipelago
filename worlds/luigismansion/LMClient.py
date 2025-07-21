@@ -595,7 +595,6 @@ class LMContext(CommonContext):
                     "that you saw this message and please explain what you last did to trigger it.")
                 self.debug_flag_ten = True
 
-        # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
             crown_helper_val = "00000001"
