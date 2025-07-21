@@ -536,10 +536,6 @@ class GameData:
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Karst", "Karst defeated"),
             # EventDatum(event_offset + 15,, "Jupiter Lighthouse - Agatio", "Agatio defeated"),
         ]
-        # event_offset += 12
-        # boss_events = [
-            # EventDatum(event_offset + 1, 94 - 1 + 8 + 0x600,"Sea of Time - Poseidon fight", "Poseidon defeated")
-        # ]
         self.events = {e.event_id: e for e in events}
         for event in self.events.values():
             self.location_names[event.event_id] = LocationName(event.event_id, event.flag, event.location_name.replace(' ', '_').replace('-', '').replace('__', '_'), event.location_name)

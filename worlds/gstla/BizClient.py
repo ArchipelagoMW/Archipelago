@@ -479,7 +479,6 @@ class GSTLAClient(BizHawkClient):
         if not self._is_in_game(result):
             # TODO: if the player goes back into the save file should we reset some things?
             self.local_locations = set()
-            # self.starting_items = StartingItemHandler(dict())
             self.was_in_game = False
             logger.debug("Not in game...")
             return
