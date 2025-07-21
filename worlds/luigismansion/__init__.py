@@ -219,7 +219,6 @@ class LMWorld(World):
         else:
             LOCATION_DICT: dict[str, LMLocationData] = {}
             if self.options.game_mode.value == 1:
-                # TODO filter entire furniture table by requiring vacuum = false
                 for name, loc_data in FURNITURE_LOCATION_TABLE.items():
                     if not loc_data.require_poltergust:
                         LOCATION_DICT.update({name: loc_data})
@@ -275,6 +274,31 @@ class LMWorld(World):
                         LOCATION_DICT = {
                             **LOCATION_DICT,
                             **TREASURES_LOCATION_TABLE
+                        }
+                    case "Basement":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **BASEMENT_LOCS
+                        }
+                    case "1st Floor":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **FIRST_FLOOR_LOCS
+                        }
+                    case "2nd Floor":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **SECOND_FLOOR_LOCS
+                        }
+                    case "Attic":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **ATTIC_LOCS
+                        }
+                    case "Roof":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **ROOF_LOCS
                         }
 
             for location, data in LOCATION_DICT.items():

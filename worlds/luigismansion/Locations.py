@@ -1383,6 +1383,32 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     **DECOR_LOCATION_TABLE
 }
 
+BASEMENT_LOCS = {}
+for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+    if loc_data.floor == 0:
+        BASEMENT_LOCS.update({name: loc_data})
+
+FIRST_FLOOR_LOCS = {}
+for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+    if loc_data.floor == 1:
+        FIRST_FLOOR_LOCS.update({name: loc_data})
+
+SECOND_FLOOR_LOCS = {}
+for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+    if loc_data.floor == 2:
+        SECOND_FLOOR_LOCS.update({name: loc_data})
+
+ATTIC_LOCS = {}
+for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+    if loc_data.floor == 3:
+        ATTIC_LOCS.update({name: loc_data})
+
+ROOF_LOCS = {}
+for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+    if loc_data.floor == 4:
+        ROOF_LOCS.update({name: loc_data})
+
+
 TREASURES_LOCATION_TABLE = {
     "Heart Door Lamp": LMLocationData("Foyer", 94, "Furniture", 270, [],
         update_ram_addr=[LMRamData(in_game_room_id=2)]),
