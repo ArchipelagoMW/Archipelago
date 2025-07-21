@@ -56,6 +56,7 @@ class CrystalProjectWorld(World):
     location_name_to_id.update(shop_name_to_id)
     location_name_to_id.update(region_completion_name_to_id)
     item_name_groups = get_item_names_per_category()
+    base_game_jobs: set[str] = item_name_groups[JOB].copy()
 
     mod_info = get_mod_info()
     modded_items = get_modded_items(mod_info)

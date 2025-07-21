@@ -1868,7 +1868,10 @@ def get_starting_jobs(world: "CrystalProjectWorld") -> List[str]:
         return default_starting_job_list
 
 def get_random_starting_jobs(self, count:int) -> List[str]:
-    return self.random.sample(list(self.item_name_groups[JOB]), count)
+    if self.options.useMods.value == self.options.useMods.option_true:
+        return self.random.sample(list(self.item_name_groups[JOB]), count)
+    else:
+        return self.random.sample(list(self.base_game_jobs), count)
 
 def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
     job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too
