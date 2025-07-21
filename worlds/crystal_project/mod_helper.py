@@ -655,10 +655,17 @@ def build_spark_location(location, shifted_spark_ids: List[ModIncrementedIdData]
 
 def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Callable[[CollectionState], bool]]:
     logic = CrystalProjectLogic(world.player, world.options)
+    job_id = None
+    loot_type = None
+    loot_id = None
+
     if condition is not None:
-        job_id = condition['Data']['Number']
-        loot_type = condition['Data']['LootType']
-        loot_id = condition['Data']['LootValue']
+        if 'Number' in condition['Data']:
+            job_id = condition['Data']['Number']
+
+        if 'LootType' in condition['Data']:
+            loot_type = condition['Data']['LootType']
+            loot_id = condition['Data']['LootValue']
     else:
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
