@@ -1385,25 +1385,13 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
 
 BASEMENT_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 0)
 
-FIRST_FLOOR_LOCS = {}
-for name, loc_data in FURNITURE_LOCATION_TABLE.items():
-    if loc_data.floor == 1:
-        FIRST_FLOOR_LOCS.update({name: loc_data})
+FIRST_FLOOR_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 1)
 
-SECOND_FLOOR_LOCS = {}
-for name, loc_data in FURNITURE_LOCATION_TABLE.items():
-    if loc_data.floor == 2:
-        SECOND_FLOOR_LOCS.update({name: loc_data})
+SECOND_FLOOR_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 2)
 
-ATTIC_LOCS = {}
-for name, loc_data in FURNITURE_LOCATION_TABLE.items():
-    if loc_data.floor == 3:
-        ATTIC_LOCS.update({name: loc_data})
+ATTIC_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 3)
 
-ROOF_LOCS = {}
-for name, loc_data in FURNITURE_LOCATION_TABLE.items():
-    if loc_data.floor == 4:
-        ROOF_LOCS.update({name: loc_data})
+ROOF_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 4)
 
 
 TREASURES_LOCATION_TABLE = {
