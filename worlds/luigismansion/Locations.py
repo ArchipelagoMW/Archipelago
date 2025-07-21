@@ -122,7 +122,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
                                                update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP Entry 284? 285? 294? 309?
     "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
                                                update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP entry?
-    "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True,
+    "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True, #TODO Add to client
                                       update_ram_addr=[LMRamData(0x804D80A4)], require_poltergust=False),
 
 
