@@ -1383,10 +1383,7 @@ FURNITURE_LOCATION_TABLE: dict[str, LMLocationData] = {
     **DECOR_LOCATION_TABLE
 }
 
-BASEMENT_LOCS = {}
-for name, loc_data in FURNITURE_LOCATION_TABLE.items():
-    if loc_data.floor == 0:
-        BASEMENT_LOCS.update({name: loc_data})
+BASEMENT_LOCS = dict((name, loc_data) for (name, loc_data) in FURNITURE_LOCATION_TABLE.items() if loc_data.floor == 0)
 
 FIRST_FLOOR_LOCS = {}
 for name, loc_data in FURNITURE_LOCATION_TABLE.items():
