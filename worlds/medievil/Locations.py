@@ -185,6 +185,7 @@ list_of_level_locations = [
     ["Chalice: Return to the Graveyard","Chalice of Souls",MedievilLocationCategory.CHALICE],
 
     # Scarecrow Fields
+    # REQUIRES DARING DASH
     # Requires Harvester Parts for Chalice
     ["Life Bottle: Scarecrow Fields","Level_End",MedievilLocationCategory.FUN],
     ["Key Item: Harvester Parts - SF","Level_End",MedievilLocationCategory.PROGRESSION],
@@ -262,7 +263,8 @@ list_of_level_locations = [
     ["Gold Coins: Bag Behind Big Tree - EE","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Chest In Egg - EE","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Bag at Cave Entrance - EE","Level_End",MedievilLocationCategory.FUN],
-    ["Gold Coins:Chest Near Barrier - EE","Level_End",MedievilLocationCategory.FUN],
+    ["Gold Coins: Bag in Talisman Cave - EE","Level_End",MedievilLocationCategory.FUN],
+    ["Gold Coins: Chest Near Barrier - EE","Level_End",MedievilLocationCategory.FUN],    
     ["Gold Coins: Chest Left of Fountain - EE","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Chest Top of Fountain - EE","Level_End",MedievilLocationCategory.FUN],
     ["Gold Coins: Chest Right of Fountain - EE","Level_End",MedievilLocationCategory.FUN],
@@ -272,6 +274,7 @@ list_of_level_locations = [
     # Sleeping Village
     ["Earth Rune: Sleeping Village","Level_End",MedievilLocationCategory.PROGRESSION],
     ["Chaos Rune: Sleeping Village","Level_End",MedievilLocationCategory.PROGRESSION],
+    ["Moon Rune: Sleeping Village","Level_End",MedievilLocationCategory.PROGRESSION],    
     ["Key Item: Safe Key - SV","Level_End",MedievilLocationCategory.PROGRESSION],
     ["Key Item: Shadow Artefact - SV","Level_End",MedievilLocationCategory.PROGRESSION],
     ["Key Item: Crucifix - SV","Level_End",MedievilLocationCategory.PROGRESSION],
@@ -383,7 +386,7 @@ list_of_level_locations = [
     ["Chalice: The Gallows Gauntlet","Chalice of Souls",MedievilLocationCategory.CHALICE],
         
     # Asylum Grounds
-    ["Chaos Rune: Asylum Grounds - AG","Level_End",MedievilLocationCategory.PROGRESSION],
+    ["Chaos Rune: Asylum Grounds","Level_End",MedievilLocationCategory.PROGRESSION],
     ["Equipment: Silver Shield in Chest Behind Door - AG","Level_End",MedievilLocationCategory.FUN],
     ["Energy Vial: Near Bishop - AG","Level_End",MedievilLocationCategory.FUN],
     ["Energy Vial: Near King - AG","Level_End",MedievilLocationCategory.FUN],
