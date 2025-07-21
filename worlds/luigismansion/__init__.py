@@ -656,7 +656,7 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            if location == "Luigi's Courage" or location == "E. Gadd's Gift":
+            if location == "Luigi's Courage" or location == "E. Gadd's Gift" or location == "Visit E. Gadd's Gallery":
                 region = self.get_region(self.origin_region_name)
                 entry = LMLocation(self.player, location, region, data)
                 region.locations.append(entry)
