@@ -49,7 +49,7 @@ If you would like to validate your config file to make sure it works, you may do
       and click the "Generate Game" button.
 2. Open the Archipelago Launcher and click "Generate". This will create a zip file in Archipelago/output
    - You will need to open this .zip to get your .aplm patch file if you are not using the Archipelago website
-3. Navigate to the Archipelago website and go to the Host Game page
+3. Navigate to the Archipelago website and go to the Host Game page (top right menu)
 4. Click upload file and pass it the .zip created in your output folder
 5. Click the "Create New Room" link. You are now able to download your patch file from here (as of AP 0.6.2).
 6. Run the ArchipelagoLauncher.exe and click `Open Patch`. Select your `.aplm` patch file.
