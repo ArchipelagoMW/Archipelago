@@ -1021,8 +1021,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(LANDS_END, "Land's End Chest - Definitely requires Quintar *wink* among the first spikes 1", 2849 + treasure_index_offset), #Ether chest
         LocationData(LANDS_END, "Land's End Chest - Definitely requires Quintar *wink* among the first spikes 2", 3003 + treasure_index_offset), #Potion chest
-        LocationData(LANDS_END, "Land's End Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset), #Money chest
-        LocationData(LANDS_END, "Land's End Chest - To defeat the Huns", 2740 + treasure_index_offset), #Blue Cape chest
+        LocationData(LANDS_END, "Land's End Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
+        LocationData(LANDS_END, "Land's End Chest - To defeat the Huns", 2740 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.has_vertical_movement(state)), #Blue Cape chest
         LocationData(LANDS_END, "Land's End Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
         LocationData(LANDS_END, "Land's End Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Defender chest
         LocationData(LANDS_END, "Land's End Chest - Fancy some spikes cliff diving?", 1693 + treasure_index_offset), #Rune Ward chest
@@ -1031,7 +1031,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(LANDS_END, "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, lambda state: logic.has_glide(state)), #(191, 177, -214) 9th Scrap on main Overpass map
 
         #NPCs
-        LocationData(LANDS_END, "Land's End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset), #Ingot
+        LocationData(LANDS_END, "Land's End NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
         LocationData(LANDS_END, "Land's End NPC - Pillar Gold by River Cats Ego", 2850 + npc_index_offset), #Ore
         LocationData(LANDS_END, "Land's End NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(LANDS_END, "Land's End NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
