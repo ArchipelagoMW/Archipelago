@@ -252,16 +252,16 @@ class GSTLAWorld(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         ret = dict()
-        ret['start_inventory'] = {
-            item_id_by_name[k]: v
-            for k, v in self.options.start_inventory.items()
-        }
-
-        for k,v in self.options.start_inventory_from_pool.items():
-            if item_id_by_name[k] in ret['start_inventory']:
-                ret['start_inventory'][item_id_by_name[k]] += v
-            else:
-                ret['start_inventory'][item_id_by_name[k]] = v
+        # ret['start_inventory'] = {
+        #     item_id_by_name[k]: v
+        #     for k, v in self.options.start_inventory.items()
+        # }
+        #
+        # for k,v in self.options.start_inventory_from_pool.items():
+        #     if item_id_by_name[k] in ret['start_inventory']:
+        #         ret['start_inventory'][item_id_by_name[k]] += v
+        #     else:
+        #         ret['start_inventory'][item_id_by_name[k]] = v
         goal_dict = dict()
         flags = set()
         counts = dict()

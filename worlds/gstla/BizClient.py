@@ -6,7 +6,7 @@ import logging
 from enum import IntEnum, Enum
 from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 from . import items_by_id, ItemType
@@ -115,15 +115,15 @@ class GoalManager:
 
 
     async def check_goals(self, client: 'GSTLAClient', ctx: 'BizHawkClientContext') -> None:
-        server_flags: Optional[dict[str, Any]] = ctx.stored_data.get(client.get_goal_flags_key(ctx), dict())
+        server_flags: Optional[List[int]] = ctx.stored_data.get(client.get_goal_flags_key(ctx), None)
         if server_flags is None:
-            server_flags = dict()
-        updated_flags: dict[int, Any] = dict()
+            server_flags = []
+        updated_flags: Set[int] = set()
         for flag, is_set in client.goal_map.items():
             ap_id = self.desired_flags.get(flag, None)
             if ap_id is not None:
-                if is_set and not server_flags.get(ap_id, False):
-                    updated_flags[ap_id] = is_set
+                if is_set and ap_id not in server_flags:
+                    updated_flags.add(ap_id)
 
         server_djinn = ctx.stored_data.get(client.get_djinn_count_key(ctx), [])
         if server_djinn is None:
@@ -140,12 +140,12 @@ class GoalManager:
     def is_done(self, client: 'GSTLAClient', ctx: 'BizHawkClientContext'):
         if not self.initialized:
             return
-        goal_flags: dict[str, Any] = ctx.stored_data.get(client.get_goal_flags_key(ctx), dict())
+        goal_flags: List[int] = ctx.stored_data.get(client.get_goal_flags_key(ctx), [])
         if goal_flags is None:
-            goal_flags = dict()
+            goal_flags = []
         # logger.info(f"Goal flags: {goal_flags}")
-        for name in self.flag_requirements:
-            if not goal_flags.get(name, False):
+        for ap_id in self.desired_flags.values():
+            if ap_id not in goal_flags:
                 return False
 
         if "djinn" in self.count_requirements:
@@ -156,7 +156,7 @@ class GoalManager:
             if required_count > len(server_count):
                 return False
 
-        if "summon" in self.count_requirements:
+        if "summons" in self.count_requirements:
             required_count = self.count_requirements["summons"]
             server_count = len(client.summons)
             if required_count > server_count:
@@ -222,15 +222,14 @@ def cmd_print_progress(self: 'BizHawkClientCommandProcessor') -> None:
     client = _handle_common_cmd(self)
     if client is None:
         return
-    flags = self.ctx.stored_data.get(client.get_goal_flags_key(self.ctx))
+    flags: List[int] = self.ctx.stored_data.get(client.get_goal_flags_key(self.ctx))
     if flags is not None and len(flags) != 0:
         logger.info("Objectives Completed: ")
-        for flag, cleared in flags.items():
-            if cleared:
-                event_name = event_id_to_name
-                logger.info(event_name)
+        for flag in flags:
+            event_name = event_id_to_name
+            logger.info(event_name)
 
-    djinn_count = self.ctx.stored_data.get(client.get_djinn_count_key(self.ctx))
+    djinn_count: List[int] = self.ctx.stored_data.get(client.get_djinn_count_key(self.ctx))
     if "djinn" in client.goals.count_requirements and djinn_count is not None:
         logger.info(f"Djinn count: {len(djinn_count)}")
         # logger.info("Objectives Not Completed: ")
@@ -248,27 +247,6 @@ commands = [
     ("goals_completed", cmd_print_progress)
 ]
 
-
-class StartingItemHandler:
-
-    def __init__(self, starting_data: Mapping[str, int]):
-        self.starting_data = []
-        self.count = sum(starting_data.values())
-
-        keys = list(starting_data.keys())
-        keys.sort()
-
-        for key in keys:
-            c = starting_data[key]
-            for i in range(c):
-                self.starting_data.append(int(key))
-        logger.debug("Starting data: %s", self.starting_data)
-        logger.debug("Starting count: %s", self.count)
-
-    def __getitem__(self, n: int):
-        return self.starting_data[n]
-
-
 class GSTLAClient(BizHawkClient):
     game = 'Golden Sun The Lost Age'
     system = 'GBA'
@@ -283,8 +261,8 @@ class GSTLAClient(BizHawkClient):
         self.djinn_flag_map: Dict[int, str] = dict()
         self.checked_djinn: Set[int] = set()
         self.mimics = {x.id: x for x in mimics}
-        self.summons: Set[str] = set()
-        self.summon_index: int = 0
+        self.summons: Set[int] = set()
+        self.summon_item_index: int = 0
         for loc in all_locations:
             if loc.loc_type == LocationType.Event:
                 continue
@@ -293,7 +271,7 @@ class GSTLAClient(BizHawkClient):
                 self.djinn_flag_map[loc.flag] = loc_names_by_id[loc.addresses[0]]
         self.temp_locs: Set[int] = set()
         self.local_locations: Set[int] = set()
-        self.starting_items: StartingItemHandler = StartingItemHandler(dict())
+        # self.starting_items: StartingItemHandler = StartingItemHandler(dict())
         self.was_in_game: bool = False
         self.goals = GoalManager()
 
@@ -318,7 +296,7 @@ class GSTLAClient(BizHawkClient):
         for cmd, func in commands:
             if cmd not in ctx.command_processor.commands:
                 ctx.command_processor.commands[cmd] = func
-        ctx.items_handling = 0b001
+        ctx.items_handling = 0b111
         ctx.watcher_timeout = 1  # not sure what a reasonable setting here is; passed to asyncio.wait_for
         return True
 
@@ -350,15 +328,15 @@ class GSTLAClient(BizHawkClient):
         return f"gstla_goal_djinn_status_{ctx.slot}_{ctx.team}"
 
     def check_summon_count(self, ctx: "BizHawkClientContext") -> None:
-        if self.summon_index >= len(ctx.items_received):
+        if self.summon_item_index >= len(ctx.items_received):
             return
         end = len(ctx.items_received)
-        for i in range(self.summon_index, end):
+        for i in range(self.summon_item_index, end):
             item = ctx.items_received[i]
             itemdata = items_by_id[item.item]
             if itemdata.type == ItemType.Summon:
-                self.summons.add(itemdata.name)
-        self.summon_index = end
+                self.summons.add(itemdata.id)
+        self.summon_item_index = end
 
     def _check_djinn_flags(self, data: List[bytes]) -> None:
         flag_bytes = data[_DataLocations.DJINN_FLAGS]
@@ -415,46 +393,72 @@ class GSTLAClient(BizHawkClient):
             logger.debug("AP Item slot has data in it: %d", item_in_slot)
             return
         item_index = int.from_bytes(data[_DataLocations.AP_ITEMS_RECEIVED], 'little')
-        start_count = self.starting_items.count
-        item_code = None
-        if start_count > item_index:
-            logger.debug("Starting items to give: %d, Current Item Index: %d", start_count, item_index)
-            item_code = self.starting_items[item_index]
-        elif len(ctx.items_received) + start_count > item_index:
-            logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index - start_count)
-            item_code = ctx.items_received[item_index - start_count].item
-        if item_code is not None:
-            itemdata = items_by_id[item_code]
-            if itemdata.type == ItemType.Summon:
-                self.summons.add(itemdata.name)
-            logger.debug("Writing Item %d to Slot", item_code)
-            await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
-                                           item_code.to_bytes(length=2, byteorder="little"),
-                                           _DataLocations.AP_ITEM_SLOT.domain)])
+        cur_amount = len(ctx.items_received)
+        if cur_amount <= item_index:
+            return
+        logger.debug("Items to give: %d, Current Item Index: %d", len(ctx.items_received), item_index)
 
-    async def update_goal_flags(self, updated: dict[int, Any], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
-        messages = [
-            {
+        index_to_give = -1
+        for i in range(item_index, cur_amount):
+            item = ctx.items_received[i]
+            if self._should_give_to_player(ctx, item):
+                index_to_give = i
+                break
+            else:
+                logger.debug(f"Should not give item {item.item} to player")
+
+        if index_to_give == -1:
+            logger.debug("None of the current items should be given")
+            await write(ctx.bizhawk_ctx, [
+                (_DataLocations.AP_ITEMS_RECEIVED.addr,
+                 cur_amount.to_bytes(length=2, byteorder="little"),
+                 _DataLocations.AP_ITEMS_RECEIVED.domain)
+            ])
+            return
+        elif item_index != index_to_give:
+            # Update the item index so as to skip ones we don't care about
+            update_index = index_to_give - 1
+            await write(ctx.bizhawk_ctx, [
+                (_DataLocations.AP_ITEMS_RECEIVED.addr,
+                 update_index.to_bytes(length=2, byteorder="little"),
+                 _DataLocations.AP_ITEMS_RECEIVED.domain)
+            ])
+
+        item = ctx.items_received[index_to_give]
+
+        logger.debug("Writing Item %d to Slot", item.item)
+        await write(ctx.bizhawk_ctx, [(_DataLocations.AP_ITEM_SLOT.addr,
+                                       item.item.to_bytes(length=2, byteorder="little"),
+                                       _DataLocations.AP_ITEM_SLOT.domain)])
+
+    def _should_give_to_player(self, ctx: 'BizHawkClientContext', item: NetworkItem) -> bool:
+        if item.item in event_id_to_name:
+            return False
+        return ctx.slot != item.player
+
+    async def update_goal_flags(self, updated: Set[int], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
+        messages = []
+        if len(updated) > 0:
+            messages.append({
                 "cmd": "Set",
                 "operation": "update",
                 "want_reply": True,
                 "key": self.get_goal_flags_key(ctx),
-                "default": dict(),
+                "default": [],
                 "operations": [
                     {
                         "operation": "update",
-                        "value": updated,
+                        "value": [x for x in updated],
                     }
                 ]
-            }
-        ]
+            })
         if include_djinn:
             messages.append({
                 "cmd": "Set",
                 "operation": "update",
                 "want_reply": True,
                 "key": self.get_djinn_count_key(ctx),
-                "default": dict(),
+                "default": [],
                 "operations": [
                     {
                         "operation": "update",
@@ -462,18 +466,10 @@ class GSTLAClient(BizHawkClient):
                     }
                 ]
             })
-
-        await ctx.send_msgs(messages)
+        if messages:
+            await ctx.send_msgs(messages)
 
     async def game_watcher(self, ctx: 'BizHawkClientContext') -> None:
-        # TODO: implement
-        # 1. Verify that the game is running (emo tracker, read 2 bytes from 0x02000428 > 1)
-        # 2. Verify that a save file is loaded
-        # 3. Read the ROM for location flags that have been toggled.
-        # Send the appropriate items to AP
-        # 4. Check AP for items that should be granted to the player.
-        # Give them said items, assuming it is possible to give an item to a PC within the game
-        # and save slot selected
 
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
             logger.debug("Not connected to server...")
@@ -483,17 +479,18 @@ class GSTLAClient(BizHawkClient):
         if not self._is_in_game(result):
             # TODO: if the player goes back into the save file should we reset some things?
             self.local_locations = set()
-            self.starting_items = StartingItemHandler(dict())
+            # self.starting_items = StartingItemHandler(dict())
             self.was_in_game = False
             logger.debug("Not in game...")
             return
 
         if not self.was_in_game and ctx.slot_data is not None:
             logger.info(f"Slot data: {ctx.slot_data}")
-            self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
+            # self.starting_items = StartingItemHandler(ctx.slot_data.get('start_inventory', dict()))
             self.goals.init_reqs_from_slotdata(ctx.slot_data)
             for desired_flag in self.goals.desired_flags.keys():
                 self.goal_map[desired_flag] = False
+            self.check_summon_count(ctx)
             ctx.set_notify(self.get_goal_flags_key(ctx), self.get_djinn_count_key(ctx))
             logger.info(self.goals.flag_requirements)
             logger.info(self.goals.count_requirements)
@@ -516,6 +513,7 @@ class GSTLAClient(BizHawkClient):
 
 
         await self._receive_items(ctx, result)
+        self.check_summon_count(ctx)
 
         if self.temp_locs != self.local_locations:
             if self.temp_locs:
@@ -524,12 +522,7 @@ class GSTLAClient(BizHawkClient):
                 await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(self.local_locations)}])
 
         await self.goals.check_goals(self, ctx)
-        # if updated and updated['flags']:
-        #     logger.info(f"Updated: {updated}")
-        #     await self._update_goals(updated, ctx)
 
-        # victory_check = result[_DataLocations.DOOM_DRAGON]
-        # if victory_check[0] & 1 > 0 and not ctx.finished_game:
         if not ctx.finished_game and self.goals.is_done(self, ctx):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
