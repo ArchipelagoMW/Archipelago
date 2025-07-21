@@ -118,7 +118,10 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
                                                      update_ram_addr=[LMRamData(in_game_room_id=53)], require_poltergust=False),
     "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], remote_only=True,
                                                      update_ram_addr=[LMRamData(in_game_room_id=53)], require_poltergust=False),
-    # "Storage Room Cage": LMLocationData("Storage Room", 712, "Special", -1, []), # TODO Do we want this?
+    "Storage Room Cage Button": LMLocationData("Storage Room", 712, "Furniture", 285, [], remote_only=True,
+                                               update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP Entry 284? 285? 294? 309?
+    "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
+                                               update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP entry?
 
     # Special Case
     "Observatory Shoot the Moon": LMLocationData("Observatory", 24, "Special", -1, [], remote_only=True,
