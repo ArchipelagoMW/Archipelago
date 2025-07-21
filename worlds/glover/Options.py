@@ -70,10 +70,10 @@ class EnableAtlantisBonus(Toggle):
     """
     display_name = "Include Atlantis Bonus"
 
-class SwapLink(Toggle):
+class TagLink(Toggle):
     """When you transform the ball, everyone who enabled swap link changes character or the ball. Of course, the reverse is true too. Default off.
     """
-    display_name = "Swap Link"
+    display_name = "Tag Link"
 
 
 
@@ -275,7 +275,7 @@ class GloverOptions(PerGameCommonOptions):
     bonus_levels : EnableBonuses
     atlantis_bonus : EnableAtlantisBonus
     death_link : DeathLink
-    swap_link : SwapLink
+    tag_link : TagLink
 
     randomize_jump : RandomizeJump
     include_power_ball : IncludePowerBall

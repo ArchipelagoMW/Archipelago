@@ -1,0 +1,2310 @@
+[
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Arch Garibs": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				}
+			],
+			"Block Garibs": [
+				{
+					"ballRequirement": true,
+					"mv0": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Bull": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Bull Tip Left": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Bull Tip Right": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Center Platform": {
+				"B": [],
+				"D": [
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"regionIndex": 2,
+						"trickDifficulty": 0
+					}
+				]
+			},
+			"Checkers Garibs": [],
+			"Checkpoint": [
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Checkpoint 1": [
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Checkpoint Tip": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Cliff Life": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Edge Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Edge Platforms": {
+				"B": [],
+				"D": [
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 0,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 29,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 8,
+						"mv1": 26,
+						"mv2": 27,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 14,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					}
+				]
+			},
+			"End": {
+				"B": [
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 31,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"mv1": 16,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					}
+				],
+				"D": [
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					}
+				]
+			},
+			"Floor": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Goal": [
+				{
+					"ballRequirement": true,
+					"ck0": "Gate",
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				}
+			],
+			"Goal Life": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				}
+			],
+			"Pillar Garibs": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 8,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 31,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Pillar Life": [
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"mv2": 13,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 3,
+					"mv2": 32,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 11,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Pillars": {
+				"B": [],
+				"D": [
+					{
+						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 8,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 1
+					}
+				]
+			},
+			"Platform A Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
+				}
+			],
+			"Platform B Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
+				}
+			],
+			"Platform C Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
+				}
+			],
+			"Platform D Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 3,
+					"trickDifficulty": 0
+				}
+			],
+			"Platform E Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 2,
+					"trickDifficulty": 0
+				}
+			],
+			"Platforms Tip": [],
+			"Pool Edge Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 1,
+					"trickDifficulty": 0
+				}
+			],
+			"Shark Garibs": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			],
+			"Shark Tip": [
+				{
+					"ballRequirement": false,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				}
+			]
+		},
+		"l2": {
+			"Arch Garibs": [],
+			"Ball Switch": [],
+			"Bridge Garibs A": [],
+			"Bridge Garibs B": [],
+			"Bulls": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Clifftop": {
+				"B": [],
+				"D": []
+			},
+			"Clifftop Garibs": [],
+			"Drain Block": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch": [],
+			"Goal": [],
+			"Hercules Potion": [],
+			"Hidden Edge": {
+				"B": [],
+				"D": []
+			},
+			"Mesa Garibs": [],
+			"Mesa Jar": [],
+			"Plateau": {
+				"B": [],
+				"D": []
+			},
+			"Pool Edge Garibs": [],
+			"Pyramid Life": [],
+			"Roof Garibs": [],
+			"Rooftop": {
+				"B": [],
+				"D": []
+			},
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Shark Jars": [],
+			"Small Pool": {
+				"B": [],
+				"D": []
+			},
+			"Start": {
+				"B": [],
+				"D": []
+			},
+			"Tip": [],
+			"Under Roof": {
+				"B": [],
+				"D": []
+			},
+			"Under Roof Garibs": [],
+			"Vault Garibs": [],
+			"Waterfall Garibs": [],
+			"Wind-Ups": []
+		},
+		"l3": {
+			"Above Cave": {
+				"B": [],
+				"D": []
+			},
+			"Alcove Garibs": [],
+			"Balcony Garibs": [],
+			"Beside Pyramid": {
+				"B": [],
+				"D": []
+			},
+			"Bottom": {
+				"B": [],
+				"D": []
+			},
+			"Cave": {
+				"B": [],
+				"D": []
+			},
+			"Cave Garibs": [],
+			"Cave Life": [],
+			"Cave Wind-Ups": [],
+			"Ceiling Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Cliff Ball Switch": [],
+			"Cliff Garibs": [],
+			"Cliff Slide Life": [],
+			"Cliff Wind-Up": [],
+			"Cliffs": {
+				"B": [],
+				"D": []
+			},
+			"Goal": [],
+			"Island Garibs": [],
+			"Jetstream": {
+				"B": [],
+				"D": []
+			},
+			"Ledge": {
+				"B": [],
+				"D": []
+			},
+			"Overlook": {
+				"B": [],
+				"D": []
+			},
+			"Path Garibs": [],
+			"Path Wind-Up": [],
+			"Pit Life 1": [],
+			"Pit Life 2": [],
+			"Pool": {
+				"B": [],
+				"D": []
+			},
+			"Pool Garibs": [],
+			"Pyramid Ball Switch": [],
+			"Raceway": {
+				"B": [],
+				"D": []
+			},
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Slide Cliff Garibs": [],
+			"Speed Potion": [],
+			"Speed Wind-Ups": [],
+			"Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Stairs Garibs": [],
+			"Stalagmite": {
+				"B": [],
+				"D": []
+			},
+			"Sticky Potion": [],
+			"Under Waterfall Garibs": [],
+			"Under Waterfall Life": [],
+			"Walkway": {
+				"B": [],
+				"D": []
+			},
+			"Waterfall": {
+				"B": [],
+				"D": []
+			},
+			"Waterfall Garibs": [],
+			"Waterfall Wind-Ups": [],
+			"Waterwheel": {
+				"B": [],
+				"D": []
+			},
+			"Whale": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l4": {
+			"Boss": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Garibs A": [],
+			"Garibs B": [],
+			"Garibs C": [],
+			"Garibs D": [],
+			"Garibs E": [],
+			"Goal": [],
+			"Life": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		}
+	},
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Ball Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Bars Glover Switch": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Chicken": {
+				"B": [],
+				"D": []
+			},
+			"Chicken Garibs": [],
+			"Conveyor Target": [],
+			"Elephant Tip": [],
+			"Fairground": {
+				"B": [],
+				"D": []
+			},
+			"Frog Potion": [],
+			"Goal": [],
+			"Hercules Potion": [],
+			"Ice Cream Glover Switch": [],
+			"Icecream": {
+				"B": [],
+				"D": []
+			},
+			"Icecream Doorway": {
+				"B": [],
+				"D": []
+			},
+			"In Tent Life": [],
+			"Jerry Garibs": [],
+			"Jerry Tip": [],
+			"Plinko Garibs": [],
+			"Plinko Glover Switch": [],
+			"Plinko Life": [],
+			"Pre Gate": {
+				"B": [],
+				"D": []
+			},
+			"Pregate Garibs": [],
+			"Ramp Glover Switch": [],
+			"Rocket Garibs": [],
+			"Slide": {
+				"B": [],
+				"D": []
+			},
+			"Slide Doorway": {
+				"B": [],
+				"D": []
+			},
+			"Slide Garibs": [],
+			"Slide Glover Switch": [],
+			"Slide Tip": [],
+			"Slots Garibs": [],
+			"Slots Glover Switch": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Spawn Wind-Up": [],
+			"Strongman Garibs": [],
+			"Strongman Life": [],
+			"Top Tent Life": [],
+			"Tower": {
+				"B": [],
+				"D": []
+			},
+			"Trampoline": {
+				"B": [],
+				"D": []
+			},
+			"Whack-A-Mole": {
+				"B": [],
+				"D": []
+			},
+			"Whack-A-Mole Glover Switch": [],
+			"Whack-A-Mole Wind-Ups": []
+		},
+		"l2": {
+			"After Coaster Garibs": [],
+			"After Coaster Wind-Up": [],
+			"Ball Switch": [],
+			"Before Coaster Garibs": [],
+			"Before Coaster Wind-Up": [],
+			"Big Top Garibs": [],
+			"Bigtop": {
+				"B": [],
+				"D": []
+			},
+			"Blades": {
+				"B": [],
+				"D": []
+			},
+			"Boomerang Ball": [],
+			"Checkered Tilt Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Checkpoint 5": [],
+			"Chicken": {
+				"B": [],
+				"D": []
+			},
+			"Chicken Garibs": [],
+			"Clown": {
+				"B": [],
+				"D": []
+			},
+			"Clown Teeth Garibs": [],
+			"Clown Teeth Life": [],
+			"Coaster": {
+				"B": [],
+				"D": []
+			},
+			"Coaster Stop": {
+				"B": [],
+				"D": []
+			},
+			"Conveyor": {
+				"B": [],
+				"D": []
+			},
+			"Fan": {
+				"B": [],
+				"D": []
+			},
+			"Fan Garibs": [],
+			"Fan Life": [],
+			"Ferris Wheel": {
+				"B": [],
+				"D": []
+			},
+			"First Dropdown": {
+				"B": [],
+				"D": []
+			},
+			"Flying Garibs": [],
+			"Frog Potion": [],
+			"Goal": [],
+			"Halfpipe": {
+				"B": [],
+				"D": []
+			},
+			"Helicopter Potion": [],
+			"Mug": {
+				"B": [],
+				"D": []
+			},
+			"Post Clown": {
+				"B": [],
+				"D": []
+			},
+			"Red Tilt Garibs": [],
+			"Second Dropdown": {
+				"B": [],
+				"D": []
+			},
+			"Slide": {
+				"B": [],
+				"D": []
+			},
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Teacup Wind-Ups": [],
+			"Teacups": {
+				"B": [],
+				"D": []
+			},
+			"Teacups Garibs": [],
+			"Tent": {
+				"B": [],
+				"D": []
+			},
+			"Tent Garib": [],
+			"Tent Life": [],
+			"Tent Tilt Garibs": [],
+			"Tip": [],
+			"Underwater Garibs": []
+		},
+		"l3": {
+			"Ball Switch": [],
+			"Bee Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Cutout Garibs": [],
+			"Fenced Wind-Ups": [],
+			"Frog Potion": [],
+			"Funnel": {
+				"B": [],
+				"D": []
+			},
+			"Funnel Garibs": [],
+			"Funnel Life": [],
+			"Garden": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch": [],
+			"Goal": [],
+			"Goal Life": [],
+			"Hands Wind-Up": [],
+			"Jerry Platform Garibs": [],
+			"Jerry Platform Life 1": [],
+			"Jerry Platform Life 2": [],
+			"Jerry Platform Life 3": [],
+			"Left Pool Garibs": [],
+			"Lower Spintop Garibs": [],
+			"Monkeyball": {
+				"B": [],
+				"D": []
+			},
+			"Pool": {
+				"B": [],
+				"D": []
+			},
+			"Portal Garibs": [],
+			"Ramp Top": {
+				"B": [],
+				"D": []
+			},
+			"Ramps": {
+				"B": [],
+				"D": []
+			},
+			"Right Pool Garibs": [],
+			"Ring": {
+				"B": [],
+				"D": []
+			},
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Ships": {
+				"B": [],
+				"D": []
+			},
+			"Ships Garibs": [],
+			"Slide": {
+				"B": [],
+				"D": []
+			},
+			"Slide Garibs A": [],
+			"Slide Garibs B": [],
+			"Slide Garibs C": [],
+			"Slide Garibs D": [],
+			"Slide Life 1": [],
+			"Slide Life 2": [],
+			"Slide Top": {
+				"B": [],
+				"D": []
+			},
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Spinning": {
+				"B": [],
+				"D": []
+			},
+			"Spinning Wind-Ups": [],
+			"Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Sticky Potion": [],
+			"Tent Garibs": [],
+			"Tent Life": [],
+			"Tents": {
+				"B": [],
+				"D": []
+			},
+			"Triangles": {
+				"B": [],
+				"D": []
+			},
+			"Tube Life 1": [],
+			"Tube Life 2": [],
+			"Tumble": {
+				"B": [],
+				"D": []
+			},
+			"Upper Spintop Garibs": []
+		},
+		"l4": {
+			"Boss": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Goal": [],
+			"Inner Garibs": [],
+			"Life 1": [],
+			"Life 2": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Outer Garibs": []
+		}
+	},
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Air Ship": {
+				"B": [],
+				"D": []
+			},
+			"Beach": {
+				"B": [],
+				"D": []
+			},
+			"Beach Garibs": [],
+			"Box Garibs": [],
+			"Bridge Garibs": [],
+			"Cannon House Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Chest": {
+				"B": [],
+				"D": []
+			},
+			"Chest Life": [],
+			"Coast": {
+				"B": [],
+				"D": []
+			},
+			"Coast Target": [],
+			"Crate Ball Switch": [],
+			"Crateyard": {
+				"B": [],
+				"D": []
+			},
+			"Fan Ball Switch": [],
+			"Floating": {
+				"B": [],
+				"D": []
+			},
+			"Flying Ship A Garibs": [],
+			"Flying Ship B Garibs": [],
+			"Goal": [],
+			"Goal Ship": {
+				"B": [],
+				"D": []
+			},
+			"Island": {
+				"B": [],
+				"D": []
+			},
+			"Lake": {
+				"B": [],
+				"D": []
+			},
+			"Ledge": {
+				"B": [],
+				"D": []
+			},
+			"Lighthouse": {
+				"B": [],
+				"D": []
+			},
+			"Lighthouse Door Life": [],
+			"Lighthouse Garibs": [],
+			"Lighthouse Glover Switch": [],
+			"Lighthouse Lobster": [],
+			"Lighthouse Wind-Up": [],
+			"Pool": {
+				"B": [],
+				"D": []
+			},
+			"Raise Ship": {
+				"B": [],
+				"D": []
+			},
+			"Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Ramp Garibs": [],
+			"Ramp Life": [],
+			"Sand Ball Switch": [],
+			"Ship Target": [],
+			"Shore Wind-Up": [],
+			"Spawn Garibs": [],
+			"Sunken": {
+				"B": [],
+				"D": []
+			},
+			"Sunken Ship Garibs": [],
+			"Tilt Garibs A": [],
+			"Tilt Garibs B": [],
+			"Tip": [],
+			"Tip House Garibs": [],
+			"Tower": {
+				"B": [],
+				"D": []
+			},
+			"Tower Elevator Side": {
+				"B": [],
+				"D": []
+			},
+			"Tower Glover Switch": [],
+			"Tower Switch Side": {
+				"B": [],
+				"D": []
+			},
+			"Underwater Lobster": [],
+			"Walkway": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l2": {
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Conveyor Wind-Up": [],
+			"Crumble Path": {
+				"B": [],
+				"D": []
+			},
+			"End Platforms": {
+				"B": [],
+				"D": []
+			},
+			"Falling Bridge Garibs": [],
+			"Glover Switch": [],
+			"Glover Switch Garibs": [],
+			"Glover Switch Platform": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch Wind-Up": [],
+			"Goal": [],
+			"Goal Garibs": [],
+			"Left Bridge Garibs": [],
+			"Log Ramps": {
+				"B": [],
+				"D": []
+			},
+			"Midshack": {
+				"B": [],
+				"D": []
+			},
+			"Mini Platform Garibs": [],
+			"Moving Plank Garibs": [],
+			"Moving Plank Wind-Ups": [],
+			"Platform Ball Switch": [],
+			"Platform Lobster": [],
+			"Poolside": {
+				"B": [],
+				"D": []
+			},
+			"Shack Life 1": [],
+			"Shack Life 2": [],
+			"Shack Life 3": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Spawn Garibs": [],
+			"Spawn Lobster": [],
+			"Spawn Wind-Up": [],
+			"Stairs Garibs": [],
+			"Sword Runway": {
+				"B": [],
+				"D": []
+			},
+			"Three Elevators": {
+				"B": [],
+				"D": []
+			},
+			"Tree Spiral": {
+				"B": [],
+				"D": []
+			},
+			"Water Ball Switch": [],
+			"Water Edge Garibs": [],
+			"Zig-Zag Wind-Up": []
+		},
+		"l3": {
+			" Caged Life": [],
+			"Arch": {
+				"B": [],
+				"D": []
+			},
+			"Arch Garibs": [],
+			"Arch Life": [],
+			"Ball Switch": [],
+			"Ball Switch Ledge": {
+				"B": [],
+				"D": []
+			},
+			"Barrel Garibs": [],
+			"Barrel House": {
+				"B": [],
+				"D": []
+			},
+			"Big House Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Bridge": {
+				"B": [],
+				"D": []
+			},
+			"Bridge Garibs": [],
+			"Broken Wall Life": [],
+			"Cannonballs Glover Switch": [],
+			"Cave": {
+				"B": [],
+				"D": []
+			},
+			"Cave Garibs": [],
+			"Cave Life": [],
+			"Cave Mouth Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Checkpoint House": {
+				"B": [],
+				"D": []
+			},
+			"Chipped Wall": {
+				"B": [],
+				"D": []
+			},
+			"Cliff Glover Switch": [],
+			"Cliff Lobster": [],
+			"Cracked Wall Garibs": [],
+			"Crooked Rockpath": {
+				"B": [],
+				"D": []
+			},
+			"Crumbling Path": {
+				"B": [],
+				"D": []
+			},
+			"Dead End Garibs": [],
+			"Dead End Wind-Up": [],
+			"Doorway Cliff": {
+				"B": [],
+				"D": []
+			},
+			"End Walkway": {
+				"B": [],
+				"D": []
+			},
+			"Goal": [],
+			"Grassroof": {
+				"B": [],
+				"D": []
+			},
+			"Hercules Potion": [],
+			"Hercules Trampoline": {
+				"B": [],
+				"D": []
+			},
+			"High House": {
+				"B": [],
+				"D": []
+			},
+			"House Gap": {
+				"B": [],
+				"D": []
+			},
+			"House Garibs": [],
+			"Life Platforms": {
+				"B": [],
+				"D": []
+			},
+			"Lip Life": [],
+			"Lobstervator Garibs": [],
+			"Megabarrel": {
+				"B": [],
+				"D": []
+			},
+			"Plank Ledge": {
+				"B": [],
+				"D": []
+			},
+			"Post-Stair Garibs": [],
+			"Push Crate Garibs": [],
+			"Push Plank Garibs": [],
+			"Ramp Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Stairs Wind-Ups": [],
+			"Sticky Potion": [],
+			"Stone Path Garibs": [],
+			"Switch Dropdown": {
+				"B": [],
+				"D": []
+			},
+			"Target": [],
+			"Tilted Cliff Garibs": [],
+			"Tip": [],
+			"Trampoline Garibs": [],
+			"Trampoline Lobster": [],
+			"Turnbridge": {
+				"B": [],
+				"D": []
+			},
+			"Under Bridge Trampoline": {
+				"B": [],
+				"D": []
+			},
+			"Under Town": {
+				"B": [],
+				"D": []
+			},
+			"Warp House": {
+				"B": [],
+				"D": []
+			},
+			"Warp House Garibs": [],
+			"Warp House Life": [],
+			"Warp House Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Wind-Up Stairs": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l4": {
+			"Boss": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Barrel A Garibs": [],
+			"Barrel B Garibs": [],
+			"Barrel C Garibs": [],
+			"Barrel D Garibs": [],
+			"Barrel E Garibs": [],
+			"Barrel F Garibs": [],
+			"Barrel G Garibs": [],
+			"Barrel H Garibs": [],
+			"Bottom": {
+				"B": [],
+				"D": []
+			},
+			"Bottom Barrel Life": [],
+			"Center Column Garibs": [],
+			"Floating A Garibs": [],
+			"Floating B Garibs": [],
+			"Floating C Garibs": [],
+			"Floating D Garibs": [],
+			"Floating E Garibs": [],
+			"Floating F Garibs": [],
+			"Goal": [],
+			"Goal Life": [],
+			"Middle Barrel Life": [],
+			"Second Barrel": {
+				"B": [],
+				"D": []
+			},
+			"Top": {
+				"B": [],
+				"D": []
+			},
+			"Top Barrel Life": [],
+			"Top Garibs": []
+		}
+	},
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Alcove Garibs": [],
+			"Alcove Life 1": [],
+			"Alcove Life 2": [],
+			"Avalanche": {
+				"B": [],
+				"D": []
+			},
+			"Ball Ledge": {
+				"B": [],
+				"D": []
+			},
+			"Big Island Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Cliff Bottom Garibs": [],
+			"Cliff Platforms": {
+				"B": [],
+				"D": []
+			},
+			"Dino Garibs": [],
+			"Double Ice Wall Garibs": [],
+			"Dragonfly": {
+				"B": [],
+				"D": []
+			},
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Frozen Ball Garibs": [],
+			"Goal": [],
+			"Goal Garibs": [],
+			"Hanging Garibs": [],
+			"Ice Bridge Garibs": [],
+			"Ice Cave": {
+				"B": [],
+				"D": []
+			},
+			"Ice Cave Garibs": [],
+			"Ice Cave Life": [],
+			"Ice Face Garibs": [],
+			"Ice Face Life": [],
+			"Ice Lake": {
+				"B": [],
+				"D": []
+			},
+			"Ice Lakeside": {
+				"B": [],
+				"D": []
+			},
+			"Ice Path": {
+				"B": [],
+				"D": []
+			},
+			"Island": {
+				"B": [],
+				"D": []
+			},
+			"Lake Path Garibs": [],
+			"Left Below Ice Garibs": [],
+			"Lower Cliffside Garibs": [],
+			"Post Icicles": {
+				"B": [],
+				"D": []
+			},
+			"Right Below Ice Garibs": [],
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Small Island Garibs": [],
+			"Snow Edge": {
+				"B": [],
+				"D": []
+			},
+			"Snowball Hill Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Under Ice": {
+				"B": [],
+				"D": []
+			},
+			"Upper Cliffside Garibs": [],
+			"Wind-Up": []
+		},
+		"l2": {
+			"After Valley Garibs": [],
+			"Bottom Avalanche Garibs": [],
+			"Bottom Valley Life": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Checkpoint Pillar": {
+				"B": [],
+				"D": []
+			},
+			"Dino Garibs": [],
+			"Dino Tree Garibs": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Floor Before Slope": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch": [],
+			"Goal": [],
+			"Goal Life": [],
+			"Hilltop": {
+				"B": [],
+				"D": []
+			},
+			"Island Garibs": [],
+			"Lava Shore": {
+				"B": [],
+				"D": []
+			},
+			"Lavafall Ball Switch": [],
+			"Lavafall Garib": [],
+			"Lavafall Platform": {
+				"B": [],
+				"D": []
+			},
+			"Lower Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Lower Tree Rex": {
+				"B": [],
+				"D": []
+			},
+			"Lowering Island": {
+				"B": [],
+				"D": []
+			},
+			"Lowering Platform": {
+				"B": [],
+				"D": []
+			},
+			"Middle Avalanche Garibs": [],
+			"Midpoint": {
+				"B": [],
+				"D": []
+			},
+			"Mini Lava Platform": {
+				"B": [],
+				"D": []
+			},
+			"Nook Garibs": [],
+			"Platform Before Slope": {
+				"B": [],
+				"D": []
+			},
+			"Push Wall Garibs": [],
+			"Push Wall Life": [],
+			"Rockslide Bottom": {
+				"B": [],
+				"D": []
+			},
+			"Rockslide Top": {
+				"B": [],
+				"D": []
+			},
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Sign Garibs": [],
+			"Sign Hill": {
+				"B": [],
+				"D": []
+			},
+			"Skull Garib": [],
+			"Slope": {
+				"B": [],
+				"D": []
+			},
+			"Slope Garibs": [],
+			"Slope Wind-Up": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Spawn Garibs": [],
+			"Switches Ball Switch": [],
+			"Switches Garibs": [],
+			"Switches Life": [],
+			"Teeter": {
+				"B": [],
+				"D": []
+			},
+			"Tilt Garibs": [],
+			"Top Avalanche Garibs": [],
+			"Top Valley Life": [],
+			"Trees Garib": [],
+			"Triceratops Garibs": [],
+			"Triceratops Wind-Up": [],
+			"Upper Tree Rex": {
+				"B": [],
+				"D": []
+			},
+			"Valley": {
+				"B": [],
+				"D": []
+			},
+			"Valley Garibs": [],
+			"Valley Wind-Up": []
+		},
+		"l3": {
+			"Cave": {
+				"B": [],
+				"D": []
+			},
+			"Cave Garibs": [],
+			"Cave Life": [],
+			"Cave Speed Potion": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Circle Lava Garibs": [],
+			"Death Potion": [],
+			"Flying Lava Ball Switch": [],
+			"Flying Lava Garibs": [],
+			"Goal": [],
+			"Grass Ring Garibs": [],
+			"Grass Ring Wind-Up": [],
+			"High Speed Potion": [],
+			"Lake": {
+				"B": [],
+				"D": []
+			},
+			"Lava Ledge Garibs": [],
+			"Lava Pit Ball Switch": [],
+			"Love Tree Garibs": [],
+			"Love Tree Life": [],
+			"Lower Grass Ledge Garibs": [],
+			"Lower Grass Ledge Life": [],
+			"Monolith A": [],
+			"Monolith B": [],
+			"Monolith Ball Switch": [],
+			"Monolith C": [],
+			"Monolith D": [],
+			"Monolith Wind-Ups": [],
+			"Slope": {
+				"B": [],
+				"D": []
+			},
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Trees Glover Switch": [],
+			"Triceratops Garibs": [],
+			"Turning Stones": {
+				"B": [],
+				"D": []
+			},
+			"Turning Stones Garibs": [],
+			"Upper Grass Ledge Garibs": []
+		},
+		"l4": {
+			"Boss": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Swag": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Archway Garibs": [],
+			"Archway Life": [],
+			"Fossil Garibs": [],
+			"Fossils Life": [],
+			"Goal": [],
+			"Goal Garibs": [],
+			"Homestretch Life": [],
+			"Lava Garibs": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Rock Life": [],
+			"Sharp Turn Garibs": [],
+			"Spawn Garibs": []
+		}
+	},
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Above Electric": {
+				"B": [],
+				"D": []
+			},
+			"Above Electric Garib": [],
+			"Above Electric Life": [],
+			"Ball Lip": {
+				"B": [],
+				"D": []
+			},
+			"Beachball": [],
+			"Beachball Garibs": [],
+			"Beachball Slope": {
+				"B": [],
+				"D": []
+			},
+			"Behind Tower Life": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Cleet Bridge": {
+				"B": [],
+				"D": []
+			},
+			"Cleets Garibs": [],
+			"Coffin Garibs": [],
+			"Coffin Glover Switch": [],
+			"Coffin Pair": {
+				"B": [],
+				"D": []
+			},
+			"Copper": {
+				"B": [],
+				"D": []
+			},
+			"Copper Edge": {
+				"B": [],
+				"D": []
+			},
+			"Dead-End Glover Switch": [],
+			"Dirt Hill": {
+				"B": [],
+				"D": []
+			},
+			"Dirt Hill Garibs": [],
+			"Dirt Hill Helicopter Potion": [],
+			"Dropdown": {
+				"B": [],
+				"D": []
+			},
+			"Dropdown Boomerang Ball": [],
+			"Dropdown Garibs": [],
+			"Electric Garibs": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Flying Platform": {
+				"B": [],
+				"D": []
+			},
+			"Frog Potion": [],
+			"Ghost Garibs": [],
+			"Glover Switch Garibs": [],
+			"Goal": [],
+			"Large Plank Garibs": [],
+			"Left Ghost Ledge Garibs": [],
+			"Left Target": [],
+			"Left Tower Garib": [],
+			"Post-Gate": {
+				"B": [],
+				"D": []
+			},
+			"Pre-Gate Edge": {
+				"B": [],
+				"D": []
+			},
+			"Pre-Gate Floor": {
+				"B": [],
+				"D": []
+			},
+			"Push Blocks": [],
+			"Ramp Boomerang Ball": [],
+			"Right Ghost Ledge Garibs": [],
+			"Right Target": [],
+			"Right Tower Garib": [],
+			"Sign Platform": {
+				"B": [],
+				"D": []
+			},
+			"Sky Platform Garibs": [],
+			"Sky Platform Helicopter Potion": [],
+			"Sky Platform Life 1": [],
+			"Sky Platform Life 2": [],
+			"Small Plank Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Tower": {
+				"B": [],
+				"D": []
+			},
+			"Wind-Up": []
+		},
+		"l2": {
+			"Above Doorway Life": [],
+			"Above Dynamite": {
+				"B": [],
+				"D": []
+			},
+			"Above Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Carpet Garibs": [],
+			"Castle": {
+				"B": [],
+				"D": []
+			},
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Collapsing Garibs": [],
+			"Collapsing Life": [],
+			"Dropdown Garibs": [],
+			"Dropdown Life": [],
+			"Dynamite": {
+				"B": [],
+				"D": []
+			},
+			"Dynamite Garibs": [],
+			"Dynamite Pillar": {
+				"B": [],
+				"D": []
+			},
+			"Electric": {
+				"B": [],
+				"D": []
+			},
+			"Electric Garibs": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Gate Garibs": [],
+			"Gate Life": [],
+			"Goal": [],
+			"Left Rooftop Garibs": [],
+			"Lowest Swinging Platform": {
+				"B": [],
+				"D": []
+			},
+			"Mummy": [],
+			"Mummy Garibs": [],
+			"Pillar Garibs": [],
+			"Push Switch": [],
+			"Push Target": [],
+			"Right Rooftop Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Swinging Garibs": [],
+			"Switchroom": {
+				"B": [],
+				"D": []
+			},
+			"Tip": [],
+			"Wind-Up": [],
+			"Wood Garibs": []
+		},
+		"l3": {
+			"Ball Switch": [],
+			"Barrels": {
+				"B": [],
+				"D": []
+			},
+			"Beachball": [],
+			"Beachball Garibs": [],
+			"Beachball Platform": {
+				"B": [],
+				"D": []
+			},
+			"Castle Top": {
+				"B": [],
+				"D": []
+			},
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Checkpoint 5": [],
+			"Checkpoint Slope": {
+				"B": [],
+				"D": []
+			},
+			"Coffin Garibs": [],
+			"Coffins": {
+				"B": [],
+				"D": []
+			},
+			"Crumbling Garibs": [],
+			"Electric Garibs": [],
+			"Electric Roof": {
+				"B": [],
+				"D": []
+			},
+			"Electric Roof Garibs": [],
+			"Electric Rotating": {
+				"B": [],
+				"D": []
+			},
+			"Electric Wind-Up": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Flying Crenels": {
+				"B": [],
+				"D": []
+			},
+			"Gate Garibs": [],
+			"Goal": [],
+			"Guillotine": {
+				"B": [],
+				"D": []
+			},
+			"Guillotine Garibs": [],
+			"L Roof": {
+				"B": [],
+				"D": []
+			},
+			"L Roof Garibs": [],
+			"Left Buttress Life 1": [],
+			"Left Buttress Life 2": [],
+			"Left U Roof Garibs": [],
+			"Lower Rocking Platform": {
+				"B": [],
+				"D": []
+			},
+			"Metal Jaws Life": [],
+			"Path Lip Garibs": [],
+			"Post-Gate": {
+				"B": [],
+				"D": []
+			},
+			"Pre-Gate": {
+				"B": [],
+				"D": []
+			},
+			"Right Buttress Life 1": [],
+			"Right Buttress Life 2": [],
+			"Right U Roof Garibs": [],
+			"Slant Ring Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Spike Runway": {
+				"B": [],
+				"D": []
+			},
+			"Spike Wall Top": {
+				"B": [],
+				"D": []
+			},
+			"Spiketrap Life": [],
+			"Spikewall Life": [],
+			"Stone Garibs": [],
+			"Stone Wind-Ups": [],
+			"Swinging Garibs": [],
+			"Target": [],
+			"Tower Exit": {
+				"B": [],
+				"D": []
+			},
+			"Tower Spike Warp": {
+				"B": [],
+				"D": []
+			},
+			"U Roof": {
+				"B": [],
+				"D": []
+			},
+			"Wood Bridge": {
+				"B": [],
+				"D": []
+			},
+			"Wood Slant Garibs": [],
+			"Wood Wheel": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l4": {
+			"Boss": [],
+			"Floor": {
+				"B": [],
+				"D": []
+			},
+			"Ledges": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Garibs A": [],
+			"Garibs B": [],
+			"Garibs C": [],
+			"Garibs D": [],
+			"Goal": [],
+			"Life": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		}
+	},
+	{
+		"l0": {
+			"Entry 1": [],
+			"Entry 2": [],
+			"Entry 3": [],
+			"Entry Bonus": [],
+			"Entry Boss": [],
+			"Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Tip": []
+		},
+		"l1": {
+			"Aliens Life": [],
+			"Alone Fan Garibs": [],
+			"Alone Fan Wind-Up": [],
+			"Ancient Aliens": {
+				"B": [],
+				"D": []
+			},
+			"Atop UFO Garibs": [],
+			"Bridge Garibs": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Cliff Glover Switch": [],
+			"Connector Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Craters": {
+				"B": [],
+				"D": []
+			},
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Flying Platform Garibs": [],
+			"Flying Platforms": {
+				"B": [],
+				"D": []
+			},
+			"Glover Switch Wind-Up": [],
+			"Goal": [],
+			"Goo Platform": {
+				"B": [],
+				"D": []
+			},
+			"Goo Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Goo Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Hazard Stripe Ball Switch": [],
+			"Highest Platform": {
+				"B": [],
+				"D": []
+			},
+			"Inside UFO Garibs": [],
+			"Large Fan Garibs": [],
+			"Large Fan Wind-Up": [],
+			"Medium Fan Garibs": [],
+			"Medium Fan Wind-Up": [],
+			"Ramptop": {
+				"B": [],
+				"D": []
+			},
+			"Rocketship": {
+				"B": [],
+				"D": []
+			},
+			"Rocketship Hill": {
+				"B": [],
+				"D": []
+			},
+			"Rocketship Life": [],
+			"Sign Garib": [],
+			"Sign Glover Switch": [],
+			"Sloped Path": {
+				"B": [],
+				"D": []
+			},
+			"Small Fan Garibs": [],
+			"Small Fan Wind-Up": [],
+			"Stone Pillar Ball Switch": [],
+			"UFO Glover Switch": [],
+			"UFO Inside": {
+				"B": [],
+				"D": []
+			},
+			"UFO Top": {
+				"B": [],
+				"D": []
+			},
+			"Walkway": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l2": {
+			"Above Mashers": {
+				"B": [],
+				"D": []
+			},
+			"Above Mashers Garibs": [],
+			"Above Pushers": {
+				"B": [],
+				"D": []
+			},
+			"Ball Archway": {
+				"B": [],
+				"D": []
+			},
+			"Before Mashers Garibs": [],
+			"Behind Spawn Garibs": [],
+			"Checkpoint 1": [],
+			"Cliff Ball Switch": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Goal": [],
+			"Goo": {
+				"B": [],
+				"D": []
+			},
+			"Left Spawn Walkway": {
+				"B": [],
+				"D": []
+			},
+			"Masher Wind-Ups": [],
+			"Metal Walkway Garibs": [],
+			"Post Crushers": {
+				"B": [],
+				"D": []
+			},
+			"Post Mashers": {
+				"B": [],
+				"D": []
+			},
+			"Pusher Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Pushers": {
+				"B": [],
+				"D": []
+			},
+			"Pyramid Garibs": [],
+			"Pyramid Life": [],
+			"Race Bridge Garibs": [],
+			"Ramp Jump Arch Garibs": [],
+			"Ramp Jump Archway": {
+				"B": [],
+				"D": []
+			},
+			"Right Platform Ball Switch": [],
+			"Right Spawn Platform": {
+				"B": [],
+				"D": []
+			},
+			"Secret": {
+				"B": [],
+				"D": []
+			},
+			"Slope Wind-Ups": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Speed Potion": [],
+			"Spike Wall Garibs": [],
+			"Stone Bridge": {
+				"B": [],
+				"D": []
+			},
+			"Under Spike Garibs": []
+		},
+		"l3": {
+			"Above Fan Garibs": [],
+			"Above Fan Red Switch": [],
+			"Boomerang Ball": [],
+			"Checkpoint 1": [],
+			"Checkpoint 2": [],
+			"Checkpoint 3": [],
+			"Checkpoint 4": [],
+			"Checkpoint Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Conveyor Glover Switch": [],
+			"Conveyor Island Garibs": [],
+			"End": {
+				"B": [],
+				"D": []
+			},
+			"Fan": {
+				"B": [],
+				"D": []
+			},
+			"Final Walkway": {
+				"B": [],
+				"D": []
+			},
+			"First Conveyor Garibs": [],
+			"Garib Bridge": {
+				"B": [],
+				"D": []
+			},
+			"Glass": {
+				"B": [],
+				"D": []
+			},
+			"Glass Ball Switch": [],
+			"Glass Pyramids Garibs": [],
+			"Goal": [],
+			"L Turn": {
+				"B": [],
+				"D": []
+			},
+			"Last Conveyor Garibs": [],
+			"Left Guard Rail Garibs": [],
+			"Lights Gate": {
+				"B": [],
+				"D": []
+			},
+			"Lower Conveyor": {
+				"B": [],
+				"D": []
+			},
+			"Lower Conveyor Start": {
+				"B": [],
+				"D": []
+			},
+			"Magnet": {
+				"B": [],
+				"D": []
+			},
+			"Magnet Switch": [],
+			"Middle Conveyor Garibs": [],
+			"Pinwheel": {
+				"B": [],
+				"D": []
+			},
+			"Pinwheel Conveyor": {
+				"B": [],
+				"D": []
+			},
+			"Pinwheel Garibs": [],
+			"Pinwheel Life": [],
+			"Post-Fan Ramp": {
+				"B": [],
+				"D": []
+			},
+			"Ramp Garibs": [],
+			"Red Vents": {
+				"B": [],
+				"D": []
+			},
+			"Right Guard Rail Garibs": [],
+			"Spawn": {
+				"B": [],
+				"D": []
+			},
+			"Split Path Left Garibs": [],
+			"Split Path Right Garibs": [],
+			"Teleport Entry": {
+				"B": [],
+				"D": []
+			},
+			"Teleport Exit": {
+				"B": [],
+				"D": []
+			},
+			"Throwbot": {
+				"B": [],
+				"D": []
+			},
+			"Upper Conveyor": {
+				"B": [],
+				"D": []
+			},
+			"Walkway Corner Garibs": []
+		},
+		"l4": {
+			"Boss": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l5": {
+			"Air Helicopter Potion A": [],
+			"Air Helicopter Potion B": [],
+			"Air Helicopter Potion C": [],
+			"Air Helicopter Potion D": [],
+			"Bottom Ring Garibs": [],
+			"Column A Garibs": [],
+			"Column B Garibs": [],
+			"Column C Garibs": [],
+			"Column D Garibs": [],
+			"Floor Helicopter Potion A": [],
+			"Floor Helicopter Potion B": [],
+			"Floor Helicopter Potion C": [],
+			"Floor Helicopter Potion D": [],
+			"Goal": [],
+			"Life 1": [],
+			"Life 2": [],
+			"Life 3": [],
+			"Life 4": [],
+			"Life 5": [],
+			"Life 6": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"Middle Ring Garibs": [],
+			"Spawn Helicopter Potion": [],
+			"Top Ring Garibs": []
+		}
+	},
+	{
+		"l0": {
+			"Atlantis Hub Entry": [],
+			"Carnival Hub Entry": [],
+			"Castle Cave Entry": [],
+			"Cheat Chicken": [],
+			"Fear Hub Entry": [],
+			"Main": {
+				"B": [],
+				"D": []
+			},
+			"OotW Hub Entry": [],
+			"Pirates Hub Entry": [],
+			"Prehistoric Hub Entry": [],
+			"Well Entry": []
+		},
+		"l1": {
+			"Ball Turn-In": [],
+			"Cave Exit": [],
+			"Main": {
+				"B": [],
+				"D": []
+			}
+		},
+		"l2": {
+			"Ball Switch": [],
+			"Ball Switch Tip": [],
+			"Bounce Throw Tip": [],
+			"Boxes": {
+				"B": [],
+				"D": []
+			},
+			"Camera Tip": [],
+			"Crate Tip": [],
+			"Deep Pool Tip": [],
+			"Dribble Tip": [],
+			"Duck Tip": [],
+			"End Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Fist Slam Tip": [],
+			"Glover Switch": [],
+			"Glover Switch Tip": [],
+			"Goal": [],
+			"Highground": {
+				"B": [],
+				"D": []
+			},
+			"Intro Tip": [],
+			"No Ball Tip": [],
+			"Pools": {
+				"B": [],
+				"D": []
+			},
+			"Sandtrap": {
+				"B": [],
+				"D": []
+			},
+			"Second Pit": {
+				"B": [],
+				"D": []
+			},
+			"Shallow Pool Tip": [],
+			"Slap Tip": [],
+			"Stairs": {
+				"B": [],
+				"D": []
+			},
+			"Start": {
+				"B": [],
+				"D": []
+			},
+			"Target": [],
+			"Toss Tip": [],
+			"Z-Cancel Tip": []
+		}
+	}
+]
