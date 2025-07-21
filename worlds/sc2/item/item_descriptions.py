@@ -471,7 +471,7 @@ item_descriptions = {
         Level 1: Lift Off - Planetary Fortress can lift off.
         Level 2: Armament Stabilizers - Planetary Fortress can attack while lifted off.
     """),
-    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS: "Planetary Fortress can attack air units.",
+    item_names.PLANETARY_FORTRESS_IBIKS_TRACKING_SCANNERS: "Planetary Fortress can attack air units.",
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR: "Allows Valkyries to shoot air while moving.",
     item_names.VALKYRIE_RESOURCE_EFFICIENCY: _get_resource_efficiency_desc(item_names.VALKYRIE),
     item_names.PREDATOR_VESPENE_SYNTHESIS: "Gives 1 free Vespene per target hit with Lightning Field.",
@@ -991,7 +991,7 @@ item_descriptions = {
     item_names.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING: "Immortals and Annihilators can attack air units.",
     item_names.IMMORTAL_ANNIHILATOR_DISRUPTOR_DISPERSION: "Immortals and Annihilators deal minor splash damage.",
     item_names.STALWART_HIGH_VOLTAGE_CAPACITORS: "Increases Stalwart attack bounce range by +1.",
-    item_names.STALWART_REINTIGRATED_FRAMEWORK: "Increases the movement speed of Stalwarts.",
+    item_names.STALWART_REINTEGRATED_FRAMEWORK: "Increases the movement speed of Stalwarts.",
     item_names.STALWART_STABILIZED_ELECTRODES: "Allows Stalwarts to attack while moving, and increases attack range by +1.",
     item_names.STALWART_LATTICED_SHIELDING: "Increases Stalwart max shields by +50.",
     item_names.DISRUPTOR_CLOAKING_MODULE: "Disruptors are permanently cloaked.",

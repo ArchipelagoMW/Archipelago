@@ -720,7 +720,7 @@ item_table = {
     item_names.PLANETARY_FORTRESS_PROGRESSIVE_AUGMENTED_THRUSTERS:
         ItemData(388 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Progressive, 28, SC2Race.TERRAN,
                  parent=item_names.PLANETARY_FORTRESS, quantity=2),
-    item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS:
+    item_names.PLANETARY_FORTRESS_IBIKS_TRACKING_SCANNERS:
         ItemData(389 + SC2WOL_ITEM_ID_OFFSET, TerranItemType.Armory_6, 7, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent=item_names.PLANETARY_FORTRESS),
     item_names.VALKYRIE_LAUNCHING_VECTOR_COMPENSATOR:
@@ -1836,7 +1836,7 @@ item_table = {
     item_names.DAWNBRINGER_ANTI_SURFACE_COUNTERMEASURES: ItemData(385 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 25, SC2Race.PROTOSS, parent=item_names.DAWNBRINGER),
     item_names.DAWNBRINGER_ENHANCED_SHIELD_GENERATOR: ItemData(386 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 26, SC2Race.PROTOSS, parent=item_names.DAWNBRINGER),
     item_names.STALWART_HIGH_VOLTAGE_CAPACITORS: ItemData(387 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 27, SC2Race.PROTOSS, parent=item_names.STALWART),
-    item_names.STALWART_REINTIGRATED_FRAMEWORK: ItemData(388 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 28, SC2Race.PROTOSS, parent=item_names.STALWART),
+    item_names.STALWART_REINTEGRATED_FRAMEWORK: ItemData(388 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 28, SC2Race.PROTOSS, parent=item_names.STALWART),
     item_names.STALWART_STABILIZED_ELECTRODES: ItemData(389 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_3, 29, SC2Race.PROTOSS, parent=item_names.STALWART),
     item_names.STALWART_LATTICED_SHIELDING: ItemData(390 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 0, SC2Race.PROTOSS, parent=item_names.STALWART),
     item_names.ARCHON_TRANSCENDENCE: ItemData(391 + SC2LOTV_ITEM_ID_OFFSET, ProtossItemType.Forge_4, 1, SC2Race.PROTOSS, parent=parent_names.ARCHON_SOURCE),
