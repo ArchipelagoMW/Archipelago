@@ -56,7 +56,7 @@
                 "name": "Central Hall",
                 "sections": [
                     { "name": "Central Hall: Examine Council Sign" },
-                    { "name": "Central Hall: Examine Launch Memoral" },
+                    { "name": "Central Hall: Examine Launch Memorial" },
                     { "name": "Central Hall: Examine Council Tenets" },
                     { "name": "Central Hall: Turrets and Double Axe Robot Room" },
                     { "name": "Central Hall: Vents" }
