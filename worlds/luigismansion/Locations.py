@@ -123,6 +123,7 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
                                                update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP entry?
 
+
     # Special Case
     "Observatory Shoot the Moon": LMLocationData("Observatory", 24, "Special", -1, [], remote_only=True,
         update_ram_addr = [LMRamData(0x803D339F, bit_position=2, in_game_room_id=44)]),
@@ -229,6 +230,12 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
         update_ram_addr=[LMRamData(0x803CDFB4, bit_position=2, in_game_room_id=53, ram_byte_size=2)]),
     "Van Gore's Painting (Artist's Studio)": LMLocationData("Artist's Studio", 709, "Furniture", 690, [],
         update_ram_addr=[LMRamData(0x803CDFC2, bit_position=2, in_game_room_id=60, ram_byte_size=2)]),
+    "Defeat Chauncey": LMLocationData("Nursery", 924, "Portrait", 77, [], remote_only=True,
+                                      update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)]),
+    "Defeat Bogmire": LMLocationData("Graveyard", 923, "Portrait", 0, [], remote_only=True,
+                                     update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)]),
+    "Defeat Boolussus": LMLocationData("Balcony", 922, "Portrait", 56, ["Ice Element Medal"],
+                    remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)]),
 }
 
 # Adds Toads as locations
