@@ -116,7 +116,7 @@ class MoneyLogic(BaseLogic):
         if currency == MemeCurrency.steps and amount < 6000:
             return self.logic.true_
         if currency == MemeCurrency.steps:
-            return self.logic.time.has_lived_months(amount // 5000)
+            return self.logic.time.has_lived_months(amount // 10000)
 
         if currency == MemeCurrency.cookies:
             return self.logic.time.has_lived_months(amount // 10000)
