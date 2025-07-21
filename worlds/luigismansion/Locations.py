@@ -44,14 +44,13 @@ class LMLocation(Location):
 # Chest item contents are modified in treasuretable and are always included
 # Furniture item contents are modified in furnitureinfo, some are always included
 # Plant item contents are modified in furnitureinfo but are only included when Plantsanity is active
-# BGhosts (DBSpeedy) are Blue Ghosts - item contents are modified in
-# enemytable (teidenenemyinfo) but are only included when SpeedySpirits option is active
-# GSpeedy (DGSpeedy) Are Gold # Mice - item contents are modified in
-# unknown (unknown) but are only included when SpeedySpirits option is active
+# BSpeedy are Blue Ghosts - item contents are modified in
+# iyapootable but are only included when SpeedySpirits option is active
+# Mouse Are Gold Mice - item contents are modified in
+# iyapootable but are only included when GoldMice option is active
 # Portrait item contents are modified in characterinfo but are only included when PortraitGhosts option is active
-# Toad item contents are unable to be modifeid without further study, included here for future developments
-# Boo item contents are unable to be modified without further study, included here for future developments. All
-# require Boo Radar
+# Toad item contents are unable to be modified without further study
+# Boo item contents are unable to be modified without further study. All require Boo Radar
 
 # Base Chests / Locations
 BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
