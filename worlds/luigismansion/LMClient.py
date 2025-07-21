@@ -402,7 +402,7 @@ class LMContext(CommonContext):
             return False
 
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
-        if curr_map_id in [2, 9, 10, 11, 13]:
+        if curr_map_id in [2, 3, 6, 9, 10, 11, 13]:
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
 
