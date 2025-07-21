@@ -68,16 +68,24 @@ def __get_item_name(item_data, slot: int):
             return "diamond"
 
         case "Poison Mushroom":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "mkinoko"
         case "Small Heart":
             return "sheart"
         case "Large Heart":
             return "lheart"
         case "Bomb":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "itembomb"
         case "Ice Trap":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "ice"
         case "Banana Trap":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "banana"
 
         case "Boo Radar":
