@@ -350,7 +350,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SHOUDU_PROVINCE, [SARA_SARA_BAZAAR, SHOUDU_WATERFRONT, GANYMEDE_SHRINE, THE_UNDERCITY, QUINTAR_RESERVE],
                     {SARA_SARA_BAZAAR: lambda state: state.has(FERRY_PASS, player),
                     GANYMEDE_SHRINE: lambda state: logic.has_vertical_movement(state),
-                    THE_UNDERCITY: lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state),
                     QUINTAR_RESERVE: lambda state: logic.has_vertical_movement(state) and state.has(ELEVATOR_PART, player, 10)})
     fancy_add_exits(world, THE_UNDERCITY, [SHOUDU_PROVINCE, THE_OPEN_SEA],
                     {THE_OPEN_SEA: lambda state: logic.has_swimming(state)})

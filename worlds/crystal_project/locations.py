@@ -193,7 +193,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Mercury Shrine
         #Treasure chests
-        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player)), #Contract chest
+        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player) or logic.has_vertical_movement(state)), #Contract chest
 
         
         LocationData(MERCURY_SHRINE, MERCURY_SHRINE + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
@@ -645,7 +645,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - East Switch Room", 2977 + treasure_index_offset), #Ether Pouch chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Eastern nyoom room", 2056 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind aqueduct grate", 2703 + treasure_index_offset), #Potion Pouch chest
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Money chest
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind western aqueduct grate", 2702 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 1st at west waterfall base", 2704 + treasure_index_offset), #Defense Shifter chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 2nd at west waterfall base", 1145 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - I saw Red vent in the eastern stairwell", 2701 + treasure_index_offset), #Grim Scythe chest
@@ -661,11 +661,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Ibek Cave
         #Treasure chests
-        LocationData(IBEK_CAVE, "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
+        LocationData(IBEK_CAVE, "Ibek Cave Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
 
         #NPCs
-        LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
-        LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        LocationData(IBEK_CAVE, "Ibek Cave NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
+        LocationData(IBEK_CAVE, "Ibek Cave NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
 
         #Salmon Bay
         #Treasure chests
@@ -748,7 +748,16 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Shoudu Province
         #Treasure chests
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset), #(753, 105, -176) Tincture Pouch chest
+        #Port area
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Ether Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Lurking above spike ball pit by goldsmith", 2984 + treasure_index_offset),  # (753, 105, -176) Tincture Pouch chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Weaponsmith", 1505 + treasure_index_offset),  # Plague Mask chest
+
+        #Shanty Inn Home Point area
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset),  # Potion chest
+        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset),  # Looters Pin chest
+
+        #Moving up past here requires Ibek/Owl
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Below fast boi spark", 3504 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Through rooftop window south of fast boi spark 1", 3506 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Through rooftop window south of fast boi spark 2", 2763 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
@@ -764,13 +773,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Granary", 3520 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Below the flower house", 3521 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - White hut", 3522 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Elevator Part chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump through a window", 1507 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ether Pouch chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Across the reservoir", 2978 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_swimming(state)) or logic.has_glide(state)), #Ether Pouch chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Crawl along the attic", 1536 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Knicked Knackers chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Sneaky back door of cramped storage room", 1519 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Looters Pin chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Sneak behind crates near Assassin Lounge", 2760 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Muggers Glove chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Weaponsmith", 1505 + treasure_index_offset), #Plague Mask chest
-        LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Outside the inn", 2985 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Go in the back door", 1506 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion Pouch
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Near the Assassin Lounge", 2762 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion Pouch
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Chest - Jump along the lamppost", 2752 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Suitor Hat chest
@@ -833,30 +838,40 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #The Undercity
         #Treasures
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Hiding in the rafters", 2989 + treasure_index_offset), #Potion Pouch chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Up the rafters against a pillar", 2990 + treasure_index_offset), #Ether chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Even further up the rafters", 2991 + treasure_index_offset), #Ether Pouch chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 1", 2988 + treasure_index_offset), #Fenix Juice chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 2", 2987 + treasure_index_offset), #Ether chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 3", 1147 + treasure_index_offset), #Potion chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 4", 3517 + treasure_index_offset), #(778, 94, -254) Elevator Part chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Climb up lampposts and run across the fence", 1925 + treasure_index_offset), #Cursegiver chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - North wall climb", 3516 + treasure_index_offset), #Elevator Part chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Atop awning east of the waterfall", 3518 + treasure_index_offset), #Elevator Part chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Hiding in a building in the north area", 2826 + treasure_index_offset), #Potion chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Undercity Inn", 3519 + treasure_index_offset), #Elevator Part
-        LocationData(THE_UNDERCITY, "The Undercity Chest - South of the Undercity Inn", 1695 + treasure_index_offset), #Brigandine chest
-        LocationData(THE_UNDERCITY, "The Undercity Chest - Hidden in a nook in the wall", 2793 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Knights Plate chest
-        LocationData(THE_UNDERCITY, "Underpass Chest - Lovely bounce tree W of The Undercity", 3673 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(608, 91, -215) (Summon Pah) Underpass Scrap chest
+        # can get without mounts from Shoudu
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 1", 2988 + treasure_index_offset),  # Fenix Juice chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 2", 2987 + treasure_index_offset),  # Ether chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 3", 1147 + treasure_index_offset),  # Potion chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Gated-off room 4", 3517 + treasure_index_offset),  # (778, 94, -254) Elevator Part chest
+        #except these up high
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Climb up lampposts and run across the fence", 1925 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Cursegiver chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - North wall climb (or fall through broken grate by Sky Arena Prize Counter)", 3516 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Elevator Part chest
+        #Home Point Stone area - can walk from Ganymede Shrine -> Undercity entrance next to white hut -> fall off rafter; can also swim from the sea
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Hiding in the rafters", 2989 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Potion Pouch chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Atop awning east of the waterfall", 3518 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Elevator Part chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Hidden in a nook in the wall", 2793 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Knights Plate chest
+        #ibek from Home Point Stone area
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Up the rafters against a pillar", 2990 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ether chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Even further up the rafters", 2991 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ether Pouch chest
+        #Undercity Inn area - can walk from Home Point Stone area if you hop up on guy who wants you to defeat the Undercity masters, go north, and hop west across lamps
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Hiding in a building in the north area", 2826 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Potion chest
+        LocationData(THE_UNDERCITY, "The Undercity Chest - Undercity Inn", 3519 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Elevator Part
+        LocationData(THE_UNDERCITY, "The Undercity Chest - South of the Undercity Inn", 1695 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Brigandine chest
+        #swimmy swimmy
+        LocationData(THE_UNDERCITY, "Underpass Chest - Lovely bounce tree W of The Undercity", 3673 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #(608, 91, -215) (Summon Pah) Underpass Scrap chest
         
         #NPCs
+        #can get without mounts from Shoudu
         LocationData(THE_UNDERCITY, "The Undercity NPC - Gold hiding from the bats under the awning", 2835 + npc_index_offset), #Dust
         LocationData(THE_UNDERCITY, "The Undercity NPC - Gated-off room Gold", 2825 + npc_index_offset), #Ore
-        LocationData(THE_UNDERCITY, "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
-        LocationData(THE_UNDERCITY, "The Undercity NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset), #Ingot
+        #other side of canal from Home Point Stone area
+        LocationData(THE_UNDERCITY, "The Undercity NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)), #Dust
+        #Undercity Inn area
+        LocationData(THE_UNDERCITY, "The Undercity NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)), #Ingot
 
         #Crystals
-        LocationData(THE_UNDERCITY, "The Undercity Crystal - Assassin", 1204 + crystal_index_offset),
+        #Can just swim or defeat the Undercity Masters; Blade Master: Ibek or Owl, Shadow Master: Horizontal or Fish, Duel Master: Ibek or Owl; to defeat all masters, you either need both ibek + quintar, owl, or fish
+        LocationData(THE_UNDERCITY, "The Undercity Crystal - Assassin", 1204 + crystal_index_offset, lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state) or logic.has_swimming(state)),
 
         #Ganymede Shrine
         #Treasure chests
@@ -1338,11 +1353,11 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)), #Monster ID: 37
         LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 217
         LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)), #Monster ID: 63
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
+        LocationData(IBEK_CAVE, "Ibek Cave Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Final Sky Arena Fight: Arachlea", 1366 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 252 (SkyArenaRegistrar)
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)), #Monster ID: 145
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)), #Monster ID: 144
-        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)), #Monster ID: 146
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 145
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 144
+        LocationData(THE_UNDERCITY, "The Undercity Boss - Duel Master", 1941 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 146
         LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)), #Monster ID: 59
         LocationData(BEAURIOR_ROCK, "Beaurior Rock Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)), #Monster ID: 78 and 100
         LocationData(EASTERN_CHASM, "Eastern Chasm Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 293

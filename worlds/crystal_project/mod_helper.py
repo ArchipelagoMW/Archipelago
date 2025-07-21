@@ -404,6 +404,10 @@ def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData],
                         if has_add_inventory and condition['ConditionType'] == 5 and not condition['IsNegation']:
                             rule_condition = condition
 
+                        # Condition Type 11 is Job present and 21 is Job Mastered
+                        if has_add_inventory and (condition['ConditionType'] == 11 or condition['ConditionType'] == 21):
+                            rule_condition = condition
+
                 for action_false in actions_false:
                     # 8 is Add Inventory 74 is Add Job, this means it's a check
                     if action_false['ActionType'] == 8 or action_false['ActionType'] == 74:
@@ -416,6 +420,10 @@ def build_npc_location(location, shifted_entity_ids: List[ModIncrementedIdData],
 
                         # Condition Type 5 is Check Inventory
                         if has_add_inventory and condition['ConditionType'] == 5 and condition['IsNegation']:
+                            rule_condition = condition
+
+                        # Condition Type 11 is Job present and 21 is Job Mastered
+                        if has_add_inventory and (condition['ConditionType'] == 11 or condition['ConditionType'] == 21):
                             rule_condition = condition
 
             # 8 is Add Inventory 74 is Add Job, this means it's a check
@@ -579,6 +587,10 @@ def build_boss_npc(location, boss_troop_ids: List[int], shifted_entity_ids: List
                         if has_battle and condition['ConditionType'] == 5 and not condition['IsNegation']:
                             rule_condition = condition
 
+                        # Condition Type 11 is Job present and 21 is Job Mastered
+                        if has_battle and (condition['ConditionType'] == 11 or condition['ConditionType'] == 21):
+                            rule_condition = condition
+
                 for action_false in actions_false:
                     # 8 is Add Inventory 74 is Add Job, this means it's a check
                     if action_false['ActionType'] == 27:
@@ -587,6 +599,10 @@ def build_boss_npc(location, boss_troop_ids: List[int], shifted_entity_ids: List
 
                         # Condition Type 5 is Check Inventory
                         if has_battle and condition['ConditionType'] == 5 and condition['IsNegation']:
+                            rule_condition = condition
+
+                        # Condition Type 11 is Job present and 21 is Job Mastered
+                        if has_battle and (condition['ConditionType'] == 11 or condition['ConditionType'] == 21):
                             rule_condition = condition
 
             # 27 is battle
@@ -639,13 +655,23 @@ def build_spark_location(location, shifted_spark_ids: List[ModIncrementedIdData]
 
 def build_condition_rule(condition, world: "CrystalProjectWorld") -> Optional[Callable[[CollectionState], bool]]:
     logic = CrystalProjectLogic(world.player, world.options)
+    job_id = None
+    loot_type = None
+    loot_id = None
+
     if condition is not None:
-        loot_type = condition['Data']['LootType']
-        loot_id = condition['Data']['LootValue']
+        if 'Number' in condition['Data']:
+            job_id = condition['Data']['Number']
+
+        if 'LootType' in condition['Data']:
+            loot_type = condition['Data']['LootType']
+            loot_id = condition['Data']['LootValue']
     else:
         return lambda state: logic.has_swimming(state) and logic.has_glide(state) and logic.has_vertical_movement(state)
 
-    if loot_type == 1:
+    if loot_type is None and job_id is not None:
+        archipelago_loot_id = job_id + job_index_offset
+    elif loot_type == 1:
         archipelago_loot_id = loot_id + item_index_offset
     elif loot_type == 2:
         archipelago_loot_id = loot_id + equipment_index_offset
