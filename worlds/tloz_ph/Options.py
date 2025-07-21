@@ -11,10 +11,12 @@ class PhantomHourglassGoal(Choice):
     The goal to accomplish in order to complete the seed.
     - Triforce_door: Open the triforce door on TotOK B6. Leftover from pre-alpha
     - beat_bellumbeck: beat bellumbeck on the ruins of the ghost ship
+    - metal_hunt: collect a specified number of metals
     """
     display_name = "Goal"
     option_triforce_door = 0
     option_beat_bellumbeck = 1
+    option_metal_hunt = 2
     default = 1
 
 
@@ -114,7 +116,6 @@ class PhantomHourglassDungeonsRequired(Range):
     default = 3
 
 
-
 class PhantomHourglassBellumAccess(Choice):
     """
     What unlocks after you reach your dungeon requirement
@@ -158,6 +159,7 @@ class PhantomHourglassBoatRequriesSeaChart(Toggle):
     display_name = "Boat Requires Sea Chart"
     default = 1
 
+
 class PhantomHourglassFogSettings(Choice):
     """
     Choose when the fog exists in the NW Quadrant
@@ -173,12 +175,17 @@ class PhantomHourglassFogSettings(Choice):
     default = 0
 
 
-class PhantomHourglassRandomizeHarrow(Toggle):
+class PhantomHourglassRandomizeHarrow(Choice):
     """
     Choose whether to randomize the rng hell checks on harrow island
+    If enabled, the hint option with give you hints on entering the island
     """
-    display_name = "Randomize Harrow"
+    display_name = "randomize_harrow"
+    option_no_harrow = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
     default = 0
+
 
 class PhantomHourglassGhostShipInDungeonPool(Choice):
     """
@@ -193,12 +200,14 @@ class PhantomHourglassGhostShipInDungeonPool(Choice):
     option_false = 2
     default = 0
 
+
 class PhantomHourglassTotokInDungeonPool(Toggle):
     """
     Choose whether the NE Sea Chart chest on B13 of Temple of the Ocean King is in the dungeon reward pool
     """
     display_name = "TotOK in Dungeon Pool"
     default = 0
+
 
 class PhantomHourglassRandomizeMaskedBeedle(Toggle):
     """
@@ -207,6 +216,7 @@ class PhantomHourglassRandomizeMaskedBeedle(Toggle):
     """
     auto_display_name = "masked_beedle"
     default = 0
+
 
 class PhantomHourglassDungeonHints(Choice):
     """
@@ -221,12 +231,14 @@ class PhantomHourglassDungeonHints(Choice):
     option_totok = 2
     default = 1
 
+
 class PhantomHourglassExcludeNonRequriedDungeons(Toggle):
     """
     Non-required dungeons won't have progression or useful items. Does not apply to TotOK.
     """
     display_name = "exclude_non_required_dungeons"
     default = 1
+
 
 class PhantomHourglassHintSpiritIsland(Choice):
     """
@@ -241,6 +253,7 @@ class PhantomHourglassHintSpiritIsland(Choice):
     option_none = 2
     default = 0
 
+
 class PhantomHourglassShopHints(Toggle):
     """
     Get hints for shop items you currently can buy
@@ -249,6 +262,7 @@ class PhantomHourglassShopHints(Toggle):
     display_name = "hint_shops"
     default = 1
 
+
 class PhantomHourglassRandomizeDigSpots(Toggle):
     """
     Randomize dig spots that give 100-300 rupees
@@ -256,7 +270,8 @@ class PhantomHourglassRandomizeDigSpots(Toggle):
     display_name = "randomize_rupee_dig_spots"
     default = 1
 
-class PhantomHourglassRandomizeMinigames(Toggle):
+
+class PhantomHourglassRandomizeMinigames(Choice):
     """
     Randomize the following minigames:
     - Bannan Cannon Game
@@ -264,41 +279,80 @@ class PhantomHourglassRandomizeMinigames(Toggle):
     - Dee Ess Goron Game
     - Maze Island Main Rewards
     - Prince of Red Lions Fight
+    if hit option is on, all minigame rewards will be hinted for on their scene
     """
     display_name = "randomize_minigames"
-    default = 1
+    option_no_minigames = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
+    default = 2
 
-class PhantomHourglassMinigameHints(Toggle):
-    """
-    Add Hints the following minigames:
-    - Bannan Cannon Game
-    - Molida Archer
-    - Dee Ess Goron Game
-    - Maze Island Main Rewards
-    - Prince of Red Lions Fight
-    - Harrow Island
-    """
-    display_name = "randomize_minigames"
-    default = 0
 
 class PhantomHourglassSkipOceanFights(Toggle):
     """
     The Massive Eye fight before Goron Island, ice pillars around Isle of Frost and Giant Eye Plant before Bannan trade
-    quest item are removed, and cannon isn't required
+    quest item are removed, and cannon isn't required for those locations
     """
     display_name = "skip_ocean_fights"
     default = 0
 
+
 class PhantomHourglassRandomizeFishing(Choice):
     """
     Adds checks for catching the 6 fish you can catch at sea, and handing in 4 fish to the wayfarer on bannan island.
-    The hint option also gives free hints for the catching fish checks in the wayfarers hut on bannan island.
+    The hint option also gives free hints for the catching fish checks on entering the wayfarers hut on bannan island.
     """
     display_name = "randomize_fishing"
     option_no_fish = 0
-    option_randomize_fish_with_hints = 1
-    option_randomize_fish_without_hints = 2
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
     default = 0
+
+
+class PhantomHourglassSpiritGemPacks(Range):
+    """
+    Instead of having 20 individual spirit gems of each type, you get them in packs of n
+    """
+    display_name = "spirit_gem_packs"
+    range_vanilla = 1
+    range_packs_of_4 = 4
+    range_start = 1
+    range_end = 20
+    default = 1
+
+
+class PhantomHourglassAdditionalSpiritGems(Range):
+    """
+    Adds additional spirit gems/packs to the pool.
+    At 0 there will be exactly enough to get both upgrade locations
+    Can cause generation errors if too many locations are excluded
+    """
+    display_name = "additional_spirit_gems"
+    range_start = 0
+    range_end = 5
+    default = 0
+
+
+class PhantomHourglassRandomizeSalvage(Choice):
+    """
+    Randomize all 31 treasure maps and salvage locations!
+    Hint option gives you a hint for the location on receiving the map item
+    """
+    display_name = "randomize_salvage"
+    option_no_salvage = 0
+    option_randomize_with_hints = 1
+    option_randomize_without_hints = 2
+
+
+class PhantomHourglassZauzRequiredMetals(Range):
+    """
+    How many rare metals you need to have obtained for zauz to give the phantom blade forging check
+    If the value is greater than the number of required dungeons, the value will be the number of dungeons
+    """
+    display_name = "zauz_required_metals"
+    range_start = 0
+    range_end = 8
+    default = 3
 
 @dataclass
 class PhantomHourglassOptions(PerGameCommonOptions):
@@ -319,26 +373,31 @@ class PhantomHourglassOptions(PerGameCommonOptions):
     boat_requires_sea_chart: PhantomHourglassBoatRequriesSeaChart
 
     # Item Randomization
+    keysanity: PhantomHourglassKeyRandomization
     randomize_minigames: PhantomHourglassRandomizeMinigames
+    randomize_frogs: PhantomHourglassFrogRandomization
+    randomize_fishing: PhantomHourglassRandomizeFishing
+    randomize_salvage: PhantomHourglassRandomizeSalvage
     randomize_harrow: PhantomHourglassRandomizeHarrow
     randomize_digs: PhantomHourglassRandomizeDigSpots
-    randomize_fishing: PhantomHourglassRandomizeFishing
-    keysanity: PhantomHourglassKeyRandomization
-    randomize_frogs: PhantomHourglassFrogRandomization
     randomize_triforce_crest: PhantomHourglassTriforceCrestRandomization
     randomize_masked_beedle: PhantomHourglassRandomizeMaskedBeedle
 
     # Hint Options
     dungeon_hints: PhantomHourglassDungeonHints
     shop_hints: PhantomHourglassShopHints
-    minigame_hints: PhantomHourglassMinigameHints
     spirit_island_hints: PhantomHourglassHintSpiritIsland
 
     # World Options
     fog_settings: PhantomHourglassFogSettings
     skip_ocean_fights: PhantomHourglassSkipOceanFights
+    zauz_required_metals: PhantomHourglassZauzRequiredMetals
 
-    # Phantom Hourglass
+    # Spirit Gem options
+    spirit_gem_packs: PhantomHourglassSpiritGemPacks
+    additional_spirit_gems: PhantomHourglassAdditionalSpiritGems
+
+    # Phantom Hourglass options
     ph_starting_time: PhantomHourglassStartingTime
     ph_time_increment: PhantomHourglassTimeIncrement
 

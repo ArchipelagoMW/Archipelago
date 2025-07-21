@@ -42,7 +42,7 @@ STARTING_FLAGS = [
     [0x1B559F, 0x05],
     [0x1B55A0, 0x31],
     [0x1B55A1, 0x00],
-    [0x1B55A2, 0x20],
+    [0x1B55A2, 0x60],
     [0x1B55A3, 0x20],
     [0x1B55A4, 0x26],
     [0x1B55A5, 0xCC],
@@ -87,7 +87,7 @@ STARTING_FLAGS = [
 ]
 
 STARTING_FROG_FLAGS = [
-    [0x1B55A2, 0xA0],
+    [0x1B55A2, 0xE0],
     [0x1B55A3, 0x3F]
 ]
 
@@ -114,7 +114,7 @@ STAGE_FLAGS = {
     15: [0x00, 0x3C, 0x00, 0x40],  # Isle of Frost
     31: [0x00, 0x00, 0xD0, 0x00],  # Temple of Ice
     21: [0xB6, 0x01, 0x00, 0x00],  # Isle of the Dead
-    17: [0x12, 0x4C, 0x43, 0x00],  # Isle of ruins
+    17: [0x10, 0x4C, 0x43, 0x00],  # Isle of ruins
     18: [0x10, 0x4C, 0x43, 0x00],  # Isle of ruins
     36: [0x20, 0x00, 0x00, 0x00],  # Bremeur's Temple
     33: [0x00, 0x26, 0x00, 0x00],  # Mutoh's Temple
@@ -985,6 +985,39 @@ CATEGORY_LOCATION_GROUPS = {
         "Fishing Catch Rusty Swordfish",
         "Fishing Catch Legendary Neptoona",
         "Fishing Catch Stowfish",
+    ],
+    "Salvage Locations": [
+        "Ocean SW Salvage #1 Molida SW",
+        "Ocean SW Salvage #2 Mercay NE",
+        "Ocean NW Salvage #3 Gusts SW",
+        "Ocean NW Salvage #4 Bannan SE",
+        "Ocean SW Salvage #5 Molida N",
+        "Ocean NW Salvage #6 Bannan W",
+        "Ocean NW Salvage #7 Gusts E",
+        "Ocean SW Salvage #8 Mercay SE",
+        "Ocean SW Salvage #9 Cannon W",
+        "Ocean NW Salvage #10 Gusts SE",
+        "Ocean NW Salvage #11 Gusts N",
+        "Ocean SE Salvage #12 Dee Ess N",
+        "Ocean SE Salvage #13 Harrow E",
+        "Ocean SE Salvage #14 Goron NW",
+        "Ocean SE Salvage #15 Goron W",
+        "Ocean SE Salvage #16 Goron NE",
+        "Ocean SE Salvage #17 Frost S",
+        "Ocean SW Salvage #18 Cannon S",
+        "Ocean NW Salvage #19 Gusts NE",
+        "Ocean NW Salvage #20 Bannan E",
+        "Ocean SW Salvage #21 Molida NW",
+        "Ocean SE Salvage #22 Harrow S",
+        "Ocean SE Salvage #23 Frost NW",
+        "Ocean NE Salvage #24 Ruins W",
+        "Ocean NE Salvage #25 Dead E",
+        "Ocean NE Salvage #26 Ruins SW",
+        "Ocean NE Salvage #27 Maze E",
+        "Ocean NE Salvage #28 Ruins NW",
+        "Ocean NE Salvage #29 Maze W",
+        "Ocean NE Salvage #30 Ruins S",
+        "Ocean NE Salvage #31 Dead S",
     ]
 }
 

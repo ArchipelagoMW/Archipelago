@@ -15,8 +15,9 @@ class TestGeneration(WorldTestBase):
         "goal": "triforce_door",
         "ghost_ship_in_dungeon_pool": "rescue_tetra",
         "totok_in_dungeon_pool": False,
-        "randomize_harrow": False,
+        "randomize_harrow": "no_harrow",
         "exclude_non_required_dungeons": True,
         "randomize_masked_beedle": True,
-        "randomize minigames": False
+        "randomize minigames": "randomize_with_hints",
+        "randomize_salvage": "randomize_with_hints"
                }

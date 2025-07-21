@@ -1,4 +1,4 @@
-from .Constants import *
+from worlds.tloz_ph.data.Constants import *
 
 # TODO: Add sram data for saveslot 2
 # TODO: Add the rest of sram data in bulk
@@ -575,7 +575,7 @@ LOCATIONS_DATA = {
         'force_vanilla': True,
         'dungeon': "Temple of the Ocean King"
     },
-    "TotOK B9 Ghost Chest": {
+    "TotOK B9 Wizzrobe Chest": {
         "region_id": "totok b9 ghosts",
         "vanilla_item": "Wisdom Gem",
         "stage_id": 37,
@@ -692,7 +692,7 @@ LOCATIONS_DATA = {
         "x_min": 65000,
         'dungeon': "Temple of the Ocean King"
     },
-    "TotOK B12 Ghost Chest": {
+    "TotOK B12 Kill Everything Chest": {
         "region_id": "totok b12",
         "vanilla_item": "Ship Part",
         "item_override": "NE Sea Chart",  # Lets the B13 chest be a dungeon reward
@@ -1243,7 +1243,6 @@ LOCATIONS_DATA = {
     "Temple of Courage Crayk Sand of Hours": {
         "region_id": "toc crayk",
         "vanilla_item": "Sand of Hours (Boss)",
-        "item_override": "Sand of Hours",
         "stage_id": 0x2C,
         "floor_id": 0,
         "address": 0x1B557F,
@@ -1459,7 +1458,6 @@ LOCATIONS_DATA = {
     "Temple of Wind Cyclok Sand of Hours": {
         "region_id": "tow cyclok",
         "vanilla_item": "Sand of Hours (Boss)",
-        "item_override": "Sand of Hours",
         "stage_id": 0x2A,
         "floor_id": 0x0,
         "address": 0x1B557F,
@@ -1906,7 +1904,6 @@ LOCATIONS_DATA = {
         "stage_id": 0x2E,
         "floor_id": 0x0,
         "vanilla_item": "Sand of Hours (Boss)",
-        "item_override": "Sand of Hours",
         "address": 0x1B559B,
         "value": 0x4,
         "dungeon": "Goron Temple",
@@ -2225,7 +2222,6 @@ LOCATIONS_DATA = {
         "stage_id": 0x2D,
         "floor_id": 0x0,
         "vanilla_item": "Sand of Hours (Boss)",
-        "item_override": "Sand of Hours",
         "address": 0x1B559B,
         "value": 0x8,
         "dungeon": "Temple of Ice",
@@ -2345,7 +2341,7 @@ LOCATIONS_DATA = {
         "additional_rooms": [0x1201],
         "y": 0x4CCD,
     },
-    "Isle of Ruins Doyland's Item": {
+    "Isle of Ruins Doylan's Item": {
         "region_id": "ruins",
         "vanilla_item": "King's Key",
         "stage_id": 0x22,
@@ -2386,7 +2382,7 @@ LOCATIONS_DATA = {
         "y": 0x0,
         "z_min": -30000
     },
-    "Isle of Ruins Outside Doyland's Temple Chest": {
+    "Isle of Ruins Outside Doylan's Temple Chest": {
         "region_id": "ruins water",
         "vanilla_item": "Courage Gem",
         "stage_id": 0x12,
@@ -2470,7 +2466,6 @@ LOCATIONS_DATA = {
     "Mutoh's Temple Eox Sand of Hours": {
         "region_id": "mutoh eox",
         "vanilla_item": "Sand of Hours (Boss)",
-        "item_override": "Sand of Hours",
         "stage_id": 0x2F,
         "floor_id": 0,
         "address": 0x1B559B,
@@ -2690,29 +2685,384 @@ LOCATIONS_DATA = {
         "conditional": True,
     },
 
+    # Salvage
+    "Ocean SW Salvage #1 Molida SW": {
+        "region_id": "salvage 1",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 128,
+        "id": 290,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #1",
+    },
+    "Ocean SW Salvage #2 Mercay NE": {
+        "region_id": "salvage 2",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 16,
+        "id": 291,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #2",
+    },
+    "Ocean NW Salvage #3 Gusts SW": {
+        "region_id": "salvage 3",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 32,
+        "id": 292,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #3",
+    },
+    "Ocean NW Salvage #4 Bannan SE": {
+        "region_id": "salvage 4",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 128,
+        "id": 293,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #4",
+    },
+    "Ocean SW Salvage #5 Molida N": {
+        "region_id": "salvage 5",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 64,
+        "id": 294,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #5",
+    },
+    "Ocean NW Salvage #6 Bannan W": {
+        "region_id": "salvage 6",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 1,
+        "id": 295,
+        "vanilla_item": "Treasure",
+        "item_override": "Treasure Map #6",
+    },
+    "Ocean NW Salvage #7 Gusts E": {
+        "region_id": "salvage 7",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 8,
+        "id": 296,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #7",
+    },
+    "Ocean SW Salvage #8 Mercay SE": {
+        "region_id": "salvage 8",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 8,
+        "id": 297,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #8",
+    },
+    "Ocean SW Salvage #9 Cannon W": {
+        "region_id": "salvage 9",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 2,
+        "id": 298,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #9",
+    },
+    "Ocean NW Salvage #10 Gusts SE": {
+        "region_id": "salvage 10",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 16,
+        "id": 299,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #10",
+    },
+    "Ocean NW Salvage #11 Gusts N": {
+        "region_id": "salvage 11",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 2,
+        "id": 300,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #11",
+    },
+    "Ocean SE Salvage #12 Dee Ess N": {
+        "region_id": "salvage 12",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 32,
+        "id": 301,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #12",
+    },
+    "Ocean SE Salvage #13 Harrow E": {
+        "region_id": "salvage 13",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 4,
+        "id": 302,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #13",
+    },
+    "Ocean SE Salvage #14 Goron NW": {
+        "region_id": "salvage 14",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 1,
+        "id": 303,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #14",
+    },
+    "Ocean SE Salvage #15 Goron W": {
+        "region_id": "salvage 15",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 2,
+        "id": 304,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #15",
+    },
+    "Ocean SE Salvage #16 Goron NE": {
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #16",
+        "region_id": "salvage 16",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 16,
+        "id": 305,
+    },
+    "Ocean SE Salvage #17 Frost S": {
+        "region_id": "salvage 17",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 64,
+        "id": 306,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #17",
+    },
+    "Ocean SW Salvage #18 Cannon S": {
+        "region_id": "salvage 18",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 4,
+        "id": 307,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #18",
+    },
+    "Ocean NW Salvage #19 Gusts NE": {
+        "region_id": "salvage 19",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 4,
+        "id": 308,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #19",
+    },
+    "Ocean NW Salvage #20 Bannan E": {
+        "region_id": "salvage 20",
+        "stage_id": 0,
+        "floor_id": 1,
+        "conditional": True,
+        "address": 1812053,
+        "value": 64,
+        "id": 309,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #20",
+    },
+    "Ocean SW Salvage #21 Molida NW": {
+        "region_id": "salvage 21",
+        "stage_id": 0,
+        "floor_id": 0,
+        "conditional": True,
+        "address": 1812052,
+        "value": 32,
+        "id": 310,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #21",
+    },
+    "Ocean SE Salvage #22 Harrow S": {
+        "region_id": "salvage 22",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 8,
+        "id": 311,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #22",
+    },
+    "Ocean SE Salvage #23 Frost NW": {
+        "region_id": "salvage 23",
+        "stage_id": 0,
+        "floor_id": 2,
+        "conditional": True,
+        "address": 1812054,
+        "value": 128,
+        "id": 312,
+        "vanilla_item": "Sand of Hours (Small)",
+        "item_override": "Treasure Map #23",
+    },
+    "Ocean NE Salvage #24 Ruins W": {
+        "region_id": "salvage 24",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 2,
+        "id": 313,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #24",
+    },
+    "Ocean NE Salvage #25 Dead E": {
+        "region_id": "salvage 25",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 4,
+        "id": 314,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #25",
+    },
+    "Ocean NE Salvage #26 Ruins SW": {
+        "region_id": "salvage 26",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 32,
+        "id": 315,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #26",
+    },
+    "Ocean NE Salvage #27 Maze E": {
+        "region_id": "salvage 27",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 8,
+        "id": 316,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #27",
+    },
+    "Ocean NE Salvage #28 Ruins NW": {
+        "region_id": "salvage 28",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 1,
+        "id": 317,
+        "vanilla_item": "Treasure",
+        "item_override": "Treasure Map #28",
+    },
+    "Ocean NE Salvage #29 Maze W": {
+        "region_id": "salvage 29",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 16,
+        "id": 318,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #29",
+    },
+    "Ocean NE Salvage #30 Ruins S": {
+        "region_id": "salvage 30",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 64,
+        "id": 319,
+        "vanilla_item": "Ship Part",
+        "item_override": "Treasure Map #30",
+    },
+    "Ocean NE Salvage #31 Dead S": {
+        "region_id": "salvage 31",
+        "stage_id": 0,
+        "floor_id": 3,
+        "conditional": True,
+        "address": 1812055,
+        "value": 128,
+        "id": 320,
+        "vanilla_item": "Gold Rupee (300)",
+        "item_override": "Treasure Map #31",
+    },
+
     # ==== New checks at bottom to preserve id ordering
-
-
-
-
 }
 
 for i, name in enumerate(LOCATIONS_DATA):
     LOCATIONS_DATA[name]["id"] = i+1
 
 if __name__ == "__main__":
-    islands = {}
-    island_groups = {}
-    for location, data in LOCATIONS_DATA.items():
-        islands.setdefault(data["stage_id"], [])
-        islands[data["stage_id"]].append(location)
+    """    islands = {}
+        island_groups = {}
+        for location, data in LOCATIONS_DATA.items():
+            islands.setdefault(data["stage_id"], [])
+            islands[data["stage_id"]].append(location)
+    
+        for i, data in islands.items():
+            island_groups[STAGES[i]] = data
+            print(f"\t\"{STAGES[i]}\": [")
+            for loc in data:
+                print(f"\t\t\"{loc}\",")
+            print(f"\t],")
+    """
+    for name, data in LOCATIONS_DATA.items():
+        if "Salvage" in name and "#" in name:
 
-    for i, data in islands.items():
-        island_groups[STAGES[i]] = data
-        print(f"\t\"{STAGES[i]}\": [")
-        for loc in data:
-            print(f"\t\t\"{loc}\",")
-        print(f"\t],")
+            print(f"\t\t\"{name}\",")
 
+            """ident = name[name.find("#")+1:name.find(" ", name.find("#"))]
+            data["vanilla_item"] = ""
+            data["item_override"] = f"Treasure Map #{ident}"
+
+            print(f"\t\"{name}\": " + "{")
+            for key, value in data.items():
+                if type(value) is str:
+                    print(f"\t\t\"{key}\": \"{value}\",")
+                else:
+                    print(f"\t\t\"{key}\": {value},")
+            print("\t},")"""
 
 

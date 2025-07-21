@@ -1,3 +1,5 @@
+from math import floor, ceil
+
 from BaseClasses import CollectionState
 from Options import Accessibility
 from .Constants import *
@@ -6,11 +8,20 @@ from .Constants import *
 # =========== Item States =============
 
 def ph_has_sword(state: CollectionState, player: int):
-    return state.has("Sword (Progressive)", player)
+    return any([
+        state.has("Sword (Progressive)", player),
+        state.has("Oshus' Sword", player)
+    ])
 
 
 def ph_has_phantom_sword(state: CollectionState, player: int):
-    return state.has("Sword (Progressive)", player, 2)
+    return any([
+        state.has("Sword (Progressive)", player, 2),
+        all([
+            ph_has_sword(state, player),
+            state.has("Phantom Sword", player)
+        ])
+    ])
 
 
 def ph_has_shield(state: CollectionState, player: int):
@@ -51,8 +62,15 @@ def ph_has_spirit(state: CollectionState, player: int, spirit: str, count: int =
 
 
 def ph_has_spirit_gems(state: CollectionState, player: int, spirit: str, count: int = 1):
-    return all([state.has(f"{spirit} Gem", player, count),
-                ph_has_spirit(state, player, spirit)])
+    pack_size = state.multiworld.worlds[player].options.spirit_gem_packs
+    return all([
+        ph_has_spirit(state, player, spirit),
+        any([
+            state.has(f"{spirit} Gem", player, count),
+            state.has(f"{spirit} Gem Pack", player, ceil(count / pack_size)),
+        ])
+
+    ])
 
 
 def ph_has_sun_key(state: CollectionState, player: int):
@@ -113,26 +131,34 @@ def ph_has_cannon(state: CollectionState, player: int):
 def ph_has_salvage(state: CollectionState, player: int):
     return state.has("Salvage Arm", player)
 
+
 def ph_has_fishing_rod(state, player):
     return state.has("Fishing Rod", player)
+
 
 def ph_has_big_catch_lure(state, player):
     return state.has("Big Catch Lure", player)
 
+
 def ph_has_swordfish_shadows(state, player):
     return state.has("Swordfish Shadows", player)
+
 
 def ph_has_loovar(state, player):
     return state.has("Fish: Loovar", player)
 
+
 def ph_has_rsf(state, player):
     return state.has("Fish: Rusty Swordfish", player)
+
 
 def ph_has_neptoona(state, player):
     return state.has("Fish: Legendary Neptoona", player)
 
+
 def ph_has_stowfish(state, player):
     return state.has("Fish: Stowfish", player)
+
 
 # ============== Frogs =======================
 
@@ -191,6 +217,10 @@ def ph_has_frog_square(state: CollectionState, player: int):
     ])
 
 
+def ph_has_treasure_map(state, player, number):
+    return state.has(f"Treasure Map #{number}", player)
+
+
 # =========== Combined item states ================
 
 def ph_has_explosives(state: CollectionState, player: int):
@@ -245,8 +275,11 @@ def ph_can_kill_eye_brute(state: CollectionState, player: int):
     return any([
         ph_option_hard_logic(state, player),
         ph_has_hammer(state, player),
-        ph_has_bow(state, player),
-        ph_has_chus(state, player)
+        ph_has_chus(state, player),
+        all([
+            ph_has_bow(state, player),
+            ph_has_sword(state, player)
+        ]),
     ])
 
 
@@ -466,26 +499,26 @@ def ph_option_keys_in_own_dungeon(state: CollectionState, player: int):
 
 
 def ph_option_phantoms_hard(state: CollectionState, player: int):
-    return any([
-        all([
+    return all([
+        any([
             state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon"],
-            ph_has_grapple(state, player)
+            ph_UT_glitched_logic(state, player)
         ]),
-        ph_UT_glitched_logic(state, player)
-    ])
+        ph_has_grapple(state, player)
+    ]),
 
 
 def ph_option_phantoms_med(state: CollectionState, player: int):
-    return any([
-        all([
+    return all([
+        any([
             state.multiworld.worlds[player].options.phantom_combat_difficulty in ["require_weapon", "require_stun"],
-            any([
-                ph_has_bow(state, player),
-                ph_has_hammer(state, player),
-                ph_has_fire_sword(state, player)
-            ])
+            ph_UT_glitched_logic(state, player)
         ]),
-        ph_UT_glitched_logic(state, player)
+        any([
+            ph_has_bow(state, player),
+            ph_has_hammer(state, player),
+            ph_has_fire_sword(state, player)
+        ])
     ])
 
 
@@ -513,8 +546,10 @@ def ph_clever_bombs(state: CollectionState, player: int):
     return all([ph_has_bombs(state, player),
                 ph_option_hard_logic(state, player)])
 
+
 def ph_option_randomize_minigames(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_minigames
+
 
 def ph_option_randomize_frogs(state: CollectionState, player: int):
     return state.multiworld.worlds[player].options.randomize_frogs == "randomize"
@@ -529,10 +564,15 @@ def ph_option_triforce_crest(state, player):
 
 
 def ph_beat_required_dungeons(state: CollectionState, player: int):
-    # print(f"Dungeons required: {state.count_group('Current Metals', player)}/{state.multiworld.worlds[player].options.dungeons_required} {state.has_group("Current Metals", player,
-    #                       state.multiworld.worlds[player].options.dungeons_required)}")
-    return state.has_group("Current Metals", player,
-                           state.multiworld.worlds[player].options.dungeons_required)
+    current_metals = ITEM_GROUPS["Current Metals"]
+    return state.has_from_list(current_metals, player,
+                               state.multiworld.worlds[player].options.dungeons_required)
+
+
+def ph_zauz_required_metals(state: CollectionState, player: int):
+    current_metals = ITEM_GROUPS["Current Metals"]
+    return state.has_from_list(current_metals, player,
+                               state.multiworld.worlds[player].options.zauz_required_metals)
 
 
 def ph_option_randomize_masked_beedle(state: CollectionState, player: int):

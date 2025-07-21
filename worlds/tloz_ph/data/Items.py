@@ -1,4 +1,5 @@
 from BaseClasses import ItemClassification
+from worlds.tloz_ph.data.Constants import *
 
 ITEMS_DATA = {
     #   "No Item": {
@@ -95,6 +96,11 @@ ITEMS_DATA = {
         'classification': ItemClassification.progression,
         'progressive': [[0x1BA646, 0x10], [0x1BA646, 0x80], [0x1BA647, 0x04]]
     },
+    "Spirit of Courage White": {
+        'classification': ItemClassification.progression,
+        'address': None,
+        'dummy': True  # TODO won't be dummy once address exists
+    },
     "Heart Container": {
         'classification': ItemClassification.useful,
         'backup_filler': True,
@@ -115,6 +121,14 @@ ITEMS_DATA = {
         'backup_filler': True,
         'address': 0x1BA528,
         'value': 7200,
+        'incremental': True,
+        'size': 4
+    },
+    "Sand of Hours (Small)": {
+        'classification': ItemClassification.useful,
+        'backup_filler': True,
+        'address': 0x1BA528,
+        'value': 3600,
         'incremental': True,
         'size': 4
     },
@@ -208,6 +222,24 @@ ITEMS_DATA = {
         'value': 1,
         'incremental': True
     },
+    "Power Gem Pack": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA541,
+        'value': "pack_size",
+        'incremental': True
+    },
+    "Wisdom Gem Pack": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA542,
+        'value': "pack_size",
+        'incremental': True
+    },
+    "Courage Gem Pack": {
+        'classification': ItemClassification.progression_skip_balancing,
+        'address': 0x1BA540,
+        'value': "pack_size",
+        'incremental': True
+    },
 
     # ========== Rupees and filler =============
 
@@ -230,7 +262,7 @@ ITEMS_DATA = {
         'address': 0x1BA53E,
         'value': 20,
         'incremental': True,
-        'size': 2
+        'size': 2,
     },
     "Big Green Rupee (100)": {
         'classification': ItemClassification.progression_skip_balancing,
@@ -392,159 +424,221 @@ ITEMS_DATA = {
         'set_bit': [(0x1BA650, 1)]
     },
     "Treasure Map #1": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x80
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x80,
+        "id": 0x42,
+        "hint_on_receive": ['Ocean SW Salvage #1 Molida SW'],
     },
     "Treasure Map #2": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x10
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x10,
+        "id": 0x43,
+        "hint_on_receive": ['Ocean SW Salvage #2 Mercay NE'],
     },
     "Treasure Map #3": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x20
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x20,
+        "id": 0x44,
+        "hint_on_receive": ['Ocean NW Salvage #3 Gusts SW'],
     },
     "Treasure Map #4": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x80
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x80,
+        "id": 0x45,
+        "hint_on_receive": ['Ocean NW Salvage #4 Bannan SE'],
     },
     "Treasure Map #5": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x40
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x40,
+        "id": 0x46,
+        "hint_on_receive": ['Ocean SW Salvage #5 Molida N'],
     },
     "Treasure Map #6": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x1,
+        "id": 0x47,
+        "hint_on_receive": ['Ocean NW Salvage #6 Bannan W'],
     },
     "Treasure Map #7": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x8
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x8,
+        "id": 0x48,
+        "hint_on_receive": ['Ocean NW Salvage #7 Gusts E'],
     },
     "Treasure Map #8": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x8
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x8,
+        "id": 0x49,
+        "hint_on_receive": ['Ocean SW Salvage #8 Mercay SE'],
     },
     "Treasure Map #9": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x02
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x2,
+        "id": 0x4a,
+        "hint_on_receive": ['Ocean SW Salvage #9 Cannon W'],
     },
     "Treasure Map #10": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x10
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x10,
+        "id": 0x4b,
+        "hint_on_receive": ['Ocean NW Salvage #10 Gusts SE'],
     },
     "Treasure Map #11": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x2,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x2,
+        "id": 0x4c,
+        "hint_on_receive": ['Ocean NW Salvage #11 Gusts N'],
     },
     "Treasure Map #12": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x20
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x20,
+        "id": 0x4d,
+        "hint_on_receive": ['Ocean SE Salvage #12 Dee Ess N'],
     },
     "Treasure Map #13": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x04
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x4,
+        "id": 0x4e,
+        "hint_on_receive": ['Ocean SE Salvage #13 Harrow E'],
     },
     "Treasure Map #14": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x1
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x1,
+        "id": 0x4f,
+        "hint_on_receive": ['Ocean SE Salvage #14 Goron NW'],
     },
     "Treasure Map #15": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x2
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x2,
+        "id": 0x50,
+        "hint_on_receive": ['Ocean SE Salvage #15 Goron W'],
     },
     "Treasure Map #16": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x10
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x10,
+        "id": 0x51,
+        "hint_on_receive": ['Ocean SE Salvage #16 Goron NE'],
     },
     "Treasure Map #17": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x40
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x40,
+        "id": 0x52,
+        "hint_on_receive": ['Ocean SE Salvage #17 Frost S'],
     },
     "Treasure Map #18": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x4
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x4,
+        "id": 0x53,
+        "hint_on_receive": ['Ocean SW Salvage #18 Cannon S'],
     },
     "Treasure Map #19": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x4
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x4,
+        "id": 0x54,
+        "hint_on_receive": ['Ocean NW Salvage #19 Gusts NE'],
     },
     "Treasure Map #20": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA651,
-        'value': 0x40
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba651,
+        "value": 0x40,
+        "id": 0x55,
+        "hint_on_receive": ['Ocean NW Salvage #20 Bannan E'],
     },
     "Treasure Map #21": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA650,
-        'value': 0x20
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba650,
+        "value": 0x20,
+        "id": 0x56,
+        "hint_on_receive": ['Ocean SW Salvage #21 Molida NW'],
     },
     "Treasure Map #22": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 0x08
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x8,
+        "id": 0x57,
+        "hint_on_receive": ['Ocean SE Salvage #22 Harrow S'],
     },
     "Treasure Map #23": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA652,
-        'value': 128,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba652,
+        "value": 0x80,
+        "id": 0x58,
+        "hint_on_receive": ['Ocean SE Salvage #23 Frost NW'],
     },
     "Treasure Map #24": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 0x2,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x2,
+        "id": 0x59,
+        "hint_on_receive": ['Ocean NE Salvage #24 Ruins W'],
     },
     "Treasure Map #25": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 0x04,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x4,
+        "id": 0x5a,
+        "hint_on_receive": ['Ocean NE Salvage #25 Dead E'],
     },
     "Treasure Map #26": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 0x20,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x20,
+        "id": 0x5b,
+        "hint_on_receive": ['Ocean NE Salvage #26 Ruins SW'],
     },
     "Treasure Map #27": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 0x8,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x8,
+        "id": 0x5c,
+        "hint_on_receive": ['Ocean NE Salvage #27 Maze E'],
     },
     "Treasure Map #28": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 1,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x1,
+        "id": 0x5d,
+        "hint_on_receive": ['Ocean NE Salvage #28 Ruins NW'],
     },
     "Treasure Map #29": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 0x10,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x10,
+        "id": 0x5e,
+        "hint_on_receive": ['Ocean NE Salvage #29 Maze W'],
     },
     "Treasure Map #30": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 64,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x40,
+        "id": 0x5f,
+        "hint_on_receive": ['Ocean NE Salvage #30 Ruins S'],
     },
     "Treasure Map #31": {
-        'classification': ItemClassification.filler,
-        'address': 0x1BA653,
-        'value': 128,
+        "classification": ItemClassification.progression_skip_balancing,
+        "address": 0x1ba653,
+        "value": 0x80,
+        "id": 0x60,
+        "hint_on_receive": ['Ocean NE Salvage #31 Dead S'],
     },
 
 
@@ -867,6 +961,21 @@ for i, k in enumerate(ITEMS_DATA):
     ITEMS_DATA[k]["id"] = i+1
 
 if __name__ == "__main__":
-    for item in ITEMS_DATA:
-        print(f"\t\"{item}\",")
+    for name, data in ITEMS_DATA.items():
+        if "Treasure Map" in name:
+            i = int(name[name.find("#")+1:])
+
+            loc = LOCATION_GROUPS["Salvage Locations"][i-1]
+            data["hint_on_receive"] = [loc]
+            print(f"\t\"{name}\": " + "{")
+            for key, value in data.items():
+                if type(value) is str:
+                    print(f"\t\t\"{key}\": \"{value}\",")
+                elif key == "classification":
+                    print(f"\t\t\"{key}\": ItemClassification.progression_skip_balancing,")
+                elif type(value) is int:
+                    print(f"\t\t\"{key}\": {hex(value)},")
+                elif key != "id":
+                    print(f"\t\t\"{key}\": {value},")
+            print("\t},")
 

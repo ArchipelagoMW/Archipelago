@@ -1,12 +1,12 @@
 """
 "Dynamic Flag Name": {
     "on_scenes": list[int],
-    "not_last_scenes": list[int]
+    "not_last_scenes": list[int],
     "has_items": list[tuple[str, int]],         item_name, min count (0 for not have item)
     "has_locations": list[str],
     "not_has_locations": list[str],
     "any_not_has_locations": list[str],
-    "set_if_true": list[tuple[int, int]],       address, value
+    "set_if_true": list[tuple[int, int or str]],       address, value (if value is an item name, value becomes the
     "unset_if_true": list[tuple[int, int]],     address, value
     "has_slot_data": list[list[str, any]]       slot_data, ==value
     "goal_requirement": bool                    checks dungeon requirement if true
@@ -168,10 +168,6 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0x1300, 0x130A],
         "has_items": [("Salvage Arm", 0)],
         "unset_if_true": [(0x1BA649, 0x10)]
-    },
-    "Mercay skip blow on map for Linebeck": {
-        "on_scenes": [0xB03],
-        "unset_if_true": [(0x1B557D, 0x1d2)]
     },
     "Cannon Open Door": {
         "on_scenes": [0x130B],
@@ -371,6 +367,12 @@ DYNAMIC_FLAGS = {
         "set_if_true": [(0x1B5580, 0x2)],
         "has_slot_data": [["randomize_triforce_crest", 0]],
     },
+    "Triforce Crest Rando safety": {
+        "on_scenes": [0x2507],
+        "set_if_true": [(0x1B5580, 0x2)],
+        "has_slot_data": [["randomize_triforce_crest", 1]],
+        "has_items": [("Triforce Crest", 1)]
+    },
 
     # boat requires sea chart
     "Despawn linebeck 2": {
@@ -398,7 +400,15 @@ DYNAMIC_FLAGS = {
         "on_scenes": [0xB02],
         "set_if_true": [(0x1B557E, 0x8)]
     },
-
+    "Mercay skip blow on map for Linebeck": {
+        "on_scenes": [0xB03],
+        "unset_if_true": [(0x1B557D, 0x1d2)]
+    },
+    "mercay Safety Shipyard": {
+        "on_scenes": [0xB03],
+        "has_locations": ["Temple of Fire Blaaz Dungeon Reward"],
+        "set_if_true": [(0x1B557F, 0x20)]
+    },
     # Fog
     "No fog add fog if spirits": {
         "on_scenes": [0x01],
@@ -681,6 +691,16 @@ DYNAMIC_FLAGS = {
         "has_locations": ["Temple of Courage Crayk Dungeon Reward"],
         "set_if_true": [(0x1B557F, 0x80)]
     },
+    "Zauz has enough metals": {
+        "on_scenes": [0x160A],
+        "zauz_metals": True,
+        "set_if_true": [(0x1B55A0, 0x10), (0x1B558C, 1)]
+    },
+    "Zauz not has enough metals": {
+        "on_scenes": [0x160A],
+        "zauz_metals": False,
+        "unset_if_true": [(0x1B55A0, 0x10), (0x1B558C, 1)]
+    },
     # Dungeons and metals
     "Goron temple metals": {
         "on_scenes": [0x2000],
@@ -891,33 +911,44 @@ DYNAMIC_FLAGS = {
     },
     "RESET Fishing remove Stowfish": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Stowfish", 1)],
-        "set_if_true": [(0x1BA5B9, 0x1)]
+        "set_if_true": [(0x1BA5B9, "Fish: Stowfish")]
     },
     "RESET Fishing skippy": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Skippyjack", 1)],
-        "set_if_true": [(0x1BA5B4, 0x1)]
+        "set_if_true": [(0x1BA5B4, "Fish: Skippyjack")]
     },
     "RESET Fishing toona": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Toona", 1)],
-        "set_if_true": [(0x1BA5B5, 0x1)]
+        "set_if_true": [(0x1BA5B5, "Fish: Toona")]
     },
     "RESET Fishing loovar": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Loovar", 1)],
-        "set_if_true": [(0x1BA5B6, 0x1)]
+        "set_if_true": [(0x1BA5B6, "Fish: Loovar")]
     },
     "RESET Fishing rsf": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Rusty Swordfish", 1)],
-        "set_if_true": [(0x1BA5B7, 0x1)]
+        "set_if_true": [(0x1BA5B7, "Fish: Rusty Swordfish")]
     },
     "RESET Fishing neptoona": {
         "on_scenes": [0, 1, 2, 3],
+        "last_scene": [0x200],
         "has_items": [("Fish: Legendary Neptoona", 1)],
         "set_if_true": [(0x1BA5B8, 0x1)]
     },
+    "Safety give sword cause silly": {
+        "on_scenes": [0, 1, 2, 3, 0xB03],
+        "has_items": [("Sword (Progressive)", 1)],
+        "set_if_true": [(0x1BA644, 1)]
+    }
 }
 

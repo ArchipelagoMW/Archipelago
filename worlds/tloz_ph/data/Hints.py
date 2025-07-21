@@ -73,37 +73,37 @@ HINT_DATA = {
     "Bannan Island Cannon Game": {
         "scenes": [0x1400],
         "has_items": ["Bombs (Progressive)"],
-        "slot_data": ["minigame_hints", "randomize_minigames"],
+        "slot_data": [("randomize_minigames", 1)],
     },
     "Molida Archery 1700": {
         "scenes": [0xC0B],
-        "slot_data": ["minigame_hints", "randomize_minigames"],
+        "slot_data": [("randomize_minigames", 1)],
     },
     "Molida Archery 2000": {
         "scenes": [0xC0B],
-        "slot_data": ["minigame_hints", "randomize_minigames", ("logic", [1, 2])],
+        "slot_data": [("randomize_minigames", 1), ("logic", [1, 2])],
     },
     "Dee Ess Win Goron Game": {
         "scenes": [0x1B00],
-        "slot_data": ["minigame_hints", "randomize_minigames"],
+        "slot_data": [("randomize_minigames", 1)],
     },
     "Harrow Island": {
         "scenes": [0x1800],
-        "slot_data": ["minigame_hints", "randomize_harrow"],
+        "slot_data": [("randomize_harrow", 1)],
         "locations": ["Harrow Island Dig 1", "Harrow Island Dig 2", "Harrow Island Dig 3", "Harrow Island Dig 4"]
     },
     "Maze Island": {
         "scenes": [0x1900],
-        "slot_data": ["minigame_hints"],
+        "slot_data": [("randomize_minigames", 1)],
         "locations": ["Maze Island Beginner", "Maze Island Normal", "Maze Island Expert", "Maze Island Bonus Reward"]
     },
     "Ocean NW Prince of Red Lion Combat Reward": {
         "scenes": [0x700],
-        "slot_data": ["minigame_hints", "randomize_minigames"],
+        "slot_data": [("randomize_minigames", 1)],
     },
     "Fishing Hints": {
         "scenes": [0x1401],
-        "slot_data": ["randomize_fishing"],
+        "slot_data": [("randomize_fishing", 1)],
         "locations": LOCATION_GROUPS["Fish"]
     },
 

@@ -319,7 +319,7 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # ================= Zauz's Island ====================
 
         ["zauz", "zauz dig", False, lambda state: ph_has_shovel(state, player)],
-        ["zauz", "zauz blade", False, None],
+        ["zauz", "zauz blade", False, lambda state: ph_zauz_required_metals(state, player)],
         ["ghost ship tetra", "zauz crest", False, None],
 
         # ================= Uncharted Island ====================
@@ -369,7 +369,8 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         # ================= Goron Temple ====================
         ["gt", "gt bow", False, lambda state: ph_has_bow(state, player)],
         ["gt", "gt b1", False, lambda state: all([ph_has_explosives(state, player),
-                                                  ph_can_kill_eye_brute(state, player)])],
+                                                  ph_can_kill_eye_brute(state, player),
+                                                  ph_has_sword(state, player)])],
         ["gt", "gt b2", False, lambda state: ph_can_hit_bombchu_switches(state, player)],
         ["gt b2", "gt b3", False, None],
         ["gt b2", "gt b2 back", False, lambda state: any([
@@ -475,6 +476,51 @@ def make_overworld_logic(player: int, origin_name: str, options: PhantomHourglas
         ["sw ocean", "fishing", False, lambda state: ph_has_fishing_rod(state, player)],
         ["fishing", "fishing bcl", False, lambda state: ph_has_big_catch_lure(state, player)],
         ["fishing", "fishing shadows", False, lambda state: ph_has_swordfish_shadows(state, player)],
+
+        # ========== Salvage ==============
+
+        ["sw ocean west", "sw ocean west salvage", False, lambda state: ph_has_salvage(state, player)],
+        ["sw ocean east", "sw ocean east salvage", False, lambda state: ph_has_salvage(state, player)],
+        ["nw ocean", "nw ocean salvage", False, lambda state: ph_has_salvage(state, player)],
+        ["se ocean", "se ocean salvage", False, lambda state: ph_has_salvage(state, player)],
+        ["ne ocean", "ne ocean salvage", False, lambda state: ph_has_salvage(state, player)],
+        ["ne ocean", "ne ocean inner", False, lambda state: ph_has_regal_necklace(state, player)],
+        ["ne ocean inner", "ne ocean salvage inner", False, lambda state: ph_has_salvage(state, player)],
+        ["ne ocean", "nw ocean corner salvage", False, lambda state: all([
+            ph_has_salvage(state, player),
+            ph_has_sea_chart(state, player, "NW")])],
+
+        ["sw ocean west salvage", "salvage 1", False, lambda state: ph_has_treasure_map(state, player, 1)],
+        ["sw ocean east salvage", "salvage 2", False, lambda state: ph_has_treasure_map(state, player, 2)],
+        ["nw ocean salvage", "salvage 3", False, lambda state: ph_has_treasure_map(state, player, 3)],
+        ["nw ocean corner salvage", "salvage 4", False, lambda state: ph_has_treasure_map(state, player, 4)],
+        ["sw ocean west salvage", "salvage 5", False, lambda state: ph_has_treasure_map(state, player, 5)],
+        ["nw ocean salvage", "salvage 6", False, lambda state: ph_has_treasure_map(state, player, 6)],
+        ["nw ocean salvage", "salvage 7", False, lambda state: ph_has_treasure_map(state, player, 7)],
+        ["sw ocean east salvage", "salvage 8", False, lambda state: ph_has_treasure_map(state, player, 8)],
+        ["sw ocean east salvage", "salvage 9", False, lambda state: ph_has_treasure_map(state, player, 9)],
+        ["nw ocean salvage", "salvage 10", False, lambda state: ph_has_treasure_map(state, player, 10)],
+        ["nw ocean salvage", "salvage 11", False, lambda state: ph_has_treasure_map(state, player, 11)],
+        ["se ocean salvage", "salvage 12", False, lambda state: ph_has_treasure_map(state, player, 12)],
+        ["se ocean salvage", "salvage 13", False, lambda state: ph_has_treasure_map(state, player, 13)],
+        ["se ocean salvage", "salvage 14", False, lambda state: ph_has_treasure_map(state, player, 14)],
+        ["se ocean salvage", "salvage 15", False, lambda state: ph_has_treasure_map(state, player, 15)],
+        ["se ocean salvage", "salvage 16", False, lambda state: ph_has_treasure_map(state, player, 16)],
+        ["se ocean salvage", "salvage 17", False, lambda state: ph_has_treasure_map(state, player, 17)],
+        ["sw ocean east salvage", "salvage 18", False, lambda state: ph_has_treasure_map(state, player, 18)],
+        ["nw ocean salvage", "salvage 19", False, lambda state: ph_has_treasure_map(state, player, 19)],
+        ["nw ocean corner salvage", "salvage 20", False, lambda state: ph_has_treasure_map(state, player, 20)],
+        ["sw ocean west salvage", "salvage 21", False, lambda state: ph_has_treasure_map(state, player, 21)],
+        ["se ocean salvage", "salvage 22", False, lambda state: ph_has_treasure_map(state, player, 22)],
+        ["se ocean salvage", "salvage 23", False, lambda state: ph_has_treasure_map(state, player, 23)],
+        ["ne ocean salvage", "salvage 24", False, lambda state: ph_has_treasure_map(state, player, 24)],
+        ["ne ocean salvage", "salvage 25", False, lambda state: ph_has_treasure_map(state, player, 25)],
+        ["ne ocean salvage inner", "salvage 26", False, lambda state: ph_has_treasure_map(state, player, 26)],
+        ["ne ocean salvage", "salvage 27", False, lambda state: ph_has_treasure_map(state, player, 27)],
+        ["ne ocean salvage inner", "salvage 28", False, lambda state: ph_has_treasure_map(state, player, 28)],
+        ["ne ocean salvage", "salvage 29", False, lambda state: ph_has_treasure_map(state, player, 29)],
+        ["ne ocean salvage", "salvage 30", False, lambda state: ph_has_treasure_map(state, player, 30)],
+        ["ne ocean salvage", "salvage 31", False, lambda state: ph_has_treasure_map(state, player, 31)],
 
         # Goal stuff
         ["mercay island", "beat required dungeons", False, lambda state: ph_beat_required_dungeons(state, player)],

@@ -1,6 +1,7 @@
 import os
 import logging
 import random
+from math import ceil
 from typing import List, Union, ClassVar, Any, Optional, Tuple
 import settings
 from BaseClasses import Tutorial, Region, Location, LocationProgressType, Item, ItemClassification
@@ -46,20 +47,18 @@ def add_items_from_filler(item_pool_dict: dict, filler_item_count: int, item: st
     return [item_pool_dict, filler_item_count]
 
 
-def add_additional_spirit_gems(item_pool_dict: dict, filler_item_count: int):
-    def add_gems(gem: str, filler_count: int):
-        gems = 20 - item_pool_dict[gem]
-        if filler_count >= gems:
-            filler_count -= gems
-            item_pool_dict[gem] = 20
-        return filler_count
+def add_spirit_gems(pack_option, add_option):
+    if pack_option == 1:
+        return [("Power Gem", 20), ("Wisdom Gem", 20), ("Courage Gem", 20)]
+    else:
+        count = ceil(20 / pack_option.value) + add_option
+        return [("Power Gem Pack", count), ("Wisdom Gem Pack", count), ("Courage Gem Pack", count)]
 
-    filler_item_count = add_gems("Power Gem", filler_item_count)
-    filler_item_count = add_gems("Wisdom Gem", filler_item_count)
-    filler_item_count = add_gems("Courage Gem", filler_item_count)
 
-    return [item_pool_dict, filler_item_count]
-
+def add_sand(starting_time, time_incr):
+    max_sand_count = ceil((5999-starting_time)/time_incr)
+    sand_count = min(max_sand_count, 5)
+    return [("Sand of Hours", sand_count)]
 
 class PhantomHourglassWorld(World):
     """
@@ -163,6 +162,8 @@ class PhantomHourglassWorld(World):
                 return self.options.randomize_minigames
             if location_name in LOCATION_GROUPS["Fishing Locations"]:
                 return self.options.randomize_fishing
+            if location_name in LOCATION_GROUPS["Salvage Locations"]:
+                return self.options.randomize_salvage
             if "GOAL" in location_name:
                 if location_name == "GOAL: Beat Bellumbeck" and self.options.goal == "beat_bellumbeck":
                     return True
@@ -190,6 +191,10 @@ class PhantomHourglassWorld(World):
             else self.options.dungeons_required.value
         self.options.dungeons_required.value = dungeons_required
         self.required_dungeons = implemented_dungeons[:dungeons_required]
+
+        # Cap zauz metals at number of metals
+        if self.options.zauz_required_metals > dungeons_required:
+            self.options.zauz_required_metals.value = dungeons_required
 
         # Extend mcguffin list
         boss_reward_pool = ITEM_GROUPS["Vanilla Metals"]
@@ -330,7 +335,8 @@ class PhantomHourglassWorld(World):
                 continue
             if (item_name in ["Treasure", "Ship Part", "Nothing!", "Potion", "Red Potion", "Purple Potion",
                               "Yellow Potion", "Power Gem", "Wisdom Gem", "Courage Gem", "Heart Container",
-                              "Bombs (Progressive)", "Bow (Progressive)", "Bombchus (Progressive)"]
+                              "Bombs (Progressive)", "Bow (Progressive)", "Bombchus (Progressive)",
+                              "Sand of Hours (Boss)"]
                     or "Treasure Map" in item_name):
                 filler_item_count += 1
                 continue
@@ -339,8 +345,12 @@ class PhantomHourglassWorld(World):
 
         # Fill filler count with consistent amounts of items, when filler count is empty it won't add any more items
         # so add progression items first
-        add_items = [("Wisdom Gem", 20), ("Power Gem", 20), ("Courage Gem", 20), ("Heart Container", 13),
-                     ("Bombs (Progressive)", 3), ("Bow (Progressive)", 3), ("Bombchus (Progressive)", 3)]
+        add_items = [("Bombs (Progressive)", 3), ("Bow (Progressive)", 3), ("Bombchus (Progressive)", 3)]
+        add_items += add_spirit_gems(self.options.spirit_gem_packs, self.options.additional_spirit_gems)
+        if self.options.randomize_salvage:
+            add_items += [(i, 1) for i in ITEM_GROUPS["Treasure Maps"]]
+        add_items += [("Heart Container", 13)]
+        add_items += add_sand(self.options.ph_starting_time, self.options.ph_time_increment)
         for i, count in add_items:
             item_pool_dict, filler_item_count = add_items_from_filler(item_pool_dict, filler_item_count, i, count)
         # Add ships if enough room in filler pool
@@ -463,6 +473,8 @@ class PhantomHourglassWorld(World):
         ]
         filler_item_names += ITEM_GROUPS["Treasure Items"]
         filler_item_names += ITEM_GROUPS["Ammo Refills"]
+        if self.options.randomize_fishing:  # If fishing is enable add useless fish to filler pool cause funny :3
+            filler_item_names += ["Fish: Skippyjack", "Fish: Toona"]
 
         item_name = self.random.choice(filler_item_names)
         return item_name
@@ -472,11 +484,12 @@ class PhantomHourglassWorld(World):
                    "ghost_ship_in_dungeon_pool", "exclude_non_required_dungeons",
                    "logic", "phantom_combat_difficulty", "boat_requires_sea_chart",
                    "randomize_minigames", "randomize_digs", "randomize_fishing",
-                   "keysanity", "randomize_frogs",
+                   "keysanity", "randomize_frogs", "randomize_salvage",
                    "randomize_triforce_crest", "randomize_harrow",
                    "randomize_masked_beedle",
-                   "fog_settings", "skip_ocean_fights",
-                   "dungeon_hints", "shop_hints", "minigame_hints", "spirit_island_hints",
+                   "fog_settings", "skip_ocean_fights", "zauz_required_metals",
+                   "spirit_gem_packs", "additional_spirit_gems",
+                   "dungeon_hints", "shop_hints", "spirit_island_hints",
                    "ph_starting_time", "ph_time_increment",
                    "death_link"]
         slot_data = self.options.as_dict(*options)
