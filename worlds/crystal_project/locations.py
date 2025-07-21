@@ -193,7 +193,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Mercury Shrine
         #Treasure chests
-        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player)), #Contract chest
+        LocationData(MERCURY_SHRINE, "Mercury Shrine Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player) or logic.has_vertical_movement(state)), #Contract chest
 
         
         LocationData(MERCURY_SHRINE, MERCURY_SHRINE + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
@@ -645,7 +645,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - East Switch Room", 2977 + treasure_index_offset), #Ether Pouch chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Eastern nyoom room", 2056 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind aqueduct grate", 2703 + treasure_index_offset), #Potion Pouch chest
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind western aqueduct grate", 2702 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Money chest
+        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Hiding behind western aqueduct grate", 2702 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 1st at west waterfall base", 2704 + treasure_index_offset), #Defense Shifter chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - Twinsies the 2nd at west waterfall base", 1145 + treasure_index_offset), #Money chest
         LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Chest - I saw Red vent in the eastern stairwell", 2701 + treasure_index_offset), #Grim Scythe chest
@@ -661,11 +661,11 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Ibek Cave
         #Treasure chests
-        LocationData(IBEK_CAVE, "Ancient Reservoir Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
+        LocationData(IBEK_CAVE, "Ibek Cave Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
 
         #NPCs
-        LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
-        LocationData(IBEK_CAVE, "Ancient Reservoir NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        LocationData(IBEK_CAVE, "Ibek Cave NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
+        LocationData(IBEK_CAVE, "Ibek Cave NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
 
         #Salmon Bay
         #Treasure chests
@@ -1338,7 +1338,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(CAPITAL_JAIL, "Capital Jail Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)), #Monster ID: 37
         LocationData(COBBLESTONE_CRAG, "Cobblestone Crag Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 217
         LocationData(OKIMOTO_NS, "Okimoto N.S. Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)), #Monster ID: 63
-        LocationData(ANCIENT_RESERVOIR, "Ancient Reservoir Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
+        LocationData(IBEK_CAVE, "Ibek Cave Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
         LocationData(SHOUDU_PROVINCE, "Shoudu Province Boss - Final Sky Arena Fight: Arachlea", 1366 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 252 (SkyArenaRegistrar)
         LocationData(THE_UNDERCITY, "The Undercity Boss - Blade Master", 1939 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.is_area_in_level_range(state, 40)), #Monster ID: 145
         LocationData(THE_UNDERCITY, "The Undercity Boss - Shadow Master", 1940 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 40)), #Monster ID: 144
