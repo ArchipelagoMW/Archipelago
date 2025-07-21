@@ -561,6 +561,11 @@ class LMContext(CommonContext):
                     if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 6):
                         self.locations_checked.add(mis_loc)
 
+            elif current_map_id == 3:
+                for addr_to_update in lm_loc_data.update_ram_addr:
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 3):
+                        self.locations_checked.add(mis_loc)
+
         await self.check_locations(self.locations_checked)
 
         # If on final boss with King Boo
