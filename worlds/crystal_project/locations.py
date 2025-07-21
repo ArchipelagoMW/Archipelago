@@ -858,7 +858,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_UNDERCITY, "The Undercity Chest - Undercity Inn", 3519 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Elevator Part
         LocationData(THE_UNDERCITY, "The Undercity Chest - South of the Undercity Inn", 1695 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),  # Brigandine chest
         #swimmy swimmy
-        LocationData(THE_UNDERCITY, "Underpass Chest - Lovely bounce tree W of The Undercity", 3673 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(608, 91, -215) (Summon Pah) Underpass Scrap chest
+        LocationData(THE_UNDERCITY, "Underpass Chest - Lovely bounce tree W of The Undercity", 3673 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #(608, 91, -215) (Summon Pah) Underpass Scrap chest
         
         #NPCs
         #can get without mounts from Shoudu
