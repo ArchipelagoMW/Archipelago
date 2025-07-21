@@ -257,7 +257,6 @@ class GameData:
         self._load_djinn()
         self._load_summons()
         self._load_forgeables()
-        self._load_enemies()
         self._setup_events()
         self._setup_location_names()
         self._setup_item_names()
@@ -402,6 +401,7 @@ class GameData:
                 )
 
     def _load_enemies(self):
+        # Function is unused, but leaving here in case we actually want to use it for some reason
         enemy_offset = 6000
         with open(os.path.join(SCRIPT_DIR, 'data', 'enemies.json'), 'r') as enemy_file:
             enemy_data = json.load(enemy_file)

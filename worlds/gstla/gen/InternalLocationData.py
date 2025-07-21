@@ -297,7 +297,6 @@ events = [
     InternalLocationData(2593, 2593, 5020, 5020, [0], 0,
         5020, True, True, LocationType.Event, LocationRestriction(7), True), # Contigo - Reunion Reunion
     
-    
 ]
 
 the_rest = [

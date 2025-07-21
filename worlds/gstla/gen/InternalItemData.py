@@ -206,7 +206,6 @@ events: List[InternalEventItemData] = [
     InternalEventItemData(5019, 1754, "Anemos Inner Sanctum - Dullahan", "Dullahan defeated"),
     InternalEventItemData(5020, 2593, "Contigo - Reunion", "Reunion"),
     
-    
 ]
 
 characters: List[InternalItemData] = [

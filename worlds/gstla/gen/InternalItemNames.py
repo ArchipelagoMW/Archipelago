@@ -546,8 +546,6 @@ class InternalItemName:
     Piers = "Piers"
     
 
-
-
 item_id_by_py_name: Dict[str, int] = {
     "Milquetoast_Mimic": 2561,
     "Clumsy_Mimic": 2562,

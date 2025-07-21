@@ -255,9 +255,6 @@ class InternalLocationName:
     Contigo_Reunion = "Contigo - Reunion"
     
 
-    ##enemy events
-    
-
     ##remainder
     Kandorean_Temple_Mimic = "Kandorean Temple - Mimic"
     Dehkan_Plateau_Elixir = "Dehkan Plateau - Second Screen Ledge"

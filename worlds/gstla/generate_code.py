@@ -181,7 +181,6 @@ def generate_location_names(env: Environment, data: GameData):
     fire_djinn = []
     air_djinn = []
     events = []
-    enemies = []
     name_list = []
 
     for djinn in data.raw_djinn_data:
@@ -211,9 +210,6 @@ def generate_location_names(env: Environment, data: GameData):
             hidden_items.append(loc_name)
         else:
             remainder.append(loc_name)
-    for enemy in data.raw_enemy_data:
-        enemies.append(data.location_names[enemy.ap_id])
-        # name_list.append({'name': data.location_names[enemy.ap_id].py_name, 'id': enemy.ap_id})
 
     with open(os.path.join(SCRIPT_DIR, 'gen', 'InternalLocationNames.py'), 'w') as outfile:
         write_warning(outfile)
@@ -222,7 +218,6 @@ def generate_location_names(env: Environment, data: GameData):
                                       remainder=remainder, earthDjinn=earth_djinn,
                                       waterDjinn=water_djinn, fireDjinn=fire_djinn,
                                       airDjinn=air_djinn, events=events,
-                                      enemies=enemies,
                                       name_list=name_list))
 
 def generate_item_names(env: Environment, data: GameData):
@@ -242,8 +237,6 @@ def generate_item_names(env: Environment, data: GameData):
         name_list += [{'name': x.name, 'id': x.id} for x in summons]
         events = [data.item_names[event.event_id] for event in data.events.values()]
         name_list += [{'name': data.item_names[x.id].py_name, 'id': x.id} for x in events]
-        enemies = [data.item_names[enemy.ap_id] for enemy in data.raw_enemy_data]
-        # name_list += [{'name': data.item_names[x.id].py_name, 'id': x.id} for x in enemies]
         name_list += [{'name': d.name, 'id': d.ap_id} for d in data.raw_djinn_data]
         name_list += [{'name': data.item_names[p.id].py_name, 'id': p.id} for p in data.raw_psy_data]
         name_list += [{'name': c.name, 'id': c.id} for c in data.raw_character_data]
@@ -254,7 +247,6 @@ def generate_item_names(env: Environment, data: GameData):
             psyenergies=[data.item_names[x.id] for x in data.raw_psy_data],
             djinn=[data.item_names[x.ap_id] for x in data.raw_djinn_data],
             events=events,
-            enemies=enemies,
             characters=[data.item_names[c.id] for c in data.raw_character_data],
             types=[x for x in ItemType if x < ItemType.Psyenergy or x == ItemType.Mimic]))
 
@@ -272,7 +264,6 @@ def generate_item_data(env: Environment, data: GameData):
         psyitems = []
         mimics = []
         other_prog = []
-        enemies = []
         other_useful = dict()
         other_items = dict()
         shop_only = []
@@ -345,13 +336,6 @@ def generate_item_data(env: Environment, data: GameData):
         for usefuls in USEFUL_ITEM_GROUPS.values():
             useful_remainder_ids |= usefuls
         useful_remainder_ids = {x['item'].id for x in other_useful.values()} - useful_remainder_ids
-        for enemy in data.raw_enemy_data:
-            enemies.append({
-                'id': enemy.ap_id,
-                'flag': enemy.flag,
-                'location_name': data.item_names[enemy.ap_id],
-                'item_name': data.item_names[enemy.ap_id],
-            })
         outfile.write(template.render(
             summons=summons,
             psyenergies=psyenergies,
@@ -360,7 +344,6 @@ def generate_item_data(env: Environment, data: GameData):
             characters=characters,
             mimics=mimics,
             other_prog=other_prog,
-            enemies=enemies,
             misc=misc,
             other_useful=other_useful,
             useful_groups=USEFUL_ITEM_GROUPS,
@@ -419,7 +402,6 @@ def generate_location_data(env: Environment, data: GameData):
             djinn_locations=djinn_locs,
             other_locations=remainder,
             events=data.events.values(),
-            enemies=data.raw_enemy_data,
             loc_type_lookup=loc_type_lookup,
         ))
 
