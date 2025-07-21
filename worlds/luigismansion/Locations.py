@@ -119,9 +119,9 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Telephone Room R1 Chest": LMLocationData("Telephone Room", 44, "Furniture", 681, [], remote_only=True,
                                                      update_ram_addr=[LMRamData(in_game_room_id=53)], require_poltergust=False),
     "Storage Room Cage Button": LMLocationData("Storage Room", 712, "Furniture", 285, [], remote_only=True,
-                                               update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP Entry 284? 285? 294? 309?
+                                    update_ram_addr=[LMRamData(0x803D33A2, bit_position=0, in_game_room_id=14)]),
     "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
-                                               update_ram_addr=[LMRamData(in_game_room_id=14)]), # TODO What is JMP entry?
+                           update_ram_addr=[LMRamData(0x803D339E, bit_position=1, in_game_room_id=14)]),
     "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True, #TODO Add to client
                                       update_ram_addr=[LMRamData(0x804D80A4)], require_poltergust=False),
 
