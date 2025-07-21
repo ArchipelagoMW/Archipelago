@@ -137,9 +137,6 @@ key_item_names = {
     "Time Rune: The Lake", 
     "Time Rune: Pumpkin Gorge", 
     "Time Rune: The Time Device",
-    
-    # level end
-    "Level_End"
 }
 
 
@@ -286,10 +283,7 @@ _all_items: List[MedievilItemData] = [
 
     ("Time Rune: The Lake", 145, MedievilItemCategory.PROGRESSION, True),
     ("Time Rune: Pumpkin Gorge", 146, MedievilItemCategory.PROGRESSION, True),
-    ("Time Rune: The Time Device", 147, MedievilItemCategory.PROGRESSION, True),
-    
-    # Level_End is typically a progression item as it signifies advancing a stage
-    ("Level_End", 999, MedievilItemCategory.LEVEL_END, True) 
+    ("Time Rune: The Time Device", 147, MedievilItemCategory.PROGRESSION, True)
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
