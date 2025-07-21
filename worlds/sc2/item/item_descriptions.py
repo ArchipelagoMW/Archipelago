@@ -958,7 +958,6 @@ item_descriptions = {
     item_names.CORSAIR_SUSTAINING_DISRUPTION: "Corsair disruption webs last longer.",
     item_names.CORSAIR_NEUTRON_SHIELDS: "Increases corsair maximum shields by +20.",
     item_names.ORACLE_STEALTH_DRIVE: "Oracles become permanently cloaked.",
-    item_names.ORACLE_STASIS_CALIBRATION: "Oracle War Council upgrade. Enemies caught by the Oracle's Stasis Ward may now be attacked for the first 5 seconds of stasis.",
     item_names.ORACLE_SKYWARD_CHRONOANOMALY: "The Oracle's Stasis Ward can affect air units.",
     item_names.ORACLE_TEMPORAL_ACCELERATION_BEAM: "Oracles no longer need to to spend energy to attack.",
     item_names.ORACLE_BOSONIC_CORE: "Increases starting energy by 150 and maximum energy by 50.",
@@ -1077,7 +1076,7 @@ item_descriptions = {
     item_names.TEMPEST_DISINTEGRATION: "Tempest War Council upgrade. " + _ability_desc("Tempests", "Disintegration", "deals 500 damage to a target unit or structure over 20 seconds"),
     item_names.SCOUT_EXPEDITIONARY_HULL: "Scout War Council upgrade. Scouts gain +25 shields, +50 health, +1 shield armor, and reduced shield regeneration delay.",
     item_names.ARBITER_VESSEL_OF_THE_CONCLAVE: "Arbiter War Council upgrade. Reduces the energy cost of Recall by 50 and Stasis Field by 100.",
-    # Oracle
+    item_names.ORACLE_STASIS_CALIBRATION: "Oracle War Council upgrade. Enemies caught by the Oracle's Stasis Ward may now be attacked for the first 5 seconds of stasis.",
     item_names.MOTHERSHIP_INTEGRATED_POWER: "Mothership War Council upgrade. Allows Motherships to move at full speed outside pylon power.",
     item_names.OPPRESSOR_VULCAN_BLASTER: "Oppressor War Council upgrade. " + _ability_desc("Oppressors", "Vulcan Blaster", "activates a powerful short range anti-ground weapon for a limited time. Greatly reduces movement and turning speed, and disables other weapons while active"),
     item_names.CALADRIUS_CORONA_BEAM: "Caladrius War Council upgrade. " + _ability_desc("Caladrius", "Corona Beam", "channels a beam that drains up to 100 of the Caladrius' shields to deal up to 200 damage over time to a single target"),
