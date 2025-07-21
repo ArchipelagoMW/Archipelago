@@ -33,10 +33,13 @@ def update_dol_offsets(gcm: GCM, dol: DOL, seed: str, start_inv: list[str], walk
     dol.data.write(struct.pack(">H", speed_to_use))
 
     # Vacuum Speed
-    if any("Poltergust 4000" in key for key in start_inv):
-        vac_speed = "3800000F"
-    else:
-        vac_speed = "800D0160"
+    vac_count = len(list("Progressive Vacuum" in key for key in start_inv))
+    match vac_count:
+        case x if vac_count >= 2:
+            vac_speed = "3800000F"
+        case _:
+            vac_speed = "800D0160"
+
     dol.data.seek(0x7EA28)
     dol.data.write(bytes.fromhex(vac_speed))
 

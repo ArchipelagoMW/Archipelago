@@ -580,10 +580,10 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
+        vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
+        if vac_count >= 2:
             vac_speed = "3800000F"
-            vac_item = next(netItem.item for netItem in self.items_received if netItem.item == 8064)
-            lm_item_name = self.item_names.lookup_in_game(vac_item)
+            lm_item_name = self.item_names.lookup_in_game(8064)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
             for addr_to_update in lm_item.update_ram_addr:
                 dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
@@ -595,7 +595,6 @@ class LMContext(CommonContext):
                     "that you saw this message and please explain what you last did to trigger it.")
                 self.debug_flag_ten = True
 
-        # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
             crown_helper_val = "00000001"
