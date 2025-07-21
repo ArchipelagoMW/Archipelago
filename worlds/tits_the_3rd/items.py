@@ -195,12 +195,13 @@ default_character_quartz_pool: Counter[str] = Counter()
 # fills the pool counters according to info in location_table
 for location in location_table:
     if location_table[location].vanilla_item != "":
-        if location_table[location].check_type == CheckTypeName.chest:
-            default_chest_pool[location_table[location].vanilla_item] += 1
-        if location_table[location].check_type == CheckTypeName.character_quartz:
-            default_character_quartz_pool[location_table[location].vanilla_item] += 1
-        if location_table[location].check_type == CheckTypeName.area_unlock:
-            default_item_pool[location_table[location].vanilla_item] += 1
+        match location_table[location].check_type:
+            case CheckTypeName.chest:
+                default_chest_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.character_quartz:
+                default_character_quartz_pool[location_table[location].vanilla_item] += 1
+            case CheckTypeName.area_unlock:
+                default_item_pool[location_table[location].vanilla_item] += 1
 
 default_character_to_location = {
     ItemName.tita: LocationName.sealing_stone_tita,
