@@ -775,9 +775,6 @@ class LMWorld(World):
             elif data.code == 140:
                 copies_to_place = 3
             elif data.code == 64:
-                if self.options.vacuum_start.value:
-                    copies_to_place = 1
-                else:
                     copies_to_place = 2
             else:
                 copies_to_place = 1
