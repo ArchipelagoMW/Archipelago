@@ -82,14 +82,14 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SHOUDU_PROVINCE, "Shoudu Fields", 576, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Market", 577, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Port", 672),
-        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
+        LocationData(SHOUDU_PROVINCE, "Shanty Inn", 1523),
         LocationData(SHOUDU_PROVINCE, "Sky Arena", 1524, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE, player=player)),
         LocationData(SHOUDU_PROVINCE, "Prize Counter", 2731, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
         LocationData(SHOUDU_PROVINCE, "Shoudu Elevator", 3523, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
 
         LocationData(GANYMEDE_SHRINE, "Ganymede Shrine", 1573),
 
-        LocationData(THE_UNDERCITY, "The Undercity", 1266),
+        LocationData(THE_UNDERCITY, "The Undercity", 1266, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE, player=player) or state.can_reach(QUINTAR_RESERVE, player=player)),
 
         LocationData(CAPITAL_PIPELINE, "Capital Pipeline", 1127),
         LocationData(CAPITAL_PIPELINE, "East Capital Pipeline", 1420, lambda state: logic.has_vertical_movement(state) or logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)),
