@@ -508,7 +508,7 @@ class LMContext(CommonContext):
                     if furn_flag > 0:
                         return True
             case "Map":
-                if curr_map_id == map_to_check:
+                if curr_map_id in map_to_check:
                     return True
             case _:
                 byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
@@ -533,17 +533,11 @@ class LMContext(CommonContext):
         for mis_loc in self.missing_locations:
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
-
-            if current_map_id == 11:
-                if not mis_loc in BOOLOSSUS_AP_ID_LIST:
-                    continue
-
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 11):
-                        self.locations_checked.add(mis_loc)
+            if current_map_id not in lm_loc_data.map_id:
+                continue
 
             # If in main mansion map
-            elif current_map_id == 2:
+            if current_map_id == 2:
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     # Only check locations that are currently in the same room as us.
@@ -553,17 +547,12 @@ class LMContext(CommonContext):
                     if not room_to_check == current_room_id:
                         continue
 
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 2):
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
                         self.locations_checked.add(mis_loc)
 
-            elif current_map_id == 6:
+            else:
                 for addr_to_update in lm_loc_data.update_ram_addr:
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 6):
-                        self.locations_checked.add(mis_loc)
-
-            elif current_map_id == 3:
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 3):
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
                         self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)

@@ -14,6 +14,7 @@ class LMLocationData(NamedTuple):
     remote_only: bool = None
     update_ram_addr: Optional[list[LMRamData]] = None
     require_poltergust: bool = True
+    map_id: list[int] = [2]
 
 
 class LMLocation(Location):
@@ -123,11 +124,11 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
                            update_ram_addr=[LMRamData(0x803D339E, bit_position=1, in_game_room_id=14)]),
     "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True,
-                                      update_ram_addr=[LMRamData(0x804D80A4)], require_poltergust=False),
+                                      update_ram_addr=[LMRamData(0x804D80A4)], require_poltergust=False, map_id=[6]),
     "Complete Training": LMLocationData("Training Room", 926, "Special", 0, [], remote_only=True,
-                       update_ram_addr=[LMRamData(0x803D33B2, bit_position=0, in_game_room_id=0)]),
-    "Complete Training - Catch 10 Ghosts": LMLocationData("Training Room", 927, "Special", 0, [], remote_only=True,
-                                        update_ram_addr=[LMRamData(0x803D33B2, bit_position=1, in_game_room_id=0)]),
+                       update_ram_addr=[LMRamData(0x803D33B2, bit_position=0, in_game_room_id=0)], map_id=[3]),
+    "Catch 9 Ghosts in Training": LMLocationData("Training Room", 927, "Special", 0, [], remote_only=True,
+                       update_ram_addr=[LMRamData(0x803D33B2, bit_position=1, in_game_room_id=0)], map_id=[3]),
 
 
     # Special Case
@@ -237,11 +238,11 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Van Gore's Painting (Artist's Studio)": LMLocationData("Artist's Studio", 709, "Furniture", 690, [],
         update_ram_addr=[LMRamData(0x803CDFC2, bit_position=2, in_game_room_id=60, ram_byte_size=2)]),
     "Defeat Chauncey": LMLocationData("Nursery", 924, "Portrait", 77, [], remote_only=True,
-            update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)]),
+            update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)], map_id=[2,10]),
     "Defeat Bogmire": LMLocationData("Graveyard", 923, "Portrait", 0, [], remote_only=True,
-            update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)]),
+            update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)], map_id=[2,13]),
     "Defeat Boolussus": LMLocationData("Balcony", 922, "Portrait", 56, ["Ice Element Medal"],
-                    remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)]),
+                    remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)], map_id=[2,11]),
 }
 
 # Adds Toads as locations
@@ -1708,7 +1709,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Lydia, the Mirror-Gazing Mother": LMLocationData("Master Bedroom", 622, "Portrait", 71, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DA9, bit_position=7, in_game_room_id=34)]),
     "Chauncey, the Spoiled Baby": LMLocationData("Nursery", 623, "Portrait", 77, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)]),
+        update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)], map_id=[2,10]),
     "Henry and Orville, the Twin Brothers": LMLocationData("Twins' Room", 624, "Portrait", 79, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DAA, bit_position=1, in_game_room_id=27)]),
     "The Floating Whirlindas": LMLocationData("Ballroom", 625, "Portrait", 34, [], remote_only=True,
@@ -1724,7 +1725,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Spooky, the Guard Dog": LMLocationData("Boneyard", 630, "Portrait", 23, ["Water Element Medal"], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DB3, bit_position=0, in_game_room_id=11)]),
     "Bogmire, the Cemetary Shadow": LMLocationData("Graveyard", 631, "Portrait", 0, [], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)]),
+        update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)], map_id=[2,13]),
     "Biff Atlas, the Bodybuilder": LMLocationData("Rec Room", 632, "Portrait", 32, [], remote_only=True,
         update_ram_addr=[LMRamData(0x803D5DAA, bit_position=6, in_game_room_id=23)]),
     "Slim Bankshot, the Lonely Poolshark": LMLocationData("Billiards Room", 633, "Portrait", 26, [], remote_only=True,
@@ -1738,7 +1739,7 @@ PORTRAIT_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Uncle Grimmly, Hermit of the Darkness": LMLocationData("Wardrobe", 637, "Portrait", 16, ["Blackout"],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DBB, bit_position=3, in_game_room_id=41)]),
     "Boolossus, the Jumbo Ghost": LMLocationData("Balcony", 638, "Portrait", 56, ["Ice Element Medal"],
-        remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)]),
+        remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)], map_id=[2,11]),
     "Jarvis, the Jar Collector": LMLocationData("Ceramics Studio", 639, "Portrait", 0, ["Ice Element Medal"],
         remote_only=True, update_ram_addr=[LMRamData(0x803D5DA8, bit_position=5, in_game_room_id=58)]),
     "Clockwork Soldiers, the Toy Platoon": LMLocationData("Clockwork Room", 640, "Portrait", 115, [], remote_only=True,
@@ -1883,35 +1884,35 @@ ROOM_BOO_LOCATION_TABLE: dict[str, LMLocationData] = {
 # Tracking the individual boos of Boolossues
 BOOLOSSUS_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Boolossus Fragment 1": LMLocationData("Balcony", 720, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E08, bit_position=3, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E08, bit_position=3, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 2": LMLocationData("Balcony", 721, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E08, bit_position=4, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E08, bit_position=4, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 3": LMLocationData("Balcony", 722, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E08, bit_position=5, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E08, bit_position=5, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 4": LMLocationData("Balcony", 723, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E08, bit_position=6, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E08, bit_position=6, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 5": LMLocationData("Balcony", 724, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E08, bit_position=7, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E08, bit_position=7, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 6": LMLocationData("Balcony", 725, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=0, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=0, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 7": LMLocationData("Balcony", 726, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=1, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=1, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 8": LMLocationData("Balcony", 727, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=2, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=2, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 9": LMLocationData("Balcony", 728, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=3, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=3, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 10": LMLocationData("Balcony", 729, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=4, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=4, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 11": LMLocationData("Balcony", 730, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=5, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=5, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 12": LMLocationData("Balcony", 731, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=6, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=6, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 13": LMLocationData("Balcony", 732, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E09, bit_position=7, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E09, bit_position=7, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 14": LMLocationData("Balcony", 733, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E0A, bit_position=0, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E0A, bit_position=0, in_game_room_id=62)], map_id=[2,11]),
     "Boolossus Fragment 15": LMLocationData("Balcony", 734, "Boolossus Boo", 0, ["Ice Element Medal"], remote_only=True,
-        update_ram_addr=[LMRamData(0x803D5E0A, bit_position=1, in_game_room_id=62)]),
+        update_ram_addr=[LMRamData(0x803D5E0A, bit_position=1, in_game_room_id=62)], map_id=[2,11]),
 }
 
 BOO_LOCATION_TABLE = {**ROOM_BOO_LOCATION_TABLE,
