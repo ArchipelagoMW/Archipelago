@@ -656,9 +656,11 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            if location == "Luigi's Courage" or location == "E. Gadd's Gift" or location == "Visit E. Gadd's Gallery":
+            if data.code in [708, 853, 925, 926, 927]:
                 region = self.get_region(self.origin_region_name)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
             else:
                 region = self.get_region(data.region)

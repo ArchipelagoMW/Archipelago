@@ -122,8 +122,12 @@ BASE_LOCATION_TABLE: dict[str, LMLocationData] = {
                                     update_ram_addr=[LMRamData(0x803D33A2, bit_position=0, in_game_room_id=14)]),
     "Storage Room Wall Button": LMLocationData("Storage Room", 921, "Furniture", 284, [], remote_only=True,
                            update_ram_addr=[LMRamData(0x803D339E, bit_position=1, in_game_room_id=14)]),
-    "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True, #TODO Add to client
+    "Visit E. Gadd's Gallery": LMLocationData("Foyer", 925, "Map", 0, [], remote_only=True,
                                       update_ram_addr=[LMRamData(0x804D80A4)], require_poltergust=False),
+    "Complete Training": LMLocationData("Training Room", 926, "Special", 0, [], remote_only=True,
+                       update_ram_addr=[LMRamData(0x803D33B2, bit_position=0, in_game_room_id=0)]),
+    "Complete Training - Catch 10 Ghosts": LMLocationData("Training Room", 927, "Special", 0, [], remote_only=True,
+                                        update_ram_addr=[LMRamData(0x803D33B2, bit_position=1, in_game_room_id=0)]),
 
 
     # Special Case
@@ -233,9 +237,9 @@ ENEMIZER_LOCATION_TABLE: dict[str, LMLocationData] = {
     "Van Gore's Painting (Artist's Studio)": LMLocationData("Artist's Studio", 709, "Furniture", 690, [],
         update_ram_addr=[LMRamData(0x803CDFC2, bit_position=2, in_game_room_id=60, ram_byte_size=2)]),
     "Defeat Chauncey": LMLocationData("Nursery", 924, "Portrait", 77, [], remote_only=True,
-                                      update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)]),
+            update_ram_addr=[LMRamData(0x803D5DAC, bit_position=0, in_game_room_id=26)]),
     "Defeat Bogmire": LMLocationData("Graveyard", 923, "Portrait", 0, [], remote_only=True,
-                                     update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)]),
+            update_ram_addr=[LMRamData(0x803D5DBE, bit_position=5, in_game_room_id=15)]),
     "Defeat Boolussus": LMLocationData("Balcony", 922, "Portrait", 56, ["Ice Element Medal"],
                     remote_only=True, update_ram_addr=[LMRamData(0x803D5DBF, bit_position=4, in_game_room_id=62)]),
 }
