@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
 import typing
 
 from BaseClasses import (
@@ -231,7 +231,7 @@ class AreaData:
         color_mapping: Dict[str, str] = (
             world.door_color_mapping[self.area_name].type_mapping
             if world.door_color_mapping
-            and world.options.door_color_randomization
+            and world.options.door_color_randomization.value
             != DoorColorRandomization.option_none
             else {}
         )
@@ -244,7 +244,7 @@ class AreaData:
                     continue
 
                 if (
-                    world.options.door_color_randomization
+                    world.options.door_color_randomization.value
                     != DoorColorRandomization.option_none
                     and door_data.exclude_from_rando is False
                     and door_data.defaultLock.value in color_mapping
@@ -298,6 +298,10 @@ class AreaData:
 
                 apply_blast_shield_to_both_sides_of_door(door_data)
 
+                # Skip connection if door has a disabled blast shield (locked door)
+                if  door_data.blast_shield == BlastShieldType.Disabled:
+                    continue
+
                 target_region = world.get_region(
                     door_data.get_destination_region_name()
                 )
@@ -330,6 +334,11 @@ class AreaData:
                     apply_blast_shield_to_both_sides_of_door(
                         target_door, target_room_data=target_room
                     )
+
+                    # Skip sub-region connections if either door has a disabled blast shield
+                    if (cast(BlastShieldType, door_data.blast_shield) == BlastShieldType.Disabled or
+                             target_door.blast_shield == BlastShieldType.Disabled):
+                        continue
 
                     target_sub_region = world.get_region(
                         target_door.get_destination_region_name()

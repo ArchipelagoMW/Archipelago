@@ -2,6 +2,7 @@ from Fill import distribute_items_restrictive
 from ..PrimeOptions import DoorColorRandomization
 from ..Items import SuitUpgrade
 from ..DoorRando import DoorLockType
+from ..BlastShieldRando import BlastShieldType, WorldBlastShieldMapping
 
 from ..Config import make_config, starting_inventory
 from ..data.AreaNames import MetroidPrimeArea
@@ -274,4 +275,128 @@ class TestBeamRandoWithDoorRando(MetroidPrimeTestBase):
         self.assertFalse(
             new_starting_beam_doors_found,
             "New starting beam doors should not be included when power beam doors are included",
+        )
+
+
+class TestDisabledBlastShieldConnections(MetroidPrimeWithOverridesTestBase):
+    """Test that doors with disabled blast shields do not create connections between regions"""
+    
+    run_default_tests = False  # type: ignore
+    options = {
+        "trick_difficulty": "medium",
+    }
+    overrides = {
+        "blast_shield_mapping": WorldBlastShieldMapping.from_option_value(
+            {
+                "Tallon Overworld": {
+                    "area": "Tallon Overworld",
+                    "type_mapping": {
+                        "Landing Site": {
+                            0: "Disabled",  # Door to Gully
+                        }
+                    },
+                }
+            }
+        ),
+    }
+
+    def test_normal_door_connections_not_created_for_disabled_blast_shields(self):
+        """Verify that no connection exists between Landing Site and Gully when door has disabled blast shield"""
+        world: "MetroidPrimeWorld" = self.world
+        
+        # Get the regions
+        landing_site = world.get_region(RoomName.Landing_Site.value)
+        gully = world.get_region(RoomName.Gully.value)
+        
+        # Check that there's no direct connection from Landing Site to Gully
+        landing_to_gully_found = False
+        for exit in landing_site.exits:
+            if exit.connected_region == gully:
+                landing_to_gully_found = True
+                break
+                
+        self.assertFalse(
+            landing_to_gully_found,
+            "Connection from Landing Site to Gully should not exist when door has disabled blast shield"
+        )
+        
+        # Also verify the reverse connection doesn't exist
+        gully_to_landing_found = False
+        for exit in gully.exits:
+            if exit.connected_region == landing_site:
+                gully_to_landing_found = True
+                break
+                
+        self.assertFalse(
+            gully_to_landing_found,
+            "Connection from Gully to Landing Site should not exist when door has disabled blast shield"
+        )
+
+
+class TestDisabledBlastShieldSubRegionConnections(MetroidPrimeWithOverridesTestBase):
+    """Test that sub-region connections are not created when doors have disabled blast shields"""
+    
+    run_default_tests = False  # type: ignore
+    options = {
+        "trick_difficulty": "medium",
+    }
+    overrides = {
+        "blast_shield_mapping": WorldBlastShieldMapping.from_option_value(
+            {
+                "Phendrana Drifts": {
+                    "area": "Phendrana Drifts",
+                    "type_mapping": {
+                        "Plaza Walkway": {
+                            0: "Disabled",  # Sub-region door to Phendrana Shorelines
+                        }
+                    },
+                }
+            }
+        ),
+    }
+
+    def test_sub_region_connections_not_created_for_disabled_blast_shields(self):
+        """Verify that sub-region connections are not created when doors have disabled blast shields"""
+        world: "MetroidPrimeWorld" = self.world
+        
+        # Get the regions - Plaza Walkway connects to Phendrana Shorelines via sub-region door
+        plaza_walkway = world.get_region(RoomName.Plaza_Walkway.value)
+        phendrana_shorelines = world.get_region(RoomName.Phendrana_Shorelines.value)
+        ruins_entryway = world.get_region(RoomName.Ruins_Entryway.value)
+        
+        # Check that there's no connection from Plaza Walkway to Phendrana Shorelines
+        plaza_to_shorelines_found = False
+        for exit in plaza_walkway.exits:
+            if exit.connected_region == phendrana_shorelines:
+                plaza_to_shorelines_found = True
+                break
+                
+        self.assertFalse(
+            plaza_to_shorelines_found,
+            "Sub-region connection from Plaza Walkway to Phendrana Shorelines should not exist when door has disabled blast shield"
+        )
+        
+        # Also check that the paired sub-region connection doesn't exist
+        # (Plaza Walkway door 0 connects to Phendrana Shorelines door 3, which connects to Ruins Entryway)
+        plaza_to_ruins_found = False
+        for exit in plaza_walkway.exits:
+            if exit.connected_region == ruins_entryway:
+                plaza_to_ruins_found = True
+                break
+                
+        self.assertFalse(
+            plaza_to_ruins_found,
+            "Sub-region connection from Plaza Walkway to Ruins Entryway should not exist when door has disabled blast shield"
+        )
+        
+        # The intermediate connection through sub-regions should also not exist
+        # Plaza Walkway normally has 2 exits: Ice Ruins East and Phendrana Shorelines (then to Ruins Entryway)
+        # With the disabled door, it should only have 1 exit
+        expected_exit_count = 1
+        actual_exit_count = len(plaza_walkway.exits)
+        
+        self.assertEqual(
+            actual_exit_count,
+            expected_exit_count,
+            f"Plaza Walkway should have {expected_exit_count} exit when sub-region door is disabled. Found {actual_exit_count} exits"
         )
