@@ -485,6 +485,44 @@ class LMContext(CommonContext):
             }
         }])
 
+    def check_ram_location(self, loc_data, addr_to_update, curr_map_id, map_to_check) -> bool:
+        """
+        Checks a provided location in ram to see if the location was interacted with. This includes
+        furniture, plants, entering rooms,
+        """
+        # TODO optimize all other cases for reading when a pointer is there vs not.
+        match loc_data.type:
+            case "Furniture" | "Plant":
+                # Check all possible furniture addresses.
+                for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                    # Only check if the current address is a pointer
+                    current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                    if not check_if_addr_is_pointer(current_addr):
+                        continue
+
+                    furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                    if not furn_id == loc_data.jmpentry:
+                        continue
+
+                    furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                    if furn_flag > 0:
+                        return True
+            case "Map":
+                if curr_map_id == map_to_check:
+                    return True
+            case _:
+                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                if not addr_to_update.pointer_offset is None:
+                    curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                        [addr_to_update.pointer_offset]), byte_size))
+                    if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                        return True
+                else:
+                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                    if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                        return True
+        return False
+
     async def lm_check_locations(self):
         if not (self.check_ingame() and self.check_alive()):
             return
@@ -501,15 +539,12 @@ class LMContext(CommonContext):
                     continue
 
                 for addr_to_update in lm_loc_data.update_ram_addr:
-                    current_boo_state = dme.read_byte(addr_to_update.ram_addr)
-                    if (current_boo_state & (1 << addr_to_update.bit_position)) > 0:
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 11):
                         self.locations_checked.add(mis_loc)
 
             # If in main mansion map
             elif current_map_id == 2:
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-
-                #TODO optimize all other cases for reading when a pointer is there vs not.
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     # Only check locations that are currently in the same room as us.
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
@@ -518,33 +553,13 @@ class LMContext(CommonContext):
                     if not room_to_check == current_room_id:
                         continue
 
-                    match lm_loc_data.type:
-                        case "Furniture" | "Plant":
-                            # Check all possible furniture addresses. #TODO Find a way to not check all 600+
-                            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
-                                # Only check if the current address is a pointer
-                                current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
-                                if not check_if_addr_is_pointer(current_addr):
-                                    continue
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 2):
+                        self.locations_checked.add(mis_loc)
 
-                                furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                                if not furn_id == lm_loc_data.jmpentry:
-                                    continue
-
-                                furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-                                if furn_flag > 0:
-                                    self.locations_checked.add(mis_loc)
-                        case _:
-                            byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
-                            if not addr_to_update.pointer_offset is None:
-                                curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                    [addr_to_update.pointer_offset]), byte_size))
-                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
-                                    self.locations_checked.add(mis_loc)
-                            else:
-                                curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
-                                    self.locations_checked.add(mis_loc)
+            elif current_map_id == 6:
+                for addr_to_update in lm_loc_data.update_ram_addr:
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, 6):
+                        self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)
 
