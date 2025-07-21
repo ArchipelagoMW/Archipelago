@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, location_tables, location_dictionary
-from .Options import MedievilOption
+from .Options import MedievilOption, GoalOptions
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -63,20 +63,97 @@ class MedievilWorld(World):
     def create_regions(self):
         # Create Regions
         regions: Dict[str, Region] = {}
+        
         regions["Menu"] = self.create_region("Menu", [])
+        
         regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
-            "MainWorld"
+            "Hall of Heroes",
+            "Dan's Crypt",
+            "The Graveyard",
+            "Return to the Graveyard",
+            "Cemetery Hill",
+            "The Hilltop Mausoleum",
+            "Scarecrow Fields",
+            "Ant Hill",
+            "The Crystal Caves",
+            "The Lake",
+            "Pumpkin Gorge",
+            "Pumpkin Serpent",
+            "The Sleeping Village",
+            "Pools of the Ancient Dead",
+            "Asylum Grounds",
+            "Inside the Asylum",
+            "Enchanted Earth",
+            "The Gallows Gauntlet",
+            "The Haunted Ruins",
+            "The Ghost Ship",
+            "The Entrance Hall",
+            "The Time Device",
+            "Zaroks Lair"
         ]})
         
         def create_connection(from_region: str, to_region: str):
             connection = Entrance(self.player, f"{to_region}", regions[from_region])
             regions[from_region].exits.append(connection)
             connection.connect(regions[to_region])
-            print(f"Connecting {from_region} to {to_region} Using entrance: " + connection.name)
             
-        create_connection("Menu", "MainWorld")
+        create_connection("Menu", "Dan's Crypt")
+        create_connection("Dan's Crypt", "The Graveyard")
+        create_connection("The Graveyard", "Cemetery Hill")
+        create_connection("Cemetery Hill", "The Hilltop Mausoleum")
+        create_connection("The Hilltop Mausoleum", "Return to the Graveyard")
         
+        create_connection("Return to the Graveyard", "Scarecrow Fields")
         
+        # dragon gem 1 + Shadow Artefact path
+        create_connection("Scarecrow Fields", "The Sleeping Village")
+        create_connection("The Sleeping Village", "Asylum Grounds")
+        create_connection("Asylum Grounds", "Inside the Asylum")
+        
+        # dragon gem 2 path
+        create_connection("Scarecrow Fields", "Pumpkin Gorge")
+        create_connection("Pumpkin Gorge", "Pumpkin Serpent")
+        
+        create_connection("Return to the Graveyard", "Enchanted Earth")
+        # needs shadow artefact
+        create_connection("Enchanted Earth", "Pools of the Ancient Dead")
+        
+        # Requires Witches Talisman
+        create_connection("Enchanted Earth", "Ant Hill")
+        
+        create_connection("Pools of the Ancient Dead", "The Lake")
+        create_connection("The Lake", "The Crystal Caves")
+        
+        # Needs dragon armour
+        create_connection("The Crystal Caves", "The Gallows Gauntlet")
+        create_connection("The Gallows Gauntlet", "The Haunted Ruins")
+        create_connection("The Haunted Ruins", "The Ghost Ship")
+        create_connection("The Ghost Ship", "The Entrance Hall")
+        create_connection("The Entrance Hall", "The Time Device")
+        create_connection("The Time Device", "Zaroks Lair")
+        
+        # hall of heroes
+        create_connection("The Graveyard", "Hall of Heroes")
+        create_connection("Return to the Graveyard", "Hall of Heroes")
+        create_connection("Cemetery Hill", "Hall of Heroes")        
+        create_connection("The Hilltop Mausoleum", "Hall of Heroes")        
+        create_connection("Scarecrow Fields", "Hall of Heroes")        
+        create_connection("Ant Hill", "Hall of Heroes")        
+        create_connection("The Crystal Caves", "Hall of Heroes")
+        create_connection("The Lake", "Hall of Heroes")
+        create_connection("Pumpkin Gorge", "Hall of Heroes")
+        create_connection("Pumpkin Serpent", "Hall of Heroes")
+        create_connection("The Sleeping Village", "Hall of Heroes")
+        create_connection("Pools of the Ancient Dead", "Hall of Heroes")
+        create_connection("Asylum Grounds", "Hall of Heroes")
+        create_connection("Inside the Asylum", "Hall of Heroes")
+        create_connection("Enchanted Earth", "Hall of Heroes")
+        create_connection("The Gallows Gauntlet", "Hall of Heroes")
+        create_connection("The Haunted Ruins", "Hall of Heroes")
+        create_connection("The Ghost Ship", "Hall of Heroes")
+        create_connection("The Entrance Hall", "Hall of Heroes")
+        create_connection("The Time Device", "Hall of Heroes")
+                                                                                                                   
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
@@ -91,7 +168,6 @@ class MedievilWorld(World):
                     new_region
                 )
             else:
-
                 event_item = self.create_item(location.default_item)
                 new_location = MedievilLocation(
                     self.player,
@@ -105,9 +181,8 @@ class MedievilWorld(World):
                 new_location.place_locked_item(event_item)
 
             new_region.locations.append(new_location)
-        print("created " + str(len(new_region.locations)) + " locations")
+            
         self.multiworld.regions.append(new_region)
-        print("adding region: " + region_name)
         return new_region
 
 
@@ -160,8 +235,73 @@ class MedievilWorld(World):
     def get_filler_item_name(self) -> str:
         return "Gold (50)" # this clearly needs looked into
     
-    
+    def set_rules(self) -> None:
+        def is_level_cleared(self, level, state):        
+            return state.can_reach_location("Cleared: " + level, self.player)
+        
+        def is_boss_defeated(self, boss, state): # can used later
+            return state.has("Boss: " + boss, self.player)
+        
+        def has_keyitem_required(self, item, state):
+            return state.has("Key Item: " + item, self.player)
+
+        def has_weapon_required(self, weapon, state):
+            return state.has("Equipment: " + weapon, self.player)
+            
+        for region in self.multiworld.get_regions(self.player):
+            for location in region.locations:
+                    set_rule(location, lambda state: True)
                     
+        if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Cleared: Zaroks Lair", self.player)
+            
+        set_rule(self.multiworld.get_location("Cleared: The Graveyard", self.player), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
+        set_rule(self.multiworld.get_location("Cleared: Cemetery Hill", self.player), lambda state: is_level_cleared(self, "The Graveyard" , state))
+
+        set_rule(self.multiworld.get_location("Cleared: The Hilltop Mausoleum", self.player), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Hilltop Mausoleum", self.player), lambda state: has_weapon_required(self, "Cemetery Hill" , state))
+
+        set_rule(self.multiworld.get_location("Cleared: Return to the Graveyard", self.player), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state))
+        
+        set_rule(self.multiworld.get_location("Cleared: Enchanted Earth", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+        set_rule(self.multiworld.get_location("Cleared: Enchanted Earth", self.player), lambda state: has_keyitem_required(self, "Shadow Talisman" , state))
+        
+        set_rule(self.multiworld.get_location("Cleared: Scarecrow Fields", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+        
+        set_rule(self.multiworld.get_location("Cleared: Sleeping Village", self.player), lambda state: is_level_cleared(self, "Scarecrow Fields" , state))
+        set_rule(self.multiworld.get_location("Cleared: Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Crucifix Cast" , state))
+        set_rule(self.multiworld.get_location("Cleared: Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Landlords Bust" , state))
+        set_rule(self.multiworld.get_location("Cleared: Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Crucifix" , state))
+        
+                
+        set_rule(self.multiworld.get_location("Cleared: Asylum Grounds", self.player), lambda state: is_level_cleared(self, "Sleeping Village" , state))
+        set_rule(self.multiworld.get_location("Cleared: Inside the Asylum", self.player), lambda state: is_level_cleared(self, "Asylum Grounds" , state))
+        set_rule(self.multiworld.get_location("Cleared: Pumpkin Gorge", self.player), lambda state: is_level_cleared(self, "Scarecrow Fields" , state))
+
+        set_rule(self.multiworld.get_location("Cleared: Pumpkin Serpent", self.player), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state))
+        set_rule(self.multiworld.get_location("Cleared: Pumpkin Serpent", self.player), lambda state: has_keyitem_required(self, " Witches Talisman" , state))
+        
+        
+        # ant caves
+        if self.options.exclude_ant_caves.value != 50:
+            set_rule(self.multiworld.get_location("Cleared: Ant Hill", self.player), lambda state: has_keyitem_required(self, "Witches Talisman" , state))
+            set_rule(self.multiworld.get_location("Cleared: Ant Hill", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+            
+        set_rule(self.multiworld.get_location("Cleared: Pools of the Ancient Dead", self.player), lambda state: is_level_cleared(self, "Enchanted Earth" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Lake", self.player), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
+        
+        set_rule(self.multiworld.get_location("Cleared: The Crystal Caves", self.player), lambda state: is_level_cleared(self, "The Lake" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Crystal Caves", self.player), lambda state: has_keyitem_required(self, "Dragon Gem - Pumpkin Gorge" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Crystal Caves", self.player), lambda state: has_keyitem_required(self, "Dragon Gem - Inside the Asylum" , state))        
+        
+        set_rule(self.multiworld.get_location("Cleared: The Gallows Gauntlet", self.player), lambda state: is_level_cleared(self, "The Crystal Caves" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Haunted Ruins", self.player), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state))
+        set_rule(self.multiworld.get_location("Cleared: Ghost Ship", self.player), lambda state: is_level_cleared(self, "The Haunted Ruins" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Entrance Hall", self.player), lambda state: is_level_cleared(self, "Ghost Ship" , state))
+        set_rule(self.multiworld.get_location("Cleared: The Time Device", self.player), lambda state: is_level_cleared(self, "The Entrance Hall" , state))
+        set_rule(self.multiworld.get_location("Cleared: Zaroks Lair", self.player), lambda state: is_level_cleared(self, "The Time Device" , state))
+        
+        
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
@@ -170,7 +310,7 @@ class MedievilWorld(World):
         # Create the mandatory lists to generate the player's output file
         items_id = []
         items_address = []
-        locations_id = []
+        locations_id = [] 
         locations_address = []
         locations_target = []
         for location in self.multiworld.get_filled_locations():
@@ -193,7 +333,10 @@ class MedievilWorld(World):
 
         slot_data = {
             "options": {
-                "guaranteed_items": self.options.guaranteed_items.value,
+                "guaranteed_items": self.options.guaranteed_items,
+                "goal": self.options.goal.value,
+                "exclude_ant_caves": self.options.exclude_ant_caves.value,
+                "exclude_dynamic_items": self.options.exclude_dynamic_items.value
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
