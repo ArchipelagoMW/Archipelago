@@ -148,40 +148,7 @@ class MedievilWorld(World):
         create_connection("The Ghost Ship", "Map")
         create_connection("The Entrance Hall", "Map")
         create_connection("The Time Device", "Map")        
-        
-        # create_connection("Dan's Crypt", "The Graveyard")
-        # create_connection("The Graveyard", "Cemetery Hill")
-        # create_connection("Cemetery Hill", "The Hilltop Mausoleum")
-        # create_connection("The Hilltop Mausoleum", "Return to the Graveyard")
-        
-        # create_connection("Return to the Graveyard", "Scarecrow Fields")
-        
-        # # dragon gem 1 + Shadow Artefact path
-        # create_connection("Scarecrow Fields", "The Sleeping Village")
-        # create_connection("The Sleeping Village", "Asylum Grounds")
-        # create_connection("Asylum Grounds", "Inside the Asylum")
-        
-        # # dragon gem 2 path
-        # create_connection("Scarecrow Fields", "Pumpkin Gorge")
-        # create_connection("Pumpkin Gorge", "Pumpkin Serpent")
-        
-        # create_connection("Return to the Graveyard", "Enchanted Earth")
-        # # needs shadow artefact
-        # create_connection("Enchanted Earth", "Pools of the Ancient Dead")
-        
-        # # Requires Witches Talisman
         create_connection("Enchanted Earth", "Ant Hill")
-        
-        # create_connection("Pools of the Ancient Dead", "The Lake")
-        # create_connection("The Lake", "The Crystal Caves")
-        
-        # # Needs dragon armour
-        # create_connection("The Crystal Caves", "The Gallows Gauntlet")
-        # create_connection("The Gallows Gauntlet", "The Haunted Ruins")
-        # create_connection("The Haunted Ruins", "The Ghost Ship")
-        # create_connection("The Ghost Ship", "The Entrance Hall")
-        # create_connection("The Entrance Hall", "The Time Device")
-        # create_connection("The Time Device", "Zaroks Lair")
         
         # # hall of heroes
         create_connection("The Graveyard", "Hall of Heroes")
@@ -302,36 +269,36 @@ class MedievilWorld(World):
         def has_weapon_required(self, weapon: str, state: CollectionState):
             return state.has("Equipment: " + weapon, self.player)
         
-        def has_number_of_chalices(count, state: CollectionState):
+        def has_number_of_chalices(self, count, state: CollectionState):
             
-            chaliceList = [
-                "Chalice: The Graveyard"
-                "Chalice: Cemetery Hill"
-                "Chalice: The Hilltop Mausoleum"
-                "Chalice: Return to the Graveyard"
-                "Chalice: Scarecrow Fields"
-                "Chalice: Ant Hill"
-                "Chalice: Enchanted Earth"
-                "Chalice: Sleeping Village"
-                "Chalice: Pools of the Ancient Dead"
-                "Chalice: The Lake"
-                "Chalice: The Crystal Caves"
-                "Chalice: The Gallows Gauntlet"
-                "Chalice: Asylum Grounds"
-                "Chalice: Inside the Asylum"
-                "Chalice: Pumpkin Gorge"
-                "Chalice: Pumpkin Serpent"
-                "Chalice: The Haunted Ruins"
-                "Chalice: Ghost Ship"
-                "Chalice: The Entrance Hall"
+            chalice_list = [
+                "Chalice: The Graveyard",
+                "Chalice: Cemetery Hill",
+                "Chalice: The Hilltop Mausoleum",
+                "Chalice: Return to the Graveyard",
+                "Chalice: Scarecrow Fields",
+                "Chalice: Ant Hill",
+                "Chalice: Enchanted Earth",
+                "Chalice: Sleeping Village",
+                "Chalice: Pools of the Ancient Dead",
+                "Chalice: The Lake",
+                "Chalice: The Crystal Caves",
+                "Chalice: The Gallows Gauntlet",
+                "Chalice: Asylum Grounds",
+                "Chalice: Inside the Asylum",
+                "Chalice: Pumpkin Gorge",
+                "Chalice: Pumpkin Serpent",
+                "Chalice: The Haunted Ruins",
+                "Chalice: Ghost Ship",
+                "Chalice: The Entrance Hall",
                 "Chalice: The Time Device"
             ]
             
             matches = []
-            for chalice in state.has:
-                if chalice in chaliceList:
+            for chalice in chalice_list:
+                if state.can_reach_location(chalice, self.player):
                     matches.append(chalice)
-            return matches == count
+            return len(matches) == count
             
             
         for region in self.multiworld.get_regions(self.player):
@@ -347,99 +314,57 @@ class MedievilWorld(World):
         set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state)) 
         set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state)) 
         set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state)) 
-        set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state)) 
+        set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state) and has_keyitem_required(self, "Skull Key" , state )) 
         set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
         set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state)) 
         set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
         set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
-        set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: is_level_cleared(self, "Sleeping Village" , state)) 
+        set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: is_level_cleared(self, "Sleeping Village" , state) and has_keyitem_required(self, "Crucifix Cast" , state)  and has_keyitem_required(self, "Landlords Bust" , state) and has_keyitem_required(self, "Crucifix" , state)) 
         set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds" , state)) 
-        set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state)) 
-        set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: is_level_cleared(self, "Enchanted Earth" , state)) 
+        set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state) and has_keyitem_required(self, "Witches Talisman" , state)) 
+        set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: is_level_cleared(self, "Enchanted Earth" , state) and has_keyitem_required(self, "Shadow Talisman" , state)) 
         set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state)) 
         set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake" , state)) 
-        set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: is_level_cleared(self, "The Crystal Caves" , state)) 
-        set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state)) 
+        set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: is_level_cleared(self, "The Crystal Caves" , state) and has_keyitem_required(self, "Dragon Gem - Pumpkin Serpent" , state) and has_keyitem_required(self, "Dragon Gem - Inside the Asylum" , state)) 
+        set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state) and has_keyitem_required(self, "King Peregrine's Crown" , state)) 
         set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins" , state)) 
         set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship" , state)) 
         set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
         set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
         
         
+        set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Witches Talisman" , state))
+        
         # hall of heroes rules
         
-        # set_rule(self.get_entrance("The Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(1, state)) 
-        # set_rule(self.get_entrance("Return to the Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(2, state)) 
-        # set_rule(self.get_entrance("Cemetery Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(3, state)) 
-        # set_rule(self.get_entrance("The Hilltop Mausoleum -> Hall of Heroes",    self.player), lambda state: has_number_of_chalices(4, state)) 
-        # set_rule(self.get_entrance("Scarecrow Fields -> Hall of Heroes",  self.player), lambda state: has_number_of_chalices(5, state)) 
-        # set_rule(self.get_entrance("Ant Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(6, state)) 
-        # set_rule(self.get_entrance("The Crystal Caves -> Hall of Heroes"), lambda state: has_number_of_chalices(7, state)) 
-        # set_rule(self.get_entrance("The Lake -> Hall of Heroes"), lambda state: has_number_of_chalices(8, state)) 
-        # set_rule(self.get_entrance("Pumpkin Gorge -> Hall of Heroes"), lambda state: has_number_of_chalices(9, state)) 
-        # set_rule(self.get_entrance("Pumpkin Serpent -> Hall of Heroes"), lambda state: has_number_of_chalices(10, state)) 
-        # set_rule(self.get_entrance("The Sleeping Village -> Hall of Heroes"), lambda state: has_number_of_chalices(11, state)) 
-        # set_rule(self.get_entrance("Pools of the Ancient Dead -> Hall of Heroes"), lambda state: has_number_of_chalices(12, state)) 
-        # set_rule(self.get_entrance("Asylum Grounds -> Hall of Heroes"), lambda state: has_number_of_chalices(13, state)) 
-        # set_rule(self.get_entrance("Inside the Asylum -> Hall of Heroes"), lambda state: has_number_of_chalices(14, state)) 
-        # set_rule(self.get_entrance("Enchanted Earth -> Hall of Heroes"), lambda state: has_number_of_chalices(15, state)) 
-        # set_rule(self.get_entrance("The Gallows Gauntlet -> Hall of Heroes"), lambda state: has_number_of_chalices(16, state)) 
-        # set_rule(self.get_entrance("The Haunted Ruins -> Hall of Heroes"), lambda state: has_number_of_chalices(17, state)) 
-        # set_rule(self.get_entrance("The Ghost Ship -> Hall of Heroes"), lambda state: has_number_of_chalices(18, state)) 
-        # set_rule(self.get_entrance("The Entrance Hall -> Hall of Heroes"), lambda state: has_number_of_chalices(19, state)) 
-        # set_rule(self.get_entrance("The Time Device -> Hall of Heroes"), lambda state: has_number_of_chalices(20, state)) 
+        set_rule(self.get_entrance("The Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(self,1, state))
+        set_rule(self.get_entrance("Return to the Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(self,2, state))
+        set_rule(self.get_entrance("Cemetery Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(self,3, state))
+        set_rule(self.get_entrance("The Hilltop Mausoleum -> Hall of Heroes"), lambda state: has_number_of_chalices(self,4, state))
+        set_rule(self.get_entrance("Scarecrow Fields -> Hall of Heroes"), lambda state: has_number_of_chalices(self,5, state))
+        set_rule(self.get_entrance("Ant Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(self,6, state))
+        set_rule(self.get_entrance("The Crystal Caves -> Hall of Heroes"), lambda state: has_number_of_chalices(self,7, state))
+        set_rule(self.get_entrance("The Lake -> Hall of Heroes"), lambda state: has_number_of_chalices(self,8, state))
+        set_rule(self.get_entrance("Pumpkin Gorge -> Hall of Heroes"), lambda state: has_number_of_chalices(self,9, state))
+        set_rule(self.get_entrance("Pumpkin Serpent -> Hall of Heroes"), lambda state: has_number_of_chalices(self,10, state))
+        set_rule(self.get_entrance("The Sleeping Village -> Hall of Heroes"), lambda state: has_number_of_chalices(self,11, state))
+        set_rule(self.get_entrance("Pools of the Ancient Dead -> Hall of Heroes"), lambda state: has_number_of_chalices(self,12, state))
+        set_rule(self.get_entrance("Asylum Grounds -> Hall of Heroes"), lambda state: has_number_of_chalices(self,13, state))
+        set_rule(self.get_entrance("Inside the Asylum -> Hall of Heroes"), lambda state: has_number_of_chalices(self,14, state))
+        set_rule(self.get_entrance("Enchanted Earth -> Hall of Heroes"), lambda state: has_number_of_chalices(self,15, state))
+        set_rule(self.get_entrance("The Gallows Gauntlet -> Hall of Heroes"), lambda state: has_number_of_chalices(self,16, state))
+        set_rule(self.get_entrance("The Haunted Ruins -> Hall of Heroes"), lambda state: has_number_of_chalices(self,17, state))
+        set_rule(self.get_entrance("The Ghost Ship -> Hall of Heroes"), lambda state: has_number_of_chalices(self,18, state))
+        set_rule(self.get_entrance("The Entrance Hall -> Hall of Heroes"), lambda state: has_number_of_chalices(self,19, state))
+        set_rule(self.get_entrance("The Time Device -> Hall of Heroes"), lambda state: has_number_of_chalices(self,20, state))
         
+        # Get a birds eye view of everything
         
-        # Level Rules
-        
-        # set_rule(self.get_entrance("Dan's Crypt -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))    
-
-        # set_rule(self.get_entrance("The Graveyard -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state))
-
-        # set_rule(self.get_entrance("Cemetery Hill -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
-
-        # set_rule(self.get_entrance("The Hilltop Mausoleum -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state))
-        
-        # set_rule(self.get_entrance("Return to the Graveyard -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Skull Key" , state ) and has_keyitem_required(self, "Witches Talisman" , state ))
-        
-        # set_rule(self.get_entrance("Return to the Graveyard -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Skull Key" , state ))
-        
-        # set_rule(self.get_entrance("Scarecrow Fields -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state) and has_keyitem_required(self, "Landlords Bust" , state))
-
-        # set_rule(self.get_entrance("The Sleeping Village -> Asylum Grounds"), lambda state: is_level_cleared(self, "The Sleeping Village" , state) and has_keyitem_required(self, "Crucifix Cast" , state)  and has_keyitem_required(self, "Landlords Bust" , state) and has_keyitem_required(self, "Crucifix" , state))
-        
-        # set_rule(self.get_entrance("Asylum Grounds -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds" , state))
-        
-        # set_rule(self.get_entrance("Scarecrow Fields -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state))
-
-        # set_rule(self.get_entrance("Pumpkin Gorge -> Pumpkin Serpent"), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state) and has_keyitem_required(self, "Witches Talisman" , state))
-        
-        
-        # # ant caves
-        # # if self.options.exclude_ant_caves.value != 50:
-        set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Witches Talisman" , state))
-
-        # set_rule(self.get_entrance("Enchanted Earth -> Pools of the Ancient Dead"), lambda state: is_level_cleared(self, "Enchanted Earth" , state) and has_keyitem_required(self, "Shadow Talisman" , state))
-        
-        # set_rule(self.get_entrance("Pools of the Ancient Dead -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
-        
-        # set_rule(self.get_entrance("The Lake -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake" , state))    
-        
-        # set_rule(self.get_entrance("The Crystal Caves -> The Gallows Gauntlet"), lambda state: is_level_cleared(self, "The Crystal Caves" , state) and has_keyitem_required(self, "Dragon Gem - Pumpkin Serpent" , state) and has_keyitem_required(self, "Dragon Gem - Inside the Asylum" , state))
-                   
-        # set_rule(self.get_entrance("The Gallows Gauntlet -> The Haunted Ruins"), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state))
-        # set_rule(self.get_entrance("The Haunted Ruins -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins" , state))
-        # set_rule(self.get_entrance("The Ghost Ship -> The Entrance Hall"), lambda state: is_level_cleared(self, "The Ghost Ship" , state))
-        # set_rule(self.get_entrance("The Entrance Hall -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state))
-        # set_rule(self.get_entrance("The Time Device -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
-        
-        
-
-        from Utils import visualize_regions
-        state = self.multiworld.get_all_state(False)
-        state.update_reachable_regions(self.player)
-        visualize_regions(self.get_region("Menu"), "medievil_layout.puml", show_entrance_names=True,
-                        regions_to_highlight=state.reachable_regions[self.player])        
+        # from Utils import visualize_regions
+        # state = self.multiworld.get_all_state(False)
+        # state.update_reachable_regions(self.player)
+        # visualize_regions(self.get_region("Menu"), "medievil_layout.puml", show_entrance_names=True,
+        #                 regions_to_highlight=state.reachable_regions[self.player])        
         
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
@@ -472,7 +397,7 @@ class MedievilWorld(World):
 
         slot_data = {
             "options": {
-                "guaranteed_items": self.options.guaranteed_items,
+                "guaranteed_items": self.options.guaranteed_items.value,
                 "goal": self.options.goal.value,
                 "exclude_ant_caves": self.options.exclude_ant_caves.value,
                 "exclude_dynamic_items": self.options.exclude_dynamic_items.value

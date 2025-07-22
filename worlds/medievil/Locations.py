@@ -71,7 +71,8 @@ class MedievilLocation(Location):
         
         output = {}
         for i, region_name in enumerate(table_order):
-            print({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + i)})
+             
+          #  print({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + i)})
             output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + (region_offset * i))})
 
         return output
