@@ -90,6 +90,21 @@ class DarkSouls3World(World):
         self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
+        # Don't list disabled locations as being AP-excluded (they'll be listed in the DS3-excluded section)
+        if not self.options.enable_dlc:
+            self.options.exclude_locations.value = {
+                location
+                for location in self.options.exclude_locations
+                if not location_dictionary[location].dlc
+            }
+
+        if not self.options.enable_ngp:
+            self.options.exclude_locations.value = {
+                location for
+                location in self.options.exclude_locations
+                if not location_dictionary[location].ngp
+            }
+
         # Inform Universal Tracker where Yhorm is being randomized to.
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Dark Souls III" in self.multiworld.re_gen_passthrough:
