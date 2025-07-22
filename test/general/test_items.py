@@ -166,7 +166,11 @@ class TestBase(unittest.TestCase):
 
     def test_collect_remove_location_accessibility(self):
         """
-        Test that worlds' .remove() implements the reverse of .collect() by checking location accessibility.
+        Test that worlds' .remove() implements the reverse of .collect() by checking location accessibility, and test
+        that collecting an item never reduces accessibility.
+
+        Because logic issues could be present only when items are collected in a specific order, there is no guaranteed
+        way to identify all collect/remove issues, so the test collects items in a deterministically random order.
 
         test_create_item only tests that .collect()/.remove() correctly update CollectionState.prog_items, but worlds
         can implement their own data structures on CollectionState objects. These custom data structures being updated
@@ -179,28 +183,47 @@ class TestBase(unittest.TestCase):
                 # Get all the advancement items in the multiworld.
                 items = [item for item in multiworld.get_items() if item.advancement]
 
+                # Get all locations in the multiworld.
+                locations = multiworld.get_locations()
+
                 # Shuffle the items into a deterministically random order because otherwise, the order of all items
                 # should always be the same, limiting what can be tested.
                 multiworld.random.shuffle(items)
 
-                # Store the reachable locations before each item is collected.
-                reachable_before_each_collect = []
                 state = CollectionState(multiworld)
+                initially_reachable = {loc for loc in locations if loc.can_reach(state)}
+                new_reachable_locations_at_each_collect = [initially_reachable]
+                reachable_so_far = initially_reachable.copy()
+
                 for item in items:
-                    reachable_locations_before_collect = {loc for loc in multiworld.get_locations()
-                                                          if loc.can_reach(state)}
-                    reachable_before_each_collect.append(reachable_locations_before_collect)
                     state.collect(item, prevent_sweep=True)
+                    reachable_locations = {loc for loc in locations if loc.can_reach(state)}
+                    # Check that all previously reachable locations were still reachable. Collecting an item must never
+                    # reduce accessibility.
+                    should_be_empty = reachable_so_far - reachable_locations
+                    if len(should_be_empty) > 0:
+                        self.fail(f"Collecting {item} reduced accessibility. No longer accessible after collecting:"
+                                  f" {should_be_empty}")
+                    # Find the newly reachable locations and update the locations reachable so far, as well as the list
+                    # of sets of locations that became reachable with each item collected.
+                    newly_reachable = reachable_locations - reachable_so_far
+                    reachable_so_far.update(newly_reachable)
+                    new_reachable_locations_at_each_collect.append(newly_reachable)
 
                 # Remove each item in reverse and check that the reachable locations are the same as before the item was
                 # collected.
-                reversed_zip = zip(reversed(items), reversed(reachable_before_each_collect))
-                for item, expected_reachable_after_remove in reversed_zip:
+                for item in reversed(items):
+                    only_reachable_because_of_this_item = new_reachable_locations_at_each_collect.pop()
                     state.remove(item)
-                    reachable_locations_after_remove = {loc for loc in multiworld.get_locations()
-                                                        if loc.can_reach(state)}
-                    # The reachable locations before the item was collected should be the same as after the item was
-                    # both collected and removed.
-                    self.assertSetEqual(reachable_locations_after_remove, expected_reachable_after_remove,
-                                        f"Location accessibility was not the same before and after collecting and"
-                                        f" removing '{item}'")
+                    reachable_locations = {loc for loc in locations if loc.can_reach(state)}
+                    # Check that the locations that were only reachable because of this item are now unreachable.
+                    should_be_empty = only_reachable_because_of_this_item.intersection(reachable_locations)
+                    if len(should_be_empty) > 0:
+                        self.fail(f"Removing '{item}' did not result in losing access to the same locations that"
+                                  f" '{item}' gave access to. Locations that '{item}' gave access to:"
+                                  f" {should_be_empty}")
+
+                    # Check that all locations reachable before this item was collected are still reachable.
+                    # Also checks that removing the item has not made additional locations reachable.
+                    reachable_so_far.difference_update(only_reachable_because_of_this_item)
+                    self.assertSetEqual(reachable_so_far, reachable_locations)
