@@ -508,7 +508,7 @@ class MegaMan3Client(BizHawkClient):
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
             if state[0] == 0x0E and not self.sending_death_link:
                 await self.send_deathlink(ctx)
-            else:
+            elif state[0] != 0x0E:
                 self.sending_death_link = False
 
         if self.last_wily != last_wily[0]:
