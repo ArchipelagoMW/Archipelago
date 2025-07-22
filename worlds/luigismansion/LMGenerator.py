@@ -69,27 +69,29 @@ class LuigisMansionRandomizer:
         # Get Arc automatically handles decompressing RARC data from yay0, but compressing is on us later.
         logger.info("Loading all of the main mansion map files into memory.")
         self.map_two_file = self.get_arc("files/Map/map2.szp")
+        self.map_three_file = self.get_arc("files/Map/map3.szp")
 
         # Loads all the specific JMP tables AP may potentially change / update.
         # Although some events are not changed by AP directly, they are changed here to remove un-necessary cutscenes,
         # set certain flag values, and remove un-necessary script tags.
-        self.jmp_item_info_table = self.load_maptwo_info_table("iteminfotable")
-        self.jmp_item_appear_table = self.load_maptwo_info_table("itemappeartable")
-        self.jmp_treasure_table = self.load_maptwo_info_table("treasuretable")
-        self.jmp_furniture_info_table = self.load_maptwo_info_table("furnitureinfo")
-        self.jmp_character_info_table = self.load_maptwo_info_table("characterinfo")
-        self.jmp_event_info_table = self.load_maptwo_info_table("eventinfo")
-        self.jmp_observer_info_table = self.load_maptwo_info_table("observerinfo")
-        self.jmp_key_info_table = self.load_maptwo_info_table("keyinfo")
-        self.jmp_obj_info_table = self.load_maptwo_info_table("objinfo")
-        self.jmp_generator_info_table = self.load_maptwo_info_table("generatorinfo")
-        self.jmp_enemy_info_table = self.load_maptwo_info_table("enemyinfo")
-        self.jmp_boo_table = self.load_maptwo_info_table("telesa")
-        self.jmp_teiden_observer_info_table = self.load_maptwo_info_table("teidenobserverinfo")
+        self.jmp_item_info_table = self.load_map_info_table(self.map_two_file,"iteminfotable")
+        self.jmp_item_appear_table = self.load_map_info_table(self.map_two_file,"itemappeartable")
+        self.jmp_treasure_table = self.load_map_info_table(self.map_two_file,"treasuretable")
+        self.jmp_furniture_info_table = self.load_map_info_table(self.map_two_file,"furnitureinfo")
+        self.jmp_character_info_table = self.load_map_info_table(self.map_two_file,"characterinfo")
+        self.jmp_event_info_table = self.load_map_info_table(self.map_two_file,"eventinfo")
+        self.jmp_observer_info_table = self.load_map_info_table(self.map_two_file,"observerinfo")
+        self.jmp_key_info_table = self.load_map_info_table(self.map_two_file,"keyinfo")
+        self.jmp_obj_info_table = self.load_map_info_table(self.map_two_file,"objinfo")
+        self.jmp_generator_info_table = self.load_map_info_table(self.map_two_file,"generatorinfo")
+        self.jmp_enemy_info_table = self.load_map_info_table(self.map_two_file,"enemyinfo")
+        self.jmp_boo_table = self.load_map_info_table(self.map_two_file,"telesa")
+        self.jmp_teiden_observer_info_table = self.load_map_info_table(self.map_two_file,"teidenobserverinfo")
         if self.output_data["Options"]["speedy_spirits"]:
-            self.jmp_teiden_enemy_info_table = self.load_maptwo_info_table("teidenenemyinfo")
-        self.jmp_teiden_character_info_table = self.load_maptwo_info_table("teidencharacterinfo")
-        self.jmp_iyapoo_table = self.load_maptwo_info_table("iyapootable")
+            self.jmp_teiden_enemy_info_table = self.load_map_info_table(self.map_two_file,"teidenenemyinfo")
+        self.jmp_teiden_character_info_table = self.load_map_info_table(self.map_two_file,"teidencharacterinfo")
+        self.jmp_iyapoo_table = self.load_map_info_table(self.map_two_file,"iyapootable")
+        self.jmp_map3_event_info_table = self.load_map_info_table(self.map_three_file,"eventinfo")
 
         # Saves the randomized iso file, with all files updated.
         self.save_randomized_iso()
@@ -102,23 +104,23 @@ class LuigisMansionRandomizer:
         return arc
 
     # Uses custom class to load in JMP Info file entry (see more details in JMP_Info_File.py)
-    def load_maptwo_info_table(self, jmp_table_name: str):
-        jmp_table_entry = JMPInfoFile(self.map_two_file, jmp_table_name)
+    def load_map_info_table(self, map_file, jmp_table_name: str):
+        jmp_table_entry = JMPInfoFile(map_file, jmp_table_name)
         if self.debug:
             jmp_table_entry.print_header_info()
         return jmp_table_entry
 
     # Updates the existing ARC / RARC file with the provided data for a given info file entry.
-    def update_maptwo_info_table(self, jmp_info_file: JMPInfoFile):
+    def update_map_info_table(self, map_file, jmp_info_file: JMPInfoFile):
         jmp_info_file.update_info_file_bytes()
 
-        for jmp_file in self.map_two_file.file_entries:
+        for jmp_file in map_file.file_entries:
             if jmp_file.name == jmp_info_file.info_file_entry.name:
                 jmp_file.data = jmp_info_file.info_file_entry.data
                 break
 
-    # Updates all jmp tables in the map2.szp file.
-    def update_maptwo_jmp_tables(self):
+    # Updates all jmp tables in the map2.szp and map3.szp file.
+    def update_map_jmp_tables(self):
         # Get Output data required information
         bool_boo_checks = True if self.output_data["Options"]["boo_gates"] == 1 else False
         bool_speedy_spirits = True if self.output_data["Options"]["speedy_spirits"] == 1 else False
@@ -142,25 +144,27 @@ class LuigisMansionRandomizer:
             update_teiden_enemy_info(self.jmp_enemy_info_table, self.jmp_teiden_enemy_info_table)
         update_boo_table(self.jmp_boo_table, self.output_data)
         update_iyapoo_table(self.jmp_iyapoo_table, self.output_data)
+        update_event_info(self.jmp_map3_event_info_table, self.output_data)
 
         # Updates all the data entries in each jmp table in the szp file.
-        self.update_maptwo_info_table(self.jmp_character_info_table)
-        self.update_maptwo_info_table(self.jmp_teiden_character_info_table)
-        self.update_maptwo_info_table(self.jmp_item_info_table)
-        self.update_maptwo_info_table(self.jmp_item_appear_table)
-        self.update_maptwo_info_table(self.jmp_treasure_table)
-        self.update_maptwo_info_table(self.jmp_furniture_info_table)
-        self.update_maptwo_info_table(self.jmp_event_info_table)
-        self.update_maptwo_info_table(self.jmp_observer_info_table)
-        self.update_maptwo_info_table(self.jmp_key_info_table)
-        self.update_maptwo_info_table(self.jmp_obj_info_table)
-        self.update_maptwo_info_table(self.jmp_generator_info_table)
-        self.update_maptwo_info_table(self.jmp_enemy_info_table)
-        self.update_maptwo_info_table(self.jmp_teiden_observer_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_character_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_teiden_character_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_item_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_item_appear_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_treasure_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_furniture_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_event_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_observer_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_key_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_obj_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_generator_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_enemy_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_teiden_observer_info_table)
         if self.output_data["Options"]["speedy_spirits"]:
-            self.update_maptwo_info_table(self.jmp_teiden_enemy_info_table)
-        self.update_maptwo_info_table(self.jmp_boo_table)
-        self.update_maptwo_info_table(self.jmp_iyapoo_table)
+            self.update_map_info_table(self.map_two_file,self.jmp_teiden_enemy_info_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_boo_table)
+        self.update_map_info_table(self.map_two_file,self.jmp_iyapoo_table)
+        self.update_map_info_table(self.map_three_file, self.jmp_map3_event_info_table)
 
     def save_randomized_iso(self):
         # Get Output data required information
@@ -247,7 +251,7 @@ class LuigisMansionRandomizer:
             self.gcm = randomize_music(self.gcm, self.seed)
 
         logger.info("Updating the in-game tables for chests, furniture, ghosts, etc.")
-        self.update_maptwo_jmp_tables()
+        self.update_map_jmp_tables()
 
         # Save the map two file changes
         # As mentioned before, these szp files need to be compressed again in order to be properly read by Dolphin/GC.

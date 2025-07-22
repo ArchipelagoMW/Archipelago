@@ -242,6 +242,7 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["pos_x"] = spawn_region["pos_x"]
             x["pos_z"] = spawn_region["pos_z"]
 
+        # Change Training room second visit to always be on
         if x["EventNo"] == 10:
             x["EventFlag"] = 0
 
