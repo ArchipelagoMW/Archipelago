@@ -264,6 +264,13 @@ class DarkSouls3World(World):
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
+                # Don't consider non-randomized locations to be AP-excluded
+                if location.name in excluded:
+                    excluded.remove(location.name)
+                    # Only remove from all_excluded if excluded does not have priority over missable
+                    if not (self.options.missable_location_behavior < self.options.excluded_location_behavior):
+                        self.all_excluded_locations.remove(location.name)
+
                 # Don't allow missable duplicates of progression items to be expected progression.
                 if location.name in self.missable_dupe_prog_locs: continue
 
@@ -279,11 +286,6 @@ class DarkSouls3World(World):
                     parent = new_region,
                 )
                 new_location.place_locked_item(event_item)
-                if location.name in excluded:
-                    excluded.remove(location.name)
-                    # Only remove from all_excluded if excluded does not have priority over missable
-                    if not (self.options.missable_location_behavior < self.options.excluded_location_behavior):
-                        self.all_excluded_locations.remove(location.name)
 
             new_region.locations.append(new_location)
 
@@ -1353,7 +1355,7 @@ class DarkSouls3World(World):
         if self.yhorm_location != default_yhorm_location:
             text += f"\nYhorm takes the place of {self.yhorm_location.name} in {self.player_name}'s world\n"
 
-        if self.options.excluded_location_behavior == "allow_useful":
+        if self.options.excluded_location_behavior != "forbid_useful":
             text += f"\n{self.player_name}'s world excluded: {sorted(self.all_excluded_locations)}\n"
 
         if text:
