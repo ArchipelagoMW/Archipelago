@@ -607,7 +607,7 @@ class TrapPercentage(Range):
     internal_name = "trap_percentage"
     range_start = 0
     range_end = 100
-    default = 20
+    default = 0
 
 @dataclass
 class LMOptions(DeathLinkMixin, PerGameCommonOptions):
