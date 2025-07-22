@@ -100,6 +100,43 @@ macro org(address,bank)
     endif
 endmacro
 
+; capcom.....
+; i can't keep defending you like this
+
+;P
+%org($BEBA, $13)
+RemoveP:
+db $25
+;A
+%org($BD7D, $13)
+RemoveA:
+db $25
+;S
+%org($BE7D, $13)
+RemoveS1:
+db $25
+;S
+%org($BDD5, $13)
+RemoveS2:
+db $25
+
+;W
+%org($BDC7, $13)
+RemoveW:
+db $25
+;O
+%org($BEC7, $13)
+RemoveO:
+db $25
+;R
+%org($BDCF, $13)
+RemoveR:
+db $25
+;D
+%org($BECF, $13)
+RemoveD:
+db $25
+
 %org($A17C, $02)
 AdjustWeaponRefill:
   ; compare vs unreceived instead. Since the stage ends anyways, this just means you aren't granted the weapon if you don't have it already
@@ -124,6 +161,10 @@ FixPseudoRush:
 HookBreakMan:
   JSR SetBreakMan
   NOP
+
+%org($90BC, $18)
+BlockPassword:
+  AND #$08 ; originally 0C, just block down inputs
 
 %org($9258, $18)
 HookStageSelect:
