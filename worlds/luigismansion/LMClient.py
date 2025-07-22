@@ -794,8 +794,13 @@ async def give_player_items(ctx: LMContext):
                         else:
                             curr_val += 1
                 #await wait_for_next_loop(10)
-                await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
-                    curr_val.to_bytes(byte_size, 'big'))
+                if item.item == 8064:
+                    curr_val = 1
+                    await write_bytes_and_validate(0x803D339B, None,
+                                                   curr_val.to_bytes(1, 'big'))
+                else:
+                    await write_bytes_and_validate(addr_to_update.ram_addr, ram_offset,
+                        curr_val.to_bytes(byte_size, 'big'))
 
             # Update the last received index to ensure we don't receive the same item over and over.
             last_recv_idx += 1
