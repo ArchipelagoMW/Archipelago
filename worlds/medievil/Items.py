@@ -69,7 +69,7 @@ key_item_names = {
     
     # Inventory Key Items
     
-    "Key Item: Dragon Gem - Pumpkin Gorge",
+    "Key Item: Dragon Gem - Pumpkin Serpent",
     "Key Item: Dragon Gem - Inside the Asylum",
     "Key Item: King Peregrine's Crown",
     "Key Item: Soul Helmet 1",
@@ -83,6 +83,7 @@ key_item_names = {
     "Key Item: Witches Talisman", 
     "Key Item: Safe Key", 
     "Key Item: Shadow Artefact", 
+    "Key Item: Shadow Talisman",     
     "Key Item: Crucifix", 
     "Key Item: Landlords Bust", 
     "Key Item: Crucifix Cast", 
@@ -202,7 +203,7 @@ _all_items: List[MedievilItemData] = [
     ("Life Bottle: Dan's Crypt - Behind Wall", 53, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Scarecrow Fields", 54, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Pools of the Ancient Dead", 54, MedievilItemCategory.PROGRESSION, True),    
-    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer )", 54, MedievilItemCategory.PROGRESSION, True),    
+    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer)", 54, MedievilItemCategory.PROGRESSION, True),    
     ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 54, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Time Device", 54, MedievilItemCategory.PROGRESSION, True),
     
@@ -212,8 +213,8 @@ _all_items: List[MedievilItemData] = [
     ("Chalice of Souls", 88, MedievilItemCategory.CHALICE, False),
     
     # Key Inventory Items
-    ("Key Item: Dragon Gem: Pumpkin Gorge", 89, MedievilItemCategory.PROGRESSION, True),
-    ("Key Item: Dragon Gem: Inside the Asylum", 90, MedievilItemCategory.PROGRESSION, True),
+    ("Key Item: Dragon Gem - Pumpkin Serpent", 89, MedievilItemCategory.PROGRESSION, True),
+    ("Key Item: Dragon Gem - Inside the Asylum", 90, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: King Peregrine's Crown", 91, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Soul Helmet 1", 92, MedievilItemCategory.PROGRESSION, True), # progressive soul helmet?
     ("Key Item: Soul Helmet 2", 93, MedievilItemCategory.PROGRESSION, True),

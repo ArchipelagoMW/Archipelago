@@ -43,6 +43,7 @@ class MedievilLocation(Location):
         base_id = 99251000
         
         table_order = [
+            "Map",
             "Hall of Heroes",
             "Dan's Crypt",
             "The Graveyard",
@@ -84,6 +85,7 @@ class MedievilLocation(Location):
 # Gold shield ammo is used as a default. If you start picking up a lot, there's something wrong
 
 location_tables = {
+    "Map": [],
     "Hall of Heroes": [
         MedievilLocationData("Life Bottle: Hall of Heroes (Canny Tim)","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
         MedievilLocationData("Life Bottle: Hall of Heroes (Ravenhooves The Archer)","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
