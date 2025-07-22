@@ -152,6 +152,7 @@ def generate_monitor_rules():
             for rule in sorted_by_duration[:10]:
                 total_duration = sum(call.duration_ns for call in rule.calls)
                 print(f"{rule.location}: {total_duration / 1_000_000:.2f} ms over {len(rule.calls)} calls")
+            print(f"Total generation steps took {sum(step for step in self.gen_steps.values()) / 1_000_000_000:.2f} s.\n")
 
     run_count = 20
     runs = []
