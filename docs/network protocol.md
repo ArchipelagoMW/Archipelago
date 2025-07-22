@@ -231,11 +231,11 @@ Sent to clients after a client requested this message be sent to them, more info
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
 
 #### Arguments
-| Name | Type | Notes |
-| ---- | ---- | ----- |
-| type | str | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
-| original_cmd | Optional[str] | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
-| text | str | A descriptive message of the problem at hand. |
+| Name | Type        | Notes |
+| ---- |-------------| ----- |
+| type | str         | The [PacketProblemType](#PacketProblemType) that was detected in the packet. |
+| original_cmd | str \| None | The `cmd` argument of the faulty packet, will be `None` if the `cmd` failed to be parsed. |
+| text | str         | A descriptive message of the problem at hand. |
 
 ##### PacketProblemType
 `PacketProblemType` indicates the type of problem that was detected in the faulty packet, the known problem types are below but others may be added in the future.
@@ -294,7 +294,7 @@ Sent by the client to initiate a connection to an Archipelago game session.
 | password       | str                               | If the game session requires a password, it should be passed here.                           |
 | game           | str                               | The name of the game the client is playing. Example: `A Link to the Past`                    |
 | name           | str                               | The player name for this client.                                                             |
-| uuid           | str                               | Unique identifier for player client.                                                         |
+| uuid           | str                               | Unique identifier for player. Cached in the user cache \Archipelago\Cache\common.json        |
 | version        | [NetworkVersion](#NetworkVersion) | An object representing the Archipelago version this client supports.                         |
 | items_handling | int                               | Flags configuring which items should be sent by the server. Read below for individual flags. |
 | tags           | list\[str\]                       | Denotes special features or capabilities that the sender is capable of. [Tags](#Tags)        |
@@ -551,14 +551,14 @@ In JSON this may look like:
 Message nodes sent along with [PrintJSON](#PrintJSON) packet to be reconstructed into a legible message. The nodes are intended to be read in the order they are listed in the packet.
 
 ```python
-from typing import TypedDict, Optional
+from typing import TypedDict
 class JSONMessagePart(TypedDict):
-    type: Optional[str]
-    text: Optional[str]
-    color: Optional[str] # only available if type is a color
-    flags: Optional[int] # only available if type is an item_id or item_name
-    player: Optional[int] # only available if type is either item or location
-    hint_status: Optional[HintStatus] # only available if type is hint_status
+    type: str | None
+    text: str | None
+    color: str | None # only available if type is a color
+    flags: int | None # only available if type is an item_id or item_name
+    player: int | None # only available if type is either item or location
+    hint_status: HintStatus | None # only available if type is hint_status
 ```
 
 `type` is used to denote the intent of the message part. This can be used to indicate special information which may be rendered differently depending on client. How these types are displayed in Archipelago's ALttP client is not the end-all be-all. Other clients may choose to interpret and display these messages differently.

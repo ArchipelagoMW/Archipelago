@@ -3,7 +3,7 @@ from ...data import villagers_data, fish_data
 from ...data.building import Building
 from ...data.game_item import GenericSource, ItemTag, Tag, CustomRuleSource
 from ...data.harvest import ForagingSource, SeasonalForagingSource, ArtifactSpotSource
-from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement
+from ...data.requirement import ToolRequirement, BookRequirement, SkillRequirement, YearRequirement
 from ...data.shop import ShopSource, MysteryBoxSource, ArtifactTroveSource, PrizeMachineSource, FishingTreasureChestSource
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.book_names import Book
@@ -209,7 +209,7 @@ pelican_town = ContentPack(
         # Books
         Book.animal_catalogue: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
-            ShopSource(money_price=5000, shop_region=Region.ranch),),
+            ShopSource(money_price=5000, shop_region=Region.ranch, other_requirements=(YearRequirement(2),)),),
         Book.book_of_mysteries: (
             Tag(ItemTag.BOOK, ItemTag.BOOK_POWER),
             MysteryBoxSource(amount=38),),  # After 38 boxes, there are 49.99% chances player received the book.
