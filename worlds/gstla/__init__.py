@@ -251,12 +251,27 @@ class GSTLAWorld(World):
         return filler_item.name
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        ret = dict()
+        ret = {
+            "options": {
+                "item_shuffle": self.options.item_shuffle.value,
+                "reveal_hidden_item": self.options.reveal_hidden_item.value,
+                "omit_locations": self.options.omit_locations.value,
+                "lemurian_ship": self.options.lemurian_ship.value,
+                "start_with_wings": self.options.start_with_wings_of_anemos.value,
+                # AP logically requires 28 djinn, though the randomizer is the one which sets the number
+                "anemos_inner_sanctum_access": self.options.anemos_inner_sanctum_access.value,
+                "djinn_logic": self.options.djinn_logic.value,
+                # If free retreat and no manual retreat glitch, no retreat glitches work
+                "free_retreat": self.options.free_retreat.value,
+                "manual_retreat_glitch": self.options.manual_retreat_glitch.value,
+                "name_puzzles": self.options.name_puzzles.value,
+                "teleport_to_dungeons_and_towns": self.options.teleport_to_dungeons_and_towns.value,
+            }
+        }
         goal_dict = dict()
         flags = set()
         counts = dict()
         for goal in self.options.goal.value:
-            # TODO: needs to handle summons and djinn
             if "Hunt" in goal:
                 continue
             flags.add(goal)
