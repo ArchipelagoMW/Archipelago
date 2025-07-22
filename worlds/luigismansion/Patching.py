@@ -99,7 +99,7 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 9, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
@@ -241,6 +241,9 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["pos_y"] = spawn_region["pos_y"]
             x["pos_x"] = spawn_region["pos_x"]
             x["pos_z"] = spawn_region["pos_z"]
+
+        if x["EventNo"] == 10:
+            x["EventFlag"] = 0
 
 
 def update_character_info(character_info, output_data):
