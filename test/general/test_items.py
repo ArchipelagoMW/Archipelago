@@ -195,15 +195,16 @@ class TestBase(unittest.TestCase):
                 new_reachable_locations_at_each_collect = [initially_reachable]
                 reachable_so_far = initially_reachable.copy()
 
-                for item in items:
+                for i, item in enumerate(items):
                     state.collect(item, prevent_sweep=True)
                     reachable_locations = {loc for loc in locations if loc.can_reach(state)}
                     # Check that all previously reachable locations were still reachable. Collecting an item must never
                     # reduce accessibility.
-                    should_be_empty = reachable_so_far - reachable_locations
-                    if len(should_be_empty) > 0:
-                        self.fail(f"Collecting {item} reduced accessibility. No longer accessible after collecting:"
-                                  f" {should_be_empty}")
+                    no_longer_accessible = reachable_so_far - reachable_locations
+                    if len(no_longer_accessible) > 0:
+                        self.fail(f"Collecting '{item}' reduced accessibility. No longer accessible after collecting"
+                                  f" '{item}': {no_longer_accessible}."
+                                  f"\nPreviously collected items in order of collection: {items[0:i]}")
                     # Find the newly reachable locations and update the locations reachable so far, as well as the list
                     # of sets of locations that became reachable with each item collected.
                     newly_reachable = reachable_locations - reachable_so_far
@@ -212,16 +213,18 @@ class TestBase(unittest.TestCase):
 
                 # Remove each item in reverse and check that the reachable locations are the same as before the item was
                 # collected.
-                for item in reversed(items):
+                for i, item in zip(reversed(range(len(items))), reversed(items)):
                     only_reachable_because_of_this_item = new_reachable_locations_at_each_collect.pop()
                     state.remove(item)
                     reachable_locations = {loc for loc in locations if loc.can_reach(state)}
                     # Check that the locations that were only reachable because of this item are now unreachable.
-                    should_be_empty = only_reachable_because_of_this_item.intersection(reachable_locations)
-                    if len(should_be_empty) > 0:
+                    should_have_become_unreachable = only_reachable_because_of_this_item.intersection(reachable_locations)
+                    if len(should_have_become_unreachable) > 0:
                         self.fail(f"Removing '{item}' did not result in losing access to the same locations that"
-                                  f" '{item}' gave access to. Locations that '{item}' gave access to:"
-                                  f" {should_be_empty}")
+                                  f" '{item}' gave access to. Locations that removing '{item}' should have removed"
+                                  f" access to but did not: {should_have_become_unreachable}."
+                                  f"\nPreviously removed items in order of removal: {items[-1:i:-1]}"
+                                  f"\nPreviously collected items in order of collection: {items[0:i]}")
 
                     # Check that all locations reachable before this item was collected are still reachable.
                     # Also checks that removing the item has not made additional locations reachable.
