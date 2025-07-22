@@ -75,6 +75,7 @@ def generate_monitor_rules():
     fixed_seed = script_args.seed
 
     original_set_location_rule = StardewRuleCollector.set_location_rule
+    original_set_entrance_rule = StardewRuleCollector.set_entrance_rule
     original_collect = StardewValleyWorld.collect
     original_remove = StardewValleyWorld.remove
     original_call_single = AutoWorld.call_single
@@ -91,11 +92,19 @@ def generate_monitor_rules():
         def apply_patches(self):
             @wraps(original_set_location_rule)
             def patched_set_location_rule(self_, location_name: str, rule: StardewRule) -> None:
-                wrapped = PerformanceMonitoringStardewRule(location_name, rule)
+                wrapped = PerformanceMonitoringStardewRule("[location] " + location_name, rule)
                 self.monitored_rules.append(wrapped)
                 original_set_location_rule(self_, location_name, wrapped)
 
             StardewRuleCollector.set_location_rule = patched_set_location_rule
+
+            @wraps(original_set_entrance_rule)
+            def patched_set_entrance_rule(self_, entrance_name: str, rule: StardewRule) -> None:
+                wrapped = PerformanceMonitoringStardewRule("[entrance] " + entrance_name, rule)
+                self.monitored_rules.append(wrapped)
+                original_set_entrance_rule(self_, entrance_name, wrapped)
+
+            StardewRuleCollector.set_entrance_rule = patched_set_entrance_rule
 
             @wraps(original_collect)
             def patched_collect(*args, **kwargs):
@@ -144,7 +153,7 @@ def generate_monitor_rules():
                 total_duration = sum(call.duration_ns for call in rule.calls)
                 print(f"{rule.location}: {total_duration / 1_000_000:.2f} ms over {len(rule.calls)} calls")
 
-    run_count = 5
+    run_count = 20
     runs = []
 
     def run_multiple_generations():
