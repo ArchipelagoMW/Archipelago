@@ -15,6 +15,7 @@ logger = logging.getLogger("Client")
 MM3_CURRENT_STAGE = 0x22
 MM3_MEGAMAN_STATE = 0x30
 MM3_ROBOT_MASTERS_DEFEATED = 0x61
+MM3_DOC_STATUS = 0x62
 MM3_HEALTH = 0xA2
 MM3_WEAPON_ENERGY = 0xA3
 MM3_WEAPONS = {
@@ -373,6 +374,7 @@ class MegaMan3Client(BizHawkClient):
     auto_heal: bool = False
     refill_queue: List[Tuple[MM3EnergyLinkType, int]] = []
     last_wily: Optional[int] = None  # default to wily 1
+    doc_status: Optional[int] = None  # default to no doc progress
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read
@@ -435,6 +437,8 @@ class MegaMan3Client(BizHawkClient):
         elif cmd == "Retrieved":
             if f"MM3_LAST_WILY_{ctx.team}_{ctx.slot}" in args["keys"]:
                 self.last_wily = args["keys"][f"MM3_LAST_WILY_{ctx.team}_{ctx.slot}"]
+            if f"MM3_DOC_STATUS_{ctx.team}_{ctx.slot}" in args["keys"]:
+                self.doc_status = args["keys"][f"MM3_DOC_STATUS_{ctx.team}_{ctx.slot}"]
         elif cmd == "Connected":
             if self.energy_link:
                 ctx.set_notify(f"EnergyLink{ctx.team}")
@@ -460,18 +464,19 @@ class MegaMan3Client(BizHawkClient):
             return
 
         # get our relevant bytes
-        (robot_masters_unlocked, robot_masters_defeated, doc_robo_unlocked, doc_robo_defeated,
+        (robot_masters_unlocked, robot_masters_defeated, doc_status, doc_robo_unlocked, doc_robo_defeated,
          rush_acquired, received_items, completed_stages, consumable_checks,
             e_tanks, lives, weapon_energy, health, state, bar_state, current_stage,
             energy_link_packet, last_wily) = await read(ctx.bizhawk_ctx, [
                 (MM3_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM3_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
+                (MM3_DOC_STATUS, 1, "RAM"),
                 (MM3_DOC_ROBOT_UNLOCKED, 1, "RAM"),
                 (MM3_DOC_ROBOT_DEFEATED, 1, "RAM"),
                 (MM3_RUSH_RECEIVED, 1, "RAM"),
                 (MM3_RECEIVED_ITEMS, 1, "RAM"),
                 (MM3_COMPLETED_STAGES, 0x1, "RAM"),
-                (MM3_CONSUMABLES, 16, "RAM"), # Could be more but 16 definitely catches all current
+                (MM3_CONSUMABLES, 16, "RAM"),  # Could be more but 16 definitely catches all current
                 (MM3_E_TANKS, 1, "RAM"),
                 (MM3_LIVES, 1, "RAM"),
                 (MM3_WEAPON_ENERGY, 11, "RAM"),
@@ -510,7 +515,7 @@ class MegaMan3Client(BizHawkClient):
             if self.last_wily is None:
                 # revalidate last wily from data storage
                 await ctx.send_msgs([{"cmd": "Set", "key": f"MM3_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
-                    {"operation": "default", "value": 8}
+                    {"operation": "default", "value": 0xC}
                 ]}])
                 await ctx.send_msgs([{"cmd": "Get", "keys": [f"MM3_LAST_WILY_{ctx.team}_{ctx.slot}"]}])
             elif last_wily[0] == 0:
@@ -520,6 +525,23 @@ class MegaMan3Client(BizHawkClient):
                 self.last_wily = last_wily[0]
                 await ctx.send_msgs([{"cmd": "Set", "key": f"MM3_LAST_WILY_{ctx.team}_{ctx.slot}", "operations": [
                     {"operation": "replace", "value": self.last_wily}
+                ]}])
+
+        if self.doc_status != doc_status[0]:
+            if self.doc_status is None:
+                # revalidate doc status from data storage
+                await ctx.send_msgs([{"cmd": "Set", "key": f"MM3_DOC_STATUS_{ctx.team}_{ctx.slot}", "operations": [
+                    {"operation": "default", "value": 0}
+                ]}])
+                await ctx.send_msgs([{"cmd": "Get", "keys": [f"MM3_DOC_STATUS_{ctx.team}_{ctx.slot}"]}])
+            elif doc_status[0] == 0:
+                writes.append((MM3_DOC_STATUS, self.doc_status.to_bytes(1, "little"), "RAM"))
+            else:
+                # correct our setting
+                # shouldn't be possible to desync, but we'll account for it anyways
+                self.doc_status |= doc_status[0]
+                await ctx.send_msgs([{"cmd": "Set", "key": f"MM3_DOC_STATUS_{ctx.team}_{ctx.slot}", "operations": [
+                    {"operation": "replace", "value": self.doc_status}
                 ]}])
 
         weapon_energy = bytearray(weapon_energy)

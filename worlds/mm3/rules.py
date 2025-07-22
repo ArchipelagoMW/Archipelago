@@ -207,7 +207,7 @@ def set_rules(world: "MM3World") -> None:
         world.weapon_damage[0][world.options.starting_robot_master.value] = 1
 
     # weakness validation, it is better to confirm a completable seed than respect plando
-    boss_health = {boss: 0x1C if boss != 12 else 0x1C * 2 for boss in range(8)}
+    boss_health = {boss: 0x1C for boss in range(8)}
 
     weapon_energy = {key: float(0x1C) for key in weapon_costs}
     weapon_boss = {boss: {weapon: world.weapon_damage[weapon][boss] for weapon in world.weapon_damage}
@@ -232,7 +232,7 @@ def set_rules(world: "MM3World") -> None:
                 continue
             highest, wp = max(zip(weapon_weight.values(), weapon_weight.keys()))
             uses = weapon_energy[wp] // weapon_costs[wp]
-            if int(uses * boss_damage[wp]) > boss_health[boss]:
+            if int(uses * boss_damage[wp]) >= boss_health[boss]:
                 used = ceil(boss_health[boss] / boss_damage[wp])
                 weapon_energy[wp] -= weapon_costs[wp] * used
                 boss_health[boss] = 0
