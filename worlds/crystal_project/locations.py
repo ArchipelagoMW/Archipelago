@@ -527,7 +527,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER, "Salmon River Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset), #Ether Pouch chest
         LocationData(SALMON_RIVER, "Salmon River Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
         LocationData(SALMON_RIVER, "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
-        LocationData(SALMON_RIVER, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData(SALMON_RIVER, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
         LocationData(SALMON_RIVER, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
@@ -542,7 +542,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER, "Salmon River NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER, "Salmon River NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER, "Salmon River NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
+        LocationData(SALMON_RIVER, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
         #Crystals
         LocationData(SALMON_RIVER, "River Cats Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
