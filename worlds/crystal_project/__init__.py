@@ -279,6 +279,8 @@ class CrystalProjectWorld(World):
                 if self.options.clamshellGoalQuantity.value < 2:
                     self.options.clamshellGoalQuantity.value = 2
                 self.options.extraClamshellsInPool.value = int(max_clamshells - self.options.clamshellGoalQuantity.value)
+                if self.options.extraClamshellsInPool.value < 0:
+                    self.options.extraClamshellsInPool.value = 0
 
                 # Log the change to player settings
                 message = ("For player {2}: total_clamshells was {0} but there was only room for {1} clamshells in the pool. "
@@ -290,6 +292,8 @@ class CrystalProjectWorld(World):
         return total_clamshell_quantity
 
     def get_total_progressive_levels(self, max_progressive_levels: int) -> int:
+        if max_progressive_levels < 1:
+            max_progressive_levels = 1
         # this formula is how we can do ceiling division in Python
         progressive_levels = -(self.options.maxLevel.value // -self.options.progressiveLevelSize.value)
         #don't forget to -1
@@ -300,14 +304,10 @@ class CrystalProjectWorld(World):
             if potential_progressive_level_size > self.options.progressiveLevelSize.range_end:
                 potential_progressive_level_size = self.options.progressiveLevelSize.range_end
                 potential_max_level = max_progressive_levels * potential_progressive_level_size
-                if potential_max_level < self.options.maxLevel.range_start:
-                    potential_max_level = self.options.maxLevel.range_start
 
             if self.options.maxLevel.value > potential_max_level:
-                message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
-                           f"Reduced max_level to {potential_max_level} and increased progressive_level_size to {potential_progressive_level_size}.")
-                logging.getLogger().info(message)
-                self.options.maxLevel.value = potential_max_level
+                raise Exception(f"For player {self.player_name}: yaml settings were too restrictive. Needed at least {-(self.options.maxLevel.value // -potential_progressive_level_size)} Progressive Levels, but only room for {max_progressive_levels} Progressive Levels in the pool. "
+                                f"This is usually caused by mods that add more items than locations. Change settings and regenerate.")
             else:
                 message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
                            f"Increased progressive_level_size to {potential_progressive_level_size}.")
