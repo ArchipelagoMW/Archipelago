@@ -614,6 +614,22 @@ class AutoRun(Toggle):
     display_name = "Auto Run"
     default = 1
 
+class Coop(Choice):
+    """Enables cooping a seed by making local items the same as remote items, enabling
+     your friends to receive items you pick up.  Also helpful if trying to play a world from multiple devices.
+     You will still need to pickup djinn the other person picks up.
+     off - vanilla
+     progression - Only progression items are treated as remote items
+     prog_useful - Progression and useful items are treated as remote items
+     all - All items are treated as remote items
+     """
+    option_off = 0
+    option_progression = 1
+    option_prog_useful = 2
+    option_all = 3
+    default = 0
+
+
 class Goal(OptionSet):
     """What conditions must be satisfied for this world to goal.  You can select however many you want, and only
     when all the selected conditions are satisfied is the world considered goaled.
@@ -736,6 +752,7 @@ class GSTLAOptions(PerGameCommonOptions):
     shuffle_music: MusicShuffle
     teleport_to_dungeons_and_towns: TelportEverywhere
     auto_run: AutoRun
+    coop: Coop
     
     start_inventory_from_pool: StartInventoryPool
 

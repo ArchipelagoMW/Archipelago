@@ -21,7 +21,7 @@ from BaseClasses import Item, ItemClassification, Tutorial
 from .Items import GSTLAItem, item_table, all_items, ItemType, create_events, create_items, create_item, \
     AP_PLACEHOLDER_ITEM, items_by_id, get_filler_item, AP_PROG_PLACEHOLDER_ITEM, create_filler_pool_weights, \
     create_trap_pool_weights, AP_USEFUL_PLACEHOLDER_ITEM, create_item_direct
-from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data
+from .Locations import GSTLALocation, all_locations, location_name_to_id, location_type_to_data, remote_blacklist
 from .Rules import set_access_rules, set_item_rules, set_entrance_rules
 from .Regions import create_regions
 from .Connections import create_vanilla_connections
@@ -266,6 +266,7 @@ class GSTLAWorld(World):
                 "manual_retreat_glitch": self.options.manual_retreat_glitch.value,
                 "name_puzzles": self.options.name_puzzles.value,
                 "teleport_to_dungeons_and_towns": self.options.teleport_to_dungeons_and_towns.value,
+                "coop": self.options.coop.value,
             }
         }
         goal_dict = dict()
@@ -366,6 +367,26 @@ class GSTLAWorld(World):
                 level = min(max(floor((max_level - starting_level) * sphere / max_sphere + starting_level), starting_level), max_level)
                 self._character_levels.append((char.code - 0xD00, level))
 
+    def _should_be_remote(self, location: GSTLALocation) -> bool:
+        ap_item = location.item
+        if ap_item.player != self.player:
+            return True
+        coop_opt = self.options.coop.value
+        if coop_opt == 0:
+            # off
+            return False
+        if location.address in remote_blacklist:
+            return False
+        if coop_opt == 3:
+            # all
+            return True
+        if ap_item.advancement or ap_item.trap:
+            return True
+        if ap_item.useful and coop_opt >= 2:
+            # prog_useful
+            return True
+        # shouldn't make it this far, but just in case
+        return False
 
     def _generate_rando_data(self, rando_file: BinaryIO, debug_file: TextIO):
         rando_file.write(0x1.to_bytes(length=1, byteorder='little'))
@@ -397,7 +418,7 @@ class GSTLAWorld(World):
                     # TODO: need to fill with something else
                     continue
 
-                if ap_item.player != self.player:
+                if self._should_be_remote(location):
                     if ap_item.classification & (ItemClassification.progression | ItemClassification.trap) > 0:
                         item_data = AP_PROG_PLACEHOLDER_ITEM
                     elif ap_item.classification & ItemClassification.useful > 0:

@@ -16,6 +16,8 @@ import logging
 
 if TYPE_CHECKING:
     from . import GSTLAWorld
+    from .Items import GSTLAItem
+
 
 def set_entrance_rules(world: 'GSTLAWorld'):
     player = world.player
@@ -957,7 +959,7 @@ class _RestrictionRule:
         self.player = player
         self.loc_restrictions = loc_restrictions
 
-    def __call__(self, item) -> bool:
+    def __call__(self, item: 'GSTLAItem') -> bool:
         # Really the type should be 'GSTLAItem' -> bool, but I dunno how to get around python typing
         if item.player != self.player:
             return True

@@ -6,10 +6,11 @@ import logging
 from enum import IntEnum, Enum
 from typing import Dict, List, TYPE_CHECKING, Set, Tuple, Mapping, Optional, Any
 
+from BaseClasses import ItemClassification
 from NetUtils import ClientStatus, NetworkItem
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
-from . import items_by_id, ItemType
+from . import items_by_id, ItemType, remote_blacklist
 from .gen.LocationNames import loc_names_by_id, LocationName, option_name_to_goal_name
 from .gen.ItemData import djinn_items, mimics, ItemData, events
 from .gen.LocationData import all_locations, LocationType, djinn_locations, LocationData, location_name_to_data, \
@@ -280,6 +281,8 @@ class GSTLAClient(BizHawkClient):
         self.local_locations: Set[int] = set()
         # self.starting_items: StartingItemHandler = StartingItemHandler(dict())
         self.was_in_game: bool = False
+        self.coop: int = 0
+        self.remote_blacklist: Set[int] = remote_blacklist
         self.goals = GoalManager()
 
     async def validate_rom(self, ctx: 'BizHawkClientContext'):
@@ -435,7 +438,7 @@ class GSTLAClient(BizHawkClient):
             return
         elif item_index != index_to_give:
             # Update the item index so as to skip ones we don't care about
-            update_index = index_to_give - 1
+            update_index = index_to_give
             await write(ctx.bizhawk_ctx, [
                 (_DataLocations.AP_ITEMS_RECEIVED.addr,
                  update_index.to_bytes(length=2, byteorder="little"),
@@ -450,9 +453,22 @@ class GSTLAClient(BizHawkClient):
                                        _DataLocations.AP_ITEM_SLOT.domain)])
 
     def _should_give_to_player(self, ctx: 'BizHawkClientContext', item: NetworkItem) -> bool:
+        logger.debug("item: %s flags: %s location: %s coop: %s", item.item, item.flags, item.location, self.coop)
         if item.item in event_id_to_name:
             return False
-        return ctx.slot != item.player
+        if ctx.slot != item.player:
+            return True
+        elif self.coop == 0:
+            return False
+        elif item.location in self.remote_blacklist:
+            return False
+        elif self.coop == 3:
+            return True
+        elif item.flags & (ItemClassification.progression | ItemClassification.trap) > 0:
+            return True
+        elif self.coop == 2 and (item.flags & ItemClassification.useful) > 0:
+            return True
+        return False
 
     async def update_goal_flags(self, updated: Set[int], ctx: 'BizHawkClientContext', include_djinn: bool = False) -> None:
         messages = []
@@ -508,6 +524,7 @@ class GSTLAClient(BizHawkClient):
             for desired_flag in self.goals.desired_flags.keys():
                 self.goal_map[desired_flag] = False
             self.check_summon_count(ctx)
+            self.coop = ctx.slot_data.get("options", dict()).get("coop", 0)
             ctx.set_notify(self.get_goal_flags_key(ctx), self.get_djinn_location_key(ctx))
             # logger.info(self.goals.flag_requirements)
             # logger.info(self.goals.count_requirements)
@@ -535,8 +552,8 @@ class GSTLAClient(BizHawkClient):
 
         if self.temp_locs != self.local_locations:
             if self.temp_locs:
-                logger.debug("Sending locations to AP: %s", self.local_locations)
-                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(self.local_locations)}])
+                logger.debug("Sending locations to AP: %s", self.temp_locs)
+                await ctx.send_msgs([{"cmd": "LocationChecks", "locations": list(self.temp_locs)}])
                 self.local_locations = self.temp_locs
 
         if self.djinn_last_count != len(self.possessed_djinn):
