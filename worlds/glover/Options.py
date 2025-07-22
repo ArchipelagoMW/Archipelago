@@ -28,7 +28,7 @@ class StartingBall(Choice):
 
 class GaribLogic(Choice):
     """How the garibs are placed in logic. Default Garib Groups.
-    Level Garibs: You get a check for getting all garibs in a level. You are sent garib level completions.
+    Level Garibs: You get a check for getting all garibs in a level. You aren't sent garibs.
     Garib Groups: Each group of garibs in a level is a check. You are sent bundles of garibs.
     Garibsanity: Each garib is a check. You can be sent individual garibs.
     """
@@ -91,6 +91,11 @@ class CheckpointsChecks(Toggle):
     """Checkpoints are checks and items. Default off.
     """
     display_name = "Randomize Checkpoints"
+
+class SwitchesChecks(DefaultOnToggle):
+    """Switches are checks and level events are items. Default on.
+    """
+    display_name = "Randomize Switches"
 
 class MrTipChecks(DefaultOnToggle):
     """Mr. Tips are checks. Default on.
