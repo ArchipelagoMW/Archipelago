@@ -2,6 +2,13 @@
 <MENUOFF>
 <LUIGISTOP2>
 <FLAGON>(109)
+<CHECKFLAG>(22)"Upgrade""Continue"
+-------------------------
+<CASE>"Upgrade"
+<WEAPON>
+<RAMDOMJMP>"Continue"
+-------------------------
+<CASE>"Continue"
 <BGM>(11)
 <CHOICE>"Hint"(1)"Save"(2)"Heal"(3)"Close"(4)<LISTEND>
 <ANYKEY>
