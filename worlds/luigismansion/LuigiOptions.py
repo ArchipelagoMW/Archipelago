@@ -601,7 +601,7 @@ class DoorModelRando(Toggle):
 
 class TrapPercentage(Range):
     """
-    Set the percentage of filler items that are traps.
+    Set the percentage of filler items that are traps. Default percentage is 0%
     """
     display_name = "Trap Percentage"
     internal_name = "trap_percentage"
