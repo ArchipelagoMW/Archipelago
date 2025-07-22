@@ -335,7 +335,7 @@ class SC2Logic:
                 self.player,
             )
             or state.has_all((item_names.REAPER, item_names.REAPER_JET_PACK_OVERDRIVE), self.player)
-            or state.has_all((item_names.PLANETARY_FORTRESS, item_names.PLANETARY_FORTRESS_IKBIS_TRACKING_SCANNERS), self.player)
+            or state.has_all((item_names.PLANETARY_FORTRESS, item_names.PLANETARY_FORTRESS_IBIKS_TRACKING_SCANNERS), self.player)
             or (
                 state.has(item_names.MEDIVAC, self.player)
                 and state.has_any((item_names.SIEGE_TANK, item_names.SIEGE_BREAKERS, item_names.SHOCK_DIVISION), self.player)
