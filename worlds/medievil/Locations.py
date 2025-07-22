@@ -69,12 +69,18 @@ class MedievilLocation(Location):
             "The Time Device",
             "Zaroks Lair"           
         ]
-        
+
         output = {}
         for i, region_name in enumerate(table_order):
-             
-          #  print({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + i)})
-            output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + (region_offset * i))})
+            current_region_base_id = base_id + (i * region_offset)
+            # Ensure the region exists in location_tables
+            if region_name in location_tables:
+                # Enumerate the items within the current region, starting from current_region_base_id
+                for j, location_data in enumerate(location_tables[region_name]):
+                    # Assign an ID to each location within the region
+                    # The ID for each location in a region will be current_region_base_id + j
+                    print(f"{current_region_base_id + j}: {location_data.name}")
+                    output[location_data.name] = current_region_base_id + j
 
         return output
     
