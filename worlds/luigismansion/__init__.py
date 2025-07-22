@@ -854,7 +854,7 @@ class LMWorld(World):
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.nothing_weight.value,
+                          self.options.poison_trap_weight.value, self.options.ghost_weight, self.options.dust_weight.value,
                           self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.bomb_trap_weight.value, self.options.ice_trap_weight.value,  # bomb, ice
                           self.options.banana_trap_weight.value, self.options.coin_weight.value, twencoin, thircoin,
