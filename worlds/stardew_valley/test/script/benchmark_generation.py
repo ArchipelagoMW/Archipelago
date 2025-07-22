@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from functools import wraps
 
 from BaseClasses import CollectionState, get_seed
-from Fill import distribute_items_restrictive
+from Fill import distribute_items_restrictive, FillError
 from test.general import gen_steps
 from worlds import AutoWorld
 from ..bases import setup_solo_multiworld
@@ -157,13 +157,19 @@ def generate_monitor_rules():
     runs = []
 
     def run_multiple_generations():
+        nonlocal run_count
         for i in range(run_count):
             seed = get_seed(fixed_seed)
             print(f"Running generation {i + 1} with seed {seed}")
             run = Run(i, seed)
             run.apply_patches()
             gc.collect()
-            run.run_one_generation()
+            try:
+                run.run_one_generation()
+            except FillError as e:
+                print(e)
+                run_count -= 1
+                continue
             run.print_results()
             runs.append(run)
 
