@@ -116,7 +116,7 @@ def set_rules(world):
 
     all_location_names = set(location.name for location in world.multiworld.get_locations(world.player))
 
-    set_entrance_rules(logic, rule_collector, world_options, world_content)
+    set_entrance_rules(logic, rule_collector, bundle_rooms, world_options, world_content)
     set_ginger_island_rules(logic, rule_collector, world_options, world_content)
 
     set_tool_rules(logic, rule_collector, world_content)
@@ -206,17 +206,13 @@ def set_building_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
 def set_bundle_rules(bundle_rooms: List[BundleRoom], logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions):
     for bundle_room in bundle_rooms:
+        if bundle_room.name == CCRoom.raccoon_requests:
+            # The rule for the raccoon bundles are placed on their entrance, not on the location itself.
+            continue
+
         room_rules = []
         for bundle in bundle_room.bundles:
             bundle_rules = logic.bundle.can_complete_bundle(bundle)
-            if bundle_room.name == CCRoom.raccoon_requests:
-                num = int(bundle.name[-1])
-                extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0
-                extra_raccoons = extra_raccoons + num
-                bundle_rules = logic.received(CommunityUpgrade.raccoon, extra_raccoons) & bundle_rules
-                if num > 1:
-                    previous_bundle_name = f"Raccoon Request {num - 1}"
-                    bundle_rules = bundle_rules & logic.region.can_reach_location(previous_bundle_name)
             room_rules.append(bundle_rules)
             rule_collector.set_location_rule(bundle.name, bundle_rules)
         if bundle_room.name == CCRoom.abandoned_joja_mart or bundle_room.name == CCRoom.raccoon_requests:
@@ -240,7 +236,8 @@ def set_skills_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, 
             rule_collector.set_location_rule(skill.mastery_name, rule)
 
 
-def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, world_options: StardewValleyOptions, content: StardewContent):
+def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions,
+                       content: StardewContent):
     set_mines_floor_entrance_rules(logic, rule_collector)
     set_skull_cavern_floor_entrance_rules(logic, rule_collector)
     set_blacksmith_entrance_rules(logic, rule_collector)
@@ -270,7 +267,8 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(LogicEntrance.talk_to_mines_dwarf,
                                      logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     rule_collector.set_entrance_rule(LogicEntrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days() & logic.money.can_spend(1000))
-    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
+    set_raccoon_rules(logic, rule_collector, bundle_rooms, world_options)
+
     rule_collector.set_entrance_rule(LogicEntrance.fish_in_waterfall,
                                      logic.skill.has_level(Skill.fishing, 5) & logic.tool.has_fishing_rod(FishingRod.bamboo))
 
@@ -310,6 +308,19 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
 
     rule_collector.set_entrance_rule(Entrance.feed_trash_bear, logic.received("Trash Bear Arrival"))
     rule_collector.set_entrance_rule(Entrance.enter_shorts_maze, logic.has(Craftable.staircase))
+
+
+def set_raccoon_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, bundle_rooms: List[BundleRoom], world_options: StardewValleyOptions):
+    rule_collector.set_entrance_rule(LogicEntrance.has_giant_stump, logic.received(CommunityUpgrade.raccoon))
+    rule_collector.set_entrance_rule(LogicEntrance.buy_from_raccoon, logic.quest.has_raccoon_shop())
+
+    raccoon_room = next(iter(room for room in bundle_rooms if room.name == CCRoom.raccoon_requests))
+    extra_raccoons = 1 if world_options.quest_locations.has_story_quests() else 0
+
+    for bundle in raccoon_room.bundles:
+        num = int(bundle.name[-1])
+        bundle_rules = logic.received(CommunityUpgrade.raccoon, num + extra_raccoons) & logic.bundle.can_complete_bundle(bundle)
+        rule_collector.set_entrance_rule("Can Complete " + bundle.name, bundle_rules)
 
 
 def set_dangerous_mine_rules(logic, rule_collector: StardewRuleCollector, content: StardewContent):
