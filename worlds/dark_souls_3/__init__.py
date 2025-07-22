@@ -90,7 +90,7 @@ class DarkSouls3World(World):
         self.created_regions = set()
         self.all_excluded_locations.update(self.options.exclude_locations.value)
 
-        # Don't list disabled locations as being AP-excluded (they'll be listed in the DS3-excluded section)
+        # Don't consider disabled locations to be AP-excluded
         if not self.options.enable_dlc:
             self.options.exclude_locations.value = {
                 location
