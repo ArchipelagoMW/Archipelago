@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, location_tables, location_dictionary
-from .Options import MedievilOption, GoalOptions
+from .Options import MedievilOption, GoalOptions, ExcludeDynamicItems
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -58,11 +58,12 @@ class MedievilWorld(World):
 
 
     def generate_early(self):
-        self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION),
-        self.enabled_location_categories.add(MedievilLocationCategory.WEAPON),
-        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE),
-        self.enabled_location_categories.add(MedievilLocationCategory.FUN),
-        self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END),    
+        self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION)
+        self.enabled_location_categories.add(MedievilLocationCategory.WEAPON)
+        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE)
+        self.enabled_location_categories.add(MedievilLocationCategory.FUN)
+        self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END)
+        self.enabled_location_categories.add(MedievilLocationCategory.DYNAMIC_ITEM)
 
     def create_regions(self):
         # Create Regions
@@ -172,12 +173,14 @@ class MedievilWorld(World):
         create_connection("The Entrance Hall", "Hall of Heroes")
         create_connection("The Time Device", "Hall of Heroes")
         
-        create_connection("Hall of Heroes", "Map") 
+        create_connection("Hall of Heroes", "Map")
                                                                                                                    
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
         for location in location_table:
+            if self.options.exclude_dynamic_items.value == ExcludeDynamicItems.option_true and location.category == MedievilLocationCategory.DYNAMIC_ITEM:
+                continue
             if location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
                     self.player,
@@ -260,6 +263,9 @@ class MedievilWorld(World):
         def is_level_cleared(self, location: str, state: CollectionState):        
             return state.can_reach_location("Cleared: " + location, self.player)
         
+        def has_daring_dash(self, state: CollectionState):
+            return state.has("Skill: Daring Dash", self.player)
+        
         def is_boss_defeated(self, boss: str, state: CollectionState): # can used later
             return state.has("Boss: " + boss, self.player, 1)
         
@@ -267,7 +273,7 @@ class MedievilWorld(World):
             return state.has("Key Item: " + item, self.player, 1)
 
         def has_weapon_required(self, weapon: str, state: CollectionState):
-            return state.has("Equipment: " + weapon, self.player)
+            return state.has("Equipment: " + weapon, self.player, 1)
         
         def has_number_of_chalices(self, count, state: CollectionState):
             
@@ -311,12 +317,12 @@ class MedievilWorld(World):
         
         # Map rules
         
-        set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state)) 
-        set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state)) 
-        set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state)) 
+        set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
+        set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state))
+        set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
         set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state) and has_keyitem_required(self, "Skull Key" , state )) 
         set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-        set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state)) 
+        set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_daring_dash(self, state))
         set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
         set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
         set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: is_level_cleared(self, "Sleeping Village" , state) and has_keyitem_required(self, "Crucifix Cast" , state)  and has_keyitem_required(self, "Landlords Bust" , state) and has_keyitem_required(self, "Crucifix" , state)) 
@@ -331,7 +337,6 @@ class MedievilWorld(World):
         set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship" , state)) 
         set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
         set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
-        
         
         set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Witches Talisman" , state))
         

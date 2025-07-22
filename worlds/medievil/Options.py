@@ -13,10 +13,14 @@ class ExcludeAntCaves(Toggle):
 class ExcludeDynamicItems(Toggle):
     """Excludes Dynamic drops from the check list. They require a different kind of logic. Keep this as its default value unless testing"""
     display_name = "Exclude Dynamic Items from the Pool"
+    default = 1
+    option_true = 1
+    option_false = 0
 
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
     display_name = "Guaranteed Items"
+    
 
 class GoalOption(Choice):
     """Lets the user choose the completion goal
