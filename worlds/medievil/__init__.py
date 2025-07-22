@@ -276,6 +276,7 @@ class MedievilWorld(World):
         def has_weapon_required(self, weapon, state):
             return state.has("Equipment: " + weapon, self.player)
             
+            
         for region in self.multiworld.get_regions(self.player):
             for location in region.locations:
                     set_rule(location, lambda state: True)
@@ -291,41 +292,32 @@ class MedievilWorld(World):
         set_rule(self.multiworld.get_entrance("Cemetery Hill -> The Hilltop Mausoleum", self.player), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
 
         set_rule(self.multiworld.get_entrance("The Hilltop Mausoleum -> Return to the Graveyard", self.player), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state))
-        add_rule(self.multiworld.get_entrance("The Hilltop Mausoleum -> Return to the Graveyard", self.player), lambda state: has_keyitem_required(self, "Skull Key" , state))
         
-        set_rule(self.multiworld.get_entrance("Return to the Graveyard -> Enchanted Earth", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+        set_rule(self.multiworld.get_entrance("Return to the Graveyard -> Enchanted Earth", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Skull Key" , state ))
         
-        set_rule(self.multiworld.get_entrance("Return to the Graveyard -> Scarecrow Fields", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+        set_rule(self.multiworld.get_entrance("Return to the Graveyard -> Scarecrow Fields", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Skull Key" , state ))
         
-        set_rule(self.multiworld.get_entrance("Scarecrow Fields -> The Sleeping Village", self.player), lambda state: is_level_cleared(self, "Scarecrow Fields" , state))
-        add_rule(self.multiworld.get_entrance("Scarecrow Fields -> The Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Crucifix Cast" , state))
-        add_rule(self.multiworld.get_entrance("Scarecrow Fields -> The Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Landlords Bust" , state))
-        add_rule(self.multiworld.get_entrance("Scarecrow Fields -> The Sleeping Village", self.player), lambda state: has_keyitem_required(self, "Crucifix" , state))        
+        set_rule(self.multiworld.get_entrance("Scarecrow Fields -> The Sleeping Village", self.player), lambda state: is_level_cleared(self, "Scarecrow Fields" , state) )
 
-        set_rule(self.multiworld.get_entrance("The Sleeping Village -> Asylum Grounds", self.player), lambda state: is_level_cleared(self, "The Sleeping Village" , state))
+        set_rule(self.multiworld.get_entrance("The Sleeping Village -> Asylum Grounds", self.player), lambda state: is_level_cleared(self, "The Sleeping Village" , state)and has_keyitem_required(self, "Crucifix Cast" , state) and has_keyitem_required(self, "Landlords Bust" , state) and has_keyitem_required(self, "Crucifix" , state))
         
         set_rule(self.multiworld.get_entrance("Asylum Grounds -> Inside the Asylum", self.player), lambda state: is_level_cleared(self, "Asylum Grounds" , state))
         set_rule(self.multiworld.get_entrance("Scarecrow Fields -> Pumpkin Gorge", self.player), lambda state: is_level_cleared(self, "Scarecrow Fields" , state))
 
-        set_rule(self.multiworld.get_entrance("Pumpkin Gorge -> Pumpkin Serpent", self.player), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state))
-        add_rule(self.multiworld.get_entrance("Pumpkin Gorge -> Pumpkin Serpent", self.player), lambda state: has_keyitem_required(self, "Witches Talisman" , state))
+        set_rule(self.multiworld.get_entrance("Pumpkin Gorge -> Pumpkin Serpent", self.player), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state) and has_keyitem_required(self, "Witches Talisman" , state))
         
         
         # ant caves
         # if self.options.exclude_ant_caves.value != 50:
-        set_rule(self.multiworld.get_entrance("Enchanted Earth -> Ant Hill", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-        add_rule(self.multiworld.get_entrance("Enchanted Earth -> Ant Hill", self.player), lambda state: has_keyitem_required(self, "Witches Talisman" , state))
+        set_rule(self.multiworld.get_entrance("Enchanted Earth -> Ant Hill", self.player), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitem_required(self, "Witches Talisman" , state))
 
-        set_rule(self.multiworld.get_entrance("Enchanted Earth -> Pools of the Ancient Dead", self.player), lambda state: is_level_cleared(self, "Enchanted Earth" , state))
-        add_rule(self.multiworld.get_entrance("Enchanted Earth -> Pools of the Ancient Dead",  self.player), lambda state: has_keyitem_required(self, "Shadow Talisman" , state))
+        set_rule(self.multiworld.get_entrance("Enchanted Earth -> Pools of the Ancient Dead", self.player), lambda state: is_level_cleared(self, "Enchanted Earth" , state) and has_keyitem_required(self, "Shadow Talisman" , state))
         
         set_rule(self.multiworld.get_entrance("Pools of the Ancient Dead -> The Lake", self.player), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
         
         set_rule(self.multiworld.get_entrance("The Lake -> The Crystal Caves", self.player), lambda state: is_level_cleared(self, "The Lake" , state))    
         
-        set_rule(self.multiworld.get_entrance("The Crystal Caves -> The Gallows Gauntlet", self.player), lambda state: is_level_cleared(self, "The Crystal Caves" , state))
-        add_rule(self.multiworld.get_entrance("The Crystal Caves -> The Gallows Gauntlet", self.player), lambda state: has_keyitem_required(self, "Dragon Gem - Pumpkin Serpent" , state))
-        add_rule(self.multiworld.get_entrance("The Crystal Caves -> The Gallows Gauntlet", self.player), lambda state: has_keyitem_required(self, "Dragon Gem - Inside the Asylum" , state))
+        set_rule(self.multiworld.get_entrance("The Crystal Caves -> The Gallows Gauntlet", self.player), lambda state: is_level_cleared(self, "The Crystal Caves" , state) and has_keyitem_required(self, "Dragon Gem - Pumpkin Serpent" , state) and has_keyitem_required(self, "Dragon Gem - Inside the Asylum" , state))
                    
         set_rule(self.multiworld.get_entrance("The Gallows Gauntlet -> The Haunted Ruins", self.player), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state))
         set_rule(self.multiworld.get_entrance("The Haunted Ruins -> The Ghost Ship", self.player), lambda state: is_level_cleared(self, "The Haunted Ruins" , state))
