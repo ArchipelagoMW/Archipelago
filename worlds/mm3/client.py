@@ -501,15 +501,17 @@ class MegaMan3Client(BizHawkClient):
         writes = []
 
         # deathlink
-        if self.pending_death_link:
-            writes.append((MM3_MEGAMAN_STATE, bytes([0x0E]), "RAM"))
-            self.pending_death_link = False
-            self.sending_death_link = True
-        if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            if state[0] == 0x0E and not self.sending_death_link:
-                await self.send_deathlink(ctx)
-            elif state[0] != 0x0E:
-                self.sending_death_link = False
+        # only handle deathlink in bar state 0x80 (in stage)
+        if bar_state[0] == 0x80:
+            if self.pending_death_link:
+                writes.append((MM3_MEGAMAN_STATE, bytes([0x0E]), "RAM"))
+                self.pending_death_link = False
+                self.sending_death_link = True
+            if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+                if state[0] == 0x0E and not self.sending_death_link:
+                    await self.send_deathlink(ctx)
+                elif state[0] != 0x0E:
+                    self.sending_death_link = False
 
         if self.last_wily != last_wily[0]:
             if self.last_wily is None:
