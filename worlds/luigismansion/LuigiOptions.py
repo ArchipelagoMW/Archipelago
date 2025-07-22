@@ -136,7 +136,10 @@ class HeartWeight(Range):
 
 
 class BetterVacuum(Choice):
-    """Choose whether to include the Poltergust 4000"""
+    """
+    Choose whether to include the Poltergust 4000.
+
+    If you start with the upgrade on a no-poltergust start, you will receive the base poltergust instead"""
     display_name = "Poltergust 4000"
     internal_name = "good_vacuum"
     option_start_with = 0

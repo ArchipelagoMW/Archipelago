@@ -169,6 +169,7 @@ class LuigisMansionRandomizer:
         max_health: str = str(self.output_data["Options"]["luigi_max_health"])
         door_to_close_list: dict[int, int] = dict(self.output_data["Entrances"])
         start_inv_list: list[str] = list(self.output_data["Options"]["start_inventory"])
+        bool_start_vacuum: bool = True if int(self.output_data["Options"]["vacuum_start"]) == 1 else False
         bool_randomize_music: bool = True if int(self.output_data["Options"]["random_music"]) == 1 else False
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
@@ -204,7 +205,7 @@ class LuigisMansionRandomizer:
 
         logger.info("Updating the intro and lab events with the customized version.")
         self.gcm = update_intro_and_lab_events(self.gcm, bool_hidden_mansion, max_health, start_inv_list,
-            door_to_close_list)
+            door_to_close_list, bool_start_vacuum)
 
         if bool_boo_checks:
             logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
