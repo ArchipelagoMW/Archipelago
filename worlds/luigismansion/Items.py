@@ -235,7 +235,7 @@ other_filler_items: Dict[str, LMItemData] = {
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x338, ram_byte_size=4, item_count=1)]),
     "Diamond": LMItemData("Money", 124, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B7C, pointer_offset=0x33C, ram_byte_size=4, item_count=1)]),
-    "Dust": LMItemData("Dust", 127, IC.filler),
+    "Dust": LMItemData("Dust Item", 127, IC.filler),
     "Small Heart": LMItemData("Heart", 128, IC.filler,
         update_ram_addr=[LMRamData(0x803D8B40, pointer_offset=0xB8, ram_byte_size=2, item_count=20)]),
     "Large Heart": LMItemData("Heart", 129, IC.filler,
