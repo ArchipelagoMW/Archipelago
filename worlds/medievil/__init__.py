@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, location_tables, location_dictionary
-from .Options import MedievilOption, GoalOptions
+from .Options import MedievilOption, GoalOptions, ExcludeDynamicItems
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -58,11 +58,12 @@ class MedievilWorld(World):
 
 
     def generate_early(self):
-        self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION),
-        self.enabled_location_categories.add(MedievilLocationCategory.WEAPON),
-        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE),
-        self.enabled_location_categories.add(MedievilLocationCategory.FUN),
-        self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END),    
+        self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION)
+        self.enabled_location_categories.add(MedievilLocationCategory.WEAPON)
+        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE)
+        self.enabled_location_categories.add(MedievilLocationCategory.FUN)
+        self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END)
+        self.enabled_location_categories.add(MedievilLocationCategory.DYNAMIC_ITEM)
 
     def create_regions(self):
         # Create Regions
@@ -172,12 +173,14 @@ class MedievilWorld(World):
         create_connection("The Entrance Hall", "Hall of Heroes")
         create_connection("The Time Device", "Hall of Heroes")
         
-        create_connection("Hall of Heroes", "Map") 
+        create_connection("Hall of Heroes", "Map")
                                                                                                                    
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
         for location in location_table:
+            if self.options.exclude_dynamic_items.value == ExcludeDynamicItems.option_true and location.category == MedievilLocationCategory.DYNAMIC_ITEM:
+                continue
             if location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
                     self.player,
