@@ -13,6 +13,8 @@ from functools import wraps
 
 from BaseClasses import CollectionState, get_seed
 from Fill import distribute_items_restrictive
+from test.general import gen_steps
+from worlds import AutoWorld
 from ..bases import setup_solo_multiworld
 from ..options import presets
 from ... import StardewValleyWorld
@@ -75,6 +77,7 @@ def generate_monitor_rules():
     original_set_location_rule = StardewRuleCollector.set_location_rule
     original_collect = StardewValleyWorld.collect
     original_remove = StardewValleyWorld.remove
+    original_call_single = AutoWorld.call_single
 
     class Run:
         def __init__(self, index: int, seed: int):
@@ -83,6 +86,7 @@ def generate_monitor_rules():
             self.monitored_rules = []
             self.collects = []
             self.removes = []
+            self.gen_steps = {}
 
         def apply_patches(self):
             @wraps(original_set_location_rule)
@@ -113,9 +117,23 @@ def generate_monitor_rules():
 
             StardewValleyWorld.remove = patched_remove
 
+            @wraps(AutoWorld.call_single)
+            def patched_call_single(self_, method_name: str, *args, **kwargs):
+                start = time.perf_counter_ns()
+                result = original_call_single(self_, method_name, *args, **kwargs)
+                end = time.perf_counter_ns()
+                self.gen_steps[method_name] = end - start
+                return result
+
+            AutoWorld.call_single = patched_call_single
+
         def run_one_generation(self) -> None:
             multiworld = setup_solo_multiworld(options, self.seed, _cache={})
+
+            fill_start = time.perf_counter_ns()
             distribute_items_restrictive(multiworld)
+            fill_end = time.perf_counter_ns()
+            self.gen_steps['fill'] = fill_end - fill_start
 
             # print(explain(multiworld.get_location('Raccoon Request 5', 1).access_rule.delegate, multiworld.state, mode=ExplainMode.CLIENT))
 
@@ -172,6 +190,12 @@ def generate_monitor_rules():
         avg_removes = total_removes / sum(len(run.removes) for run in runs) if total_removes else 0
         print(f"Total collects: {total_collects / 1_000_000:.2f} ms, average per collect: {avg_collects / 1_000_000:.4f} ms")
         print(f"Total removes: {total_removes / 1_000_000:.2f} ms, average per remove: {avg_removes / 1_000_000:.4f} ms")
+
+        print("\n\nGeneration steps:")
+        for step in gen_steps + ('fill',):
+            total_time = sum(run.gen_steps.get(step, 0) for run in runs)
+            avg_time = total_time / run_count
+            print(f"{step}: {total_time / 1_000_000:.2f} ms total, {avg_time / 1_000_000:.4f} ms average")
 
     run_multiple_generations()
     print_cumulative_results()
