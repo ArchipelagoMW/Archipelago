@@ -40,8 +40,8 @@ class MedievilLocation(Location):
 
     @staticmethod
     def get_name_to_id() -> dict:
-        base_id = 99251000
-        
+        base_id = 99250000
+        region_offset = 1000        
         table_order = [
             "Map",
             "Hall of Heroes",
@@ -71,7 +71,8 @@ class MedievilLocation(Location):
         
         output = {}
         for i, region_name in enumerate(table_order):
-            output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + i)})
+            print({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + i)})
+            output.update({location_data.name: id for id, location_data in enumerate(location_tables[region_name], base_id + (region_offset * i))})
 
         return output
     

@@ -32,3 +32,4 @@ class MedievilOption(PerGameCommonOptions):
     goal: GoalOption
     exclude_ant_caves: ExcludeAntCaves
     exclude_dynamic_items: ExcludeDynamicItems
+    guaranteed_items: GuaranteedItemsOption
