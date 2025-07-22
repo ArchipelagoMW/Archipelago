@@ -179,25 +179,40 @@ class LMWorld(World):
         # There are more clever ways to do this, but all would require much larger changes
         return slot_data  # Tell UT that we have logic to fix
 
+    def set_element_rules(self, location: LMLocation, use_enemizer: bool):
+        region = location.region
+        if len(location.access) != 0:
+            for item in location.access:
+                if item == "Fire Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                elif item == "Water Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
+                elif item == "Ice Element Medal":
+                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                else:
+                    add_rule(location, lambda state, i=item: state.has(i, self.player), "and")
+
+        if use_enemizer:
+            if region in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
+                # if fire, require water
+                if self.ghost_affected_regions[region] == "Fire":
+                    add_rule(location, lambda state: Rules.can_fst_water(state, self.player), "and")
+                # if water, require ice
+                elif self.ghost_affected_regions[region] == "Water":
+                    add_rule(location, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                # if ice, require fire
+                elif self.ghost_affected_regions[region] == "Ice":
+                    add_rule(location, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                else:
+                    pass
     def _set_optional_locations(self):
 
         # Set the flags for progression location by checking player's settings
         if self.options.toadsanity:
             for location, data in TOAD_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
-                entry = LMLocation(self.player, location, region, data)
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                entry: LMLocation = LMLocation(self.player, location, region, data)
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if "Full" in self.options.furnisanity.value:
             for location, data in FURNITURE_LOCATION_TABLE.items():
@@ -205,16 +220,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         else:
             LOCATION_DICT: dict[str, LMLocationData] = {}
@@ -306,16 +312,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         if self.options.gold_mice:
             for location, data in GOLD_MICE_LOCATION_TABLE.items():
@@ -342,28 +339,7 @@ class LMWorld(World):
                     add_rule(entry,
                              lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value),
                              "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys() and location != "Uncle Grimmly, Hermit of the Darkness":
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if self.options.lightsanity:
             for location, data in LIGHT_LOCATION_TABLE.items():
@@ -385,28 +361,7 @@ class LMWorld(World):
                     add_rule(entry, lambda state: state.can_reach_location("Balcony Clear Chest", self.player))
                 elif entry.code == 757 and self.options.enemizer.value != 2:
                     add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
         if self.options.walksanity:
             for location, data in WALK_LOCATION_TABLE.items():
@@ -414,21 +369,12 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 region.locations.append(entry)
         if self.options.boosanity:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
                 region: Region = self.get_region(data.region)
-                entry: Location = LMLocation(self.player, location, region, data)
+                entry: LMLocation = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
                 add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 675 and self.open_doors.get(28) == 0:
@@ -444,28 +390,7 @@ class LMWorld(World):
                         keys = spawn_locations[self.origin_region_name]["door_keys"]
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -495,28 +420,7 @@ class LMWorld(World):
                         for key in keys:
                             add_rule(entry, lambda state, k=key: state.has(k, self.player), "or")
                 entry.code = None
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-                if region.name in GHOST_TO_ROOM.keys():
-                    # if fire, require water
-                    if self.ghost_affected_regions[region.name] == "Fire":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    # if water, require ice
-                    elif self.ghost_affected_regions[region.name] == "Water":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    # if ice, require fire
-                    elif self.ghost_affected_regions[region.name] == "Ice":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    else:
-                        pass
+                self.set_element_rules(entry, True)
                 region.locations.append(entry)
             for location, data in BOOLOSSUS_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
@@ -667,16 +571,7 @@ class LMWorld(World):
                 entry = LMLocation(self.player, location, region, data)
                 if data.require_poltergust:
                     add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-                if len(entry.access) != 0:
-                    for item in entry.access:
-                        if item == "Fire Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                        elif item == "Water Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                        elif item == "Ice Element Medal":
-                            add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                        else:
-                            add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+                self.set_element_rules(entry, False)
                 if location == "Huge Flower (Boneyard)":
                     add_rule(entry, lambda state: state.has("Progressive Flower", self.player, 3))
                 if entry.code is None:
@@ -686,28 +581,7 @@ class LMWorld(World):
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
             add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
-            if len(entry.access) != 0:
-                for item in entry.access:
-                    if item == "Fire Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    elif item == "Water Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    elif item == "Ice Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    else:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-            if region.name in GHOST_TO_ROOM.keys():
-                # if fire, require water
-                if self.ghost_affected_regions[region.name] == "Fire":
-                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                # if water, require ice
-                elif self.ghost_affected_regions[region.name] == "Water":
-                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                # if ice, require fire
-                elif self.ghost_affected_regions[region.name] == "Ice":
-                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                else:
-                    pass
+            self.set_element_rules(entry, True)
             region.locations.append(entry)
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.get_region(data.region)
@@ -718,28 +592,7 @@ class LMWorld(World):
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
             if entry.code == 25 and self.open_doors.get(28) == 0:
                 add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
-            if len(entry.access) != 0:
-                for item in entry.access:
-                    if item == "Fire Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                    elif item == "Water Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                    elif item == "Ice Element Medal":
-                        add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                    else:
-                        add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
-            if region.name in GHOST_TO_ROOM.keys():
-                # if fire, require water
-                if self.ghost_affected_regions[region.name] == "Fire":
-                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
-                # if water, require ice
-                elif self.ghost_affected_regions[region.name] == "Water":
-                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
-                # if ice, require fire
-                elif self.ghost_affected_regions[region.name] == "Ice":
-                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
-                else:
-                    pass
+            self.set_element_rules(entry, True)
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
