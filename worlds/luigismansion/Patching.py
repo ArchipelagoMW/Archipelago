@@ -22,8 +22,8 @@ def __get_item_name(item_data, slot: int):
 
     if item_data["door_id"] != 0:
         return "key_" + str(item_data["door_id"])
-    elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bars" in item_data["name"]:
-        if item_data["type"] == "Freestanding":
+    elif "Bills" in item_data["name"] or "Coins" in item_data["name"] or "Gold Bar" in item_data["name"]:
+        if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
             return "nothing" # Do not spawn the money physically let it be handled remotely
         return "money"
 
@@ -47,42 +47,50 @@ def __get_item_name(item_data, slot: int):
             return "mstar"
 
         case "Gold Diamond":
-            if item_data["type"] == "Freestanding":
+            if item_data["type"] == "Freestanding" or item_data["type"] == "Chest":
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "rdiamond"
         case "Sapphire":
-            if item_data["type"] == "Freestanding":
+            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "sapphire"
         case "Emerald":
-            if item_data["type"] == "Freestanding":
+            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "emerald"
         case "Ruby":
-            if item_data["type"] == "Freestanding":
+            if item_data["type"] in ["Freestanding", "Chest", "BSpeedy", "Mouse"]:
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "ruby"
         case "Diamond":
-            if item_data["type"] == "Freestanding":
+            if item_data["type"] == "Freestanding" or item_data["type"] == "Chest":
                 return "nothing"  # Do not spawn the gem physically let it be handled remotely
             return "diamond"
 
         case "Poison Mushroom":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "mkinoko"
         case "Small Heart":
             return "sheart"
         case "Large Heart":
             return "lheart"
         case "Bomb":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "itembomb"
         case "Ice Trap":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "ice"
         case "Banana Trap":
+            if item_data["type"] == "Freestanding":
+                return "nothing"
             return "banana"
 
         case "Boo Radar":
             return "gameboy"
-        case "Poltergust 4000":
+        case "Progressive Vacuum":
             return "vbody"
 
     return "nothing"
@@ -91,11 +99,11 @@ def __get_item_name(item_data, slot: int):
 def update_event_info(event_info, boo_checks: bool, output_data):
     # Removes events that we don't want to trigger at all in the mansion, such as some E. Gadd calls, warps after
     # boss battles / grabbing boss keys, and various cutscenes etc. Also remove Mario Items/Elemental Item events
-    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 54, 69, 70, 73, 80, 81, 85, 91]
+    events_to_remove = [7, 12, 15, 18, 19, 20, 21, 41, 42, 45, 47, 54, 69, 70, 73, 80, 81, 85, 91]
 
     # Only remove the boo checks if the player does not want them.
     if not boo_checks:
-        events_to_remove += [16, 47, 96]
+        events_to_remove += [16, 96]
 
     event_info.info_file_field_entries = list(filter(
         lambda info_entry: not (info_entry["EventNo"] in events_to_remove or (info_entry["EventNo"] == 93 and
@@ -174,20 +182,20 @@ def update_event_info(event_info, boo_checks: bool, output_data):
             x["disappear_flag"] = 22
             x["EventIf"] = 2
 
-        # Update the Washroom event trigger to be area entry based
-        # Also updates the event disappear trigger to be flag 28
-        # Also updates the EventFlag to 0, so this event always plays
-        if boo_checks and x["EventNo"] == 47:
-            x["pos_x"] = -1725.000000
-            x["pos_y"] = 100.000000
-            x["pos_z"] = -4150.000000
-            x["EventFlag"] = 0
-            x["disappear_flag"] = 28
-            x["EventIf"] = 5
-            x["EventArea"] = 380
-            x["EventLock"] = 1
-            x["PlayerStop"] = 1
-            x["EventLoad"] = 0
+        # # Update the Washroom event trigger to be area entry based
+        # # Also updates the event disappear trigger to be flag 28
+        # # Also updates the EventFlag to 0, so this event always plays
+        # if boo_checks and x["EventNo"] == 47:
+        #     x["pos_x"] = -1725.000000
+        #     x["pos_y"] = 100.000000
+        #     x["pos_z"] = -4150.000000
+        #     x["EventFlag"] = 0
+        #     x["disappear_flag"] = 28
+        #     x["EventIf"] = 5
+        #     x["EventArea"] = 380
+        #     x["EventLock"] = 1
+        #     x["PlayerStop"] = 1
+        #     x["EventLoad"] = 0
 
         # Update the King Boo event trigger to be area entry based
         if boo_checks and x["EventNo"] == 16:
@@ -1333,10 +1341,109 @@ def update_boo_table(telesa_info, output_data):
 
 
 def update_iyapoo_table(iyapoo_table, output_data):
-    for iyapoo in iyapoo_table.info_file_field_entries:
-        iyapoo["other"] = "----"
+    if output_data["Options"]["speedy_spirits"] == 0 and output_data["Options"]["gold_mice"] == 0:
+        return
 
-    #TODO Define more features here
+    slot_num: int = int(output_data["Slot"])
+    output_loc = output_data["Locations"]
+    for iyapoo in iyapoo_table.info_file_field_entries:
+        item_data = {}
+        if output_data["Options"]["speedy_spirits"] == 0 and "iyapoo" in iyapoo["name"]:
+            continue
+        match iyapoo["name"]:
+            case "iyapoo1":
+                item_data = output_loc["Storage Room Speedy Spirit"]
+            case "iyapoo2":
+                item_data = output_loc["Billiards Room Speedy Spirit"]
+            case "iyapoo3":
+                item_data = output_loc["Dining Room Speedy Spirit"]
+            case "iyapoo4":
+                item_data = output_loc["Study Speedy Spirit"]
+            case "iyapoo5":
+                item_data = output_loc["Twins' Room Speedy Spirit"]
+            case "iyapoo6":
+                item_data = output_loc["Nana's Room Speedy Spirit"]
+            case "iyapoo7":
+                item_data = output_loc["Kitchen Speedy Spirit"]
+            case "iyapoo8":
+                item_data = output_loc["Sealed Room Speedy Spirit"]
+            case "iyapoo9":
+                item_data = output_loc["Rec Room Speedy Spirit"]
+            case "iyapoo10":
+                item_data = output_loc["Wardrobe Speedy Spirit"]
+            case "iyapoo11":
+                item_data = output_loc["Cellar Speedy Spirit"]
+            case "iyapoo12":
+                item_data = output_loc["Breaker Room Speedy Spirit"]
+            case "iyapoo13":
+                item_data = output_loc["Hidden Room Speedy Spirit"]
+            case "iyapoo14":
+                item_data = output_loc["Conservatory Speedy Spirit"]
+            case "iyapoo15":
+                item_data = output_loc["Nursery Speedy Spirit"]
+            case "iyapoo15":
+                item_data = output_loc["Nursery Speedy Spirit"]
+            case "goldrat0":
+                item_data = output_loc["1F Hallway Chance Mouse"]
+            case "goldrat1":
+                item_data = output_loc["2F Rear Hallway Chance Mouse"]
+            case "goldrat2":
+                item_data = output_loc["Kitchen Chance Mouse"]
+            case "goldrat3":
+                item_data = output_loc["Tea Room Chance Mouse"]
+            case "goldrat4":
+                item_data = output_loc["Sealed Room Chance Mouse"]
+            case "goldrat5":
+                item_data = output_loc["Dining Room Cheese Mouse"]
+            case "goldrat6":
+                item_data = output_loc["Fortune Teller Cheese Mouse"]
+            case "goldrat7":
+                item_data = output_loc["Study Cheese Gold Mouse"]
+            case "goldrat8":
+                item_data = output_loc["Tea Room Cheese Mouse"]
+            case "goldrat9":
+                item_data = output_loc["Safari Room Cheese Mouse"]
+
+        treasure_item_name = __get_item_name(item_data, slot_num)
+        coin_amount = 0
+        bill_amount = 0
+        gold_bar_amount = 0
+        sapphire_amount = 0
+        emerald_amount = 0
+        ruby_amount = 0
+
+        if int(item_data["player"]) == slot_num and item_data["name"] in ALL_ITEMS_TABLE.keys():
+            lm_item_data = ALL_ITEMS_TABLE[item_data["name"]]
+            if lm_item_data.update_ram_addr and any(update_addr.item_count for update_addr in
+                    lm_item_data.update_ram_addr if update_addr.item_count and update_addr.item_count > 0):
+                item_amt = next(update_addr.item_count for update_addr in lm_item_data.update_ram_addr if
+                   update_addr.item_count and update_addr.item_count > 0)
+
+                if "Coins" in item_data["name"]:
+                    if "Bills" in item_data["name"]:
+                        coin_amount = item_amt
+                        bill_amount = item_amt
+                    else:
+                        coin_amount = item_amt
+                elif "Bills" in item_data["name"]:
+                    bill_amount = item_amt
+                elif "Gold Bar" in item_data["name"]:
+                    gold_bar_amount = item_amt
+                elif "Sapphire" in item_data["name"]:
+                    sapphire_amount = item_amt
+                elif "Emerald" in item_data["name"]:
+                    emerald_amount = item_amt
+                elif "Ruby" in item_data["name"]:
+                    ruby_amount = item_amt
+
+        index = iyapoo_table.info_file_field_entries.index(iyapoo)
+        iyapoo_table.info_file_field_entries[index]["coin"] = coin_amount
+        iyapoo_table.info_file_field_entries[index]["bill"] = bill_amount
+        iyapoo_table.info_file_field_entries[index]["gold"] = gold_bar_amount
+        iyapoo_table.info_file_field_entries[index]["sapphire"] = sapphire_amount
+        iyapoo_table.info_file_field_entries[index]["emerald"] = emerald_amount
+        iyapoo_table.info_file_field_entries[index]["ruby"] = ruby_amount
+        iyapoo_table.info_file_field_entries[index].update({"other": treasure_item_name})
 
 
 def apply_new_ghost(enemy_info_entry, element):

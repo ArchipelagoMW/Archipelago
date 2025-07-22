@@ -6,11 +6,12 @@ from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 import dolphin_memory_engine as dme
 
 from .iso_helper.lm_rom import LMUSAAPPatch
-from . import CLIENT_VERSION
 from .Items import *
 from .Locations import ALL_LOCATION_TABLE, SELF_LOCATIONS_TO_RECV, BOOLOSSUS_AP_ID_LIST
 from .Helper_Functions import StringByteFunction as sbf
 from .lm.Wallet.Wallet import Wallet
+
+CLIENT_VERSION = "V0.4.11"
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -190,7 +191,7 @@ class LMContext(CommonContext):
         self.game_clear = False
         self.last_not_ingame = time.time()
         self.boosanity = False
-        self.boo_washroom_count = None
+        #self.boo_washroom_count = None
         self.boo_balcony_count = None
         self.boo_final_count = None
         self.received_trap_link = False
@@ -254,9 +255,9 @@ class LMContext(CommonContext):
             if not args["slot_data"]["apworld version"] == CLIENT_VERSION:
                 local_version = str(args["slot_data"]["apworld version"]) if (
                     str(args["slot_data"]["apworld version"])) else "N/A"
-                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion APWorld version. " +
-                    f"The client version is {CLIENT_VERSION}! Please verify you are using the same APWorld as the " +
-                    f"generator, which is '{local_version}'")
+                raise Utils.VersionException("Error! Server was generated with a different Luigi's Mansion " +
+                    f"APWorld version.\nThe client version is {CLIENT_VERSION}!\nPlease verify you are using the " +
+                    f"same APWorld as the generator, which is '{local_version}'")
 
             arg_seed = str(args["slot_data"]["seed"])
             iso_seed = read_string(0x80000001, len(arg_seed))
@@ -265,9 +266,9 @@ class LMContext(CommonContext):
                                 "Please verify that you are using the right ISO/seed/APLM file.")
 
             self.boosanity = bool(args["slot_data"]["boosanity"])
-            self.pickup_anim_on = bool(args["slot_data"]["pickup animation"])
-            self.wallet.rank_requirement = int(args["slot_data"]["rank requirement"])
-            self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
+            self.pickup_anim_on = True if int(args["slot_data"]["pickup animation"]) == 1 else False
+            self.rank_req = int(args["slot_data"]["rank requirement"])
+            #self.boo_washroom_count = int(args["slot_data"]["washroom boo count"])
             self.boo_balcony_count = int(args["slot_data"]["balcony boo count"])
             self.boo_final_count = int(args["slot_data"]["final boo count"])
             self.luigimaxhp = int(args["slot_data"]["luigi max health"])
@@ -317,7 +318,7 @@ class LMContext(CommonContext):
 
     def make_gui(self):
         ui = super().make_gui()
-        ui.base_title = f"Luigi's Mansion Client v{CLIENT_VERSION}"
+        ui.base_title = f"Luigi's Mansion Client {CLIENT_VERSION}"
         if tracker_loaded:
             ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
@@ -383,7 +384,7 @@ class LMContext(CommonContext):
             return False
 
         # These are the only valid maps we want Luigi to have checks with or do health detection with.
-        if curr_map_id in [2, 9, 10, 11, 13]:
+        if curr_map_id in [2, 3, 6, 9, 10, 11, 13]:
             if not time.time() > (self.last_not_ingame + (CHECKS_WAIT*LONGER_MODIFIER)):
                 return False
 
@@ -466,6 +467,44 @@ class LMContext(CommonContext):
             }
         }])
 
+    def check_ram_location(self, loc_data, addr_to_update, curr_map_id, map_to_check) -> bool:
+        """
+        Checks a provided location in ram to see if the location was interacted with. This includes
+        furniture, plants, entering rooms,
+        """
+        # TODO optimize all other cases for reading when a pointer is there vs not.
+        match loc_data.type:
+            case "Furniture" | "Plant":
+                # Check all possible furniture addresses.
+                for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
+                    # Only check if the current address is a pointer
+                    current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
+                    if not check_if_addr_is_pointer(current_addr):
+                        continue
+
+                    furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
+                    if not furn_id == loc_data.jmpentry:
+                        continue
+
+                    furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
+                    if furn_flag > 0:
+                        return True
+            case "Map":
+                if curr_map_id in map_to_check:
+                    return True
+            case _:
+                byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
+                if not addr_to_update.pointer_offset is None:
+                    curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
+                        [addr_to_update.pointer_offset]), byte_size))
+                    if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                        return True
+                else:
+                    curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
+                    if (curr_val & (1 << addr_to_update.bit_position)) > 0:
+                        return True
+        return False
+
     async def lm_check_locations(self):
         if not (self.check_ingame() and self.check_alive()):
             return
@@ -476,21 +515,12 @@ class LMContext(CommonContext):
         for mis_loc in self.missing_locations:
             local_loc = self.location_names.lookup_in_game(mis_loc)
             lm_loc_data = ALL_LOCATION_TABLE[local_loc]
-
-            if current_map_id == 11:
-                if not mis_loc in BOOLOSSUS_AP_ID_LIST:
-                    continue
-
-                for addr_to_update in lm_loc_data.update_ram_addr:
-                    current_boo_state = dme.read_byte(addr_to_update.ram_addr)
-                    if (current_boo_state & (1 << addr_to_update.bit_position)) > 0:
-                        self.locations_checked.add(mis_loc)
+            if current_map_id not in lm_loc_data.map_id:
+                continue
 
             # If in main mansion map
-            elif current_map_id == 2:
+            if current_map_id == 2:
                 current_room_id = dme.read_word(dme.follow_pointers(ROOM_ID_ADDR, [ROOM_ID_OFFSET]))
-
-                #TODO optimize all other cases for reading when a pointer is there vs not.
                 for addr_to_update in lm_loc_data.update_ram_addr:
                     # Only check locations that are currently in the same room as us.
                     room_to_check = addr_to_update.in_game_room_id if not addr_to_update.in_game_room_id is None \
@@ -499,33 +529,13 @@ class LMContext(CommonContext):
                     if not room_to_check == current_room_id:
                         continue
 
-                    match lm_loc_data.type:
-                        case "Furniture" | "Plant":
-                            # Check all possible furniture addresses. #TODO Find a way to not check all 600+
-                            for current_offset in range(0, FURNITURE_ADDR_COUNT, 4):
-                                # Only check if the current address is a pointer
-                                current_addr = FURNITURE_MAIN_TABLE_ID + current_offset
-                                if not check_if_addr_is_pointer(current_addr):
-                                    continue
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
+                        self.locations_checked.add(mis_loc)
 
-                                furn_id = dme.read_word(dme.follow_pointers(current_addr, [FURN_ID_OFFSET]))
-                                if not furn_id == lm_loc_data.jmpentry:
-                                    continue
-
-                                furn_flag = dme.read_word(dme.follow_pointers(current_addr, [FURN_FLAG_OFFSET]))
-                                if furn_flag > 0:
-                                    self.locations_checked.add(mis_loc)
-                        case _:
-                            byte_size = 1 if addr_to_update.ram_byte_size is None else addr_to_update.ram_byte_size
-                            if not addr_to_update.pointer_offset is None:
-                                curr_val = int.from_bytes(dme.read_bytes(dme.follow_pointers(addr_to_update.ram_addr,
-                    [addr_to_update.pointer_offset]), byte_size))
-                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
-                                    self.locations_checked.add(mis_loc)
-                            else:
-                                curr_val = int.from_bytes(dme.read_bytes(addr_to_update.ram_addr, byte_size))
-                                if (curr_val & (1 << addr_to_update.bit_position)) > 0:
-                                    self.locations_checked.add(mis_loc)
+            else:
+                for addr_to_update in lm_loc_data.update_ram_addr:
+                    if self.check_ram_location(lm_loc_data, addr_to_update, current_map_id, lm_loc_data.map_id):
+                        self.locations_checked.add(mis_loc)
 
         await self.check_locations(self.locations_checked)
 
@@ -556,10 +566,10 @@ class LMContext(CommonContext):
             return
 
         # Always adjust the Vacuum speed as saving and quitting or going to E. Gadds lab could reset it back to normal.
-        if any([netItem.item for netItem in self.items_received if netItem.item == 8064]):
+        vac_count = len(list(netItem.item for netItem in self.items_received if netItem.item == 8064))
+        if vac_count >= 2:
             vac_speed = "3800000F"
-            vac_item = next(netItem.item for netItem in self.items_received if netItem.item == 8064)
-            lm_item_name = self.item_names.lookup_in_game(vac_item)
+            lm_item_name = self.item_names.lookup_in_game(8064)
             lm_item = ALL_ITEMS_TABLE[lm_item_name]
             for addr_to_update in lm_item.update_ram_addr:
                 dme.write_bytes(addr_to_update.ram_addr, bytes.fromhex(vac_speed))
@@ -571,7 +581,6 @@ class LMContext(CommonContext):
                     "that you saw this message and please explain what you last did to trigger it.")
                 self.debug_flag_ten = True
 
-        # TODO review this for king boo stuff in DOL_Updater instead.
         # Always adjust Pickup animation issues if the user turned pick up animations off.
         if not self.pickup_anim_on:
             crown_helper_val = "00000001"
@@ -595,9 +604,6 @@ class LMContext(CommonContext):
                     dme.write_byte(addr_to_update.ram_addr, curr_val)
 
             curr_boo_count = len(set(boo_received_list))
-            if curr_boo_count >= self.boo_washroom_count:
-                boo_val = dme.read_byte(BOO_WASHROOM_FLAG_ADDR)
-                dme.write_byte(BOO_WASHROOM_FLAG_ADDR, (boo_val | (1 << BOO_WASHROOM_FLAG_BIT)))
             if curr_boo_count >= self.boo_balcony_count:
                 boo_val = dme.read_byte(BOO_BALCONY_FLAG_ADDR)
                 dme.write_byte(BOO_BALCONY_FLAG_ADDR, (boo_val | (1 << BOO_BALCONY_FLAG_BIT)))
@@ -607,7 +613,7 @@ class LMContext(CommonContext):
         return
 
 async def dolphin_sync_task(ctx: LMContext):
-    logger.info("Using Luigi's Mansion client v" + CLIENT_VERSION)
+    logger.info(f"Using Luigi's Mansion client {CLIENT_VERSION}")
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
 
     while not ctx.exit_event.is_set():
@@ -776,7 +782,7 @@ async def give_player_items(ctx: LMContext):
 
 def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
     Utils.init_logging("Luigi's Mansion Client")
-    logger.info("Starting LM Client v" + CLIENT_VERSION)
+    logger.info(f"Starting LM Client {CLIENT_VERSION}")
     server_address: str = ""
 
     if output_data:
@@ -784,11 +790,12 @@ def main(output_data: Optional[str] = None, lm_connect=None, lm_password=None):
         try:
             lm_usa_manifest = lm_usa_patch.read_contents(output_data)
             server_address = lm_usa_manifest["server"]
-            asyncio.run(lm_usa_patch.patch(output_data))
+            lm_usa_patch.patch(output_data)
         except Exception as ex:
             logger.error("Unable to patch your Luigi's Mansion ROM as expected. Additional details:\n" + str(ex))
             Utils.messagebox("Cannot Patch Luigi's Mansion", "Unable to patch your Luigi's Mansion ROM as " +
                 "expected. Additional details:\n" + str(ex), True)
+            raise ex
 
 
     async def _main(connect, password):

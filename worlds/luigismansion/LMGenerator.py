@@ -173,8 +173,10 @@ class LuigisMansionRandomizer:
         bool_randomize_mice: bool = True if int(self.output_data["Options"]["gold_mice"]) == 1 else False
         bool_hidden_mansion: bool = True if int(self.output_data["Options"]["hidden_mansion"]) == 1 else False
         walk_speed: int = int(self.output_data["Options"]["walk_speed"])
-        bool_pickup_anim_enabled: bool = True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
-        bool_fear_anim_enabled: bool = True if int(self.output_data["Options"]["enable_pickup_animation"]) == 1 else False
+        bool_pickup_anim_enabled: bool = \
+            True if int(self.output_data["Options"]["enable_fear_animation"]) == 1 else False
+        bool_fear_anim_enabled: bool = \
+            True if int(self.output_data["Options"]["enable_pickup_animation"]) == 1 else False
         player_name: str = str(self.output_data["Name"])
         king_boo_health: int = int(self.output_data["Options"]["king_boo_health"])
         random_spawn: str = str(self.output_data["Options"]["spawn"])
@@ -182,7 +184,7 @@ class LuigisMansionRandomizer:
 
         # Boo related options
         bool_boo_checks: bool = True if self.output_data["Options"]["boo_gates"] == 1 else False
-        washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
+        #washroom_boo_count: int = int(self.output_data["Options"]["washroom_boo_count"])
         balcony_boo_count: int = int(self.output_data["Options"]["balcony_boo_count"])
         final_boo_count: int = int(self.output_data["Options"]["final_boo_count"])
 
@@ -206,13 +208,11 @@ class LuigisMansionRandomizer:
 
         if bool_boo_checks:
             logger.info("Boo Gates was enabled, updating all of the common events with the customized version.")
-            boo_list_events = ["16", "47", "96"]
+            boo_list_events = ["16", "96"]
             str_move_type = None
             for event_no in boo_list_events:
                 if event_no == "16":
                     required_boo_count = final_boo_count
-                elif event_no == "47":
-                    required_boo_count = washroom_boo_count
                 else:
                     required_boo_count = balcony_boo_count
                     str_move_type = "MOVEOUTSIDE" if str(self.output_data["Options"]["spawn"]) in \
@@ -253,6 +253,7 @@ class LuigisMansionRandomizer:
         # If you forget this, you will get an Invalid read error on a certain memory address typically.
         logger.info("Saving all files back into the main mansion file, then generating the new ISO file...")
         self.map_two_file.save_changes()
+        logger.info("map2.szp Yay0 check...")
         self.gcm.changed_files["files/Map/map2.szp"] = Yay0.compress(self.map_two_file.data)
 
         # Generator function to combine all necessary files into an ISO file.

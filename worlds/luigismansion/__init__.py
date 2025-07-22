@@ -27,9 +27,6 @@ from .Regions import *
 from . import Rules
 from .iso_helper.lm_rom import LMPlayerContainer
 
-
-CLIENT_VERSION = "0.4.10"
-
 def run_client(*args):
     from .LMClient import main  # lazy import
     launch_subprocess(main, name="LuigiMansionClient", args=args)
@@ -69,9 +66,11 @@ class LMWeb(WebWorld):
         ]),
         OptionGroup("Access Options", [
             LuigiOptions.RankRequirement,
+            LuigiOptions.GameMode,
+            LuigiOptions.VacuumStart,
             LuigiOptions.MarioItems,
             LuigiOptions.BooGates,
-            LuigiOptions.WashroomBooCount,
+            # LuigiOptions.WashroomBooCount,
             LuigiOptions.BalconyBooCount,
             LuigiOptions.FinalBooCount,
             LuigiOptions.Enemizer,
@@ -156,7 +155,7 @@ class LMWorld(World):
     }
     settings: LuigisMansionSettings
     item_name_groups = get_item_names_per_category()
-    required_client_version = (0, 6, 0)
+    required_client_version = (0, 6, 2)
     web = LMWeb()
 
     using_ut: bool # so we can check if we're using UT only once
@@ -204,6 +203,8 @@ class LMWorld(World):
             for location, data in FURNITURE_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -216,7 +217,12 @@ class LMWorld(World):
                             add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
                 region.locations.append(entry)
         else:
-            LOCATION_DICT = {}
+            LOCATION_DICT: dict[str, LMLocationData] = {}
+            if self.options.game_mode.value == 1:
+                for name, loc_data in FURNITURE_LOCATION_TABLE.items():
+                    if not loc_data.require_poltergust:
+                        LOCATION_DICT.update({name: loc_data})
+
             for group in self.options.furnisanity.value:
                 match group:
                     case "Ceiling":
@@ -259,19 +265,47 @@ class LMWorld(World):
                             **LOCATION_DICT,
                             **DRAWERS_LOCATION_TABLE
                         }
-                    case "Treasures":
-                        LOCATION_DICT = {
-                            **LOCATION_DICT,
-                            **TREASURES_LOCATION_TABLE
-                        }
                     case "Plants":
                         LOCATION_DICT = {
                             **LOCATION_DICT,
                             **PLANT_LOCATION_TABLE
                         }
+                    case "Treasures":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **TREASURES_LOCATION_TABLE
+                        }
+                    case "Basement":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **BASEMENT_LOCS
+                        }
+                    case "1st Floor":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **FIRST_FLOOR_LOCS
+                        }
+                    case "2nd Floor":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **SECOND_FLOOR_LOCS
+                        }
+                    case "Attic":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **ATTIC_LOCS
+                        }
+                    case "Roof":
+                        LOCATION_DICT = {
+                            **LOCATION_DICT,
+                            **ROOF_LOCS
+                        }
+
             for location, data in LOCATION_DICT.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -288,17 +322,20 @@ class LMWorld(World):
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Blackout", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
         if self.options.speedy_spirits:
             for location, data in SPEEDY_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Blackout", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
         if self.options.portrification:
             for location, data in PORTRAIT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 624 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if entry.code == 627:
@@ -332,6 +369,8 @@ class LMWorld(World):
             for location, data in LIGHT_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if entry.code not in [771, 775, 776]:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 741 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if entry.code == 745:
@@ -373,6 +412,8 @@ class LMWorld(World):
             for location, data in WALK_LOCATION_TABLE.items():
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -389,6 +430,7 @@ class LMWorld(World):
                 region: Region = self.get_region(data.region)
                 entry: Location = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if entry.code == 675 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if data.code == 674 and self.open_doors.get(27) == 0:
@@ -429,6 +471,7 @@ class LMWorld(World):
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
                 add_rule(entry, lambda state: state.has("Ice Element Medal", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
         else:
             for location, data in ROOM_BOO_LOCATION_TABLE.items():
@@ -437,6 +480,7 @@ class LMWorld(World):
                 entry.address = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: state.has("Boo Radar", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if data.code == 675 and self.open_doors.get(28) == 0:
                     add_rule(entry, lambda state: state.has("Twins Bedroom Key", self.player), "and")
                 if data.code == 674 and self.open_doors.get(27) == 0:
@@ -481,6 +525,7 @@ class LMWorld(World):
                 entry.code = None
                 entry.place_locked_item(Item("Boo", ItemClassification.progression, None, self.player))
                 add_rule(entry, lambda state: state.has("Ice Element Medal", self.player), "and")
+                add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
 
         rankcalc = 0
@@ -496,19 +541,21 @@ class LMWorld(World):
             rankcalc = 5
         loc = self.multiworld.get_location("King Boo", self.player)
         add_rule(loc, lambda state: state.has("Gold Diamond", self.player, rankcalc), "and")
+        add_rule(loc, lambda state: state.has("Progressive Vacuum", self.player), "and")
 
     def generate_early(self):
         if (self.options.boosanity == 1 or self.options.boo_gates == 1) and self.options.boo_radar == 2:
             raise Options.OptionError(f"When Boo Radar is excluded, neither Boosanity nor Boo Gates can be active "
                                       f"This error was found in {self.player_name}'s Luigi's Mansion world. "
                                       f"Their YAML must be fixed")
-        
         if hasattr(self.multiworld, "re_gen_passthrough"):
             if "Luigi's Mansion" in self.multiworld.re_gen_passthrough:
                 self.using_ut = True
                 passthrough = self.multiworld.re_gen_passthrough["Luigi's Mansion"]
                 self.options.rank_requirement.value = passthrough["rank requirement"]
+                self.options.game_mode.value = passthrough["game mode"]
                 self.options.good_vacuum.value = passthrough["better vacuum"]
+                self.options.vacuum_start.value = passthrough["vacuum start"]
                 self.options.door_rando.value = passthrough["door rando"]
                 self.options.toadsanity.value = passthrough["toadsanity"]
                 self.options.gold_mice.value = passthrough["gold_mice"]
@@ -520,7 +567,7 @@ class LMWorld(World):
                 self.options.walksanity.value = passthrough["walksanity"]
                 self.options.mario_items.value = passthrough["clairvoya requirement"]
                 self.options.boo_gates.value = passthrough["boo gates"]
-                self.options.washroom_boo_count.value = passthrough["washroom boo count"]
+                # self.options.washroom_boo_count.value = passthrough["washroom boo count"]
                 self.options.balcony_boo_count.value = passthrough["balcony boo count"]
                 self.options.final_boo_count.value = passthrough["final boo count"]
                 self.options.enemizer.value = passthrough["enemizer"]
@@ -529,6 +576,15 @@ class LMWorld(World):
                 self.using_ut = False
         else:
             self.using_ut = False
+
+        if self.options.game_mode.value == 1:
+            self.options.vacuum_start.value = 0
+            self.options.door_rando.value = 3
+
+        if self.options.vacuum_start.value:
+            self.options.start_inventory.value["Progressive Vacuum"] = (
+                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
+            )
 
         if self.using_ut:
             # We know we're in second gen
@@ -549,11 +605,14 @@ class LMWorld(World):
             # We know we're in second gen
             self.open_doors = passthrough["door rando list"]  # this should be the same list from slot data
             self.open_doors = {int(k): v for k, v in self.open_doors.items()}
-        elif self.options.door_rando == 1:
+        elif self.options.door_rando == 1 or self.options.door_rando == 2:
             k = list(self.open_doors.keys())
             v = list(self.open_doors.values())
             self.open_doors = dict(zip(self.random.sample(k, k=len(self.open_doors)),
                                        v))
+            if self.options.door_rando.value == 2:
+                for door_num in [3, 42, 59, 72]:
+                    self.open_doors[door_num] = 0
             spawn_doors = copy.copy(spawn_locations[self.origin_region_name]["door_ids"])
             if spawn_doors:
                 for door in spawn_locations[self.origin_region_name]["door_ids"]:
@@ -561,6 +620,9 @@ class LMWorld(World):
                         spawn_doors.remove(door)
                 if not spawn_doors:
                     self.spawn_full_locked: bool = True
+        elif self.options.door_rando.value == 3:
+            for door_id in self.open_doors.keys():
+                self.open_doors[door_id] = 1
 
         # If player wants to start with boo radar or good vacuum
         if self.options.boo_radar == 0:
@@ -569,8 +631,8 @@ class LMWorld(World):
             )
 
         if self.options.good_vacuum == 0:
-            self.options.start_inventory.value["Poltergust 4000"] = (
-                    self.options.start_inventory.value.get("Poltergust 4000", 0) + 1
+            self.options.start_inventory.value["Progressive Vacuum"] = (
+                    self.options.start_inventory.value.get("Progressive Vacuum", 0) + 1
             )
 
         if self.options.boosanity.value == 0 and self.options.balcony_boo_count.value > 31:
@@ -583,7 +645,7 @@ class LMWorld(World):
         if self.options.boo_gates.value == 0:
             self.options.final_boo_count.value = 0
             self.options.balcony_boo_count.value = 0
-            self.options.washroom_boo_count.value = 0
+            # self.options.washroom_boo_count.value = 0
 
     def create_regions(self):
         # Add all randomizable regions
@@ -594,13 +656,17 @@ class LMWorld(World):
 
         # Assign each location to their region
         for location, data in BASE_LOCATION_TABLE.items():
-            if location == "Luigi's Courage" or location == "E. Gadd's Gift":
+            if data.code in [708, 853, 925, 926, 927]:
                 region = self.get_region(self.origin_region_name)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 region.locations.append(entry)
             else:
                 region = self.get_region(data.region)
                 entry = LMLocation(self.player, location, region, data)
+                if data.require_poltergust:
+                    add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
                 if len(entry.access) != 0:
                     for item in entry.access:
                         if item == "Fire Element Medal":
@@ -619,6 +685,7 @@ class LMWorld(World):
         for location, data in ENEMIZER_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
+            add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
             if len(entry.access) != 0:
                 for item in entry.access:
                     if item == "Fire Element Medal":
@@ -645,6 +712,7 @@ class LMWorld(World):
         for location, data in CLEAR_LOCATION_TABLE.items():
             region = self.get_region(data.region)
             entry = LMLocation(self.player, location, region, data)
+            add_rule(entry, lambda state: state.has("Progressive Vacuum", self.player), "and")
             if entry.code == 5:
                 add_rule(entry,
                          lambda state: state.has_group("Mario Item", self.player, self.options.mario_items.value))
@@ -660,6 +728,18 @@ class LMWorld(World):
                         add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
                     else:
                         add_rule(entry, lambda state, i=item: state.has(i, self.player), "and")
+            if region.name in GHOST_TO_ROOM.keys():
+                # if fire, require water
+                if self.ghost_affected_regions[region.name] == "Fire":
+                    add_rule(entry, lambda state: Rules.can_fst_water(state, self.player), "and")
+                # if water, require ice
+                elif self.ghost_affected_regions[region.name] == "Water":
+                    add_rule(entry, lambda state: Rules.can_fst_ice(state, self.player), "and")
+                # if ice, require fire
+                elif self.ghost_affected_regions[region.name] == "Ice":
+                    add_rule(entry, lambda state: Rules.can_fst_fire(state, self.player), "and")
+                else:
+                    pass
             region.locations.append(entry)
         self._set_optional_locations()
         connect_regions(self)
@@ -682,9 +762,9 @@ class LMWorld(World):
                 copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else 1 - exclude.count(item)
                 for _ in range(copies_to_place):
                     self.itempool.append(self.create_item(item))
-        if self.options.good_vacuum == 2:
-            exclude += ["Poltergust 4000"]
-        if self.options.boo_radar == 2:
+        if self.options.good_vacuum.value == 2:
+            exclude += ["Progressive Vacuum"]
+        if self.options.boo_radar.value == 2:
             exclude += ["Boo Radar"]
         item_list = []
         for item, data in ITEM_TABLE.items():
@@ -694,9 +774,13 @@ class LMWorld(World):
                 copies_to_place = 5
             elif data.code == 140:
                 copies_to_place = 3
+            elif data.code == 64:
+                    copies_to_place = 2
             else:
                 copies_to_place = 1
             copies_to_place = 0 if copies_to_place - exclude.count(item) <= 0 else copies_to_place - exclude.count(item)
+            if data.code == 64 and copies_to_place < 1:
+                raise Options.OptionError(f"{self.player_name} has excluded too many copies of Progressive Vacuum and the seed cannot be completed")
             for _ in range(copies_to_place):
                 item_list.append(item)
                 self.itempool.append(self.create_item(item))
@@ -752,7 +836,7 @@ class LMWorld(World):
         filler_weights = [self.options.bundle_weight.value, self.options.gems_weight.value,  # coins & bills, sapphire
                           self.options.gems_weight.value, self.options.gems_weight.value, diamweight,
                           # emerald, ruby, diamond
-                          self.options.nothing_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
+                          self.options.dust_weight.value, self.options.heart_weight.value, lheart,  # poison mush, nothing, sm heart, l heart
                           self.options.coin_weight.value, twencoin, thircoin,
                           # banana, 10coin, 20coin, 30coin
                           self.options.bill_weight.value, twenbill, self.options.bars_weight.value,
@@ -898,6 +982,8 @@ class LMWorld(World):
 
     # TODO: UPDATE FOR LM tracker
     def fill_slot_data(self):
+        from .LMClient import CLIENT_VERSION
+
         return {
             "rank requirement": self.options.rank_requirement.value,
             "better vacuum": self.options.good_vacuum.value,
@@ -914,7 +1000,7 @@ class LMWorld(World):
             "walksanity": self.options.walksanity.value,
             "clairvoya requirement": self.options.mario_items.value,
             "boo gates": self.options.boo_gates.value,
-            "washroom boo count": self.options.washroom_boo_count.value,
+            # "washroom boo count": self.options.washroom_boo_count.value,
             "balcony boo count": self.options.balcony_boo_count.value,
             "final boo count": self.options.final_boo_count.value,
             "enemizer": self.options.enemizer.value,

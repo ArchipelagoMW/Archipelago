@@ -5,11 +5,12 @@ from pkgutil import get_data
 from typing import Optional
 
 from gclib.gcm import GCM
-from gclib.rarc import RARC, RARCNode, RARCFileEntry
+from gclib.rarc import RARC, RARCFileEntry
 from gclib.yaz0_yay0 import Yay0
 
 from .. import ALWAYS_HINT
 from .. Hints import PORTRAIT_HINTS
+from CommonClient import logger
 
 MAIN_PKG_NAME = "worlds.luigismansion.LMGenerator"
 
@@ -98,7 +99,7 @@ def update_blackout_event(gcm: GCM) -> GCM:
 
 # Updates all common events
 def update_common_events(gcm: GCM, randomize_mice: bool) -> GCM:
-    list_custom_events = ["03", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
+    list_custom_events = ["03", "10", "22", "24", "29", "33", "35", "38", "50", "61", "64", "65",
      "66", "67", "68", "71", "72", "74", "75", "82", "86", "87", "88", "89", "90"]
     if randomize_mice:
         list_custom_events += ["95", "97", "98", "99", "100"]
@@ -171,6 +172,7 @@ def randomize_music(gcm: GCM, seed: str) -> GCM:
              event_file.name == name_to_find).data = updated_event
 
         event_arc.save_changes()
+        logger.info("Randomize music Yay0 check...")
         gcm.changed_files[lm_event.file_path] = Yay0.compress(event_arc.data)
     return gcm
 
@@ -399,5 +401,6 @@ def __update_custom_event(gcm: GCM, event_number: str, delete_all_other_files: b
 
         #TODO check for all directories being empty and delete them.
 
+    logger.info(f"Event{event_number} Yay0 check...")
     gcm.changed_files["files/Event/event" + event_number + ".szp"] = Yay0.compress(custom_event.data)
     return gcm
